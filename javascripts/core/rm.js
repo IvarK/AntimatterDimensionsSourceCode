@@ -95,7 +95,7 @@ function generateRandomGlyph(level) {
       break;
 
     case "infinity":
-      infinityGlyph(glyph, effectAmount)
+      return infinityGlyph(glyph, effectAmount)
       break;
   }
 }

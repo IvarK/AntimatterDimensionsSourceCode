@@ -73,8 +73,6 @@ function generateRandomGlyph(level) {
   var type = GLYPH_TYPES[Math.floor(Math.random() * GLYPH_TYPES.length)]
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-  console.log(effectAmount)
-  console.log(type)
   var glyph = {
     type: type,
     strength: strength,
@@ -110,7 +108,6 @@ function timeGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    console.log(effect)
     switch(effect) {
       case "pow":
         glyph.effects.pow = 1 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/100
@@ -141,7 +138,6 @@ function dilationGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    console.log(effect)
     switch(effect) {
       case "dilationMult":
         glyph.effects.dilationMult = Math.pow(glyph.level * glyph.strength, 1.5) * 2
@@ -172,10 +168,9 @@ function replicationGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    console.log(effect)
     switch(effect) {
       case "speed":
-        glyph.effects.speed = Math.pow(glyph.level * glyph.strength) * 3
+        glyph.effects.speed = glyph.level * glyph.strength * 3
         break;
 
       case "pow":
@@ -203,7 +198,6 @@ function infinityGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    console.log("effect:" + effect)
     switch(effect) {
       case "pow":
         glyph.effects.pow = 1 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75

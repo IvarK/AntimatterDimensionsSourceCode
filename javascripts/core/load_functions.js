@@ -109,6 +109,11 @@ if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.c
   if (player.timeDimension8 === undefined) player.timeDimension8 = {cost: new Decimal("1e3350"), amount: new Decimal(0), power: new Decimal(1), bought: 0 }
   if (player.why === undefined) player.why = 0
   if (player.options.animations === undefined) player.options.animations = {floatingText: true, bigCrunch: true, eternity: true, tachyonParticles: true}
+  if (player.options.animations.reality === undefined) player.options.animations.reality = true;
+  if (player.realities === undefined) player.realities = 0;
+  if (player.thisReality === undefined) player.thisReality = 0;
+  if (player.bestReality === undefined) player.bestReality = 9999999999;
+  if (player.reality === undefined) player.reality = {realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}}
   setTheme(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";

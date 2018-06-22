@@ -270,6 +270,17 @@ var player = {
         }
     },
     why: 0,
+    realities: 0,
+    thisReality: 0,
+    bestReality: 9999999999,
+    reality: {
+        realityMachines: new Decimal(0),
+        glyphs: {
+            active: [],
+            inventory: [],
+            slots: 3,
+        },
+    },
     options: {
         newsHidden: false,
         notation: "Mixed scientific",
@@ -1727,6 +1738,10 @@ function galaxyReset() {
         dead: player.dead,
         dilation: player.dilation,
         why: player.why,
+        realities: player.realities,
+        thisReality: player.thisReality,
+        bestReality: player.bestReality,
+        reality: player.reality,
         options: player.options
     };
 
@@ -2955,6 +2970,10 @@ document.getElementById("bigcrunch").onclick = function () {
             dead: player.dead,
             dilation: player.dilation,
             why: player.why,
+            realities: player.realities,
+            thisReality: player.thisReality,
+            bestReality: player.bestReality,
+            reality: player.reality,
             options: player.options
         };
 
@@ -3326,6 +3345,10 @@ function eternity(force) {
                 rebuyables: player.dilation.rebuyables
             },
             why: player.why,
+            realities: player.realities,
+            thisReality: player.thisReality,
+            bestReality: player.bestReality,
+            reality: player.reality,
             options: player.options
         };
         if (player.respec) respecTimeStudies()
@@ -3568,6 +3591,10 @@ function startChallenge(name, target) {
       dead: player.dead,
       dilation: player.dilation,
       why: player.why,
+      realities: player.realities,
+      thisReality: player.thisReality,
+      bestReality: player.bestReality,
+      reality: player.reality,
       options: player.options
     };
 	if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
@@ -4130,6 +4157,10 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
                 rebuyables: player.dilation.rebuyables
             },
             why: player.why,
+            realities: player.realities,
+            thisReality: player.thisReality,
+            bestReality: player.bestReality,
+            reality: player.reality,
             options: player.options
         };
 

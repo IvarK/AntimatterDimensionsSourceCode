@@ -115,6 +115,10 @@ function buyDilationStudy(name, cost) {
             showEternityTab("dilation")
             document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
         }
+        if (name === 6) {
+            showTab("reality")
+            document.getElementById("dilstudy6").innerHTML = "Unlock reality machines<span>Cost: 5,000,000,000 Time Theorems"
+        }
         player.dilation.studies.push(name)
         player.timestudy.theorem -= cost
         document.getElementById("dilstudy"+name).className = "dilationupgbought"
@@ -211,6 +215,10 @@ function canBuyStudy(name) {
 
 function canBuyDilationStudy(name) {
     if (name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5) return true
+    if (name == 6) {
+        if (player.eternityPoints.gte("1e4000")) return true
+        else return false
+    }
     if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= parseInt(document.getElementById("dilstudy"+name).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""))) return true
     else return false
 }

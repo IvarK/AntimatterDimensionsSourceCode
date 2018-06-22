@@ -86,6 +86,7 @@ function softReset(bulk) {
       infchallengeTimes: player.infchallengeTimes,
       lastTenRuns: player.lastTenRuns,
       lastTenEternities: player.lastTenEternities,
+      lastTenRealities: player.lastTenRealities,
       infMult: player.infMult,
       infMultCost: player.infMultCost,
       tickSpeedMultDecrease: player.tickSpeedMultDecrease,
@@ -150,6 +151,10 @@ function softReset(bulk) {
       dead: player.dead,
       dilation: player.dilation,
       why: player.why,
+      realities: player.realities,
+      thisReality: player.thisReality,
+      bestReality: player.bestReality,
+      reality: player.reality,
       options: player.options
   };
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {

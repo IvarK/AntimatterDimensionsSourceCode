@@ -16,7 +16,7 @@ function onLoad() {
   if (player.options.invert === true) player.options.theme = "Inverted"; player.options.invert = undefined;
   if (player.options.notation === undefined) player.options.notation = "Standard"
   if (player.options.challConf === undefined) player.options.challConf = false
-if (player.options.notation === undefined) player.options.notation = "Standard";
+  if (player.options.notation === undefined) player.options.notation = "Standard";
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
@@ -43,7 +43,7 @@ if (player.options.notation === undefined) player.options.notation = "Standard";
   if (player.firstAmount !== 0) document.getElementById("secondRow").style.display = "table-row";
   if (player.challenges === undefined) player.challenges = []
   if (player.currentChallenge === undefined) player.currentChallenge = ""
-if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
+  if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
   if (player.matter === undefined) player.matter = new Decimal(0)
   if (player.autobuyers === undefined) player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   if (player.costMultipliers === undefined) player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
@@ -113,7 +113,8 @@ if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.c
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = 0;
   if (player.bestReality === undefined) player.bestReality = 9999999999;
-  if (player.reality === undefined) player.reality = {realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}}
+  if (player.lastTenRealities === undefined) player.lastTenRealities = [[600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0]];
+  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3} };
   setTheme(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
@@ -751,6 +752,7 @@ function transformSaveToDecimal() {
   for (var i=0; i<10; i++) {
       player.lastTenRuns[i][1] = new Decimal(player.lastTenRuns[i][1])
       player.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1])
+      player.lastTenRealities[i][1] = new Decimal(player.lastTenEternities[i][1])
   }
   player.lastTenRuns = [[parseFloat(player.lastTenRuns[0][0]), player.lastTenRuns[0][1]], [parseFloat(player.lastTenRuns[1][0]), player.lastTenRuns[1][1]], [parseFloat(player.lastTenRuns[2][0]), player.lastTenRuns[2][1]], [parseFloat(player.lastTenRuns[3][0]), player.lastTenRuns[3][1]], [parseFloat(player.lastTenRuns[4][0]), player.lastTenRuns[4][1]], [parseFloat(player.lastTenRuns[5][0]), player.lastTenRuns[5][1]], [parseFloat(player.lastTenRuns[6][0]), player.lastTenRuns[6][1]], [parseFloat(player.lastTenRuns[7][0]), player.lastTenRuns[7][1]], [parseFloat(player.lastTenRuns[8][0]), player.lastTenRuns[8][1]], [parseFloat(player.lastTenRuns[9][0]), player.lastTenRuns[9][1]]]
   player.replicanti.chanceCost = new Decimal(player.replicanti.chanceCost)
@@ -782,6 +784,8 @@ function transformSaveToDecimal() {
   player.dilation.dilatedTime = new Decimal(player.dilation.dilatedTime)
   player.dilation.totalTachyonParticles = new Decimal(player.dilation.totalTachyonParticles)
   player.dilation.nextThreshold = new Decimal(player.dilation.nextThreshold)
+
+  player.reality.realityMachines = new Decimal(player.reality.realityMachines)
 }
 
 

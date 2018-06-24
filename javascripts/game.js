@@ -4903,12 +4903,12 @@ setInterval(function() {
         for (var i=0; i < player.challenges.length; i++) {
             if (player.challenges[i].includes("post")) {
                 temp *= 1.3
-                document.getElementById("infchallengesbtn").style.display = "inline-block"
+                document.getElementById("infchallengetimes").style.display = "inline-block"
             }
         }
         infDimPow = temp
     } else {
-        document.getElementById("infchallengesbtn").style.display = "none"
+        document.getElementById("infchallengetimes").style.display = "none"
     }
 
     if (player.money.gte(new Decimal("1e2000")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
@@ -4971,7 +4971,7 @@ setInterval(function() {
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
 
-    if (player.eternities == 0) document.getElementById("pasteternities").style.display = "none"
+    if (player.eternities == 0 && player.realities == 0) document.getElementById("pasteternities").style.display = "none"
     else document.getElementById("pasteternities").style.display = "inline-block"
     if (player.realities == 0) document.getElementById("pastrealities").style.display = "none"
     else document.getElementById("pastrealities").style.display = "inline-block"
@@ -6075,7 +6075,9 @@ function showStatsTab(tabName) {
     var tab;
     for (var i = 0; i < tabs.length; i++) {
         tab = tabs.item(i);
-        if (tab.id === tabName) {
+        if (tab.id === tabName && tab.id === "challengetimes") {
+            tab.style.display = 'flex';
+        } else if (tab.id === tabName) {
             tab.style.display = 'block';
         } else {
             tab.style.display = 'none';

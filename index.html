@@ -1045,7 +1045,6 @@
             <tr>
                 <td><button class="secondarytabbtn" onclick="showStatsTab('stats')">Statistics</button><td>
                 <td><button class="secondarytabbtn" onclick="showStatsTab('challengetimes')" id="challengetimesbtn" style="display:none" >Challenge records</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('infchallengetimes')" id="infchallengesbtn" style="display:none">InfChallenge records</button><td>
                 <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs" style="display:none">Past Infinities</button><td>
                 <td><button class="secondarytabbtn" onclick="showStatsTab('lastteneternities')" id="pasteternities" style="display:none">Past Eternities</button><td>
                 <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenrealities')" id="pastrealities" style="display:none">Past Realities</button><td>
@@ -1068,34 +1067,37 @@
                 <div id="totalTime">You have played for </div>
                 <div id="infoScale">If every antimatter were a planck volume, you would have enough to </div>
             </div>
-            <div id="challengetimes" class="statstab" >
-                <br>
-                <div id="challengetime2"></div>
-                <div id="challengetime3"></div>
-                <div id="challengetime4"></div>
-                <div id="challengetime5"></div>
-                <div id="challengetime6"></div>
-                <div id="challengetime7"></div>
-                <div id="challengetime8"></div>
-                <div id="challengetime9"></div>
-                <div id="challengetime10"></div>
-                <div id="challengetime11"></div>
-                <div id="challengetime12"></div>
-                <br>
-                <div id="challengetimesum"></div>
-            </div>
-            <div id="infchallengetimes" class="statstab" >
-                <br>
-                <div id="infchallengetime1"></div>
-                <div id="infchallengetime2"></div>
-                <div id="infchallengetime3"></div>
-                <div id="infchallengetime4"></div>
-                <div id="infchallengetime5"></div>
-                <div id="infchallengetime6"></div>
-                <div id="infchallengetime7"></div>
-                <div id="infchallengetime8"></div>
-                <br>
-                <div id="infchallengetimesum"></div>
+            <div id="challengetimes" class="statstab" style="display: flex !important; flex-direction: row; justify-content: center; align-items: center;">
+                <div>
+                    <br>
+                    <div id="challengetime2"></div>
+                    <div id="challengetime3"></div>
+                    <div id="challengetime4"></div>
+                    <div id="challengetime5"></div>
+                    <div id="challengetime6"></div>
+                    <div id="challengetime7"></div>
+                    <div id="challengetime8"></div>
+                    <div id="challengetime9"></div>
+                    <div id="challengetime10"></div>
+                    <div id="challengetime11"></div>
+                    <div id="challengetime12"></div>
+                    <br>
+                    <div id="challengetimesum"></div>
+                </div>
+                <div id="infchallengetimes" style="margin-top: 53px; margin-left: 20px;">
+                    <br>
+                    <div></div>
+                    <div id="infchallengetime1"></div>
+                    <div id="infchallengetime2"></div>
+                    <div id="infchallengetime3"></div>
+                    <div id="infchallengetime4"></div>
+                    <div id="infchallengetime5"></div>
+                    <div id="infchallengetime6"></div>
+                    <div id="infchallengetime7"></div>
+                    <div id="infchallengetime8"></div>
+                    <br>
+                    <div id="infchallengetimesum"></div>
+                </div>
             </div>
             <div id="lasttenruns" class="statstab">
                 <div id="run1"></div>

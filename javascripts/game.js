@@ -676,7 +676,7 @@ function updateDimensions() {
     if (document.getElementById("eternityupgrades").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("eter1").innerHTML = "Infinity Dimensions multiplier based on unspent EP (x+1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
         document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on eternities ((x/200)^log4(2x))<br>Currently: "+shortenMoney(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))+"x<br>Cost: 10 EP"
-        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,300/Math.max(infchallengeTimes, player.achievements.includes("r112") ? 6.1 : 7.5)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
+        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,300/Math.max(infchallengeTimes, isAchEnabled("r112") ? 6.1 : 7.5)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
         document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
         document.getElementById("eter5").innerHTML = "Time Dimensions are multiplied by your unspent time theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
         document.getElementById("eter6").innerHTML = "Time Dimensions are multiplied by days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
@@ -1331,7 +1331,7 @@ function upgradeReplicantiGalaxy() {
 
 function replicantiGalaxy() {
     if (player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) ? player.replicanti.galaxies < player.replicanti.gal : player.replicanti.galaxies < Math.floor(player.replicanti.gal * 1.5))) {
-        if (player.achievements.includes("r126")) player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
+        if (isAchEnabled("r126")) player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
         else player.replicanti.amount = new Decimal(1)
         player.replicanti.galaxies += 1
         player.galaxies-=1
@@ -1607,7 +1607,7 @@ function galaxyReset() {
     autoS = true;
     if (player.sacrificed == 0) giveAchievement("I don't believe in Gods");
     player = {
-        money: player.achievements.includes("r111") ? player.money : new Decimal(10),
+        money: isAchEnabled("r111") ? player.money : new Decimal(10),
         tickSpeedCost: new Decimal(1000),
         tickspeed: new Decimal(1000),
         firstCost: new Decimal(10),
@@ -1777,9 +1777,9 @@ function galaxyReset() {
     if (player.options.notation == "Emojis") player.spreadingCancer+=1;
     if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
     if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
-    if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-    if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-    if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
+    if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
 
     if (player.eternities < 30) {
         document.getElementById("secondRow").style.display = "none";
@@ -1799,12 +1799,12 @@ function galaxyReset() {
     if (player.galaxies >= 2) giveAchievement("Double Galaxy");
     if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
     if (player.challenges.includes("challenge1")) player.money = new Decimal(100).max(player.money)
-    if (player.achievements.includes("r37")) player.money = new Decimal(1000).max(player.money);
-    if (player.achievements.includes("r54")) player.money = new Decimal(2e5).max(player.money);
-    if (player.achievements.includes("r55")) player.money = new Decimal(1e10).max(player.money);
-    if (player.achievements.includes("r78")) player.money = new Decimal(1e25).max(player.money);
+    if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
+    if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
+    if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
+    if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
     player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
-    if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
     if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
     updateTickSpeed();
 };
@@ -2002,7 +2002,7 @@ function breakInfinity() {
 function gainedInfinityPoints() {
     let div = 308;
     if (player.timestudy.studies.includes(111)) div = 285;
-    else if (player.achievements.includes("r103")) div = 307.8;
+    else if (isAchEnabled("r103")) div = 307.8;
 
     var ret = Decimal.pow(10, player.money.e/div -0.75).times(player.infMult).times(kongIPMult)
     if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))
@@ -2010,8 +2010,8 @@ function gainedInfinityPoints() {
     if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
     if (player.timestudy.studies.includes(142)) ret = ret.times(1e25)
     if (player.timestudy.studies.includes(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
-    if (player.achievements.includes("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
-    if (player.achievements.includes("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
+    if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
+    if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
     if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
     return ret.floor()
 }
@@ -2171,13 +2171,13 @@ function calcSacrificeBoost() {
     if (player.firstAmount == 0) return new Decimal(1);
     if (player.challenges.includes("postc2")) {
         if (player.timestudy.studies.includes(228)) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.013).max(1)
-        if (player.achievements.includes("r88")) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.011).max(1)
+        if (isAchEnabled("r88")) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.011).max(1)
         return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.01).max(1)
     }
     if (player.currentChallenge != "challenge11") {
         var sacrificePow=2;
-        if (player.achievements.includes("r32")) sacrificePow += 0.2;
-        if (player.achievements.includes("r57")) sacrificePow += 0.2; //this upgrade was too OP lol
+        if (isAchEnabled("r32")) sacrificePow += 0.2;
+        if (isAchEnabled("r57")) sacrificePow += 0.2; //this upgrade was too OP lol
         return Decimal.pow((player.firstAmount.e/10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
     } else {
         return player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
@@ -2188,13 +2188,13 @@ function calcTotalSacrificeBoost() {
     if (player.sacrificed == 0) return new Decimal(1);
     if (player.challenges.includes("postc2")) {
         if (player.timestudy.studies.includes(228)) return player.sacrificed.pow(0.013).max(1)
-        if (player.achievements.includes("r88")) return player.sacrificed.pow(0.011).max(1)
+        if (isAchEnabled("r88")) return player.sacrificed.pow(0.011).max(1)
         else return player.sacrificed.pow(0.01)
     }
     if (player.currentChallenge != "challenge11") {
         var sacrificePow=2;
-        if (player.achievements.includes("r32")) sacrificePow += 0.2;
-        if (player.achievements.includes("r57")) sacrificePow += 0.2;
+        if (isAchEnabled("r32")) sacrificePow += 0.2;
+        if (isAchEnabled("r57")) sacrificePow += 0.2;
         return Decimal.pow((player.sacrificed.e/10.0), sacrificePow);
     } else {
         return player.sacrificed.pow(0.05) //this is actually off but like im not sure how youd make it good. not that it matters.
@@ -2212,11 +2212,11 @@ function sacrifice(auto = false) {
     player.eightPow = player.eightPow.times(calcSacrificeBoost())
     player.sacrificed = player.sacrificed.plus(player.firstAmount);
     if (player.currentChallenge != "challenge11") {
-        if (player.currentChallenge == "challenge7" && !player.achievements.includes("r118")) clearDimensions(6);
-        else if (!player.achievements.includes("r118")) clearDimensions(7);
+        if (player.currentChallenge == "challenge7" && !isAchEnabled("r118")) clearDimensions(6);
+        else if (!isAchEnabled("r118")) clearDimensions(7);
     } else {
         player.chall11Pow = player.chall11Pow.times(calcSacrificeBoost())
-        if (!player.achievements.includes("r118")) resetDimensions();
+        if (!isAchEnabled("r118")) resetDimensions();
         player.money = new Decimal(100)
 
     }
@@ -2852,7 +2852,7 @@ document.getElementById("bigcrunch").onclick = function () {
             if (gainedInfinityPoints().gte(1e200) && player.thisInfinityTime <= 20) giveAchievement("Ludicrous Speed")
             if (gainedInfinityPoints().gte(1e250) && player.thisInfinityTime <= 200) giveAchievement("I brake for nobody")
         }
-        if (!player.achievements.includes("r111") && player.lastTenRuns[9][1] != 1) {
+        if (!isAchEnabled("r111") && player.lastTenRuns[9][1] != 1) {
             var n = 0;
             for (i=0; i<9; i++) {
                 if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i+1][1].times(Number.MAX_VALUE))) n++;
@@ -2860,7 +2860,7 @@ document.getElementById("bigcrunch").onclick = function () {
             if (n == 9) giveAchievement("Yo dawg, I heard you liked infinities...")
         }
         let infGain = 1;
-        if (player.thisInfinityTime > 50 && player.achievements.includes("r87")) infGain = 250;
+        if (player.thisInfinityTime > 50 && isAchEnabled("r87")) infGain = 250;
         if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
         if (player.currentEternityChall == "eterc4") {
             infGain = 1
@@ -3033,7 +3033,7 @@ document.getElementById("bigcrunch").onclick = function () {
             }
         }
 
-        if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
+        if (player.replicanti.unl && !isAchEnabled("r95")) player.replicanti.amount = new Decimal(1)
 
         player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies/2) :0
 
@@ -3045,10 +3045,10 @@ document.getElementById("bigcrunch").onclick = function () {
 
         document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
 
-        if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
+        if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
         if (player.eternities < 30) {
             document.getElementById("secondRow").style.display = "none";
             document.getElementById("thirdRow").style.display = "none";
@@ -3079,10 +3079,10 @@ document.getElementById("bigcrunch").onclick = function () {
 
         updateAutobuyers();
         if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
-        if (player.achievements.includes("r37")) player.money = new Decimal(1000);
-        if (player.achievements.includes("r54")) player.money = new Decimal(2e5);
-        if (player.achievements.includes("r55")) player.money = new Decimal(1e10);
-        if (player.achievements.includes("r78")) player.money = new Decimal(1e25);
+        if (isAchEnabled("r37")) player.money = new Decimal(1000);
+        if (isAchEnabled("r54")) player.money = new Decimal(2e5);
+        if (isAchEnabled("r55")) player.money = new Decimal(1e10);
+        if (isAchEnabled("r78")) player.money = new Decimal(1e25);
         if (player.challenges.length >= 2) giveAchievement("Daredevil");
         if (player.challenges.length == 12) giveAchievement("AntiChallenged");
         resetInfDimensions();
@@ -3175,7 +3175,7 @@ function eternity(force) {
             if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
         }
         if (player.timestudy.studies.includes(191)) player.infinitiedBank += Math.floor(player.infinitied*0.05)
-        if (player.achievements.includes("r131")) player.infinitiedBank += Math.floor(player.infinitied*0.05)
+        if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
         if (player.dilation.active && !force) {
             let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0)
@@ -3221,7 +3221,7 @@ function eternity(force) {
             eightPow: new Decimal(1),
             sacrificed: new Decimal(0),
             achievements: player.achievements,
-            challenges: (player.eternities > 0 && player.achievements.includes("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities > 0) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
+            challenges: (player.eternities > 0 && isAchEnabled("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities > 0) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
             currentChallenge: "",
             infinityUpgrades: player.infinityUpgrades,
             infinityPoints: new Decimal(0),
@@ -3260,7 +3260,7 @@ function eternity(force) {
             dimensionMultDecrease: player.eternities > 18 ? player.dimensionMultDecrease : 10,
             dimensionMultDecreaseCost: player.eternities > 18 ? player.dimensionMultDecreaseCost : 1e8,
             version: player.version,
-            postChallUnlocked: (player.achievements.includes("r133")) ? 8 : 0,
+            postChallUnlocked: (isAchEnabled("r133")) ? 8 : 0,
             postC4Tier: 1,
             postC3Reward: new Decimal(1),
             overXGalaxies: player.overXGalaxies,
@@ -3401,8 +3401,8 @@ function eternity(force) {
         if (player.replicanti.unl) player.replicanti.amount = new Decimal(1)
         player.replicanti.galaxies = 0
         document.getElementById("respec").className = "storebtn"
-        if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
 
         if (player.eternities <= 30) {
             document.getElementById("secondRow").style.display = "none";
@@ -3429,19 +3429,19 @@ function eternity(force) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         updateAutobuyers();
-        if (player.achievements.includes("r37")) player.money = new Decimal(1000);
-        if (player.achievements.includes("r54")) player.money = new Decimal(2e5);
-        if (player.achievements.includes("r55")) player.money = new Decimal(1e10);
-        if (player.achievements.includes("r78")) player.money = new Decimal(1e25);
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+        if (isAchEnabled("r37")) player.money = new Decimal(1000);
+        if (isAchEnabled("r54")) player.money = new Decimal(2e5);
+        if (isAchEnabled("r55")) player.money = new Decimal(1e10);
+        if (isAchEnabled("r78")) player.money = new Decimal(1e25);
+        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();
         updateChallengeTimes()
         updateLastTenRuns()
         updateLastTenEternities()
-        if (!player.achievements.includes("r133")) {
+        if (!isAchEnabled("r133")) {
             var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
             for (var i = 0; i< infchalls.length; i++) infchalls[i].style.display = "none"
         }
@@ -3757,8 +3757,8 @@ function reality(force) {
             reality: player.reality,
             options: player.options
         };
-        if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
 
         if (player.eternities <= 30) {
             document.getElementById("secondRow").style.display = "none";
@@ -3785,20 +3785,20 @@ function reality(force) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         updateAutobuyers();
-        if (player.achievements.includes("r37")) player.money = new Decimal(1000);
-        if (player.achievements.includes("r54")) player.money = new Decimal(2e5);
-        if (player.achievements.includes("r55")) player.money = new Decimal(1e10);
-        if (player.achievements.includes("r78")) player.money = new Decimal(1e25);
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+        if (isAchEnabled("r37")) player.money = new Decimal(1000);
+        if (isAchEnabled("r54")) player.money = new Decimal(2e5);
+        if (isAchEnabled("r55")) player.money = new Decimal(1e10);
+        if (isAchEnabled("r78")) player.money = new Decimal(1e25);
+        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();
         updateChallengeTimes()
         updateLastTenRuns()
         updateLastTenEternities()
         updateLastTenRealities()
-        if (!player.achievements.includes("r133")) {
+        if (!isAchEnabled("r133")) {
             var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
             for (var i = 0; i< infchalls.length; i++) infchalls[i].style.display = "none"
         }
@@ -4021,10 +4021,10 @@ function startChallenge(name, target) {
 
     IPminpeak = new Decimal(0)
     if (player.currentChallenge.includes("post")) player.break = true
-    if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-    if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-    if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-    if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
+    if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
+    if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
 
     if (player.eternities < 30) {
         document.getElementById("secondRow").style.display = "none";
@@ -4048,10 +4048,10 @@ function startChallenge(name, target) {
     showTab('dimensions');
     updateChallenges();
     if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
-    if (player.achievements.includes("r37")) player.money = new Decimal(1000);
-    if (player.achievements.includes("r54")) player.money = new Decimal(2e5);
-    if (player.achievements.includes("r55")) player.money = new Decimal(1e10);
-    if (player.achievements.includes("r78")) player.money = new Decimal(1e25);
+    if (isAchEnabled("r37")) player.money = new Decimal(1000);
+    if (isAchEnabled("r54")) player.money = new Decimal(2e5);
+    if (isAchEnabled("r55")) player.money = new Decimal(1e10);
+    if (isAchEnabled("r78")) player.money = new Decimal(1e25);
     showTab("dimensions")
     try {
         kongregate.stats.submit('Infinitied', getInfinitied());
@@ -4392,7 +4392,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             eightPow: new Decimal(1),
             sacrificed: new Decimal(0),
             achievements: player.achievements,
-            challenges: (player.eternities > 0 && player.achievements.includes("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities > 0) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
+            challenges: (player.eternities > 0 && isAchEnabled("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities > 0) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
             currentChallenge: "",
             infinityUpgrades: player.infinityUpgrades,
             infinityPoints: new Decimal(0),
@@ -4431,7 +4431,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             dimensionMultDecrease: player.eternities > 18 ? player.dimensionMultDecrease : 10,
             dimensionMultDecreaseCost: player.eternities > 18 ? player.dimensionMultDecreaseCost : 1e8,
             version: player.version,
-            postChallUnlocked: (player.achievements.includes("r133")) ? 8 : 0,
+            postChallUnlocked: (isAchEnabled("r133")) ? 8 : 0,
             postC4Tier: 1,
             postC3Reward: new Decimal(1),
             overXGalaxies: player.overXGalaxies,
@@ -4568,8 +4568,8 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
 
         if (player.replicanti.unl) player.replicanti.amount = new Decimal(1)
         player.replicanti.galaxies = 0
-        if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-        if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+        if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
         if (player.eternities < 30) {
             document.getElementById("secondRow").style.display = "none";
             document.getElementById("thirdRow").style.display = "none";
@@ -4594,13 +4594,13 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         updateAutobuyers();
-        if (player.achievements.includes("r37")) player.money = new Decimal(1000);
-        if (player.achievements.includes("r54")) player.money = new Decimal(2e5);
-        if (player.achievements.includes("r55")) player.money = new Decimal(1e10);
-        if (player.achievements.includes("r78")) player.money = new Decimal(1e25);
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-        if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+        if (isAchEnabled("r37")) player.money = new Decimal(1000);
+        if (isAchEnabled("r54")) player.money = new Decimal(2e5);
+        if (isAchEnabled("r55")) player.money = new Decimal(1e10);
+        if (isAchEnabled("r78")) player.money = new Decimal(1e25);
+        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
+        if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();
         updateChallengeTimes()
@@ -4890,7 +4890,7 @@ setInterval(function() {
     if (player.infinitied == 0 && player.infinityPoints.lt(new Decimal(1e50)) && player.eternities <= 0) document.getElementById("infinityPoints2").style.display = "none"
     else document.getElementById("infinityPoints2").style.display = "inline-block"
 
-    if (blink && !player.achievements.includes("r78")) {
+    if (blink && !isAchEnabled("r78")) {
         document.getElementById("Blink of an eye").style.display = "none"
         blink = false
     }
@@ -5222,6 +5222,7 @@ function gameLoop(diff) {
     else player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff
+    player.thisReality += diff
 
     if (player.eternities > 0) document.getElementById("tdtabbtn").style.display = "inline-block"
 
@@ -5303,7 +5304,7 @@ function gameLoop(diff) {
     else document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b>"
 
     if (nextAt[player.postChallUnlocked] === undefined) document.getElementById("nextchall").textContent = " "
-    else if (!player.achievements.includes("r133")) {
+    else if (!isAchEnabled("r133")) {
         document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
         while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
             if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
@@ -5315,7 +5316,7 @@ function gameLoop(diff) {
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
-    if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
+    if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
@@ -5406,13 +5407,13 @@ function gameLoop(diff) {
     updateTimeDimensions()
     updateTimeShards()
     updateDilation()
-    if (getDimensionProductionPerSecond(1).gt(player.money) && !player.achievements.includes("r44")) {
+    if (getDimensionProductionPerSecond(1).gt(player.money) && !isAchEnabled("r44")) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
     } else {
         Marathon = 0;
     }
-    if (DimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !player.achievements.includes("r113")) {
+    if (DimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
         Marathon2+=player.options.updateRate/1000;
         if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
     } else {

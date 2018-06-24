@@ -6,7 +6,7 @@ function getTimeDimensionPower(tier) {
   var ret = dim.power.pow(2)
 
   if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.dividedBy(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, -2500)))
-  if (player.achievements.includes("r105")) ret = ret.div(player.tickspeed.div(1000).pow(0.000005))
+  if (isAchEnabled("r105")) ret = ret.div(player.tickspeed.div(1000).pow(0.000005))
 
   ret = ret.times(kongAllDimMult)
 
@@ -25,7 +25,7 @@ function getTimeDimensionPower(tier) {
   if (ECTimesCompleted("eterc10") !== 0) ec10bonus = new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002+1, 1))
   if (player.timestudy.studies.includes(31)) ec10bonus = ec10bonus.pow(4)
   ret = ret.times(ec10bonus)
-  if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
+  if (isAchEnabled("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 
   if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
     var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)

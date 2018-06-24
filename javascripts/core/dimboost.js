@@ -6,7 +6,7 @@ function getDimensionBoostPower() {
   if (player.challenges.includes("postc7")) ret = 4
   if (player.currentChallenge == "postc7" || player.timestudy.studies.includes(81)) ret = 10
 
-  if (player.achievements.includes("r101")) ret = ret*1.01
+  if (isAchEnabled("r101")) ret = ret*1.01
   if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
   return Decimal.fromValue(ret)
@@ -18,7 +18,7 @@ function softReset(bulk) {
   player.resets+=bulk;
   if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
   player = {
-      money: player.achievements.includes("r111") ? player.money : new Decimal(10),
+      money: isAchEnabled("r111") ? player.money : new Decimal(10),
       tickSpeedCost: new Decimal(1000),
       tickspeed: new Decimal(1000),
       firstCost: new Decimal(10),
@@ -180,10 +180,10 @@ if (player.currentChallenge == "postc2") {
   }
 
 
-  if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-  if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-  if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-  if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
+  if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
+  if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
+  if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
+  if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
 
 
 
@@ -208,10 +208,10 @@ if (player.currentChallenge == "postc2") {
   player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
   updateTickSpeed()
   if (player.challenges.includes("challenge1")) player.money = new Decimal(100).max(player.money)
-  if (player.achievements.includes("r37")) player.money = new Decimal(1000).max(player.money);
-  if (player.achievements.includes("r54")) player.money = new Decimal(2e5).max(player.money);
-  if (player.achievements.includes("r55")) player.money = new Decimal(1e10).max(player.money);
-  if (player.achievements.includes("r78")) player.money = new Decimal(1e25).max(player.money);
+  if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
+  if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
+  if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
+  if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
 
   if (player.resets >= 10) {
       giveAchievement("Boosting to the max");

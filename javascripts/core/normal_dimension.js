@@ -26,27 +26,27 @@ function getDimensionFinalMultiplier(tier) {
   if (hasInfinityMult(tier)) multiplier = multiplier.times(dimMults());
   if (tier == 1) {
       if (player.infinityUpgrades.includes("unspentBonus")) multiplier = multiplier.times(unspentBonus);
-      if (player.achievements.includes("r28")) multiplier = multiplier.times(1.1);
-      if (player.achievements.includes("r31")) multiplier = multiplier.times(1.05);
-      if (player.achievements.includes("r71")) multiplier = multiplier.times(3);
-      if (player.achievements.includes("r68")) multiplier = multiplier.times(1.5);
+      if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
+      if (isAchEnabled("r31")) multiplier = multiplier.times(1.05);
+      if (isAchEnabled("r71")) multiplier = multiplier.times(3);
+      if (isAchEnabled("r68")) multiplier = multiplier.times(1.5);
   }
 
   multiplier = multiplier.times(timeMult());
-  if (tier == 8 && player.achievements.includes("r23")) multiplier = multiplier.times(1.1);
-  else if (player.achievements.includes("r34")) multiplier = multiplier.times(1.02);
-  if (tier <= 4 && player.achievements.includes("r43")) multiplier = multiplier.times(1.25);
-  if (player.achievements.includes("r48")) multiplier = multiplier.times(1.1);
-  if (player.achievements.includes("r72")) multiplier = multiplier.times(1.1); // tbd
-  if (player.achievements.includes("r74") && player.currentChallenge != "") multiplier = multiplier.times(1.4);
-  if (player.achievements.includes("r77")) multiplier = multiplier.times(1+tier/100);
-  if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) multiplier = multiplier.times(3600/(player.thisInfinityTime+1800));
-  if (player.achievements.includes("r78") && player.thisInfinityTime < 3) multiplier = multiplier.times(3.3/(player.thisInfinityTime+0.3));
-  if (player.achievements.includes("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) multiplier = multiplier.times(Math.max(2400/(player.thisInfinityTime+600), 1))
-  if (player.achievements.includes("r91") && player.thisInfinityTime < 50) multiplier = multiplier.times(Math.max(301-player.thisInfinityTime*6, 1))
-  if (player.achievements.includes("r92") && player.thisInfinityTime < 600) multiplier = multiplier.times(Math.max(101-player.thisInfinityTime/6, 1));
-  if (player.achievements.includes("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
-  else if (player.achievements.includes("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
+  if (tier == 8 && isAchEnabled("r23")) multiplier = multiplier.times(1.1);
+  else if (isAchEnabled("r34")) multiplier = multiplier.times(1.02);
+  if (tier <= 4 && isAchEnabled("r43")) multiplier = multiplier.times(1.25);
+  if (isAchEnabled("r48")) multiplier = multiplier.times(1.1);
+  if (isAchEnabled("r72")) multiplier = multiplier.times(1.1); // tbd
+  if (isAchEnabled("r74") && player.currentChallenge != "") multiplier = multiplier.times(1.4);
+  if (isAchEnabled("r77")) multiplier = multiplier.times(1+tier/100);
+  if (isAchEnabled("r56") && player.thisInfinityTime < 1800) multiplier = multiplier.times(3600/(player.thisInfinityTime+1800));
+  if (isAchEnabled("r78") && player.thisInfinityTime < 3) multiplier = multiplier.times(3.3/(player.thisInfinityTime+0.3));
+  if (isAchEnabled("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) multiplier = multiplier.times(Math.max(2400/(player.thisInfinityTime+600), 1))
+  if (isAchEnabled("r91") && player.thisInfinityTime < 50) multiplier = multiplier.times(Math.max(301-player.thisInfinityTime*6, 1))
+  if (isAchEnabled("r92") && player.thisInfinityTime < 600) multiplier = multiplier.times(Math.max(101-player.thisInfinityTime/6, 1));
+  if (isAchEnabled("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
+  else if (isAchEnabled("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
 
 
   if (player.timestudy.studies.includes(71) && tier !== 8) multiplier = multiplier.times(calcTotalSacrificeBoost().pow(0.25).min("1e210000"));
@@ -180,7 +180,7 @@ function hasInfinityMult(tier) {
         if (player.currentChallenge == "challenge9" || player.currentChallenge == "postc1") dimMult = Math.pow(10/0.30,Math.random())*0.30
     
         if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
-        if (player.achievements.includes("r58")) dimMult *= 1.01;
+        if (isAchEnabled("r58")) dimMult *= 1.01;
         dimMult += ECTimesCompleted("eterc3") * 0.8
         return dimMult;
     }
@@ -544,7 +544,7 @@ function timeMult() {
     var mult = new Decimal(1)
     if (player.infinityUpgrades.includes("timeMult")) mult = mult.times(Math.pow(player.totalTimePlayed / 1200, 0.15));
     if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(Decimal.max(Math.pow(player.thisInfinityTime / 2400, 0.25), 1));
-    if (player.achievements.includes("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (600*60*48), 0.05));
+    if (isAchEnabled("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (600*60*48), 0.05));
     return mult;
 }
 

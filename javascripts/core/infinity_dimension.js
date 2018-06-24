@@ -75,8 +75,8 @@ function DimensionPower(tier) {
   mult = mult.times(infDimPow)
 
   mult = mult.times(kongAllDimMult)
-  if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
-  if (player.achievements.includes("r75")) mult = mult.times(player.achPow);
+  if (isAchEnabled("r94") && tier == 1) mult = mult.times(2);
+  if (isAchEnabled("r75")) mult = mult.times(player.achPow);
   if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
       var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
 
@@ -100,7 +100,7 @@ function DimensionPower(tier) {
 
   if (player.eternityUpgrades.includes(2)) mult = mult.times(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))
 
-  if (player.eternityUpgrades.includes(3)) mult = mult.times(Decimal.pow(2,300/Math.max(infchallengeTimes, player.achievements.includes("r112") ? 6.1 : 7.5)))
+  if (player.eternityUpgrades.includes(3)) mult = mult.times(Decimal.pow(2,300/Math.max(infchallengeTimes, isAchEnabled("r112") ? 6.1 : 7.5)))
 
   if (player.timestudy.studies.includes(92)) mult = mult.times(Decimal.pow(2, 600/Math.max(player.bestEternity, 20)))
   if (player.timestudy.studies.includes(162)) mult = mult.times(1e11)

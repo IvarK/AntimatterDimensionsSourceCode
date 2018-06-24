@@ -263,3 +263,8 @@ function getSecretAchAmount() {
     }
     return n
 }
+
+function isAchEnabled(name) {
+    if (player.achievements.includes(name) && (player.realities == 0 || player.thisReality > 2 * 24 * 60 * 60 * 10 * Math.pow(0.9, Math.max(player.realities-1, 0)))) return true;
+    else return false
+}

@@ -73,9 +73,16 @@ function generateRandomGlyph(level) {
   var type = GLYPH_TYPES[Math.floor(Math.random() * GLYPH_TYPES.length)]
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+  var idx = 0
+  var hasglyph = true
+  while (hasglyph) {
+    var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
+    if (slot !== undefined) idx++;
+    else hasglyph = false
+  }
   var glyph = {
     id: Date.now(),
-    idx: player.reality.glyphs.inventory.length,
+    idx: idx,
     type: type,
     strength: strength,
     level: level,
@@ -233,7 +240,7 @@ function generateGlyphTable() {
       html += "<td>"
       var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
-        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ach-tooltip='"
+        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ach-tooltip='"
         html += "rarity: " + shorten(glyph.strength) + " "
         html += "level: " + shorten(glyph.level) + " "
         for (i in glyph.effects) {
@@ -257,7 +264,7 @@ function generateGlyphTable() {
     var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
-      glyphhtml += "<div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ach-tooltip='"
+      glyphhtml += "<div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ach-tooltip='"
       glyphhtml += "rarity: " + shorten(glyph.strength) + " "
       glyphhtml += "level: " + shorten(glyph.level) + " "
       for (i in glyph.effects) {
@@ -273,16 +280,24 @@ function generateGlyphTable() {
 
 function drag(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
+  ev.target.style.opacity = 0.5
 }
 
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
+function dragover(e) {
+  e.target.style.opacity = 1
+}
+
 function drop(ev) {
   ev.preventDefault();
   var data = parseInt(ev.dataTransfer.getData("text"));
-  if (parseInt(ev.target.id) > 1000) return false
+  if (parseInt(ev.target.id) > 1000) {
+    ev.target.style.opacity = 1
+    return false
+  }
 
   if (ev.target.className.includes("glyphactive")) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {

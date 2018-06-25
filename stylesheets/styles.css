@@ -1382,6 +1382,35 @@ button {
     100% { text-shadow: 0 0 10px white; }
 }
 
+.tooltip {
+    width: 150px;
+    background-color: #4a4a4a;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    transition: opacity 0.3s;
+    font-size: 1em;
+    font-weight: normal;
+    padding: 12px;
+    pointer-events: none;
+    display: none;
+  }
+  
+  .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #4a4a4a transparent transparent transparent;
+  }
+
 [ach-tooltip] {
     position: relative;
     z-index: 2;

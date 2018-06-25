@@ -282,6 +282,7 @@ function allowDrop(ev) {
 function drop(ev) {
   ev.preventDefault();
   var data = parseInt(ev.dataTransfer.getData("text"));
+  if (parseInt(ev.target.id) > 1000) return false
 
   if (ev.target.className.includes("glyphactive")) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {

@@ -1280,6 +1280,16 @@ button {
     background: white;
 }
 
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+  }
+
 #glyphslots {
     display: flex;
     justify-content: center;
@@ -1305,7 +1315,7 @@ button {
     background: black;
     font-size: 1.5rem;
     transition-duration: 0.2s;
-    cursor: pointer;
+    cursor: move;
     font-family: Typewriter;
 }
 

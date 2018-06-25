@@ -585,6 +585,7 @@ if (player.version < 5) {
   checkForEndMe();
   updateEternityChallenges();
   updateDilationUpgradeCosts()
+  generateGlyphTable();
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
@@ -667,7 +668,6 @@ function change_save(saveId) {
   showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
-
   closeToolTip();
 }
 
@@ -786,6 +786,8 @@ function transformSaveToDecimal() {
   player.dilation.nextThreshold = new Decimal(player.dilation.nextThreshold)
 
   player.reality.realityMachines = new Decimal(player.reality.realityMachines)
+
+  
 }
 
 

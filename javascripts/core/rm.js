@@ -218,3 +218,36 @@ function infinityGlyph(glyph, effectAmount) {
   }
   return glyph
 }
+
+function generateGlyphTable() {
+  var table = document.getElementById("glyphs")
+  var html = ""
+  var idx = 0
+  var glyphs = player.reality.glyphs.inventory
+  var glyphsAmount = glyphs.length
+  for (var row=1; row<=10; row++) {
+    html += "<tr>"
+    for (var cell=1; cell<=10; cell++) {
+      html += "<td>"
+      
+      if (glyphsAmount > idx) {
+        var glyph = glyphs[idx]
+        html += "<div class='glyph "+glyph.type+"glyph' ach-tooltip='"
+        html += "rarity: " + shorten(glyph.strength) + " "
+        html += "level: " + shorten(glyph.level) + " "
+        for (i in glyph.effects) {
+          var effect = glyph.effects[i]
+          html += i + ": " + shorten(effect) + " "
+        }
+        html += "'></div>"
+      } else {
+        html += "<div class='glyph empty'></div>"
+      }
+
+      idx++;
+      html += "</td>"
+    }
+    html += "</tr>"
+  }
+  table.innerHTML = html
+}

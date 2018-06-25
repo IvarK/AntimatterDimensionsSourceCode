@@ -354,6 +354,8 @@ button {
     border-radius: 4px;
     transition-duration: 0.2s;
     cursor: pointer;
+    font-family: Typewriter;
+    font-size: 18px;
 }
 
 .tabbtn:hover {
@@ -513,37 +515,38 @@ button {
 
 
 
-.infinitybtn {
+.infinitytabbtn {
     color: #FFFFFF;
     background: #1F1F1F;
-    font-weight: bold;
     border: 2px solid #B67F33;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
 }
 
-.infinitybtn:hover {
+.infinitytabbtn:hover {
     color: #000000;
     background: #B67F33;
-    font-weight: bold;
     border: 2px solid #B67F33;
-    border-radius: 4px;
 }
 
 .eternitytabbtn {
     color: #b341e0;
     background: black;
     border: 2px solid #b341e0;
-    font-weight: bold;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
 }
 
 .eternitytabbtn:hover {
     color: #511568;
     background: white;
+}
+
+.realitytabbtn {
+    background-color: white;
+    border: 2px solid #0b600e;
+    color: #0b600e;
+}
+
+.realitytabbtn:hover {
+    background-color: #0b600e;
+    color: white;
 }
 
 .achievementhidden {
@@ -1276,6 +1279,11 @@ button {
     background: white;
 }
 
+.glyphcontainer {
+    display: flex;
+    justify-content: center;
+}
+
 .glyph {
     display:flex;
     justify-content:center;
@@ -1289,7 +1297,19 @@ button {
     font-family: Typewriter;
 }
 
-.glyph:hover {
+#glyphs tr {
+    height: 50px;
+}
+
+#glyphs td {
+    width: 50px;
+}
+
+#glyphs .glyph {
+    background: gainsboro
+}
+
+#glyphs .glyph:hover {
     background: white;
 }
 
@@ -1312,6 +1332,13 @@ button {
     border: 1px solid #B241E3;
     box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
     text-shadow: #B241E3 -1px 1px 2px;
+}
+
+.dilationglyph {
+    color: #64DD17;
+    border: 1px solid #64DD17;
+    box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
+    text-shadow: #64DD17 -1px 1px 2px;
 }
 
 @keyframes glow {

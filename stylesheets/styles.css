@@ -542,6 +542,7 @@ button {
     background-color: white;
     border: 2px solid #0b600e;
     color: #0b600e;
+    display: none;
 }
 
 .realitytabbtn:hover {
@@ -1279,6 +1280,17 @@ button {
     background: white;
 }
 
+#glyphslots {
+    display: flex;
+    justify-content: center;
+    padding: 36px;
+}
+
+#glyphslots .glyph {
+    margin-right: 20px;
+    background: gainsboro
+}
+
 .glyphcontainer {
     display: flex;
     justify-content: center;
@@ -1313,6 +1325,14 @@ button {
     background: white;
 }
 
+#glyphs .empty {
+    cursor: default;
+}
+
+#glyphs .empty:hover {
+    background: gainsboro
+}
+
 .glyph.normalglyph {
     color: #22aa48;
     border: 1px solid #22aa48;
@@ -1325,6 +1345,8 @@ button {
     border: 1px solid #B67F33;
     box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
     text-shadow: #B67F33 -1px 1px 2px;
+    height: 50px !important;
+    width: 50px !important;
 }
 
 .timeglyph {
@@ -1332,6 +1354,8 @@ button {
     border: 1px solid #B241E3;
     box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
     text-shadow: #B241E3 -1px 1px 2px;
+    height: 50px !important;
+    width: 50px !important;
 }
 
 .dilationglyph {
@@ -1339,6 +1363,8 @@ button {
     border: 1px solid #64DD17;
     box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
     text-shadow: #64DD17 -1px 1px 2px;
+    height: 50px !important;
+    width: 50px !important;
 }
 
 @keyframes glow {

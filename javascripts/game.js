@@ -5111,14 +5111,9 @@ setInterval(function() {
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 20000) giveAchievement("This is what I have to do to get rid of you.")
     if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
     if ( Math.max(document.documentElement.clientHeight, window.innerHeight || 0) <= 150 || parent.document.body.clientHeight <= 150) giveAchievement("Dip the antimatter")
+    if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
 
 }, 1000)
-
-function fact(v) {
-    let ret=1;
-    do {ret *= v} while (--v > 1)
-    return ret;
-}
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)
@@ -5785,6 +5780,8 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
+
+
 
     player.lastUpdate = thisUpdate;
 }

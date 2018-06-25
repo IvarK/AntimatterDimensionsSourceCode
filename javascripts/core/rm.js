@@ -74,6 +74,8 @@ function generateRandomGlyph(level) {
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   var glyph = {
+    id: Date.now(),
+    idx: player.reality.glyphs.inventory.length,
     type: type,
     strength: strength,
     level: level,
@@ -222,26 +224,25 @@ function infinityGlyph(glyph, effectAmount) {
 function generateGlyphTable() {
   var table = document.getElementById("glyphs")
   var html = ""
-  var idx = 0
+  
   var glyphs = player.reality.glyphs.inventory
-  var glyphsAmount = glyphs.length
   for (var row=1; row<=10; row++) {
     html += "<tr>"
     for (var cell=1; cell<=10; cell++) {
+      var idx = ((row-1)*10 + cell - 1)
       html += "<td>"
-      
-      if (glyphsAmount > idx) {
-        var glyph = glyphs[idx]
-        html += "<div class='glyph "+glyph.type+"glyph' ach-tooltip='"
+      var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
+      if (glyph !== undefined && glyph !== null) {
+        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ach-tooltip='"
         html += "rarity: " + shorten(glyph.strength) + " "
         html += "level: " + shorten(glyph.level) + " "
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += i + ": " + shorten(effect) + " "
         }
-        html += "'></div>"
+        html += "'></div></div>"
       } else {
-        html += "<div class='glyph empty'></div>"
+        html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
 
       idx++;
@@ -249,5 +250,71 @@ function generateGlyphTable() {
     }
     html += "</tr>"
   }
+
+  $("#glyphslots").empty()
+  for (var slot=0; slot<player.reality.glyphs.slots; slot++) {
+    $("#glyphslots").append('<div id="active'+slot+'"class="glyph glyphactive" ondragover="allowDrop(event)" ondrop="drop(event)"></div>')
+    var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
+    if (glyph !== undefined && glyph !== null) {
+      var glyphhtml = ""
+      glyphhtml += "<div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ach-tooltip='"
+      glyphhtml += "rarity: " + shorten(glyph.strength) + " "
+      glyphhtml += "level: " + shorten(glyph.level) + " "
+      for (i in glyph.effects) {
+        var effect = glyph.effects[i]
+        glyphhtml += i + ": " + shorten(effect) + " "
+      }
+      glyphhtml += "'></div>"
+      $("#glyphslots").children()[slot].innerHTML = glyphhtml
+    }
+  }
   table.innerHTML = html
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = parseInt(ev.dataTransfer.getData("text"));
+
+  if (ev.target.className.includes("glyphactive")) {
+    var glyph = player.reality.glyphs.inventory.find(function(glyph) {
+      return glyph.id == data
+    })
+    if (glyph !== undefined && glyph !== null) {
+      glyph.idx = parseInt(ev.target.id.split("active")[1])
+      player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
+      player.reality.glyphs.active.push(glyph)
+    } else {
+      var glyph = player.reality.glyphs.active.find(function(glyph) {
+        return glyph.id == data
+      })
+      glyph.idx = parseInt(ev.target.id.split("active")[1])
+    }
+  } else {
+    var glyph = player.reality.glyphs.active.find(function(glyph) {
+      return glyph.id == data
+    })
+    if (glyph !== undefined && glyph !== null) {
+      glyph.idx = parseInt(ev.target.id)
+      player.reality.glyphs.active.splice(player.reality.glyphs.active.indexOf(glyph), 1)
+      player.reality.glyphs.inventory.push(glyph)
+    } else {
+      var glyph = player.reality.glyphs.inventory.find(function(glyph) {
+        return glyph.id == data
+      })
+      console.log(ev.target.id)
+      glyph.idx = parseInt(ev.target.id)
+    }
+  }
+  console.log(ev.target.className)
+  //ev.target.appendChild(document.getElementById(data));
+
+  generateGlyphTable()
 }

@@ -2032,6 +2032,12 @@ function gainedRealityMachines() {
     return ret
 }
 
+function gainedGlyphLevel() {
+    var ret = Math.round(Math.pow(player.eternityPoints.log10(), 0.5) * Math.pow(player.replicanti.amount.log10(), 0.4) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
+    if (ret == Infinity || isNaN(ret)) return 0
+    return ret
+}
+
 
 function setAchieveTooltip() {
     var apocAchieve = document.getElementById("Antimatter Apocalypse");
@@ -3492,7 +3498,8 @@ function reality(force) {
         }
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
-        addRealityTime(player.thisReality, gainedRealityMachines(), 1)
+        player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
+        addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),
@@ -3840,6 +3847,7 @@ function reality(force) {
         }
         Marathon2 = 0;
     }
+    generateGlyphTable();
 }
 
 function exitChallenge() {
@@ -5780,6 +5788,7 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
+    document.getElementById("realitymachine").innerHTML = "Do a reality idk<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())
 
 
 

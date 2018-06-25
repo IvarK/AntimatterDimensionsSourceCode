@@ -1312,33 +1312,33 @@ button {
     -webkit-user-drag: element;
   }
 
-#glyphslots {
-    display: flex;
-    justify-content: center;
-    padding: 36px;
-}
-
-#glyphslots .glyph {
-    margin-right: 20px;
-    background: gainsboro
-}
-
 .glyphcontainer {
     display: flex;
     justify-content: center;
 }
 
 .glyph {
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
     height: 50px !important;
     width: 50px !important;
-    background: black;
+    background: black !important;
     font-size: 1.5rem;
     transition-duration: 0.2s;
     cursor: move;
     font-family: Typewriter;
+}
+
+#glyphslots {
+    display: flex;
+    justify-content: center;
+    padding: 36px;
+}
+
+#glyphslots .glyphactive {
+    margin-right: 20px;
+    background: gainsboro !important;
 }
 
 
@@ -1360,6 +1360,7 @@ button {
 }
 
 #glyphs .empty {
+    background: gainsboro !important;
     cursor: default;
 }
 
@@ -1392,6 +1393,15 @@ button {
     width: 50px !important;
 }
 
+.replicationglyph {
+    color: #03A9F4;
+    border: 1px solid #03A9F4;
+    box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
+    text-shadow: #03A9F4 -1px 1px 2px;
+    height: 50px !important;
+    width: 50px !important;
+}
+
 .dilationglyph {
     color: #64DD17;
     border: 1px solid #64DD17;
@@ -1400,6 +1410,7 @@ button {
     height: 50px !important;
     width: 50px !important;
 }
+
 
 @keyframes glow {
     20% { text-shadow: 0 0 10px green; }

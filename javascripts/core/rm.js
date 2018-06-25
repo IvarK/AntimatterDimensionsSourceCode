@@ -1,6 +1,7 @@
 
 // TODO, add more types
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity"]
+const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞"}
 
 /**
  * pow is for exponent on time dim multiplier (^1.02) or something like that
@@ -241,14 +242,14 @@ function generateGlyphTable() {
       html += "<td>"
       var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
-        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
+        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         html += "rarity: " + shorten(glyph.strength) + " <br>"
         html += "level: " + shorten(glyph.level) + " <br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += i + ": " + shorten(effect) + " <br>"
         }
-        html += "</span></div></div>"
+        html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
       } else {
         html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
@@ -265,14 +266,14 @@ function generateGlyphTable() {
     var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
-      glyphhtml += "<div id='"+glyph.id+"' class='"+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
+      glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       glyphhtml += "rarity: " + shorten(glyph.strength) + " <br>"
       glyphhtml += "level: " + shorten(glyph.level) + " <br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
         glyphhtml += i + ": " + shorten(effect) + " <br>"
       }
-      glyphhtml += "</span></div>"
+      glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
       $("#glyphslots").children()[slot].innerHTML = glyphhtml
     }
   }

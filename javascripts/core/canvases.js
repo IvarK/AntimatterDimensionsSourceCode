@@ -256,3 +256,9 @@ function drawStudyTree() {
         }
     }
 }
+
+window.addEventListener('scroll', function() {
+
+    if (player.options.theme == "S6") document.getElementById("stars").style.top = window.scrollY+document.documentElement.clientHeight/2+"px";
+    
+});

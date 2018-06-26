@@ -344,10 +344,14 @@ function setTheme(name) {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'black';
         normalDimChart.data.datasets[0].borderColor = '#000'
-    }  else if(name === "S5") {
+    } else if(name === "S5") {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'black';
         normalDimChart.data.datasets[0].borderColor = '#000'
+    }  else if(name === "S6") {
+        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
+        Chart.defaults.global.defaultFontColor = 'white';
+        normalDimChart.data.datasets[0].borderColor = '#FFF'
     } else {
         document.getElementById("theme").textContent="Current theme: " + name;
     }
@@ -1880,25 +1884,29 @@ document.getElementById("importbtn").onclick = function () {
         setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 5000)
     }
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274") giveAchievement("So do I");
-    if (sha512_256(save_data) === "de24687ee7ba1acd8f5dc8f71d41a3d4b7f14432fff53a4d4166e7eea48a88c0") {
+    if (sha512_256(save_data.toUpperCase()) === "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537") {
         player.options.theme = "S1";
-        player.options.secretThemeKey = save_data;
+        player.options.secretThemeKey = save_data[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
-    } else if (sha512_256(save_data) === "76269d18c05c9ebec8a990a096cee046dea042a0421f8ab81d17f34dd1cdbdbf") {
+    } else if (sha512_256(save_data.toUpperCase()) === "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290") {
         player.options.theme = "S2";
-        player.options.secretThemeKey = save_data;
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
-    } else if (sha512_256(save_data) === "d764e9a1d1e18081be19f3483b537ae1159ab40d10e096df1d9e857d68d6ba7a") {
+    } else if (sha512_256(save_data.toUpperCase()) === "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f") {
         player.options.theme = "S3";
-        player.options.secretThemeKey = save_data;
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
-    } else if (sha512_256(save_data) === "ae0199482ecfa538a03eb37c67866e67a11f1832516c26c7939e971e514d40c5") {
+    } else if (sha512_256(save_data.toUpperCase()) === "d910565e1664748188b313768c370649230ca348cb6330fe9df73bcfa68d974d") {
         player.options.theme = "S4";
-        player.options.secretThemeKey = save_data;
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
-    }  else if (sha512_256(save_data) === "7a668b64cdfe1bcdf7a38d3858429ee21290268de66b9784afba27dc5225ce28") {
+    } else if (sha512_256(save_data.toUpperCase()) === "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883") {
         player.options.theme = "S5";
-        player.options.secretThemeKey = save_data;
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
+        setTheme(player.options.theme);
+    } else if (sha512_256(save_data.toUpperCase()) === "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137") {
+        player.options.theme = "S6";
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
     } else {
         save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });

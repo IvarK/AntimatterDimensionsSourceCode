@@ -3757,13 +3757,11 @@ function reality(force) {
             },
             why: player.why,
             realities: player.realities+1,
-            thisReality: player.thisReality,
-            bestReality: player.bestReality,
+            thisReality: 0,
+            bestReality: Math.min(player.thisReality, player.bestReality),
             reality: player.reality,
             options: player.options
         };
-        if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
-        if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
 
         if (player.eternities <= 30) {
             document.getElementById("secondRow").style.display = "none";
@@ -3790,23 +3788,12 @@ function reality(force) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         updateAutobuyers();
-        if (isAchEnabled("r37")) player.money = new Decimal(1000);
-        if (isAchEnabled("r54")) player.money = new Decimal(2e5);
-        if (isAchEnabled("r55")) player.money = new Decimal(1e10);
-        if (isAchEnabled("r78")) player.money = new Decimal(1e25);
-        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
-        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
-        if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();
         updateChallengeTimes()
         updateLastTenRuns()
         updateLastTenEternities()
         updateLastTenRealities()
-        if (!isAchEnabled("r133")) {
-            var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
-            for (var i = 0; i< infchalls.length; i++) infchalls[i].style.display = "none"
-        }
         IPminpeak = new Decimal(0)
         EPminpeak = new Decimal(0)
         updateMilestones()

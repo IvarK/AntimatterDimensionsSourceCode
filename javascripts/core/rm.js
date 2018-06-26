@@ -369,7 +369,7 @@ function generateGlyphTable() {
       if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       var rarity = getRarity(glyph.strength)
-      glyphhtml += "<span style='color: "+rarity.color+"'>" + rarity.name + "</span> Level: "+shorten(glyph.level)+"<br><br>"
+      glyphhtml += "<span style='color: "+rarity.color+"; float:left'>" + rarity.name + "</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
         glyphhtml += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"

@@ -2033,7 +2033,7 @@ function gainedRealityMachines() {
 }
 
 function gainedGlyphLevel() {
-    var ret = Math.round(Math.pow(player.eternityPoints.log10(), 0.5) * Math.pow(player.replicanti.amount.log10(), 0.4) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
+    var ret = Math.round(Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, 0.4) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
     if (ret == Infinity || isNaN(ret)) return 0
     return ret
 }

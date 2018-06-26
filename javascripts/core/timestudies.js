@@ -117,7 +117,7 @@ function buyDilationStudy(name, cost) {
         }
         if (name === 6) {
             showTab("reality")
-            document.getElementById("dilstudy6").innerHTML = "Unlock reality machines<span>Cost: 5,000,000,000 Time Theorems"
+            document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Cost: 5,000,000,000 Time Theorems"
         }
         player.dilation.studies.push(name)
         player.timestudy.theorem -= cost

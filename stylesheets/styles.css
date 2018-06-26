@@ -1418,7 +1418,7 @@ button {
 }
 
 .tooltip {
-    width: 150px;
+    width: 275px;
     background-color: #4a4a4a;
     color: #fff;
     text-align: center;
@@ -1433,6 +1433,10 @@ button {
     padding: 12px;
     pointer-events: none;
     display: none;
+  }
+
+  .tooltip br:last-child {
+      display: none;
   }
   
   .tooltip::after {

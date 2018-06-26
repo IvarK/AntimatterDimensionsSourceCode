@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
       if (tier == 2) multiplier = multiplier.pow(1.7)
   }
 
-  multiplier = multiplier.times(player.achPow);
+  if ( isAchEnabled("r11") ) multiplier = multiplier.times(player.achPow);
   multiplier = multiplier.times(kongDimMult)
   multiplier = multiplier.times(kongAllDimMult)
 
@@ -75,6 +75,12 @@ function getDimensionFinalMultiplier(tier) {
   }
 
   if (player.dilation.upgrades.includes(6)) multiplier = multiplier.times(player.dilation.dilatedTime.pow(308))
+
+  for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "normal" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
+      if (glyph.type == "normal" && glyph.effects.mult !== undefined) multiplier = multiplier.times(glyph.effects.mult)
+  }
   return multiplier;
 }
 

@@ -242,14 +242,16 @@ function generateGlyphTable() {
       html += "<td>"
       var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
-        html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
+        if (glyph.color !== undefined) html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
+        else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         html += "rarity: " + shorten(glyph.strength) + " <br>"
         html += "level: " + shorten(glyph.level) + " <br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += i + ": " + shorten(effect) + " <br>"
         }
-        html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
+        if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
+        else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
       } else {
         html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
@@ -266,14 +268,16 @@ function generateGlyphTable() {
     var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
-      glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
+      if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
+      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       glyphhtml += "rarity: " + shorten(glyph.strength) + " <br>"
       glyphhtml += "level: " + shorten(glyph.level) + " <br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
         glyphhtml += i + ": " + shorten(effect) + " <br>"
       }
-      glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
+      if (glyph.symbol !== undefined) glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
+      else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
       $("#glyphslots").children()[slot].innerHTML = glyphhtml
     }
   }

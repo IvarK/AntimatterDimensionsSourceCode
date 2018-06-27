@@ -287,11 +287,11 @@ function normalGlyph(glyph, effectAmount) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 4) return { name: "Mythical", color: "blue" }
-  if (x >= 3) return { name: "Legendary", color:  "gold" }
-  if (x >= 2.5) return { name:  "Very rare", color:  "red" }
-  if (x >= 2) return { name:  "Rare", color:  "green" }
-  if (x >= 1.5) return { name:  "Uncommon", color:  "silver" }
+  if (x >= 4) return { name: "Mythical", color: "red" }
+  if (x >= 3) return { name: "Legendary", color:  "orange" }
+  if (x >= 2.5) return { name:  "Epic", color:  "purple" }
+  if (x >= 2) return { name:  "Rare", color:  "blue" }
+  if (x >= 1.5) return { name:  "Uncommon", color:  "green" }
   if (x >= 1) return { name:  "Common", color:  "white" }
 }
 
@@ -343,7 +343,7 @@ function generateGlyphTable() {
         if (glyph.color !== undefined) html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         var rarity = getRarity(glyph.strength)
-        html += "<span style='color: "+rarity.color+"; float:left'>" + rarity.name + "</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
+        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+(glyph.strength / 4 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"

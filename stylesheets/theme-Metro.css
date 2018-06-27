@@ -77,13 +77,15 @@ input, select {
     background: #EF5350 !important;
 }
 
-.infinitybtn {
+.infinitytabbtn {
     border: 1px solid #FF9800 !important;
+    background: #1F1F1F !important;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
-.infinitybtn:hover {
+.infinitytabbtn:hover {
     background: #FF9800 !important;
+    border: 1px solid #FF9800 !important;
 }
 
 .eternitybtn {
@@ -97,8 +99,14 @@ input, select {
 
 .eternitytabbtn {
     color: #673AB7 !important;
+    background: #000 !important;
     border: 1px solid #673AB7 !important;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
+}
+
+.eternitytabbtn:hover {
+    background: #FFF !important;
+    border: 1px solid #673AB7 !important;
 }
 
 .completedrow {
@@ -476,6 +484,22 @@ input, select {
 
 .dilationupglocked:hover, .dilationupgrebuyablelocked:hover {
     background: #EF5350 !important;
+}
+
+.realitytabbtn {
+    background: white !important;
+    border: 1px solid #0b600e !important;
+    display: none;
+}
+
+.realitytabbtn:hover {
+    background-color: #0b600e !important;
+    border: 1px solid #0b600e !important;
+    color: white;
+}
+
+#realitymachine {
+    border: 1px solid #0b600e !important;
 }
 
 @keyframes metroStudyGlowIn {

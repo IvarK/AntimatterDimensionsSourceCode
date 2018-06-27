@@ -1328,6 +1328,11 @@ button {
     transition-duration: 0.2s;
     cursor: move;
     font-family: Typewriter;
+    
+}
+
+#reality * {
+    user-select: none;
 }
 
 #glyphslots {

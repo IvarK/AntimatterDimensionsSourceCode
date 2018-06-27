@@ -1,7 +1,7 @@
 
 // TODO, add more types
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "normal"]
-const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", normal:"Ω"}
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "normalcy"]
+const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", normalcy:"Ω"}
 
 /**
  * pow is for exponent on time dim multiplier (^1.02) or something like that
@@ -49,7 +49,7 @@ const infinityEffects = ["pow", "rate", "ipgain", "infMult"]
  * dimboost: multiply dim boost effect
  * autochall: do challenges automatically.
  */
-const normalEffects= ["pow", "mult", "dimboost", "autochall"]
+const normalcyEffects= ["pow", "mult", "dimboost", "autochall"]
 
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -90,7 +90,7 @@ function generateRandomGlyph(level) {
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-    type = "normal"
+    type = "normalcy"
     effectAmount = 1
   }
   var idx = 0
@@ -125,8 +125,8 @@ function generateRandomGlyph(level) {
       return infinityGlyph(glyph, effectAmount)
       break;
 
-    case "normal":
-      return normalGlyph(glyph, effectAmount)
+    case "normalcy":
+      return normalcyGlyph(glyph, effectAmount)
       break;
   }
 }
@@ -252,10 +252,10 @@ function infinityGlyph(glyph, effectAmount) {
   return glyph
 }
 
-function normalGlyph(glyph, effectAmount) {
+function normalcyGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = normalEffects[Math.floor(Math.random() * normalEffects.length)]
+    var toAdd = normalcyEffects[Math.floor(Math.random() * normalcyEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
@@ -287,7 +287,7 @@ function normalGlyph(glyph, effectAmount) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 4) return { name: "Artifact", color: "#FFE57F" }
+  if (x >= 4) return { name: "Perfect", color: "#FFE57F" }
   if (x >= 3.5) return { name: "Mythical", color: "#D50000" }
   if (x >= 3) return { name: "Legendary", color:  "#FF9800" }
   if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" }
@@ -319,10 +319,10 @@ function getDesc(typeeffect, x) {
     infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>",
     infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    normalmult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    normaldimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalautochall: "Automatically complete normal and infinity challenges"
+    normalcypow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    normalcymult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    normalcydimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
+    normalcyautochall: "Automatically complete normal and infinity challenges"
   }
 
   return EFFECT_DESCRIPTIONS[typeeffect]
@@ -344,7 +344,7 @@ function generateGlyphTable() {
         if (glyph.color !== undefined) html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         var rarity = getRarity(glyph.strength)
-        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
+        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"
@@ -370,7 +370,7 @@ function generateGlyphTable() {
       if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       var rarity = getRarity(glyph.strength)
-      glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
+      glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
         glyphhtml += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"

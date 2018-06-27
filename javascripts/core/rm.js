@@ -1,7 +1,7 @@
 
 // TODO, add more types
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "normalcy"]
-const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", normalcy:"Ω"}
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"]
+const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", power:"Ω"}
 
 /**
  * pow is for exponent on time dim multiplier (^1.02) or something like that
@@ -49,7 +49,7 @@ const infinityEffects = ["pow", "rate", "ipgain", "infMult"]
  * dimboost: multiply dim boost effect
  * autochall: do challenges automatically.
  */
-const normalcyEffects= ["pow", "mult", "dimboost", "autochall"]
+const powerEffects= ["pow", "mult", "dimboost", "autochall"]
 
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -90,7 +90,7 @@ function generateRandomGlyph(level) {
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-    type = "normalcy"
+    type = "power"
     effectAmount = 1
   }
   var idx = 0
@@ -125,8 +125,8 @@ function generateRandomGlyph(level) {
       return infinityGlyph(glyph, effectAmount)
       break;
 
-    case "normalcy":
-      return normalcyGlyph(glyph, effectAmount)
+    case "power":
+      return powerGlyph(glyph, effectAmount)
       break;
   }
 }
@@ -252,10 +252,10 @@ function infinityGlyph(glyph, effectAmount) {
   return glyph
 }
 
-function normalcyGlyph(glyph, effectAmount) {
+function powerGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = normalcyEffects[Math.floor(Math.random() * normalcyEffects.length)]
+    var toAdd = powerEffects[Math.floor(Math.random() * powerEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
@@ -319,10 +319,10 @@ function getDesc(typeeffect, x) {
     infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>",
     infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalcypow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    normalcymult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    normalcydimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalcyautochall: "Automatically complete normal and infinity challenges"
+    powerpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
+    powerautochall: "Automatically complete normal and infinity challenges"
   }
 
   return EFFECT_DESCRIPTIONS[typeeffect]

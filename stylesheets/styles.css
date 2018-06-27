@@ -1375,10 +1375,10 @@ button {
 
 .glyphraritytext {
     text-shadow: -1px 1px 2px black;
-    width: 180px;
+    width: 190px;
 }
 
-.glyph.normalcyglyph {
+.glyph.powerglyph {
     border: 1px solid #22aa48;
     box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
 }

@@ -287,11 +287,12 @@ function normalGlyph(glyph, effectAmount) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 4) return { name: "Mythical", color: "red" }
-  if (x >= 3) return { name: "Legendary", color:  "orange" }
-  if (x >= 2.5) return { name:  "Epic", color:  "purple" }
-  if (x >= 2) return { name:  "Rare", color:  "blue" }
-  if (x >= 1.5) return { name:  "Uncommon", color:  "green" }
+  if (x >= 4) return { name: "Artifact", color: "#FFE57F" }
+  if (x >= 3.5) return { name: "Mythical", color: "#D50000" }
+  if (x >= 3) return { name: "Legendary", color:  "#FF9800" }
+  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" }
+  if (x >= 2) return { name:  "Rare", color:  "#2196F3" }
+  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }
   if (x >= 1) return { name:  "Common", color:  "white" }
 }
 
@@ -341,7 +342,7 @@ function generateGlyphTable() {
       var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
         if (glyph.color !== undefined) html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
-        else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
+        else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         var rarity = getRarity(glyph.strength)
         html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
         for (i in glyph.effects) {
@@ -367,7 +368,7 @@ function generateGlyphTable() {
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
       if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
-      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
+      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       var rarity = getRarity(glyph.strength)
       glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
       for (i in glyph.effects) {
@@ -447,11 +448,11 @@ function drop(ev) {
       var glyph = player.reality.glyphs.inventory.find(function(glyph) {
         return glyph.id == data
       })
-      console.log(ev.target.id)
+      //console.log(ev.target.id)
       glyph.idx = parseInt(ev.target.id)
     }
   }
-  console.log(ev.target.className)
+  //console.log(ev.target.className)
   //ev.target.appendChild(document.getElementById(data));
   generateGlyphTable()
   mouseOn.css({"left": "0", "top": "0px", "display": "none"})

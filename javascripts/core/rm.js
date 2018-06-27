@@ -343,7 +343,7 @@ function generateGlyphTable() {
         if (glyph.color !== undefined) html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         else html += "<div class='glyph' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' ><span class='tooltip'>"
         var rarity = getRarity(glyph.strength)
-        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+(glyph.strength / 4 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
+        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
           html += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"
@@ -369,7 +369,7 @@ function generateGlyphTable() {
       if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
       var rarity = getRarity(glyph.strength)
-      glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+(glyph.strength / 4 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
+      glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
         glyphhtml += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"

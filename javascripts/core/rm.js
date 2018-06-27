@@ -302,14 +302,14 @@ function getRarity(x) {
 const NUMBERCOLOR = "#85ff85"
 function getDesc(typeeffect, x) {
   const EFFECT_DESCRIPTIONS = {
-    timepow: "Time dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    timespeed: "Multiply game speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    timefreeTickMult: "Free tickspeed threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    timeeternity: "Multiply EP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    dilationdilationMult: "Multiply dilated time gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    dilationgalaxyThreshold: "Free galaxy threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> TT per second.",
-    dilationpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.",
+    timepow: "Time dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    timespeed: "Multiply game speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    timefreeTickMult: "Free tickspeed threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    timeeternity: "Multiply EP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    dilationdilationMult: "Multiply dilated time gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    dilationgalaxyThreshold: "Free galaxy threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> TT per second.", // Implemented
+    dilationpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
     replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     replicationpow: "Replicanti multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     replicationdtgain: "Multiply DT gain by replicanti amount ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
@@ -318,8 +318,8 @@ function getDesc(typeeffect, x) {
     infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>",
     infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    normalmult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
+    normalpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    normalmult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     normaldimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
     normalautochall: "Automatically complete normal and infinity challenges"
   }

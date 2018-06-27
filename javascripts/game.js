@@ -2030,6 +2030,10 @@ function gainedEternityPoints() {
     if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
     else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
     else if (player.timestudy.studies.includes(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "time" && glyph.effects.eternity !== undefined) ret = ret.times(glyph.effects.eternity)
+    }
 
     return ret.floor()
 }
@@ -3549,7 +3553,7 @@ function reality(force) {
             infinityUpgrades: [],
             infinityPoints: new Decimal(0),
             infinitied: 0,
-            infinitiedBank: player.infinitiedBank,
+            infinitiedBank: 0,
             totalTimePlayed: player.totalTimePlayed,
             bestInfinityTime: 9999999999,
             thisInfinityTime: 0,
@@ -3646,7 +3650,7 @@ function reality(force) {
                 power: new Decimal(1),
                 baseAmount: 0
             },
-            infDimBuyers: player.infDimBuyers,
+            infDimBuyers: [false, false, false, false, false, false, false, false],
             timeShards: new Decimal(0),
             tickThreshold: new Decimal(1),
             totalTickGained: 0,
@@ -3721,7 +3725,7 @@ function reality(force) {
                 galaxies: 0,
                 galCost: new Decimal(1e170),
                 galaxybuyer: undefined,
-                auto: player.replicanti.auto
+                auto: [false, false, false]
             },
             timestudy: {
                 theorem: 0,
@@ -4757,6 +4761,15 @@ function updateDilationUpgradeCosts() {
 }
 
 
+function getDilationGainPerSecond() {
+    var ret = player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1])
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
+    }
+    return ret
+}
+
 
 
 
@@ -5111,6 +5124,10 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
+    updateAchievements()
+    if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
+    else document.getElementById("nextAchAt").textContent = ""
+
 }, 1000)
 
 var postC2Count = 0;
@@ -5126,6 +5143,14 @@ function gameLoop(diff) {
     diff = diff / 100;
     if (diff < 0) diff = 1;
     if (player.currentEternityChall === "eterc12") diff = diff / 1000;
+    var speedMod = 1
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "time" && glyph.effects.speed !== undefined) {
+            diff *= glyph.effects.speed
+            speedmod = glyph.effects.speed
+        }
+    }
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times(diff/player.autoTime))
@@ -5211,8 +5236,8 @@ function gameLoop(diff) {
 
     document.getElementById("dimTabButtons").style.display = "none"
 
-    if (player.currentEternityChall === "eterc12") player.totalTimePlayed += diff*1000
-    else player.totalTimePlayed += diff
+    if (player.currentEternityChall === "eterc12") player.totalTimePlayed += diff*1000 / speedMod
+    else player.totalTimePlayed += diff / speedMod
     player.thisInfinityTime += diff
     player.thisEternity += diff
     player.thisReality += diff
@@ -5255,13 +5280,17 @@ function gameLoop(diff) {
     if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0 && player.currentEternityChall !== "eterc12") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
 
     let gain;
+    var tickmult = 1.33
+    if (player.timestudy.studies.includes(171)) mult = 1.25
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "time" && glyph.effects.freeTickMult !== undefined) tickmult = tickmult.times(glyph.effects.freeTickMult)
+    }
     if (player.timeShards.gt(0)) {
-        if (player.timestudy.studies.includes(171)) gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(1.25))
-        else gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(1.33))
+        gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(tickmult))
         player.totalTickGained += gain
         player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
-        if (player.timestudy.studies.includes(171)) player.tickThreshold = new Decimal(1).times(1.25).pow(player.totalTickGained)
-        else player.tickThreshold = new Decimal(1).times(1.33).pow(player.totalTickGained)
+        player.tickThreshold = new Decimal(1).times(tickmult).pow(player.totalTickGained)
         document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
         updateTickSpeed();
     }
@@ -5445,10 +5474,14 @@ function gameLoop(diff) {
         else document.getElementById("timeMax"+tier).className = "unavailablebtn"
     }
 
-    if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1])*diff/10)
+    if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/10)
 
     if (player.dilation.nextThreshold.lte(player.dilation.dilatedTime)) {
         let thresholdMult = 5 * Math.pow(0.875, player.dilation.rebuyables[2])
+        for (i in player.reality.glyphs.active) {
+            var glyph = player.reality.glyphs.active[i]
+            if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult = thresholdMult.times(glyph.effects.galaxyThreshold)
+        }
         // for (var i = 0; i < player.dilation.rebuyables[2]; i++) {
         //     thresholdMult *= Math.min( 1 - (Math.pow(0.8, i) / 10), 0.999)
         // }
@@ -5457,6 +5490,10 @@ function gameLoop(diff) {
         if (player.dilation.upgrades.includes(4)) player.dilation.freeGalaxies += 1
     }
 
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "dilation" && glyph.effects.TTgen !== undefined) player.timestudy.theorem = player.timestudy.theorem.plus(glyph.effects.TTgen*diff/10)
+    }
 
 
 

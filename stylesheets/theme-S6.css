@@ -1,15 +1,10 @@
 #stars {
     display: block !important;
-    position: absolute;
-    width: auto;
-    height: auto;
+    position: fixed;
     left: 50%;
     top: 50%;
     z-index: -1000;
-    pointer-events:none;
-    overflow: hidden;
-    min-width: 100%;
-    min-height: 100%;
+    pointer-events: none;
     transform: translate(-50%,-50%);
 }
 

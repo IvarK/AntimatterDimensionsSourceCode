@@ -3553,7 +3553,7 @@ function reality(force) {
             infinityUpgrades: [],
             infinityPoints: new Decimal(0),
             infinitied: 0,
-            infinitiedBank: player.infinitiedBank,
+            infinitiedBank: 0,
             totalTimePlayed: player.totalTimePlayed,
             bestInfinityTime: 9999999999,
             thisInfinityTime: 0,
@@ -3650,7 +3650,7 @@ function reality(force) {
                 power: new Decimal(1),
                 baseAmount: 0
             },
-            infDimBuyers: player.infDimBuyers,
+            infDimBuyers: [false, false, false, false, false, false, false, false],
             timeShards: new Decimal(0),
             tickThreshold: new Decimal(1),
             totalTickGained: 0,
@@ -3725,7 +3725,7 @@ function reality(force) {
                 galaxies: 0,
                 galCost: new Decimal(1e170),
                 galaxybuyer: undefined,
-                auto: player.replicanti.auto
+                auto: [false, false, false]
             },
             timestudy: {
                 theorem: 0,
@@ -5125,6 +5125,8 @@ setInterval(function() {
     else $("#realitybtn").hide()
 
     updateAchievements()
+    if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
+    else document.getElementById("nextAchAt").textContent = ""
 
 }, 1000)
 

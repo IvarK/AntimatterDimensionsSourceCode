@@ -5124,6 +5124,8 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
+    updateAchievements()
+
 }, 1000)
 
 var postC2Count = 0;

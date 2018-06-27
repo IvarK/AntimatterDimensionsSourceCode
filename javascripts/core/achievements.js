@@ -208,7 +208,7 @@ function updateAchievements() {
       for (var l=0; l<8; l++) {
           achNum += 1;
           var name = allAchievements["r"+achNum]
-          if (player.achievements.includes("r"+achNum)) {
+          if (isAchEnabled("r"+achNum)) {
               n++
               document.getElementById(name).className = "achievementunlocked"
           } else {
@@ -265,6 +265,25 @@ function getSecretAchAmount() {
 }
 
 function isAchEnabled(name) {
-    if (player.achievements.includes(name) && (player.realities == 0 || player.thisReality > 2 * 24 * 60 * 60 * 10 * Math.pow(0.9, Math.max(player.realities-1, 0)))) return true;
-    else return false
+    if (!player.achievements.includes(name)) return false
+    if (player.realities == 0 && player.achievements.includes(name)) return true
+    var time = player.thisReality / 10
+    var achnum = parseInt(name.split("r")[1])
+    var row = Math.floor(achnum / 10)
+    var col = achnum % 10
+    var basePerAch = 60 * 48 * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffFromMiddle = (col - 7) * 3
+    var timeReq = 0
+    for ( var i = 1; i < row; i++) {
+        timeReq += (basePerAch + ((i - 7) * 3)) * 8
+    }
+
+    for ( var i = 1; i < col; i++) {
+        timeReq += basePerAch + diffFromMiddle
+    }
+
+    timeReq += basePerAch + diffFromMiddle
+
+    if (timeReq > time) return false
+    else return true
 }

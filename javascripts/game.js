@@ -4919,7 +4919,7 @@ setInterval(function() {
     document.getElementById("eternitybtn").style.display = (player.infinityPoints.gte(player.eternityChallGoal) && (player.infDimensionsUnlocked[7] || player.eternities > 24)) ? "inline-block" : "none"
 
 
-    if (player.eternities !== 0 || player.realities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
+    if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     for (var i=1; i <=8; i++) {
         document.getElementById("postc"+i+"goal").textContent = "Goal: "+shortenCosts(goals[i-1])
     }

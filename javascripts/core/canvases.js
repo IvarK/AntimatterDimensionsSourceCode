@@ -43,7 +43,7 @@ function animationOnOff(name) {
 function drawAnimations(ts){
     if (player.dilation.tachyonParticles.gte(1) && document.getElementById("eternitystore").style.display !== "none" && document.getElementById("dilation").style.display !== "none" && player.options.animations.tachyonParticles) {
         ctx3.clearRect(0, 0, canvas.width, canvas.height);
-        if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") ctx3.fillStyle="#FFF";
+        if (player.options.theme == "Dark" || player.options.theme == "Dark Metro" || player.options.theme == "S6") ctx3.fillStyle="#FFF";
         else ctx3.fillStyle="#000";
         for (i=0; i<player.dilation.tachyonParticles.exponent+1; i++) {
             if (typeof particles["particle"+i] == "undefined") {

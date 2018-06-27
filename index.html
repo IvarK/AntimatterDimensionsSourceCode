@@ -31,7 +31,10 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 95vh; ">
+    <video autoplay muted loop id="stars" style="display: none;">
+        <source src="images/s6-bg.webm" type="video/webm">
+    </video>
+<body id="body" style="height: 95vh;">
     <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
         <div id='game'>
             <div id='news'>.</div>
@@ -313,7 +316,7 @@
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudylocked" id="dilstudy6" onclick="buyDilationStudy(6, 5e9)">Unlock reality machines<span>Requirement: 1e4000 EP<span>Cost: 5,000,000,000 Time Theorems</button></td>
+                        <td><button class="timestudylocked" id="dilstudy6" onclick="buyDilationStudy(6, 5e9)">Unlock reality<span>Requirement: 1e4000 EP<span>Cost: 5,000,000,000 Time Theorems</button></td>
                     </tr>
                 </table>
                 <div style="height: 60px;"></div>
@@ -1170,6 +1173,7 @@
             </table>
             <div id="normalachievements" class="achtab">
                 <div id="achmultlabel" style="font-size: 140%">Current achievement multiplier on each Dimension: 1x</div>
+                <div id="nextAchAt" style="font-size: 140%">Next achievement in</div>
                 <table id="achievementtable" style="margin: auto">
                     <tr id="achRow1">
                         <td>
@@ -2647,23 +2651,42 @@
 
         </div>
         <div id="reality" class="tab" align="center" style="margin-top: 10px;">
-            <div>
-                <button id="realitymachine" onclick="reality()">Do a reality idk<br>Machines gained: 1<br>Glyph level: 1</button>
-            </div>
-            <div id="glyphslots">
-                <!-- These are generated from JS -->
-            </div>
-            <div class="glyphcontainer" style="width: 80%; margin: auto;">
+            <table class="table" align="center" style="margin: auto">
+                <tr>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('glyphstab')">Glyphs</button></td>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('wormhole')">Wormhole</button></td>
+                </tr>
+            </table>
+            <div id="glyphstab" class="realitytab">
                 <div>
-                    <h3 style="text-align: center">Inventory</h3>
-                    <table>
-                        <tbody id="glyphs">
-                        </tbody>
-                    </table>
+                    <button id="realitymachine" onclick="reality()">Make a new reality<br>Machines gained: 1<br>Glyph level: 1</button>
                 </div>
-                <div  style="width: 20%">
-                    <h3 style="text-align: center">Upgrades</h3>
-                    here be upgrades
+                <div id="glyphslots">
+                    <!-- These are generated from JS -->
+                </div>
+                <div class="glyphcontainer" style="width: 80%; margin: auto;">
+                    <div>
+                        <h3 style="text-align: center">Inventory</h3>
+                        <table>
+                            <tbody id="glyphs">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width: 20%">
+                        <h3 style="text-align: center">Upgrades</h3>
+                        here be upgrades
+                    </div>
+                </div>
+            </div>
+            <div id="automation" class="realitytab">
+                <div>
+                    <h1>Upgrades here later</h1>
+                </div>
+            </div>
+            <div id="wormhole" class="realitytab">
+                <div>
+                    <h1>Add this</h1>
                 </div>
             </div>
         </div>

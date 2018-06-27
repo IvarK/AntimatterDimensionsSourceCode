@@ -1373,6 +1373,10 @@ button {
     background: gainsboro
 }
 
+.glyphraritytext {
+    text-shadow: -1px 1px 2px black;
+}
+
 .glyph.normalglyph {
     color: #22aa48;
     border: 1px solid #22aa48;
@@ -1423,7 +1427,7 @@ button {
 }
 
 .tooltip {
-    width: 150px;
+    width: 275px;
     background-color: #4a4a4a;
     color: #fff;
     text-align: center;
@@ -1438,6 +1442,10 @@ button {
     padding: 12px;
     pointer-events: none;
     display: none;
+  }
+
+  .tooltip br:last-child {
+      display: none;
   }
   
   .tooltip::after {

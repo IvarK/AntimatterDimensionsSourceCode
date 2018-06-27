@@ -1,0 +1,576 @@
+#stars {
+    display: block !important;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: -1000;
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+}
+
+button {
+    color: #E0E0E0;
+    background-color: #455A64 !important;
+    border: 1px solid black;
+    box-shadow: 0px 0px 7px 2px #111111;
+}
+
+.popup {
+    background-color: #455A64 !important;
+    box-shadow: 0px 0px 15px 0px black !important;
+}
+
+.achievementunlocked {
+    background-color: #43A047 !important;
+}
+
+.storebtn {
+    color: #E0E0E0;
+    background-color: #455A64 !important;
+    border: 1px solid black;
+    box-shadow: 0px 0px 7px 2px #111111;
+}
+
+.storebtn:hover {
+    background: #1B5E20 !important;
+}
+
+.newdim:hover {
+    background: #1B5E20 !important;
+}
+
+.newdimlocked {
+    background: #37474F !important;
+}
+
+.newdimlocked:hover {
+    background: #B84B5F !important;
+}
+
+.postinfcrunch:hover {
+    background: #1565C0 !important;
+}
+
+.infinitybtn {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 2px solid #FF9800 !important;
+}
+
+.infinitybtn:hover {
+    background: #FF9800 !important;
+}
+
+input {
+    background-color: #455A64 !important;
+    border: 1px solid black !important;
+}
+
+#coinAmount {
+    animation: antimatterGlow 25s infinite;
+}
+
+#progressbar {
+    background-color: #1B5E20 !important;
+}
+
+#news {
+    color: #E0E0E0 !important;
+}
+
+#game {
+    border: 1px solid #546E7A !important;
+    background-color: #455A64;
+}
+
+.container {
+    color: #888888 !important;
+}
+
+.challengesbtn {
+    background: #546E7A !important;
+}
+
+.challengesbtn:hover {
+    background: #43A047 !important;
+}
+
+.lockedchallengesbtn {
+    background: #23292a !important;
+    border-color: #B84B5F !important;
+}
+
+.onchallengebtn {
+    background: #263238 !important;
+}
+
+.tabbtn {
+    border: 2px solid #1565C0 !important;
+}
+
+.tabbtn:hover {
+    background: #1565C0 !important;
+    color: black !important;
+}
+
+.secondarytabbtn:hover {
+    background: #1565C0 !important;
+    color: black !important;
+}
+
+.secondarytabbtn {
+    border: 2px solid #1565C0 !important;
+}
+
+.challengediv {
+    background: #455A64 !important;
+}
+
+.completedchallengesbtn {
+    background: #43A047 !important;
+    box-shadow: none;
+    border: 3px solid #388E3C;
+}
+
+.autobuyerbtn {
+    color: black !important;
+    box-shadow: none !important;
+    border: 1px solid black !important;
+}
+
+.autobuyerbtn:hover {
+    background: #FF9800 !important;
+}
+
+#infinityPoints1 {
+    color: #4F5957 !important;
+}
+
+.IPAmount1 {
+    color: white !important;
+    text-shadow: 0px 0px 7px #fff;
+}
+
+.IPAmount2 {
+    color: white !important;
+    text-shadow: 0px 0px 7px #fff;
+}
+
+.statstab {
+    color: #E0E0E0 !important;
+}
+
+.unavailablebtn {
+    background: #37474F !important;
+}
+
+.unavailablebtn:hover {
+    background: #B84B5F !important;
+}
+
+.postinfcrunch {
+    color: black;
+    border: 2px solid #1565C0 !important;
+}
+
+.infinimultbtn {
+    background: #1F1F1F !important;
+}
+
+.infinimultbtn:hover {
+    color: white !important;
+    background: #1F1F1F !important;
+}
+
+.infinistorebtn1 {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtn2 {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtn3 {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtn4 {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtnlocked {
+    background: #263238 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtnlocked:hover {
+    background: #37474F !important;
+}
+
+.infinistorebtn2:hover {
+    color: #000;
+    background: #D50000 !important;
+}
+
+.infinistorebtn1:hover {
+    color: #000;
+    background: #6200EA !important;
+}
+
+.infinistorebtn3:hover {
+    color: #000;
+    background: #FFD600 !important;
+}
+
+.infinistorebtn4:hover {
+    color: #000;
+    background: #00E5FF !important;
+}
+
+.infinistorebtnbought {
+    color: black;
+    background: #43A047 !important;
+    border: 1px solid black !important;
+}
+
+.storebtn:hover {
+    color: #FFF !important;
+}
+
+#infPowAmount {
+    color: white !important;
+    text-shadow: 0px 0px 7px #fff;
+}
+
+#infDimMultAmount {
+    color: white !important;
+    text-shadow: 0px 0px 7px #fff;
+}
+
+#timeShardAmount {
+    color: #64DD17 !important;
+    text-shadow: 0px 0px 7px #64DD17;
+}
+
+#tickThreshold {
+    color: #64DD17 !important;
+    text-shadow: 0px 0px 7px #64DD17;
+}
+
+#replicantiamount {
+    color: #03A9F4 !important;
+    text-shadow: 0px 0px 7px #03A9F4;
+}
+
+#replicantimult {
+    color: #03A9F4 !important;
+    text-shadow: 0px 0px 7px #03A9F4;
+}
+
+.eternitybtn {
+    color: #b341e0 !important;
+    background: black !important;
+    border: 2px solid #b341e0 !important;
+}
+
+.eternitybtn:hover {
+    color: #511568 !important;
+    background: white !important;
+}
+
+.eternitytabbtn {
+    color: #b341e0 !important;
+    background: black !important;
+    border: 2px solid #b341e0 !important;
+}
+
+.eternitytabbtn:hover {
+    color: #511568 !important;
+    background: white !important;
+}
+
+#eternityPoints1 {
+    color: #4F5957 !important;
+}
+
+.EPAmount1 {
+    color: #b341e0 !important;
+    text-shadow: 0px 0px 7px #b341e0;
+}
+
+.EPAmount2 {
+    color: #b341e0 !important;
+    text-shadow: 0px 0px 7px #b341e0;
+}
+
+.TheoremAmount {
+    color: #64DD17 !important;
+    text-shadow: 0px 0px 7px #64DD17;
+}
+
+.timetheorembtn {
+    color: #3AACD6 !important;
+    background: #161616 !important;
+    border: 1px solid #3AACD6 !important;
+}
+
+.timetheorembtn:hover {
+    color: #161616 !important;
+    background: #3AACD6 !important;
+}
+
+.timetheorembtnlocked {
+    background: #263238 !important;
+    border: 1px solid #3AACD6 !important;
+}
+
+.timetheorembtnlocked:hover {
+    background: #B84B5F !important;
+    border: 1px solid #B84B5F !important;
+}
+
+#theorembuybackground {
+    background: #455A64 !important;
+}
+
+.eternitychallengestudy {
+    background: white !important;
+}
+
+.timestudy {
+    color: #b341e0 !important;
+    background: black !important;
+}
+
+.eternitychallengestudy:hover {
+    background: #490066 !important;
+}
+
+.timestudy:hover {
+    color: #DADADA !important;
+    background: #3A0A57 !important;
+}
+
+.timestudy.normaldimstudy:hover {
+    color: #EEEEEE !important;
+    background: #0d401b !important;
+}
+
+.timestudy.infdimstudy:hover {
+    color: #EEEEEE !important;
+    background: #543b18 !important;
+}
+
+.timestudy.timedimstudy:hover {
+    color: #EEEEEE !important;
+    background: #6a158e !important;
+}
+
+.timestudy.activestudy:hover {
+    color: #EEEEEE !important;
+    background: #FF0100 !important;
+}
+
+.timestudy.idlestudy:hover {
+    color: #EEEEEE !important;
+    background: #0080ff !important;
+}
+
+.timestudybought {
+    color: #1e0830 !important;
+    background: #8D48C3 !important;
+}
+
+.timestudybought.normaldimstudy {
+    background: #22aa48 !important;
+    border: 1px solid #198036 !important;
+}
+
+.timestudybought.infdimstudy {
+    background: #B67F33 !important;
+    border: 1px solid #8b6227 !important;
+}
+
+.timestudybought.timedimstudy {
+    background: #B241E3 !important;
+    border: 1px solid #951ec8 !important;
+}
+
+.timestudybought.activestudy {
+    background: #FF0100 !important;
+    border: 1px solid #cc0000 !important;
+}
+
+.timestudybought.passivestudy {
+    background: #5E33B6 !important;
+    border: 1px solid #4b288f !important;
+}
+
+.timestudybought.idlestudy {
+    background: #0080ff !important;
+    border: 1px solid #0066cc !important;
+}
+
+.timestudybought.darkstudy {
+    color: black !important;
+    background-color: white !important;
+    border-color: black !important;
+}
+
+.timestudybought.lightstudy {
+    color: white !important;
+    background-color: black !important;
+    border-color: white !important;
+}
+
+.timestudylocked, .eternitychallengestudylocked {
+    background: #23292a !important;
+    color: black !important;
+}
+
+.timestudylocked.normaldimstudylocked {
+    background: #212c24 !important;
+}
+
+.timestudylocked.infdimstudylocked {
+    background: #2c2721 !important;
+}
+
+.timestudylocked.timedimstudylocked {
+    background: #29212c !important;
+}
+
+.timestudylocked.activestudylocked {
+    background: #2c2121 !important;
+}
+
+.timestudylocked.passivestudylocked {
+    background: #24212c !important;
+}
+
+.timestudylocked.idlestudylocked {
+    background: #2d3239 !important;
+}
+
+.timestudylocked:hover, .eternitychallengestudylocked:hover {
+    background: #B84B5F !important;
+    border: 1px solid #B84B5F !important;
+}
+
+.eternityupbtn {
+    color: #b341e0 !important;
+    background: black !important;
+    border: 1px solid #b341e0 !important;
+}
+
+.eternityupbtn:hover {
+    color: black !important;
+    background: white !important;
+}
+
+.eternityupbtnlocked {
+    color: black !important;
+    background: #263238 !important;
+    border: 1px solid #691fa5 !important;
+}
+
+.eternityupbtnlocked:hover {
+    background: #37474F !important;
+}
+
+.eternityupbtnbought {
+    color: #1e0830 !important;
+    background: #8D48C3 !important;
+    border: 1px solid #691fa5 !important;
+}
+
+.milestonereward {
+    background: #8D48C3 !important;
+}
+
+.milestonerewardlocked {
+    color: #b341e0 !important;
+    background: black !important;
+    border: 1px solid #b341e0 !important;
+    animation: studyGlowIn 7s infinite;
+}
+
+.greedbtn {
+    background-color: #f2d729 !important;
+    color: black !important;
+}
+
+.greedbtn:hover {
+    background-color: #9E913A !important;
+}
+
+.eternitychallengestudybought {
+    background: #490066 !important;
+}
+
+.dilationbtn {
+    color: #64DD17 !important;
+    background: black !important;
+}
+
+.dilationbtn:hover {
+    color: #64DD17 !important;
+    background: white !important;
+}
+
+.dilationupg {
+    background: black !important;
+}
+
+.dilationupgrebuyable {
+    background: black !important;
+}
+
+.dilationupg:hover {
+    color: #64DD17 !important;
+    background: white !important;
+}
+
+.dilationupgrebuyable:hover {
+    color: #64ddad !important;
+    background: white !important;
+}
+
+.dilationupgbought {
+    background: #64DD17 !important;
+}
+
+.dilationupgrebuyablelocked, .dilationupglocked {
+    color: black !important;
+    background: #23292a !important;
+}
+
+.dilationupgrebuyablelocked:hover, .dilationupglocked:hover {
+    background: #B84B5F !important;
+    border: 1px solid #B84B5F !important;
+}
+
+#tachyonParticleAmount {
+    color: #64ddad !important;
+    text-shadow: 0px 0px 7px #64ddad;
+}
+
+#dilatedTimeAmount, #dilatedTimePerSecond, #galaxyThreshold, #dilatedGalaxies {
+    color: #64DD17 !important;
+    text-shadow: 0px 0px 7px #64DD17;
+}
+
+@keyframes antimatterGlow {
+    0%  {color: #2196F3;}
+    33% {color: #673AB7;}
+    66%  {color: #00BCD4;}
+    100%  {color: #2196F3;}
+}

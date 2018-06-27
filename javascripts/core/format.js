@@ -147,8 +147,8 @@ shortenMoney = function (money) {
 };
 
 
-function timeDisplay(time) {
-  if (time <= 100) return (time/10).toFixed(3) + " seconds"
+function timeDisplay(time, decimals = true) {
+  if (time <= 100 && decimals) return (time/10).toFixed(3) + " seconds"
   time = Decimal.floor(time / 10)
 
 

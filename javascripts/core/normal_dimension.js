@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
       if (tier == 2) multiplier = multiplier.pow(1.7)
   }
 
-  multiplier = multiplier.times(player.achPow);
+  if ( isAchEnabled("r11") ) multiplier = multiplier.times(player.achPow);
   multiplier = multiplier.times(kongDimMult)
   multiplier = multiplier.times(kongAllDimMult)
 
@@ -67,14 +67,28 @@ function getDimensionFinalMultiplier(tier) {
   if (player.timestudy.studies.includes(193)) multiplier = multiplier.times(Decimal.pow(1.03, player.eternities).min("1e13000"))
   if (tier == 8 && player.timestudy.studies.includes(214)) multiplier = multiplier.times((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1).min(new Decimal("1e125000"))))
   if (multiplier.lt(1)) multiplier = new Decimal(1)
+
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "normal" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
+    if (glyph.type == "normal" && glyph.effects.mult !== undefined) multiplier = multiplier.times(glyph.effects.mult)
+  }
+
   if (player.dilation.active) {
     multiplier = Decimal.pow(10, Math.pow(multiplier.log10(), 0.75))
     if (player.dilation.upgrades.includes(9)) {
       multiplier = Decimal.pow(10, Math.pow(multiplier.log10(), 1.05))
     }
+
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "dilation" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
+    }
   }
 
   if (player.dilation.upgrades.includes(6)) multiplier = multiplier.times(player.dilation.dilatedTime.pow(308))
+
+  
   return multiplier;
 }
 

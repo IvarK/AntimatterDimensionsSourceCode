@@ -266,7 +266,7 @@ function powerGlyph(glyph, effectAmount) {
     var effect = effects[i]
     switch(effect) {
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
+        glyph.effects.pow = 1.015 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
         break;
 
       case "mult":
@@ -287,13 +287,13 @@ function powerGlyph(glyph, effectAmount) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 4) return { name: "Perfect", color: "#FFE57F" }
-  if (x >= 3.5) return { name: "Mythical", color: "#D50000" }
-  if (x >= 3) return { name: "Legendary", color:  "#FF9800" }
-  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" }
-  if (x >= 2) return { name:  "Rare", color:  "#2196F3" }
-  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }
-  if (x >= 1) return { name:  "Common", color:  "white" }
+  if (x >= 3) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
+  if (x >= 2.75) return { name: "Mythical", color: "#D50000" } // ~0.01%
+  if (x >= 2.5) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
+  if (x >= 2.25) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
+  if (x >= 2) return { name:  "Rare", color:  "#2196F3" } // ~2.84%
+  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }  // ~19%
+  if (x >= 1) return { name:  "Common", color:  "white" } // 100%
 }
 
 /**

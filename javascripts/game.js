@@ -2021,6 +2021,10 @@ function gainedInfinityPoints() {
     if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
     if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
     if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "infinity" && glyph.effects.ipgain !== undefined) ret = ret.times(glyph.effects.ipgain)
+    }
     return ret.floor()
 }
 
@@ -2045,7 +2049,12 @@ function gainedRealityMachines() {
 }
 
 function gainedGlyphLevel() {
-    var ret = Math.round(Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, 0.4) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
+    var replPow = 0.4
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
+    }
+    var ret = Math.round(Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
     if (ret == Infinity || isNaN(ret)) return 0
     return ret
 }
@@ -2880,6 +2889,10 @@ document.getElementById("bigcrunch").onclick = function () {
         let infGain = 1;
         if (player.thisInfinityTime > 50 && isAchEnabled("r87")) infGain = 250;
         if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
+        for (i in player.reality.glyphs.active) {
+          var glyph = player.reality.glyphs.active[i]
+          if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
+        }
         if (player.currentEternityChall == "eterc4") {
             infGain = 1
             if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {
@@ -4767,6 +4780,10 @@ function getDilationGainPerSecond() {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
     }
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "replication" && glyph.effects.dtgain !== undefined) ret = ret.times(player.replicanti.amount.e * glyph.effects.dtgain)
+    }
     return ret
 }
 
@@ -5337,6 +5354,10 @@ function gameLoop(diff) {
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "replicanti" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed
+    }
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval

@@ -79,9 +79,12 @@ function DimensionPower(tier) {
   if (isAchEnabled("r75")) mult = mult.times(player.achPow);
   if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
       var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
-
       if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
       if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+      for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "replicanti" && glyph.effects.pow !== undefined) replmult = replmult.pow(glyph.effects.pow)
+      }
 
       mult = mult.times(replmult)
   }
@@ -118,6 +121,11 @@ function DimensionPower(tier) {
     if (player.dilation.upgrades.includes(9)) {
       mult = Decimal.pow(10, Math.pow(mult.log10(), 1.05))
     }
+  }
+
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "infinity" && glyph.effects.pow !== undefined) mult = mult.pow(glyph.effects.pow)
   }
 
   return mult

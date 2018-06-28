@@ -347,7 +347,7 @@ function generateGlyphTable() {
         html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 3 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
-          html += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"
+          html += getDesc(glyph.type + i, (Number.isFinite(effect)) ? shorten(effect) : effect) +" <br><br>"
         }
         if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
         else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
@@ -399,8 +399,10 @@ function generateGlyphTable() {
 }
 
 function deleteGlyph(id) {
-  if (shiftDown && confirm("Do you really want to delete this glyph?")) {
+  if (!shiftDown) return false;
+  if (controlDown || confirm("Do you really want to delete this glyph?")) {
     for (i in player.reality.glyphs.inventory) {
+      console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
       if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
     }
     generateGlyphTable();

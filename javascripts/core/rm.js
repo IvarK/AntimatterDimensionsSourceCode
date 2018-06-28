@@ -401,10 +401,17 @@ function generateGlyphTable() {
 function deleteGlyph(id) {
   if (!shiftDown) return false;
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
-    for (i in player.reality.glyphs.inventory) {
-      console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
-      if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
-    }
+    var inv = player.reality.glyphs.inventory
+    var g = inv.find(function(glyph) {
+      return glyph.id = id
+    })
+    player.reality.glyphs.inventory.splice(inv.indexOf(g),1)
+    mouseOn.remove()
+    mouseOn = $("document")
+    // for (i in player.reality.glyphs.inventory) {
+    //   console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
+    //   if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
+    // }
     generateGlyphTable();
   }
 }

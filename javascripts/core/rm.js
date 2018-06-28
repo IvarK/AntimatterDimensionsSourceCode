@@ -77,18 +77,23 @@ function estimate_curve(iterations, moreThan) {
  * More than 1.5 approx 19.215
  * Exactly 1 approx 50%
  */
+function random() {
+  var x = Math.sin(player.reality.seed++) * 10000;
+  return x - Math.floor(x);
+}
+
 function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
   var u = 0, v = 0;
-  while(u === 0) u = Math.random(); 
-  while(v === 0) v = Math.random();
+  while(u === 0) u = random(); 
+  while(v === 0) v = random();
   return Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65);
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
 function generateRandomGlyph(level) {
-  var type = GLYPH_TYPES[Math.floor(Math.random() * GLYPH_TYPES.length)]
+  var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
   var strength = gaussian_bell_curve()
-  var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+  var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
@@ -134,7 +139,7 @@ function generateRandomGlyph(level) {
 function timeGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = timeEffects[Math.floor(Math.random() * timeEffects.length)]
+    var toAdd = timeEffects[Math.floor(random() * timeEffects.length)]
     console.log(toAdd)
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
@@ -165,7 +170,7 @@ function timeGlyph(glyph, effectAmount) {
 function dilationGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = dilationEffects[Math.floor(Math.random() * dilationEffects.length)]
+    var toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -195,7 +200,7 @@ function dilationGlyph(glyph, effectAmount) {
 function replicationGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = replicationEffects[Math.floor(Math.random() * replicationEffects.length)]
+    var toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -225,7 +230,7 @@ function replicationGlyph(glyph, effectAmount) {
 function infinityGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = infinityEffects[Math.floor(Math.random() * infinityEffects.length)]
+    var toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -255,7 +260,7 @@ function infinityGlyph(glyph, effectAmount) {
 function powerGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = powerEffects[Math.floor(Math.random() * powerEffects.length)]
+    var toAdd = powerEffects[Math.floor(random() * powerEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {

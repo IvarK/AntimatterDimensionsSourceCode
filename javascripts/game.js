@@ -281,6 +281,7 @@ var player = {
             inventory: [],
             slots: 3,
         },
+        seed: Math.floor(Date.now() * Math.random()+1)
     },
     options: {
         newsHidden: false,

@@ -13,9 +13,13 @@ function getDimensionFinalMultiplier(tier) {
   if ( isAchEnabled("r11") ) multiplier = multiplier.times(player.achPow);
   multiplier = multiplier.times(kongDimMult)
   multiplier = multiplier.times(kongAllDimMult)
-
+  var conversionRate = 7
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "infinity" && glyph.effects.rate !== undefined) conversionRate += glyph.effects.rate
+  }
   if (player.currentEternityChall == "eterc9") multiplier = multiplier;
-  else multiplier = multiplier.times(player.infinityPower.pow(7).max(1))
+  else multiplier = multiplier.times(player.infinityPower.pow(conversionRate).max(1))
 
   if (player.infinityUpgrades.includes("totalMult")) multiplier = multiplier.times(totalMult)
   if (player.infinityUpgrades.includes("currentMult")) multiplier = multiplier.times(currentMult)
@@ -70,8 +74,8 @@ function getDimensionFinalMultiplier(tier) {
 
   for (i in player.reality.glyphs.active) {
     var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "normal" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
-    if (glyph.type == "normal" && glyph.effects.mult !== undefined) multiplier = multiplier.times(glyph.effects.mult)
+    if (glyph.type == "power" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
+    if (glyph.type == "power" && glyph.effects.mult !== undefined) multiplier = multiplier.times(glyph.effects.mult)
   }
 
   if (player.dilation.active) {

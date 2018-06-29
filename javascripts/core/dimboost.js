@@ -7,8 +7,13 @@ function getDimensionBoostPower() {
   if (player.currentChallenge == "postc7" || player.timestudy.studies.includes(81)) ret = 10
 
   if (isAchEnabled("r101")) ret = ret*1.01
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "power" && glyph.effects.dimboost !== undefined) ret *= glyph.effects.dimboost
+  }
   if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
+  
   return Decimal.fromValue(ret)
 }
 

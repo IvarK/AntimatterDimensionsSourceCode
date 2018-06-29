@@ -114,7 +114,7 @@ function onLoad() {
   if (player.thisReality === undefined) player.thisReality = 0;
   if (player.bestReality === undefined) player.bestReality = 9999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0]];
-  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3} };
+  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}, seed: Math.floor(Date.now() * Math.random()+1) };
   setTheme(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";

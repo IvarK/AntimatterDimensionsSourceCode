@@ -77,18 +77,23 @@ function estimate_curve(iterations, moreThan) {
  * More than 1.5 approx 19.215
  * Exactly 1 approx 50%
  */
+function random() {
+  var x = Math.sin(player.reality.seed++) * 10000;
+  return x - Math.floor(x);
+}
+
 function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
   var u = 0, v = 0;
-  while(u === 0) u = Math.random(); 
-  while(v === 0) v = Math.random();
+  while(u === 0) u = random(); 
+  while(v === 0) v = random();
   return Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65);
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
 function generateRandomGlyph(level) {
-  var type = GLYPH_TYPES[Math.floor(Math.random() * GLYPH_TYPES.length)]
+  var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
   var strength = gaussian_bell_curve()
-  var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+  var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
@@ -134,7 +139,7 @@ function generateRandomGlyph(level) {
 function timeGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = timeEffects[Math.floor(Math.random() * timeEffects.length)]
+    var toAdd = timeEffects[Math.floor(random() * timeEffects.length)]
     console.log(toAdd)
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
@@ -165,7 +170,7 @@ function timeGlyph(glyph, effectAmount) {
 function dilationGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = dilationEffects[Math.floor(Math.random() * dilationEffects.length)]
+    var toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -195,7 +200,7 @@ function dilationGlyph(glyph, effectAmount) {
 function replicationGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = replicationEffects[Math.floor(Math.random() * replicationEffects.length)]
+    var toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -225,7 +230,7 @@ function replicationGlyph(glyph, effectAmount) {
 function infinityGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = infinityEffects[Math.floor(Math.random() * infinityEffects.length)]
+    var toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 
@@ -255,7 +260,7 @@ function infinityGlyph(glyph, effectAmount) {
 function powerGlyph(glyph, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = powerEffects[Math.floor(Math.random() * powerEffects.length)]
+    var toAdd = powerEffects[Math.floor(random() * powerEffects.length)]
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
@@ -266,7 +271,7 @@ function powerGlyph(glyph, effectAmount) {
     var effect = effects[i]
     switch(effect) {
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
+        glyph.effects.pow = 1.015 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
         break;
 
       case "mult":
@@ -287,13 +292,13 @@ function powerGlyph(glyph, effectAmount) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 4) return { name: "Perfect", color: "#FFE57F" }
-  if (x >= 3.5) return { name: "Mythical", color: "#D50000" }
-  if (x >= 3) return { name: "Legendary", color:  "#FF9800" }
-  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" }
-  if (x >= 2) return { name:  "Rare", color:  "#2196F3" }
-  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }
-  if (x >= 1) return { name:  "Common", color:  "white" }
+  if (x >= 3) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
+  if (x >= 2.75) return { name: "Mythical", color: "#D50000" } // ~0.01%
+  if (x >= 2.5) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
+  if (x >= 2.25) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
+  if (x >= 2) return { name:  "Rare", color:  "#2196F3" } // ~2.84%
+  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }  // ~19%
+  if (x >= 1) return { name:  "Common", color:  "white" } // 100%
 }
 
 /**
@@ -311,17 +316,17 @@ function getDesc(typeeffect, x) {
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> TT per second.", // Implemented
     dilationpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
-    replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    replicationpow: "Replicanti multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    replicationdtgain: "Multiply DT gain by replicanti amount ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    replicationglyphlevel: "Glyph level modifier from replicanti. ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseInt(x)).toFixed(2) + "</span>",
-    infinitypow: "Infinity dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>",
-    infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
-    infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
+    replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationpow: "Replicanti multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationdtgain: "Multiply DT gain by replicanti amount ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationglyphlevel: "Glyph level modifier from replicanti. ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseInt(x)).toFixed(2) + "</span>", // Implemented
+    infinitypow: "Infinity dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>", // Implemented
+    infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>",
+    powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerautochall: "Automatically complete normal and infinity challenges"
   }
 
@@ -401,10 +406,17 @@ function generateGlyphTable() {
 function deleteGlyph(id) {
   if (!shiftDown) return false;
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
-    for (i in player.reality.glyphs.inventory) {
-      console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
-      if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
-    }
+    var inv = player.reality.glyphs.inventory
+    var g = inv.find(function(glyph) {
+      return glyph.id = id
+    })
+    player.reality.glyphs.inventory.splice(inv.indexOf(g),1)
+    mouseOn.remove()
+    mouseOn = $("document")
+    // for (i in player.reality.glyphs.inventory) {
+    //   console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
+    //   if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
+    // }
     generateGlyphTable();
   }
 }

@@ -264,6 +264,7 @@ function getSecretAchAmount() {
     return n
 }
 
+const DAYS_FOR_ALL_ACHS = 4
 function isAchEnabled(name) {
     if (!player.achievements.includes(name)) return false
     if (player.realities == 0 && player.achievements.includes(name)) return true
@@ -271,11 +272,12 @@ function isAchEnabled(name) {
     var achnum = parseInt(name.split("r")[1])
     var row = Math.floor(achnum / 10)
     var col = achnum % 10
-    var basePerAch = 60 * 48 * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffFromMiddle = (row - 7) * 180
+    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 90 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffFromMiddle = (row - 7) * diffBetweenRows
     var timeReq = 0
     for ( var i = 1; i < row; i++) {
-        timeReq += (basePerAch + ((i - 7) * 180)) * 8
+        timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
     }
 
     for ( var i = 1; i < col; i++) {
@@ -291,20 +293,21 @@ function isAchEnabled(name) {
 function nextAchIn() {
     
     var time = player.thisReality / 10
-    if ( time > 60 * 48 * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return 0
-    var basePerAch = 60 * 48 * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    if ( time > 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return 0
+    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 90 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var timeReq = 0
     var row = 1
     while (time > timeReq) {
-        timeReq += (basePerAch + ((row - 7) * 180)) * 8
+        timeReq += (basePerAch + ((row - 7) * diffBetweenRows)) * 8
         row++
     }
     row--
-    timeReq -= (basePerAch + ((row - 7) * 180)) * 8
+    timeReq -= (basePerAch + ((row - 7) * diffBetweenRows)) * 8
 
     var col = 1
     while (time > timeReq) {
-        timeReq += (basePerAch + ((row - 7) * 180))
+        timeReq += (basePerAch + ((row - 7) * diffBetweenRows))
         col++
     }
 

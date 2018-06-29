@@ -567,6 +567,20 @@ button {
     user-select: none;
 }
 
+.achievementdisabled {
+    background-color: #c45a5a;
+    border: 2px solid #781212;
+    width: 104px;
+    height: 104px;
+    border-radius: 8px;
+    margin: 0px auto;
+    text-align: center;
+    font-family: TypeWriter;
+    color: black;
+    font-size: 70%;
+    user-select: none;
+}
+
 .achievementlocked {
     background: #A3A3A3;
     border: 2px solid #B84B5F;

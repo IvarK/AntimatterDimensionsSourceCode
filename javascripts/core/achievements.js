@@ -209,10 +209,12 @@ function updateAchievements() {
           achNum += 1;
           var name = allAchievements["r"+achNum]
           if (isAchEnabled("r"+achNum)) {
-              n++
-              document.getElementById(name).className = "achievementunlocked"
+                n++
+                document.getElementById(name).className = "achievementunlocked"
+          } else if (player.achievements.includes("r"+achNum)) {
+                document.getElementById(name).className = "achievementdisabled"
           } else {
-              document.getElementById(name).className = "achievementlocked"
+                document.getElementById(name).className = "achievementlocked"
           }
       }
       if (n == 8) {
@@ -310,7 +312,6 @@ function nextAchIn() {
         timeReq += (basePerAch + ((row - 7) * diffBetweenRows))
         col++
     }
-
 
     return ( timeReq - time) * 10
 }

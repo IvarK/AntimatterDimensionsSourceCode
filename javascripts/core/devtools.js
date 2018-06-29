@@ -29,7 +29,7 @@ dev.cancerize = function() {
     player.options.theme = "S4";
     player.options.secretThemeKey = "Cancer";
     setTheme(player.options.theme);
-    player.options.notation = "Emojis"
+    player.options.notation = "Cancer"
     document.getElementById("theme").textContent = "SO"
     document.getElementById("notation").textContent = "BEAUTIFUL"
 }

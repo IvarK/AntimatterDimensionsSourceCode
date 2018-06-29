@@ -115,7 +115,7 @@ function formatValue(notation, value, places, placesUnder1000) {
             return (matissa + "ᴇ" + pow);
         } else if (notation === "Letters") {
             return matissa + letter(power,'abcdefghijklmnopqrstuvwxyz');
-        } else if (notation === "Emojis") {
+        } else if (notation === "Cancer") {
             return matissa + letter(power,['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡'])
         }
 

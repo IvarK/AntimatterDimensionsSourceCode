@@ -1779,7 +1779,7 @@ function galaxyReset() {
     setInitialDimensionPower();
 
 
-    if (player.options.notation == "Emojis") player.spreadingCancer+=1;
+    if (player.options.notation == "Cancer") player.spreadingCancer+=1;
     if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
     if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
     if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
@@ -2136,9 +2136,9 @@ document.getElementById("notation").onclick = function () {
         player.options.notation = "Standard";
         document.getElementById("notation").textContent = ("Notation: Standard")
     } else if (player.options.notation === "Standard") {
-        player.options.notation = "Emojis";
+        player.options.notation = "Cancer";
         document.getElementById("notation").textContent = ("Notation: Cancer")
-    } else if (player.options.notation === "Emojis") {
+    } else if (player.options.notation === "Cancer") {
         player.options.notation = "Mixed scientific";
         document.getElementById("notation").textContent = ("Notation: Mixed scientific")
     } else if (player.options.notation === "Mixed scientific") {
@@ -5462,7 +5462,7 @@ function gameLoop(diff) {
     } else {
         Marathon2 = 0;
     }
-    if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Emojis" || player.options.notation == "Brackets")) {
+    if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Cancer" || player.options.notation == "Brackets")) {
         painTimer += player.options.updateRate/1000;
         if (painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
@@ -5942,7 +5942,7 @@ function maxBuyGalaxies(manual) {
     if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc1" || player.currentChallenge == "postc7") return
     if (player.autobuyers[10].priority > player.galaxies || manual) {
         while(player.eightAmount >= getGalaxyRequirement() && (player.autobuyers[10].priority > player.galaxies || manual)) {
-            if (player.options.notation == "Emojis") player.spreadingCancer+=1;
+            if (player.options.notation == "Cancer") player.spreadingCancer+=1;
             player.galaxies++
         }
         player.galaxies--

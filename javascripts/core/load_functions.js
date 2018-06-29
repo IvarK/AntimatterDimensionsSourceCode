@@ -515,7 +515,16 @@ if (player.version < 5) {
       if (player.bestEternity <= 0.01 || player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
   }
 
-  // player.version is currently 11
+  //last update version check, fix emoji/cancer issue
+  if (player.version < 13) {
+    player.version = 13
+    if (player.options.notation === "Emojis") {
+        player.options.notation = "Cancer";
+        document.getElementById("notation").textContent = ("Notation: Cancer");
+    }
+}
+
+  // player.version is currently 12 on live, and will be 13 after the update is released
   if (player.options.notation == "Default") {
       player.options.notation = "Brackets";
       document.getElementById("notation").textContent = ("Notation: Brackets")

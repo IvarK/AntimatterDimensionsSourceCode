@@ -87,18 +87,12 @@ dev.updateCosts = function() {
     }
 }
 
-dev.testTDCosts = function() {
-    for (var i=1; i<9; i++) {
-        var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e2900", "1e3300"]
-        var dim = player["timeDimension"+i]
-        if (dim.cost.gte(Number.MAX_VALUE)) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
-        }
-        if (dim.cost.gte("1e1300")) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*2.2, dim.bought).times(timeDimStartCosts[i])
-        }
-        if (i > 4) {
-          dim.cost = Decimal.pow(timeDimCostMults[i]*100, dim.bought).times(timeDimStartCosts[i])
+dev.refundDilStudies = function() {
+    for (var i=0; i<6; i++) {
+        if (player.dilation.studies.includes(i+1)) {
+            player.dilation.studies.splice(player.dilation.studies.indexOf(i+1), 1);
+            console.log(document.getElementById("dilstudy"+(i+1)))
+            player.timestudy.theorem += parseInt(document.getElementById("dilstudy"+(i+1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""))
         }
     }
 }

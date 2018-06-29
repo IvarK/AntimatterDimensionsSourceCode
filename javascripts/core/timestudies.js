@@ -359,8 +359,8 @@ function respecTimeStudies() {
   updateTimeStudyButtons()
   updateTheoremButtons()
   drawStudyTree()
-  if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON"
-  else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"
+  if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
+  else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
 }
 
 function exportStudyTree() {

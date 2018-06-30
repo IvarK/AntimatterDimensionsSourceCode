@@ -86,8 +86,8 @@ input {
 }
 
 #game {
-    border: 1px solid #546E7A !important;
-    background-color: #455A64;
+    border: 1px solid grey !important;
+    background-color: #000000;
 }
 
 .container {
@@ -599,6 +599,37 @@ input {
 #dilatedTimeAmount, #dilatedTimePerSecond, #galaxyThreshold, #dilatedGalaxies {
     color: #64DD17 !important;
     text-shadow: 0px 0px 7px #64DD17;
+}
+
+.realitytabbtn {
+    background-color: white !important;
+    border: 2px solid #0b600e !important;
+}
+
+.realitytabbtn:hover {
+    color: white  !important;
+    background-color: #0b600e !important;
+    border: 2px solid #0b600e !important;
+}
+
+#realitymachine {
+    background: white !important;
+}
+
+#realitymachine:hover {
+    background: #0b600e !important;
+}
+
+#glyphs .glyphbg {
+    background: #333333 !important;
+}
+
+#glyphslots .glyphactive {
+    background: #333333 !important;
+}
+
+#glyphs .empty {
+    background: #333333 !important;
 }
 
 @keyframes antimatterGlow {

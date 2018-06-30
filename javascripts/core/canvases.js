@@ -122,11 +122,14 @@ function drawTreeBranch(num1, num2) {
         } else if (name2 == 123 || name2 == 133 || name2 == 143 || name1 == 143) {
             ctx.strokeStyle="#0080ff";
         } else {
-            ctx.strokeStyle="#000000";
+            if (player.options.theme === "S6") ctx.strokeStyle="#DDDDDD";
+            else ctx.strokeStyle="#000000";
         }
     } else {
-        if (name2 < 20) {
+        if (isECName) {
             ctx.strokeStyle="#4b3753";
+        } else if (isDilStudyName) {
+            ctx.strokeStyle="#759362";
         } else if (name2 == 71 || name2 == 81 || name2 == 91 || name2 == 101 || name1 == 101) {
             ctx.strokeStyle="#37533f";
         } else if (name2 == 72 || name2 == 82 || name2 == 92 || name2 == 102 || name1 == 102) {

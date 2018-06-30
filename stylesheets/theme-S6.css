@@ -10,8 +10,8 @@
 
 button {
     color: #E0E0E0;
-    background-color: #455A64 !important;
-    border: 1px solid black;
+    background-color: black !important;
+    border: 1px solid white;
     box-shadow: 0px 0px 7px 2px #111111;
 }
 
@@ -25,8 +25,8 @@ button {
 }
 
 .storebtn {
-    color: #E0E0E0;
-    background-color: #455A64 !important;
+    color: #FFF !important;
+    background-color: black !important;
     border: 1px solid black;
     box-shadow: 0px 0px 7px 2px #111111;
 }
@@ -62,8 +62,9 @@ button {
 }
 
 input {
-    background-color: #455A64 !important;
-    border: 1px solid black !important;
+    color: white !important;
+    background-color: black !important;
+    border: 1px solid grey !important;
 }
 
 #coinAmount {
@@ -88,7 +89,8 @@ input {
 }
 
 .challengesbtn {
-    background: #546E7A !important;
+    color: white !important;
+    background: black !important;
 }
 
 .challengesbtn:hover {
@@ -96,7 +98,8 @@ input {
 }
 
 .lockedchallengesbtn {
-    background: #23292a !important;
+    color: grey !important;
+    background: black !important;
     border-color: #B84B5F !important;
 }
 
@@ -123,7 +126,14 @@ input {
 }
 
 .challengediv {
-    background: #455A64 !important;
+    color: #E0E0E0 !important;
+    background: black !important;
+    border: 1px solid grey !important;
+}
+
+.infchallengediv {
+    background: black !important;
+    border: 1px solid white !important;
 }
 
 .completedchallengesbtn {
@@ -133,9 +143,9 @@ input {
 }
 
 .autobuyerbtn {
-    color: black !important;
+    color: white !important;
     box-shadow: none !important;
-    border: 1px solid black !important;
+    border: 1px solid #FF9800 !important;
 }
 
 .autobuyerbtn:hover {
@@ -161,10 +171,12 @@ input {
 }
 
 .unavailablebtn {
-    background: #37474F !important;
+    color: grey !important;
+    background-color: black !important;
 }
 
 .unavailablebtn:hover {
+    color: black !important;
     background: #B84B5F !important;
 }
 
@@ -207,12 +219,13 @@ input {
 }
 
 .infinistorebtnlocked {
-    background: #263238 !important;
-    border: 1px solid black !important;
+    color: grey !important;
+    background-color: black !important;
+    border: 1px solid grey !important;
 }
 
 .infinistorebtnlocked:hover {
-    background: #37474F !important;
+    background-color: #222 !important;
 }
 
 .infinistorebtn2:hover {
@@ -432,31 +445,37 @@ input {
 }
 
 .timestudylocked, .eternitychallengestudylocked {
-    background: #23292a !important;
-    color: black !important;
+    background: black !important;
+    color: grey !important;
 }
 
 .timestudylocked.normaldimstudylocked {
+    color: black !important;
     background: #212c24 !important;
 }
 
 .timestudylocked.infdimstudylocked {
+    color: black !important;
     background: #2c2721 !important;
 }
 
 .timestudylocked.timedimstudylocked {
+    color: black !important;
     background: #29212c !important;
 }
 
 .timestudylocked.activestudylocked {
+    color: black !important;
     background: #2c2121 !important;
 }
 
 .timestudylocked.passivestudylocked {
+    color: black !important;
     background: #24212c !important;
 }
 
 .timestudylocked.idlestudylocked {
+    color: black !important;
     background: #2d3239 !important;
 }
 
@@ -477,13 +496,13 @@ input {
 }
 
 .eternityupbtnlocked {
-    color: black !important;
-    background: #263238 !important;
+    color: grey !important;
+    background: black !important;
     border: 1px solid #691fa5 !important;
 }
 
 .eternityupbtnlocked:hover {
-    background: #37474F !important;
+    background: #222 !important;
 }
 
 .eternityupbtnbought {
@@ -549,11 +568,12 @@ input {
 }
 
 .dilationupgrebuyablelocked, .dilationupglocked {
-    color: black !important;
-    background: #23292a !important;
+    color: grey !important;
+    background: black !important;
 }
 
 .dilationupgrebuyablelocked:hover, .dilationupglocked:hover {
+    color: black !important;
     background: #B84B5F !important;
     border: 1px solid #B84B5F !important;
 }

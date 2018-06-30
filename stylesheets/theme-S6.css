@@ -329,29 +329,36 @@ input {
     text-shadow: 0px 0px 7px #64DD17;
 }
 
+#timetheorems {
+    color: grey !important;
+}
+
 .timetheorembtn {
     color: #3AACD6 !important;
-    background: #161616 !important;
+    background: black !important;
     border: 1px solid #3AACD6 !important;
 }
 
 .timetheorembtn:hover {
-    color: #161616 !important;
+    color: black !important;
     background: #3AACD6 !important;
 }
 
 .timetheorembtnlocked {
-    background: #263238 !important;
-    border: 1px solid #3AACD6 !important;
+    color: grey !important;
+    background: black !important;
+    border: 1px solid grey !important;
 }
 
 .timetheorembtnlocked:hover {
+    color: black !important;
     background: #B84B5F !important;
     border: 1px solid #B84B5F !important;
 }
 
 #theorembuybackground {
-    background: #455A64 !important;
+    border: 1px solid #3AACD6 !important;
+    background: black !important;
 }
 
 .eternitychallengestudy {

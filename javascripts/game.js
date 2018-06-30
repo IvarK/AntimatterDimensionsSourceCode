@@ -1877,7 +1877,7 @@ function verify_save(obj) {
 }
 
 document.getElementById("importbtn").onclick = function () {
-    var save_data = prompt("Input your save. (your current save file will be overwritten!)");
+    var save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
     if (save_data.constructor !== String) save_data = "";
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
         document.getElementById("body").style.animation = "barrelRoll 5s 1";

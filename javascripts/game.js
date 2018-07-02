@@ -1781,7 +1781,7 @@ function galaxyReset() {
 
     if (player.options.notation == "Cancer") player.spreadingCancer+=1;
     if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
-    if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
+    if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread")
     if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
     if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
     if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
@@ -5137,7 +5137,7 @@ setInterval(function() {
     if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 20000) giveAchievement("This is what I have to do to get rid of you.")
-    if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
+    if (player.why >= 1e5) giveAchievement("Should we tell them about buy max...")
     if ( Math.max(document.documentElement.clientHeight, window.innerHeight || 0) <= 150 || parent.document.body.clientHeight <= 150) giveAchievement("Dip the antimatter")
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()

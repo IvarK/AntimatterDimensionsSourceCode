@@ -5299,7 +5299,7 @@ function gameLoop(diff) {
 
     let gain;
     var tickmult = 1.33;
-    if (player.timestudy.studies.includes(171)) mult = 1.25;
+    if (player.timestudy.studies.includes(171)) tickmult = 1.25;
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i];
         if (glyph.type == "time" && glyph.effects.freeTickMult !== undefined) tickmult = 1+(tickmult-1)*glyph.effects.freeTickMult;

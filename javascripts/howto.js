@@ -87,6 +87,9 @@ function updateSpoilers() {
 			if (i === 17 && (player.replicanti.unl || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
+			if (i === 18 && player.eternities >= 1) { 
+				(displayed === 0) ? displayed = 1 : displayed = 0; 
+			} 
 			if (i < 5 || i === 7) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}

@@ -124,7 +124,7 @@ const allAchievements = {
   s33 : "A sound financial decision",
   s34 : "You do know how these work, right?",
   s35 : "Should we tell them about buy max...",
-  s36 : "Dip the antimatter",
+  s36 : "While you were away... Nothing happened.",
   s37 : "You followed the instructions",
   s38 : "Professional bodybuilder",
 };
@@ -150,7 +150,7 @@ const secretAchievementTooltips = {
     s33 : "Click on the donate link.",
     s34 : "Respec with an empty study tree.",
     s35 : "Buy single tickspeed 1,000,000 times.",
-    s36 : "Dip the antimatter.",
+    s36 : "Have nothing happen while you were away.",
     s37 : "Follow instructions.",
     s38 : "Get all your dimension bulk buyers to 1e100.",
   };

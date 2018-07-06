@@ -515,20 +515,29 @@ if (player.version < 5) {
       if (player.bestEternity <= 0.01 || player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
   }
 
-  //last update version check, fix emoji/cancer issue
-  if (player.version < 13) {
-    player.version = 13
-    if (player.options.notation === "Emojis") {
-        player.options.notation = "Cancer";
-        document.getElementById("notation").textContent = ("Notation: Cancer");
-    }
-}
-
   // player.version is currently 12 on live, and will be 13 after the update is released
+  if (player.version < 12.1) {
+    player.version = 12.1
+    if (player.achievements.includes("s36")) {
+        player.achievements.splice(player.achievements.indexOf("s36"), 1)
+        updateAchievements();
+    }
+  }
+
+  // player.version is currently 12.1
   if (player.options.notation == "Default") {
       player.options.notation = "Brackets";
       document.getElementById("notation").textContent = ("Notation: Brackets")
   }
+
+    //last update version check, fix emoji/cancer issue
+    if (player.version < 13) {
+        player.version = 13
+        if (player.options.notation === "Emojis") {
+            player.options.notation = "Cancer";
+            document.getElementById("notation").textContent = ("Notation: Cancer");
+        }
+    }
 
   toggleCrunchMode()
   toggleCrunchMode()
@@ -652,6 +661,7 @@ function save_game(changed, silent) {
 function change_save(saveId) {
   // Save previous save to make sure no changes are lost
   save_game(false, true);
+  closeToolTip();
 
   currentSave = saveId;
 

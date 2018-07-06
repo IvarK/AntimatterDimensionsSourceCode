@@ -114,7 +114,7 @@ function DimensionPower(tier) {
 
   if (ECTimesCompleted("eterc9") !== 0) mult = mult.times(player.timeShards.pow(ECTimesCompleted("eterc9")*0.1).plus(1).min(new Decimal("1e400")))
 
-  if (mult.lte(1)) mult = new Decimal(1)
+  if (mult.lt(0)) mult = new Decimal(0)
 
   if (player.dilation.active) {
     mult = Decimal.pow(10, Math.pow(mult.log10(), 0.75))

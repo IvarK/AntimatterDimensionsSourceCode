@@ -6393,6 +6393,10 @@ window.addEventListener('keydown', function(event) {
         return false;
     }
     switch (event.keyCode) {
+        case 57: // D
+            giveAchievement("That dimension doesn’t exist")
+        break;
+
         case 65: // A
             toggleAutoBuyers();
         break;

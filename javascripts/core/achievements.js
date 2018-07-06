@@ -127,6 +127,14 @@ const allAchievements = {
   s36 : "Dip the antimatter",
   s37 : "You followed the instructions",
   s38 : "Professional bodybuilder",
+  s41 : "That dimension doesn’t exist",
+  s42 : "s42",
+  s43 : "s43",
+  s44 : "s44",
+  s45 : "s45",
+  s46 : "s46",
+  s47 : "s47",
+  s48 : "s48",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",
@@ -153,6 +161,14 @@ const secretAchievementTooltips = {
     s36 : "Dip the antimatter.",
     s37 : "Follow instructions.",
     s38 : "Get all your dimension bulk buyers to 1e100.",
+    s41 : "Try to purchase the 9th dimension.",
+    s42 : "s42",
+    s43 : "s43",
+    s44 : "s44",
+    s45 : "s45",
+    s46 : "s46",
+    s47 : "s47",
+    s48 : "s48",
   };
 const allAchievementNums = Object.invert(allAchievements)
 // to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");

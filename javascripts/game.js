@@ -2000,6 +2000,7 @@ function breakInfinity() {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) return false
     if (player.break && !player.currentChallenge.includes("post")) {
         player.break = false
+        if (player.dilation.active) giveAchievement("Time fixes everything")
         document.getElementById("break").textContent = "BREAK INFINITY"
     } else {
         player.break = true

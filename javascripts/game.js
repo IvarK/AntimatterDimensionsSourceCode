@@ -8,7 +8,6 @@ var shiftDown = false;
 var controlDown = false;
 var justImported = false;
 var saved = 0;
-var painTimer = 0;
 var keySequence = 0;
 var failureCount = 0;
 var implosionCheck = 0;
@@ -1745,7 +1744,7 @@ function galaxyReset() {
         dimlife: player.dimlife,
         dead: player.dead,
         dilation: player.dilation,
-        why: player.why,
+        secretUnlocks: player.secretUnlocks,
         realities: player.realities,
         thisReality: player.thisReality,
         bestReality: player.bestReality,
@@ -3046,7 +3045,7 @@ document.getElementById("bigcrunch").onclick = function () {
             dimlife: player.dimlife,
             dead: player.dead,
             dilation: player.dilation,
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -3422,7 +3421,7 @@ function eternity(force, auto) {
                 upgrades: player.dilation.upgrades,
                 rebuyables: player.dilation.rebuyables
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -3784,7 +3783,7 @@ function reality(force) {
                     3: 0,
                 }
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities+1,
             thisReality: 0,
             bestReality: Math.min(player.thisReality, player.bestReality),
@@ -4011,7 +4010,7 @@ function startChallenge(name, target) {
       dimlife: player.dimlife,
       dead: player.dead,
       dilation: player.dilation,
-      why: player.why,
+      secretUnlocks: player.secretUnlocks,
       realities: player.realities,
       thisReality: player.thisReality,
       bestReality: player.bestReality,
@@ -4578,7 +4577,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
                 upgrades: player.dilation.upgrades,
                 rebuyables: player.dilation.rebuyables
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -5140,7 +5139,7 @@ setInterval(function() {
     if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 20000) giveAchievement("This is what I have to do to get rid of you.")
-    if (player.why >= 1e5) giveAchievement("Should we tell them about buy max...")
+    if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
     if ( Math.max(document.documentElement.clientHeight, window.innerHeight || 0) <= 150 || parent.document.body.clientHeight <= 150) giveAchievement("Dip the antimatter")
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
@@ -5466,8 +5465,8 @@ function gameLoop(diff) {
         Marathon2 = 0;
     }
     if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Cancer" || player.options.notation == "Brackets")) {
-        painTimer += player.options.updateRate/1000;
-        if (painTimer >= 600) giveAchievement("Do you enjoy pain?");
+        player.secretUnlocks.painTimer += player.options.updateRate/1000;
+        if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");

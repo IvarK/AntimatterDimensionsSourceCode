@@ -6357,6 +6357,7 @@ window.addEventListener('keydown', function(event) {
         keySequence++
     } else if (keySequence == 9 && event.keyCode == 65) {
         giveAchievement("30 Lives")
+        if (player.money.lt(30)) player.money = new Decimal(30)
     } else {
         keySequence = 0;
     }

@@ -482,3 +482,29 @@ function drop(ev) {
   mouseOn.appendTo($(ev.target))
   mouseOn = $("document")
 }
+
+function buyRealityUpg(id, cost) {
+  if (player.reality.realityMachines < cost) return false
+  if (player.reality.upg.includes(id)) return false
+  player.reality.realityMachines -= cost
+  player.reality.upg.push(id)
+  updateRealityUpgrades()
+}
+
+function updateRealityUpgrades() {
+  var rm = player.reality.realityMachines
+
+  if (rm < 1) $("#rupg1").addClass("rUpgUn")
+  else $("#rupg1").removeClass("rUpgUn")
+
+  if (rm < 2) $("#rupg2").addClass("rUpgUn")
+  else $("#rupg1").removeClass("rUpgUn")
+
+  if (rm < 2) $("#rupg3").addClass("rUpgUn")
+  else $("#rupg1").removeClass("rUpgUn")
+
+  for (i in player.reality.upg) {
+    var upg = player.reality.upg[i]
+    $("#rupg"+upg).addClass("rUpgBought")
+  }
+}

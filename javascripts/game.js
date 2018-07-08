@@ -281,7 +281,8 @@ var player = {
             inventory: [],
             slots: 3,
         },
-        seed: Math.floor(Date.now() * Math.random()+1)
+        seed: Math.floor(Date.now() * Math.random()+1),
+        upg: []
     },
     options: {
         newsHidden: false,
@@ -3463,6 +3464,8 @@ function eternity(force, auto) {
             document.getElementById("buyerBtnInf").style.display = "inline-block"
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
+        
+        if (player.reality.upg.includes(3)) player.eternities += 2
         updateAutobuyers();
         if (isAchEnabled("r37")) player.money = new Decimal(1000);
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
@@ -4780,6 +4783,7 @@ function updateDilationUpgradeCosts() {
 
 function getDilationGainPerSecond() {
     var ret = player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1])
+    if (player.reality.upg.includes(1)) ret *= 5
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
@@ -5358,6 +5362,7 @@ function gameLoop(diff) {
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
+    if (player.reality.upg.includes(2)) interval /= 3
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
         if (glyph.type == "replicanti" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed

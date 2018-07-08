@@ -1772,7 +1772,44 @@ br {
     position: relative;
 }
   
+.realityUpgrade {
+    background-color: black;
+    border: 2px solid #0b600e;
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 12px;
+    color: #d5ffd7;
+    cursor: pointer;
+    transition-duration: 0.12s
+}
 
+.realityUpgrade:hover {
+    color: black;
+    background-color: #d5ffd7;
+}
+
+/*
+reality upgrade unavailable
+*/
+.rUpgUn { 
+    background-color: #656565;
+    cursor: default;
+}
+
+.rUpgUn:hover {
+    background-color: #656565;
+    color: #d5ffd7;
+}
+
+.rUpgBought {
+    background-color: #0b600e;
+    cursor: default;
+}
+
+.rUpgBought:hover {
+    color: #d5ffd7;
+    background-color: #0b600e
+}
 
 
 

@@ -4842,7 +4842,7 @@ function updateDilation() {
     if (document.getElementById("dilation").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
         document.getElementById("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
-        document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(player.dilation.tachyonParticles.times(Decimal.pow(2, player.dilation.rebuyables[1]))) + "/s"
+        document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilationGainPerSecond()) + "/s"
         document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
         document.getElementById("dilatedGalaxies").textContent = player.dilation.freeGalaxies
     }

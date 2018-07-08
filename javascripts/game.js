@@ -11,6 +11,7 @@ var saved = 0;
 var keySequence = 0;
 var failureCount = 0;
 var implosionCheck = 0;
+var statsTimer = 0;
 var TIER_NAMES = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
 var DISPLAY_NAMES = [ null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth" ];
 var forceHardReset = false;
@@ -426,6 +427,7 @@ function showTab(tabName) {
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas();
     closeToolTip();
+    if (tabName !== "statistics") statsTimer = 0
 }
 
 
@@ -5476,6 +5478,10 @@ function gameLoop(diff) {
     if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Cancer" || player.options.notation == "Brackets")) {
         player.secretUnlocks.painTimer += player.options.updateRate/1000;
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
+    }
+    if (document.getElementById("statistics").style.display !== "none") {
+        statsTimer += player.options.updateRate/1000;
+        if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");

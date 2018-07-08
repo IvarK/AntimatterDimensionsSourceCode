@@ -22,7 +22,7 @@ function getTickSpeedMultiplier() {
       if (isAchEnabled("r86")) perGalaxy *= 1.01;
       if (player.timestudy.studies.includes(212)) perGalaxy *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
 
-      return new Decimal(baseMultiplier-(player.galaxies*perGalaxy));
+      return new Decimal(baseMultiplier-(galaxies*perGalaxy));
   } else {
       let baseMultiplier = 0.8
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83

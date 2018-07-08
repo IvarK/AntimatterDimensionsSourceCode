@@ -127,6 +127,14 @@ const allAchievements = {
   s36 : "While you were away... Nothing happened.",
   s37 : "You followed the instructions",
   s38 : "Professional bodybuilder",
+  s41 : "That dimension doesn’t exist",
+  s42 : "Was it even broken?",
+  s43 : "Time fixes everything",
+  s44 : "Are you statisfied now?",
+  s45 : "s45",
+  s46 : "s46",
+  s47 : "s47",
+  s48 : "s48",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",
@@ -134,7 +142,7 @@ const secretAchievementTooltips = {
     s13 : "Pay respects.",
     s14 : "Say something naughty.",
     s15 : "Do a barrel roll.",
-    s16 : "Use standard, cancer, or bracket notation for 10 minutes with more than 1 eternity without refreshing.",
+    s16 : "Use standard, cancer, or bracket notation for 10 minutes with more than 1 eternity.",
     s17 : "Input the konami code.",
     s18 : "You have a 1/100,000 chance of getting this achievement every second.",
     s21 : "Purchase the secret time study.",
@@ -153,6 +161,14 @@ const secretAchievementTooltips = {
     s36 : "Have nothing happen while you were away.",
     s37 : "Follow instructions.",
     s38 : "Get all your dimension bulk buyers to 1e100.",
+    s41 : "Try to purchase the 9th dimension.",
+    s42 : '"Fix" your save.',
+    s43 : "Fix infinity while dilated.",
+    s44 : "Stare intently at the statistics tab for 15 minutes.",
+    s45 : "s45",
+    s46 : "s46",
+    s47 : "s47",
+    s48 : "s48",
   };
 const allAchievementNums = Object.invert(allAchievements)
 // to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");

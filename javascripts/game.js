@@ -8,10 +8,10 @@ var shiftDown = false;
 var controlDown = false;
 var justImported = false;
 var saved = 0;
-var painTimer = 0;
 var keySequence = 0;
 var failureCount = 0;
 var implosionCheck = 0;
+var statsTimer = 0;
 var TIER_NAMES = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
 var DISPLAY_NAMES = [ null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth" ];
 var forceHardReset = false;
@@ -350,10 +350,14 @@ function setTheme(name) {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'black';
         normalDimChart.data.datasets[0].borderColor = '#000'
-    }  else if(name === "S6") {
+    } else if(name === "S6") {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'white';
         normalDimChart.data.datasets[0].borderColor = '#FFF'
+    } else if(name === "S7") {
+        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
+        Chart.defaults.global.defaultFontColor = 'black';
+        normalDimChart.data.datasets[0].borderColor = '#000'
     } else {
         document.getElementById("theme").textContent="Current theme: " + name;
     }
@@ -424,6 +428,7 @@ function showTab(tabName) {
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas();
     closeToolTip();
+    if (tabName !== "statistics") statsTimer = 0
 }
 
 
@@ -1746,7 +1751,7 @@ function galaxyReset() {
         dimlife: player.dimlife,
         dead: player.dead,
         dilation: player.dilation,
-        why: player.why,
+        secretUnlocks: player.secretUnlocks,
         realities: player.realities,
         thisReality: player.thisReality,
         bestReality: player.bestReality,
@@ -1911,6 +1916,10 @@ document.getElementById("importbtn").onclick = function () {
         player.options.theme = "S6";
         player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
+    } else if (sha512_256(save_data.toUpperCase()) === "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7") {
+        player.options.theme = "S7";
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
+        setTheme(player.options.theme);
     } else {
         save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
         if(verify_save(save_data)) forceHardReset = true
@@ -2002,6 +2011,7 @@ function breakInfinity() {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) return false
     if (player.break && !player.currentChallenge.includes("post")) {
         player.break = false
+        if (player.dilation.active) giveAchievement("Time fixes everything")
         document.getElementById("break").textContent = "BREAK INFINITY"
     } else {
         player.break = true
@@ -3047,7 +3057,7 @@ document.getElementById("bigcrunch").onclick = function () {
             dimlife: player.dimlife,
             dead: player.dead,
             dilation: player.dilation,
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -3423,7 +3433,7 @@ function eternity(force, auto) {
                 upgrades: player.dilation.upgrades,
                 rebuyables: player.dilation.rebuyables
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -3787,7 +3797,7 @@ function reality(force) {
                     3: 0,
                 }
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities+1,
             thisReality: 0,
             bestReality: Math.min(player.thisReality, player.bestReality),
@@ -4014,7 +4024,7 @@ function startChallenge(name, target) {
       dimlife: player.dimlife,
       dead: player.dead,
       dilation: player.dilation,
-      why: player.why,
+      secretUnlocks: player.secretUnlocks,
       realities: player.realities,
       thisReality: player.thisReality,
       bestReality: player.bestReality,
@@ -4581,7 +4591,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
                 upgrades: player.dilation.upgrades,
                 rebuyables: player.dilation.rebuyables
             },
-            why: player.why,
+            secretUnlocks: player.secretUnlocks,
             realities: player.realities,
             thisReality: player.thisReality,
             bestReality: player.bestReality,
@@ -5144,7 +5154,7 @@ setInterval(function() {
     if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 20000) giveAchievement("This is what I have to do to get rid of you.")
-    if (player.why >= 1e5) giveAchievement("Should we tell them about buy max...")
+    if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
     if ( Math.max(document.documentElement.clientHeight, window.innerHeight || 0) <= 150 || parent.document.body.clientHeight <= 150) giveAchievement("Dip the antimatter")
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
@@ -5471,8 +5481,12 @@ function gameLoop(diff) {
         Marathon2 = 0;
     }
     if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Cancer" || player.options.notation == "Brackets")) {
-        painTimer += player.options.updateRate/1000;
-        if (painTimer >= 600) giveAchievement("Do you enjoy pain?");
+        player.secretUnlocks.painTimer += player.options.updateRate/1000;
+        if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
+    }
+    if (document.getElementById("statistics").style.display !== "none") {
+        statsTimer += player.options.updateRate/1000;
+        if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
@@ -6362,6 +6376,7 @@ window.addEventListener('keydown', function(event) {
         keySequence++
     } else if (keySequence == 9 && event.keyCode == 65) {
         giveAchievement("30 Lives")
+        if (player.money.lt(30)) player.money = new Decimal(30)
     } else {
         keySequence = 0;
     }
@@ -6405,6 +6420,10 @@ window.addEventListener('keydown', function(event) {
         return false;
     }
     switch (event.keyCode) {
+        case 57: // D
+            giveAchievement("That dimension doesn’t exist")
+        break;
+
         case 65: // A
             toggleAutoBuyers();
         break;

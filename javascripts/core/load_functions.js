@@ -110,6 +110,7 @@ function onLoad() {
   if (player.why === undefined) player.why = 0
   if (player.options.animations === undefined) player.options.animations = {floatingText: true, bigCrunch: true, eternity: true, tachyonParticles: true}
   if (player.options.animations.reality === undefined) player.options.animations.reality = true;
+  if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed"};
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
   if (player.bestReality === undefined) player.bestReality = 9999999999;
@@ -119,6 +120,10 @@ function onLoad() {
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
   slider.value = player.options.updateRate;
+
+  if (player.secretUnlocks.fixed === "hasbeenfixed") {
+    giveAchievement("Was it even broken?")
+  }
 
   if (player.secondAmount !== 0) {
       document.getElementById("thirdRow").style.display = "table-row";

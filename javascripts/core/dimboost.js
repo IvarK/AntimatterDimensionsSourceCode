@@ -155,7 +155,7 @@ function softReset(bulk) {
       dimlife: player.dimlife,
       dead: player.dead,
       dilation: player.dilation,
-      why: player.why,
+      secretUnlocks: player.secretUnlocks,
       realities: player.realities,
       thisReality: player.thisReality,
       bestReality: player.bestReality,

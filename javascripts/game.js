@@ -3533,7 +3533,7 @@ function eternity(force, auto) {
 }
 
 function reality(force) {
-    if ((player.eternityPoints.gte("1e4000") && (realizationCheck === 1 || !player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
+    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
         if (((player.bestReality > 6000) && player.options.animations.reality) && realizationCheck === 0) {
             realizationCheck = 1;
             document.getElementById("container").style.animation = "realize 10s 1";

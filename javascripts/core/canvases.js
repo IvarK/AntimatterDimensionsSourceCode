@@ -37,7 +37,8 @@ function animationOnOff(name) {
     if (name == "floatingText") document.getElementById("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
     else if (name == "bigCrunch") document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
     else if (name == "tachyonParticles") document.getElementById("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
-    if (player.options.animations[name]) requestAnimationFrame(drawAnimations);
+    else if (name == "reality") document.getElementById("realityAnimBtn").textContent = "Reality: " + ((player.options.animations.reality) ? "ON" : "OFF")
+    if (player.options.animations[name] && name == "tachyonParticles") requestAnimationFrame(drawAnimations);
 }
 
 function drawAnimations(ts){
@@ -257,7 +258,6 @@ function drawStudyTree() {
             if (document.getElementById(all[i]).className.split(" ")[1] !== undefined || all[i] > 220) {
                 var tempName = document.getElementById(all[i]).className.split(" ")[1];
                 var name;
-                console.log(all[i])
                 if (all[i] == 222 || all[i] == 223 || all[i] == 226 || all[i] == 227 || all[i] == 232 || all[i] == 233) name = "dark"
                 else if (all[i] == 221 || all[i] == 224 || all[i] == 225 || all[i] == 228 || all[i] == 231 || all[i] == 234) name = "light"
                 else if (tempName.includes("normaldimstudy")) name = "normal dims"

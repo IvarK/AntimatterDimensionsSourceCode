@@ -11,6 +11,7 @@ var saved = 0;
 var keySequence = 0;
 var failureCount = 0;
 var implosionCheck = 0;
+var realizationCheck = 0;
 var statsTimer = 0;
 var TIER_NAMES = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
 var DISPLAY_NAMES = [ null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth" ];
@@ -3532,7 +3533,24 @@ function eternity(force, auto) {
 }
 
 function reality(force) {
-    if ((player.eternityPoints.gte("1e4000") && (!player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
+    if ((player.eternityPoints.gte("1e4000") && (realizationCheck === 1 || !player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
+        if (((player.bestReality > 6000) && player.options.animations.reality) && realizationCheck === 0) {
+            realizationCheck = 1;
+            document.getElementById("container").style.animation = "realize 10s 1";
+            document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+            setTimeout(function(){
+                document.getElementById("realityanimbg").play();
+                document.getElementById("realityanimbg").currentTime = 0;
+                document.getElementById("realityanimbg").play();
+            }, 2000)
+            setTimeout(function(){
+                document.getElementById("container").style.animation = "";
+                document.getElementById("realityanimbg").style.animation = "";
+            }, 10000)
+            setTimeout(reality, 3000)
+            return
+        }
+        realizationCheck = 0;
         if (player.thisReality<player.bestReality && !force) {
             player.bestEternity = player.thisEternity
         }
@@ -4968,6 +4986,7 @@ setInterval(function() {
 
 
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
+    else document.getElementById("eternitystorebtn").style.display = "none"
     for (var i=1; i <=8; i++) {
         document.getElementById("postc"+i+"goal").textContent = "Goal: "+shortenCosts(goals[i-1])
     }
@@ -5155,7 +5174,6 @@ setInterval(function() {
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 20000) giveAchievement("This is what I have to do to get rid of you.")
     if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
-    if ( Math.max(document.documentElement.clientHeight, window.innerHeight || 0) <= 150 || parent.document.body.clientHeight <= 150) giveAchievement("Dip the antimatter")
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 

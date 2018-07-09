@@ -10,6 +10,10 @@ body {
     filter: invert(100%);
 }
 
+#realityanimbg {
+    filter: invert(1);
+}
+
 #theorembuybackground {
     border-color: #fff !important;
     background-color: #1f1f1f !important;

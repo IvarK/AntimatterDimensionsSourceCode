@@ -8,6 +8,10 @@
     transform: translate(-50%,-50%);
 }
 
+body {
+    background: black !important;
+}
+
 button {
     color: #E0E0E0;
     background-color: black !important;
@@ -91,7 +95,7 @@ input {
 }
 
 .container {
-    color: #888888 !important;
+    color: #999 !important;
 }
 
 .challengesbtn {
@@ -159,7 +163,7 @@ input {
 }
 
 #infinityPoints1 {
-    color: #4F5957 !important;
+    color: #999 !important;
 }
 
 .IPAmount1 {
@@ -187,7 +191,7 @@ input {
 }
 
 .postinfcrunch {
-    color: black;
+    color: white !important;
     border: 2px solid #1565C0 !important;
 }
 
@@ -630,6 +634,10 @@ input {
 
 #glyphs .empty {
     background: #333333 !important;
+}
+
+#realityanimbg {
+    filter: invert(1);
 }
 
 @keyframes antimatterGlow {

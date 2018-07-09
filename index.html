@@ -31,9 +31,6 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-    <video autoplay muted loop id="stars" style="display: none;">
-        <source src="images/s6-bg.webm" type="video/webm">
-    </video>
 <body id="body" style="height: 95vh;">
     <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
         <div id='game'>
@@ -2788,6 +2785,7 @@
 		<button id="floatingTextAnimBtn" class="storebtn" onclick="animationOnOff('floatingText')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
         <button id="bigCrunchAnimBtn" class="storebtn" onclick="animationOnOff('bigCrunch')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
         <button id="tachyonParticleAnimBtn" class="storebtn" onclick="animationOnOff('tachyonParticles')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
+        <button id="realityAnimBtn" class="storebtn" onclick="animationOnOff('reality')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
 	</div>
     <div id="TTbuttons" style="display:none;">
         <button class="timetheorembtn" onclick="maxTheorems()" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Buy max Theorems</button>
@@ -2802,7 +2800,12 @@
         <p id="studytreeloadsavetext" style="position: fixed;">load:</p>
     </div>
 </body>
-
+<video autoplay muted loop id="stars" style="display: none;">
+    <source src="images/s6-bg.webm" type="video/webm">
+</video>
+<video preload muted id="realityanimbg" style="opacity: 0;">
+    <source src="images/realityanimbg.webm" type="video/webm">
+</video>
 
 
 <script type="text/javascript"src="PlayFab/PlayFabClientApi.js"></script>

@@ -563,6 +563,10 @@ input {
     text-shadow: 0px 0px 7px #64DD17;
 }
 
+#realityanimbg {
+    filter: invert(1);
+}
+
 @keyframes antimatterGlow {
     0%  {color: #2196F3;}
     33% {color: #673AB7;}

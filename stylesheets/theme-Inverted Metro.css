@@ -10,6 +10,10 @@ body {
     filter: invert(100%);
 }
 
+#realityanimbg {
+    filter: invert(1);
+}
+
 * {
     border-radius: 0px !important;
 }

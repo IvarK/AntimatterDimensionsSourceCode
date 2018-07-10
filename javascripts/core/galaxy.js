@@ -1,27 +1,46 @@
-function getDimensionBoostPower() {
-  if (player.currentChallenge == "challenge11" || player.currentChallenge == "postc1") return Decimal.fromNumber(1);
-
-  var ret = 2
-  if (player.infinityUpgrades.includes("resetMult")) ret = 2.5
-  if (player.challenges.includes("postc7")) ret = 4
-  if (player.currentChallenge == "postc7" || player.timestudy.studies.includes(81)) ret = 10
-
-  if (isAchEnabled("r101")) ret = ret*1.01
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "power" && glyph.effects.dimboost !== undefined) ret *= glyph.effects.dimboost
-  }
-  if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
-  if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
-  
-  return Decimal.fromValue(ret)
+function getGalaxyCostScalingStart() {
+  var n = 100 + ECTimesCompleted("eterc5")*5
+  if (player.timestudy.studies.includes(223)) n += 7
+  if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
+  return n
 }
 
-function softReset(bulk) {
-  //if (bulk < 1) bulk = 1 (fixing issue 184)
-  if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
-  player.resets+=bulk;
-  if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
+function getGalaxyRequirement() {
+  let amount = 80 + ((player.galaxies) * 60);
+  if (player.timestudy.studies.includes(42)) amount = 80 + ((player.galaxies) * 52)
+  if (player.currentChallenge == "challenge4") amount = 99 + ((player.galaxies) * 90)
+
+  let galaxyCostScalingStart = getGalaxyCostScalingStart()
+  if (player.currentEternityChall == "eterc5") {
+      amount += Math.pow(player.galaxies, 2) + player.galaxies
+  }
+  else if ((player.galaxies) >= galaxyCostScalingStart) {
+      amount += Math.pow((player.galaxies)-(galaxyCostScalingStart-1),2)+(player.galaxies)-(galaxyCostScalingStart-1)
+  }
+  if (player.galaxies >= 800) {
+      amount = Math.floor(amount * Math.pow(1.002, (player.galaxies-799)))
+  }
+
+  if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+  if (player.challenges.includes("postc5")) amount -= 1;
+
+  return amount;
+}
+
+document.getElementById("secondSoftReset").onclick = function() {
+  if (player.currentEternityChall == "eterc6") return
+  var bool = player.currentChallenge != "challenge11" && player.currentChallenge != "postc1" && player.currentChallenge != "postc7" && (player.break || player.money.lte(Number.MAX_VALUE))
+  if (player.currentChallenge == "challenge4" ? player.sixthAmount >= getGalaxyRequirement() && bool : player.eightAmount >= getGalaxyRequirement() && bool) {
+      if (player.eternities >= 7 && !shiftDown) maxBuyGalaxies(true);
+      else galaxyReset();
+  }
+}
+
+function galaxyReset() {
+
+  if (autoS) auto = false;
+  autoS = true;
+  if (player.sacrificed == 0) giveAchievement("I don't believe in Gods");
   player = {
       money: isAchEnabled("r111") ? player.money : new Decimal(10),
       tickSpeedCost: new Decimal(1000),
@@ -50,6 +69,14 @@ function softReset(bulk) {
       sixthBought: 0,
       seventhBought: 0,
       eightBought: 0,
+      firstPow: new Decimal(1),
+      secondPow: new Decimal(1),
+      thirdPow: new Decimal(1),
+      fourthPow: new Decimal(1),
+      fifthPow: new Decimal(1),
+      sixthPow: new Decimal(1),
+      seventhPow: new Decimal(1),
+      eightPow: new Decimal(1),
       sacrificed: new Decimal(0),
       achievements: player.achievements,
       challenges: player.challenges,
@@ -61,22 +88,14 @@ function softReset(bulk) {
       totalTimePlayed: player.totalTimePlayed,
       bestInfinityTime: player.bestInfinityTime,
       thisInfinityTime: player.thisInfinityTime,
-      firstPow: getDimensionBoostPower().pow(player.resets),
-      secondPow: getDimensionBoostPower().pow(player.resets-1),
-      thirdPow: getDimensionBoostPower().pow(player.resets- 2).max(1),
-      fourthPow: getDimensionBoostPower().pow(player.resets- 3).max(1),
-      fifthPow: getDimensionBoostPower().pow(player.resets- 4).max(1),
-      sixthPow: getDimensionBoostPower().pow(player.resets- 5).max(1),
-      seventhPow: getDimensionBoostPower().pow(player.resets- 6).max(1),
-      eightPow: getDimensionBoostPower().pow(player.resets- 7).max(1),
-      resets: player.resets,
-      galaxies: player.galaxies,
-      tickDecrease: player.tickDecrease,
+      resets: 0,
+      galaxies: player.galaxies + 1,
       totalmoney: player.totalmoney,
+      tickDecrease: player.tickDecrease - 0.03,
       interval: null,
       lastUpdate: player.lastUpdate,
       achPow: player.achPow,
-    newsArray: player.newsArray,
+      newsArray: player.newsArray,
       autobuyers: player.autobuyers,
       costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
       tickspeedMultiplier: new Decimal(10),
@@ -100,9 +119,9 @@ function softReset(bulk) {
       dimensionMultDecreaseCost: player.dimensionMultDecreaseCost,
       version: player.version,
       overXGalaxies: player.overXGalaxies,
+      spreadingCancer: player.spreadingCancer,
       infDimensionsUnlocked: player.infDimensionsUnlocked,
       infinityPower: player.infinityPower,
-      spreadingCancer: player.spreadingCancer,
       postChallUnlocked: player.postChallUnlocked,
       postC4Tier: 1,
       postC3Reward: new Decimal(1),
@@ -162,6 +181,7 @@ function softReset(bulk) {
       reality: player.reality,
       options: player.options
   };
+
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
       player.thirdCost = new Decimal(100)
       player.fourthCost = new Decimal(500)
@@ -170,8 +190,9 @@ function softReset(bulk) {
       player.seventhCost = new Decimal(2e5)
       player.eightCost = new Decimal(4e6)
   }
-  if (player.currentChallenge == "postc1") player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
-  if (player.resets == 1 && player.currentChallenge == "") {
+
+  if (player.resets == 0 && player.currentChallenge == "") {
+      if (player.infinityUpgrades.includes("skipReset1")) player.resets++;
       if (player.infinityUpgrades.includes("skipReset2")) player.resets++;
       if (player.infinityUpgrades.includes("skipReset3")) player.resets++;
       if (player.infinityUpgrades.includes("skipResetGalaxy")) {
@@ -179,22 +200,22 @@ function softReset(bulk) {
           if (player.galaxies == 0) player.galaxies = 1
       }
   }
-if (player.currentChallenge == "postc2") {
+  if (player.currentChallenge == "postc2") {
       player.eightAmount = new Decimal(1);
       player.eightBought = 1;
+      player.resets = 4;
   }
 
+  setInitialDimensionPower();
 
+
+  if (player.options.notation == "Cancer") player.spreadingCancer+=1;
+  if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
+  if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread")
   if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
   if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
-  if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
   if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
 
-
-
-
-
-  //updateInterval();
   if (player.eternities < 30) {
       document.getElementById("secondRow").style.display = "none";
       document.getElementById("thirdRow").style.display = "none";
@@ -209,66 +230,16 @@ if (player.currentChallenge == "postc2") {
       document.getElementById("eightRow").style.display = "none";
   }
 
-
-  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
-  updateTickSpeed()
+  if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??")
+  if (player.galaxies >= 2) giveAchievement("Double Galaxy");
+  if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
   if (player.challenges.includes("challenge1")) player.money = new Decimal(100).max(player.money)
   if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
   if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
   if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
   if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
-
-  if (player.resets >= 10) {
-      giveAchievement("Boosting to the max");
-  }
-}
-
-
-function getShiftRequirement(bulk) {
-  let amount = 20;
-  if (player.currentChallenge == "challenge4") {
-      tier = Math.min(player.resets + bulk + 4, 6)
-      if (tier == 6) amount += (player.resets+bulk - 2) * 20;
-  } else {
-      tier = Math.min(player.resets + bulk + 4, 8)
-  }
-
-  let mult = 15
-  if (player.timestudy.studies.includes(211)) mult -= 5
-  if (player.timestudy.studies.includes(222)) mult -= 2
-
-  if (tier == 8) amount += Math.ceil((player.resets+bulk - 4) * mult);
-  if (player.currentEternityChall == "eterc5") {
-      amount += Math.pow(player.resets+bulk, 3) + player.resets+bulk
-  }
-
-  if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
-  if (player.challenges.includes("postc5")) amount -= 1
-
-  return { tier: tier, amount: amount };
-}
-
-document.getElementById("softReset").onclick = function () {
-  var name = TIER_NAMES[getShiftRequirement(0).tier]
-  if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getShiftRequirement(0).amount) return;
-  auto = false;
-  if (player.infinityUpgrades.includes("bulkBoost")) maxBuyDimBoosts(true);
-  else softReset(1)
-  
-  for (var tier = 1; tier<9; tier++) {
-    var name = TIER_NAMES[tier];
-    var mult = getDimensionBoostPower().pow(player.resets + 1 - tier)
-    if (mult > 1) floatText(name + "D", "x" + shortenDimensions(mult))
-  }
+  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
+  if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
+  if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
+  updateTickSpeed();
 };
-
-function setInitialDimensionPower () {
-    player.firstPow = getDimensionBoostPower().pow(player.resets)
-    player.secondPow = getDimensionBoostPower().pow(player.resets - 1).max(1)
-    player.thirdPow = getDimensionBoostPower().pow(player.resets - 2).max(1)
-    player.fourthPow = getDimensionBoostPower().pow(player.resets - 3).max(1)
-    player.fifthPow = getDimensionBoostPower().pow(player.resets - 4).max(1)
-    player.sixthPow = getDimensionBoostPower().pow(player.resets - 5).max(1)
-    player.seventhPow = getDimensionBoostPower().pow(player.resets - 6).max(1)
-    player.eightPow = getDimensionBoostPower().pow(player.resets - 7).max(1)
-  }

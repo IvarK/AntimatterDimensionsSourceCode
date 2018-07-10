@@ -2466,7 +2466,7 @@ document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1])
     if (player.currentChallenge.length == 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1])
     if ((player.money.gte(Number.MAX_VALUE) && !player.currentChallenge.includes("post")) || (player.currentChallenge !== "" && player.money.gte(player.challengeTarget))) {
-        if ((player.bestInfinityTime > 600 && !player.break) && player.eternities === 0 && player.realities === 0 && implosionCheck === 0 && player.options.animations.bigCrunch) {
+        if ((player.bestInfinityTime > 600 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
             implosionCheck = 1;
             document.getElementById("body").style.animation = "implode 2s 1";
             setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
@@ -3161,7 +3161,7 @@ function eternity(force, auto) {
 }
 
 function reality(force) {
-    if ((player.eternityPoints.gte("1e4000") && (realizationCheck === 1 || !player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
+    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.realityconfirm || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, and unlock various upgrades."))) || force === true) {
         if (((player.bestReality > 6000) && player.options.animations.reality) && realizationCheck === 0) {
             realizationCheck = 1;
             document.getElementById("container").style.animation = "realize 10s 1";

@@ -14,7 +14,7 @@ var automatorRows = []
 var automatorIdx = 0
 
 function updateState() {
-  automatorRows = $("#automator").val().toLowerCase().split("\n")
+  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
 }
 
 function highlightcurrent() {

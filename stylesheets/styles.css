@@ -1825,12 +1825,20 @@ reality upgrade unavailable
     width: 200px;
     overflow-y: scroll;
     resize: none;
+    font-family: 'PT Mono', monospace;
+    color: #66ff66;
+    background-color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#automator::selection {
+    color: red;
 }
 
 
-
-@media print,
-screen and (max-width: 960px) {
+@media print, screen and (max-width: 960px) {
     div.wrapper {
         width: auto;
         margin: 0;

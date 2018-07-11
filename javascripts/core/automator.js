@@ -17,6 +17,15 @@ function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n")
 }
 
+function highlightcurrent() {
+  var row = automatorRows[automatorIdx]
+  var idx = $("#automator")[0].value.indexOf(row)
+  if (idx >= 0) {
+    $("#automator")[0].focus()
+    $("#automator")[0].setSelectionRange(idx, idx + row.length)
+  }
+}
+
 var automatorOn = false
 function mainIteration() {
   if (automatorOn) {
@@ -47,6 +56,7 @@ function mainIteration() {
     }
 
     if (automatorRows.length - 1 < automatorIdx) automatorIdx = 0
+    if ( $("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent()
   }
 }
 

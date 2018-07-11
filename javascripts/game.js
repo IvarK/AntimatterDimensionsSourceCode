@@ -5994,7 +5994,7 @@ window.onfocus = function() {
 }
 
 window.addEventListener('keydown', function(event) {
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
+    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false
     const tmp = event.keyCode;
     if (tmp >= 49 && tmp <= 56) {
         if (shiftDown) buyOneDimension(tmp-48)

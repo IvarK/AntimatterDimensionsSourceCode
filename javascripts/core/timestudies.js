@@ -77,7 +77,7 @@ function updateTheoremButtons() {
 
 function buyTimeStudy(name, cost, check) {
   if (shiftDown && check === undefined) studiesUntil(name);
-  else if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
+  if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
       player.timestudy.theorem -= cost
       if (name == 71 || name == 81 || name == 91 || name == 101) {
@@ -106,7 +106,8 @@ function buyTimeStudy(name, cost, check) {
       updateTheoremButtons()
       updateTimeStudyButtons()
       drawStudyTree()
-  }
+      return true
+  } else return false
 }
 
 function buyDilationStudy(name, cost) {

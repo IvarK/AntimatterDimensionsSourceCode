@@ -2710,6 +2710,11 @@
             <div id="automation" class="realitytab" style="display: none;">
                 <div>
                     <h1>Upgrades here later</h1>
+                    <div>
+                        <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOn = !automatorOn">
+                        <label for="automatorOn">Automator on</label>
+                    </div>
+                    <textarea name="automator" id="automator" cols="30" onChange="updateState()"></textarea>
                 </div>
             </div>
             <div id="wormhole" class="realitytab" style="display: none;">
@@ -2837,6 +2842,7 @@
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>
+<script type="text/javascript" src="javascripts/core/automator.js"></script>
 
 
 <script type="text/javascript" src="javascripts/sha512.js"></script>

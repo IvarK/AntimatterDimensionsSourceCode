@@ -283,7 +283,8 @@ var player = {
             slots: 3,
         },
         seed: Math.floor(Date.now() * Math.random()+1),
-        upg: []
+        upg: [],
+        automatorRows: 0
     },
     options: {
         newsHidden: false,

@@ -1820,6 +1820,13 @@ reality upgrade unavailable
     transform: translate(-50%,-50%);
 }
 
+#automator {
+    height: 300px;
+    width: 200px;
+    overflow-y: scroll;
+    resize: none;
+}
+
 
 
 @media print,

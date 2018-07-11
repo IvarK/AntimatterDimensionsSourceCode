@@ -3158,7 +3158,9 @@ function eternity(force, auto) {
             loadAutoBuyerSettings()
         }
         Marathon2 = 0;
+        return true
     }
+    else return false
 }
 
 function reality(force) {

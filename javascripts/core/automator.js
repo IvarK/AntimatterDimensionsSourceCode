@@ -3,11 +3,20 @@
  * 
  * BUY STUDY 11:
  * Buys study
+ * also can do BUY STUDYUNTIL X
+ * 
+ * 
  * 
  * WAIT EP 1e20:
  * waits untils 1e20 ep
  * 
  * possible targets: ep, ip, antimatter, replicanti, replicantigalaxy
+ * 
+ * RESPEC: makes next eternity respec
+ * 
+ * ETERNITY: does an eternity
+ * 
+ * STOP: stops the script
  */
 
 var automatorRows = []
@@ -52,6 +61,17 @@ function mainIteration() {
         break;
       case "wait":
         if (wait(current)) automatorIdx+=1
+        break;
+      case "respec":
+        player.respec = true
+        automatorIdx+=1
+        break;
+      case "eternity":
+        eternity()
+        automatorIdx+=1
+        break;
+      case "stop":
+        //I eat ass
         break;
     }
 

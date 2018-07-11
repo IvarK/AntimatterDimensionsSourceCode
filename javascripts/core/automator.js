@@ -68,6 +68,16 @@ function buy(current) {
       else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
       else return false
       break;
+    case "studyuntil":
+      id = parseInt(current.id)
+      if (!player.timestudy.studies.includes(id)) {
+        studiesUntil(id)
+        return false
+      }
+      else {
+        return true
+      }
+      break;
   }
 }
 

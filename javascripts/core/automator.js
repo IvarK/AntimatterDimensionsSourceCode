@@ -153,11 +153,6 @@ function start(current) {
   }
 }
 
-function importAutomatorScript(script) {
-  var outputString = JSON.parse(script).join("\n")
-  document.getElementById("automator").value = outputString
-  updateState()
-}
 
 function automatorSaveButton(num) {
   if (shiftDown) {
@@ -169,5 +164,4 @@ function automatorSaveButton(num) {
   }
 }
 
-updateState()
 setInterval(mainIteration, 50)

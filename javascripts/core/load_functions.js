@@ -5,6 +5,16 @@ var saves = {
   2: null
 };
 
+function importAutomatorScript(script) {
+  var outputString = JSON.parse(script).join("\n")
+  document.getElementById("automator").value = outputString
+  updateState()
+}
+
+function updateState() {
+    automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+  }
+
 function onLoad() {
   if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
   if (player.options === undefined) {

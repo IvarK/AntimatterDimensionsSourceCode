@@ -9,7 +9,7 @@
  * 
  * WAIT EP 1e20:
  * waits untils 1e20 ep
- * possible targets: ep, ip, antimatter, replicanti, replicantigalaxy, seconds
+ * possible targets: ep, ip, antimatter, replicanti, rg, seconds
  * replicantigalaxy has a MAX option, which waits until you have as much as you can.
  * 
  * UNLOCK EC 1: you know
@@ -45,6 +45,7 @@ function highlightcurrent() {
 var automatorOn = false
 var timer = 0
 var now = Date.now()
+var waiting = false
 function mainIteration() {
   if (automatorRows[0] === undefined) return false; 
   if (automatorOn) {
@@ -148,7 +149,7 @@ function wait(current) {
       if (id.gt(player.replicanti.amount)) return false
       else return true
       break;
-    case "replicantigalaxy":
+    case "rg":
       if (current.id == "max") {
         if ((!player.timestudy.studies.includes(131) ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
         else return false
@@ -157,10 +158,17 @@ function wait(current) {
       else return true
       break;
     case "seconds":
+      if (waiting = false) {
+        waiting = true
+        now = Date.now()
+      }
       timer += (Date.now() - now) / 1000
       now = Date.now()
       if (timer < id) return false
-      else return true
+      else {
+        waiting = false
+        return true
+      }
       break;
   }
 }

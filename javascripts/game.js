@@ -6111,7 +6111,7 @@ window.addEventListener('keydown', function(event) {
         $.notify("Paying respects", "info")
         giveAchievement("It pays to have respect")
     }
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "textarea") return false
+    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text"  || document.activeElement.type === "textarea") return false
     switch (event.keyCode) {
         case 67: // C
             document.getElementById("bigcrunch").onclick()

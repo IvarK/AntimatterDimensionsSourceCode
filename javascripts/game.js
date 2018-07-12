@@ -3927,7 +3927,8 @@ document.getElementById("ec1unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec2unl").onclick = function() {
@@ -3937,7 +3938,8 @@ document.getElementById("ec2unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec3unl").onclick = function() {
@@ -3947,7 +3949,8 @@ document.getElementById("ec3unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec4unl").onclick = function() {
@@ -3957,7 +3960,8 @@ document.getElementById("ec4unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec5unl").onclick = function() {
@@ -3967,7 +3971,8 @@ document.getElementById("ec5unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec6unl").onclick = function() {
@@ -3977,7 +3982,8 @@ document.getElementById("ec6unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec7unl").onclick = function() {
@@ -3987,7 +3993,8 @@ document.getElementById("ec7unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec8unl").onclick = function() {
@@ -3997,7 +4004,8 @@ document.getElementById("ec8unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec9unl").onclick = function() {
@@ -4007,7 +4015,8 @@ document.getElementById("ec9unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec10unl").onclick = function() {
@@ -4017,7 +4026,8 @@ document.getElementById("ec10unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec11unl").onclick = function() {
@@ -4027,7 +4037,8 @@ document.getElementById("ec11unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 document.getElementById("ec12unl").onclick = function() {
@@ -4037,11 +4048,12 @@ document.getElementById("ec12unl").onclick = function() {
         updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } else return false
 }
 
 function startEternityChallenge(name, startgoal, goalIncrease) {
-    if (player.eternityChallUnlocked == 0 || parseInt(name.split("c")[1]) !== player.eternityChallUnlocked) return
+    if (player.eternityChallUnlocked == 0 || parseInt(name.split("c")[1]) !== player.eternityChallUnlocked) return false
     if((player.options.challConf) || name == "" ? true :  (confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP with special conditions."))) {
         player = {
             money: new Decimal(10),
@@ -4325,8 +4337,8 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
         updateEternityChallenges()
         Marathon2 = 0;
 
-
-    }
+        return true
+    } else return false
 }
 
 function startDilatedEternity() {
@@ -4552,6 +4564,59 @@ setInterval(function() {
         }
     })
 }, 60000)
+
+
+const ETERNITY_CHALLS = [ 
+    ec1 = {
+        start: new Decimal("1e1800"),
+        inc: new Decimal("1e200")
+    },
+    ec2 = {
+        start: new Decimal("1e975"),
+        inc: new Decimal("1e175")
+    },
+    ec3 = {
+        start: new Decimal("1e600"),
+        inc: new Decimal("1e75")
+    },
+    ec4 = {
+        start: new Decimal("1e2750"),
+        inc: new Decimal("1e550")
+    },
+    ec5 = {
+        start: new Decimal("1e750"),
+        inc: new Decimal("1e400")
+    },
+    ec6 = {
+        start: new Decimal("1e850"),
+        inc: new Decimal("1e250")
+    },
+    ec7 = {
+        start: new Decimal("1e2000"),
+        inc: new Decimal("1e530")
+    },
+    ec8 = {
+        start: new Decimal("1e1300"),
+        inc: new Decimal("1e900")
+    },
+    ec9 = {
+        start: new Decimal("1e1750"),
+        inc: new Decimal("1e250")
+    },
+    ec10 = {
+        start: new Decimal("1e3000"),
+        inc: new Decimal("1e300")
+    },
+    ec11 = {
+        start: new Decimal("1e500"),
+        inc: new Decimal("1e200")
+    },
+    ec12 = {
+        start: new Decimal("1e110000"),
+        inc: new Decimal("1e12000")
+    },
+
+]
 
 
 
@@ -6046,7 +6111,7 @@ window.addEventListener('keydown', function(event) {
         $.notify("Paying respects", "info")
         giveAchievement("It pays to have respect")
     }
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
+    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "textarea") return false
     switch (event.keyCode) {
         case 67: // C
             document.getElementById("bigcrunch").onclick()

@@ -9,8 +9,11 @@
  * 
  * WAIT EP 1e20:
  * waits untils 1e20 ep
- * 
  * possible targets: ep, ip, antimatter, replicanti, replicantigalaxy
+ * 
+ * UNLOCK EC 1: you know
+ * 
+ * START EC 1: duh
  * 
  * RESPEC: makes next eternity respec
  * 
@@ -63,6 +66,12 @@ function mainIteration() {
       case "wait":
         if (wait(current)) automatorIdx+=1
         break;
+      case "unlock":
+        if (unlock(current)) automatorIdx+=1
+        break;
+      case "start":
+        if (start(current)) automatorIdx+=1
+        break;
       case "respec":
         player.respec = true
         automatorIdx+=1
@@ -105,7 +114,8 @@ function buy(current) {
 function unlock(current) {
   switch(current.target) {
     case "ec":
-      //TODO, challgoal and challincrease are not in javascript yet
+      if ( document.getElementById("ec" + current.id + "unl").click() ) return true
+      else return false
   }
 }
 
@@ -132,6 +142,14 @@ function wait(current) {
       if (id.gt(player.replicanti.galaxies)) return false
       else return true
       break;
+  }
+}
+
+function start(current) {
+  switch(current.target) {
+    case "ec":
+      if (startEternityChallenge("eterc" + current.id, ETERNITY_CHALLS["ec"+current.id].start, ETERNITY_CHALLS["ec"+current.id].inc)) return true
+      else return false
   }
 }
 

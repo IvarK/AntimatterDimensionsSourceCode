@@ -131,7 +131,7 @@ function unlock(current) {
 }
 
 function wait(current) {
-  id = new Decimal(current.id)
+  if (current.id !== "max") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
       if (id.gt(player.eternityPoints)) return false

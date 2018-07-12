@@ -2716,7 +2716,7 @@
                         <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
                         <button class="realitytabbtn" onclick="automatorSaveButton(3)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">3</button>
                         <label for="automatorOn" style="margin-left: 40px;">on:</label>
-                        <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOn = !automatorOn">
+                        <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOn = !automatorOn; automatorIdx = 0;">
                     </div>
                     <textarea name="automator" id="automator" cols="30" onChange="updateState()"></textarea>
                 </div>

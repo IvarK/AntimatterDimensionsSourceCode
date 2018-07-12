@@ -15,6 +15,9 @@
  * 
  * START EC 1: duh
  * 
+ * CHANGE IPautobuyer 1e20:
+ * changes the settings of autobuyers, currently only ip
+ * 
  * RESPEC: makes next eternity respec
  * 
  * ETERNITY: does an eternity
@@ -72,16 +75,19 @@ function mainIteration() {
       case "start":
         if (start(current)) automatorIdx+=1
         break;
+      case "change":
+        if (change(current)) automatorIdx+=1
+        break;
       case "respec":
         player.respec = true
         automatorIdx+=1
         break;
       case "eternity":
-        eternity()
-        automatorIdx+=1
+        if (eternity(false, true)) automatorIdx+=1
         break;
       case "stop":
-        //I eat ass
+        automatorOn = false
+        $("#automatorOn")[0].checked = false
         break;
     }
 
@@ -114,6 +120,7 @@ function buy(current) {
 function unlock(current) {
   switch(current.target) {
     case "ec":
+      if (player.eternityChallUnlocked == parseInt(current.id)) return true
       if ( document.getElementById("ec" + current.id + "unl").click() ) return true
       else return false
   }
@@ -148,8 +155,18 @@ function wait(current) {
 function start(current) {
   switch(current.target) {
     case "ec":
+      if (player.currentEternityChall == "eterc" + current.id) return true
       if (startEternityChallenge("eterc" + current.id, ETERNITY_CHALLS["ec"+current.id].start, ETERNITY_CHALLS["ec"+current.id].inc)) return true
       else return false
+  }
+}
+
+function change(current) {
+  switch(current.target) {
+    case "ipautobuyer":
+      document.getElementById("priority12").value = current.id
+      updatePriorities()
+      return true
   }
 }
 

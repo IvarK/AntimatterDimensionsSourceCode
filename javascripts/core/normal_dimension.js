@@ -587,5 +587,6 @@ function getDimensionProductionPerSecond(tier) {
         tick = new Decimal(1).dividedBy(tick)
         ret = Decimal.floor(player[TIER_NAMES[tier] + 'Amount']).times(getDimensionFinalMultiplier(tier)).times(1000).dividedBy(tick)
     }
+    if (((player.currentChallenge !== "" && !player.currentChallenge.includes("post")) || !player.break) && ret.gte(Number.MAX_VALUE)) ret = new Decimal(Number.MAX_VALUE)
     return ret;
 }

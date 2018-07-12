@@ -5,6 +5,8 @@
  * Buys study
  * also can do BUY STUDYUNTIL X
  * 
+ * You can also BUY TTMAX or BUY TTEP 3 or BUY TTAM 4 etc.
+ * 
  * 
  * 
  * WAIT EP 1e20:
@@ -24,11 +26,13 @@
  * ETERNITY: does an eternity
  * 
  * STOP: stops the script
+ * 
+ * LOAD SCRIPT 2: loads the second script
  */
 
 var automatorRows = []
 var automatorIdx = 0
-
+var tryingToBuy = 0
 function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
 }
@@ -46,6 +50,7 @@ var automatorOn = false
 var timer = 0
 var now = Date.now()
 var waiting = false
+var buying = false
 function mainIteration() {
   if (automatorRows[0] === undefined) return false; 
   if (automatorOn) {
@@ -93,6 +98,10 @@ function mainIteration() {
         automatorOn = false
         $("#automatorOn")[0].checked = false
         break;
+      case "load":
+        automatorIdx = 0
+        loadScript(current.id)
+        break;
     }
 
     if (automatorRows.length - 1 < automatorIdx) automatorIdx = 0
@@ -117,6 +126,45 @@ function buy(current) {
       else {
         return true
       }
+      break;
+    case "ttmax":
+      maxTheorems()
+      break;
+    case "ttip":
+      if (!buying) {
+        buying = true
+        tryingToBuy = 0
+      }
+      if (buyWithIP()) tryingToBuy++
+      if (tryingToBuy == parseInt(current.id)) {
+        buying = false
+        return true
+      }
+      else return false
+      break;
+    case "ttep":
+      if (!buying) {
+        buying = true
+        tryingToBuy = 0
+      }
+      if (buyWithEP()) tryingToBuy++
+      if (tryingToBuy == parseInt(current.id)) {
+        buying = false
+        return true
+      }
+      else return false
+      break;
+    case "ttam":
+      if (!buying) {
+        buying = true
+        tryingToBuy = 0
+      }
+      if (buyWithAntimatter()) tryingToBuy++
+      if (tryingToBuy == parseInt(current.id)) {
+        buying = false
+        return true
+      }
+      else return false
       break;
   }
 }
@@ -196,9 +244,15 @@ function automatorSaveButton(num) {
   if (shiftDown) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
       $.notify("Automator script "+num+" saved", "info")
-  } else if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
-      importAutomatorScript(localStorage.getItem("automatorScript"+num));
-      $.notify("Automator script "+num+" loaded", "info")
+  } else {
+    loadScript(num)
+  }
+}
+
+function loadScript(num) {
+  if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
+    importAutomatorScript(localStorage.getItem("automatorScript"+num));
+    $.notify("Automator script "+num+" loaded", "info")
   }
 }
 

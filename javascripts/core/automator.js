@@ -37,6 +37,7 @@ function highlightcurrent() {
 
 var automatorOn = false
 function mainIteration() {
+  if (automatorRows[0] === undefined) return false; 
   if (automatorOn) {
     var row = automatorRows[automatorIdx].split(" ")
     if (row.length == 1) {
@@ -131,6 +132,22 @@ function wait(current) {
       if (id.gt(player.replicanti.galaxies)) return false
       else return true
       break;
+  }
+}
+
+function importAutomatorScript(script) {
+  var outputString = JSON.parse(script).join("\n")
+  document.getElementById("automator").value = outputString
+  updateState()
+}
+
+function automatorSaveButton(num) {
+  if (shiftDown) {
+      localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
+      $.notify("Automator script "+num+" saved", "info")
+  } else if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
+      importAutomatorScript(localStorage.getItem("automatorScript"+num));
+      $.notify("Automator script "+num+" loaded", "info")
   }
 }
 

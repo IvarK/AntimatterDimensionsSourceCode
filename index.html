@@ -2709,9 +2709,10 @@
                 </div>
             </div>
             <div id="automation" class="realitytab" style="display: none;">
+                <canvas id="automatorTreeCanvas"></canvas>
                 <div>
                     <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
-                        <p id="automaterloadsavetext">load:</p>
+                        <p id="automatorloadsavetext">load:</p>
                         <button class="realitytabbtn" onclick="automatorSaveButton(1)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">1</button>
                         <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
                         <button class="realitytabbtn" onclick="automatorSaveButton(3)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">3</button>
@@ -2720,6 +2721,37 @@
                     </div>
                     <textarea name="automator" id="automator" cols="30" onChange="updateState()"></textarea>
                 </div>
+                <table class="table" id="studytable">
+                    <tr>
+                        <td><button class="automatorinstruction" id="automator11" onclick="buyAutomatorInstruction(11, 1)">WAIT</button></td>
+                    </tr>
+                </table>
+                <br>
+                <table class="table" id="studytable">
+                    <tr>
+                        <td><button class="automatorinstruction" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER</button></td>
+                        <td><button class="automatorinstruction" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP</button></td>
+                    </tr>
+                </table>
+                <table class="table" id="studytable">
+                    <tr>
+                        <td><button class="automatorinstruction" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP</button></td>
+                        <td><button class="automatorinstruction" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI</button></td>
+                    </tr>
+                </table>
+                <table class="table" id="studytable">
+                    <tr>
+                        <td><button class="automatorinstruction" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME</button></td>
+                        <td><button class="automatorinstruction" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG</button></td>
+                    </tr>
+                </table>
+                <table class="table" id="studytable">
+                    <tr>
+                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                        <td><button class="automatorinstruction" id="automator51" onclick="buyAutomatorInstruction(51, 2)">MAX</button></td>
+                    </tr>
+                </table>
             </div>
             <div id="wormhole" class="realitytab" style="display: none;">
                 <div>

@@ -5873,6 +5873,7 @@ function showRealityTab(tabName) {
             tab.style.display = 'none';
         }
     }
+    resizeCanvas()
 }
 
 function showAchTab(tabName) {
@@ -6034,6 +6035,7 @@ window.addEventListener('keydown', function(event) {
     if (event.keyCode == 16) {
         shiftDown = true;
         document.getElementById("studytreeloadsavetext").textContent = "save:"
+        document.getElementById("automatorloadsavetext").textContent = "save:"
         drawStudyTree()
     }
     if ((controlDown && shiftDown && (event.keyCode == 67 || event.keyCode == 73 || event.keyCode == 74)) || event.keyCode == 123) {
@@ -6046,6 +6048,7 @@ window.addEventListener('keyup', function(event) {
     if (event.keyCode == 16) {
         shiftDown = false;
         document.getElementById("studytreeloadsavetext").textContent = "load:"
+        document.getElementById("automatorloadsavetext").textContent = "load:"
         drawStudyTree()
     }
 }, false);
@@ -6054,7 +6057,9 @@ window.onfocus = function() {
     controlDown = false;
     shiftDown = false;
     document.getElementById("studytreeloadsavetext").textContent = "load:"
-    drawStudyTree()
+    document.getElementById("automatorloadsavetext").textContent = "load:"
+    drawStudyTree();
+    drawAutomatorTree();
 }
 
 window.addEventListener('keydown', function(event) {

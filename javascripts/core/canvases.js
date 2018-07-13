@@ -10,6 +10,8 @@ var canvas = document.getElementById("studyTreeCanvas");
 var ctx = canvas.getContext("2d");
 var canvas3 = document.getElementById("dilationCanvas");
 var ctx3 = canvas3.getContext("2d");
+var canvas4 = document.getElementById("automatorTreeCanvas");
+var ctx4 = canvas4.getContext("2d");
 
 window.addEventListener("resize", resizeCanvas);
 
@@ -18,11 +20,16 @@ function resizeCanvas() {
     canvas.height = 0;
     canvas3.width = 0;
     canvas3.height = 0;
+    canvas4.width = 0;
+    canvas4.height = 0;
     canvas.width = document.body.scrollWidth;
     canvas.height = document.body.scrollHeight;
     canvas3.width = document.body.scrollWidth;
     canvas3.height = document.body.scrollHeight;
+    canvas4.width = document.body.scrollWidth;
+    canvas4.height = document.body.scrollHeight;
     drawStudyTree();
+    drawAutomatorTree();
 }
 
 function point(x, y, ctz){
@@ -276,8 +283,30 @@ function drawStudyTree() {
     }
 }
 
-window.addEventListener('scroll', function() {
+function drawAutomatorTreeBranch(num1, num2) {
+    if (document.getElementById("timestudies").style.display === "none") return
+    var start = document.getElementById(num1).getBoundingClientRect();
+    var end = document.getElementById(num2).getBoundingClientRect();
+    var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+    var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+    var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+    var y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+    ctx4.lineWidth=10;
+    ctx4.beginPath();
+    //TODO: add purchases/locked colors to the lines based on commands unlocked
+    ctx4.strokeStyle="#000000";
+    ctx4.moveTo(x1, y1);
+    ctx4.lineTo(x2, y2);
+    ctx4.stroke();
+}
 
-    //if (player.options.theme == "S6") document.getElementById("stars").style.top = window.scrollY+document.documentElement.clientHeight/2+"px";
-    
-});
+function drawAutomatorTree() {
+    ctx4.clearRect(0, 0, canvas.width, canvas.height);
+    drawAutomatorTreeBranch("automator11", "automator21");
+    drawAutomatorTreeBranch("automator11", "automator22");
+    drawAutomatorTreeBranch("automator11", "automator31");
+    drawAutomatorTreeBranch("automator11", "automator32");
+    drawAutomatorTreeBranch("automator11", "automator41");
+    drawAutomatorTreeBranch("automator11", "automator42");
+    drawAutomatorTreeBranch("automator42", "automator51");
+}

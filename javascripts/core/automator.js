@@ -256,4 +256,13 @@ function loadScript(num) {
   }
 }
 
+function buyAutomatorInstruction(id, cost) {
+  if (cost > player.reality.realityMachines) return false
+  if (player.reality.automatorCommands.includes(id)) return false
+  player.reality.realityMachines -= cost
+  player.reality.automatorCommands.push(id)
+  // updateAutomatorTree()
+  return true
+}
+
 setInterval(mainIteration, 50)

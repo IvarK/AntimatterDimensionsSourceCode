@@ -284,7 +284,8 @@ var player = {
         },
         seed: Math.floor(Date.now() * Math.random()+1),
         upg: [],
-        automatorRows: 0
+        automatorRows: 0,
+        automatorCommands: []
     },
     options: {
         newsHidden: false,
@@ -662,7 +663,7 @@ function updateDimensions() {
 
     if (document.getElementById("dilation").style.display == "block") {
         if (player.dilation.active) {
-            if (Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles <= 0) {
+            if (getTachyonGain() <= 0) {
                 document.getElementById("enabledilation").innerHTML = "Disable dilation.<br>Reach " + shortenMoney(Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / Math.pow(3, player.dilation.rebuyables[3]), 2/3))) + " antimatter to gain more Tachyon Particles."
             } else {
                 document.getElementById("enabledilation").textContent = "Disable dilation."
@@ -2525,6 +2526,7 @@ document.getElementById("bigcrunch").onclick = function () {
         let infGain = 1;
         if (player.thisInfinityTime > 50 && isAchEnabled("r87")) infGain = 250;
         if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
+        if (player.reality.upg.includes(5)) infGain *= 5
         for (i in player.reality.glyphs.active) {
           var glyph = player.reality.glyphs.active[i]
           if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
@@ -2845,8 +2847,7 @@ function eternity(force, auto) {
         if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
         if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
-            let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0)
-            player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(tachyonGain)
+            player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
             player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(tachyonGain)
         }
         player.challenges = temp
@@ -4461,7 +4462,7 @@ function updateDilationUpgradeCosts() {
 
 function getDilationGainPerSecond() {
     var ret = player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1])
-    if (player.reality.upg.includes(1)) ret *= 5
+    if (player.reality.upg.includes(1)) ret *= 3
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
@@ -4471,6 +4472,12 @@ function getDilationGainPerSecond() {
       if (glyph.type == "replication" && glyph.effects.dtgain !== undefined) ret = ret.times(player.replicanti.amount.e * glyph.effects.dtgain)
     }
     return ret
+}
+
+function getTachyonGain() {
+    let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0)            
+    if (player.reality.upg.includes(4)) tachyonGain *= 3
+    return tachyonGain
 }
 
 
@@ -5107,7 +5114,7 @@ function gameLoop(diff) {
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
     document.getElementById("eternitybtn").innerHTML = (player.eternities == 0) ? "Other times await.. I need to become Eternal" : "<b>I need to become Eternal.</b><br>"+"Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
     if (gainedEternityPoints().gte(1e6)) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
-    if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(Math.round(Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0) * 10)/10) +" Tachyon particles."
+    if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(getTachyonGain()) +" Tachyon particles."
     if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
     updateMoney();
     updateCoinPerSec();

@@ -240,6 +240,6 @@ function galaxyReset() {
   if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
   player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
   if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
-  if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
+  if (player.galaxies >= 630 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
   updateTickSpeed();
 };

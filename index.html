@@ -148,7 +148,7 @@
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="timestudy" id="51" onclick="buyTimeStudy(51, 3)"><span id=51desc>You gain 1e15 times more IP</span>Cost: 3 Time Theorems</button></td>
-                        <td><button class="eternitychallengestudy" id="ec5unl">Eternity Challenge 5<span>Requirement: 200 galaxies<span>Cost: 100 Time Theorems</button></td>
+                        <td><button class="eternitychallengestudy" id="ec5unl">Eternity Challenge 5<span>Requirement: 200 antimatter galaxies<span>Cost: 100 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
@@ -284,7 +284,7 @@
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="timestudy darkstudy" id="231" onclick="buyTimeStudy(231, 500)">Dimensional boosts are more effective based on their amount.<span>Cost: 500 Time Theorems</button></td>
-                        <td><button class="timestudy lightstudy" id="232" onclick="buyTimeStudy(232, 500)">Galaxies are more effective based on non-replicated galaxies.<span>Cost: 500 Time Theorems</button></td>
+                        <td><button class="timestudy lightstudy" id="232" onclick="buyTimeStudy(232, 500)">Galaxies are more effective based on Antimatter Galaxies.<span>Cost: 500 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" id="233" onclick="buyTimeStudy(233, 500)">Max replicanti galaxy upgrade cost is reduced based on replicanti amount.<span>Cost: 500 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" id="234" onclick="buyTimeStudy(234, 500)">Sacrifice boosts First Dimension.<span>Cost: 500 Time Theorems</button></td>
                     </tr>
@@ -420,7 +420,7 @@
                         <td class="milestoneText">10 Eternities:</td>
                     </tr>
                     <tr>
-                        <td><button class="milestonerewardlocked" id="reward6">Unlock autobuy max galaxies</button></td>
+                        <td><button class="milestonerewardlocked" id="reward6">Unlock autobuy max Antimatter Galaxies</button></td>
                         <td><button class="milestonerewardlocked" id="reward7">Unlock autobuy max Dimensional Boosts</button></td>
                     </tr>
                     <tr>
@@ -518,7 +518,7 @@
                             <button class="timestudy" id="dil1" onclick="buyDilationUpgrade(1)">Double time dilation gain.<br><span id="dil1cost">Cost: 1e5 dilated time</span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Decrease the galaxy threshold multiplier, but resets free galaxies and dilated time.<br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
+                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Decrease the free galaxy threshold multiplier, but resets free galaxies and dilated time.<br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
                         </td>
                         <td>
                             <button class="timestudy" id="dil3" onclick="buyDilationUpgrade(3)">Triple the amount of Tachyon Particles gained.<br><span id="dil3cost">Cost: 1e7 dilated time</span></button>
@@ -1023,7 +1023,7 @@
 
             </table>
             <div style="display: none;"><textarea id="exportOutput" style="color:black; width: 200px; height: 55px;"></textarea></div>
-            <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
+            <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
             <div id="footercontainer">
                 <table id="footer">
                     <tr>
@@ -1054,7 +1054,7 @@
                 <br>
                 <div id="totalmoney">You have made x antimatter.</div>
                 <div id="totalresets">You have made x dimensional boosts/shifts.</div>
-                <div id="galaxies">You have made x Antimatter galaxies.</div>
+                <div id="galaxies">You have made x Antimatter Galaxies.</div>
                 <br>
                 <div id="eternitied">You have eternitied x times.</div>
                 <div id="thiseternity">You have spent x in this eternity</div>
@@ -1248,18 +1248,18 @@
                             <div id="That's fast!" class="achievement achievementlocked" style="background-image: url(images/23.png)" ach-tooltip="Go infinite in under 2 hours. Reward: Start with 1000 antimatter."><br></div>
                         </td>
                         <td>
-                            <div id="I don't believe in Gods" class="achievement achievementlocked" style="background-image: url(images/24.png)" ach-tooltip="Buy a Galaxy without Sacrificing."><br></div>
+                            <div id="I don't believe in Gods" class="achievement achievementlocked" style="background-image: url(images/24.png)" ach-tooltip="Buy an Antimatter Galaxy without Sacrificing."><br></div>
                         </td>
                     </tr>
                     <tr id="achRow4">
                         <td>
-                            <div id="Spreading Cancer" class="achievement achievementlocked" style="background-image: url(images/46.png)" ach-tooltip="Buy ten Galaxies in total while using cancer notation."><br></div>
+                            <div id="Spreading Cancer" class="achievement achievementlocked" style="background-image: url(images/46.png)" ach-tooltip="Buy ten Antimatter Galaxies in total while using cancer notation."><br></div>
                         </td>
                         <td>
                             <div id="Supersanic" class="achievement achievementlocked" style="background-image: url(images/26.png)" ach-tooltip="Have antimatter/sec exceed your current antimatter above 1 Tg (1e63)."><br></div>
                         </td>
                         <td>
-                            <div id="Zero Deaths" class="achievement achievementlocked" style="background-image: url(images/27.png)" ach-tooltip="Get to Infinity without Dimension shifts, boosts or galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger."><br></div>
+                            <div id="Zero Deaths" class="achievement achievementlocked" style="background-image: url(images/27.png)" ach-tooltip="Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger."><br></div>
                         </td>
                         <td>
                             <div id="Over in 30 seconds" class="achievement achievementlocked" style="background-image: url(images/28.png)" ach-tooltip="Have antimatter/sec exceed your current antimatter for 30 consecutive seconds."><br></div>
@@ -1331,7 +1331,7 @@
                     </tr>
                     <tr id="achRow7">
                             <td>
-                                <div id="ERROR 909: Dimension not found" class="achievement achievementlocked" style="background-image: url(images/41.png)" ach-tooltip="Get to infinity with only a single first Dimension without Dimension Boosts, Shifts or Galaxies while in Automatic Galaxies Challenge. Reward: First Dimensions are 3 times stronger."><br></div>
+                                <div id="ERROR 909: Dimension not found" class="achievement achievementlocked" style="background-image: url(images/41.png)" ach-tooltip="Get to infinity with only a single first Dimension without Dimension Boosts, Shifts or Antimatter Galaxies while in Automatic Antimatter Galaxies Challenge. Reward: First Dimensions are 3 times stronger."><br></div>
                             </td>
                             <td>
                                 <div id="Can't hold all these infinities" class="achievement achievementlocked" style="background-image: url(images/42.png)" ach-tooltip="Get all Dimension multipliers over 1e308. Reward: All dimensions 10% stronger."><br></div>
@@ -1363,7 +1363,7 @@
                                 <div id="Anti-antichallenged" class="achievement achievementlocked" style="background-image: url(images/50.png)" ach-tooltip="Complete 8 Infinity Challenges."><br></div>
                             </td>
                             <td>
-                                <div id="YOU CAN GET 50 GALAXIES!??" class="achievement achievementlocked" style="background-image: url(images/51.png)" ach-tooltip="Get 50 galaxies. Reward: Tickspeed is 5% lower per galaxy."><br></div>
+                                <div id="YOU CAN GET 50 GALAXIES!??" class="achievement achievementlocked" style="background-image: url(images/51.png)" ach-tooltip="Get 50 Antimatter Galaxies. Reward: Tickspeed is 5% lower per Antimatter Galaxy."><br></div>
                             </td>
                             <td>
                                 <div id="I got a few to spare" class="achievement achievementlocked" style="background-image: url(images/52.png)" ach-tooltip="Reach 1e35000 antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have."><br></div>
@@ -1476,7 +1476,7 @@
                                 <div id="Like feasting on a behind" class="achievement achievementlocked" style="background-image: url(images/85.png)" ach-tooltip="Get 1e100 IP without any infinities, dimensions, or resets (not including upgrades). Reward: IP multiplier based on time spent this infinity."><br></div>
                             </td>
                             <td>
-                                <div id="Popular music" class="achievement achievementlocked" style="background-image: url(images/86.png)" ach-tooltip="Have 180 times more non-bonus replicanti galaxies than normal galaxies. Reward: Replicanti galaxies divide your replicanti by 1.79e308 instead of resetting them to 1."><br></div>
+                                <div id="Popular music" class="achievement achievementlocked" style="background-image: url(images/86.png)" ach-tooltip="Have 180 times more non-bonus Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti Galaxies divide your replicanti by 1.79e308 instead of resetting them to 1."><br></div>
                             </td>
                             <td>
                                 <div id="But I wanted another prestige layer..." class="achievement achievementlocked" style="background-image: url(images/87.png)" ach-tooltip="Reach 1e308 EP."><br></div>
@@ -1490,7 +1490,7 @@
                                 <div id="No ethical consumption" class="achievement achievementlocked" style="background-image: url(images/89.png)" ach-tooltip="Get 5 billion banked infinities. Reward: After eternity you permanently keep 5% of your infinities."><br></div>
                             </td>
                             <td>
-                                <div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)" ach-tooltip="Have 540 galaxies without having any Replicated galaxies."><br></div>
+                                <div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)" ach-tooltip="Have 630 Antimatter Galaxies without having any Replicanti Galaxies. Reward: Gain a multiplier to dilated time gains based on Antimatter Galaxies"><br></div>
                             </td>
                             <td>
                                 <div id="I never liked this infinity stuff anyway" class="achievement achievementlocked" style="background-image: url(images/91.png)" ach-tooltip="Reach 1e200,000 IP without buying IDs or IP multipliers."><br></div>
@@ -1810,7 +1810,7 @@
 
                                     <button id="challenge12" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Automated Galaxies</span>
+                                    <span>Reward: Automated Antimatter Galaxies</span>
                                 </div>
                             </div>
                         </td>
@@ -1865,14 +1865,14 @@
                     <tr>
                         <td>
                             <div class="infchallengediv" id="postc3div" style="height: 140px; display: none">
-                                <span>Tickspeed interval decrease is always at 0%, but every tickspeed purchase you get a static multiplier on all dimensions (increases with galaxies).</span>
+                                <span>Tickspeed interval decrease is always at 0%, but every tickspeed purchase you get a static multiplier on all dimensions (increases with Antimatter Galaxies).</span>
                                 <br>
                                 <br>
                                 <div class="outer">
                                     <button id="postc3" class="challengesbtn" onclick="startChallenge('postc3', new Decimal('1e5000'))">Start</button>
                                     <br>
                                     <span id="postc3goal" >Goal: 1e5000</span><br>
-                                    <span>Reward: Static multiplier on each tickspeed purchase</span>
+                                    <span>Reward: Static multiplier on each tickspeed purchase based on Antimatter Galaxies</span>
                                 </div>
                             </div>
                         </td>
@@ -1921,7 +1921,7 @@
                     <tr>
                             <td>
                                 <div class="infchallengediv" id="postc7div" style="height: 140px; display: none">
-                                    <span>You can't get antimatter Galaxies, but dimensional boost multiplier 2.5x -> 10x</span>
+                                    <span>You can't get Antimatter Galaxies, but dimensional boost multiplier 2.5x -> 10x</span>
                                     <br>
                                     <br>
                                     <div class="outer">
@@ -2029,7 +2029,7 @@
                         </td>
                         <td>
                             <div class="eterchallengediv" id="eterc6div" style="height: 140px; display: none">
-                                <span>You can't gain galaxies normally, but the cost of upgrading your max replicanti galaxies is massively reduced.
+                                <span>You can't gain Antimatter Galaxies normally, but the cost of upgrading your max replicanti galaxies is massively reduced.
                                 </span>
                                 <br>
                                 <br>
@@ -2209,16 +2209,16 @@
                 </tr>
                 <tr>
                     <td>
-                        <button id="infi14" class="infinistorebtn1">Decrease the number of Dimensions needed for Dimensional Boosts and galaxies by 9<br>Cost: 1 IP</button>
+                        <button id="infi14" class="infinistorebtn1">Decrease the number of Dimensions needed for Dimensional Boosts and Antimatter Galaxies by 9<br>Cost: 1 IP</button>
                     </td>
                     <td>
-                        <button id="infi24" class="infinistorebtn2">Antimatter Galaxies are twice as effective<br>Cost: 2 IP</button>
+                        <button id="infi24" class="infinistorebtn2">Galaxies are twice as effective<br>Cost: 2 IP</button>
                     </td>
                     <td>
                         <button id="infi34" class="infinistorebtn3">Infinity Point generation (based on fastest infinity) <br>xx</button>
                     </td>
                     <td>
-                        <button id="infi44" class="infinistorebtn4">You start with the 8th dimension unlocked, and a Galaxy<br>Cost: 500 IP</button>
+                        <button id="infi44" class="infinistorebtn4">You start with the 8th dimension unlocked, and an Antimatter Galaxy<br>Cost: 500 IP</button>
                     </td>
                 </tr>
                 <tr>
@@ -2579,7 +2579,7 @@
                             <button id="postinfi21" class="infinistorebtn1">Production based on current antimatter<br>Currently: <br>Cost: 50 K IP</button>
                         </td>
                         <td>
-                            <button id="postinfi41" class="infinistorebtn1">Double the power of Galaxies<br>Currently: <br>Cost: 500 K IP</button>
+                            <button id="postinfi41" class="infinistorebtn1">Makes galaxies 50% stronger<br>Currently: <br>Cost: 5e11 IP</button>
                         </td>
                     </tr>
                     <tr>

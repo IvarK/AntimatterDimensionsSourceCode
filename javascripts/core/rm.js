@@ -498,10 +498,16 @@ function updateRealityUpgrades() {
   else $("#rupg1").removeClass("rUpgUn")
 
   if (rm < 2) $("#rupg2").addClass("rUpgUn")
-  else $("#rupg1").removeClass("rUpgUn")
+  else $("#rupg2").removeClass("rUpgUn")
 
   if (rm < 2) $("#rupg3").addClass("rUpgUn")
-  else $("#rupg1").removeClass("rUpgUn")
+  else $("#rupg3").removeClass("rUpgUn")
+
+  if (rm < 3) $("#rupg4").addClass("rUpgUn")
+  else $("#rupg4").removeClass("rUpgUn")
+
+  if (rm < 4) $("#rupg5").addClass("rUpgUn")
+  else $("#rupg5").removeClass("rUpgUn")
 
   for (i in player.reality.upg) {
     var upg = player.reality.upg[i]

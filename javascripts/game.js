@@ -4361,15 +4361,15 @@ function startDilatedEternity() {
     giveAchievement("I told you already, time is relative")
     eternity(true)
     player.dilation.active = true;
-    var totalMult = 1
-    var currentMult = 1
-    var infinitiedMult = 1
-    var achievementMult = 1
-    var challengeMult = 1
-    var unspentBonus = 1
-    var postc8Mult = new Decimal(0)
-    var mult18 = new Decimal(1)
-    var ec10bonus = new Decimal(1)
+    totalMult = 1
+    currentMult = 1
+    infinitiedMult = 1
+    achievementMult = 1
+    challengeMult = 1
+    unspentBonus = 1
+    postc8Mult = new Decimal(0)
+    mult18 = new Decimal(1)
+    ec10bonus = new Decimal(1)
     setTimeout(function() {
         gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
     }, 250)
@@ -6138,8 +6138,6 @@ window.addEventListener('keydown', function(event) {
 
 
 
-
-init();
 var totalMult = 1
 var currentMult = 1
 var infinitiedMult = 1
@@ -6149,6 +6147,7 @@ var unspentBonus = 1
 var postc8Mult = new Decimal(0)
 var mult18 = 1
 var ec10bonus = new Decimal(1)
+init();
 setInterval( function() {
     totalMult = Math.pow(player.totalmoney.e+1, 0.5)
     currentMult = Math.pow(player.money.e+1, 0.5)

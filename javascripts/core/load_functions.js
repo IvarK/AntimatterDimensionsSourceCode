@@ -398,8 +398,11 @@ if (player.version < 5) {
   toggleCommas()
   toggleCommas()
   if (!player.replicanti.auto[0]) document.getElementById("replauto1").textContent = "Auto: OFF"
+  else document.getElementById("replauto1").textContent = "Auto: ON"
   if (!player.replicanti.auto[1]) document.getElementById("replauto2").textContent = "Auto: OFF"
+  else document.getElementById("replauto2").textContent = "Auto: ON"
   if (!player.replicanti.auto[2]) document.getElementById("replauto3").textContent = "Auto: OFF"
+  else document.getElementById("replauto3").textContent = "Auto: ON"
 
   loadAutoBuyerSettings();
   updateLastTenRuns()

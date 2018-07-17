@@ -5552,9 +5552,8 @@ function simulateTime(seconds, real) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+" times."
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+" times."
-    if (popupString.length == 20) {
-        popupString = popupString.slice(0, -1);
-        popupString+= "... Nothing happened."
+    if (popupString === "While you were away.") {
+        popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")
     }
 

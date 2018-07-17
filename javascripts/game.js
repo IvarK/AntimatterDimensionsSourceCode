@@ -1796,7 +1796,8 @@ document.getElementById("notation").onclick = function () {
     updateTickSpeed();
     setAchieveTooltip();
     updateCosts();
-    updateDilationUpgradeCosts()
+    updateDilationUpgradeCosts();
+    updateAutobuyers();
     document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 };
 

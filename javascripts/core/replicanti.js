@@ -109,7 +109,7 @@ function replicantiLoop(diff) {
     if (player.reality.upg.includes(2)) interval /= 3
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replicanti" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed
+        if (glyph.type == "replication" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed
     }
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)

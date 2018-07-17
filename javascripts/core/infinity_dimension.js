@@ -83,7 +83,7 @@ function DimensionPower(tier) {
       if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
       for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replicanti" && glyph.effects.pow !== undefined) replmult = replmult.pow(glyph.effects.pow)
+        if (glyph.type == "replication" && glyph.effects.pow !== undefined) replmult = replmult.pow(glyph.effects.pow)
       }
 
       mult = mult.times(replmult)

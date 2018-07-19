@@ -292,7 +292,6 @@ var player = {
         notation: "Mixed scientific",
         //Standard = normal prefixed numbers, Scientific = standard form, Engineering = powers of 3.
         scientific: false,
-        challConf: false,
         sacrificeConfirmation: true,
         retryChallenge: false,
         bulkOn: true,
@@ -300,7 +299,6 @@ var player = {
         hotkeys: true,
         theme: undefined,
         secretThemeKey: 0,
-        eternityconfirm: true,
         commas: true,
         updateRate: 50,
         chart: {
@@ -962,21 +960,14 @@ document.getElementById("maxall").onclick = function () {
     }
 }
 
-
-
-
-document.getElementById("challengeconfirmation").onclick = function () {
-    if (!player.options.challConf) {
-        player.options.challConf = true;
-        document.getElementById("challengeconfirmation").textContent = "Challenge confirmation OFF"
-    } else {
-        player.options.challConf = false;
-        document.getElementById("challengeconfirmation").textContent = "Challenge confirmation ON"
-    }
+function confirmationOnOff(name) {
+    if (player.options.confirmations[name]) player.options.confirmations[name] = false;
+    else player.options.confirmations[name] = true;
+    if (name == "challenges") document.getElementById("challengesConfBtn").textContent = "Challenges: " + ((player.options.confirmations.challenges) ? "ON" : "OFF")
+    else if (name == "eternity") document.getElementById("eternityConfBtn").textContent = "Eternity: " + ((player.options.confirmations.eternity) ? "ON" : "OFF")
+    else if (name == "dilation") document.getElementById("dilationConfBtn").textContent = "Dilation: " + ((player.options.confirmations.dilation) ? "ON" : "OFF")
+    else if (name == "reality") document.getElementById("realityConfBtn").textContent = "Reality: " + ((player.options.confirmations.reality) ? "ON" : "OFF")
 }
-
-
-
 
 function buyInfinityUpgrade(name, cost) {
     if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
@@ -1298,16 +1289,6 @@ function toggleCrunchMode() {
     }
 }
 
-function toggleEternityConf() {
-    if (player.options.eternityconfirm) {
-        player.options.eternityconfirm = false
-        document.getElementById("eternityconf").textContent = "Eternity confirmation OFF"
-    } else {
-        player.options.eternityconfirm = true
-        document.getElementById("eternityconf").textContent = "Eternity confirmation ON"
-    }
-}
-
 
 
 
@@ -1496,6 +1477,11 @@ document.getElementById("load").onclick = function () {
 document.getElementById("animationoptionsbtn").onclick = function () {
     closeToolTip();
     document.getElementById("animationoptions").style.display = "flex";
+};
+
+document.getElementById("confirmationoptionsbtn").onclick = function () {
+    closeToolTip();
+    document.getElementById("confirmationoptions").style.display = "flex";
 };
 
 function verify_save(obj) {
@@ -2805,7 +2791,7 @@ function respecToggle() {
 }
 
 function eternity(force, auto) {
-    if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.eternityconfirm || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
+    if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
         if (player.thisEternity<player.bestEternity && !force) {
@@ -3547,7 +3533,7 @@ function exitChallenge() {
 }
 
 function startChallenge(name, target) {
-  if(player.options.challConf || name == "" ? true : (name.includes("post")) ? confirm("You will start over with just your infinity upgrades, and achievements. You need to reach a set goal with special conditions. NOTE: The rightmost infinity upgrade column doesn't work on challenges.") : confirm("You will start over with just your infinity upgrades, and achievements. You need to reach infinity with special conditions. NOTE: The rightmost infinity upgrade column doesn't work on challenges.")) {
+  if(!player.options.confirmations.challenges || name == "" ? true : (name.includes("post")) ? confirm("You will start over with just your infinity upgrades, and achievements. You need to reach a set goal with special conditions. NOTE: The rightmost infinity upgrade column doesn't work on challenges.") : confirm("You will start over with just your infinity upgrades, and achievements. You need to reach infinity with special conditions. NOTE: The rightmost infinity upgrade column doesn't work on challenges.")) {
     if (player.currentChallenge != "") document.getElementById(player.currentChallenge).textContent = "Start"
     player = {
         money: new Decimal(10),
@@ -4056,7 +4042,7 @@ document.getElementById("ec12unl").onclick = function() {
 
 function startEternityChallenge(name, startgoal, goalIncrease) {
     if (player.eternityChallUnlocked == 0 || parseInt(name.split("c")[1]) !== player.eternityChallUnlocked) return false
-    if((player.options.challConf) || name == "" ? true :  (confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP with special conditions."))) {
+    if((!player.options.confirmations.challenges) || name == "" ? true :  (confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP with special conditions."))) {
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),
@@ -4353,7 +4339,7 @@ function startDilatedEternity() {
         }, 250)
         return
     }
-    if (!confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
+    if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
         setTimeout(function() {
             gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
         }, 250)
@@ -4736,8 +4722,6 @@ setInterval(function() {
         document.getElementById("toggleallinfdims").style.visibility = "hidden"
     }
 
-    if (player.eternities !== 0) document.getElementById("eternityconf").style.display = "inline-block"
-    else document.getElementById("eternityconf").style.display = "none"
     if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
     else document.getElementById("replauto1").style.visibility = "hidden"
     if (player.eternities >= 60) document.getElementById("replauto2").style.visibility = "visible"
@@ -4755,10 +4739,19 @@ setInterval(function() {
     if (player.infinitied > 0  || player.eternities > 0) document.getElementById("pastinfs").style.display = "inline-block"
     else document.getElementById("pastinfs").style.display = "none"
 
-    if (player.infinitied !== 0 || player.eternities !== 0) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
+    if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0 ) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
     else document.getElementById("bigCrunchAnimBtn").style.display = "none"
     if (!player.dilation.tachyonParticles.eq(0)) document.getElementById("tachyonParticleAnimBtn").style.display = "inline-block"
     else document.getElementById("tachyonParticleAnimBtn").style.display = "none"
+    if (player.realities !== 0 ) document.getElementById("realityAnimBtn").style.display = "inline-block"
+    else document.getElementById("realityAnimBtn").style.display = "none"
+
+    if (player.eternities !== 0 || player.realities !== 0) document.getElementById("eternityConfBtn").style.display = "inline-block"
+    else document.getElementById("eternityConfBtn").style.display = "none"
+    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("dilationConfBtn").style.display = "inline-block"
+    else document.getElementById("dilationConfBtn").style.display = "none"
+    if (player.realities !== 0) document.getElementById("realityConfBtn").style.display = "inline-block"
+    else document.getElementById("realityConfBtn").style.display = "none"
 
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
         for (var i=1;i<player.eternities-9 && i < 9; i++) {
@@ -5529,7 +5522,7 @@ function gameLoop(diff) {
 
 function simulateTime(seconds, real) {
 
-    //the game is simulated at a 50ms update rate, with a max of 1000 ticks
+    //the game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted into a higher diff per tick
     //warning: do not call this function with real unless you know what you're doing
     document.getElementById("offlineprogress").style.display = "block"
     var ticks = seconds * 20;

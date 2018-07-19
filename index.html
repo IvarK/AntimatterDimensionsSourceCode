@@ -995,7 +995,7 @@
                     <td><div><button id="importbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
                 </tr>
                 <tr>
-                    <td><div><button id="challengeconfirmation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Challenge confirmation ON</button></div></td>
+                    <td><div><button id="confirmationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Confirmations</button></div></td>
 					<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
 					<td><div><button id="load" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
                 </tr>
@@ -1010,7 +1010,7 @@
                     <td><div><button id="commas" onclick="toggleCommas()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Commas on large exponents ON</button></div></td>
                 </tr>
                 <tr>
-					<td><div><button id="eternityconf" onclick="toggleEternityConf()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%; display: none">Eternity confirmation ON</button></div></td>
+					<td><div><button id="eternityconf" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%; display: none">THIS DOES NOTHING</button></div></td>
                     <td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="33" max="200" value="50" class="slider" ></div></td>
                     <td><div><button id="animationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
                 </tr>
@@ -2829,6 +2829,13 @@
         <button id="bigCrunchAnimBtn" class="storebtn" onclick="animationOnOff('bigCrunch')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
         <button id="tachyonParticleAnimBtn" class="storebtn" onclick="animationOnOff('tachyonParticles')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
         <button id="realityAnimBtn" class="storebtn" onclick="animationOnOff('reality')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
+    </div>
+    <div class="popup savemenu" id="confirmationoptions">
+        <button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
+		<button id="challengesConfBtn" class="storebtn" onclick="confirmationOnOff('challenges')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
+        <button id="eternityConfBtn" class="storebtn" onclick="confirmationOnOff('eternity')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
+        <button id="dilationConfBtn" class="storebtn" onclick="confirmationOnOff('dilation')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
+        <button id="realityConfBtn" class="storebtn" onclick="confirmationOnOff('reality')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
 	</div>
     <div id="TTbuttons" style="display:none;">
         <button class="timetheorembtn" onclick="maxTheorems()" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Buy max Theorems</button>

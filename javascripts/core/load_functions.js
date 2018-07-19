@@ -25,7 +25,6 @@ function onLoad() {
   }
   if (player.options.invert === true) player.options.theme = "Inverted"; player.options.invert = undefined;
   if (player.options.notation === undefined) player.options.notation = "Standard"
-  if (player.options.challConf === undefined) player.options.challConf = false
   if (player.options.notation === undefined) player.options.notation = "Standard";
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
@@ -33,7 +32,6 @@ function onLoad() {
   if (player.options.bulkOn === undefined) player.options.bulkOn = true
   if (player.options.cloud === undefined) player.options.cloud = true
   if (player.options.hotkeys === undefined) player.options.hotkeys = true
-  if (player.options.eternityconfirm === undefined) player.options.eternityconfirm = true
   if (player.options.themes === undefined) player.options.themes = "Normal"
   if (player.options.secretThemeKey === undefined) player.options.secretThemeKey = 0
   if (player.achievements === undefined) player.achievements = [];
@@ -120,6 +118,7 @@ function onLoad() {
   if (player.why === undefined) player.why = 0
   if (player.options.animations === undefined) player.options.animations = {floatingText: true, bigCrunch: true, eternity: true, tachyonParticles: true}
   if (player.options.animations.reality === undefined) player.options.animations.reality = true;
+  if (player.options.confirmations === undefined) player.options.confirmations = {challenges: true, eternity: true, dilation: true, reality: true};
   if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed"};
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
@@ -393,8 +392,6 @@ if (player.version < 5) {
   toggleCloud()
   respecToggle()
   respecToggle()
-  toggleEternityConf()
-  toggleEternityConf()
   toggleCommas()
   toggleCommas()
   if (!player.replicanti.auto[0]) document.getElementById("replauto1").textContent = "Auto: OFF"
@@ -433,6 +430,11 @@ if (player.version < 5) {
   document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
   document.getElementById("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
   document.getElementById("realityAnimBtn").textContent = "Reality: " + ((player.options.animations.reality) ? "ON" : "OFF")
+
+  document.getElementById("challengesConfBtn").textContent = "Challenges: " + ((player.options.confirmations.challenges) ? "ON" : "OFF")
+  document.getElementById("eternityConfBtn").textContent = "Eternity: " + ((player.options.confirmations.eternity) ? "ON" : "OFF")
+  document.getElementById("dilationConfBtn").textContent = "Dilation: " + ((player.options.confirmations.dilation) ? "ON" : "OFF")
+  document.getElementById("realityConfBtn").textContent = "Reality: " + ((player.options.confirmations.reality) ? "ON" : "OFF")
 
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 
@@ -565,11 +567,6 @@ if (player.version < 5) {
 
   if (player.options.newsHidden) {
       document.getElementById("game").style.display = "none";
-  }
-  if (player.options.challConf) {
-      document.getElementById("challengeconfirmation").textContent = "Challenge confirmation OFF"
-  } else {
-      document.getElementById("challengeconfirmation").textContent = "Challenge confirmation ON"
   }
 
   document.getElementById("chartDurationInput").value = player.options.chart.duration;

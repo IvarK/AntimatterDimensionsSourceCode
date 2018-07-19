@@ -5490,7 +5490,7 @@ function gameLoop(diff) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
         newDimension()
-        if (player.infDimBuyers[i-1]) buyMaxInfDims(infdimpurchasewhileloop)
+        if (player.infDimBuyers[i-1] && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc8") buyMaxInfDims(infdimpurchasewhileloop)
         infdimpurchasewhileloop = 1;
     }
 

@@ -220,7 +220,7 @@ function replicationGlyph(glyph, effectAmount) {
         break;
         
       case "glyphlevel":
-        glyph.effects.glyphlevel = Math.pow(Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.3), 0.5)/100
+        glyph.effects.glyphlevel = Math.pow(Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4), 0.5)/50
         break;
     }
   }

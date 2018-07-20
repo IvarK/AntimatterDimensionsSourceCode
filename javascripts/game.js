@@ -1680,6 +1680,23 @@ function gainedGlyphLevel() {
     return ret
 }
 
+function percentToNextGlyphLevel() {
+    var replPow = 0.4
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
+    }
+    var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
+    var retOffset = 0;
+    if (Math.round(ret) > ret) {
+        retOffset = 0.5;
+    } else {
+        retOffset = -0.5;
+    }
+    if (ret == Infinity || isNaN(ret)) return 0
+    return ((ret - Math.floor(ret)-retOffset) * 100).toFixed(1)
+}
+
 
 function setAchieveTooltip() {
     var apocAchieve = document.getElementById("Antimatter Apocalypse");
@@ -5520,7 +5537,7 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
-    document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())
+    document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
     document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
 
 

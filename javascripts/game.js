@@ -662,7 +662,7 @@ function updateDimensions() {
     if (document.getElementById("dilation").style.display == "block") {
         if (player.dilation.active) {
             if (getTachyonGain() <= 0) {
-                document.getElementById("enabledilation").innerHTML = "Disable dilation.<br>Reach " + shortenMoney(Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / Math.pow(3, player.dilation.rebuyables[3]), 2/3))) + " antimatter to gain more Tachyon Particles."
+                document.getElementById("enabledilation").innerHTML = "Disable dilation.<br>Reach " + shortenMoney(getTachyonReq()) + " antimatter to gain more Tachyon Particles."
             } else {
                 document.getElementById("enabledilation").textContent = "Disable dilation."
             }
@@ -4463,9 +4463,17 @@ function getDilationGainPerSecond() {
 }
 
 function getTachyonGain() {
-    let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0)            
-    if (player.reality.upg.includes(4)) tachyonGain *= 3
+    let mult = Math.pow(3, player.dilation.rebuyables[3])
+    if (player.reality.upg.includes(4)) mult *= 3
+    let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (mult) - player.dilation.totalTachyonParticles, 0)            
     return tachyonGain
+}
+
+function getTachyonReq() {
+    let mult = Math.pow(3, player.dilation.rebuyables[3])
+    if (player.reality.upg.includes(4)) mult *= 3
+    let req = Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
+    return req
 }
 
 

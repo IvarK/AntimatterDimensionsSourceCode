@@ -309,4 +309,10 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator11", "automator41");
     drawAutomatorTreeBranch("automator11", "automator42");
     drawAutomatorTreeBranch("automator42", "automator51");
+    drawAutomatorTreeBranch("automator12", "automator23");
+    drawAutomatorTreeBranch("automator12", "automator24");
+    drawAutomatorTreeBranch("automator12", "automator33");
+    drawAutomatorTreeBranch("automator12", "automator34");
+    drawAutomatorTreeBranch("automator12", "automator43");
+    drawAutomatorTreeBranch("automator12", "automator44");
 }

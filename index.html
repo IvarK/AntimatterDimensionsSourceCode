@@ -2725,7 +2725,20 @@
                 </div>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="automatorinstruction" id="automator11" onclick="buyAutomatorInstruction(11, 1)">WAIT</button></td>
+                        <td><button class="automatorinstruction" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
+                            <span class="tooltip">
+                                WAIT [target] [amount] <br>
+                                Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
+                            </span>
+                            WAIT
+                        </button></td>
+                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                        <td><button class="automatorinstruction" id="automator12">BUY
+                            <span class="tooltip">
+                                BUY [target] [amount/ID] <br>
+                                Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
+                            </span>
+                        </button></td>
                     </tr>
                 </table>
                 <br>
@@ -2733,18 +2746,24 @@
                     <tr>
                         <td><button class="automatorinstruction" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER</button></td>
                         <td><button class="automatorinstruction" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP</button></td>
+                        <td><button class="automatorinstruction" id="automator23">STUDY</button></td>
+                        <td><button class="automatorinstruction" id="automator24">STUDYUNTIL</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="automatorinstruction" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP</button></td>
                         <td><button class="automatorinstruction" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI</button></td>
+                        <td><button class="automatorinstruction" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP</button></td>
+                        <td><button class="automatorinstruction" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="automatorinstruction" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME</button></td>
                         <td><button class="automatorinstruction" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG</button></td>
+                        <td><button class="automatorinstruction" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM</button></td>
+                        <td><button class="automatorinstruction" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">

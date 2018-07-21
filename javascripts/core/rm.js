@@ -387,16 +387,18 @@ function generateGlyphTable() {
   }
   table.innerHTML = html
 
-  $(".tooltip").parent().mousemove(function(e) {
+  $(".tooltip").parent(".glyph").mousemove(function(e) {
     mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
   })
   var that = this
-  $(".tooltip").parent().mouseenter(function() {
+  $(".tooltip").parent(".glyph").mouseenter(function(e) {
+    e.stopPropagation();
     mouseOn = $(this).find(".tooltip")
     mouseOn.appendTo("#body")
   })
 
-  $(".tooltip").parent().mouseleave(function() {
+  $(".tooltip").parent(".glyph").mouseleave(function(e) {
+    e.stopPropagation();
     mouseOn.css({"left": "0", "top": "0px", "display": "none"})
     mouseOn.appendTo($(this))
     mouseOn = $("document")
@@ -514,3 +516,19 @@ function updateRealityUpgrades() {
     $("#rupg"+upg).addClass("rUpgBought")
   }
 }
+
+$(".tooltip").parent().mousemove(function(e) {
+  mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
+})
+$(".tooltip").parent().mouseenter(function(e) {
+  e.stopPropagation();
+  mouseOn = $(this).find(".tooltip")
+  mouseOn.appendTo("#body")
+})
+
+$(".tooltip").parent().mouseleave(function(e) {
+  e.stopPropagation();
+  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+  mouseOn.appendTo($(this))
+  mouseOn = $("document")
+})

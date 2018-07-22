@@ -284,7 +284,9 @@ function drawStudyTree() {
 }
 
 function drawAutomatorTreeBranch(num1, num2) {
-    if (document.getElementById("timestudies").style.display === "none") return
+    if (document.getElementById("automation").style.display === "none") return
+    var id1 = parseInt(num1.split("automator")[1])
+    var id2 = parseInt(num2.split("automator")[1])
     var start = document.getElementById(num1).getBoundingClientRect();
     var end = document.getElementById(num2).getBoundingClientRect();
     var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -293,8 +295,11 @@ function drawAutomatorTreeBranch(num1, num2) {
     var y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
     ctx4.lineWidth=10;
     ctx4.beginPath();
-    //TODO: add purchases/locked colors to the lines based on commands unlocked
-    ctx4.strokeStyle="#000000";
+    if (player.reality.automatorCommands.includes(id1) && player.reality.automatorCommands.includes(id2)) {
+        ctx4.strokeStyle="#000";
+    } else {
+        ctx4.strokeStyle="#444";
+    }
     ctx4.moveTo(x1, y1);
     ctx4.lineTo(x2, y2);
     ctx4.stroke();

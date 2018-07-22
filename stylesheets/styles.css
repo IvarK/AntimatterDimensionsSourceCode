@@ -1837,7 +1837,7 @@ reality upgrade unavailable
     color: red;
 }
 
-.automatorinstruction {
+.automatorinstruction.command {
     background-color: black;
     border: 2px solid #0b600e;
     border-radius: 5px;
@@ -1848,13 +1848,51 @@ reality upgrade unavailable
     height: 50px;
 }
 
-.automatorinstruction:hover {
+.automatorinstruction.target {
+    background-color: black;
+    border: 2px solid #2196F3;
+    border-radius: 5px;
+    color: #BBDEFB;
+    cursor: pointer;
+    transition-duration: 0.12s;
+    width: 150px;
+    height: 50px;
+}
+
+.automatorinstruction.command:hover {
     color: black;
     background-color: #d5ffd7;
 }
 
-.automatorinstructionbought {
+.automatorinstruction.target:hover {
+    color: black;
+    background-color: #BBDEFB;
+}
+
+.automatorinstructionbought.command {
     background-color: #0b600e;
+    border: 2px solid #08450b;
+    border-radius: 5px;
+    color: #d5ffd7;
+    cursor: default;
+    transition-duration: 0.12s;
+    width: 150px;
+    height: 50px;
+}
+
+.automatorinstructionbought.target {
+    background-color: #2196F3;
+    border: 2px solid #1976D2;
+    border-radius: 5px;
+    color: #BBDEFB;
+    cursor: default;
+    transition-duration: 0.12s;
+    width: 150px;
+    height: 50px;
+}
+
+.automatorinstructionlocked.command {
+    background-color: #656565;
     border: 2px solid #0b600e;
     border-radius: 5px;
     color: #d5ffd7;
@@ -1864,11 +1902,11 @@ reality upgrade unavailable
     height: 50px;
 }
 
-.automatorinstructionlocked {
+.automatorinstructionlocked.target {
     background-color: #656565;
-    border: 2px solid #0b600e;
+    border: 2px solid #2196F3;
     border-radius: 5px;
-    color: #d5ffd7;
+    color: #BBDEFB;
     cursor: default;
     transition-duration: 0.12s;
     width: 150px;

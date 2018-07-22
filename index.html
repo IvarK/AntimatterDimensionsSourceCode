@@ -2703,7 +2703,7 @@
                     <div style="width: 20%">
                         <h3 style="text-align: center">Upgrades</h3>
                         <div class="realityUpgrade" onclick="buyRealityUpg(1, 1)" id="rupg1">You gain dilated time 3 times faster<br>Cost: 1 RM</div>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(2, 2)" id="rupg2">You gain replicantis 3 times faster<br>Cost: 2 RM</div>
+                        <div class="realityUpgrade" onclick="buyRealityUpg(2, 2)" id="rupg2">You gain replicanti 3 times faster<br>Cost: 2 RM</div>
                         <div class="realityUpgrade" onclick="buyRealityUpg(3, 2)" id="rupg3">You gain 3 times more eternities<br>Cost: 2 RM</div>
                         <div class="realityUpgrade" onclick="buyRealityUpg(4, 3)" id="rupg4">You gain 3 times more Tachyon Particles<br>Cost: 3 RM</div>
                         <div class="realityUpgrade" onclick="buyRealityUpg(5, 4)" id="rupg5">You gain 5 times more infinities<br>Cost: 4 RM</div>
@@ -2725,52 +2725,55 @@
                 </div>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="automatorinstruction" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
+                        <td><button class="automatorinstruction command" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
                             <span class="tooltip">
                                 WAIT [target] [amount] <br>
                                 Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
                             </span>
-                            WAIT
+                            WAIT<br>
+                            Cost: 2 RM
                         </button></td>
                         <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="automatorinstruction" id="automator12">BUY
+                        <td><button class="automatorinstruction command" id="automator12">
                             <span class="tooltip">
                                 BUY [target] [amount/ID] <br>
                                 Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
                             </span>
+                            BUY<br>
+                            Cost: ??? RM
                         </button></td>
                     </tr>
                 </table>
                 <br>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="automatorinstruction" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER</button></td>
-                        <td><button class="automatorinstruction" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP</button></td>
-                        <td><button class="automatorinstruction" id="automator23">STUDY</button></td>
-                        <td><button class="automatorinstruction" id="automator24">STUDYUNTIL</button></td>
+                        <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP<br>Cost: 2 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator23">STUDY<br>Cost: ??? RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator24">STUDYUNTIL<br>Cost: ??? RM</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="automatorinstruction" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP</button></td>
-                        <td><button class="automatorinstruction" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI</button></td>
-                        <td><button class="automatorinstruction" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP</button></td>
-                        <td><button class="automatorinstruction" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP</button></td>
+                        <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP<br>Cost: 3 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP<br>Cost: 3 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP<br>Cost: 2 RM</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="automatorinstruction" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME</button></td>
-                        <td><button class="automatorinstruction" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG</button></td>
-                        <td><button class="automatorinstruction" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM</button></td>
-                        <td><button class="automatorinstruction" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX</button></td>
+                        <td><button class="automatorinstruction target" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME<br>Cost: 3 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG<br>Cost: 2 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM<br>Cost: 3 RM</button></td>
+                        <td><button class="automatorinstruction target" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX<br>Cost: 20 RM</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="timestudybought" style="opacity: 0;"></button></td>
                         <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="automatorinstruction" id="automator51" onclick="buyAutomatorInstruction(51, 2)">MAX</button></td>
+                        <td><button class="automatorinstruction target" id="automator51" onclick="buyAutomatorInstruction(51, 2)">MAX<br>Cost: 2 RM</button></td>
                     </tr>
                 </table>
             </div>
@@ -2899,6 +2902,7 @@
 <script type="text/javascript" src="javascripts/core/replicanti.js"></script>
 <script type="text/javascript" src="javascripts/core/timestudies.js"></script>
 <script type="text/javascript" src="javascripts/core/rm.js"></script>
+<script type="text/javascript" src="javascripts/core/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/canvases.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
 <script type="text/javascript" src="javascripts/core/load_functions.js"></script>
@@ -2906,7 +2910,6 @@
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>
-<script type="text/javascript" src="javascripts/core/automator.js"></script>
 
 
 <script type="text/javascript" src="javascripts/sha512.js"></script>

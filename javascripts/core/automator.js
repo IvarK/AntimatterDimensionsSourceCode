@@ -257,12 +257,44 @@ function loadScript(num) {
 }
 
 function buyAutomatorInstruction(id, cost) {
-  if (cost > player.reality.realityMachines) return false
+  if (player.reality.realityMachines.lt(cost)) return false
   if (player.reality.automatorCommands.includes(id)) return false
-  player.reality.realityMachines -= cost
+  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
   player.reality.automatorCommands.push(id)
-  // updateAutomatorTree()
+  if (id == 11 || id == 12) {
+      document.getElementById("automator"+id).className = "automatorinstructionbought command"
+  } else {
+      document.getElementById("automator"+id).className = "automatorinstructionbought target"
+  }
+  updateAutomatorTree()
   return true
+}
+
+function canBuyAutomatorInstruction(id) {
+  if (player.reality.realityMachines.lt(instructionCosts[allInstructions.indexOf(id)])) return false
+  return true
+}
+
+var allInstructions = [11, 12, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51]
+var instructionCosts = [1, 0,  3,  2,  0,  0,  3,  2,  3,  2,  3,  2,  3,  20, 2]
+function updateAutomatorTree() {
+  for (var i=0; i<allInstructions.length; i++) {
+    if (!player.reality.automatorCommands.includes(allInstructions[i])) {
+      if (canBuyAutomatorInstruction(allInstructions[i]) && player.reality.realityMachines.gte(instructionCosts[i])) {
+        if (allInstructions[i] == 11 || allInstructions[i] == 12) {
+          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction command"
+        } else {
+          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction target"
+        }
+      } else {
+          if (allInstructions[i] == 11 || allInstructions[i] == 12) {
+            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked command"
+          } else {
+            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked target"
+          }
+        }
+    }
+  }
 }
 
 setInterval(mainIteration, 50)

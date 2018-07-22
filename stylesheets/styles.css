@@ -19,6 +19,15 @@ button {
     padding: 1px 6px;
 }
 
+.checkbox {
+    vertical-align: bottom;
+    top: -2px;
+    position: relative;
+    padding: 0px;
+    margin: 0;
+    margin-top: 5px;
+}
+
 #game {
     border: 2px solid black;
     border-radius: 4px;

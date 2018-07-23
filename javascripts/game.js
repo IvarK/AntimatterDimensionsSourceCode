@@ -1639,6 +1639,8 @@ function gainedInfinityPoints() {
     if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
     if (player.timestudy.studies.includes(142)) ret = ret.times(1e25)
     if (player.timestudy.studies.includes(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
+    if (isAchEnabled("r85")) ret = ret.times(4);
+    if (isAchEnabled("r93")) ret = ret.times(4);
     if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
     if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
     if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
@@ -3116,8 +3118,6 @@ function eternity(force, auto) {
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
         if (isAchEnabled("r55")) player.money = new Decimal(1e10);
         if (isAchEnabled("r78")) player.money = new Decimal(1e25);
-        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
-        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
         if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();
@@ -4304,8 +4304,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
         if (isAchEnabled("r55")) player.money = new Decimal(1e10);
         if (isAchEnabled("r78")) player.money = new Decimal(1e25);
-        if (isAchEnabled("r85")) player.infMult = player.infMult.times(4);
-        if (isAchEnabled("r93")) player.infMult = player.infMult.times(4);
         if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
         resetInfDimensions();
         updateChallenges();

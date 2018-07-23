@@ -559,13 +559,15 @@ if (player.version < 5) {
       document.getElementById("notation").textContent = ("Notation: Brackets")
   }
 
-    //last update version check, fix emoji/cancer issue
+    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards
     if (player.version < 13) {
         player.version = 13
         if (player.options.notation === "Emojis") {
             player.options.notation = "Cancer";
             document.getElementById("notation").textContent = ("Notation: Cancer");
         }
+        if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4)
+        if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4)
     }
 
   toggleCrunchMode()

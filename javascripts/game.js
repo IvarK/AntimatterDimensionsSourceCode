@@ -1628,35 +1628,13 @@ function breakInfinity() {
     }
 }
 
-function fixedGainedInfinityPoints() {
-    let div = 308;
-    if (player.timestudy.studies.includes(111)) div = 285;
-    else if (isAchEnabled("r103")) div = 307.8;
-
-    var ret = new Decimal(308/div).times(player.infMult).times(kongIPMult)
-    if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))
-    if (player.timestudy.studies.includes(51)) ret = ret.times(1e15)
-    if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
-    if (player.timestudy.studies.includes(142)) ret = ret.times(1e25)
-    if (player.timestudy.studies.includes(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
-    if (isAchEnabled("r85")) ret = ret.times(4);
-    if (isAchEnabled("r93")) ret = ret.times(4);
-    if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
-    if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
-    if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "infinity" && glyph.effects.ipgain !== undefined) ret = ret.times(glyph.effects.ipgain)
-    }
-    return ret.floor()
-}
-
 function gainedInfinityPoints() {
     let div = 308;
     if (player.timestudy.studies.includes(111)) div = 285;
     else if (isAchEnabled("r103")) div = 307.8;
 
-    var ret = Decimal.pow(10, player.money.e/div -0.75).times(player.infMult).times(kongIPMult)
+    if(player.break) var ret = Decimal.pow(10, player.money.e/div -0.75).times(player.infMult).times(kongIPMult)
+    else var ret = new Decimal(308/div).times(player.infMult).times(kongIPMult)
     if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))
     if (player.timestudy.studies.includes(51)) ret = ret.times(1e15)
     if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
@@ -2533,8 +2511,8 @@ document.getElementById("bigcrunch").onclick = function () {
         if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");
         if (player.challenges.length == 20) giveAchievement("Anti-antichallenged");
         if (!player.break || player.currentChallenge != "") {
-            player.infinityPoints = player.infinityPoints.plus(fixedGainedInfinityPoints());
-            addTime(player.thisInfinityTime, fixedGainedInfinityPoints())
+            player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints());
+            addTime(player.thisInfinityTime, gainedInfinityPoints())
         }
         else {
             player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints())

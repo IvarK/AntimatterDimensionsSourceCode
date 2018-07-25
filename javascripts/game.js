@@ -580,10 +580,9 @@ function updateDimensions() {
     }
 
     if (player.bestInfinityTime == 9999999999) {
-        document.getElementById("bestInfinity").textContent = ""
-        document.getElementById("infinitied").textContent = ""
-        document.getElementById("thisInfinity").textContent = ""
+        $("infinityStatistics").hide()
     } else {
+        $("infinityStatistics").show()
         document.getElementById("bestInfinity").textContent = "Your fastest Infinity is in " + timeDisplay(player.bestInfinityTime) + "."
         document.getElementById("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
         if (player.infinityPoints.equals(1)) {
@@ -607,13 +606,21 @@ function updateDimensions() {
         document.getElementById("totalTime").textContent = "You have played for " + timeDisplay(player.totalTimePlayed) + "."
 
         if (player.eternities == 0) {
-            document.getElementById("eternitied").textContent = ""
-            document.getElementById("besteternity").textContent = ""
-            document.getElementById("thiseternity").textContent = ""
+            $("eternityStatistics").hide()
         } else {
+            $("eternityStatistics").show()
             document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
             document.getElementById("besteternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
             document.getElementById("thiseternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+        }
+
+        if (player.realities == 0) {
+            $("realityStatistics").hide()
+        } else {
+            $("realityStatistics").show()
+            document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
+            document.getElementById("bestreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
+            document.getElementById("thisreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
         }
     }
 
@@ -4909,6 +4916,8 @@ setInterval(function() {
     updateAchievements()
     if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
+
+    $("#timeForAchievements").text("You will gain your achievements back in the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
 
 }, 1000)
 

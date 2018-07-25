@@ -1351,6 +1351,7 @@ button {
     transition-duration: 0.2s;
     cursor: move;
     font-family: Typewriter;
+    box-sizing: border-box;
     
 }
 

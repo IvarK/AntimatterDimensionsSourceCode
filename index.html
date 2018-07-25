@@ -1056,15 +1056,28 @@
                 <div id="totalresets">You have made x dimensional boosts/shifts.</div>
                 <div id="galaxies">You have made x Antimatter Galaxies.</div>
                 <br>
-                <div id="eternitied">You have eternitied x times.</div>
-                <div id="thiseternity">You have spent x in this eternity</div>
-                <div id="besteternity">Your fastest eternity is in x.</div>
-                <br>
-                <div id="infinitied">You have infinitied x times.</div>
-                <div id="infinitiedBank">You have infinitied x times.</div>
-                <div id="bestInfinity">Your fastest infinity is in x.</div>
-                <div id="thisInfinity">You have spent x in this Infinity.</div>
-                <br>
+                <div id="infinityStatistics">
+                    <h3>Infinity</h3>
+                    <div id="infinitied">You have infinitied x times.</div>
+                    <div id="infinitiedBank">You have infinitied x times.</div>
+                    <div id="bestInfinity">Your fastest infinity is in x.</div>
+                    <div id="thisInfinity">You have spent x in this Infinity.</div>
+                    <br>
+                </div>
+                <div id="eternityStatistics">
+                    <h3>Eternity</h3>
+                    <div id="eternitied">You have eternitied x times.</div>
+                    <div id="thiseternity">You have spent x in this eternity</div>
+                    <div id="besteternity">Your fastest eternity is in x.</div>
+                    <br>
+                </div>
+                <div id="realityStatistics">
+                    <h3>Reality</h3>
+                    <div id="realitied">You have eternitied x times.</div>
+                    <div id="thisreality">You have spent x in this eternity</div>
+                    <div id="bestreality">Your fastest eternity is in x.</div>
+                    <br>
+                </div>
                 <div id="totalTime">You have played for </div>
                 <div id="infoScale">If every antimatter were a planck volume, you would have enough to </div>
             </div>
@@ -2688,6 +2701,8 @@
             <div id="glyphstab" class="realitytab">
                 <div>
                     <button id="realitymachine" onclick="reality()">Make a new reality<br>Machines gained: 1<br>Glyph level: 1</button>
+                    <br>
+                    <div id="timeForAchievements" style="color: black; font-size: 12px; width: 40%; margin: 5px auto">You will regain your achievements in the span of</div>
                 </div>
                 <div id="glyphslots">
                     <!-- These are generated from JS -->
@@ -2731,16 +2746,15 @@
                                 Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
                             </span>
                             WAIT<br>
-                            Cost: 2 RM
+                            Cost: 1 RM
                         </button></td>
                         <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="automatorinstruction command" id="automator12">
+                        <td><button class="automatorinstructionbought command" id="automator12">
                             <span class="tooltip">
                                 BUY [target] [amount/ID] <br>
                                 Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
                             </span>
                             BUY<br>
-                            Cost: ??? RM
                         </button></td>
                     </tr>
                 </table>
@@ -2749,8 +2763,8 @@
                     <tr>
                         <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
                         <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator23">STUDY<br>Cost: ??? RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator24">STUDYUNTIL<br>Cost: ??? RM</button></td>
+                        <td><button class="automatorinstructionbought target" id="automator23">STUDY<br></button></td>
+                        <td><button class="automatorinstructionbought target" id="automator24">STUDYUNTIL</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">

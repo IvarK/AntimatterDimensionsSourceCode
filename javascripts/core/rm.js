@@ -482,29 +482,12 @@ function drop(ev) {
   mouseOn = $("document")
 }
 
-/**
- * 
- * In here we could do strings of conditions, but if we are gonna go with conditions like "Reach first eternity without any RGs" how are we gonna do those
- */
-const REALITY_UPGRADE_CONDITIONS = {
-  1: true,
-  2: true,
-  3: true,
-  4: true,
-  5: true,
-  6: false,
-  7: false,
-  8: false,
-  9: false,
-  10: false,
-}
-
 const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15]
 
 function canBuyRealityUpg(id) {
-  if (player.reality.realityMachines < REALITY_UPGRADE_COSTS[id]) return false // Has enough RM
+  if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
-  if (!eval(REALITY_UPGRADE_CONDITIONS[id])) return false // Has done conditions
+  if (!player.reality.upgReqs[id]) return false // Has done conditions
   var row = Math.floor( ( id - 1 ) / 5 )
   if (row == 0) return true
   else {
@@ -517,7 +500,7 @@ function canBuyRealityUpg(id) {
 
 function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
-  player.reality.realityMachines -= cost
+  player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   player.reality.upg.push(id)
   updateRealityUpgrades()
   return true

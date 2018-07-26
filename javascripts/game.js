@@ -2547,6 +2547,9 @@ document.getElementById("bigcrunch").onclick = function () {
             }
             if (n == 9) giveAchievement("Yo dawg, I heard you liked infinities...")
         }
+        if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
+            player.reality.upgReqs[7] = true;
+        }
         let infGain = 1;
         if (player.thisInfinityTime > 50 && isAchEnabled("r87")) infGain = 250;
         if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
@@ -2871,6 +2874,9 @@ function eternity(force, auto) {
         if (player.timestudy.studies.includes(191)) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
+        if (player.realities > 0 && player.eternities === 0 && player.reality.upgReqChecks[0]) {
+            player.reality.upgReqs[6] = true;
+        } 
         if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
             player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain())
             player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())

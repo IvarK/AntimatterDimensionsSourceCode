@@ -52,6 +52,7 @@ function upgradeReplicantiGalaxy() {
 
 function replicantiGalaxy() {
   if (player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) ? player.replicanti.galaxies < player.replicanti.gal : player.replicanti.galaxies < Math.floor(player.replicanti.gal * 1.5))) {
+      player.reality.upgReqChecks[0] = false;
       if (isAchEnabled("r126")) player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
       else player.replicanti.amount = new Decimal(1)
       player.replicanti.galaxies += 1

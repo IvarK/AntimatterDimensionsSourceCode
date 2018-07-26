@@ -580,9 +580,9 @@ function updateDimensions() {
     }
 
     if (player.bestInfinityTime == 9999999999) {
-        $("infinityStatistics").hide()
+        $("#infinityStatistics").hide()
     } else {
-        $("infinityStatistics").show()
+        $("#infinityStatistics").show()
         document.getElementById("bestInfinity").textContent = "Your fastest Infinity is in " + timeDisplay(player.bestInfinityTime) + "."
         document.getElementById("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
         if (player.infinityPoints.equals(1)) {
@@ -606,18 +606,18 @@ function updateDimensions() {
         document.getElementById("totalTime").textContent = "You have played for " + timeDisplay(player.totalTimePlayed) + "."
 
         if (player.eternities == 0) {
-            $("eternityStatistics").hide()
+            $("#eternityStatistics").hide()
         } else {
-            $("eternityStatistics").show()
+            $("#eternityStatistics").show()
             document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
             document.getElementById("besteternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
             document.getElementById("thiseternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
         }
 
         if (player.realities == 0) {
-            $("realityStatistics").hide()
+            $("#realityStatistics").hide()
         } else {
-            $("realityStatistics").show()
+            $("#realityStatistics").show()
             document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
             document.getElementById("bestreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
             document.getElementById("thisreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."

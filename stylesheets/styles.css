@@ -1790,7 +1790,13 @@ br {
     margin-bottom: 12px;
     color: #d5ffd7;
     cursor: pointer;
-    transition-duration: 0.12s
+    transition-duration: 0.12s;
+    height: 100px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .realityUpgrade:hover {
@@ -1923,6 +1929,10 @@ reality upgrade unavailable
     height: 50px;
 }
 
+
+.realityUpgradeTable > tbody > tr > td {
+    width: 18%;
+}
 
 @media print, screen and (max-width: 960px) {
     div.wrapper {

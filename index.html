@@ -2694,6 +2694,7 @@
             <table class="table" align="center" style="margin: auto">
                 <tr>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('glyphstab')">Glyphs</button></td>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('upgrades')">Upgrades</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('wormhole')">Wormhole</button></td>
                 </tr>
@@ -2707,7 +2708,7 @@
                 <div id="glyphslots">
                     <!-- These are generated from JS -->
                 </div>
-                <div class="glyphcontainer" style="width: 80%; margin: auto;">
+                <div class="glyphcontainer" style="margin: auto;">
                     <div>
                         <h3 style="text-align: center">Inventory</h3>
                         <table>
@@ -2715,15 +2716,25 @@
                             </tbody>
                         </table>
                     </div>
-                    <div style="width: 20%">
-                        <h3 style="text-align: center">Upgrades</h3>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(1, 1)" id="rupg1">You gain dilated time 3 times faster<br>Cost: 1 RM</div>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(2, 2)" id="rupg2">You gain replicanti 3 times faster<br>Cost: 2 RM</div>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(3, 2)" id="rupg3">You gain 3 times more eternities<br>Cost: 2 RM</div>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(4, 3)" id="rupg4">You gain 3 times more Tachyon Particles<br>Cost: 3 RM</div>
-                        <div class="realityUpgrade" onclick="buyRealityUpg(5, 4)" id="rupg5">You gain 5 times more infinities<br>Cost: 4 RM</div>
-                    </div>
                 </div>
+            </div>
+            <div id="upgrades" class="realitytab" style="display: none;">
+                <table class="table realityUpgradeTable" align="center" style="margin: auto">
+                    <tr>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(1)" id="rupg1">You gain dilated time 3 times faster<br>Cost: 1 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(2)" id="rupg2">You gain replicanti 3 times faster<br>Cost: 2 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(3)" id="rupg3">You gain 3 times more eternities<br>Cost: 2 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(4)" id="rupg4">You gain 3 times more Tachyon Particles<br>Cost: 3 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(5)" id="rupg5">You gain 5 times more infinities<br>Cost: 4 RM</div></td>
+                    </tr>
+                    <tr>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(6)" id="rupg6"><b>Requires: Reach first Eternity without getting any RGs during that eternity</b><br>Replicanti gain is boosted from RGs (x RG/50)<br>Cost: 15 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(7)" id="rupg7"><b>Requires: Reach first Infinity with just 1 galaxy</b><br>Infinitied gain is boosted from Galaxies (x Galaxies/30)<br>Cost: 15 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(8)" id="rupg8">TODO<br>Cost: 15 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(9)" id="rupg9">TODO<br>Cost: 15 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(10)" id="rupg10">TODO<br>Cost: 15 RM</div></td>
+                    </tr>
+                </table>
             </div>
             <div id="automation" class="realitytab" style="display: none;">
                 <canvas id="automatorTreeCanvas"></canvas>

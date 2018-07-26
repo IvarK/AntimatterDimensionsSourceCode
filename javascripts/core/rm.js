@@ -473,43 +473,61 @@ function drop(ev) {
       var glyph = player.reality.glyphs.inventory.find(function(glyph) {
         return glyph.id == data
       })
-      //console.log(ev.target.id)
       glyph.idx = parseInt(ev.target.id)
     }
   }
-  //console.log(ev.target.className)
-  //ev.target.appendChild(document.getElementById(data));
   generateGlyphTable()
   mouseOn.css({"left": "0", "top": "0px", "display": "none"})
   mouseOn.appendTo($(ev.target))
   mouseOn = $("document")
 }
 
-function buyRealityUpg(id, cost) {
-  if (player.reality.realityMachines < cost) return false
-  if (player.reality.upg.includes(id)) return false
+/**
+ * 
+ * In here we could do strings of conditions, but if we are gonna go with conditions like "Reach first eternity without any RGs" how are we gonna do those
+ */
+const REALITY_UPGRADE_CONDITIONS = {
+  1: true,
+  2: true,
+  3: true,
+  4: true,
+  5: true,
+  6: false,
+  7: false,
+  8: false,
+  9: false,
+  10: false,
+}
+
+const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15]
+
+function canBuyRealityUpg(id) {
+  if (player.reality.realityMachines < REALITY_UPGRADE_COSTS[id]) return false // Has enough RM
+  if (player.reality.upg.includes(id)) return false // Doesn't have it already
+  if (!eval(REALITY_UPGRADE_CONDITIONS[id])) return false // Has done conditions
+  var row = Math.floor( ( id - 1 ) / 5 )
+  if (row == 0) return true
+  else {
+    for (var i = row*5 - 4; i <=row*5; i++) {
+      if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row
+    }
+  }
+  return true
+}
+
+function buyRealityUpg(id) {
+  if (!canBuyRealityUpg(id)) return false
   player.reality.realityMachines -= cost
   player.reality.upg.push(id)
   updateRealityUpgrades()
+  return true
 }
 
 function updateRealityUpgrades() {
-  var rm = player.reality.realityMachines
-
-  if (rm < 1) $("#rupg1").addClass("rUpgUn")
-  else $("#rupg1").removeClass("rUpgUn")
-
-  if (rm < 2) $("#rupg2").addClass("rUpgUn")
-  else $("#rupg2").removeClass("rUpgUn")
-
-  if (rm < 2) $("#rupg3").addClass("rUpgUn")
-  else $("#rupg3").removeClass("rUpgUn")
-
-  if (rm < 3) $("#rupg4").addClass("rUpgUn")
-  else $("#rupg4").removeClass("rUpgUn")
-
-  if (rm < 4) $("#rupg5").addClass("rUpgUn")
-  else $("#rupg5").removeClass("rUpgUn")
+  for (var i = 1; i <= $(".realityUpgrade").length; i++) {
+    if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
+    else $("#rupg"+i).removeClass("rUpgUn")
+  }
 
   for (i in player.reality.upg) {
     var upg = player.reality.upg[i]

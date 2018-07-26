@@ -1676,7 +1676,12 @@ function gainedEternityPoints() {
 function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints).e/4000 -1)
 
-    return ret
+    return Math.floor(ret)
+}
+
+function percentToNextRealityMachine() {
+    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints).e/4000 -1)
+    return ((ret - Math.floor(ret)) * 100).toFixed(1);
 }
 
 function gainedGlyphLevel() {
@@ -4914,7 +4919,7 @@ setInterval(function() {
     if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
 
-    $("#timeForAchievements").text("You will gain your achievements back in the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
+    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
 
 }, 1000)
 
@@ -5543,7 +5548,7 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
-    document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
+    document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
     document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
 
 

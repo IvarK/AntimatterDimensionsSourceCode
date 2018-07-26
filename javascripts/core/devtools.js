@@ -87,6 +87,15 @@ dev.updateCosts = function() {
     }
 }
 
+dev.refundTimeDims = function() {
+    for (var i=1; i<9; i++) {
+        var dim = player["timeDimension"+i]
+        dim.bought = 0;
+        dim.power = new Decimal(1);
+    }
+    dev.updateCosts()
+}
+
 dev.calculateTimeStudiesCost = function() {
     var totalCost = 0;
     for (var i=0; i<all.length; i++) {
@@ -204,4 +213,23 @@ dev.giveSpecialGlyph = function(color, symbol, level) {
 dev.giveGlyph = function() {
     player.reality.glyphs.inventory.push(generateRandomGlyph(Math.random() * 100))
     generateGlyphTable();
+}
+
+dev.decriminalize = function() {
+    player.achievements.splice(player.achievements.indexOf("s23"), 1);
+    updateAchievements();
+}
+
+dev.realize = function() {
+    document.getElementById("container").style.animation = "realize 10s 1";
+    document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+    setTimeout(function(){
+        document.getElementById("realityanimbg").play();
+        document.getElementById("realityanimbg").currentTime = 0;
+        document.getElementById("realityanimbg").play();
+    }, 2000)
+    setTimeout(function(){
+        document.getElementById("container").style.animation = "";
+        document.getElementById("realityanimbg").style.animation = "";
+    }, 10000)
 }

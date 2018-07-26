@@ -4914,7 +4914,7 @@ setInterval(function() {
     if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
 
-    $("#timeForAchievements").text("You will gain your achievements back in the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
+    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
 
 }, 1000)
 

@@ -2804,7 +2804,24 @@
             </div>
             <div id="wormhole" class="realitytab" style="display: none;">
                 <div>
-                    <h1>Add this</h1>
+                    <h1>Here will be some fancy animation made with canvas (probably by Omsi)</h1>
+                    <div class="radial-progress" data-progress="0">
+                        <div class="circle">
+                            <div class="mask full">
+                                <div class="fill"></div>
+                            </div>
+                            <div class="mask half">
+                                <div class="fill"></div>
+                                <div class="fill fix"></div>
+                            </div>
+                        </div>
+                        <div class="inset"></div>
+                    </div>
+                    <div class="wormhole-upgrades">
+                        <button class="realityUpgrade" id="wormholeinterval" onclick="upgradeWormholeInterval()">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="realityUpgrade" id="wormholepower" onclick="upgradePowerInterval()">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="realityUpgrade" id="wormholeduration" onclick="upgradeWormholeDuration()">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2929,6 +2946,7 @@
 <script type="text/javascript" src="javascripts/core/rm.js"></script>
 <script type="text/javascript" src="javascripts/core/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/canvases.js"></script>
+<script type="text/javascript" src="javascripts/core/wormhole.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
 <script type="text/javascript" src="javascripts/core/load_functions.js"></script>
 <script type="text/javascript" src="javascripts/core/newsticker.js"></script>

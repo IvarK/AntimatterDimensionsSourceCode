@@ -1432,6 +1432,56 @@ button {
     background: black !important;
 }
 
+.wormhole-upgrades {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+
+.radial-progress {
+    /* @circle-background: #d6dadc;
+    @circle-color: #97a71d; */
+    
+}
+
+.radial-progress {
+    /* @circle-size: 120px; */
+    background-color: #d6dadc;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 50px
+  }
+
+.circle .fill {
+    background-color: #97a71d;
+    /* rect(<top>, <right>, <bottom>, <left>) */
+    clip: rect(0px, 60px, 120px, 0px);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.circle .mask {
+    /* rect(<top>, <right>, <bottom>, <left>) */
+    clip: rect(0px, 120px, 120px, 60px);
+}
+
+.circle .mask, .circle .fill {
+    width:    120px;
+    height:   120px;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.inset {
+    width:       90px;
+    height:      90px;
+    position:    absolute;
+    margin-left: 15px;
+    margin-top:  15px;
+    background-color: #fbfbfb;
+    border-radius: 50%;
+}
 
 @keyframes glow {
     20% { text-shadow: 0 0 10px green; }

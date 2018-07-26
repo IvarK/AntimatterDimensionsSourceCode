@@ -179,6 +179,7 @@ function galaxyReset() {
       thisReality: player.thisReality,
       bestReality: player.bestReality,
       reality: player.reality,
+      wormhole: player.wormhole,
       options: player.options
   };
 

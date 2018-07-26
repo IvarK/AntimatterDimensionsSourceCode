@@ -160,6 +160,7 @@ function softReset(bulk) {
       thisReality: player.thisReality,
       bestReality: player.bestReality,
       reality: player.reality,
+      wormhole: player.wormhole,
       options: player.options
   };
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {

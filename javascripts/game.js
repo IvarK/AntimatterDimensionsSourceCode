@@ -287,6 +287,13 @@ var player = {
         automatorRows: 0,
         automatorCommands: []
     },
+    wormhole: {
+        speed: 60 * 60, // Seconds to fill
+        power: 5, // Multiplier from the wormhole
+        duration: 10, // How long it lasts.
+        phase: 0,
+        active: false
+    },
     options: {
         newsHidden: false,
         notation: "Mixed scientific",
@@ -2702,6 +2709,7 @@ document.getElementById("bigcrunch").onclick = function () {
             thisReality: player.thisReality,
             bestReality: player.bestReality,
             reality: player.reality,
+            wormhole: player.wormhole,
             options: player.options
         };
 
@@ -3078,6 +3086,7 @@ function eternity(force, auto) {
             thisReality: player.thisReality,
             bestReality: player.bestReality,
             reality: player.reality,
+            wormhole: player.wormhole,
             options: player.options
         };
         
@@ -3467,6 +3476,7 @@ function reality(force) {
             thisReality: 0,
             bestReality: Math.min(player.thisReality, player.bestReality),
             reality: player.reality,
+            wormhole: player.wormhole,
             options: player.options
         };
 
@@ -3545,6 +3555,7 @@ function reality(force) {
         Marathon2 = 0;
     }
     generateGlyphTable();
+    updateWormholeUpgrades()
 }
 
 function exitChallenge() {
@@ -3701,6 +3712,7 @@ function startChallenge(name, target) {
       thisReality: player.thisReality,
       bestReality: player.bestReality,
       reality: player.reality,
+      wormhole: player.wormhole,
       options: player.options
     };
 	if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
@@ -4280,6 +4292,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             thisReality: player.thisReality,
             bestReality: player.bestReality,
             reality: player.reality,
+            wormhole: player.wormhole,
             options: player.options
         };
 
@@ -4935,6 +4948,7 @@ function gameLoop(diff) {
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     diff = diff / 100;
     if (diff < 0) diff = 1;
+    if (player.wormhole.active) diff *= player.wormhole.power
     if (player.currentEternityChall === "eterc12") diff = diff / 1000;
     var speedMod = 1
     for (i in player.reality.glyphs.active) {
@@ -5551,7 +5565,20 @@ function gameLoop(diff) {
     document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
     document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
 
-
+    var rotation = player.wormhole.phase / player.wormhole.speed * 180
+    if (player.wormhole.active ) {
+        $('.radial-progress .inset').css("background-color", "red")
+        var rotation = player.wormhole.phase / player.wormhole.duration * 180
+        $('.circle .fill').css("background-color", 'red');
+    }
+    else {
+        $('.radial-progress .inset').css("background-color", "#fbfbfb")
+        $('.circle .fill').css("background-color", "#97a71d")
+    }
+    $('.circle .fill').css("transform", 'rotate(' + rotation + 'deg)');
+    $('.circle .full').css("transform", 'rotate(' + rotation + 'deg)');
+    $('.circle .fill .fix').css("transform", 'rotate(' + (rotation * 2) + 'deg)');
+    wormHoleLoop(diff)
 
     player.lastUpdate = thisUpdate;
 }

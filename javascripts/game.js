@@ -4400,20 +4400,20 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
 }
 
 function startDilatedEternity() {
-    if (!player.dilation.studies.includes(1)) return
+    if (!player.dilation.studies.includes(1)) return false
     clearInterval(gameLoopIntervalId);
     if (player.dilation.active) {
         eternity(true)
         setTimeout(function() {
             gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
         }, 250)
-        return
+        return false
     }
     if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
         setTimeout(function() {
             gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
         }, 250)
-        return
+        return false
     }
     giveAchievement("I told you already, time is relative")
     eternity(true)
@@ -4430,18 +4430,20 @@ function startDilatedEternity() {
     setTimeout(function() {
         gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
     }, 250)
+    return true
 }
 
 function unlockDilation() {
-    if (player.dilation.studies.includes(1)) return
-    if (player.timestudy.theorem < 5000) return
-    if (ECTimesCompleted("eterc12") !== 5) return
-    if (ECTimesCompleted("eterc11") !== 5) return
+    if (player.dilation.studies.includes(1)) return false
+    if (player.timestudy.theorem < 5000) return false
+    if (ECTimesCompleted("eterc12") !== 5) return false
+    if (ECTimesCompleted("eterc11") !== 5) return false
     player.timestudy.theorem -= 5000
     document.getElementById("dilationunlock").className = "dilationupgbought"
     updateTimeStudyButtons()
     showEternityTab("dilation")
     document.getElementById("dilationunlock").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
+    return true
 }
 
 

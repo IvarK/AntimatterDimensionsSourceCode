@@ -111,6 +111,12 @@ function mainIteration() {
         automatorIdx = 0
         loadScript(current.id)
         break;
+      case "toggle":
+        if (!player.reality.automatorCommands.includes(53)) return false
+        toggle(current)
+        automatorIdx+=1
+        break;
+
     }
 
     if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > 2 + Math.ceil(Math.sqrt(player.realities))) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.5) + 2
@@ -190,6 +196,12 @@ function unlock(current) {
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
       if ( document.getElementById("ec" + current.id + "unl").click() ) return true
       else return false
+      break;
+    case "dilation":
+      if (!player.reality.automatorCommands.includes(63)) return false
+      if (unlockDilation()) return true
+      else return false
+      break;
   }
 }
 
@@ -248,9 +260,16 @@ function start(current) {
   if (!player.reality.automatorCommands.includes(73)) return false
   switch(current.target) {
     case "ec":
+      if (!player.reality.automatorCommands.includes(84)) return false
       if (player.currentEternityChall == "eterc" + current.id) return true
       if (startEternityChallenge("eterc" + current.id, ETERNITY_CHALLS["ec"+current.id].start, ETERNITY_CHALLS["ec"+current.id].inc)) return true
       else return false
+      break;
+    case "dilation":
+      if (!player.reality.automatorCommands.includes(83)) return false
+      if (startDilatedEternity) return true
+      else return false
+      break;
   }
 }
 
@@ -261,6 +280,56 @@ function change(current) {
       document.getElementById("priority12").value = current.id
       updatePriorities()
       return true
+  }
+}
+
+function toggle(current) {
+  if (current.target[0] == "d") {
+    player.autobuyers[parseInt(current.target[1])].isOn = !player.autobuyers[parseInt(current.target[1])].isOn
+    updateAutobuyers()
+    return true
+  } else {
+    switch(current.target) {
+      case "tickspeed":
+        player.autobuyers[8].isOn = !player.autobuyers[8].isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "dimboost":
+        player.autobuyers[9].isOn = !player.autobuyers[9].isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "galaxy":
+        player.autobuyers[10].isOn = !player.autobuyers[9].isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "infinity":
+        player.autobuyers[11].isOn = !player.autobuyers[9].isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "infinity":
+        player.autobuyers[11].isOn = !player.autobuyers[9].isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "sacrifice":
+        player.autoSacrifice.isOn = !player.autoSacrifice.isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "eternity":
+        player.eternityBuyer.isOn = !player.eternityBuyer.isOn
+        updateAutobuyers()
+        return true
+        break;
+      case "rg":
+        replicantiGalaxyAutoToggle()
+        return true
+        break;
+    }
   }
 }
 

@@ -292,7 +292,8 @@ var player = {
         power: 5, // Multiplier from the wormhole
         duration: 10, // How long it lasts.
         phase: 0,
-        active: false
+        active: false,
+        unlocked: false
     },
     options: {
         newsHidden: false,
@@ -4964,6 +4965,7 @@ function gameLoop(diff) {
             speedmod = glyph.effects.speed
         }
     }
+    if (player.wormhole.active) speedmod *= player.wormhole.power
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times(diff/player.autoTime))
@@ -5570,21 +5572,7 @@ function gameLoop(diff) {
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
     document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
-
-    var rotation = player.wormhole.phase / player.wormhole.speed * 180
-    if (player.wormhole.active ) {
-        $('.radial-progress .inset').css("background-color", "red")
-        var rotation = player.wormhole.phase / player.wormhole.duration * 180
-        $('.circle .fill').css("background-color", 'red');
-    }
-    else {
-        $('.radial-progress .inset').css("background-color", "#fbfbfb")
-        $('.circle .fill').css("background-color", "#97a71d")
-    }
-    $('.circle .fill').css("transform", 'rotate(' + rotation + 'deg)');
-    $('.circle .full').css("transform", 'rotate(' + rotation + 'deg)');
-    $('.circle .fill .fix').css("transform", 'rotate(' + (rotation * 2) + 'deg)');
-    wormHoleLoop(diff)
+    if (player.wormhole.unlocked) wormHoleLoop(diff)
 
     player.lastUpdate = thisUpdate;
 }

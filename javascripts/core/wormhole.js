@@ -19,6 +19,14 @@
     else $("#wormholeduration").removeClass("rUpgUn")
  }
 
+function unlockWormhole() {
+    if (player.reality.realityMachines.lt(50)) return false
+    if (player.wormhole.unlocked) return false
+    player.wormhole.unlocked = true
+    player.reality.realityMachines = player.reality.realityMachines.minus(50)
+    $("#wormholecontainer").show()
+}
+
 function getWormholeIntervalCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 3600) / Math.log(0.8))
     return Math.pow(2.5, amountOfPurchases) * 15
@@ -36,24 +44,24 @@ function getWormholeDurationCost() {
 
 function upgradeWormholeInterval() {
     var cost = getWormholeIntervalCost()
-    if (cost > player.reality.realityMachines) return false
-    player.reality.realityMachines -= cost
+    if (player.reality.realityMachines.lt(cost)) return false
+    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
     player.wormhole.speed *= 0.8
     updateWormholeUpgrades()
 }
 
 function upgradeWormholePower() {
     var cost = getWormholePowerCost()
-    if (cost > player.reality.realityMachines) return false
-    player.reality.realityMachines -= cost
+    if (player.reality.realityMachines.lt(cost)) return false
+    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
     player.wormhole.speed *= 1.35
     updateWormholeUpgrades()
 }
 
 function upgradeWormholeDuration() {
     var cost = getWormholeDurationCost()
-    if (cost > player.reality.realityMachines) return false
-    player.reality.realityMachines -= cost
+    if (player.reality.realityMachines.lt(cost)) return false
+    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
     player.wormhole.speed *= 1.5
     updateWormholeUpgrades()
 }
@@ -73,4 +81,19 @@ function wormHoleLoop(diff) {
             player.wormhole.active = true
         }
     }
+
+    var rotation = player.wormhole.phase / player.wormhole.speed * 180
+    if (player.wormhole.active ) {
+        $('.radial-progress .inset').css("background-color", "red")
+        var rotation = player.wormhole.phase / player.wormhole.duration * 180
+        $('.circle .fill').css("background-color", 'red');
+    }
+    else {
+        $('.radial-progress .inset').css("background-color", "#fbfbfb")
+        $('.circle .fill').css("background-color", "#97a71d")
+    }
+    $('.circle .fill').css("transform", 'rotate(' + rotation + 'deg)');
+    $('.circle .full').css("transform", 'rotate(' + rotation + 'deg)');
+    $('.circle .fill .fix').css("transform", 'rotate(' + (rotation * 2) + 'deg)');
 }
+

@@ -1506,6 +1506,10 @@ button {
     display: none;
   }
 
+.tooltip h3 {
+    color:white
+}
+
   .tooltip br:last-child {
       display: none;
   }

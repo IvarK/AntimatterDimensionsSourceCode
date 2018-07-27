@@ -93,17 +93,21 @@ function mainIteration() {
         if (change(current)) automatorIdx+=1
         break;
       case "respec":
+        if (!player.reality.automatorCommands.includes(61)) return false
         player.respec = true
         automatorIdx+=1
         break;
       case "eternity":
+        if (!player.reality.automatorCommands.includes(62)) return false
         if (eternity(false, true)) automatorIdx+=1
         break;
       case "stop":
+        if (!player.reality.automatorCommands.includes(72)) return false
         automatorOn = false
         $("#automatorOn")[0].checked = false
         break;
       case "load":
+        if (!player.reality.automatorCommands.includes(51)) return false
         automatorIdx = 0
         loadScript(current.id)
         break;
@@ -133,9 +137,11 @@ function buy(current) {
       }
       break;
     case "ttmax":
+      if (!player.reality.automatorCommands.includes(44)) return false
       maxTheorems()
       break;
     case "ttip":
+      if (!player.reality.automatorCommands.includes(34)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -148,6 +154,7 @@ function buy(current) {
       else return false
       break;
     case "ttep":
+      if (!player.reality.automatorCommands.includes(33)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -160,6 +167,7 @@ function buy(current) {
       else return false
       break;
     case "ttam":
+      if (!player.reality.automatorCommands.includes(43)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -175,8 +183,10 @@ function buy(current) {
 }
 
 function unlock(current) {
+  if (!player.reality.automatorCommands.includes(54)) return false
   switch(current.target) {
     case "ec":
+      if (!player.reality.automatorCommands.includes(64)) return false
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
       if ( document.getElementById("ec" + current.id + "unl").click() ) return true
       else return false
@@ -184,33 +194,41 @@ function unlock(current) {
 }
 
 function wait(current) {
+  if (!player.reality.automatorCommands.includes(11)) return false
   if (current.id !== "max") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
+      if (!player.reality.automatorCommands.includes(22)) return false
       if (id.gt(player.eternityPoints)) return false
       else return true
       break;
     case "ip":
+      if (!player.reality.automatorCommands.includes(31)) return false
       if (id.gt(player.infinityPoints)) return false
       else return true
       break;
     case "antimatter":
+      if (!player.reality.automatorCommands.includes(21)) return false
       if (id.gt(player.money)) return false
       else return true
       break;
     case "replicanti":
+      if (!player.reality.automatorCommands.includes(32)) return false
       if (id.gt(player.replicanti.amount)) return false
       else return true
       break;
     case "rg":
+      if (!player.reality.automatorCommands.includes(42)) return false
       if (current.id == "max") {
+        if (!player.reality.automatorCommands.includes(51)) return false
         if ((!player.timestudy.studies.includes(131) ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
         else return false
       }
       if (id.gt(player.replicanti.galaxies)) return false
       else return true
       break;
-    case "seconds":
+    case "time":
+      if (!player.reality.automatorCommands.includes(41)) return false
       if (waiting = false) {
         waiting = true
         now = Date.now()
@@ -227,6 +245,7 @@ function wait(current) {
 }
 
 function start(current) {
+  if (!player.reality.automatorCommands.includes(73)) return false
   switch(current.target) {
     case "ec":
       if (player.currentEternityChall == "eterc" + current.id) return true
@@ -236,6 +255,7 @@ function start(current) {
 }
 
 function change(current) {
+  if (!player.reality.automatorCommands.includes(71)) return false
   switch(current.target) {
     case "ipautobuyer":
       document.getElementById("priority12").value = current.id
@@ -280,19 +300,20 @@ function canBuyAutomatorInstruction(id) {
   return true
 }
 
-var allInstructions = [11, 12, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51]
-var instructionCosts = [1, 0,  3,  2,  0,  0,  3,  2,  3,  2,  3,  2,  3,  20, 2]
+var allInstructions = [11, 12, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]
+var instructionCosts = [1, 0,  3,  2,  0,  0,  3,  2,  3,  2,  3,  2,  3,  20, 30, 10, 30, 30, 30, 10, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+var automatorCommands = [11, 12, 51, 53, 54, 61, 62, 71, 72, 73]
 function updateAutomatorTree() {
   for (var i=0; i<allInstructions.length; i++) {
     if (!player.reality.automatorCommands.includes(allInstructions[i])) {
       if (canBuyAutomatorInstruction(allInstructions[i]) && player.reality.realityMachines.gte(instructionCosts[i])) {
-        if (allInstructions[i] == 11 || allInstructions[i] == 12) {
+        if (automatorCommands.includes(allInstructions[i])) {
           document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction command"
         } else {
           document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction target"
         }
       } else {
-          if (allInstructions[i] == 11 || allInstructions[i] == 12) {
+          if (automatorCommands.includes(allInstructions[i])) {
             document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked command"
           } else {
             document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked target"

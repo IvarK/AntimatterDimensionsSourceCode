@@ -313,11 +313,25 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator11", "automator32");
     drawAutomatorTreeBranch("automator11", "automator41");
     drawAutomatorTreeBranch("automator11", "automator42");
-    drawAutomatorTreeBranch("automator42", "automator51");
+    drawAutomatorTreeBranch("automator42", "automator52");
     drawAutomatorTreeBranch("automator12", "automator23");
     drawAutomatorTreeBranch("automator12", "automator24");
     drawAutomatorTreeBranch("automator12", "automator33");
     drawAutomatorTreeBranch("automator12", "automator34");
     drawAutomatorTreeBranch("automator12", "automator43");
     drawAutomatorTreeBranch("automator12", "automator44");
+    drawAutomatorTreeBranch("automator41", "automator51");
+    drawAutomatorTreeBranch("automator43", "automator53");
+    drawAutomatorTreeBranch("automator44", "automator54");
+    drawAutomatorTreeBranch("automator51", "automator61");
+    drawAutomatorTreeBranch("automator52", "automator62");
+    drawAutomatorTreeBranch("automator54", "automator63");
+    drawAutomatorTreeBranch("automator54", "automator64");
+    drawAutomatorTreeBranch("automator61", "automator71");
+    drawAutomatorTreeBranch("automator62", "automator72");
+    drawAutomatorTreeBranch("automator64", "automator73");
+    drawAutomatorTreeBranch("automator71", "automator81");
+    drawAutomatorTreeBranch("automator71", "automator82");
+    drawAutomatorTreeBranch("automator73", "automator83");
+    drawAutomatorTreeBranch("automator73", "automator84");
 }

@@ -86,6 +86,7 @@ function galaxyReset() {
       infinitied: player.infinitied,
       infinitiedBank: player.infinitiedBank,
       totalTimePlayed: player.totalTimePlayed,
+      realTimePlayed: player.realTimePlayed,
       bestInfinityTime: player.bestInfinityTime,
       thisInfinityTime: player.thisInfinityTime,
       resets: 0,

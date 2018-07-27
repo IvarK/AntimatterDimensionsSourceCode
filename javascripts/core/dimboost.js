@@ -59,6 +59,7 @@ function softReset(bulk) {
       infinitied: player.infinitied,
       infinitiedBank: player.infinitiedBank,
       totalTimePlayed: player.totalTimePlayed,
+      realTimePlayed: player.realTimePlayed,
       bestInfinityTime: player.bestInfinityTime,
       thisInfinityTime: player.thisInfinityTime,
       firstPow: getDimensionBoostPower().pow(player.resets),

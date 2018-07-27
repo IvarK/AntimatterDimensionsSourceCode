@@ -1,7 +1,7 @@
 /**
- * Interval: starts at 3600, x0.8 per upgrade, upgrade cost goes x2.5, starts at 15
+ * Interval: starts at 3600, x0.8 per upgrade, upgrade cost goes x3.5, starts at 15
  * Power: starts at 5, x1.35 per upgrade, cost goes x2, starts at 20
- * Duration: starts at 10, x1.5 per upgrade, cost goes x3, starts at 10
+ * Duration: starts at 10, x1.5 per upgrade, cost goes x4, starts at 10
  * 
  */
 
@@ -29,7 +29,7 @@ function unlockWormhole() {
 
 function getWormholeIntervalCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 3600) / Math.log(0.8))
-    return Math.pow(2.5, amountOfPurchases) * 15
+    return Math.pow(3.5, amountOfPurchases) * 15
 }
 
 function getWormholePowerCost() {
@@ -39,7 +39,7 @@ function getWormholePowerCost() {
 
 function getWormholeDurationCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 10) / Math.log(1.5))
-    return Math.pow(3, amountOfPurchases) * 10
+    return Math.pow(4, amountOfPurchases) * 10
 }
 
 function upgradeWormholeInterval() {

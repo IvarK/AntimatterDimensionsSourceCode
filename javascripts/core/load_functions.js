@@ -125,7 +125,7 @@ function onLoad() {
   if (player.bestReality === undefined) player.bestReality = 9999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0], [600*60*24*31, 1, 0]];
   if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 5, duration: 10, phase: 0, active: false, unlocked: false }
-  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}, seed: Math.floor(Date.now() * Math.random()+1), upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [] };
+  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}, seed: Math.floor(Date.now() * Math.random()+1), upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [], respec: false };
   setTheme(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
@@ -637,6 +637,8 @@ if (player.version < 5) {
   updateAutomatorTree();
   updateWormholeUpgrades()
   updateAutomatorRows()
+  
+  if (player.reality.respec) $("#glyphRespec").addClass("rUpgBought")
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {

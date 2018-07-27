@@ -545,3 +545,18 @@ $(".tooltip").parent().mouseleave(function(e) {
   mouseOn.appendTo($(this))
   mouseOn = $("document")
 })
+
+function toggleGlyphRespec() {
+  player.reality.respec = !player.reality.respec
+  if (player.reality.respec) $("#glyphRespec").addClass("rUpgBought")
+  else $("#glyphRespec").removeClass("rUpgBought")
+}
+
+function respecGlyphs() {
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    player.reality.glyphs.active.splice(player.reality.glyphs.active.indexOf(glyph), 1)
+    player.reality.glyphs.inventory.push(glyph)
+  }
+  generateGlyphTable();
+}

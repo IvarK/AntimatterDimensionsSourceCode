@@ -61,6 +61,7 @@ var player = {
     infinitied: 0,
     infinitiedBank: 0,
     totalTimePlayed: 0,
+    realTimePlayed: 0,
     bestInfinityTime: 9999999999,
     thisInfinityTime: 0,
     resets: 0,
@@ -614,7 +615,14 @@ function updateDimensions() {
         document.getElementById("totalmoney").textContent = 'You have made a total of ' + shortenMoney(player.totalmoney) + ' antimatter.'
         document.getElementById("totalresets").textContent = 'You have done ' + player.resets + ' dimensional boosts/shifts.'
         document.getElementById("galaxies").textContent = 'You have ' + Math.round(player.galaxies) + ' Antimatter Galaxies.'
-        document.getElementById("totalTime").textContent = "You have played for " + timeDisplay(player.totalTimePlayed) + "."
+        document.getElementById("totalRealTime").textContent = "You have played for " + timeDisplay(player.realTimePlayed) + "."
+        
+        if (player.realities == 0 ) {
+            $("#totalTime").hide()
+        } else {
+            $("#totalTime").show()
+            document.getElementById("totalTime").textContent = "Your existance has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
+        }
 
         if (player.eternities == 0) {
             $("#eternityStatistics").hide()
@@ -2636,6 +2644,7 @@ document.getElementById("bigcrunch").onclick = function () {
             infinitied: player.infinitied + infGain,
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
+            realTimePlayed: player.realTimePlayed,
             bestInfinityTime: Math.min(player.bestInfinityTime, player.thisInfinityTime),
             thisInfinityTime: 0,
             resets: 0,
@@ -2951,6 +2960,7 @@ function eternity(force, auto) {
             infinitied: 0,
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
+            realTimePlayed: player.realTimePlayed,
             bestInfinityTime: 9999999999,
             thisInfinityTime: 0,
             resets: (player.eternities >= 4) ? 4 : 0,
@@ -3290,6 +3300,7 @@ function reality(force) {
             infinitied: 0,
             infinitiedBank: 0,
             totalTimePlayed: player.totalTimePlayed,
+            realTimePlayed: player.realTimePlayed,
             bestInfinityTime: 9999999999,
             thisInfinityTime: 0,
             resets: 0,
@@ -3652,6 +3663,7 @@ function startChallenge(name, target) {
       infinitied: player.infinitied,
       infinitiedBank: player.infinitiedBank,
       totalTimePlayed: player.totalTimePlayed,
+      realTimePlayed: player.realTimePlayed,
       bestInfinityTime: player.bestInfinityTime,
       thisInfinityTime: 0,
       resets: 0,
@@ -4161,6 +4173,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             infinitied: 0,
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
+            realTimePlayed: player.realTimePlayed,
             bestInfinityTime: 9999999999,
             thisInfinityTime: 0,
             resets: (player.eternities >= 4) ? 4 : 0,
@@ -5004,10 +5017,10 @@ function gameLoop(diff) {
         var glyph = player.reality.glyphs.active[i]
         if (glyph.type == "time" && glyph.effects.speed !== undefined) {
             diff *= glyph.effects.speed
-            speedmod = glyph.effects.speed
+            speedMod = glyph.effects.speed
         }
     }
-    if (player.wormhole.active) speedmod *= player.wormhole.power
+    if (player.wormhole.active) speedMod *= player.wormhole.power
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times(diff/player.autoTime))
@@ -5093,8 +5106,9 @@ function gameLoop(diff) {
 
     document.getElementById("dimTabButtons").style.display = "none"
 
-    if (player.currentEternityChall === "eterc12") player.totalTimePlayed += diff*1000 / speedMod
-    else player.totalTimePlayed += diff / speedMod
+    if (player.currentEternityChall === "eterc12") player.realTimePlayed += diff*1000 / speedMod
+    else player.realTimePlayed += diff / speedMod
+    player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff
     player.thisReality += diff

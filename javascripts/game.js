@@ -2492,6 +2492,18 @@ function checkForEndMe() {
     if (temp2 <= 66.6) giveAchievement("Yes. This is hell.")
 }
 
+function checkForRUPG8() {
+    if ( player.thisReality < 600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return false
+
+    for (var row = 1; row <= 13; row++) {
+        for (var col = 1; col <= 8; col++) {
+            if (!player.achievements.includes(row*10 + col)) return false
+        }
+    }
+
+    return true
+}
+
 
 document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1])
@@ -2561,6 +2573,7 @@ document.getElementById("bigcrunch").onclick = function () {
           var glyph = player.reality.glyphs.active[i]
           if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
         }
+        if (player.reality.upg.includes(7)) infGain *= (player.galaxies/30)
         if (player.currentEternityChall == "eterc4") {
             infGain = 1
             if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {
@@ -2815,6 +2828,10 @@ document.getElementById("bigcrunch").onclick = function () {
 
         Marathon2 = 0;
 
+        if (player.realities > 0 && player.eternities == 0 && player.infinitied == 1) {
+            if ( checkForRUPG8() ) player.reality.upgReqs[8] = true;
+        }
+
     }
   updateChallenges();
   updateChallengeTimes()
@@ -2884,6 +2901,8 @@ function eternity(force, auto) {
             player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain())
             player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
         }
+        if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e600"))) player.reality.upgReqs[10] = true
+        if (player.reality.upg.includes(10) && player.eternities == 0) player.eternities = 100
         player.challenges = temp
         player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
         player = {
@@ -3192,6 +3211,7 @@ function eternity(force, auto) {
             loadAutoBuyerSettings()
         }
         Marathon2 = 0;
+
         return true
     }
     else return false
@@ -3566,6 +3586,7 @@ function reality(force) {
     updateLastTenRealities()
     updateWormholeUpgrades()
     updateAutomatorRows()
+    if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
 }
 
 function exitChallenge() {
@@ -4514,6 +4535,8 @@ function getDilationGainPerSecond() {
 function getTachyonGain() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
     if (player.reality.upg.includes(4)) mult *= 3
+    if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+
     let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (mult) - player.dilation.totalTachyonParticles, 0)            
     return tachyonGain
 }
@@ -4521,6 +4544,8 @@ function getTachyonGain() {
 function getTachyonReq() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
     if (player.reality.upg.includes(4)) mult *= 3
+    if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+
     let req = Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
     return req
 }
@@ -4951,6 +4976,8 @@ setInterval(function() {
         $("#automatorUnlock").show()
         $(".automator-container").hide()
     }
+
+    updateRealityUpgrades()
 
 }, 1000)
 

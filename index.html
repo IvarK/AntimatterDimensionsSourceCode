@@ -2730,77 +2730,81 @@
                     <tr>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(6)" id="rupg6"><b>Requires: Reach first Eternity without getting any RGs during that eternity</b><br>Replicanti gain is boosted from RGs (x RG/50)<br>Cost: 15 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(7)" id="rupg7"><b>Requires: Reach first Infinity with just 1 galaxy</b><br>Infinitied gain is boosted from Galaxies (x Galaxies/30)<br>Cost: 15 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(8)" id="rupg8">TODO<br>Cost: 15 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(8)" id="rupg8"><b>Requires: Have the first 13 rows of achievements when you infinity the first time</b><br>Tachyon Particle gain is multiplied based on achievement multiplier (mult^0.5)<br>Cost: 15 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(9)" id="rupg9">TODO<br>Cost: 15 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(10)" id="rupg10">TODO<br>Cost: 15 RM</div></td>
                     </tr>
                 </table>
             </div>
             <div id="automation" class="realitytab" style="display: none;">
-                <canvas id="automatorTreeCanvas"></canvas>
-                <div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
-                        <p id="automatorloadsavetext">load:</p>
-                        <button class="realitytabbtn" onclick="automatorSaveButton(1)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">1</button>
-                        <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
-                        <button class="realitytabbtn" onclick="automatorSaveButton(3)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">3</button>
-                        <label for="automatorOn" style="margin-left: 40px;">on:</label>
-                        <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOn = !automatorOn; automatorIdx = 0;">
+                <span id="automatorUnlock"><br><br><br>You need to get 4 Realities to unlock the automator</span>
+                <div class="automator-container">
+                    <div id="rowsAvailable">Your automator can use 4 rows, next row at 9 realities</div>
+                    <canvas id="automatorTreeCanvas"></canvas>
+                    <div>
+                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
+                            <p id="automatorloadsavetext">load:</p>
+                            <button class="realitytabbtn" onclick="automatorSaveButton(1)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">1</button>
+                            <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
+                            <button class="realitytabbtn" onclick="automatorSaveButton(3)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">3</button>
+                            <label for="automatorOn" style="margin-left: 40px;">on:</label>
+                            <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOn = !automatorOn; automatorIdx = 0;">
+                        </div>
+                        <textarea name="automator" id="automator" cols="30" onChange="updateState()"></textarea>
                     </div>
-                    <textarea name="automator" id="automator" cols="30" onChange="updateState()"></textarea>
+                    <table class="table" id="studytable">
+                        <tr>
+                            <td><button class="automatorinstruction command" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
+                                <span class="tooltip">
+                                    WAIT [target] [amount] <br>
+                                    Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
+                                </span>
+                                WAIT<br>
+                                Cost: 1 RM
+                            </button></td>
+                            <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                            <td><button class="automatorinstructionbought command" id="automator12">
+                                <span class="tooltip">
+                                    BUY [target] [amount/ID] <br>
+                                    Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
+                                </span>
+                                BUY<br>
+                            </button></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <table class="table" id="studytable">
+                        <tr>
+                            <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstructionbought target" id="automator23">STUDY<br></button></td>
+                            <td><button class="automatorinstructionbought target" id="automator24">STUDYUNTIL</button></td>
+                        </tr>
+                    </table>
+                    <table class="table" id="studytable">
+                        <tr>
+                            <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP<br>Cost: 2 RM</button></td>
+                        </tr>
+                    </table>
+                    <table class="table" id="studytable">
+                        <tr>
+                            <td><button class="automatorinstruction target" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX<br>Cost: 20 RM</button></td>
+                        </tr>
+                    </table>
+                    <table class="table" id="studytable">
+                        <tr>
+                            <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                            <td><button class="timestudybought" style="opacity: 0;"></button></td>
+                            <td><button class="automatorinstruction target" id="automator51" onclick="buyAutomatorInstruction(51, 2)">MAX<br>Cost: 2 RM</button></td>
+                        </tr>
+                    </table>
                 </div>
-                <table class="table" id="studytable">
-                    <tr>
-                        <td><button class="automatorinstruction command" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
-                            <span class="tooltip">
-                                WAIT [target] [amount] <br>
-                                Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
-                            </span>
-                            WAIT<br>
-                            Cost: 1 RM
-                        </button></td>
-                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="automatorinstructionbought command" id="automator12">
-                            <span class="tooltip">
-                                BUY [target] [amount/ID] <br>
-                                Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
-                            </span>
-                            BUY<br>
-                        </button></td>
-                    </tr>
-                </table>
-                <br>
-                <table class="table" id="studytable">
-                    <tr>
-                        <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstructionbought target" id="automator23">STUDY<br></button></td>
-                        <td><button class="automatorinstructionbought target" id="automator24">STUDYUNTIL</button></td>
-                    </tr>
-                </table>
-                <table class="table" id="studytable">
-                    <tr>
-                        <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP<br>Cost: 2 RM</button></td>
-                    </tr>
-                </table>
-                <table class="table" id="studytable">
-                    <tr>
-                        <td><button class="automatorinstruction target" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX<br>Cost: 20 RM</button></td>
-                    </tr>
-                </table>
-                <table class="table" id="studytable">
-                    <tr>
-                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="timestudybought" style="opacity: 0;"></button></td>
-                        <td><button class="automatorinstruction target" id="automator51" onclick="buyAutomatorInstruction(51, 2)">MAX<br>Cost: 2 RM</button></td>
-                    </tr>
-                </table>
             </div>
             <div id="wormhole" class="realitytab" style="display: none;">
                 <button class="realityUpgrade" onclick="unlockWormhole">Unleash the Wormhole<br>Costs 50 RM</button>

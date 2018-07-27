@@ -284,6 +284,8 @@ var player = {
         },
         seed: Math.floor(Date.now() * Math.random()+1),
         upg: [],
+        upgReqs: [null, true, true, true, true, true, false, false, false, false, false], 
+        upgReqChecks: [false],
         automatorRows: 0,
         automatorCommands: []
     },
@@ -1682,13 +1684,13 @@ function gainedEternityPoints() {
 }
 
 function gainedRealityMachines() {
-    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints).e/4000 -1)
+    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
 
-    return Math.floor(ret)
+    return Decimal.floor(ret)
 }
 
 function percentToNextRealityMachine() {
-    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints).e/4000 -1)
+    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     return ((ret - Math.floor(ret)) * 100).toFixed(1);
 }
 
@@ -3524,7 +3526,6 @@ function reality(force) {
         updateChallengeTimes()
         updateLastTenRuns()
         updateLastTenEternities()
-        updateLastTenRealities()
         IPminpeak = new Decimal(0)
         EPminpeak = new Decimal(0)
         updateMilestones()
@@ -3562,7 +3563,9 @@ function reality(force) {
         Marathon2 = 0;
     }
     generateGlyphTable();
+    updateLastTenRealities()
     updateWormholeUpgrades()
+    updateAutomatorRows()
 }
 
 function exitChallenge() {
@@ -4940,6 +4943,14 @@ setInterval(function() {
     else document.getElementById("nextAchAt").textContent = ""
 
     $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
+
+    if (player.realities > 3) {
+        $("#automatorUnlock").hide()
+        $(".automator-container").show()
+    } else {
+        $("#automatorUnlock").show()
+        $(".automator-container").hide()
+    }
 
 }, 1000)
 

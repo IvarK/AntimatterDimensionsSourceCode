@@ -405,6 +405,7 @@ if (player.version < 5) {
   loadAutoBuyerSettings();
   updateLastTenRuns()
   updateLastTenEternities()
+  updateLastTenRealities()
 
   updateInfCosts()
 
@@ -635,6 +636,7 @@ if (player.version < 5) {
   updateRealityUpgrades();
   updateAutomatorTree();
   updateWormholeUpgrades()
+  updateAutomatorRows()
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {

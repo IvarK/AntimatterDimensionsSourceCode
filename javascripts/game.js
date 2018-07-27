@@ -288,7 +288,8 @@ var player = {
         upgReqs: [null, true, true, true, true, true, false, false, false, false, false], 
         upgReqChecks: [false],
         automatorRows: 0,
-        automatorCommands: []
+        automatorCommands: [],
+        respec: false
     },
     wormhole: {
         speed: 60 * 60, // Seconds to fill
@@ -3249,6 +3250,7 @@ function reality(force) {
         if (player.thisReality<player.bestReality && !force) {
             player.bestEternity = player.thisEternity
         }
+        if (player.reality.respec) respecGlyphs()
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
         player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))

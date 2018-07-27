@@ -102,8 +102,8 @@ function toggleReplAuto(i) {
   }
 }
 
-function replicantiLoop(diff) {
-  let interval = player.replicanti.interval
+function getReplicantiInterval() {
+    let interval = player.replicanti.interval
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
@@ -114,6 +114,13 @@ function replicantiLoop(diff) {
     }
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
+    if (player.reality.upg.includes(6)) interval /= (player.replicanti.galaxies/50)
+    return interval
+}
+
+function replicantiLoop(diff) {
+    let interval = getReplicantiInterval()
+
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
     var current = player.replicanti.amount.ln()

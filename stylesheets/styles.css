@@ -1432,6 +1432,10 @@ button {
     background: black !important;
 }
 
+.glyphactive .glyph {
+    cursor: default !important;
+}
+
 .wormhole-upgrades {
     display: flex;
     justify-content: space-around;
@@ -1879,6 +1883,14 @@ reality upgrade unavailable
 .rUpgBought:hover {
     color: #d5ffd7;
     background-color: #0b600e
+}
+
+.rUpgReqNotMet {
+    background-color: rgb(165, 57, 57)
+}
+
+.rUpgReqNotMet:hover {
+    background-color: rgb(165, 57, 57)
 }
 
 #realityanimbg {

@@ -373,7 +373,7 @@ function generateGlyphTable() {
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
       if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
-      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
+      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"'><span class='tooltip'>"
       var rarity = getRarity(glyph.strength)
       glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+shorten(glyph.level)+"</span><br><br>"
       for (i in glyph.effects) {
@@ -502,6 +502,10 @@ function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   player.reality.upg.push(id)
+  if (id == 10) {
+    player.reality.glyphs.slots++
+    generateGlyphTable()
+  }
   updateRealityUpgrades()
   return true
 }
@@ -512,10 +516,18 @@ function updateRealityUpgrades() {
     else $("#rupg"+i).removeClass("rUpgUn")
   }
 
+  for (i in player.reality.upgReqs) {
+    if (i == 0) continue
+    var check = player.reality.upgReqs[i]
+    if (check) $("#rupg"+i).removeClass("rUpgReqNotMet")
+    else $("#rupg"+i).addClass("rUpgReqNotMet")
+  }
+
   for (i in player.reality.upg) {
     var upg = player.reality.upg[i]
     $("#rupg"+upg).addClass("rUpgBought")
   }
+
 }
 
 $(".tooltip").parent().mousemove(function(e) {

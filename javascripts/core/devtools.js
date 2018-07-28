@@ -211,7 +211,7 @@ dev.giveSpecialGlyph = function(color, symbol, level) {
 }
 
 dev.giveGlyph = function() {
-    player.reality.glyphs.inventory.push(generateRandomGlyph(Math.random() * 100))
+    player.reality.glyphs.inventory.push(generateRandomGlyph(Math.ceil(Math.random() * 100)))
     generateGlyphTable();
 }
 

@@ -4829,13 +4829,13 @@ setInterval(function() {
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
 
-    if (player.eternities == 0) document.getElementById("pasteternities").style.display = "none"
+    if (player.eternities == 0 && player.realities == 0) document.getElementById("pasteternities").style.display = "none"
     else document.getElementById("pasteternities").style.display = "inline-block"
     if (player.realities == 0) document.getElementById("pastrealities").style.display = "none"
     else document.getElementById("pastrealities").style.display = "inline-block"
     if (player.challenges.length > 1) document.getElementById("challengetimesbtn").style.display = "inline-block"
     else document.getElementById("challengetimesbtn").style.display = "none"
-    if (player.infinitied > 0  || player.eternities > 0) document.getElementById("pastinfs").style.display = "inline-block"
+    if (player.infinitied > 0 || player.eternities > 0 || player.realities > 0) document.getElementById("pastinfs").style.display = "inline-block"
     else document.getElementById("pastinfs").style.display = "none"
 
     if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0 ) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"

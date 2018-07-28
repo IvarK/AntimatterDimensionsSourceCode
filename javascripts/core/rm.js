@@ -410,7 +410,7 @@ function deleteGlyph(id) {
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
-      return glyph.id = id
+      return glyph.id == id
     })
     player.reality.glyphs.inventory.splice(inv.indexOf(g),1)
     mouseOn.remove()

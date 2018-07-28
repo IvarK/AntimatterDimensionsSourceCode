@@ -606,7 +606,7 @@ function updateDimensions() {
             document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
         }
         if (player.infinitied == 1) document.getElementById("infinitied").textContent = "You have infinitied 1 time."
-        else document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
+        else document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.infinitied === 1) ? " time." : " times.")
         if (player.infinitiedBank > 0) document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times this eternity."
 
     }
@@ -628,7 +628,7 @@ function updateDimensions() {
             $("#eternityStatistics").hide()
         } else {
             $("#eternityStatistics").show()
-            document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
+            document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.eternities === 1) ? " time." : " times.")
             document.getElementById("besteternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
             document.getElementById("thiseternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
         }
@@ -4874,40 +4874,40 @@ setInterval(function() {
     }
 
     document.getElementById("eterc1goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1800").times(new Decimal("1e200").pow(ECTimesCompleted("eterc1"))).max(new Decimal("1e1800"))) + " IP"
-    document.getElementById("eterc1completed").textContent = "Completed "+ECTimesCompleted("eterc1")+" times."
+    document.getElementById("eterc1completed").textContent = "Completed "+ECTimesCompleted("eterc1")+((player.eternityChalls.eterc1 === 1) ? " time." : " times.")
 
     document.getElementById("eterc2goal").textContent = "Goal: "+shortenCosts(new Decimal("1e975").times(new Decimal("1e175").pow(ECTimesCompleted("eterc2"))).max(new Decimal("1e975"))) + " IP"
-    document.getElementById("eterc2completed").textContent = "Completed "+ECTimesCompleted("eterc2")+" times."
+    document.getElementById("eterc2completed").textContent = "Completed "+ECTimesCompleted("eterc2")+((player.eternityChalls.eterc2 === 1) ? " time." : " times.")
 
     document.getElementById("eterc3goal").textContent = "Goal: "+shortenCosts(new Decimal("1e600").times(new Decimal("1e75").pow(ECTimesCompleted("eterc3"))).max(new Decimal("1e575"))) + " IP"
-    document.getElementById("eterc3completed").textContent = "Completed "+ECTimesCompleted("eterc3")+" times."
+    document.getElementById("eterc3completed").textContent = "Completed "+ECTimesCompleted("eterc3")+((player.eternityChalls.eterc3 === 1) ? " time." : " times.")
 
     document.getElementById("eterc4goal").textContent = "Goal: "+shortenCosts(new Decimal("1e2750").times(new Decimal("1e550").pow(ECTimesCompleted("eterc4"))).max(new Decimal("1e2750"))) + " IP in "+Math.max((16 - (ECTimesCompleted("eterc4")*4)), 0)+" infinities or less."
-    document.getElementById("eterc4completed").textContent = "Completed "+ECTimesCompleted("eterc4")+" times."
+    document.getElementById("eterc4completed").textContent = "Completed "+ECTimesCompleted("eterc4")+((player.eternityChalls.eterc4 === 1) ? " time." : " times.")
 
     document.getElementById("eterc5goal").textContent = "Goal: "+shortenCosts(new Decimal("1e750").times(new Decimal("1e400").pow(ECTimesCompleted("eterc5"))).max(new Decimal("1e750"))) + " IP"
-    document.getElementById("eterc5completed").textContent = "Completed "+ECTimesCompleted("eterc5")+" times."
+    document.getElementById("eterc5completed").textContent = "Completed "+ECTimesCompleted("eterc5")+((player.eternityChalls.eterc5 === 1) ? " time." : " times.")
 
     document.getElementById("eterc6goal").textContent = "Goal: "+shortenCosts(new Decimal("1e850").times(new Decimal("1e250").pow(ECTimesCompleted("eterc6"))).max(new Decimal("1e850"))) + " IP"
-    document.getElementById("eterc6completed").textContent = "Completed "+ECTimesCompleted("eterc6")+" times."
+    document.getElementById("eterc6completed").textContent = "Completed "+ECTimesCompleted("eterc6")+((player.eternityChalls.eterc6 === 1) ? " time." : " times.")
 
     document.getElementById("eterc7goal").textContent = "Goal: "+shortenCosts(new Decimal("1e2000").times(new Decimal("1e530").pow(ECTimesCompleted("eterc7"))).max(new Decimal("1e2000"))) + " IP"
-    document.getElementById("eterc7completed").textContent = "Completed "+ECTimesCompleted("eterc7")+" times."
+    document.getElementById("eterc7completed").textContent = "Completed "+ECTimesCompleted("eterc7")+((player.eternityChalls.eterc7 === 1) ? " time." : " times.")
 
     document.getElementById("eterc8goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1300").times(new Decimal("1e900").pow(ECTimesCompleted("eterc8"))).max(new Decimal("1e1300"))) + " IP"
-    document.getElementById("eterc8completed").textContent = "Completed "+ECTimesCompleted("eterc8")+" times."
+    document.getElementById("eterc8completed").textContent = "Completed "+ECTimesCompleted("eterc8")+((player.eternityChalls.eterc8 === 1) ? " time." : " times.")
 
     document.getElementById("eterc9goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1750").times(new Decimal("1e250").pow(ECTimesCompleted("eterc9"))).max(new Decimal("1e1750"))) + " IP"
-    document.getElementById("eterc9completed").textContent = "Completed "+ECTimesCompleted("eterc9")+" times."
+    document.getElementById("eterc9completed").textContent = "Completed "+ECTimesCompleted("eterc9")+((player.eternityChalls.eterc9 === 1) ? " time." : " times.")
 
     document.getElementById("eterc10goal").textContent = "Goal: "+shortenCosts(new Decimal("1e3000").times(new Decimal("1e300").pow(ECTimesCompleted("eterc10"))).max(new Decimal("1e3000"))) + " IP"
-    document.getElementById("eterc10completed").textContent = "Completed "+ECTimesCompleted("eterc10")+" times."
+    document.getElementById("eterc10completed").textContent = "Completed "+ECTimesCompleted("eterc10")+((player.eternityChalls.eterc10 === 1) ? " time." : " times.")
 
     document.getElementById("eterc11goal").textContent = "Goal: "+shortenCosts(new Decimal("1e500").times(new Decimal("1e200").pow(ECTimesCompleted("eterc11"))).max(new Decimal("1e500"))) + " IP"
-    document.getElementById("eterc11completed").textContent = "Completed "+ECTimesCompleted("eterc11")+" times."
+    document.getElementById("eterc11completed").textContent = "Completed "+ECTimesCompleted("eterc11")+((player.eternityChalls.eterc11 === 1) ? " time." : " times.")
 
     document.getElementById("eterc12goal").textContent = "Goal: "+shortenCosts(new Decimal("1e110000").times(new Decimal("1e12000").pow(ECTimesCompleted("eterc12"))).max(new Decimal("1e110000"))) + " IP in "+(Math.max(10 - ECTimesCompleted("eterc12")*2, 1)/10) + ((ECTimesCompleted("eterc12") === 0) ? " second or less." :" seconds or less." )
-    document.getElementById("eterc12completed").textContent = "Completed "+ECTimesCompleted("eterc12")+" times."
+    document.getElementById("eterc12completed").textContent = "Completed "+ECTimesCompleted("eterc12")+((player.eternityChalls.eterc12 === 1) ? " time." : " times.")
     updateECUnlockButtons()
 
 
@@ -5657,8 +5657,8 @@ function simulateTime(seconds, real) {
     if (player.timeShards.gt(playerStart.timeShards)) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
     if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString+= ","
     else popupString+= "."
-    if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+" times."
-    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+" times."
+    if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.realities === 1) ? " time." : " times.")
+    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.realities === 1) ? " time." : " times.")
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")

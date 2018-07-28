@@ -807,7 +807,7 @@ function transformSaveToDecimal() {
   for (var i=0; i<10; i++) {
       player.lastTenRuns[i][1] = new Decimal(player.lastTenRuns[i][1])
       player.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1])
-      player.lastTenRealities[i][1] = new Decimal(player.lastTenEternities[i][1])
+      player.lastTenRealities[i][1] = new Decimal(player.lastTenRealities[i][1])
   }
   player.lastTenRuns = [[parseFloat(player.lastTenRuns[0][0]), player.lastTenRuns[0][1]], [parseFloat(player.lastTenRuns[1][0]), player.lastTenRuns[1][1]], [parseFloat(player.lastTenRuns[2][0]), player.lastTenRuns[2][1]], [parseFloat(player.lastTenRuns[3][0]), player.lastTenRuns[3][1]], [parseFloat(player.lastTenRuns[4][0]), player.lastTenRuns[4][1]], [parseFloat(player.lastTenRuns[5][0]), player.lastTenRuns[5][1]], [parseFloat(player.lastTenRuns[6][0]), player.lastTenRuns[6][1]], [parseFloat(player.lastTenRuns[7][0]), player.lastTenRuns[7][1]], [parseFloat(player.lastTenRuns[8][0]), player.lastTenRuns[8][1]], [parseFloat(player.lastTenRuns[9][0]), player.lastTenRuns[9][1]]]
   player.replicanti.chanceCost = new Decimal(player.replicanti.chanceCost)

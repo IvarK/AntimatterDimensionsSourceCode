@@ -101,6 +101,7 @@ function generateRandomGlyph(level) {
   var idx = 0
   var hasglyph = true
   while (hasglyph) {
+    console.log(idx)
     var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
     if (slot !== undefined) idx++;
     else hasglyph = false
@@ -553,10 +554,14 @@ function toggleGlyphRespec() {
 }
 
 function respecGlyphs() {
+  var idx = 1
   for (i in player.reality.glyphs.active) {
+    console.log(idx)
     var glyph = player.reality.glyphs.active[i]
-    player.reality.glyphs.active.splice(player.reality.glyphs.active.indexOf(glyph), 1)
+    glyph.idx = idx
     player.reality.glyphs.inventory.push(glyph)
+    idx++
   }
+  player.reality.glyphs.active = []
   generateGlyphTable();
 }

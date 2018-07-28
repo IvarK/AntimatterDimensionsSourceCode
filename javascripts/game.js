@@ -3250,10 +3250,10 @@ function reality(force) {
         if (player.thisReality<player.bestReality && !force) {
             player.bestEternity = player.thisEternity
         }
-        if (player.reality.respec) respecGlyphs()
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
         player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
+        if (player.reality.respec) respecGlyphs()
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
         player = {
             money: new Decimal(10),

@@ -637,7 +637,7 @@ function updateDimensions() {
             $("#realityStatistics").hide()
         } else {
             $("#realityStatistics").show()
-            document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
+            document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.realities === 1) ? " time." : " times.")
             document.getElementById("bestreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
             document.getElementById("thisreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
         }

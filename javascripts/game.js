@@ -2467,11 +2467,11 @@ function updateLastTenRealities() {
     document.getElementById("averageRealityRun").textContent = "Last 10 realities average time: "+ timeDisplayShort(tempTime)+" Average EP gain: "+shortenDimensions(tempRM)+" reality machines. "+tempstring
 }
 
-function addRealityTime(time, rm, power) {
+function addRealityTime(time, rm, level) {
     for (var i=player.lastTenRealities.length-1; i>0; i--) {
         player.lastTenRealities[i] = player.lastTenRealities[i-1]
     }
-    player.lastTenRealities[0] = [time, rm, power]
+    player.lastTenRealities[0] = [time, rm, level]
 }
 
 
@@ -3253,8 +3253,8 @@ function reality(force) {
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
         player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
-        if (player.reality.respec) respecGlyphs()
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
+        if (player.reality.respec) respecGlyphs()
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),
@@ -4829,7 +4829,7 @@ setInterval(function() {
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
 
-    if (player.eternities == 0 && player.realities == 0) document.getElementById("pasteternities").style.display = "none"
+    if (player.eternities == 0) document.getElementById("pasteternities").style.display = "none"
     else document.getElementById("pasteternities").style.display = "inline-block"
     if (player.realities == 0) document.getElementById("pastrealities").style.display = "none"
     else document.getElementById("pastrealities").style.display = "inline-block"

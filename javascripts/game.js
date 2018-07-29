@@ -3594,12 +3594,15 @@ function reality(force) {
             loadAutoBuyerSettings()
         }
         Marathon2 = 0;
+        toggleCrunchMode()
+        toggleCrunchMode()
+        toggleCrunchMode()
+        generateGlyphTable();
+        updateLastTenRealities()
+        updateWormholeUpgrades()
+        updateAutomatorRows()
+        if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
     }
-    generateGlyphTable();
-    updateLastTenRealities()
-    updateWormholeUpgrades()
-    updateAutomatorRows()
-    if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
 }
 
 function exitChallenge() {

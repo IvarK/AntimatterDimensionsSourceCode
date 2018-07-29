@@ -4838,9 +4838,9 @@ setInterval(function() {
     if (player.infinitied > 0 || player.eternities > 0 || player.realities > 0) document.getElementById("pastinfs").style.display = "inline-block"
     else document.getElementById("pastinfs").style.display = "none"
 
-    if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0 ) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
+    if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
     else document.getElementById("bigCrunchAnimBtn").style.display = "none"
-    if (!player.dilation.tachyonParticles.eq(0)) document.getElementById("tachyonParticleAnimBtn").style.display = "inline-block"
+    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("tachyonParticleAnimBtn").style.display = "inline-block"
     else document.getElementById("tachyonParticleAnimBtn").style.display = "none"
     if (player.realities !== 0 ) document.getElementById("realityAnimBtn").style.display = "inline-block"
     else document.getElementById("realityAnimBtn").style.display = "none"

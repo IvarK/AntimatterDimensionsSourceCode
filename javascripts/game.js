@@ -2457,7 +2457,7 @@ function updateLastTenRealities() {
         if (rmpm.gt(tempBest)) tempBest = rmpm
         var tempstring = shorten(rmpm) + " RM/min"
         if (rmpm<1) tempstring = shorten(rmpm*60) + " RM/hour"
-        document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" realities ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1]) +" reality machines and a level "+player.lastTenRealities[i][2]+" glyph. "+ tempstring
+        document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" realities ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
     }
 
     var rmpm = tempRM.dividedBy(tempTime/600)

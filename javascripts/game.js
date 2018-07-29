@@ -5196,13 +5196,11 @@ function gameLoop(diff) {
     else document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b>"
 
     if (nextAt[player.postChallUnlocked] === undefined) document.getElementById("nextchall").textContent = " "
-    else if (!isAchEnabled("r133")) {
-        document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
-        while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
-            if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
-            if (player.eternities > 6) player.challenges.push("postc"+player.postChallUnlocked)
-            updateChallenges()
-        }
+    document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
+    while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
+        if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
+        if (player.eternities > 6) player.challenges.push("postc"+player.postChallUnlocked)
+        updateChallenges()
     }
     replicantiLoop(diff)
 

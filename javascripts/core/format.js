@@ -160,7 +160,7 @@ function timeDisplay(time, decimals = true) {
   } else if (time >= 3600) {
       return Decimal.floor(time / 3600) + ((Decimal.floor((time % 86400) / 3600).eq(1)) ? " hour, " : " hours, ") + Decimal.floor((time % 3600) / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute, and " : " minutes, and ") + Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
   } else if (time >= 60) {
-      return Decimal.floor(time / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute, and " : " minutes, and ") + Decimal.floor(time % 60) + " seconds"
+      return Decimal.floor(time / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute and " : " minutes and ") + Decimal.floor(time % 60) + " seconds"
   } else return Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
 }
 

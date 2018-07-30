@@ -512,7 +512,7 @@ function buyRealityUpg(id) {
 }
 
 function updateRealityUpgrades() {
-  for (var i = 1; i <= $(".realityUpgrade").length; i++) {
+  for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
     else $("#rupg"+i).removeClass("rUpgUn")
   }
@@ -524,9 +524,9 @@ function updateRealityUpgrades() {
     else $("#rupg"+i).addClass("rUpgReqNotMet")
   }
 
-  for (i in player.reality.upg) {
-    var upg = player.reality.upg[i]
-    $("#rupg"+upg).addClass("rUpgBought")
+  for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
+    if (player.reality.upg.includes(i)) $("#rupg"+i).addClass("rUpgBought")
+    else $("#rupg"+i).removeClass("rUpgBought")
   }
 
 }

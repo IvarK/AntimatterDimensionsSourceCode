@@ -148,8 +148,8 @@ shortenMoney = function (money) {
 
 
 function timeDisplay(time, decimals = true) {
-  if (time <= 100 && decimals) return (time/10).toFixed(3) + " seconds"
-  time = Decimal.floor(time / 10)
+  if (time <= 10000 && decimals) return (time/1000).toFixed(3) + " seconds"
+  time = Decimal.floor(time / 1000)
 
 
 
@@ -170,9 +170,9 @@ function preformat(int) {
 }
 
 function timeDisplayShort(time) {
-  if (time <= 100) return (time/10).toFixed(3) + " seconds"
-  if (time <= 600) return (time/10).toFixed(2) + " seconds"
-  time = Decimal.floor(time / 10)
+  if (time <= 10000) return (time/1000).toFixed(3) + " seconds"
+  if (time <= 60000) return (time/1000).toFixed(2) + " seconds"
+  time = Decimal.floor(time / 1000)
   return preformat(Decimal.floor((time) / 3600)) + ":" + preformat(Decimal.floor((time % 3600) / 60)) + ":" + preformat(Decimal.floor(time % 60))
 
   }

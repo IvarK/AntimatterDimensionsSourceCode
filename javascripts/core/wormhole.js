@@ -69,13 +69,13 @@ function upgradeWormholeDuration() {
 function wormHoleLoop(diff) {
     
     if (player.wormhole.active) {
-        player.wormhole.phase += diff / 10 / player.wormhole.power
+        player.wormhole.phase += diff / 1000 / player.wormhole.power
         if (player.wormhole.phase >= player.wormhole.duration) {
             player.wormhole.phase = 0
             player.wormhole.active = false
         }
     } else {
-        player.wormhole.phase += diff / 10
+        player.wormhole.phase += diff / 1000
         if (player.wormhole.phase >= player.wormhole.speed) {
             player.wormhole.phase = 0
             player.wormhole.active = true

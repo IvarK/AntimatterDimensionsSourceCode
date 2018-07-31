@@ -284,7 +284,7 @@ const DAYS_FOR_ALL_ACHS = 4
 function isAchEnabled(name) {
     if (!player.achievements.includes(name)) return false
     if (player.realities == 0 && player.achievements.includes(name)) return true
-    var time = player.thisReality / 10
+    var time = player.thisReality / 1000
     var achnum = parseInt(name.split("r")[1])
     var row = Math.floor(achnum / 10)
     var col = achnum % 10
@@ -308,7 +308,7 @@ function isAchEnabled(name) {
 
 function nextAchIn() {
     
-    var time = player.thisReality / 10
+    var time = player.thisReality / 1000
     if ( time > 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return 0
     var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffBetweenRows = DAYS_FOR_ALL_ACHS * 90 * Math.pow(0.9, Math.max(player.realities-1, 0))
@@ -327,5 +327,5 @@ function nextAchIn() {
         col++
     }
 
-    return ( timeReq - time) * 10
+    return ( timeReq - time) * 1000
 }

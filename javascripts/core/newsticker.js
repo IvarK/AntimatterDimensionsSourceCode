@@ -117,14 +117,14 @@ newsArray = [//always true
 ["fucking hacker", "player.newsArray.length >= 200", "n10"],
 ["Asian man trys to steal the trophy of fastest infinty of -1 seconds, AND HE DOES IT!", 'player.newsArray.includes("c1")', "n4"],
 ["I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen, We should have listened.", 'player.newsArray.includes("b17")', "n6"],
-["I thought the update was 5 hours away... -new players after more than 5 hours of gameplay", 'player.newsArray.includes("a91") && player.totalTimePlayed >= 600*300', "n7"],
-["Somebody told me to wait five hours for the update yesterday but it's today and it still hasn't come! What do I do?", 'player.newsArray.includes("a91") && player.totalTimePlayed >= 600*300', "n8"],
+["I thought the update was 5 hours away... -new players after more than 5 hours of gameplay", 'player.newsArray.includes("a91") && player.totalTimePlayed >= 60000*300', "n7"],
+["Somebody told me to wait five hours for the update yesterday but it's today and it still hasn't come! What do I do?", 'player.newsArray.includes("a91") && player.totalTimePlayed >= 60000*300', "n8"],
 //hard
 ["You do know that you won't reach Infinity in -1 seconds, right?", "player.bestInfinityTime == 0.1", "c1"],
 ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "player.totalmoney.e >= 3e6", "c2"],  //might not be poss?
 ["Anti Emoji Movie MMMCMXCIX is a major hit!", "player.spreadingCancer >= 3999", "c3"],
 ["Achievement Unlocked!", "player.achievements.length == 88", "c4"],
-["Did you use an autoclicker for that?", "player.timestudy.studies.includes(131) && player.thisInfinityTime <= 600 && player.replicanti.galaxies >= 50", "c5"],
+["Did you use an autoclicker for that?", "player.timestudy.studies.includes(131) && player.thisInfinityTime <= 60000 && player.replicanti.galaxies >= 50", "c5"],
 ["Timing is key.", "player.thisEternity < 1", "c6"],
 ["If you want to farm infinitied, why don't you just get the time study?", "!player.timestudy.studies.includes(32) && player.infinitied > 72000 * 168", "c7"],
 ["The achievement is for two million, not two billion...", "player.infinitied > 2e9", "c8"],

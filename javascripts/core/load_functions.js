@@ -123,8 +123,8 @@ function onLoad() {
   if (player.realTimePlayed === undefined) player.realTimePlayed = player.totalTimePlayed;
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
-  if (player.bestReality === undefined) player.bestReality = 9999999999;
-  if (player.lastTenRealities === undefined) player.lastTenRealities = [[600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0], [600*60*24*31, new Decimal(1), 0]];
+  if (player.bestReality === undefined) player.bestReality = 999999999999;
+  if (player.lastTenRealities === undefined) player.lastTenRealities = [[60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0]];
   if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 5, duration: 10, phase: 0, active: false, unlocked: false }
   if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3}, seed: Math.floor(Date.now() * Math.random()+1), upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [], respec: false };
   setTheme(player.options.theme);
@@ -562,15 +562,43 @@ if (player.version < 5) {
       document.getElementById("notation").textContent = ("Notation: Brackets")
   }
 
-    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards
+    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+    if (player.version === 13) dev.updateTestSave()
+
+    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
+        //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 1;
         player.version = 13
         if (player.options.notation === "Emojis") {
             player.options.notation = "Cancer";
             document.getElementById("notation").textContent = ("Notation: Cancer");
         }
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4)
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4)
+        if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
+        if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
+        player.realTimePlayed *= 100;
+        player.totalTimePlayed *= 100;
+        player.thisInfinityTime*= 100;
+        player.thisEternity *= 100;
+        player.thisReality *= 100;
+        if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
+        else player.bestInfinityTime *= 100;
+        if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
+        else player.bestEternity *= 100;
+        for (var i=0; i<10; i++) {
+            player.lastTenEternities[i][0] *= 100;
+            player.lastTenRuns[i][0] *= 100;
+        }
+        for (var i=0; i<11; i++) {
+            player.challengeTimes[i] *= 100;
+        }
+        for (var i=0; i<8; i++) {
+            player.infchallengeTimes[i] *= 100;
+        }
+        updateLastTenRuns();
+        updateLastTenEternities();
+        updateLastTenRealities();
+        updateChallengeTimes();
     }
 
   toggleCrunchMode()

@@ -125,9 +125,9 @@ function replicantiLoop(diff) {
 
     var current = player.replicanti.amount.ln()
 
-    if (player.replicanti.unl && (diff > 5 || interval < 50 || player.timestudy.studies.includes(192))) {
-        var gained = Decimal.pow(Math.E, current +(diff*est/10))
-        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
+    if (player.replicanti.unl && (diff > 500 || interval < 50 || player.timestudy.studies.includes(192))) {
+        var gained = Decimal.pow(Math.E, current +(diff/100*est/10))
+        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
         player.replicanti.amount = Decimal.min(Number.MAX_VALUE, gained)
         if (player.timestudy.studies.includes(192)) player.replicanti.amount = gained
         replicantiTicks = 0
@@ -163,8 +163,8 @@ function replicantiLoop(diff) {
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
 
 
-    if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 600*30) giveAchievement("Is this safe?");
-    if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 150) giveAchievement("The swarm");
+    if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
+    if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && !player.timestudy.studies.includes(131)) {
         document.getElementById("replicantireset").click()

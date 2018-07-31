@@ -560,9 +560,9 @@ document.getElementById("eightMax").onclick = function () {
 
 function timeMult() {
     var mult = new Decimal(1)
-    if (player.infinityUpgrades.includes("timeMult")) mult = mult.times(Math.pow(player.totalTimePlayed / 1200, 0.15));
-    if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(Decimal.max(Math.pow(player.thisInfinityTime / 2400, 0.25), 1));
-    if (isAchEnabled("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (600*60*48), 0.05));
+    if (player.infinityUpgrades.includes("timeMult")) mult = mult.times(Math.pow(player.totalTimePlayed / 120000, 0.15));
+    if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(Decimal.max(Math.pow(player.thisInfinityTime / 240000, 0.25), 1));
+    if (isAchEnabled("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (60000*60*48), 0.05));
     return mult;
 }
 

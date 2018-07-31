@@ -233,3 +233,36 @@ dev.realize = function() {
         document.getElementById("realityanimbg").style.animation = "";
     }, 10000)
 }
+
+dev.updateTestSave = function() {
+    if (!(window.location.href.split("//")[1].length > 20)) return false
+    if (player.options.testVersion === undefined) {
+        player.options.testVersion = 1;
+        player.realTimePlayed *= 100;
+        player.totalTimePlayed *= 100;
+        player.thisInfinityTime*= 100;
+        player.thisEternity *= 100;
+        player.thisReality *= 100;
+        if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
+        else player.bestInfinityTime *= 100;
+        if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
+        else player.bestEternity *= 100;
+        if (player.bestReality === 9999999999) player.bestReality = 999999999999;
+        else player.bestReality *= 100;
+        for (var i=0; i<10; i++) {
+            player.lastTenRealities[i][0] *= 100;
+            player.lastTenEternities[i][0] *= 100;
+            player.lastTenRuns[i][0] *= 100;
+        }
+        for (var i=0; i<11; i++) {
+            player.challengeTimes[i] *= 100;
+        }
+        for (var i=0; i<8; i++) {
+            player.infchallengeTimes[i] *= 100;
+        }
+        updateLastTenRuns();
+        updateLastTenEternities();
+        updateLastTenRealities();
+        updateChallengeTimes();
+    }
+}

@@ -1830,6 +1830,7 @@ document.getElementById("notation").onclick = function () {
 
     updateLastTenRuns();
     updateLastTenEternities();
+    updateLastTenRealities();
     updateTickSpeed();
     setAchieveTooltip();
     updateCosts();
@@ -2394,7 +2395,8 @@ function updateLastTenRuns() {
         if (ippm.gt(tempBest)) tempBest = ippm
         var tempstring = shorten(ippm) + " IP/min"
         if (ippm<1) tempstring = shorten(ippm*60) + " IP/hour"
-        document.getElementById("run"+(i+1)).textContent = "The infinity "+(i+1)+" infinities ago took " + timeDisplayShort(player.lastTenRuns[i][0]) + " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
+        if (i === 0) document.getElementById("run"+(i+1)).textContent = "The infinity "+(i+1)+" infinity ago took " + timeDisplayShort(player.lastTenRuns[i][0]) + " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
+        else document.getElementById("run"+(i+1)).textContent = "The infinity "+(i+1)+" infinities ago took " + timeDisplayShort(player.lastTenRuns[i][0]) + " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
     }
 
     var ippm = tempIP.dividedBy(tempTime/600)
@@ -2424,7 +2426,8 @@ function updateLastTenEternities() {
         if (eppm.gt(tempBest)) tempBest = eppm
         var tempstring = shorten(eppm) + " EP/min"
         if (eppm<1) tempstring = shorten(eppm*60) + " EP/hour"
-        document.getElementById("eternityrun"+(i+1)).textContent = "The Eternity "+(i+1)+" eternities ago took " + timeDisplayShort(player.lastTenEternities[i][0]) + " and gave " + shortenDimensions(player.lastTenEternities[i][1]) +" EP. "+ tempstring
+        if (i === 0) document.getElementById("eternityrun"+(i+1)).textContent = "The Eternity "+(i+1)+" eternity ago took " + timeDisplayShort(player.lastTenEternities[i][0]) + " and gave " + shortenDimensions(player.lastTenEternities[i][1]) +" EP. "+ tempstring
+        else document.getElementById("eternityrun"+(i+1)).textContent = "The Eternity "+(i+1)+" eternities ago took " + timeDisplayShort(player.lastTenEternities[i][0]) + " and gave " + shortenDimensions(player.lastTenEternities[i][1]) +" EP. "+ tempstring
     }
 
     var eppm = tempEP.dividedBy(tempTime/600)
@@ -2457,7 +2460,8 @@ function updateLastTenRealities() {
         if (rmpm.gt(tempBest)) tempBest = rmpm
         var tempstring = shorten(rmpm) + " RM/min"
         if (rmpm<1) tempstring = shorten(rmpm*60) + " RM/hour"
-        document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" realities ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
+        if (i === 0) document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" reality ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
+        else document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" realities ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
     }
 
     var rmpm = tempRM.dividedBy(tempTime/600)
@@ -3559,6 +3563,7 @@ function reality(force) {
         updateChallengeTimes()
         updateLastTenRuns()
         updateLastTenEternities()
+        updateLastTenRealities()
         IPminpeak = new Decimal(0)
         EPminpeak = new Decimal(0)
         updateMilestones()
@@ -3598,7 +3603,6 @@ function reality(force) {
         toggleCrunchMode()
         toggleCrunchMode()
         generateGlyphTable();
-        updateLastTenRealities()
         updateWormholeUpgrades()
         updateAutomatorRows()
         if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true

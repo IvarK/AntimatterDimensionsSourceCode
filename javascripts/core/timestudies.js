@@ -215,7 +215,7 @@ function canBuyStudy(name) {
 }
 
 function canBuyDilationStudy(name) {
-    if (name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5) return true
+    if ((name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.amcost.log10() / 20000 + player.timestudy.ipcost.log10() / 100 + player.timestudy.epcost.log2() >= 13000 && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
     if (name == 6) {
         if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && player.timestudy.theorem >= 5000000000) return true
         else return false

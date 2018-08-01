@@ -131,8 +131,8 @@ newsArray = [//always true
 ["Keep up the quick pace!", "Marathon > 1200", "c9"],
 ["One day you will stop your incessant grind.", "player.eternities > 50000", "c10"],
 ["You can probably stop farming for eternities now...", "player.eternities > 2000000", "c11"],
-["Are you serious?", "worstChallengeTime <= 0.1", "c12"],
-["The amazing speedster", "infchallengeTimes <= 0.8", "c13"],
+["Are you serious?", "worstChallengeTime <= 10", "c12"],
+["The amazing speedster", "infchallengeTimes <= 80", "c13"],
 //luck
 ["This news message is 1000x rarer than all the others.", "Math.random() < 0.001", "l1"],
 ["You just won a small prize in the lottery.", "Math.random() < 1e-4", "l2"],

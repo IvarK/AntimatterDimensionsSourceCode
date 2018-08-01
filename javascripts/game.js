@@ -681,7 +681,7 @@ function updateDimensions() {
     if (document.getElementById("eternityupgrades").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("eter1").innerHTML = "Infinity Dimensions multiplier based on unspent EP (x+1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
         document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on eternities ((x/200)^log4(2x))<br>Currently: "+shortenMoney(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))+"x<br>Cost: 10 EP"
-        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 6.1 : 7.5)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
+        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
         document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
         document.getElementById("eter5").innerHTML = "Time Dimensions are multiplied by your unspent time theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
         document.getElementById("eter6").innerHTML = "Time Dimensions are multiplied by days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
@@ -2497,14 +2497,14 @@ function checkForEndMe() {
     for (var i=0; i<11; i++) {
         temp += player.challengeTimes[i]
     }
-    if (temp <= 1800) giveAchievement("Not-so-challenging")
-    if (temp <= 50) giveAchievement("End me")
+    if (temp <= 180000) giveAchievement("Not-so-challenging")
+    if (temp <= 5000) giveAchievement("End me")
     var temp2 = 0
     for (var i=0; i<8;i++) {
         temp2 += player.infchallengeTimes[i]
     }
     infchallengeTimes = temp2
-    if (temp2 <= 66.6) giveAchievement("Yes. This is hell.")
+    if (temp2 <= 6666) giveAchievement("Yes. This is hell.")
 }
 
 function checkForRUPG8() {
@@ -2798,7 +2798,7 @@ document.getElementById("bigcrunch").onclick = function () {
 
         try {
             kongregate.stats.submit('Infinitied', getInfinitied());
-            kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100))
+            kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime))
 
         } catch (err) {console.log("Couldn't load Kongregate API")}
         giveAchievement("To infinity!");
@@ -3826,7 +3826,7 @@ function startChallenge(name, target) {
     showTab("dimensions")
     try {
         kongregate.stats.submit('Infinitied', getInfinitied());
-        kongregate.stats.submit('Fastest Infinity time', Math.floor(player.bestInfinityTime / 10))
+        kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime))
     } catch (err) {console.log("Couldn't load Kongregate API")}
 
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
@@ -4943,7 +4943,7 @@ setInterval(function() {
     document.getElementById("infinitiedBank").style.display = (player.infinitiedBank > 0) ? "block" : "none"
     document.getElementById("infinitiedBank").textContent = "You have " + player.infinitiedBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " banked infinities."
 
-    if (infchallengeTimes < 7.5) giveAchievement("Never again")
+    if (infchallengeTimes < 750) giveAchievement("Never again")
     if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
     if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
     if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")

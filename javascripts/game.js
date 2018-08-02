@@ -591,7 +591,7 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-    if (getInfinitied() === 0) {
+    if (getInfinitied() === 0 && player.realities === 0) {
         $("#infinityStatistics").hide()
     } else {
         $("#infinityStatistics").show()
@@ -626,13 +626,15 @@ function updateDimensions() {
             document.getElementById("totalTime").textContent = "Your existance has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
         }
 
-        if (player.eternities == 0) {
+        if (player.eternities == 0 && player.realities === 0) {
             $("#eternityStatistics").hide()
         } else {
             $("#eternityStatistics").show()
+            if (player.bestEternity === 999999999999) $("#besteternity").hide()
+            else $("#besteternity").show()
             document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.eternities === 1) ? " time." : " times.")
-            document.getElementById("besteternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
-            document.getElementById("thiseternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+            document.getElementById("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+            document.getElementById("thiseternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
         }
 
         if (player.realities == 0) {
@@ -640,8 +642,8 @@ function updateDimensions() {
         } else {
             $("#realityStatistics").show()
             document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.realities === 1) ? " time." : " times.")
-            document.getElementById("bestreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
-            document.getElementById("thisreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
+            document.getElementById("bestreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
+            document.getElementById("thisreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
         }
     }
 

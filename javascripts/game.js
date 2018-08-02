@@ -4597,7 +4597,7 @@ document.getElementById("quickReset").onclick = function () {
 function updateInfPower() {
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
-    else document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(7))
+    else document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(7).max(1))
     if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
     else document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Infinity Power per second."
 }

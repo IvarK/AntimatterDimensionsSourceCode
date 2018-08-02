@@ -1850,6 +1850,7 @@ br {
     cursor: pointer;
     transition-duration: 0.12s;
     height: 100px;
+    padding: 0px;
     text-align: center;
     display: flex;
     justify-content: center;

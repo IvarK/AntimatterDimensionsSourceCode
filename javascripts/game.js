@@ -5636,7 +5636,7 @@ function gameLoop(diff) {
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
-    document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
+    document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
     if (player.wormhole.unlocked) wormHoleLoop(diff)
 
     player.lastUpdate = thisUpdate;

@@ -16,6 +16,7 @@ body {
 
 * {
     border-radius: 0px !important;
+    border-width: 1px !important;
 }
 
 input, select {
@@ -93,13 +94,15 @@ input, select {
     background: #EF5350 !important;
 }
 
-.infinitybtn {
+.infinitytabbtn {
     border: 1px solid #FF9800 !important;
+    background: #1F1F1F !important;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
-.infinitybtn:hover {
+.infinitytabbtn:hover {
     background: #FF9800 !important;
+    border: 1px solid #FF9800 !important;
 }
 
 .eternitybtn {
@@ -113,8 +116,14 @@ input, select {
 
 .eternitytabbtn {
     color: #673AB7 !important;
+    background: #000 !important;
     border: 1px solid #673AB7 !important;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
+}
+
+.eternitytabbtn:hover {
+    background: #FFF !important;
+    border: 1px solid #673AB7 !important;
 }
 
 .completedrow {
@@ -230,35 +239,29 @@ input, select {
 }
 
 .timetheorembtn {
-    background: #dedede !important;
-    color: #ff432b !important;
-    border: 1px solid #ff432b !important;
+    background: #212121 !important;
+    color: #00BCD4 !important;
+    border: 1px solid #00BCD4 !important;
 }
 
 .timetheorembtn:hover {
-    color: #dedede !important;
-    background: #ff432b !important;
+    color: #212121 !important;
+    background: #00BCD4 !important;
 }
 
 .timetheorembtnlocked {
-    color: #fff !important;
-    background: #616161 !important;
+    background: #9E9E9E !important;
     border: none !important;
-    box-shadow: 1px 1px 1px 0px #fff;
+    box-shadow: 1px 1px 1px 0px #000;
 }
 
 .timetheorembtnlocked:hover {
-    background: #10acaf !important;
-}
-
-#timetheorems, #studytreeloadsavetext {
-    color: #bbb !important;
+    background: #EF5350 !important;
 }
 
 #theorembuybackground {
-    background: #111 !important;
+    background: #EEEEEE !important;
     border-width: 1px !important;
-    border-color: #fff !important;
 }
 
 .eternitychallengestudy {

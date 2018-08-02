@@ -2871,6 +2871,7 @@ function respecToggle() {
 
 function eternity(force, auto) {
     if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
+        if (player.currentEternityChall == "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) return false
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
         if (player.thisEternity<player.bestEternity && !force) {
@@ -2922,7 +2923,7 @@ function eternity(force, auto) {
         if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e600"))) player.reality.upgReqs[10] = true
         if (player.reality.upg.includes(10) && player.eternities == 0) player.eternities = 100
         player.challenges = temp
-        player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
+        if (!force) player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),

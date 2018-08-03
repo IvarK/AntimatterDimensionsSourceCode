@@ -2918,7 +2918,6 @@ function eternity(force, auto) {
             player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
         }
         if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e600"))) player.reality.upgReqs[10] = true
-        if (player.reality.upg.includes(10) && player.eternities == 0) player.eternities = 100
         player.challenges = temp
         player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
         player = {
@@ -3559,6 +3558,7 @@ function reality(force) {
             document.getElementById("buyerBtnInf").style.display = "inline-block"
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
+        if (player.reality.upg.includes(10)) player.eternities = 100
         updateAutobuyers();
         resetInfDimensions();
         updateChallenges();

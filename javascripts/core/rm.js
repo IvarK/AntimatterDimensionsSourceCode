@@ -503,7 +503,7 @@ function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   player.reality.upg.push(id)
-  if (id == 10) {
+  if (id == 9) {
     player.reality.glyphs.slots++
     generateGlyphTable()
   }

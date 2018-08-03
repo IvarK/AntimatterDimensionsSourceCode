@@ -46,16 +46,6 @@ button {
     background: #1565C0 !important;
 }
 
-.infinitybtn {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 2px solid #FF9800 !important;
-}
-
-.infinitybtn:hover {
-    background: #FF9800 !important;
-}
-
 input {
     background-color: #455A64 !important;
     border: 1px solid black !important;
@@ -115,6 +105,26 @@ input {
 
 .secondarytabbtn {
     border: 2px solid #1565C0 !important;
+}
+
+.infinitybtn {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 2px solid #FF9800 !important;
+}
+
+.infinitybtn:hover {
+    background: #FF9800 !important;
+}
+
+.infinitytabbtn {
+    color: #000 !important;
+    background: #F5F5F5 !important;
+    border: 2px solid #FF9800 !important;
+}
+
+.infinitytabbtn:hover {
+    background: #FF9800 !important;
 }
 
 .challengediv {
@@ -561,6 +571,125 @@ input {
 #dilatedTimeAmount, #dilatedTimePerSecond, #galaxyThreshold, #dilatedGalaxies {
     color: #64DD17 !important;
     text-shadow: 0px 0px 7px #64DD17;
+}
+
+.realitytabbtn {
+    background-color: white !important;
+    border: 2px solid #0b600e !important;
+}
+
+.realitytabbtn:hover {
+    background-color: #0b600e !important;
+    color: white !important;
+}
+
+#realitymachines {
+    color: #757575 !important;
+}
+
+#timeForAchievements {
+    color: #757575 !important;
+}
+
+#realitymachine {
+    background: white !important;
+    border: 2px solid #0b600e !important;
+}
+
+#realitymachine:hover {
+    color: white !important;
+    background: #0b600e !important;
+}
+
+.realityUpgrade {
+    background-color: black !important;
+}
+
+.realityUpgrade:hover {
+    color: black !important;
+    background-color: #d5ffd7 !important;
+}
+
+.rUpgUn { 
+    color: #d5ffd7 !important;
+    background-color: #656565 !important;
+}
+
+.rUpgUn:hover {
+    color: #d5ffd7 !important;
+    background-color: #656565 !important;
+}
+
+.rUpgBought {
+    color: #d5ffd7 !important;
+    background-color: #0b600e !important;
+}
+
+.rUpgBought:hover {
+    color: #d5ffd7 !important;
+    background-color: #0b600e !important;
+}
+
+.rUpgReqNotMet {
+    color: #d5ffd7 !important;
+    background-color: rgb(165, 57, 57) !important;
+}
+
+.rUpgReqNotMet:hover {
+    color: #d5ffd7 !important;
+    background-color: rgb(165, 57, 57) !important;
+}
+
+#glyphslots .glyphactive {
+    background: #333 !important;
+}
+
+#glyphs .empty {
+    background: #333 !important;
+}
+
+#glyphs .glyphbg {
+    background: #333 !important;
+}
+
+#glyphs .glyphbg:hover {
+    background: #333 !important;
+}
+
+.automatorinstruction.command {
+    background-color: black !important;
+}
+
+.automatorinstruction.target {
+    background-color: black !important;
+}
+
+.automatorinstruction.command:hover {
+    color: black !important;
+    background-color: #d5ffd7 !important;
+}
+
+.automatorinstruction.target:hover {
+    color: black !important;
+    background-color: #BBDEFB !important;
+}
+
+.automatorinstructionbought.command {
+    background-color: #0b600e !important;
+    border: 2px solid #08450b !important;
+}
+
+.automatorinstructionbought.target {
+    background-color: #2196F3 !important;
+    border: 2px solid #1976D2 !important;
+}
+
+.automatorinstructionlocked.command {
+    background-color: #656565 !important;
+}
+
+.automatorinstructionlocked.target {
+    background-color: #656565 !important;
 }
 
 #realityanimbg {

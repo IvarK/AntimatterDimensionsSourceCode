@@ -120,6 +120,18 @@ function getReplicantiInterval() {
 
 function replicantiLoop(diff) {
     let interval = getReplicantiInterval()
+    let intervalMult = 1;
+    if (player.timestudy.studies.includes(62)) intervalMult /= 3
+    if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult *= 10
+    if (player.timestudy.studies.includes(213)) intervalMult /= 20
+    if (player.reality.upg.includes(2)) intervalMult /= 3
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "replication" && glyph.effects.speed !== undefined) intervalMult = intervalMult / glyph.effects.speed
+    }
+    if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) intervalMult /= 2
+    if (player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult = Math.max(intervalMult * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), intervalMult)
+    if (player.reality.upg.includes(6)) intervalMult /= (player.replicanti.galaxies/50)
 
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
@@ -169,8 +181,13 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && !player.timestudy.studies.includes(131)) {
         document.getElementById("replicantireset").click()
     }
-    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: "+(interval).toFixed(3)+"ms<br>-> "+Math.max(interval*0.9).toFixed(3)+" Costs: "+shortenCosts(player.replicanti.intervalCost)+" IP"
-    else document.getElementById("replicantiinterval").textContent = "Interval: "+(interval).toFixed(3)+"ms"
+    if (interval < 0.0001) var intervalPlaces = 7
+    else if (interval < 0.001) var intervalPlaces = 6
+    else if (interval < 0.01) var intervalPlaces = 5
+    else if (interval < 0.1) var intervalPlaces = 4
+    else var intervalPlaces = 3
+    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: "+(interval).toFixed(intervalPlaces)+"ms<br>-> "+Math.max(interval*0.9, 1 * intervalMult).toFixed(intervalPlaces)+" Costs: "+shortenCosts(player.replicanti.intervalCost)+" IP"
+    else document.getElementById("replicantiinterval").textContent = "Interval: "+(interval).toFixed(intervalPlaces)+"ms"
 
     var estimate = Math.max((Math.log(Number.MAX_VALUE) - current) / est, 0)
     document.getElementById("replicantiapprox").textContent ="Approximately "+ timeDisplay(estimate*1000) + " Until Infinite Replicanti"

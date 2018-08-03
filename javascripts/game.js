@@ -591,7 +591,7 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-    if (getInfinitied() === 0) {
+    if (getInfinitied() === 0 && player.realities === 0) {
         $("#infinityStatistics").hide()
     } else {
         $("#infinityStatistics").show()
@@ -626,13 +626,15 @@ function updateDimensions() {
             document.getElementById("totalTime").textContent = "Your existance has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
         }
 
-        if (player.eternities == 0) {
+        if (player.eternities == 0 && player.realities === 0) {
             $("#eternityStatistics").hide()
         } else {
             $("#eternityStatistics").show()
+            if (player.bestEternity === 999999999999) $("#besteternity").hide()
+            else $("#besteternity").show()
             document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.eternities === 1) ? " time." : " times.")
-            document.getElementById("besteternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
-            document.getElementById("thiseternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+            document.getElementById("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+            document.getElementById("thiseternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
         }
 
         if (player.realities == 0) {
@@ -640,8 +642,8 @@ function updateDimensions() {
         } else {
             $("#realityStatistics").show()
             document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.realities === 1) ? " time." : " times.")
-            document.getElementById("bestreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
-            document.getElementById("thisreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
+            document.getElementById("bestreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
+            document.getElementById("thisreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
         }
     }
 
@@ -681,7 +683,7 @@ function updateDimensions() {
     if (document.getElementById("eternityupgrades").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("eter1").innerHTML = "Infinity Dimensions multiplier based on unspent EP (x+1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
         document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on eternities ((x/200)^log4(2x))<br>Currently: "+shortenMoney(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))+"x<br>Cost: 10 EP"
-        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 6.1 : 7.5)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
+        document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
         document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
         document.getElementById("eter5").innerHTML = "Time Dimensions are multiplied by your unspent time theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
         document.getElementById("eter6").innerHTML = "Time Dimensions are multiplied by days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
@@ -1227,7 +1229,7 @@ function updateInfCosts() {
         document.getElementById("72desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))+"x"
         document.getElementById("73desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.005).max(1).min("1e1300"))+"x"
         document.getElementById("82desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0000109, Decimal.pow(player.resets, 2)))+"x"
-        document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity, 18000)/60))+"x"
+        document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
         document.getElementById("92desc").textContent = "Currently: "+shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))+"x"
         document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25))+"x"
         document.getElementById("121desc").textContent = "Currently: "+((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5).toFixed(1)+"x"
@@ -2497,14 +2499,14 @@ function checkForEndMe() {
     for (var i=0; i<11; i++) {
         temp += player.challengeTimes[i]
     }
-    if (temp <= 1800) giveAchievement("Not-so-challenging")
-    if (temp <= 50) giveAchievement("End me")
+    if (temp <= 180000) giveAchievement("Not-so-challenging")
+    if (temp <= 5000) giveAchievement("End me")
     var temp2 = 0
     for (var i=0; i<8;i++) {
         temp2 += player.infchallengeTimes[i]
     }
     infchallengeTimes = temp2
-    if (temp2 <= 66.6) giveAchievement("Yes. This is hell.")
+    if (temp2 <= 6666) giveAchievement("Yes. This is hell.")
 }
 
 function checkForRUPG8() {
@@ -2798,7 +2800,7 @@ document.getElementById("bigcrunch").onclick = function () {
 
         try {
             kongregate.stats.submit('Infinitied', getInfinitied());
-            kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100))
+            kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime))
 
         } catch (err) {console.log("Couldn't load Kongregate API")}
         giveAchievement("To infinity!");
@@ -2869,6 +2871,7 @@ function respecToggle() {
 
 function eternity(force, auto) {
     if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
+        if (player.currentEternityChall == "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) return false
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
         if (player.thisEternity<player.bestEternity && !force) {
@@ -2919,7 +2922,7 @@ function eternity(force, auto) {
         }
         if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e600"))) player.reality.upgReqs[10] = true
         player.challenges = temp
-        player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
+        if (!force) player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),
@@ -2966,7 +2969,7 @@ function eternity(force, auto) {
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
             realTimePlayed: player.realTimePlayed,
-            bestInfinityTime: 9999999999,
+            bestInfinityTime: 999999999999,
             thisInfinityTime: 0,
             resets: (player.eternities >= 4) ? 4 : 0,
             galaxies: (player.eternities >= 4) ? 1 : 0,
@@ -3306,7 +3309,7 @@ function reality(force) {
             infinitiedBank: 0,
             totalTimePlayed: player.totalTimePlayed,
             realTimePlayed: player.realTimePlayed,
-            bestInfinityTime: 9999999999,
+            bestInfinityTime: 999999999999,
             thisInfinityTime: 0,
             resets: 0,
             galaxies: 0,
@@ -3456,7 +3459,7 @@ function reality(force) {
             eternityPoints: new Decimal(0),
             eternities: 0,
             thisEternity: 0,
-            bestEternity: 9999999999,
+            bestEternity: 999999999999,
             eternityUpgrades: [],
             epmult: new Decimal(1),
             epmultCost: new Decimal(500),
@@ -3826,7 +3829,7 @@ function startChallenge(name, target) {
     showTab("dimensions")
     try {
         kongregate.stats.submit('Infinitied', getInfinitied());
-        kongregate.stats.submit('Fastest Infinity time', Math.floor(player.bestInfinityTime / 10))
+        kongregate.stats.submit('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime))
     } catch (err) {console.log("Couldn't load Kongregate API")}
 
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
@@ -4595,7 +4598,7 @@ document.getElementById("quickReset").onclick = function () {
 function updateInfPower() {
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
-    else document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(7))
+    else document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(7).max(1))
     if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
     else document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Infinity Power per second."
 }
@@ -4932,7 +4935,7 @@ setInterval(function() {
         document.getElementById("eterc8ids").style.display = "none"
     }
 
-    if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(2 * (5 - ECTimesCompleted("eterc12")), 1)) {
+    if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
         document.getElementById("challfail").style.display = "block"
         setTimeout(exitChallenge, 500)
         giveAchievement("You're a mistake")
@@ -4943,7 +4946,7 @@ setInterval(function() {
     document.getElementById("infinitiedBank").style.display = (player.infinitiedBank > 0) ? "block" : "none"
     document.getElementById("infinitiedBank").textContent = "You have " + player.infinitiedBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " banked infinities."
 
-    if (infchallengeTimes < 7.5) giveAchievement("Never again")
+    if (infchallengeTimes < 750) giveAchievement("Never again")
     if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
     if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
     if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
@@ -5204,7 +5207,7 @@ function gameLoop(diff) {
     else document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b>"
 
     if (nextAt[player.postChallUnlocked] === undefined) document.getElementById("nextchall").textContent = " "
-    document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
+    else document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
     while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
         if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
         if (player.eternities > 6) player.challenges.push("postc"+player.postChallUnlocked)
@@ -5633,7 +5636,7 @@ function gameLoop(diff) {
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
     document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
-    document.getElementById("realitymachines").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
+    document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machines."
     if (player.wormhole.unlocked) wormHoleLoop(diff)
 
     player.lastUpdate = thisUpdate;

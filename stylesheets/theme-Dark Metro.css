@@ -5,6 +5,7 @@ body {
 
 * {
     border-radius: 0px !important;
+    border-width: 1px !important;
 }
 
 .container {
@@ -112,6 +113,17 @@ input {
     background: #FF9800 !important;
 }
 
+.infinitytabbtn {
+    color: black !important;
+    background: white !important;
+    border: 1px solid #FF9800 !important;
+    box-shadow: 1px 1px 1px 0px black;
+}
+
+.infinitytabbtn:hover {
+    background: #FF9800 !important;
+}
+
 .eternitybtn {
     color: #673AB7 !important;
     border: 1px solid #673AB7 !important;
@@ -123,7 +135,13 @@ input {
 
 .eternitytabbtn {
     color: #673AB7 !important;
+    background: black !important;
     border: 1px solid #673AB7 !important;
+    box-shadow: 1px 1px 1px 0px black;
+}
+
+.eternitytabbtn:hover {
+    background: white !important;
     box-shadow: 1px 1px 1px 0px black;
 }
 
@@ -535,6 +553,41 @@ input {
 
 #dilatedTimeAmount, #dilatedTimePerSecond, #galaxyThreshold, #dilatedGalaxies {
     color: #64DD17 !important;
+}
+
+.realitytabbtn {
+    background-color: white !important;
+    border: 1px solid #0b600e !important;
+    color: #0b600e !important;
+}
+
+.realitytabbtn:hover {
+    background-color: #0b600e !important;
+    color: white !important;
+}
+
+#realitymachines {
+    color: #757575 !important;
+}
+
+#timeForAchievements {
+    color: #757575 !important;
+}
+
+#glyphslots .glyphactive {
+    background: #333 !important;
+}
+
+#glyphs .empty {
+    background: #333 !important;
+}
+
+#glyphs .glyphbg {
+    background: #333 !important;
+}
+
+#glyphs .glyphbg:hover {
+    background: #333 !important;
 }
 
 #realityanimbg {

@@ -2123,10 +2123,10 @@ function updateAutobuyers() {
     if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
     if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
 
-    document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[8].cost + " IP"
-    document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[9].cost + " IP"
-    document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[10].cost + " IP"
-    document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
+    document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[8].cost) + " IP"
+    document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[9].cost) + " IP"
+    document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[10].cost) + " IP"
+    document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[11].cost) + " IP"
 
 
     for (var i=0; i<8; i++) {

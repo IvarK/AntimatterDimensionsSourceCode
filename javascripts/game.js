@@ -2526,7 +2526,7 @@ document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1])
     if (player.currentChallenge.length == 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1])
     if ((player.money.gte(Number.MAX_VALUE) && !player.currentChallenge.includes("post")) || (player.currentChallenge !== "" && player.money.gte(player.challengeTarget))) {
-        if ((player.bestInfinityTime > 600 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
+        if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
             implosionCheck = 1;
             document.getElementById("body").style.animation = "implode 2s 1";
             setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)

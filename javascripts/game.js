@@ -623,7 +623,7 @@ function updateDimensions() {
             $("#totalTime").hide()
         } else {
             $("#totalTime").show()
-            document.getElementById("totalTime").textContent = "Your existance has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
+            document.getElementById("totalTime").textContent = "Your existence has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
         }
 
         if (player.eternities == 0 && player.realities === 0) {

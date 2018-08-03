@@ -3262,6 +3262,7 @@ function reality(force) {
         //TODO replace 1 with glyph power that you got from that reality
         player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
+        if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
         if (player.reality.respec) respecGlyphs()
         player = {
             money: new Decimal(10),
@@ -3610,7 +3611,6 @@ function reality(force) {
         generateGlyphTable();
         updateWormholeUpgrades()
         updateAutomatorRows()
-        if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
     }
 }
 

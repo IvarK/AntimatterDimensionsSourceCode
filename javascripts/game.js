@@ -2871,7 +2871,7 @@ function respecToggle() {
 
 function eternity(force, auto) {
     if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
-        if (player.currentEternityChall == "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) return false
+        if (player.currentEternityChall == "eterc4" && player.infinitied > 16 - (ECTimesCompleted("eterc4")*4)) return false
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
         if (player.thisEternity<player.bestEternity && !force) {
@@ -2879,7 +2879,7 @@ function eternity(force, auto) {
             if (player.bestEternity < 30000) giveAchievement("That wasn't an eternity");
             if (player.bestEternity <= 1) giveAchievement("Less than or equal to 0.001");
         }
-        if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
+        if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity")
         if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1))
         if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2))
         if (player.infinitied < 10 && !force) giveAchievement("Do you really need a guide for this?");

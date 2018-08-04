@@ -241,6 +241,12 @@ function buyMaxInfDims(tier) {
   buyManyInfinityDimension(tier)
 }
 
+function buyMaxInfinityDimensions() {
+    for (var i=1; i<9; i++) {
+        buyMaxInfDims(i)
+    }
+  }
+
 function switchAutoInf(tier) {
   if (player.infDimBuyers[tier-1]) {
       player.infDimBuyers[tier-1] = false

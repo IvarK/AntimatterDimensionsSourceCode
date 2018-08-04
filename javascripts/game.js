@@ -282,6 +282,7 @@ var player = {
             active: [],
             inventory: [],
             slots: 3,
+            last: ""
         },
         seed: Math.floor(Date.now() * Math.random()+1),
         upg: [],

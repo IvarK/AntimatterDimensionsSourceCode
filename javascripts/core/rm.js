@@ -92,11 +92,16 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
 function generateRandomGlyph(level) {
   var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+  for (var i=0; player.reality.glyphs.last === type; i++) {
+    type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+  }
+  player.reality.glyphs.last = type;
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
+    player.reality.glyphs.last = "power"
   }
   var idx = 0
   var hasglyph = true

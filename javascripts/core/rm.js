@@ -358,7 +358,7 @@ function generateGlyphTable() {
         html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
-          html += getDesc(glyph.type + i, (Number.isFinite(effect)) ? shorten(effect) : effect) +" <br><br>"
+          html += getDesc(glyph.type + i, formatValue(player.options.notation, effect, 2, 3)) +" <br><br>"
         }
         if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
         else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
@@ -384,7 +384,7 @@ function generateGlyphTable() {
       glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
-        glyphhtml += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"
+        glyphhtml += getDesc(glyph.type + i, formatValue(player.options.notation, effect, 2, 3)) +" <br><br>"
       }
       if (glyph.symbol !== undefined) glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
       else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"

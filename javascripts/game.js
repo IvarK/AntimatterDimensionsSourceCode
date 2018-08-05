@@ -592,7 +592,7 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-    if (getInfinitied() === 0 && player.realities === 0) {
+    if (getInfinitied() === 0 && player.realities === 0 && player.eternities === 0) {
         $("#infinityStatistics").hide()
     } else {
         $("#infinityStatistics").show()
@@ -1936,6 +1936,7 @@ function sacrifice(auto = false) {
 
 
 document.getElementById("sacrifice").onclick = function () {
+    if (player.resets < 5) return false
     if (!document.getElementById("confirmation").checked) {
         if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
             return false;

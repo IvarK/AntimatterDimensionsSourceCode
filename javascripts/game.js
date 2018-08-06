@@ -2811,7 +2811,6 @@ document.getElementById("bigcrunch").onclick = function () {
 
 
         updateAutobuyers();
-        if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
         if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
         if (isAchEnabled("r37")) player.money = new Decimal(1000);
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
@@ -3825,7 +3824,6 @@ function startChallenge(name, target) {
 
     showTab('dimensions');
     updateChallenges();
-    if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
     if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
     if (isAchEnabled("r37")) player.money = new Decimal(1000);
     if (isAchEnabled("r54")) player.money = new Decimal(2e5);

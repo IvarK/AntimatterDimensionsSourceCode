@@ -235,7 +235,6 @@ function galaxyReset() {
   if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??")
   if (player.galaxies >= 2) giveAchievement("Double Galaxy");
   if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
-  if (player.challenges.includes("challenge1")) player.money = new Decimal(100).max(player.money)
   if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
   if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
   if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);

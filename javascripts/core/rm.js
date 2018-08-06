@@ -92,11 +92,16 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
 function generateRandomGlyph(level) {
   var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+  for (var i=0; player.reality.glyphs.last === type; i++) {
+    type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+  }
+  player.reality.glyphs.last = type;
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
+    player.reality.glyphs.last = "power"
   }
   var idx = 0
   var hasglyph = true
@@ -353,7 +358,7 @@ function generateGlyphTable() {
         html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
         for (i in glyph.effects) {
           var effect = glyph.effects[i]
-          html += getDesc(glyph.type + i, (Number.isFinite(effect)) ? shorten(effect) : effect) +" <br><br>"
+          html += getDesc(glyph.type + i, (Number.isFinite(effect)) ? formatValue(player.options.notation, effect, 2, 3) : effect) +" <br><br>"
         }
         if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
         else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
@@ -379,7 +384,7 @@ function generateGlyphTable() {
       glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
-        glyphhtml += getDesc(glyph.type + i, shorten(effect)) +" <br><br>"
+        glyphhtml += getDesc(glyph.type + i, (Number.isFinite(effect)) ? formatValue(player.options.notation, effect, 2, 3) : effect) +" <br><br>"
       }
       if (glyph.symbol !== undefined) glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
       else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
@@ -456,6 +461,9 @@ function drop(ev) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
       player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
       player.reality.glyphs.active.push(glyph)
+      if (glyph.type == "power" && glyph.effects.autochall !== undefined) {
+          player.challenges = ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"];
+      }
     } else {
       var glyph = player.reality.glyphs.active.find(function(glyph) {
         return glyph.id == data

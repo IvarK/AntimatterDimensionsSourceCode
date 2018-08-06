@@ -282,6 +282,7 @@ var player = {
             active: [],
             inventory: [],
             slots: 3,
+            last: ""
         },
         seed: Math.floor(Date.now() * Math.random()+1),
         upg: [],
@@ -551,7 +552,7 @@ function updateDimensions() {
         else document.getElementById("resetLabel").textContent = 'Dimension Boost ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 
         if (player.currentChallenge == "challenge4" ? player.resets > 2 : player.resets > 3) {
-            document.getElementById("softReset").textContent = "Reset the game for a Boost"
+            document.getElementById("softReset").textContent = "Reset the game for a boost"
         } else {
             document.getElementById("softReset").textContent = "Reset the game for a new Dimension"
         }
@@ -591,7 +592,7 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-    if (getInfinitied() === 0 && player.realities === 0) {
+    if (getInfinitied() === 0 && player.realities === 0 && player.eternities === 0) {
         $("#infinityStatistics").hide()
     } else {
         $("#infinityStatistics").show()
@@ -623,7 +624,7 @@ function updateDimensions() {
             $("#totalTime").hide()
         } else {
             $("#totalTime").show()
-            document.getElementById("totalTime").textContent = "Your existance has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
+            document.getElementById("totalTime").textContent = "Your existence has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
         }
 
         if (player.eternities == 0 && player.realities === 0) {
@@ -1656,6 +1657,7 @@ function breakInfinity() {
         document.getElementById("break").textContent = "FIX INFINITY"
         giveAchievement("Limit Break")
     }
+    setAchieveTooltip()
 }
 
 function gainedInfinityPoints() {
@@ -1795,7 +1797,7 @@ function setAchieveTooltip() {
     infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e200000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed.")
     when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under "+shortenMoney(Number.MAX_VALUE)+" replicanti.")
     thinking.setAttribute('ach-tooltip', "Eternity for "+shortenCosts( new Decimal("1e600"))+" EP in 1 minute or less while dilated.")
-    thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e28000'))+" IP without any time studies while dilated.")
+    thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e28000'))+" IP without any time studies while dilated. Reward: The active time study path doesn't disable your replicanti autobuyer.")
 }
 
 document.getElementById("notation").onclick = function () {
@@ -1935,6 +1937,7 @@ function sacrifice(auto = false) {
 
 
 document.getElementById("sacrifice").onclick = function () {
+    if (player.resets < 5) return false
     if (!document.getElementById("confirmation").checked) {
         if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
             return false;
@@ -2123,10 +2126,10 @@ function updateAutobuyers() {
     if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
     if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
 
-    document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[8].cost + " IP"
-    document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[9].cost + " IP"
-    document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[10].cost + " IP"
-    document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
+    document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[8].cost) + " IP"
+    document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[9].cost) + " IP"
+    document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[10].cost) + " IP"
+    document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[11].cost) + " IP"
 
 
     for (var i=0; i<8; i++) {
@@ -2526,7 +2529,7 @@ document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1])
     if (player.currentChallenge.length == 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1])
     if ((player.money.gte(Number.MAX_VALUE) && !player.currentChallenge.includes("post")) || (player.currentChallenge !== "" && player.money.gte(player.challengeTarget))) {
-        if ((player.bestInfinityTime > 600 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
+        if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
             implosionCheck = 1;
             document.getElementById("body").style.animation = "implode 2s 1";
             setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
@@ -2549,7 +2552,7 @@ document.getElementById("bigcrunch").onclick = function () {
         if (player.currentChallenge != "" && player.challengeTimes[challNumber-2] > player.thisInfinityTime) player.challengeTimes[challNumber-2] = player.thisInfinityTime
         if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber-1] > player.thisInfinityTime) player.infchallengeTimes[challNumber-1] = player.thisInfinityTime
         if (player.currentChallenge == "postc5" && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong")
-        if ((player.bestInfinityTime > 600 && !player.break) || (player.currentChallenge != "" && !player.options.retryChallenge)) showTab("dimensions")
+        if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge != "" && !player.options.retryChallenge)) showTab("dimensions")
         if (player.currentChallenge == "challenge5") {
             try {
                 kongregate.stats.submit('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime));
@@ -2809,7 +2812,7 @@ document.getElementById("bigcrunch").onclick = function () {
 
 
         updateAutobuyers();
-        if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
+        if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
         if (isAchEnabled("r37")) player.money = new Decimal(1000);
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
         if (isAchEnabled("r55")) player.money = new Decimal(1e10);
@@ -2871,7 +2874,7 @@ function respecToggle() {
 
 function eternity(force, auto) {
     if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
-        if (player.currentEternityChall == "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) return false
+        if (player.currentEternityChall == "eterc4" && player.infinitied > 16 - (ECTimesCompleted("eterc4")*4)) return false
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
         if (player.thisEternity<player.bestEternity && !force) {
@@ -2879,7 +2882,7 @@ function eternity(force, auto) {
             if (player.bestEternity < 30000) giveAchievement("That wasn't an eternity");
             if (player.bestEternity <= 1) giveAchievement("Less than or equal to 0.001");
         }
-        if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
+        if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity")
         if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1))
         if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2))
         if (player.infinitied < 10 && !force) giveAchievement("Do you really need a guide for this?");
@@ -2887,7 +2890,7 @@ function eternity(force, auto) {
         if (player.dimlife && !force) giveAchievement("8 nobody got time for that")
         if (player.dead && !force) giveAchievement("You're already dead.")
         if (player.infinitied <= 1 && !force) giveAchievement("Do I really need to infinity")
-        if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 600 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!")
+        if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!")
         temp = []
         player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
         addEternityTime(player.thisEternity, gainedEternityPoints())
@@ -3181,6 +3184,7 @@ function eternity(force, auto) {
         }
         
         updateAutobuyers();
+        if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
         if (isAchEnabled("r37")) player.money = new Decimal(1000);
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
         if (isAchEnabled("r55")) player.money = new Decimal(1e10);
@@ -3262,6 +3266,7 @@ function reality(force) {
         //TODO replace 1 with glyph power that you got from that reality
         player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
+        if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
         if (player.reality.respec) respecGlyphs()
         player = {
             money: new Decimal(10),
@@ -3610,7 +3615,6 @@ function reality(force) {
         generateGlyphTable();
         updateWormholeUpgrades()
         updateAutomatorRows()
-        if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
     }
 }
 
@@ -3821,7 +3825,7 @@ function startChallenge(name, target) {
 
     showTab('dimensions');
     updateChallenges();
-    if (player.challenges.includes("challenge1")) player.money = new Decimal(100)
+    if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
     if (isAchEnabled("r37")) player.money = new Decimal(1000);
     if (isAchEnabled("r54")) player.money = new Decimal(2e5);
     if (isAchEnabled("r55")) player.money = new Decimal(1e10);
@@ -4382,6 +4386,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         updateAutobuyers();
+        if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
         if (isAchEnabled("r37")) player.money = new Decimal(1000);
         if (isAchEnabled("r54")) player.money = new Decimal(2e5);
         if (isAchEnabled("r55")) player.money = new Decimal(1e10);

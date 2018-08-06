@@ -65,11 +65,11 @@ function replicantiGalaxy() {
 function replicantiGalaxyAutoToggle() {
   if (player.replicanti.galaxybuyer) {
       player.replicanti.galaxybuyer = false
-      if (player.timestudy.studies.includes(131)) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
+      if (player.timestudy.studies.includes(131) && !isAchEnabled("r138")) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
       else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"
   } else {
       player.replicanti.galaxybuyer = true
-      if (player.timestudy.studies.includes(131)) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
+      if (player.timestudy.studies.includes(131) && !isAchEnabled("r138")) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
       else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON"
   }
 }
@@ -178,7 +178,7 @@ function replicantiLoop(diff) {
     if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
-    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && !player.timestudy.studies.includes(131)) {
+    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
         document.getElementById("replicantireset").click()
     }
     if (interval < 0.0001) var intervalPlaces = 7

@@ -214,7 +214,7 @@ if (player.currentChallenge == "postc2") {
 
   player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
   updateTickSpeed()
-  if (player.challenges.includes("challenge1")) player.money = new Decimal(100).max(player.money)
+  if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
   if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
   if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
   if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);

@@ -99,7 +99,7 @@ function buyTimeStudy(name, cost, check) {
       } else {
           document.getElementById(""+name).className = "timestudybought"
       }
-      if (name == 131) {
+      if (name == 131 && !isAchEnabled("r138")) {
         if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
         else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
       }
@@ -111,17 +111,17 @@ function buyTimeStudy(name, cost, check) {
 }
 
 function buyDilationStudy(name, cost) {
-    if (player.timestudy.theorem >= cost && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
+    if ((player.timestudy.theorem >= cost || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
         if (name === 1) {
             showEternityTab("dilation")
             document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
         }
         if (name === 6) {
             showTab("reality")
-            document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Cost: 5,000,000,000 Time Theorems"
         }
         player.dilation.studies.push(name)
-        player.timestudy.theorem -= cost
+        if (name !== 6) player.timestudy.theorem -= cost
+        else if (player.realities === 0 && name === 6) player.timestudy.theorem -= cost
         document.getElementById("dilstudy"+name).className = "dilationupgbought"
         updateTheoremButtons()
         updateTimeStudyButtons()
@@ -217,7 +217,7 @@ function canBuyStudy(name) {
 function canBuyDilationStudy(name) {
     if ((name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.amcost.log10() / 20000 + player.timestudy.ipcost.log10() / 100 + player.timestudy.epcost.log2() >= 13000 && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
     if (name == 6) {
-        if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && player.timestudy.theorem >= 5000000000) return true
+        if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true
         else return false
     }
     if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= parseInt(document.getElementById("dilstudy"+name).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""))) return true
@@ -275,6 +275,11 @@ function updateTimeStudyButtons() {
     else if (canBuyDilationStudy(i)) document.getElementById("dilstudy"+i).className = "dilationupg"
     else document.getElementById("dilstudy"+i).className = "timestudylocked"
   }
+
+  if (player.dilation.studies.includes(6) && player.realities === 0) document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Cost: 5,000,000,000 Time Theorems"
+  else if (player.realities === 0) document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP<span>Cost: 5,000,000,000 Time Theorems"
+  else if (player.dilation.studies.includes(6)) document.getElementById("dilstudy6").innerHTML = "Unlock reality"
+  else document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP"
 }
 
 function studiesUntil(id) {

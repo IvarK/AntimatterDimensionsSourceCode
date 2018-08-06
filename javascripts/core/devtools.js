@@ -265,4 +265,8 @@ dev.updateTestSave = function() {
         updateLastTenRealities();
         updateChallengeTimes();
     }
+    if (player.options.testVersion === 1) {
+        player.options.testVersion = 2;
+        player.reality.glyphs.last = "";
+    }
 }

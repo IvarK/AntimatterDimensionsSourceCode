@@ -1657,6 +1657,7 @@ function breakInfinity() {
         document.getElementById("break").textContent = "FIX INFINITY"
         giveAchievement("Limit Break")
     }
+    setAchieveTooltip()
 }
 
 function gainedInfinityPoints() {

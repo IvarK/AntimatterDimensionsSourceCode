@@ -289,7 +289,7 @@ function isAchEnabled(name) {
     var row = Math.floor(achnum / 10)
     var col = achnum % 10
     var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 90 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffFromMiddle = (row - 7) * diffBetweenRows
     var timeReq = 0
     for ( var i = 1; i < row; i++) {
@@ -311,7 +311,7 @@ function nextAchIn() {
     var time = player.thisReality / 1000
     if ( time > 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return 0
     var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 90 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var timeReq = 0
     var row = 1
     while (time > timeReq) {

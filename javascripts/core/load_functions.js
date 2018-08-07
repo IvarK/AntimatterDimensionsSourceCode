@@ -743,7 +743,7 @@ function change_save(saveId) {
   IPminpeak = new Decimal(0)
   EPminpeak = new Decimal(0)
   player = saves[saveId] || defaultStart;
-  save_game(true);
+  save_game(true, false);
   load_game();
   updateChallenges()
   transformSaveToDecimal()

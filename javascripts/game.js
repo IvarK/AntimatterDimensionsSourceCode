@@ -1581,7 +1581,7 @@ document.getElementById("importbtn").onclick = function () {
         mult18 = new Decimal(1)
         ec10bonus = new Decimal(1)
         player = save_data;
-        save_game();
+        save_game(false, true);
         load_game();
         updateChallenges()
         transformSaveToDecimal()

@@ -23,7 +23,7 @@ function buyWithIP() {
 }
 
 function buyWithEP() {
-  if (player.timeDimension1.bought < 1) {
+  if (player.timeDimension1.bought < 1 && player.realities === 0) {
       alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.")
       return false;
   }

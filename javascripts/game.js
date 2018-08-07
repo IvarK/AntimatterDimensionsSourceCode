@@ -1756,7 +1756,7 @@ function setAchieveTooltip() {
     let speed = document.getElementById("Ludicrous Speed")
     let speed2 = document.getElementById("I brake for nobody")
     let overdrive = document.getElementById("MAXIMUM OVERDRIVE")
-    let minute = document.getElementById("Minute of infinity")
+    let minute = document.getElementById("4.3333 minutes of Infinity")
     let infiniteIP = document.getElementById("Can you get infinite IP?")
     let over9000 = document.getElementById("IT'S OVER 9000")
     let dawg = document.getElementById("Yo dawg, I heard you liked infinities...")
@@ -4964,7 +4964,7 @@ setInterval(function() {
     if (player.money.gte("1e35000")) giveAchievement("I got a few to spare")
     if (player.infinityPower.gt(1)) giveAchievement("A new beginning.");
     if (player.infinityPower.gt(1e6)) giveAchievement("1 million is a lot"); //TBD
-    if (player.infinityPower.gt(1e260)) giveAchievement("Minute of infinity"); //TBD
+    if (player.infinityPower.gt(1e260)) giveAchievement("4.3333 minutes of Infinity"); //TBD
     if (player.totalTickGained >= 308) giveAchievement("Infinite time");
     if (player.firstPow >= 10e30) giveAchievement("I forgot to nerf that")
     if (player.money >= 10e79) giveAchievement("Antimatter Apocalypse")

@@ -66,7 +66,7 @@ const allAchievements = {
   r91 : "Ludicrous Speed",
   r92 : "I brake for nobody",
   r93 : "MAXIMUM OVERDRIVE",
-  r94 : "Minute of infinity",
+  r94 : "4.3333 minutes of Infinity",
   r95 : "Is this safe?",
   r96 : "Time is relative",
   r97 : "Yes. This is hell.",

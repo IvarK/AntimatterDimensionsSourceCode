@@ -80,12 +80,13 @@ function drawAnimations(ts){
                 else particles["particle"+i].velocityY += 10
                 }
             point(particles["particle"+i].goalX, particles["particle"+i].goalY, ctx3)
-            particles["particle"+i].goalX += particles["particle"+i].velocityX
-            particles["particle"+i].goalY += particles["particle"+i].velocityY
+            particles["particle"+i].goalX += particles["particle"+i].velocityX * delta * 60
+            particles["particle"+i].goalY += particles["particle"+i].velocityY * delta * 60
         }
     }
     delta = (ts - lastTs) / 1000;
     lastTs = ts;
+    console.log(delta)
     if (player.options.animations.tachyonParticles) requestAnimationFrame(drawAnimations);
 }
 

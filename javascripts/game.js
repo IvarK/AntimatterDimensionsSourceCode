@@ -3615,6 +3615,7 @@ function reality(force) {
         generateGlyphTable();
         updateWormholeUpgrades()
         updateAutomatorRows()
+        updateAutomatorTree()
     }
 }
 

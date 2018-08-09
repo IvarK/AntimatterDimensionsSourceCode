@@ -562,7 +562,10 @@ function toggleGlyphRespec() {
 }
 
 function respecGlyphs() {
-  var idx = 1
+  var idx = 0
+  for (i in player.reality.glyphs.inventory) {
+    idx++
+  }
   for (i in player.reality.glyphs.active) {
     console.log(idx)
     var glyph = player.reality.glyphs.active[i]

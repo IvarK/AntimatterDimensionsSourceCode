@@ -389,7 +389,12 @@ function generateGlyphTable() {
       glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
       for (i in glyph.effects) {
         var effect = glyph.effects[i]
-        glyphhtml += getDesc(glyph.type + i, (Number.isFinite(effect)) ? formatValue(player.options.notation, effect, 2, 3) : effect) +" <br><br>"
+        var precision = 3
+        var formattedAmount = effect
+        if (effect >= 1 && effect < 2) precision = 4
+        if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+        else formattedAmount = effect.toPrecision(precision)
+        glyphhtml += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
       }
       if (glyph.symbol !== undefined) glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
       else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"

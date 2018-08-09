@@ -41,7 +41,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
  * infMult: multiplier to Infinitied stat gain
  * 
  */
-const infinityEffects = ["pow", "rate", "ipgain", "infMult"]
+const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 
 /**
  * pow: dim mult ^ x

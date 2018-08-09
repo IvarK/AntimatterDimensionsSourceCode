@@ -3567,6 +3567,8 @@ function reality(force) {
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
         if (player.reality.upg.includes(10)) player.eternities = 100
+
+        if (player.realities == 4) player.reality.automatorCommands = [12, 23, 24]
         updateAutobuyers();
         resetInfDimensions();
         updateChallenges();

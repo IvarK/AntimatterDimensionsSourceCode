@@ -351,6 +351,7 @@ function loadScript(num) {
 }
 
 function buyAutomatorInstruction(id, cost) {
+  if (!canBuyAutomatorInstruction(id)) return false
   if (player.reality.realityMachines.lt(cost)) return false
   if (player.reality.automatorCommands.includes(id)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
@@ -364,9 +365,36 @@ function buyAutomatorInstruction(id, cost) {
   return true
 }
 
+// child: parent
+var automatorparents = {
+  21: 11,
+  22: 11,
+  31: 11,
+  32: 11,
+  41: 11,
+  42: 11,
+  51: 41,
+  52: 42,
+  53: 43,
+  54: 44,
+  61: 51,
+  62: 52,
+  63: 54,
+  64: 54,
+  71: 61,
+  72: 62,
+  73: 64,
+  81: 71,
+  82: 71,
+  83: 73,
+  84: 73,
+}
+
 function canBuyAutomatorInstruction(id) {
   if (player.reality.realityMachines.lt(instructionCosts[allInstructions.indexOf(id)])) return false
-  return true
+  var parent = automatorparents[id]
+  if (parent === undefined || player.reality.automatorCommands.includes(parent)) return true
+  return false
 }
 
 var allInstructions = [11, 12, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]

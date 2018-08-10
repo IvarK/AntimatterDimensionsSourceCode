@@ -362,6 +362,7 @@ function generateGlyphTable() {
           var formattedAmount = effect
           if (effect >= 1 && effect < 2) precision = 4
           if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+          else if (effect === true) formattedAmount = effect
           else formattedAmount = effect.toPrecision(precision)
           html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
         }
@@ -393,6 +394,7 @@ function generateGlyphTable() {
         var formattedAmount = effect
         if (effect >= 1 && effect < 2) precision = 4
         if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+        else if (effect === true) formattedAmount = effect
         else formattedAmount = effect.toPrecision(precision)
         glyphhtml += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
       }

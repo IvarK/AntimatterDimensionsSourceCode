@@ -196,7 +196,7 @@ function dilationGlyph(glyph, effectAmount) {
         break;
         
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/100
+        glyph.effects.pow = 1.01 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/75
         break;
     }
   }
@@ -248,7 +248,7 @@ function infinityGlyph(glyph, effectAmount) {
         break;
 
       case "rate":
-        glyph.effects.rate = Math.pow(glyph.level * glyph.strength, 0.5) * 4
+        glyph.effects.rate = Math.pow(glyph.level * glyph.strength, 0.5) * 0.2
         break;
 
       case "ipgain":
@@ -256,7 +256,7 @@ function infinityGlyph(glyph, effectAmount) {
         break;
         
       case "infmult":
-        glyph.effects.ipgain = Math.pow(glyph.level * glyph.strength, 5) * 100
+        glyph.effects.infmult = glyph.level * glyph.strength + 1
         break;
     }
   }

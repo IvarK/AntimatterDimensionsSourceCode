@@ -324,7 +324,7 @@ function getDesc(typeeffect, x) {
     dilationpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
     replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     replicationpow: "Replicanti multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationdtgain: "Multiply DT gain by replicanti amount ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationdtgain: "Multiply DT gain by log10(replicanti) x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     replicationglyphlevel: "Glyph level modifier from replicanti. ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseInt(x)).toFixed(2) + "</span>", // Implemented
     infinitypow: "Infinity dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseInt(x)).toFixed(1) + "</span>", // Implemented
@@ -362,6 +362,7 @@ function generateGlyphTable() {
           var formattedAmount = effect
           if (effect >= 1 && effect < 2) precision = 4
           if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+          else if (effect === true) formattedAmount = effect
           else formattedAmount = effect.toPrecision(precision)
           html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
         }
@@ -393,6 +394,7 @@ function generateGlyphTable() {
         var formattedAmount = effect
         if (effect >= 1 && effect < 2) precision = 4
         if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+        else if (effect === true) formattedAmount = effect
         else formattedAmount = effect.toPrecision(precision)
         glyphhtml += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
       }

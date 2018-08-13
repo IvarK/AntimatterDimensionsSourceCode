@@ -242,6 +242,7 @@ function buyMaxInfDims(tier) {
 }
 
 function buyMaxInfinityDimensions() {
+    if (player.currentEternityChall == "eterc8") return false;
     for (var i=1; i<9; i++) {
         buyMaxInfDims(i)
     }

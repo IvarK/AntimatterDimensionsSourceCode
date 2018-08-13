@@ -5321,7 +5321,7 @@ function gameLoop(diff) {
 
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "dilation" && glyph.effects.TTgen !== undefined) player.timestudy.theorem = player.timestudy.theorem.plus(glyph.effects.TTgen*diff/1000)
+        if (glyph.type == "dilation" && glyph.effects.TTgen !== undefined) player.timestudy.theorem += glyph.effects.TTgen*diff/1000
     }
 
 

@@ -196,7 +196,7 @@ function dilationGlyph(glyph, effectAmount) {
         break;
         
       case "pow":
-        glyph.effects.pow = 1.01 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/75
+        glyph.effects.pow = 1.02 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/50
         break;
     }
   }

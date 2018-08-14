@@ -2652,7 +2652,7 @@ document.getElementById("bigcrunch").onclick = function () {
             currentChallenge: player.currentChallenge,
             infinityUpgrades: player.infinityUpgrades,
             infinityPoints: player.infinityPoints,
-            infinitied: player.infinitied + infGain,
+            infinitied: player.infinitied + Math.round(infGain),
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
             realTimePlayed: player.realTimePlayed,

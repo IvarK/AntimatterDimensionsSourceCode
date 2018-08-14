@@ -1469,6 +1469,25 @@ document.getElementById("exportbtn").onclick = function () {
     output.focus();
     output.select();
 
+    if (player.pastebinkey) {
+        $.ajax({
+            type: "POST",
+            url: "http://pastebin.com/api/api_post.php",
+            data: {
+                api_option: "paste",
+                api_dev_key: player.pastebinkey,
+                api_paste_name: Date.now(),
+                api_paste_code: encodeURIComponent(output.value)  
+            },
+            success: function(response) {
+                window.open(response)
+            },
+            fail: function(response) {
+                console.log(response)
+            }
+        })
+    }
+
     try {
         if (document.execCommand('copy')) {
             $.notify("exported to clipboard", "info");

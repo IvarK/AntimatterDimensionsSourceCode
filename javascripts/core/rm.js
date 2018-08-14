@@ -224,7 +224,7 @@ function replicationGlyph(glyph, effectAmount) {
         break;
 
       case "dtgain":
-        glyph.effects.dtgain = 0.0001 * Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.65) // player.replicanti.e * x
+        glyph.effects.dtgain = 0.0003 * Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.65) // player.replicanti.e * x
         break;
         
       case "glyphlevel":

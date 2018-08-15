@@ -2623,10 +2623,18 @@ document.getElementById("bigcrunch").onclick = function () {
                 if (failureCount > 9) giveAchievement("You're a failure")
             }
         }
+
+        if (player.realities > 0 && player.eternities == 0 && player.infinitied == 0) {
+            if ( checkForRUPG8() ) player.reality.upgReqs[8] = true;
+        }
+
         if (autoS && auto) {
           if (gainedInfinityPoints().dividedBy(player.thisInfinityTime/100).gt(player.autoIP) && !player.break) player.autoIP = gainedInfinityPoints().dividedBy(player.thisInfinityTime/100);
           if (player.thisInfinityTime<player.autoTime) player.autoTime = player.thisInfinityTime;
         }
+
+        
+
         auto = autoS; //only allow autoing if prev crunch was autoed
         autoS = true;
         player = {
@@ -2868,9 +2876,6 @@ document.getElementById("bigcrunch").onclick = function () {
 
         Marathon2 = 0;
 
-        if (player.realities > 0 && player.eternities == 0 && player.infinitied == 1) {
-            if ( checkForRUPG8() ) player.reality.upgReqs[8] = true;
-        }
 
     }
   updateChallenges();
@@ -3588,6 +3593,7 @@ function reality(force) {
         if (player.reality.upg.includes(10)) player.eternities = 100
 
         if (player.realities == 4) player.reality.automatorCommands = [12, 23, 24]
+        player.reality.upgReqChecks = [true]
         updateAutobuyers();
         resetInfDimensions();
         updateChallenges();
@@ -5023,8 +5029,8 @@ setInterval(function() {
     if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
 
-    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities, 0)) ) )
-
+    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) )
+    if (player.realities == 0) $("#timeForAchievements").text("")
     if (player.realities > 3) {
         $("#automatorUnlock").hide()
         $(".automator-container").show()

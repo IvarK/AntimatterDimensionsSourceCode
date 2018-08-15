@@ -505,7 +505,7 @@ function drop(ev) {
   mouseOn = $("document")
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15]
+const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50]
 
 function canBuyRealityUpg(id) {
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM

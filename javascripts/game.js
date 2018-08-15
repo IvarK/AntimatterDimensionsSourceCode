@@ -5332,7 +5332,7 @@ function gameLoop(diff) {
         let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
         for (i in player.reality.glyphs.active) {
             var glyph = player.reality.glyphs.active[i]
-            if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult = thresholdMult.times(glyph.effects.galaxyThreshold)
+            if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
         }
 
         thresholdMult += 1.35

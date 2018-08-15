@@ -89,7 +89,6 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
     u = random(); 
     v = random();
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
-    console.log("u: "+u + "\nv: " + v + "\nret: " +ret)
   }
   return ret;
 }

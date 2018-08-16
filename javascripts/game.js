@@ -3330,7 +3330,7 @@ function reality(force) {
             eightPow: new Decimal(1),
             sacrificed: new Decimal(0),
             achievements: player.achievements,
-            challenges: [],
+            challenges: player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
             currentChallenge: "",
             infinityUpgrades: [],
             infinityPoints: new Decimal(0),
@@ -3340,17 +3340,17 @@ function reality(force) {
             realTimePlayed: player.realTimePlayed,
             bestInfinityTime: 999999999999,
             thisInfinityTime: 0,
-            resets: 0,
-            galaxies: 0,
+            resets: player.reality.upg.includes(10) ? 4 : 0,
+            galaxies: player.reality.upg.includes(10) ? 1 : 0,
             tickDecrease: 0.9,
             totalmoney: player.totalmoney,
             interval: null,
             lastUpdate: player.lastUpdate,
             achPow: player.achPow,
-            autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            autobuyers: player.reality.upg.includes(10) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             partInfinityPoint: 0,
             partInfinitied: 0,
-            break: false,
+            break: player.reality.upg.includes(10) ? player.break :false,
             costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
             tickspeedMultiplier: new Decimal(10),
             chall2Pow: 1,
@@ -3365,10 +3365,10 @@ function reality(force) {
             lastTenRealities: player.lastTenRealities,
             infMult: new Decimal(1),
             infMultCost: new Decimal(10),
-            tickSpeedMultDecrease: 10,
-            tickSpeedMultDecreaseCost: 3e6,
-            dimensionMultDecrease: 10,
-            dimensionMultDecreaseCost: 1e8,
+            tickSpeedMultDecrease: player.reality.upg.includes(10) ? player.tickSpeedMultDecrease : 10,
+            tickSpeedMultDecreaseCost: player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6,
+            dimensionMultDecrease: player.reality.upg.includes(10) ? player.dimensionMultDecrease : 10,
+            dimensionMultDecreaseCost: player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8,
             version: player.version,
             postChallUnlocked: 0,
             postC4Tier: 1,
@@ -3493,13 +3493,13 @@ function reality(force) {
             epmult: new Decimal(1),
             epmultCost: new Decimal(500),
             totalTickGained: 0,
-            offlineProd: 0,
-            offlineProdCost: 1e7,
+            offlineProd: player.reality.upg.includes(10) ? player.offlineProd : 0,
+            offlineProdCost: player.reality.upg.includes(10) ? player.offlineProdCost : 1e7,
             challengeTarget: 0,
-            autoSacrifice: 1,
+            autoSacrifice: player.reality.upg.includes(10) ? player.autoSacrifice : 1,
             replicanti: {
-                amount: new Decimal(0),
-                unl: false,
+                amount: player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0),
+                unl: player.reality.upg.includes(10) ? true : false,
                 chance: 0.01,
                 chanceCost: new Decimal(1e150),
                 interval: 1000,
@@ -3507,7 +3507,7 @@ function reality(force) {
                 gal: 0,
                 galaxies: 0,
                 galCost: new Decimal(1e170),
-                galaxybuyer: undefined,
+                galaxybuyer: player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined,
                 auto: [false, false, false]
             },
             timestudy: {
@@ -3559,6 +3559,8 @@ function reality(force) {
             options: player.options
         };
 
+        if (player.reality.upg.includes(10)) player.eternities = 100
+        
         if (player.eternities <= 30) {
             document.getElementById("secondRow").style.display = "none";
             document.getElementById("thirdRow").style.display = "none";
@@ -3590,7 +3592,6 @@ function reality(force) {
             document.getElementById("buyerBtnInf").style.display = "inline-block"
             document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
         }
-        if (player.reality.upg.includes(10)) player.eternities = 100
 
         if (player.realities == 4) player.reality.automatorCommands = [12, 23, 24]
         player.reality.upgReqChecks = [true]

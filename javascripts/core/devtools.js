@@ -96,6 +96,12 @@ dev.refundTimeDims = function() {
     dev.updateCosts()
 }
 
+dev.refundEPMult = function() {
+    player.epmult = new Decimal(1)
+    player.epmultCost = new Decimal(500)
+    document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
+}
+
 dev.calculateTimeStudiesCost = function() {
     var totalCost = 0;
     for (var i=0; i<all.length; i++) {
@@ -166,41 +172,54 @@ dev.refundDilStudies = function() {
 }
 
 dev.generateSpecialGlyph = function(color, symbol, level) {
-    var type = GLYPH_TYPES[Math.floor(Math.random() * GLYPH_TYPES.length)]
+    var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+    for (var i=0; player.reality.glyphs.last === type; i++) {
+      type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+    }
+    player.reality.glyphs.last = type;
     var strength = gaussian_bell_curve()
-    var effectAmount = Math.min(Math.floor(Math.pow(Math.random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+    var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+    if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
+      type = "power"
+      effectAmount = 1
+      player.reality.glyphs.last = "power"
+    }
     var idx = 0
     var hasglyph = true
     while (hasglyph) {
-        var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
-        if (slot !== undefined) idx++;
-        else hasglyph = false
+      var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
+      if (slot !== undefined) idx++;
+      else hasglyph = false
     }
     var glyph = {
-        id: Date.now(),
-        idx: idx,
-        type: type,
-        strength: strength,
-        level: level,
-        color: color,
-        symbol: symbol,
-        effects: {}
+      id: Date.now(),
+      idx: idx,
+      type: type,
+      strength: strength,
+      level: level,
+      color: color,
+      symbol: symbol,
+      effects: {}
     }
     switch(type) {
-        case "time":
+      case "time":
         return timeGlyph(glyph, effectAmount)
         break;
-    
-        case "dilation":
+  
+      case "dilation":
         return dilationGlyph(glyph, effectAmount)
         break;
-    
-        case "replication":
+  
+      case "replication":
         return replicationGlyph(glyph, effectAmount)
         break;
-    
-        case "infinity":
+  
+      case "infinity":
         return infinityGlyph(glyph, effectAmount)
+        break;
+  
+      case "power":
+        return powerGlyph(glyph, effectAmount)
         break;
     }
 }
@@ -208,6 +227,10 @@ dev.generateSpecialGlyph = function(color, symbol, level) {
 dev.giveSpecialGlyph = function(color, symbol, level) {
     player.reality.glyphs.inventory.push(dev.generateSpecialGlyph(color, symbol, level))
     generateGlyphTable();
+}
+
+dev.giveMusicGlyph = function() {
+    dev.giveSpecialGlyph("#FF80AB", "266b", 0)
 }
 
 dev.giveGlyph = function() {
@@ -218,6 +241,10 @@ dev.giveGlyph = function() {
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
     updateAchievements();
+}
+
+dev.removeAch = function(name) {
+    player.achievements.splice(player.achievements.indexOf(name), 1);
 }
 
 dev.realize = function() {

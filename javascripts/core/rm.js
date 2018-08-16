@@ -428,6 +428,13 @@ function generateGlyphTable() {
 }
 
 function deleteGlyph(id) {
+  var n = player.reality.glyphs.inventory.find(function(glyph) {
+    return glyph.id == id
+  })
+  if (n.symbol === "266b") {
+    var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
+    tempAudio.play();
+  }
   if (!shiftDown) return false;
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory

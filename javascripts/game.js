@@ -5675,17 +5675,23 @@ function gameLoop(diff) {
     player.lastUpdate = thisUpdate;
 }
 
-function simulateTime(seconds, real) {
+function simulateTime(seconds, real, fast) {
 
     //the game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted into a higher diff per tick
     //warning: do not call this function with real unless you know what you're doing
+    //calling it with fast will only simulate it with a max of 50 ticks
     document.getElementById("offlineprogress").style.display = "block"
     var ticks = seconds * 20;
     var bonusDiff = 0;
     var playerStart = Object.assign({}, player);
-    if (ticks > 1000 && !real) {
+    if (ticks > 1000 && !real && !fast) {
         bonusDiff = (ticks - 1000) / 20;
+        console.log(bonusDiff)
         ticks = 1000;
+    } else if (ticks > 50 && fast) {
+        bonusDiff = (ticks - 50);
+        console.log(bonusDiff)
+        ticks = 50;
     }
     let ticksDone = 0
     for (ticksDone=0; ticksDone<ticks; ticksDone++) {

@@ -2947,7 +2947,7 @@ function eternity(force, auto) {
             player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain())
             player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
         }
-        if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e600"))) player.reality.upgReqs[10] = true
+        if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e400"))) player.reality.upgReqs[10] = true
         player.challenges = temp
         if (!force) player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
         player = {

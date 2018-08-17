@@ -2612,7 +2612,7 @@ document.getElementById("bigcrunch").onclick = function () {
           var glyph = player.reality.glyphs.active[i]
           if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
         }
-        if (player.reality.upg.includes(7)) infGain *= (player.galaxies/30)
+        if (player.reality.upg.includes(7)) infGain *= Math.max(player.galaxies/30, 1)
         if (player.currentEternityChall == "eterc4") {
             infGain = 1
             if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {

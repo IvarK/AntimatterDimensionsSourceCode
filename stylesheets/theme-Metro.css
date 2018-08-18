@@ -3,6 +3,10 @@
     border-width: 1px !important;
 }
 
+.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
+    border-radius: 50% !important;
+}
+
 input, select {
     border: 1px solid #A9A9A9;
 }

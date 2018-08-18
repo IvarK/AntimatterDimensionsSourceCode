@@ -1725,7 +1725,7 @@ function gainedRealityMachines() {
 
 function percentToNextRealityMachine() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    return ((ret - Math.floor(ret)) * 100).toFixed(1);
+    return Math.min(((ret - Math.floor(ret)) * 100), 99.9).toFixed(1);
 }
 
 function gainedGlyphLevel() {
@@ -1753,7 +1753,7 @@ function percentToNextGlyphLevel() {
         retOffset = -0.5;
     }
     if (ret == Infinity || isNaN(ret)) return 0
-    return ((ret - Math.floor(ret)-retOffset) * 100).toFixed(1)
+    return Math.min(((ret - Math.floor(ret)-retOffset) * 100), 99.9).toFixed(1)
 }
 
 

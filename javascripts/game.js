@@ -2494,7 +2494,7 @@ function updateLastTenRealities() {
     var tempstring = shorten(rmpm) + " RM/min"
     averageRm = tempRM
     if (rmpm<1) tempstring = shorten(rmpm*60) + " RM/hour"
-    document.getElementById("averageRealityRun").textContent = "Last 10 realities average time: "+ timeDisplayShort(tempTime)+" Average EP gain: "+shortenDimensions(tempRM)+" reality machines. "+tempstring
+    document.getElementById("averageRealityRun").textContent = "Last 10 realities average time: "+ timeDisplayShort(tempTime)+" Average RM gain: "+shortenDimensions(tempRM)+" reality machines. "+tempstring
 }
 
 function addRealityTime(time, rm, level) {

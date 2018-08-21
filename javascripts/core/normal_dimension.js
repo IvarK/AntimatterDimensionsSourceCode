@@ -44,11 +44,11 @@ function getDimensionFinalMultiplier(tier) {
   if (isAchEnabled("r72")) multiplier = multiplier.times(1.1); // tbd
   if (isAchEnabled("r74") && player.currentChallenge != "") multiplier = multiplier.times(1.4);
   if (isAchEnabled("r77")) multiplier = multiplier.times(1+tier/100);
-  if (isAchEnabled("r56") && player.thisInfinityTime < 1800) multiplier = multiplier.times(3600/(player.thisInfinityTime+1800));
-  if (isAchEnabled("r78") && player.thisInfinityTime < 3) multiplier = multiplier.times(3.3/(player.thisInfinityTime+0.3));
-  if (isAchEnabled("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) multiplier = multiplier.times(Math.max(2400/(player.thisInfinityTime+600), 1))
-  if (isAchEnabled("r91") && player.thisInfinityTime < 50) multiplier = multiplier.times(Math.max(301-player.thisInfinityTime*6, 1))
-  if (isAchEnabled("r92") && player.thisInfinityTime < 600) multiplier = multiplier.times(Math.max(101-player.thisInfinityTime/6, 1));
+  if (isAchEnabled("r56") && player.thisInfinityTime < 180000) multiplier = multiplier.times(360000/(player.thisInfinityTime+180000));
+  if (isAchEnabled("r78") && player.thisInfinityTime < 300) multiplier = multiplier.times(330/(player.thisInfinityTime+30));
+  if (isAchEnabled("r65") && player.currentChallenge != "" && player.thisInfinityTime < 180000) multiplier = multiplier.times(Math.max(240000/(player.thisInfinityTime+60000), 1))
+  if (isAchEnabled("r91") && player.thisInfinityTime < 5000) multiplier = multiplier.times(Math.max(301-player.thisInfinityTime/100*6, 1))
+  if (isAchEnabled("r92") && player.thisInfinityTime < 60000) multiplier = multiplier.times(Math.max(101-player.thisInfinityTime/100/6, 1));
   if (isAchEnabled("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
   else if (isAchEnabled("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
 

@@ -586,15 +586,21 @@ function toggleGlyphRespec() {
 
 function respecGlyphs() {
   var idx = 0
+  var filledslots = []
   for (i in player.reality.glyphs.inventory) {
-    idx++
+    filledslots[i] = player.reality.glyphs.inventory[i].idx
   }
   for (i in player.reality.glyphs.active) {
-    console.log(idx)
     var glyph = player.reality.glyphs.active[i]
+    for (var i=0; i<filledslots.length; i++) {
+      if (!filledslots.includes(i)) {
+        filledslots[filledslots.length] = i;
+        idx = i;
+        break
+      }
+    }
     glyph.idx = idx
     player.reality.glyphs.inventory.push(glyph)
-    idx++
   }
   player.reality.glyphs.active = []
   generateGlyphTable();

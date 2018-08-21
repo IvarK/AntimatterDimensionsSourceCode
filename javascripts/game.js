@@ -1062,7 +1062,8 @@ document.getElementById("infiMult").onclick = function() {
         player.infinityPoints = player.infinityPoints.minus(player.infMultCost)
         player.infMult = player.infMult.times(2);
         player.autoIP = player.autoIP.times(2);
-        player.infMultCost = player.infMultCost.times(10)
+        if (player.infMultCost.gte("1e2000000")) player.infMultCost = player.infMultCost.times("1e10")
+        else player.infMultCost = player.infMultCost.times(10)
         document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
         if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = player.autobuyers[11].priority.times(2);
         if (player.autoCrunchMode == "amount") document.getElementById("priority12").value = formatValue("Scientific", player.autobuyers[11].priority, 2, 0);
@@ -5309,10 +5310,12 @@ function gameLoop(diff) {
 
 
     if (player.infMultBuyer) {
-        var dif = player.infinityPoints.e - player.infMultCost.e +1
+        if (player.infMultCost.gte("1e2000000")) var dif = Math.floor((player.infinityPoints.e - player.infMultCost.e) / 10) + 1;
+        else var dif = player.infinityPoints.e - player.infMultCost.e + 1
         if (dif > 0) {
             player.infMult = player.infMult.times(Decimal.pow(2, dif))
-            player.infMultCost = player.infMultCost.times(Decimal.pow(10, dif))
+            if (player.infMultCost.gte("1e2000000")) player.infMultCost = player.infMultCost.times(Decimal.pow(1e10, dif))
+            else player.infMultCost = player.infMultCost.times(Decimal.pow(10, dif))
             document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
             player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(10))
             if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = player.autobuyers[11].priority.times(Decimal.pow(2, dif));

@@ -118,6 +118,7 @@ function updateTimeDimensions() {
 
 var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
 var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
+var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]
 function buyTimeDimension(tier) {
 
   var dim = player["timeDimension"+tier]
@@ -132,10 +133,16 @@ function buyTimeDimension(tier) {
       dim.cost = Decimal.pow(timeDimCostMults[tier]*1.5, dim.bought).times(timeDimStartCosts[tier])
   }
   if (dim.cost.gte("1e1300")) {
-      dim.cost = Decimal.pow(timeDimCostMults[tier]*2.2, dim.bought).times(timeDimStartCosts[tier])
+    dim.cost = Decimal.pow(timeDimCostMults[tier]*2.2, dim.bought).times(timeDimStartCosts[tier])
+  }
+  if (dim.cost.gte("1e6000")) {
+    dim.cost = Decimal.pow(timeDimCostMults[tier]*2.2, dim.bought + Math.pow(dim.bought-timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
   }
   if (tier > 4) {
     dim.cost = Decimal.pow(timeDimCostMults[tier]*100, dim.bought).times(timeDimStartCosts[tier])
+    if (dim.cost.gte("1e6000")) {
+      dim.cost = Decimal.pow(timeDimCostMults[tier]*100, dim.bought + Math.pow(dim.bought-timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+    }
   }
   dim.power = dim.power.times(2)
   updateEternityUpgrades()

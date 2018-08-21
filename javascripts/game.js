@@ -2532,7 +2532,7 @@ function checkForEndMe() {
 }
 
 function checkForRUPG8() {
-    if ( player.thisReality < 600 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return false
+    if ( player.thisReality < 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return false
 
     for (var row = 1; row <= 13; row++) {
         for (var col = 1; col <= 8; col++) {
@@ -2624,7 +2624,7 @@ document.getElementById("bigcrunch").onclick = function () {
             }
         }
 
-        if (player.realities > 0 && player.eternities == 0 && player.infinitied == 0) {
+        if (player.realities > 0 && player.eternities === 0 && player.infinitied === 0) {
             if ( checkForRUPG8() ) player.reality.upgReqs[8] = true;
         }
 
@@ -5687,11 +5687,9 @@ function simulateTime(seconds, real, fast) {
     var playerStart = Object.assign({}, player);
     if (ticks > 1000 && !real && !fast) {
         bonusDiff = (ticks - 1000) / 20;
-        console.log(bonusDiff)
         ticks = 1000;
     } else if (ticks > 50 && fast) {
         bonusDiff = (ticks - 50);
-        console.log(bonusDiff)
         ticks = 50;
     }
     let ticksDone = 0

@@ -603,5 +603,6 @@ function respecGlyphs() {
     player.reality.glyphs.inventory.push(glyph)
   }
   player.reality.glyphs.active = []
+  toggleGlyphRespec()
   generateGlyphTable();
 }

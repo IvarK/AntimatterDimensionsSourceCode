@@ -6,15 +6,15 @@
  */
 
  function updateWormholeUpgrades() {
-    $("#wormholeInterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole.speed).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeIntervalCost())+"RM")
+    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole.speed).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeIntervalCost())+"RM")
     if (player.reality.realityMachines < getWormholeIntervalCost()) $("#wormholeinterval").addClass("rUpgUn")
     else $("#wormholeinterval").removeClass("rUpgUn")
 
-    $("#wormholePower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole.power).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholePowerCost())+"RM")
+    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole.power).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholePowerCost())+"RM")
     if (player.reality.realityMachines < getWormholePowerCost()) $("#wormholepower").addClass("rUpgUn")
     else $("#wormholepower").removeClass("rUpgUn")
 
-    $("#wormholeDuration").html("Extend the wormhole duration by 50%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeDurationCost())+"RM")
+    $("#wormholeduration").html("Extend the wormhole duration by 50%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeDurationCost())+"RM")
     if (player.reality.realityMachines < getWormholeDurationCost()) $("#wormholeduration").addClass("rUpgUn")
     else $("#wormholeduration").removeClass("rUpgUn")
  }

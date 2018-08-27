@@ -4520,6 +4520,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
         updateTickSpeed();
         playerInfinityUpgradesOnEternity()
         document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+        updateChallenges()
         updateEternityChallenges()
         Marathon2 = 0;
 

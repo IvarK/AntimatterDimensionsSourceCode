@@ -3568,7 +3568,7 @@ function reality(force) {
                 galaxies: 0,
                 galCost: new Decimal(1e170),
                 galaxybuyer: player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined,
-                auto: [false, false, false]
+                auto: [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false]
             },
             timestudy: {
                 theorem: 0,
@@ -3584,7 +3584,7 @@ function reality(force) {
             etercreq: 0,
             autoIP: new Decimal(0),
             autoTime: 1e300,
-            infMultBuyer: false,
+            infMultBuyer: player.reality.upg.includes(10) ? player.infMultBuyer : false,
             autoCrunchMode: "amount",
             respec: false,
             eternityBuyer: {
@@ -3700,6 +3700,13 @@ function reality(force) {
         toggleCrunchMode()
         toggleCrunchMode()
         toggleCrunchMode()
+        updateTimeStudyButtons()
+        if (!player.reality.upg.includes(10)) {
+            document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF"
+            document.getElementById("replauto1").textContent = "Auto: OFF"
+            document.getElementById("replauto2").textContent = "Auto: OFF"
+            document.getElementById("replauto3").textContent = "Auto: OFF"
+        }
         generateGlyphTable();
         updateWormholeUpgrades()
         updateAutomatorRows()

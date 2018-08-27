@@ -869,7 +869,7 @@ function updateEternityChallenges() {
         }
     }
 
-    if (player.eternityChallUnlocked == 0 && player.eternityChalls.eterc1 === undefined) {
+    if (player.eternityChallUnlocked == 0 && Object.keys(player.eternityChalls).length === 0) {
         document.getElementById("eterctabbtn").style.display = "none"
         for (i=1; i<13; i++) {
             document.getElementById("eterc"+i+"div").style.display = "none"

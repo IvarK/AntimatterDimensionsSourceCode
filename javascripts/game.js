@@ -4699,7 +4699,14 @@ document.getElementById("quickReset").onclick = function () {
 function updateInfPower() {
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
-    else document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(7).max(1))
+    else {
+        var conversionRate = 7
+        for (i in player.reality.glyphs.active) {
+          var glyph = player.reality.glyphs.active[i]
+          if (glyph.type == "infinity" && glyph.effects.rate !== undefined) conversionRate += glyph.effects.rate
+        }
+        document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(conversionRate).max(1))
+    }
     if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
     else document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Infinity Power per second."
 }

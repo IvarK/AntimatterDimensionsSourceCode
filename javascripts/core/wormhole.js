@@ -33,12 +33,12 @@ function getWormholeIntervalCost() {
 }
 
 function getWormholePowerCost() {
-    var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 5) / Math.log(1.35))
+    var amountOfPurchases = Math.round(Math.log(player.wormhole.power / 5) / Math.log(1.35))
     return Math.pow(2, amountOfPurchases) * 20
 }
 
 function getWormholeDurationCost() {
-    var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 10) / Math.log(1.5))
+    var amountOfPurchases = Math.round(Math.log(player.wormhole.duration / 10) / Math.log(1.5))
     return Math.pow(4, amountOfPurchases) * 10
 }
 

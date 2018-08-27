@@ -420,7 +420,7 @@ function hasInfinityMult(tier) {
             } else {
                 if (player[name + "Cost"].lt(Number.MAX_VALUE)) {
                     let failsafe = 0
-                    while (player.money.gt(player[name + "Cost"].times(10)) && x > 0 && player[name + "Cost"].lte(Number.MAX_VALUE) && failsafe < 150) {
+                    while (player.money.gte(player[name + "Cost"].times(10)) && x > 0 && player[name + "Cost"].lte(Number.MAX_VALUE) && failsafe < 150) {
                         player.money = player.money.minus(player[name + "Cost"].times(10))
                         if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc5") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
                         else if (player.currentChallenge == "postc5") multiplyPC5Costs(player[name + 'Cost'], tier)

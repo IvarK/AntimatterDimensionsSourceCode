@@ -3338,7 +3338,8 @@ function reality(force) {
                 document.getElementById("container").style.animation = "";
                 document.getElementById("realityanimbg").style.animation = "";
             }, 10000)
-            setTimeout(reality, 3000)
+            if (force === true) setTimeout(reality(true), 3000)
+            else setTimeout(reality, 3000)
             return
         }
         realizationCheck = 0;
@@ -3424,9 +3425,9 @@ function reality(force) {
             lastTenRealities: player.lastTenRealities,
             infMult: new Decimal(1),
             infMultCost: new Decimal(10),
-            tickSpeedMultDecrease: player.reality.upg.includes(10) ? player.tickSpeedMultDecrease : 10,
+            tickSpeedMultDecrease: player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10,
             tickSpeedMultDecreaseCost: player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6,
-            dimensionMultDecrease: player.reality.upg.includes(10) ? player.dimensionMultDecrease : 10,
+            dimensionMultDecrease: player.reality.upg.includes(10) ? Math.max(player.dimensionMultDecrease, 3) : 10,
             dimensionMultDecreaseCost: player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8,
             version: player.version,
             postChallUnlocked: 0,

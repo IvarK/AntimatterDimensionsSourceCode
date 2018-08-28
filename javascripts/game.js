@@ -248,6 +248,7 @@ var player = {
     autoTime: 1e300,
     infMultBuyer: false,
     autoCrunchMode: "amount",
+    autoEternityMode: "amount",
     respec: false,
     eternityBuyer: {
         limit: new Decimal(0),
@@ -286,7 +287,7 @@ var player = {
         },
         seed: Math.floor(Date.now() * Math.random()+1),
         upg: [],
-        upgReqs: [null, true, true, true, true, true, false, false, false, false, false], 
+        upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
         upgReqChecks: [false],
         automatorRows: 0,
         automatorCommands: [],
@@ -1090,7 +1091,8 @@ function buyEternityUpgrade(name, cost) {
 }
 
 
-function buyEPMult() {
+function buyEPMult(upd) {
+    if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
     if (player.eternityPoints.gte(player.epmultCost)) {
         player.epmult = player.epmult.times(5)
         player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
@@ -1103,13 +1105,13 @@ function buyEPMult() {
         else if (player.epmultCost.gte(new Decimal("1e100"))) player.epmultCost = Decimal.pow(100, count).times(500)
         else player.epmultCost = Decimal.pow(50, count).times(500)
         document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
-        updateEternityUpgrades()
+        if (upd) updateEternityUpgrades()
     }
 }
 
 function buyMaxEPMult() {
     while (player.eternityPoints.gte(player.epmultCost)) {
-        buyEPMult()
+        buyEPMult(false)
     }
 }
 
@@ -1368,6 +1370,22 @@ function toggleCrunchMode() {
         player.autoCrunchMode = "amount"
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
         document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
+    }
+}
+
+function toggleEternityMode() {
+    if (player.autoEternityMode == "amount") {
+        player.autoEternityMode = "time"
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: time"
+        document.getElementById("eternitylimittext").textContent = "Seconds between eternities:"
+    } else if (player.autoEternityMode == "time"){
+        player.autoEternityMode = "relative"
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: X times last eternity"
+        document.getElementById("eternitylimittext").textContent = "X times last eternity:"
+    } else {
+        player.autoEternityMode = "amount"
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: amount"
+        document.getElementById("eternitylimittext").textContent = "Amount of EP to wait until reset:"
     }
 }
 
@@ -1771,6 +1789,8 @@ function gainedEternityPoints() {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "time" && glyph.effects.eternity !== undefined) ret = ret.times(glyph.effects.eternity)
     }
+
+    if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
 
     return ret.floor()
 }
@@ -2602,6 +2622,24 @@ function checkForRUPG8() {
     return true
 }
 
+function gainedInfinities() {
+    let infGain = 1;
+    if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
+    if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
+    if (player.reality.upg.includes(5)) infGain *= 5
+    for (i in player.reality.glyphs.active) {
+        var glyph = player.reality.glyphs.active[i]
+        if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
+    }
+    if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
+
+    if (player.currentEternityChall == "eterc4") {
+        infGain = 1
+    }
+
+    return infGain
+}
+
 
 document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1])
@@ -2663,17 +2701,7 @@ document.getElementById("bigcrunch").onclick = function () {
         if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
             player.reality.upgReqs[7] = true;
         }
-        let infGain = 1;
-        if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
-        if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
-        if (player.reality.upg.includes(5)) infGain *= 5
-        for (i in player.reality.glyphs.active) {
-          var glyph = player.reality.glyphs.active[i]
-          if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
-        }
-        if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
         if (player.currentEternityChall == "eterc4") {
-            infGain = 1
             if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {
                 document.getElementById("challfail").style.display = "block"
                 setTimeout(exitChallenge, 500)
@@ -2738,7 +2766,7 @@ document.getElementById("bigcrunch").onclick = function () {
             currentChallenge: player.currentChallenge,
             infinityUpgrades: player.infinityUpgrades,
             infinityPoints: player.infinityPoints,
-            infinitied: player.infinitied + Math.round(infGain),
+            infinitied: player.infinitied + Math.round(gainedInfinities()),
             infinitiedBank: player.infinitiedBank,
             totalTimePlayed: player.totalTimePlayed,
             realTimePlayed: player.realTimePlayed,
@@ -3317,6 +3345,16 @@ function eternity(force, auto) {
             loadAutoBuyerSettings()
         }
         Marathon2 = 0;
+        if (player.realities > 0 && player.infinitiedBank > 1e12) player.reality.upgReqs[11] = true
+        if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") == 0) player.reality.upgReqs[12] = true
+        if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) player.reality.upgReqs[13] = true
+        if (player.eternities > 1e6) player.reality.upgReqs[14] = true
+        if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) player.reality.upgReqs[15] = true
+
+        if (player.reality.upg.includes(13)) {
+            buyMaxEPMult()
+            buyMaxTimeDimensions()
+        }
 
         return true
     }
@@ -3700,6 +3738,10 @@ function reality(force) {
         toggleCrunchMode()
         toggleCrunchMode()
         toggleCrunchMode()
+
+        toggleEternityMode()
+        toggleEternityMode()
+        toggleEternityMode()
         updateTimeStudyButtons()
         if (!player.reality.upg.includes(10)) {
             document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF"
@@ -4667,6 +4709,7 @@ function getTachyonGain() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
     if (player.reality.upg.includes(4)) mult *= 3
     if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+    if (player.reality.upg.includes(15)) mult *= Math.sqrt(Decimal.log10(player.epmult))
 
     let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (mult) - player.dilation.totalTachyonParticles, 0)            
     return tachyonGain
@@ -5115,6 +5158,12 @@ setInterval(function() {
         $(".automator-container").hide()
     }
 
+    $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
+    $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.sqrt(Decimal.log10(player.epmult)))+"x<br>Cost: 50 RM")
+
+    if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
+    else document.getElementById("toggleeternitymode").style.display = "none"
+
     updateRealityUpgrades()
 
 }, 1000)
@@ -5123,6 +5172,7 @@ var postC2Count = 0;
 var IPminpeak = new Decimal(0)
 var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
+var eternitiesGain = 0
 
 
 function gameLoop(diff) {
@@ -5176,7 +5226,11 @@ function gameLoop(diff) {
 
 
 
-    if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") player.partInfinitied += diff / player.bestInfinityTime;
+    if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") {
+        if (player.reality.upg.includes(11)) {
+            player.infinitied += Math.floor(gainedInfinities() * 0.1)
+        } else player.partInfinitied += diff / player.bestInfinityTime;
+    }
     if (player.partInfinitied >= 50) {
         player.infinitied += Math.floor(player.partInfinitied/5)
         player.partInfinitied = 0;
@@ -5185,6 +5239,17 @@ function gameLoop(diff) {
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
         player.infinitied ++;
+    }
+
+    if (player.reality.upg.includes(14) && player.eternities > 0) {
+        eternitiesGain += diff * player.realities / 1000
+        if (eternitiesGain < 2) {
+            player.eternities += 1
+            player.eternitiesGain -= 1
+        } else {
+            player.eternities += Math.floor(eternitiesGain)
+            eternitiesGain -= Math.floor(eternitiesGain)
+        }
     }
 
     player.infinityPoints = player.infinityPoints.plus(bestRunIppm.times(player.offlineProd/100).times(diff/60000))
@@ -5881,8 +5946,15 @@ function maxBuyDimBoosts(manual) {
 
 var timer = 0
 function autoBuyerTick() {
-
-    if (player.eternities >= 100 && player.eternityBuyer.isOn && gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
+    if ( player.eternities >= 100 && player.eternityBuyer.isOn ) {
+        if (player.autoEternityMode == "amount") {
+            if (gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
+        } else if (player.autoEternityMode == "time") {
+            if (player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
+        } else {
+            if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
+        }   
+    }
 
     if (player.autobuyers[11]%1 !== 0) {
     if (player.autobuyers[11].ticks*100 >= player.autobuyers[11].interval && player.money.gte(Number.MAX_VALUE)) {

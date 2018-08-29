@@ -2624,7 +2624,7 @@ document.getElementById("bigcrunch").onclick = function () {
             }
         }
 
-        if (player.realities > 0 && player.eternities == 0 && player.infinitied == 0) {
+        if (player.realities > 0 && (player.eternities == 0 || (player.reality.upg.includes(10) && player.eternities == 100)) && player.infinitied == 0) {
             if ( checkForRUPG8() ) player.reality.upgReqs[8] = true;
         }
 
@@ -3264,8 +3264,64 @@ function eternity(force, auto) {
     else return false
 }
 
+function selectGlyph(idx) {
+    player.reality.glyphs.inventory.push(possibleGlyphs[idx])
+    glyphSelected = true
+    reality(true)
+}
+
+var possibleGlyphs = []
+var glyphSelected = false
+
 function reality(force) {
     if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force === true) {
+        if (!glyphSelected) {
+            possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+            setTimeout(function() {
+                possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+            }, 50)
+            setTimeout(function() {
+                possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+                $("#glyphSelect").show()
+                var html = ""
+                for (let idx = 0; idx< 3; idx++) {
+                    var glyph = possibleGlyphs[idx]
+                    var rarity = getRarity(glyph.strength)
+                    html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; border: 1px solid "+rarity.color+" !important; box-shadow: inset "+rarity.color+" 0px 0px 10px 2px, "+rarity.color+" 0px 0px 10px 2px !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
+                    html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
+                    for (i in glyph.effects) {
+                        var effect = glyph.effects[i]
+                        var precision = 3
+                        var formattedAmount = effect
+                        if (effect >= 1 && effect < 2) precision = 4
+                        if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+                        else if (effect === true) formattedAmount = effect
+                        else formattedAmount = effect.toPrecision(precision)
+                        html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
+                    }
+                    html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
+                }
+                $("#glyphsToSelect").html(html)
+                $(".tooltip").parent(".glyph").mousemove(function(e) {
+                    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
+                })
+                var that = this
+                $(".tooltip").parent(".glyph").mouseenter(function(e) {
+                    e.stopPropagation();
+                    mouseOn = $(this).find(".tooltip")
+                    mouseOn.appendTo("#body")
+                })
+            
+                $(".tooltip").parent(".glyph").mouseleave(function(e) {
+                    e.stopPropagation();
+                    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+                    mouseOn.appendTo($(this))
+                    mouseOn = $("document")
+                })
+            }, 100)
+            return
+        }
+
         if ((player.options.animations.reality) && realizationCheck === 0) {
             realizationCheck = 1;
             document.getElementById("container").style.animation = "realize 10s 1";
@@ -3288,7 +3344,6 @@ function reality(force) {
         }
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
-        player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
         if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
         if (player.reality.respec) respecGlyphs()

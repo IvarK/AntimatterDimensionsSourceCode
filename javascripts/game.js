@@ -3366,6 +3366,8 @@ function eternity(force, auto) {
 function selectGlyph(idx) {
     player.reality.glyphs.inventory.push(possibleGlyphs[idx])
     glyphSelected = true
+    $("#glyphSelect").hide()
+    possibleGlyphs = []
     reality(true)
 }
 
@@ -6351,7 +6353,7 @@ function tooltipSave() {
 
 
 setInterval(function () {
-    save_game()
+    if ( possibleGlyphs == [] )save_game()
 }, 30000);
 
 setInterval(function () {

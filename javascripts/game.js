@@ -6353,7 +6353,7 @@ function tooltipSave() {
 
 
 setInterval(function () {
-    if ( possibleGlyphs == [] )save_game()
+    save_game()
 }, 30000);
 
 setInterval(function () {

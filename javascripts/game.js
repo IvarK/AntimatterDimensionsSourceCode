@@ -1095,8 +1095,10 @@ function buyEPMult(upd) {
     if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
     if (player.eternityPoints.gte(player.epmultCost)) {
         player.epmult = player.epmult.times(5)
-        player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
-        document.getElementById("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
+        if (player.autoEternityMode == "amount") {
+            player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
+            document.getElementById("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
+        }
         player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
         let count = player.epmult.ln()/Math.log(5)
         if (player.epmultCost.gte(new Decimal("1e4000"))) player.epmultCost = Decimal.pow(1000, count + Math.pow(count-1334, 1.2)).times(500)

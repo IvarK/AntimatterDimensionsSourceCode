@@ -3388,7 +3388,7 @@ function reality(force) {
                 for (let idx = 0; idx< 3; idx++) {
                     var glyph = possibleGlyphs[idx]
                     var rarity = getRarity(glyph.strength)
-                    html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; border: 1px solid "+rarity.color+" !important; box-shadow: inset "+rarity.color+" 0px 0px 10px 2px, "+rarity.color+" 0px 0px 10px 2px !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
+                    html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
                     html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
                     for (i in glyph.effects) {
                         var effect = glyph.effects[i]

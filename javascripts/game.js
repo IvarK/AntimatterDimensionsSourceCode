@@ -3375,7 +3375,7 @@ var possibleGlyphs = []
 var glyphSelected = false
 
 function reality(force) {
-    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force === true) {
+    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || force || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades.")))) {
         if (!glyphSelected) {
             possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
             setTimeout(function() {

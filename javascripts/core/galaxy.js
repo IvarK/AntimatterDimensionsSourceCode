@@ -168,6 +168,7 @@ function galaxyReset() {
       autoTime: player.autoTime,
       infMultBuyer: player.infMultBuyer,
       autoCrunchMode: player.autoCrunchMode,
+      autoEternityMode: player.autoEternityMode,
       respec: player.respec,
       eternityBuyer: player.eternityBuyer,
       eterc8ids: player.eterc8ids,

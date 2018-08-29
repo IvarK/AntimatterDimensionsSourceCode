@@ -11,7 +11,7 @@ function getDimensionBoostPower() {
     var glyph = player.reality.glyphs.active[i]
     if (glyph.type == "power" && glyph.effects.dimboost !== undefined) ret *= glyph.effects.dimboost
   }
-  if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
+  if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
   
   return Decimal.fromValue(ret)
@@ -77,7 +77,7 @@ function softReset(bulk) {
       interval: null,
       lastUpdate: player.lastUpdate,
       achPow: player.achPow,
-    newsArray: player.newsArray,
+      newsArray: player.newsArray,
       autobuyers: player.autobuyers,
       costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
       tickspeedMultiplier: new Decimal(10),
@@ -149,6 +149,7 @@ function softReset(bulk) {
       autoTime: player.autoTime,
       infMultBuyer: player.infMultBuyer,
       autoCrunchMode: player.autoCrunchMode,
+      autoEternityMode: player.autoEternityMode,
       respec: player.respec,
       eternityBuyer: player.eternityBuyer,
       eterc8ids: player.eterc8ids,

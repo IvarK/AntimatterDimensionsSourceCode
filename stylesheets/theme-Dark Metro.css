@@ -8,6 +8,10 @@ body {
     border-width: 1px !important;
 }
 
+.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
+    border-radius: 50% !important;
+}
+
 .container {
     color: #757575 !important;
 }
@@ -284,6 +288,10 @@ input {
 
 .IPAmount2 {
     color: #FF9800;
+}
+
+.RMAmount1 {
+    color: #0b600e;
 }
 
 .timetheorembtn {

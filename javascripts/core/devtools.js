@@ -296,4 +296,8 @@ dev.updateTestSave = function() {
         player.options.testVersion = 2;
         player.reality.glyphs.last = "";
     }
+    if (player.options.testVersion === 2) {
+        player.options.testVersion = 3;
+        player.secretUnlocks.themes = []
+    }
 }

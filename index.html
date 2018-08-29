@@ -168,7 +168,7 @@
                     <tr>
                         <td><button class="timestudy normaldimstudy" id="81" onclick="buyTimeStudy(81, 4)">Dimensional boost power becomes 10x<span>Cost: 4 Time Theorems</button></td>
                         <td><button class="timestudy infdimstudy" id="82" onclick="buyTimeStudy(82, 6)">Dimensional boosts affect Infinity Dimensions<span id="82desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
-                        <td><button class="timestudy timedimstudy" id="83" onclick="buyTimeStudy(83, 5)">Dimensional boosts are 0.04% more effective for each tick upgrade gained from Time Dimensions<span>Cost: 5 Time Theorems</button></td>
+                        <td><button class="timestudy timedimstudy" id="83" onclick="buyTimeStudy(83, 5)">Dimensional boosts gain a multiplier based on tick upgrades gained from TDs<span id="83desc">Currently: 1x</span>Cost: 5 Time Theorems</button></td>
                     </tr>
                     <tr>
                         <td><button class="timestudy normaldimstudy" id="91" onclick="buyTimeStudy(91, 4)">Normal dimensions gain a multiplier based on time spent this eternity<span id="91desc">Currently: 1x</span>Cost: 4 Time Theorems</button></td>
@@ -2269,10 +2269,11 @@
                 <button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
                 <button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy                     </button>
                 <button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
+                <button class="storebtn" id="toggleeternitymode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleEternityMode()">Auto eternity mode: amount</button>
                 <br>
                 <div class="autoBuyerDiv" id="autoBuyerEter">
                     <div>Automatic Eternity</div>
-                    <div><span>Amount of EP to wait until reset:</span>
+                    <div><span id="eternitylimittext">Amount of EP to wait until reset:</span>
                     <input type="text" onchange="updatePriorities()" id="priority13"></input></div>
                     <br>
                     <span style="font-size: 80%">Is active:</span>
@@ -2740,11 +2741,11 @@
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(10)" id="rupg10"><b>Requires: Do your first Eternity with 1e400 IP</b><br>Start with 100 eternities<br>Cost: 15 RM</div></td>
                     </tr>
                     <tr>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(11)" id="rupg11"><b>Requires: dunno</b><br>Gain 10% of the infinities you would gain by infinitying each second.<br>Cost: 50 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(12)" id="rupg12"><b>Requires: dunno</b><br>EP mult based on realities and TT<br>Cost: 50 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(13)" id="rupg13"><b>Requires: dunno</b><br>More eternity autobuyer options<br>Cost: 50 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(14)" id="rupg14"><b>Requires: dunno</b><br>EP multiplier autobuyer<br>Cost: 50 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(15)" id="rupg15"><b>Requires: dunno</b><br>Time dimension autobuyers<br>Cost: 50 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(11)" id="rupg11" style="font-size: 0.85em;"><b>Requires: 1,000,000,000,000 banked infinities</b><br>Gain 10% of the infinities you would gain by infinitying each second.<br>Cost: 50 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(12)" id="rupg12"><b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently Xx<br>Cost: 50 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(13)" id="rupg13"><b>Requires: e3500 EP without TD5</b><br>More eternity autobuyer options, EP multiplier autobuyer, Time dimension autobuyers<br>Cost: 50 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(14)" id="rupg14"><b>Requires: 1,000,000 eternities</b><br>Gain eternities per second equal to your realities (after first eternity)<br>Cost: 50 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(15)" id="rupg15"><b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently Xx<br>Cost: 50 RM</div></td>
                     </tr>
                 </table>
             </div>
@@ -2888,7 +2889,6 @@
             <div id="wormhole" class="realitytab" style="display: none;">
                 <button class="realityUpgrade" onclick="unlockWormhole()" style="text-shadow: -1px 1px 3px #d5ffd7;">Unleash the Wormhole<br>Cost: 50 RM</button>
                 <div id="wormholecontainer" style="display: none">
-                    <h1>Here will be some fancy animation made with canvas (probably by Omsi)</h1>
                     <div class="radial-progress" data-progress="0">
                         <div class="circle">
                             <div class="mask full">

@@ -71,11 +71,10 @@ function estimate_curve(iterations, moreThan) {
 }
 
 /**
- * More than 3 approx 0.0005%
- * More than 2.5 approx 0.1%
- * More than 2 approx 3%
- * More than 1.5 approx 19.215
- * Exactly 1 approx 50%
+ * More than 3 approx 0.001%
+ * More than 2.5 approx 0.2%
+ * More than 2 approx 6%
+ * More than 1.5 approx 38.43%
  */
 function random() {
   var x = Math.sin(player.reality.seed++) * 10000;
@@ -586,16 +585,23 @@ function toggleGlyphRespec() {
 
 function respecGlyphs() {
   var idx = 0
+  var filledslots = []
   for (i in player.reality.glyphs.inventory) {
-    idx++
+    filledslots[i] = player.reality.glyphs.inventory[i].idx
   }
   for (i in player.reality.glyphs.active) {
-    console.log(idx)
     var glyph = player.reality.glyphs.active[i]
+    for (var i=0; i<filledslots.length; i++) {
+      if (!filledslots.includes(i)) {
+        filledslots[filledslots.length] = i;
+        idx = i;
+        break
+      }
+    }
     glyph.idx = idx
     player.reality.glyphs.inventory.push(glyph)
-    idx++
   }
   player.reality.glyphs.active = []
+  toggleGlyphRespec()
   generateGlyphTable();
 }

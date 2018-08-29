@@ -119,14 +119,15 @@ function onLoad() {
   if (player.options.animations === undefined) player.options.animations = {floatingText: true, bigCrunch: true, eternity: true, tachyonParticles: true}
   if (player.options.animations.reality === undefined) player.options.animations.reality = true;
   if (player.options.confirmations === undefined) player.options.confirmations = {challenges: player.options.challConf, eternity: player.options.eternityconfirm, dilation: true, reality: true};
-  if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed"};
+  if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed", themes: []};
   if (player.realTimePlayed === undefined) player.realTimePlayed = player.totalTimePlayed;
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
   if (player.bestReality === undefined) player.bestReality = 999999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0]];
   if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 5, duration: 10, phase: 0, active: false, unlocked: false }
-  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3, last: ""}, seed: Math.floor(Date.now() * Math.random()+1), upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [], respec: false };
+  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3, last: ""}, seed: Math.floor(Date.now() * Math.random()+1), upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [], respec: false };
+  if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
   setTheme(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";

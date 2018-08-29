@@ -422,7 +422,7 @@ function updateAutomatorTree() {
 
 function updateAutomatorRows() {
   var rows = 6 + Math.ceil(Math.pow(player.realities, 0.7))
-  var next = Math.ceil( Math.pow(rows - 7, 1 / 0.7) )
+  var next = Math.ceil( Math.pow(rows - 6, 1 / 0.7) )
   $("#rowsAvailable").text("Your automator can use " + rows + " rows, next row at " + next + " realities")
 }
 

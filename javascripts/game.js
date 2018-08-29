@@ -1656,6 +1656,7 @@ document.getElementById("importbtn").onclick = function () {
         setTheme(player.options.theme);
     } else {
         save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
+        console.log(verify_save(save_data))
         if(verify_save(save_data)) forceHardReset = true
         if(verify_save(save_data)) document.getElementById("reset").click();
         forceHardReset = false
@@ -1676,8 +1677,11 @@ document.getElementById("importbtn").onclick = function () {
         mult18 = new Decimal(1)
         ec10bonus = new Decimal(1)
         player = save_data;
+        console.log(player)
         save_game(false, true);
+        console.log(player)
         load_game();
+        console.log(player)
         updateChallenges()
         transformSaveToDecimal()
     }

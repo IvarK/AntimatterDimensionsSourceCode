@@ -295,7 +295,7 @@ var player = {
     },
     wormhole: {
         speed: 60 * 60, // Seconds to fill
-        power: 5, // Multiplier from the wormhole
+        power: 180, // Multiplier from the wormhole
         duration: 10, // How long it lasts.
         phase: 0,
         active: false,

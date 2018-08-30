@@ -62,7 +62,7 @@ function upgradeWormholeDuration() {
     var cost = getWormholeDurationCost()
     if (player.reality.realityMachines.lt(cost)) return false
     player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole.duration *= 1.5
+    player.wormhole.duration *= 1.3
     updateWormholeUpgrades()
 }
 

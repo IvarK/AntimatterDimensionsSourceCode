@@ -300,4 +300,8 @@ dev.updateTestSave = function() {
         player.options.testVersion = 3;
         player.secretUnlocks.themes = []
     }
+    if (player.options.testVersion == 3) {
+        player.wormhole.power *= 36
+        player.options.testVersion = 4
+    }
 }

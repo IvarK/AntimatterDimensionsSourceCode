@@ -119,6 +119,7 @@ input {
 
 .tabbtn {
     border: 2px solid #1565C0 !important;
+    text-shadow: 0px 0px 10px white;
 }
 
 .tabbtn:hover {
@@ -133,6 +134,7 @@ input {
 
 .secondarytabbtn {
     border: 2px solid #1565C0 !important;
+    text-shadow: 0px 0px 10px white;
 }
 
 .challengediv {

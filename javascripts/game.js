@@ -3347,7 +3347,7 @@ function eternity(force, auto) {
         playerInfinityUpgradesOnEternity()
         document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
         updateEternityChallenges()
-        if (player.eternities <= 1) {
+        if (player.eternities === 1) {
             showTab("dimensions")
             showDimTab("timedimensions")
             loadAutoBuyerSettings()
@@ -5367,6 +5367,7 @@ function gameLoop(diff) {
     player.thisReality += diff
 
     if (player.eternities > 0) document.getElementById("tdtabbtn").style.display = "inline-block"
+    else document.getElementById("tdtabbtn").style.display = "none"
 
     for (let tier=1;tier<9;tier++) {
         if (tier != 8 && (player.infDimensionsUnlocked[tier-1] || ECTimesCompleted("eterc7") > 0)) player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(DimensionProduction(tier+1).times(diff/10000))

@@ -3374,7 +3374,7 @@ function selectGlyph(idx) {
     glyphSelected = true
     $("#glyphSelect").hide()
     possibleGlyphs = []
-    reality(true)
+    reality()
 }
 
 var possibleGlyphs = []

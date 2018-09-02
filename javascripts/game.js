@@ -3433,6 +3433,7 @@ function reality(force) {
             realizationCheck = 1;
             document.getElementById("container").style.animation = "realize 10s 1";
             document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+            document.getElementById("realityanimbg").style.display = "block";
             setTimeout(function(){
                 document.getElementById("realityanimbg").play();
                 document.getElementById("realityanimbg").currentTime = 0;
@@ -3441,6 +3442,7 @@ function reality(force) {
             setTimeout(function(){
                 document.getElementById("container").style.animation = "";
                 document.getElementById("realityanimbg").style.animation = "";
+                document.getElementById("realityanimbg").style.display = "none";
             }, 10000)
             if (force === true) setTimeout(reality(true), 3000)
             else setTimeout(reality, 3000)

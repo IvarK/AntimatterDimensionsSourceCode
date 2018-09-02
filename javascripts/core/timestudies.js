@@ -64,6 +64,65 @@ function maxTheorems() {
   updateEternityUpgrades()
 }
 
+function calculateTimeStudiesCost() {
+    var totalCost = 0;
+    for (var i=0; i<all.length; i++) {
+        if (player.timestudy.studies.includes(all[i])) {
+            totalCost += studyCosts[i]
+        }
+    }
+    switch(player.eternityChallUnlocked) {
+        case 1:
+        totalCost += 30
+        break;
+  
+        case 2:
+        totalCost += 35
+        break;
+  
+        case 3:
+        totalCost += 40
+        break;
+  
+        case 4:
+        totalCost += 70
+        break;
+  
+        case 5:
+        totalCost += 130
+        break;
+  
+        case 6:
+        totalCost += 85
+        break;
+  
+        case 7:
+        totalCost += 115
+        break;
+  
+        case 8:
+        totalCost += 115
+        break;
+  
+        case 9:
+        totalCost += 415
+        break;
+  
+        case 10:
+        totalCost += 550
+        break;
+  
+        case 11:
+        totalCost += 1
+        break;
+  
+        case 12:
+        totalCost += 1
+        break;
+    }
+    return totalCost
+}
+
 function updateTheoremButtons() {
   document.getElementById("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
   document.getElementById("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
@@ -215,7 +274,7 @@ function canBuyStudy(name) {
 }
 
 function canBuyDilationStudy(name) {
-    if ((name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.amcost.log10() / 20000 + player.timestudy.ipcost.log10() / 100 + player.timestudy.epcost.log2() >= 13000 && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
+    if ((name == 1 && ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.theorem+calculateTimeStudiesCost() >= 13000 && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
     if (name == 6) {
         if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true
         else return false

@@ -5309,7 +5309,7 @@ function gameLoop(diff) {
         player.infinitied ++;
     }
 
-    if (player.reality.upg.includes(14) && player.eternities > 0) {
+    if (player.reality.upg.includes(14)) {
         eternitiesGain += diff * player.realities / 1000
         if (eternitiesGain < 2) {
             player.eternities += 1

@@ -251,7 +251,7 @@ function infinityGlyph(glyph, effectAmount) {
         break;
 
       case "rate":
-        glyph.effects.rate = Math.pow(glyph.level * glyph.strength, 0.5) * 0.2
+        glyph.effects.rate = Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4) * 0.1
         break;
 
       case "ipgain":

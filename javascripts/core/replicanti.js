@@ -51,11 +51,20 @@ function upgradeReplicantiGalaxy() {
 
 
 function replicantiGalaxy() {
-  if (player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) ? player.replicanti.galaxies < player.replicanti.gal : player.replicanti.galaxies < Math.floor(player.replicanti.gal * 1.5))) {
+  var maxGal = player.replicanti.gal
+  if (player.timestudy.studies.includes(131)) maxGal = Math.floor(player.replicanti.gal * 1.5)
+  if (player.replicanti.amount.gte(Number.MAX_VALUE) && player.replicanti.galaxies < maxGal) {
       player.reality.upgReqChecks[0] = false;
-      if (isAchEnabled("r126")) player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
+      var galaxyGain = 1
+      if (isAchEnabled("r126")) {
+          if (player.replicanti.amount.e >= 616) {
+              galaxyGain = Math.min(Math.floor(player.replicanti.amount.e / 308), maxGal - player.replicanti.galaxies)
+              player.replicanti.amount = player.replicanti.amount.dividedBy(new Decimal("1e"+(308*galaxyGain)))
+          }
+          else player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
+      }
       else player.replicanti.amount = new Decimal(1)
-      player.replicanti.galaxies += 1
+      player.replicanti.galaxies += galaxyGain
       player.galaxies-=1
       galaxyReset()
 
@@ -179,7 +188,7 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
-        document.getElementById("replicantireset").click()
+        replicantiGalaxy()
     }
     if (interval < 0.0001) var intervalPlaces = 7
     else if (interval < 0.001) var intervalPlaces = 6

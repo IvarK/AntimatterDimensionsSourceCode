@@ -4782,7 +4782,7 @@ function getTachyonGain() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
     if (player.reality.upg.includes(4)) mult *= 3
     if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
-    if (player.reality.upg.includes(15)) mult *= Math.sqrt(Decimal.log10(player.epmult))
+    if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
 
     let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (mult) - player.dilation.totalTachyonParticles, 0)            
     return tachyonGain
@@ -5232,7 +5232,7 @@ setInterval(function() {
     }
 
     $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
-    $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.sqrt(Decimal.log10(player.epmult)))+"x<br>Cost: 50 RM")
+    $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
 
     if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
     else document.getElementById("toggleeternitymode").style.display = "none"

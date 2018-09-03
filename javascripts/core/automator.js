@@ -132,7 +132,7 @@ function mainIteration() {
           automatorIdx+=1
           break;
         case "goto":
-          automatorIdx = parseInt(current.target)+1
+          automatorIdx = parseInt(current.target)-1
           break;
       }
     }

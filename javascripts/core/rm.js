@@ -514,8 +514,10 @@ function drop(ev) {
 }
 
 const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50]
+const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
+  if (id < 6 && player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))) return false // Has enough RM accounting for rebuyables
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
@@ -531,8 +533,10 @@ function canBuyRealityUpg(id) {
 
 function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
-  player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
-  player.reality.upg.push(id)
+  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))
+  else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
+  if (id < 6) player.reality.rebuyables[id]++
+  else player.reality.upg.push(id)
   if (id == 9) {
     player.reality.glyphs.slots++
     generateGlyphTable()
@@ -559,6 +563,13 @@ function updateRealityUpgrades() {
     else $("#rupg"+i).removeClass("rUpgBought")
   }
 
+  $("#rupg1").html("You gain dilated time 3 times faster<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[1] * Math.pow(REALITY_UPGRADE_COST_MULTS[1], player.reality.rebuyables[1]))+" RM")
+  $("#rupg2").html("You gain replicanti 3 times faster<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[2] * Math.pow(REALITY_UPGRADE_COST_MULTS[2], player.reality.rebuyables[2]))+" RM")
+  $("#rupg3").html("You gain 3 times more eternities<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[3] * Math.pow(REALITY_UPGRADE_COST_MULTS[3], player.reality.rebuyables[3]))+" RM")
+  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[4] * Math.pow(REALITY_UPGRADE_COST_MULTS[4], player.reality.rebuyables[4]))+" RM")
+  $("#rupg5").html("You gain 5 times more infinities<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[5] * Math.pow(REALITY_UPGRADE_COST_MULTS[5], player.reality.rebuyables[5]))+" RM")
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
+  $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
 }
 
 $(".tooltip").parent().mousemove(function(e) {

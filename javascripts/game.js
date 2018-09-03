@@ -286,6 +286,13 @@ var player = {
             last: ""
         },
         seed: Math.floor(Date.now() * Math.random()+1),
+        rebuyables: {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+        },
         upg: [],
         upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
         upgReqChecks: [false],
@@ -2635,7 +2642,7 @@ function gainedInfinities() {
     let infGain = 1;
     if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
     if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
-    if (player.reality.upg.includes(5)) infGain *= 5
+    if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
         if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
@@ -3046,7 +3053,11 @@ function eternity(force, auto) {
         }
         if (player.realities > 0 && player.eternities == 0 && player.infinityPoints.gte(new Decimal("1e400"))) player.reality.upgReqs[10] = true
         player.challenges = temp
-        if (!force) player.eternities = player.eternities+((player.reality.upg.includes(3)) ? 3 : 1)
+        if (!force) {
+            var tempEterGain = 1;
+            if (player.reality.rebuyables[3] > 0) tempEterGain *= Math.pow(3, player.reality.rebuyables[3])
+            player.eternities+=tempEterGain 
+        }
         player = {
             money: new Decimal(10),
             tickSpeedCost: new Decimal(1000),
@@ -4766,7 +4777,7 @@ function updateDilationUpgradeCosts() {
 function getDilationGainPerSecond() {
     var ret = new Decimal(player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1]))
     if (isAchEnabled("r132")) ret = ret.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
-    if (player.reality.upg.includes(1)) ret = ret.times(3)
+    if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
@@ -4780,7 +4791,7 @@ function getDilationGainPerSecond() {
 
 function getTachyonGain() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
-    if (player.reality.upg.includes(4)) mult *= 3
+    if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
     if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
     if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
 
@@ -4790,7 +4801,7 @@ function getTachyonGain() {
 
 function getTachyonReq() {
     let mult = Math.pow(3, player.dilation.rebuyables[3])
-    if (player.reality.upg.includes(4)) mult *= 3
+    if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
     if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
 
     let req = Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
@@ -5230,9 +5241,6 @@ setInterval(function() {
         $("#automatorUnlock").show()
         $(".automator-container").hide()
     }
-
-    $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
-    $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
 
     if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
     else document.getElementById("toggleeternitymode").style.display = "none"

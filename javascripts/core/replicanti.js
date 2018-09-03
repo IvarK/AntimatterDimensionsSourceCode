@@ -116,7 +116,7 @@ function getReplicantiInterval() {
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
-    if (player.reality.upg.includes(2)) interval /= 3
+    if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[1])
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
         if (glyph.type == "replication" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed
@@ -133,7 +133,7 @@ function replicantiLoop(diff) {
     if (player.timestudy.studies.includes(62)) intervalMult /= 3
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult *= 10
     if (player.timestudy.studies.includes(213)) intervalMult /= 20
-    if (player.reality.upg.includes(2)) intervalMult /= 3
+    if (player.reality.rebuyables[2] > 0) intervalMult /= Math.pow(3, player.reality.rebuyables[1])
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
         if (glyph.type == "replication" && glyph.effects.speed !== undefined) intervalMult = intervalMult / glyph.effects.speed

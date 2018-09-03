@@ -245,4 +245,14 @@ dev.updateTestSave = function() {
         player.wormhole.power *= 36
         player.options.testVersion = 4
     }
+    if (player.options.testVersion == 4) {
+        player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
+        for (var i=1; i<6; i++) {
+            if (player.reality.upg.includes(i)) {
+                player.reality.rebuyables[i] = 1
+                player.reality.upg.splice(player.reality.upg.indexOf(i), 1)
+            }
+        }
+        player.options.testVersion = 5
+    }
 }

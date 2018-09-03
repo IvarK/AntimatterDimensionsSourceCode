@@ -490,6 +490,8 @@ function showTab(tabName) {
     }
     if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "block";
     else document.getElementById("TTbuttons").style.display = "none"
+    if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
+    else document.getElementById("progress").style.display = "none"
     resizeCanvas();
     closeToolTip();
     if (tabName !== "statistics") statsTimer = 0
@@ -5401,7 +5403,7 @@ function gameLoop(diff) {
     if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff/1000))
     else player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff/1000))
 
-    if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0 && player.currentEternityChall !== "eterc12") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/1000))
+    if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
 
     let gain;
     var tickmult = 1.33;
@@ -6210,6 +6212,8 @@ function showDimTab(tabName) {
             tab.style.display = 'none';
         }
     }
+    if (tabName === 'antimatterdimensions') document.getElementById("progress").style.display = "block"
+    else document.getElementById("progress").style.display = "none"
 }
 
 function showChallengesTab(tabName) {

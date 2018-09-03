@@ -14,6 +14,11 @@ body {
     filter: invert(1);
 }
 
+#progressbar {
+    color: white !important;
+    background-color: #ED85DF !important;
+}
+
 * {
     border-radius: 0px !important;
     border-width: 1px !important;

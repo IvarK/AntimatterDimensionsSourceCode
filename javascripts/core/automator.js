@@ -63,7 +63,7 @@ function mainIteration() {
   if (automatorRows[automatorIdx][0] == "*") cont = true
   if (automatorOn) {
     var row = automatorRows[automatorIdx].split(" ")
-    if (cont) row = row.split("* ")[1]
+    if (cont) row = row.splice(0, 1)
     if (row.length == 1) {
       var current = {
         action: row[0]

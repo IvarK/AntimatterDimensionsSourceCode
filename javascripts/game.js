@@ -723,7 +723,8 @@ function updateDimensions() {
             document.getElementById("postinfi32").innerHTML = "Normal dimensions gain a multiplier based on slowest challenge run<br>Currently:"+Decimal.max(10*3000/worstChallengeTime, 1).toFixed(2)+"x<br>Cost: "+shortenCosts(1e7)+" IP"
             document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease+"x -> "+(player.dimensionMultDecrease-1)+"x<br>Cost: "+shortenCosts(player.dimensionMultDecreaseCost) +" IP"
 
-            document.getElementById("postinfi13").innerHTML = "You passively generate Infinitied stat based on your fastest infinity.<br>1 Infinity every "+timeDisplay(player.bestInfinityTime*5)+ " <br>Cost: "+shortenCosts(20e6)+" IP"
+            if (player.bestInfinityTime === 999999999999) document.getElementById("postinfi13").innerHTML = "You passively generate Infinitied stat based on your fastest infinity.<br>1 Infinity every hundred or so years<br>Cost: "+shortenCosts(20e6)+" IP"
+            else document.getElementById("postinfi13").innerHTML = "You passively generate Infinitied stat based on your fastest infinity.<br>1 Infinity every "+timeDisplay(player.bestInfinityTime*5)+ " <br>Cost: "+shortenCosts(20e6)+" IP"
             document.getElementById("postinfi23").innerHTML = "Option to bulk buy Dimension Boosts <br>Cost: "+shortenCosts(5e9)+" IP"
             document.getElementById("postinfi33").innerHTML = "Autobuyers work twice as fast <br>Cost:"+shortenCosts(1e15)+" IP"
             if (player.dimensionMultDecrease <= 3) document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease.toFixed(1)+"x"
@@ -3349,7 +3350,7 @@ function eternity(force, auto) {
         playerInfinityUpgradesOnEternity()
         document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
         updateEternityChallenges()
-        if (player.eternities <= 1) {
+        if (player.eternities === 1) {
             showTab("dimensions")
             showDimTab("timedimensions")
             loadAutoBuyerSettings()
@@ -3376,14 +3377,14 @@ function selectGlyph(idx) {
     glyphSelected = true
     $("#glyphSelect").hide()
     possibleGlyphs = []
-    reality(true)
+    reality()
 }
 
 var possibleGlyphs = []
 var glyphSelected = false
 
 function reality(force) {
-    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || force || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades.")))) {
+    if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force) {
         if (!glyphSelected) {
             possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
             setTimeout(function() {
@@ -3435,6 +3436,7 @@ function reality(force) {
             realizationCheck = 1;
             document.getElementById("container").style.animation = "realize 10s 1";
             document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+            document.getElementById("realityanimbg").style.display = "block";
             setTimeout(function(){
                 document.getElementById("realityanimbg").play();
                 document.getElementById("realityanimbg").currentTime = 0;
@@ -3443,6 +3445,7 @@ function reality(force) {
             setTimeout(function(){
                 document.getElementById("container").style.animation = "";
                 document.getElementById("realityanimbg").style.animation = "";
+                document.getElementById("realityanimbg").style.display = "none";
             }, 10000)
             if (force === true) setTimeout(reality(true), 3000)
             else setTimeout(reality, 3000)
@@ -5311,7 +5314,7 @@ function gameLoop(diff) {
         player.infinitied ++;
     }
 
-    if (player.reality.upg.includes(14) && player.eternities > 0) {
+    if (player.reality.upg.includes(14)) {
         eternitiesGain += diff * player.realities / 1000
         if (eternitiesGain < 2) {
             player.eternities += 1
@@ -5369,6 +5372,7 @@ function gameLoop(diff) {
     player.thisReality += diff
 
     if (player.eternities > 0) document.getElementById("tdtabbtn").style.display = "inline-block"
+    else document.getElementById("tdtabbtn").style.display = "none"
 
     for (let tier=1;tier<9;tier++) {
         if (tier != 8 && (player.infDimensionsUnlocked[tier-1] || ECTimesCompleted("eterc7") > 0)) player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(DimensionProduction(tier+1).times(diff/10000))

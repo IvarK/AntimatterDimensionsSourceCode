@@ -102,65 +102,6 @@ dev.refundEPMult = function() {
     document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 }
 
-dev.calculateTimeStudiesCost = function() {
-    var totalCost = 0;
-    for (var i=0; i<all.length; i++) {
-        if (player.timestudy.studies.includes(all[i])) {
-            totalCost += studyCosts[i]
-        }
-    }
-    switch(player.eternityChallUnlocked) {
-        case 1:
-        totalCost += 30
-        break;
-  
-        case 2:
-        totalCost += 35
-        break;
-  
-        case 3:
-        totalCost += 40
-        break;
-  
-        case 4:
-        totalCost += 70
-        break;
-  
-        case 5:
-        totalCost += 130
-        break;
-  
-        case 6:
-        totalCost += 85
-        break;
-  
-        case 7:
-        totalCost += 115
-        break;
-  
-        case 8:
-        totalCost += 115
-        break;
-  
-        case 9:
-        totalCost += 415
-        break;
-  
-        case 10:
-        totalCost += 550
-        break;
-  
-        case 11:
-        totalCost += 1
-        break;
-  
-        case 12:
-        totalCost += 1
-        break;
-    }
-    return totalCost
-}
-
 dev.refundDilStudies = function() {
     for (var i=0; i<6; i++) {
         if (player.dilation.studies.includes(i+1)) {

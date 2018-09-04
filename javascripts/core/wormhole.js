@@ -14,7 +14,7 @@
     if (player.reality.realityMachines < getWormholePowerCost()) $("#wormholepower").addClass("rUpgUn")
     else $("#wormholepower").removeClass("rUpgUn")
 
-    $("#wormholeduration").html("Extend the wormhole duration by 50%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeDurationCost())+"RM")
+    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeDurationCost())+"RM")
     if (player.reality.realityMachines < getWormholeDurationCost()) $("#wormholeduration").addClass("rUpgUn")
     else $("#wormholeduration").removeClass("rUpgUn")
  }

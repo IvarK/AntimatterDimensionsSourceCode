@@ -4785,7 +4785,7 @@ function getDilationGainPerSecond() {
     }
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "replication" && glyph.effects.dtgain !== undefined) ret = ret.times(player.replicanti.amount.e * glyph.effects.dtgain)
+      if (glyph.type == "replication" && glyph.effects.dtgain !== undefined) ret = ret.times(Math.max(player.replicanti.amount.e * glyph.effects.dtgain, 1))
     }
     return ret
 }

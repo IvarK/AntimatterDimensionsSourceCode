@@ -3466,6 +3466,7 @@ function reality(force) {
         if (player.thisReality<player.bestReality && !force) {
             player.bestEternity = player.thisEternity
         }
+        giveAchievement("Snap back to reality")
         player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines())
         //TODO replace 1 with glyph power that you got from that reality
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())

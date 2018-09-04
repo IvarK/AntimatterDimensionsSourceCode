@@ -17,154 +17,29 @@ function getDimensionBoostPower() {
   return Decimal.fromValue(ret)
 }
 
+function applyDimensionBoost() {
+    var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
+    for (var i = 1; i <= 8; i++) {
+        player[tiers[i] + "Pow"] = getDimensionBoostPower().pow(player.resets + 1 - i).max(1)
+    }
+}
+
 function softReset(bulk) {
   //if (bulk < 1) bulk = 1 (fixing issue 184)
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
   player.resets+=bulk;
   if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
-  player = {
-      money: isAchEnabled("r111") ? player.money : new Decimal(10),
-      tickSpeedCost: new Decimal(1000),
-      tickspeed: new Decimal(1000),
-      firstCost: new Decimal(10),
-      secondCost: new Decimal(100),
-      thirdCost: new Decimal(10000),
-      fourthCost: new Decimal(1000000),
-      fifthCost: new Decimal(1e9),
-      sixthCost: new Decimal(1e13),
-      seventhCost: new Decimal(1e18),
-      eightCost: new Decimal(1e24),
-      firstAmount: new Decimal(0),
-      secondAmount: new Decimal(0),
-      thirdAmount: new Decimal(0),
-      fourthAmount: new Decimal(0),
-      firstBought: 0,
-      secondBought: 0,
-      thirdBought: 0,
-      fourthBought: 0,
-      fifthAmount: new Decimal(0),
-      sixthAmount: new Decimal(0),
-      seventhAmount: new Decimal(0),
-      eightAmount: new Decimal(0),
-      fifthBought: 0,
-      sixthBought: 0,
-      seventhBought: 0,
-      eightBought: 0,
-      sacrificed: new Decimal(0),
-      achievements: player.achievements,
-      challenges: player.challenges,
-      currentChallenge: player.currentChallenge,
-      infinityUpgrades: player.infinityUpgrades,
-      infinityPoints: player.infinityPoints,
-      infinitied: player.infinitied,
-      infinitiedBank: player.infinitiedBank,
-      totalTimePlayed: player.totalTimePlayed,
-      realTimePlayed: player.realTimePlayed,
-      bestInfinityTime: player.bestInfinityTime,
-      thisInfinityTime: player.thisInfinityTime,
-      firstPow: getDimensionBoostPower().pow(player.resets),
-      secondPow: getDimensionBoostPower().pow(player.resets-1),
-      thirdPow: getDimensionBoostPower().pow(player.resets- 2).max(1),
-      fourthPow: getDimensionBoostPower().pow(player.resets- 3).max(1),
-      fifthPow: getDimensionBoostPower().pow(player.resets- 4).max(1),
-      sixthPow: getDimensionBoostPower().pow(player.resets- 5).max(1),
-      seventhPow: getDimensionBoostPower().pow(player.resets- 6).max(1),
-      eightPow: getDimensionBoostPower().pow(player.resets- 7).max(1),
-      resets: player.resets,
-      galaxies: player.galaxies,
-      tickDecrease: player.tickDecrease,
-      totalmoney: player.totalmoney,
-      interval: null,
-      lastUpdate: player.lastUpdate,
-      achPow: player.achPow,
-      newsArray: player.newsArray,
-      autobuyers: player.autobuyers,
-      costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
-      tickspeedMultiplier: new Decimal(10),
-      chall2Pow: player.chall2Pow,
-      chall3Pow: new Decimal(0.01),
-      matter: new Decimal(0),
-      chall11Pow: new Decimal(1),
-      partInfinityPoint: player.partInfinityPoint,
-      partInfinitied: player.partInfinitied,
-      break: player.break,
-      challengeTimes: player.challengeTimes,
-      infchallengeTimes: player.infchallengeTimes,
-      lastTenRuns: player.lastTenRuns,
-      lastTenEternities: player.lastTenEternities,
-      lastTenRealities: player.lastTenRealities,
-      infMult: player.infMult,
-      infMultCost: player.infMultCost,
-      tickSpeedMultDecrease: player.tickSpeedMultDecrease,
-      tickSpeedMultDecreaseCost: player.tickSpeedMultDecreaseCost,
-      dimensionMultDecrease: player.dimensionMultDecrease,
-      dimensionMultDecreaseCost: player.dimensionMultDecreaseCost,
-      version: player.version,
-      overXGalaxies: player.overXGalaxies,
-      infDimensionsUnlocked: player.infDimensionsUnlocked,
-      infinityPower: player.infinityPower,
-      spreadingCancer: player.spreadingCancer,
-      postChallUnlocked: player.postChallUnlocked,
-      postC4Tier: 1,
-      postC3Reward: new Decimal(1),
-      infinityDimension1: player.infinityDimension1,
-      infinityDimension2: player.infinityDimension2,
-      infinityDimension3: player.infinityDimension3,
-      infinityDimension4: player.infinityDimension4,
-      infinityDimension5: player.infinityDimension5,
-      infinityDimension6: player.infinityDimension6,
-      infinityDimension7: player.infinityDimension7,
-      infinityDimension8: player.infinityDimension8,
-      infDimBuyers: player.infDimBuyers,
-      timeShards: player.timeShards,
-      tickThreshold: player.tickThreshold,
-      timeDimension1: player.timeDimension1,
-      timeDimension2: player.timeDimension2,
-      timeDimension3: player.timeDimension3,
-      timeDimension4: player.timeDimension4,
-      timeDimension5: player.timeDimension5,
-      timeDimension6: player.timeDimension6,
-      timeDimension7: player.timeDimension7,
-      timeDimension8: player.timeDimension8,
-      eternityPoints: player.eternityPoints,
-      eternities: player.eternities,
-      thisEternity: player.thisEternity,
-      bestEternity: player.bestEternity,
-      eternityUpgrades: player.eternityUpgrades,
-      epmult: player.epmult,
-      epmultCost: player.epmultCost,
-      totalTickGained: player.totalTickGained,
-      offlineProd: player.offlineProd,
-      offlineProdCost: player.offlineProdCost,
-      challengeTarget: player.challengeTarget,
-      autoSacrifice: player.autoSacrifice,
-      replicanti: player.replicanti,
-      timestudy: player.timestudy,
-      eternityChalls: player.eternityChalls,
-      eternityChallGoal: player.eternityChallGoal,
-      currentEternityChall: player.currentEternityChall,
-      eternityChallUnlocked: player.eternityChallUnlocked,
-      etercreq: player.etercreq,
-      autoIP: player.autoIP,
-      autoTime: player.autoTime,
-      infMultBuyer: player.infMultBuyer,
-      autoCrunchMode: player.autoCrunchMode,
-      autoEternityMode: player.autoEternityMode,
-      respec: player.respec,
-      eternityBuyer: player.eternityBuyer,
-      eterc8ids: player.eterc8ids,
-      eterc8repl: player.eterc8repl,
-      dimlife: player.dimlife,
-      dead: player.dead,
-      dilation: player.dilation,
-      secretUnlocks: player.secretUnlocks,
-      realities: player.realities,
-      thisReality: player.thisReality,
-      bestReality: player.bestReality,
-      reality: player.reality,
-      wormhole: player.wormhole,
-      options: player.options
-  };
+
+  /**
+   * All reset stuff are in these functions now. (Hope this works)
+   */
+  resetDimensions()
+  resetTickspeed()
+  applyDimensionBoost()
+  resetChallengeStuff()
+  player.money = isAchEnabled("r111") ? player.money : new Decimal(10)
+  player.sacrificed = new Decimal(0)
+
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
       player.thirdCost = new Decimal(100)
       player.fourthCost = new Decimal(500)
@@ -194,10 +69,6 @@ if (player.currentChallenge == "postc2") {
   if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
 
 
-
-
-
-  //updateInterval();
   if (player.eternities < 30) {
       document.getElementById("secondRow").style.display = "none";
       document.getElementById("thirdRow").style.display = "none";
@@ -212,15 +83,9 @@ if (player.currentChallenge == "postc2") {
       document.getElementById("eightRow").style.display = "none";
   }
 
-
-  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
   updateTickSpeed()
-  if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
-  if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
-  if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
-  if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
-  if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
 
+  startMoneyCheck()
   if (player.resets >= 10) {
       giveAchievement("Boosting to the max");
   }

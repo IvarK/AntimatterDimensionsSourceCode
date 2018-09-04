@@ -1912,10 +1912,10 @@ document.getElementById("newsbtn").onclick = function() {
 
 function resetDimensions() {
     var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
-
-    for (i = 1; i <= 8; i++) {
+    for (var i = 1; i <= 8; i++) {
         player[tiers[i] + "Amount"] = new Decimal(0)
         player[tiers[i] + "Pow"] = new Decimal(1)
+        player[tiers[i] + "Bought"] = 0
     }
     player.firstCost = new Decimal(10)
     player.secondCost = new Decimal(100)
@@ -1926,6 +1926,30 @@ function resetDimensions() {
     player.seventhCost = new Decimal(1e18)
     player.eightCost = new Decimal(1e24)
     player.eightPow = new Decimal(player.chall11Pow)
+    player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+}
+
+function resetTickspeed() {
+    player.tickSpeedCost = new Decimal(1000)
+    player.tickspeed = new Decimal(1000)
+    player.tickspeedMultiplier = new Decimal(10)
+    player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
+}
+
+function resetChallengeStuff() {
+    player.chall3Pow = new Decimal(0.01)
+    player.matter = new Decimal(0)
+    player.chall11Pow = new Decimal(1)
+    player.postC4Tier = 1
+    player.postC3Reward = new Decimal(1)
+}
+
+function startMoneyCheck() {
+    if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
+    if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
+    if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
+    if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
+    if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
 }
 
 function calcSacrificeBoost() {

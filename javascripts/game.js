@@ -3370,7 +3370,7 @@ function eternity(force, auto) {
         if (player.realities > 0 && player.infinitiedBank > 1e12) player.reality.upgReqs[11] = true
         if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") == 0) player.reality.upgReqs[12] = true
         if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) player.reality.upgReqs[13] = true
-        if (player.eternities > 1e6) player.reality.upgReqs[14] = true
+        if (player.realities > 0 && player.eternities > 1e6) player.reality.upgReqs[14] = true
         if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) player.reality.upgReqs[15] = true
 
         if (player.reality.upg.includes(13)) {

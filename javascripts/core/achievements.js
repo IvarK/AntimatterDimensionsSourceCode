@@ -357,6 +357,7 @@ function isAchEnabled(name) {
     if (player.realities == 0 && player.achievements.includes(name)) return true
     var time = player.thisReality / 1000
     var achnum = parseInt(name.split("r")[1])
+    if (achnum > 140) return true
     var row = Math.floor(achnum / 10)
     var col = achnum % 10
     var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))

@@ -265,5 +265,6 @@ dev.updateTestSave = function() {
         on: false,
         threshhold: 1
       }
+      player.options.testVersion = 6
     }
 }

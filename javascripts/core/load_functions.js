@@ -413,7 +413,6 @@ if (player.version < 5) {
   updateTickSpeed();
   updateAchievements();
   updateChallenges();
-  updateCheckBoxes();
   toggleChallengeRetry()
   toggleChallengeRetry()
   toggleBulk()
@@ -431,7 +430,6 @@ if (player.version < 5) {
   if (!player.replicanti.auto[2]) document.getElementById("replauto3").textContent = "Auto: OFF"
   else document.getElementById("replauto3").textContent = "Auto: ON"
 
-  loadAutoBuyerSettings();
   updateLastTenRuns()
   updateLastTenEternities()
   updateLastTenRealities()
@@ -632,6 +630,8 @@ if (player.version < 5) {
   toggleCrunchMode()
   toggleCrunchMode()
   toggleCrunchMode()
+  updateCheckBoxes()
+  loadAutoBuyerSettings()
 
 
   if (player.options.newsHidden) {

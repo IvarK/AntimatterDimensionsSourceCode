@@ -298,7 +298,15 @@ var player = {
         upgReqChecks: [false],
         automatorRows: 0,
         automatorCommands: [],
-        respec: false
+        respec: false,
+        tdbuyer: {
+            on: false,
+            threshhold: 1
+        },
+        epmultbuyer: {
+            on: false,
+            threshhold: 1
+        }
     },
     wormhole: {
         speed: 60 * 60, // Seconds to fill
@@ -1101,9 +1109,10 @@ function buyEternityUpgrade(name, cost) {
 }
 
 
-function buyEPMult(upd) {
+function buyEPMult(upd, threshold) {
     if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
-    if (player.eternityPoints.gte(player.epmultCost)) {
+    if (threshold == undefined) threshold = 1
+    if (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         player.epmult = player.epmult.times(5)
         if (player.autoEternityMode == "amount") {
             player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
@@ -1121,9 +1130,10 @@ function buyEPMult(upd) {
     }
 }
 
-function buyMaxEPMult() {
+function buyMaxEPMult(threshold) {
+    if (threshold == undefined) threshold = 1
     while (player.eternityPoints.gte(player.epmultCost)) {
-        buyEPMult(false)
+        buyEPMult(false, threshold)
     }
 }
 
@@ -2224,6 +2234,12 @@ function updateAutobuyers() {
 
     player.autoSacrifice.isOn = document.getElementById("13ison").checked
     player.eternityBuyer.isOn = document.getElementById("eternityison").checked
+    player.reality.epmultbuyer.on = $("#epbuyerison")[0].checked
+    player.reality.tdbuyer.on = $("#tdbuyerison")[0].checked
+    if (player.reality.upg.includes(13)) {
+      $("#autoBuyertd").show()
+      $("#autoBuyerep").show()
+    }
     priorityOrder()
 }
 
@@ -2377,6 +2393,11 @@ function updatePriorities() {
     player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
     const eterValue = fromValue(document.getElementById("priority13").value)
     if (!isNaN(eterValue)) player.eternityBuyer.limit = eterValue
+    
+    const epthresh = $("#maxspentep").val().split("%") / 100
+    const tdthresh = $("#maxspenttd").val().split("%") / 100
+    if (!isNaN(epthresh)) player.reality.epmultbuyer.threshhold = epthresh
+    if (!isNaN(tdthresh)) player.reality.tdbuyer.threshhold = tdthresh
 
     priorityOrder()
 }
@@ -2391,6 +2412,9 @@ function updateCheckBoxes() {
     if (player.autoSacrifice.isOn) document.getElementById("13ison").checked = "true"
     else document.getElementById("13ison").checked = ""
     document.getElementById("eternityison").checked = player.eternityBuyer.isOn
+
+    if (player.reality.epmultbuyer.on) $("#epbuyerison")[0].checked = true
+    if (player.reality.tdbuyer.on) $("#tdbuyerison")[0].checked = true
 
 }
 
@@ -3337,8 +3361,8 @@ function eternity(force, auto) {
         if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) player.reality.upgReqs[15] = true
 
         if (player.reality.upg.includes(13)) {
-            buyMaxEPMult()
-            buyMaxTimeDimensions()
+            if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold)
+            if (player.reality.tdbuyer.on) buyMaxTimeDimensions(player.reality.tdbuyer.threshhold)
         }
 
         return true

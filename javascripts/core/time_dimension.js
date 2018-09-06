@@ -120,12 +120,13 @@ var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
 var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
 var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]
 
-function buyTimeDimension(tier, upd) {
+function buyTimeDimension(tier, upd, threshold) {
   if (upd === undefined) upd = true
+  if (threshold == undefined) threshold = 1
 
   var dim = player["timeDimension"+tier]
   if (tier > 4 && !player.dilation.studies.includes(tier-3)) return false
-  if (player.eternityPoints.lt(dim.cost)) return false
+  if (player.eternityPoints.lt(dim.cost.times(1/threshold))) return false
 
   player.eternityPoints = player.eternityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(1);
@@ -159,6 +160,7 @@ function resetTimeDimensions() {
 
 }
 
-function buyMaxTimeDimensions() {
-  for(var i=1; i<9; i++) while(buyTimeDimension(i, false)) continue
+function buyMaxTimeDimensions(threshold) {
+  if (threshold == undefined) threshold = 1
+  for(var i=1; i<9; i++) while(buyTimeDimension(i, false, threshold)) continue
 }

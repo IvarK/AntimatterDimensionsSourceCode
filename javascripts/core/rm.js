@@ -330,7 +330,7 @@ function getDesc(typeeffect, x) {
     replicationdtgain: "Multiply DT gain by log10(replicanti) x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     replicationglyphlevel: "Glyph level modifier from replicanti. ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseFloat(x)).toFixed(2) + "</span>", // Implemented
     infinitypow: "Infinity dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseFloat(x)).toFixed(1) + "</span>", // Implemented
+    infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseFloat(x)).toFixed(2) + "</span>", // Implemented
     infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented

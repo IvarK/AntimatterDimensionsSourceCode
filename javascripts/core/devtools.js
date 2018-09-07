@@ -255,4 +255,16 @@ dev.updateTestSave = function() {
         }
         player.options.testVersion = 5
     }
+
+    if (player.options.testVersion == 5) {
+      player.reality.tdbuyer = {
+        on: false,
+        threshhold: 1
+      }
+      player.reality.epmultbuyer = {
+        on: false,
+        threshhold: 1
+      }
+      player.options.testVersion = 6
+    }
 }

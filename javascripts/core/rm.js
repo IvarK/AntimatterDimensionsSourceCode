@@ -522,7 +522,7 @@ function canBuyRealityUpg(id) {
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
   var row = Math.floor( ( id - 1 ) / 5 )
-  if (row == 0) return true
+  if (row < 2) return true
   else {
     for (var i = row*5 - 4; i <=row*5; i++) {
       if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row

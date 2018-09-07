@@ -126,7 +126,34 @@ function onLoad() {
   if (player.bestReality === undefined) player.bestReality = 999999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0]];
   if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 180, duration: 10, phase: 0, active: false, unlocked: false }
-  if (player.reality === undefined) player.reality = { realityMachines: new Decimal(0), glyphs: {active: [], inventory: [], slots: 3, last: ""}, seed: Math.floor(Date.now() * Math.random()+1), rebuyables: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}, upg: [], upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], upgReqChecks: [false], automatorRows: 0, automatorCommands: [], respec: false };
+  if (player.reality === undefined) {
+    player.reality = { 
+      realityMachines: new Decimal(0), 
+      glyphs: {
+        active: [], 
+        inventory: [], 
+        slots: 3, 
+        last: ""
+      }, 
+      seed: Math.floor(Date.now() * Math.random()+1), 
+      rebuyables: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}, 
+      upg: [], 
+      upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
+      upgReqChecks: [false], 
+      automatorRows: 0, 
+      automatorCommands: [], 
+      respec: false,
+      tdbuyer: {
+        on: false,
+        threshhold: 1
+      },
+      epmultbuyer: {
+        on: false,
+        threshhold: 1
+      }
+    };
+  }
+  
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
   setTheme(player.options.theme);
 
@@ -386,7 +413,6 @@ if (player.version < 5) {
   updateTickSpeed();
   updateAchievements();
   updateChallenges();
-  updateCheckBoxes();
   toggleChallengeRetry()
   toggleChallengeRetry()
   toggleBulk()
@@ -404,7 +430,6 @@ if (player.version < 5) {
   if (!player.replicanti.auto[2]) document.getElementById("replauto3").textContent = "Auto: OFF"
   else document.getElementById("replauto3").textContent = "Auto: ON"
 
-  loadAutoBuyerSettings();
   updateLastTenRuns()
   updateLastTenEternities()
   updateLastTenRealities()
@@ -605,6 +630,8 @@ if (player.version < 5) {
   toggleCrunchMode()
   toggleCrunchMode()
   toggleCrunchMode()
+  updateCheckBoxes()
+  loadAutoBuyerSettings()
 
 
   if (player.options.newsHidden) {
@@ -617,6 +644,7 @@ if (player.version < 5) {
   else document.getElementById("chartOnOff").checked = false
   if (player.options.chart.dips) document.getElementById("chartDipsOnOff").checked = true
   else document.getElementById("chartDipsOnOff").checked = false
+
  
   if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") {
     Chart.defaults.global.defaultFontColor = '#888';
@@ -893,6 +921,8 @@ function loadAutoBuyerSettings() {
   document.getElementById("prioritySac").value = player.autoSacrifice.priority
   document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
   document.getElementById("priority13").value = player.eternityBuyer.limit
+  $("#maxspentep").val(player.reality.epmultbuyer.threshhold * 100 + "%")
+  $("#maxspenttd").val(player.reality.tdbuyer.threshhold * 100 + "%")
 
 }
 

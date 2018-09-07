@@ -2294,14 +2294,38 @@
                 <button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
                 <button class="storebtn" id="toggleeternitymode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleEternityMode()">Auto eternity mode: amount</button>
                 <br>
-                <div class="autoBuyerDiv" id="autoBuyerEter">
-                    <div>Automatic Eternity</div>
-                    <div><span id="eternitylimittext">Amount of EP to wait until reset:</span>
-                    <input type="text" onchange="updatePriorities()" id="priority13"></input></div>
-                    <br>
-                    <span style="font-size: 80%">Is active:</span>
-                    <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="eternityison"></input>
-                </div>
+                <tr>
+                  <td>
+                    <div class="autoBuyerDiv" id="autoBuyertd">
+                      <div>Automatic Time dimensions</div><br>
+                      <div><span>Maximum percentage of EP spent</span>
+                      <input type="text" onchange="updatePriorities()" id="maxspenttd" placeholder="100%"></input></div>
+                      <br>
+                      <span style="font-size: 80%">Is active:</span>
+                      <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="tdbuyerison"></input>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="autoBuyerDiv" id="autoBuyerEter">
+                      <div>Automatic Eternity</div><br>
+                      <div><span id="eternitylimittext">Amount of EP to wait until reset:</span>
+                      <input type="text" onchange="updatePriorities()" id="priority13"></input></div>
+                      <br>
+                      <span style="font-size: 80%">Is active:</span>
+                      <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="eternityison"></input>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="autoBuyerDiv" id="autoBuyerep">
+                      <div>Automatic EP multiplier</div><br>
+                      <div><span>Maximum percentage of EP spent</span>
+                      <input type="text" onchange="updatePriorities()" id="maxspentep" placeholder="100%"></input></div>
+                      <br>
+                      <span style="font-size: 80%">Is active:</span>
+                      <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="epbuyerison"></input>
+                    </div>
+                  </td>
+                </tr>
                 <tr>
                         <td>
                             <div class="autoBuyerDiv" id="autoBuyerDimBoost" style="font-size: 11px;">

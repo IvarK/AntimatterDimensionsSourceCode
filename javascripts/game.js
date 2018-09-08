@@ -619,7 +619,7 @@ function updateDimensions() {
         }
         else document.getElementById("resetLabel").textContent = 'Dimension Boost ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 
-        if (player.currentChallenge == "challenge4" ? player.resets > 2 : player.resets > 3) {
+        if (player.currentChallenge == "challenge4" ? player.resets > 1 : player.resets > 3) {
             document.getElementById("softReset").textContent = "Reset the game for a boost"
         } else {
             document.getElementById("softReset").textContent = "Reset the game for a new Dimension"

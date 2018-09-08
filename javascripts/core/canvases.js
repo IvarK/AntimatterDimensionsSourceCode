@@ -346,8 +346,8 @@ var nodes = [{id: 0, label: "0", group: 999, title: "Remove the secondary requir
     {id: 2, label: "2", group: 0, title: "+10 Automator rows."},
     {id: 3, label: "3", group: 1, title: "Remove the unlock requirement for Time Dilation."},
     {id: 4, label: "4", group: 1, title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
-    {id: 5, label: "6", group: 2, title: "+1 to base glyph level."},
-    {id: 6, label: "5", group: 2, title: "+1 glyph choice on reality."},
+    {id: 5, label: "5", group: 2, title: "+1 to base glyph level."},
+    {id: 6, label: "6", group: 2, title: "+1 glyph choice on reality."},
 ];
 var edges = [{from: 0, to: 1},
     {from: 1, to: 2},
@@ -359,7 +359,7 @@ var edges = [{from: 0, to: 1},
     {from: 3, to: 4},
 ]
 
-var nodeContainer = document.getElementById("perks");
+var nodeContainer = $(".vis-network")[0];
 var nodeData = {
     nodes: nodes,
     edges: edges
@@ -382,6 +382,7 @@ var nodeOptions = {
 };
 network = new vis.Network(nodeContainer, nodeData, nodeOptions);
 
+// TODO: lower the cost.
 network.on("click", function(params) {
-    if (isFinite(params.nodes[0])) console.log("trying to buy perk #"+params.nodes[0]);
+    if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 99);
   });

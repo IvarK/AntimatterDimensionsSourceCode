@@ -151,7 +151,8 @@ function onLoad() {
       epmultbuyer: {
         on: false,
         threshhold: 1
-      }
+      },
+      pp: 0
     };
   }
   
@@ -697,6 +698,8 @@ if (player.version < 5) {
   updateWormholeUpgrades()
   updateAutomatorRows()
   
+  $("#pp").text("You have " + player.reality.pp + " Perk Points.")
+
   if (player.reality.respec) $("#glyphRespec").addClass("rUpgBought")
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   let diff = new Date().getTime() - player.lastUpdate

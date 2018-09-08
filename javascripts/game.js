@@ -307,7 +307,8 @@ var player = {
         epmultbuyer: {
             on: false,
             threshhold: 1
-        }
+        },
+        pp: 0
     },
     wormhole: {
         speed: 60 * 60, // Seconds to fill
@@ -3729,7 +3730,8 @@ function reality(force) {
         };
 
         if (player.reality.upg.includes(10)) player.eternities = 100
-        
+        player.reality.pp++;
+        $("#pp").text("You have " + player.reality.pp + " Perk Points.")
         if (player.eternities <= 30) {
             document.getElementById("secondRow").style.display = "none";
             document.getElementById("thirdRow").style.display = "none";

@@ -272,4 +272,8 @@ dev.updateTestSave = function() {
         player.reality.perks = []
         player.options.testVersion = 7
       }
+    if (player.options.testVersion == 7) {
+      player.reality.pp = 0
+      player.options.testVersion = 8
+    }
 }

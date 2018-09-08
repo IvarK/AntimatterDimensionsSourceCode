@@ -142,6 +142,7 @@ function onLoad() {
       upgReqChecks: [false], 
       automatorRows: 0, 
       automatorCommands: [], 
+      perks: [],
       respec: false,
       tdbuyer: {
         on: false,

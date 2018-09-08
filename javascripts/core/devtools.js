@@ -267,4 +267,9 @@ dev.updateTestSave = function() {
       }
       player.options.testVersion = 6
     }
+
+    if (player.options.testVersion == 6) {
+        player.reality.perks = []
+        player.options.testVersion = 7
+      }
 }

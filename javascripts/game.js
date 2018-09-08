@@ -297,7 +297,8 @@ var player = {
         upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
         upgReqChecks: [false],
         automatorRows: 0,
-        automatorCommands: [],
+        automatorCommands: [], 
+        perks: [],
         respec: false,
         tdbuyer: {
             on: false,

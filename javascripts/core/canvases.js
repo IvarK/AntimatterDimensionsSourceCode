@@ -12,6 +12,7 @@ var canvas3 = document.getElementById("dilationCanvas");
 var ctx3 = canvas3.getContext("2d");
 var canvas4 = document.getElementById("automatorTreeCanvas");
 var ctx4 = canvas4.getContext("2d");
+var perkBox = document.getElementById("perks")
 
 window.addEventListener("resize", resizeCanvas);
 
@@ -28,6 +29,7 @@ function resizeCanvas() {
     canvas3.height = document.body.scrollHeight;
     canvas4.width = document.body.scrollWidth;
     canvas4.height = document.body.scrollHeight;
+    perkBox.style.width = document.body.scrollWidth + 16 + "px";
     drawStudyTree();
     drawAutomatorTree();
 }
@@ -335,3 +337,51 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator73", "automator83");
     drawAutomatorTreeBranch("automator73", "automator84");
 }
+
+
+var len = undefined;
+
+var nodes = [{id: 0, label: "0", group: 999, title: "Remove the secondary requirements for unlocking eternity challenges."},
+    {id: 1, label: "1", group: 0, title: "+5 Automator rows."},
+    {id: 2, label: "2", group: 0, title: "+10 Automator rows."},
+    {id: 3, label: "3", group: 1, title: "Remove the unlock requirement for Time Dilation."},
+    {id: 4, label: "4", group: 1, title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
+    {id: 5, label: "6", group: 2, title: "+1 to base glyph level."},
+    {id: 6, label: "5", group: 2, title: "+1 glyph choice on reality."},
+];
+var edges = [{from: 0, to: 1},
+    {from: 1, to: 2},
+    
+    {from: 0, to: 5},
+    {from: 5, to: 6},
+
+    {from: 0, to: 3},
+    {from: 3, to: 4},
+]
+
+var nodeContainer = document.getElementById("perks");
+var nodeData = {
+    nodes: nodes,
+    edges: edges
+};
+var nodeOptions = {
+    nodes: {
+        shape: "dot",
+        color: 'red',
+        size: 18,
+        font: {
+            size: 20
+        },
+        borderWidth: 2,
+        shadow:true
+    },
+    edges: {
+        width: 2,
+        shadow:true
+    },
+};
+network = new vis.Network(nodeContainer, nodeData, nodeOptions);
+
+network.on("click", function(params) {
+    if (isFinite(params.nodes[0])) console.log("trying to buy perk #"+params.nodes[0]);
+  });

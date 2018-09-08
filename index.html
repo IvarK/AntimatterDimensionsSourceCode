@@ -12,6 +12,7 @@
     <script type="text/javascript" src="javascripts/notify.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+    <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
     <script>
         (function(i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -2750,6 +2751,7 @@
                     <td><button class="secondarytabbtn" onclick="showRealityTab('upgrades')">Upgrades</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('wormhole')">Wormhole</button></td>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('perks')">Perks</button></td>
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
@@ -2955,6 +2957,11 @@
                     </div>
                 </div>
             </div>
+            <div id="perks" class="realitytab" style="display: none;">  
+                <div class="vis-network" tabindex="900" style="position: relative; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
+                    <canvas width="800" height="800" style="position: relative; touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;"></canvas>
+                </div>
+            </div>
         </div>
     </div>
     <div class="popup" id="update">
@@ -3067,6 +3074,7 @@
 <script type="text/javascript" src="javascripts/chart.js"></script>
 <script type="text/javascript" src="javascripts/lz-string.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
+<script type="text/javascript" src="javascripts/vis.js"></script>
 
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>

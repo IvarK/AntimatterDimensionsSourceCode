@@ -949,4 +949,5 @@ function getRootSaveObject() {
 }
 
 setTimeout(drawAnimations, 100)
+setTimeout(drawPerkNetwork, 100)
 setTimeout(onLoad, 100)

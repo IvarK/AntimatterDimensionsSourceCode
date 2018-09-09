@@ -338,51 +338,69 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator73", "automator84");
 }
 
-
-var len = undefined;
-
-var nodes = [{id: 0, label: "0", group: 999, title: "Remove the secondary requirements for unlocking eternity challenges."},
-    {id: 1, label: "1", group: 0, title: "+5 Automator rows."},
-    {id: 2, label: "2", group: 0, title: "+10 Automator rows."},
-    {id: 3, label: "3", group: 1, title: "Remove the unlock requirement for Time Dilation."},
-    {id: 4, label: "4", group: 1, title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
-    {id: 5, label: "5", group: 2, title: "+1 to base glyph level."},
-    {id: 6, label: "6", group: 2, title: "+1 glyph choice on reality."},
-];
-var edges = [{from: 0, to: 1},
-    {from: 1, to: 2},
-    
-    {from: 0, to: 5},
-    {from: 5, to: 6},
-
-    {from: 0, to: 3},
-    {from: 3, to: 4},
-]
-
+var nodes = []
+var edges = []
 var nodeContainer = $(".vis-network")[0];
-var nodeData = {
-    nodes: nodes,
-    edges: edges
-};
-var nodeOptions = {
-    nodes: {
-        shape: "dot",
-        color: 'red',
-        size: 18,
-        font: {
-            size: 20
-        },
-        borderWidth: 2,
-        shadow:true
-    },
-    edges: {
-        width: 2,
-        shadow:true
-    },
-};
-network = new vis.Network(nodeContainer, nodeData, nodeOptions);
+var nodeData = {}
+var nodeOptions = {}
 
-// TODO: lower the cost.
+function getNodeColor(id, cost) {
+    if (canBuyPerk(id, cost)) var tempColor = "#000000"
+    else if (player.reality.perks.includes(id)) var tempColor = "#0b600e"
+    else var tempColor = "#656565"
+    if (player.reality.perks.includes(id)) var tempBorderColor = "#094E0B"
+    else var tempBorderColor = "#0b600e"
+    return {background: tempColor, border: tempBorderColor, hover: "#0b600e", highlight: "#0b600e"}
+}
+
+function drawPerkNetwork() {
+    nodes = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "Remove the secondary requirements for unlocking eternity challenges."},
+    {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 Automator rows."},
+    {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 Automator rows."},
+    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Remove the unlock requirement for Time Dilation."},
+    {id: 4, label: "4", color: getNodeColor(4, 1), title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
+    {id: 5, label: "5", color: getNodeColor(5, 1), title: "+1 to base glyph level."},
+    {id: 6, label: "6", color: getNodeColor(6, 1), title: "+1 glyph choice on reality."},
+    ];
+    edges = [{from: 0, to: 1},
+        {from: 1, to: 2},
+        
+        {from: 0, to: 5},
+        {from: 5, to: 6},
+
+        {from: 0, to: 3},
+        {from: 3, to: 4},
+    ]
+
+    nodeData = {
+        nodes: nodes,
+        edges: edges
+    };
+    nodeOptions = {
+        interaction: {
+            hover: true,
+            hoverConnectedEdges: false,
+            selectConnectedEdges: false,
+            dragNodes: false,
+            tooltipDelay: 0
+        },
+        nodes: {
+            shape: "dot",
+            size: 18,
+            font: {
+                size: 20
+            },
+            borderWidth: 2,
+            shadow:true
+        },
+        edges: {
+            width: 2,
+            shadow:true
+        },
+    };
+    network = new vis.Network(nodeContainer, nodeData, nodeOptions);
+    // TODO: lower the cost.
 network.on("click", function(params) {
     if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 99);
   });
+}

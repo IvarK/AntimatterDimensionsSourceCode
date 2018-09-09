@@ -18,10 +18,17 @@ function hasPerk(id) {
   return player.reality.perks.includes(id)
 }
 
+function canBuyPerk(id, cost) {
+  if (cost > player.reality.pp) return false
+  if (hasPerk(id) || !hasConnectedPerk(id)) return false
+  return true
+}
+
 function buyPerk(id, cost) {
   if (cost > player.reality.pp) return false
   if (hasPerk(id) || !hasConnectedPerk(id)) return false
 
   player.reality.perks.push(id)
   player.reality.pp -= cost
+  drawPerkNetwork()
 }

@@ -6,6 +6,7 @@
     z-index: -1000;
     pointer-events: none;
     transform: translate(-50%,-50%);
+    height: 125%;
 }
 
 body {

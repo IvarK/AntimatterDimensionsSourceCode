@@ -6031,7 +6031,7 @@ function showStatsTab(tabName) {
     }
 }
 
-function showDimTab(tabName) {
+function showDimTab(tabName, init) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('dimtab');
     var tab;
@@ -6043,7 +6043,7 @@ function showDimTab(tabName) {
             tab.style.display = 'none';
         }
     }
-    if (tabName === 'antimatterdimensions') document.getElementById("progress").style.display = "block"
+    if (tabName === 'antimatterdimensions' && !init) document.getElementById("progress").style.display = "block"
     else document.getElementById("progress").style.display = "none"
 }
 

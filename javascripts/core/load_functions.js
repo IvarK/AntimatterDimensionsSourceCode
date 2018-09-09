@@ -781,7 +781,7 @@ function change_save(saveId) {
   load_game();
   updateChallenges()
   transformSaveToDecimal()
-  showDimTab('antimatterdimensions')
+  showDimTab('antimatterdimensions', true)
   showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)

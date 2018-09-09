@@ -764,6 +764,7 @@ button {
     font-size: 16px;
     border-radius: 5px;
     transition-duration: 0.1s;
+    text-align: center;
 }
 
 #progresspercent {

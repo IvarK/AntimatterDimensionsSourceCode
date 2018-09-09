@@ -5031,6 +5031,8 @@ setInterval(function() {
     if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
     if ((player.matter.gte(2.586e15) && player.currentChallenge == "postc6") || player.matter.gte(Number.MAX_VALUE)) giveAchievement("It's not called matter dimensions is it?")
 
+    if (document.getElementById("eternitystore").style.display !== "none" && document.getElementById("eternityupgrades").style.display !== "none") updateEternityUpgrades()
+
     document.getElementById("dilationTabbtn").style.display = (player.dilation.studies.includes(1)) ? "inline-block" : "none"
     updateDilationUpgradeButtons()
 

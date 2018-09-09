@@ -1735,7 +1735,7 @@ document.getElementById("reset").onclick = function () {
         document.getElementById("sixthRow").style.display = "none";
         document.getElementById("seventhRow").style.display = "none";
         document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions')
+        showDimTab('antimatterdimensions', true)
         updateTickSpeed();
         updateDimensions();
         updateChallenges();
@@ -1760,7 +1760,7 @@ document.getElementById("reset").onclick = function () {
         document.getElementById("sixthRow").style.display = "none";
         document.getElementById("seventhRow").style.display = "none";
         document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions')
+        showDimTab('antimatterdimensions', true)
         updateTickSpeed();
         updateDimensions();
         updateChallenges();
@@ -5601,6 +5601,10 @@ function gameLoop(diff) {
         document.getElementById("progressbar").style.width = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to next dimension unlock")
+    } else if (player.currentEternityChall !== "") {
+        document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
+        document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
+        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to eternity challenge goal")
     } else {
         document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"

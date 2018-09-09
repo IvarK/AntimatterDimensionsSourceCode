@@ -147,6 +147,7 @@ function getTachyonReq() {
   let mult = Math.pow(3, player.dilation.rebuyables[3])
   if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
   if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+  if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
 
   let req = Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
   return req

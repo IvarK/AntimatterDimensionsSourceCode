@@ -276,4 +276,8 @@ dev.updateTestSave = function() {
       player.reality.pp = 0
       player.options.testVersion = 8
     }
+    if (player.options.testVersion == 8) {
+        player.reality.pp = player.realities
+        player.options.testVersion = 9
+      }
 }

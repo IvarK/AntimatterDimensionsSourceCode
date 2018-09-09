@@ -3373,10 +3373,16 @@ function eternity(force, auto) {
 }
 
 function selectGlyph(idx) {
-    player.reality.glyphs.inventory.push(possibleGlyphs[idx])
     glyphSelected = true
     $("#glyphSelect").hide()
-    possibleGlyphs = []
+    if (player.options.animations.reality) setTimeout(function(){
+        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
+        possibleGlyphs = []
+    }, 3000)
+    else {
+        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
+        possibleGlyphs = []
+    }
     reality()
 }
 

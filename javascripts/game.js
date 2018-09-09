@@ -3608,7 +3608,7 @@ function reality(force) {
                 power: new Decimal(1),
                 baseAmount: 0
             },
-            infDimBuyers: [false, false, false, false, false, false, false, false],
+            infDimBuyers: player.reality.upg.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false],
             timeShards: new Decimal(0),
             tickThreshold: new Decimal(1),
             totalTickGained: 0,
@@ -3774,6 +3774,7 @@ function reality(force) {
         player.reality.upgReqChecks = [true]
         updateAutobuyers();
         resetInfDimensions();
+        loadInfAutoBuyers()
         updateChallenges();
         updateChallengeTimes()
         updateLastTenRuns()

@@ -627,6 +627,25 @@ input {
     background: #0b600e !important;
 }
 
+.realityUpgrade:hover {
+    background-color: #d5ffd7 !important;
+}
+
+.rUpgUn:hover {
+    background-color: #656565 !important;
+    color: #d5ffd7 !important;
+}
+
+.rUpgBought {
+    background-color: #0b600e !important;
+    border-color: #094E0B !important;
+}
+
+.rUpgBought:hover {
+    color: #d5ffd7 !important;
+    background-color: #0b600e !important;
+}
+
 #glyphs .glyphbg {
     background: #333333 !important;
 }
@@ -637,6 +656,38 @@ input {
 
 #glyphs .empty {
     background: #333333 !important;
+}
+
+.automatorinstruction.command {
+    background-color: black !important;
+}
+
+.automatorinstruction.target {
+    background-color: black !important;
+}
+
+.automatorinstruction.command:hover {
+    background-color: #d5ffd7 !important;
+}
+
+.automatorinstruction.target:hover {
+    background-color: #BBDEFB !important;
+}
+
+.automatorinstructionbought.command {
+    background-color: #0b600e !important;
+}
+
+.automatorinstructionbought.target {
+    background-color: #2196F3 !important;
+}
+
+.automatorinstructionlocked.command {
+    background-color: #656565 !important;
+}
+
+.automatorinstructionlocked.target {
+    background-color: #656565 !important;
 }
 
 #realityanimbg {

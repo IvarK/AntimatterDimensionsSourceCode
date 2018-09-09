@@ -2990,7 +2990,7 @@ function respecToggle() {
 }
 
 function eternity(force, auto) {
-    if ((player.infinityPoints.gte(Number.MAX_VALUE) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
+    if ((player.infinityPoints.gte(player.eternityChallGoal) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true) {
         if (player.currentEternityChall == "eterc4" && player.infinitied > 16 - (ECTimesCompleted("eterc4")*4)) return false
         if (force) player.currentEternityChall = "";
         if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
@@ -5862,9 +5862,9 @@ var timer = 0
 function autoBuyerTick() {
     if ( player.eternities >= 100 && player.eternityBuyer.isOn ) {
         if (player.autoEternityMode == "amount") {
-            if (gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
+            if (player.currentEternityChall != "" || gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
         } else if (player.autoEternityMode == "time") {
-            if (player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
+            if (player.currentEternityChall != "" || player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
         } else {
             if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
         }   

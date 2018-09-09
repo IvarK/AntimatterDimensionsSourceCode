@@ -697,6 +697,8 @@ if (player.version < 5) {
   updateAutomatorTree();
   updateWormholeUpgrades()
   updateAutomatorRows()
+
+  if (player.wormhole.unlocked) $("#wormholeunlock").hide()
   
   $("#pp").text("You have " + player.reality.pp + " Perk Points.")
 

@@ -6,15 +6,15 @@
  */
 
  function updateWormholeUpgrades() {
-    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole.speed).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeIntervalCost())+"RM")
+    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole.speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost())+"RM")
     if (player.reality.realityMachines < getWormholeIntervalCost()) $("#wormholeinterval").addClass("rUpgUn")
     else $("#wormholeinterval").removeClass("rUpgUn")
 
-    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole.power).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholePowerCost())+"RM")
+    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole.power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost())+"RM")
     if (player.reality.realityMachines < getWormholePowerCost()) $("#wormholepower").addClass("rUpgUn")
     else $("#wormholepower").removeClass("rUpgUn")
 
-    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shorten(getWormholeDurationCost())+"RM")
+    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost())+"RM")
     if (player.reality.realityMachines < getWormholeDurationCost()) $("#wormholeduration").addClass("rUpgUn")
     else $("#wormholeduration").removeClass("rUpgUn")
  }
@@ -25,21 +25,22 @@ function unlockWormhole() {
     player.wormhole.unlocked = true
     player.reality.realityMachines = player.reality.realityMachines.minus(50)
     $("#wormholecontainer").show()
+    $("#wormholeunlock").hide()
 }
 
 function getWormholeIntervalCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 3600) / Math.log(0.8))
-    return Math.pow(3.5, amountOfPurchases) * 15
+    return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15)
 }
 
 function getWormholePowerCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.power / 180) / Math.log(1.35))
-    return Math.pow(2, amountOfPurchases) * 20
+    return Math.ceil(Math.pow(2, amountOfPurchases) * 20)
 }
 
 function getWormholeDurationCost() {
     var amountOfPurchases = Math.round(Math.log(player.wormhole.duration / 10) / Math.log(1.5))
-    return Math.pow(4, amountOfPurchases) * 10
+    return Math.ceil(Math.pow(4, amountOfPurchases) * 10)
 }
 
 function upgradeWormholeInterval() {

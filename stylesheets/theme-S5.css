@@ -22,7 +22,11 @@ body {
     background: #ddd !important;
 }
 
+.achievementunlocked {
+    border: 2px solid #bbb !important;
+}
+
 .achievementlocked {
-    border: 2px solid #222 !important;
-    background-color: #333 !important;
+    border: 2px solid #000 !important;
+    background-color: #222 !important;
 }

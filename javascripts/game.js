@@ -3033,7 +3033,7 @@ function eternity(force, auto) {
         if (player.timestudy.studies.includes(191)) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied*0.05)
         if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
-        if (player.realities > 0 && player.eternities === 0 && player.reality.upgReqChecks[0]) {
+        if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {
             player.reality.upgReqs[6] = true;
         } 
         if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {

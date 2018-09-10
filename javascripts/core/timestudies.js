@@ -341,23 +341,32 @@ function updateTimeStudyButtons() {
   else document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP"
 }
 
-function studiesUntil(id) {
-  var col = id % 10;
-  var row = Math.floor(id / 10);
-  var path = [0,0];
-  for(var i=1;i<4;i++){
-      if (player.timestudy.studies.includes(70+i)) path[0] = i;
-      if (player.timestudy.studies.includes(120+i))path[1] = i;
-  }
-  if ((row > 10 && path[0] === 0) || (row > 14 && path[1] === 0)) {
-      return;
-  }
-  for (var i = 1; i < row; i++) {
-      var chosenPath = path[i > 11 ? 1 : 0];
-      if (row > 6 && row < 11) var secondPath = col;
+function studiesUntil(id, p1, p2) {
+    //id: the study you want to buy until
+    //p1: a choice between 'nd', 'id', 'td'
+    //p2: a choice between 'active', 'passive', 'idle'
+    //both p1 and p2 are optional and not case sensitive
+    let lookup = [['nd','id','td'], ['active','passive','idle']]
+    let col = id % 10;
+    let row = Math.floor(id / 10);
+    let path = [0, 0];
+    for (let i = 1; i < 4; i++) {
+        if (player.timestudy.studies.includes(70 + i)) path[0] = i;
+        if (player.timestudy.studies.includes(120 + i)) path[1] = i;
+    }
+    let temp = [p1, p2];
+    for (let i = 0; i < 2; i++) {
+        if (path[i] > 0) continue;
+        if (lookup[i].includes(temp[i].toLowerCase())) path[i] = lookup[i].indexOf(temp[i].toLowerCase()) + 1;
+    }
+  if ((row > 10 && path[0] === 0 && !player.dilation.upgrades.includes(8)) || (row > 14 && path[1] === 0)) return;
+  for (let i = 1; i < row; i++) {
+      let chosenPath = path[i > 11 ? 1 : 0];
+      let secondPath;
+      if (row > 6 && row < 11)secondPath = col;
       if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), studyCosts[all.indexOf(i * 10 + (chosenPath === 0 ? col : chosenPath))], 0);
       if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, studyCosts[all.indexOf(i * 10 + secondPath)], 0);
-      else for (var j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
+      else for (let j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
   }
   buyTimeStudy(id, studyCosts[all.indexOf(id)], 0);
 }
@@ -458,7 +467,7 @@ function importStudyTree(input) {
   if (input === "") return false
   var studiesToBuy = input.split("|")[0].split(",");
   for (i=0; i<studiesToBuy.length; i++) {
-      document.getElementById(studiesToBuy[i]).click();
+    buyTimeStudy(studiesToBuy[i],studyCosts[all.indexOf(studiesToBuy[i])],0)
   }
   if (parseInt(input.split("|")[1]) !== 0) {
       justImported = true;

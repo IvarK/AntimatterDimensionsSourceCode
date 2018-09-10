@@ -648,7 +648,7 @@ if (player.version < 5) {
   else document.getElementById("chartDipsOnOff").checked = false
 
  
-  if (player.options.theme == "Dark" || player.options.theme == "Dark Metro") {
+  if (player.options.theme == "Dark" || player.options.theme == "Dark Metro" || player.options.theme == "S6") {
     Chart.defaults.global.defaultFontColor = '#888';
     normalDimChart.data.datasets[0].borderColor = '#888'
   } else {

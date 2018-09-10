@@ -384,8 +384,8 @@ function setTheme(name) {
         normalDimChart.data.datasets[0].borderColor = '#000'
     } else if(name === "S6") {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'white';
-        normalDimChart.data.datasets[0].borderColor = '#FFF'
+        Chart.defaults.global.defaultFontColor = '#888';
+        normalDimChart.data.datasets[0].borderColor = '#888'
     } else if(name === "S7") {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'black';

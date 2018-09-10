@@ -354,10 +354,12 @@ function studiesUntil(id, p1, p2) {
         if (player.timestudy.studies.includes(70 + i)) path[0] = i;
         if (player.timestudy.studies.includes(120 + i)) path[1] = i;
     }
-    let temp = [p1, p2];
-    for (let i = 0; i < 2; i++) {
-        if (path[i] > 0) continue;
-        if (lookup[i].includes(temp[i].toLowerCase())) path[i] = lookup[i].indexOf(temp[i].toLowerCase()) + 1;
+    if (p1 != undefined && p2 != undefined) {
+        let temp = [p1, p2];
+        for (let i = 0; i < temp.length; i++) {
+            if (path[i] > 0) continue;
+            if (lookup[i].includes(temp[i].toLowerCase())) path[i] = lookup[i].indexOf(temp[i].toLowerCase()) + 1;
+        }
     }
   if ((row > 10 && path[0] === 0 && !player.dilation.upgrades.includes(8)) || (row > 14 && path[1] === 0)) return;
   for (let i = 1; i < row; i++) {
@@ -467,7 +469,7 @@ function importStudyTree(input) {
   if (input === "") return false
   var studiesToBuy = input.split("|")[0].split(",");
   for (i=0; i<studiesToBuy.length; i++) {
-    buyTimeStudy(studiesToBuy[i],studyCosts[all.indexOf(studiesToBuy[i])],0)
+    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))],0)
   }
   if (parseInt(input.split("|")[1]) !== 0) {
       justImported = true;

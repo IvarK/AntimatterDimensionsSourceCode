@@ -1904,11 +1904,24 @@ reality upgrade unavailable
     background-color: rgb(165, 57, 57)
 }
 
+.videocontainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%; 
+    overflow: hidden;
+    margin-left: -16px;
+}
+
 #realityanimbg {
-    position: fixed;
-    left: 50%;
+    min-width: 100%; 
+    min-height: 100%; 
+    width: auto;
+    height: auto;
+    position: absolute;
     top: 50%;
-    z-index: 1000;
+    left: 50%;
     transform: translate(-50%,-50%);
 }
 

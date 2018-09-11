@@ -42,6 +42,13 @@ function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
 }
 
+function automatorOnOff() {
+  automatorOn = !automatorOn;
+  if (!automatorOn) {
+    $("#automator")[0].blur()
+  }
+}
+
 function highlightcurrent() {
   var row = automatorRows[automatorIdx]
   var idx = $("#automator")[0].value.indexOf(row)

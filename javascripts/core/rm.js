@@ -317,23 +317,23 @@ function getRarity(x) {
 const NUMBERCOLOR = "#85ff85"
 function getDesc(typeeffect, x) {
   const EFFECT_DESCRIPTIONS = {
-    timepow: "Time dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    timepow: "Time dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     timespeed: "Multiply game speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     timefreeTickMult: "Free tickspeed threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     timeeternity: "Multiply EP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     dilationdilationMult: "Multiply dilated time gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> TT per second.", // Implemented
-    dilationpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
+    dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + (3600*x).toFixed(2) + "</span> TT per hour.", // Implemented
+    dilationpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
     replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationpow: "Replicanti multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationpow: "Replicanti multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     replicationdtgain: "Multiply DT gain by log10(replicanti) x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationglyphlevel: "Glyph level modifier from replicanti. ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseFloat(x)).toFixed(2) + "</span>", // Implemented
-    infinitypow: "Infinity dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseFloat(x)).toFixed(3) + "</span>", // Implemented
+    infinitypow: "Infinity dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseFloat(x)).toFixed(2) + "</span>", // Implemented
     infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerpow: "Normal dimension multiplier ^ <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
+    powerpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerautochall: "Automatically complete normal and infinity challenges"
@@ -562,12 +562,19 @@ function updateRealityUpgrades() {
     if (player.reality.upg.includes(i)) $("#rupg"+i).addClass("rUpgBought")
     else $("#rupg"+i).removeClass("rUpgBought")
   }
+  
+  row1Mults = [null, 3, 3, 3, 3, 5];
+  row1Costs = [null];
+  for (var i = 1; i <= 5; i++) {
+	  row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
+	  row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
+  }
 
-  $("#rupg1").html("You gain dilated time 3 times faster<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[1] * Math.pow(REALITY_UPGRADE_COST_MULTS[1], player.reality.rebuyables[1]))+" RM")
-  $("#rupg2").html("You gain replicanti 3 times faster<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[2] * Math.pow(REALITY_UPGRADE_COST_MULTS[2], player.reality.rebuyables[2]))+" RM")
-  $("#rupg3").html("You gain 3 times more eternities<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[3] * Math.pow(REALITY_UPGRADE_COST_MULTS[3], player.reality.rebuyables[3]))+" RM")
-  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[4] * Math.pow(REALITY_UPGRADE_COST_MULTS[4], player.reality.rebuyables[4]))+" RM")
-  $("#rupg5").html("You gain 5 times more infinities<br>Cost: "+shortenDimensions(REALITY_UPGRADE_COSTS[5] * Math.pow(REALITY_UPGRADE_COST_MULTS[5], player.reality.rebuyables[5]))+" RM")
+  $("#rupg1").html("You gain dilated time 3 times faster<br>Currently: "+ row1Mults[1] +"x<br>Cost: "+row1Costs[1]+" RM")
+  $("#rupg2").html("You gain replicanti 3 times faster<br>Currently: "+ row1Mults[2] +"x<br>Cost: "+row1Costs[2]+" RM")
+  $("#rupg3").html("You gain 3 times more eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
+  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: "+ row1Mults[4] +"x<br>Cost: "+row1Costs[4]+" RM")
+  $("#rupg5").html("You gain 5 times more infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
 }

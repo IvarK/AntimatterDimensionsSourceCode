@@ -677,8 +677,7 @@ function updateDimensions() {
             document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
             document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
         }
-        if (player.infinitied == 1) document.getElementById("infinitied").textContent = "You have infinitied 1 time."
-        else document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.infinitied === 1) ? " time." : " times.")
+        document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.infinitied === 1) ? " time." : " times.")
         if (player.infinitiedBank > 0) document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times this eternity."
 
     }
@@ -1334,12 +1333,12 @@ function updateInfCosts() {
 			else
 				ECUnlockQuantity[ECnum] = ECUnlockQuantity[ECnum].min(ECUnlockThresholds[ECnum]);
 			
-			if (ECnum <= 6 && ECnum != 4)	// requirements are doubles
-				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + ECUnlockQuantity[ECnum] + "/" + ECUnlockThresholds[ECnum] + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
-			else if (ECnum == 4)			// regex stuff to add commas
-				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + ECUnlockQuantity[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/" + ECUnlockThresholds[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
-			else							// requirements are Decimals
-				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
+            if (ECnum <= 6 && ECnum != 4)	// requirements are doubles
+                document.getElementById("ec" + ECnum + "desc").textContent = ECUnlockQuantity[ECnum] + "/" + ECUnlockThresholds[ECnum] + " " + ECUnlockResource[ECnum];
+            else if (ECnum == 4)			// regex stuff to add commas
+                document.getElementById("ec" + ECnum + "desc").textContent = ECUnlockQuantity[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/" + ECUnlockThresholds[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + ECUnlockResource[ECnum];
+            else							// requirements are Decimals
+                document.getElementById("ec" + ECnum + "desc").textContent = shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum];
 		}
 		try {
 			document.getElementById("ec" + player.etercreq + "unl").innerHTML = "Eternity Challenge " + player.etercreq + "<span>Cost: " + ECUnlockTTCosts[player.etercreq] + " Time Theorems";
@@ -1347,10 +1346,6 @@ function updateInfCosts() {
 		catch (err) {
 			// Don't do anything if none of the ECs are currently unlocked
 		}
-
-        document.getElementById("ec11unl").innerHTML = "Eternity Challenge 11<span>Requirement: Use only the Normal Dimension path<span>Cost: 1 Time Theorem"
-        document.getElementById("ec12unl").innerHTML = "Eternity Challenge 12<span>Requirement: Use only the Time Dimension path<span>Cost: 1 Time Theorem"
-
         if (player.dilation.studies.includes(1)) document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
         else document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Requirement: 5 EC11 and EC12 completions and 13000 total theorems<span>Cost: 5000 Time Theorems"
     }

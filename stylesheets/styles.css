@@ -1452,12 +1452,6 @@ button {
 }
 
 .radial-progress {
-    /* @circle-background: #d6dadc;
-    @circle-color: #97a71d; */
-    
-}
-
-.radial-progress {
     /* @circle-size: 120px; */
     background-color: #d6dadc;
     width: 120px;

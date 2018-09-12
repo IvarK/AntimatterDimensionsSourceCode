@@ -2020,11 +2020,16 @@ reality upgrade unavailable
     width: 18%;
 }
 
+#pp {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 #perks {
     width: 900px;
     height: 500px;
-    border: 1px solid #444444;
-    margin-left: -16px;
+    border: 1px solid black;
 }
 
 @media print, screen and (max-width: 960px) {

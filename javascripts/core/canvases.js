@@ -12,7 +12,6 @@ var canvas3 = document.getElementById("dilationCanvas");
 var ctx3 = canvas3.getContext("2d");
 var canvas4 = document.getElementById("automatorTreeCanvas");
 var ctx4 = canvas4.getContext("2d");
-var perkBox = document.getElementById("perks")
 
 window.addEventListener("resize", resizeCanvas);
 
@@ -29,7 +28,6 @@ function resizeCanvas() {
     canvas3.height = document.body.scrollHeight;
     canvas4.width = document.body.scrollWidth;
     canvas4.height = document.body.scrollHeight;
-    perkBox.style.width = document.body.scrollWidth + 16 + "px";
     drawStudyTree();
     drawAutomatorTree();
 }
@@ -348,9 +346,11 @@ function getNodeColor(id, cost) {
     if (canBuyPerk(id, cost)) var tempColor = "#000000"
     else if (player.reality.perks.includes(id)) var tempColor = "#0b600e"
     else var tempColor = "#656565"
+    if (canBuyPerk(id, cost) || player.reality.perks.includes(id)) var tempHoverColor = "#0b600e"
+    else var tempHoverColor = "#656565"
     if (player.reality.perks.includes(id)) var tempBorderColor = "#094E0B"
     else var tempBorderColor = "#0b600e"
-    return {background: tempColor, border: tempBorderColor, hover: "#0b600e", highlight: "#0b600e"}
+    return {background: tempColor, border: tempBorderColor, hover: {background: tempHoverColor, border: tempBorderColor}, highlight: {background: tempColor, border: tempBorderColor}}
 }
 
 function drawPerkNetwork() {
@@ -381,8 +381,7 @@ function drawPerkNetwork() {
             hover: true,
             hoverConnectedEdges: false,
             selectConnectedEdges: false,
-            dragNodes: false,
-            tooltipDelay: 0
+            tooltipDelay: 0,
         },
         nodes: {
             shape: "dot",
@@ -399,8 +398,22 @@ function drawPerkNetwork() {
         },
     };
     network = new vis.Network(nodeContainer, nodeData, nodeOptions);
-    // TODO: lower the cost.
-network.on("click", function(params) {
-    if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 99);
-  });
+
+    //buying perks TODO: lower the cost.
+    network.on("click", function(params) {
+        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 99);
+    });
+    //hide tooltips on drag
+    network.on("dragStart", function(params) {
+        document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
+    });
+    //set min and max zoom
+    network.on("zoom",function(){
+        if(network.getScale() <= 0.2 ) {
+            network.moveTo({scale: 0.2,});
+        }
+        if(network.getScale() >= 4 ) {
+            network.moveTo({scale: 4,});
+        }
+    })
 }

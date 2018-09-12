@@ -1899,7 +1899,8 @@ reality upgrade unavailable
 }
 
 .videocontainer {
-    position: absolute;
+    position: fixed;
+    z-index: -1000;
     top: 0;
     bottom: 0;
     width: 100%;
@@ -1915,6 +1916,7 @@ reality upgrade unavailable
     width: auto;
     height: auto;
     position: absolute;
+    pointer-events: all;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);

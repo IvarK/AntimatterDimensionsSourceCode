@@ -4946,45 +4946,20 @@ setInterval(function() {
     if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
         while (upgradeReplicantiGalaxy()) continue
     }
-
-    document.getElementById("eterc1goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1800").times(new Decimal("1e200").pow(ECTimesCompleted("eterc1"))).max(new Decimal("1e1800"))) + " IP"
-    document.getElementById("eterc1completed").textContent = "Completed "+ECTimesCompleted("eterc1")+((player.eternityChalls.eterc1 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc2goal").textContent = "Goal: "+shortenCosts(new Decimal("1e975").times(new Decimal("1e175").pow(ECTimesCompleted("eterc2"))).max(new Decimal("1e975"))) + " IP"
-    document.getElementById("eterc2completed").textContent = "Completed "+ECTimesCompleted("eterc2")+((player.eternityChalls.eterc2 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc3goal").textContent = "Goal: "+shortenCosts(new Decimal("1e600").times(new Decimal("1e75").pow(ECTimesCompleted("eterc3"))).max(new Decimal("1e575"))) + " IP"
-    document.getElementById("eterc3completed").textContent = "Completed "+ECTimesCompleted("eterc3")+((player.eternityChalls.eterc3 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc4goal").textContent = "Goal: "+shortenCosts(new Decimal("1e2750").times(new Decimal("1e550").pow(ECTimesCompleted("eterc4"))).max(new Decimal("1e2750"))) + " IP in "+Math.max((16 - (ECTimesCompleted("eterc4")*4)), 0)+" infinities or less."
-    document.getElementById("eterc4completed").textContent = "Completed "+ECTimesCompleted("eterc4")+((player.eternityChalls.eterc4 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc5goal").textContent = "Goal: "+shortenCosts(new Decimal("1e750").times(new Decimal("1e400").pow(ECTimesCompleted("eterc5"))).max(new Decimal("1e750"))) + " IP"
-    document.getElementById("eterc5completed").textContent = "Completed "+ECTimesCompleted("eterc5")+((player.eternityChalls.eterc5 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc6goal").textContent = "Goal: "+shortenCosts(new Decimal("1e850").times(new Decimal("1e250").pow(ECTimesCompleted("eterc6"))).max(new Decimal("1e850"))) + " IP"
-    document.getElementById("eterc6completed").textContent = "Completed "+ECTimesCompleted("eterc6")+((player.eternityChalls.eterc6 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc7goal").textContent = "Goal: "+shortenCosts(new Decimal("1e2000").times(new Decimal("1e530").pow(ECTimesCompleted("eterc7"))).max(new Decimal("1e2000"))) + " IP"
-    document.getElementById("eterc7completed").textContent = "Completed "+ECTimesCompleted("eterc7")+((player.eternityChalls.eterc7 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc8goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1300").times(new Decimal("1e900").pow(ECTimesCompleted("eterc8"))).max(new Decimal("1e1300"))) + " IP"
-    document.getElementById("eterc8completed").textContent = "Completed "+ECTimesCompleted("eterc8")+((player.eternityChalls.eterc8 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc9goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1750").times(new Decimal("1e250").pow(ECTimesCompleted("eterc9"))).max(new Decimal("1e1750"))) + " IP"
-    document.getElementById("eterc9completed").textContent = "Completed "+ECTimesCompleted("eterc9")+((player.eternityChalls.eterc9 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc10goal").textContent = "Goal: "+shortenCosts(new Decimal("1e3000").times(new Decimal("1e300").pow(ECTimesCompleted("eterc10"))).max(new Decimal("1e3000"))) + " IP"
-    document.getElementById("eterc10completed").textContent = "Completed "+ECTimesCompleted("eterc10")+((player.eternityChalls.eterc10 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc11goal").textContent = "Goal: "+shortenCosts(new Decimal("1e500").times(new Decimal("1e200").pow(ECTimesCompleted("eterc11"))).max(new Decimal("1e500"))) + " IP"
-    document.getElementById("eterc11completed").textContent = "Completed "+ECTimesCompleted("eterc11")+((player.eternityChalls.eterc11 === 1) ? " time." : " times.")
-
-    document.getElementById("eterc12goal").textContent = "Goal: "+shortenCosts(new Decimal("1e110000").times(new Decimal("1e12000").pow(ECTimesCompleted("eterc12"))).max(new Decimal("1e110000"))) + " IP in "+(Math.max(10 - ECTimesCompleted("eterc12")*2, 1)/10) + ((ECTimesCompleted("eterc12") === 0) ? " second or less." :" seconds or less." )
-    document.getElementById("eterc12completed").textContent = "Completed "+ECTimesCompleted("eterc12")+((player.eternityChalls.eterc12 === 1) ? " time." : " times.")
+	
+	// EC goal IP text
+	for (var ECNum = 1; ECNum <= 12; ECNum++) {
+		var ECComp = ECTimesCompleted("eterc" + ECNum);
+		var extraText = "";
+		if (ECNum == 4)
+			extraText = " in "+Math.max((16 - 4*ECComp), 0)+" infinities or less.";
+		if (ECNum == 12)
+			extraText = " in "+(Math.max(10 - 2*ECComp, 1)/10) + ((ECComp == 0) ? " second or less." :" seconds or less.");
+		
+		document.getElementById("eterc" + ECNum + "goal").textContent = "Goal: "+shortenCosts(getECGoalIP(ECNum, ECComp)) + " IP" + extraText;
+		document.getElementById("eterc" + ECNum + "completed").textContent = "Completed " + ECComp + ((ECComp == 1) ? " time." : " times.");
+	}
     updateECUnlockButtons()
-
-
 
 
     if (player.currentEternityChall == "eterc8") {
@@ -5076,6 +5051,15 @@ setInterval(function() {
     updateRealityUpgrades()
 
 }, 1000)
+
+function getECGoalIP(challNum, timesCompleted) {
+	var ECBaseIPGoal = [0, 1800, 975, 600, 2750, 750, 850, 2000, 1300, 1750, 3000, 500, 110000];
+	var ECPerComp = [0, 200, 175, 75, 550, 400, 250, 530, 900, 250, 300, 200, 12000]
+	
+	var baseDecimal = new Decimal("1e" + ECBaseIPGoal[challNum]);
+	var perCompDecimal = new Decimal("1e" + ECPerComp[challNum]);
+	return baseDecimal.times(perCompDecimal.pow(timesCompleted)).max(baseDecimal);
+}
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)

@@ -70,33 +70,39 @@ function mainIteration() {
   if (automatorRows[automatorIdx][0] == "*") cont = true
   if (automatorOn) {
     var row = automatorRows[automatorIdx].split(" ")
-    if (cont) row.splice(0, 1)
-    if (row.length == 1) {
-      var current = {
-        action: row[0]
+      if (cont) row.splice(0, 1);
+      if (row.length == 1) {
+          var current = {
+              action: row[0]
+          }
+      } else if (row.length == 2) {
+          var current = {
+              action: row[0],
+              target: row[1]
+          }
+      } else if (row.length == 3) {
+          var current = {
+              action: row[0],
+              target: row[1],
+              id: row[2]
+          }
+      } else if (row[0] == "if") {
+          var current = {
+              action: row[1],
+              target: row[2],
+              id: row[3]
+          }
+          ifstatement = true
+          if (wait(current)) automatorIdx += 1
+          else automatorIdx += 2
+      } else if (row.length >= 4) { //added more flexibility to allow for more arguments in automator commands
+          var current = {
+              action: row[0],
+              target: row[1],
+              id: row[2],
+              args: row.slice(3)
+          }
       }
-    } else if (row.length == 2) {
-      var current = {
-        action: row[0],
-        target: row[1]
-      }
-    } else if (row.length == 3) {
-      var current = {
-        action: row[0],
-        target: row[1],
-        id: row[2]
-      }
-    } else if (row[0] == "if"){
-      var current = {
-        action: row[1],
-        target: row[2],
-        id: row[3]
-      }
-
-      ifstatement = true
-      if (wait(current)) automatorIdx+=1
-      else automatorIdx+=2
-    }
     if (!ifstatement) {
       switch(current.action) {
         case "buy":
@@ -158,10 +164,10 @@ function buy(current) {
       else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
       else return false
       break;
-    case "studyuntil":
-      id = parseInt(current.id)
+      case "studyuntil":
+          id = parseInt(current.id);
       if (!player.timestudy.studies.includes(id)) {
-        studiesUntil(id)
+          studiesUntil(id, ...current.args);//passes arguments into the studies until function.
         return false
       }
       else {

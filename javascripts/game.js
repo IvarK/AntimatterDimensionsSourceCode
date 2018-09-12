@@ -1323,26 +1323,30 @@ function updateInfCosts() {
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
         document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
 
-        if (player.etercreq !== 1) document.getElementById("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ECTimesCompleted("eterc1")+1)*20000+" Eternities<span>Cost: 30 Time Theorems"
-        else document.getElementById("ec1unl").innerHTML = "Eternity Challenge 1<span>Cost: 30 Time Theorems"
-        if (player.etercreq !== 2) document.getElementById("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(1300+(ECTimesCompleted("eterc2")*150))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
-        else document.getElementById("ec2unl").innerHTML = "Eternity Challenge 2<span>Cost: 35 Time Theorems"
-        if (player.etercreq !== 3) document.getElementById("ec3unl").innerHTML = "Eternity Challenge 3<span>Requirement: "+(17300+(ECTimesCompleted("eterc3")*1250))+" 8th dimensions<span>Cost: 40 Time Theorems"
-        else document.getElementById("ec3unl").innerHTML = "Eternity Challenge 3<span>Cost: 40 Time Theorems"
-        if (player.etercreq !== 4) document.getElementById("ec4unl").innerHTML = "Eternity Challenge 4<span>Requirement: "+(1e8 + (ECTimesCompleted("eterc4")*5e7)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" infinities<span>Cost: 70 Time Theorems"
-        else document.getElementById("ec4unl").innerHTML = "Eternity Challenge 4<span>Cost: 70 Time Theorems"
-        if (player.etercreq !== 5) document.getElementById("ec5unl").innerHTML = "Eternity Challenge 5<span>Requirement: "+(160+(ECTimesCompleted("eterc5")*14))+" antimatter galaxies<span>Cost: 130 Time Theorems"
-        else document.getElementById("ec5unl").innerHTML = "Eternity Challenge 5<span>Cost: 130 Time Theorems"
-        if (player.etercreq !== 6) document.getElementById("ec6unl").innerHTML = "Eternity Challenge 6<span>Requirement: "+(40+(ECTimesCompleted("eterc6")*5))+" replicanti galaxies<span>Cost: 85 Time Theorems"
-        else document.getElementById("ec6unl").innerHTML = "Eternity Challenge 6<span>Cost: 85 Time Theorems"
-        if (player.etercreq !== 7) document.getElementById("ec7unl").innerHTML = "Eternity Challenge 7<span>Requirement: "+shortenCosts(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))+" antimatter <span>Cost: 115 Time Theorems"
-        else document.getElementById("ec7unl").innerHTML = "Eternity Challenge 7<span>Cost: 115 Time Theorems"
-        if (player.etercreq !== 8) document.getElementById("ec8unl").innerHTML = "Eternity Challenge 8<span>Requirement: "+shortenCosts(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))+" IP <span>Cost: 115 Time Theorems"
-        else document.getElementById("ec8unl").innerHTML = "Eternity Challenge 8<span>Cost: 115 Time Theorems"
-        if (player.etercreq !== 9) document.getElementById("ec9unl").innerHTML = "Eternity Challenge 9<span>Requirement: "+shortenCosts(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))+" infinity power<span>Cost: 415 Time Theorems"
-        else document.getElementById("ec9unl").innerHTML = "Eternity Challenge 9<span>Cost: 415 Time Theorems"
-        if (player.etercreq !== 10) document.getElementById("ec10unl").innerHTML = "Eternity Challenge 10<span>Requirement: "+shortenCosts(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))+" EP<span>Cost: 550 Time Theorems"
-        else document.getElementById("ec10unl").innerHTML = "Eternity Challenge 10<span>Cost: 550 Time Theorems"
+		// Text for EC unlock studies
+		var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
+		var ECUnlockResource = ["", "Eterities", "Tickspeed upgrades gained from time dimensions", "8th dimensions", "infinities", "antimatter galaxies", "replicanti galaxies", "antimatter", "IP", "infinity power", "EP"]
+		var ECUnlockThresholds = [0, (ECTimesCompleted("eterc1")+1)*20000, 1300+(ECTimesCompleted("eterc2")*150), 17300+(ECTimesCompleted("eterc3")*1250), 1e8 + (ECTimesCompleted("eterc4")*5e7), 160+(ECTimesCompleted("eterc5")*14), 40+(ECTimesCompleted("eterc6")*5), new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))), new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))), new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))), new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10")))];
+		var ECUnlockTTCosts = [0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550];
+		for (var ECnum = 1; ECnum <= 10; ECnum++) {
+			if (ECnum <= 6)	// showing more than the maximum may lead to text overflowing
+				ECUnlockQuantity[ECnum] = Math.min(ECUnlockQuantity[ECnum], ECUnlockThresholds[ECnum]);
+			else
+				ECUnlockQuantity[ECnum] = ECUnlockQuantity[ECnum].min(ECUnlockThresholds[ECnum]);
+			
+			if (ECnum <= 6 && ECnum != 4)	// requirements are doubles
+				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + ECUnlockQuantity[ECnum] + "/" + ECUnlockThresholds[ECnum] + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
+			else if (ECnum == 4)			// regex stuff to add commas
+				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + ECUnlockQuantity[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/" + ECUnlockThresholds[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
+			else							// requirements are Decimals
+				document.getElementById("ec" + ECnum + "unl").innerHTML = "Eternity Challenge " + ECnum + "<span>" + shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum] + "<span>Cost: " + ECUnlockTTCosts[ECnum] + " Time Theorems";
+		}
+		try {
+			document.getElementById("ec" + player.etercreq + "unl").innerHTML = "Eternity Challenge " + player.etercreq + "<span>Cost: " + ECUnlockTTCosts[player.etercreq] + " Time Theorems";
+		}
+		catch (err) {
+			// Don't do anything if none of the ECs are currently unlocked
+		}
 
         document.getElementById("ec11unl").innerHTML = "Eternity Challenge 11<span>Requirement: Use only the Normal Dimension path<span>Cost: 1 Time Theorem"
         document.getElementById("ec12unl").innerHTML = "Eternity Challenge 12<span>Requirement: Use only the Time Dimension path<span>Cost: 1 Time Theorem"

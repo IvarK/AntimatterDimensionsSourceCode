@@ -341,12 +341,10 @@ function updateTimeStudyButtons() {
   else document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP"
 }
 
-function studiesUntil(id, p1, p2) {
+function studiesUntil(id, ...paths) {
     //id: the study you want to buy until
-    //p1: a choice between 'nd', 'id', 'td'
-    //p2: a choice between 'active', 'passive', 'idle'
-    //both p1 and p2 are optional and not case sensitive
-    let lookup = [['nd','id','td'], ['active','passive','idle']]
+    //paths is a an d following args given after id which specify which of the locked paths the player chooses (optional and not case sensitive, used to make automator more flexible)
+    let lookup = [['nd','id','td'], ['active','passive','idle']];
     let col = id % 10;
     let row = Math.floor(id / 10);
     let path = [0, 0];
@@ -354,11 +352,16 @@ function studiesUntil(id, p1, p2) {
         if (player.timestudy.studies.includes(70 + i)) path[0] = i;
         if (player.timestudy.studies.includes(120 + i)) path[1] = i;
     }
-    if (p1 != undefined && p2 != undefined) {
-        let temp = [p1, p2];
-        for (let i = 0; i < temp.length; i++) {
-            if (path[i] > 0) continue;
-            if (lookup[i].includes(temp[i].toLowerCase())) path[i] = lookup[i].indexOf(temp[i].toLowerCase()) + 1;
+    if (paths.length > 0 && paths !== undefined) {
+        for (let i = 0; i < paths.length; i++) {
+            let check = -1;
+            for (let j = 0; j < lookup.length; j++) {
+                if (lookup[j].includes(paths[i].toLowerCase())) {
+                    check = j;
+                    break;
+                }
+            }
+            if (check > -1 && path[check] === 0) path[check] = lookup[i].indexOf(paths[i]) + 1;
         }
     }
   if ((row > 10 && path[0] === 0 && !player.dilation.upgrades.includes(8)) || (row > 14 && path[1] === 0)) return;

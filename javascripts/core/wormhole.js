@@ -68,15 +68,19 @@ function upgradeWormholeDuration() {
 }
 
 function wormHoleLoop(diff) {
+	
+	let wormholeImage = document.getElementById("wormholeImage");
     
     if (player.wormhole.active) {
         player.wormhole.phase += diff / 1000 / player.wormhole.power
+		wormholeImage.setAttribute('ach-tooltip', "Wormhole is active for " + (player.wormhole.duration - player.wormhole.phase).toFixed(1) + " more seconds.");
         if (player.wormhole.phase >= player.wormhole.duration) {
             player.wormhole.phase = 0
             player.wormhole.active = false
         }
     } else {
         player.wormhole.phase += diff / 1000
+		wormholeImage.setAttribute('ach-tooltip', "Wormhole will activate in " + (player.wormhole.speed - player.wormhole.phase).toFixed(1) + " seconds.");
         if (player.wormhole.phase >= player.wormhole.speed) {
             player.wormhole.phase = 0
             player.wormhole.active = true

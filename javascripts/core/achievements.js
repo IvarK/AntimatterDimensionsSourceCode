@@ -401,3 +401,38 @@ function nextAchIn() {
 
     return ( timeReq - time) * 1000
 }
+
+function lockedString(name) {
+	if (!player.achievements.includes(name))
+		return "";
+    var achnum = parseInt(name.split("r")[1])
+    if (achnum > 140 || isNaN(achnum))
+		return "";
+    var row = Math.floor(achnum / 10)
+    var col = achnum % 10
+    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var diffFromMiddle = (row - 7) * diffBetweenRows
+    var timeReq = 0
+    for ( var i = 1; i < row; i++) {
+        timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
+    }
+
+    for ( var i = 1; i < col; i++) {
+        timeReq += basePerAch + diffFromMiddle
+    }
+
+    timeReq += basePerAch + diffFromMiddle
+	timeReq -= player.thisReality / 1000
+
+	if (timeReq < 0)
+		return ""
+	else if (timeReq < 60)
+		return "\n\n(Locked: " + timeReq.toFixed(0) + " seconds)";
+	else if (timeReq < 3600)
+		return "\n\n(Locked: " + (timeReq/60).toFixed(1) + " minutes)";
+	else if (timeReq < 86400)
+		return "\n\n(Locked: " + (timeReq/3600).toFixed(1) + " hours)";
+	else
+		return "\n\n(Locked: " + (timeReq/86400).toFixed(1) + " days)";
+}

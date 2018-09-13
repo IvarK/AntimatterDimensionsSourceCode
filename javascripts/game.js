@@ -512,6 +512,7 @@ function showTab(tabName) {
     resizeCanvas();
     closeToolTip();
     if (tabName !== "statistics") statsTimer = 0
+    if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
 

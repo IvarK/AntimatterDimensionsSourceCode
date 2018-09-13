@@ -166,8 +166,9 @@ function buy(current) {
       break;
       case "studyuntil":
           id = parseInt(current.id);
-      if (!player.timestudy.studies.includes(id)) {
-          studiesUntil(id, ...current.args);//passes arguments into the studies until function.
+          if (!player.timestudy.studies.includes(id)) {
+              if (current.args === undefined) studiesUntil(id);
+              else studiesUntil(id, ...current.args);//passes arguments into the studies until function.
         return false
       }
       else {

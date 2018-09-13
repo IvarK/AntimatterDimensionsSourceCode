@@ -5031,11 +5031,17 @@ setInterval(function() {
     else $("#realitybtn").hide()
 
     updateAchievements()
-    if (player.realities > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
+    if (player.realities > 0 && nextAchIn() > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
 
-    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) )
-    if (player.realities == 0) $("#timeForAchievements").text("")
+    var totalAchTime = 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0));
+	$("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
+    if (player.realities == 0)
+		$("#timeForAchievements").text("")
+	if (player.thisReality < totalAchTime)
+		$("#allAchAt").text("(Remaining: " + timeDisplay(totalAchTime - player.thisReality) + ")")
+	else
+		$("#allAchAt").text("")
     if (player.realities > 3) {
         $("#automatorUnlock").hide()
         $(".automator-container").show()
@@ -5723,7 +5729,16 @@ function gameLoop(diff) {
 	if (player.eternityPoints.exponent > 6000)
 		document.getElementById("maxTimeDimensions").setAttribute('ach-tooltip', "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000")));
 	
-	
+	// Achievement tooltip editing (for amount of time locked)
+	if (player.realities > 0) {
+		for (var key in allAchievements) {
+			var achName = allAchievements[key];
+			var oldText = document.getElementById(allAchievements[key]).getAttribute("ach-tooltip");
+			var lockText = lockedString(key);
+			var textLines = oldText.split("\n");
+			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
+		}
+	}
 
     player.lastUpdate = thisUpdate;
 }

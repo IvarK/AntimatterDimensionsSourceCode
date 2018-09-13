@@ -1342,7 +1342,7 @@ function updateInfCosts() {
                 document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum];
 		}
 		try {
-			document.getElementById("ec" + player.etercreq + "unl").innerHTML = "Eternity Challenge " + player.etercreq + "<span>Cost: " + ECUnlockTTCosts[player.etercreq] + " Time Theorems";
+			document.getElementById("ec" + player.etercreq + "desc").textContent = "";
 		}
 		catch (err) {
 			// Don't do anything if none of the ECs are currently unlocked

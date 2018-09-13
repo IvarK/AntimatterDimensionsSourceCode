@@ -597,8 +597,14 @@ $(".tooltip").parent().mouseleave(function(e) {
 
 function toggleGlyphRespec() {
   player.reality.respec = !player.reality.respec
-  if (player.reality.respec) $("#glyphRespec").addClass("rUpgBought")
-  else $("#glyphRespec").removeClass("rUpgBought")
+  if (player.reality.respec) {
+	  $("#glyphRespec").addClass("rUpgBought")
+	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
+  }
+  else {
+	  $("#glyphRespec").removeClass("rUpgBought")
+	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
+  }
 }
 
 function respecGlyphs() {

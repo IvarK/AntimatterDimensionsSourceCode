@@ -5712,9 +5712,18 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
-    document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
+	if (gainedRealityMachines() < 554)	// At more than (e7659 EP, 554 RM), each +1 EP exponent always adds at least one more RM.  This prevents some display funniness with the percentage text being put on the next line alone (when >1000 RM) when it doesn't even matter any more
+		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
+	else
+		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
     document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
     if (player.wormhole.unlocked) wormHoleLoop(diff)
+		
+	// Increased cost scaling tooltips
+	if (player.eternityPoints.exponent > 6000)
+		document.getElementById("maxTimeDimensions").setAttribute('ach-tooltip', "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000")));
+	
+	
 
     player.lastUpdate = thisUpdate;
 }

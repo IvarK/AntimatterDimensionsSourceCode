@@ -385,7 +385,7 @@ function drawPerkNetwork() {
     {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with 8th achievement row after reality."},
     {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with 9th achievement row after reality."},
     {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with 10th achievement row after reality."},
-    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with 11tt achievement row after reality."},
+    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with 11th achievement row after reality."},
     {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with 12th achievement row after reality."},
     ];
 

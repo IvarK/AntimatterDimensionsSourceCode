@@ -213,7 +213,7 @@ function canBuyStudy(name) {
   }
 
   if (name == 181) {
-      if (player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)) return true; else return false;
+      if ( (player.reality.perks.includes(4) || player.eternityChalls.eterc1 !== undefined) && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)) return true; else return false;
   }
   if (name == 201) if(player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)) return true; else return false
   if (name == 211) if(player.timestudy.studies.includes(191)) return true; else return false

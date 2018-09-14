@@ -79,7 +79,7 @@ function buyDilationUpgrade(id, costInc) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
       player.dilation.rebuyables[id] += 1
       if (id == 2) {
-          player.dilation.dilatedTime = new Decimal(0)
+          if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
           player.dilation.nextThreshold = new Decimal(1000)
           player.dilation.freeGalaxies = 0
       }

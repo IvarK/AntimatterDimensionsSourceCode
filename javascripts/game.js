@@ -3034,7 +3034,7 @@ function eternity(force, auto) {
               if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
                 while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
                       player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
-                      console.log(completitions)
+                      
               }
             }
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
@@ -5366,6 +5366,17 @@ function gameLoop(diff) {
     if (gainedEternityPoints().gte(1e6)) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
     if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(getTachyonGain()) +" Tachyon particles."
     if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
+    var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
+    if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1))) {
+      var completitions = 1
+      while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+      
+      document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + 
+                                                         " completitions on Eternity" +
+                                                         ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : 
+                                                         "<br>Next goal at " + shortenCosts(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions)))
+    }
     updateMoney();
     updateCoinPerSec();
     updateDimensions()

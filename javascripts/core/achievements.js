@@ -364,7 +364,7 @@ function isAchEnabled(name) {
     var basePerAch = secondsForAllAchs / 104
     var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffFromMiddle = (row - 7) * diffBetweenRows
-    for (var achrow = 1; achrow < 13; achrow++) {
+    for (var achrow = 1; achrow < 14; achrow++) {
       if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
     }
     var timeReq = 0
@@ -387,7 +387,7 @@ function nextAchIn() {
   var basePerAch = secondsForAllAchs / 104
   var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
   var time = player.thisReality / 1000
-  for (var achrow = 1; achrow < 13; achrow++) {
+  for (var achrow = 1; achrow < 14; achrow++) {
     if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
   }
   if ( time > secondsForAllAchs ) return 0
@@ -422,7 +422,7 @@ function lockedString(name) {
     var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffFromMiddle = (row - 7) * diffBetweenRows
     var time = player.thisReality / 1000
-    for (var achrow = 1; achrow < 13; achrow++) {
+    for (var achrow = 1; achrow < 14; achrow++) {
       if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
     }
     var timeReq = 0

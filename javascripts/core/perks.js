@@ -28,6 +28,7 @@ const CONNECTED_PERKS = {
   410: [49],
   411: [410],
   412: [411],
+  413: [412],
 }
 
 function hasConnectedPerk(id) {

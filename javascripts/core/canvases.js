@@ -395,7 +395,9 @@ function drawPerkNetwork() {
     {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with 9th achievement row after reality."}, //DONE
     {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with 10th achievement row after reality."}, //DONE
     {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with 11th achievement row after reality."}, //DONE
-    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with 12th achievement row after reality."},]; //DONE
+    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with 12th achievement row after reality."},//DONE
+    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with 13th achievement row after reality."},//DONE
+    ]; 
     nodes = new vis.DataSet(nodesArray);
 
     // This creates the edges based on CONNECTED_PERKS in perks.js

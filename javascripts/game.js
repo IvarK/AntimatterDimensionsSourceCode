@@ -4136,6 +4136,7 @@ function canUnlockEC(idx, cost, study, study2) {
     if (!player.timestudy.studies.includes(study) && (player.study2 == 0 || !player.timestudy.studies.includes(study2))) return false
     if (player.timestudy.theorem < cost) return false
     if (player.etercreq == idx && idx !== 11 && idx !== 12) return true
+    if (player.reality.perks.includes(31)) return true
 
     switch(idx) {
         case 1:

@@ -373,7 +373,7 @@ function drawPerkNetwork() {
     {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on reality."}, //DONE
     {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."}, //DONE
     {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."},
+    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."}, //DONE
     {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of eternity challenges at once if you reach the goal for a higher completion of that challenge."},
     {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with 1st achievement row after reality."},
     {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with 2nd achievement row after reality."},

@@ -428,7 +428,7 @@ function drawPerkNetwork() {
     //buying perks TODO: lower the cost.
     network.on("click", function(params) {
         if (params.nodes[0] === 0) buyPerk(params.nodes[0], 1);
-        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 999);
+        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 1);
     });
     //hide tooltips on drag
     network.on("dragStart", function(params) {

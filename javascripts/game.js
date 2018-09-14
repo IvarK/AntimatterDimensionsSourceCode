@@ -3028,15 +3028,17 @@ function eternity(force, auto) {
         player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
         addEternityTime(player.thisEternity, gainedEternityPoints())
         if (player.currentEternityChall !== "") {
+            var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
             var completitions = 1
             if (player.reality.perks.includes(32)) {
-              if ( player.infinityPoints.gte(getECGoalIP(player.currentEternityChall, player.eternityChalls[player.currentEternityChall] + 1)) ) {
-                while (completitions < 5 - player.eternityChalls[player.currentEternityChall] && 
-                      player.infinityPoints.gte(getECGoalIP(player.currentEternityChall, player.eternityChalls[player.currentEternityChall] + completitions))) completitions += 1
+              if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
+                while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+                      console.log(completitions)
               }
             }
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
-                player.eternityChalls[player.currentEternityChall] = 1
+                player.eternityChalls[player.currentEternityChall] = completitions
             } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += completitions
             player.etercreq = 0
             respecTimeStudies()

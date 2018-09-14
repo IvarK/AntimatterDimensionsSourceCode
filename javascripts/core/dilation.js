@@ -35,13 +35,16 @@ function startDilatedEternity() {
 function unlockDilation() {
   if (player.dilation.studies.includes(1)) return false
   if (player.timestudy.theorem < 5000) return false
-  if (ECTimesCompleted("eterc12") !== 5) return false
-  if (ECTimesCompleted("eterc11") !== 5) return false
+  if (!player.reality.perks.includes(13) && ECTimesCompleted("eterc12") !== 5) return false
+  if (!player.reality.perks.includes(13) && ECTimesCompleted("eterc11") !== 5) return false
   player.timestudy.theorem -= 5000
   document.getElementById("dilationunlock").className = "dilationupgbought"
   updateTimeStudyButtons()
   showEternityTab("dilation")
   document.getElementById("dilationunlock").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
+  if (player.reality.perks.includes(14)) player.dilation.upgrades = [3, 4, 5]
+  if (player.reality.perks.includes(15)) player.dilation.upgrades = player.dilation.upgrades.concat([3, 4, 5])
+
   return true
 }
 

@@ -1855,6 +1855,8 @@ function gainedGlyphLevel() {
       if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
     }
     var ret = Math.round(Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
+    if (player.reality.perks.includes(21)) ret += 1
+    if (player.reality.perks.includes(24)) ret += 1
     if (ret == Infinity || isNaN(ret)) return 0
     return ret
 }
@@ -3400,6 +3402,46 @@ function selectGlyph(idx) {
     reality()
 }
 
+function generateGlyphSelection(amount) {
+  possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+  $("#glyphSelect").show()
+  var html = ""
+  for (let idx = 0; idx< amount; idx++) {
+      var glyph = possibleGlyphs[idx]
+      var rarity = getRarity(glyph.strength)
+      html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
+      html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
+      for (i in glyph.effects) {
+          var effect = glyph.effects[i]
+          var precision = 3
+          var formattedAmount = effect
+          if (effect >= 1 && effect < 2) precision = 4
+          if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
+          else if (effect === true) formattedAmount = effect
+          else formattedAmount = effect.toPrecision(precision)
+          html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
+      }
+      html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
+  }
+  $("#glyphsToSelect").html(html)
+  $(".tooltip").parent(".glyph").mousemove(function(e) {
+      mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
+  })
+
+  $(".tooltip").parent(".glyph").mouseenter(function(e) {
+      e.stopPropagation();
+      mouseOn = $(this).find(".tooltip")
+      mouseOn.appendTo("#body")
+  })
+
+  $(".tooltip").parent(".glyph").mouseleave(function(e) {
+      e.stopPropagation();
+      mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+      mouseOn.appendTo($(this))
+      mouseOn = $("document")
+  })
+}
+
 var possibleGlyphs = []
 var glyphSelected = false
 
@@ -3411,43 +3453,14 @@ function reality(force) {
                 possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
             }, 50)
             setTimeout(function() {
-                possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
-                $("#glyphSelect").show()
-                var html = ""
-                for (let idx = 0; idx< 3; idx++) {
-                    var glyph = possibleGlyphs[idx]
-                    var rarity = getRarity(glyph.strength)
-                    html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
-                    html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-                    for (i in glyph.effects) {
-                        var effect = glyph.effects[i]
-                        var precision = 3
-                        var formattedAmount = effect
-                        if (effect >= 1 && effect < 2) precision = 4
-                        if (new Decimal(1000).lt(effect)) formattedAmount = formatValue(player.options.notation, effect, 2, 3)
-                        else if (effect === true) formattedAmount = effect
-                        else formattedAmount = effect.toPrecision(precision)
-                        html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
-                    }
-                    html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
+                if (player.reality.perks.includes(22)) {
+                  setTimeout(function() {
+                    possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+                    generateGlyphSelection(4)
+                  }, 50)
+                } else {
+                  generateGlyphSelection(3)
                 }
-                $("#glyphsToSelect").html(html)
-                $(".tooltip").parent(".glyph").mousemove(function(e) {
-                    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
-                })
-                var that = this
-                $(".tooltip").parent(".glyph").mouseenter(function(e) {
-                    e.stopPropagation();
-                    mouseOn = $(this).find(".tooltip")
-                    mouseOn.appendTo("#body")
-                })
-            
-                $(".tooltip").parent(".glyph").mouseleave(function(e) {
-                    e.stopPropagation();
-                    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
-                    mouseOn.appendTo($(this))
-                    mouseOn = $("document")
-                })
             }, 100)
             return
         }

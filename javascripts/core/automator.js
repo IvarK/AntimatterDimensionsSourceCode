@@ -42,6 +42,14 @@ function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
 }
 
+function getAutomatorRows() {
+  var ret = 6 + Math.ceil(Math.pow(player.realities, 0.7) )
+  if (player.reality.perks.includes(3)) ret = 6 + Math.ceil(Math.pow(player.realities, 0.85) )
+  if (player.reality.perks.includes(1)) ret += 5
+  if (player.reality.perks.includes(2)) ret += 10
+  return ret
+}
+
 function automatorOnOff() {
   automatorOn = !automatorOn;
   if (!automatorOn) {
@@ -150,7 +158,7 @@ function mainIteration() {
       }
     }
 
-    if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > 6 + Math.ceil(Math.pow(player.realities, 0.7)) ) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.7) + 6
+    if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > getAutomatorRows() ) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.7) + 6
     if ( $("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent()
     if (ifstatement) ifstatement = false
   }
@@ -454,9 +462,11 @@ function updateAutomatorTree() {
 }
 
 function updateAutomatorRows() {
-  var rows = 6 + Math.ceil(Math.pow(player.realities, 0.7))
-  var next = Math.ceil( Math.pow(rows - 6, 1 / 0.7) )
-  $("#rowsAvailable").text("Your automator can use " + rows + " rows, next row at " + next + " realities")
+  var pow = 0.7
+  if (player.reality.perks.includes(3)) pow = 0.85
+  var rows = 6 + Math.ceil(Math.pow(player.realities, pow))
+  var next = Math.ceil( Math.pow(rows - 6, 1 / pow) )
+  $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows, next row at " + next + " realities")
 }
 
 setInterval(mainIteration, 50)

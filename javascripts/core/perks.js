@@ -7,7 +7,7 @@ const CONNECTED_PERKS = {
   4: [0],
   11: [0],
   12: [11],
-  13: [24],
+  13: [24, 15],
   14: [11],
   15: [12, 13],
   21: [0],
@@ -30,8 +30,6 @@ const CONNECTED_PERKS = {
   412: [411],
 }
 
-
-
 function hasConnectedPerk(id) {
   if (id == 0) return true
   return CONNECTED_PERKS[id].some(hasPerk)
@@ -53,5 +51,5 @@ function buyPerk(id, cost) {
 
   player.reality.perks.push(id)
   player.reality.pp -= cost
-  drawPerkNetwork()
+  document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
 }

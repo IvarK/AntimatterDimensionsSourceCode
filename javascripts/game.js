@@ -3878,6 +3878,7 @@ function reality(force) {
         updateAutomatorRows()
         updateAutomatorTree()
         drawPerkNetwork()
+        document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
     }
 }
 

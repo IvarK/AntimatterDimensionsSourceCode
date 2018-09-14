@@ -341,6 +341,7 @@ var edges = []
 var nodeContainer = $(".vis-network")[0];
 var nodeData = {}
 var nodeOptions = {}
+var network;
 
 
 function getNodeColor(id, cost) {
@@ -354,12 +355,20 @@ function getNodeColor(id, cost) {
   return {background: tempColor, border: tempBorderColor, hover: {background: tempHoverColor, border: tempBorderColor}, highlight: {background: tempColor, border: tempBorderColor}}
 }
 
+function updatePerkColors() {
+    for (var i=0; i<nodes.length-1; i++) {
+        if (i===0) var id = 0
+        else var id = parseInt(Object.keys(CONNECTED_PERKS)[i])
+        nodes.update([{id:id, color: getNodeColor(id, 1) }]);
+    }
+}
+
 //0: automator
 //10: dilation
 //20: glyphs
 //30: ecs
 function drawPerkNetwork() {
-    nodes = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on reality."}, //DONE
+    nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on reality."}, //DONE
     {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."}, //DONE
     {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."}, //DONE
     {id: 3, label: "3", color: getNodeColor(3, 1), title: "Improve the automator row per reality scaling."}, //DONE
@@ -387,6 +396,7 @@ function drawPerkNetwork() {
     {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with 10th achievement row after reality."}, //DONE
     {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with 11th achievement row after reality."}, //DONE
     {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with 12th achievement row after reality."},]; //DONE
+    nodes = new vis.DataSet(nodesArray);
 
     // This creates the edges based on CONNECTED_PERKS in perks.js
     edges = []
@@ -427,8 +437,11 @@ function drawPerkNetwork() {
 
     //buying perks TODO: lower the cost.
     network.on("click", function(params) {
-        if (params.nodes[0] === 0) buyPerk(params.nodes[0], 1);
-        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 1);
+        var id = params.nodes[0]
+        if (isFinite(id)) {
+            buyPerk(id, 1);
+            updatePerkColors()
+        }
     });
     //hide tooltips on drag
     network.on("dragStart", function(params) {

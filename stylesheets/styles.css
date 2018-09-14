@@ -1924,10 +1924,11 @@ reality upgrade unavailable
 
 #automator {
     height: 300px;
-    width: 200px;
+    width: 400px;
     overflow-y: scroll;
     resize: none;
     font-family: 'PT Mono', monospace;
+    text-align: center;
     color: #66ff66;
     background-color: black;
     border: none;

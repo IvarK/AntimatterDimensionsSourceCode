@@ -279,5 +279,13 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 8) {
         player.reality.pp = player.realities
         player.options.testVersion = 9
-      }
+    }
+    if (player.options.testVersion == 9) {
+        //give starting perk
+        if(player.reality.pp > 0) {
+            player.reality.pp -= 1
+            player.reality.perks.push(0)
+        }
+        player.options.testVersion = 10
+    }
 }

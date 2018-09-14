@@ -353,23 +353,44 @@ function getNodeColor(id, cost) {
     return {background: tempColor, border: tempBorderColor, hover: {background: tempHoverColor, border: tempBorderColor}, highlight: {background: tempColor, border: tempBorderColor}}
 }
 
+
+//0: automator
+//10: dilation
+//20: glyphs
+//30: ecs
 function drawPerkNetwork() {
-    nodes = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "Remove the secondary requirements for unlocking eternity challenges."},
-    {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 Automator rows."},
-    {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 Automator rows."},
-    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Remove the unlock requirement for Time Dilation."},
-    {id: 4, label: "4", color: getNodeColor(4, 1), title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
-    {id: 5, label: "5", color: getNodeColor(5, 1), title: "+1 to base glyph level."},
-    {id: 6, label: "6", color: getNodeColor(6, 1), title: "+1 glyph choice on reality."},
+    nodes = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on reality."},
+    {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."},
+    {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."},
+    {id: 3, label: "3", color: getNodeColor(2, 1), title: "Improve the automator row per reality scaling."},
+    {id: 11, label: "11", color: getNodeColor(11, 1), title: "The 2nd rebuyable dilation upgrade no longer resets your free galaxies or dilated time."},
+    {id: 12, label: "12", color: getNodeColor(12, 1), title: "Rebuyable dilation upgrade autobuyers."},
+    {id: 13, label: "13", color: getNodeColor(13, 1), title: "Remove the unlock requirement for Time Dilation."},
+    {id: 14, label: "14", color: getNodeColor(14, 1), title: "Keep dilation upgrades on reality."},
+    {id: 21, label: "21", color: getNodeColor(21, 1), title: "+1 to base glyph level."},
+    {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on reality."},
+    {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."},
+    {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."},
+    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."},
+    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of eternity challenges at once if you reach the goal for a higher completion of that challenge."}
     ];
     edges = [{from: 0, to: 1},
         {from: 1, to: 2},
-        
-        {from: 0, to: 5},
-        {from: 5, to: 6},
+        {from: 1, to: 3},
 
-        {from: 0, to: 3},
-        {from: 3, to: 4},
+        {from: 0, to: 11},
+        {from: 11, to: 12},
+        {from: 12, to: 13},
+        {from: 12, to: 14},
+        {from: 13, to: 14},
+
+        {from: 0, to: 21},
+        {from: 21, to: 22},
+        {from: 22, to: 23},
+        {from: 23, to: 24},
+
+        {from: 0, to: 31},
+        {from: 31, to: 32},
     ]
 
     nodeData = {
@@ -390,22 +411,23 @@ function drawPerkNetwork() {
                 size: 20
             },
             borderWidth: 2,
-            shadow:true
+            shadow: true
         },
         edges: {
             width: 2,
-            shadow:true
+            shadow: true
         },
     };
     network = new vis.Network(nodeContainer, nodeData, nodeOptions);
 
     //buying perks TODO: lower the cost.
     network.on("click", function(params) {
-        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 99);
+        if (params.nodes[0] === 0) buyPerk(params.nodes[0], 1);
+        if (isFinite(params.nodes[0])) buyPerk(params.nodes[0], 999);
     });
     //hide tooltips on drag
     network.on("dragStart", function(params) {
-        document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
+        if(document.getElementsByClassName("vis-tooltip")[0] !== undefined) document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
     });
     //set min and max zoom
     network.on("zoom",function(){

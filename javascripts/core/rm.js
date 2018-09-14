@@ -513,7 +513,7 @@ function drop(ev) {
   mouseOn = $("document")
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50]
+const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 500, 500, 500, 500, 500]
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {

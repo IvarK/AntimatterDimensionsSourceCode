@@ -138,7 +138,7 @@ function onLoad() {
       seed: Math.floor(Date.now() * Math.random()+1), 
       rebuyables: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}, 
       upg: [], 
-      upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
+      upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], 
       upgReqChecks: [false], 
       automatorRows: 0, 
       automatorCommands: [], 
@@ -697,6 +697,7 @@ if (player.version < 5) {
   updateAutomatorTree();
   updateWormholeUpgrades()
   updateAutomatorRows()
+  drawPerkNetwork()
 
   if (player.wormhole.unlocked) $("#wormholeunlock").hide()
   

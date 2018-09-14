@@ -294,7 +294,7 @@ var player = {
             5: 0,
         },
         upg: [],
-        upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false], 
+        upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], 
         upgReqChecks: [false],
         automatorRows: 0,
         automatorCommands: [], 
@@ -3405,7 +3405,7 @@ var glyphSelected = false
 
 function reality(force) {
     if ((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except achievements and challenge records. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force) {
-        if (!glyphSelected) {
+        if (!glyphSelected && player.reality.perks.includes(0)) {
             possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
             setTimeout(function() {
                 possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
@@ -3472,6 +3472,7 @@ function reality(force) {
             return
         }
         realizationCheck = 0;
+        if (!player.reality.perks.includes(0)) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()))
         if (player.thisReality<player.bestReality && !force) {
             player.bestEternity = player.thisEternity
         }
@@ -3480,6 +3481,13 @@ function reality(force) {
         //TODO replace 1 with glyph power that you got from that reality
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
         if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
+        if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length == 4) {
+            var tempBool = true
+            for (i in player.reality.glyphs.active) {
+                if (player.reality.glyphs.active[i].level < 10) tempBool = false
+            }
+            player.reality.upgReqs[16] = tempBool
+        }
         if (player.reality.respec) respecGlyphs()
         player = {
             money: new Decimal(10),
@@ -3847,6 +3855,7 @@ function reality(force) {
         updateWormholeUpgrades()
         updateAutomatorRows()
         updateAutomatorTree()
+        drawPerkNetwork()
     }
 }
 

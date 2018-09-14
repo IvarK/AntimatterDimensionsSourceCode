@@ -390,6 +390,10 @@ function setTheme(name) {
         document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
         Chart.defaults.global.defaultFontColor = 'black';
         normalDimChart.data.datasets[0].borderColor = '#000'
+    } else if(name === "S8") {
+        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
+        Chart.defaults.global.defaultFontColor = 'black';
+        normalDimChart.data.datasets[0].borderColor = '#000'
     } else {
         document.getElementById("theme").textContent="Current theme: " + name;
     }
@@ -467,6 +471,11 @@ function getNextSecretTheme() {
         } else if (currentThemeNum < 7 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7") {
             if (lowestThemeNum > 7) {
                 lowestThemeNum = 7;
+                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
+            }
+        } else if (currentThemeNum < 8 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19") {
+            if (lowestThemeNum > 8) {
+                lowestThemeNum = 8;
                 player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
             }
         }
@@ -1676,6 +1685,11 @@ document.getElementById("importbtn").onclick = function () {
     } else if (sha512_256(save_data.toUpperCase()) === "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7") {
         player.options.theme = "S7";
         player.secretUnlocks.themes.push("S7"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
+        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
+        setTheme(player.options.theme);
+    } else if (sha512_256(save_data.toUpperCase()) === "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19") {
+        player.options.theme = "S8";
+        player.secretUnlocks.themes.push("S8"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
         player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
         setTheme(player.options.theme);
     } else {

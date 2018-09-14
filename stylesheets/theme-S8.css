@@ -1,0 +1,528 @@
+body {
+    background: url('../images/s8-bg.jpg') no-repeat;
+    color: black !important;
+    background-color: white;
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.container {
+    color: black !important;
+}
+
+/*metro  theme with less box shadows*/
+
+* {
+    border-radius: 0px !important;
+    border-width: 1px !important;
+}
+
+.radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
+    border-radius: 50% !important;
+}
+
+input, select {
+    border: 1px solid #A9A9A9;
+}
+
+.popup {
+    border: 1px solid black !important;
+}
+
+#game {
+    border: 1px solid black !important;
+}
+
+.tabbtn {
+    background: #EEEEEE !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.tabbtn:hover {
+    background: #2196F3 !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.secondarytabbtn {
+    background: #EEEEEE !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.secondarytabbtn:hover {
+    background: #2196F3 !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.storebtn {
+    background: #EEEEEE !important;
+    border: 1px solid #66BB6A !important;
+}
+
+.storebtn:hover {
+    background: #66BB6A !important;
+}
+
+.unavailablebtn {
+    background: #9E9E9E !important;
+    border: 1px solid #EF5350 !important;
+}
+
+.unavailablebtn:hover {
+    background: #EF5350 !important;
+}
+
+.newdim {
+    color: black !important;
+    background: #EEEEEE !important;
+    border: 1px solid #66BB6A !important;
+}
+
+.newdim:hover {
+    background: #66BB6A !important;
+}
+
+.newdimlocked {
+    background: #9E9E9E !important;
+    border: 1px solid #EF5350 !important;
+}
+
+.newdimlocked:hover {
+    background: #EF5350 !important;
+}
+
+.infinitytabbtn {
+    border: 1px solid #FF9800 !important;
+    background: #1F1F1F !important;
+}
+
+.infinitytabbtn:hover {
+    background: #FF9800 !important;
+    border: 1px solid #FF9800 !important;
+}
+
+.eternitybtn {
+    color: #673AB7 !important;
+    border: 1px solid #673AB7 !important;
+}
+
+.eternitybtn:hover {
+    background: white !important;
+}
+
+.eternitytabbtn {
+    color: #673AB7 !important;
+    background: #000 !important;
+    border: 1px solid #673AB7 !important;
+}
+
+.eternitytabbtn:hover {
+    background: #FFF !important;
+    border: 1px solid #673AB7 !important;
+}
+
+.completedrow {
+    background: #1B5E20 !important;
+}
+
+.achievementunlocked {
+    background-color: #66BB6A !important;
+    border: 1px solid #43A047 !important;
+}
+
+.achievementlocked {
+    background-color: #9E9E9E !important;
+    border: 1px solid #EF5350 !important;
+}
+
+.achievementhidden {
+    border-width: 1px !important;
+}
+
+.infinistorebtn1 {
+    border: 1px solid black !important;
+}
+
+.infinistorebtn2 {
+    border: 1px solid black !important;
+}
+
+.infinistorebtn3 {
+    border: 1px solid black !important;
+}
+
+.infinistorebtn4 {
+    border: 1px solid black !important;
+}
+
+.infinistorebtn1:hover {
+    background: #9C27B0 !important;
+}
+
+.infinistorebtn2:hover {
+    background: #F44336 !important;
+}
+
+.infinistorebtn3:hover {
+    background: #FFEB3B !important;
+}
+
+.infinistorebtn4:hover {
+    background: #00BCD4 !important;
+}
+
+.infinistorebtnbought {
+    background: #66BB6A !important;
+    border: 1px solid black !important;
+}
+
+.infinimultbtn {
+    color: #EF5350 !important;
+    border: 1px solid #00BCD4 !important;
+}
+
+.infinimultbtn:hover {
+    color: black !important;
+    background: #00BCD4 !important;
+    border: 1px solid black !important;
+}
+
+.infinistorebtnlocked {
+    border: 1px solid #616161 !important;
+    background: #9E9E9E !important;
+}
+
+.infinistorebtnlocked:hover {
+    background: #BDBDBD !important;
+}
+
+.autobuyerbtn {
+    border: 1px solid #E91E63 !important;
+    margin-bottom: -1px;
+}
+
+.autobuyerbtn:hover {
+    background: #FF9800 !important;
+    border: #FF9800 !important;
+}
+
+.postinfcrunch {
+    background: #EEEEEE !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.postinfcrunch:hover {
+    background: #2196F3 !important;
+    border: 1px solid #2196F3 !important;
+}
+
+.EPAmount1 {
+    color: #673AB7;
+}
+
+.EPAmount2 {
+    color: #673AB7;
+}
+
+.IPAmount1 {
+    color: #FF9800;
+}
+
+.IPAmount2 {
+    color: #FF9800;
+}
+
+.RMAmount1 {
+    color: #0b600e;
+}
+
+.timetheorembtn {
+    background: #212121 !important;
+    color: #00BCD4 !important;
+    border: 1px solid #00BCD4 !important;
+}
+
+.timetheorembtn:hover {
+    color: #212121 !important;
+    background: #00BCD4 !important;
+}
+
+.timetheorembtnlocked {
+    background: #9E9E9E !important;
+    border: none !important;
+    box-shadow: 1px 1px 1px 0px #000;
+}
+
+.timetheorembtnlocked:hover {
+    background: #EF5350 !important;
+}
+
+#theorembuybackground {
+    background: #EEEEEE !important;
+    border-width: 1px !important;
+}
+
+.eternitychallengestudy {
+    animation: eternityChallengeGlowIn 5s infinite !important;
+}
+
+.timestudy {
+    color: #673AB7 !important;
+    border: 1px solid #4527A0 !important;
+    animation: metroStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.normaldimstudy {
+    animation: normalDimStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.infdimstudy {
+    animation: infDimStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.timedimstudy {
+    animation: timeDimStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.activestudy {
+    animation: activeStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.passivestudy {
+    animation: passiveStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.idlestudy {
+    animation: idleStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.darkstudy {
+    animation: darkStudyGlowIn 5s infinite !important;
+}
+
+.timestudy.lightstudy {
+    animation: lightStudyGlowIn 5s infinite !important;
+}
+
+.timestudy:hover {
+    color: #EEEEEE !important;
+    background: #512DA8 !important;
+}
+
+.timestudy.normaldimstudy:hover {
+    color: #EEEEEE !important;
+    background: #22aa48 !important;
+}
+
+.timestudy.infdimstudy:hover {
+    color: #EEEEEE !important;
+    background: #B67F33 !important;
+}
+
+.timestudy.timedimstudy:hover {
+    color: #EEEEEE !important;
+    background: #B241E3 !important;
+}
+
+.timestudy.activestudy:hover {
+    color: #EEEEEE !important;
+    background: #FF0100 !important;
+}
+
+.timestudy.idlestudy:hover {
+    color: #EEEEEE !important;
+    background: #0080ff !important;
+}
+
+.timestudybought {
+    color: black !important;
+    background: #673AB7 !important;
+    border: 1px solid black !important;
+}
+
+.timestudybought.normaldimstudy {
+    background: #22aa48 !important;
+}
+
+.timestudybought.infdimstudy {
+    background: #B67F33 !important;
+}
+
+.timestudybought.timedimstudy {
+    background: #B241E3 !important;
+}
+
+.timestudybought.activestudy {
+    background: #FF0100 !important;
+}
+
+.timestudybought.passivestudy {
+    background: #5E33B6 !important;
+}
+
+.timestudybought.idlestudy {
+    background: #0080ff !important;
+}
+
+.timestudybought.darkstudy {
+    color: black !important;
+    background-color: white !important;
+    border-color: black !important;
+}
+
+.timestudybought.lightstudy {
+    color: white !important;
+    background-color: black !important;
+    border-color: white !important;
+}
+
+.timestudylocked, .eternitychallengestudylocked {
+    color: black !important;
+    background: #9E9E9E !important;
+    box-shadow: 1px 1px 1px 0px #000;
+    border: none !important;
+}
+
+.timestudylocked.normaldimstudylocked {
+    background: #94a89a !important;
+}
+
+.timestudylocked.infdimstudylocked {
+    background: #a8a094 !important;
+}
+
+.timestudylocked.timedimstudylocked {
+    background: #a294a8 !important;
+}
+
+.timestudylocked.activestudylocked {
+    background: #a89494 !important;
+}
+
+.timestudylocked.passivestudylocked {
+    background: #9b94a8 !important;
+}
+
+.timestudylocked.idlestudylocked {
+    background: #949ea8 !important;
+}
+
+.timestudylocked:hover, .eternitychallengestudylocked:hover {
+    background: #EF5350 !important;
+}
+
+.eternityupbtn {
+    color: #673AB7 !important;
+    border: 1px solid #673AB7 !important;
+    box-shadow: 1px 1px 1px 0px #9E9E9E;
+}
+
+.eternityupbtn:hover {
+    color: #511568;
+    background: white;
+}
+
+.eternityupbtnlocked {
+    background: #9E9E9E !important;
+    border: 1px solid black !important;
+
+}
+
+.eternityupbtnlocked:hover {
+    background: #BDBDBD !important;
+}
+
+.eternityupbtnbought {
+    color: black !important;
+    background: #673AB7 !important;
+    border: 1px solid black !important;
+}
+
+.challengediv {
+    border: 1px solid black !important;
+}
+
+.infchallengediv {
+    border: 1px solid black !important;
+}
+
+.eterchallengediv {
+    color: #673AB7 !important;
+    border: 1px solid #673AB7 !important;
+}
+
+.challengesbtn {
+    border: 3px solid #43A047 !important;
+    border-bottom-color: #388E3C !important;
+    border-right-color: #388E3C !important;
+}
+
+.challengesbtn:hover {
+    background: #66BB6A !important;
+}
+
+.completedchallengesbtn {
+    background: #66BB6A !important;
+    border: 3px solid #43A047 !important;
+    border-bottom-color: #388E3C !important;
+    border-right-color: #388E3C !important;
+}
+
+.lockedchallengesbtn {
+    background-color: #9E9E9E !important;
+    border: 3px solid #757575 !important;
+    border-bottom-color: #616161 !important;
+    border-right-color: #616161 !important;
+}
+
+.milestonereward {
+    background: #673AB7 !important;
+    border: 1px solid #512DA8 !important;
+}
+
+.milestonerewardlocked {
+    background: #9E9E9E !important;
+    box-shadow: 1px 1px 1px 0px #000;
+    border: none !important;
+}
+
+.dilationbtn {
+    border-width: 1px !important;
+}
+
+.dilationupglocked, .dilationupgrebuyablelocked {
+    color: black !important;
+    background: #9E9E9E !important;
+    box-shadow: 1px 1px 1px 0px #000;
+    border: none !important;
+}
+
+.dilationupglocked:hover, .dilationupgrebuyablelocked:hover {
+    background: #EF5350 !important;
+}
+
+.realitytabbtn {
+    background: white !important;
+    border: 1px solid #0b600e !important;
+    display: none;
+}
+
+.realitytabbtn:hover {
+    background-color: #0b600e !important;
+    border: 1px solid #0b600e !important;
+    color: white;
+}
+
+#realitymachine {
+    border: 1px solid #0b600e !important;
+}
+
+@keyframes metroStudyGlowIn {
+    0%  {box-shadow: inset 0px 0px 3px 0px #673AB7;}
+    50% {box-shadow: inset 0px 0px 20px 0px #673AB7;}
+    100%  {box-shadow: inset 0px 0px 3px 0px #673AB7;}
+}

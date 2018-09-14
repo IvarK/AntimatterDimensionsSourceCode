@@ -288,4 +288,9 @@ dev.updateTestSave = function() {
         }
         player.options.testVersion = 10
     }
+    if (player.options.testVersion == 10) {
+        //var for s45
+        player.secretUnlocks.dragging = 0;
+        player.options.testVersion = 11
+    }
 }

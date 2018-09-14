@@ -119,7 +119,7 @@ function onLoad() {
   if (player.options.animations === undefined) player.options.animations = {floatingText: true, bigCrunch: true, eternity: true, tachyonParticles: true}
   if (player.options.animations.reality === undefined) player.options.animations.reality = true;
   if (player.options.confirmations === undefined) player.options.confirmations = {challenges: player.options.challConf, eternity: player.options.eternityconfirm, dilation: true, reality: true};
-  if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed", themes: []};
+  if (player.secretUnlocks === undefined) player.secretUnlocks = {painTimer: 0, why: player.why, fixed: "notyetfixed", dragging: 0, themes: []};
   if (player.realTimePlayed === undefined) player.realTimePlayed = player.totalTimePlayed;
   if (player.realities === undefined) player.realities = 0;
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;

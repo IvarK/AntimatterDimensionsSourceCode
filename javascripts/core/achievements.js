@@ -360,9 +360,13 @@ function isAchEnabled(name) {
     if (achnum > 140) return true
     var row = Math.floor(achnum / 10)
     var col = achnum % 10
-    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var secondsForAllAchs = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0))
+    var basePerAch = secondsForAllAchs / 104
     var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffFromMiddle = (row - 7) * diffBetweenRows
+    for (var achrow = 1; achrow < 13; achrow++) {
+      if (player.reality.perks.includes("4" + achrow)) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
+    }
     var timeReq = 0
     for ( var i = 1; i < row; i++) {
         timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
@@ -379,27 +383,31 @@ function isAchEnabled(name) {
 }
 
 function nextAchIn() {
-    
-    var time = player.thisReality / 1000
-    if ( time > 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return 0
-    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var timeReq = 0
-    var row = 1
-    while (time > timeReq) {
-        timeReq += (basePerAch + ((row - 7) * diffBetweenRows)) * 8
-        row++
-    }
-    row--
-    timeReq -= (basePerAch + ((row - 7) * diffBetweenRows)) * 8
+  var secondsForAllAchs = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0))
+  var basePerAch = secondsForAllAchs / 104
+  var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
+  var time = player.thisReality / 1000
+  for (var achrow = 1; achrow < 13; achrow++) {
+    if (player.reality.perks.includes("4" + achrow)) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
+  }
+  if ( time > secondsForAllAchs ) return 0
+  
+  var timeReq = 0
+  var row = 1
+  while (time > timeReq) {
+      timeReq += (basePerAch + ((row - 7) * diffBetweenRows)) * 8
+      row++
+  }
+  row--
+  timeReq -= (basePerAch + ((row - 7) * diffBetweenRows)) * 8
 
-    var col = 1
-    while (time > timeReq) {
-        timeReq += (basePerAch + ((row - 7) * diffBetweenRows))
-        col++
-    }
+  var col = 1
+  while (time > timeReq) {
+      timeReq += (basePerAch + ((row - 7) * diffBetweenRows))
+      col++
+  }
 
-    return ( timeReq - time) * 1000
+  return ( timeReq - time) * 1000
 }
 
 function lockedString(name) {
@@ -413,6 +421,10 @@ function lockedString(name) {
     var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
     var diffFromMiddle = (row - 7) * diffBetweenRows
+    var time = player.thisReality / 1000
+    for (var achrow = 1; achrow < 13; achrow++) {
+      if (player.reality.perks.includes("4" + achrow)) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
+    }
     var timeReq = 0
     for ( var i = 1; i < row; i++) {
         timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
@@ -423,7 +435,7 @@ function lockedString(name) {
     }
 
     timeReq += basePerAch + diffFromMiddle
-	timeReq -= player.thisReality / 1000
+	timeReq -= time
 
 	if (timeReq < 0)
 		return ""

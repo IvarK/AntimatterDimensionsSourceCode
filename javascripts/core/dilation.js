@@ -67,7 +67,7 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                                           1e15]
 
 
-function buyDilationUpgrade(id, costInc) {
+function buyDilationUpgrade(id) {
   if (id > 3) { // Not rebuyable
       if (player.dilation.dilatedTime < DIL_UPG_COSTS[id]) return // Not enough dilated time
       if (player.dilation.upgrades.includes(id)) return // Has the upgrade

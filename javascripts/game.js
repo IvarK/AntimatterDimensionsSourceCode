@@ -5091,6 +5091,12 @@ setInterval(function() {
     if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
     else document.getElementById("toggleeternitymode").style.display = "none"
 
+    if (player.reality.perks.includes(12)) {
+      buyDilationUpgrade(1)
+      buyDilationUpgrade(2)
+      buyDilationUpgrade(3)
+    }
+
     updateRealityUpgrades()
 
 }, 1000)
@@ -5776,7 +5782,7 @@ function gameLoop(diff) {
 			var textLines = oldText.split("\n");
 			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
 		}
-	}
+  }
 
     player.lastUpdate = thisUpdate;
 }

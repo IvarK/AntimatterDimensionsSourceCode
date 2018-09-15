@@ -42,8 +42,8 @@ function unlockDilation() {
   updateTimeStudyButtons()
   showEternityTab("dilation")
   document.getElementById("dilationunlock").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
-  if (player.reality.perks.includes(14)) player.dilation.upgrades = [3, 4, 5]
-  if (player.reality.perks.includes(15)) player.dilation.upgrades = player.dilation.upgrades.concat([3, 4, 5])
+  if (player.reality.perks.includes(14)) player.dilation.upgrades = [4, 5, 6];
+  if (player.reality.perks.includes(15)) player.dilation.upgrades = player.dilation.upgrades.concat([7, 8, 9])
 
   return true
 }

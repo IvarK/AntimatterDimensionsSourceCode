@@ -3033,12 +3033,18 @@ function eternity(force, auto) {
         if (player.currentEternityChall !== "") {
             var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
             var completitions = 1
-            if (player.reality.perks.includes(32)) {
-              if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
-                  while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1;
-                      
-              }
+			if (player.reality.perks.includes(32)) {
+				var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4)
+				var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200)
+				while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+						player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+				var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions
+					
+				if (player.currentEternityChall == "eterc4" && totalCompletions >= maxEC4Valid)
+					completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall)
+				if (player.currentEternityChall == "eterc12" && totalCompletions >= maxEC12Valid)
+					completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
+
             }
             if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2 * completitions).toFixed(1))
             if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07 * completitions).toFixed(2))
@@ -5366,15 +5372,27 @@ function gameLoop(diff) {
     if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(getTachyonGain()) +" Tachyon particles."
     if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
     var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
-    if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1))) {
-      var completitions = 1
-      while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
-      
-      document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + 
-                                                         " completitions on Eternity" +
-                                                         ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : 
-                                                         "<br>Next goal at " + shortenCosts(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions)))
+    if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall)))) {
+		var completitions = 1
+		// This assumes bulk completion won't go above x5 btw
+		var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4)
+		var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200)
+		while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+				player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+		var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions
+		var nextGoalText = "<br>Next goal at " + shortenCosts(getECGoalIP(challNum, totalCompletions))
+				
+		if (player.currentEternityChall == "eterc4" && totalCompletions >= maxEC4Valid) {
+			completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall)
+			nextGoalText = "<br>(Too many infinities for more)"
+		}
+		if (player.currentEternityChall == "eterc12" && totalCompletions >= maxEC12Valid) {
+			completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
+			nextGoalText = "<br>(Too slow for more)"
+		}
+					  
+		document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + " completitions on Eternity" +
+                                                         ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : nextGoalText)
     }
     updateMoney();
     updateCoinPerSec();

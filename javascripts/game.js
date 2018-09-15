@@ -3035,11 +3035,13 @@ function eternity(force, auto) {
             var completitions = 1
             if (player.reality.perks.includes(32)) {
               if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
-                while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+                  while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
+                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1;
                       
               }
             }
+            if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2 * completitions).toFixed(1))
+            if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07 * completitions).toFixed(2))
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
                 player.eternityChalls[player.currentEternityChall] = completitions
             } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += completitions
@@ -3054,8 +3056,7 @@ function eternity(force, auto) {
                     giveAchievement("5 more eternities until the update");
                 }
             }
-            if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) for (i in completitions) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1))
-            if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) for (i in completitions) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2))
+
         }
         for (var i=0; i<player.challenges.length; i++) {
             if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])

@@ -3041,12 +3041,17 @@ function eternity(force, auto) {
         if (player.currentEternityChall !== "") {
             var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
             var completitions = 1
-            if (player.reality.perks.includes(32)) {
-              if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
-                while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
-                      
-              }
+			if (player.reality.perks.includes(32)) {
+				var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4)
+				var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200)
+				while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+						player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+				var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions
+					
+				if (player.currentEternityChall == "eterc4" && totalCompletions >= maxEC4Valid)
+					completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall)
+				if (player.currentEternityChall == "eterc12" && totalCompletions >= maxEC12Valid)
+					completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
             }
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
                 player.eternityChalls[player.currentEternityChall] = completitions

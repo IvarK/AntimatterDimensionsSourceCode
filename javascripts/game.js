@@ -1335,7 +1335,7 @@ function updateInfCosts() {
 
             // Text for EC unlock studies
             var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
-            var ECUnlockResource = ["", "Eternities", "Tickspeed upgrades gained from time dimensions", "8th dimensions", "infinities", "antimatter galaxies", "replicanti galaxies", "antimatter", "IP", "infinity power", "EP"]
+        var ECUnlockResource = ["", "Eternities", "Tickspeed upgrades gained from time dimensions", "8th dimensions", "infinities", "antimatter galaxies", "replicanti galaxies", "antimatter", "IP", "infinity power", "EP"];
             var ECUnlockThresholds = [0, (ECTimesCompleted("eterc1") + 1) * 20000, 1300 + (ECTimesCompleted("eterc2") * 150), 17300 + (ECTimesCompleted("eterc3") * 1250), 1e8 + (ECTimesCompleted("eterc4") * 5e7), 160 + (ECTimesCompleted("eterc5") * 14), 40 + (ECTimesCompleted("eterc6") * 5), new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))), new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))), new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))), new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10")))];
         for (var ECnum = 1; ECnum <= 10; ECnum++) {
             if (player.reality.perks.includes(31)) document.getElementById("ec" + ECnum + "desc").textContent = "";
@@ -1358,12 +1358,19 @@ function updateInfCosts() {
             catch (err) {
                 // Don't do anything if none of the ECs are currently unlocked
             }
-
+        }
+        if (player.reality.perks.includes(31)) {
+            document.getElementById("ec11desc").textContent = '';
+            document.getElementById("ec12desc").textContent = '';
+        } else {
+            document.getElementById("ec11desc").textContent = 'Requirement: Use only the Normal Dimension path';
+            document.getElementById("ec12desc").textContent = 'Requirement: Use only the Time Dimension path';
+        }
             if (player.dilation.studies.includes(1) || player.reality.perks.includes(13)) document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
             else document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Requirement: 5 EC11 and EC12 completions and 13000 total theorems<span>Cost: 5000 Time Theorems"
         }
     }
-}
+
 
 
 
@@ -1817,7 +1824,7 @@ function gainedInfinityPoints() {
     if (isAchEnabled("r93")) ret = ret.times(4);
     if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
     if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime/100+1)*Math.pow(player.thisInfinityTime/100+1, 0.11)))
-    if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
+    if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000).max(1))
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "infinity" && glyph.effects.ipgain !== undefined) ret = ret.times(glyph.effects.ipgain)

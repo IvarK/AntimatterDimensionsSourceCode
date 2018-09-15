@@ -32,22 +32,6 @@ function startDilatedEternity() {
   return true
 }
 
-function unlockDilation() {
-  if (player.dilation.studies.includes(1)) return false
-  if (player.timestudy.theorem < 5000) return false
-  if (!player.reality.perks.includes(13) && ECTimesCompleted("eterc12") !== 5) return false
-  if (!player.reality.perks.includes(13) && ECTimesCompleted("eterc11") !== 5) return false
-  player.timestudy.theorem -= 5000
-  document.getElementById("dilationunlock").className = "dilationupgbought"
-  updateTimeStudyButtons()
-  showEternityTab("dilation")
-  document.getElementById("dilationunlock").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
-  if (player.reality.perks.includes(14)) player.dilation.upgrades = [4, 5, 6];
-  if (player.reality.perks.includes(15)) player.dilation.upgrades = player.dilation.upgrades.concat([7, 8, 9])
-
-  return true
-}
-
 
 /**
 *
@@ -71,7 +55,7 @@ function buyDilationUpgrade(id) {
   if (id > 3) { // Not rebuyable
       if (player.dilation.dilatedTime < DIL_UPG_COSTS[id]) return // Not enough dilated time
       if (player.dilation.upgrades.includes(id)) return // Has the upgrade
-      player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id])
+      player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
       player.dilation.upgrades.push(id)
       if (id == 4) player.dilation.freeGalaxies *= 2 // Double the current galaxies
   } else { // Is rebuyable

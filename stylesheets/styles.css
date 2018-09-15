@@ -1928,7 +1928,6 @@ reality upgrade unavailable
     overflow-y: scroll;
     resize: none;
     font-family: 'PT Mono', monospace;
-    text-align: center;
     color: #66ff66;
     background-color: black;
     border: none;
@@ -2189,6 +2188,12 @@ screen and (max-width: 480px) {
 @keyframes spin3d {
     0%  {transform: rotate3d(5.2, -2.8, 1.4, 0deg);}
     100% {transform: rotate3d(5.2, -2.8, 1.4, 360deg);}
+}
+
+@keyframes spin4d {
+    0%  {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
+    50%  {transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg);}
+    100% {transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg);}
 }
 
 @keyframes float {

@@ -21,7 +21,12 @@ dev.doubleEverything = function() {
 }
 
 dev.spin3d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin3d 2s infinite"
+    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin3d 3s infinite"
+    else document.getElementById("body").style.animation = ""
+}
+
+dev.spin4d = function() {
+    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin4d 3s infinite"
     else document.getElementById("body").style.animation = ""
 }
 
@@ -72,7 +77,7 @@ dev.implode = function() {
     setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
 }
 
-dev.updateCosts = function() {
+dev.updateTDCosts = function() {
     for (var i=1; i<9; i++) {
         var dim = player["timeDimension"+i]
         if (dim.cost.gte(Number.MAX_VALUE)) {
@@ -200,6 +205,13 @@ dev.realize = function() {
         document.getElementById("container").style.animation = "";
         document.getElementById("realityanimbg").style.animation = "";
     }, 10000)
+}
+
+dev.respecPerks = function() {
+    player.reality.pp += player.reality.perks.length
+    player.reality.perks = []
+    document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
+    drawPerkNetwork()
 }
 
 dev.updateTestSave = function() {

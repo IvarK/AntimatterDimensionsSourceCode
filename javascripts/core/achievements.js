@@ -276,9 +276,7 @@ function giveAchievement(name) {
     $.notify(name, "success");
     player.achievements.push(allAchievementNums[name]);
     document.getElementById(name).className = "achievementunlocked"
-    try {
-        kongregate.stats.submit('Achievements', player.achievements.length);
-    } catch (err) {console.log("Couldn't load Kongregate API")}
+    kong.submitStats('Achievements', player.achievements.length);
     if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
         if (player.autoCrunchMode == "amount" && player.autobuyers[11].priority != undefined) player.autobuyers[11].priority = player.autobuyers[11].priority.times(4);
     }

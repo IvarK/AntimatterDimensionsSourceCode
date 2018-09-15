@@ -1332,32 +1332,36 @@ function updateInfCosts() {
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
         document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
 
-		// Text for EC unlock studies
-		var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
-		var ECUnlockResource = ["", "Eternities", "Tickspeed upgrades gained from time dimensions", "8th dimensions", "infinities", "antimatter galaxies", "replicanti galaxies", "antimatter", "IP", "infinity power", "EP"]
-		var ECUnlockThresholds = [0, (ECTimesCompleted("eterc1")+1)*20000, 1300+(ECTimesCompleted("eterc2")*150), 17300+(ECTimesCompleted("eterc3")*1250), 1e8 + (ECTimesCompleted("eterc4")*5e7), 160+(ECTimesCompleted("eterc5")*14), 40+(ECTimesCompleted("eterc6")*5), new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))), new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))), new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))), new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10")))];
-		var ECUnlockTTCosts = [0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550];
-		for (var ECnum = 1; ECnum <= 10; ECnum++) {
-			if (ECnum <= 6)	// showing more than the maximum may lead to text overflowing
-				ECUnlockQuantity[ECnum] = Math.min(ECUnlockQuantity[ECnum], ECUnlockThresholds[ECnum]);
-			else
-				ECUnlockQuantity[ECnum] = ECUnlockQuantity[ECnum].min(ECUnlockThresholds[ECnum]);
-			
-            if (ECnum <= 6 && ECnum != 4)	// requirements are doubles
-                document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + ECUnlockQuantity[ECnum] + "/" + ECUnlockThresholds[ECnum] + " " + ECUnlockResource[ECnum];
-            else if (ECnum == 4)			// regex stuff to add commas
-                document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + ECUnlockQuantity[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/" + ECUnlockThresholds[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + ECUnlockResource[ECnum];
-            else							// requirements are Decimals
-                document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum];
-		}
-		try {
-			document.getElementById("ec" + player.etercreq + "desc").textContent = "";
-		}
-		catch (err) {
-			// Don't do anything if none of the ECs are currently unlocked
-		}
-        if (player.dilation.studies.includes(1)) document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
-        else document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Requirement: 5 EC11 and EC12 completions and 13000 total theorems<span>Cost: 5000 Time Theorems"
+
+            // Text for EC unlock studies
+            var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
+            var ECUnlockResource = ["", "Eternities", "Tickspeed upgrades gained from time dimensions", "8th dimensions", "infinities", "antimatter galaxies", "replicanti galaxies", "antimatter", "IP", "infinity power", "EP"]
+            var ECUnlockThresholds = [0, (ECTimesCompleted("eterc1") + 1) * 20000, 1300 + (ECTimesCompleted("eterc2") * 150), 17300 + (ECTimesCompleted("eterc3") * 1250), 1e8 + (ECTimesCompleted("eterc4") * 5e7), 160 + (ECTimesCompleted("eterc5") * 14), 40 + (ECTimesCompleted("eterc6") * 5), new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))), new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))), new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))), new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10")))];
+        for (var ECnum = 1; ECnum <= 10; ECnum++) {
+            if (player.reality.perks.includes(31)) document.getElementById("ec" + ECnum + "desc").textContent = "";
+            else {
+                if (ECnum <= 6)	// showing more than the maximum may lead to text overflowing
+                    ECUnlockQuantity[ECnum] = Math.min(ECUnlockQuantity[ECnum], ECUnlockThresholds[ECnum]);
+                else
+                    ECUnlockQuantity[ECnum] = ECUnlockQuantity[ECnum].min(ECUnlockThresholds[ECnum]);
+
+                if (ECnum <= 6 && ECnum != 4)	// requirements are doubles
+                    document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + ECUnlockQuantity[ECnum] + "/" + ECUnlockThresholds[ECnum] + " " + ECUnlockResource[ECnum];
+                else if (ECnum == 4)			// regex stuff to add commas
+                    document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + ECUnlockQuantity[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "/" + ECUnlockThresholds[ECnum].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " " + ECUnlockResource[ECnum];
+                else							// requirements are Decimals
+                    document.getElementById("ec" + ECnum + "desc").textContent = "Requirement: " + shortenCosts(ECUnlockQuantity[ECnum]) + "/" + shortenCosts(ECUnlockThresholds[ECnum]) + " " + ECUnlockResource[ECnum];
+            }
+            try {
+                document.getElementById("ec" + player.etercreq + "desc").textContent = "";
+            }
+            catch (err) {
+                // Don't do anything if none of the ECs are currently unlocked
+            }
+
+            if (player.dilation.studies.includes(1) || player.reality.perks.includes(13)) document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Cost: 5000 Time Theorems"
+            else document.getElementById("dilstudy1").innerHTML = "Unlock time dilation<span>Requirement: 5 EC11 and EC12 completions and 13000 total theorems<span>Cost: 5000 Time Theorems"
+        }
     }
 }
 

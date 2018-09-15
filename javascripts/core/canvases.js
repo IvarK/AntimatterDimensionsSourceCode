@@ -214,7 +214,7 @@ function drawStudyTree() {
     drawTreeBranch("111", "ec7unl")
     drawTreeBranch("123", "ec8unl")
     drawTreeBranch("151", "ec9unl")
-    drawTreeBranch("ec1unl", "181")
+    if (!player.reality.perks.includes(4)) drawTreeBranch("ec1unl", "181")
     drawTreeBranch("ec2unl", "181")
     drawTreeBranch("ec3unl", "181")
     drawTreeBranch("181", "ec10unl")

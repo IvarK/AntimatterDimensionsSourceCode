@@ -321,8 +321,6 @@ var player = {
     options: {
         newsHidden: false,
         notation: "Mixed scientific",
-        //Standard = normal prefixed numbers, Scientific = standard form, Engineering = powers of 3.
-        scientific: false,
         sacrificeConfirmation: true,
         retryChallenge: false,
         bulkOn: true,
@@ -346,7 +344,6 @@ var player = {
     }
 
 };
-
 
 var defaultStart = $.extend(true, {}, player);
 
@@ -1396,72 +1393,6 @@ document.getElementById("toggleBtnTickSpeed").onclick = function () {
         document.getElementById("toggleBtnTickSpeed").textContent = "Buys singles"
     }
 };
-
-var hardReset = function () {
-    if (forceHardReset) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
-        player = defaultStart
-        infDimPow = 1;
-        save_game();
-        load_game();
-        updateCosts();
-
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions', true)
-        updateTickSpeed();
-        updateDimensions();
-        updateChallenges();
-        updateAutobuyers();
-    } else if (confirm("Do you really want to erase all your progress?")) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
-        player = defaultStart
-        infDimPow = 1;
-        save_game();
-        load_game();
-        updateCosts();
-
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions', true)
-        updateTickSpeed();
-        updateDimensions();
-        updateChallenges();
-        updateAutobuyers();
-    }
-};
-
-var opt = {};
-opt.rows = [
-    [
-        { name: "RESET THE GAME", action: hardReset }
-    ]
-];
-
-var app = new Vue({
-    el: '#optionsVue',
-    data: opt
-})
 
 function breakInfinity() {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) return false
@@ -2891,7 +2822,7 @@ function eternity(force, auto) {
             wormhole: player.wormhole,
             options: player.options
         };
-        
+
         if (player.respec) respecTimeStudies()
         player.respec = false
         giveAchievement("Time is relative")
@@ -5789,7 +5720,7 @@ function init() {
         showTab('dimensions');
     };
     document.getElementById('optionsbtn').onclick = function () {
-        showTab('options');
+        showTab('optionsVue');
     };
     document.getElementById('statisticsbtn').onclick = function () {
         showTab('statistics');

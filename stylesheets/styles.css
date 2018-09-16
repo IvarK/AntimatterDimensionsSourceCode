@@ -210,6 +210,11 @@ button {
     background: #5AC467;
 }
 
+.optionsbtn {
+    width: 200px;
+    height: 55px;
+}
+
 .infinimultbtn {
     color: #C93A3A;
     background: #1F1F1F;

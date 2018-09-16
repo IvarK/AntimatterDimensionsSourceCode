@@ -1,4 +1,6 @@
-document.getElementById("theme").onclick = function() {
+var optionActions = {};
+
+optionActions.changeTheme = function() {
     let themes = Themes.available();
     let current = themes.indexOf(Theme.current());
     let next = Math.wrap(current + 1, 0, themes.length - 1);
@@ -6,7 +8,9 @@ document.getElementById("theme").onclick = function() {
     theme.set();
 };
 
-document.getElementById("notation").onclick = function() {
+document.getElementById("theme").onclick = optionActions.changeTheme;
+
+optionActions.changeNotation = function() {
     let notations = [
         "Scientific",
         "Engineering",
@@ -19,13 +23,14 @@ document.getElementById("notation").onclick = function() {
         "Brackets",
         "Infinity"
     ];
-    player.options.scientific = !player.options.scientific;
     let currentIndex = notations.indexOf(player.options.notation);
     let nextIndex = Math.wrap(currentIndex + 1, 0, notations.length - 1);
     Notation.set(notations[nextIndex]);
 };
 
-document.getElementById("newsbtn").onclick = function() {
+document.getElementById("notation").onclick = optionActions.changeNotation;
+
+optionActions.toggleNews = function() {
     if (!player.options.newsHidden) {
         document.getElementById("game").style.display = "none";
         player.options.newsHidden = true
@@ -36,12 +41,14 @@ document.getElementById("newsbtn").onclick = function() {
     }
 };
 
+document.getElementById("newsbtn").onclick = optionActions.toggleNews;
+
 document.getElementById("retry").onclick = function() {
     player.options.retryChallenge = !player.options.retryChallenge;
     updateOptionsButtons();
 };
 
-document.getElementById("exportbtn").onclick = function () {
+optionActions.export = function() {
     let output = document.getElementById('exportOutput');
     let parent = output.parentElement;
 
@@ -84,7 +91,9 @@ document.getElementById("exportbtn").onclick = function () {
     }
 };
 
-document.getElementById("importbtn").onclick = function() {
+document.getElementById("exportbtn").onclick = optionActions.export;
+
+optionActions.import = function() {
     var save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
     if (save_data.constructor !== String) save_data = "";
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
@@ -130,18 +139,24 @@ document.getElementById("importbtn").onclick = function() {
     }
 };
 
-document.getElementById("confirmationoptionsbtn").onclick = function () {
+document.getElementById("importbtn").onclick = optionActions.import;
+
+optionActions.openConfirmationOptions = function () {
     closeToolTip();
     document.getElementById("confirmationoptions").style.display = "flex";
 };
 
-document.getElementById("save").onclick = function() {
+document.getElementById("confirmationoptionsbtn").onclick = optionActions.openConfirmationOptions;
+
+optionActions.save = function() {
     saved++;
     if (saved > 99) giveAchievement("Just in case");
     save_game();
 };
 
-document.getElementById("load").onclick = function() {
+document.getElementById("save").onclick = optionActions.save;
+
+optionActions.load = function() {
     closeToolTip();
     for (var i = 0; i < 3; i++) {
         var _break = player.break;
@@ -160,13 +175,19 @@ document.getElementById("load").onclick = function() {
     document.getElementById("loadmenu").style.display = "flex";
 };
 
-document.getElementById("cloudsave").onclick = function() {
+document.getElementById("load").onclick = load;
+
+optionActions.cloudSave = function() {
     playFabSaveCheck();
 };
 
-document.getElementById("cloudload").onclick = function() {
+document.getElementById("cloudsave").onclick = optionActions.cloudSave;
+
+optionActions.cloudLoad = function() {
     playFabLoadCheck();
 };
+
+document.getElementById("cloudload").onclick = optionActions.cloudLoad;
 
 document.getElementById("cloudToggle").onclick = function() {
     player.options.cloud = !player.options.cloud;
@@ -178,9 +199,61 @@ document.getElementById("hotkeys").onclick = function() {
     updateOptionsButtons();
 };
 
-document.getElementById("reset").onclick = function() {
-    hardReset();
+optionActions.hardReset = function () {
+    if (forceHardReset) {
+        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
+        else set_save('dimensionSave', currentSave, defaultStart);
+        player = defaultStart
+        infDimPow = 1;
+        save_game();
+        load_game();
+        updateCosts();
+
+        document.getElementById("secondRow").style.display = "none";
+        document.getElementById("thirdRow").style.display = "none";
+        document.getElementById("tickSpeed").style.visibility = "hidden";
+        document.getElementById("tickSpeedMax").style.visibility = "hidden";
+        document.getElementById("tickLabel").style.visibility = "hidden";
+        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
+        document.getElementById("fourthRow").style.display = "none";
+        document.getElementById("fifthRow").style.display = "none";
+        document.getElementById("sixthRow").style.display = "none";
+        document.getElementById("seventhRow").style.display = "none";
+        document.getElementById("eightRow").style.display = "none";
+        showDimTab('antimatterdimensions', true)
+        updateTickSpeed();
+        updateDimensions();
+        updateChallenges();
+        updateAutobuyers();
+    } else if (confirm("Do you really want to erase all your progress?")) {
+        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
+        else set_save('dimensionSave', currentSave, defaultStart);
+        player = defaultStart
+        infDimPow = 1;
+        save_game();
+        load_game();
+        updateCosts();
+
+        document.getElementById("secondRow").style.display = "none";
+        document.getElementById("thirdRow").style.display = "none";
+        document.getElementById("tickSpeed").style.visibility = "hidden";
+        document.getElementById("tickSpeedMax").style.visibility = "hidden";
+        document.getElementById("tickLabel").style.visibility = "hidden";
+        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
+        document.getElementById("fourthRow").style.display = "none";
+        document.getElementById("fifthRow").style.display = "none";
+        document.getElementById("sixthRow").style.display = "none";
+        document.getElementById("seventhRow").style.display = "none";
+        document.getElementById("eightRow").style.display = "none";
+        showDimTab('antimatterdimensions', true)
+        updateTickSpeed();
+        updateDimensions();
+        updateChallenges();
+        updateAutobuyers();
+    }
 };
+
+document.getElementById("reset").onclick = optionActions.hardReset;
 
 document.getElementById("commas").onclick = function() {
     player.options.commas = !player.options.commas;
@@ -198,10 +271,12 @@ slider.oninput = function() {
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
 };
 
-document.getElementById("animationoptionsbtn").onclick = function () {
+optionActions.openAnimationOptions = function () {
     closeToolTip();
     document.getElementById("animationoptions").style.display = "flex";
 };
+
+document.getElementById("animationoptionsbtn").onclick = optionActions.openAnimationOptions;
 
 function updateOptionsButtons() {
     updateOnOffButton("retry", player.options.retryChallenge, "Automatically retry challenges");
@@ -217,3 +292,15 @@ function updateOptionsButtons() {
         document.getElementById(name).innerHTML = value ? on : off;
     }
 }
+
+var app = new Vue({
+    el: '#optionsVue',
+    data: {
+        options: { },
+        optionActions: optionActions
+    }
+});
+
+updateVue = function () {
+    app.options = player.options;
+};

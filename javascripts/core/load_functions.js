@@ -721,6 +721,7 @@ function load_game(root) {
 
   if (saves[currentSave]) player = saves[currentSave];
   onLoad();
+    updateVue();
 }
 
 

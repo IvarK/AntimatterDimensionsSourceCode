@@ -305,16 +305,16 @@ dev.updateTestSave = function() {
     }
 
     if (player.options.testVersion == 11) {
-      for (let i in player.reality.glyphs.active) {
-        let glyph = player.reality.glyphs.active[1]
+      for (i = 0; i < player.reality.glyphs.active.length; i++) {
+        let glyph = player.reality.glyphs.active[i]
         if (glyph.effects.autochall !== undefined) {
           glyph.effects.autochall = undefined
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         }
       }
 
-      for (let i in player.reality.glyphs.inventory) {
-        let glyph = player.reality.glyphs.inventory[1]
+      for (i = 0; i < player.reality.glyphs.inventory.length; i++) {
+        let glyph = player.reality.glyphs.inventory[i]
         if (glyph.effects.autochall !== undefined) {
           glyph.effects.autochall = undefined
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10

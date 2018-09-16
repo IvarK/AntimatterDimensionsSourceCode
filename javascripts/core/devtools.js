@@ -303,4 +303,23 @@ dev.updateTestSave = function() {
         player.secretUnlocks.dragging = 0;
         player.options.testVersion = 11
     }
+
+    if (player.options.testVersion == 11) {
+      for (let i in player.reality.glyphs.active) {
+        let glyph = player.reality.glyphs.active[1]
+        if (glyph.effects.autochall !== undefined) {
+          glyph.effects.autochall = undefined
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+        }
+      }
+
+      for (let i in player.reality.glyphs.inventory) {
+        let glyph = player.reality.glyphs.inventory[1]
+        if (glyph.effects.autochall !== undefined) {
+          glyph.effects.autochall = undefined
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+        }
+      }
+      player.options.testVersion = 12
+  }
 }

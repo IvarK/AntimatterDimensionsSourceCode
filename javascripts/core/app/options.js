@@ -1,0 +1,1 @@
+document.getElementById("theme").onclick = function (ev) { Theme.setNext(); };

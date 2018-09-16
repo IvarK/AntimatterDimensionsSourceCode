@@ -350,146 +350,6 @@ var player = {
 
 var defaultStart = $.extend(true, {}, player);
 
-
-
-
-
-function setTheme(name) {
-    document.querySelectorAll("link").forEach( function(e) {
-        if (e.href.includes("theme")) e.remove();
-    });
-
-    if(name !== undefined && name.length < 3) giveAchievement("Shhh... It's a secret")
-    if(name === undefined) {
-        document.getElementById("theme").textContent = "Current theme: Normal"
-    } else if(name === "S1") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S2") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S3") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S4") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S5") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S6") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = '#888';
-        normalDimChart.data.datasets[0].borderColor = '#888'
-    } else if(name === "S7") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if(name === "S8") {
-        document.getElementById("theme").textContent="Current theme: " + player.options.secretThemeKey;
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else {
-        document.getElementById("theme").textContent="Current theme: " + name;
-    }
-
-    if (name === undefined) return;
-
-    var head = document.head;
-    var link = document.createElement('link');
-
-    link.type = 'text/css';
-    link.rel = 'stylesheet';
-    link.href = "stylesheets/theme-" + name + ".css";
-
-    head.appendChild(link);
-}
-
-document.getElementById("theme").onclick = function () {
-    if (player.options.theme === undefined) {
-        player.options.theme = "Metro";
-    } else if (player.options.theme === "Metro") {
-        player.options.theme = "Dark";
-        Chart.defaults.global.defaultFontColor = '#888';
-        normalDimChart.data.datasets[0].borderColor = '#888'
-    } else if (player.options.theme === "Dark") {
-        player.options.theme = "Dark Metro";
-    } else if (player.options.theme === "Dark Metro") {
-        player.options.theme = "Inverted";
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-    } else if (player.options.theme === "Inverted") {
-        player.options.theme = "Inverted Metro";
-    } else {
-        player.options.theme = getNextSecretTheme();
-    }
-
-    setTheme(player.options.theme);
-
-}
-
-function getNextSecretTheme() {
-    if (player.options.theme === "Inverted Metro") var currentThemeNum = 0
-    else var currentThemeNum = parseInt(player.options.theme[1])
-    var lowestThemeNum = 100;
-    for (i in player.secretUnlocks.themes) {
-        if (currentThemeNum < 1 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537") {
-            if (lowestThemeNum > 1) {
-                lowestThemeNum = 1;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 2 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290") {
-            if (lowestThemeNum > 2) {
-                lowestThemeNum = 2;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 3 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f") {
-            if (lowestThemeNum > 3) {
-                lowestThemeNum = 3;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 4 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "d910565e1664748188b313768c370649230ca348cb6330fe9df73bcfa68d974d") {
-            if (lowestThemeNum > 4) {
-                lowestThemeNum = 4;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 5 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883") {
-            if (lowestThemeNum > 5) {
-                lowestThemeNum = 5;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 6 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137") {
-            if (lowestThemeNum > 6) {
-                lowestThemeNum = 6;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 7 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7") {
-            if (lowestThemeNum > 7) {
-                lowestThemeNum = 7;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        } else if (currentThemeNum < 8 && sha512_256(player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1].toUpperCase()) === "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19") {
-            if (lowestThemeNum > 8) {
-                lowestThemeNum = 8;
-                player.options.secretThemeKey = player.secretUnlocks.themes[i].split(player.secretUnlocks.themes[i][1])[1]
-            }
-        }
-    }
-    if (lowestThemeNum === 100) {
-        Chart.defaults.global.defaultFontColor = 'black';
-        normalDimChart.data.datasets[0].borderColor = '#000'
-        return undefined
-    } else {
-        return "S"+lowestThemeNum
-    }
-}
-
-
 let kongIPMult = 1
 let kongDimMult = 1
 let kongAllDimMult = 1
@@ -1663,83 +1523,42 @@ document.getElementById("importbtn").onclick = function () {
         setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 5000)
     }
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274") giveAchievement("So do I");
-    if (sha512_256(save_data.toUpperCase()) === "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537") {
-        player.options.theme = "S1";
-        player.secretUnlocks.themes.push("S1"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290") {
-        player.options.theme = "S2";
-        player.secretUnlocks.themes.push("S2"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f") {
-        player.options.theme = "S3";
-        player.secretUnlocks.themes.push("S3"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "d910565e1664748188b313768c370649230ca348cb6330fe9df73bcfa68d974d") {
-        player.options.theme = "S4";
-        player.secretUnlocks.themes.push("S4"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883") {
-        player.options.theme = "S5";
-        player.secretUnlocks.themes.push("S5"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137") {
-        player.options.theme = "S6";
-        player.secretUnlocks.themes.push("S6"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7") {
-        player.options.theme = "S7";
-        player.secretUnlocks.themes.push("S7"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else if (sha512_256(save_data.toUpperCase()) === "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19") {
-        player.options.theme = "S8";
-        player.secretUnlocks.themes.push("S8"+save_data[0].toUpperCase()+save_data.substr(1).toLowerCase())
-        player.options.secretThemeKey = save_data.toLowerCase()[0].toUpperCase()+save_data.substr(1).toLowerCase()
-        setTheme(player.options.theme);
-    } else {
-        save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-        console.log(verify_save(save_data))
-        if(verify_save(save_data)) forceHardReset = true
-        if(verify_save(save_data)) document.getElementById("reset").click();
-        forceHardReset = false
-        if (!save_data || !verify_save(save_data)) {
-            alert('could not load the save..');
-            load_custom_game();
-            return;
-		}
-        saved = 0;
-        totalMult = 1
-        currentMult = 1
-        infinitiedMult = 1
-        achievementMult = 1
-        challengeMult = 1
-        unspentBonus = 1
-        infDimPow = 1
-        postc8Mult = new Decimal(0)
-        mult18 = new Decimal(1)
-        ec10bonus = new Decimal(1)
-        player = save_data;
-        console.log(player)
-        save_game(false, true);
-        console.log(player)
-        load_game();
-        console.log(player)
-        updateChallenges()
-        transformSaveToDecimal()
+    if (Theme.tryUnlock(save_data))
+        return;
+    save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
+    console.log(verify_save(save_data))
+    if(verify_save(save_data)) forceHardReset = true
+    if(verify_save(save_data)) document.getElementById("reset").click();
+    forceHardReset = false
+    if (!save_data || !verify_save(save_data)) {
+        alert('could not load the save..');
+        load_custom_game();
+        return;
     }
+    saved = 0;
+    totalMult = 1
+    currentMult = 1
+    infinitiedMult = 1
+    achievementMult = 1
+    challengeMult = 1
+    unspentBonus = 1
+    infDimPow = 1
+    postc8Mult = new Decimal(0)
+    mult18 = new Decimal(1)
+    ec10bonus = new Decimal(1)
+    player = save_data;
+    console.log(player)
+    save_game(false, true);
+    console.log(player)
+    load_game();
+    console.log(player)
+    updateChallenges()
+    transformSaveToDecimal()
 };
 
 
 
-
-document.getElementById("reset").onclick = function () {
+var hardReset = function () {
     if (forceHardReset) {
         if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
         else set_save('dimensionSave', currentSave, defaultStart);
@@ -1793,6 +1612,19 @@ document.getElementById("reset").onclick = function () {
     }
 };
 
+document.getElementById("reset").onclick = hardReset;
+
+var opt = {};
+opt.rows = [
+    [
+        { name: "RESET THE GAME", action: hardReset }
+    ]
+];
+
+var app = new Vue({
+    el: '#optionsVue',
+    data: opt
+})
 
 function breakInfinity() {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) return false
@@ -3034,13 +2866,21 @@ function eternity(force, auto) {
         if (player.currentEternityChall !== "") {
             var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
             var completitions = 1
-            if (player.reality.perks.includes(32)) {
-              if ( player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1)) ) {
-                while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
-                      
-              }
+			if (player.reality.perks.includes(32)) {
+				var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4)
+				var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200)
+				while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+						player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+				var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions
+					
+				if (player.currentEternityChall == "eterc4" && totalCompletions >= maxEC4Valid)
+					completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall)
+				if (player.currentEternityChall == "eterc12" && totalCompletions >= maxEC12Valid)
+					completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
+
             }
+            if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2 * completitions).toFixed(1))
+            if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07 * completitions).toFixed(2))
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
                 player.eternityChalls[player.currentEternityChall] = completitions
             } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += completitions
@@ -3055,8 +2895,7 @@ function eternity(force, auto) {
                     giveAchievement("5 more eternities until the update");
                 }
             }
-            if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) for (i in completitions) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1))
-            if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) for (i in completitions) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2))
+
         }
         for (var i=0; i<player.challenges.length; i++) {
             if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
@@ -5366,15 +5205,27 @@ function gameLoop(diff) {
     if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(getTachyonGain()) +" Tachyon particles."
     if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
     var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
-    if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + 1))) {
-      var completitions = 1
-      while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
-                      player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
-      
-      document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + 
-                                                         " completitions on Eternity" +
-                                                         ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : 
-                                                         "<br>Next goal at " + shortenCosts(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions)))
+    if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall)))) {
+		var completitions = 1
+		// This assumes bulk completion won't go above x5 btw
+		var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4)
+		var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200)
+		while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) && 
+				player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1
+		var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions
+		var nextGoalText = "<br>Next goal at " + shortenCosts(getECGoalIP(challNum, totalCompletions))
+				
+		if (player.currentEternityChall == "eterc4" && totalCompletions >= maxEC4Valid) {
+			completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall)
+			nextGoalText = "<br>(Too many infinities for more)"
+		}
+		if (player.currentEternityChall == "eterc12" && totalCompletions >= maxEC12Valid) {
+			completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
+			nextGoalText = "<br>(Too slow for more)"
+		}
+					  
+		document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + " completitions on Eternity" +
+                                                         ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : nextGoalText)
     }
     updateMoney();
     updateCoinPerSec();

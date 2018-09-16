@@ -23,7 +23,7 @@ function onLoad() {
           animationOn: true
       }
   }
-  if (player.options.invert === true) player.options.theme = "Inverted"; player.options.invert = undefined;
+  if (player.options.invert === true) Theme.set("Inverted"); player.options.invert = undefined;
   if (player.options.notation === undefined) player.options.notation = "Standard"
   if (player.options.notation === undefined) player.options.notation = "Standard";
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
@@ -157,7 +157,7 @@ function onLoad() {
   }
   
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
-  setTheme(player.options.theme);
+  Theme.set(player.options.theme);
 
   sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
   slider.value = player.options.updateRate;
@@ -646,15 +646,6 @@ if (player.version < 5) {
   else document.getElementById("chartOnOff").checked = false
   if (player.options.chart.dips) document.getElementById("chartDipsOnOff").checked = true
   else document.getElementById("chartDipsOnOff").checked = false
-
- 
-  if (player.options.theme == "Dark" || player.options.theme == "Dark Metro" || player.options.theme == "S6") {
-    Chart.defaults.global.defaultFontColor = '#888';
-    normalDimChart.data.datasets[0].borderColor = '#888'
-  } else {
-    Chart.defaults.global.defaultFontColor = 'black';
-    normalDimChart.data.datasets[0].borderColor = '#000'
-  }
 
   if (player.eternities < 30) {
     document.getElementById("secondRow").style.display = "none";

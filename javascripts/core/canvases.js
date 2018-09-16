@@ -51,8 +51,7 @@ function animationOnOff(name) {
 function drawAnimations(ts){
     if (player.dilation.tachyonParticles.gte(1) && document.getElementById("eternitystore").style.display !== "none" && document.getElementById("dilation").style.display !== "none" && player.options.animations.tachyonParticles) {
         ctx3.clearRect(0, 0, canvas.width, canvas.height);
-        if (player.options.theme == "Dark" || player.options.theme == "Dark Metro" || player.options.theme == "S6") ctx3.fillStyle="#FFF";
-        else ctx3.fillStyle="#000";
+        ctx3.fillStyle = Theme.current().colors.tachyons;
         for (i=0; i<player.dilation.tachyonParticles.exponent+1; i++) {
             if (typeof particles["particle"+i] == "undefined") {
                 particles["particle"+i] = {}
@@ -130,8 +129,7 @@ function drawTreeBranch(num1, num2) {
         } else if (name2 == 123 || name2 == 133 || name2 == 143 || name1 == 143) {
             ctx.strokeStyle="#0080ff";
         } else {
-            if (player.options.theme === "S6") ctx.strokeStyle="#DDDDDD";
-            else ctx.strokeStyle="#000000";
+            ctx.strokeStyle = Theme.current().colors.studyTreePath;
         }
     } else {
         if (isECName) {

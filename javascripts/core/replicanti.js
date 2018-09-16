@@ -35,7 +35,7 @@ function upgradeReplicantiInterval() {
 }
 
 function upgradeReplicantiGalaxy() {
-  let cost = player.replicanti.galCost
+    let cost = player.replicanti.galCost;
   if (player.timestudy.studies.includes(233)) cost = cost.dividedBy(player.replicanti.amount.pow(0.3))
   if (player.infinityPoints.gte(cost) && player.eterc8repl !== 0) {
       player.infinityPoints = player.infinityPoints.minus(cost)
@@ -50,23 +50,23 @@ function upgradeReplicantiGalaxy() {
   return false
 }
 
-function maxReplicantiGalaxy(diff){
+function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
-    var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0)
+    var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     if (player.timestudy.studies.includes(131)) maxGal = Math.floor(player.replicanti.gal * 1.5);
     var curGal = player.replicanti.galaxies;
-    var gainGal = 0;
-    if(curGal < maxGal){ 
-      if(diff/infiTime < maxGal-curGal){
-        diff = diff % infiTime;
-        gainGal = Math.floor(diff/infiTime)
+    let gainGal = 0;
+    if (curGal < maxGal) { 
+        if (diff / infiTime < maxGal - curGal) {
+            gainGal = Math.floor(diff / infiTime);
+            diff = diff % infiTime;
     }else {
-    diff -= (maxGal - curGal) * infiTime; 
-    gainGal = maxGal - curGal;
-    }
-    player.replicanti.galaxies += gainGal;
-    player.galaxies -= 1;
-    galaxyReset()
+        diff -= (maxGal - curGal) * infiTime; 
+        gainGal = maxGal - curGal;
+        }
+        player.replicanti.galaxies += gainGal;
+        galaxies -= 1;
+        galaxyReset();
 }
 return diff;
 }
@@ -172,8 +172,7 @@ function replicantiLoop(diff) {
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
     var current = player.replicanti.amount.ln();
-    let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff;
-
+    let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff * 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
 
     if (player.replicanti.unl && (diff > 500 || interval < 50 || player.timestudy.studies.includes(192))) {
@@ -220,8 +219,8 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
         replicantiGalaxy();
     }
-    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: " + (interval).toPrecision(2) + "ms<br>-> " + Math.max(interval * 0.9, 1 * intervalMult).toPrecision(2) + " Costs: " + shortenCosts(player.replicanti.intervalCost) + " IP"
-    else document.getElementById("replicantiinterval").textContent = "Interval: " + (interval).toPrecision(2) + "ms"
+    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : Math.floor(interval)) + "ms<br>-> " + (interval < 1000 ? Math.max(interval * 0.9, 1 * intervalMult).toPrecision(3) : Math.floor(Math.max(interval * 0.9, 1 * intervalMult))) + " Costs: " + shortenCosts(player.replicanti.intervalCost) + " IP"
+    else document.getElementById("replicantiinterval").textContent = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : timeDisplay(interval));
       if(speedCheck){
         var estimate = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance+1) * getReplicantiInterval(true),0);
         var gps = 1000 / estimate;

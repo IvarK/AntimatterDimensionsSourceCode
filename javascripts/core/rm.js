@@ -485,9 +485,6 @@ function drop(ev) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
       player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
       player.reality.glyphs.active.push(glyph)
-      if (glyph.type == "power" && glyph.effects.autochall !== undefined) {
-          player.challenges = ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"];
-      }
     } else {
       var glyph = player.reality.glyphs.active.find(function(glyph) {
         return glyph.id == data

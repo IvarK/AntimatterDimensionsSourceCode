@@ -2916,13 +2916,6 @@ function eternity(force, auto) {
             document.getElementById("eightRow").style.display = "none";
         }
 
-        for (i in player.reality.glyphs.active) {
-            var glyph = player.reality.glyphs.active[i];
-            if (glyph.type == "power" && glyph.effects.autochall !== undefined) {
-                player.challenges = ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"];
-            }
-        }
-
         document.getElementById("matter").style.display = "none";
         document.getElementById("quickReset").style.display = "none";
         if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
@@ -3400,13 +3393,7 @@ function reality(force) {
             document.getElementById("seventhRow").style.display = "none";
             document.getElementById("eightRow").style.display = "none";
         }
-
-        for (i in player.reality.glyphs.active) {
-            var glyph = player.reality.glyphs.active[i];
-            if (glyph.type == "power" && glyph.effects.autochall !== undefined) {
-                player.challenges = ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"];
-            }
-        }
+        
         document.getElementById("matter").style.display = "none";
         document.getElementById("quickReset").style.display = "none";
         if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");

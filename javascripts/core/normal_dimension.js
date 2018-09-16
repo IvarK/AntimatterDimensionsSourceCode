@@ -202,6 +202,12 @@ function hasInfinityMult(tier) {
         if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
         if (isAchEnabled("r58")) dimMult *= 1.01;
         dimMult += ECTimesCompleted("eterc3") * 0.8
+
+        for (i in player.reality.glyphs.active) {
+          var glyph = player.reality.glyphs.active[i]
+          if (glyph.type == "power" && glyph.effects.buy10 !== undefined) dimMult = dimMult.times(glyph.effects.buy10)
+        }
+
         return dimMult;
     }
     

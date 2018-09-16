@@ -7,38 +7,27 @@ document.getElementById("theme").onclick = function (ev) {
 };
 
 document.getElementById("notation").onclick = function () {
+    let notations = [
+        "Scientific",
+        "Engineering",
+        "Letters",
+        "Standard",
+        "Cancer",
+        "Mixed scientific",
+        "Mixed engineering",
+        "Logarithm",
+        "Brackets",
+        "Infinity"
+    ];
     player.options.scientific = !player.options.scientific;
-    if (player.options.notation === "Infinity") {
-        player.options.notation = "Scientific";
-        document.getElementById("notation").textContent = ("Notation: Scientific")
-    } else if (player.options.notation === "Scientific") {
-        player.options.notation = "Engineering";
-        document.getElementById("notation").textContent = ("Notation: Engineering")
-    } else if (player.options.notation === "Engineering") {
-        player.options.notation = "Letters";
-        document.getElementById("notation").textContent = ("Notation: Letters")
-    } else if (player.options.notation === "Letters") {
-        player.options.notation = "Standard";
-        document.getElementById("notation").textContent = ("Notation: Standard")
-    } else if (player.options.notation === "Standard") {
-        player.options.notation = "Cancer";
-        document.getElementById("notation").textContent = ("Notation: Cancer")
-    } else if (player.options.notation === "Cancer") {
-        player.options.notation = "Mixed scientific";
-        document.getElementById("notation").textContent = ("Notation: Mixed scientific")
-    } else if (player.options.notation === "Mixed scientific") {
-        player.options.notation = "Mixed engineering";
-        document.getElementById("notation").textContent = ("Notation: Mixed engineering")
-    } else if (player.options.notation === "Mixed engineering") {
-        player.options.notation = "Logarithm";
-        document.getElementById("notation").textContent = ("Notation: Logarithm")
-    } else if (player.options.notation === "Logarithm") {
-        player.options.notation = "Brackets";
-        document.getElementById("notation").textContent = ("Notation: Brackets")
-    } else if (player.options.notation === "Brackets") {
-        player.options.notation = "Infinity";
-        document.getElementById("notation").textContent = ("Notation: Infinity")
-    }
+    let currentIndex = notations.indexOf(player.options.notation);
+    let nextIndex = Math.wrap(currentIndex + 1, 0, notations.length - 1);
+    setNotation(notations[nextIndex]);
+};
+
+setNotation = function (notation) {
+    player.options.notation = notation;
+    document.getElementById("notation").textContent = ("Notation: " + notation);
 
     updateLastTenRuns();
     updateLastTenEternities();

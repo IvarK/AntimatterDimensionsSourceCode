@@ -146,6 +146,14 @@ shortenMoney = function (money) {
   return formatValue(player.options.notation, money, 2, 1);
 };
 
+shortenGlyphEffect = function (money) {
+  return formatValue(player.options.notation, money, 2, 3);
+};
+
+shortenMultiplier = function (money) {
+  return formatValue(player.options.notation, money, 1, 1);
+};
+
 
 function timeDisplay(time, decimals = true) {
   if (time <= 10000 && decimals) return (time/1000).toFixed(3) + " seconds"

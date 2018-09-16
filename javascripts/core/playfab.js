@@ -260,13 +260,3 @@ function playFabSaveCheck() {
     if (popupsWaiting === 0) decreaseWaiting();
   });
 }
-
-function toggleCloud() {
-  if (player.options.cloud) {
-    player.options.cloud = false
-    document.getElementById("cloud").innerHTML = "Automatic cloud saving/loading OFF"
-  } else {
-    player.options.cloud = true
-    document.getElementById("cloud").innerHTML = "Automatic cloud saving/loading ON"
-  }
-}

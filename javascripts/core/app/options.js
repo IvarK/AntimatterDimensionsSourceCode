@@ -49,18 +49,10 @@ document.getElementById("retry").onclick = function() {
 };
 
 optionActions.export = function() {
-    let output = document.getElementById('exportOutput');
-    let parent = output.parentElement;
+    // TODO: purge exportOutput from codebase
+    // let output = document.getElementById('exportOutput');
 
-    parent.style.display = "";
-    output.value = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; }));
-
-    output.onblur = function() {
-        parent.style.display = "none";
-    };
-
-    output.focus();
-    output.select();
+    let save = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; }));
 
     if (player.pastebinkey) {
         $.ajax({
@@ -70,7 +62,7 @@ optionActions.export = function() {
                 api_option: "paste",
                 api_dev_key: player.pastebinkey,
                 api_paste_name: Date.now(),
-                api_paste_code: encodeURIComponent(output.value)
+                api_paste_code: encodeURIComponent(save)
             },
             success: function(response) {
                 window.open(response)
@@ -81,13 +73,22 @@ optionActions.export = function() {
         })
     }
 
+    if (copyToClipboard(save)) {
+        $.notify("exported to clipboard", "info");
+    }
+};
+
+var copyToClipboard = function (str) {
     try {
-        if (document.execCommand('copy')) {
-            $.notify("exported to clipboard", "info");
-            output.blur();
-        }
+        let el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        let result = document.execCommand('copy');
+        document.body.removeChild(el);
+        return result;
     } catch(ex) {
-        // well, we tried.
+        return false;
     }
 };
 

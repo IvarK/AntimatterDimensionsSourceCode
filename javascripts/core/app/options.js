@@ -22,20 +22,5 @@ document.getElementById("notation").onclick = function () {
     player.options.scientific = !player.options.scientific;
     let currentIndex = notations.indexOf(player.options.notation);
     let nextIndex = Math.wrap(currentIndex + 1, 0, notations.length - 1);
-    setNotation(notations[nextIndex]);
-};
-
-setNotation = function (notation) {
-    player.options.notation = notation;
-    document.getElementById("notation").textContent = ("Notation: " + notation);
-
-    updateLastTenRuns();
-    updateLastTenEternities();
-    updateLastTenRealities();
-    updateTickSpeed();
-    setAchieveTooltip();
-    updateCosts();
-    updateDilationUpgradeCosts();
-    updateAutobuyers();
-    document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
+    Notation.set(notations[nextIndex]);
 };

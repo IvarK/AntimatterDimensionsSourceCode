@@ -32,7 +32,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    player.options.notation = "Cancer"
+    Notation.set("Cancer");
     document.getElementById("theme").textContent = "SO"
     document.getElementById("notation").textContent = "BEAUTIFUL"
 }

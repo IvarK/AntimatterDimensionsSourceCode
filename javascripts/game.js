@@ -5200,7 +5200,7 @@ function gameLoop(diff) {
     } else {
         Marathon2 = 0;
     }
-    if (player.eternities >= 1 && (player.options.notation == "Standard" || player.options.notation == "Cancer" || player.options.notation == "Brackets")) {
+    if (player.eternities >= 1 && Notation.current().isPain()) {
         player.secretUnlocks.painTimer += player.options.updateRate/1000;
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
@@ -5712,7 +5712,7 @@ function maxBuyGalaxies(manual) {
     if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc1" || player.currentChallenge == "postc7") return
     if (player.autobuyers[10].priority > player.galaxies || manual) {
         while(player.eightAmount >= getGalaxyRequirement() && (player.autobuyers[10].priority > player.galaxies || manual)) {
-            if (player.options.notation == "Cancer") player.spreadingCancer+=1;
+            if (Notation.current().isCancer()) player.spreadingCancer += 1;
             player.galaxies++
         }
         player.galaxies--

@@ -49,7 +49,7 @@ const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
  * dimboost: multiply dim boost effect
  * autochall: do challenges automatically.
  */
-const powerEffects= ["pow", "mult", "dimboost", "autochall"]
+const powerEffects= ["pow", "mult", "dimboost", "buy10"]
 
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -201,7 +201,7 @@ function dilationGlyph(glyph, effectAmount) {
         break;
         
       case "pow":
-        glyph.effects.pow = 1.02 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/50
+        glyph.effects.pow = 1.1 + Math.pow(glyph.level, 0.7) * Math.pow(glyph.strength, 0.7)/25
         break;
     }
   }
@@ -223,7 +223,7 @@ function replicationGlyph(glyph, effectAmount) {
         break;
 
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.4)/75
+        glyph.effects.pow = 1.1 + Math.pow(glyph.level, 0.5) * glyph.strength / 25
         break;
 
       case "dtgain":
@@ -261,7 +261,7 @@ function infinityGlyph(glyph, effectAmount) {
         break;
         
       case "infmult":
-        glyph.effects.infmult = glyph.level * glyph.strength + 1
+        glyph.effects.infmult = Math.pow(glyph.level * glyph.strength, 1.5) * 2
         break;
     }
   }
@@ -286,15 +286,15 @@ function powerGlyph(glyph, effectAmount) {
         break;
 
       case "mult":
-        glyph.effects.mult = Math.pow(glyph.level * glyph.strength, 3)
+        glyph.effects.mult = Math.pow(glyph.level * glyph.strength * 10, glyph.level * glyph.strength * 10)
         break;
 
       case "dimboost":
         glyph.effects.dimboost = Math.pow(glyph.level * glyph.strength, 0.5)
         break;
         
-      case "autochall":
-        glyph.effects.autochall = true
+      case "buy10":
+        glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         break;
     }
   }
@@ -338,7 +338,7 @@ function getDesc(typeeffect, x) {
     powerpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerautochall: "Automatically complete normal and infinity challenges"
+    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>"
   }
 
   return EFFECT_DESCRIPTIONS[typeeffect]

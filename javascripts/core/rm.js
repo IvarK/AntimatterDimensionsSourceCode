@@ -159,7 +159,7 @@ function timeGlyph(glyph, effectAmount) {
     var effect = effects[i]
     switch(effect) {
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.2) * Math.pow(glyph.strength, 0.4)/100
+        glyph.effects.pow = 1.01 + Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.45)/75
         break;
 
       case "speed":
@@ -249,7 +249,7 @@ function infinityGlyph(glyph, effectAmount) {
     var effect = effects[i]
     switch(effect) {
       case "pow":
-        glyph.effects.pow = 1 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
+        glyph.effects.pow = 1.007 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
         break;
 
       case "rate":

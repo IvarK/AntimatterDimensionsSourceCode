@@ -65,15 +65,6 @@ Theme.current = function () {
     return Themes.find(player.options.theme);
 };
 
-Theme.setNext = function() {
-    let themes = Themes.available();
-    let current = themes.indexOf(Theme.current());
-    let next = Math.wrap(current + 1, 0, themes.length - 1);
-    let theme = themes[next];
-    theme.set();
-    return theme;
-};
-
 Theme.set = function(name) {
     let theme = Themes.find(name);
     theme.set();

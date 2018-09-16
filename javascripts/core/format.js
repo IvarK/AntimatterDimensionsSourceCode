@@ -131,21 +131,32 @@ function formatValue(notation, value, places, placesUnder1000) {
 }
 
 shorten = function (money) {
-  return formatValue(player.options.notation, money, 2, 2);
+  return shortenWithCurrentNotation(money, 2, 2);
 };
 
 shortenCosts = function (money) {
-  return formatValue(player.options.notation, money, 0, 0);
+  return shortenWithCurrentNotation(money, 0, 0);
 };
 
 shortenDimensions = function (money) {
-  return formatValue(player.options.notation, money, 2, 0);
+  return shortenWithCurrentNotation(money, 2, 0);
 };
 
 shortenMoney = function (money) {
-  return formatValue(player.options.notation, money, 2, 1);
+  return shortenWithCurrentNotation(money, 2, 1);
 };
 
+shortenGlyphEffect = function (money) {
+  return shortenWithCurrentNotation(money, 2, 3);
+};
+
+shortenMultiplier = function (money) {
+  return shortenWithCurrentNotation(money, 1, 1);
+};
+
+shortenWithCurrentNotation = function(value, places, placesUnder1000) {
+    return formatValue(Notation.current().name, value, places, placesUnder1000);
+};
 
 function timeDisplay(time, decimals = true) {
   if (time <= 10000 && decimals) return (time/1000).toFixed(3) + " seconds"

@@ -8,11 +8,11 @@ function DimensionDescription(tier) {
 
   if (ECTimesCompleted("eterc7")) {
     if (tier < 9) {
-        description += '  (+' + formatValue(player.options.notation, DimensionRateOfChange(tier), 2, 2) + '%/s)';
+        description += '  (+' + shorten(DimensionRateOfChange(tier)) + '%/s)';
     }
   } else {
     if (tier < 8) {
-        description += '  (+' + formatValue(player.options.notation, DimensionRateOfChange(tier), 2, 2) + '%/s)';
+        description += '  (+' + shorten(DimensionRateOfChange(tier)) + '%/s)';
     }
   }
 

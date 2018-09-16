@@ -108,7 +108,7 @@ function getDimensionDescription(tier) {
   if (tier == 8) description = Math.round(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
 
   if (tier < 8) {
-      description += '  (+' + formatValue(player.options.notation, getDimensionRateOfChange(tier), 2, 2) + '%/s)';
+      description += '  (+' + shorten(getDimensionRateOfChange(tier)) + '%/s)';
   }
 
   return description;

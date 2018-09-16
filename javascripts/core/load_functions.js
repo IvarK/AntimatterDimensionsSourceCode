@@ -24,8 +24,6 @@ function onLoad() {
       }
   }
   if (player.options.invert === true) Theme.set("Inverted"); player.options.invert = undefined;
-  if (player.options.notation === undefined) player.options.notation = "Standard"
-  if (player.options.notation === undefined) player.options.notation = "Standard";
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
@@ -173,7 +171,6 @@ function onLoad() {
       document.getElementById("tickLabel").style.visibility = "visible";
       document.getElementById("tickSpeedAmount").style.visibility = "visible";
   }
-  if (player.options.notation == "Mixed") player.options.notation = "Mixed scientific"
 
   if (player.infinityPower === undefined) {
       player.infinityPower = new Decimal(1)
@@ -455,8 +452,6 @@ if (player.version < 5) {
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
   document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
 
-  document.getElementById("notation").textContent = "Notation: " + player.options.notation
-
   document.getElementById("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
   document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
   document.getElementById("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
@@ -584,12 +579,6 @@ if (player.version < 5) {
     }
   }
 
-  // player.version is currently 12.1
-  if (player.options.notation == "Default") {
-      player.options.notation = "Brackets";
-      document.getElementById("notation").textContent = ("Notation: Brackets")
-  }
-
     //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
     if (player.version === 13) dev.updateTestSave()
 
@@ -598,10 +587,6 @@ if (player.version < 5) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
         if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 1;
         player.version = 13
-        if (player.options.notation === "Emojis") {
-            player.options.notation = "Cancer";
-            document.getElementById("notation").textContent = ("Notation: Cancer");
-        }
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
         player.realTimePlayed *= 100;
@@ -689,6 +674,7 @@ if (player.version < 5) {
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()
+  Notation.set(player.options.notation);
 
   if (player.wormhole.unlocked) $("#wormholeunlock").hide()
   

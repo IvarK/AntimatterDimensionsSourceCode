@@ -674,7 +674,9 @@ function updateCosts() {
     }
 }
 
-function floatText(id, text, leftOffset = 150) {
+function floatText(id, text, leftOffset) {
+    if(!leftOffset)
+        leftOffset = 150;
     if (!player.options.animations.floatingText) return
     var el = $("#"+id)
     el.append("<div class='floatingText' style='left: "+leftOffset+"px'>"+text+"</div>")
@@ -1634,7 +1636,7 @@ function calcTotalSacrificeBoost() {
 }
 
 
-function sacrifice(auto = false) {
+function sacrifice(auto) {
     if (player.eightAmount == 0) return false;
     if (player.resets < 5) return false
     if (player.currentEternityChall == "eterc3") return false

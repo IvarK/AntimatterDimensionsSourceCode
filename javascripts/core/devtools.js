@@ -31,13 +31,9 @@ dev.spin4d = function() {
 }
 
 dev.cancerize = function() {
-    player.options.theme = "S4";
-    player.options.secretThemeKey = "Cancer";
-    setTheme(player.options.theme);
-    player.options.notation = "Cancer"
-    document.getElementById("theme").textContent = "SO"
-    document.getElementById("notation").textContent = "BEAUTIFUL"
-}
+    Theme.tryUnlock("Cancer");
+    Notation.set("Cancer");
+};
 
 dev.fixSave = function() {
     var save = JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; })
@@ -305,4 +301,23 @@ dev.updateTestSave = function() {
         player.secretUnlocks.dragging = 0;
         player.options.testVersion = 11
     }
+
+    if (player.options.testVersion == 11) {
+      for (i = 0; i < player.reality.glyphs.active.length; i++) {
+        let glyph = player.reality.glyphs.active[i]
+        if (glyph.effects.autochall !== undefined) {
+          glyph.effects.autochall = undefined
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+        }
+      }
+
+      for (i = 0; i < player.reality.glyphs.inventory.length; i++) {
+        let glyph = player.reality.glyphs.inventory[i]
+        if (glyph.effects.autochall !== undefined) {
+          glyph.effects.autochall = undefined
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+        }
+      }
+      player.options.testVersion = 12
+  }
 }

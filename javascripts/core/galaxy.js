@@ -212,7 +212,7 @@ function galaxyReset() {
   setInitialDimensionPower();
 
 
-  if (player.options.notation == "Cancer") player.spreadingCancer+=1;
+  if (Notation.current().isCancer()) player.spreadingCancer +=1 ;
   if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer")
   if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread")
   if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);

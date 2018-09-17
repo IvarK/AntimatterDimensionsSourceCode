@@ -210,6 +210,11 @@ button {
     background: #5AC467;
 }
 
+.optionsbtn {
+    width: 200px;
+    height: 55px;
+}
+
 .infinimultbtn {
     color: #C93A3A;
     background: #1F1F1F;
@@ -725,7 +730,7 @@ button {
 	display: none;
 }
 
-#footercontainer {
+.sticky-footer {
     bottom: 0;
     position: fixed;
     width: 100%;
@@ -733,8 +738,7 @@ button {
     pointer-events: none;
 }
 
-
-#footer {
+.footer {
     height: 50px;
     margin: auto;
     text-align:center;
@@ -742,7 +746,7 @@ button {
     font-family: Typewriter;
 }
 
-#footer tr td div {
+.footer tr td div {
     pointer-events: all !important;
 }
 

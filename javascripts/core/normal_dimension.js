@@ -108,7 +108,7 @@ function getDimensionDescription(tier) {
   if (tier == 8) description = Math.round(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
 
   if (tier < 8) {
-      description += '  (+' + formatValue(player.options.notation, getDimensionRateOfChange(tier), 2, 2) + '%/s)';
+      description += '  (+' + shorten(getDimensionRateOfChange(tier)) + '%/s)';
   }
 
   return description;
@@ -196,10 +196,18 @@ function hasInfinityMult(tier) {
     
     
         if (player.currentChallenge == "challenge9" || player.currentChallenge == "postc1") dimMult = Math.pow(10/0.30,Math.random())*0.30
+
+        if (isAchEnabled("r141")) dimMult += 0.25;
     
         if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
         if (isAchEnabled("r58")) dimMult *= 1.01;
         dimMult += ECTimesCompleted("eterc3") * 0.8
+
+        for (i in player.reality.glyphs.active) {
+          var glyph = player.reality.glyphs.active[i]
+          if (glyph.type == "power" && glyph.effects.buy10 !== undefined) dimMult = dimMult.times(glyph.effects.buy10)
+        }
+
         return dimMult;
     }
     

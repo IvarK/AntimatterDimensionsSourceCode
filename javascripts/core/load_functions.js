@@ -23,9 +23,7 @@ function onLoad() {
           animationOn: true
       }
   }
-  if (player.options.invert === true) player.options.theme = "Inverted"; player.options.invert = undefined;
-  if (player.options.notation === undefined) player.options.notation = "Standard"
-  if (player.options.notation === undefined) player.options.notation = "Standard";
+  if (player.options.invert === true) Theme.set("Inverted"); player.options.invert = undefined;
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
@@ -157,10 +155,7 @@ function onLoad() {
   }
   
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
-  setTheme(player.options.theme);
-
-  sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
-  slider.value = player.options.updateRate;
+  Theme.set(player.options.theme);
 
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?")
@@ -173,7 +168,6 @@ function onLoad() {
       document.getElementById("tickLabel").style.visibility = "visible";
       document.getElementById("tickSpeedAmount").style.visibility = "visible";
   }
-  if (player.options.notation == "Mixed") player.options.notation = "Mixed scientific"
 
   if (player.infinityPower === undefined) {
       player.infinityPower = new Decimal(1)
@@ -415,16 +409,10 @@ if (player.version < 5) {
   updateTickSpeed();
   updateAchievements();
   updateChallenges();
-  toggleChallengeRetry()
-  toggleChallengeRetry()
   toggleBulk()
   toggleBulk()
-  toggleCloud()
-  toggleCloud()
   respecToggle()
   respecToggle()
-  toggleCommas()
-  toggleCommas()
   if (!player.replicanti.auto[0]) document.getElementById("replauto1").textContent = "Auto: OFF"
   else document.getElementById("replauto1").textContent = "Auto: ON"
   if (!player.replicanti.auto[1]) document.getElementById("replauto2").textContent = "Auto: OFF"
@@ -454,8 +442,6 @@ if (player.version < 5) {
 
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
   document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
-
-  document.getElementById("notation").textContent = "Notation: " + player.options.notation
 
   document.getElementById("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
   document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
@@ -584,12 +570,6 @@ if (player.version < 5) {
     }
   }
 
-  // player.version is currently 12.1
-  if (player.options.notation == "Default") {
-      player.options.notation = "Brackets";
-      document.getElementById("notation").textContent = ("Notation: Brackets")
-  }
-
     //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
     if (player.version === 13) dev.updateTestSave()
 
@@ -598,10 +578,6 @@ if (player.version < 5) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
         if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 1;
         player.version = 13
-        if (player.options.notation === "Emojis") {
-            player.options.notation = "Cancer";
-            document.getElementById("notation").textContent = ("Notation: Cancer");
-        }
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
         player.realTimePlayed *= 100;
@@ -647,15 +623,6 @@ if (player.version < 5) {
   if (player.options.chart.dips) document.getElementById("chartDipsOnOff").checked = true
   else document.getElementById("chartDipsOnOff").checked = false
 
- 
-  if (player.options.theme == "Dark" || player.options.theme == "Dark Metro" || player.options.theme == "S6") {
-    Chart.defaults.global.defaultFontColor = '#888';
-    normalDimChart.data.datasets[0].borderColor = '#888'
-  } else {
-    Chart.defaults.global.defaultFontColor = 'black';
-    normalDimChart.data.datasets[0].borderColor = '#000'
-  }
-
   if (player.eternities < 30) {
     document.getElementById("secondRow").style.display = "none";
     document.getElementById("thirdRow").style.display = "none";
@@ -671,7 +638,6 @@ if (player.version < 5) {
   }
   if (player.wormhole.unlocked) $("#wormholecontainer").show()
 
-  if (!player.options.hotkeys) document.getElementById("hotkeys").textContent = "Enable hotkeys"
   updateAutobuyers();
   setAchieveTooltip();
   updatePriorities();
@@ -698,6 +664,7 @@ if (player.version < 5) {
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()
+  Notation.set(player.options.notation);
 
   if (player.wormhole.unlocked) $("#wormholeunlock").hide()
   
@@ -749,6 +716,7 @@ function load_game(root) {
 
   if (saves[currentSave]) player = saves[currentSave];
   onLoad();
+    updateVue();
 }
 
 

@@ -1,6 +1,6 @@
-var optionActions = {};
+ui.actions.options = {};
 
-optionActions.changeTheme = function() {
+ui.actions.options.changeTheme = function() {
     let themes = Themes.available();
     let current = themes.indexOf(Theme.current());
     let next = Math.wrap(current + 1, 0, themes.length - 1);
@@ -8,9 +8,9 @@ optionActions.changeTheme = function() {
     theme.set();
 };
 
-document.getElementById("theme").onclick = optionActions.changeTheme;
+document.getElementById("theme").onclick = ui.actions.options.changeTheme;
 
-optionActions.changeNotation = function() {
+ui.actions.options.changeNotation = function() {
     let notations = [
         "Scientific",
         "Engineering",
@@ -28,9 +28,9 @@ optionActions.changeNotation = function() {
     Notation.set(notations[nextIndex]);
 };
 
-document.getElementById("notation").onclick = optionActions.changeNotation;
+document.getElementById("notation").onclick = ui.actions.options.changeNotation;
 
-optionActions.toggleNews = function() {
+ui.actions.options.toggleNews = function() {
     if (!player.options.newsHidden) {
         document.getElementById("game").style.display = "none";
         player.options.newsHidden = true
@@ -41,14 +41,14 @@ optionActions.toggleNews = function() {
     }
 };
 
-document.getElementById("newsbtn").onclick = optionActions.toggleNews;
+document.getElementById("newsbtn").onclick = ui.actions.options.toggleNews;
 
 document.getElementById("retry").onclick = function() {
     player.options.retryChallenge = !player.options.retryChallenge;
     updateOptionsButtons();
 };
 
-optionActions.export = function() {
+ui.actions.options.export = function() {
     // TODO: purge exportOutput from codebase
     // let output = document.getElementById('exportOutput');
 
@@ -92,9 +92,9 @@ var copyToClipboard = function (str) {
     }
 };
 
-document.getElementById("exportbtn").onclick = optionActions.export;
+document.getElementById("exportbtn").onclick = ui.actions.options.export;
 
-optionActions.import = function() {
+ui.actions.options.import = function() {
     var save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
     if (save_data.constructor !== String) save_data = "";
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
@@ -140,24 +140,24 @@ optionActions.import = function() {
     }
 };
 
-document.getElementById("importbtn").onclick = optionActions.import;
+document.getElementById("importbtn").onclick = ui.actions.options.import;
 
-optionActions.openConfirmationOptions = function () {
+ui.actions.options.openConfirmationOptions = function () {
     closeToolTip();
     document.getElementById("confirmationoptions").style.display = "flex";
 };
 
-document.getElementById("confirmationoptionsbtn").onclick = optionActions.openConfirmationOptions;
+document.getElementById("confirmationoptionsbtn").onclick = ui.actions.options.openConfirmationOptions;
 
-optionActions.save = function() {
+ui.actions.options.save = function() {
     saved++;
     if (saved > 99) giveAchievement("Just in case");
     save_game();
 };
 
-document.getElementById("save").onclick = optionActions.save;
+document.getElementById("save").onclick = ui.actions.options.save;
 
-optionActions.load = function() {
+ui.actions.options.load = function() {
     closeToolTip();
     for (var i = 0; i < 3; i++) {
         var _break = player.break;
@@ -178,17 +178,17 @@ optionActions.load = function() {
 
 document.getElementById("load").onclick = load;
 
-optionActions.cloudSave = function() {
+ui.actions.options.cloudSave = function() {
     playFabSaveCheck();
 };
 
-document.getElementById("cloudsave").onclick = optionActions.cloudSave;
+document.getElementById("cloudsave").onclick = ui.actions.options.cloudSave;
 
-optionActions.cloudLoad = function() {
+ui.actions.options.cloudLoad = function() {
     playFabLoadCheck();
 };
 
-document.getElementById("cloudload").onclick = optionActions.cloudLoad;
+document.getElementById("cloudload").onclick = ui.actions.options.cloudLoad;
 
 document.getElementById("cloudToggle").onclick = function() {
     player.options.cloud = !player.options.cloud;
@@ -200,7 +200,7 @@ document.getElementById("hotkeys").onclick = function() {
     updateOptionsButtons();
 };
 
-optionActions.hardReset = function () {
+ui.actions.options.hardReset = function () {
     if (forceHardReset) {
         if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
         else set_save('dimensionSave', currentSave, defaultStart);
@@ -254,7 +254,7 @@ optionActions.hardReset = function () {
     }
 };
 
-document.getElementById("reset").onclick = optionActions.hardReset;
+document.getElementById("reset").onclick = ui.actions.options.hardReset;
 
 document.getElementById("commas").onclick = function() {
     player.options.commas = !player.options.commas;
@@ -264,7 +264,7 @@ document.getElementById("commas").onclick = function() {
 var slider = document.getElementById("updaterateslider");
 var sliderText = document.getElementById("updaterate");
 
-optionActions.refreshUpdateRate = function() {
+ui.actions.options.refreshUpdateRate = function() {
     if (player.options.updateRate === 200) giveAchievement("You should download some more RAM");
     clearInterval(gameLoopIntervalId);
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
@@ -273,15 +273,15 @@ optionActions.refreshUpdateRate = function() {
 slider.oninput = function(ev) {
     player.options.updateRate = parseInt(this.value);
     sliderText.textContent = "Update rate: " + this.value + "ms";
-    optionActions.refreshUpdateRate();
+    ui.actions.options.refreshUpdateRate();
 };
 
-optionActions.openAnimationOptions = function () {
+ui.actions.options.openAnimationOptions = function () {
     closeToolTip();
     document.getElementById("animationoptions").style.display = "flex";
 };
 
-document.getElementById("animationoptionsbtn").onclick = optionActions.openAnimationOptions;
+document.getElementById("animationoptionsbtn").onclick = ui.actions.options.openAnimationOptions;
 
 function updateOptionsButtons() {
     updateOnOffButton("retry", player.options.retryChallenge, "Automatically retry challenges");
@@ -297,15 +297,3 @@ function updateOptionsButtons() {
         document.getElementById(name).innerHTML = value ? on : off;
     }
 }
-
-var app = new Vue({
-    el: '#optionsVue',
-    data: {
-        options: { },
-        optionActions: optionActions
-    }
-});
-
-updateVue = function () {
-    app.options = player.options;
-};

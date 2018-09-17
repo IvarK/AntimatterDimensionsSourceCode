@@ -1,14 +1,14 @@
 Vue.component('options', {
-    props: ['options', 'actions'],
+    props: ['model', 'actions'],
     template:
     '<table>\
         <tr>\
           <td is="options-button" font="20px" :text="\'Current theme: \' + theme" @click="actions.changeTheme" />\
-          <td is="options-button" font="120%" :text="\'Notation: \' + options.notation" @click="actions.changeNotation" />\
+          <td is="options-button" font="120%" :text="\'Notation: \' + model.notation" @click="actions.changeNotation" />\
           <td is="options-button" font="120%" text="Hide/show the news" @click="actions.toggleNews" />\
         </tr>\
         <tr>\
-          <td is="on-off-button" font="120%" text="Automatically retry challenges" v-model="options.retryChallenge" />\
+          <td is="on-off-button" font="120%" text="Automatically retry challenges" v-model="model.retryChallenge" />\
           <td is="options-button" font="20px" text="Export" @click="actions.export" />\
           <td is="options-button" font="20px" text="Import" @click="actions.import" />\
         </tr>\
@@ -20,22 +20,22 @@ Vue.component('options', {
         <tr>\
           <td is="options-button" font="120%" text="Cloud save" @click="actions.cloudSave" />\
           <td is="options-button" font="120%" text="Cloud load" @click="actions.cloudLoad" />\
-          <td is="on-off-button" font="120%" text="Automatic cloud saving/loading" v-model="options.cloud" />\
+          <td is="on-off-button" font="120%" text="Automatic cloud saving/loading" v-model="model.cloud" />\
         </tr>\
         <tr>\
-          <td is="toggle-button" font="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="options.hotkeys" />\
+          <td is="toggle-button" font="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys" />\
           <td is="options-button" font="20px" text="RESET THE GAME" @click="actions.hardReset" />\
-          <td is="toggle-button" font="120%" on="Commas on exponents" off="Notation on exponents" v-model="options.commas" />\
+          <td is="toggle-button" font="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas" />\
         </tr>\
         <tr>\
           <td />\
-          <td is="update-rate-slider" v-model="options.updateRate" @input="actions.refreshUpdateRate"/>\
+          <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"/>\
           <td is="options-button" font="160%" text="Animations" @click="actions.openAnimationOptions" />\
         </tr>\
      </table>',
     computed: {
         theme: function() {
-            return Themes.find(this.options.theme).displayName();
+            return Themes.find(this.model.theme).displayName();
         }
     },
     methods: {

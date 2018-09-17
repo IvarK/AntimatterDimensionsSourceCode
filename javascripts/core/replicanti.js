@@ -219,8 +219,8 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
         replicantiGalaxy();
     }
-    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : Math.floor(interval)) + "ms<br>-> " + (interval < 1000 ? Math.max(interval * 0.9, 1 * intervalMult).toPrecision(3) : Math.floor(Math.max(interval * 0.9, 1 * intervalMult))) + " Costs: " + shortenCosts(player.replicanti.intervalCost) + " IP"
-    else document.getElementById("replicantiinterval").textContent = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : timeDisplay(interval));
+    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : Math.floor(interval)) + "ms<br>-> " + (interval < 1000 ? Math.max(interval * 0.9, 1 * intervalMult).toPrecision(3) : Math.floor(Math.max(interval * 0.9, 1 * intervalMult))) + "ms Costs: " + shortenCosts(player.replicanti.intervalCost) + " IP"
+    else document.getElementById("replicantiinterval").textContent = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) + "ms" : timeDisplay(interval));
       if(speedCheck){
         var estimate = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance+1) * getReplicantiInterval(true),0);
         var gps = 1000 / estimate;

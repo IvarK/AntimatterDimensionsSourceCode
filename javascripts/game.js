@@ -774,6 +774,7 @@ function updateEternityChallenges() {
     }
 }
 
+
 document.getElementById("news").onclick = function () {
     if (document.getElementById("news").textContent === "Click this to unlock a secret achievement.") {
         giveAchievement("Real news")

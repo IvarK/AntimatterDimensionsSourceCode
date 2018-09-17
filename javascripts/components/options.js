@@ -42,13 +42,18 @@ Vue.component('options', {
     },
     components: {
         'update-rate-slider': {
-            props: ['value'],
+            props: {
+                value: {
+                    type: Number,
+                    default: 50
+                }
+            },
             template:
                 '<div class="storebtn update-rate-btn" style="font-size:130%; text-align: center; cursor: default;"> \
                    <b>Update Rate: {{ value }} ms</b>\
                    <input class="slider" style="width: 170px;"\
                      type="range" min="33" max="200"\
-                     :value="value" @input="emitInput($event.target.value)" />\
+                     :value="value" @input="emitInput(parseInt($event.target.value))" />\
                  </div>'
         }
     }

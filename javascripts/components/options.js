@@ -60,7 +60,7 @@ Vue.component('options', {
         'update-rate-slider': {
             props: ['value'],
             template:
-                '<td><div class="storebtn optionsbtn" style="font-size:130%; text-align: center;"> \
+                '<td><div class="storebtn optionsbtn" style="font-size:130%; text-align: center; cursor: default;"> \
                    <b>Update Rate: {{ value }} ms</b>\
                    <input class="slider" style="width: 170px;"\
                      type="range" min="33" max="200"\

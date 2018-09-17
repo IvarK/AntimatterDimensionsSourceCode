@@ -34,6 +34,7 @@
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
 <body id="body" style="height: 95vh;">
+<div id="ui">
     <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
         <div id='game'>
             <div id='news'>.</div>
@@ -319,22 +320,7 @@
                     </tr>
                 </table>
                 <div style="height: 60px;"></div>
-                <div>
-                    <table id="footer">
-                        <tr>
-                            <td>
-                                <div style="text-align:center">
-                                    <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <footer-links></footer-links>
             </div>
             <div  class="eternitytab" id="eternityupgrades">
                 <br>
@@ -374,21 +360,7 @@
                     </tr>
                 </table>
                 <div><button class="storebtn" onclick="buyMaxEPMult()" style="height: 25px; width: 190px; font-size:10px; margin-top: -3px;">Max EP mult</button></div>
-                <div id="footercontainer">
-                    <table id="footer">
-                        <tr>
-                            <td>
-                                <div style="text-align:center">
-                                    <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <footer-links sticky="true"></footer-links>
             </div>
             <div class="eternitytab" id="milestones">
                 <table class="table" align="center" style="margin: auto" id="milestones">
@@ -473,21 +445,7 @@
                         <td><button class="milestonerewardlocked" id="reward23">Unlock autobuyer for Eternities</button></td>
                     </tr>
                 </table>
-                <div>
-                    <table id="footer">
-                        <tr>
-                            <td>
-                                <div style="text-align:center">
-                                    <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <footer-links></footer-links>
             </div>
             <div class="eternitytab" id="dilation" style="font-size: 11px">
                 <canvas id="dilationCanvas"></canvas>
@@ -543,21 +501,7 @@
                         </td>
                     </tr>
                 </table>
-                <div>
-                    <table id="footer">
-                        <tr>
-                            <td>
-                                <div style="text-align:center">
-                                    <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <footer-links></footer-links>
             </div>
         </div>
         <div id="dimensions" class="tab">
@@ -946,88 +890,24 @@
                 <canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
                 <b>Exponents of antimatter per second</b>
             </div>
-            <div id="footercontainer">
-
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div id="optionsVue" class="tab" align="center" style="display: none">
-            <br>
-                <options :rows="rows"></options>
-            </br>
+            <footer-links sticky="true"></footer-links>
         </div>
         <div id="options" class="tab" align="center">
             <br>
-            <table>
-                <tr>
-                    <td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Current theme: Normal</button></div></td>
-                    <td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Notation: Standard</button></div></td>
-                    <td><div><button id="newsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Hide/show the news</button></div></td>
-                </tr>
-                <tr>
-					<td><div><button id="retry" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Automatically retry challenges</button></div></td>
-                    <td><div><button id="exportbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
-                    <td><div><button id="importbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
-                </tr>
-                <tr>
-                    <td><div><button id="confirmationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Confirmations</button></div></td>
-					<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
-					<td><div><button id="load" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-                </tr>
-                <tr id="cloudOptions">
-                    <td><div><button id="cloudsave" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud save</button></div></td>
-                    <td><div><button id="cloudload" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud load</button></div></td>
-                    <td><div><button id="cloudToggle" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Toggle automatic cloud saving/loading</button></div></td>
-                </tr>
-                <tr>
-                    <td><div><button id="hotkeys" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
-					<td><div><button id="reset" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
-                    <td><div><button id="commas" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Commas on large exponents ON</button></div></td>
-                </tr>
-                <tr>
-					<td><div><button id="eternityconf" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%; display: none">THIS DOES NOTHING</button></div></td>
-                    <td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="33" max="200" value="50" class="slider" ></div></td>
-                    <td><div><button id="animationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
-                </tr>
-                <tr>
-
-
-                </tr>
-
-
-
-            </table>
-            <div style="display: none;"><textarea id="exportOutput" style="color:black; width: 200px; height: 55px;"></textarea></div>
-            <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
-            <div id="footercontainer">
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <options :model="model.player.options" :actions="actions.options"></options>
+            <p>
+                Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension,
+                T to buy max tickspeed, shift+T to buy one tickspeed, M for max all
+                <br>
+                S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch,
+                A for toggle autobuyers, R for replicanti galaxies, E for eternity.
+                <br>
+                You can hold shift while buying time studies to buy all up until that point,
+                see each study's number, and save study trees.
+                <br>
+                Hotkeys do not work while holding control.
+            </p>
+            <footer-links sticky="true"></footer-links>
         </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>
@@ -1148,22 +1028,7 @@
                     <div id="averageRealityRun"></div>
                     <br>
                 </div>
-            <div>
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <footer-links></footer-links>
         </div>
         <div id="achievements" class="tab">
             <table class="table" align="center" style="margin: auto" id="achTabButtons">
@@ -1653,22 +1518,7 @@
                     </tr>
                 </table>
             </div>
-            <div>
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <footer-links></footer-links>
         </div>
         <div id="challenges" class="tab">
             <br>
@@ -2170,19 +2020,7 @@
                     </tr>
                 </table>
             </div>
-            <table id="footer">
-                <tr>
-                    <td>
-                        <div style="text-align:center">
-                            <a href="howto.html" target="_newtab">How to play  </a> |
-                            <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                            <a href="changelog.html" target="_newtab">Changelog   </a> |
-                            <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                            <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <footer-links></footer-links>
         </div>
         <div id="infinity" class="tab" align="center" style="display: none">
             <br>
@@ -2259,22 +2097,7 @@
             <br>
             <div><button id="infiMult" class="infinimultbtn">Multiply infinity points from all sources by 2 <br>currently: <br>Cost: 100 IP</button></div>
             <div><button id="infmultbuyer" class="storebtn" onclick="infMultAutoToggle()" style="display:none; height: 25px; width: 190px; font-size:10px; margin-top: 3px;">Autobuy IP mult ON</button></div>
-            <div>
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a> |
-                                <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <footer-links></footer-links>
         </div>
 
         <div id="autobuyers" class="inftab">
@@ -2595,22 +2418,7 @@
                 <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="13ison"></input>
             </div>
 
-            <div>
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <footer-links></footer-links>
         </div>
         <div id="postinf" class="inftab" align="center">
             <br>
@@ -2674,22 +2482,7 @@
                         </td>
                     </tr>
                 </table>
-                <div>
-                    <table id="footer">
-                        <tr>
-                            <td>
-                                <div style="text-align:center">
-                                    <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+            <footer-links></footer-links>
         </div>
         <div id="replicantis" class="inftab">
             <br>
@@ -2712,22 +2505,7 @@
                 <br>
                 <button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button>
             </div>
-            <div id="footercontainer">
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            <footer-links sticky="true"></footer-links>
         </div>
 
         </div>
@@ -3056,6 +2834,7 @@
     <div id="progress" style="display:none">
         <div id="progressbar"><span id="progresspercent" ach-tooltip="Percentage until Infinity">0%</span></div>
     </div>
+</div>
 </body>
 <div class="videocontainer">
     <video autoplay muted loop id="stars" style="display: none;">
@@ -3070,7 +2849,6 @@
 
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
 <script type="text/javascript" src="javascripts/lib/lodash.min.js"></script>
-<script type="text/javascript" src="javascripts/components/options.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/autobuyer.js"></script>
 <!-- script type="text/javascript" src="javascripts/decimal.js"></script> -->
@@ -3084,9 +2862,15 @@
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
 <script type="text/javascript" src="javascripts/core/format.js"></script>
+
+<script type="text/javascript" src="javascripts/components/options.js"></script>
+<script type="text/javascript" src="javascripts/components/footer-links.js"></script>
+<script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>
 <script type="text/javascript" src="javascripts/core/app/options.js"></script>
+<script type="text/javascript" src="javascripts/core/app/ui.js"></script>
+
 <script type="text/javascript" src="javascripts/core/achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/chart.js"></script>
 <script type="text/javascript" src="javascripts/core/tickspeed.js"></script>
@@ -3110,9 +2894,5 @@
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>
 
-
 <script type="text/javascript" src="javascripts/sha512.js"></script>
-
-
-
 </html>

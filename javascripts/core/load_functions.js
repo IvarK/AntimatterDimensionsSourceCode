@@ -157,9 +157,6 @@ function onLoad() {
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
   Theme.set(player.options.theme);
 
-  sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
-  slider.value = player.options.updateRate;
-
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?")
   }
@@ -412,7 +409,6 @@ if (player.version < 5) {
   updateTickSpeed();
   updateAchievements();
   updateChallenges();
-  updateOptionsButtons();
   toggleBulk()
   toggleBulk()
   respecToggle()
@@ -642,7 +638,6 @@ if (player.version < 5) {
   }
   if (player.wormhole.unlocked) $("#wormholecontainer").show()
 
-  if (!player.options.hotkeys) document.getElementById("hotkeys").textContent = "Enable hotkeys"
   updateAutobuyers();
   setAchieveTooltip();
   updatePriorities();
@@ -721,6 +716,7 @@ function load_game(root) {
 
   if (saves[currentSave]) player = saves[currentSave];
   onLoad();
+    updateVue();
 }
 
 

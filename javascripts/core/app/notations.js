@@ -28,8 +28,6 @@ Notation.set = function (name) {
         name = "Cancer";
     }
     player.options.notation = name;
-    document.getElementById("notation").textContent = ("Notation: " + name);
-
     updateLastTenRuns();
     updateLastTenEternities();
     updateLastTenRealities();

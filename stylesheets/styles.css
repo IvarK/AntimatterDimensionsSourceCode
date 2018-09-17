@@ -730,28 +730,7 @@ button {
 	display: none;
 }
 
-#footercontainer {
-    bottom: 0;
-    position: fixed;
-    width: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-
-#footer {
-    height: 50px;
-    margin: auto;
-    text-align:center;
-    font-size: 15px;
-    font-family: Typewriter;
-}
-
-#footer tr td div {
-    pointer-events: all !important;
-}
-
-.footercontainer {
+.sticky-footer {
     bottom: 0;
     position: fixed;
     width: 100%;

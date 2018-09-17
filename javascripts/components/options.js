@@ -3,34 +3,34 @@ Vue.component('options', {
     template:
     '<table>\
         <tr>\
-          <td is="options-button" font="20px" :text="\'Current theme: \' + theme" @click="actions.changeTheme" />\
-          <td is="options-button" font="120%" :text="\'Notation: \' + model.notation" @click="actions.changeNotation" />\
-          <td is="options-button" font="120%" text="Hide/show the news" @click="actions.toggleNews" />\
+          <td is="options-button" fontSize="20px" @click="actions.changeTheme">Current theme: {{ theme }}</td>\
+          <td is="options-button" fontSize="120%" @click="actions.changeNotation">Notation: {{ model.notation }}</td>\
+          <td is="options-button" fontSize="120%" @click="actions.toggleNews">Hide/show the news</td>\
         </tr>\
         <tr>\
-          <td is="on-off-button" font="120%" text="Automatically retry challenges" v-model="model.retryChallenge" />\
-          <td is="options-button" font="20px" text="Export" @click="actions.export" />\
-          <td is="options-button" font="20px" text="Import" @click="actions.import" />\
+          <td is="on-off-button" fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge" />\
+          <td is="options-button" fontSize="20px" @click="actions.export">Export</td>\
+          <td is="options-button" fontSize="20px" @click="actions.import">Import</td>\
         </tr>\
         <tr>\
-          <td is="options-button" font="160%" text="Confirmations" @click="actions.openConfirmationOptions" />\
-          <td is="options-button" font="20px" text="Save" @click="actions.save" />\
-          <td is="options-button" font="20px" text="Load" @click="actions.load" />\
+          <td is="options-button" fontSize="160%" @click="actions.openConfirmationOptions">Confirmations</td>\
+          <td is="options-button" fontSize="20px" @click="actions.save">Save</td>\
+          <td is="options-button" fontSize="20px" @click="actions.load">Load</td>\
         </tr>\
         <tr>\
-          <td is="options-button" font="120%" text="Cloud save" @click="actions.cloudSave" />\
-          <td is="options-button" font="120%" text="Cloud load" @click="actions.cloudLoad" />\
-          <td is="on-off-button" font="120%" text="Automatic cloud saving/loading" v-model="model.cloud" />\
+          <td is="options-button" fontSize="120%" @click="actions.cloudSave">Cloud save</td>\
+          <td is="options-button" fontSize="120%" @click="actions.cloudLoad">Cloud load</td>\
+          <td is="on-off-button" fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud" />\
         </tr>\
         <tr>\
-          <td is="toggle-button" font="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys" />\
-          <td is="options-button" font="20px" text="RESET THE GAME" @click="actions.hardReset" />\
-          <td is="toggle-button" font="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas" />\
+          <td is="toggle-button" fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys" />\
+          <td is="options-button" fontSize="20px" @click="actions.hardReset">RESET THE GAME</td>\
+          <td is="toggle-button" fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"></td>\
         </tr>\
         <tr>\
           <td/>\
-          <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"/>\
-          <td is="options-button" font="160%" text="Animations" @click="actions.openAnimationOptions" />\
+          <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"></td>\
+          <td is="options-button" fontSize="160%" @click="actions.openAnimationOptions">Animations</td>\
         </tr>\
      </table>',
     computed: {
@@ -42,14 +42,14 @@ Vue.component('options', {
     },
     components: {
         'toggle-button': {
-            props: ['font', 'on', 'off', 'value'],
+            props: ['on', 'off', 'value'],
             template:
-                '<options-button :font="font" :text="value ? on : off" @click="$emit(\'input\', !value)" />'
+                '<options-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</options-button>'
         },
         'on-off-button': {
-            props: ['font', 'text', 'value'],
+            props: ['text', 'value'],
             template:
-                '<options-button :font="font" :text="displayText" @click="$emit(\'input\', !value)" />',
+                '<options-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</options-button>',
             computed: {
                 displayText: function () {
                     return this.value ? this.text + " ON" : this.text + " OFF";
@@ -63,16 +63,16 @@ Vue.component('options', {
                    <b>Update Rate: {{ value }} ms</b>\
                    <input class="slider" style="width: 170px;"\
                      type="range" min="33" max="200"\
-                     :value="value" @input="$emit(\'input\', $event.target.value)" />\
+                     :value="value" @input="emitInput($event.target.value)" />\
                  </div></td>'
         }
     }
 });
 
 Vue.component('options-button', {
-    props: ['font', 'text'],
+    inheritAttrs: false,
     template:
-    '<td><button class="storebtn optionsbtn" :style="{ fontSize: font }" @click="$emit(\'click\')">\
-        {{ text }}\
-    </button></td>'
+    '<td><primary-button class="optionsbtn" v-bind="$attrs" v-on="$listeners">\
+        <slot></slot>\
+     </primary-button></td>'
 });

@@ -28,10 +28,11 @@ Vue.component('options', {
           <td is="toggle-button" font="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas" />\
         </tr>\
         <tr>\
-          <td />\
+          <td/>\
           <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"/>\
           <td is="options-button" font="160%" text="Animations" @click="actions.openAnimationOptions" />\
         </tr>\
+        <tr/>\
      </table>',
     computed: {
         theme: function() {

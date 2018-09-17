@@ -965,7 +965,7 @@
                 </table>
             </div>
         </div>
-        <div id="optionsVue" class="tab" align="center">
+        <div id="options" class="tab" align="center">
             <br>
                 <options :model="model.player.options" :actions="actions.options"></options>
             <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
@@ -986,66 +986,6 @@
                 </table>
             </div>
             </br>
-        </div>
-        <div id="options" class="tab" align="center">
-            <br>
-            <table>
-                <tr>
-                    <td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Current theme: Normal</button></div></td>
-                    <td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Notation: Standard</button></div></td>
-                    <td><div><button id="newsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Hide/show the news</button></div></td>
-                </tr>
-                <tr>
-					<td><div><button id="retry" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Automatically retry challenges</button></div></td>
-                    <td><div><button id="exportbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Export</button></div></td>
-                    <td><div><button id="importbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Import</button></div></td>
-                </tr>
-                <tr>
-                    <td><div><button id="confirmationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Confirmations</button></div></td>
-					<td><div><button id="save" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Save</button></div></td>
-					<td><div><button id="load" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">Load</button></div></td>
-                </tr>
-                <tr id="cloudOptions">
-                    <td><div><button id="cloudsave" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud save</button></div></td>
-                    <td><div><button id="cloudload" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud load</button></div></td>
-                    <td><div><button id="cloudToggle" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Toggle automatic cloud saving/loading</button></div></td>
-                </tr>
-                <tr>
-                    <td><div><button id="hotkeys" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
-					<td><div><button id="reset" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
-                    <td><div><button id="commas" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Commas on large exponents ON</button></div></td>
-                </tr>
-                <tr>
-					<td><div><button id="eternityconf" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%; display: none">THIS DOES NOTHING</button></div></td>
-                    <td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="33" max="200" value="50" class="slider" ></div></td>
-                    <td><div><button id="animationoptionsbtn" class="storebtn" style="width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
-                </tr>
-                <tr>
-
-
-                </tr>
-
-
-
-            </table>
-            <div style="display: none;"><textarea id="exportOutput" style="color:black; width: 200px; height: 55px;"></textarea></div>
-            <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
-            <div id="footercontainer">
-                <table id="footer">
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
         </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>

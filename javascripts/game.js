@@ -5720,7 +5720,7 @@ function init() {
         showTab('dimensions');
     };
     document.getElementById('optionsbtn').onclick = function () {
-        showTab('optionsVue');
+        showTab('options');
     };
     document.getElementById('statisticsbtn').onclick = function () {
         showTab('statistics');

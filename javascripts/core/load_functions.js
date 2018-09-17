@@ -875,6 +875,19 @@ function transformSaveToDecimal() {
 
   player.reality.realityMachines = new Decimal(player.reality.realityMachines)
 
+  for (let i = 0; i < player.reality.glyphs.active; i++) {
+    let glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "power" && glyph.effects.mult !== undefined) {
+      glyph.effects.mult = new Decimal(glyph.effects.mult)
+    }
+  }
+
+  for (let i = 0; i < player.reality.glyphs.inventory; i++) {
+    let glyph = player.reality.glyphs.inventory[i]
+    if (glyph.type == "power" && glyph.effects.mult !== undefined) {
+      glyph.effects.mult = new Decimal(glyph.effects.mult)
+    }
+  } 
   
 }
 

@@ -338,7 +338,7 @@ function getDesc(typeeffect, x) {
     powerpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
     powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>"
+    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>" // Implemented
   }
 
   return EFFECT_DESCRIPTIONS[typeeffect]

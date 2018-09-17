@@ -32,7 +32,6 @@ Vue.component('options', {
           <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"/>\
           <td is="options-button" font="160%" text="Animations" @click="actions.openAnimationOptions" />\
         </tr>\
-        <tr/>\
      </table>',
     computed: {
         theme: function() {

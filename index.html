@@ -967,25 +967,20 @@
         </div>
         <div id="options" class="tab" align="center">
             <br>
-                <options :model="model.player.options" :actions="actions.options"></options>
-            <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
-            <div>
-                <table>
-                    <tr>
-                        <td>
-                            <div style="text-align:center">
-                                <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
-                                <a href="changelog.html" target="_newtab">Changelog   </a> |
-                                <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
-                                <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
-
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            </br>
+            <options :model="model.player.options" :actions="actions.options"></options>
+            <p>
+                Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension,
+                T to buy max tickspeed, shift+T to buy one tickspeed, M for max all
+                <br>
+                S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch,
+                A for toggle autobuyers, R for replicanti galaxies, E for eternity.
+                <br>
+                You can hold shift while buying time studies to buy all up until that point,
+                see each study's number, and save study trees.
+                <br>
+                Hotkeys do not work while holding control.
+            </p>
+            <footer-links></footer-links>
         </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>
@@ -3044,6 +3039,7 @@
 <script type="text/javascript" src="javascripts/core/format.js"></script>
 
 <script type="text/javascript" src="javascripts/components/options.js"></script>
+<script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>

@@ -916,13 +916,6 @@ function updateEternityChallenges() {
 }
 
 
-
-
-
-
-
-
-
 function toggleChallengeRetry() {
     if (player.options.retryChallenge) {
         player.options.retryChallenge = false

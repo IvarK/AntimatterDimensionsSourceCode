@@ -1,36 +1,36 @@
 Vue.component('options', {
     props: ['model', 'actions'],
     template:
-    '<table>\
+    '<table class="options">\
         <tr>\
-          <td is="options-button" fontSize="20px" @click="actions.changeTheme">Current theme: {{ theme }}</td>\
-          <td is="options-button" fontSize="120%" @click="actions.changeNotation">Notation: {{ model.notation }}</td>\
-          <td is="options-button" fontSize="120%" @click="actions.toggleNews">Hide/show the news</td>\
+          <td><primary-button fontSize="20px" @click="actions.changeTheme">Current theme: {{ theme }}</primary-button></td>\
+          <td><primary-button fontSize="120%" @click="actions.changeNotation">Notation: {{ model.notation }}</primary-button></td>\
+          <td><primary-button fontSize="120%" @click="actions.toggleNews">Hide/show the news</primary-button></td>\
         </tr>\
         <tr>\
-          <td is="on-off-button" fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge" />\
-          <td is="options-button" fontSize="20px" @click="actions.export">Export</td>\
-          <td is="options-button" fontSize="20px" @click="actions.import">Import</td>\
+          <td><primary-named-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"></primary-named-on-off></td>\
+          <td><primary-button fontSize="20px" @click="actions.export">Export</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="actions.import">Import</primary-button></td>\
         </tr>\
         <tr>\
-          <td is="options-button" fontSize="160%" @click="actions.openConfirmationOptions">Confirmations</td>\
-          <td is="options-button" fontSize="20px" @click="actions.save">Save</td>\
-          <td is="options-button" fontSize="20px" @click="actions.load">Load</td>\
+          <td><primary-button fontSize="160%" @click="actions.openConfirmationOptions">Confirmations</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="actions.save">Save</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="actions.load">Load</primary-button></td>\
         </tr>\
         <tr>\
-          <td is="options-button" fontSize="120%" @click="actions.cloudSave">Cloud save</td>\
-          <td is="options-button" fontSize="120%" @click="actions.cloudLoad">Cloud load</td>\
-          <td is="on-off-button" fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud" />\
+          <td><primary-button fontSize="120%" @click="actions.cloudSave">Cloud save</primary-button></td>\
+          <td><primary-button fontSize="120%" @click="actions.cloudLoad">Cloud load</primary-button></td>\
+          <td><primary-named-on-off fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud"></primary-named-on-off></td>\
         </tr>\
         <tr>\
-          <td is="toggle-button" fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys" />\
-          <td is="options-button" fontSize="20px" @click="actions.hardReset">RESET THE GAME</td>\
-          <td is="toggle-button" fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"></td>\
+          <td><primary-on-off fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys"></primary-on-off></td>\
+          <td><primary-button fontSize="20px" @click="actions.hardReset">RESET THE GAME</primary-button></td>\
+          <td><primary-on-off fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"></primary-on-off></td>\
         </tr>\
         <tr>\
           <td/>\
-          <td is="update-rate-slider" v-model="model.updateRate" @input="actions.refreshUpdateRate"></td>\
-          <td is="options-button" fontSize="160%" @click="actions.openAnimationOptions">Animations</td>\
+          <td><update-rate-slider v-model="model.updateRate" @input="actions.refreshUpdateRate"></update-rate-slider></td>\
+          <td><primary-button fontSize="160%" @click="actions.openAnimationOptions">Animations</primary-button></td>\
         </tr>\
      </table>',
     computed: {
@@ -41,38 +41,15 @@ Vue.component('options', {
     methods: {
     },
     components: {
-        'toggle-button': {
-            props: ['on', 'off', 'value'],
-            template:
-                '<options-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</options-button>'
-        },
-        'on-off-button': {
-            props: ['text', 'value'],
-            template:
-                '<options-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</options-button>',
-            computed: {
-                displayText: function () {
-                    return this.value ? this.text + " ON" : this.text + " OFF";
-                }
-            }
-        },
         'update-rate-slider': {
             props: ['value'],
             template:
-                '<td><div class="storebtn optionsbtn" style="font-size:130%; text-align: center; cursor: default;"> \
+                '<div class="storebtn update-rate-btn" style="font-size:130%; text-align: center; cursor: default;"> \
                    <b>Update Rate: {{ value }} ms</b>\
                    <input class="slider" style="width: 170px;"\
                      type="range" min="33" max="200"\
                      :value="value" @input="emitInput($event.target.value)" />\
-                 </div></td>'
+                 </div>'
         }
     }
-});
-
-Vue.component('options-button', {
-    inheritAttrs: false,
-    template:
-    '<td><primary-button class="optionsbtn" v-bind="$attrs" v-on="$listeners">\
-        <slot></slot>\
-     </primary-button></td>'
 });

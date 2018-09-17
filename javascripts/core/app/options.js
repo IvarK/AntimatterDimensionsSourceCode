@@ -110,11 +110,6 @@ ui.actions.options.import = function() {
     }
 };
 
-ui.actions.options.openConfirmationOptions = function () {
-    closeToolTip();
-    document.getElementById("confirmationoptions").style.display = "flex";
-};
-
 ui.actions.options.save = function() {
     saved++;
     if (saved > 99) giveAchievement("Just in case");
@@ -206,9 +201,4 @@ ui.actions.options.refreshUpdateRate = function() {
     if (player.options.updateRate === 200) giveAchievement("You should download some more RAM");
     clearInterval(gameLoopIntervalId);
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
-};
-
-ui.actions.options.openAnimationOptions = function () {
-    closeToolTip();
-    document.getElementById("animationoptions").style.display = "flex";
 };

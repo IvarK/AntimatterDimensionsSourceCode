@@ -210,7 +210,8 @@ button {
     background: #5AC467;
 }
 
-.options button, .options .update-rate-btn {
+.options button,
+.options .update-rate-btn {
     width: 200px;
     height: 55px;
 }
@@ -698,16 +699,39 @@ button {
     display: none;
 }
 
+.modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border: 3px solid black;
+    width: 300px;
+    height: 120px;
+    background-color: #E0E0E0;
+    border-radius: 6px;
+    text-align:center;
+    z-index: 2;
+    color: black;
+    font-family: Typewriter;
+    padding: 10px;
+    padding-bottom: 15px;
+}
+
+.options-modal button {
+    fontSize: 15px
+}
+
 .savemenu {
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 300px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
 }
 
 .savemenu div {
 	display: flex;
 	flex-direction: column;
+    justify-content: center;
 	align-items: center;
 	margin: 10px;
 }

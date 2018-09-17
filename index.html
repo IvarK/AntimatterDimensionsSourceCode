@@ -2804,20 +2804,7 @@
         <h3>Select one of the following glyphs</h3>
         <div id="glyphsToSelect"></div>
     </div>
-    <div class="popup savemenu" id="animationoptions">
-        <button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
-		<button id="floatingTextAnimBtn" class="storebtn" onclick="animationOnOff('floatingText')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="bigCrunchAnimBtn" class="storebtn" onclick="animationOnOff('bigCrunch')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="tachyonParticleAnimBtn" class="storebtn" onclick="animationOnOff('tachyonParticles')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="realityAnimBtn" class="storebtn" onclick="animationOnOff('reality')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-    </div>
-    <div class="popup savemenu" id="confirmationoptions">
-        <button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
-		<button id="challengesConfBtn" class="storebtn" onclick="confirmationOnOff('challenges')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="eternityConfBtn" class="storebtn" onclick="confirmationOnOff('eternity')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="dilationConfBtn" class="storebtn" onclick="confirmationOnOff('dilation')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-        <button id="realityConfBtn" class="storebtn" onclick="confirmationOnOff('reality')" style="width: 200px; height: 55px; font-size: 15px" style="display: inline">ON</button>
-	</div>
+    <modal-popup :view="view" :model="model"></modal-popup>
     <div id="TTbuttons" style="display:none;">
         <button class="timetheorembtn" onclick="maxTheorems()" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Buy max Theorems</button>
         <button class="timetheorembtn" onclick="studyTreeSaveButton(1)" style="margin-left:176px; width:30px; height: 30px; font-size: 0.75rem; bottom: 77px;">1</button>
@@ -2865,6 +2852,7 @@
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/options.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
+<script type="text/javascript" src="javascripts/components/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>

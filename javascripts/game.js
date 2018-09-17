@@ -377,6 +377,7 @@ function showTab(tabName) {
     else document.getElementById("progress").style.display = "none"
     resizeCanvas();
     closeToolTip();
+    tryStartTachyonAnimation();
     if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
@@ -910,15 +911,6 @@ document.getElementById("maxall").onclick = function () {
         onBuyDimension(tier)
         floatText(name + "D", "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
     }
-}
-
-function confirmationOnOff(name) {
-    if (player.options.confirmations[name]) player.options.confirmations[name] = false;
-    else player.options.confirmations[name] = true;
-    if (name == "challenges") document.getElementById("challengesConfBtn").textContent = "Challenges: " + ((player.options.confirmations.challenges) ? "ON" : "OFF")
-    else if (name == "eternity") document.getElementById("eternityConfBtn").textContent = "Eternity: " + ((player.options.confirmations.eternity) ? "ON" : "OFF")
-    else if (name == "dilation") document.getElementById("dilationConfBtn").textContent = "Dilation: " + ((player.options.confirmations.dilation) ? "ON" : "OFF")
-    else if (name == "reality") document.getElementById("realityConfBtn").textContent = "Reality: " + ((player.options.confirmations.reality) ? "ON" : "OFF")
 }
 
 function buyInfinityUpgrade(name, cost) {
@@ -4475,20 +4467,6 @@ setInterval(function() {
     if (player.infinitied > 0 || player.eternities > 0 || player.realities > 0) document.getElementById("pastinfs").style.display = "inline-block"
     else document.getElementById("pastinfs").style.display = "none"
 
-    if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
-    else document.getElementById("bigCrunchAnimBtn").style.display = "none"
-    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("tachyonParticleAnimBtn").style.display = "inline-block"
-    else document.getElementById("tachyonParticleAnimBtn").style.display = "none"
-    if (player.realities !== 0 ) document.getElementById("realityAnimBtn").style.display = "inline-block"
-    else document.getElementById("realityAnimBtn").style.display = "none"
-
-    if (player.eternities !== 0 || player.realities !== 0) document.getElementById("eternityConfBtn").style.display = "inline-block"
-    else document.getElementById("eternityConfBtn").style.display = "none"
-    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("dilationConfBtn").style.display = "inline-block"
-    else document.getElementById("dilationConfBtn").style.display = "none"
-    if (player.realities !== 0) document.getElementById("realityConfBtn").style.display = "inline-block"
-    else document.getElementById("realityConfBtn").style.display = "none"
-
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
         for (var i=1;i<player.eternities-9 && i < 9; i++) {
             if (player.infDimBuyers[i-1]) {
@@ -5678,6 +5656,7 @@ function showEternityTab(tabName, init) {
     if (tabName === 'timestudies' && !init) document.getElementById("TTbuttons").style.display = "block"
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas()
+    tryStartTachyonAnimation();
 }
 
 function showRealityTab(tabName) {
@@ -5775,6 +5754,7 @@ function init() {
 
 
 function closeToolTip() {
+    ui.hideModal();
     var elements = document.getElementsByClassName("popup")
     for (var i=0; i<elements.length; i++) elements[i].style.display = "none"
 }

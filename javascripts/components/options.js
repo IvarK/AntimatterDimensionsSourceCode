@@ -13,7 +13,7 @@ Vue.component('options', {
           <td><primary-button fontSize="20px" @click="actions.import">Import</primary-button></td>\
         </tr>\
         <tr>\
-          <td><primary-button fontSize="160%" @click="actions.openConfirmationOptions">Confirmations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showModal(\'confirmationOptions\')">Confirmations</primary-button></td>\
           <td><primary-button fontSize="20px" @click="actions.save">Save</primary-button></td>\
           <td><primary-button fontSize="20px" @click="actions.load">Load</primary-button></td>\
         </tr>\
@@ -30,7 +30,7 @@ Vue.component('options', {
         <tr>\
           <td/>\
           <td><update-rate-slider v-model="model.updateRate" @input="actions.refreshUpdateRate"></update-rate-slider></td>\
-          <td><primary-button fontSize="160%" @click="actions.openAnimationOptions">Animations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showModal(\'animationOptions\')">Animations</primary-button></td>\
         </tr>\
      </table>',
     computed: {
@@ -39,6 +39,9 @@ Vue.component('options', {
         }
     },
     methods: {
+        showModal: function(name) {
+            ui.showModal(name);
+        }
     },
     components: {
         'update-rate-slider': {

@@ -4,5 +4,8 @@ var ui = {
             options: { }
         }
     },
-    actions: { }
+    actions: { },
+    view: {
+        modal: undefined
+    }
 };

@@ -28,8 +28,8 @@ Vue.component('options', {
           <td is="toggle-button" font="120%" on="Commas on exponents" off="Notation on exponents" v-model="options.commas" />\
         </tr>\
         <tr>\
-          <td></td>\
-          <td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="updaterate">Update Rate: OUT OF ORDER</b><input id="updaterateslider" style="width: 170px;" type="range" min="33" max="200" value="50" class="slider" ></div></td>\
+          <td />\
+          <td is="update-rate-slider" v-model="options.updateRate" @input="actions.refreshUpdateRate"/>\
           <td is="options-button" font="160%" text="Animations" @click="actions.openAnimationOptions" />\
         </tr>\
      </table>',
@@ -55,6 +55,16 @@ Vue.component('options', {
                     return this.value ? this.text + " ON" : this.text + " OFF";
                 }
             }
+        },
+        'update-rate-slider': {
+            props: ['value'],
+            template:
+                '<td><div class="storebtn optionsbtn" style="font-size:130%; text-align: center;"> \
+                   <b>Update Rate: {{ value }} ms</b>\
+                   <input class="slider" style="width: 170px;"\
+                     type="range" min="33" max="200"\
+                     :value="value" @input="$emit(\'input\', $event.target.value)" />\
+                 </div></td>'
         }
     }
 });

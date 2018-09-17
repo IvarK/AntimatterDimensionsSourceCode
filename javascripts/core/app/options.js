@@ -264,12 +264,16 @@ document.getElementById("commas").onclick = function() {
 var slider = document.getElementById("updaterateslider");
 var sliderText = document.getElementById("updaterate");
 
-slider.oninput = function() {
-    player.options.updateRate = parseInt(this.value);
-    sliderText.textContent = "Update rate: " + this.value + "ms";
+optionActions.refreshUpdateRate = function() {
     if (player.options.updateRate === 200) giveAchievement("You should download some more RAM");
     clearInterval(gameLoopIntervalId);
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+};
+
+slider.oninput = function(ev) {
+    player.options.updateRate = parseInt(this.value);
+    sliderText.textContent = "Update rate: " + this.value + "ms";
+    optionActions.refreshUpdateRate();
 };
 
 optionActions.openAnimationOptions = function () {

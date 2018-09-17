@@ -37,7 +37,6 @@ var Theme = function Theme(name, colors) {
         Chart.defaults.global.defaultFontColor = colors.chartFont;
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
 
-        document.getElementById("theme").textContent = "Current theme: " + this.displayName();
         stripThemeCss();
         if (!this.isDefault())
             attachThemeCss();

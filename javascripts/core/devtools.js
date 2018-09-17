@@ -33,9 +33,7 @@ dev.spin4d = function() {
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
     Notation.set("Cancer");
-    document.getElementById("theme").textContent = "SO"
-    document.getElementById("notation").textContent = "BEAUTIFUL"
-}
+};
 
 dev.fixSave = function() {
     var save = JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; })

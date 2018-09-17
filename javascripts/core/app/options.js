@@ -1,6 +1,6 @@
-var optionActions = {};
+ui.actions.options = {};
 
-optionActions.changeTheme = function() {
+ui.actions.options.changeTheme = function() {
     let themes = Themes.available();
     let current = themes.indexOf(Theme.current());
     let next = Math.wrap(current + 1, 0, themes.length - 1);
@@ -8,9 +8,7 @@ optionActions.changeTheme = function() {
     theme.set();
 };
 
-document.getElementById("theme").onclick = optionActions.changeTheme;
-
-optionActions.changeNotation = function() {
+ui.actions.options.changeNotation = function() {
     let notations = [
         "Scientific",
         "Engineering",
@@ -28,9 +26,7 @@ optionActions.changeNotation = function() {
     Notation.set(notations[nextIndex]);
 };
 
-document.getElementById("notation").onclick = optionActions.changeNotation;
-
-optionActions.toggleNews = function() {
+ui.actions.options.toggleNews = function() {
     if (!player.options.newsHidden) {
         document.getElementById("game").style.display = "none";
         player.options.newsHidden = true
@@ -41,14 +37,7 @@ optionActions.toggleNews = function() {
     }
 };
 
-document.getElementById("newsbtn").onclick = optionActions.toggleNews;
-
-document.getElementById("retry").onclick = function() {
-    player.options.retryChallenge = !player.options.retryChallenge;
-    updateOptionsButtons();
-};
-
-optionActions.export = function() {
+ui.actions.options.export = function() {
     // TODO: purge exportOutput from codebase
     // let output = document.getElementById('exportOutput');
 
@@ -92,9 +81,7 @@ var copyToClipboard = function (str) {
     }
 };
 
-document.getElementById("exportbtn").onclick = optionActions.export;
-
-optionActions.import = function() {
+ui.actions.options.import = function() {
     var save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
     if (save_data.constructor !== String) save_data = "";
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
@@ -108,7 +95,9 @@ optionActions.import = function() {
     save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
     console.log(verify_save(save_data));
     if(verify_save(save_data)) forceHardReset = true;
-    if(verify_save(save_data)) document.getElementById("reset").click();
+    if(verify_save(save_data)) {
+        ui.actions.options.hardReset();
+    }
     forceHardReset = false;
     if (!save_data || !verify_save(save_data)) {
         alert('could not load the save..');
@@ -140,24 +129,18 @@ optionActions.import = function() {
     }
 };
 
-document.getElementById("importbtn").onclick = optionActions.import;
-
-optionActions.openConfirmationOptions = function () {
+ui.actions.options.openConfirmationOptions = function () {
     closeToolTip();
     document.getElementById("confirmationoptions").style.display = "flex";
 };
 
-document.getElementById("confirmationoptionsbtn").onclick = optionActions.openConfirmationOptions;
-
-optionActions.save = function() {
+ui.actions.options.save = function() {
     saved++;
     if (saved > 99) giveAchievement("Just in case");
     save_game();
 };
 
-document.getElementById("save").onclick = optionActions.save;
-
-optionActions.load = function() {
+ui.actions.options.load = function() {
     closeToolTip();
     for (var i = 0; i < 3; i++) {
         var _break = player.break;
@@ -176,31 +159,15 @@ optionActions.load = function() {
     document.getElementById("loadmenu").style.display = "flex";
 };
 
-document.getElementById("load").onclick = load;
-
-optionActions.cloudSave = function() {
+ui.actions.options.cloudSave = function() {
     playFabSaveCheck();
 };
 
-document.getElementById("cloudsave").onclick = optionActions.cloudSave;
-
-optionActions.cloudLoad = function() {
+ui.actions.options.cloudLoad = function() {
     playFabLoadCheck();
 };
 
-document.getElementById("cloudload").onclick = optionActions.cloudLoad;
-
-document.getElementById("cloudToggle").onclick = function() {
-    player.options.cloud = !player.options.cloud;
-    updateOptionsButtons();
-};
-
-document.getElementById("hotkeys").onclick = function() {
-    player.options.hotkeys = !player.options.hotkeys;
-    updateOptionsButtons();
-};
-
-optionActions.hardReset = function () {
+ui.actions.options.hardReset = function () {
     if (forceHardReset) {
         if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
         else set_save('dimensionSave', currentSave, defaultStart);
@@ -254,58 +221,13 @@ optionActions.hardReset = function () {
     }
 };
 
-document.getElementById("reset").onclick = optionActions.hardReset;
-
-document.getElementById("commas").onclick = function() {
-    player.options.commas = !player.options.commas;
-    updateOptionsButtons();
-};
-
-var slider = document.getElementById("updaterateslider");
-var sliderText = document.getElementById("updaterate");
-
-optionActions.refreshUpdateRate = function() {
+ui.actions.options.refreshUpdateRate = function() {
     if (player.options.updateRate === 200) giveAchievement("You should download some more RAM");
     clearInterval(gameLoopIntervalId);
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
 };
 
-slider.oninput = function(ev) {
-    player.options.updateRate = parseInt(this.value);
-    sliderText.textContent = "Update rate: " + this.value + "ms";
-    optionActions.refreshUpdateRate();
-};
-
-optionActions.openAnimationOptions = function () {
+ui.actions.options.openAnimationOptions = function () {
     closeToolTip();
     document.getElementById("animationoptions").style.display = "flex";
-};
-
-document.getElementById("animationoptionsbtn").onclick = optionActions.openAnimationOptions;
-
-function updateOptionsButtons() {
-    updateOnOffButton("retry", player.options.retryChallenge, "Automatically retry challenges");
-    updateOnOffButton("cloudToggle", player.options.cloud, "Automatic cloud saving/loading");
-    updateToggleButton("hotkeys", player.options.hotkeys, "Disable hotkeys", "Enable hotkeys");
-    updateToggleButton("commas", player.options.commas, "Commas on exponents", "Notation on exponents");
-
-    function updateOnOffButton(name, value, label) {
-        updateToggleButton(name, value, label + " ON", label + " OFF");
-    }
-
-    function updateToggleButton(name, value, on, off) {
-        document.getElementById(name).innerHTML = value ? on : off;
-    }
-}
-
-var app = new Vue({
-    el: '#optionsVue',
-    data: {
-        options: { },
-        optionActions: optionActions
-    }
-});
-
-updateVue = function () {
-    app.options = player.options;
 };

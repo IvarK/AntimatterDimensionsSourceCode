@@ -730,7 +730,7 @@ button {
 	display: none;
 }
 
-#footercontainer {
+.sticky-footer {
     bottom: 0;
     position: fixed;
     width: 100%;
@@ -738,8 +738,7 @@ button {
     pointer-events: none;
 }
 
-
-#footer {
+.footer {
     height: 50px;
     margin: auto;
     text-align:center;
@@ -747,7 +746,7 @@ button {
     font-family: Typewriter;
 }
 
-#footer tr td div {
+.footer tr td div {
     pointer-events: all !important;
 }
 

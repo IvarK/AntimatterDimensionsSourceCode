@@ -38,9 +38,6 @@ ui.actions.options.toggleNews = function() {
 };
 
 ui.actions.options.export = function() {
-    // TODO: purge exportOutput from codebase
-    // let output = document.getElementById('exportOutput');
-
     let save = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; }));
 
     if (player.pastebinkey) {
@@ -62,23 +59,7 @@ ui.actions.options.export = function() {
         })
     }
 
-    if (copyToClipboard(save)) {
-        $.notify("exported to clipboard", "info");
-    }
-};
-
-var copyToClipboard = function (str) {
-    try {
-        let el = document.createElement('textarea');
-        el.value = str;
-        document.body.appendChild(el);
-        el.select();
-        let result = document.execCommand('copy');
-        document.body.removeChild(el);
-        return result;
-    } catch(ex) {
-        return false;
-    }
+    copyToClipboardAndNotify(save);
 };
 
 ui.actions.options.import = function() {

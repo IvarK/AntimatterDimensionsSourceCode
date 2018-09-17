@@ -444,28 +444,8 @@ function respecTimeStudies() {
 }
 
 function exportStudyTree() {
-  let output = document.getElementById('treeExportOutput');
-  let parent = output.parentElement;
-
-  parent.style.display = "";
-  output.value = player.timestudy.studies + "|" + player.eternityChallUnlocked;
-
-  output.onblur = function() {
-      parent.style.display = "none";
-  }
-
-  output.focus();
-  output.select();
-
-  try {
-      if (document.execCommand('copy')) {
-          $.notify("exported to clipboard", "info");
-          output.blur();
-      }
-  } catch(ex) {
-      // well, we tried.
-  }
-};
+  copyToClipboardAndNotify(player.timestudy.studies + "|" + player.eternityChallUnlocked);
+}
 
 function importStudyTree(input) {
   if (typeof input !== 'string') var input = prompt()

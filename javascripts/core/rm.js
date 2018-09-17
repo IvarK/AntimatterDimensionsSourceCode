@@ -286,7 +286,7 @@ function powerGlyph(glyph, effectAmount) {
         break;
 
       case "mult":
-        glyph.effects.mult = Math.pow(glyph.level * glyph.strength * 10, glyph.level * glyph.strength * 10)
+        glyph.effects.mult = Decimal.pow(glyph.level * glyph.strength * 10, glyph.level * glyph.strength * 10)
         break;
 
       case "dimboost":

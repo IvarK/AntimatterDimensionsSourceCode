@@ -179,13 +179,13 @@ function newestSave(first, second) {
     let firstInfo = getSaveInfo(first);
     let secondInfo = getSaveInfo(second);
     if (firstInfo.eternities === secondInfo.eternities && firstInfo.infinities === secondInfo.infinities) {
-      return undefined;
+        return undefined;
     }
     if (firstInfo.eternities > secondInfo.eternities) {
-      return first;
+        return first;
     }
     if (firstInfo.infinities > secondInfo.infinities) {
-      return first;
+        return first;
     }
     return second;
 }
@@ -199,74 +199,43 @@ function playFabLoadCheck() {
       let cloudSave = cloudRoot.saves[saveId];
       let localSave = saves[saveId];
       let newestSave = newestSave(cloudSave, localSave);
-      function loadCurrentCloudSave() {
+      function overwriteLocalSave() {
           load_cloud_save(saveId, cloudSave);
       }
       if (newestSave === localSave) {
-        ui.addCloudConflict(saveId, cloudSave, localSave, loadCurrentCloudSave);
-        ui.showModal(Modal.cloudLoadConflict);
+          ui.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
+          ui.showModal(Modal.cloudLoadConflict);
       } else {
-          loadCurrentCloudSave();
+          overwriteLocalSave();
       }
     }
   });
 }
 
 function playFabSaveCheck() {
-  var cloudconflict = document.getElementById("cloudsaveconflict");
   loadFromPlayFab(function(cloudRoot) {
-    let popupsWaiting = 0;
-    function decreaseWaiting() {
-      popupsWaiting--;
-      if (popupsWaiting <= 0) {
-        saveToPlayFab(cloudRoot);
-      }
-    }
-
     for (var i = 0; i < 3; i++) {
       let saveId = i;
-      var cloudInfinitied = cloudRoot.saves[saveId] ? cloudRoot.saves[saveId].infinitied : 0;
-      var cloudEternities = cloudRoot.saves[saveId] ? cloudRoot.saves[saveId].eternities : 0;
-      var localInfinitied = saves[saveId] ? saves[saveId].infinitied : 0;
-      var localEternities = saves[saveId] ? saves[saveId].eternities : 0;
-      function saveCurrent(isLastConflict) {
+      let cloudSave = cloudRoot.saves[saveId];
+      let localSave = saves[saveId];
+      let newestSave = newestSave(cloudSave, localSave);
+      let isConflicted = false;
+      function overwriteCloudSave() {
           cloudRoot.saves[saveId] = saves[saveId];
-          if (isLastConflict){
-            saveToPlayFab(cloudRoot);
-          }
       }
-      if (cloudEternities > localEternities || (cloudEternities == localEternities && cloudInfinitied > localInfinitied)) {
-        ui.addCloudConflict(saveId, cloudRoot.saves[saveId], saves[saveId], saveCurrent);
-        popupsWaiting++;
-        let el = cloudconflict.cloneNode(true);
-        el.style.display = "flex";
-        var localEl = el.querySelector("#local");
-        var cloudEl = el.querySelector("#cloud");
-
-        localEl.querySelector(".save_id").textContent = saveId + 1;
-        localEl.querySelector(".save_infinities").textContent = localInfinitied;
-        localEl.querySelector(".save_eternities").textContent = localEternities;
-
-        cloudEl.querySelector(".save_id").textContent = saveId + 1;
-        cloudEl.querySelector(".save_infinities").textContent = cloudInfinitied;
-        cloudEl.querySelector(".save_eternities").textContent = cloudEternities;
-
-        el.querySelector(".no").onclick = function() {
-          decreaseWaiting();
-          el.remove();
-        };
-        el.querySelector(".yes").onclick = function() {
-          cloudRoot.saves[saveId] = saves[saveId];
-          decreaseWaiting();
-          el.remove();
-        };
-
-        document.body.appendChild(el);
+      function sendCloudSave() {
+          saveToPlayFab(cloudRoot);
+      }
+      if (newestSave === cloudSave) {
+          isConflicted = true;
+          ui.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+          ui.showModal(Modal.cloudSaveConflict);
       } else {
-        cloudRoot.saves[saveId] = saves[saveId];
+          overwriteCloudSave();
+      }
+      if (!isConflicted){
+          sendCloudSave();
       }
     }
-
-    if (popupsWaiting === 0) decreaseWaiting();
   });
 }

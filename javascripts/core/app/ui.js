@@ -23,16 +23,13 @@ ui = new Vue({
             ui.view.modal.current = undefined;
             ui.view.modal.cloudConflicts = [];
         },
-        addCloudConflict: function(saveId, cloudSave, localSave, callback) {
+        addCloudConflict: function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
             ui.view.modal.cloudConflicts.push({
                 saveId: saveId,
                 cloud: getSaveInfo(cloudSave),
                 local: getSaveInfo(localSave),
-                callback: callback,
-                // Use closure here so Vue doesn't bother to convert save to reactive object
-                getCloudSave: function() {
-                    return cloudSave;
-                }
+                onAccept: onAccept,
+                onLastConflict: onLastConflict
             });
 
             function getSaveInfo(save) {
@@ -49,6 +46,7 @@ var Modal = {
     animationOptions: "modal-animation-options",
     confirmationOptions: "modal-confirmation-options",
     loadGame: "modal-load-game",
+    cloudSaveConflict: "modal-cloud-save-conflict",
     cloudLoadConflict: "modal-cloud-load-conflict"
 };
 

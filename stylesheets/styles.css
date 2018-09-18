@@ -755,35 +755,6 @@ button {
     font-size: 15px
 }
 
-.savemenu {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 300px;
-}
-
-.savemenu div {
-	display: flex;
-	flex-direction: column;
-    justify-content: center;
-	align-items: center;
-	margin: 10px;
-}
-
-.savemenu .closebtn {
-	width: 30px;
-	height: 30px;
-	font-size: 1.5rem;
-	line-height: 1.5rem;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-}
-
-.savemenu .storebtn {
-	margin: 5px;
-}
-
 .sticky-footer {
     bottom: 0;
     position: fixed;

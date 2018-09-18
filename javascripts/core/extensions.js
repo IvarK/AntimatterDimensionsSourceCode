@@ -30,3 +30,7 @@ function copyToClipboardAndNotify(str) {
         $.notify("Exported to clipboard", "info");
     }
 }
+
+function safeCall(fn) {
+    if (fn) fn();
+}

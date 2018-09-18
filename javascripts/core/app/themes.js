@@ -36,27 +36,6 @@ var Theme = function Theme(name, colors) {
 
         Chart.defaults.global.defaultFontColor = colors.chartFont;
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
-
-        stripThemeCss();
-        if (!this.isDefault())
-            attachThemeCss();
-
-        function stripThemeCss() {
-            document.querySelectorAll("link").forEach( function(e) {
-                if (e.href.includes("theme")) e.remove();
-            });
-        }
-
-        function attachThemeCss() {
-            let head = document.head;
-            let link = document.createElement('link');
-
-            link.type = 'text/css';
-            link.rel = 'stylesheet';
-            link.href = "stylesheets/theme-" + name + ".css";
-
-            head.appendChild(link);
-        }
     }
 };
 

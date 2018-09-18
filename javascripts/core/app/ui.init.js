@@ -8,7 +8,8 @@ var ui = {
     view: {
         modal: {
             current: undefined,
-            cloudConflicts: [ ]
+            cloudConflicts: [ ],
+            message: ""
         }
     }
 };

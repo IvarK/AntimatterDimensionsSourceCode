@@ -19,9 +19,13 @@ ui = new Vue({
         showModal: function(name) {
             ui.view.modal.current = Modal[name] ? Modal[name] : name;
         },
-        hideModal: function () {
+        hideModal: function() {
             ui.view.modal.current = undefined;
             ui.view.modal.cloudConflicts = [];
+        },
+        showModalMessage: function(message) {
+            ui.view.modal.message = message;
+            ui.showModal(Modal.message);
         },
         addCloudConflict: function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
             ui.view.modal.cloudConflicts.push({
@@ -47,7 +51,8 @@ var Modal = {
     confirmationOptions: "modal-confirmation-options",
     loadGame: "modal-load-game",
     cloudSaveConflict: "modal-cloud-save-conflict",
-    cloudLoadConflict: "modal-cloud-load-conflict"
+    cloudLoadConflict: "modal-cloud-load-conflict",
+    message: "modal-message"
 };
 
 var updateVue = function () {

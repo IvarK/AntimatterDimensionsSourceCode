@@ -716,8 +716,19 @@ button {
 }
 
 .modal-message {
-    width: 300px;
-    height: 120px;
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-message div {
+    max-width: 500px;
+}
+
+.modal-message .storebtn {
+    margin-top: 10px;
 }
 
 .modal-options {

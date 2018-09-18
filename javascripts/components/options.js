@@ -13,9 +13,9 @@ Vue.component('options', {
           <td><primary-button fontSize="20px" @click="actions.import">Import</primary-button></td>\
         </tr>\
         <tr>\
-          <td><primary-button fontSize="160%" @click="showModal(\'confirmationOptions\')">Confirmations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showConfirmationOptions">Confirmations</primary-button></td>\
           <td><primary-button fontSize="20px" @click="actions.save">Save</primary-button></td>\
-          <td><primary-button fontSize="20px" @click="showModal(\'loadGame\')">Load</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="showLoadGameModal">Load</primary-button></td>\
         </tr>\
         <tr>\
           <td><primary-button fontSize="120%" @click="actions.cloudSave">Cloud save</primary-button></td>\
@@ -30,7 +30,7 @@ Vue.component('options', {
         <tr>\
           <td/>\
           <td><update-rate-slider v-model="model.updateRate" @input="actions.refreshUpdateRate"></update-rate-slider></td>\
-          <td><primary-button fontSize="160%" @click="showModal(\'animationOptions\')">Animations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showAnimationOptions">Animations</primary-button></td>\
         </tr>\
      </table>',
     computed: {
@@ -39,8 +39,14 @@ Vue.component('options', {
         }
     },
     methods: {
-        showModal: function(name) {
-            ui.showModal(name);
+        showLoadGameModal: function() {
+            ui.showModal(Modal.loadGame);
+        },
+        showConfirmationOptions: function() {
+            ui.showModal(Modal.confirmationOptions);
+        },
+        showAnimationOptions: function() {
+            ui.showModal(Modal.animationOptions);
         }
     },
     components: {

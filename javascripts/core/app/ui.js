@@ -1,10 +1,13 @@
 Vue.mixin({
     methods: {
         emitClick: function() {
-            this.$emit('click')
+            this.$emit('click');
         },
         emitInput: function(val) {
-            this.$emit('input', val)
+            this.$emit('input', val);
+        },
+        emitClose: function() {
+            this.$emit('close');
         }
     }
 });
@@ -14,10 +17,10 @@ ui = new Vue({
     data: ui,
     methods: {
         showModal: function(name) {
-            ui.view.modal = Modal[name] ? Modal[name] : name;
+            ui.view.modal.current = Modal[name] ? Modal[name] : name;
         },
         hideModal: function () {
-            ui.view.modal = undefined;
+            ui.view.modal.current = undefined;
         }
     }
 });

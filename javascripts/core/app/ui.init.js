@@ -6,6 +6,8 @@ var ui = {
     },
     actions: { },
     view: {
-        modal: undefined
+        modal: {
+            current: undefined
+        }
     }
 };

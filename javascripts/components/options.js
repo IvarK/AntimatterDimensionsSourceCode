@@ -1,7 +1,7 @@
 Vue.component('options', {
     props: ['model', 'actions'],
     template:
-    '<table class="options">\
+    '<table class="options-container">\
         <tr>\
           <td><primary-button fontSize="20px" @click="actions.changeTheme">Current theme: {{ theme }}</primary-button></td>\
           <td><primary-button fontSize="120%" @click="actions.changeNotation">Notation: {{ model.notation }}</primary-button></td>\

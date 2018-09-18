@@ -2804,7 +2804,7 @@
         <h3>Select one of the following glyphs</h3>
         <div id="glyphsToSelect"></div>
     </div>
-    <modal-popup :view="view" :model="model"></modal-popup>
+    <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
     <div id="TTbuttons" style="display:none;">
         <button class="timetheorembtn" onclick="maxTheorems()" style="margin-left:-276px; width:130px; height: 30px; font-size: 0.75rem; bottom: 77px;">Buy max Theorems</button>
         <button class="timetheorembtn" onclick="studyTreeSaveButton(1)" style="margin-left:176px; width:30px; height: 30px; font-size: 0.75rem; bottom: 77px;">1</button>
@@ -2852,7 +2852,8 @@
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/options.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
-<script type="text/javascript" src="javascripts/components/modal-popup.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-options.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>

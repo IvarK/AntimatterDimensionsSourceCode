@@ -210,8 +210,8 @@ button {
     background: #5AC467;
 }
 
-.options button,
-.options .update-rate-btn {
+.options-container button,
+.options-container .update-rate-btn {
     width: 200px;
     height: 55px;
 }
@@ -717,7 +717,7 @@ button {
     padding-bottom: 15px;
 }
 
-.options-modal button {
+.modal-options button {
     fontSize: 15px
 }
 

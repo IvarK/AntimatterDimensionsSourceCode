@@ -4617,7 +4617,7 @@ setInterval(function() {
 
     updateRealityUpgrades()
 
-    if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 4) player.reality.upgReqs[20] = true
+    if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) player.reality.upgReqs[20] = true
 
 }, 1000)
 

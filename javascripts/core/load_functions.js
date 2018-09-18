@@ -882,7 +882,7 @@ function transformSaveToDecimal() {
     }
   }
 
-  for (let i = 0; i < player.reality.glyphs.inventorylength; i++) {
+  for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     let glyph = player.reality.glyphs.inventory[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
       glyph.effects.mult = new Decimal(glyph.effects.mult)

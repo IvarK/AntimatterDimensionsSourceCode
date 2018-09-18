@@ -103,6 +103,7 @@ function generateRandomGlyph(level) {
   player.reality.glyphs.last = type;
   var strength = gaussian_bell_curve()
   var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+  if (player.reality.upg.includes(17)) effectAmount = Math.min(effectAmount + 1, 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
@@ -432,6 +433,12 @@ function deleteGlyph(id) {
   var n = player.reality.glyphs.inventory.find(function(glyph) {
     return glyph.id == id
   })
+
+  if (player.reality.upg.includes(19)) {
+    sacrificeGlyph(n)
+    return;
+  }
+
   if (n.symbol === "266b") {
     var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
     tempAudio.play();
@@ -512,7 +519,7 @@ function drop(ev) {
   mouseOn = $("document")
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 500, 500, 500, 500, 500]
+const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500]
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
@@ -627,4 +634,9 @@ function respecGlyphs() {
   player.reality.glyphs.active = []
   toggleGlyphRespec()
   generateGlyphTable();
+}
+
+function sacrificeGlyph(glyph) {
+  //TODO
+  console.log("Sacrificing glyph " + glyph)
 }

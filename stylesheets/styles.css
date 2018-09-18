@@ -750,10 +750,6 @@ button {
 	margin: 5px;
 }
 
-.save_selected {
-	display: none;
-}
-
 .sticky-footer {
     bottom: 0;
     position: fixed;

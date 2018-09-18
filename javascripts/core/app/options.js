@@ -116,25 +116,6 @@ ui.actions.options.save = function() {
     save_game();
 };
 
-ui.actions.options.load = function() {
-    closeToolTip();
-    for (var i = 0; i < 3; i++) {
-        var _break = player.break;
-        player.break = true;
-        if (currentSave === i) document.querySelector("#save" + (i + 1) + " .save_antimatter").textContent = "Antimatter: " + shortenMoney(player.money);
-        else document.querySelector("#save" + (i + 1) + " .save_antimatter").textContent = "Antimatter: " + shortenMoney(saves[i] ? new Decimal(saves[i].money) : 10);
-        player.break = _break;
-    }
-
-    document.querySelectorAll(".save_selected").forEach(function(el) {
-        el.style.display = "none";
-    });
-
-    document.querySelector("#save" + (currentSave + 1) + " .save_selected").style.display = "inline";
-
-    document.getElementById("loadmenu").style.display = "flex";
-};
-
 ui.actions.options.cloudSave = function() {
     playFabSaveCheck();
 };

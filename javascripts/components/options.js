@@ -15,7 +15,7 @@ Vue.component('options', {
         <tr>\
           <td><primary-button fontSize="160%" @click="showModal(\'confirmationOptions\')">Confirmations</primary-button></td>\
           <td><primary-button fontSize="20px" @click="actions.save">Save</primary-button></td>\
-          <td><primary-button fontSize="20px" @click="actions.load">Load</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="showModal(\'loadGame\')">Load</primary-button></td>\
         </tr>\
         <tr>\
           <td><primary-button fontSize="120%" @click="actions.cloudSave">Cloud save</primary-button></td>\

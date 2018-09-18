@@ -28,6 +28,7 @@ ui = new Vue({
 var Modal = {
     animationOptions: "modal-animation-options",
     confirmationOptions: "modal-confirmation-options",
+    loadGame: "modal-load-options"
 };
 
 var updateVue = function () {

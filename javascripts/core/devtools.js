@@ -319,5 +319,10 @@ dev.updateTestSave = function() {
         }
       }
       player.options.testVersion = 12
+    }
+  
+  if (player.options.testVersion == 12) {
+    player.reality.upgReqs.push(false, false, false, false, false)
+    player.options.testVersion = 13
   }
 }

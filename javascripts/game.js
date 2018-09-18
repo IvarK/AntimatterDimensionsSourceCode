@@ -294,7 +294,7 @@ var player = {
             5: 0,
         },
         upg: [],
-        upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], 
+        upgReqs: [null, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], 
         upgReqChecks: [false],
         automatorRows: 0,
         automatorCommands: [], 
@@ -3028,12 +3028,29 @@ function reality(force) {
         addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel())
         if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
         if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length == 4) {
+          var tempBool = true
+          for (i in player.reality.glyphs.active) {
+              if (player.reality.glyphs.active[i].rarity < 1.5) tempBool = false
+          }
+          player.reality.upgReqs[16] = tempBool
+        }
+        if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length == 4) {
+          var tempBool = true
+          for (i in player.reality.glyphs.active) {
+            let count = 0
+            for (let y in player.reality.glyphs.active[i].effects) count++
+            if (count < 2) tempBool = false
+          }
+          player.reality.upgReqs[17] = tempBool
+        }
+        if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length == 4) {
             var tempBool = true
             for (i in player.reality.glyphs.active) {
                 if (player.reality.glyphs.active[i].level < 10) tempBool = false
             }
-            player.reality.upgReqs[16] = tempBool
+            player.reality.upgReqs[18] = tempBool
         }
+        if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) player.reality.upgReqs[19] = true
         if (player.reality.respec) respecGlyphs()
         player = {
             money: new Decimal(10),
@@ -4599,6 +4616,8 @@ setInterval(function() {
     }
 
     updateRealityUpgrades()
+
+    if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 4) player.reality.upgReqs[20] = true
 
 }, 1000)
 

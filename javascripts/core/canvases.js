@@ -38,22 +38,31 @@ function point(x, y, ctz){
     ctz.fill();
   }
 
-function animationOnOff(name) {
-    if (player.options.animations[name]) player.options.animations[name] = false;
-    else player.options.animations[name] = true;
-    if (name == "floatingText") document.getElementById("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
-    else if (name == "bigCrunch") document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
-    else if (name == "tachyonParticles") document.getElementById("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
-    else if (name == "reality") document.getElementById("realityAnimBtn").textContent = "Reality: " + ((player.options.animations.reality) ? "ON" : "OFF")
-    if (player.options.animations[name] && name == "tachyonParticles") requestAnimationFrame(drawAnimations);
+var tachyonAnimation = {
+    running: false,
+    delta: 0,
+    lastTs: 0
+};
+
+function tryStartTachyonAnimation() {
+    if (tachyonAnimation.running || !player.options.animations.tachyonParticles) return;
+    tachyonAnimation.running = true;
+    requestAnimationFrame(drawTachyonAnimationFrame);
 }
 
-function drawAnimations(ts){
-    if (player.dilation.tachyonParticles.gte(1) && document.getElementById("eternitystore").style.display !== "none" && document.getElementById("dilation").style.display !== "none" && player.options.animations.tachyonParticles) {
+function drawTachyonAnimationFrame(ts){
+    let isVisible =
+        document.getElementById("eternitystore").style.display !== "none" &&
+        document.getElementById("dilation").style.display !== "none";
+    if (!isVisible) {
+        tachyonAnimation.running = false;
+        return;
+    }
+    if (player.dilation.tachyonParticles.gte(1)) {
         ctx3.clearRect(0, 0, canvas.width, canvas.height);
         ctx3.fillStyle = Theme.current().colors.tachyons;
         for (i=0; i<player.dilation.tachyonParticles.exponent+1; i++) {
-            if (typeof particles["particle"+i] == "undefined") {
+            if (typeof particles["particle"+i] === "undefined") {
                 particles["particle"+i] = {}
                 particles["particle"+i].goalX = Math.ceil(Math.random() * canvas3.width);
                 particles["particle"+i].goalY = Math.ceil(Math.random() * canvas3.height);
@@ -79,13 +88,13 @@ function drawAnimations(ts){
                 else particles["particle"+i].velocityY += 10
                 }
             point(particles["particle"+i].goalX, particles["particle"+i].goalY, ctx3)
-            particles["particle"+i].goalX += particles["particle"+i].velocityX * delta * 60
-            particles["particle"+i].goalY += particles["particle"+i].velocityY * delta * 60
+            particles["particle"+i].goalX += particles["particle"+i].velocityX * tachyonAnimation.delta * 60
+            particles["particle"+i].goalY += particles["particle"+i].velocityY * tachyonAnimation.delta * 60
         }
     }
-    delta = (ts - lastTs) / 1000;
-    lastTs = ts;
-    if (player.options.animations.tachyonParticles) requestAnimationFrame(drawAnimations);
+    tachyonAnimation.delta = (ts - tachyonAnimation.lastTs) / 1000;
+    tachyonAnimation.lastTs = ts;
+    requestAnimationFrame(drawTachyonAnimationFrame);
 }
 
 function drawTreeBranch(num1, num2) {

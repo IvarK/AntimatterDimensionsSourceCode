@@ -443,16 +443,6 @@ if (player.version < 5) {
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
   document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
 
-  document.getElementById("floatingTextAnimBtn").textContent = "Floating text: " + ((player.options.animations.floatingText) ? "ON" : "OFF")
-  document.getElementById("bigCrunchAnimBtn").textContent = "Big crunch: " + ((player.options.animations.bigCrunch) ? "ON" : "OFF")
-  document.getElementById("tachyonParticleAnimBtn").textContent = "Tachyon particles: " + ((player.options.animations.tachyonParticles) ? "ON" : "OFF")
-  document.getElementById("realityAnimBtn").textContent = "Reality: " + ((player.options.animations.reality) ? "ON" : "OFF")
-
-  document.getElementById("challengesConfBtn").textContent = "Challenges: " + ((player.options.confirmations.challenges) ? "ON" : "OFF")
-  document.getElementById("eternityConfBtn").textContent = "Eternity: " + ((player.options.confirmations.eternity) ? "ON" : "OFF")
-  document.getElementById("dilationConfBtn").textContent = "Dilation: " + ((player.options.confirmations.dilation) ? "ON" : "OFF")
-  document.getElementById("realityConfBtn").textContent = "Reality: " + ((player.options.confirmations.reality) ? "ON" : "OFF")
-
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 
   if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc1" || player.currentChallenge == "postc6") document.getElementById("matter").style.display = "inline-block";
@@ -730,7 +720,6 @@ function save_game(changed, silent) {
 function change_save(saveId) {
   // Save previous save to make sure no changes are lost
   save_game(false, true);
-  closeToolTip();
 
   currentSave = saveId;
 
@@ -756,7 +745,7 @@ function change_save(saveId) {
   showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
-  closeToolTip();
+  ui.hideModal();
 }
 
 function transformSaveToDecimal() {
@@ -932,6 +921,5 @@ function getRootSaveObject() {
   };
 }
 
-setTimeout(drawAnimations, 100)
 setTimeout(drawPerkNetwork, 100)
 setTimeout(onLoad, 100)

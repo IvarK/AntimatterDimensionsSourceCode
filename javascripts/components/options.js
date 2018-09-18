@@ -1,7 +1,7 @@
 Vue.component('options', {
     props: ['model', 'actions'],
     template:
-    '<table class="options">\
+    '<table class="options-container">\
         <tr>\
           <td><primary-button fontSize="20px" @click="actions.changeTheme">Current theme: {{ theme }}</primary-button></td>\
           <td><primary-button fontSize="120%" @click="actions.changeNotation">Notation: {{ model.notation }}</primary-button></td>\
@@ -13,9 +13,9 @@ Vue.component('options', {
           <td><primary-button fontSize="20px" @click="actions.import">Import</primary-button></td>\
         </tr>\
         <tr>\
-          <td><primary-button fontSize="160%" @click="actions.openConfirmationOptions">Confirmations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showConfirmationOptions">Confirmations</primary-button></td>\
           <td><primary-button fontSize="20px" @click="actions.save">Save</primary-button></td>\
-          <td><primary-button fontSize="20px" @click="actions.load">Load</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="showLoadGameModal">Load</primary-button></td>\
         </tr>\
         <tr>\
           <td><primary-button fontSize="120%" @click="actions.cloudSave">Cloud save</primary-button></td>\
@@ -30,7 +30,7 @@ Vue.component('options', {
         <tr>\
           <td/>\
           <td><update-rate-slider v-model="model.updateRate" @input="actions.refreshUpdateRate"></update-rate-slider></td>\
-          <td><primary-button fontSize="160%" @click="actions.openAnimationOptions">Animations</primary-button></td>\
+          <td><primary-button fontSize="160%" @click="showAnimationOptions">Animations</primary-button></td>\
         </tr>\
      </table>',
     computed: {
@@ -39,6 +39,15 @@ Vue.component('options', {
         }
     },
     methods: {
+        showLoadGameModal: function() {
+            ui.showModal(Modal.loadGame);
+        },
+        showConfirmationOptions: function() {
+            ui.showModal(Modal.confirmationOptions);
+        },
+        showAnimationOptions: function() {
+            ui.showModal(Modal.animationOptions);
+        }
     },
     components: {
         'update-rate-slider': {

@@ -210,7 +210,8 @@ button {
     background: #5AC467;
 }
 
-.options button, .options .update-rate-btn {
+.options-container button,
+.options-container .update-rate-btn {
     width: 200px;
     height: 55px;
 }
@@ -698,36 +699,71 @@ button {
     display: none;
 }
 
-.savemenu {
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 300px;
+.modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border: 3px solid black;
+    background-color: #E0E0E0;
+    border-radius: 6px;
+    text-align:center;
+    z-index: 2;
+    color: black;
+    font-family: Typewriter, serif;
+    padding: 10px 10px 15px;
+    display: inline-block;
 }
 
-.savemenu div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin: 10px;
+.modal-message {
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.savemenu .closebtn {
-	width: 30px;
-	height: 30px;
-	font-size: 1.5rem;
-	line-height: 1.5rem;
-	position: absolute;
-	top: 5px;
-	right: 5px;
+.modal-message div {
+    max-width: 500px;
 }
 
-.savemenu .storebtn {
-	margin: 5px;
+.modal-message .storebtn {
+    margin-top: 10px;
 }
 
-.save_selected {
-	display: none;
+.modal-options {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-options div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.modal-options .closebtn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.modal-options .storebtn {
+    margin: 5px;
+}
+
+.modal-options button {
+    font-size: 15px
 }
 
 .sticky-footer {

@@ -376,7 +376,8 @@ function showTab(tabName) {
     if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
     else document.getElementById("progress").style.display = "none"
     resizeCanvas();
-    closeToolTip();
+    ui.hideModal();
+    tryStartTachyonAnimation();
     if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
@@ -910,15 +911,6 @@ document.getElementById("maxall").onclick = function () {
         onBuyDimension(tier)
         floatText(name + "D", "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
     }
-}
-
-function confirmationOnOff(name) {
-    if (player.options.confirmations[name]) player.options.confirmations[name] = false;
-    else player.options.confirmations[name] = true;
-    if (name == "challenges") document.getElementById("challengesConfBtn").textContent = "Challenges: " + ((player.options.confirmations.challenges) ? "ON" : "OFF")
-    else if (name == "eternity") document.getElementById("eternityConfBtn").textContent = "Eternity: " + ((player.options.confirmations.eternity) ? "ON" : "OFF")
-    else if (name == "dilation") document.getElementById("dilationConfBtn").textContent = "Dilation: " + ((player.options.confirmations.dilation) ? "ON" : "OFF")
-    else if (name == "reality") document.getElementById("realityConfBtn").textContent = "Reality: " + ((player.options.confirmations.reality) ? "ON" : "OFF")
 }
 
 function buyInfinityUpgrade(name, cost) {
@@ -2256,14 +2248,8 @@ document.getElementById("bigcrunch").onclick = function () {
         if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
             player.reality.upgReqs[7] = true;
         }
-        if (player.currentEternityChall == "eterc4") {
-            if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {
-                document.getElementById("challfail").style.display = "block"
-                setTimeout(exitChallenge, 500)
-                giveAchievement("You're a mistake")
-                failureCount++
-                if (failureCount > 9) giveAchievement("You're a failure")
-            }
+        if (player.currentEternityChall == "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4") * 4)) {
+            failChallenge();
         }
 
         if (player.realities > 0 && (player.eternities == 0 || (player.reality.upg.includes(10) && player.eternities == 100)) && player.infinitied == 0) {
@@ -2525,6 +2511,13 @@ document.getElementById("bigcrunch").onclick = function () {
 
 }
 
+function failChallenge() {
+    ui.showModalMessage("You failed the challenge, you will now exit it.");
+    setTimeout(exitChallenge, 500);
+    giveAchievement("You're a mistake");
+    failureCount++;
+    if (failureCount > 9) giveAchievement("You're a failure");
+}
 
 function respecToggle() {
     if (player.respec) {
@@ -4291,8 +4284,7 @@ setInterval(function() {
         //like this:
         if (data.version > player.version) {
             player.version = data.version
-            document.getElementById("update").style.display = "block"
-            document.getElementById("updatePopup").innerHTML = data.message
+            ui.showModalMessage(data.message);
             //or some more resilient method
             //like forced news bar with message running over and over
         }
@@ -4476,20 +4468,6 @@ setInterval(function() {
     if (player.infinitied > 0 || player.eternities > 0 || player.realities > 0) document.getElementById("pastinfs").style.display = "inline-block"
     else document.getElementById("pastinfs").style.display = "none"
 
-    if (player.infinitied !== 0 || player.eternities !== 0 || player.realities !== 0) document.getElementById("bigCrunchAnimBtn").style.display = "inline-block"
-    else document.getElementById("bigCrunchAnimBtn").style.display = "none"
-    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("tachyonParticleAnimBtn").style.display = "inline-block"
-    else document.getElementById("tachyonParticleAnimBtn").style.display = "none"
-    if (player.realities !== 0 ) document.getElementById("realityAnimBtn").style.display = "inline-block"
-    else document.getElementById("realityAnimBtn").style.display = "none"
-
-    if (player.eternities !== 0 || player.realities !== 0) document.getElementById("eternityConfBtn").style.display = "inline-block"
-    else document.getElementById("eternityConfBtn").style.display = "none"
-    if (!player.dilation.tachyonParticles.eq(0) || player.realities !== 0) document.getElementById("dilationConfBtn").style.display = "inline-block"
-    else document.getElementById("dilationConfBtn").style.display = "none"
-    if (player.realities !== 0) document.getElementById("realityConfBtn").style.display = "inline-block"
-    else document.getElementById("realityConfBtn").style.display = "none"
-
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
         for (var i=1;i<player.eternities-9 && i < 9; i++) {
             if (player.infDimBuyers[i-1]) {
@@ -4537,11 +4515,7 @@ setInterval(function() {
     }
 
     if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
-        document.getElementById("challfail").style.display = "block"
-        setTimeout(exitChallenge, 500)
-        giveAchievement("You're a mistake")
-        failureCount++
-        if (failureCount > 9) giveAchievement("You're a failure")
+        failChallenge();
     }
 
     document.getElementById("infinitiedBank").style.display = (player.infinitiedBank > 0) ? "block" : "none"
@@ -5342,7 +5316,6 @@ function simulateTime(seconds, real, fast) {
     //the game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted into a higher diff per tick
     //warning: do not call this function with real unless you know what you're doing
     //calling it with fast will only simulate it with a max of 50 ticks
-    document.getElementById("offlineprogress").style.display = "block"
     var ticks = seconds * 20;
     var bonusDiff = 0;
     var playerStart = Object.assign({}, player);
@@ -5372,7 +5345,7 @@ function simulateTime(seconds, real, fast) {
         giveAchievement("While you were away... Nothing happened.")
     }
 
-    document.getElementById("offlinePopup").innerHTML = popupString
+    ui.showModalMessage(popupString);
 }
 
 function startInterval() {
@@ -5679,6 +5652,7 @@ function showEternityTab(tabName, init) {
     if (tabName === 'timestudies' && !init) document.getElementById("TTbuttons").style.display = "block"
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas()
+    tryStartTachyonAnimation();
 }
 
 function showRealityTab(tabName) {
@@ -5762,35 +5736,6 @@ function init() {
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
 
 }
-
-
-
-
-
-
-
-
-
-//Playfab stuff
-
-
-
-function closeToolTip() {
-    var elements = document.getElementsByClassName("popup")
-    for (var i=0; i<elements.length; i++) elements[i].style.display = "none"
-}
-
-function tooltipLoad() {
-    loadFromPlayFab()
-    closeToolTip()
-}
-
-function tooltipSave() {
-    saveToPlayFab()
-    closeToolTip()
-}
-
-
 
 setInterval(function () {
     save_game()

@@ -4,5 +4,12 @@ var ui = {
             options: { }
         }
     },
-    actions: { }
+    actions: { },
+    view: {
+        modal: {
+            current: undefined,
+            cloudConflicts: [ ],
+            message: ""
+        }
+    }
 };

@@ -168,42 +168,45 @@ function getRootFromChunks(chunks) {
   ));
 }
 
+// if both of them are the same, undefined will be returned
+function newestSave(first, second) {
+    function getSaveInfo(save) {
+        return {
+            infinities: save ? save.infinitied : 0,
+            eternities: save ? save.eternities : 0
+        }
+    }
+    let firstInfo = getSaveInfo(first);
+    let secondInfo = getSaveInfo(second);
+    if (firstInfo.eternities === secondInfo.eternities && firstInfo.infinities === secondInfo.infinities) {
+      return undefined;
+    }
+    if (firstInfo.eternities > secondInfo.eternities) {
+      return first;
+    }
+    if (firstInfo.infinities > secondInfo.infinities) {
+      return first;
+    }
+    return second;
+}
 
 function playFabLoadCheck() {
-  var cloudconflict = document.getElementById("cloudloadconflict");
   loadFromPlayFab(function(cloudRoot) {
-    $.notify("Loaded from cloud", "info")
+    $.notify("Loaded from cloud", "info");
 
     for (var i = 0; i < 3; i++) {
       let saveId = i;
-      var cloudInfinitied = cloudRoot.saves[saveId] ? cloudRoot.saves[saveId].infinitied : 0;
-      var cloudEternities = cloudRoot.saves[saveId] ? cloudRoot.saves[saveId].eternities : 0;
-      var localInfinitied = saves[saveId] ? saves[saveId].infinitied : 0;
-      var localEternities = saves[saveId] ? saves[saveId].eternities : 0;
-      if (cloudEternities < localEternities || (cloudEternities == localEternities && cloudInfinitied < localInfinitied)) {
-        let el = cloudconflict.cloneNode(true);
-        el.style.display = "flex";
-        var localEl = el.querySelector("#local");
-        var cloudEl = el.querySelector("#cloud");
-
-        localEl.querySelector(".save_id").textContent = saveId + 1;
-        localEl.querySelector(".save_infinities").textContent = localInfinitied;
-        localEl.querySelector(".save_eternities").textContent = localEternities;
-        localEl.querySelector(".storebtn").onclick = function() {
-          el.remove();
-        };
-
-        cloudEl.querySelector(".save_id").textContent = saveId + 1;
-        cloudEl.querySelector(".save_infinities").textContent = cloudInfinitied;
-        cloudEl.querySelector(".save_eternities").textContent = cloudEternities;
-        cloudEl.querySelector(".storebtn").onclick = function() {
-          load_cloud_save(saveId, cloudRoot.saves[saveId]);
-          el.remove();
-        };
-
-        document.body.appendChild(el);
+      let cloudSave = cloudRoot.saves[saveId];
+      let localSave = saves[saveId];
+      let newestSave = newestSave(cloudSave, localSave);
+      function loadCurrentCloudSave() {
+          load_cloud_save(saveId, cloudSave);
+      }
+      if (newestSave === localSave) {
+        ui.addCloudConflict(saveId, cloudSave, localSave, loadCurrentCloudSave);
+        ui.showModal(Modal.cloudLoadConflict);
       } else {
-        load_cloud_save(saveId, cloudRoot.saves[saveId]);
+          loadCurrentCloudSave();
       }
     }
   });
@@ -226,7 +229,14 @@ function playFabSaveCheck() {
       var cloudEternities = cloudRoot.saves[saveId] ? cloudRoot.saves[saveId].eternities : 0;
       var localInfinitied = saves[saveId] ? saves[saveId].infinitied : 0;
       var localEternities = saves[saveId] ? saves[saveId].eternities : 0;
+      function saveCurrent(isLastConflict) {
+          cloudRoot.saves[saveId] = saves[saveId];
+          if (isLastConflict){
+            saveToPlayFab(cloudRoot);
+          }
+      }
       if (cloudEternities > localEternities || (cloudEternities == localEternities && cloudInfinitied > localInfinitied)) {
+        ui.addCloudConflict(saveId, cloudRoot.saves[saveId], saves[saveId], saveCurrent);
         popupsWaiting++;
         let el = cloudconflict.cloneNode(true);
         el.style.display = "flex";

@@ -7,7 +7,8 @@ var ui = {
     actions: { },
     view: {
         modal: {
-            current: undefined
+            current: undefined,
+            cloudConflicts: [ ]
         }
     }
 };

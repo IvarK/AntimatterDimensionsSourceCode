@@ -376,7 +376,7 @@ function showTab(tabName) {
     if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
     else document.getElementById("progress").style.display = "none"
     resizeCanvas();
-    closeToolTip();
+    ui.hideModal();
     tryStartTachyonAnimation();
     if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
@@ -5735,36 +5735,6 @@ function init() {
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
 
 }
-
-
-
-
-
-
-
-
-
-//Playfab stuff
-
-
-
-function closeToolTip() {
-    ui.hideModal();
-    var elements = document.getElementsByClassName("popup")
-    for (var i=0; i<elements.length; i++) elements[i].style.display = "none"
-}
-
-function tooltipLoad() {
-    loadFromPlayFab()
-    closeToolTip()
-}
-
-function tooltipSave() {
-    saveToPlayFab()
-    closeToolTip()
-}
-
-
 
 setInterval(function () {
     save_game()

@@ -720,7 +720,6 @@ function save_game(changed, silent) {
 function change_save(saveId) {
   // Save previous save to make sure no changes are lost
   save_game(false, true);
-  closeToolTip();
 
   currentSave = saveId;
 
@@ -746,7 +745,7 @@ function change_save(saveId) {
   showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
-  closeToolTip();
+  ui.hideModal();
 }
 
 function transformSaveToDecimal() {

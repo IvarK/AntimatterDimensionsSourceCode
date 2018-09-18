@@ -172,7 +172,7 @@ function replicantiLoop(diff) {
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
     var current = player.replicanti.amount.ln();
-    let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff * 2;
+    let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
 
     if (player.replicanti.unl && (diff > 500 || interval < 50 || player.timestudy.studies.includes(192))) {

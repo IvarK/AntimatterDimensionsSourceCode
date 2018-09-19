@@ -349,7 +349,7 @@ function getSecretAchAmount() {
     return n
 }
 
-const DAYS_FOR_ALL_ACHS = 3
+const DAYS_FOR_ALL_ACHS = 2
 function isAchEnabled(name) {
     if (!player.achievements.includes(name)) return false
     if (player.realities == 0 && player.achievements.includes(name)) return true

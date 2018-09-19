@@ -121,7 +121,7 @@ function eternity(force, auto) {
     player.dilation.active = false;
 
     fullResetInfDimensions();
-    resetReplicanti();
+    eternityResetReplicanti();
     resetChallengeStuff();
     resetDimensions();
     if (player.respec) respecTimeStudies();
@@ -207,19 +207,19 @@ function eternity(force, auto) {
     }
 
     return true;
+}
 
-    function resetReplicanti() {
-        player.replicanti.amount = player.eternities >= 50 ? new Decimal(1) : new Decimal(0);
-        player.replicanti.unl = player.eternities >= 50;
-        player.replicanti.chance = 0.01;
-        player.replicanti.chanceCost = new Decimal(1e150);
-        player.replicanti.interval = 1000;
-        player.replicanti.intervalCost = new Decimal(1e140);
-        player.replicanti.gal = 0;
-        player.replicanti.galaxies = 0;
-        player.replicanti.galCost = new Decimal(1e170);
-        player.replicanti.galaxybuyer = (player.eternities > 1) ? player.replicanti.galaxybuyer : undefined;
-    }
+function eternityResetReplicanti() {
+    player.replicanti.amount = player.eternities >= 50 ? new Decimal(1) : new Decimal(0);
+    player.replicanti.unl = player.eternities >= 50;
+    player.replicanti.chance = 0.01;
+    player.replicanti.chanceCost = new Decimal(1e150);
+    player.replicanti.interval = 1000;
+    player.replicanti.intervalCost = new Decimal(1e140);
+    player.replicanti.gal = 0;
+    player.replicanti.galaxies = 0;
+    player.replicanti.galCost = new Decimal(1e170);
+    player.replicanti.galaxybuyer = (player.eternities > 1) ? player.replicanti.galaxybuyer : undefined;
 }
 
 function fullResetInfDimensions() {

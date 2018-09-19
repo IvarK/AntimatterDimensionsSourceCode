@@ -158,6 +158,7 @@ function reality(force) {
     };
 
     fullResetInfDimensions();
+    fullResetTimeDimensions();
     resetReplicanti();
     resetChallengeStuff();
     resetDimensions();

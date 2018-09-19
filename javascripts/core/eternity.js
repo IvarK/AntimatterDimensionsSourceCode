@@ -1,6 +1,9 @@
 function eternity(force, auto) {
-    if (!((player.infinityPoints.gte(player.eternityChallGoal) && (!player.options.confirmations.eternity || force || auto || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades."))) || force === true)) {
-        return false
+    if (!force && player.infinityPoints.lt(player.eternityChallGoal)) {
+        return false;
+    }
+    if (!force && !auto && !askEternityConfirmation()) {
+        return false;
     }
     if (player.currentEternityChall === "eterc4" && player.infinitied > 16 - (ECTimesCompleted("eterc4") * 4)) return false;
     if (force) player.currentEternityChall = "";
@@ -391,3 +394,11 @@ function eternity(force, auto) {
     return true
 }
 
+function askEternityConfirmation() {
+    if (!player.options.confirmations.eternity) {
+        return true;
+    }
+    let message = "Eternity will reset everything except achievements and challenge records. " +
+        "You will also gain an Eternity point and unlock various upgrades.";
+    return confirm(message);
+}

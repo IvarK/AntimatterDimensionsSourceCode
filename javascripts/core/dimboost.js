@@ -93,27 +93,28 @@ if (player.currentChallenge == "postc2") {
 
 
 function getShiftRequirement(bulk) {
-  let amount = 20;
-  if (player.currentChallenge == "challenge4") {
-      tier = Math.min(player.resets + bulk + 4, 6)
-      if (tier == 6) amount += (player.resets+bulk - 2) * 20;
-  } else {
-      tier = Math.min(player.resets + bulk + 4, 8)
-  }
+    let maxShiftTier = player.currentChallenge === "challenge4" ? 6 : 8;
+    let targetResets = player.resets + bulk;
+    let tier = Math.min(targetResets + 4, maxShiftTier);
+    let amount = 20;
+    let mult = 15;
+    if (player.timestudy.studies.includes(211)) mult -= 5;
+    if (player.timestudy.studies.includes(222)) mult -= 2;
 
-  let mult = 15
-  if (player.timestudy.studies.includes(211)) mult -= 5
-  if (player.timestudy.studies.includes(222)) mult -= 2
+    if (tier === 6 && player.currentChallenge === "challenge4") {
+        amount += Math.ceil((targetResets - 2) * 20);
+    }
+    else if (tier === 8) {
+        amount += Math.ceil((targetResets - 4) * mult);
+    }
+    if (player.currentEternityChall === "eterc5") {
+        amount += Math.pow(targetResets, 3) + targetResets;
+    }
 
-  if (tier == 8) amount += Math.ceil((player.resets+bulk - 4) * mult);
-  if (player.currentEternityChall == "eterc5") {
-      amount += Math.pow(player.resets+bulk, 3) + player.resets+bulk
-  }
+    if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+    if (player.challenges.includes("postc5")) amount -= 1;
 
-  if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
-  if (player.challenges.includes("postc5")) amount -= 1
-
-  return { tier: tier, amount: amount };
+    return { tier: tier, amount: amount };
 }
 
 document.getElementById("softReset").onclick = function () {

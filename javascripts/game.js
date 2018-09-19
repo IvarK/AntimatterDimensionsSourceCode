@@ -1461,7 +1461,7 @@ function gainedGlyphLevel(round) {
       if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
     }
     var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
-    if (player.reality.upg.includes(18)) ret *= Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.55, 1)
+    if (player.reality.upg.includes(18)) ret *= Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1)
     if (round) ret = Math.round(ret)
     if (player.reality.perks.includes(21)) ret += 1
     if (player.reality.perks.includes(24)) ret += 1

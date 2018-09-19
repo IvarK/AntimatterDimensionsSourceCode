@@ -77,7 +77,7 @@ function reality(force) {
     respecGlyphs();
     player.money = new Decimal(10);
     player.sacrificed = new Decimal(0);
-    player.player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";
     player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
     player.infinityPoints = new Decimal(0);

@@ -35,9 +35,9 @@ function softReset(bulk) {
      * All reset stuff are in these functions now. (Hope this works)
      */
     player.sacrificed = new Decimal(0);
+    resetChallengeStuff();
     resetDimensions();
     applyDimensionBoost();
-    resetChallengeStuff();
     applyChallengeModifiers();
     skipResetsIfPossible();
     hidePreMilestone30Elements();

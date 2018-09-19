@@ -1507,6 +1507,7 @@ function resetDimensions() {
 }
 
 function resetChallengeStuff() {
+    player.chall2Pow = 1;
     player.chall3Pow = new Decimal(0.01)
     player.matter = new Decimal(0)
     player.chall11Pow = new Decimal(1)
@@ -1515,9 +1516,6 @@ function resetChallengeStuff() {
 }
 
 function resetMoney() {
-    if (isAchEnabled("r111")) {
-        return;
-    }
     let money = 10;
     if (isAchEnabled("r78")) money = 1e25;
     else if (isAchEnabled("r55")) money = 1e10;

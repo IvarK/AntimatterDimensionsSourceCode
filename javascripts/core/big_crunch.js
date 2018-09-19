@@ -1,8 +1,12 @@
 function bigCrunchReset() {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
     if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
-    if (!((player.money.gte(Number.MAX_VALUE) && !player.currentChallenge.includes("post")) || (player.currentChallenge !== "" && player.money.gte(player.challengeTarget)))) {
-        runPostCrunchUpdates();
+    const isInChallenge = player.currentChallenge !== "";
+    const isInPreBreakChallenge = isInChallenge && !player.currentChallenge.includes("post");
+    if (player.money.lt(Number.MAX_VALUE) && (!player.break || isInPreBreakChallenge)) {
+        return;
+    }
+    if (isInChallenge && player.money.lt(player.challengeTarget)) {
         return;
     }
 
@@ -12,9 +16,7 @@ function bigCrunchReset() {
         setTimeout(function() {
             document.getElementById("body").style.animation = "";
         }, 2000);
-        setTimeout(function() {
-            document.getElementById("bigcrunch").onclick();
-        }, 1000);
+        setTimeout(bigCrunchReset, 1000);
         return
     }
     implosionCheck = 0;
@@ -42,16 +44,13 @@ function bigCrunchReset() {
     }
     if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");
     if (player.challenges.length === 20) giveAchievement("Anti-antichallenged");
-    if (!player.break || player.currentChallenge !== "") {
-        player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints());
-        addTime(player.thisInfinityTime, gainedInfinityPoints())
-    }
-    else {
-        player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints());
-        addTime(player.thisInfinityTime, gainedInfinityPoints());
-        if (gainedInfinityPoints().gte(1e150)) giveAchievement("All your IP are belong to us");
-        if (gainedInfinityPoints().gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
-        if (gainedInfinityPoints().gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
+    let infinityPoints = gainedInfinityPoints();
+    player.infinityPoints = player.infinityPoints.plus(infinityPoints);
+    addTime(player.thisInfinityTime, infinityPoints);
+    if (player.break && player.currentChallenge === "") {
+        if (infinityPoints.gte(1e150)) giveAchievement("All your IP are belong to us");
+        if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
+        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
     }
     if (!isAchEnabled("r111") && player.lastTenRuns[9][1] !== 1) {
         var n = 0;
@@ -72,10 +71,10 @@ function bigCrunchReset() {
     }
 
     if (autoS && auto) {
-        if (gainedInfinityPoints().dividedBy(player.thisInfinityTime / 100).gt(player.autoIP) && !player.break) player.autoIP = gainedInfinityPoints().dividedBy(player.thisInfinityTime / 100);
+        let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
+        if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
         if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
     }
-
 
     auto = autoS; //only allow autoing if prev crunch was autoed
     autoS = true;
@@ -131,7 +130,6 @@ function bigCrunchReset() {
     player.postC3Reward = new Decimal(1);
 
     if (player.bestInfinityTime <= 1) giveAchievement("Less than or equal to 0.001");
-
     if (!player.options.retryChallenge) player.currentChallenge = "";
 
     if (player.resets === 0 && player.currentChallenge === "") {
@@ -223,13 +221,9 @@ function bigCrunchReset() {
 
     Marathon2 = 0;
 
-    runPostCrunchUpdates();
-
-    function runPostCrunchUpdates() {
-        updateChallenges();
-        updateChallengeTimes();
-        updateLastTenRuns();
-    }
+    updateChallenges();
+    updateChallengeTimes();
+    updateLastTenRuns();
 }
 
 document.getElementById("bigcrunch").onclick = bigCrunchReset;

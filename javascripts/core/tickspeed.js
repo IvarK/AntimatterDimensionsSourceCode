@@ -127,3 +127,15 @@ function updateTickSpeed() {
       document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
   }
 }
+
+function resetTickspeed() {
+    player.tickSpeedCost = new Decimal(1000);
+    player.tickspeedMultiplier = new Decimal(10);
+    let tickspeed = new Decimal(1000);
+    if (isAchEnabled("r36")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r45")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r66")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r83")) tickspeed = tickspeed.times(Decimal.pow(0.95, player.galaxies));
+    tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
+    player.tickspeed = tickspeed;
+}

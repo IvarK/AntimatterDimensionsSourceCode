@@ -137,7 +137,3 @@ document.getElementById("softReset").onclick = function () {
     if (mult > 1) floatText(name + "D", "x" + shortenDimensions(mult))
   }
 };
-
-function setInitialDimensionPower () {
-    applyDimensionBoost();
-}

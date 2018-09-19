@@ -68,7 +68,8 @@ function bigCrunchReset() {
     if (player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") document.getElementById("matter").style.display = "block";
     else document.getElementById("matter").style.display = "none";
 
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
+    document.getElementById("replicantireset").innerHTML =
+        "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
 ;
     document.getElementById("matter").style.display = "none";
     document.getElementById("quickReset").style.display = "none";

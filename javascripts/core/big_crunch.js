@@ -95,8 +95,6 @@ function bigCrunchReset() {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
 
-    Marathon2 = 0;
-
     updateChallengeTimes();
     updateLastTenRuns();
 }
@@ -118,6 +116,7 @@ function secondSoftReset() {
     document.getElementById("replicantireset").innerHTML =
         "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     updateChallengeElements();
+    Marathon2 = 0;
 }
 
 function updateChallengeElements() {

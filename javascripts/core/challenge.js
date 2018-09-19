@@ -12,7 +12,6 @@ function startChallenge(name, target) {
     showTab("dimensions");
     if (player.currentChallenge.includes("post") && player.currentEternityChall !== "")
         giveAchievement("I wish I had gotten 7 eternities");
-    Marathon2 = 0;
 }
 
 function askChallengeConfirmation(challenge) {

@@ -46,7 +46,7 @@ function reality(force) {
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel());
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = trueif(!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4);
+    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = !player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4;
     {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
@@ -73,7 +73,7 @@ function reality(force) {
         }
         player.reality.upgReqs[18] = tempBool
     }
-    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) player.reality.upgReqs[19] = trueif(player.reality.respec);
+    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) player.reality.upgReqs[19] = player.reality.respec;
     respecGlyphs();
     player.money = new Decimal(10);
     player.sacrificed = new Decimal(0);

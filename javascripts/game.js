@@ -5463,7 +5463,7 @@ function maxBuyDimBoosts(manual) {
     }
 
     // But in case of EC5 it's not, so do binarysearch-like search for appropriate boost amount
-    while (maxBoosts !== minBoosts) {
+    while (maxBoosts !== (minBoosts + 1)) {
         let middle = Math.floor((maxBoosts + minBoosts) / 2);
         if (canBoost(middle)) {
             minBoosts = middle;
@@ -5473,7 +5473,7 @@ function maxBuyDimBoosts(manual) {
         }
     }
 
-    tryBoost(maxBoosts);
+    tryBoost(maxBoosts - 1);
 
     function ensureShift(bulk) {
         requirement = getShiftRequirement(bulk);

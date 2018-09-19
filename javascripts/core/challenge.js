@@ -5,6 +5,7 @@ function startChallenge(name, target) {
     player.currentChallenge = name;
     player.challengeTarget = target;
     secondSoftReset();
+    if (player.currentChallenge.includes("post")) player.break = true;
     document.getElementById("fifthRow").style.display = "none";
     document.getElementById("sixthRow").style.display = "none";
     document.getElementById("seventhRow").style.display = "none";

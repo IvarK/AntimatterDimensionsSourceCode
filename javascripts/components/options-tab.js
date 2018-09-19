@@ -1,4 +1,4 @@
-Vue.component('options', {
+Vue.component('options-tab', {
     props: ['model', 'actions'],
     template:
     '<table class="options-container">\

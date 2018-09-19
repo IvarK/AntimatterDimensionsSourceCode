@@ -45,6 +45,10 @@ function galaxyReset() {
     player.resets = 0;
     softReset(0);
     if (Notation.current().isCancer()) player.spreadingCancer += 1;
+    checkGalaxyAchievements();
+}
+
+function checkGalaxyAchievements() {
     if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer");
     if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread");
     if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??");

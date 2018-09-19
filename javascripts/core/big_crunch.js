@@ -20,45 +20,18 @@ function bigCrunchReset() {
         return
     }
     implosionCheck = 0;
-    if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
-    if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
-    if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
-    if (player.thisInfinityTime <= 200) giveAchievement("Blink of an eye");
-    if (player.eightAmount === 0) giveAchievement("You didn't need it anyway");
-    if (player.galaxies === 1) giveAchievement("Claustrophobic");
-    if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
-    if (player.currentChallenge === "challenge2" && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
-    if (player.currentChallenge === "challenge11" && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
-    if (player.currentChallenge === "challenge5" && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
-    if (player.currentChallenge === "challenge3" && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
-    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && player.currentChallenge === "challenge12") giveAchievement("ERROR 909: Dimension not found");
+    if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
+        player.challenges.push(player.currentChallenge);
+    }
     if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) player.challengeTimes[challNumber - 2] = player.thisInfinityTime;
     if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber - 1] > player.thisInfinityTime) player.infchallengeTimes[challNumber - 1] = player.thisInfinityTime;
-    if (player.currentChallenge === "postc5" && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
     if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
     if (player.currentChallenge === "challenge5") {
         kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
     }
-    if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
-        player.challenges.push(player.currentChallenge);
-    }
-    if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");
-    if (player.challenges.length === 20) giveAchievement("Anti-antichallenged");
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addTime(player.thisInfinityTime, infinityPoints);
-    if (player.break && player.currentChallenge === "") {
-        if (infinityPoints.gte(1e150)) giveAchievement("All your IP are belong to us");
-        if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
-        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
-    }
-    if (!isAchEnabled("r111") && player.lastTenRuns[9][1] !== 1) {
-        var n = 0;
-        for (i = 0; i < 9; i++) {
-            if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i + 1][1].times(Number.MAX_VALUE))) n++;
-        }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked infinities...")
-    }
     if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
         player.reality.upgReqs[7] = true;
     }
@@ -80,12 +53,12 @@ function bigCrunchReset() {
     autoS = true;
     player.infinitied = player.infinitied + Math.round(gainedInfinities());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-    if (player.bestInfinityTime <= 1) giveAchievement("Less than or equal to 0.001");
     player.thisInfinityTime = 0;
     player.resets = 0;
     player.galaxies = 0;
     player.tickDecrease = 0.9;
 
+    checkBigCrunchAchievements();
     if (!player.options.retryChallenge) player.currentChallenge = "";
 
     if (player.replicanti.unl && !isAchEnabled("r95")) player.replicanti.amount = new Decimal(1);
@@ -104,17 +77,11 @@ function bigCrunchReset() {
 
     kong.submitStats('Infinitied', getInfinitied());
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
-    giveAchievement("To infinity!");
-    if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
 
     softReset(0, true);
     resetMoney();
     updateAutobuyers();
     resetInfDimensions();
-    if (player.challenges.length >= 2) giveAchievement("Daredevil");
-    if (player.challenges.length === 12) giveAchievement("AntiChallenged");
-    if (player.challenges.length === 20) giveAchievement("Anti-antichallenged");
     IPminpeak = new Decimal(0);
 
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc10") {
@@ -143,6 +110,43 @@ function bigCrunchReset() {
     updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
+}
+
+function checkBigCrunchAchievements() {
+    giveAchievement("To infinity!");
+    if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+    if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
+    if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
+    if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
+    if (player.thisInfinityTime <= 200) giveAchievement("Blink of an eye");
+    if (player.eightAmount === 0) giveAchievement("You didn't need it anyway");
+    if (player.galaxies === 1) giveAchievement("Claustrophobic");
+    if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
+    if (player.currentChallenge === "challenge2" && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
+    if (player.currentChallenge === "challenge11" && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
+    if (player.currentChallenge === "challenge5" && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
+    if (player.currentChallenge === "challenge3" && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
+    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && player.currentChallenge === "challenge12") giveAchievement("ERROR 909: Dimension not found");
+    if (player.currentChallenge === "postc5" && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
+    if (player.challenges.length >= 2) giveAchievement("Daredevil");
+    if (player.challenges.length === 12) giveAchievement("AntiChallenged");
+    if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");
+    if (player.challenges.length === 20) giveAchievement("Anti-antichallenged");
+    if (player.break && player.currentChallenge === "") {
+        const infinityPoints = gainedInfinityPoints();
+        if (infinityPoints.gte(1e150)) giveAchievement("All your IP are belong to us");
+        if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
+        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
+    }
+    if (!isAchEnabled("r111") && player.lastTenRuns[9][1] !== 1) {
+        var n = 0;
+        for (i = 0; i < 9; i++) {
+            if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i + 1][1].times(Number.MAX_VALUE))) n++;
+        }
+        if (n === 9) giveAchievement("Yo dawg, I heard you liked infinities...")
+    }
+    if (player.bestInfinityTime <= 1) giveAchievement("Less than or equal to 0.001");
 }
 
 document.getElementById("bigcrunch").onclick = bigCrunchReset;

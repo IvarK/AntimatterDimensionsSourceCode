@@ -45,7 +45,7 @@ function softReset(bulk) {
     updateTickSpeed();
     let currentMoney = player.money;
     resetMoney();
-    if (!isAchEnabled("r111")) {
+    if (isAchEnabled("r111")) {
         player.money = player.money.max(currentMoney);
     }
     if (player.resets >= 10) {

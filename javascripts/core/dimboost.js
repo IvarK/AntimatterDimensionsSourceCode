@@ -25,9 +25,9 @@ function applyDimensionBoost() {
     }
 }
 
-function softReset(bulk) {
+function softReset(bulk, bigCrunch) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
-    if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
+    if (!player.break && player.money.gt(Number.MAX_VALUE) && !bigCrunch) return;
     player.resets += bulk;
     if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
 

@@ -75,289 +75,96 @@ function reality(force) {
     }
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) player.reality.upgReqs[19] = trueif(player.reality.respec);
     respecGlyphs();
-    player = {
-        money: new Decimal(10),
-        tickSpeedCost: new Decimal(1000),
-        tickspeed: new Decimal(1000),
-        firstCost: new Decimal(10),
-        secondCost: new Decimal(100),
-        thirdCost: new Decimal(10000),
-        fourthCost: new Decimal(1000000),
-        fifthCost: new Decimal(1e9),
-        sixthCost: new Decimal(1e13),
-        seventhCost: new Decimal(1e18),
-        eightCost: new Decimal(1e24),
-        firstAmount: new Decimal(0),
-        secondAmount: new Decimal(0),
-        thirdAmount: new Decimal(0),
-        fourthAmount: new Decimal(0),
-        firstBought: 0,
-        secondBought: 0,
-        thirdBought: 0,
-        fourthBought: 0,
-        fifthAmount: new Decimal(0),
-        sixthAmount: new Decimal(0),
-        seventhAmount: new Decimal(0),
-        eightAmount: new Decimal(0),
-        fifthBought: 0,
-        sixthBought: 0,
-        seventhBought: 0,
-        eightBought: 0,
-        firstPow: new Decimal(1),
-        secondPow: new Decimal(1),
-        thirdPow: new Decimal(1),
-        fourthPow: new Decimal(1),
-        fifthPow: new Decimal(1),
-        sixthPow: new Decimal(1),
-        seventhPow: new Decimal(1),
-        eightPow: new Decimal(1),
-        sacrificed: new Decimal(0),
-        achievements: player.achievements,
-        challenges: player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [],
-        currentChallenge: "",
-        infinityUpgrades: player.reality.upg.includes(10) ? player.infinityUpgrades : [],
-        infinityPoints: new Decimal(0),
-        infinitied: 0,
-        infinitiedBank: 0,
-        totalTimePlayed: player.totalTimePlayed,
-        realTimePlayed: player.realTimePlayed,
-        bestInfinityTime: 999999999999,
-        thisInfinityTime: 0,
-        resets: player.reality.upg.includes(10) ? 4 : 0,
-        galaxies: player.reality.upg.includes(10) ? 1 : 0,
-        tickDecrease: 0.9,
-        totalmoney: player.totalmoney,
-        interval: null,
-        lastUpdate: player.lastUpdate,
-        achPow: player.achPow,
-        autobuyers: player.reality.upg.includes(10) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        partInfinityPoint: 0,
-        partInfinitied: 0,
-        break: player.reality.upg.includes(10) ? player.break : false,
-        costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
-        tickspeedMultiplier: new Decimal(10),
-        chall2Pow: 1,
-        chall3Pow: new Decimal(0.01),
-        newsArray: player.newsArray,
-        matter: new Decimal(0),
-        chall11Pow: new Decimal(1),
-        challengeTimes: player.challengeTimes,
-        infchallengeTimes: player.infchallengeTimes,
-        lastTenRuns: [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]],
-        lastTenEternities: [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]],
-        lastTenRealities: player.lastTenRealities,
-        infMult: new Decimal(1),
-        infMultCost: new Decimal(10),
-        tickSpeedMultDecrease: player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10,
-        tickSpeedMultDecreaseCost: player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6,
-        dimensionMultDecrease: player.reality.upg.includes(10) ? Math.max(player.dimensionMultDecrease, 3) : 10,
-        dimensionMultDecreaseCost: player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8,
-        version: player.version,
-        postChallUnlocked: 0,
-        postC4Tier: 1,
-        postC3Reward: new Decimal(1),
-        overXGalaxies: player.overXGalaxies,
-        spreadingCancer: player.spreadingCancer,
-        infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
-        infinityPower: new Decimal(1),
-        infinityDimension1: {
-            cost: new Decimal(1e8),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension2: {
-            cost: new Decimal(1e9),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension3: {
-            cost: new Decimal(1e10),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension4: {
-            cost: new Decimal(1e20),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension5: {
-            cost: new Decimal(1e140),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension6: {
-            cost: new Decimal(1e200),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension7: {
-            cost: new Decimal(1e250),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infinityDimension8: {
-            cost: new Decimal(1e280),
-            amount: new Decimal(0),
-            bought: 0,
-            power: new Decimal(1),
-            baseAmount: 0
-        },
-        infDimBuyers: player.reality.upg.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false],
-        timeShards: new Decimal(0),
-        tickThreshold: new Decimal(1),
-        totalTickGained: 0,
-        timeDimension1: {
-            cost: new Decimal(1),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension2: {
-            cost: new Decimal(5),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension3: {
-            cost: new Decimal(100),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension4: {
-            cost: new Decimal(1000),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension5: {
-            cost: new Decimal("1e2350"),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension6: {
-            cost: new Decimal("1e2650"),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension7: {
-            cost: new Decimal("1e3000"),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        timeDimension8: {
-            cost: new Decimal("1e3350"),
-            amount: new Decimal(0),
-            power: new Decimal(1),
-            bought: 0
-        },
-        eternityPoints: new Decimal(0),
-        eternities: 0,
-        thisEternity: 0,
-        bestEternity: 999999999999,
-        eternityUpgrades: [],
-        epmult: new Decimal(1),
-        epmultCost: new Decimal(500),
-        totalTickGained: 0,
-        offlineProd: player.reality.upg.includes(10) ? player.offlineProd : 0,
-        offlineProdCost: player.reality.upg.includes(10) ? player.offlineProdCost : 1e7,
-        challengeTarget: 0,
-        autoSacrifice: player.reality.upg.includes(10) ? player.autoSacrifice : 1,
-        replicanti: {
-            amount: player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0),
-            unl: player.reality.upg.includes(10) ? true : false,
-            chance: 0.01,
-            chanceCost: new Decimal(1e150),
-            interval: 1000,
-            intervalCost: new Decimal(1e140),
-            gal: 0,
-            galaxies: 0,
-            galCost: new Decimal(1e170),
-            galaxybuyer: player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined,
-            auto: [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false]
-        },
-        timestudy: {
-            theorem: 0,
-            amcost: new Decimal("1e20000"),
-            ipcost: new Decimal(1),
-            epcost: new Decimal(1),
-            studies: []
-        },
-        eternityChalls: {},
-        eternityChallGoal: new Decimal(Number.MAX_VALUE),
-        currentEternityChall: "",
-        eternityChallUnlocked: 0,
-        etercreq: 0,
-        autoIP: new Decimal(0),
-        autoTime: 1e300,
-        infMultBuyer: player.reality.upg.includes(10) ? player.infMultBuyer : false,
-        autoCrunchMode: "amount",
-        autoEternityMode: player.autoEternityMode,
-        respec: false,
-        eternityBuyer: {
-            limit: new Decimal(0),
-            isOn: false
-        },
-        eterc8ids: 50,
-        eterc8repl: 40,
-        dimlife: true,
-        dead: true,
-        dilation: {
-            studies: [],
-            active: false,
-            tachyonParticles: new Decimal(0),
-            dilatedTime: new Decimal(0),
-            totalTachyonParticles: new Decimal(0),
-            nextThreshold: new Decimal(1000),
-            freeGalaxies: 0,
-            upgrades: [],
-            rebuyables: {
-                1: 0,
-                2: 0,
-                3: 0
-            }
-        },
-        secretUnlocks: player.secretUnlocks,
-        realities: player.realities + 1,
-        thisReality: 0,
-        bestReality: Math.min(player.thisReality, player.bestReality),
-        reality: player.reality,
-        wormhole: player.wormhole,
-        options: player.options
+    player.money = new Decimal(10);
+    player.sacrificed = new Decimal(0);
+    player.player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.currentChallenge = "";
+    player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
+    player.infinityPoints = new Decimal(0);
+    player.infinitied = 0;
+    player.infinitiedBank = 0;
+    player.bestInfinityTime = 999999999999;
+    player.thisInfinityTime = 0;
+    player.resets = player.reality.upg.includes(10) ? 4 : 0;
+    player.galaxies = player.reality.upg.includes(10) ? 1 : 0;
+    player.tickDecrease = 0.9;
+    player.interval = null;
+    player.autobuyers = player.reality.upg.includes(10) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    player.partInfinityPoint = 0;
+    player.partInfinitied = 0;
+    player.break = player.reality.upg.includes(10) ? player.break : false;
+    player.lastTenRuns = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
+    player.lastTenEternities = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
+    player.infMult = new Decimal(1);
+    player.infMultCost = new Decimal(10);
+    player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
+    player.tickSpeedMultDecreaseCost = player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6;
+    player.dimensionMultDecrease = player.reality.upg.includes(10) ? Math.max(player.dimensionMultDecrease, 3) : 10;
+    player.dimensionMultDecreaseCost = player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8;
+    player.postChallUnlocked = 0;
+    player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
+    player.infinityPower = new Decimal(1);
+    player.infDimBuyers = player.reality.upg.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
+    player.timeShards = new Decimal(0);
+    player.tickThreshold = new Decimal(1);
+    player.eternityPoints = new Decimal(0);
+    player.eternities = 0;
+    player.thisEternity = 0;
+    player.bestEternity = 999999999999;
+    player.eternityUpgrades = [];
+    player.epmult = new Decimal(1);
+    player.epmultCost = new Decimal(500);
+    player.totalTickGained = 0;
+    player.offlineProd = player.reality.upg.includes(10) ? player.offlineProd : 0;
+    player.offlineProdCost = player.reality.upg.includes(10) ? player.offlineProdCost : 1e7;
+    player.challengeTarget = 0;
+    player.autoSacrifice = player.reality.upg.includes(10) ? player.autoSacrifice : 1;
+    player.eternityChalls = {};
+    player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+    player.currentEternityChall = "";
+    player.eternityChallUnlocked = 0;
+    player.etercreq = 0;
+    player.autoIP = new Decimal(0);
+    player.autoTime = 1e300;
+    player.infMultBuyer = player.reality.upg.includes(10) ? player.infMultBuyer : false;
+    player.autoCrunchMode = "amount";
+    player.respec = false;
+    player.eterc8ids = 50;
+    player.eterc8repl = 40;
+    player.dimlife = true;
+    player.dead = true;
+    player.realities = player.realities + 1;
+    player.thisReality = 0;
+    player.bestReality = Math.min(player.thisReality, player.bestReality);
+    player.timestudy.theorem = 0;
+    player.timestudy.amcost = new Decimal("1e20000");
+    player.timestudy.ipcost = new Decimal(1);
+    player.timestudy.epcost = new Decimal(1);
+    player.timestudy.studies = [];
+    player.eternityBuyer.limit = new Decimal(0);
+    player.eternityBuyer.isOn = false;
+    player.dilation.studies = [];
+    player.dilation.active = false;
+    player.dilation.tachyonParticles = new Decimal(0);
+    player.dilation.dilatedTime = new Decimal(0);
+    player.dilation.totalTachyonParticles = new Decimal(0);
+    player.dilation.nextThreshold = new Decimal(1000);
+    player.dilation.freeGalaxies = 0;
+    player.dilation.upgrades = [];
+    player.dilation.rebuyables = {
+        1: 0,
+        2: 0,
+        3: 0
     };
+
+    fullResetInfDimensions();
+    resetReplicanti();
+    resetChallengeStuff();
+    resetDimensions();
     if (player.reality.upg.includes(10)) player.eternities = 100;
     player.reality.pp++;
-    $("#pp").text("You have " + player.reality.pp + " Perk Points.");
-    if (player.eternities <= 30) {
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
-    }
+    $("#pp").text("You have " + player.reality.pp + " Perk Points.")
+    hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
     document.getElementById("quickReset").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
@@ -402,6 +209,7 @@ function reality(force) {
     document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
     document.getElementById("totaltickgained").textContent = "You've gained " + Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " tickspeed upgrades.";
+    resetTickspeed();
     updateTickSpeed();
     playerInfinityUpgradesOnEternity();
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
@@ -431,4 +239,29 @@ function reality(force) {
     updateAutomatorTree();
     drawPerkNetwork();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
+
+    function resetReplicanti() {
+        player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);
+        player.replicanti.unl = player.reality.upg.includes(10);
+        player.replicanti.chance = 0.01;
+        player.replicanti.chanceCost = new Decimal(1e150);
+        player.replicanti.interval = 1000;
+        player.replicanti.intervalCost = new Decimal(1e140);
+        player.replicanti.gal = 0;
+        player.replicanti.galaxies = 0;
+        player.replicanti.galCost = new Decimal(1e170);
+        player.replicanti.galaxybuyer = player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined;
+        player.replicanti.auto = [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false];
+    }
+}
+
+function fullResetTimeDimensions() {
+    const cost = [1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
+    for (let i = 0; i < 8; i++) {
+        let dimension = player["timeDimension" + (i + 1)];
+        dimension.cost = new Decimal(cost[i]);
+        dimension.amount = new Decimal(0);
+        dimension.bought = 0;
+        dimension.power = new Decimal(1);
+    }
 }

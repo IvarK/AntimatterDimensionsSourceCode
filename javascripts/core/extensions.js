@@ -10,6 +10,10 @@ Math.wrap = function(number, min, max) {
     return number < 0 ? min + 1 + number : min + number;
 };
 
+Math.clamp = function(value, min, max) {
+    return (value < min) ? min : (value > max ? max : value);
+};
+
 function copyToClipboard(str) {
     try {
         let el = document.createElement('textarea');

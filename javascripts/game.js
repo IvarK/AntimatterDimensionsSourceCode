@@ -5433,14 +5433,70 @@ function maxBuyGalaxies(manual) {
 }
 
 function maxBuyDimBoosts(manual) {
-    if (player.autobuyers[9].priority > player.resets || player.overXGalaxies <= player.galaxies || getShiftRequirement(0).tier < 8 || manual == true) {
-        var r = 0;
-        while(player[TIER_NAMES[getShiftRequirement(r).tier]+"Amount"] >= getShiftRequirement(r).amount && (player.autobuyers[9].priority > player.resets+r || player.overXGalaxies <= player.galaxies || getShiftRequirement(r).tier < 8 || manual == true)) r+=1;
+    let requirement = undefined;
+    let bulk = 0;
+    do {
+        if (!ensureShift(bulk++)) return;
+    } while (requirement.tier < 8);
 
-        if (r >= 750) giveAchievement("Costco sells dimboosts now")
-        if (r > 0) softReset(r)
+    let availableBoosts = Number.MAX_VALUE;
+    if (player.overXGalaxies > player.galaxies && !manual) {
+        availableBoosts = player.autobuyers[9].priority - player.resets - bulk;
     }
 
+    if (availableBoosts <= 0) {
+        bulk += availableBoosts;
+        tryBoost(bulk);
+        return;
+    }
+
+    let firstBoost = requirement;
+    let secondBoost = ensureShift(bulk);
+    if (!secondBoost) return;
+
+    let increase = secondBoost.amount - firstBoost.amount;
+    let minBoosts = bulk;
+    let maxBoosts = bulk + Math.floor((player.eightAmount - secondBoost.amount) / increase);
+    maxBoosts = Math.min(maxBoosts, availableBoosts);
+
+    // Usually enough, as boost scaling is linear most of the time
+    if (canBoost(maxBoosts)){
+        tryBoost(maxBoosts);
+        return;
+    }
+
+    // But in case of EC5 it's not, so do binarysearch-like search for appropriate boost amount
+    while (maxBoosts !== (minBoosts + 1)) {
+        let middle = Math.floor((maxBoosts + minBoosts) / 2);
+        if (canBoost(middle)) {
+            minBoosts = middle;
+        }
+        else {
+            maxBoosts = middle;
+        }
+    }
+
+    tryBoost(maxBoosts - 1);
+
+    function ensureShift(bulk) {
+        requirement = getShiftRequirement(bulk);
+        if (requirementIsMet(requirement)) {
+            return requirement;
+        }
+        tryBoost(bulk);
+        return undefined;
+    }
+    function canBoost(bulk) {
+        return requirementIsMet(getShiftRequirement(bulk));
+    }
+    function requirementIsMet(requirement) {
+        return player[TIER_NAMES[requirement.tier]+"Amount"] >= requirement.amount;
+    }
+    function tryBoost(bulk) {
+        if (bulk > 0) {
+            softReset(bulk);
+        }
+    }
 }
 
 var timer = 0

@@ -43,6 +43,11 @@ ui = new Vue({
                 }
             }
         }
+    },
+    computed: {
+        themeCss: function() {
+            return "stylesheets/theme-"+ this.model.player.options.theme +".css";
+        }
     }
 });
 

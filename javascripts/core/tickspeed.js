@@ -97,13 +97,23 @@ function buyMaxTickSpeed() {
       if (buying <= 0) return false
       player.tickspeed = player.tickspeed.times(Decimal.pow(mult, buying));
       if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(Decimal.pow(1.05+(player.galaxies*0.005), buying))
-      for (var i = 0; i<buying-1; i++) {
-          player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
-          player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease)
-      }
+      increaseTickSpeedCost(buying - 1);
       if (player.money.gte(player.tickSpeedCost)) player.money = player.money.minus(player.tickSpeedCost)
       player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
       player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease)
+
+      function increaseTickSpeedCost(n) {
+          // Unoptimized version
+          // for (var i = 0; i < n; i++) {
+          //    cost *= mult;
+          //    mult *= multDec;
+          // }
+          let cost = player.tickSpeedCost;
+          let mult = player.tickspeedMultiplier;
+          let multDec = new Decimal(player.tickSpeedMultDecrease);
+          player.tickSpeedCost = cost.times(mult.pow(n)).times(multDec.pow(n * (n - 1) / 2));
+          player.tickspeedMultiplier = mult.times(multDec.pow(n));
+      }
   }
 
   updateTickSpeed()

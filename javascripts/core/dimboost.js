@@ -19,8 +19,9 @@ function getDimensionBoostPower() {
 
 function applyDimensionBoost() {
     var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
+    const power = getDimensionBoostPower();
     for (var i = 1; i <= 8; i++) {
-        player[tiers[i] + "Pow"] = getDimensionBoostPower().pow(player.resets + 1 - i).max(1)
+        player[tiers[i] + "Pow"] = power.pow(player.resets + 1 - i).max(1)
     }
 }
 
@@ -34,10 +35,8 @@ function softReset(bulk) {
    * All reset stuff are in these functions now. (Hope this works)
    */
   resetDimensions()
-  resetTickspeed()
   applyDimensionBoost()
   resetChallengeStuff()
-  player.money = isAchEnabled("r111") ? player.money : new Decimal(10)
   player.sacrificed = new Decimal(0)
 
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
@@ -49,25 +48,21 @@ function softReset(bulk) {
       player.eightCost = new Decimal(4e6)
   }
   if (player.currentChallenge == "postc1") player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
-  if (player.resets == 1 && player.currentChallenge == "") {
-      if (player.infinityUpgrades.includes("skipReset2")) player.resets++;
-      if (player.infinityUpgrades.includes("skipReset3")) player.resets++;
-      if (player.infinityUpgrades.includes("skipResetGalaxy")) {
-          player.resets++;
-          if (player.galaxies == 0) player.galaxies = 1
-      }
-  }
-if (player.currentChallenge == "postc2") {
-      player.eightAmount = new Decimal(1);
-      player.eightBought = 1;
-  }
 
-
-  if (isAchEnabled("r36")) player.tickspeed = player.tickspeed.times(0.98);
-  if (isAchEnabled("r45")) player.tickspeed = player.tickspeed.times(0.98);
-  if (isAchEnabled("r66")) player.tickspeed = player.tickspeed.times(0.98);
-  if (isAchEnabled("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
-
+    if (player.resets < 4 && player.currentChallenge === "") {
+        if (player.infinityUpgrades.includes("skipResetGalaxy")) {
+            player.resets = 4;
+            if (player.galaxies === 0) player.galaxies = 1
+        }
+        else if (player.infinityUpgrades.includes("skipReset3")) player.resets = 3;
+        else if (player.infinityUpgrades.includes("skipReset2")) player.resets = 2;
+        else if (player.infinityUpgrades.includes("skipReset1")) player.resets = 1;
+    }
+    if (player.currentChallenge == "postc2") {
+        player.eightAmount = new Decimal(1);
+        player.eightBought = 1;
+        player.resets = 4;
+    }
 
   if (player.eternities < 30) {
       document.getElementById("secondRow").style.display = "none";
@@ -83,9 +78,9 @@ if (player.currentChallenge == "postc2") {
       document.getElementById("eightRow").style.display = "none";
   }
 
-  updateTickSpeed()
-
-  startMoneyCheck()
+  resetTickspeed();
+  updateTickSpeed();
+  resetMoney();
   if (player.resets >= 10) {
       giveAchievement("Boosting to the max");
   }
@@ -132,12 +127,5 @@ document.getElementById("softReset").onclick = function () {
 };
 
 function setInitialDimensionPower () {
-    player.firstPow = getDimensionBoostPower().pow(player.resets)
-    player.secondPow = getDimensionBoostPower().pow(player.resets - 1).max(1)
-    player.thirdPow = getDimensionBoostPower().pow(player.resets - 2).max(1)
-    player.fourthPow = getDimensionBoostPower().pow(player.resets - 3).max(1)
-    player.fifthPow = getDimensionBoostPower().pow(player.resets - 4).max(1)
-    player.sixthPow = getDimensionBoostPower().pow(player.resets - 5).max(1)
-    player.seventhPow = getDimensionBoostPower().pow(player.resets - 6).max(1)
-    player.eightPow = getDimensionBoostPower().pow(player.resets - 7).max(1)
-  }
+    applyDimensionBoost();
+}

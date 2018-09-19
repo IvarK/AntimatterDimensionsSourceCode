@@ -70,6 +70,7 @@ var player = {
     totalmoney: new Decimal(0),
     achPow: 1,
     newsArray: [],
+    // TODO: Not used, remove
     interval: null,
     lastUpdate: new Date().getTime(),
     autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -1505,13 +1506,6 @@ function resetDimensions() {
     player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
 }
 
-function resetTickspeed() {
-    player.tickSpeedCost = new Decimal(1000)
-    player.tickspeed = new Decimal(1000)
-    player.tickspeedMultiplier = new Decimal(10)
-    player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained))
-}
-
 function resetChallengeStuff() {
     player.chall3Pow = new Decimal(0.01)
     player.matter = new Decimal(0)
@@ -1520,12 +1514,17 @@ function resetChallengeStuff() {
     player.postC3Reward = new Decimal(1)
 }
 
-function startMoneyCheck() {
-    if (isAchEnabled("r21")) player.money = new Decimal(100).max(player.money);
-    if (isAchEnabled("r37")) player.money = new Decimal(1000).max(player.money);
-    if (isAchEnabled("r54")) player.money = new Decimal(2e5).max(player.money);
-    if (isAchEnabled("r55")) player.money = new Decimal(1e10).max(player.money);
-    if (isAchEnabled("r78")) player.money = new Decimal(1e25).max(player.money);
+function resetMoney() {
+    if (isAchEnabled("r111")) {
+        return;
+    }
+    let money = 10;
+    if (isAchEnabled("r78")) money = 1e25;
+    else if (isAchEnabled("r55")) money = 1e10;
+    else if (isAchEnabled("r54")) money = 2e5;
+    else if (isAchEnabled("r37")) money = 1000;
+    else if (isAchEnabled("r21")) money = 100;
+    player.money = new Decimal(money);
 }
 
 function calcSacrificeBoost() {

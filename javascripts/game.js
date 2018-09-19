@@ -1453,14 +1453,16 @@ function percentToNextRealityMachine() {
     return Math.min(((ret - Math.floor(ret)) * 100), 99.9).toFixed(1);
 }
 
-function gainedGlyphLevel() {
+function gainedGlyphLevel(round) {
+    if (round === undefined) round = true
     var replPow = 0.4
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
     }
-    var ret = Math.round(Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000)
-    if (player.reality.upg.includes(18))ret *= Math.sqrt(Math.log10(player.eternities)) * 0.55
+    var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
+    if (player.reality.upg.includes(18)) ret *= Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.55, 1)
+    if (round) ret = Math.round(ret)
     if (player.reality.perks.includes(21)) ret += 1
     if (player.reality.perks.includes(24)) ret += 1
     if (ret == Infinity || isNaN(ret)) return 0
@@ -1473,7 +1475,7 @@ function percentToNextGlyphLevel() {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
     }
-    var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
+    var ret = gainedGlyphLevel(false)
     var retOffset = 0;
     if (Math.round(ret) > ret) {
         retOffset = 0.5;

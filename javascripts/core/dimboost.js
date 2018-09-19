@@ -26,29 +26,50 @@ function applyDimensionBoost() {
 }
 
 function softReset(bulk) {
-  //if (bulk < 1) bulk = 1 (fixing issue 184)
-  if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
-  player.resets+=bulk;
-  if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
+    //if (bulk < 1) bulk = 1 (fixing issue 184)
+    if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
+    player.resets += bulk;
+    if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
 
-  /**
-   * All reset stuff are in these functions now. (Hope this works)
-   */
-  resetDimensions()
-  applyDimensionBoost()
-  resetChallengeStuff()
-  player.sacrificed = new Decimal(0)
+    /**
+     * All reset stuff are in these functions now. (Hope this works)
+     */
+    player.sacrificed = new Decimal(0);
+    resetDimensions();
+    applyDimensionBoost();
+    resetChallengeStuff();
+    applyChallengeModifiers();
+    skipResetsIfPossible();
+    hidePreMilestone30Elements();
+    resetTickspeed();
+    updateTickSpeed();
+    if (!isAchEnabled("r111")) {
+        resetMoney();
+    }
+    if (player.resets >= 10) {
+        giveAchievement("Boosting to the max");
+    }
+}
 
-  if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc1") {
-      player.thirdCost = new Decimal(100)
-      player.fourthCost = new Decimal(500)
-      player.fifthCost = new Decimal(2500)
-      player.sixthCost = new Decimal(2e4)
-      player.seventhCost = new Decimal(2e5)
-      player.eightCost = new Decimal(4e6)
-  }
-  if (player.currentChallenge == "postc1") player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
+function applyChallengeModifiers() {
+    if (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") {
+        player.thirdCost = new Decimal(100);
+        player.fourthCost = new Decimal(500);
+        player.fifthCost = new Decimal(2500);
+        player.sixthCost = new Decimal(2e4);
+        player.seventhCost = new Decimal(2e5);
+        player.eightCost = new Decimal(4e6);
+    }
+    if (player.currentChallenge === "postc1")
+        player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
+    if (player.currentChallenge === "postc2") {
+        player.eightAmount = new Decimal(1);
+        player.eightBought = 1;
+        player.resets = 4;
+    }
+}
 
+function skipResetsIfPossible() {
     if (player.resets < 4 && player.currentChallenge === "") {
         if (player.infinityUpgrades.includes("skipResetGalaxy")) {
             player.resets = 4;
@@ -58,34 +79,23 @@ function softReset(bulk) {
         else if (player.infinityUpgrades.includes("skipReset2")) player.resets = 2;
         else if (player.infinityUpgrades.includes("skipReset1")) player.resets = 1;
     }
-    if (player.currentChallenge == "postc2") {
-        player.eightAmount = new Decimal(1);
-        player.eightBought = 1;
-        player.resets = 4;
-    }
-
-  if (player.eternities < 30) {
-      document.getElementById("secondRow").style.display = "none";
-      document.getElementById("thirdRow").style.display = "none";
-      document.getElementById("tickSpeed").style.visibility = "hidden";
-      document.getElementById("tickSpeedMax").style.visibility = "hidden";
-      document.getElementById("tickLabel").style.visibility = "hidden";
-      document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-      document.getElementById("fourthRow").style.display = "none";
-      document.getElementById("fifthRow").style.display = "none";
-      document.getElementById("sixthRow").style.display = "none";
-      document.getElementById("seventhRow").style.display = "none";
-      document.getElementById("eightRow").style.display = "none";
-  }
-
-  resetTickspeed();
-  updateTickSpeed();
-  resetMoney();
-  if (player.resets >= 10) {
-      giveAchievement("Boosting to the max");
-  }
 }
 
+function hidePreMilestone30Elements() {
+    if (player.eternities < 30) {
+        document.getElementById("secondRow").style.display = "none";
+        document.getElementById("thirdRow").style.display = "none";
+        document.getElementById("tickSpeed").style.visibility = "hidden";
+        document.getElementById("tickSpeedMax").style.visibility = "hidden";
+        document.getElementById("tickLabel").style.visibility = "hidden";
+        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
+        document.getElementById("fourthRow").style.display = "none";
+        document.getElementById("fifthRow").style.display = "none";
+        document.getElementById("sixthRow").style.display = "none";
+        document.getElementById("seventhRow").style.display = "none";
+        document.getElementById("eightRow").style.display = "none";
+    }
+}
 
 function getShiftRequirement(bulk) {
     let maxShiftTier = player.currentChallenge === "challenge4" ? 6 : 8;

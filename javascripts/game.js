@@ -345,6 +345,8 @@ var player = {
 
 };
 
+var keys = [];
+
 var defaultStart = $.extend(true, {}, player);
 
 let kongIPMult = 1
@@ -5830,6 +5832,7 @@ window.addEventListener('keyup', function(event) {
         document.getElementById("automatorloadsavetext").textContent = "load:"
         drawStudyTree()
     }
+    if (keys.includes(event.keyCode)) keys.splice(keys.indexOf(event.keyCode), 1);
 }, false);
 
 window.onfocus = function() {
@@ -5841,51 +5844,57 @@ window.onfocus = function() {
     drawAutomatorTree();
 }
 
-window.addEventListener('keydown', function(event) {
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false
-    const tmp = event.keyCode;
-    if (tmp >= 49 && tmp <= 56) {
-        if (shiftDown) buyOneDimension(tmp-48)
-        else buyManyDimension(tmp-48)
-        return false;
-    } else if (tmp >= 97 && tmp <= 104) {
-        if (shiftDown) buyOneDimension(tmp-96)
-        else buyManyDimension(tmp-96)
-        return false;
-    }
-    switch (event.keyCode) {
-        case 57: // D
-            giveAchievement("That dimension doesn’t exist")
-        break;
+window.addEventListener('keydown', function (event) {
+    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false;
+    if (!keys.includes(event.keyCode)) keys.push(event.keyCode);
+    console.log(keys);
+    for (let i = 0; i < keys.length; i++) {
+    const tmp = keys[i];
+        if (tmp >= 49 && tmp <= 56) {
+            if (shiftDown) buyOneDimension(tmp-48)
+            else buyManyDimension(tmp-48)
+            continue;
+        } else if (tmp >= 97 && tmp <= 104) {
+            if (shiftDown) buyOneDimension(tmp-96)
+            else buyManyDimension(tmp-96)
+            continue;
+        }
+        switch (keys[i]) {
+            case 57: // 9
+                giveAchievement("That dimension doesn’t exist")
+                continue;
 
-        case 65: // A
-            toggleAutoBuyers();
-        break;
+            case 65: // A
+                toggleAutoBuyers();
+                continue;
 
-        case 68: // D
-            document.getElementById("softReset").onclick()
-        break;
+            case 68: // D
+                document.getElementById("softReset").onclick()
+                continue;
 
-        case 71: // G
-            document.getElementById("secondSoftReset").onclick()
-        break;
+            case 71: // G
+                document.getElementById("secondSoftReset").onclick()
+                continue;
 
-        case 77: // M
-            document.getElementById("maxall").onclick()
-        break;
+            case 77: // M
+                document.getElementById("maxall").onclick()
+                continue;
 
-        case 83: // S
-            document.getElementById("sacrifice").onclick()
-        break;
+            case 83: // S
+                document.getElementById("sacrifice").onclick()
+                continue;
 
-        case 84: // T
-            if (shiftDown) buyTickSpeed()
-            else buyMaxTickSpeed()
-        break;
+            case 84: // T
+                if (shiftDown) buyTickSpeed()
+                else buyMaxTickSpeed()
+                continue;
 
-        case 82: //R
-            replicantiGalaxy()
-        break;
+            case 82: //R
+                replicantiGalaxy()
+                continue;
+        }
+        keys.splice(i, 1);
+        i -= 1;
     }
   }, false);
 

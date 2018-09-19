@@ -53,36 +53,26 @@ function bigCrunchReset() {
     autoS = true;
     player.infinitied = player.infinitied + Math.round(gainedInfinities());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-    player.thisInfinityTime = 0;
-    player.resets = 0;
-    player.galaxies = 0;
-    player.tickDecrease = 0.9;
 
     checkBigCrunchAchievements();
-    if (!player.options.retryChallenge) player.currentChallenge = "";
-
-    if (player.replicanti.unl && !isAchEnabled("r95")) player.replicanti.amount = new Decimal(1);
-
-    player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0;
-
-    if (player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") document.getElementById("matter").style.display = "block";
-    else document.getElementById("matter").style.display = "none";
-
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
-;
-    document.getElementById("matter").style.display = "none";
-    document.getElementById("quickReset").style.display = "none";
+    if (!player.options.retryChallenge)
+        player.currentChallenge = "";
 
     checkForEndMe();
 
     kong.submitStats('Infinitied', getInfinitied());
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 
-    softReset(0, true);
-    resetMoney();
-    updateAutobuyers();
-    resetInfDimensions();
-    IPminpeak = new Decimal(0);
+    let currenReplicanti = player.replicanti.amount;
+    let currentReplicantiGalaxies = player.replicanti.galaxies;
+    secondSoftReset();
+
+    if (isAchEnabled("r95")) {
+        player.replicanti.amount = currenReplicanti;
+    }
+    if (player.timestudy.studies.includes(33)) {
+        player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+    }
 
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc10") {
         for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
@@ -105,11 +95,39 @@ function bigCrunchReset() {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
 
-    Marathon2 = 0;
-
-    updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
+}
+
+function secondSoftReset() {
+    player.resets = 0;
+    player.galaxies = 0;
+    player.tickDecrease = 0.9;
+    resetMoney();
+    softReset(0);
+    updateAutobuyers();
+    resetInfDimensions();
+    updateChallenges();
+    IPminpeak = new Decimal(0);
+    if (player.replicanti.unl)
+        player.replicanti.amount = new Decimal(1);
+    player.replicanti.galaxies = 0;
+    player.thisInfinityTime = 0;
+    document.getElementById("replicantireset").innerHTML =
+        "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
+    updateChallengeElements();
+    Marathon2 = 0;
+}
+
+function updateChallengeElements() {
+    if (name === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6")
+        document.getElementById("matter").style.display = "block";
+    else
+        document.getElementById("matter").style.display = "none";
+    if (name === "challenge12" || name === "challenge9" || name === "challenge5" || player.currentChallenge === "postc1" || player.currentChallenge === "postc4" || player.currentChallenge === "postc5" || player.currentChallenge === "postc6" || player.currentChallenge === "postc8")
+        document.getElementById("quickReset").style.display = "inline-block";
+    else
+        document.getElementById("quickReset").style.display = "none";
 }
 
 function checkBigCrunchAchievements() {

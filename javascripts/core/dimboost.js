@@ -25,9 +25,9 @@ function applyDimensionBoost() {
     }
 }
 
-function softReset(bulk, bigCrunch) {
+function softReset(bulk) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
-    if (!player.break && player.money.gt(Number.MAX_VALUE) && !bigCrunch) return;
+    if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
     player.resets += bulk;
     if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
 
@@ -43,8 +43,10 @@ function softReset(bulk, bigCrunch) {
     hidePreMilestone30Elements();
     resetTickspeed();
     updateTickSpeed();
+    let currentMoney = player.money;
+    resetMoney();
     if (!isAchEnabled("r111")) {
-        resetMoney();
+        player.money = player.money.max(currentMoney);
     }
     if (player.resets >= 10) {
         giveAchievement("Boosting to the max");
@@ -135,7 +137,3 @@ document.getElementById("softReset").onclick = function () {
     if (mult > 1) floatText(name + "D", "x" + shortenDimensions(mult))
   }
 };
-
-function setInitialDimensionPower () {
-    applyDimensionBoost();
-}

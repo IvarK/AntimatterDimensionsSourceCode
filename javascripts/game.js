@@ -3029,23 +3029,26 @@ function reality(force) {
         if (player.reality.glyphs.active.length == 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true
         if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length == 4) {
           var tempBool = true
-          for (i in player.reality.glyphs.active) {
+          for (let i in player.reality.glyphs.active) {
               if (player.reality.glyphs.active[i].rarity < 1.5) tempBool = false
           }
           player.reality.upgReqs[16] = tempBool
         }
         if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length == 4) {
           var tempBool = true
-          for (i in player.reality.glyphs.active) {
+          for (let i in player.reality.glyphs.active) {
             let count = 0
-            for (let y in player.reality.glyphs.active[i].effects) count++
-            if (count < 2) tempBool = false
+            for (let y in player.reality.glyphs.active[i].effects) {
+                count++
+            }
+            if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
           }
+          console.log(tempBool)
           player.reality.upgReqs[17] = tempBool
         }
         if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length == 4) {
             var tempBool = true
-            for (i in player.reality.glyphs.active) {
+            for (let i in player.reality.glyphs.active) {
                 if (player.reality.glyphs.active[i].level < 10) tempBool = false
             }
             player.reality.upgReqs[18] = tempBool

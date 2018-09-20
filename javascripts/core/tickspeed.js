@@ -121,11 +121,35 @@ function buyMaxTickSpeed() {
 
 
 function updateTickSpeed() {
-  var exp = player.tickspeed.e;
-  if (exp > 1) document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.toFixed(0);
-  else {
-      document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
-  }
+	let exp = player.tickspeed.e;
+	let tickSpeedText;
+	if (exp > 1)
+		tickSpeedText = 'Tickspeed: ' + player.tickspeed.toFixed(0);
+	else 
+		tickSpeedText = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
+  
+	// Accelerated game speed suffix
+	let gameSpeedMult = 1;
+	if (player.currentEternityChall == "eterc12")
+		gameSpeedMult /= 1000;
+	try {
+		for (let i = 0; i < player.reality.glyphs.active.length; i++) {
+			let currGlyph = player.reality.glyphs.active[i];
+			if (currGlyph.type === "time" && currGlyph.effects.speed != undefined)
+				gameSpeedMult *= currGlyph.effects.speed;
+		}
+	}
+	catch (err) {
+		// No glyphs
+	}
+	if (player.wormhole.active)
+		gameSpeedMult *= player.wormhole.power;
+	let speedAccelText = "   (γ = " + gameSpeedMult.toFixed(3) + ")";
+  
+	if (gameSpeedMult != 1)
+		document.getElementById("tickSpeedAmount").textContent = tickSpeedText + speedAccelText;
+	else
+		document.getElementById("tickSpeedAmount").textContent = tickSpeedText;
 }
 
 function resetTickspeed() {

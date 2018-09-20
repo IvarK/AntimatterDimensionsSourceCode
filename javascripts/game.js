@@ -3206,12 +3206,15 @@ function gameLoop(diff) {
         }
     }
 
+	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
     document.getElementById("eternitybtn").innerHTML = (player.eternities == 0) ? "Other times await.. I need to become Eternal" : "<b>I need to become Eternal.</b><br>"+"Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
     if (gainedEternityPoints().gte(1e6)) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
     if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(getTachyonGain()) +" Tachyon particles."
-    if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
+    
+	// EC completion
+	if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
     var challNum = parseInt(player.currentEternityChall.split("eterc")[1])
     if (player.reality.perks.includes(32) && player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall)))) {
 		var completitions = 1
@@ -3235,6 +3238,12 @@ function gameLoop(diff) {
 		document.getElementById("eternitybtn").innerHTML = "Other challenges await.. <br>+" + completitions + " completitions on Eternity" +
                                                          ((completitions + ECTimesCompleted(player.currentEternityChall) == 5) ? "" : nextGoalText)
     }
+	
+	// Warning to not eternity immediately when reality launches (should only really show up when it matters, in terms of resetting very large amounts of replicanti)
+	if (player.realities == 0 && player.eternityPoints.exponent >= 4000 && player.timestudy.theorem > 5e9 && player.replicanti.amount.exponent > 20000)
+		document.getElementById("eternitybtn").innerHTML = "Gain <b>" + (player.dilation.active ? shortenMoney(getTachyonGain()) +" Tachyon particles</b><br>" : shortenDimensions(gainedEternityPoints()) + " EP</b><br>")
+			+ "You should explore a bit and look at new content before clicking me!";
+	
     updateMoney();
     updateCoinPerSec();
     updateDimensions()
@@ -3660,8 +3669,8 @@ function gameLoop(diff) {
 			var textLines = oldText.split("\n");
 			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
 		}
-  }
-
+	}
+	
     player.lastUpdate = thisUpdate;
 }
 
@@ -4137,6 +4146,7 @@ function init() {
     showDimTab('antimatterdimensions')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)
+	initializeWormhole();
     load_game();
     updateTickSpeed();
     updateAutobuyers();
@@ -4144,7 +4154,6 @@ function init() {
     kong.init();
 
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
-
 }
 
 setInterval(function () {

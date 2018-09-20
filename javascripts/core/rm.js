@@ -102,8 +102,9 @@ function generateRandomGlyph(level) {
   }
   player.reality.glyphs.last = type;
   var strength = gaussian_bell_curve()
+  if (player.reality.upg.includes(16)) strength *= 1.3
   var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-  if (player.reality.upg.includes(17)) effectAmount = Math.min(effectAmount + 1, 4)
+  if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1

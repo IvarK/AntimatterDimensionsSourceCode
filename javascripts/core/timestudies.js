@@ -342,28 +342,13 @@ function updateTimeStudyButtons() {
   else document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP"
 }
 
-function studiesUntil(id, ...paths) {
-    //id: the study you want to buy until
-    //paths is a an d following args given after id which specify which of the locked paths the player chooses (optional and not case sensitive, used to make automator more flexible)
-    let lookup = [['nd','id','td'], ['active','passive','idle']];
+function studiesUntil(id) {
     let col = id % 10;
     let row = Math.floor(id / 10);
     let path = [0, 0];
     for (let i = 1; i < 4; i++) {
         if (player.timestudy.studies.includes(70 + i)) path[0] = i;
         if (player.timestudy.studies.includes(120 + i)) path[1] = i;
-    }
-    if (paths.length > 0 && paths !== undefined) {
-        for (let i = 0; i < paths.length; i++) {
-            let check = -1;
-            for (let j = 0; j < lookup.length; j++) {
-                if (lookup[j].includes(paths[i].toLowerCase())) {
-                    check = j;
-                    break;
-                }
-            }
-            if (check > -1 && path[check] === 0) path[check] = lookup[i].indexOf(paths[i]) + 1;
-        }
     }
   if ((row > 10 && path[0] === 0 && !player.dilation.upgrades.includes(8)) || (row > 14 && path[1] === 0)) return;
   for (let i = 1; i < row; i++) {
@@ -375,6 +360,101 @@ function studiesUntil(id, ...paths) {
       else for (let j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
   }
   buyTimeStudy(id, studyCosts[all.indexOf(id)], 0);
+}
+
+function studyPath(mode, args) {
+    if (!(mode === 'none' || mode === 'all')) return false;
+    if (args === undefined) args = [];
+    let row = 0;
+    let master = [];
+    let locks = [0, 0, 0];
+    main: while (row < 24) {
+        row++;
+        if (mode === 'none') {
+            if (row >= 2 && row <= 4) {
+                for (let i = 20; i <= 40; i += 10) {
+                    if (args.includes(i + 1) && !master.includes(row*10 + 1)) master.push(row*10 + 1);
+                    if (args.includes(i + 2) && !master.includes(row*10 + 2)) master.push(row*10 + 2);
+                }
+                if (row === 3 && args.includes(33)) master.push(33);
+                continue main;
+            }
+            if (row === 6) {
+                if (args.includes(62)) master.push(61, 62);
+                else master.push(61);
+                continue main;
+            }
+            if (row === 16) {
+                if (args.includes(161)) master.push(161);
+                if (args.includes(162)) master.push(162);
+                continue main;
+            }
+        }
+        if (row >= 7 && row <= 10) {
+            if (mode === 'all' && player.dilation.upgrades.includes(8)) {
+                master.push(row*10 + 1, row*10 + 2, row*10 + 3);
+                continue main;
+            }
+            if (locks[0] === 0) {
+                let temp = [];
+                let options = ['nd', 'id', 'td'];
+                for (let k = 0; k < args.length; k++) {
+                    for (let i = 70; i <= 100; i += 10) {
+                        for (let j = 1; j <= 3; j++) {
+
+                            if (args[k] === i + j || args[k] === options[j - 1]) temp.push(j);
+                        }
+                    }
+                }
+                if (temp.length === 0) break main;
+                locks[0] = temp[0];
+                temp = temp.filter(function (x) { if (x !== locks[0]) return x;});
+                if(temp.length > 0)locks[2] = temp[0];
+            }
+            master.push(row*10 + locks[0]);
+            continue main;
+        }
+        if (row >= 12 && row <= 14) {
+            if (locks[1] === 0) {
+                let temp = [];
+                let options = ['active', 'passive', 'idle'];
+                for (let k = 0; k < args.length; k++) {
+                    for (let i = 120; i <= 140; i += 10) {
+                        for (let j = 1; j <= 3; j++) {
+                            if (args[k] === i + j || args[k] === options[j - 1]) temp.push(j);
+                        }
+                    }
+                }
+                if (temp.length === 0) break main;
+                locks[1] = temp[0];
+            }
+            master.push(row*10 + locks[1]);
+            continue main;
+        }
+        if (row === 22 || row === 23) {
+            col: for (let i = 1; i <= 8 / (row - 21); i += 2) {
+                for (let j = 0; j < args.length; j++) {
+                    for (let k = 0; k < 2; k++) {
+                        if (args[j] === row*10 + i + k) {
+                            master.push(args[j]);
+                            continue col;
+                        }
+                    }
+                }
+            }
+            continue main;
+        }
+        for (let i = 1; all.includes(row * 10 + i); i++)master.push(row * 10 + i);
+    }
+    if (locks[2] > 0) {
+        master.push(70 + locks[2], 80 + locks[2], 90 + locks[2], 100 + locks[2]);
+    }
+    let string = master.reduce(function (acc, x) {
+        return acc += x + ',';
+    }, '');
+    string = string.slice(0, -1);
+    string += '|0';
+    importStudyTree(string);
 }
 
 

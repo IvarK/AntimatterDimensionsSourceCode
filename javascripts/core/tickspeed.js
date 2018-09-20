@@ -97,13 +97,23 @@ function buyMaxTickSpeed() {
       if (buying <= 0) return false
       player.tickspeed = player.tickspeed.times(Decimal.pow(mult, buying));
       if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(Decimal.pow(1.05+(player.galaxies*0.005), buying))
-      for (var i = 0; i<buying-1; i++) {
-          player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
-          player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease)
-      }
+      increaseTickSpeedCost(buying - 1);
       if (player.money.gte(player.tickSpeedCost)) player.money = player.money.minus(player.tickSpeedCost)
       player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
       player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease)
+
+      function increaseTickSpeedCost(n) {
+          // Unoptimized version
+          // for (var i = 0; i < n; i++) {
+          //    cost *= mult;
+          //    mult *= multDec;
+          // }
+          let cost = player.tickSpeedCost;
+          let mult = player.tickspeedMultiplier;
+          let multDec = new Decimal(player.tickSpeedMultDecrease);
+          player.tickSpeedCost = cost.times(mult.pow(n)).times(multDec.pow(n * (n - 1) / 2));
+          player.tickspeedMultiplier = mult.times(multDec.pow(n));
+      }
   }
 
   updateTickSpeed()
@@ -116,4 +126,16 @@ function updateTickSpeed() {
   else {
       document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
   }
+}
+
+function resetTickspeed() {
+    player.tickSpeedCost = new Decimal(1000);
+    player.tickspeedMultiplier = new Decimal(10);
+    let tickspeed = new Decimal(1000);
+    if (isAchEnabled("r36")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r45")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r66")) tickspeed = tickspeed.times(0.98);
+    if (isAchEnabled("r83")) tickspeed = tickspeed.times(Decimal.pow(0.95, player.galaxies));
+    tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
+    player.tickspeed = tickspeed;
 }

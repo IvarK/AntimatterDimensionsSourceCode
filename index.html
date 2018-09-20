@@ -2145,7 +2145,7 @@
                                 <div>Automatic DimBoosts</div>
                                 <button class="autobuyerbtn" id="buyerBtnDimBoost">46% smaller interval<br>Cost: 2 points</button>
                                 <div style="font-size: 80%"id="intervalDimBoost">Current interval: 30 seconds</div>
-                                <span style="font-size: 80%">Max 8ths used on reset:</span>
+                                <span style="font-size: 80%">Max DimBoosts:</span>
                                 <input type="text" onchange="updatePriorities()" id="priority10"></input>
                                 <br>
                                 <span style="font-size: 80%">Galaxies required to always Dimboost:</span>
@@ -2564,8 +2564,8 @@
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(15)" id="rupg15"><b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently Xx<br>Cost: 50 RM</div></td>
                     </tr>
                     <tr>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(16)" id="rupg16" style="font-size: 0.85em;"><b>Requires: Reality with 4 glyphs with uncommon or better rarity.</b><br>Improve the glyph rarity formula (not implemented)<br>Cost: 1500 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(17)" id="rupg17"><b>Requires: Reality with 4 glyphs, with each having 2 effects</b><br>+1 effects on glyphs<br>Cost: 1500 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(16)" id="rupg16" style="font-size: 0.85em;"><b>Requires: Reality with 4 glyphs with uncommon or better rarity.</b><br>Improve the glyph rarity formula<br>Cost: 1500 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(17)" id="rupg17"><b>Requires: Reality with 4 glyphs, with each having 2 effects</b><br>50% chance to get +1 effects on glyphs<br>Cost: 1500 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(18)" id="rupg18"><b>Requires: Reality with 4 level 10 or higher glyphs equipped.</b><br>Eternities affect glyph level<br>Cost: 1500 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(19)" id="rupg19"><b>Requires: Have a total of 30 glyphs</b><br>You can sacrifice power and time glyphs for permanent bonuses (not implemented)<br>Cost: 1500 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(20)" id="rupg20" style="font-size: 0.85em;"><b>Requires: 2 years total play time</b><br>You can have multiple wormholes (not implemented)<br>Cost: 1500 RM</div></td>
@@ -2611,18 +2611,22 @@
                     <br>
                     <table class="table" id="studytable">
                         <tr>
-                            <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 2)">EP<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstructionbought target" id="automator23">STUDY<br></button></td>
-                            <td><button class="automatorinstructionbought target" id="automator24">STUDYUNTIL</button></td>
+                            <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 1)">IF<br>Cost: 1 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator23" onclick="buyAutomatorInstruction(23, 2)">EP<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstructionbought target" id="automator24">STUDY<br></button></td>
+                            <td><button class="automatorinstructionbought target" id="automator25">STUDYUNTIL</button></td>
+                            <td><button class="automatorinstruction target" id="automator26" onclick="buyAutomatorInstruction(26, 50)">STUDYPATH<br>Cost: 50 RM</button></td>
                         </tr>
                     </table>
                     <table class="table" id="studytable">
                         <tr>
-                            <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 3)">IP<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 3)">TTEP<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 2)">TTIP<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 1)">GOTO<br>Cost: 1 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 3)">IP<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 3)">TTEP<br>Cost: 3 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator35" onclick="buyAutomatorInstruction(35, 2)">TTIP<br>Cost: 2 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator36" onclick="buyAutomatorInstruction(36, 500)">STUDYIMPORT<br>Cost: 500 RM</button></td>
                         </tr>
                     </table>
                     <table class="table" id="studytable">
@@ -2759,6 +2763,7 @@
     <div id="progress" style="display:none">
         <div id="progressbar"><span id="progresspercent" ach-tooltip="Percentage until Infinity">0%</span></div>
     </div>
+    <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>
 <div class="videocontainer">
@@ -2810,6 +2815,7 @@
 <script type="text/javascript" src="javascripts/core/time_dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimboost.js"></script>
 <script type="text/javascript" src="javascripts/core/galaxy.js"></script>
+<script type="text/javascript" src="javascripts/core/big_crunch.js"></script>
 <script type="text/javascript" src="javascripts/core/replicanti.js"></script>
 <script type="text/javascript" src="javascripts/core/timestudies.js"></script>
 <script type="text/javascript" src="javascripts/core/rm.js"></script>

@@ -95,6 +95,7 @@ function mainIteration() {
               id: row[2]
           }
       } else if (row[0] == "if") {
+          if (!player.reality.automatorCommands.includes(21)) return false;
           var current = {
               action: row[1],
               target: row[2],
@@ -152,7 +153,8 @@ function mainIteration() {
           toggle(current)
           automatorIdx+=1
           break;
-        case "goto":
+          case "goto":
+          if (!player.reality.automatorCommands.includes(31)) return false
           automatorIdx = parseInt(current.target)-1
           break;
       }
@@ -175,14 +177,20 @@ function buy(current) {
       case "studyuntil":
           id = parseInt(current.id);
           if (!player.timestudy.studies.includes(id)) {
-              if (current.args === undefined) studiesUntil(id);
-              else studiesUntil(id, ...current.args);//passes arguments into the studies until function.
-        return false
-      }
-      else {
+              studiesUntil(id);//passes arguments into the studies until function.
         return true
-      }
-      break;
+      } else return false
+          break;
+      case "studypath":
+          if (!player.reality.automatorCommands.includes(26)) return false;
+          studyPath(current.id, current.args);
+          return true;
+          break;
+      case "studyimport":
+          if (!player.reality.automatorCommands.includes(36)) return false;
+          importStudyTree(current.id);
+          return true;
+          break;
     case "ttmax":
       if (!player.reality.automatorCommands.includes(44)) return false
       maxTheorems()
@@ -351,11 +359,6 @@ function toggle(current) {
         updateAutobuyers()
         return true
         break;
-      case "infinity":
-        player.autobuyers[11].isOn = !player.autobuyers[9].isOn
-        updateAutobuyers()
-        return true
-        break;
       case "sacrifice":
         player.autoSacrifice.isOn = !player.autoSacrifice.isOn
         updateAutobuyers()
@@ -363,7 +366,7 @@ function toggle(current) {
         break;
       case "eternity":
         player.eternityBuyer.isOn = !player.eternityBuyer.isOn
-        updateAutobuyers()
+        teupdateAutobuyers()
         return true
         break;
       case "rg":
@@ -410,8 +413,11 @@ function buyAutomatorInstruction(id, cost) {
 var automatorparents = {
   21: 11,
   22: 11,
-  31: 11,
+  23: 11,
+  31: 21,
   32: 11,
+  33: 11,
+  36: 26,
   41: 11,
   42: 11,
   51: 41,
@@ -438,9 +444,9 @@ function canBuyAutomatorInstruction(id) {
   return false
 }
 
-var allInstructions = [11, 12, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]
-var instructionCosts = [1, 0,  3,  2,  0,  0,  3,  2,  3,  2,  3,  2,  3,  20, 30, 10, 30, 30, 30, 10, 30, 30, 30, 30, 30, 30, 30, 30, 30]
-var automatorCommands = [11, 12, 51, 53, 54, 61, 62, 71, 72, 73]
+var allInstructions = [11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]
+var instructionCosts = [1, 0, 1, 3,  2,  0,  0, 50, 1, 3,  2,  3,  2,  3,  2, 500,  3,  20, 30, 10, 30, 30, 30, 10, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+var automatorCommands = [11, 12, 21, 31, 51, 53, 54, 61, 62, 71, 72, 73]
 function updateAutomatorTree() {
   for (var i=0; i<allInstructions.length; i++) {
     if (!player.reality.automatorCommands.includes(allInstructions[i])) {

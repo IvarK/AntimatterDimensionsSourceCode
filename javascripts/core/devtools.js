@@ -324,5 +324,17 @@ dev.updateTestSave = function() {
   if (player.options.testVersion == 12) {
     player.reality.upgReqs.push(false, false, false, false, false)
     player.options.testVersion = 13
-  }
+    }
+    if (player.options.testVersion === 13) {
+        for (let i = 0; i < player.reality.automatorCommands.length; i++) {
+            let temp = player.reality.automatorCommands[i];
+            if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
+            player.reality.automatorCommands[i] = temp;
+        }
+        if (!player.reality.automatorCommands.includes(24)) player.reality.automatorCommands.push(24);
+        if (!player.reality.automatorCommands.includes(25)) player.reality.automatorCommands.push(25);
+        if (!player.reality.automatorCommands.includes(12)) player.reality.automatorCommands.push(12);
+        updateAutomatorTree();
+        player.options.testVersion = 14;
+    }
 }

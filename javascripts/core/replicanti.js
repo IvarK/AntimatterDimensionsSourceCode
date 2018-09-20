@@ -65,7 +65,7 @@ function maxReplicantiGalaxy(diff) {
         gainGal = maxGal - curGal;
         }
         player.replicanti.galaxies += gainGal;
-        galaxies -= 1;
+        player.galaxies -= 1;
         galaxyReset();
 }
 return diff;

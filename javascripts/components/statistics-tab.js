@@ -1,5 +1,5 @@
 Vue.component('statistics-tab', {
-  props: ['model'],
+  props: ['model', 'view', 'actions'],
   data: function() {
     return {
       tabs: [
@@ -41,5 +41,7 @@ Vue.component('statistics-tab', {
     }
   },
   template:
-    '<subtabbed-container :tabs="tabs" :model="model"></subtabbed-container>'
+    '<tab-container id="statistics" stickyFooter="true" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">\
+      <subtabbed-container :tabs="tabs" :model="model"></subtabbed-container>\
+    </tab-container>'
 });

@@ -1,10 +1,9 @@
 Vue.component('statistics-stats-tab', {
   props: ['model'],
   template:
-  // TODO statstab2 => statstab
-    '<div class="statstab2">\
+    '<div class="statstab">\
         <br>\
-        <h3 style="margin-bottom: 10px;">General</h3>\
+        <h3>General</h3>\
         <div>You have made a total of {{ totalAntimatter }} antimatter.</div>\
         <div>You have done {{ player.resets }} dimensional boosts/shifts.</div>\
         <div>You have {{ Math.round(player.galaxies) }} Antimatter Galaxies.</div>\
@@ -12,7 +11,7 @@ Vue.component('statistics-stats-tab', {
         <div v-if="realityUnlocked">Your existence has spanned {{ timeDisplay(player.totalTimePlayed) }} of time.</div>\
         <br>\
         <div v-if="infinityUnlocked">\
-            <h3 style="margin-bottom: 10px;">Infinity</h3>\
+            <h3>Infinity</h3>\
             <div>You have infinitied {{ formatResetAmount(player.infinitied) }}<span v-if="eternityUnlocked"> this eternity</span>.</div>\
             <div v-if="hasBankedInfinities">You have {{ formatAmount(player.infinitiedBank) }} banked infinities.</div>\
             <div v-if="hasBestInfinity">Your fastest Infinity is in {{ timeDisplay(player.bestInfinityTime) }}.</div>\
@@ -20,14 +19,14 @@ Vue.component('statistics-stats-tab', {
             <br>\
         </div>\
         <div v-if="eternityUnlocked">\
-            <h3 style="margin-bottom: 10px;">Eternity</h3>\
+            <h3>Eternity</h3>\
             <div>You have Eternitied {{ formatResetAmount(player.eternities) }}<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div v-if="hasBestEternity">Your fastest Eternity is in {{ timeDisplay(player.bestEternity) }}.</div>\
             <div>You have spent {{ timeDisplay(player.thisEternity) }} in this Eternity.</div>\
             <br>\
         </div>\
         <div v-if="realityUnlocked">\
-            <h3 style="margin-bottom: 10px;">Reality</h3>\
+            <h3>Reality</h3>\
             <div>You have Realitied {{ formatResetAmount(player.realities) }}.</div>\
             <div>Your fastest Reality is in {{ timeDisplay(player.bestReality) }}.</div>\
             <div>You have spent {{ timeDisplay(player.thisReality) }} in this Reality.</div>\

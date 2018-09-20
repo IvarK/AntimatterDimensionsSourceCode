@@ -67,7 +67,6 @@
             <button id="dimensionsbtn" class="tabbtn">Dimensions</button>
             <button id="optionsbtn" class="tabbtn">Options</button>
             <button id="statisticsbtn" class="tabbtn">Statistics</button>
-            <button id="statisticsVuebtn" class="tabbtn">Statistics Vue</button>
             <button id="achievementsbtn" class="tabbtn">Achievements</button>
             <button id="challengesbtn" class="tabbtn">Challenges</button>
             <button id="infinitybtn" class="tabbtn infinitytabbtn">Infinity</button>
@@ -909,129 +908,9 @@
             </p>
             <footer-links sticky="true"></footer-links>
         </div>
-        <div id = "statisticsVue" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
-            <br>
-            <statistics-tab :model="model"></statistics-tab>
-        </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>
-            <tr>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('stats')">Statistics</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('challengetimes')" id="challengetimesbtn" style="display:none" >Challenge records</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs" style="display:none">Past Infinities</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lastteneternities')" id="pasteternities" style="display:none">Past Eternities</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenrealities')" id="pastrealities" style="display:none">Past Realities</button><td>
-            </tr>
-            <div id="stats" class="statstab">
-                <br>
-                <h3 style="margin-bottom: 10px;">General</h3>
-                <div id="totalmoney">You have made x antimatter.</div>
-                <div id="totalresets">You have made x dimensional boosts/shifts.</div>
-                <div id="galaxies">You have made x Antimatter Galaxies.</div>
-                <div id="totalRealTime">You have played for </div>
-                <div id="totalTime">You have played for </div>
-                <br>
-                <div id="infinityStatistics">
-                    <h3 style="margin-bottom: 10px;">Infinity</h3>
-                    <div id="infinitied">You have infinitied x times.</div>
-                    <div id="infinitiedBank">You have infinitied x times.</div>
-                    <div id="bestInfinity">Your fastest infinity is in x.</div>
-                    <div id="thisInfinity">You have spent x in this Infinity.</div>
-                    <br>
-                </div>
-                <div id="eternityStatistics">
-                    <h3 style="margin-bottom: 10px;">Eternity</h3>
-                    <div id="eternitied">You have eternitied x times.</div>
-                    <div id="besteternity">Your fastest eternity is in x.</div>
-                    <div id="thiseternity">You have spent x in this eternity</div>
-                    <br>
-                </div>
-                <div id="realityStatistics">
-                    <h3 style="margin-bottom: 10px;">Reality</h3>
-                    <div id="realitied">You have realitied x times.</div>
-                    <div id="bestreality">Your fastest reality is in x.</div>
-                    <div id="thisreality">You have spent x in this reality</div>
-                    <br>
-                </div>
-                <div id="infoScale">If every antimatter were a planck volume, you would have enough to </div>
-            </div>
-            <div id="challengetimes" class="statstab" style="display: flex !important; flex-direction: row; justify-content: center; align-items: center;">
-                <div>
-                    <br>
-                    <div id="challengetime2"></div>
-                    <div id="challengetime3"></div>
-                    <div id="challengetime4"></div>
-                    <div id="challengetime5"></div>
-                    <div id="challengetime6"></div>
-                    <div id="challengetime7"></div>
-                    <div id="challengetime8"></div>
-                    <div id="challengetime9"></div>
-                    <div id="challengetime10"></div>
-                    <div id="challengetime11"></div>
-                    <div id="challengetime12"></div>
-                    <br>
-                    <div id="challengetimesum"></div>
-                </div>
-                <div id="infchallengetimes" style="margin-top: 53px; margin-left: 20px;">
-                    <br>
-                    <div></div>
-                    <div id="infchallengetime1"></div>
-                    <div id="infchallengetime2"></div>
-                    <div id="infchallengetime3"></div>
-                    <div id="infchallengetime4"></div>
-                    <div id="infchallengetime5"></div>
-                    <div id="infchallengetime6"></div>
-                    <div id="infchallengetime7"></div>
-                    <div id="infchallengetime8"></div>
-                    <br>
-                    <div id="infchallengetimesum"></div>
-                </div>
-            </div>
-            <div id="lasttenruns" class="statstab">
-                <div id="run1"></div>
-                <div id="run2"></div>
-                <div id="run3"></div>
-                <div id="run4"></div>
-                <div id="run5"></div>
-                <div id="run6"></div>
-                <div id="run7"></div>
-                <div id="run8"></div>
-                <div id="run9"></div>
-                <div id="run10"></div>
-                <br>
-                <div id="averagerun"></div>
-                <br>
-            </div>
-            <div id="lastteneternities" class="statstab">
-                <div id="eternityrun1"></div>
-                <div id="eternityrun2"></div>
-                <div id="eternityrun3"></div>
-                <div id="eternityrun4"></div>
-                <div id="eternityrun5"></div>
-                <div id="eternityrun6"></div>
-                <div id="eternityrun7"></div>
-                <div id="eternityrun8"></div>
-                <div id="eternityrun9"></div>
-                <div id="eternityrun10"></div>
-                <br>
-                <div id="averageEternityRun"></div>
-                <br>
-            </div>
-            <div id="lasttenrealities" class="statstab">
-                    <div id="realityrun1"></div>
-                    <div id="realityrun2"></div>
-                    <div id="realityrun3"></div>
-                    <div id="realityrun4"></div>
-                    <div id="realityrun5"></div>
-                    <div id="realityrun6"></div>
-                    <div id="realityrun7"></div>
-                    <div id="realityrun8"></div>
-                    <div id="realityrun9"></div>
-                    <div id="realityrun10"></div>
-                    <br>
-                    <div id="averageRealityRun"></div>
-                    <br>
-                </div>
+            <statistics-tab :model="model"></statistics-tab>
             <footer-links :sticky="true"></footer-links>
         </div>
         <div id="achievements" class="tab">

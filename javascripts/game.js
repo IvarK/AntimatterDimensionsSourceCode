@@ -186,62 +186,18 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-    if (getInfinitied() === 0 && player.realities === 0 && player.eternities === 0) {
-        $("#infinityStatistics").hide()
-    } else {
-        $("#infinityStatistics").show()
-        if (player.bestInfinityTime === 999999999999) $("#bestInfinity").hide()
-        else $("#bestInfinity").show()
-        document.getElementById("bestInfinity").textContent = "Your fastest Infinity is in " + timeDisplay(player.bestInfinityTime) + "."
-        document.getElementById("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
-        if (player.infinityPoints.equals(1)) {
-            document.getElementById("infinityPoints1").textContent = "You have 1 Infinity point."
-            document.getElementById("infinityPoints2").textContent = "You have 1 Infinity point."
-        }
-        else {
-            document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
-            document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
-        }
-        document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.infinitied === 1) ? " time." : " times.")
-        if (player.infinitiedBank > 0) document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times this eternity."
-
+  if (!(getInfinitied() === 0 && player.realities === 0 && player.eternities === 0)) {
+    if (player.infinityPoints.equals(1)) {
+      document.getElementById("infinityPoints1").textContent = "You have 1 Infinity point."
+      document.getElementById("infinityPoints2").textContent = "You have 1 Infinity point."
     }
-
-    if (document.getElementById("stats").style.display == "block" && document.getElementById("statistics").style.display == "block") {
-        document.getElementById("totalmoney").textContent = 'You have made a total of ' + shortenMoney(player.totalmoney) + ' antimatter.'
-        document.getElementById("totalresets").textContent = 'You have done ' + player.resets + ' dimensional boosts/shifts.'
-        document.getElementById("galaxies").textContent = 'You have ' + Math.round(player.galaxies) + ' Antimatter Galaxies.'
-        document.getElementById("totalRealTime").textContent = "You have played for " + timeDisplay(player.realTimePlayed) + "."
-        
-        if (player.realities == 0 ) {
-            $("#totalTime").hide()
-        } else {
-            $("#totalTime").show()
-            document.getElementById("totalTime").textContent = "Your existence has spanned " + timeDisplay(player.totalTimePlayed) + " of time."
-        }
-
-        if (player.eternities == 0 && player.realities === 0) {
-            $("#eternityStatistics").hide()
-        } else {
-            $("#eternityStatistics").show()
-            if (player.bestEternity === 999999999999) $("#besteternity").hide()
-            else $("#besteternity").show()
-            document.getElementById("eternitied").textContent = "You have Eternitied " + player.eternities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.eternities === 1) ? " time." : " times.")
-            document.getElementById("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
-            document.getElementById("thiseternity").textContent = "You have spent "+timeDisplay(player.thisEternity)+" in this Eternity."
-        }
-
-        if (player.realities == 0) {
-            $("#realityStatistics").hide()
-        } else {
-            $("#realityStatistics").show()
-            document.getElementById("realitied").textContent = "You have Realitied " + player.realities.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ((player.realities === 1) ? " time." : " times.")
-            document.getElementById("bestreality").textContent = "Your fastest Reality is in "+timeDisplay(player.bestReality)+"."
-            document.getElementById("thisreality").textContent = "You have spent "+timeDisplay(player.thisReality)+" in this Reality."
-        }
+    else {
+      document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
+      document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
     }
+  }
 
-    if (document.getElementById("infinity").style.display == "block") {
+  if (document.getElementById("infinity").style.display == "block") {
         if (document.getElementById("preinf").style.display == "block") {
             document.getElementById("infi11").innerHTML = "Normal dimensions gain a multiplier based on time played <br>Currently: " + (Math.pow(0.5 * player.totalTimePlayed / 60000, 0.15)).toFixed(2) + "x<br>Cost: 1 IP"
             document.getElementById("infi12").innerHTML = "First and Eighth Dimensions gain a multiplier based on infinitied stat<br>Currently: " + shortenMultiplier(dimMults()) + "x<br>Cost: 1 IP"
@@ -1663,75 +1619,34 @@ function toggleBulk() {
 }
 
 function updateChallengeTimes() {
-document.getElementById("challengetime2").textContent = "Challenge  " + 2 + " time record: " + timeDisplayShort(player.challengeTimes[0])
-    document.getElementById("challengetime3").textContent = "Challenge  " + 3 + " time record: " + timeDisplayShort(player.challengeTimes[1])
-    document.getElementById("challengetime4").textContent = "Challenge  " + 4 + " time record: " + timeDisplayShort(player.challengeTimes[6])
-    document.getElementById("challengetime5").textContent = "Challenge  " + 5 + " time record: " + timeDisplayShort(player.challengeTimes[4])
-    document.getElementById("challengetime6").textContent = "Challenge  " + 6 + " time record: " + timeDisplayShort(player.challengeTimes[8])
-    document.getElementById("challengetime7").textContent = "Challenge  " + 7 + " time record: " + timeDisplayShort(player.challengeTimes[7])
-    document.getElementById("challengetime8").textContent = "Challenge  " + 8 + " time record: " + timeDisplayShort(player.challengeTimes[9])
-    document.getElementById("challengetime9").textContent = "Challenge  " + 9 + " time record: " + timeDisplayShort(player.challengeTimes[3])
-    document.getElementById("challengetime10").textContent = "Challenge " + 10 + " time record: " + timeDisplayShort(player.challengeTimes[2])
-    document.getElementById("challengetime11").textContent = "Challenge " + 11 + " time record: " + timeDisplayShort(player.challengeTimes[10])
-    document.getElementById("challengetime12").textContent = "Challenge " + 12 + " time record: " + timeDisplayShort(player.challengeTimes[5])
-	var temp = 0
-	for (var i=0; i<11; i++) {
-		temp += player.challengeTimes[i]
-	}
-	document.getElementById("challengetimesum").textContent = "Sum of challenge time records is " + timeDisplayShort(temp)
-
-	temp = 0
-    for (var i=0; i<8; i++) {
-        document.getElementById("infchallengetime"+(i+1)).textContent = "Infinity Challenge " + (i+1) + " time record: " + timeDisplayShort(player.infchallengeTimes[i])
-		temp += player.infchallengeTimes[i]
-    }
-	document.getElementById("infchallengetimesum").textContent = "Sum of infinity challenge time records is " + timeDisplayShort(temp)
     updateWorstChallengeTime();
 }
 
 var bestRunIppm = new Decimal(0)
 function updateLastTenRuns() {
-    let tempBest = 0
-    var tempTime = new Decimal(0)
-    var tempIP = new Decimal(0)
-    for (var i=0; i<10;i++) {
-        tempTime = tempTime.plus(player.lastTenRuns[i][0])
-        tempIP = tempIP.plus(player.lastTenRuns[i][1])
-    }
-    tempTime = tempTime.dividedBy(10)
-    tempIP = tempIP.dividedBy(10)
-    for (var i=0; i<10; i++) {
-        var ippm = player.lastTenRuns[i][1].dividedBy(player.lastTenRuns[i][0]/60000)
-        if (ippm.gt(tempBest)) tempBest = ippm
-        var tempstring = shorten(ippm) + " IP/min"
-        if (ippm<1) tempstring = shorten(ippm*60) + " IP/hour"
-        if (i === 0) document.getElementById("run"+(i+1)).textContent = "The infinity "+(i+1)+" infinity ago took " + timeDisplayShort(player.lastTenRuns[i][0]) + " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
-        else document.getElementById("run"+(i+1)).textContent = "The infinity "+(i+1)+" infinities ago took " + timeDisplayShort(player.lastTenRuns[i][0]) + " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
-    }
+  bestRunIppm = player.lastTenRuns
+    .map(function(run) { runRatePerMinute(run) })
+    .reduce(Decimal.maxReducer);
 
-    var ippm = tempIP.dividedBy(tempTime/60000)
-    var tempstring = shorten(ippm) + " IP/min"
-    if (ippm<1) tempstring = shorten(ippm*60) + " IP/hour"
-    document.getElementById("averagerun").textContent = "Last 10 infinities average time: "+ timeDisplayShort(tempTime)+" Average IP gain: "+shortenDimensions(tempIP)+" IP. "+tempstring
-
-    if (tempBest.gte(1e8)) giveAchievement("Oh hey, you're still here");
-    if (tempBest.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
-
-    bestRunIppm = tempBest
+  if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
+  if (bestRunIppm.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
 }
 
-function gainRatePerMinute(amount, time) {
-    return Decimal.divide(amount, time / 60 * 1000);
+function runRatePerMinute(run) {
+    return ratePerMinute(run[1], run[0]);
+}
+
+function ratePerMinute(amount, time) {
+    return Decimal.divide(amount, time / (60 * 1000));
 }
 
 function averageRun(runs) {
-    let sumReducer = function(acc, current) { return Decimal.add(acc, current); };
     let totalTime = runs
         .map(function(run) { return run[0] })
-        .reduce(sumReducer);
+        .reduce(Decimal.sumReducer);
     let totalAmount = runs
         .map(function(run) { return run[1] })
-        .reduce(sumReducer);
+        .reduce(Decimal.sumReducer);
     return [
         totalTime.dividedBy(runs.length),
         totalAmount.dividedBy(runs.length)
@@ -1740,29 +1655,9 @@ function averageRun(runs) {
 
 var averageEp = new Decimal(0)
 function updateLastTenEternities() {
-    let tempBest = 0
-    var tempTime = new Decimal(0)
-    var tempEP = new Decimal(0)
-    for (var i=0; i<10;i++) {
-        tempTime = tempTime.plus(player.lastTenEternities[i][0])
-        tempEP = tempEP.plus(player.lastTenEternities[i][1])
-    }
-    tempTime = tempTime.dividedBy(10)
-    tempEP = tempEP.dividedBy(10)
-    for (var i=0; i<10; i++) {
-        var eppm = player.lastTenEternities[i][1].dividedBy(player.lastTenEternities[i][0]/60000)
-        if (eppm.gt(tempBest)) tempBest = eppm
-        var tempstring = shorten(eppm) + " EP/min"
-        if (eppm<1) tempstring = shorten(eppm*60) + " EP/hour"
-        if (i === 0) document.getElementById("eternityrun"+(i+1)).textContent = "The Eternity "+(i+1)+" eternity ago took " + timeDisplayShort(player.lastTenEternities[i][0]) + " and gave " + shortenDimensions(player.lastTenEternities[i][1]) +" EP. "+ tempstring
-        else document.getElementById("eternityrun"+(i+1)).textContent = "The Eternity "+(i+1)+" eternities ago took " + timeDisplayShort(player.lastTenEternities[i][0]) + " and gave " + shortenDimensions(player.lastTenEternities[i][1]) +" EP. "+ tempstring
-    }
-
-    var eppm = tempEP.dividedBy(tempTime/60000)
-    var tempstring = shorten(eppm) + " EP/min"
-    averageEp = tempEP
-    if (eppm<1) tempstring = shorten(eppm*60) + " EP/hour"
-    document.getElementById("averageEternityRun").textContent = "Last 10 eternities average time: "+ timeDisplayShort(tempTime)+" Average EP gain: "+shortenDimensions(tempEP)+" EP. "+tempstring
+    averageEp = player.lastTenEternities
+      .reduce(Decimal.sumReducer)
+      .dividedBy(player.lastTenEternities);
 }
 
 function addEternityTime(time, ep) {
@@ -1772,29 +1667,9 @@ function addEternityTime(time, ep) {
 
 var averageRm = new Decimal(0)
 function updateLastTenRealities() {
-    let tempBest = 0
-    var tempTime = new Decimal(0)
-    var tempRM = new Decimal(0)
-    for (var i=0; i<10;i++) {
-        tempTime = tempTime.plus(player.lastTenRealities[i][0])
-        tempRM = tempRM.plus(player.lastTenRealities[i][1])
-    }
-    tempTime = tempTime.dividedBy(10)
-    tempRM = tempRM.dividedBy(10)
-    for (var i=0; i<10; i++) {
-        var rmpm = player.lastTenRealities[i][1].dividedBy(player.lastTenRealities[i][0]/60000)
-        if (rmpm.gt(tempBest)) tempBest = rmpm
-        var tempstring = shorten(rmpm) + " RM/min"
-        if (rmpm<1) tempstring = shorten(rmpm*60) + " RM/hour"
-        if (i === 0) document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" reality ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
-        else document.getElementById("realityrun"+(i+1)).textContent = "The Reality "+(i+1)+" realities ago took " + timeDisplayShort(player.lastTenRealities[i][0]) + " and gave " + shortenDimensions(player.lastTenRealities[i][1])+((player.lastTenRealities[i][1].eq(1)) ? " reality machine and a level " : " reality machines and a level ")+player.lastTenRealities[i][2]+" glyph. "+ tempstring
-    }
-
-    var rmpm = tempRM.dividedBy(tempTime/60000)
-    var tempstring = shorten(rmpm) + " RM/min"
-    averageRm = tempRM
-    if (rmpm<1) tempstring = shorten(rmpm*60) + " RM/hour"
-    document.getElementById("averageRealityRun").textContent = "Last 10 realities average time: "+ timeDisplayShort(tempTime)+" Average RM gain: "+shortenDimensions(tempRM)+" reality machines. "+tempstring
+  averageRm = player.lastTenRealities
+    .reduce(Decimal.sumReducer)
+    .dividedBy(player.lastTenRealities);
 }
 
 function addRealityTime(time, rm, level) {
@@ -2410,12 +2285,9 @@ setInterval(function() {
         for (var i=0; i < player.challenges.length; i++) {
             if (player.challenges[i].includes("post")) {
                 temp *= 1.3
-                document.getElementById("infchallengetimes").style.display = "inline-block"
             }
         }
         infDimPow = temp
-    } else {
-        document.getElementById("infchallengetimes").style.display = "none"
     }
 
     if (player.money.gte(new Decimal("1e2000")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
@@ -2477,15 +2349,6 @@ setInterval(function() {
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
 
-    if (player.eternities == 0 && player.realities == 0) document.getElementById("pasteternities").style.display = "none"
-    else document.getElementById("pasteternities").style.display = "inline-block"
-    if (player.realities == 0) document.getElementById("pastrealities").style.display = "none"
-    else document.getElementById("pastrealities").style.display = "inline-block"
-    if (player.challenges.length > 1) document.getElementById("challengetimesbtn").style.display = "inline-block"
-    else document.getElementById("challengetimesbtn").style.display = "none"
-    if (player.infinitied > 0 || player.eternities > 0 || player.realities > 0) document.getElementById("pastinfs").style.display = "inline-block"
-    else document.getElementById("pastinfs").style.display = "none"
-
     if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
         for (var i=1;i<player.eternities-9 && i < 9; i++) {
             if (player.infDimBuyers[i-1]) {
@@ -2535,9 +2398,6 @@ setInterval(function() {
     if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
         failChallenge();
     }
-
-    document.getElementById("infinitiedBank").style.display = (player.infinitiedBank > 0) ? "block" : "none"
-    document.getElementById("infinitiedBank").textContent = "You have " + player.infinitiedBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " banked infinities."
 
     if (infchallengeTimes < 750) giveAchievement("Never again")
     if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
@@ -3231,27 +3091,6 @@ function gameLoop(diff) {
     // else document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
 
     document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
-    var scale1 = [2.82e-45,1e-42,7.23e-30,5e-21,9e-17,6.2e-11,5e-8,3.555e-6,7.5e-4,1,2.5e3,2.6006e6,3.3e8,5e12,4.5e17,1.08e21,1.53e24,1.41e27,5e32,8e36,1.7e45,1.7e48,3.3e55,3.3e61,5e68,1e73,3.4e80,1e113,Number.MAX_VALUE,new Decimal("1e65000")];
-    var scale2 = [" protons."," nucleui."," Hydrogen atoms."," viruses."," red blood cells."," grains of sand."," grains of rice."," teaspoons."," wine bottles."," fridge-freezers."," Olympic-sized swimming pools."," Great Pyramids of Giza."," Great Walls of China."," large asteroids.",
-                " dwarf planets."," Earths."," Jupiters."," Suns."," red giants."," hypergiant stars."," nebulas."," Oort clouds."," Local Bubbles."," galaxies."," Local Groups."," Sculptor Voids."," observable universes."," Dimensions.", " Infinity Dimensions.", " Time Dimensions."];
-    var id = 0;
-    if (player.money.times(4.22419e-105).gt(2.82e-45)) {
-        if (player.money.times(4.22419e-105).gt(scale1[scale1.length - 1])) id = scale1.length - 1;
-        else {
-            while (player.money.times(4.22419e-105).gt(scale1[id])) id++;
-            if (id > 0) id--;
-        }
-        if (id >= 7 && id < 11) document.getElementById("infoScale").textContent = "If every antimatter were a planck volume, you would have enough to fill " + shortenMoney(player.money * 4.22419e-105 / scale1[id]) + scale2[id];
-        else document.getElementById("infoScale").textContent = "If every antimatter were a planck volume, you would have enough to make " + shortenMoney(player.money.times(4.22419e-105).dividedBy(scale1[id])) + scale2[id];
-    } else { //does this part work correctly? i doubt it does
-        if (player.money.times(1e-54) < 2.82e-45) document.getElementById("infoScale").textContent = "If every antimatter were " + shortenMoney(2.82e-45 / 1e-54 / player.money) + " attometers cubed, you would have enough to make a proton."
-        else if (player.money * 1e-63 < 2.82e-45) document.getElementById("infoScale").textContent = "If every antimatter were " + shortenMoney(2.82e-45 / 1e-63 / player.money) + " zeptometers cubed, you would have enough to make a proton."
-        else if (player.money * 1e-72 < 2.82e-45) document.getElementById("infoScale").textContent = "If every antimatter were " + shortenMoney(2.82e-45 / 1e-72 / player.money) + " yoctometers cubed, you would have enough to make a proton."
-        else document.getElementById("infoScale").textContent = "If every antimatter were " + shortenMoney(2.82e-45 / 4.22419e-105 / player.money) + " planck volumes, you would have enough to make a proton."
-    }
-    if (player.money.gt(new Decimal("1e100000"))) {
-        document.getElementById("infoScale").innerHTML = "<br>If you wrote 3 numbers a second, it would take you <br>" + timeDisplay(player.money.log10()*1000/3) + "<br> to write down your antimatter amount.";
-    }
 
     var shiftRequirement = getShiftRequirement(0);
 
@@ -3676,22 +3515,6 @@ function showInfTab(tabName) {
     }
 }
 
-function showStatsTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('statstab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName && tab.id === "challengetimes") {
-            tab.style.display = 'flex';
-        } else if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-}
-
 function showDimTab(tabName, init) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('dimtab');
@@ -3786,9 +3609,6 @@ function init() {
     document.getElementById('statisticsbtn').onclick = function () {
         showTab('statistics');
     };
-    document.getElementById('statisticsVuebtn').onclick = function () {
-        showTab('statisticsVue');
-    };
     document.getElementById('achievementsbtn').onclick = function () {
         showTab('achievements');
     };
@@ -3811,7 +3631,6 @@ function init() {
     //show one tab during init or they'll all start hidden
     showTab('dimensions')
     showInfTab('preinf')
-    showStatsTab('stats')
     showDimTab('antimatterdimensions')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)

@@ -750,7 +750,6 @@ function change_save(saveId) {
   updateChallenges()
   transformSaveToDecimal()
   showDimTab('antimatterdimensions', true)
-  showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
   Modal.hide();

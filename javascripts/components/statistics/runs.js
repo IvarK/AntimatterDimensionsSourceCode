@@ -87,7 +87,8 @@ Vue.component('statistic-past-runs', {
     };
   },
   template:
-    '<div class="statstab2">\
+    '<div class="statstab">\
+        <br>\
         <div v-for="(run, index) in runs">\
             <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\
             <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>\
@@ -100,7 +101,7 @@ Vue.component('statistic-past-runs', {
     </div>',
   methods: {
     averageGain: function(time, amount) {
-      let rpm = gainRatePerMinute(amount, time);
+      let rpm = ratePerMinute(amount, time);
       var tempstring = shorten(rpm) + " IP/min";
       if (rpm < 1) tempstring = shorten(rpm * 60) + " IP/hour";
       return tempstring;

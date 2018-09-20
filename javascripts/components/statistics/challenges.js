@@ -1,8 +1,7 @@
 Vue.component('statistics-challenges', {
   props: ['model'],
   template:
-  // TODO statstab2 => statstab
-    '<div class="statstab2" style="display: flex !important; flex-direction: row; justify-content: center; align-items: center;">\
+    '<div class="statstab statsistics-challenges">\
         <statistics-challenge-times\
             name="Challenge"\
             :times="normalChallenges"\

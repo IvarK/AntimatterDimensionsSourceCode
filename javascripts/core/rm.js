@@ -443,7 +443,7 @@ function deleteGlyph(id) {
   }
   if (!shiftDown) return false;
 
-  if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "infinity")) {
+  if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
     sacrificeGlyph(n)
     return;
   }

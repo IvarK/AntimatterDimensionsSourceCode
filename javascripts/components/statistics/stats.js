@@ -123,7 +123,7 @@ function largestMatterScale(matter) {
   let low = 0;
   let high = matterScale.length;
   while (low !== high) {
-    let mid = (low + high) / 2;
+    let mid = Math.floor((low + high) / 2);
     if (Decimal.lte(matterScale[mid].amount, matter)) {
       low = mid + 1;
     }

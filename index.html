@@ -891,27 +891,10 @@
             </div>
             <footer-links sticky="true"></footer-links>
         </div>
-        <div id="options" class="tab" align="center">
-            <br>
-            <options-tab :model="model.player.options" :actions="actions.options"></options-tab>
-            <p>
-                Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension,
-                T to buy max tickspeed, shift+T to buy one tickspeed, M for max all
-                <br>
-                S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch,
-                A for toggle autobuyers, R for replicanti galaxies, E for eternity.
-                <br>
-                You can hold shift while buying time studies to buy all up until that point,
-                see each study's number, and save study trees.
-                <br>
-                Hotkeys do not work while holding control.
-            </p>
-            <footer-links sticky="true"></footer-links>
-        </div>
-        <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
-            <br>
-            <statistics-tab :model="model"></statistics-tab>
-            <footer-links :sticky="true"></footer-links>
+        <div v-if="view.tab.current">
+            <keep-alive>
+                <component :is="view.tab.current" :model="model" :view="view" :actions="actions"></component>
+            </keep-alive>
         </div>
         <div id="achievements" class="tab">
             <table class="table" align="center" style="margin: auto" id="achTabButtons">
@@ -2682,6 +2665,7 @@
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/secondary-button.js"></script>
+<script type="text/javascript" src="javascripts/components/tab-container.js"></script>
 <script type="text/javascript" src="javascripts/components/subtabbed-container.js"></script>
 <script type="text/javascript" src="javascripts/components/options-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics-tab.js"></script>

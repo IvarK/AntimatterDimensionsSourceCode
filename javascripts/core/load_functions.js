@@ -753,7 +753,7 @@ function change_save(saveId) {
   showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
-  ui.hideModal();
+  Modal.hide();
 }
 
 function transformSaveToDecimal() {

@@ -40,13 +40,13 @@ Vue.component('options-tab', {
     },
     methods: {
         showLoadGameModal: function() {
-            ui.showModal(Modal.loadGame);
+            Modal.loadGame.show();
         },
         showConfirmationOptions: function() {
-            ui.showModal(Modal.confirmationOptions);
+            Modal.confirmationOptions.show();
         },
         showAnimationOptions: function() {
-            ui.showModal(Modal.animationOptions);
+            Modal.animationOptions.show();
         }
     },
     components: {

@@ -386,7 +386,7 @@ function showTab(tabName) {
     if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
     else document.getElementById("progress").style.display = "none"
     resizeCanvas();
-    ui.hideModal();
+    Modal.hide();
     tryStartTachyonAnimation();
     if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
@@ -2199,7 +2199,7 @@ function gainedInfinities() {
 }
 
 function failChallenge() {
-    ui.showModalMessage("You failed the challenge, you will now exit it.");
+    Modal.message.show("You failed the challenge, you will now exit it.");
     setTimeout(exitChallenge, 500);
     giveAchievement("You're a mistake");
     failureCount++;
@@ -2643,7 +2643,7 @@ setInterval(function() {
         //like this:
         if (data.version > player.version) {
             player.version = data.version
-            ui.showModalMessage(data.message);
+            Modal.message.show(data.message);
             //or some more resilient method
             //like forced news bar with message running over and over
         }
@@ -3715,7 +3715,7 @@ function simulateTime(seconds, real, fast) {
         giveAchievement("While you were away... Nothing happened.")
     }
 
-    ui.showModalMessage(popupString);
+    Modal.message.show(popupString);
 }
 
 function startInterval() {

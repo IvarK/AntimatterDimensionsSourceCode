@@ -12,7 +12,7 @@ var modalCloudConflictMixin = {
             }
             if (conflicts.length === 1){
                 safeCall(this.conflict.onLastConflict);
-                ui.hideModal();
+                Modal.hide();
             }
             conflicts.shift();
         }

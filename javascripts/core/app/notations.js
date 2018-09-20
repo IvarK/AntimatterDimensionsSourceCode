@@ -11,7 +11,7 @@ var Notation = function Notation(name) {
 };
 
 Notation.current = function () {
-    return new Notation(typeof player !== "undefined" ? player.options.notation : undefined);
+    return new Notation(player.options.notation);
 };
 
 Notation.set = function (name) {

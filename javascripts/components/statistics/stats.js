@@ -42,14 +42,17 @@ Vue.component('statistics-stats-tab', {
         totalAntimatter: function() {
             return shortenMoney(this.player.totalmoney);
         },
+        progress: function() {
+            return PlayerProgress.of(this.model.player);
+        },
         infinityUnlocked: function() {
-            return this.player.eternities > 0 || this.eternityUnlocked;
+            return this.progress.infinityUnlocked();
         },
         eternityUnlocked: function() {
-            return this.player.eternities > 0 || this.realityUnlocked;
+            return this.progress.eternityUnlocked();
         },
         realityUnlocked: function() {
-            return this.player.realities > 0;
+            return this.progress.realityUnlocked();
         },
         hasBankedInfinities: function() {
             return this.player.infinitiedBank > 0;

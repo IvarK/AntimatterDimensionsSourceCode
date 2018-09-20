@@ -43,7 +43,6 @@ var formatPostBreak = false;
 
 const inflog = Math.log10(Number.MAX_VALUE)
 function formatValue(notation, value, places, placesUnder1000) {
-    if (typeof player == "undefined") return "Infinite";
     if ((value <= Number.MAX_VALUE || formatPostBreak || (player.break && (player.currentChallenge == "" || !new Decimal(Number.MAX_VALUE).equals(player.challengeTarget)) )) && (value >= 1000)) {
         if (value instanceof Decimal) {
            var power = value.e

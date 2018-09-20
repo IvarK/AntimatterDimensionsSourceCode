@@ -1,5 +1,5 @@
 Vue.component('statistics-stats-tab', {
-    props: ['player'],
+    props: ['model'],
     template:
     // TODO statstab2 => statstab
         '<div class="statstab2">\
@@ -36,6 +36,9 @@ Vue.component('statistics-stats-tab', {
             <div v-html="infoScale"></div>\
         </div>',
     computed: {
+        player: function() {
+            return this.model.player;
+        },
         totalAntimatter: function() {
             return shortenMoney(this.player.totalmoney);
         },
@@ -93,7 +96,7 @@ function estimateMatterScale(matter) {
     }
     let scale = smallestProtonScale(matter);
     return "If every antimatter were " + shortenMoney(proton / scale.amount / matter) + " " +
-        scale.name + " , you would have enough to make a proton.";
+        scale.name + ", you would have enough to make a proton.";
 }
 
 function smallestProtonScale(matter) {

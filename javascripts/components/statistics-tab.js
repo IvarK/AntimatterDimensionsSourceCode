@@ -1,5 +1,12 @@
 Vue.component('statistics-tab', {
     props: ['model'],
+    data: function() {
+        return {
+            tabs: [
+                { name: "Statistics", component: "statistics-stats-tab" },
+            ]
+        };
+    },
     template:
-        '<statistics-stats-tab :player="model.player"></statistics-stats-tab>'
+        '<subtabbed-container :tabs="tabs" :model="model"></subtabbed-container>'
 });

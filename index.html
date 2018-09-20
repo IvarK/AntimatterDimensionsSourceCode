@@ -67,6 +67,7 @@
             <button id="dimensionsbtn" class="tabbtn">Dimensions</button>
             <button id="optionsbtn" class="tabbtn">Options</button>
             <button id="statisticsbtn" class="tabbtn">Statistics</button>
+            <button id="statisticsVuebtn" class="tabbtn">Statistics Vue</button>
             <button id="achievementsbtn" class="tabbtn">Achievements</button>
             <button id="challengesbtn" class="tabbtn">Challenges</button>
             <button id="infinitybtn" class="tabbtn infinitytabbtn">Infinity</button>
@@ -907,6 +908,10 @@
                 Hotkeys do not work while holding control.
             </p>
             <footer-links sticky="true"></footer-links>
+        </div>
+        <div id = "statisticsVue" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
+            <br>
+            <statistics-tab :model="model"></statistics-tab>
         </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>
@@ -2797,6 +2802,8 @@
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/options-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/stats.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>

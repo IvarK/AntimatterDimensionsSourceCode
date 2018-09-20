@@ -4127,6 +4127,9 @@ function init() {
     document.getElementById('statisticsbtn').onclick = function () {
         showTab('statistics');
     };
+    document.getElementById('statisticsVuebtn').onclick = function () {
+        showTab('statisticsVue');
+    };
     document.getElementById('achievementsbtn').onclick = function () {
         showTab('achievements');
     };

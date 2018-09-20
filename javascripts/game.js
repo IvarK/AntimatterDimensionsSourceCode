@@ -1720,6 +1720,24 @@ function updateLastTenRuns() {
     bestRunIppm = tempBest
 }
 
+function gainRatePerMinute(amount, time) {
+    return Decimal.divide(amount, time / 60 * 1000);
+}
+
+function averageRun(runs) {
+    let sumReducer = function(acc, current) { return Decimal.add(acc, current); };
+    let totalTime = runs
+        .map(function(run) { return run[0] })
+        .reduce(sumReducer);
+    let totalAmount = runs
+        .map(function(run) { return run[1] })
+        .reduce(sumReducer);
+    return [
+        totalTime.dividedBy(runs.length),
+        totalAmount.dividedBy(runs.length)
+    ];
+}
+
 var averageEp = new Decimal(0)
 function updateLastTenEternities() {
     let tempBest = 0
@@ -1748,10 +1766,8 @@ function updateLastTenEternities() {
 }
 
 function addEternityTime(time, ep) {
-    for (var i=player.lastTenEternities.length-1; i>0; i--) {
-        player.lastTenEternities[i] = player.lastTenEternities[i-1]
-    }
-    player.lastTenEternities[0] = [time, ep]
+    player.lastTenEternities.pop();
+    player.lastTenEternities.unshift([time, ep]);
 }
 
 var averageRm = new Decimal(0)
@@ -1782,20 +1798,16 @@ function updateLastTenRealities() {
 }
 
 function addRealityTime(time, rm, level) {
-    for (var i=player.lastTenRealities.length-1; i>0; i--) {
-        player.lastTenRealities[i] = player.lastTenRealities[i-1]
-    }
-    player.lastTenRealities[0] = [time, rm, level]
+    player.lastTenEternities.pop();
+    player.lastTenEternities.unshift([time, rm, level]);
 }
 
 
 document.getElementById("postInfinityButton").onclick = function() {document.getElementById("bigcrunch").click()}
 
 function addTime(time, ip) {
-    for (var i=player.lastTenRuns.length-1; i>0; i--) {
-        player.lastTenRuns[i] = player.lastTenRuns[i-1]
-    }
-    player.lastTenRuns[0] = [time, ip]
+    player.lastTenRuns.pop();
+    player.lastTenRuns.unshift([time, ip]);
 }
 
 var infchallengeTimes = 999999999

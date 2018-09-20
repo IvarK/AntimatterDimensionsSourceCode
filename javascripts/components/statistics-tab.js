@@ -4,8 +4,28 @@ Vue.component('statistics-tab', {
         return {
             tabs: [
                 { name: "Statistics", component: "statistics-stats-tab" },
+                {
+                    name: "Past Infinities",
+                    component: "statistic-past-infinities",
+                    condition: function() { return this.progress.infinityUnlocked(); }.bind(this)
+                },
+                {
+                    name: "Past Eternities",
+                    component: "statistic-past-eternities",
+                    condition: function() { return this.progress.eternityUnlocked(); }.bind(this)
+                },
+                {
+                    name: "Past Realities",
+                    component: "statistic-past-realities",
+                    condition: function() { return this.progress.realityUnlocked(); }.bind(this)
+                }
             ]
         };
+    },
+    computed: {
+        progress: function() {
+            return PlayerProgress.of(this.model.player);
+        }
     },
     template:
         '<subtabbed-container :tabs="tabs" :model="model"></subtabbed-container>'

@@ -28,6 +28,7 @@ function showTab(tabName) {
             tab.style.display = 'none';
         }
     }
+    tryShowtab(tabName);
     if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "block";
     else document.getElementById("TTbuttons").style.display = "none"
     if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
@@ -2795,7 +2796,8 @@ function gameLoop(diff) {
         player.secretUnlocks.painTimer += player.options.updateRate/1000;
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
-    if (document.getElementById("statistics").style.display !== "none") {
+
+    if (Tab.statistics.isCurrent()) {
         statsTimer += player.options.updateRate/1000;
         if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }

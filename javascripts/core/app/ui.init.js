@@ -1,13 +1,16 @@
 var ui = {
-    model: {
-        player: player
+  model: {
+    player: player
+  },
+  actions: {},
+  view: {
+    modal: {
+      current: undefined,
+      cloudConflicts: [],
+      message: ""
     },
-    actions: { },
-    view: {
-        modal: {
-            current: undefined,
-            cloudConflicts: [ ],
-            message: ""
-        }
+    tab : {
+        current: undefined
     }
+  }
 };

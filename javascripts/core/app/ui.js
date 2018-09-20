@@ -53,3 +53,29 @@ initVue();
 var updateVue = function () {
     ui.model.player = player;
 };
+
+// small hack until Vue migration is complete
+function tryShowtab(tab) {
+  if (tab === 'options') {
+    Tab.options.show();
+    return true;
+  }
+  if (tab === 'statistics') {
+    Tab.statistics.show();
+    return true;
+  }
+  ui.view.tab.current = undefined;
+  return false;
+}
+
+var Tab = function Tab(component) {
+  this.show = function() {
+    ui.view.tab.current = component;
+  };
+  this.isCurrent = function() {
+    return ui.view.tab.current === component;
+  }
+};
+
+Tab.options = new Tab("options-tab");
+Tab.statistics = new Tab("statistics-tab");

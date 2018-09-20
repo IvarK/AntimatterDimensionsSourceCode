@@ -3660,8 +3660,8 @@ function gameLoop(diff) {
 			var textLines = oldText.split("\n");
 			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
 		}
-  }
-
+	}
+	
     player.lastUpdate = thisUpdate;
 }
 
@@ -4137,6 +4137,7 @@ function init() {
     showDimTab('antimatterdimensions')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)
+	initializeWormhole();
     load_game();
     updateTickSpeed();
     updateAutobuyers();
@@ -4144,7 +4145,6 @@ function init() {
     kong.init();
 
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
-
 }
 
 setInterval(function () {

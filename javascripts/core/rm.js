@@ -653,10 +653,10 @@ function getGlyphSacEffect(type) {
     return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
 
     case "replication":
-    return Math.pow(player.reality.glyphs.sac[type], 0.75)
+    return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.75)
 
     case "dilation":
-    return Math.pow(player.reality.glyphs.sac[type], 0.4)
+    return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
   }
 }
 

@@ -428,6 +428,8 @@ function generateGlyphTable() {
     mouseOn.appendTo($(this))
     mouseOn = $("document")
   })
+
+  updateGlyphDescriptions()
 }
 
 function deleteGlyph(id) {
@@ -435,16 +437,18 @@ function deleteGlyph(id) {
     return glyph.id == id
   })
 
-  if (player.reality.upg.includes(19)) {
-    sacrificeGlyph(n)
-    return;
-  }
-
   if (n.symbol === "266b") {
     var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
     tempAudio.play();
   }
   if (!shiftDown) return false;
+
+  if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "infinity")) {
+    sacrificeGlyph(n)
+    return;
+  }
+
+
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
@@ -637,7 +641,65 @@ function respecGlyphs() {
   generateGlyphTable();
 }
 
+function getGlyphSacEffect(type) {
+  switch(type) {
+    case "power":
+    return Math.floor(Math.sqrt(player.reality.glyphs.sac[type]) / 2)
+    
+    case "infinity":
+    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
+
+    case "time":
+    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
+
+    case "replication":
+    return Math.pow(player.reality.glyphs.sac[type], 0.75)
+
+    case "dilation":
+    return Math.pow(player.reality.glyphs.sac[type], 0.4)
+  }
+}
+
+function getGlyphSacDescription(type) {
+  let amount = getGlyphSacEffect(type)
+  let total = shorten(player.reality.glyphs.sac[type])
+  if (player.reality.glyphs.sac[type] == 0) return ""
+  switch(type) {
+    case "power":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later<br><br>"
+
+    case "infinity":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(3) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
+
+    case "time":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(3) + "x bigger multiplier when buying 8th time dimension.<br><br>"
+
+    case "replication":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum replicanti chance cap by +" + Math.floor(amount) + "%<br><br>"
+
+    case "dilation":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount) + "x<br><br>"
+  }
+}
+
 function sacrificeGlyph(glyph) {
-  //TODO
-  console.log("Sacrificing glyph " + glyph)
+  if (!confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs would increase by " +(glyph.level * glyph.strength).toFixed(2))) return
+  player.reality.glyphs.sac[glyph.type] += glyph.level * glyph.strength
+
+  let inv = player.reality.glyphs.inventory
+  let g = inv.find(function(x) {
+    return x.id == glyph.id
+  })
+  inv.splice(inv.indexOf(g),1)
+  mouseOn.remove()
+  mouseOn = $("document")
+  generateGlyphTable();
+}
+
+function updateGlyphDescriptions() {
+  let html = ""
+  for (let i in player.reality.glyphs.sac) {
+    html += getGlyphSacDescription(i)
+  }
+  $("#sacrificedGlyphs").html(html)
 }

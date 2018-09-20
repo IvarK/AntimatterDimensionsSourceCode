@@ -17,8 +17,8 @@ function getGalaxyRequirement() {
   else if ((player.galaxies) >= galaxyCostScalingStart) {
       amount += Math.pow((player.galaxies)-(galaxyCostScalingStart-1),2)+(player.galaxies)-(galaxyCostScalingStart-1)
   }
-  if (player.galaxies >= 800) {
-      amount = Math.floor(amount * Math.pow(1.002, (player.galaxies-799)))
+  if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
+      amount = Math.floor(amount * Math.pow(1.002, (player.galaxies-(799 + getGlyphSacEffect("power")))))
   }
 
   if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;

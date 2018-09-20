@@ -325,6 +325,7 @@ dev.updateTestSave = function() {
     player.reality.upgReqs.push(false, false, false, false, false)
     player.options.testVersion = 13
     }
+
     if (player.options.testVersion === 13) {
         for (let i = 0; i < player.reality.automatorCommands.length; i++) {
             let temp = player.reality.automatorCommands[i];
@@ -337,4 +338,15 @@ dev.updateTestSave = function() {
         updateAutomatorTree();
         player.options.testVersion = 14;
     }
+
+  if (player.options.testVersion == 14) {
+    player.reality.glyphs.sac = {
+      power: 0,
+      infinity: 0,
+      time: 0,
+      replication: 0,
+      dilation: 0
+    }
+    player.options.testVersion = 15
+  }
 }

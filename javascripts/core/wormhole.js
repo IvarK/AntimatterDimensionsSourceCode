@@ -27,6 +27,7 @@ function unlockWormhole() {
     player.wormhole.unlocked = true
     player.reality.realityMachines = player.reality.realityMachines.minus(50)
     $("#wormholecontainer").show()
+    $(".wormhole-upgrades").show()
     $("#wormholeunlock").hide()
 }
 

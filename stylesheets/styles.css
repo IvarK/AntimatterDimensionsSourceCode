@@ -2072,6 +2072,19 @@ reality upgrade unavailable
     border: 1px solid black;
 }
 
+#glyphTabUpper {
+  display: flex;
+  justify-content: space-between
+}
+
+.glyphDescriptions {
+  width: 32%;
+  border: 1px solid rgb(184, 184, 184);
+  border-radius: 5px;
+  margin: 24px;
+  padding: 12px;
+}
+
 @media print, screen and (max-width: 960px) {
     div.wrapper {
         width: auto;

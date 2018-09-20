@@ -2522,23 +2522,35 @@
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
-                <div>
-                    <button id="realitymachine" onclick="reality()">Make a new reality<br>Machines gained: 1<br>Glyph level: 1</button>
-                    <br><br>
-                    <button class="realityUpgrade" onclick="toggleGlyphRespec()" id="glyphRespec" style="width:150px; height: 40px; margin: auto">Clear glyph slots on Reality</button>
+              <div id="glyphTabUpper">
+                <div class="glyphDescriptions" id="activeGlyphs"> <!-- left-->
+                  here will be a description of current glyph effects or smthing
                 </div>
-                <div id="glyphslots">
+                <div> <!-- middle -->
+                  <button id="realitymachine" onclick="reality()">Make a new reality
+                    <br>Machines gained: 1
+                    <br>Glyph level: 1</button>
+                  <br>
+                  <br>
+                  <button class="realityUpgrade" onclick="toggleGlyphRespec()" id="glyphRespec" style="width:150px; height: 40px; margin: auto">Clear glyph slots on Reality</button>
+                  <div id="glyphslots">
                     <!-- These are generated from JS -->
+                  </div>
                 </div>
-                <div class="glyphcontainer" style="margin: auto;">
-                    <div>
-                        <h3 style="text-align: center">Inventory</h3>
-                        <table>
-                            <tbody id="glyphs">
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="glyphDescriptions" id="sacrificedGlyphs"> <!-- right-->
+
                 </div>
+              </div>
+              
+              <div class="glyphcontainer" style="margin: auto;">
+                <div>
+                  <h3 style="text-align: center">Inventory</h3>
+                  <table>
+                    <tbody id="glyphs">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
             <div id="upgrades" class="realitytab" style="display: none;">
                 <table class="table realityUpgradeTable" align="center" style="margin: auto">

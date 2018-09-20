@@ -147,7 +147,7 @@ function buyTimeDimension(tier, upd, threshold) {
       dim.cost = Decimal.pow(timeDimCostMults[tier]*100, dim.bought + Math.pow(dim.bought-timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
     }
   }
-  dim.power = dim.power.times(2)
+  dim.power = dim.power.times(2 * getGlyphSacEffect("time"))
   if (upd) updateEternityUpgrades()
   return true
 }

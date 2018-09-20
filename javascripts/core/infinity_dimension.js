@@ -210,7 +210,7 @@ function buyManyInfinityDimension(tier) {
   } else {
       dim.cost = Decimal.round(dim.cost.times(infCostMults[tier]))
   }
-  dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.times(infPowerMults[tier] * getGlyphSacEffect("infinity"))
   dim.baseAmount += 10
 
   if (player.currentEternityChall == "eterc8") player.eterc8ids-=1
@@ -236,7 +236,7 @@ function buyMaxInfDims(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.cost = dim.cost.times(costMult)
   dim.amount = dim.amount.plus(10*toBuy);
-  dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
+  dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
   dim.baseAmount += 10*toBuy
   buyManyInfinityDimension(tier)
 }

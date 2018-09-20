@@ -10,7 +10,7 @@ function unlockReplicantis() {
 }
 
 function upgradeReplicantiChance() {
-  if (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1 && player.eterc8repl !== 0) {
+  if (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1 + (getGlyphSacEffect("replication") / 100)&& player.eterc8repl !== 0) {
       player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
       player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
       player.replicanti.chance += 0.01

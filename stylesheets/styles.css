@@ -766,6 +766,18 @@ button {
     font-size: 15px
 }
 
+.statsistics-stats h3 {
+    margin-bottom: 10px;
+}
+
+.statsistics-challenges {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    !important;
+}
+
 .sticky-footer {
     bottom: 0;
     position: fixed;

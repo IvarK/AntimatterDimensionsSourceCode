@@ -893,7 +893,7 @@
         </div>
         <div id="options" class="tab" align="center">
             <br>
-            <options :model="model.player.options" :actions="actions.options"></options>
+            <options-tab :model="model.player.options" :actions="actions.options"></options-tab>
             <p>
                 Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension,
                 T to buy max tickspeed, shift+T to buy one tickspeed, M for max all
@@ -910,124 +910,8 @@
         </div>
         <div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
             <br>
-            <tr>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('stats')">Statistics</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('challengetimes')" id="challengetimesbtn" style="display:none" >Challenge records</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs" style="display:none">Past Infinities</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lastteneternities')" id="pasteternities" style="display:none">Past Eternities</button><td>
-                <td><button class="secondarytabbtn" onclick="showStatsTab('lasttenrealities')" id="pastrealities" style="display:none">Past Realities</button><td>
-            </tr>
-            <div id="stats" class="statstab">
-                <br>
-                <h3 style="margin-bottom: 10px;">General</h3>
-                <div id="totalmoney">You have made x antimatter.</div>
-                <div id="totalresets">You have made x dimensional boosts/shifts.</div>
-                <div id="galaxies">You have made x Antimatter Galaxies.</div>
-                <div id="totalRealTime">You have played for </div>
-                <div id="totalTime">You have played for </div>
-                <br>
-                <div id="infinityStatistics">
-                    <h3 style="margin-bottom: 10px;">Infinity</h3>
-                    <div id="infinitied">You have infinitied x times.</div>
-                    <div id="infinitiedBank">You have infinitied x times.</div>
-                    <div id="bestInfinity">Your fastest infinity is in x.</div>
-                    <div id="thisInfinity">You have spent x in this Infinity.</div>
-                    <br>
-                </div>
-                <div id="eternityStatistics">
-                    <h3 style="margin-bottom: 10px;">Eternity</h3>
-                    <div id="eternitied">You have eternitied x times.</div>
-                    <div id="besteternity">Your fastest eternity is in x.</div>
-                    <div id="thiseternity">You have spent x in this eternity</div>
-                    <br>
-                </div>
-                <div id="realityStatistics">
-                    <h3 style="margin-bottom: 10px;">Reality</h3>
-                    <div id="realitied">You have realitied x times.</div>
-                    <div id="bestreality">Your fastest reality is in x.</div>
-                    <div id="thisreality">You have spent x in this reality</div>
-                    <br>
-                </div>
-                <div id="infoScale">If every antimatter were a planck volume, you would have enough to </div>
-            </div>
-            <div id="challengetimes" class="statstab" style="display: flex !important; flex-direction: row; justify-content: center; align-items: center;">
-                <div>
-                    <br>
-                    <div id="challengetime2"></div>
-                    <div id="challengetime3"></div>
-                    <div id="challengetime4"></div>
-                    <div id="challengetime5"></div>
-                    <div id="challengetime6"></div>
-                    <div id="challengetime7"></div>
-                    <div id="challengetime8"></div>
-                    <div id="challengetime9"></div>
-                    <div id="challengetime10"></div>
-                    <div id="challengetime11"></div>
-                    <div id="challengetime12"></div>
-                    <br>
-                    <div id="challengetimesum"></div>
-                </div>
-                <div id="infchallengetimes" style="margin-top: 53px; margin-left: 20px;">
-                    <br>
-                    <div></div>
-                    <div id="infchallengetime1"></div>
-                    <div id="infchallengetime2"></div>
-                    <div id="infchallengetime3"></div>
-                    <div id="infchallengetime4"></div>
-                    <div id="infchallengetime5"></div>
-                    <div id="infchallengetime6"></div>
-                    <div id="infchallengetime7"></div>
-                    <div id="infchallengetime8"></div>
-                    <br>
-                    <div id="infchallengetimesum"></div>
-                </div>
-            </div>
-            <div id="lasttenruns" class="statstab">
-                <div id="run1"></div>
-                <div id="run2"></div>
-                <div id="run3"></div>
-                <div id="run4"></div>
-                <div id="run5"></div>
-                <div id="run6"></div>
-                <div id="run7"></div>
-                <div id="run8"></div>
-                <div id="run9"></div>
-                <div id="run10"></div>
-                <br>
-                <div id="averagerun"></div>
-                <br>
-            </div>
-            <div id="lastteneternities" class="statstab">
-                <div id="eternityrun1"></div>
-                <div id="eternityrun2"></div>
-                <div id="eternityrun3"></div>
-                <div id="eternityrun4"></div>
-                <div id="eternityrun5"></div>
-                <div id="eternityrun6"></div>
-                <div id="eternityrun7"></div>
-                <div id="eternityrun8"></div>
-                <div id="eternityrun9"></div>
-                <div id="eternityrun10"></div>
-                <br>
-                <div id="averageEternityRun"></div>
-                <br>
-            </div>
-            <div id="lasttenrealities" class="statstab">
-                    <div id="realityrun1"></div>
-                    <div id="realityrun2"></div>
-                    <div id="realityrun3"></div>
-                    <div id="realityrun4"></div>
-                    <div id="realityrun5"></div>
-                    <div id="realityrun6"></div>
-                    <div id="realityrun7"></div>
-                    <div id="realityrun8"></div>
-                    <div id="realityrun9"></div>
-                    <div id="realityrun10"></div>
-                    <br>
-                    <div id="averageRealityRun"></div>
-                    <br>
-                </div>
-            <footer-links></footer-links>
+            <statistics-tab :model="model"></statistics-tab>
+            <footer-links :sticky="true"></footer-links>
         </div>
         <div id="achievements" class="tab">
             <table class="table" align="center" style="margin: auto" id="achTabButtons">
@@ -2794,9 +2678,16 @@
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
 <script type="text/javascript" src="javascripts/core/format.js"></script>
+<script type="text/javascript" src="javascripts/core/player.js"></script>
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
-<script type="text/javascript" src="javascripts/components/options.js"></script>
+<script type="text/javascript" src="javascripts/components/secondary-button.js"></script>
+<script type="text/javascript" src="javascripts/components/subtabbed-container.js"></script>
+<script type="text/javascript" src="javascripts/components/options-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/stats.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/challenges.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/runs.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
@@ -2804,6 +2695,8 @@
 <script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-cloud.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
+<script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
+<script type="text/javascript" src="javascripts/core/app/modal.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>
 <script type="text/javascript" src="javascripts/core/app/options.js"></script>

@@ -591,10 +591,10 @@ if (player.version < 5) {
             player.lastTenRuns[i][0] *= 100;
         }
         for (var i=0; i<11; i++) {
-            player.challengeTimes[i] *= 100;
+            setChallengeTime(i, player.challengeTimes[i] * 100);
         }
         for (var i=0; i<8; i++) {
-            player.infchallengeTimes[i] *= 100;
+            setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
         updateLastTenRuns();
         updateLastTenEternities();
@@ -750,10 +750,9 @@ function change_save(saveId) {
   updateChallenges()
   transformSaveToDecimal()
   showDimTab('antimatterdimensions', true)
-  showStatsTab('stats')
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
-  ui.hideModal();
+  Modal.hide();
 }
 
 function transformSaveToDecimal() {

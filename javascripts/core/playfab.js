@@ -204,7 +204,7 @@ function playFabLoadCheck() {
       }
       if (newestSave === localSave) {
           ui.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
-          ui.showModal(Modal.cloudLoadConflict);
+          Modal.cloudLoadConflict.show();
       } else {
           overwriteLocalSave();
       }
@@ -229,7 +229,7 @@ function playFabSaveCheck() {
       if (newestSave === cloudSave) {
           isConflicted = true;
           ui.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
-          ui.showModal(Modal.cloudSaveConflict);
+          Modal.cloudSaveConflict.show();
       } else {
           overwriteCloudSave();
       }

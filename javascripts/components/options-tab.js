@@ -1,4 +1,4 @@
-Vue.component('options', {
+Vue.component('options-tab', {
     props: ['model', 'actions'],
     template:
     '<table class="options-container">\
@@ -40,13 +40,13 @@ Vue.component('options', {
     },
     methods: {
         showLoadGameModal: function() {
-            ui.showModal(Modal.loadGame);
+            Modal.loadGame.show();
         },
         showConfirmationOptions: function() {
-            ui.showModal(Modal.confirmationOptions);
+            Modal.confirmationOptions.show();
         },
         showAnimationOptions: function() {
-            ui.showModal(Modal.animationOptions);
+            Modal.animationOptions.show();
         }
     },
     components: {

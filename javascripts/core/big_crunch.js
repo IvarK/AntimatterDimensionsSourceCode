@@ -23,8 +23,12 @@ function bigCrunchReset() {
     if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
         player.challenges.push(player.currentChallenge);
     }
-    if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) player.challengeTimes[challNumber - 2] = player.thisInfinityTime;
-    if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber - 1] > player.thisInfinityTime) player.infchallengeTimes[challNumber - 1] = player.thisInfinityTime;
+    if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) {
+        setChallengeTime(challNumber - 2, player.thisInfinityTime);
+    }
+    if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber - 1] > player.thisInfinityTime) {
+        setInfChallengeTime(challNumber - 1, player.thisInfinityTime);
+    }
     if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
     if (player.currentChallenge === "challenge5") {
         kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));

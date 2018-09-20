@@ -1,8 +1,6 @@
 var ui = {
     model: {
-        player: {
-            options: { }
-        }
+        player: player
     },
     actions: { },
     view: {

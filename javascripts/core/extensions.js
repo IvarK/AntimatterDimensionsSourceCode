@@ -14,6 +14,14 @@ Math.clamp = function(value, min, max) {
     return (value < min) ? min : (value > max ? max : value);
 };
 
+Decimal.sumReducer = function(accumulator, previous) {
+  return Decimal.add(accumulator, previous);
+};
+
+Decimal.maxReducer = function(a, b) {
+  return Decimal.max(a, b);
+};
+
 function copyToClipboard(str) {
     try {
         let el = document.createElement('textarea');

@@ -25,3 +25,13 @@ function askChallengeConfirmation(challenge) {
         "NOTE: The rightmost infinity upgrade column doesn't work on challenges.";
     return confirm(message);
 }
+
+function setChallengeTime(id, time) {
+    // Use splice so Vue could track changes
+    player.challengeTimes.splice(id, 1, time);
+}
+
+function setInfChallengeTime(id, time) {
+    // Use splice so Vue could track changes
+    player.infchallengeTimes.splice(id, 1, time);
+}

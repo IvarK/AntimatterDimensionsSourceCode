@@ -5,6 +5,11 @@ Vue.component('statistics-tab', {
             tabs: [
                 { name: "Statistics", component: "statistics-stats-tab" },
                 {
+                    name: "Challenge records",
+                    component: "statistics-challenges",
+                    condition: function() { return this.model.player.challenges.length > 1; }.bind(this)
+                },
+                {
                     name: "Past Infinities",
                     component: "statistic-past-infinities",
                     condition: function() { return this.progress.infinityUnlocked(); }.bind(this)

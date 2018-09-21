@@ -373,6 +373,8 @@ function generateGlyphTable() {
           else formattedAmount = effect.toPrecision(precision)
           html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
         }
+        if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+          html += "<span style='color:rgb(180,180,180)'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
         if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
         else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
       } else {
@@ -382,6 +384,7 @@ function generateGlyphTable() {
       idx++;
       html += "</td>"
     }
+    
     html += "</tr>"
   }
 
@@ -411,6 +414,76 @@ function generateGlyphTable() {
     }
   }
   table.innerHTML = html
+  
+  // Update total effect box
+  let allActiveEffects = getTotalGlyphEffects();
+  let activeEffectText = "Current Glyph Effects:<br>";
+  for (let effect in allActiveEffects) {
+    switch(effect) {
+      case "power.pow":
+        activeEffectText += "<br>Normal Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "power.mult":
+        activeEffectText += "<br>Normal Dimensions x" + shortenDimensions(allActiveEffects[effect]);
+        break;
+      case "power.dimboost":
+        activeEffectText += "<br>Dimboost power x" + allActiveEffects[effect].toFixed(2);
+        break;
+      case "power.buy10":
+        activeEffectText += "<br>Multiplier for \"Buy 10\" x" + allActiveEffects[effect].toFixed(2);
+        break;
+      case "infinity.pow":
+        activeEffectText += "<br>\Infinity Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "infinity.rate":
+        activeEffectText += "<br>Infinity power conversion: ^" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "infinity.ipgain":
+        activeEffectText += "<br>IP gain x" + shortenDimensions(allActiveEffects[effect]);
+        break;
+      case "infinity.infmult":
+        activeEffectText += "<br>Infinitied stat gain x" + shortenDimensions(allActiveEffects[effect]).toPrecision(3);
+        break;
+      case "replication.speed":
+        activeEffectText += "<br>Replicanti speed x" + allActiveEffects[effect].toPrecision(3);
+        break;
+      case "replication.pow":
+        activeEffectText += "<br>Replicanti multiplier ^" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "replication.dtgain":  // This stacks weirdly
+        activeEffectText += "<br>DT gain from log10(replicanti) x" + allActiveEffects[effect].toPrecision(3);
+        break;
+      case "replication.glyphlevel":
+        activeEffectText += "<br>Next glyph level replicanti scaling: ^(0.4 + " + allActiveEffects[effect].toFixed(3) + ")";
+        break;
+      case "time.pow":
+        activeEffectText += "<br>Time Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "time.speed":
+        activeEffectText += "<br>Game runs x" + allActiveEffects[effect].toFixed(3) + " faster";
+        break;
+      case "time.freeTickMult":  // This stacks weirdly
+        activeEffectText += "<br>Free tickspeed threshold x" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "time.eternity":
+        activeEffectText += "<br>EP gain x" + shortenDimensions(allActiveEffects[effect]);
+        break;
+      case "dilation.dilationMult":
+        activeEffectText += "<br>DT gain x" + shortenDimensions(allActiveEffects[effect]);
+        break;
+      case "dilation.galaxyThreshold":
+        activeEffectText += "<br>Free galaxy threshold x" + allActiveEffects[effect].toFixed(3);
+        break;
+      case "dilation.TTgen":
+        activeEffectText += "<br>Generating " + (3600*allActiveEffects[effect]).toFixed(2) + " TT per hour";
+        break;
+      case "dilation.pow":
+        activeEffectText += "<br>Normal Dimension multiplier ^" + allActiveEffects[effect].toFixed(3) + " (while dilated)";
+        break;
+    }
+  }
+  $("#activeGlyphs").html(activeEffectText)
+  updateTickSpeed();
 
   $(".tooltip").parent(".glyph").mousemove(function(e) {
     mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
@@ -430,6 +503,27 @@ function generateGlyphTable() {
   })
 
   updateGlyphDescriptions()
+}
+
+function getTotalGlyphEffects() {
+  let activeGlyphs = player.reality.glyphs.active;
+  let allEffects = {};
+  for (let i = 0; i < activeGlyphs.length; i++) {
+    let currGlyph = activeGlyphs[i];
+    for (let effect in currGlyph.effects) {
+      uniqueEffect = currGlyph.type + "." + effect;
+      if (currGlyph.effects.hasOwnProperty(effect))
+        if (allEffects[uniqueEffect] == undefined)
+          allEffects[uniqueEffect] = currGlyph.effects[effect];
+        else {  // Combine the effects appropriately (some are additive)
+          if (uniqueEffect === "replication.glyphlevel" || uniqueEffect === "dilation.TTgen" || uniqueEffect === "infinity.rate" || uniqueEffect === "replication.dtgain")
+            allEffects[uniqueEffect] += currGlyph.effects[effect];
+          else
+            allEffects[uniqueEffect] *= currGlyph.effects[effect];
+        }
+    }
+  }
+  return allEffects;
 }
 
 function deleteGlyph(id) {

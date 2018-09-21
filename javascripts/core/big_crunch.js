@@ -3,7 +3,7 @@ function bigCrunchReset() {
     if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
     const isInChallenge = player.currentChallenge !== "";
     const isInPreBreakChallenge = isInChallenge && !player.currentChallenge.includes("post");
-    if (player.money.lt(Number.MAX_VALUE) && (!player.break || isInPreBreakChallenge)) {
+    if (player.money.lt(Number.MAX_VALUE)) {
         return;
     }
     if (isInChallenge && player.money.lt(player.challengeTarget)) {

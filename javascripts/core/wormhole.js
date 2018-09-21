@@ -124,17 +124,18 @@ function Dot(dotSize, dotType, r, theta) {
 	this.size = dotSize;
 	this.isParticle = dotType == 'particle';
 	this.isPlanet = dotType == 'planet';
+	this.isHole = dotType == 'hole';
 	this.radius = r;
 	this.angle = theta;
 	this.respawn = true;
-    this.canvas = document.getElementById("wormholeImage");
+  this.canvas = document.getElementById("wormholeImage");
 	
-    this.draw = function () {
-        let disp = this.canvas.getContext('2d');
+  this.draw = function () {
+    let disp = this.canvas.getContext('2d');
 		let x = this.radius * Math.sin(2*Math.PI * this.angle);
 		let y = this.radius * Math.cos(2*Math.PI * this.angle);
-        disp.beginPath();
-        disp.lineWidth = 2*this.size;
+    disp.beginPath();
+    disp.lineWidth = 2*this.size;
 		
 		// Wormhole active, draw some trails
 		if (player.wormhole.active && this.isParticle && !this.respawn) {
@@ -145,14 +146,27 @@ function Dot(dotSize, dotType, r, theta) {
 			disp.moveTo(x + 200, y + 200);
 			disp.lineTo(prevX + 200, prevY + 200);
 		}
-		else
-			disp.arc(x + 200, y + 200, this.size, 0, 2*Math.PI);
+		else {
+      if (this.isHole) {  // Glowing effect to make it more visible on dark themes
+        let glow = disp.createRadialGradient(x + 200, y + 200, 0, x + 200, y + 200, this.size * 2);
+        glow.addColorStop(0, "rgba(0, 0, 0, 1)");
+        glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
+        glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
+        glow.addColorStop(1, "rgba(100, 100, 100, 0)");
+        disp.fillStyle = glow;
+        disp.fillRect(0, 0, 400, 400);
+      }
+      else
+        disp.arc(x + 200, y + 200, this.size, 0, 2*Math.PI);
+    }
 		
 		if (this.isParticle)
-			if (player.wormhole.active)
-				disp.strokeStyle = "rgb(255, 0, 0)";
+			if (player.wormhole.active) {
+        let dist = Math.floor(127 * (this.radius - bhSize) / semimajorAxis);
+				disp.strokeStyle = "rgb(" + (255-dist) + ", " + dist + ", " + dist + ")";
+      }
 			else
-				disp.strokeStyle = "rgb(150, 150, 150)";
+				disp.strokeStyle = "rgb(127, 127, 127)";
 		else if (this.isPlanet)
 			disp.strokeStyle = "rgb(0, 0, 255)";
 		else
@@ -209,7 +223,7 @@ function initializeWormhole() {
 			
 	// Particles (scaled to take the same range as the orbit)
 	particleList = [hole];
-	numParticles = 50;
+	numParticles = 80;
 	for (let i = 0; i < numParticles; i++)
 		particleList.push(new Dot(planetSize / 3, 'particle', getRandomRadius(), Math.random()));
 	particleList.push(planet);

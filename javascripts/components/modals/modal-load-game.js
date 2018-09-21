@@ -16,7 +16,7 @@ Vue.component('modal-load-record', {
     template:
         '<div>\
             <strong>Save #{{ saveId + 1 }}: <span v-if="isSelected">(selected)</span></strong>\
-            <span>Antimatter: {{ antimatter }}</span>\
+            <span style="width: 320px;">Antimatter: {{ antimatter }}</span>\
             <primary-button @click="loadSave">Load</primary-button>\
         </div>',
     computed: {

@@ -131,14 +131,14 @@ function onLoad() {
         active: [], 
         inventory: [], 
         slots: 3, 
-        last: ""
-      },
-      sac: {
-        power: 0,
-        infinity: 0,
-        time: 0,
-        replication: 0,
-        dilation: 0
+        last: "",
+        sac: {
+          power: 0,
+          infinity: 0,
+          time: 0,
+          replication: 0,
+          dilation: 0
+        }
       },
       seed: Math.floor(Date.now() * Math.random()+1), 
       rebuyables: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}, 

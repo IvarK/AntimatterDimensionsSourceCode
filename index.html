@@ -2634,6 +2634,11 @@
     </div>
     <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
+<div id="testui">
+    <keep-alive>
+        <test v-if="visible" :player="player"></test>
+    </keep-alive>
+</div>
 </body>
 <div class="videocontainer">
     <video autoplay muted loop id="stars" style="display: none;">

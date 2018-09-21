@@ -1657,7 +1657,7 @@ function averageRun(runs) {
 var averageEp = new Decimal(0)
 function updateLastTenEternities() {
     averageEp = player.lastTenEternities
-      .map(function(run) { return runRatePerMinute(run) })
+      .map(function(run) { return run[1] })
       .reduce(Decimal.sumReducer)
       .dividedBy(player.lastTenEternities.length);
 }
@@ -1670,7 +1670,7 @@ function addEternityTime(time, ep) {
 var averageRm = new Decimal(0)
 function updateLastTenRealities() {
   averageRm = player.lastTenRealities
-    .map(function(run) { return runRatePerMinute(run) })
+    .map(function(run) { return run[1] })
     .reduce(Decimal.sumReducer)
     .dividedBy(player.lastTenRealities.length);
 }

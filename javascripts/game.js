@@ -2498,23 +2498,28 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
+// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
+function getGameSpeedupFactor() {
+  let factor = 1;
+  if (player.currentEternityChall === "eterc12")
+    factor /= 1000;
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "time" && glyph.effects.speed !== undefined)
+      factor *= glyph.effects.speed
+  }
+  if (player.wormhole.active) factor *= player.wormhole.power
+  
+  return factor;
+}
 
 function gameLoop(diff) {
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
-    if (player.wormhole.active) diff *= player.wormhole.power
-    if (player.currentEternityChall === "eterc12") diff = diff / 1000;
-    var speedMod = 1
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "time" && glyph.effects.speed !== undefined) {
-            diff *= glyph.effects.speed
-            speedMod = glyph.effects.speed
-        }
-    }
-    if (player.wormhole.active) speedMod *= player.wormhole.power
+    speedFactor = getGameSpeedupFactor();
+    diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
@@ -2615,8 +2620,7 @@ function gameLoop(diff) {
 
     document.getElementById("dimTabButtons").style.display = "none"
 
-    if (player.currentEternityChall === "eterc12") player.realTimePlayed += diff*1000 / speedMod
-    else player.realTimePlayed += diff / speedMod
+    player.realTimePlayed += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff

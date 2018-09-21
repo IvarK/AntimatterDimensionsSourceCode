@@ -79,17 +79,3 @@ var Tab = function Tab(component) {
 
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
-
-Vue.component('test', {
-  props: ['player'],
-  template:
-    '<span>{{player.money}}</span>'
-});
-
-var testui = new Vue({
-  el: '#testui',
-  data: {
-    player: { money: 1 },
-    visible: false
-  }
-});

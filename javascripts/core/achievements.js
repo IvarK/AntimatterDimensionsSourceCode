@@ -104,7 +104,7 @@ const allAchievements = {
   r137 : "Now you're thinking with dilation!",
   r138 : "This is what I have to do to get rid of you.",
   r141 : "Snap back to reality",
-  r142 : "r142",
+  r142 : "How does this work?",
   r143 : "r143",
   r144 : "r144",
   r145 : "r145",

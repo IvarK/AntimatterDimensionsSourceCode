@@ -6,7 +6,8 @@ function getDimensionBoostPower() {
   if (player.challenges.includes("postc7")) ret = 4
   if (player.currentChallenge == "postc7" || player.timestudy.studies.includes(81)) ret = 10
 
-  if (isAchEnabled("r101")) ret = ret*1.01
+  if (isAchEnabled("r101")) ret *= 1.01
+  if (isAchEnabled("r142")) ret *= 1.5
   for (i in player.reality.glyphs.active) {
     var glyph = player.reality.glyphs.active[i]
     if (glyph.type == "power" && glyph.effects.dimboost !== undefined) ret *= glyph.effects.dimboost

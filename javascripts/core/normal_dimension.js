@@ -197,7 +197,7 @@ function hasInfinityMult(tier) {
     
         if (player.currentChallenge == "challenge9" || player.currentChallenge == "postc1") dimMult = Math.pow(10/0.30,Math.random())*0.30
 
-        if (isAchEnabled("r141")) dimMult += 0.25;
+        if (isAchEnabled("r141")) dimMult += 0.1;
     
         if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
         if (isAchEnabled("r58")) dimMult *= 1.01;

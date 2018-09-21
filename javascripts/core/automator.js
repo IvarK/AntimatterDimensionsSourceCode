@@ -97,9 +97,9 @@ function mainIteration() {
       } else if (row[0] == "if") {
           if (!player.reality.automatorCommands.includes(21)) return false;
           var current = {
-              action: row[1],
-              target: row[2],
-              id: row[3]
+              action: row[0],
+              target: row[1],
+              id: row[2]
           }
           ifstatement = true
           if (wait(current)) automatorIdx += 1

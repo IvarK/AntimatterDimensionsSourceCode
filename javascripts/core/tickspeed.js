@@ -129,25 +129,9 @@ function updateTickSpeed() {
 		tickSpeedText = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
   
 	// Accelerated game speed suffix
-	let gameSpeedMult = 1;
-	if (player.currentEternityChall == "eterc12")
-		gameSpeedMult /= 1000;
-	try {
-		for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-			let currGlyph = player.reality.glyphs.active[i];
-			if (currGlyph.type === "time" && currGlyph.effects.speed != undefined)
-				gameSpeedMult *= currGlyph.effects.speed;
-		}
-	}
-	catch (err) {
-		// No glyphs
-	}
-	if (player.wormhole.active)
-		gameSpeedMult *= player.wormhole.power;
-	let speedAccelText = "   (γ = " + gameSpeedMult.toFixed(3) + ")";
-  
+	let gameSpeedMult = getGameSpeedupFactor();
 	if (gameSpeedMult != 1)
-		document.getElementById("tickSpeedAmount").textContent = tickSpeedText + speedAccelText;
+		document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   (γ = " + gameSpeedMult.toFixed(3) + ")";
 	else
 		document.getElementById("tickSpeedAmount").textContent = tickSpeedText;
 }

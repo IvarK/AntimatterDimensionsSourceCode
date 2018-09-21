@@ -41,7 +41,7 @@ Vue.component('statistics-tab', {
     }
   },
   template:
-    '<tab-container id="statistics" stickyFooter="true" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">\
-      <subtabbed-container :tabs="tabs" :model="model"></subtabbed-container>\
+    '<tab-container id="statistics" style="color: black; font-size: 12px; font-family: Typewriter">\
+      <subtabbed-container class="tab-content" :tabs="tabs" :model="model"></subtabbed-container>\
     </tab-container>'
 });

@@ -1657,7 +1657,7 @@ function averageRun(runs) {
 var averageEp = new Decimal(0)
 function updateLastTenEternities() {
     averageEp = player.lastTenEternities
-      .map(function(run) { return runRatePerMinute(run) })
+      .map(function(run) { return run[1] })
       .reduce(Decimal.sumReducer)
       .dividedBy(player.lastTenEternities.length);
 }
@@ -1670,7 +1670,7 @@ function addEternityTime(time, ep) {
 var averageRm = new Decimal(0)
 function updateLastTenRealities() {
   averageRm = player.lastTenRealities
-    .map(function(run) { return runRatePerMinute(run) })
+    .map(function(run) { return run[1] })
     .reduce(Decimal.sumReducer)
     .dividedBy(player.lastTenRealities.length);
 }
@@ -2500,23 +2500,28 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
+// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
+function getGameSpeedupFactor() {
+  let factor = 1;
+  if (player.currentEternityChall === "eterc12")
+    factor /= 1000;
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "time" && glyph.effects.speed !== undefined)
+      factor *= glyph.effects.speed
+  }
+  if (player.wormhole.active) factor *= player.wormhole.power
+  
+  return factor;
+}
 
 function gameLoop(diff) {
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
-    if (player.wormhole.active) diff *= player.wormhole.power
-    if (player.currentEternityChall === "eterc12") diff = diff / 1000;
-    var speedMod = 1
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "time" && glyph.effects.speed !== undefined) {
-            diff *= glyph.effects.speed
-            speedMod = glyph.effects.speed
-        }
-    }
-    if (player.wormhole.active) speedMod *= player.wormhole.power
+    speedFactor = getGameSpeedupFactor();
+    diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
@@ -2617,8 +2622,7 @@ function gameLoop(diff) {
 
     document.getElementById("dimTabButtons").style.display = "none"
 
-    if (player.currentEternityChall === "eterc12") player.realTimePlayed += diff*1000 / speedMod
-    else player.realTimePlayed += diff / speedMod
+    player.realTimePlayed += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff
@@ -2835,21 +2839,19 @@ function gameLoop(diff) {
 
     if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
 
-    if (player.dilation.nextThreshold.lte(player.dilation.dilatedTime)) {
-        let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-        for (i in player.reality.glyphs.active) {
-            var glyph = player.reality.glyphs.active[i]
-            if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
-        }
-
-        thresholdMult += 1.35
-        // for (var i = 0; i < player.dilation.rebuyables[2]; i++) {
-        //     thresholdMult *= Math.min( 1 - (Math.pow(0.8, i) / 10), 0.999)
-        // }
-        player.dilation.nextThreshold = player.dilation.nextThreshold.times(thresholdMult)
-        player.dilation.freeGalaxies += 1
-        if (player.dilation.upgrades.includes(4)) player.dilation.freeGalaxies += 1
+    // Free galaxies
+    let freeGalaxyMult = 1;
+    if (player.dilation.upgrades.includes(4)) 
+      freeGalaxyMult = 2;
+    let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
     }
+    thresholdMult += 1.35;
+    player.dilation.freeGalaxies = Math.max(player.dilation.freeGalaxies / freeGalaxyMult, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), new Decimal(thresholdMult))));
+    player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.freeGalaxies));
+    player.dilation.freeGalaxies *= freeGalaxyMult;
 
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]
@@ -3671,7 +3673,7 @@ window.onload = function() {
         else {
             document.getElementById("shopbtn").style.display = "none";
         }
-        document.getElementById("container").style.display = "block"
+        document.getElementById("container").style.display = "flex"
         document.getElementById("loading").style.display = "none"
     }, 1000)
 

@@ -12,16 +12,20 @@ Vue.component('statistics-stats-tab', {
         <br>\
         <div v-if="infinityUnlocked">\
             <h3>Infinity</h3>\
-            <div>You have infinitied {{ formatResetAmount(player.infinitied) }}<span v-if="eternityUnlocked"> this eternity</span>.</div>\
+            <div v-if="hasInfinities">You have infinitied {{ formatResetAmount(player.infinitied) }}<span v-if="eternityUnlocked"> this eternity</span>.</div>\
+            <div v-else>You have\'t infinitied<span v-if="eternityUnlocked"> this eternity</span>.</div>\
             <div v-if="hasBankedInfinities">You have {{ formatAmount(player.infinitiedBank) }} banked infinities.</div>\
             <div v-if="hasBestInfinity">Your fastest Infinity is in {{ timeDisplay(player.bestInfinityTime) }}.</div>\
+            <div v-else>You have\'t infinitied<span v-if="eternityUnlocked"> this eternity</span>.</div>\
             <div>You have spent {{ timeDisplay(player.thisInfinityTime) }} in this Infinity.</div>\
             <br>\
         </div>\
         <div v-if="eternityUnlocked">\
             <h3>Eternity</h3>\
-            <div>You have Eternitied {{ formatResetAmount(player.eternities) }}<span v-if="realityUnlocked"> this reality</span>.</div>\
+            <div v-if="hasEternities">You have Eternitied {{ formatResetAmount(player.eternities) }}<span v-if="realityUnlocked"> this reality</span>.</div>\
+            <div v-else>You have\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div v-if="hasBestEternity">Your fastest Eternity is in {{ timeDisplay(player.bestEternity) }}.</div>\
+            <div v-else>You have\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div>You have spent {{ timeDisplay(player.thisEternity) }} in this Eternity.</div>\
             <br>\
         </div>\
@@ -53,8 +57,14 @@ Vue.component('statistics-stats-tab', {
     realityUnlocked: function() {
       return this.progress.realityUnlocked();
     },
+    hasInfinities: function() {
+      return this.player.infinitied > 0;
+    },
     hasBankedInfinities: function() {
       return this.player.infinitiedBank > 0;
+    },
+    hasEternities: function() {
+      return this.player.eternities > 0;
     },
     hasBestInfinity: function() {
       return this.player.bestInfinityTime < 999999999999;

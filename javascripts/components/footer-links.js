@@ -1,7 +1,7 @@
 Vue.component('footer-links', {
     props: ['sticky'],
     template:
-        '<div :class="{ \'sticky-footer\': sticky }">\
+        '<div :class="[sticky ? \'sticky-footer\' : \'\', \'footer-wrapper\']">\
             <table class="footer">\
                 <tr>\
                     <td>\

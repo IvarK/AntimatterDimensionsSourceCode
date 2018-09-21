@@ -102,8 +102,8 @@ Vue.component('statistic-past-runs', {
   methods: {
     averageGain: function(time, amount) {
       let rpm = ratePerMinute(amount, time);
-      var tempstring = shorten(rpm) + " IP/min";
-      if (rpm < 1) tempstring = shorten(rpm * 60) + " IP/hour";
+      var tempstring = shorten(rpm) + " " + this.points + "/min";
+      if (rpm < 1) tempstring = shorten(rpm * 60) + " " + this.points + "/hour";
       return tempstring;
     },
     averageRunGain: function(run) {

@@ -2833,21 +2833,19 @@ function gameLoop(diff) {
 
     if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
 
-    if (player.dilation.nextThreshold.lte(player.dilation.dilatedTime)) {
-        let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-        for (i in player.reality.glyphs.active) {
-            var glyph = player.reality.glyphs.active[i]
-            if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
-        }
-
-        thresholdMult += 1.35
-        // for (var i = 0; i < player.dilation.rebuyables[2]; i++) {
-        //     thresholdMult *= Math.min( 1 - (Math.pow(0.8, i) / 10), 0.999)
-        // }
-        player.dilation.nextThreshold = player.dilation.nextThreshold.times(thresholdMult)
-        player.dilation.freeGalaxies += 1
-        if (player.dilation.upgrades.includes(4)) player.dilation.freeGalaxies += 1
+    // Free galaxies
+    let freeGalaxyMult = 1;
+    if (player.dilation.upgrades.includes(4)) 
+      freeGalaxyMult = 2;
+    let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
     }
+    thresholdMult += 1.35;
+    player.dilation.freeGalaxies = Math.max(player.dilation.freeGalaxies / freeGalaxyMult, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), new Decimal(thresholdMult))));
+    player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.freeGalaxies));
+    player.dilation.freeGalaxies *= freeGalaxyMult;
 
     for (i in player.reality.glyphs.active) {
         var glyph = player.reality.glyphs.active[i]

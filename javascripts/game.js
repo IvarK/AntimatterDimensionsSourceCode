@@ -1626,7 +1626,7 @@ function updateChallengeTimes() {
 var bestRunIppm = new Decimal(0)
 function updateLastTenRuns() {
   bestRunIppm = player.lastTenRuns
-    .map(function(run) { runRatePerMinute(run) })
+    .map(function(run) { return runRatePerMinute(run) })
     .reduce(Decimal.maxReducer);
 
   if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
@@ -1657,8 +1657,9 @@ function averageRun(runs) {
 var averageEp = new Decimal(0)
 function updateLastTenEternities() {
     averageEp = player.lastTenEternities
+      .map(function(run) { return runRatePerMinute(run) })
       .reduce(Decimal.sumReducer)
-      .dividedBy(player.lastTenEternities);
+      .dividedBy(player.lastTenEternities.length);
 }
 
 function addEternityTime(time, ep) {
@@ -1669,8 +1670,9 @@ function addEternityTime(time, ep) {
 var averageRm = new Decimal(0)
 function updateLastTenRealities() {
   averageRm = player.lastTenRealities
+    .map(function(run) { return runRatePerMinute(run) })
     .reduce(Decimal.sumReducer)
-    .dividedBy(player.lastTenRealities);
+    .dividedBy(player.lastTenRealities.length);
 }
 
 function addRealityTime(time, rm, level) {

@@ -33,10 +33,10 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 95vh;">
-<div id="ui">
-    <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none">
-        <div id='game'>
+<body id="body" style="height: 97vh;">
+<div id="ui" style="height: 100%;">
+    <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; height: 100%">
+        <div id='game' style="flex: 0 0 auto">
             <div id='news'>.</div>
         </div>
         <div id="matter"></div>
@@ -53,12 +53,12 @@
         </div>
         <div id="coinsPerSec">You are getting 0 antimatter per second.</div>
 
-        <tr id="tickSpeedRow" style="visibility: hidden">
+        <div id="tickSpeedRow" style="visibility: hidden">
             <div id="tickLabel" style="visibility: hidden">Make the game 10% faster.</div>
             <button id="tickSpeed" style="color:black; visibility: hidden; height: 25px;width: 170px; font-size: 12px" class="storebtn">Cost: 1000</button>
             <button id="tickSpeedMax" onclick="buyMaxTickSpeed()" style="color:black; visibility: hidden; height: 25px; font-size: 12px" class="storebtn">Buy Max</button>
             <div id="tickSpeedAmount" style="visibility: hidden">Tickspeed: 1000</div>
-        </tr>
+        </div>
         <p></p>
         <div style="position:absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 360px; top: 19px">
             <button id="bigcrunch" style="font-family: Typewriter; font-size: 50px; width: 360px; height: 100px;" class="tabbtn">Big Crunch</button>
@@ -891,7 +891,7 @@
             </div>
             <footer-links sticky="true"></footer-links>
         </div>
-        <div v-if="view.tab.current">
+        <div v-if="view.tab.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
             <keep-alive>
                 <component :is="view.tab.current" :model="model" :view="view" :actions="actions"></component>
             </keep-alive>

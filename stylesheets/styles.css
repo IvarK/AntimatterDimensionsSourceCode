@@ -34,7 +34,8 @@ button {
     padding: 2px;
     width: 75%;
     overflow: hidden;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     text-align: left
 }
 
@@ -680,6 +681,24 @@ button {
 
 }
 
+.tab-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.tab-content {
+    flex: 1 0 auto;
+}
+
+.options-buttons {
+    align-self: center;
+}
+
+.footer-wrapper {
+    flex-shrink: 0;
+}
+
 .popup {
 	position: absolute;
 	left: 50%;
@@ -787,8 +806,8 @@ button {
 }
 
 .footer {
-    height: 50px;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
     text-align:center;
     font-size: 15px;
     font-family: Typewriter;

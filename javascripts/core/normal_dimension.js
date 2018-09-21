@@ -74,8 +74,14 @@ function getDimensionFinalMultiplier(tier) {
 
   for (i in player.reality.glyphs.active) {
     var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "power" && glyph.effects.pow !== undefined) multiplier = multiplier.pow(glyph.effects.pow)
-    if (glyph.type == "power" && glyph.effects.mult !== undefined) multiplier = multiplier.times(glyph.effects.mult)
+    if (glyph.type == "power" && glyph.effects.mult !== undefined)
+      multiplier = multiplier.times(glyph.effects.mult)
+  }
+  
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "power" && glyph.effects.pow !== undefined)
+      multiplier = multiplier.pow(glyph.effects.pow)
   }
 
   if (player.dilation.active) {

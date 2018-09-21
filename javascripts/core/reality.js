@@ -242,6 +242,8 @@ function reality(force) {
     drawPerkNetwork();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
 
+    if (player.realities >= 4) giveAchievement("How does this work?")
+
     function resetReplicanti() {
         player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);
         player.replicanti.unl = player.reality.upg.includes(10);

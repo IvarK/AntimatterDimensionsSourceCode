@@ -40,13 +40,13 @@ ui.actions.options.toggleNews = function() {
 ui.actions.options.export = function() {
     let save = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; }));
 
-    if (player.pastebinkey) {
+    if (player.options.pastebinkey) {
         $.ajax({
             type: "POST",
             url: "http://pastebin.com/api/api_post.php",
             data: {
                 api_option: "paste",
-                api_dev_key: player.pastebinkey,
+                api_dev_key: player.options.pastebinkey,
                 api_paste_name: Date.now(),
                 api_paste_code: encodeURIComponent(save)
             },

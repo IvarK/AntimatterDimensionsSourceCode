@@ -436,16 +436,16 @@ function generateGlyphTable() {
         activeEffectText += "<br>\Infinity Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
         break;
       case "infinity.rate":
-        activeEffectText += "<br>Infinity power conversion: ^" + allActiveEffects[effect].toFixed(3);
+        activeEffectText += "<br>Infinity power conversion: ^(7 + " + allActiveEffects[effect].toFixed(3) + ")";
         break;
       case "infinity.ipgain":
         activeEffectText += "<br>IP gain x" + shortenDimensions(allActiveEffects[effect]);
         break;
       case "infinity.infmult":
-        activeEffectText += "<br>Infinitied stat gain x" + shortenDimensions(allActiveEffects[effect]).toPrecision(3);
+        activeEffectText += "<br>Infinitied stat gain x" + shortenDimensions(allActiveEffects[effect]);
         break;
       case "replication.speed":
-        activeEffectText += "<br>Replicanti speed x" + allActiveEffects[effect].toPrecision(3);
+        activeEffectText += "<br>Replicanti speed x" + shortenDimensions(allActiveEffects[effect]);
         break;
       case "replication.pow":
         activeEffectText += "<br>Replicanti multiplier ^" + allActiveEffects[effect].toFixed(3);
@@ -518,6 +518,8 @@ function getTotalGlyphEffects() {
         else {  // Combine the effects appropriately (some are additive)
           if (uniqueEffect === "replication.glyphlevel" || uniqueEffect === "dilation.TTgen" || uniqueEffect === "infinity.rate" || uniqueEffect === "replication.dtgain")
             allEffects[uniqueEffect] += currGlyph.effects[effect];
+          else if (uniqueEffect === "power.mult") // This is a Decimal
+            allEffects[uniqueEffect] = allEffects[uniqueEffect].times(currGlyph.effects[effect]);
           else
             allEffects[uniqueEffect] *= currGlyph.effects[effect];
         }
@@ -760,13 +762,14 @@ function getGlyphSacDescription(type) {
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later<br><br>"
+    let partialGalaxy = Math.sqrt(player.reality.glyphs.sac[type]) / 2 - amount;
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later (" + (100*partialGalaxy).toFixed(1) + "% to next)<br><br>"
 
     case "infinity":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(3) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
 
     case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(3) + "x bigger multiplier when buying 8th time dimension.<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th time dimension.<br><br>"
 
     case "replication":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum replicanti chance cap by +" + Math.floor(amount) + "%<br><br>"

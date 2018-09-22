@@ -40,7 +40,12 @@ button {
 }
 
 #TTbuttons {
-    font-family: Typewriter;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Typewriter, serif;
+  align-items: flex-end;
 }
 
 #news {
@@ -1076,7 +1081,7 @@ button {
     color: #3AACD6;
     background: #232028;
     font-weight: bold;
-    font-family: Typewriter;
+    font-family: Typewriter, serif;
     border: 1px solid #691fa5;
     width: 170px;
     height: 70px;
@@ -1084,10 +1089,6 @@ button {
     cursor: pointer;
     border-radius: 4px;
     font-size: 0.85rem;
-    position: fixed;
-    left: 50%;
-
-    bottom: 5px;
     z-index: 1;
 }
 
@@ -1108,9 +1109,6 @@ button {
     transition-duration: 0.2s;
     border-radius: 4px;
     font-size: 0.85rem;
-    position: fixed;
-    left: 50%;
-    bottom: 5px;
     z-index: 1;
 }
 
@@ -1125,34 +1123,69 @@ button {
 
 #timetheorems {
     color: black;
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
     font-size: 15px;
-    transform: translateX(-50%);
+    text-align: center;
+    flex: 1 0 auto;
 }
 
 #studytreeloadsavetext {
     color: black;
-    position: fixed;
-    bottom: 82px;
-    left: 50%;
-    margin-left: 145px;
     font-size: 10px;
 }
 
 #theorembuybackground {
     background: #E0E0E0;
-    width: 570px;
-    height: 110px;
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    margin-left: -287px;
     border: 2px solid black;
     border-bottom: none;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
+    z-index: 1;
+}
+
+.ttshop-container {
+  padding: 0 10px 5px 10px;
+  width: 555px;
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease-out;
+}
+
+.ttshop-minimize-btn {
+  width: 39px;
+  height: 39px;
+  margin-left: -2px
+}
+
+.ttshop-minimize-btn span {
+  display: inline-block;
+  transition: all 0.25s ease-out;
+  margin-left: -1px;
+  font-size: 25px;
+}
+
+#minimizeArrow {
+  color: black;
+}
+
+.ttbuttons-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.ttbuttons-top-row {
+  align-items: center;
+}
+
+.ttbuttons-top-row .timetheorembtn {
+  height: 30px;
+  font-size: 0.75rem;
+}
+
+.ttbuttons-top-row .tt-save-load-btn {
+  width: 30px;
+  margin: 3px;
 }
 
 #studyTreeCanvas, #dilationCanvas, #automatorTreeCanvas {
@@ -1668,6 +1701,7 @@ body {
     font: 14px/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #727272;
     font-weight: 300;
+    overflow-y: scroll;
 }
 
 h1,
@@ -1892,7 +1926,9 @@ br {
     pointer-events:none;
 }
 
-
+.TheoremAmount {
+  display: inline;
+}
 
 #timestudies span {
     display:block;

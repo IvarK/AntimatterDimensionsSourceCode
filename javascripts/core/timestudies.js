@@ -5,7 +5,6 @@ function buyWithAntimatter() {
       player.money = player.money.minus(player.timestudy.amcost)
       player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
       player.timestudy.theorem += 1
-      updateTheoremButtons()
       updateTimeStudyButtons()
       return true
   } else return false
@@ -16,7 +15,6 @@ function buyWithIP() {
       player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
       player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
       player.timestudy.theorem += 1
-      updateTheoremButtons()
       updateTimeStudyButtons()
       return true
   } else return false
@@ -31,7 +29,6 @@ function buyWithEP() {
       player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost)
       player.timestudy.epcost = player.timestudy.epcost.times(2)
       player.timestudy.theorem += 1
-      updateTheoremButtons()
       updateTimeStudyButtons()
       updateEternityUpgrades()
       return true
@@ -59,7 +56,6 @@ function maxTheorems() {
   }*/
   // the below line of code *should* be replaced with the above block, but it's not required
   while (buyWithEP()) continue
-  updateTheoremButtons()
   updateTimeStudyButtons()
   updateEternityUpgrades()
 }
@@ -123,17 +119,6 @@ function calculateTimeStudiesCost() {
     return totalCost
 }
 
-function updateTheoremButtons() {
-  document.getElementById("theoremam").className = player.money.gte(player.timestudy.amcost) ? "timetheorembtn" : "timetheorembtnlocked"
-  document.getElementById("theoremip").className = player.infinityPoints.gte(player.timestudy.ipcost) ? "timetheorembtn" : "timetheorembtnlocked"
-  document.getElementById("theoremep").className = player.eternityPoints.gte(player.timestudy.epcost) ? "timetheorembtn" : "timetheorembtnlocked"
-  document.getElementById("theoremep").innerHTML = "Buy Time Theorems Cost: "+shortenDimensions(player.timestudy.epcost)+" EP"
-  document.getElementById("theoremip").innerHTML = "Buy Time Theorems Cost: "+shortenCosts(player.timestudy.ipcost)+" IP"
-  document.getElementById("theoremam").innerHTML = "Buy Time Theorems Cost: "+shortenCosts(player.timestudy.amcost)
-  if (player.timestudy.theorem>99999) document.getElementById("timetheorems").innerHTML = "You have <span style='display:inline' class=\"TheoremAmount\">"+shortenMoney(player.timestudy.theorem)+"</span> Time "+"Theorems."
-  else document.getElementById("timetheorems").innerHTML = "You have <span style='display:inline' class=\"TheoremAmount\">"+Math.floor(player.timestudy.theorem).toFixed(0)+"</span> Time "+ (player.timestudy.theorem == 1 ? "Theorem." : "Theorems.")
-}
-
 function buyTimeStudy(name, cost, check) {
   if (shiftDown && check === undefined) studiesUntil(name);
   if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
@@ -162,7 +147,6 @@ function buyTimeStudy(name, cost, check) {
         if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
         else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
       }
-      updateTheoremButtons()
       updateTimeStudyButtons()
       drawStudyTree()
       return true
@@ -183,7 +167,6 @@ function buyDilationStudy(name, cost) {
         if (name !== 6) player.timestudy.theorem -= cost
         else if (player.realities === 0 && name === 6) player.timestudy.theorem -= cost
         document.getElementById("dilstudy"+name).className = "dilationupgbought"
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
     }
@@ -517,7 +500,6 @@ function respecTimeStudies() {
   }
   player.eternityChallUnlocked = 0
   updateTimeStudyButtons()
-  updateTheoremButtons()
   drawStudyTree()
   if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON"
   else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"

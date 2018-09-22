@@ -4,7 +4,7 @@ Vue.component('tt-shop', {
     `<div id="TTbuttons">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div class="ttbuttons-row ttbuttons-top-row">
-          <button class="timetheorembtn" style="width:130px" v-show="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
+          <button class="timetheorembtn" style="width:130px" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmount }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">
             <p id="studytreeloadsavetext">{{ view.shiftDown ? 'save:' : 'load:' }}</p>
@@ -13,7 +13,7 @@ Vue.component('tt-shop', {
             <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>
           </div>
         </div>
-        <div class="ttbuttons-row" v-show="!minimized">
+        <div class="ttbuttons-row" v-if="!minimized">
           <tt-buy-button :budget="player.money" :cost="player.timestudy.amcost" :format="formatAM" :action="buyWithAM"></tt-buy-button>
           <tt-buy-button :budget="player.infinityPoints" :cost="player.timestudy.ipcost" :format="formatIP" :action="buyWithIP"></tt-buy-button>
           <tt-buy-button :budget="player.eternityPoints" :cost="player.timestudy.epcost" :format="formatEP" :action="buyWithEP"></tt-buy-button>

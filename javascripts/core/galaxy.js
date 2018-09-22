@@ -27,7 +27,7 @@ function getGalaxyRequirement() {
   return amount;
 }
 
-document.getElementById("secondSoftReset").onclick = function() {
+function secondSoftResetBtnClick() {
   if (player.currentEternityChall === "eterc6") return;
   var bool = player.currentChallenge !== "challenge11" && player.currentChallenge !== "postc1" && player.currentChallenge !== "postc7" && (player.break || player.money.lte(Number.MAX_VALUE));
   if (player.currentChallenge === "challenge4" ? player.sixthAmount >= getGalaxyRequirement() && bool : player.eightAmount >= getGalaxyRequirement() && bool) {
@@ -35,6 +35,8 @@ document.getElementById("secondSoftReset").onclick = function() {
       else galaxyReset();
   }
 };
+
+document.getElementById("secondSoftReset").onclick = secondSoftResetBtnClick;
 
 function galaxyReset() {
     if (autoS) auto = false;

@@ -1,7 +1,3 @@
-
-
-var keys = [];
-
 var defaultStart = $.extend(true, {}, player);
 
 let kongIPMult = 1
@@ -420,7 +416,7 @@ function glowText(id) {
 
 
 
-document.getElementById("maxall").onclick = function () {
+function maxAll() {
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
     buyMaxTickSpeed();
 
@@ -526,6 +522,8 @@ document.getElementById("maxall").onclick = function () {
         floatText(name + "D", "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
     }
 }
+
+document.getElementById("maxall").onclick = maxAll;
 
 function buyInfinityUpgrade(name, cost) {
     if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
@@ -1199,7 +1197,7 @@ function sacrifice(auto) {
 
 
 
-document.getElementById("sacrifice").onclick = function () {
+function sacrificeBtnClick() {
     if (player.resets < 5) return false
     if (!document.getElementById("confirmation").checked) {
         if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
@@ -1211,6 +1209,7 @@ document.getElementById("sacrifice").onclick = function () {
     return sacrifice();
 }
 
+document.getElementById("sacrifice").onclick = sacrificeBtnClick;
 
 function updateAutobuyers() {
     var autoBuyerDim1 = new Autobuyer (1)
@@ -3729,135 +3728,22 @@ window.onload = function() {
 
 }
 
-window.addEventListener('keydown', function(event) {
-    if (keySequence == 0 && event.keyCode == 38) {
-        keySequence++
-    } else if (keySequence == 1 && event.keyCode == 38) {
-        keySequence++
-    } else if (keySequence == 2 && event.keyCode == 40) {
-        keySequence++
-    } else if (keySequence == 3 && event.keyCode == 40) {
-        keySequence++
-    } else if (keySequence == 4 && event.keyCode == 37) {
-        keySequence++
-    } else if (keySequence == 5 && event.keyCode == 39) {
-        keySequence++
-    } else if (keySequence == 6 && event.keyCode == 37) {
-        keySequence++
-    } else if (keySequence == 7 && event.keyCode == 39) {
-        keySequence++
-    } else if (keySequence == 8 && event.keyCode == 66) {
-        keySequence++
-    } else if (keySequence == 9 && event.keyCode == 65) {
-        giveAchievement("30 Lives")
-        if (player.money.lt(30)) player.money = new Decimal(30)
-    } else {
-        keySequence = 0;
-    }
-    if (event.keyCode == 17) controlDown = true;
-    if (event.keyCode == 16) {
-        shiftDown = true;
-        ui.view.shiftDown = true;
-        document.getElementById("automatorloadsavetext").textContent = "save:"
-        drawStudyTree()
-    }
-    if ((controlDown && shiftDown && (event.keyCode == 67 || event.keyCode == 73 || event.keyCode == 74)) || event.keyCode == 123) {
-        giveAchievement("Stop right there criminal scum!")
-    }
-}, false);
-
-window.addEventListener('keyup', function(event) {
-    if (event.keyCode == 17) controlDown = false;
-    if (event.keyCode == 16) {
-        shiftDown = false;
-        ui.view.shiftDown = false;
-        document.getElementById("automatorloadsavetext").textContent = "load:"
-        drawStudyTree()
-    }
-    if (keys.includes(event.keyCode)) keys.splice(keys.indexOf(event.keyCode), 1);
-}, false);
-
 window.onfocus = function() {
-    controlDown = false;
-    shiftDown = false;
-    ui.view.shiftDown = false;
-    document.getElementById("automatorloadsavetext").textContent = "load:"
-    drawStudyTree();
+    setControlKey(false);
+    setShiftKey(false);
     drawAutomatorTree();
+};
+
+function setShiftKey(isDown) {
+  shiftDown = isDown;
+  ui.view.shiftDown = isDown;
+  document.getElementById("automatorloadsavetext").textContent = isDown ? "load:" : "save:";
+  drawStudyTree()
 }
 
-window.addEventListener('keydown', function (event) {
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false;
-    if (!keys.includes(event.keyCode)) keys.push(event.keyCode);
-    for (let i = 0; i < keys.length; i++) {
-    const tmp = keys[i];
-        if (tmp >= 49 && tmp <= 56) {
-            if (shiftDown) buyOneDimension(tmp-48)
-            else buyManyDimension(tmp-48)
-            continue;
-        } else if (tmp >= 97 && tmp <= 104) {
-            if (shiftDown) buyOneDimension(tmp-96)
-            else buyManyDimension(tmp-96)
-            continue;
-        }
-        switch (keys[i]) {
-            case 57: // 9
-                giveAchievement("That dimension doesn’t exist")
-                continue;
-
-            case 65: // A
-                toggleAutoBuyers();
-                continue;
-
-            case 68: // D
-                document.getElementById("softReset").onclick()
-                continue;
-
-            case 71: // G
-                document.getElementById("secondSoftReset").onclick()
-                continue;
-
-            case 77: // M
-                document.getElementById("maxall").onclick()
-                continue;
-
-            case 83: // S
-                document.getElementById("sacrifice").onclick()
-                continue;
-
-            case 84: // T
-                if (shiftDown) buyTickSpeed()
-                else buyMaxTickSpeed()
-                continue;
-
-            case 82: //R
-                replicantiGalaxy()
-                continue;
-        }
-        keys.splice(i, 1);
-        i -= 1;
-    }
-  }, false);
-
-  window.addEventListener('keyup', function(event) {
-    if (event.keyCode === 70) {
-        $.notify("Paying respects", "info")
-        giveAchievement("It pays to have respect")
-    }
-    if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text"  || document.activeElement.type === "textarea") return false
-    switch (event.keyCode) {
-        case 67: // C
-            document.getElementById("bigcrunch").onclick()
-        break;
-
-        case 69: // E, also, nice.
-        document.getElementById("eternitybtn").onclick();
-        break;
-
-    }
-  }, false);
-
-
+function setControlKey(isDown) {
+  controlDown = isDown;
+}
 
 var totalMult = 1
 var currentMult = 1

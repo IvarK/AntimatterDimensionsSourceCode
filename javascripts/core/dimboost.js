@@ -125,7 +125,7 @@ function getShiftRequirement(bulk) {
     return { tier: tier, amount: amount };
 }
 
-document.getElementById("softReset").onclick = function () {
+function softResetBtnClick() {
   var name = TIER_NAMES[getShiftRequirement(0).tier]
   if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getShiftRequirement(0).amount) return;
   auto = false;
@@ -138,3 +138,5 @@ document.getElementById("softReset").onclick = function () {
     if (mult > 1) floatText(name + "D", "x" + shortenDimensions(mult))
   }
 };
+
+document.getElementById("softReset").onclick = softResetBtnClick;

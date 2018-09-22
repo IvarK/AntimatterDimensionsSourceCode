@@ -7,7 +7,6 @@ var shiftDown = false;
 var controlDown = false;
 var justImported = false;
 var saved = 0;
-var keySequence = 0;
 var failureCount = 0;
 var implosionCheck = 0;
 var realizationCheck = 0;

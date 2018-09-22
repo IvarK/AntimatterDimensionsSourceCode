@@ -73,27 +73,30 @@ function upgradeWormholeDuration() {
     updateWormholeUpgrades()
 }
 
+function setWormhole(state) {
+  player.wormhole.active = state;
+  player.wormhole.phase = 0;
+}
+
 let totalPhase;
 function wormHoleLoop(diff) {
 	// Change wormhole state
 	let incPhase = diff / 1000;
     if (player.wormhole.active) {
-		incPhase /= player.wormhole.power;
-		document.getElementById("wormholeStatus").textContent = "Wormhole is active for " + (player.wormhole.duration - player.wormhole.phase).toFixed(1) + " more seconds.";
-        if (player.wormhole.phase >= player.wormhole.duration) {
-            player.wormhole.phase = 0
-            player.wormhole.active = false
-			updateTickSpeed();
-        }
+      incPhase /= player.wormhole.power;
+      document.getElementById("wormholeStatus").textContent = "Wormhole is active for " + (player.wormhole.duration - player.wormhole.phase).toFixed(1) + " more seconds.";
+      if (player.wormhole.phase >= player.wormhole.duration) {
+        player.wormhole.phase -= player.wormhole.duration
+        player.wormhole.active = false
+        updateTickSpeed();
+      }
     } else {
-		document.getElementById("wormholeStatus").textContent = "Wormhole will activate in " + (player.wormhole.speed - player.wormhole.phase).toFixed(1) + " seconds.";
-        if (player.wormhole.phase >= player.wormhole.speed) {
-            player.wormhole.phase = 0
-            player.wormhole.active = true
-			updateTickSpeed();
-			if (player.wormhole.speed > 60)
-				$.notify("Wormhole activated!", "info")
-        }
+      document.getElementById("wormholeStatus").textContent = "Wormhole will activate in " + (player.wormhole.speed - player.wormhole.phase).toFixed(1) + " seconds.";
+      if (player.wormhole.phase >= player.wormhole.speed) {
+        player.wormhole.phase -= player.wormhole.speed
+        player.wormhole.active = true
+        updateTickSpeed();
+      }
     }
 	player.wormhole.phase += incPhase;
 	totalPhase = getTotalPhase();

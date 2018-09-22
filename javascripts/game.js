@@ -3170,6 +3170,16 @@ function gameLoop(diff) {
     player.lastUpdate = thisUpdate;
 }
 
+// Reducing boilerplate code a bit (runs a specified number of ticks with a specified length and triggers autobuyers after each tick)
+function gameLoopWithAutobuyers(seconds, ticks, real) {
+  for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
+    gameLoop(1000 * seconds)
+    autoBuyerTick();
+    if (real)
+      console.log(ticksDone)
+  }
+}
+
 function simulateTime(seconds, real, fast) {
 
     //the game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted into a higher diff per tick
@@ -3178,18 +3188,72 @@ function simulateTime(seconds, real, fast) {
     var ticks = seconds * 20;
     var bonusDiff = 0;
     var playerStart = Object.assign({}, player);
-    if (ticks > 1000 && !real && !fast) {
-        bonusDiff = (ticks - 1000) / 20;
-        ticks = 1000;
-    } else if (ticks > 50 && fast) {
-        bonusDiff = (ticks - 50);
-        ticks = 50;
+    let wormholeActivations = 0;
+    
+    // Simulation code with wormhole (should be at most 600 ticks)
+    if (player.wormhole.unlocked) {
+      let wormholeCycleTime = player.wormhole.duration + player.wormhole.speed;
+      wormholeActivations = Math.floor(seconds / wormholeCycleTime);
+      
+      if (wormholeActivations < 2)  // Should be fine to just simulate the ticks
+        gameLoopWithAutobuyers(seconds / 600, 600, real)
+      else {
+        // Simulate until the start of the idle cycle (50 ticks each part) for code consistency
+        let simulatedAtStart = 0;
+        if (!player.wormhole.active) {
+          let simulatedIdleTime = player.wormhole.speed - player.wormhole.phase;
+          gameLoopWithAutobuyers(simulatedIdleTime / 50, 50, real);
+          setWormhole(true);
+          simulatedAtStart += simulatedIdleTime;
+        }
+        let simulatedActiveTime = player.wormhole.duration - player.wormhole.phase;
+        gameLoopWithAutobuyers(simulatedActiveTime / 50, 50, real);
+        setWormhole(false);
+        simulatedAtStart += simulatedActiveTime;
+        
+        // Calculate how much time to simulate after cycles, "borrowing" time from one activation if needed
+        let afterCycleTime = seconds - wormholeActivations * wormholeCycleTime - simulatedAtStart;
+        if (afterCycleTime < 0) {
+          afterCycleTime += wormholeCycleTime;
+          wormholeActivations--;
+        }
+        
+        // Simulate repeated wormhole activations
+        if (wormholeActivations < 100) { // Run X ticks per activation, half on and half off, maximum 400
+          let ticksPerActivation = Math.floor(400 / wormholeActivations);
+          for (let act = 0; act < wormholeActivations; act++) {
+            gameLoopWithAutobuyers(player.wormhole.speed / ticksPerActivation, ticksPerActivation, real)
+            setWormhole(true);
+            gameLoopWithAutobuyers(player.wormhole.duration / ticksPerActivation, ticksPerActivation, real)
+            setWormhole(false);
+          }
+        }
+        else {  // Calculates an average speedup and just does 400 ticks at that rate with the wormhole explicitly disabled after each tick
+          let avgSpeed = (player.wormhole.speed + player.wormhole.power * player.wormhole.duration) / wormholeCycleTime;
+          for (let ticksDone = 0; ticksDone < 400; ticksDone++) {
+            gameLoop(avgSpeed * seconds);
+            setWormhole(false);
+            autoBuyerTick();
+          if (real)
+            console.log(ticksDone)
+          }
+        }
+      
+        // Simulates another 100 ticks after the wormhole stuff to get the right phase
+        gameLoopWithAutobuyers(afterCycleTime / 100, 100, real);
+      }
     }
-    let ticksDone = 0
-    for (ticksDone=0; ticksDone<ticks; ticksDone++) {
-        gameLoop(50+bonusDiff)
-        autoBuyerTick();
-        if (real) console.log(ticksDone)
+      
+    // This is pretty much the older simulation code
+    else {  
+      if (ticks > 1000 && !real && !fast) {
+          bonusDiff = (ticks - 1000) / 20;
+          ticks = 1000;
+      } else if (ticks > 50 && fast) {
+          bonusDiff = (ticks - 50);
+          ticks = 50;
+      }
+      gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
     var popupString = "While you were away"
     if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
@@ -3199,6 +3263,7 @@ function simulateTime(seconds, real, fast) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
+    if (wormholeActivations != 0)  popupString+= " <br>The wormhole activated  "+ wormholeActivations + (wormholeActivations == 1 ? " time." : " times.")
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")

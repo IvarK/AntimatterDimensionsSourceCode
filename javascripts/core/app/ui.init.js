@@ -11,6 +11,7 @@ var ui = {
     },
     tab : {
         current: undefined
-    }
+    },
+    shiftDown: false
   }
 };

@@ -1979,7 +1979,6 @@ document.getElementById("ec1unl").onclick = function() {
     if (canUnlockEC(1, 30, 171)) {
         unlockEChall(1)
         player.timestudy.theorem -= 30
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -1990,7 +1989,6 @@ document.getElementById("ec2unl").onclick = function() {
     if (canUnlockEC(2, 35, 171)) {
         unlockEChall(2)
         player.timestudy.theorem -= 35
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2001,7 +1999,6 @@ document.getElementById("ec3unl").onclick = function() {
     if (canUnlockEC(3, 40, 171)) {
         unlockEChall(3)
         player.timestudy.theorem -= 40
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2012,7 +2009,6 @@ document.getElementById("ec4unl").onclick = function() {
     if (canUnlockEC(4, 70, 143)) {
         unlockEChall(4)
         player.timestudy.theorem -= 70
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2023,7 +2019,6 @@ document.getElementById("ec5unl").onclick = function() {
     if (canUnlockEC(5, 130, 42)) {
         unlockEChall(5)
         player.timestudy.theorem -= 130
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2034,7 +2029,6 @@ document.getElementById("ec6unl").onclick = function() {
     if (canUnlockEC(6, 85, 121)) {
         unlockEChall(6)
         player.timestudy.theorem -= 85
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2045,7 +2039,6 @@ document.getElementById("ec7unl").onclick = function() {
     if (canUnlockEC(7, 115, 111)) {
         unlockEChall(7)
         player.timestudy.theorem -= 115
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2056,7 +2049,6 @@ document.getElementById("ec8unl").onclick = function() {
     if (canUnlockEC(8, 115, 123)) {
         unlockEChall(8)
         player.timestudy.theorem -= 115
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2067,7 +2059,6 @@ document.getElementById("ec9unl").onclick = function() {
     if (canUnlockEC(9, 415, 151)) {
         unlockEChall(9)
         player.timestudy.theorem -= 415
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2078,7 +2069,6 @@ document.getElementById("ec10unl").onclick = function() {
     if (canUnlockEC(10, 550, 181)) {
         unlockEChall(10)
         player.timestudy.theorem -= 550
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2089,7 +2079,6 @@ document.getElementById("ec11unl").onclick = function() {
     if (canUnlockEC(11, 1, 231, 232)) {
         unlockEChall(11)
         player.timestudy.theorem -= 1
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2100,7 +2089,6 @@ document.getElementById("ec12unl").onclick = function() {
     if (canUnlockEC(12, 1, 233, 234)) {
         unlockEChall(12)
         player.timestudy.theorem -= 1
-        updateTheoremButtons()
         updateTimeStudyButtons()
         drawStudyTree()
         return true
@@ -2325,7 +2313,6 @@ setInterval(function() {
     document.getElementById("replicantimax").className = (player.infinityPoints.gte(player.replicanti.galCost)) ? "storebtn" : "unavailablebtn"
     document.getElementById("replicantireset").className = (player.replicanti.galaxies < player.replicanti.gal && player.replicanti.amount.gte(Number.MAX_VALUE)) ? "storebtn" : "unavailablebtn"
     document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e140)) ? "storebtn" : "unavailablebtn"
-    updateTheoremButtons()
 
     if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
 
@@ -3152,8 +3139,6 @@ function gameLoop(diff) {
     if (player.dilation.upgrades.includes(10)) {
         player.timestudy.theorem += parseFloat(player.dilation.tachyonParticles.div(20000).times(diff/1000).toString())
         if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") {
-            if (player.timestudy.theorem>99999) document.getElementById("timetheorems").innerHTML = "You have <span style='display:inline' class=\"TheoremAmount\">"+shortenMoney(player.timestudy.theorem)+"</span> Time "+"Theorems."
-            else document.getElementById("timetheorems").innerHTML = "You have <span style='display:inline' class=\"TheoremAmount\">"+Math.floor(player.timestudy.theorem).toFixed(0)+"</span> Time "+ (player.timestudy.theorem == 1 ? "Theorem." : "Theorems.")
             updateTimeStudyButtons()
         }
     }
@@ -3707,7 +3692,7 @@ window.addEventListener('keydown', function(event) {
     if (event.keyCode == 17) controlDown = true;
     if (event.keyCode == 16) {
         shiftDown = true;
-        document.getElementById("studytreeloadsavetext").textContent = "save:"
+        ui.view.shiftDown = true;
         document.getElementById("automatorloadsavetext").textContent = "save:"
         drawStudyTree()
     }
@@ -3720,7 +3705,7 @@ window.addEventListener('keyup', function(event) {
     if (event.keyCode == 17) controlDown = false;
     if (event.keyCode == 16) {
         shiftDown = false;
-        document.getElementById("studytreeloadsavetext").textContent = "load:"
+        ui.view.shiftDown = false;
         document.getElementById("automatorloadsavetext").textContent = "load:"
         drawStudyTree()
     }
@@ -3730,7 +3715,7 @@ window.addEventListener('keyup', function(event) {
 window.onfocus = function() {
     controlDown = false;
     shiftDown = false;
-    document.getElementById("studytreeloadsavetext").textContent = "load:"
+    ui.view.shiftDown = false;
     document.getElementById("automatorloadsavetext").textContent = "load:"
     drawStudyTree();
     drawAutomatorTree();

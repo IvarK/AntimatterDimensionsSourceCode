@@ -638,7 +638,6 @@ if (player.version < 5) {
   updateAutobuyers();
   setAchieveTooltip();
   updatePriorities();
-  updateTheoremButtons();
   updateTimeStudyButtons();
   totalMult = Math.pow(player.totalmoney.e+1, 0.5)
   currentMult = Math.pow(player.money.e+1, 0.5)

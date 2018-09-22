@@ -3230,6 +3230,8 @@ function simulateTime(seconds, real, fast) {
         }
         else {  // Calculates an average speedup and just does 400 ticks at that rate with the wormhole explicitly disabled after each tick
           let avgSpeed = (player.wormhole.speed + player.wormhole.power * player.wormhole.duration) / wormholeCycleTime;
+          oldTotalTime = player.totalTimePlayed;
+          oldRealTime = player.realTimePlayed;
           for (let ticksDone = 0; ticksDone < 400; ticksDone++) {
             gameLoop(avgSpeed * seconds);
             setWormhole(false);
@@ -3237,9 +3239,12 @@ function simulateTime(seconds, real, fast) {
           if (real)
             console.log(ticksDone)
           }
+          player.totalTimePlayed = oldTotalTime + 1000*seconds * avgSpeed;
+          player.realTimePlayed = oldRealTime + 1000*seconds;
         }
       
         // Simulates another 100 ticks after the wormhole stuff to get the right phase
+        console.log("Simulating " + afterCycleTime + " seconds after cycles");
         gameLoopWithAutobuyers(afterCycleTime / 100, 100, real);
       }
     }
@@ -3789,6 +3794,7 @@ window.onfocus = function() {
 window.addEventListener('keydown', function (event) {
     if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false;
     if (!keys.includes(event.keyCode)) keys.push(event.keyCode);
+    console.log(keys);
     for (let i = 0; i < keys.length; i++) {
     const tmp = keys[i];
         if (tmp >= 49 && tmp <= 56) {

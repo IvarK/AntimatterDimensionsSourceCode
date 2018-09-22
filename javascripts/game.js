@@ -3244,7 +3244,6 @@ function simulateTime(seconds, real, fast) {
         }
       
         // Simulates another 100 ticks after the wormhole stuff to get the right phase
-        console.log("Simulating " + afterCycleTime + " seconds after cycles");
         gameLoopWithAutobuyers(afterCycleTime / 100, 100, real);
       }
     }
@@ -3794,7 +3793,6 @@ window.onfocus = function() {
 window.addEventListener('keydown', function (event) {
     if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text" || document.activeElement.type === "textarea") return false;
     if (!keys.includes(event.keyCode)) keys.push(event.keyCode);
-    console.log(keys);
     for (let i = 0; i < keys.length; i++) {
     const tmp = keys[i];
         if (tmp >= 49 && tmp <= 56) {

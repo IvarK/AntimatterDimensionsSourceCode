@@ -41,6 +41,7 @@ class Keyboard {
     if (Keyboard.spins[key] !== undefined) {
       throw "Duplicate spin binding";
     }
+    Keyboard.spins[key] = spin;
     Mousetrap.bind(key, () => spin.start(), "keydown");
     Mousetrap.bind(key, () => spin.stop(), "keyup");
   }

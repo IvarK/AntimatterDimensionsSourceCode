@@ -350,7 +350,7 @@ input {
     text-shadow: 0px 0px 7px #64DD17;
 }
 
-#timetheorems {
+#timetheorems, #studytreeloadsavetext, #minimizeArrow {
     color: grey !important;
 }
 

@@ -2,9 +2,9 @@ Vue.component('tt-shop', {
   props: ['player', 'view'],
   template:
     `<div id="TTbuttons">
-      <div id="theorembuybackground">
+      <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div class="ttbuttons-row ttbuttons-top-row">
-          <button class="timetheorembtn" style="width:130px" onclick="maxTheorems()">Buy max Theorems</button>
+          <button class="timetheorembtn" style="width:130px" v-show="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmount }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">
             <p id="studytreeloadsavetext">{{ view.shiftDown ? 'save:' : 'load:' }}</p>
@@ -13,12 +13,15 @@ Vue.component('tt-shop', {
             <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>
           </div>
         </div>
-        <div class="ttbuttons-row">
+        <div class="ttbuttons-row" v-show="!minimized">
           <tt-buy-button :budget="player.money" :cost="player.timestudy.amcost" :format="formatAM" :action="buyWithAM"></tt-buy-button>
           <tt-buy-button :budget="player.infinityPoints" :cost="player.timestudy.ipcost" :format="formatIP" :action="buyWithIP"></tt-buy-button>
           <tt-buy-button :budget="player.eternityPoints" :cost="player.timestudy.epcost" :format="formatEP" :action="buyWithEP"></tt-buy-button>
         </div>
-      </div>    
+      </div>
+      <button v-if="minimizeVisible" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
+        <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
+      </button>
     </div>`,
   computed: {
     theoremAmount: function() {
@@ -31,8 +34,28 @@ Vue.component('tt-shop', {
     theoremNoun: function() {
       return this.player.timestudy.theorem === 1 ? "Theorem" : "Theorems";
     },
+    minimized: function() {
+      return this.player.timestudy.shopMinimized;
+    },
+    minimizeVisible: function() {
+      return this.player.dilation.upgrades.includes(10);
+    },
+    minimizeArrowStyle: function() {
+      return {
+        transform: this.minimized ? "rotateX(180deg)" : "",
+      };
+    },
+    containerStyle: function() {
+      return {
+        transform: this.minimized ? "translateY(73px)" : "",
+        width: this.minimized ? "440px" : "555px"
+      }
+    }
   },
   methods: {
+    minimize: function() {
+      this.player.timestudy.shopMinimized = !this.player.timestudy.shopMinimized;
+    },
     formatAM: function(am) {
       return shortenCosts(am);
     },

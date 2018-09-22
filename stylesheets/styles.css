@@ -45,6 +45,7 @@ button {
   left: 50%;
   transform: translateX(-50%);
   font-family: Typewriter, serif;
+  align-items: flex-end;
 }
 
 #news {
@@ -1123,6 +1124,8 @@ button {
 #timetheorems {
     color: black;
     font-size: 15px;
+    text-align: center;
+    flex: 1 0 auto;
 }
 
 #studytreeloadsavetext {
@@ -1131,17 +1134,38 @@ button {
 }
 
 #theorembuybackground {
-    padding: 0 10px 5px 10px;
     background: #E0E0E0;
-    width: 550px;
-    height: 105px;
     border: 2px solid black;
     border-bottom: none;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
+}
+
+.ttshop-container {
+  padding: 0 10px 5px 10px;
+  width: 555px;
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease-out;
+}
+
+.ttshop-minimize-btn {
+  width: 39px;
+  height: 39px;
+  margin-left: -2px
+}
+
+.ttshop-minimize-btn span {
+  display: inline-block;
+  transition: all 0.25s ease-out;
+  margin-left: -1px;
+  font-size: 25px;
+}
+
+#minimizeArrow {
+  color: black;
 }
 
 .ttbuttons-row {

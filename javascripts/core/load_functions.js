@@ -391,6 +391,8 @@ if (player.version < 5) {
       }
   }
 
+  if (player.timestudy.shopMinimized === undefined) player.timestudy.shopMinimized = false;
+
 
 
   if (player.eternities == 0) {

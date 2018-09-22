@@ -29,7 +29,7 @@ function showTab(tabName) {
         }
     }
     tryShowtab(tabName);
-    if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "block";
+    if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "flex";
     else document.getElementById("TTbuttons").style.display = "none"
     if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
     else document.getElementById("progress").style.display = "none"
@@ -3548,7 +3548,7 @@ function showEternityTab(tabName, init) {
             tab.style.display = 'none';
         }
     }
-    if (tabName === 'timestudies' && !init) document.getElementById("TTbuttons").style.display = "block"
+    if (tabName === 'timestudies' && !init) document.getElementById("TTbuttons").style.display = "flex"
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas()
     tryStartTachyonAnimation();

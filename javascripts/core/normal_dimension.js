@@ -211,7 +211,7 @@ function hasInfinityMult(tier) {
 
         for (i in player.reality.glyphs.active) {
           var glyph = player.reality.glyphs.active[i]
-          if (glyph.type == "power" && glyph.effects.buy10 !== undefined) dimMult = dimMult.times(glyph.effects.buy10)
+          if (glyph.type == "power" && glyph.effects.buy10 !== undefined) dimMult *= glyph.effects.buy10
         }
 
         return dimMult;

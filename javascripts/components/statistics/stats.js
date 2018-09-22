@@ -13,7 +13,7 @@ Vue.component('statistics-stats-tab', {
         <div v-if="infinityUnlocked">\
             <h3>Infinity</h3>\
             <div v-if="hasInfinities">You have infinitied {{ formatResetAmount(player.infinitied) }}<span v-if="eternityUnlocked"> this eternity</span>.</div>\
-            <div v-else>You have\'t infinitied<span v-if="eternityUnlocked"> this eternity</span>.</div>\
+            <div v-else>You haven\'t infinitied<span v-if="eternityUnlocked"> this eternity</span>.</div>\
             <div v-if="hasBankedInfinities">You have {{ formatAmount(player.infinitiedBank) }} banked infinities.</div>\
             <div v-if="hasBestInfinity">Your fastest Infinity is in {{ timeDisplay(player.bestInfinityTime) }}.</div>\
             <div v-else>You have no fastest infinity<span v-if="eternityUnlocked"> this eternity</span>.</div>\
@@ -23,7 +23,7 @@ Vue.component('statistics-stats-tab', {
         <div v-if="eternityUnlocked">\
             <h3>Eternity</h3>\
             <div v-if="hasEternities">You have Eternitied {{ formatResetAmount(player.eternities) }}<span v-if="realityUnlocked"> this reality</span>.</div>\
-            <div v-else>You have\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
+            <div v-else>You haven\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div v-if="hasBestEternity">Your fastest Eternity is in {{ timeDisplay(player.bestEternity) }}.</div>\
             <div v-else>You have no fastest eternity<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div>You have spent {{ timeDisplay(player.thisEternity) }} in this Eternity.</div>\

@@ -44,7 +44,7 @@ Keyboard.bind("up up down down left right left right b a", () => {
   }
 });
 
-Keyboard.bindRepeatableHotkey("f", () => {
+Keyboard.bindRepeatable("f", () => {
   $.notify("Paying respects", "info");
   giveAchievement("It pays to have respect");
 });

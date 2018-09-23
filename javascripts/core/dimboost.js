@@ -78,9 +78,9 @@ function skipResetsIfPossible() {
             player.resets = 4;
             if (player.galaxies === 0) player.galaxies = 1
         }
-        else if (player.infinityUpgrades.includes("skipReset3")) player.resets = 3;
-        else if (player.infinityUpgrades.includes("skipReset2")) player.resets = 2;
-        else if (player.infinityUpgrades.includes("skipReset1")) player.resets = 1;
+        else if (player.infinityUpgrades.includes("skipReset3") && player.resets < 3) player.resets = 3;
+        else if (player.infinityUpgrades.includes("skipReset2") && player.resets < 2) player.resets = 2;
+        else if (player.infinityUpgrades.includes("skipReset1") && player.resets < 1) player.resets = 1;
     }
 }
 

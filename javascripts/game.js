@@ -3145,12 +3145,48 @@ function gameLoop(diff) {
 
     document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
-	if (gainedRealityMachines() < 554)	// At more than (e7659 EP, 554 RM), each +1 EP exponent always adds at least one more RM.  This prevents some display funniness with the percentage text being put on the next line alone (when >1000 RM) when it doesn't even matter any more
-		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
-	else
-		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+"<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)"
-    document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
-    if (player.wormhole.unlocked) wormHoleLoop(diff)
+  
+  // Adjust the text on the reality button in order to minimize text overflowing
+  let glyphLevelText = "<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)";
+  if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
+    document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to reality again!"
+	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely
+		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+glyphLevelText;
+  else if (player.eternityPoints.exponent > 4986)  // At more than (4986 EP, 5.48 RM) each +1 EP exponent always adds at least one more RM percent, so drop the decimal points
+		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+Math.floor(percentToNextRealityMachine()).toFixed(0)+"%)"+glyphLevelText;
+	else 
+		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)"+glyphLevelText
+  document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
+  
+  // Tooltip for reality button stating more detailed RM and glyph level info
+  let nextRMText = gainedRealityMachines() < 100 ? "Next RM gained at " + shortenDimensions(new Decimal("1e" + Math.floor(4000*(1 + Math.log(parseInt(gainedRealityMachines().toFixed()) + 1)/Math.log(1000))))) + "<br><br>" : "";
+  let EPFactor = Math.sqrt(player.eternityPoints.e / 4000);
+  let replPow = 0.4
+  for (i in player.reality.glyphs.active) {
+    let glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
+  }
+  let replFactor = Math.pow(player.replicanti.amount.e, replPow) / Math.sqrt(100000 / Math.sqrt(4000));
+  let DTFactor = Math.pow(player.dilation.dilatedTime.log10(), 1.3) / Math.sqrt(100000 / Math.sqrt(4000));
+  if (player.dilation.dilatedTime.exponent == 0)
+    DTFactor = 0;
+  let eterFactor = Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1);
+  let perkFactor = 0;
+  if (player.reality.perks.includes(21)) perkFactor++;
+  if (player.reality.perks.includes(24)) perkFactor++;
+  let factorNames = ["EP", "Replicanti", "DT", "Eternities", "Perks"];
+  let factorNumbers = [EPFactor.toFixed(2), "x"+replFactor.toFixed(2), "x"+DTFactor.toFixed(2), "x"+eterFactor.toFixed(2), "+"+perkFactor]
+  let isFactorDisplayed = [true, true, true, player.reality.upg.includes(18), perkFactor != 0]
+  let glyphLevelFactorText = 'Glyph level factors:<table style="width:100%">';
+  for (let i = 0; i < factorNames.length; i++)
+    if (isFactorDisplayed[i])
+      glyphLevelFactorText += "<tr><td>" + factorNames[i] + "</td><td>" + factorNumbers[i] + "</td></tr>";
+  glyphLevelFactorText += "</table>";
+  document.getElementById("realitymachine").className = "infotooltip"
+  $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
+  
+  if (player.wormhole.unlocked)
+    wormHoleLoop(diff)
 		
 	// Increased cost scaling tooltips
 	if (player.eternityPoints.exponent > 6000)

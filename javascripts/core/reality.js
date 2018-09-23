@@ -135,8 +135,8 @@ function reality(force) {
     player.dimlife = true;
     player.dead = true;
     player.realities = player.realities + 1;
-    player.thisReality = 0;
     player.bestReality = Math.min(player.thisReality, player.bestReality);
+    player.thisReality = 0;
     player.timestudy.theorem = 0;
     player.timestudy.amcost = new Decimal("1e20000");
     player.timestudy.ipcost = new Decimal(1);

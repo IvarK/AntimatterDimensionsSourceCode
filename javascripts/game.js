@@ -1675,8 +1675,8 @@ function updateLastTenRealities() {
 }
 
 function addRealityTime(time, rm, level) {
-    player.lastTenEternities.pop();
-    player.lastTenEternities.unshift([time, rm, level]);
+    player.lastTenRealities.pop();
+    player.lastTenRealities.unshift([time, rm, level]);
 }
 
 

@@ -46,7 +46,7 @@ Vue.component('statistics-challenge-times', {
   template:
     '<div>\
         <br>\
-        <div v-for="(time, index) in times">\
+        <div v-for="(time, index) in times" :key="index">\
             <span>{{ name }} {{ start + index }} time record: {{ timeDisplayShort(time) }}</span>\
         </div>\
         <br>\

@@ -1,7 +1,7 @@
 const pastRunsMixin = {
   methods: {
     runGain(run) {
-      return shortenDimensions(run[1])
+      return shortenDimensions(run[1]);
     }
   }
 };
@@ -23,7 +23,7 @@ Vue.component('statistic-past-infinities', {
       reward: function(run) {
         return this.runGain(run) + " IP";
       }
-    }
+    };
   }
 });
 
@@ -44,7 +44,7 @@ Vue.component('statistic-past-eternities', {
       reward: function(run) {
         return this.runGain(run) + " EP";
       }
-    }
+    };
   }
 });
 
@@ -66,7 +66,7 @@ Vue.component('statistic-past-realities', {
         let rm = run[1].eq(1) ? " reality machine" : " reality machines";
         return this.runGain(run) + rm + " and a level " + run[2] + " glyph";
       }
-    }
+    };
   }
 });
 
@@ -89,7 +89,7 @@ Vue.component('statistic-past-runs', {
   template:
     '<div class="statstab">\
         <br>\
-        <div v-for="(run, index) in runs">\
+        <div v-for="(run, index) in runs" :key="index">\
             <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\
             <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>\
         </div>\
@@ -102,8 +102,10 @@ Vue.component('statistic-past-runs', {
   methods: {
     averageGain: function(time, amount) {
       let rpm = ratePerMinute(amount, time);
-      var tempstring = shorten(rpm) + " " + this.points + "/min";
-      if (rpm < 1) tempstring = shorten(rpm * 60) + " " + this.points + "/hour";
+      let tempstring = shorten(rpm) + " " + this.points + "/min";
+      if (rpm < 1) {
+        tempstring = shorten(rpm * 60) + " " + this.points + "/hour";
+      }
       return tempstring;
     },
     averageRunGain: function(run) {

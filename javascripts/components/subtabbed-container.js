@@ -3,23 +3,25 @@ Vue.component('subtabbed-container', {
   data: function() {
     return {
       openedTab: this.tabs[0]
-    }
+    };
   },
   template:
     '<div>\
         <tr>\
-            <td is="subtab-button" v-for="tab in tabs" @click="openTab(tab)" v-if="canShow(tab)" >{{ tab.name }}</td>\
+            <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="openTab(tab)">{{ tab.name }}</td>\
         </tr>\
         <keep-alive>\
             <component :is="openedTab.component" :model="model"></component>\
         </keep-alive>\
     </div>',
+  computed: {
+    visibleTabs: function() {
+      return this.tabs.filter(tab => tab.condition === undefined || tab.condition());
+    }
+  },
   methods: {
     openTab: function(tab) {
       this.openedTab = tab;
-    },
-    canShow: function(tab) {
-      return tab.condition === undefined || tab.condition();
     }
   },
   components: {

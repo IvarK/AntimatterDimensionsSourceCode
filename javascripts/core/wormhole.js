@@ -18,7 +18,8 @@
     if (player.reality.realityMachines < getWormholeDurationCost()) $("#wormholeduration").addClass("rUpgUn")
     else $("#wormholeduration").removeClass("rUpgUn")
 
-	recalculateOrbit();
+  if (planet !== undefined) // This function gets called once on-load before the wormhole is initialized
+    recalculateOrbit();
  }
 
 function unlockWormhole() {
@@ -212,7 +213,7 @@ function getTotalPhase() {
 let particleList = [];
 function initializeWormhole() {
 	// Black hole and planet
-    planet = new Dot(planetSize, 'planet', 0, 0);
+  planet = new Dot(planetSize, 'planet', 0, 0);
 	hole = new Dot(0, 'hole', 0, 0);
 			
 	// Orbital size parameters

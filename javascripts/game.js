@@ -3731,7 +3731,6 @@ function init() {
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)
     load_game();
-	  initializeWormhole();
     updateTickSpeed();
     updateAutobuyers();
     updateChallengeTimes()

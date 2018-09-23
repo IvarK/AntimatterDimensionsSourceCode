@@ -639,6 +639,7 @@ if (player.version < 5) {
     $("#wormholecontainer").show()
     $(".wormhole-upgrades").show()
   }
+	initializeWormhole();
 
   updateAutobuyers();
   setAchieveTooltip();

@@ -101,22 +101,27 @@ function wormHoleLoop(diff) {
     }
 	player.wormhole.phase += incPhase;
 	totalPhase = getTotalPhase();
+  
+  // Prevents a flickering wormhole if phase gets set too high (shouldn't ever happen in practice)
+  if (player.wormhole.phase > period)
+    player.wormhole.phase %= period;
+    
 			
-    // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
-    E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
-    r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
-    theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
-    if (Math.tan(E0/2) < 0)
-        theta *= -1;
-    planet.radius = r;
+  // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
+  E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
+  r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
+  theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
+  if (Math.tan(E0/2) < 0)
+    theta *= -1;
+  planet.radius = r;
 	planet.angle = theta / (2*Math.PI);
 
-    // Time dilation factor (Realistic formula, but only actually used for particle speed)
-    delta = 1 / Math.sqrt(1 - bhSize/r);
+  // Time dilation factor (Realistic formula, but only actually used for particle speed)
+  delta = 1 / Math.sqrt(1 - bhSize/r);
 				
 	// Move+draw everything
 	document.getElementById("wormholeImage").getContext('2d').clearRect(0, 0, 400, 400);
-    for (let i = 0; i < particleList.length; i++) {
+  for (let i = 0; i < particleList.length; i++) {
 		particleList[i].update();
 		particleList[i].draw();
 	}

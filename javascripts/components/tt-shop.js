@@ -19,7 +19,7 @@ Vue.component('tt-shop', {
           <tt-buy-button :budget="player.eternityPoints" :cost="player.timestudy.epcost" :format="formatEP" :action="buyWithEP"></tt-buy-button>
         </div>
       </div>
-      <button v-if="minimizeVisible" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
+      <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
         <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
       </button>
     </div>`,
@@ -35,9 +35,9 @@ Vue.component('tt-shop', {
       return this.player.timestudy.theorem === 1 ? "Theorem" : "Theorems";
     },
     minimized: function() {
-      return this.player.timestudy.shopMinimized;
+      return this.minimizeAvailable && this.player.timestudy.shopMinimized;
     },
-    minimizeVisible: function() {
+    minimizeAvailable: function() {
       return this.player.dilation.upgrades.includes(10);
     },
     minimizeArrowStyle: function() {
@@ -49,7 +49,7 @@ Vue.component('tt-shop', {
       return {
         transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
-      }
+      };
     }
   },
   methods: {

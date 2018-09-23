@@ -2,8 +2,8 @@
 // Keyboard.bind for single press combinations
 // Keyboard.bindRepeatable for repeatable combinations
 // Hotkeys obey player.options.hotkeys option
-// Keyboard.bindRepeatableHotkey for single press hotkeys
-// Keyboard.bindSpinHotkey for repeatable hotkeys
+// Keyboard.bindHotkey for single press hotkeys
+// Keyboard.bindRepeatableHotkey for repeatable hotkeys
 // Keyboard class uses Mousetrap under the hood, so for more details visit
 // https://craig.is/killing/mice
 

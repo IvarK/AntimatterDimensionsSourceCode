@@ -11,6 +11,7 @@ Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
+Modal.import = new Modal("modal-import");
 Modal.message = new Modal("modal-message");
 Modal.message.show = function(text) {
     if (!uiInitialized) return;

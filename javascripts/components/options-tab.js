@@ -24,7 +24,7 @@ Vue.component('options-buttons', {
         <tr>\
           <td><primary-named-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"></primary-named-on-off></td>\
           <td><primary-button fontSize="20px" @click="actions.export">Export</primary-button></td>\
-          <td><primary-button fontSize="20px" @click="actions.import">Import</primary-button></td>\
+          <td><primary-button fontSize="20px" @click="showImportModal">Import</primary-button></td>\
         </tr>\
         <tr>\
           <td><primary-button fontSize="160%" @click="showConfirmationOptions">Confirmations</primary-button></td>\
@@ -55,6 +55,9 @@ Vue.component('options-buttons', {
     methods: {
         showLoadGameModal: function() {
             Modal.loadGame.show();
+        },
+        showImportModal: function() {
+            Modal.import.show();
         },
         showConfirmationOptions: function() {
             Modal.confirmationOptions.show();

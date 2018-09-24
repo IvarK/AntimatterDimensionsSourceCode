@@ -66,6 +66,7 @@ Theme.tryUnlock = function(name) {
     player.secretUnlocks.themes.push(prefix + _.capitalize(name));
     Theme.set(prefix);
     giveAchievement("Shhh... It's a secret");
+    return true;
 };
 
 Theme.light = function(name, overrideColors) {

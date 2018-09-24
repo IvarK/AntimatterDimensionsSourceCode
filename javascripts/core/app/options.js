@@ -63,8 +63,28 @@ ui.actions.options.export = function() {
 };
 
 ui.actions.options.import = function() {
-    var save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
-    if (save_data.constructor !== String) save_data = "";
+  let save_data = prompt("Input your save. (if you import a valid save, your current save file will be overwritten!)");
+  if (save_data.constructor !== String) {
+    return;
+  }
+  importSave(save_data);
+};
+
+function parseSaveData(save) {
+  let parsedSave;
+  try {
+    parsedSave = JSON.parse(atob(save), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
+  }
+  catch (e) {
+    parsedSave = undefined;
+  }
+  if (!parsedSave || !verify_save(parsedSave)) {
+    return undefined;
+  }
+  return parsedSave;
+}
+
+function importSave(save_data) {
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
         document.getElementById("body").style.animation = "barrelRoll 5s 1";
         giveAchievement("Do a barrel roll!");
@@ -73,18 +93,13 @@ ui.actions.options.import = function() {
     if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274") giveAchievement("So do I");
     if (Theme.tryUnlock(save_data))
         return;
-    save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-    console.log(verify_save(save_data));
-    if(verify_save(save_data)) forceHardReset = true;
-    if(verify_save(save_data)) {
-        ui.actions.options.hardReset();
+    let parsedSave = parseSaveData(save_data);
+    if (parsedSave === undefined) {
+      alert('could not load the save..');
+      load_custom_game();
+      return;
     }
-    forceHardReset = false;
-    if (!save_data || !verify_save(save_data)) {
-        alert('could not load the save..');
-        load_custom_game();
-        return;
-    }
+    ui.actions.options.hardReset(true);
     saved = 0;
     totalMult = 1;
     currentMult = 1;
@@ -96,7 +111,7 @@ ui.actions.options.import = function() {
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
     ec10bonus = new Decimal(1);
-    player = save_data;
+    player = parsedSave;
     console.log(player);
     save_game(false, true);
     console.log(player);
@@ -104,11 +119,11 @@ ui.actions.options.import = function() {
     console.log(player);
     updateChallenges();
     transformSaveToDecimal();
+}
 
-    function verify_save(obj) {
-        return typeof obj === 'object';
-    }
-};
+function verify_save(obj) {
+  return typeof obj === 'object';
+}
 
 ui.actions.options.save = function() {
     saved++;
@@ -124,7 +139,7 @@ ui.actions.options.cloudLoad = function() {
     playFabLoadCheck();
 };
 
-ui.actions.options.hardReset = function () {
+ui.actions.options.hardReset = function (forceHardReset) {
     if (forceHardReset) {
         if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
         else set_save('dimensionSave', currentSave, defaultStart);

@@ -635,7 +635,11 @@ if (player.version < 5) {
     document.getElementById("seventhRow").style.display = "none";
     document.getElementById("eightRow").style.display = "none";
   }
-  if (player.wormhole.unlocked) $("#wormholecontainer").show()
+  if (player.wormhole.unlocked) {
+    $("#wormholecontainer").show()
+    $(".wormhole-upgrades").show()
+  }
+	initializeWormhole();
 
   updateAutobuyers();
   setAchieveTooltip();
@@ -669,7 +673,13 @@ if (player.version < 5) {
   
   $("#pp").text("You have " + player.reality.pp + " Perk Points.")
 
-  if (player.reality.respec) $("#glyphRespec").addClass("rUpgBought")
+  if (player.reality.respec) {
+    $("#glyphRespec").addClass("rUpgBought")
+    document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
+  }
+  else
+	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
+    
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {

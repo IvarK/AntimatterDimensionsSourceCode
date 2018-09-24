@@ -2344,3 +2344,24 @@ screen and (max-width: 480px) {
     100% {opacity: 0;}
 }
 
+.infotooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.infotooltip .infotooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    padding: 5px 5px;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 1;
+    left: 105%
+}
+
+.infotooltip:hover .infotooltiptext {
+    visibility: visible;
+}
+

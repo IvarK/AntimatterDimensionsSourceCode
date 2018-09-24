@@ -102,6 +102,8 @@ function updateDilationUpgradeCosts() {
   document.getElementById("dil8cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[8]) + " dilated time"
   document.getElementById("dil9cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[9]) + " dilated time"
   document.getElementById("dil10cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[10]) + " dilated time"
+  if (player.reality.perks.includes(11))
+    document.getElementById("dil2").innerHTML = document.getElementById("dil2").innerHTML.replace(" and dilated time", "");
 }
 
 

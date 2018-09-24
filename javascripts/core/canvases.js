@@ -395,6 +395,7 @@ function drawPerkNetwork() {
     {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
     {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."}, //DONE
     {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of eternity challenges at once if you reach the goal for a higher completion of that challenge."},
+    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking dilation."},
     {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with 1st achievement row after reality."}, //DONE
     {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with 2nd achievement row after reality."}, //DONE
     {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with 3rd achievement row after reality."}, //DONE
@@ -418,9 +419,12 @@ function drawPerkNetwork() {
     {id: 61, label: "61", color: getNodeColor(61, 1), title: "Infinity dimension autobuyers work 3 times faster."}, //DONE
     {id: 62, label: "62", color: getNodeColor(62, 1), title: "Replicanti autobuyers work 3 times faster."}, //DONE
     {id: 63, label: "63", color: getNodeColor(63, 1), title: "Dilation autobuyers work 3 times faster."}, //DONE
+    {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time dimension 5-8 unlocks."}, //DONE
     {id: 71, label: "71", color: getNodeColor(71, 1), title: "3x replicanti doesn't require EC5."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
     {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts like you would have spent 15 minutes in this eternity."}, //DONE
+    {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of eternity upgrades after first eternity of a reality."}, //DONE
+    {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of eternity upgrades after first eternity of a reality."}, //DONE
     ]; 
     nodes = new vis.DataSet(nodesArray);
 

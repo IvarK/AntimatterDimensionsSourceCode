@@ -3512,6 +3512,15 @@ function autoBuyInfDims() {
   }
 }
 
+function autoBuyExtraTimeDims() {
+  if (player.timeDimension8.bought == 0 && player.reality.perks.includes(64)) {
+    buyDilationStudy(2, 1000000)
+    buyDilationStudy(3, 1e7)
+    buyDilationStudy(4, 1e8)
+    buyDilationStudy(5, 1e9)
+  }
+}
+
 var slowerAutobuyerTimer = 0
 setInterval(function() {
   slowerAutobuyerTimer += 1/3
@@ -3524,6 +3533,8 @@ setInterval(function() {
     if (!player.reality.perks.includes(61)) autoBuyInfDims()
     if (!player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
     if (!player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+
+    autoBuyExtraTimeDims()
   }
 }, 333)
 

@@ -8,7 +8,6 @@ Vue.component('modal-import', {
     `<div class="modal-import">
         <modal-close-button @click="emitClose"></modal-close-button>
         <h3>Input your save</h3>
-        <div style="font-size: 75%">(if you import a valid save, your current save file will be overwritten!)</div>
         <input type="text" v-model="input">
         <div v-if="!player && hasInput">Not a valid save</div>
         <div v-if="player">Antimatter: {{ formatMoney(player.money) }}</div>
@@ -16,6 +15,7 @@ Vue.component('modal-import', {
         <div v-if="player && progress.eternityUnlocked()">Eternities: {{ shortenDimensions(player.eternities) }}</div>
         <div v-if="player && progress.realityUnlocked()">Realities: {{ shortenDimensions(player.realities) }}</div>
         <primary-button v-if="hasInput" style="margin-top: 3px" @click="importSave">Import</primary-button>
+        <div v-if="hasInput" style="font-size: 75%">(if you import a valid save, your current save file will be overwritten!)</div>
     </div>`,
   computed: {
     player: function() {

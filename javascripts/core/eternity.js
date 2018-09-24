@@ -147,7 +147,9 @@ function eternity(force, auto) {
     }
 
     updateAutobuyers();
+    if (player.reality.perks.includes(53)) player.infinityPoints = new Decimal(1e15);
     if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
+    if (player.reality.perks.includes(54)) player.infinityPoints = new Decimal(1e130);
     resetInfDimensions();
     updateChallenges();
     updateChallengeTimes();

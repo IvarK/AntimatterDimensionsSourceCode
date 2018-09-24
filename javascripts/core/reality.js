@@ -244,6 +244,13 @@ function reality(force) {
 
     if (player.realities >= 4) giveAchievement("How does this work?")
 
+    if (player.reality.perks.includes(53)) player.infinityPoints = new Decimal(1e15);
+    if (player.reality.perks.includes(54)) player.infinityPoints = new Decimal(1e130);
+    
+    if (player.reality.perks.includes(55)) player.eternityPoints = new Decimal(10);
+    if (player.reality.perks.includes(56)) player.eternityPoints = new Decimal(2000);
+    if (player.reality.perks.includes(57)) player.eternityPoints = new Decimal(1e9);
+
     function resetReplicanti() {
         player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);
         player.replicanti.unl = player.reality.upg.includes(10);

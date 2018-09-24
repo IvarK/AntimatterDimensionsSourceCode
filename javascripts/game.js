@@ -1040,10 +1040,16 @@ function gainedInfinityPoints() {
 
 function gainedEternityPoints() {
     var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+
+    var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
+    if (player.reality.perks.includes(72)) study121 = 50
+
+    var study123 = Math.sqrt(1.39*player.thisEternity/1000)
+    if (player.reality.perks.includes(72)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
     if (player.timestudy.studies.includes(61)) ret = ret.times(10)
-    if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
+    if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
     else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
-    else if (player.timestudy.studies.includes(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/1000))
+    else if (player.timestudy.studies.includes(123)) ret = ret.times(study123)
     for (i in player.reality.glyphs.active) {
       var glyph = player.reality.glyphs.active[i]
       if (glyph.type == "time" && glyph.effects.eternity !== undefined) ret = ret.times(glyph.effects.eternity)
@@ -1128,11 +1134,13 @@ function resetChallengeStuff() {
 
 function resetMoney() {
     let money = 10;
-    if (isAchEnabled("r78")) money = 1e25;
+    if (player.reality.perks.includes(52)) money = 1e130
+    else if (isAchEnabled("r78")) money = 1e25;
     else if (isAchEnabled("r55")) money = 1e10;
     else if (isAchEnabled("r54")) money = 2e5;
     else if (isAchEnabled("r37")) money = 1000;
     else if (isAchEnabled("r21")) money = 100;
+    else if (player.reality.perks.includes(51)) money = 100;
     player.money = new Decimal(money);
 }
 
@@ -2338,26 +2346,6 @@ setInterval(function() {
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
 
-    if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
-        for (var i=1;i<player.eternities-9 && i < 9; i++) {
-            if (player.infDimBuyers[i-1]) {
-                buyMaxInfDims(i)
-                buyManyInfinityDimension(i)
-            }
-        }
-    }
-
-    if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
-    }
-
-    if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && ((player.timestudy.studies.includes(22)) ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
-    }
-
-    if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
-        while (upgradeReplicantiGalaxy()) continue
-    }
 	
 	// EC goal IP text
 	for (var ECNum = 1; ECNum <= 12; ECNum++) {
@@ -2459,11 +2447,6 @@ setInterval(function() {
     if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
     else document.getElementById("toggleeternitymode").style.display = "none"
 
-    if (player.reality.perks.includes(12)) {
-      buyDilationUpgrade(1)
-      buyDilationUpgrade(2)
-      buyDilationUpgrade(3)
-    }
 
     updateRealityUpgrades()
 
@@ -3495,6 +3478,54 @@ function autoBuyerTick() {
     updateCosts()
 
 }
+
+function autoBuyDilationUpgrades() {
+  if (player.reality.perks.includes(12)) {
+    buyDilationUpgrade(1)
+    buyDilationUpgrade(2)
+    buyDilationUpgrade(3)
+  }
+}
+
+function autoBuyReplicantiUpgrades() {
+  if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
+    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
+  }
+
+  if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
+    while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && ((player.timestudy.studies.includes(22)) ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
+  }
+
+  if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
+    while (upgradeReplicantiGalaxy()) continue
+  }
+}
+
+function autoBuyInfDims() {
+  if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
+    for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
+      if (player.infDimBuyers[i - 1]) {
+        buyMaxInfDims(i)
+        buyManyInfinityDimension(i)
+      }
+    }
+  }
+}
+
+var slowerAutobuyerTimer = 0
+setInterval(function() {
+  slowerAutobuyerTimer += 1/3
+  if (player.reality.perks.includes(61)) autoBuyInfDims()
+  if (player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
+  if (player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+
+  if (slowerAutobuyerTimer > 1) {
+    slowerAutobuyerTimer -= 1
+    if (!player.reality.perks.includes(61)) autoBuyInfDims()
+    if (!player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
+    if (!player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+  }
+}, 333)
 
 
 setInterval(function() {

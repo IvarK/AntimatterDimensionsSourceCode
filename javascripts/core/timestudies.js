@@ -185,7 +185,7 @@ function canBuyStudy(name) {
       if (player.timestudy.studies.includes(21)) return true; else return false
   }
   if (name == 62) {
-      if (player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42)) return true; else return false
+      if (player.reality.perks.includes(71) ||(player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42))) return true; else return false
   }
 
   if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) {

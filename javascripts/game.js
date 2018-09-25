@@ -3833,6 +3833,8 @@ function setShiftKey(isDown) {
   ui.view.shiftDown = isDown;
   document.getElementById("automatorloadsavetext").textContent = isDown ? "load:" : "save:";
   drawStudyTree()
+  if (isDown) showPerkLabels()
+  else hidePerkLabels()
 }
 
 function setControlKey(isDown) {

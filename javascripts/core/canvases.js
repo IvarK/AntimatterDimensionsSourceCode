@@ -374,6 +374,14 @@ function updatePerkColors() {
     }
 }
 
+function hidePerkLabels() {
+    network.setOptions({nodes: {font: {size: 0}}});
+}
+
+function showPerkLabels() {
+    network.setOptions({nodes: {font: {size: 20}}});
+}
+
 //0: automator
 //10: dilation
 //20: glyphs
@@ -396,19 +404,19 @@ function drawPerkNetwork() {
     {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."}, //DONE
     {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of eternity challenges at once if you reach the goal for a higher completion of that challenge."},
     {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking dilation."},
-    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with 1st achievement row after reality."}, //DONE
-    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with 2nd achievement row after reality."}, //DONE
-    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with 3rd achievement row after reality."}, //DONE
-    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with 4th achievement row after reality."}, //DONE
-    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with 5th achievement row after reality."}, //DONE
-    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with 6th achievement row after reality."}, //DONE
-    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with 7th achievement row after reality."}, //DONE
-    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with 8th achievement row after reality."}, //DONE
-    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with 9th achievement row after reality."}, //DONE
-    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with 10th achievement row after reality."}, //DONE
-    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with 11th achievement row after reality."}, //DONE
-    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with 12th achievement row after reality."},//DONE
-    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with 13th achievement row after reality."},//DONE
+    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after reality."}, //DONE
+    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after reality."}, //DONE
+    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after reality."}, //DONE
+    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with the 4th achievement row after reality."}, //DONE
+    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with the 5th achievement row after reality."}, //DONE
+    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with the 6th achievement row after reality."}, //DONE
+    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with the 7th achievement row after reality."}, //DONE
+    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with the 8th achievement row after reality."}, //DONE
+    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with the 9th achievement row after reality."}, //DONE
+    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with the 10th achievement row after reality."}, //DONE
+    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with the 11th achievement row after reality."}, //DONE
+    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with the 12th achievement row after reality."},//DONE
+    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with the 13th achievement row after reality."},//DONE
     {id: 51, label: "51", color: getNodeColor(51, 1), title: "Start with 100 antimatter after every reset"}, //DONE
     {id: 52, label: "52", color: getNodeColor(52, 1), title: "Start with 1e130 antimatter after every reset"}, //DONE
     {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 2e15 IP after every Eternity and Reality"}, //DONE
@@ -422,7 +430,7 @@ function drawPerkNetwork() {
     {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time dimension 5-8 unlocks."}, //DONE
     {id: 71, label: "71", color: getNodeColor(71, 1), title: "3x replicanti doesn't require EC5."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
-    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts like you would have spent 15 minutes in this eternity."}, //DONE
+    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this eternity."}, //DONE
     {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of eternity upgrades after first eternity of a reality."}, //DONE
     {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of eternity upgrades after first eternity of a reality."}, //DONE
     ]; 
@@ -453,7 +461,7 @@ function drawPerkNetwork() {
             shape: "dot",
             size: 18,
             font: {
-                size: 20
+                size: 0
             },
             borderWidth: 2,
             shadow: true

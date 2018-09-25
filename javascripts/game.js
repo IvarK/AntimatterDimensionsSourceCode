@@ -765,8 +765,15 @@ function updateInfCosts() {
         document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
         document.getElementById("92desc").textContent = "Currently: "+shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))+"x"
         document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25))+"x"
-        document.getElementById("121desc").textContent = "Currently: "+((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5).toFixed(1)+"x"
-        document.getElementById("123desc").textContent = "Currently: "+Math.sqrt(1.39*player.thisEternity/1000).toFixed(1)+"x"
+
+        var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
+        if (player.reality.perks.includes(72)) study121 = 50
+        document.getElementById("121desc").textContent = "Currently: "+study121.toFixed(1)+"x"
+
+        var study123 = Math.sqrt(1.39*player.thisEternity/1000)
+        if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
+        document.getElementById("123desc").textContent = "Currently: "+study123.toFixed(1)+"x"
+
         document.getElementById("141desc").textContent = "Currently: "+shortenMoney(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125))).max(1))+"x"
         document.getElementById("142desc").textContent = "You gain "+shortenCosts(1e25)+"x more IP"
         document.getElementById("143desc").textContent = "Currently: "+shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125)))+"x"
@@ -1045,7 +1052,7 @@ function gainedEternityPoints() {
     if (player.reality.perks.includes(72)) study121 = 50
 
     var study123 = Math.sqrt(1.39*player.thisEternity/1000)
-    if (player.reality.perks.includes(72)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
+    if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
     if (player.timestudy.studies.includes(61)) ret = ret.times(10)
     if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
     else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
@@ -2473,7 +2480,7 @@ var eternitiesGain = 0
 function getGameSpeedupFactor() {
   let factor = 1;
   if (player.currentEternityChall === "eterc12")
-    factor /= 1000;
+    return 1/1000;
   for (i in player.reality.glyphs.active) {
     var glyph = player.reality.glyphs.active[i]
     if (glyph.type == "time" && glyph.effects.speed !== undefined)

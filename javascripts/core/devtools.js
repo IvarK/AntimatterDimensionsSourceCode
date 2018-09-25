@@ -349,4 +349,10 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 15
   }
+
+  if (player.options.testVersion == 15) {
+    player.wormhole.pause = false
+
+    player.options.testVersion = 16
+  }
 }

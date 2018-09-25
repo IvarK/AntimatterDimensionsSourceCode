@@ -85,7 +85,7 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
   var u = 0, v = 0;
   var minimumValue = 1
   var ret = 1
-  if (player.reality.perks.includes(23)) minimumValue = 1.05
+  if (player.reality.perks.includes(23)) minimumValue = 1.1
   while (ret <= minimumValue || u == 0 || v == 0) {
     u = random(); 
     v = random();

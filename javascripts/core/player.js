@@ -323,7 +323,8 @@ var player = {
     duration: 10, // How long it lasts.
     phase: 0,
     active: false,
-    unlocked: false
+    unlocked: false,
+    pause: false
   },
   options: {
     newsHidden: false,

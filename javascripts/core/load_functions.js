@@ -123,7 +123,7 @@ function onLoad() {
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
   if (player.bestReality === undefined) player.bestReality = 999999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0]];
-  if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 180, duration: 10, phase: 0, active: false, unlocked: false }
+  if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 180, duration: 10, phase: 0, active: false, unlocked: false, pause: false }
   if (player.reality === undefined) {
     player.reality = { 
       realityMachines: new Decimal(0), 

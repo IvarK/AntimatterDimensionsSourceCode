@@ -755,6 +755,26 @@ button {
     margin-top: 10px;
 }
 
+.modal-import {
+    width: 475px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-import div {
+    margin-top: 2px;
+}
+
+.modal-import input {
+    border: 1px solid black;
+    background-color: #F2F2F2;
+    border-radius: 3px;
+    width: 450px;
+    text-align: center;
+}
+
 .modal-options {
     width: 300px;
     height: 300px;
@@ -772,6 +792,7 @@ button {
     margin: 10px;
 }
 
+.modal-import .closebtn,
 .modal-options .closebtn {
     width: 30px;
     height: 30px;

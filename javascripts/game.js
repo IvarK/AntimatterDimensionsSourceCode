@@ -3824,6 +3824,10 @@ window.onfocus = function() {
     drawAutomatorTree();
 };
 
+window.onblur = function() {
+  Keyboard.stopSpins();
+};
+
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;

@@ -49,23 +49,35 @@ Theme.set = function(name) {
     return theme;
 };
 
+Theme.secretThemeIndex = function(name) {
+  let secretThemes = [
+    "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537",
+    "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290",
+    "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f",
+    "d910565e1664748188b313768c370649230ca348cb6330fe9df73bcfa68d974d",
+    "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883",
+    "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137",
+    "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7",
+    "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19"
+  ];
+  let sha = sha512_256(name.toUpperCase());
+  return secretThemes.indexOf(sha);
+};
+
+Theme.isSecretTheme = function(name) {
+  return Theme.secretThemeIndex(name) !== -1;
+};
+
 Theme.tryUnlock = function(name) {
-    let secretThemes = [
-        "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537",
-        "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290",
-        "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f",
-        "d910565e1664748188b313768c370649230ca348cb6330fe9df73bcfa68d974d",
-        "cb72e4a679254df5f99110dc7a93924628b916d2e069e3ad206db92068cb0883",
-        "c8fac64da08d674123c32c936b14115ab384fe556fd24e431eb184a8dde21137",
-        "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7",
-        "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19"
-    ];
-    let sha = sha512_256(name.toUpperCase());
-    if (!secretThemes.includes(sha)) return false;
-    let prefix = "S" + (secretThemes.indexOf(sha) + 1);
+    let index = Theme.secretThemeIndex(name);
+    if (index === -1) {
+      return false;
+    }
+    let prefix = "S" + (index + 1);
     player.secretUnlocks.themes.push(prefix + _.capitalize(name));
     Theme.set(prefix);
     giveAchievement("Shhh... It's a secret");
+    return true;
 };
 
 Theme.light = function(name, overrideColors) {

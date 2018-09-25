@@ -150,7 +150,7 @@ function reality(force) {
     player.dilation.dilatedTime = new Decimal(0);
     player.dilation.totalTachyonParticles = new Decimal(0);
     player.dilation.nextThreshold = new Decimal(1000);
-    player.dilation.freeGalaxies = 0;
+    player.dilation.baseFreeGalaxies = 0;
     player.dilation.upgrades = [];
     player.dilation.rebuyables = {
         1: 0,

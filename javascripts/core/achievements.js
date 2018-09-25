@@ -349,100 +349,113 @@ function getSecretAchAmount() {
     return n
 }
 
-const DAYS_FOR_ALL_ACHS = 2
 function isAchEnabled(name) {
-    if (!player.achievements.includes(name)) return false
-    if (player.realities == 0 && player.achievements.includes(name)) return true
-    var time = player.thisReality / 1000
-    var achnum = parseInt(name.split("r")[1])
-    if (achnum > 140) return true
-    var row = Math.floor(achnum / 10)
-    var col = achnum % 10
-    var secondsForAllAchs = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var basePerAch = secondsForAllAchs / 104
-    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffFromMiddle = (row - 7) * diffBetweenRows
-    for (var achrow = 1; achrow < 14; achrow++) {
-      if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
-    }
-    var timeReq = 0
-    for ( var i = 1; i < row; i++) {
-        timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
-    }
-
-    for ( var i = 1; i < col; i++) {
-        timeReq += basePerAch + diffFromMiddle
-    }
-
-    timeReq += basePerAch + diffFromMiddle
-
-    if (timeReq > time) return false
-    else return true
+  if (!player.achievements.includes(name)) return false;
+  if (player.realities === 0) return true;
+  const achId = parseInt(name.split("r")[1]);
+  if (achId > 140) return true;
+  const row = Math.floor(achId / 10);
+  if (row <= achSkipPerkCount) return true;
+  const currentSeconds = player.thisReality / 1000;
+  return timeRequiredForAchievement(achId) <= currentSeconds;
 }
 
 function nextAchIn() {
-  var secondsForAllAchs = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0))
-  var basePerAch = secondsForAllAchs / 104
-  var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
-  var time = player.thisReality / 1000
-  for (var achrow = 1; achrow < 14; achrow++) {
-    if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
-  }
-  if ( time > secondsForAllAchs ) return 0
-  
-  var timeReq = 0
-  var row = 1
-  while (time > timeReq) {
-      timeReq += (basePerAch + ((row - 7) * diffBetweenRows)) * 8
-      row++
-  }
-  row--
-  timeReq -= (basePerAch + ((row - 7) * diffBetweenRows)) * 8
-
-  var col = 1
-  while (time > timeReq) {
-      timeReq += (basePerAch + ((row - 7) * diffBetweenRows))
-      col++
+  updateRealityAchievementModifiers();
+  let currentSeconds = player.thisReality / 1000;
+  if (currentSeconds > realityAchievementModifiers.secondsForAllAchs) return 0;
+  const baseAchTime = realityAchievementModifiers.baseAchTime;
+  const rowModifier = realityAchievementModifiers.rowModifier;
+  for (let achrow = 1; achrow < 14; achrow++) {
+    if (player.reality.perks.includes(parseInt("4" + achrow))) currentSeconds += (baseAchTime + (achrow - 7) * rowModifier) * 8
   }
 
-  return ( timeReq - time) * 1000
+  let timeReq = 0;
+  let row = 1;
+  while (currentSeconds > timeReq) {
+    timeReq += (baseAchTime + ((row - 7) * rowModifier)) * 8;
+    row++
+  }
+  row--;
+  timeReq -= (baseAchTime + ((row - 7) * rowModifier)) * 8;
+
+  let col = 1;
+  while (currentSeconds > timeReq) {
+    timeReq += (baseAchTime + ((row - 7) * rowModifier));
+    col++
+  }
+
+  return (timeReq - currentSeconds) * 1000
 }
 
 function lockedString(name) {
-	if (!player.achievements.includes(name))
-		return "";
-    var achnum = parseInt(name.split("r")[1])
-    if (achnum > 140 || isNaN(achnum))
-		return "";
-    var row = Math.floor(achnum / 10)
-    var col = achnum % 10
-    var basePerAch = 60 * 24 * DAYS_FOR_ALL_ACHS * 60 / 104 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffBetweenRows = DAYS_FOR_ALL_ACHS * 100 * Math.pow(0.9, Math.max(player.realities-1, 0))
-    var diffFromMiddle = (row - 7) * diffBetweenRows
-    var time = player.thisReality / 1000
-    for (var achrow = 1; achrow < 14; achrow++) {
-      if (player.reality.perks.includes(parseInt("4" + achrow))) time += (basePerAch + (achrow - 7) * diffBetweenRows) * 8
-    }
-    var timeReq = 0
-    for ( var i = 1; i < row; i++) {
-        timeReq += (basePerAch + ((i - 7) * diffBetweenRows)) * 8
-    }
+  if (!player.achievements.includes(name))
+    return "";
+  const achId = parseInt(name.split("r")[1]);
+  if (achId > 140 || isNaN(achId))
+    return "";
+  const row = Math.floor(achId / 10);
+  if (row <= achSkipPerkCount) return "";
+  const currentSeconds = player.thisReality / 1000;
+  const remainingTime =  timeRequiredForAchievement(achId) - currentSeconds;
 
-    for ( var i = 1; i < col; i++) {
-        timeReq += basePerAch + diffFromMiddle
-    }
+  if (remainingTime < 0)
+    return "";
+  else if (remainingTime < 60)
+    return "\n\n(Locked: " + remainingTime.toFixed(0) + " seconds)";
+  else if (remainingTime < 3600)
+    return "\n\n(Locked: " + (remainingTime / 60).toFixed(1) + " minutes)";
+  else if (remainingTime < 86400)
+    return "\n\n(Locked: " + (remainingTime / 3600).toFixed(1) + " hours)";
+  else
+    return "\n\n(Locked: " + (remainingTime / 86400).toFixed(1) + " days)";
+}
 
-    timeReq += basePerAch + diffFromMiddle
-	timeReq -= time
+function timeRequiredForAchievement(achId) {
+  updateRealityAchievementModifiers();
+  const baseAchTime = realityAchievementModifiers.baseAchTime;
+  const rowModifier = realityAchievementModifiers.rowModifier;
 
-	if (timeReq < 0)
-		return ""
-	else if (timeReq < 60)
-		return "\n\n(Locked: " + timeReq.toFixed(0) + " seconds)";
-	else if (timeReq < 3600)
-		return "\n\n(Locked: " + (timeReq/60).toFixed(1) + " minutes)";
-	else if (timeReq < 86400)
-		return "\n\n(Locked: " + (timeReq/3600).toFixed(1) + " hours)";
-	else
-		return "\n\n(Locked: " + (timeReq/86400).toFixed(1) + " days)";
+  const row = Math.floor(achId / 10);
+  const previousRowCount = row - 1;
+  const previousAchCount = previousRowCount * 8;
+  // Unoptimized version
+  // const achTime = row => basePerAch + (row - 7) * rowModifier;
+  // previousRowsTime = 0;
+  // for (let i = 1; i < row; i++) {
+  //   previousRowsTime += achTime(i) * 8
+  // }
+  const previousRowsTime = previousAchCount * (baseAchTime + (previousRowCount - 13) * rowModifier / 2);
+  const currentRowAchTime = baseAchTime + (row - 7) * rowModifier;
+  const column = achId % 10;
+  const currentRowTime = currentRowAchTime * column;
+  return previousRowsTime + currentRowTime;
+}
+
+let realityAchievementModifiers = {
+  realities: -1,
+  baseAchTime: -1,
+  rowModifier: -1,
+  secondsForAllAchs: -1
+};
+
+const DAYS_FOR_ALL_ACHS = 2;
+const SECONDS_IN_DAY = 60 * 60 * 24;
+const DEFAULT_SECONDS_FOR_ALL_ACHS = SECONDS_IN_DAY * DAYS_FOR_ALL_ACHS;
+
+// TODO: further optimization:
+// pre-generate ach times on reality
+function updateRealityAchievementModifiers() {
+  if (realityAchievementModifiers.realities === player.realities) {
+    return;
+  }
+  const requiredTimeModifier = Math.pow(0.9, Math.max(player.realities - 1, 0));
+  const secondsForAllAchs = DEFAULT_SECONDS_FOR_ALL_ACHS * requiredTimeModifier;
+  realityAchievementModifiers = {
+    realities: player.realities,
+    // how much it takes for row 7 achievement to get
+    baseAchTime: secondsForAllAchs / 104,
+    rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
+    secondsForAllAchs: secondsForAllAchs
+  };
 }

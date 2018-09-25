@@ -14,14 +14,14 @@ Keyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 Keyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 Keyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 Keyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
+Keyboard.bindRepeatableHotkey("c", () => bigCrunchReset());
+Keyboard.bindRepeatableHotkey("e", () => eternity());
 
 for (let i = 1; i < 9; i++) {
   Keyboard.bindRepeatableHotkey(`${i}`, () => buyManyDimension(i));
   Keyboard.bindRepeatableHotkey(`shift+${i}`, () => buyOneDimension(i));
 }
 
-Keyboard.bindHotkey("c", () => bigCrunchReset());
-Keyboard.bindHotkey("e", () => eternity());
 Keyboard.bindHotkey("a", () => toggleAutoBuyers());
 Keyboard.bindHotkey("esc", () => Modal.hide());
 

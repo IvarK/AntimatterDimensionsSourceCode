@@ -417,16 +417,17 @@ function timeRequiredForAchievement(achId) {
   const rowModifier = realityAchievementModifiers.rowModifier;
 
   const row = Math.floor(achId / 10);
-  const previousRowCount = row - 1;
-  const previousAchCount = previousRowCount * 8;
+  const perkAdjustedRow = Math.clamp(row - achSkipPerkCount, 1, row);
+  const previousRowCount = perkAdjustedRow - 1;
+  const previousRowsAchCount = previousRowCount * 8;
   // Unoptimized version
-  // const achTime = row => basePerAch + (row - 7) * rowModifier;
+  // const achTime = row => baseAchTime + (row - 7) * rowModifier;
   // previousRowsTime = 0;
   // for (let i = 1; i < row; i++) {
   //   previousRowsTime += achTime(i) * 8
   // }
-  const previousRowsTime = previousAchCount * (baseAchTime + (previousRowCount - 13) * rowModifier / 2);
-  const currentRowAchTime = baseAchTime + (row - 7) * rowModifier;
+  const previousRowsTime = previousRowsAchCount * (baseAchTime + (previousRowCount - 13) * rowModifier / 2);
+  const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;
   const column = achId % 10;
   const currentRowTime = currentRowAchTime * column;
   return previousRowsTime + currentRowTime;

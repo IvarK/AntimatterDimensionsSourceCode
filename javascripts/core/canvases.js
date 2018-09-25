@@ -411,8 +411,8 @@ function drawPerkNetwork() {
     {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with 13th achievement row after reality."},//DONE
     {id: 51, label: "51", color: getNodeColor(51, 1), title: "Start with 100 antimatter after every reset"}, //DONE
     {id: 52, label: "52", color: getNodeColor(52, 1), title: "Start with 1e130 antimatter after every reset"}, //DONE
-    {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 1e15 IP after every Eternity and Reality"}, //DONE
-    {id: 54, label: "54", color: getNodeColor(54, 1), title: "Start with 1e130 IP after every Eternity and Reality"}, //DONE
+    {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 2e15 IP after every Eternity and Reality"}, //DONE
+    {id: 54, label: "54", color: getNodeColor(54, 1), title: "Start with 2e130 IP after every Eternity and Reality"}, //DONE
     {id: 55, label: "55", color: getNodeColor(55, 1), title: "Start with 10 EP after every Reality"}, //DONE
     {id: 56, label: "56", color: getNodeColor(56, 1), title: "Start with 2000 EP after every Reality"}, //DONE
     {id: 57, label: "57", color: getNodeColor(57, 1), title: "Start with 1e9 EP after every Reality"}, //DONE

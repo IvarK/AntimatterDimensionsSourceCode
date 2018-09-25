@@ -64,13 +64,13 @@ function eternity(force, auto) {
     if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied * 0.05);
     if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
     if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {
-        player.reality.upgReqs[6] = true;
+      unlockRealityUpgrade(6);
     }
     if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
         player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
         player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
     }
-    if (player.realities > 0 && player.eternities === 0 && player.infinityPoints.gte(new Decimal("1e400"))) player.reality.upgReqs[10] = true;
+    if (player.realities > 0 && player.eternities === 0 && player.infinityPoints.gte(new Decimal("1e400"))) unlockRealityUpgrade(10);
     player.challenges = temp;
     if (!force) {
         var tempEterGain = 1;
@@ -199,11 +199,11 @@ function eternity(force, auto) {
         loadAutoBuyerSettings()
     }
     Marathon2 = 0;
-    if (player.realities > 0 && player.infinitiedBank > 1e12) player.reality.upgReqs[11] = true;
-    if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") === 0) player.reality.upgReqs[12] = true;
-    if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) player.reality.upgReqs[13] = true;
-    if (player.realities > 0 && player.eternities > 1e6) player.reality.upgReqs[14] = true;
-    if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) player.reality.upgReqs[15] = true;
+    if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);
+    if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") === 0) unlockRealityUpgrade(12);
+    if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
+    if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
+    if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
 
     if (player.reality.upg.includes(13)) {
         if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold);

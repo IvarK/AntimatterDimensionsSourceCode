@@ -37,14 +37,14 @@ function bigCrunchReset() {
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addTime(player.thisInfinityTime, infinityPoints);
     if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
-        player.reality.upgReqs[7] = true;
+      unlockRealityUpgrade(7);
     }
     if (player.currentEternityChall === "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4") * 4)) {
         failChallenge();
     }
 
     if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied === 0) {
-        if (checkForRUPG8()) player.reality.upgReqs[8] = true;
+        if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
 
     if (autoS && auto) {

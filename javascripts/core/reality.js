@@ -46,13 +46,13 @@ function reality(force) {
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel());
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) player.reality.upgReqs[9] = true;
+    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
     if(!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
             if (player.reality.glyphs.active[i].rarity < 1.5) tempBool = false
         }
-        player.reality.upgReqs[16] = tempBool
+        if (tempBool) unlockRealityUpgrade(16)
     }
     if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4) {
         var tempBool = true;
@@ -63,17 +63,16 @@ function reality(force) {
             }
             if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
         }
-        console.log(tempBool);
-        player.reality.upgReqs[17] = tempBool
+        if (tempBool) unlockRealityUpgrade(17)
     }
     if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4) {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
             if (player.reality.glyphs.active[i].level < 10) tempBool = false
         }
-        player.reality.upgReqs[18] = tempBool
+        if (tempBool) unlockRealityUpgrade(18)
     }
-    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) player.reality.upgReqs[19] = true
+    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
     if (player.reality.respec)
         respecGlyphs();
     player.money = new Decimal(10);
@@ -275,4 +274,10 @@ function fullResetTimeDimensions() {
         dimension.bought = 0;
         dimension.power = new Decimal(1);
     }
+}
+
+function unlockRealityUpgrade(id) {
+  if (player.reality.upgReqs[id]) return
+  player.reality.upgReqs[id] = true
+  $.notify(name, "You've unlocked a Reality upgrade!");
 }

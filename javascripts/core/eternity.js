@@ -150,7 +150,6 @@ function eternity(force, auto) {
     if (player.reality.perks.includes(53)) player.infinityPoints = new Decimal(2e15);
     if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
     if (player.reality.perks.includes(54)) player.infinityPoints = new Decimal(2e130);
-    console.log(player.infinityPoints)
     resetInfDimensions();
     updateChallenges();
     updateChallengeTimes();
@@ -214,8 +213,6 @@ function eternity(force, auto) {
       if (player.reality.perks.includes(81)) player.eternityUpgrades.push(1, 2, 3)
       if (player.reality.perks.includes(82)) player.eternityUpgrades.push(4, 5, 6)
     }
-    
-    console.log(player.infinityPoints)
 
     return true;
 }

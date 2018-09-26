@@ -279,5 +279,5 @@ function fullResetTimeDimensions() {
 function unlockRealityUpgrade(id) {
   if (player.reality.upgReqs[id]) return
   player.reality.upgReqs[id] = true
-  $.notify(name, "You've unlocked a Reality upgrade!");
+  $.notify("You've unlocked a Reality upgrade!", "success");
 }

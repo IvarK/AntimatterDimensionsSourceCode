@@ -8,7 +8,7 @@ Vue.component('modal-import', {
     `<div class="modal-import">
         <modal-close-button @click="emitClose"></modal-close-button>
         <h3>Input your save</h3>
-        <input type="text" v-model="input">
+        <input ref="input" type="text" v-model="input">
         <div v-if="inputIsSecretTheme">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatMoney(player.money) }}</div>
@@ -54,5 +54,8 @@ Vue.component('modal-import', {
       Modal.hide();
       importSave(this.input);
     }
+  },
+  mounted: function() {
+    this.$refs.input.select();
   }
 });

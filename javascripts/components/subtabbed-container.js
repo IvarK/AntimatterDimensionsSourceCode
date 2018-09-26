@@ -10,9 +10,7 @@ Vue.component('subtabbed-container', {
         <tr>\
             <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="openTab(tab)">{{ tab.name }}</td>\
         </tr>\
-        <keep-alive>\
-            <component :is="openedTab.component" :model="model"></component>\
-        </keep-alive>\
+        <component :is="openedTab.component" :model="model"></component>\
     </div>',
   computed: {
     visibleTabs: function() {

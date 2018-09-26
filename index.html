@@ -892,9 +892,7 @@
             <footer-links sticky="true"></footer-links>
         </div>
         <div v-show="view.tab.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
-            <keep-alive>
-                <component v-if="view.tab.current" :is="view.tab.current" :model="model" :view="view" :actions="actions"></component>
-            </keep-alive>
+            <component :is="view.tab.current" :model="model" :view="view" :actions="actions"></component>
         </div>
         <div id="achievements" class="tab">
             <table class="table" align="center" style="margin: auto" id="achTabButtons">

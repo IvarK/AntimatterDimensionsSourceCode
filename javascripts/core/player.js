@@ -378,6 +378,8 @@ class DimensionStats {
   get bought() { return player[this.$_props.bought]; }
   set bought(value) { player[this.$_props.bought] = value; }
 
+  get boughtBefore10() { return this.bought % 10; }
+
   get pow() { return player[this.$_props.pow]; }
   set pow(value) { player[this.$_props.pow] = value; }
 }

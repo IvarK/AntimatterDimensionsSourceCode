@@ -13,7 +13,6 @@ var realizationCheck = 0;
 var statsTimer = 0;
 var TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
 var DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
-var forceHardReset = false;
 var player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
@@ -352,3 +351,35 @@ var player = {
   }
 
 };
+
+class DimensionStats {
+  constructor(tier) {
+    const tierProps = DimensionStats.tierProps;
+    let props = tierProps[tier];
+    if (props === undefined) {
+      const name = TIER_NAMES[tier];
+      props = {
+        cost: name + "Cost",
+        amount: name + "Amount",
+        bought: name + "Bought",
+        pow: name + "Pow",
+      };
+      tierProps[tier] = props;
+    }
+    this.$_props = props;
+  }
+
+  get cost() { return player[this.$_props.cost]; }
+  set cost(value) { player[this.$_props.cost] = value; }
+
+  get amount() { return player[this.$_props.amount]; }
+  set amount(value) { player[this.$_props.amount] = value; }
+
+  get bought() { return player[this.$_props.bought]; }
+  set bought(value) { player[this.$_props.bought] = value; }
+
+  get pow() { return player[this.$_props.pow]; }
+  set pow(value) { player[this.$_props.pow] = value; }
+}
+
+DimensionStats.tierProps = [];

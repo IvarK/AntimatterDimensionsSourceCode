@@ -68,7 +68,7 @@ function formatValue(notation, value, places, placesUnder1000) {
             if (player.options.commas) return (pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"."+(pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[1]+"∞"
             else return (pow / inflog).toFixed(Math.max(infPlaces, places))+"∞"
         }
-        if (notation.includes("engineering") || notation.includes("Engineering")) pow = power - (power % 3)
+        if (notation !== undefined && (notation.includes("engineering") || notation.includes("Engineering"))) pow = power - (power % 3)
         else pow = power
         if (power > 100000  && !player.options.commas) pow = formatValue(notation, pow, 3, 3)
         if (power > 100000  && player.options.commas) pow = pow.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

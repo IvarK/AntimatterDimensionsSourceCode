@@ -316,15 +316,31 @@ var player = {
     },
     pp: 0
   },
-  wormhole: {
+  wormhole: [{
     speed: 60 * 60, // Seconds to fill
     power: 180, // Multiplier from the wormhole
     duration: 10, // How long it lasts.
     phase: 0,
     active: false,
     unlocked: false,
-    pause: false
   },
+  {
+    speed: 60 * 6,
+    power: 90, 
+    duration: 7, 
+    phase: 0,
+    active: false,
+    unlocked: false,
+  },
+  {
+    speed: 6 * 6,
+    power: 45, 
+    duration: 4, 
+    phase: 0,
+    active: false,
+    unlocked: false,
+  }],
+  wormholePause: false,
   options: {
     newsHidden: false,
     notation: "Mixed scientific",

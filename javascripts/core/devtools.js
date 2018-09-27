@@ -356,4 +356,25 @@ dev.updateTestSave = function() {
 
     player.options.testVersion = 16
   }
+  if (player.options.testVersion == 16) {
+    player.wormholePause = false
+    player.wormhole = [player.wormhole, {
+      speed: 60 * 6,
+      power: 90, 
+      duration: 7, 
+      phase: 0,
+      active: false,
+      unlocked: false,
+    },
+    {
+      speed: 6 * 6,
+      power: 45, 
+      duration: 4, 
+      phase: 0,
+      active: false,
+      unlocked: false,
+    }]
+
+    player.options.testVersion = 17
+  }
 }

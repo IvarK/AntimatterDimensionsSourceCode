@@ -6,16 +6,16 @@
  */
 
  function updateWormholeUpgrades() {
-    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole.speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost())+"RM")
-    if (player.reality.realityMachines < getWormholeIntervalCost()) $("#wormholeinterval").addClass("rUpgUn")
+    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[0].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(0))+"RM")
+    if (player.reality.realityMachines < getWormholeIntervalCost(0)) $("#wormholeinterval").addClass("rUpgUn")
     else $("#wormholeinterval").removeClass("rUpgUn")
 
-    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole.power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost())+"RM")
-    if (player.reality.realityMachines < getWormholePowerCost()) $("#wormholepower").addClass("rUpgUn")
+    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole[0].power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(0))+"RM")
+    if (player.reality.realityMachines < getWormholePowerCost(0)) $("#wormholepower").addClass("rUpgUn")
     else $("#wormholepower").removeClass("rUpgUn")
 
-    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole.duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost())+"RM")
-    if (player.reality.realityMachines < getWormholeDurationCost()) $("#wormholeduration").addClass("rUpgUn")
+    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole[0].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost(0))+"RM")
+    if (player.reality.realityMachines < getWormholeDurationCost(0)) $("#wormholeduration").addClass("rUpgUn")
     else $("#wormholeduration").removeClass("rUpgUn")
 
   if (planet !== undefined) // This function gets called once on-load before the wormhole is initialized
@@ -24,88 +24,88 @@
 
 function unlockWormhole() {
     if (player.reality.realityMachines.lt(50)) return false
-    if (player.wormhole.unlocked) return false
-    player.wormhole.unlocked = true
+    if (player.wormhole[0].unlocked) return false
+    player.wormhole[0].unlocked = true
     player.reality.realityMachines = player.reality.realityMachines.minus(50)
     $("#wormholecontainer").show()
     $(".wormhole-upgrades").show()
     $("#wormholeunlock").hide()
 }
 
-function getWormholeIntervalCost() {
-    var amountOfPurchases = Math.round(Math.log(player.wormhole.speed / 3600) / Math.log(0.8))
-    return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15)
+function getWormholeIntervalCost(i) {
+    var amountOfPurchases = Math.round(Math.log(player.wormhole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
+    return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
 }
 
-function getWormholePowerCost() {
-    var amountOfPurchases = Math.round(Math.log(player.wormhole.power / 180) / Math.log(1.35))
-    return Math.ceil(Math.pow(2, amountOfPurchases) * 20)
+function getWormholePowerCost(i) {
+    var amountOfPurchases = Math.round(Math.log(player.wormhole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
+    return Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
 }
 
-function getWormholeDurationCost() {
-    var amountOfPurchases = Math.round(Math.log(player.wormhole.duration / 10) / Math.log(1.5))
-    return Math.ceil(Math.pow(4, amountOfPurchases) * 10)
+function getWormholeDurationCost(i) {
+    var amountOfPurchases = Math.round(Math.log(player.wormhole[i].duration / (10 - i*3)) / Math.log(1.5))
+    return Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
 }
 
-function upgradeWormholeInterval() {
+function upgradeWormholeInterval(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholeIntervalCost()
+    var cost = getWormholeIntervalCost(i)
     if (player.reality.realityMachines.lt(cost)) return false
     player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole.speed *= 0.8
+    player.wormhole[i].speed *= 0.8
     updateWormholeUpgrades()
 }
 
-function upgradeWormholePower() {
+function upgradeWormholePower(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholePowerCost()
+    var cost = getWormholePowerCost(i)
     if (player.reality.realityMachines.lt(cost)) return false
     player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole.power *= 1.35
+    player.wormhole[i].power *= 1.35
     updateWormholeUpgrades()
 }
 
-function upgradeWormholeDuration() {
+function upgradeWormholeDuration(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholeDurationCost()
+    var cost = getWormholeDurationCost(i)
     if (player.reality.realityMachines.lt(cost)) return false
     player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole.duration *= 1.3
+    player.wormhole[i].duration *= 1.3
     updateWormholeUpgrades()
 }
 
-function setWormhole(state) {
-  player.wormhole.active = state;
-  player.wormhole.phase = 0;
+function setWormhole(state, i) {
+  player.wormhole[i].active = state;
+  player.wormhole[i].phase = 0;
 }
 
 let totalPhase;
-function wormHoleLoop(diff) {
+function wormHoleLoop(diff, i) {
   // Change wormhole state
-  if (player.wormhole.pause) return
+  if (player.wormhole[i].pause) return
 	let incPhase = diff / 1000;
-    if (player.wormhole.active) {
-      incPhase /= player.wormhole.power;
-      document.getElementById("wormholeStatus").textContent = "Wormhole is active for " + (player.wormhole.duration - player.wormhole.phase).toFixed(1) + " more seconds.";
-      if (player.wormhole.phase >= player.wormhole.duration) {
-        player.wormhole.phase -= player.wormhole.duration
-        player.wormhole.active = false
+    if (player.wormhole[i].active) {
+      incPhase /= player.wormhole[0].power;
+      document.getElementById("wormholeStatus").textContent = "Wormhole is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
+      if (player.wormhole[i].phase >= player.wormhole[i].duration) {
+        player.wormhole[i].phase -= player.wormhole[i].duration
+        player.wormhole[i].active = false
         updateTickSpeed();
       }
     } else {
-      document.getElementById("wormholeStatus").textContent = "Wormhole will activate in " + (player.wormhole.speed - player.wormhole.phase).toFixed(1) + " seconds.";
-      if (player.wormhole.phase >= player.wormhole.speed) {
-        player.wormhole.phase -= player.wormhole.speed
-        player.wormhole.active = true
+      document.getElementById("wormholeStatus").textContent = "Wormhole will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
+      if (player.wormhole[i].phase >= player.wormhole[i].speed) {
+        player.wormhole[i].phase -= player.wormhole[i].speed
+        player.wormhole[i].active = true
         updateTickSpeed();
       }
     }
-	player.wormhole.phase += incPhase;
+	player.wormhole[i].phase += incPhase;
 	totalPhase = getTotalPhase();
   
   // Prevents a flickering wormhole if phase gets set too high (shouldn't ever happen in practice)
-  if (player.wormhole.phase > period)
-    player.wormhole.phase %= period;
+  if (player.wormhole[i].phase > period)
+    player.wormhole[i].phase %= period;
     
 			
   // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
@@ -148,7 +148,7 @@ function Dot(dotSize, dotType, r, theta) {
     disp.lineWidth = 2*this.size;
 		
 		// Wormhole active, draw some trails
-		if (player.wormhole.active && this.isParticle && !this.respawn) {
+		if (player.wormhole[0].active && this.isParticle && !this.respawn) {
 			let prevX = this.prevRadius * Math.sin(2*Math.PI * this.prevAngle);
 			let prevY = this.prevRadius * Math.cos(2*Math.PI * this.prevAngle);
 			disp.lineCap = 'round';
@@ -171,7 +171,7 @@ function Dot(dotSize, dotType, r, theta) {
     }
 		
 		if (this.isParticle)
-			if (player.wormhole.active) {
+			if (player.wormhole[0].active) {
         let dist = Math.floor(127 * (this.radius - bhSize) / semimajorAxis);
 				disp.strokeStyle = "rgb(" + (255-dist) + ", " + dist + ", " + dist + ")";
       }
@@ -188,7 +188,7 @@ function Dot(dotSize, dotType, r, theta) {
 		this.update = function () {
 		if (this.isParticle) {
 			let particleSpeed = 0.05 * Math.min(Math.pow(Math.max(delta,2)/2, 3), 5);
-			if (player.wormhole.active) {
+			if (player.wormhole[0].active) {
 				this.prevAngle = this.angle;
 				this.prevRadius = this.radius;
 			}
@@ -209,10 +209,10 @@ function Dot(dotSize, dotType, r, theta) {
  // Code was originally written to use phase over a cycle of active+inactive time and would be really difficult to rewrite to use the current wormhole phase
  // Example on what this is: if the wormhole has intervals of 100+10 then this ranges from 0 to 110 and is active when less than 5 or more than 105
 function getTotalPhase() {
-	if (player.wormhole.active)
-		return (player.wormhole.phase - player.wormhole.duration/2 + period) % period;
+	if (player.wormhole[0].active)
+		return (player.wormhole[0].phase - player.wormhole[0].duration/2 + period) % period;
 	else
-		return player.wormhole.phase + player.wormhole.duration/2;
+		return player.wormhole[0].phase + player.wormhole[0].duration/2;
  }
 
 // Should only be run once on game load
@@ -224,7 +224,7 @@ function initializeWormhole() {
 			
 	// Orbital size parameters
 	semimajorAxis = 100;   										// Basically orbit size in pixels, can be changed
-	period = player.wormhole.speed + player.wormhole.duration;	// Time taken for one orbit (in seconds)
+	period = player.wormhole[0].speed + player.wormhole[0].duration;	// Time taken for one orbit (in seconds)
 	totalPhase = getTotalPhase();
 			
 	// A fair bit of calculation, should probably only be called on-load and after upgrades
@@ -244,20 +244,20 @@ let eccentricity, semimajorAxis, period, bhSize, planet, hole;
 function recalculateOrbit() {
 	let currOrbitPos = totalPhase / period;
 	
-	period = player.wormhole.speed + player.wormhole.duration;		// Update orbital period
+	period = player.wormhole[0].speed + player.wormhole[0].duration;		// Update orbital period
 	calculateOrbitParams();
 	hole.size = (bhSize - planetSize) / 2;							// Prevent planet+hole overlapping
 	
 	// Do stuff to make sure the relative position of the planet stays about the same
 	totalPhase = currOrbitPos * period;
-	if (player.wormhole.active) {
+	if (player.wormhole[0].active) {
 		
 	}
 	else {
-		player.wormhole.phase = totalPhase - player.wormhole.duration/2;
-		if (player.wormhole.phase < 0) {
-			player.wormhole.active = true;
-			player.wormhole.phase += player.wormhole.duration/2;
+		player.wormhole[0].phase = totalPhase - player.wormhole[0].duration/2;
+		if (player.wormhole[0].phase < 0) {
+			player.wormhole[0].active = true;
+			player.wormhole[0].phase += player.wormhole[0].duration/2;
 		}
 	}
 }
@@ -276,23 +276,23 @@ function E(eccentricity, M) {
 let activeThreshold = 2;
 function calculateOrbitParams() {
     // Fixed-point iteration for eccentricity (I'm really hoping this always converges)
-	y = (1 - Math.pow(activeThreshold, -2)) / (1 - Math.pow(player.wormhole.power, -2));
+	y = (1 - Math.pow(activeThreshold, -2)) / (1 - Math.pow(player.wormhole[0].power, -2));
 	eccentricity = 0.5;
 	maxIter = 1000;
 	for (let k = 0; k < maxIter; k++)
-		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * (player.wormhole.duration / period))) - 1)
+		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * (player.wormhole[0].duration / period))) - 1)
 			
 	// Black hole size, calculated from orbit shape in order to give the right max boost
-	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(player.wormhole.power, -2));
+	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(player.wormhole[0].power, -2));
 }
 
 // Used for particle spawning, note that particles can be farther out when active
 function getRandomRadius() {
-	return bhSize + 0.5*semimajorAxis*Math.random() * (player.wormhole.active ? 2 : 1);
+	return bhSize + 0.5*semimajorAxis*Math.random() * (player.wormhole[0].active ? 2 : 1);
 }
 
 function pauseWormhole() {
-  player.wormhole.pause = !player.wormhole.pause
-  if (player.wormhole.pause) $("#pauseButton").addClass("rUpgBought")
+  player.wormhole[0].pause = !player.wormhole[0].pause
+  if (player.wormhole[0].pause) $("#pauseButton").addClass("rUpgBought")
   else $("#pauseButton").removeClass("rUpgBought")
 }

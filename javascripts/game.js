@@ -2486,7 +2486,10 @@ function getGameSpeedupFactor() {
     if (glyph.type == "time" && glyph.effects.speed !== undefined)
       factor *= glyph.effects.speed
   }
-  if (player.wormhole.active && !player.wormhole.pause) factor *= player.wormhole.power
+  // TODO, REMOVE
+  if (player.wormhole[0] !== undefined) {
+    if (player.wormhole[0].active && !player.wormhole[0].pause) factor *= player.wormhole[0].power
+  } else dev.updateTestSave()
   
   return factor;
 }
@@ -3176,8 +3179,9 @@ function gameLoop(diff) {
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
-  if (player.wormhole.unlocked)
-    wormHoleLoop(diff)
+  if (player.wormhole[0].unlocked) {
+    wormHoleLoop(diff, 0)
+  }
 		
 	// Increased cost scaling tooltips
 	if (player.eternityPoints.exponent > 6000)
@@ -3218,8 +3222,8 @@ function simulateTime(seconds, real, fast) {
     let wormholeActivations = 0;
     
     // Simulation code with wormhole (should be at most 600 ticks)
-    if (player.wormhole.unlocked) {
-      let wormholeCycleTime = player.wormhole.duration + player.wormhole.speed;
+    if (player.wormhole[0].unlocked) {
+      let wormholeCycleTime = player.wormhole[0].duration + player.wormhole[0].speed;
       wormholeActivations = Math.floor(seconds / wormholeCycleTime);
       
       if (wormholeActivations < 2)  // Should be fine to just simulate the ticks
@@ -3227,15 +3231,15 @@ function simulateTime(seconds, real, fast) {
       else {
         // Simulate until the start of the idle cycle (50 ticks each part) for code consistency
         let simulatedAtStart = 0;
-        if (!player.wormhole.active) {
-          let simulatedIdleTime = player.wormhole.speed - player.wormhole.phase;
+        if (!player.wormhole[0].active) {
+          let simulatedIdleTime = player.wormhole[0].speed - player.wormhole[0].phase;
           gameLoopWithAutobuyers(simulatedIdleTime / 50, 50, real);
-          setWormhole(true);
+          setWormhole(true, 0);
           simulatedAtStart += simulatedIdleTime;
         }
-        let simulatedActiveTime = player.wormhole.duration - player.wormhole.phase;
+        let simulatedActiveTime = player.wormhole[0].duration - player.wormhole[0].phase;
         gameLoopWithAutobuyers(simulatedActiveTime / 50, 50, real);
-        setWormhole(false);
+        setWormhole(false, 0);
         simulatedAtStart += simulatedActiveTime;
         
         // Calculate how much time to simulate after cycles, "borrowing" time from one activation if needed
@@ -3249,19 +3253,19 @@ function simulateTime(seconds, real, fast) {
         if (wormholeActivations < 100) { // Run X ticks per activation, half on and half off, maximum 400
           let ticksPerActivation = Math.floor(400 / wormholeActivations);
           for (let act = 0; act < wormholeActivations; act++) {
-            gameLoopWithAutobuyers(player.wormhole.speed / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(true);
-            gameLoopWithAutobuyers(player.wormhole.duration / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(false);
+            gameLoopWithAutobuyers(player.wormhole[0].speed / ticksPerActivation, ticksPerActivation, real)
+            setWormhole(true, 0);
+            gameLoopWithAutobuyers(player.wormhole[0].duration / ticksPerActivation, ticksPerActivation, real)
+            setWormhole(false, 0);
           }
         }
         else {  // Calculates an average speedup and just does 400 ticks at that rate with the wormhole explicitly disabled after each tick
-          let avgSpeed = (player.wormhole.speed + player.wormhole.power * player.wormhole.duration) / wormholeCycleTime;
+          let avgSpeed = (player.wormhole[0].speed + player.wormhole[0].power * player.wormhole[0].duration) / wormholeCycleTime;
           oldTotalTime = player.totalTimePlayed;
           oldRealTime = player.realTimePlayed;
           for (let ticksDone = 0; ticksDone < 400; ticksDone++) {
             gameLoop(avgSpeed * seconds);
-            setWormhole(false);
+            setWormhole(false, 0);
             autoBuyerTick();
           if (real)
             console.log(ticksDone)

@@ -123,7 +123,33 @@ function onLoad() {
   if (player.thisReality === undefined) player.thisReality = player.totalTimePlayed;
   if (player.bestReality === undefined) player.bestReality = 999999999999;
   if (player.lastTenRealities === undefined) player.lastTenRealities = [[60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0], [60000*60*24*31, new Decimal(1), 0]];
-  if (player.wormhole === undefined) player.wormhole = { speed: 60 * 60, power: 180, duration: 10, phase: 0, active: false, unlocked: false, pause: false }
+  if (player.wormhole === undefined) {
+    player.wormhole = [{
+      speed: 60 * 60, // Seconds to fill
+      power: 180, // Multiplier from the wormhole
+      duration: 10, // How long it lasts.
+      phase: 0,
+      active: false,
+      unlocked: false,
+    },
+    {
+      speed: 60 * 6,
+      power: 90, 
+      duration: 7, 
+      phase: 0,
+      active: false,
+      unlocked: false,
+    },
+    {
+      speed: 6 * 6,
+      power: 45, 
+      duration: 4, 
+      phase: 0,
+      active: false,
+      unlocked: false,
+    }]
+    player.wormholePause = false
+  }
   if (player.reality === undefined) {
     player.reality = { 
       realityMachines: new Decimal(0), 
@@ -167,7 +193,8 @@ function onLoad() {
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?")
   }
-
+  // TODO, REMOVE
+  dev.updateTestSave()
   if (player.secondAmount !== 0) {
       document.getElementById("thirdRow").style.display = "table-row";
       document.getElementById("tickSpeed").style.visibility = "visible";

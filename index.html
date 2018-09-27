@@ -2493,7 +2493,12 @@
                             <td><button class="automatorinstruction target" id="automator23" onclick="buyAutomatorInstruction(23, 2)">EP<br>Cost: 2 RM</button></td>
                             <td><button class="automatorinstructionbought target" id="automator24">STUDY<br></button></td>
                             <td><button class="automatorinstructionbought target" id="automator25">STUDYUNTIL</button></td>
-                            <td><button class="automatorinstruction target" id="automator26" onclick="buyAutomatorInstruction(26, 50)">STUDYPATH<br>Cost: 50 RM</button></td>
+                            <td><button class="automatorinstruction target" id="automator26" onclick="buyAutomatorInstruction(26, 50)">
+                                    <span class="tooltip">
+                                        <h3>BUY  STUDYPATH [all/none] [study ids and path names]</h3>
+                                        <br />
+                                        Buys studies top-down using arguments after the mode specification. The 2 modes specify to buy "all" or "none" of the studies on non-locked splits (incl. 62 and 33). Locked paths must be specified by ID # or split name.
+                                    </span>STUDYPATH<br>Cost: 50 RM</button></td>
                         </tr>
                     </table>
                     <table class="table" id="studytable">

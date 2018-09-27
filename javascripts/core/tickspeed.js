@@ -89,8 +89,8 @@ function buyMaxTickSpeed() {
     player.postC3Reward.fromDecimal(postC3Reward);
   }
 
-  const underPostC3Effect = player.challenges.includes("postc3") || currentChallenge === "postc3";
   const currentChallenge = player.currentChallenge;
+  const underPostC3Effect = player.challenges.includes("postc3") || currentChallenge === "postc3";
   if (currentChallenge === "challenge2" || currentChallenge === "postc1") {
     player.chall2Pow = 0;
   }

@@ -72,50 +72,83 @@ document.getElementById("tickSpeed").onclick = function () {
 };
 
 function buyMaxTickSpeed() {
-  if (!canBuyTickSpeed()) return false
-  var mult = getTickSpeedMultiplier()
-  if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc1") player.chall2Pow = 0
-  if (player.currentChallenge == "challenge5" || player.currentChallenge == "postc5" || player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2) {
-      while (player.money.gt(player.tickSpeedCost) && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || player.currentChallenge == "postc5")) {
-          player.money = player.money.minus(player.tickSpeedCost);
-          if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
-          else multiplySameCosts(player.tickSpeedCost)
-          if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease);
-          player.tickspeed = player.tickspeed.times(mult);
-          if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
-          postc8Mult = new Decimal(1)
-          if (player.tickSpeedCost.gt(Number.MAX_VALUE)) buyMaxTickSpeed()
-      }
-  } else {
-
-      var a = Math.log10(Math.sqrt(player.tickSpeedMultDecrease))
-      var b = player.tickspeedMultiplier.dividedBy(Math.sqrt(player.tickSpeedMultDecrease)).log10()
-      var c = player.tickSpeedCost.dividedBy(player.money).log10()
-      var discriminant = Math.pow(b, 2) - (c *a* 4)
-      if (discriminant < 0) return false
-      var buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c *a *4))-b)/(2 * a))+1
-      if (buying <= 0) return false
-      player.tickspeed = player.tickspeed.times(Decimal.pow(mult, buying));
-      if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(Decimal.pow(1.05+(player.galaxies*0.005), buying))
-      increaseTickSpeedCost(buying - 1);
-      if (player.money.gte(player.tickSpeedCost)) player.money = player.money.minus(player.tickSpeedCost)
-      player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
-      player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease)
-
-      function increaseTickSpeedCost(n) {
-          // Unoptimized version
-          // for (var i = 0; i < n; i++) {
-          //    cost *= mult;
-          //    mult *= multDec;
-          // }
-          let cost = player.tickSpeedCost;
-          let mult = player.tickspeedMultiplier;
-          let multDec = new Decimal(player.tickSpeedMultDecrease);
-          player.tickSpeedCost = cost.times(mult.pow(n)).times(multDec.pow(n * (n - 1) / 2));
-          player.tickspeedMultiplier = mult.times(multDec.pow(n));
-      }
+  if (!canBuyTickSpeed()) return false;
+  const mult = getTickSpeedMultiplier();
+  let money = new Decimal(player.money);
+  let tickSpeedCost = new Decimal(player.tickSpeedCost);
+  let tickSpeedMultDecrease = player.tickSpeedMultDecrease;
+  let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
+  let tickspeed = new Decimal(player.tickspeed);
+  let postC3Reward = new Decimal(player.postC3Reward);
+  function flushValues() {
+    player.money.fromDecimal(money);
+    player.tickSpeedCost.fromDecimal(tickSpeedCost);
+    player.tickSpeedMultDecrease = tickSpeedMultDecrease;
+    player.tickspeedMultiplier.fromDecimal(tickspeedMultiplier);
+    player.tickspeed.fromDecimal(tickspeed);
+    player.postC3Reward.fromDecimal(postC3Reward);
   }
 
+  const underPostC3Effect = player.challenges.includes("postc3") || currentChallenge === "postc3";
+  const currentChallenge = player.currentChallenge;
+  if (currentChallenge === "challenge2" || currentChallenge === "postc1") {
+    player.chall2Pow = 0;
+  }
+  if (currentChallenge === "challenge5" || currentChallenge === "postc5" || tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2) {
+    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2 || currentChallenge === "postc5")) {
+      money = money.minus(tickSpeedCost);
+      if (currentChallenge === "challenge5" || currentChallenge === "postc5") {
+        multiplySameCosts(tickSpeedCost);
+      }
+      else {
+        tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
+      }
+      if (tickSpeedCost.gte(Number.MAX_VALUE)) {
+        tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
+      }
+      tickspeed = tickspeed.times(mult);
+      if (underPostC3Effect) {
+        postC3Reward = postC3Reward.times(1.05 + (player.galaxies * 0.005));
+      }
+      postc8Mult = new Decimal(1);
+    }
+  }
+  if (tickSpeedCost.gte(Number.MAX_VALUE)) {
+    const a = Math.log10(Math.sqrt(tickSpeedMultDecrease));
+    const b = tickspeedMultiplier.dividedBy(Math.sqrt(tickSpeedMultDecrease)).log10();
+    const c = tickSpeedCost.dividedBy(money).log10();
+    const discriminant = Math.pow(b, 2) - (c * a * 4);
+    if (discriminant < 0) {
+      flushValues();
+      return false;
+    }
+    const buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1;
+    if (buying <= 0) {
+      flushValues();
+      return false;
+    }
+    tickspeed = tickspeed.times(Decimal.pow(mult, buying));
+    if (underPostC3Effect) {
+      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying))
+    }
+    increaseTickSpeedCost(buying - 1);
+    money = money.minus(tickSpeedCost).max(0);
+    tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
+    tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
+
+    function increaseTickSpeedCost(n) {
+      // Unoptimized version
+      // for (var i = 0; i < n; i++) {
+      //    cost *= mult;
+      //    mult *= multDec;
+      // }
+      const multDec = new Decimal(tickSpeedMultDecrease);
+      tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier.pow(n)).times(multDec.pow(n * (n - 1) / 2));
+      tickspeedMultiplier = tickspeedMultiplier.times(multDec.pow(n));
+    }
+  }
+
+  flushValues();
   updateTickSpeed()
 }
 

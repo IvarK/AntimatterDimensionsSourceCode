@@ -455,6 +455,13 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     let amount = new Decimal(dimension.amount);
     let bought = dimension.bought;
     let pow = new Decimal(dimension.pow);
+    function flushValues() {
+      player.money.fromDecimal(money);
+      dimension.cost.fromDecimal(cost);
+      dimension.amount.fromDecimal(amount);
+      dimension.bought = bought;
+      dimension.pow.fromDecimal(pow);
+    }
     if (dimension.cost.lt(Number.MAX_VALUE)) {
       let failsafe = 0;
       while (money.gte(cost.times(10)) && x > 0 && cost.lte(Number.MAX_VALUE) && failsafe < 150) {
@@ -476,9 +483,15 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       const b = costMultiplier.dividedBy(Math.sqrt(dimensionMultDecrease)).log10();
       const c = cost.dividedBy(money).log10();
       const discriminant = Math.pow(b, 2) - (c * a * 4);
-      if (discriminant < 0) return false;
+      if (discriminant < 0) {
+        flushValues();
+        return false;
+      }
       let buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1;
-      if (buying <= 0) return false;
+      if (buying <= 0) {
+        flushValues();
+        return false;
+      }
       if (buying > bulk) buying = bulk;
       amount = amount.plus(10 * buying).round();
       let preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
@@ -490,17 +503,11 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       let newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
 
       costMultiplier.fromDecimal(costMults[tier].times(Decimal.pow(dimensionMultDecrease, postInfBuy + 1)));
-      if (money.gte(newCost)) {
-        money = money.minus(newCost);
-      }
+      money = money.minus(newCost).max(0);
       cost = newCost.times(costMultiplier);
       costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
     }
-    player.money.fromDecimal(money);
-    dimension.cost.fromDecimal(cost);
-    dimension.amount.fromDecimal(amount);
-    dimension.bought = bought;
-    dimension.pow.fromDecimal(pow);
+    flushValues();
   }
   if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
   if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") player.chall2Pow = 0;

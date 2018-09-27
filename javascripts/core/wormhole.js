@@ -82,7 +82,7 @@ function setWormhole(state, i) {
 let totalPhase;
 function wormHoleLoop(diff, i) {
   // Change wormhole state
-  if (player.wormhole[i].pause) return
+  if (player.wormholePause) return
 	let incPhase = diff / 1000;
     if (player.wormhole[i].active) {
       incPhase /= player.wormhole[0].power;
@@ -292,7 +292,7 @@ function getRandomRadius() {
 }
 
 function pauseWormhole() {
-  player.wormhole[0].pause = !player.wormhole[0].pause
-  if (player.wormhole[0].pause) $("#pauseButton").addClass("rUpgBought")
+  player.wormholePause = !player.wormholePause
+  if (player.wormholePause) $("#pauseButton").addClass("rUpgBought")
   else $("#pauseButton").removeClass("rUpgBought")
 }

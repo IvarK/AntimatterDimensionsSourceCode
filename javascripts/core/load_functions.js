@@ -662,7 +662,7 @@ if (player.version < 5) {
     document.getElementById("seventhRow").style.display = "none";
     document.getElementById("eightRow").style.display = "none";
   }
-  if (player.wormhole.unlocked) {
+  if (player.wormhole[0].unlocked) {
     $("#wormholecontainer").show()
     $(".wormhole-upgrades").show()
   }
@@ -696,7 +696,7 @@ if (player.version < 5) {
   drawPerkNetwork()
   Notation.set(player.options.notation);
 
-  if (player.wormhole.unlocked) $("#wormholeunlock").hide()
+  if (player.wormhole[0].unlocked) $("#wormholeunlock").hide()
   else $(".wormhole-upgrades").hide()
   
   $("#pp").text("You have " + player.reality.pp + " Perk Points.")

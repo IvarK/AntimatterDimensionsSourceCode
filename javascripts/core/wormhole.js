@@ -81,7 +81,8 @@ function setWormhole(state) {
 
 let totalPhase;
 function wormHoleLoop(diff) {
-	// Change wormhole state
+  // Change wormhole state
+  if (player.wormhole.pause) return
 	let incPhase = diff / 1000;
     if (player.wormhole.active) {
       incPhase /= player.wormhole.power;
@@ -288,4 +289,10 @@ function calculateOrbitParams() {
 // Used for particle spawning, note that particles can be farther out when active
 function getRandomRadius() {
 	return bhSize + 0.5*semimajorAxis*Math.random() * (player.wormhole.active ? 2 : 1);
+}
+
+function pauseWormhole() {
+  player.wormhole.pause = !player.wormhole.pause
+  if (player.wormhole.pause) $("#pauseButton").addClass("rUpgBought")
+  else $("#pauseButton").removeClass("rUpgBought")
 }

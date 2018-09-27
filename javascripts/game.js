@@ -2486,7 +2486,7 @@ function getGameSpeedupFactor() {
     if (glyph.type == "time" && glyph.effects.speed !== undefined)
       factor *= glyph.effects.speed
   }
-  if (player.wormhole.active) factor *= player.wormhole.power
+  if (player.wormhole.active && !player.wormhole.pause) factor *= player.wormhole.power
   
   return factor;
 }

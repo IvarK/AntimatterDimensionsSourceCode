@@ -84,15 +84,39 @@ function parseSaveData(save) {
   return parsedSave;
 }
 
+let secretImports = [
+  "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3",
+  "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274"
+];
+
+function secretImportIndex(data) {
+  const sha = sha512_256(data.replace(/\s/g, '').toUpperCase());
+  return secretImports.indexOf(sha);
+}
+
+function isSecretImport(data) {
+  return secretImportIndex(data) !== -1;
+}
+
+function tryImportSecret(data) {
+  let index = secretImportIndex(data);
+  if (index === 0) {
+    document.getElementById("body").style.animation = "barrelRoll 5s 1";
+    giveAchievement("Do a barrel roll!");
+    setTimeout(() => document.getElementById("body").style.animation = "", 5000);
+    return true;
+  }
+  if (index === 1) {
+    giveAchievement("So do I");
+    return true;
+  }
+  return false;
+}
+
 function importSave(save_data) {
-    if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3") {
-        document.getElementById("body").style.animation = "barrelRoll 5s 1";
-        giveAchievement("Do a barrel roll!");
-        setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 5000)
+    if (tryImportSecret(save_data) || Theme.tryUnlock(save_data)) {
+      return;
     }
-    if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274") giveAchievement("So do I");
-    if (Theme.tryUnlock(save_data))
-        return;
     let parsedSave = parseSaveData(save_data);
     if (parsedSave === undefined) {
       alert('could not load the save..');

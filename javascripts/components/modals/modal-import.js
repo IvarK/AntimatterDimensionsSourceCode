@@ -9,7 +9,7 @@ Vue.component('modal-import', {
         <modal-close-button @click="emitClose"></modal-close-button>
         <h3>Input your save</h3>
         <input ref="input" type="text" v-model="input">
-        <div v-if="inputIsSecretTheme">???</div>
+        <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatMoney(player.money) }}</div>
           <div v-if="progress.infinityUnlocked()">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
@@ -31,13 +31,13 @@ Vue.component('modal-import', {
       return this.input !== "";
     },
     inputIsValid: function() {
-      return this.inputIsValidSave || this.inputIsSecretTheme;
+      return this.inputIsValidSave || this.inputIsSecret;
     },
     inputIsValidSave: function() {
       return this.player !== undefined;
     },
-    inputIsSecretTheme: function() {
-      return Theme.isSecretTheme(this.input);
+    inputIsSecret: function() {
+      return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     }
   },
   methods: {

@@ -90,6 +90,7 @@ function wormHoleLoop(diff, i) {
       if (player.wormhole[i].phase >= player.wormhole[i].duration) {
         player.wormhole[i].phase -= player.wormhole[i].duration
         player.wormhole[i].active = false
+        $.notify("Wormhole duration ended.", "success");
         updateTickSpeed();
       }
     } else {
@@ -97,6 +98,7 @@ function wormHoleLoop(diff, i) {
       if (player.wormhole[i].phase >= player.wormhole[i].speed) {
         player.wormhole[i].phase -= player.wormhole[i].speed
         player.wormhole[i].active = true
+        $.notify("Wormhole is active!", "success");
         updateTickSpeed();
       }
     }

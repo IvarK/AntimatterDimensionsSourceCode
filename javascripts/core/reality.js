@@ -75,7 +75,6 @@ function reality(force) {
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
     if (player.reality.respec)
         respecGlyphs();
-    player.money = new Decimal(10);
     player.sacrificed = new Decimal(0);
     player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";
@@ -212,6 +211,7 @@ function reality(force) {
     document.getElementById("totaltickgained").textContent = "You've gained " + Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " tickspeed upgrades.";
     resetTickspeed();
     updateTickSpeed();
+    resetMoney();
     playerInfinityUpgradesOnEternity();
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     updateEternityChallenges();

@@ -1790,16 +1790,10 @@ function generateGlyphSelection(amount) {
       var rarity = getRarity(glyph.strength)
       html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
       html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-      for (i in glyph.effects) {
-          var effect = glyph.effects[i]
-          var precision = 3
-          var formattedAmount = effect
-          if (effect >= 1 && effect < 2) precision = 4
-          if (new Decimal(1000).lt(effect)) formattedAmount = shortenGlyphEffect(effect)
-          else if (effect === true) formattedAmount = effect
-          else formattedAmount = effect.toPrecision(precision)
-          html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
-      }
+      for (i in glyph.effects)
+        html += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
+      if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+        html += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
       html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
   }
   $("#glyphsToSelect").html(html)

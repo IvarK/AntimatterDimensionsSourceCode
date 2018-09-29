@@ -319,31 +319,72 @@ function getRarity(x) {
  */
 
 const NUMBERCOLOR = "#85ff85"
-function getDesc(typeeffect, x) {
+function getDesc(typeeffect, x, coloredNumber) {
+  let spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+  let spanSuffix = "</span>"
   const EFFECT_DESCRIPTIONS = {
-    timepow: "Time dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    timespeed: "Multiply game speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    timefreeTickMult: "Free tickspeed threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    timeeternity: "Multiply EP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    dilationdilationMult: "Multiply dilated time gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    dilationgalaxyThreshold: "Free galaxy threshold multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    dilationTTgen: "Generates <span style='color:"+NUMBERCOLOR+"'>" + (3600*x).toFixed(2) + "</span> TT per hour.", // Implemented
-    dilationpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span> while dilated.", // Implemented
-    replicationspeed: "Multiply replication speed by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationpow: "Replicanti multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationdtgain: "Multiply DT gain by log10(replicanti) x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (0.4+parseFloat(x)).toFixed(3) + "</span>", // Implemented
-    infinitypow: "Infinity dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    infinityrate: "Infinity power conversion rate ^7 -> ^<span style='color:"+NUMBERCOLOR+"'>" + (7+parseFloat(x)).toFixed(2) + "</span>", // Implemented
-    infinityipgain: "Multiply IP gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    infinityinfmult: "Multiply infinitied stat gain by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerpow: "Normal dimension multiplier ^<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powermult: "Normal dimension multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerdimboost: "Dimension boost multiplier x<span style='color:"+NUMBERCOLOR+"'>" + x + "</span>", // Implemented
-    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by <span style='color:"+NUMBERCOLOR+"'>" + x + "</span>" // Implemented
+    timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
+    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timeeternity: "Multiply EP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    dilationdilationMult: "Multiply dilated time gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    dilationTTgen: "Generates " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
+    dilationpow: "Normal dimension multipliers <br>^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
+    replicationspeed: "Multiply replication speed by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    replicationdtgain: "Multiply DT gain by <br>log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
+    replicationglyphlevel: "Replicanti scaling for next glyph level: <br>^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
+    infinitypow: "Infinity dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    infinityrate: "Infinity power conversion rate: <br>^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
+    infinityipgain: "Multiply IP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    infinityinfmult: "Multiply infinitied stat gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    powermult: "Normal dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerdimboost: "Dimension boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
+    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by " + spanPrefix + x.toFixed(2) + spanSuffix
+  }
+  
+  // Used for total glyph effects, slightly reworded/shortened
+  const EFFECT_DESCRIPTIONS_SHORT = {
+    timepow: "Time dimension multipliers ^" + x.toFixed(3),
+    timespeed: "Game runs x" + x.toFixed(3) + " faster",
+    timefreeTickMult: "Free tickspeed threshold multiplier x" + x.toFixed(3),
+    timeeternity: "EP gain x" + shortenDimensions(x),
+    dilationdilationMult: "DT gain x" + shortenDimensions(x),
+    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + x.toFixed(3),
+    dilationTTgen: "Generating " + (3600*x).toFixed(2) + " TT per hour",
+    dilationpow: "Normal dimension multipliers ^" + x.toFixed(3) + " while dilated",
+    replicationspeed: "Replication speed x" + shortenDimensions(x),
+    replicationpow: "Replicanti multiplier ^" + x.toFixed(3),
+    replicationdtgain: "DT gain from log10(replicanti) x" + x.toFixed(5),
+    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^(0.4 + " + x.toFixed(3) + ")",
+    infinitypow: "Infinity dimension multipliers ^" + x.toFixed(3),
+    infinityrate: "Infinity power conversion rate ^7 -> ^(7 + " + x.toFixed(2) + ")",
+    infinityipgain: "IP gain x" + shortenDimensions(x),
+    infinityinfmult: "Infinity stat gain x" + shortenDimensions(x),
+    powerpow: "Normal dimension multipliers ^" + x.toFixed(3),
+    powermult: "Normal dimension multipliers x" + shortenDimensions(x),
+    powerdimboost: "Dimension boost multiplier x" + x.toFixed(2),
+    powerbuy10: "Multiplier from \"Buy 10\" x" + x.toFixed(2)
   }
 
-  return EFFECT_DESCRIPTIONS[typeeffect]
+  if (coloredNumber)  // Assuming non-colored number text will always be put in the total glyph box
+    return EFFECT_DESCRIPTIONS[typeeffect]
+  else
+    return EFFECT_DESCRIPTIONS_SHORT[typeeffect]
+}
+
+function getGlyphTooltip(glyph) {
+  let tooltipText = "";
+  var rarity = getRarity(glyph.strength)
+  tooltipText += "<span class='tooltip'><span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
+  for (i in glyph.effects)
+    tooltipText += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
+  if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
+  tooltipText += "</span>"
+  return tooltipText;
 }
 
 var mouseOn = $("document")
@@ -359,24 +400,15 @@ function generateGlyphTable() {
       html += "<td>"
       var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
-        if (glyph.color !== undefined) html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'><span class='tooltip'>"
-        else html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'><span class='tooltip'>"
-        var rarity = getRarity(glyph.strength)
-        html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-        for (i in glyph.effects) {
-          var effect = glyph.effects[i]
-          var precision = 3
-          var formattedAmount = effect
-          if (effect >= 1 && effect < 2) precision = 4
-          if (new Decimal(1000).lt(effect)) formattedAmount = shortenGlyphEffect(effect)
-          else if (effect === true) formattedAmount = effect
-          else formattedAmount = effect.toPrecision(precision)
-          html += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
-        }
-        if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
-          html += "<span style='color:rgb(180,180,180)'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
-        if (glyph.symbol !== undefined) html += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
-        else html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
+        if (glyph.color !== undefined)
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+        else
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+        html += getGlyphTooltip(glyph);
+        if (glyph.symbol !== undefined)
+          html += specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
+        else
+          html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
       } else {
         html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
@@ -394,21 +426,13 @@ function generateGlyphTable() {
     var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
     if (glyph !== undefined && glyph !== null) {
       var glyphhtml = ""
-      if (glyph.color !== undefined) glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'><span class='tooltip'>"
-      else glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"'><span class='tooltip'>"
-      var rarity = getRarity(glyph.strength)
-      glyphhtml += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-      for (i in glyph.effects) {
-        var effect = glyph.effects[i]
-        var precision = 3
-        var formattedAmount = effect
-        if (effect >= 1 && effect < 2) precision = 4
-        if (new Decimal(1000).lt(effect)) formattedAmount = shortenGlyphEffect(effect)
-        else if (effect === true) formattedAmount = effect
-        else formattedAmount = effect.toPrecision(precision)
-        glyphhtml += getDesc(glyph.type + i, formattedAmount) +" <br><br>"
-      }
-      if (glyph.symbol !== undefined) glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
+      if (glyph.color !== undefined)
+        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'>"
+      else
+        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"'>"
+      glyphhtml += getGlyphTooltip(glyph);
+      if (glyph.symbol !== undefined)
+        glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
       else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
       $("#glyphslots").children()[slot].innerHTML = glyphhtml
     }
@@ -418,70 +442,8 @@ function generateGlyphTable() {
   // Update total effect box
   let allActiveEffects = getTotalGlyphEffects();
   let activeEffectText = "Current Glyph Effects:<br>";
-  for (let effect in allActiveEffects) {
-    switch(effect) {
-      case "power.pow":
-        activeEffectText += "<br>Normal Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "power.mult":
-        activeEffectText += "<br>Normal Dimensions x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "power.dimboost":
-        activeEffectText += "<br>Dimboost power x" + allActiveEffects[effect].toFixed(2);
-        break;
-      case "power.buy10":
-        activeEffectText += "<br>Multiplier for \"Buy 10\" x" + allActiveEffects[effect].toFixed(2);
-        break;
-      case "infinity.pow":
-        activeEffectText += "<br>\Infinity Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "infinity.rate":
-        activeEffectText += "<br>Infinity power conversion: ^(7 + " + allActiveEffects[effect].toFixed(3) + ")";
-        break;
-      case "infinity.ipgain":
-        activeEffectText += "<br>IP gain x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "infinity.infmult":
-        activeEffectText += "<br>Infinitied stat gain x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "replication.speed":
-        activeEffectText += "<br>Replicanti speed x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "replication.pow":
-        activeEffectText += "<br>Replicanti multiplier ^" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "replication.dtgain":  // This stacks weirdly
-        activeEffectText += "<br>DT gain from log10(replicanti) x" + allActiveEffects[effect].toPrecision(3);
-        break;
-      case "replication.glyphlevel":
-        activeEffectText += "<br>Next glyph level replicanti scaling: ^(0.4 + " + allActiveEffects[effect].toFixed(3) + ")";
-        break;
-      case "time.pow":
-        activeEffectText += "<br>Time Dimension multiplier ^" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "time.speed":
-        activeEffectText += "<br>Game runs x" + allActiveEffects[effect].toFixed(3) + " faster";
-        break;
-      case "time.freeTickMult":  // This stacks weirdly
-        activeEffectText += "<br>Free tickspeed threshold x" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "time.eternity":
-        activeEffectText += "<br>EP gain x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "dilation.dilationMult":
-        activeEffectText += "<br>DT gain x" + shortenDimensions(allActiveEffects[effect]);
-        break;
-      case "dilation.galaxyThreshold":
-        activeEffectText += "<br>Free galaxy threshold x" + allActiveEffects[effect].toFixed(3);
-        break;
-      case "dilation.TTgen":
-        activeEffectText += "<br>Generating " + (3600*allActiveEffects[effect]).toFixed(2) + " TT per hour";
-        break;
-      case "dilation.pow":
-        activeEffectText += "<br>Normal Dimension multiplier ^" + allActiveEffects[effect].toFixed(3) + " (while dilated)";
-        break;
-    }
-  }
+  for (let effect in allActiveEffects)
+    activeEffectText += "<br>" + getDesc(effect, allActiveEffects[effect], false);
   $("#activeGlyphs").html(activeEffectText)
   updateTickSpeed();
 
@@ -511,12 +473,12 @@ function getTotalGlyphEffects() {
   for (let i = 0; i < activeGlyphs.length; i++) {
     let currGlyph = activeGlyphs[i];
     for (let effect in currGlyph.effects) {
-      uniqueEffect = currGlyph.type + "." + effect;
+      uniqueEffect = currGlyph.type + effect;
       if (currGlyph.effects.hasOwnProperty(effect))
         if (allEffects[uniqueEffect] == undefined)
           allEffects[uniqueEffect] = currGlyph.effects[effect];
         else {  // Combine the effects appropriately (some are additive)
-          if (uniqueEffect === "replication.glyphlevel" || uniqueEffect === "dilation.TTgen" || uniqueEffect === "infinity.rate" || uniqueEffect === "replication.dtgain")
+          if (uniqueEffect === "replicationglyphlevel" || uniqueEffect === "dilationTTgen" || uniqueEffect === "infinityrate" || uniqueEffect === "replicationdtgain")
             allEffects[uniqueEffect] += currGlyph.effects[effect];
           else if (uniqueEffect === "power.mult") // This is a Decimal
             allEffects[uniqueEffect] = allEffects[uniqueEffect].times(currGlyph.effects[effect]);
@@ -767,8 +729,8 @@ function getGlyphSacDescription(type) {
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power":
-    let partialGalaxy = Math.sqrt(player.reality.glyphs.sac[type]) / 2 - amount;
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later (" + (100*partialGalaxy).toFixed(1) + "% to next)<br><br>"
+    let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later (next at " + nextDistantGalaxy.toFixed(0) + ")<br><br>"
 
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
@@ -785,8 +747,9 @@ function getGlyphSacDescription(type) {
 }
 
 function sacrificeGlyph(glyph) {
-  if (!confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs would increase by " +(glyph.level * glyph.strength).toFixed(2))) return
-  player.reality.glyphs.sac[glyph.type] += glyph.level * glyph.strength
+  let toGain = glyph.level * glyph.strength;
+  if (!confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
+  player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
   if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), player.infinityDimension8.baseAmount / 10)
   let inv = player.reality.glyphs.inventory

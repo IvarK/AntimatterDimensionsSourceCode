@@ -8,15 +8,15 @@
 function updateWormholeUpgrades() {
   for (let i = 0; i < 3; i++) {
     $("#wormholeinterval" + (i+1)).html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[i].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholeIntervalCost(0)) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines < getWormholeIntervalCost(i)) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#wormholeinterval" + (i+1)).removeClass("rUpgUn")
 
     $("#wormholepower" + (i+1)).html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole[i].power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholePowerCost(0)) $("#wormholepower" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines < getWormholePowerCost(i)) $("#wormholepower" + (i+1)).addClass("rUpgUn")
     else $("#wormholepower" + (i+1)).removeClass("rUpgUn")
 
     $("#wormholeduration" + (i+1)).html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole[i].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholeDurationCost(0)) $("#wormholeduration" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines < getWormholeDurationCost(i)) $("#wormholeduration" + (i+1)).addClass("rUpgUn")
     else $("#wormholeduration" + (i+1)).removeClass("rUpgUn")
   }
   if (planet !== undefined) // This function gets called once on-load before the wormhole is initialized
@@ -75,19 +75,18 @@ function upgradeWormholeDuration(i) {
     updateWormholeUpgrades()
 }
 
-function setWormhole(state, i) {
-  player.wormhole[i].active = state;
-  player.wormhole[i].phase = 0;
-}
-
 let totalPhase;
 function wormHoleLoop(diff, i) {
   // Change wormhole state
   if (player.wormholePause) return
   if (!player.wormhole[i].unlocked) return
 
-  if (player.wormhole[i].active) document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
-  else document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
+  if (player.wormhole[i].active && (i == 0 || player.wormhole[i-1].active))
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
+  else if (player.wormhole[i].active)
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " sec)";
+  else
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
 
   if (i !== 0 && !player.wormhole[i - 1].active) return
 	let incPhase = diff / 1000;
@@ -95,6 +94,7 @@ function wormHoleLoop(diff, i) {
       if (player.wormhole[i].phase >= player.wormhole[i].duration) {
         player.wormhole[i].phase -= player.wormhole[i].duration
         player.wormhole[i].active = false
+        incPhase = 0
         $.notify("Wormhole "+ (i + 1) +" duration ended.", "success");
         updateTickSpeed();
       }
@@ -102,6 +102,7 @@ function wormHoleLoop(diff, i) {
       if (player.wormhole[i].phase >= player.wormhole[i].speed) {
         player.wormhole[i].phase -= player.wormhole[i].speed
         player.wormhole[i].active = true
+        incPhase = 0
         $.notify("Wormhole "+ (i + 1) +" is active!", "success");
         updateTickSpeed();
       }
@@ -145,7 +146,8 @@ function Dot(dotSize, dotType, r, theta) {
 	this.isHole = dotType == 'hole';
 	this.radius = r;
 	this.angle = theta;
-	this.respawn = true;
+	this.respawnTick = true;  // Don't draw trails on the tick particles respawn
+  this.isInside = false;
   this.canvas = document.getElementById("wormholeImage");
 	
   this.draw = function () {
@@ -154,34 +156,40 @@ function Dot(dotSize, dotType, r, theta) {
 		let y = this.radius * Math.cos(2*Math.PI * this.angle);
     disp.beginPath();
     disp.lineWidth = 2*this.size;
-		
-		// Wormhole active, draw some trails
-		if (player.wormhole[0].active && this.isParticle && !this.respawn) {
-			let prevX = this.prevRadius * Math.sin(2*Math.PI * this.prevAngle);
-			let prevY = this.prevRadius * Math.cos(2*Math.PI * this.prevAngle);
-			disp.lineCap = 'round';
-			disp.lineWidth *= 1;
-			disp.moveTo(x + 200, y + 200);
-			disp.lineTo(prevX + 200, prevY + 200);
-		}
-		else {
-      if (this.isHole) {  // Glowing effect to make it more visible on dark themes
-        let glow = disp.createRadialGradient(x + 200, y + 200, 0, x + 200, y + 200, this.size * 2);
-        glow.addColorStop(0, "rgba(0, 0, 0, 1)");
-        glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
-        glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
-        glow.addColorStop(1, "rgba(100, 100, 100, 0)");
-        disp.fillStyle = glow;
-        disp.fillRect(0, 0, 400, 400);
+    
+		// Wormhole 1 active, draw some trails
+		if (player.wormhole[0].active && this.isParticle && !this.respawnTick) {
+      if (!this.isInside || (player.wormhole[0].active && player.wormhole[1].active)) {
+        let prevX = this.prevRadius * Math.sin(2*Math.PI * this.prevAngle);
+        let prevY = this.prevRadius * Math.cos(2*Math.PI * this.prevAngle);
+        disp.lineCap = 'round';
+        disp.lineWidth *= 1;
+        disp.moveTo(x + 200, y + 200);
+        disp.lineTo(prevX + 200, prevY + 200);
       }
-      else
-        disp.arc(x + 200, y + 200, this.size, 0, 2*Math.PI);
+		}
+		else if (this.isHole) {  // Glowing effect to make the hole more visible on dark themes
+      let glow = disp.createRadialGradient(x + 200, y + 200, 0, x + 200, y + 200, this.size * 2);
+      glow.addColorStop(0, "rgba(0, 0, 0, 1)");
+      glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
+      glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
+      glow.addColorStop(1, "rgba(100, 100, 100, 0)");
+      disp.fillStyle = glow;
+      disp.fillRect(0, 0, 400, 400);
     }
+    else if (!this.isInside || (player.wormhole[0].active && player.wormhole[1].active))  // Particle and planet
+      disp.arc(x + 200, y + 200, this.size, 0, 2*Math.PI);
 		
 		if (this.isParticle)
 			if (player.wormhole[0].active) {
-        let dist = Math.floor(127 * (this.radius - bhSize) / semimajorAxis);
-				disp.strokeStyle = "rgb(" + (255-dist) + ", " + dist + ", " + dist + ")";
+        if (this.radius > bhSize) { // Trails outside wormhole
+          let dist = Math.floor(127 * (this.radius - bhSize) / semimajorAxis);
+          disp.strokeStyle = "rgb(" + (255-dist) + ", " + dist + ", " + dist + ")";
+        }
+        if (this.radius < bhSize) { // Trails inside wormhole
+          let dist = Math.floor(255 * Math.sqrt(this.radius / bhSize));
+          disp.strokeStyle = "rgb(" + dist + ", 0, 0)";
+        }
       }
 			else
 				disp.strokeStyle = "rgb(127, 127, 127)";
@@ -189,7 +197,7 @@ function Dot(dotSize, dotType, r, theta) {
 			disp.strokeStyle = "rgb(0, 0, 255)";
 		else
 			disp.strokeStyle = "rgb(0, 0, 0)";
-        disp.stroke();
+    disp.stroke();
 		}
 		
 		// Move particles
@@ -200,19 +208,26 @@ function Dot(dotSize, dotType, r, theta) {
 				this.prevAngle = this.angle;
 				this.prevRadius = this.radius;
 			}
-			this.angle = (this.angle + 20*particleSpeed*Math.PI*Math.pow(this.radius, -1.5)) % 1;
+      if (!this.isInside)
+        this.angle = (this.angle + 20*particleSpeed*Math.PI*Math.pow(this.radius, -1.5)) % 1;
 			this.radius /= 1 + 0.3*particleSpeed*Math.pow(this.radius / bhSize, -2);
 				
-			if (this.radius < bhSize) {		// Particle fell in, disable the trail and respawn it outside
-				this.radius = getRandomRadius();
-				this.angle += Math.random();
-				this.respawn = true;
-			}
-			else
-				this.respawn = false;
+			if (this.radius < 0.1*bhSize) // Particle fell in to the center
+				this.respawn();
+			else if (this.radius <= bhSize) // Particle is inside
+        this.isInside = true;
+      else
+				this.respawnTick = false;
 		}
+    
+    this.respawn = function () {
+      this.radius = getRandomRadius();
+      this.angle += Math.random();
+			this.respawnTick = true;
+      this.isInside = false;
+    }
 	}
- }
+}
  
  // Code was originally written to use phase over a cycle of active+inactive time and would be really difficult to rewrite to use the current wormhole phase
  // Example on what this is: if the wormhole has intervals of 100+10 then this ranges from 0 to 110 and is active when less than 5 or more than 105
@@ -241,7 +256,7 @@ function initializeWormhole() {
 			
 	// Particles (scaled to take the same range as the orbit)
 	particleList = [hole];
-	numParticles = 80;
+	numParticles = 120;
 	for (let i = 0; i < numParticles; i++)
 		particleList.push(new Dot(planetSize / 3, 'particle', getRandomRadius(), Math.random()));
 	particleList.push(planet);

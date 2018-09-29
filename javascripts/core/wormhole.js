@@ -75,6 +75,11 @@ function upgradeWormholeDuration(i) {
     updateWormholeUpgrades()
 }
 
+function setWormhole(state, i) {
+  player.wormhole[i].active = state;
+  player.wormhole[i].phase = 0;
+}
+
 let totalPhase;
 function wormHoleLoop(diff, i) {
   // Change wormhole state

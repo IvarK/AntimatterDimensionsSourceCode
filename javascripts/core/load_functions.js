@@ -193,8 +193,6 @@ function onLoad() {
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?")
   }
-  // TODO, REMOVE
-  dev.updateTestSave()
   if (player.secondAmount !== 0) {
       document.getElementById("thirdRow").style.display = "table-row";
       document.getElementById("tickSpeed").style.visibility = "visible";
@@ -662,10 +660,6 @@ if (player.version < 5) {
     document.getElementById("seventhRow").style.display = "none";
     document.getElementById("eightRow").style.display = "none";
   }
-  if (player.wormhole[0].unlocked) {
-    $("#wormholecontainer").show()
-    $(".wormhole-upgrades").show()
-  }
 	initializeWormhole();
 
   updateAutobuyers();
@@ -696,8 +690,14 @@ if (player.version < 5) {
   drawPerkNetwork()
   Notation.set(player.options.notation);
 
-  if (player.wormhole[0].unlocked) $("#wormholeunlock").hide()
-  else $(".wormhole-upgrades").hide()
+  $(".wormhole-upgrades").hide()
+  if (player.wormhole[0].unlocked) {
+    $("#wormholeunlock").hide()
+    $("#wormholecontainer").show()
+    $("#whupg1").show()
+  }
+  if (player.wormhole[1].unlocked) $("#whupg2").show()
+  if (player.wormhole[2].unlocked) $("#whupg3").show()
   
   $("#pp").text("You have " + player.reality.pp + " Perk Points.")
 

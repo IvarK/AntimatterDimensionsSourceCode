@@ -2445,7 +2445,7 @@
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(17)" id="rupg17"><b>Requires: Reality with 4 glyphs, with each having 2 effects</b><br>50% chance to get +1 effects on glyphs<br>Cost: 1500 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(18)" id="rupg18"><b>Requires: Reality with 4 level 10 or higher glyphs equipped.</b><br>Eternities affect glyph level<br>Cost: 1500 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(19)" id="rupg19"><b>Requires: Have a total of 30 glyphs</b><br>You can sacrifice power and time glyphs for permanent bonuses<br>Cost: 1500 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(20)" id="rupg20" style="font-size: 0.85em;"><b>Requires: 2 years total play time</b><br>You can have multiple wormholes (not implemented)<br>Cost: 1500 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(20)" id="rupg20" style="font-size: 0.85em;"><b>Requires: 2 years total play time</b><br>You can have multiple wormholes<br>Cost: 1500 RM</div></td>
                     </tr>
                 </table>
             </div>
@@ -2594,11 +2594,23 @@
                 <button id="wormholeunlock" class="realityUpgrade" onclick="unlockWormhole()" style="text-shadow: -1px 1px 3px #d5ffd7;" ach-tooltip="The wormhole makes the game run significantly faster for a short period of time. Starts at 180x faster for 10 seconds, once per hour.">Unleash the Wormhole<br>Cost: 50 RM</button>
                 <div id="wormholecontainer" style="display: none">
 					<canvas id="wormholeImage" width="400" height="400" style="border:1px solid #000000;"></canvas>
-					<h3 id="wormholeStatus"></h3>
-                    <div class="wormhole-upgrades">
-                        <button class="realityUpgrade" id="wormholeinterval" onclick="upgradeWormholeInterval(0)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
-                        <button class="realityUpgrade" id="wormholepower" onclick="upgradeWormholePower(0)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
-                        <button class="realityUpgrade" id="wormholeduration" onclick="upgradeWormholeDuration(0)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+          <h3 id="wormholeStatus1"></h3>
+          <h3 id="wormholeStatus2"></h3>
+          <h3 id="wormholeStatus3"></h3>
+                    <div class="wormhole-upgrades" id="whupg1">
+                        <button class="realityUpgrade" id="wormholeinterval1" onclick="upgradeWormholeInterval(0)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="realityUpgrade" id="wormholepower1" onclick="upgradeWormholePower(0)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="realityUpgrade" id="wormholeduration1" onclick="upgradeWormholeDuration(0)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+                    </div>
+                    <div class="wormhole-upgrades" id="whupg2">
+                        <button class="realityUpgrade" id="wormholeinterval2" onclick="upgradeWormholeInterval(1)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="realityUpgrade" id="wormholepower2" onclick="upgradeWormholePower(1)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="realityUpgrade" id="wormholeduration2" onclick="upgradeWormholeDuration(1)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+                    </div>
+                    <div class="wormhole-upgrades" id="whupg3">
+                        <button class="realityUpgrade" id="wormholeinterval3" onclick="upgradeWormholeInterval(2)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="realityUpgrade" id="wormholepower3" onclick="upgradeWormholePower(2)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="realityUpgrade" id="wormholeduration3" onclick="upgradeWormholeDuration(2)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
                     </div>
                     <div><button class="realityUpgrade" onclick="pauseWormhole()" style="height: auto; padding: 16px" id="pauseButton">Pause</button></div>
                 </div>

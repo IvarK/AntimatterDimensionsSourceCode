@@ -2477,18 +2477,23 @@ var replicantiTicks = 0
 var eternitiesGain = 0
 
 // Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
-function getGameSpeedupFactor() {
+function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
   let factor = 1;
-  if (player.currentEternityChall === "eterc12")
+  if (player.currentEternityChall === "eterc12") {
     return 1/1000;
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "time" && glyph.effects.speed !== undefined)
-      factor *= glyph.effects.speed
+  }
+  if (takeGlyphsIntoAccount) {
+    for (i in player.reality.glyphs.active) {
+      var glyph = player.reality.glyphs.active[i]
+      if (glyph.type == "time" && glyph.effects.speed !== undefined)
+        factor *= glyph.effects.speed
+    }
   }
   // TODO, REMOVE
   if (player.wormhole[0] !== undefined) {
-    if (player.wormhole[0].active && !player.wormhole[0].pause) factor *= player.wormhole[0].power
+    if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
+    if (player.wormhole[0].active && player.wormhole[1].active && !player.wormholePause) factor *= player.wormhole[1].power
+    if (player.wormhole[0].active && player.wormhole[1].active && player.wormhole[2].active && !player.wormholePause) factor *= player.wormhole[2].power
   } else dev.updateTestSave()
   
   return factor;
@@ -3181,6 +3186,8 @@ function gameLoop(diff) {
   
   if (player.wormhole[0].unlocked) {
     wormHoleLoop(diff, 0)
+    wormHoleLoop(diff, 1)
+    wormHoleLoop(diff, 2)
   }
 		
 	// Increased cost scaling tooltips

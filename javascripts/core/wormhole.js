@@ -5,19 +5,20 @@
  * 
  */
 
- function updateWormholeUpgrades() {
-    $("#wormholeinterval").html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[0].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(0))+"RM")
-    if (player.reality.realityMachines < getWormholeIntervalCost(0)) $("#wormholeinterval").addClass("rUpgUn")
-    else $("#wormholeinterval").removeClass("rUpgUn")
+function updateWormholeUpgrades() {
+  for (let i = 0; i < 3; i++) {
+    $("#wormholeinterval" + (i+1)).html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[i].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(i))+" RM")
+    if (player.reality.realityMachines < getWormholeIntervalCost(0)) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
+    else $("#wormholeinterval" + (i+1)).removeClass("rUpgUn")
 
-    $("#wormholepower").html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole[0].power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(0))+"RM")
-    if (player.reality.realityMachines < getWormholePowerCost(0)) $("#wormholepower").addClass("rUpgUn")
-    else $("#wormholepower").removeClass("rUpgUn")
+    $("#wormholepower" + (i+1)).html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole[i].power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(i))+" RM")
+    if (player.reality.realityMachines < getWormholePowerCost(0)) $("#wormholepower" + (i+1)).addClass("rUpgUn")
+    else $("#wormholepower" + (i+1)).removeClass("rUpgUn")
 
-    $("#wormholeduration").html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole[0].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost(0))+"RM")
-    if (player.reality.realityMachines < getWormholeDurationCost(0)) $("#wormholeduration").addClass("rUpgUn")
-    else $("#wormholeduration").removeClass("rUpgUn")
-
+    $("#wormholeduration" + (i+1)).html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole[i].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost(i))+" RM")
+    if (player.reality.realityMachines < getWormholeDurationCost(0)) $("#wormholeduration" + (i+1)).addClass("rUpgUn")
+    else $("#wormholeduration" + (i+1)).removeClass("rUpgUn")
+  }
   if (planet !== undefined) // This function gets called once on-load before the wormhole is initialized
     recalculateOrbit();
  }
@@ -28,7 +29,7 @@ function unlockWormhole() {
     player.wormhole[0].unlocked = true
     player.reality.realityMachines = player.reality.realityMachines.minus(50)
     $("#wormholecontainer").show()
-    $(".wormhole-upgrades").show()
+    $("#whupg1").show()
     $("#wormholeunlock").hide()
 }
 
@@ -83,51 +84,56 @@ let totalPhase;
 function wormHoleLoop(diff, i) {
   // Change wormhole state
   if (player.wormholePause) return
+  if (!player.wormhole[i].unlocked) return
+
+  if (player.wormhole[i].active) document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
+  else document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
+
+  if (i !== 0 && !player.wormhole[i - 1].active) return
 	let incPhase = diff / 1000;
     if (player.wormhole[i].active) {
-      incPhase /= player.wormhole[0].power;
-      document.getElementById("wormholeStatus").textContent = "Wormhole is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
       if (player.wormhole[i].phase >= player.wormhole[i].duration) {
         player.wormhole[i].phase -= player.wormhole[i].duration
         player.wormhole[i].active = false
-        $.notify("Wormhole duration ended.", "success");
+        $.notify("Wormhole "+ (i + 1) +" duration ended.", "success");
         updateTickSpeed();
       }
     } else {
-      document.getElementById("wormholeStatus").textContent = "Wormhole will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
       if (player.wormhole[i].phase >= player.wormhole[i].speed) {
         player.wormhole[i].phase -= player.wormhole[i].speed
         player.wormhole[i].active = true
-        $.notify("Wormhole is active!", "success");
+        $.notify("Wormhole "+ (i + 1) +" is active!", "success");
         updateTickSpeed();
       }
     }
-	player.wormhole[i].phase += incPhase;
-	totalPhase = getTotalPhase();
+  incPhase /= getGameSpeedupFactor(false);
+  player.wormhole[i].phase += incPhase;
+  if (i == 0) totalPhase = getTotalPhase();
   
   // Prevents a flickering wormhole if phase gets set too high (shouldn't ever happen in practice)
   if (player.wormhole[i].phase > period)
     player.wormhole[i].phase %= period;
     
-			
-  // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
-  E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
-  r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
-  theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
-  if (Math.tan(E0/2) < 0)
-    theta *= -1;
-  planet.radius = r;
-	planet.angle = theta / (2*Math.PI);
+	if (i == 0) {
+    // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
+    E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
+    r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
+    theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
+    if (Math.tan(E0/2) < 0)
+      theta *= -1;
+    planet.radius = r;
+    planet.angle = theta / (2*Math.PI);
 
-  // Time dilation factor (Realistic formula, but only actually used for particle speed)
-  delta = 1 / Math.sqrt(1 - bhSize/r);
-				
-	// Move+draw everything
-	document.getElementById("wormholeImage").getContext('2d').clearRect(0, 0, 400, 400);
-  for (let i = 0; i < particleList.length; i++) {
-		particleList[i].update();
-		particleList[i].draw();
-	}
+    // Time dilation factor (Realistic formula, but only actually used for particle speed)
+    delta = 1 / Math.sqrt(1 - bhSize/r);
+          
+    // Move+draw everything
+    document.getElementById("wormholeImage").getContext('2d').clearRect(0, 0, 400, 400);
+    for (let i = 0; i < particleList.length; i++) {
+      particleList[i].update();
+      particleList[i].draw();
+    }
+  }
 }
 
 // Drawing code that runs for each particle

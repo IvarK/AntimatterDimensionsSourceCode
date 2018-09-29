@@ -648,6 +648,11 @@ function buyRealityUpg(id) {
     player.reality.glyphs.slots++
     generateGlyphTable()
   }
+  if (id == 20) {
+    if (!player.wormhole[0].unlocked) return
+    player.wormhole[1].unlocked = true
+    $("#whupg2").show()
+  }
   updateRealityUpgrades()
   return true
 }

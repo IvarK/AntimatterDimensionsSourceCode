@@ -94,9 +94,7 @@ function buyMaxTickSpeed() {
       if (currentChallenge === "challenge5" || currentChallenge === "postc5") {
         multiplySameCosts(tickSpeedCost);
       }
-      else {
-        tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
-      }
+      tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
       if (tickSpeedCost.gte(Number.MAX_VALUE)) {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }

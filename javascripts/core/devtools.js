@@ -379,4 +379,12 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 17
   }
+
+  if (player.options.testVersion == 17) {
+    if (player.reality.upg.includes(20)) {
+      player.wormhole[1].unlocked = true
+      $("#whupg2").show()
+    }
+    player.options.testVersion = 18
+  }
 }

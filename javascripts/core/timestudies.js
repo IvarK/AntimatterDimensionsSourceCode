@@ -48,14 +48,16 @@ function maxTheorems() {
     player.timestudy.theorem += Math.floor(player.infinityPoints.e / 100 + 1) - IPowned
     player.infinityPoints = player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100))
   }
-  // this code is not really needed and I don't know math well enough to make it work
-  /*var EPowned = Math.floor(player.timestudy.epcost.log2())
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
-    player.timestudy.epcost = new Decimal(1).times(new Decimal(2).pow(Math.floor(player.eternityPoints.log2() + 1)))
-    player.timestudy.theorem += Math.floor(player.eternityPoints.log2() + 1) - EPowned
-  }*/
-  // the below line of code *should* be replaced with the above block, but it's not required
-  while (buyWithEP()) continue
+    let EPowned = Math.round(player.timestudy.epcost.log2());
+    let finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
+    let totalEPCost = finalEPCost.minus(player.timestudy.epcost);
+    player.timestudy.epcost = finalEPCost;
+    player.eternityPoints = player.eternityPoints.minus(totalEPCost);
+    player.timestudy.theorem += Math.round(player.timestudy.epcost.log2()) - EPowned
+    buyWithEP();  // The above code block will sometimes buy one too few TT, but it never over-buys
+  }
+  
   updateTimeStudyButtons()
   updateEternityUpgrades()
 }

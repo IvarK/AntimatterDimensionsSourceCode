@@ -162,6 +162,28 @@ function resetTimeDimensions() {
 }
 
 function buyMaxTimeDimensions(threshold) {
-  if (threshold == undefined) threshold = 1
-  for(var i=1; i<9; i++) while(buyTimeDimension(i, false, threshold)) continue
+  if (player.eternityPoints.gte(1e10)) {  // Default behavior: Buy as many as possible, starting with the highest dimension first (reduces overhead at higher EP)
+    if (threshold == undefined) threshold = 1
+    for(var i=8; i>0; i--) while(buyTimeDimension(i, false, threshold)) continue
+  }
+  else {  // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
+    for (let i=4; i > 0 && player["timeDimension"+i].bought == 0; i--)
+      buyTimeDimension(i, false, threshold);
+    
+    for (let stop = 0; stop < 1000; stop++) { // Should never take more than like 50 iterations; explicit infinite loops make me nervous
+      let cheapestDim = 1;
+      let cheapestCost = player["timeDimension1"].cost;
+      for (let i = 2; i <= 4; i++) {
+        if (player["timeDimension"+i].cost.lte(player["timeDimension"+cheapestDim].cost)) {
+          cheapestDim = i;
+          cheapestCost = player["timeDimension"+cheapestDim].cost;
+        }
+      }
+      let bought = false;
+      if (player.eternityPoints.gte(cheapestCost))
+        bought = buyTimeDimension(cheapestDim, false, threshold);
+      if (!bought)
+        break;
+    }
+  }
 }

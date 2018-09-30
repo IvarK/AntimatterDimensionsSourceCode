@@ -351,6 +351,7 @@ function studiesUntil(id) {
 function studyPath(mode, args) {
     if (!(mode === 'none' || mode === 'all')) return false;
     if (args === undefined) args = [];
+    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); })
     let row = 0;
     let master = [];
     let locks = [0, 0, 0];
@@ -373,6 +374,23 @@ function studyPath(mode, args) {
             if (row === 16) {
                 if (args.includes(161)) master.push(161);
                 if (args.includes(162)) master.push(162);
+                continue main;
+            }
+            if (row === 19) {
+                if (args.includes(191)) master.push(191);
+                if (args.includes(192) || args.includes(201)) master.push(192);
+                if (args.includes(193)) master.push(193);
+                continue main;
+            }
+            if (row === 21) {
+                for (let i = 0; i < args.length; i++) {
+                    if (!isNaN(args[i])) {
+                        if (Math.floor(args[i] / 10) === 21 && args[i] % 10 < 5 && args[i] % 10 > 0) {
+                            master.push(args[i]);
+                        }
+                    }
+
+                }
                 continue main;
             }
         }

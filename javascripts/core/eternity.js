@@ -209,7 +209,7 @@ function eternity(force, auto) {
         if (player.reality.tdbuyer.on) buyMaxTimeDimensions(player.reality.tdbuyer.threshhold)
     }
 
-    if (player.eternityUpgrades.length == 0) {
+    if (player.eternityUpgrades.length == 0 || (player.eternityUpgrades.length == 3 && player.reality.perks.includes(81))) {
       if (player.reality.perks.includes(81)) player.eternityUpgrades.push(1, 2, 3)
       if (player.reality.perks.includes(82)) player.eternityUpgrades.push(4, 5, 6)
     }

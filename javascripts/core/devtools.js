@@ -387,4 +387,9 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 18
   }
+
+  if (player.options.testVersion == 18) {
+    player.reality.upgReqs.push(false, false, false, false, false)
+    player.options.testVersion = 19
+  }
 }

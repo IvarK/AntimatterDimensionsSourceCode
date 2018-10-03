@@ -126,7 +126,7 @@ function reality(force) {
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.infMultBuyer = player.reality.upg.includes(10) ? player.infMultBuyer : false;
-    player.autoCrunchMode = "amount";
+    player.autoCrunchMode = player.reality.upg.includes(10) ? player.autoCrunchMode : "amount";
     player.respec = false;
     player.eterc8ids = 50;
     player.eterc8repl = 40;

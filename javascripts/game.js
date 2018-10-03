@@ -2452,6 +2452,8 @@ setInterval(function() {
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
+    if (player.replicanti.amount.gte(new Decimal("1e75000"))) unlockRealityUpgrade(21)
+    if (player.dilation.dilatedTime.gte(1e85)) unlockRealityUpgrade(22)
 
 }, 1000)
 
@@ -2483,12 +2485,12 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
         factor *= glyph.effects.speed
     }
   }
-  // TODO, REMOVE
+  
   if (player.wormhole[0] !== undefined) {
     if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
     if (player.wormhole[0].active && player.wormhole[1].active && !player.wormholePause) factor *= player.wormhole[1].power
     if (player.wormhole[0].active && player.wormhole[1].active && player.wormhole[2].active && !player.wormholePause) factor *= player.wormhole[2].power
-  } else dev.updateTestSave()
+  } else dev.updateTestSave() // TODO, REMOVE
   
   return factor;
 }

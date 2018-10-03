@@ -506,6 +506,11 @@ function deleteGlyph(id) {
     return;
   }
 
+  if (player.reality.upg.includes(21)) {
+    sacrificeGlyph(n)
+    return;
+  }
+
 
   if (controlDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
@@ -582,7 +587,7 @@ function drop(ev) {
   mouseOn = $("document")
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500]
+const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500, 1e5, 1e5, 1e5, 1e5, 1e5]
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
@@ -651,6 +656,7 @@ function updateRealityUpgrades() {
   $("#rupg5").html("You gain 5 times more infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
+  $("#rupg22").html("<b>Requires: 1e85 DT</b><br>Exponential bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(8,  Math.pow(player.thisReality / (1000 * 60 * 60 * 24), 0.4)))+"x<br>Cost: 100,000 RM")
 }
 
 $(".tooltip").parent().mousemove(function(e) {

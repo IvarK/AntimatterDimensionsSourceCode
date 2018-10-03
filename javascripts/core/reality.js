@@ -73,8 +73,11 @@ function reality(force) {
         if (tempBool) unlockRealityUpgrade(18)
     }
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
-    if (player.reality.respec)
+    if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
+    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(6666)) unlockRealityUpgrade(24)
+    if (player.reality.respec) {
         respecGlyphs();
+    }
     player.sacrificed = new Decimal(0);
     player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";
@@ -263,6 +266,8 @@ function reality(force) {
         player.replicanti.galaxybuyer = player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined;
         player.replicanti.auto = [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false];
     }
+    possibleGlyphs = []
+    glyphSelected = false
 }
 
 function fullResetTimeDimensions() {

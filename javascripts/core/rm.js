@@ -611,7 +611,7 @@ function buyRealityUpg(id) {
   else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   if (id < 6) player.reality.rebuyables[id]++
   else player.reality.upg.push(id)
-  if (id == 9) {
+  if (id == 9 || id == 24) {
     player.reality.glyphs.slots++
     generateGlyphTable()
   }

@@ -2554,6 +2554,7 @@ function gameLoop(diff) {
 
     if (player.reality.upg.includes(14)) {
         eternitiesGain += diff * player.realities / 1000
+        if (player.reality.upg.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
         if (eternitiesGain < 2) {
             player.eternities += 1
             player.eternitiesGain -= 1

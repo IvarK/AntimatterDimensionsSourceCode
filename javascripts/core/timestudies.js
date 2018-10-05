@@ -351,7 +351,7 @@ function studiesUntil(id) {
 function studyPath(mode, args) {
     if (!(mode === 'none' || mode === 'all')) return false;
     if (args === undefined) args = [];
-    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); })
+    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
     let row = 0;
     let master = [];
     let locks = [0, 0, 0];

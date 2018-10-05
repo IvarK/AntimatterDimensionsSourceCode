@@ -68,9 +68,7 @@ function highlightcurrent() {
 }
 
 var automatorOn = false
-var timer = 0
-var now = Date.now()
-var waiting = false
+var timeStamp = 0
 var buying = false
 var ifstatement = false
 function mainIteration() {
@@ -258,7 +256,8 @@ function unlock(current) {
 
 function wait(current) {
   if (!player.reality.automatorCommands.includes(11)) return false
-  if (current.id !== "max") id = new Decimal(current.id)
+  let id;
+  if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
       if (!player.reality.automatorCommands.includes(22)) return false
@@ -292,17 +291,17 @@ function wait(current) {
       break;
     case "time":
       if (!player.reality.automatorCommands.includes(41)) return false
-      if (waiting = false) {
-        waiting = true
-        now = Date.now()
+      if (timeStamp == 0) {
+        timeStamp = new Date().getTime()
+        return false
+      } else {
+        if (timeStamp + current.id * 1000 < new Date().getTime()) {
+          timeStamp = 0 
+          return true
+        }
+        else return false
       }
-      timer += (Date.now() - now) / 1000
-      now = Date.now()
-      if (timer < id) return false
-      else {
-        waiting = false
-        return true
-      }
+
       break;
   }
 }

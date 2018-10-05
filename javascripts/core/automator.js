@@ -40,6 +40,7 @@ var automatorIdx = 0
 var tryingToBuy = 0
 function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+  automatorIdx = 0
 }
 
 function getAutomatorRows() {
@@ -188,12 +189,13 @@ function buy(current) {
           break;
       case "studyimport":
           if (!player.reality.automatorCommands.includes(36)) return false;
-          importStudyTree(current.id);
+          importStudyTree(localStorage.getItem("studyTree"+current.id));
           return true;
           break;
     case "ttmax":
       if (!player.reality.automatorCommands.includes(44)) return false
       maxTheorems()
+      return true
       break;
     case "ttip":
       if (!player.reality.automatorCommands.includes(34)) return false
@@ -390,6 +392,7 @@ function automatorSaveButton(num) {
 function loadScript(num) {
   if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
     importAutomatorScript(localStorage.getItem("automatorScript"+num));
+    automatorIdx = 0
     $.notify("Automator script "+num+" loaded", "info")
   }
 }

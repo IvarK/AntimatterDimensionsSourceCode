@@ -3839,7 +3839,7 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  document.getElementById("automatorloadsavetext").textContent = isDown ? "load:" : "save:";
+  document.getElementById("automatorloadsavetext").textContent = isDown ? "save:" : "load:";
   drawStudyTree()
   if (isDown) showPerkLabels()
   else hidePerkLabels()

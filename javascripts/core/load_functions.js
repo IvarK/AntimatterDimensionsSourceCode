@@ -506,6 +506,9 @@ if (player.version < 5) {
       player.epmult = new Decimal(1)
       player.epmultCost = new Decimal(500)
   }
+  
+  if (player.realities > 0)
+    document.getElementById("eterc12div").innerHTML = document.getElementById("eterc12div").innerHTML.replace("1000x slower.", "1000x slower, wormholes and time glyph effects are disabled.")
 
   clearOldAchieves()
 

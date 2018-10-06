@@ -242,6 +242,7 @@ function reality(force) {
     updateAutomatorTree();
     drawPerkNetwork();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
+    document.getElementById("eterc12div").innerHTML = document.getElementById("eterc12div").innerHTML.replace("1000x slower.", "1000x slower, wormholes and time glyph effects are disabled.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")
 

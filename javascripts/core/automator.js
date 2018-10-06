@@ -70,7 +70,6 @@ function highlightcurrent() {
 var automatorOn = false
 var timeStamp = 0
 var buying = false
-var ifstatement = false
 function mainIteration() {
   if (automatorRows[0] === undefined) return false;
   var cont = false
@@ -92,17 +91,7 @@ function mainIteration() {
               action: row[0],
               target: row[1],
               id: row[2]
-          }
-      } else if (row[0] == "if") {
-          if (!player.reality.automatorCommands.includes(21)) return false;
-          var current = {
-              action: row[0],
-              target: row[1],
-              id: row[2]
-          }
-          ifstatement = true
-          if (wait(current)) automatorIdx += 1
-          else automatorIdx += 2
+          }          
       } else if (row.length >= 4) { //added more flexibility to allow for more arguments in automator commands
           var current = {
               action: row[0],
@@ -111,57 +100,60 @@ function mainIteration() {
               args: row.slice(3)
           }
       }
-    if (!ifstatement) {
-      switch(current.action) {
-        case "buy":
-          if (buy(current) || cont) automatorIdx+=1
-          break;
-        case "wait":
-          if (wait(current)) automatorIdx+=1
-          break;
-        case "unlock":
-          if (unlock(current) || cont) automatorIdx+=1
-          break;
-        case "start":
-          if (start(current) || cont) automatorIdx+=1
-          break;
-        case "change":
-          if (change(current) || cont) automatorIdx+=1
-          break;
-        case "respec":
-          if (!player.reality.automatorCommands.includes(61)) return false
-          player.respec = true
-          automatorIdx+=1
-          break;
-        case "eternity":
-          if (!player.reality.automatorCommands.includes(62)) return false
-          if (eternity(false, true) || cont) automatorIdx+=1
-          break;
-        case "stop":
-          if (!player.reality.automatorCommands.includes(72)) return false
-          automatorOn = false
-          $("#automatorOn")[0].checked = false
-          break;
-        case "load":
-          if (!player.reality.automatorCommands.includes(51)) return false
-          automatorIdx = 0
-          loadScript(current.id)
-          break;
-        case "toggle":
-          if (!player.reality.automatorCommands.includes(53)) return false
-          toggle(current)
-          automatorIdx+=1
-          break;
-          case "goto":
-          if (!player.reality.automatorCommands.includes(31)) return false
-          automatorIdx = parseInt(current.target)-1
-          break;
-      }
+    switch(current.action) {
+      case "buy":
+        if (buy(current) || cont) automatorIdx+=1
+        break;
+      case "wait":
+        if (wait(current)) automatorIdx+=1
+        break;
+      case "unlock":
+        if (unlock(current) || cont) automatorIdx+=1
+        break;
+      case "start":
+        if (start(current) || cont) automatorIdx+=1
+        break;
+      case "change":
+        if (change(current) || cont) automatorIdx+=1
+        break;
+      case "respec":
+        if (!player.reality.automatorCommands.includes(61)) return false
+        player.respec = true
+        automatorIdx+=1
+        break;
+      case "eternity":
+        if (!player.reality.automatorCommands.includes(62)) return false
+        if (eternity(false, true) || cont) automatorIdx+=1
+        break;
+      case "stop":
+        if (!player.reality.automatorCommands.includes(72)) return false
+        automatorOn = false
+        $("#automatorOn")[0].checked = false
+        break;
+      case "load":
+        if (!player.reality.automatorCommands.includes(51)) return false
+        automatorIdx = 0
+        loadScript(current.id)
+        break;
+      case "toggle":
+        if (!player.reality.automatorCommands.includes(53)) return false
+        toggle(current)
+        automatorIdx+=1
+        break;
+        case "goto":
+        if (!player.reality.automatorCommands.includes(31)) return false
+        automatorIdx = parseInt(current.target)-1
+        break;
+
+      case "if":
+        if (!player.reality.automatorCommands.includes(21)) return false;
+          if (wait(current)) automatorIdx += 1
+          else automatorIdx += 2
     }
+    
 
     if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > getAutomatorRows() ) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.7) + 6
     if ( $("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent()
-    if (ifstatement) ifstatement = false
   }
 }
 

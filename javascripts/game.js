@@ -589,7 +589,7 @@ function buyEPMult(upd, threshold) {
 
 function buyMaxEPMult(threshold) {
     if (threshold == undefined) threshold = 1
-    while (player.eternityPoints.gte(player.epmultCost)) {
+    while (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         buyEPMult(false, threshold)
     }
 }
@@ -784,7 +784,8 @@ function updateInfCosts() {
         document.getElementById("193desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.03, player.eternities).min("1e13000"))+"x"
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
         document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
-
+        document.getElementById("225desc").textContent = "Currently: +" + Math.floor(player.replicanti.amount.exponent / 1000) + " RG"
+        document.getElementById("226desc").textContent = "Currently: +" + Math.floor(player.replicanti.gal / 15) + " RG"
 
             // Text for EC unlock studies
             var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
@@ -2841,12 +2842,7 @@ function gameLoop(diff) {
       freeGalaxyMult = 2;
     if (player.dilation.baseFreeGalaxies == undefined)
       player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
-    let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
-    }
-    thresholdMult += 1.35;
+    let thresholdMult = getFreeGalaxyMult();
     player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), new Decimal(thresholdMult))));
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;

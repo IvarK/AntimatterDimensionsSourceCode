@@ -276,8 +276,8 @@
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="222" onclick="buyTimeStudy(222, 900)">Dimensional boost costs scale by another 2 less.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="223" onclick="buyTimeStudy(223, 900)">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="224" onclick="buyTimeStudy(224, 900)">Galaxy cost scaling starts 1 galaxy later for every 2000 dimensional boosts.<span>Cost: 900 Time Theorems</button></td>
-                        <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="225" onclick="buyTimeStudy(225, 900)">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems</button></td>
-                        <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="226" onclick="buyTimeStudy(226, 900)">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems</button></td>
+                        <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="225" onclick="buyTimeStudy(225, 900)">You gain extra RGs based on how high your replicanti are.<span id="225desc">Currently: </span><span>Cost: 900 Time Theorems</button></td>
+                        <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="226" onclick="buyTimeStudy(226, 900)">You gain extra RGs based on your max RGs.<span id="226desc">Currently: </span><span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="227" onclick="buyTimeStudy(227, 900)">Sacrifice affects the 4th Time Dimension with reduced effect.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="228" onclick="buyTimeStudy(228, 900)">Sacrifice scales better.<span>Cost: 900 Time Theorems</button></td>
                     </tr>
@@ -457,13 +457,13 @@
                 <table>
                     <tr>
                         <td>
-                            <button class="timestudy" id="dil1" onclick="buyDilationUpgrade(1)">Double time dilation gain.<br><span id="dil1cost">Cost: 1e5 dilated time</span></button>
+                            <button class="timestudy" id="dil1" onclick="buyDilationUpgrade(1)">Double time dilation gain.<br><span id="dil1mult">Currently: x</span><br><span id="dil1cost">Cost: 1e5 dilated time</span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Decrease the free galaxy threshold multiplier, but resets free galaxies and dilated time.<br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
+                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Free galaxy threshold is lowered, but reset them and dilated time.<br><span id="dil2mult">Currently: x</span><br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="dil3" onclick="buyDilationUpgrade(3)">Triple the amount of Tachyon Particles gained.<br><span id="dil3cost">Cost: 1e7 dilated time</span></button>
+                            <button class="timestudy" id="dil3" onclick="buyDilationUpgrade(3)">Triple the amount of Tachyon Particles gained.<br><span id="dil3mult">Currently: x</span><br><span id="dil3cost">Cost: 1e7 dilated time</span></button>
                         </td>
                     </tr>
                     <tr>

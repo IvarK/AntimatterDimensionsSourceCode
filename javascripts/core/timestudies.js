@@ -191,11 +191,11 @@ function canBuyStudy(name) {
       if (player.reality.perks.includes(71) ||(player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42))) return true; else return false
   }
 
-  if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) {
+    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !player.reality.perks.contains(31)) {
     return false;
   }
 
-  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) {
+    if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !player.reality.perks.contains(31)) {
     return false;
   }
 

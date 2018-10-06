@@ -480,7 +480,7 @@ function getTotalGlyphEffects() {
         else {  // Combine the effects appropriately (some are additive)
           if (uniqueEffect === "replicationglyphlevel" || uniqueEffect === "dilationTTgen" || uniqueEffect === "infinityrate" || uniqueEffect === "replicationdtgain")
             allEffects[uniqueEffect] += currGlyph.effects[effect];
-          else if (uniqueEffect === "power.mult") // This is a Decimal
+          else if (uniqueEffect === "powermult") // This is a Decimal
             allEffects[uniqueEffect] = allEffects[uniqueEffect].times(currGlyph.effects[effect]);
           else
             allEffects[uniqueEffect] *= currGlyph.effects[effect];

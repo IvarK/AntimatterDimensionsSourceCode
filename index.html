@@ -2463,6 +2463,7 @@
                     <canvas id="automatorTreeCanvas"></canvas>
                     <div>
                         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
+                            <button class="realitytabbtn" onclick="numberAutomator([])" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-right: 40px;">&#8634</button>
                             <p id="automatorloadsavetext">load:</p>
                             <button class="realitytabbtn" onclick="automatorSaveButton(1)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">1</button>
                             <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 0.75rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
@@ -2470,7 +2471,7 @@
                             <label for="automatorOn" style="margin-left: 40px;">on:</label>
                             <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOnOff()">
                         </div>
-                        <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateState()"></textarea>
+                            <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateState()" value="  1"></textarea>
                     </div>
                     <table class="table" id="studytable">
                         <tr>

@@ -35,12 +35,188 @@
   * 
   * The player can use rows equal to Math.ceil(realities^0.5)
   */
+let prefixLength = 5;
 var automatorRows = []
 var automatorIdx = 0
 var tryingToBuy = 0
 function updateState() {
-  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+    let rows = getAutomatorRows();
+    console.log(rows);
+    automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function (row) { return row !== "" })
+    automatorRows = automatorRows.map(function (x, i) { if (i < rows) return x.slice(prefixLength); else if (i > rows) return x; });
+    automatorRows.splice(rows, 1);
 }
+
+function numberAutomator(script) {
+    let rows = getAutomatorRows();
+    let ret = "";
+    for (let i = 1; i <= rows; i++) {
+        ret += ">";
+        for (let j = 0; j < 3 - i.toString().length; j++)ret += " ";
+        ret += i + " ";
+        if (script[i-1]) ret += script[i-1];
+        ret += "\n";
+    }
+    ret += ">> END";
+    if (script.length > rows) {
+        ret += "\n";
+        ret += script.slice(rows).join("\n");
+    }
+    document.getElementById('automator').value = ret;
+
+}
+
+document.getElementById("automator").addEventListener('keydown', function (e) {
+    let key = e.which;
+    let arr = e.srcElement.value.split("\n");
+    let maxRows = getAutomatorRows();
+    let sel = $("#automator").prop("selectionStart");
+    let row;
+    let col;
+    let count = 0;
+    let r;
+    for (r = 0; r < arr.length; r++) {
+        if (count + arr[r].length >= sel) break;
+        count += arr[r].length + 1;
+    }
+    row = r;
+    col = sel - count;
+    if (row === maxRows || col < prefixLength && row < maxRows) {
+        e.preventDefault();
+        return;
+    }
+    if (key === 37 && row < maxRows && col === prefixLength) {
+        e.preventDefault();
+        document.getElementById('automator').selectionStart = sel - prefixLength - 1;
+        document.getElementById('automator').selectionEnd = sel - prefixLength - 1;
+    }
+    if ((key === 38 || key === 37 && col === 0) && row - 1 === maxRows) {
+        e.preventDefault();
+        document.getElementById('automator').selectionStart = sel - 8;
+        document.getElementById('automator').selectionEnd = sel - 8;
+    }
+    if (key === 38 && row === 0) {
+        e.preventDefault();
+        document.getElementById('automator').selectionStart = prefixLength;
+        document.getElementById('automator').selectionEnd = prefixLength;
+    }
+    if (key === 39 && row < maxRows-1 && col === arr[row].length) {
+        e.preventDefault();
+        document.getElementById('automator').selectionStart = sel + prefixLength + 1;
+        document.getElementById('automator').selectionEnd = sel + prefixLength + 1;
+    }
+    if ((key === 40 || key === 39 && col === arr[row].length) && row + 1 === maxRows) {
+        e.preventDefault();
+        if (arr.length > maxRows + 1) {
+            document.getElementById('automator').selectionStart = sel + 8;
+            document.getElementById('automator').selectionEnd = sel + 8;
+        }
+    }
+    
+    if (row < maxRows) {
+        if (key === 13) {
+            e.preventDefault();
+            let ret = arr.slice(row + 1, maxRows);
+            let ret2 = arr.slice(maxRows + 1).reverse();
+            ret = ret.map(function (x) { return x.slice(prefixLength) });
+            ret = ret.reverse();
+            let str = arr[row].slice(Math.max(col, prefixLength));
+            ret.push(str);
+            ret = ret.reverse();
+            ret2.push(ret.pop());
+            ret2 = ret2.reverse();
+            if (ret2[ret2.length - 1] === "" && row !== maxRows-1) ret2.pop();
+            arr[row] = arr[row].slice(0, col);
+            ret.forEach(function (x, i) { arr[i + row + 1] = arr[i + row + 1].slice(0, prefixLength) + x; });
+            arr.splice(maxRows + 1);
+            arr = arr.concat(ret2);
+            e.srcElement.value = arr.join('\n');
+            let mov = prefixLength + 1;
+            if (row + 1 === maxRows) mov = 8;
+            document.getElementById('automator').selectionStart = sel + mov;
+            document.getElementById('automator').selectionEnd = sel + mov;
+            return;
+        }
+
+        if (key === 8 && col === prefixLength && row > 1) {
+            e.preventDefault();
+            let ret = arr.slice(row + 1, maxRows);
+            let ret2 = arr.slice(maxRows + 1).reverse();
+            ret = ret.map(function (x) { return x.slice(prefixLength)});
+            ret = ret.reverse();
+            ret = ret.reverse();
+            if (ret2.length > 0) ret.push(ret2.pop());
+            else ret2.push("");
+            ret2 = ret2.reverse();
+            arr[row - 1] = arr[row - 1].concat(arr[row].slice(prefixLength));
+            ret.forEach(function (x, i) { arr[i + row] = arr[i + row].slice(0, prefixLength) + x; });
+            arr.splice(maxRows + 1);
+            arr = arr.concat(ret2);
+            e.srcElement.value = arr.join('\n');
+            let mov = -prefixLength -1;
+            document.getElementById('automator').selectionStart = sel + mov;
+            document.getElementById('automator').selectionEnd = sel + mov;
+            return;
+        }
+    }
+}, { capture: true });
+
+document.getElementById("automator").addEventListener('input', function (e) {
+    let arr = e.srcElement.value.split("\n");
+    let maxRows = getAutomatorRows();
+    let sel = $("#automator").prop("selectionStart");
+    let row;
+    let col;
+    let count = 0;
+    let r;
+    for (r = 0; r < arr.length; r++) {
+        if (count + arr[r].length >= sel) break;
+        count += arr[r].length + 1;
+    }
+    row = r;
+    col = sel - count;
+    if (row === maxRows && e.inputType === "deleteContentBackward") {
+        let ret = arr[maxRows].slice(6);
+        arr[maxRows - 1] += ret;
+        arr[maxRows] = arr[maxRows].slice(0, 6);
+        e.srcElement.value = arr.join('\n');
+        document.getElementById('automator').selectionStart -= 7 + ret.length;
+        document.getElementById('automator').selectionEnd -= 7 + ret.length;
+    }
+    if (row < maxRows && col < prefixLength) {
+        document.getElementById('automator').selectionStart = sel + prefixLength - col;
+        document.getElementById('automator').selectionEnd = sel + prefixLength - col;
+    }
+}, { capture: true });
+
+document.getElementById("automator").addEventListener('click', function (e) {
+    let arr = e.srcElement.value.split("\n");
+    let maxRows = getAutomatorRows();
+    let sel = $("#automator").prop("selectionStart");
+    let row;
+    let col;
+    let count = 0;
+    let r;
+    for (r = 0; r < arr.length; r++) {
+        if (count + arr[r].length >= sel) break;
+        count += arr[r].length + 1;
+    }
+    row = r;
+    col = sel - count;
+    if (row < maxRows && col < prefixLength) {
+        document.getElementById('automator').selectionStart = sel + prefixLength - col;
+        document.getElementById('automator').selectionEnd = sel + prefixLength - col;
+    }
+    if (row === maxRows) {
+        if (arr.length > maxRows+1) {
+            document.getElementById('automator').selectionStart = sel + 7 - col;
+            document.getElementById('automator').selectionEnd = sel + 7 - col;
+        } else {
+            e.srcElement.value += "\n";
+        }
+    }
+}, { capture: true });
+
 
 function getAutomatorRows() {
   var ret = 6 + Math.ceil(Math.pow(player.realities, 0.7) )
@@ -94,16 +270,6 @@ function mainIteration() {
               target: row[1],
               id: row[2]
           }
-      } else if (row[0] == "if") {
-          if (!player.reality.automatorCommands.includes(21)) return false;
-          var current = {
-              action: row[0],
-              target: row[1],
-              id: row[2]
-          }
-          ifstatement = true
-          if (wait(current)) automatorIdx += 1
-          else automatorIdx += 2
       } else if (row.length >= 4) { //added more flexibility to allow for more arguments in automator commands
           var current = {
               action: row[0],
@@ -112,6 +278,17 @@ function mainIteration() {
               args: row.slice(3)
           }
       }
+          if (row[0] == "if") {
+              if (!player.reality.automatorCommands.includes(21)) return false;
+              var current = {
+                  action: row[0],
+                  target: row[1],
+                  id: row[2]
+              }
+              ifstatement = true
+              if (wait(current)) automatorIdx += 1
+              else automatorIdx += 2
+          }
     if (!ifstatement) {
       switch(current.action) {
         case "buy":
@@ -328,7 +505,11 @@ function change(current) {
     case "ipautobuyer":
       document.getElementById("priority12").value = current.id
       updatePriorities()
-      return true
+          return true
+      case "epautobuyer":
+          document.getElementById("priority13").value = current.id
+          updatePriorities()
+          return true
   }
 }
 

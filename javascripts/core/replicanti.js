@@ -224,11 +224,11 @@ function replicantiLoop(diff) {
       if(speedCheck){
         var estimate = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance+1) * getReplicantiInterval(true),0);
         var gps = 1000 / estimate;
-          if (gps < 1000) document.getElementById("replicantiapprox").textContent = "You gain Approximately " + gps.toPrecision(3) + " RGs per Second";
-          else document.getElementById("replicantiapprox").textContent = "You gain Approximately " + Math.floor(gps).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " RGs per Second"
+          if (gps < 1000) document.getElementById("replicantiapprox").textContent = "You gain approximately " + gps.toPrecision(3) + " RGs per second";
+          else document.getElementById("replicantiapprox").textContent = "You gain approximately " + Math.floor(gps).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " RGs per second"
       } else{
     var estimate = Math.max((Math.log(Number.MAX_VALUE) - current) / est, 0)
-    document.getElementById("replicantiapprox").textContent ="Approximately "+ timeDisplay(estimate*1000) + " Until Infinite Replicanti"
+    document.getElementById("replicantiapprox").textContent ="Approximately "+ timeDisplay(estimate*1000) + " until infinite Replicanti"
   }
     document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount)
     var replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount, 1)), 2)

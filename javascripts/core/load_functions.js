@@ -6,14 +6,10 @@ var saves = {
 };
 
 function importAutomatorScript(script) {
-  var outputString = JSON.parse(script).join("\n")
-  document.getElementById("automator").value = outputString
-  updateState()
+    var outputString = JSON.parse(script);
+    numberAutomator(outputString);
+    updateState();
 }
-
-function updateState() {
-    automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
-  }
 
 function onLoad() {
   if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
@@ -712,8 +708,9 @@ if (player.version < 5) {
   }
   else
 	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
-    
-  if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
+
+    if (localStorage.getItem("automatorScript1") === null ) numberAutomator([]);
+        else importAutomatorScript(localStorage.getItem("automatorScript1"));
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
       simulateTime(diff/1000)

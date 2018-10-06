@@ -191,6 +191,8 @@ function onLoad() {
       pp: 0
     };
   }
+  if (player.ttbuyer === undefined) player.ttbuyer = false
+  $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
   Theme.set(player.options.theme);

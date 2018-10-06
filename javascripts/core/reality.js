@@ -1,5 +1,5 @@
-function reality(force) {
-    if (!((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force)) {
+function reality(force, reset) {
+    if (!((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force)) {
         return;
     }
     if (!glyphSelected && player.reality.perks.includes(0)) {
@@ -39,14 +39,14 @@ function reality(force) {
         return
     }
     realizationCheck = 0;
-    if (!player.reality.perks.includes(0)) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
+    if (!player.reality.perks.includes(0) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality && !force) {
         player.bestEternity = player.thisEternity
     }
     giveAchievement("Snap back to reality");
-    player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel());
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
+    if (!reset) player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
+    if (!reset) addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel());
+    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3 && !reset ) unlockRealityUpgrade(9);
     if(!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
@@ -54,7 +54,7 @@ function reality(force) {
         }
         if (tempBool) unlockRealityUpgrade(16)
     }
-    if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4) {
+    if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4 && !reset ) {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
             let count = 0;
@@ -65,7 +65,7 @@ function reality(force) {
         }
         if (tempBool) unlockRealityUpgrade(17)
     }
-    if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4) {
+    if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4 && !reset) {
         var tempBool = true;
         for (let i in player.reality.glyphs.active) {
             if (player.reality.glyphs.active[i].level < 10) tempBool = false
@@ -73,7 +73,7 @@ function reality(force) {
         if (tempBool) unlockRealityUpgrade(18)
     }
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
-    if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
+    if (player.thisReality < 15 * 60 * 1000 && !reset) unlockRealityUpgrade(23)
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (player.reality.respec) {
         respecGlyphs();
@@ -285,4 +285,10 @@ function unlockRealityUpgrade(id) {
   if (player.reality.upgReqs[id]) return
   player.reality.upgReqs[id] = true
   $.notify("You've unlocked a Reality upgrade!", "success");
+}
+
+function startRealityOver() {
+  glyphSelected = true
+  realizationCheck = 1
+  reality(true, true)
 }

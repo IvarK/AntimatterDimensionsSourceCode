@@ -187,7 +187,7 @@ function buy(current) {
           break;
       case "studyimport":
           if (!player.reality.automatorCommands.includes(36)) return false;
-          importStudyTree(localStorage.getItem("studyTree"+current.id));
+          importStudyTree(current.id);
           return true;
           break;
     case "ttmax":
@@ -303,6 +303,9 @@ function wait(current) {
       }
 
       break;
+    case "tt":
+      if (id.gt(player.timestudy.theorem)) return false
+      else return true
   }
 }
 

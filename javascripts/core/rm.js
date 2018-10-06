@@ -159,23 +159,8 @@ function timeGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    switch(effect) {
-      case "pow":
-        glyph.effects.pow = 1.01 + Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.45)/75
-        break;
-
-      case "speed":
-        glyph.effects.speed = 1 + Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.65) * 5 / 100
-        break;
-
-      case "freeTickMult":
-        glyph.effects.freeTickMult = 1 - Math.pow(glyph.level, 0.18) * Math.pow(glyph.strength, 0.35)/100
-        break;
-        
-      case "eternity":
-        glyph.effects.eternity = Math.pow(glyph.level * glyph.strength, 3) * 100
-        break;
-    }
+    if (effects.hasOwnProperty(i))
+      glyph.effects[effect] = getGlyphEffectStrength("time" + effect, glyph.level, glyph.strength)
   }
   return glyph
 }
@@ -189,23 +174,8 @@ function dilationGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    switch(effect) {
-      case "dilationMult":
-        glyph.effects.dilationMult = Math.pow(glyph.level * glyph.strength, 1.5) * 2
-        break;
-
-      case "galaxyThreshold":
-        glyph.effects.galaxyThreshold = 1 - Math.pow(glyph.level, 0.17) * Math.pow(glyph.strength, 0.35)/100
-        break;
-
-      case "TTgen":
-        glyph.effects.TTgen = Math.pow(glyph.level * glyph.strength, 0.5) / 10000 //Per second
-        break;
-        
-      case "pow":
-        glyph.effects.pow = 1.1 + Math.pow(glyph.level, 0.7) * Math.pow(glyph.strength, 0.7)/25
-        break;
-    }
+    if (effects.hasOwnProperty(i))
+      glyph.effects[effect] = getGlyphEffectStrength("dilation" + effect, glyph.level, glyph.strength)
   }
   return glyph
 }
@@ -219,23 +189,8 @@ function replicationGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    switch(effect) {
-      case "speed":
-        glyph.effects.speed = glyph.level * glyph.strength * 3
-        break;
-
-      case "pow":
-        glyph.effects.pow = 1.1 + Math.pow(glyph.level, 0.5) * glyph.strength / 25
-        break;
-
-      case "dtgain":
-        glyph.effects.dtgain = 0.0003 * Math.pow(glyph.level, 0.3) * Math.pow(glyph.strength, 0.65) // player.replicanti.e * x
-        break;
-        
-      case "glyphlevel":
-        glyph.effects.glyphlevel = Math.pow(Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4), 0.5)/50
-        break;
-    }
+    if (effects.hasOwnProperty(i))
+      glyph.effects[effect] = getGlyphEffectStrength("replication" + effect, glyph.level, glyph.strength)
   }
   return glyph
 }
@@ -249,23 +204,8 @@ function infinityGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    switch(effect) {
-      case "pow":
-        glyph.effects.pow = 1.007 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
-        break;
-
-      case "rate":
-        glyph.effects.rate = Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4) * 0.1
-        break;
-
-      case "ipgain":
-        glyph.effects.ipgain = Math.pow(glyph.level * glyph.strength, 5) * 100
-        break;
-        
-      case "infmult":
-        glyph.effects.infmult = Math.pow(glyph.level * glyph.strength, 1.5) * 2
-        break;
-    }
+    if (effects.hasOwnProperty(i))
+      glyph.effects[effect] = getGlyphEffectStrength("infinity" + effect, glyph.level, glyph.strength)
   }
   return glyph
 }
@@ -282,25 +222,75 @@ function powerGlyph(glyph, effectAmount) {
 
   for (i in effects) {
     var effect = effects[i]
-    switch(effect) {
-      case "pow":
-        glyph.effects.pow = 1.015 + Math.pow(glyph.level, 0.25) * Math.pow(glyph.strength, 0.4)/75
-        break;
-
-      case "mult":
-        glyph.effects.mult = Decimal.pow(glyph.level * glyph.strength * 10, glyph.level * glyph.strength * 10)
-        break;
-
-      case "dimboost":
-        glyph.effects.dimboost = Math.pow(glyph.level * glyph.strength, 0.5)
-        break;
-        
-      case "buy10":
-        glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
-        break;
-    }
+    if (effects.hasOwnProperty(i))
+      glyph.effects[effect] = getGlyphEffectStrength("power" + effect, glyph.level, glyph.strength)
   }
   return glyph
+}
+
+// All glyph effects should be calculated here and will be recalculated on-load if rebalanced
+function getGlyphEffectStrength(effectKey, level, strength) {
+  switch (effectKey) {
+    case "powerpow":
+      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+    case "powermult":
+      return Decimal.pow(level * strength * 10, level * strength * 10)
+    case "powerdimboost":
+      return Math.pow(level * strength, 0.5)
+    case "powerbuy10":
+      return 1 + Math.pow(level * strength, 0.8) / 10
+    case "infinitypow":
+      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+    case "infinityrate":
+      return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
+    case "infinityipgain":
+      return Math.pow(level * strength, 5) * 100
+    case "infinityinfmult":
+      return Math.pow(level * strength, 1.5) * 2
+    case "replicationspeed":
+      return level * strength * 3
+    case "replicationpow":
+      return 1.1 + Math.pow(level, 0.5) * strength / 25
+    case "replicationdtgain":
+      return 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65) // player.replicanti.e * x
+    case "replicationglyphlevel":
+      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5)/50
+    case "dilationdilationMult":
+      return Math.pow(level * strength, 1.5) * 2
+    case "dilationgalaxyThreshold":
+      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35)/100
+    case "dilationTTgen":
+      return Math.pow(level * strength, 0.5) / 10000 //Per second
+    case "dilationpow":
+      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7)/25
+    case "timepow":
+      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45)/75
+    case "timespeed":
+      return 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
+    case "timefreeTickMult":
+      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
+    case "timeeternity":
+      return Math.pow(level * strength, 3) * 100
+    default:
+      return 0;
+  }
+}
+
+function recalculateAllGlyphs() {
+  for (let i = 0; i < player.reality.glyphs.active.length; i++)
+    fixGlyph(player.reality.glyphs.active[i]);
+  for (let i = 0; i < player.reality.glyphs.inventory.length; i++)
+    fixGlyph(player.reality.glyphs.inventory[i]);
+}
+
+// Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
+function fixGlyph(glyph) {
+  glyph.level = Math.max(1, Math.round(glyph.level));
+  if (glyph.strength == 1)
+    glyph.strength = gaussian_bell_curve()
+  for (effect in glyph.effects)
+    if (glyph.effects.hasOwnProperty(effect))
+      glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
 }
 
 function getRarity(x) {
@@ -439,11 +429,15 @@ function generateGlyphTable() {
   }
   table.innerHTML = html
   
-  // Update total effect box
+  // Update total effect box (order is specified for consistency
   let allActiveEffects = getTotalGlyphEffects();
+  let effectOrder = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow", "powermult", "powerdimboost", "powerbuy10", "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity", "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed", "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
   let activeEffectText = "Current Glyph Effects:<br>";
-  for (let effect in allActiveEffects)
-    activeEffectText += "<br>" + getDesc(effect, allActiveEffects[effect], false);
+  for (let i = 0; i < effectOrder.length; i++) {
+    let currEffect = effectOrder[i];
+    if (allActiveEffects[currEffect] != undefined)
+      activeEffectText += "<br>" + getDesc(currEffect, allActiveEffects[currEffect], false);
+  }
   $("#activeGlyphs").html(activeEffectText)
   updateTickSpeed();
 
@@ -480,7 +474,7 @@ function getTotalGlyphEffects() {
         else {  // Combine the effects appropriately (some are additive)
           if (uniqueEffect === "replicationglyphlevel" || uniqueEffect === "dilationTTgen" || uniqueEffect === "infinityrate" || uniqueEffect === "replicationdtgain")
             allEffects[uniqueEffect] += currGlyph.effects[effect];
-          else if (uniqueEffect === "power.mult") // This is a Decimal
+          else if (uniqueEffect === "powermult") // This is a Decimal
             allEffects[uniqueEffect] = allEffects[uniqueEffect].times(currGlyph.effects[effect]);
           else
             allEffects[uniqueEffect] *= currGlyph.effects[effect];

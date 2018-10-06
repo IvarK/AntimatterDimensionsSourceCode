@@ -671,6 +671,7 @@ if (player.version < 5) {
     document.getElementById("eightRow").style.display = "none";
   }
 	initializeWormhole();
+  recalculateAllGlyphs();
 
   updateAutobuyers();
   setAchieveTooltip();

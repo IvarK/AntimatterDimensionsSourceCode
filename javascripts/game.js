@@ -3461,7 +3461,7 @@ function autoBuyerTick() {
         if (player.autoEternityMode == "amount") {
             if (player.currentEternityChall != "" || gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
         } else if (player.autoEternityMode == "time") {
-            if (player.currentEternityChall != "" || player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
+            if (player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
         } else {
             if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
         }   

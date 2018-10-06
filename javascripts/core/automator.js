@@ -53,6 +53,7 @@ function getAutomatorRows() {
 
 function automatorOnOff() {
   automatorOn = !automatorOn;
+  automatorIdx = 0
   if (!automatorOn) {
     $("#automator")[0].blur()
   }
@@ -325,6 +326,10 @@ function change(current) {
       document.getElementById("priority12").value = current.id
       updatePriorities()
       return true
+    case "epautobuyer":
+      document.getElementById("priority13").value = current.id
+      updatePriorities()
+      return true
   }
 }
 
@@ -336,33 +341,33 @@ function toggle(current) {
   } else {
     switch(current.target) {
       case "tickspeed":
-        player.autobuyers[8].isOn = !player.autobuyers[8].isOn
+        $("#9ison")[0].checked = !player.autobuyers[8].isOnn
         updateAutobuyers()
         return true
         break;
       case "dimboost":
-        player.autobuyers[9].isOn = !player.autobuyers[9].isOn
+        $("#10ison")[0].checked = !player.autobuyers[9].isOn
         updateAutobuyers()
         return true
         break;
       case "galaxy":
-        player.autobuyers[10].isOn = !player.autobuyers[9].isOn
+        $("#11ison")[0].checked = !player.autobuyers[10].isOn
         updateAutobuyers()
         return true
         break;
       case "infinity":
-        player.autobuyers[11].isOn = !player.autobuyers[9].isOn
+        $("#12ison")[0].checked = !player.autobuyers[11].isOn
         updateAutobuyers()
         return true
         break;
       case "sacrifice":
-        player.autoSacrifice.isOn = !player.autoSacrifice.isOn
+        $("#13ison")[0].checked = !player.autoSacrifice.isOn
         updateAutobuyers()
         return true
         break;
       case "eternity":
-        player.eternityBuyer.isOn = !player.eternityBuyer.isOn
-        teupdateAutobuyers()
+        $("#eternityison")[0].checked = !player.eternityBuyer.isOn
+        updateAutobuyers()
         return true
         break;
       case "rg":

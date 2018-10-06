@@ -135,8 +135,8 @@ function reality(force, reset) {
     player.eterc8repl = 40;
     player.dimlife = true;
     player.dead = true;
-    player.realities = player.realities + 1;
-    player.bestReality = Math.min(player.thisReality, player.bestReality);
+    if (!reset) player.realities = player.realities + 1;
+    if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
     player.thisReality = 0;
     player.timestudy.theorem = 0;
     player.timestudy.amcost = new Decimal("1e20000");
@@ -164,7 +164,7 @@ function reality(force, reset) {
     resetChallengeStuff();
     resetDimensions();
     if (player.reality.upg.includes(10)) player.eternities = 100;
-    player.reality.pp++;
+    if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Points.")
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";

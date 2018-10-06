@@ -756,6 +756,7 @@ function updateInfCosts() {
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
+        document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
         document.getElementById("71desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000"))+"x"
         document.getElementById("72desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))+"x"
@@ -764,11 +765,18 @@ function updateInfCosts() {
         document.getElementById("83desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0004, player.totalTickGained).min("1e30"))+"x"
         document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
         document.getElementById("92desc").textContent = "Currently: "+shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))+"x"
-        document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25))+"x"
+        document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25).max(1))+"x"
+        document.getElementById("101desc").textContent = "Currently: "+shortenMoney(Decimal.max(player.replicanti.amount, 1))+"x"
+        document.getElementById("102desc").textContent = "Currently: "+shortenMoney(Decimal.pow(5, player.replicanti.galaxies, 150))+"x"
+        document.getElementById("103desc").textContent = "Currently: "+Math.max(player.replicanti.galaxies, 1)+"x"
 
         var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
-        if (player.reality.perks.includes(72)) study121 = 50
-        document.getElementById("121desc").textContent = "Currently: "+study121.toFixed(1)+"x"
+        if (player.reality.perks.includes(72)) {
+          study121 = 50
+          document.getElementById("121").innerHTML = "You gain 50x more EP<span>Cost: 9 Time Theorems"
+        }
+        else
+          document.getElementById("121desc").textContent = "Currently: "+study121.toFixed(1)+"x"
 
         var study123 = Math.sqrt(1.39*player.thisEternity/1000)
         if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)

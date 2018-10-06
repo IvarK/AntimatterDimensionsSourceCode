@@ -41,10 +41,10 @@ var automatorIdx = 0
 var tryingToBuy = 0
 function updateState() {
     let rows = getAutomatorRows();
-    console.log(rows);
     automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function (row) { return row !== "" })
     automatorRows = automatorRows.map(function (x, i) { if (i < rows) return x.slice(prefixLength); else if (i > rows) return x; });
     automatorRows.splice(rows, 1);
+    automatorIdx = 0;
 }
 
 function numberAutomator(script) {

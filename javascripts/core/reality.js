@@ -74,7 +74,7 @@ function reality(force) {
     }
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
     if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
-    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(6666)) unlockRealityUpgrade(24)
+    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (player.reality.respec) {
         respecGlyphs();
     }
@@ -143,7 +143,6 @@ function reality(force) {
     player.timestudy.ipcost = new Decimal(1);
     player.timestudy.epcost = new Decimal(1);
     player.timestudy.studies = [];
-    player.eternityBuyer.limit = new Decimal(0);
     player.eternityBuyer.isOn = false;
     player.dilation.studies = [];
     player.dilation.active = false;

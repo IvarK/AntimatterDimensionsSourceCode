@@ -73,6 +73,7 @@ function buyPerk(id, cost) {
   }
     player.reality.pp -= cost;
     numberAutomator(automatorRows);
+    updateAutomatorRows();
   document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
 }
 

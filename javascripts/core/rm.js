@@ -285,12 +285,14 @@ function recalculateAllGlyphs() {
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
 function fixGlyph(glyph) {
-  glyph.level = Math.max(1, Math.round(glyph.level));
-  if (glyph.strength == 1)
-    glyph.strength = gaussian_bell_curve()
-  for (effect in glyph.effects)
-    if (glyph.effects.hasOwnProperty(effect))
-      glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+  if (glyph.color == undefined && glyph.symbol == undefined) {
+    glyph.level = Math.max(1, Math.round(glyph.level));
+    if (glyph.strength == 1)
+      glyph.strength = gaussian_bell_curve()
+    for (effect in glyph.effects)
+      if (glyph.effects.hasOwnProperty(effect))
+        glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+  }
 }
 
 function getRarity(x) {

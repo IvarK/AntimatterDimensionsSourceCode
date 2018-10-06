@@ -71,7 +71,8 @@ function buyPerk(id, cost) {
   if (isAchSkipPerk(id)) {
     achSkipPerkCount++;
   }
-  player.reality.pp -= cost
+    player.reality.pp -= cost;
+    numberAutomator(automatorRows);
   document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
 }
 

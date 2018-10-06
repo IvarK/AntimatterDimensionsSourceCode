@@ -1792,7 +1792,7 @@ function generateGlyphSelection(amount) {
       html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
       for (i in glyph.effects)
         html += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
-      if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+      if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
         html += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
       html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
   }
@@ -3561,7 +3561,7 @@ function autoBuyDilationUpgrades() {
 
 function autoBuyReplicantiUpgrades() {
   if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
+    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < getMaxReplicantiChance()) upgradeReplicantiChance()
   }
 
   if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {

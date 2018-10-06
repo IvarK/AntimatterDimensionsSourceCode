@@ -381,7 +381,7 @@ function getGlyphTooltip(glyph) {
   tooltipText += "<span class='tooltip'><span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
   for (i in glyph.effects)
     tooltipText += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
-  if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+  if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
     tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
   tooltipText += "</span>"
   return tooltipText;

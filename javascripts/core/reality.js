@@ -192,6 +192,7 @@ function reality(force, reset) {
     EPminpeak = new Decimal(0);
     updateMilestones();
     resetTimeDimensions();
+    showEternityTab('timestudies', true)
     if (player.eternities < 20) player.autobuyers[9].bulk = 1;
     if (player.eternities < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk;
     if(player.eternities < 50) {
@@ -268,6 +269,11 @@ function reality(force, reset) {
     }
     possibleGlyphs = []
     glyphSelected = false
+    
+    if (player.reality.upg.includes(13)) {
+        if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold);
+        if (player.reality.tdbuyer.on) buyMaxTimeDimensions(player.reality.tdbuyer.threshhold)
+    }
 }
 
 function fullResetTimeDimensions() {

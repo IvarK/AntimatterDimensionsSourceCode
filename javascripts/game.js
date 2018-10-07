@@ -2441,9 +2441,10 @@ setInterval(function() {
     else document.getElementById("nextAchAt").textContent = ""
 
     var totalAchTime = 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0));
-    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
-    if (player.realities == 0)
+    if (player.reality.perks.includes(413) || player.realities == 0)
       $("#timeForAchievements").text("")
+    else
+      $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
 	if (player.thisReality < totalAchTime && player.realities != 0)
 		$("#allAchAt").text("(Remaining: " + timeDisplay(totalAchTime - player.thisReality) + ")")
 	else

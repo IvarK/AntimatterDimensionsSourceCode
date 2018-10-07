@@ -178,7 +178,7 @@ function reality(force, reset) {
         document.getElementById("buyerBtnInf").style.display = "inline-block";
         document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
     }
-    if (player.realities === 4) player.reality.automatorCommands = [12, 23, 24];
+    if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
     resetInfDimensions();

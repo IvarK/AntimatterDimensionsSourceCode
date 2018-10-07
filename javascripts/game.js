@@ -2248,6 +2248,8 @@ setInterval(function() {
 var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000"), new Decimal("1e14000"), new Decimal("1e18000"), new Decimal("1e20000"), new Decimal("1e23000"), new Decimal("1e28000")]
 
 var goals = [new Decimal("1e850"), new Decimal("1e10500"), new Decimal("1e5000"), new Decimal("1e13000"), new Decimal("1e11111"), new Decimal("2e22222"), new Decimal("1e10000"), new Decimal("1e27000")]
+
+var ttMaxTimer = 0
 setInterval(function() {
     if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
         getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
@@ -2453,8 +2455,21 @@ setInterval(function() {
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
     if (player.replicanti.amount.gte(new Decimal("1e75000"))) unlockRealityUpgrade(21)
-    if (player.dilation.dilatedTime.gte(1e85)) unlockRealityUpgrade(22)
-
+    if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
+    ttMaxTimer++;
+    if (player.reality.perks.includes(8)) maxTheorems()
+    else if (player.reality.perks.includes(7) && ttMaxTimer >= 3) {
+      maxTheorems(); 
+      ttMaxTimer = 0;
+    }
+    else if (player.reality.perks.includes(6) && ttMaxTimer >= 5) {
+      maxTheorems(); 
+      ttMaxTimer = 0;
+    }
+    else if (player.reality.perks.includes(5) && ttMaxTimer >= 10) {
+      maxTheorems(); 
+      ttMaxTimer = 0;
+    }
 }, 1000)
 
 function getECGoalIP(challNum, timesCompleted) {
@@ -3446,7 +3461,7 @@ function autoBuyerTick() {
         if (player.autoEternityMode == "amount") {
             if (player.currentEternityChall != "" || gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
         } else if (player.autoEternityMode == "time") {
-            if (player.currentEternityChall != "" || player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
+            if (player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
         } else {
             if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
         }   
@@ -3839,7 +3854,7 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  document.getElementById("automatorloadsavetext").textContent = isDown ? "load:" : "save:";
+  document.getElementById("automatorloadsavetext").textContent = isDown ? "save:" : "load:";
   drawStudyTree()
   if (isDown) showPerkLabels()
   else hidePerkLabels()

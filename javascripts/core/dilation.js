@@ -70,6 +70,13 @@ function buyDilationUpgrade(id) {
           player.dilation.nextThreshold = new Decimal(1000)
           player.dilation.freeGalaxies = 0
       }
+
+      if (id == 3) {
+        if (player.reality.perks.includes(37)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
+        else if (player.reality.perks.includes(36)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
+        else if (player.reality.perks.includes(35)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
+        else if (player.reality.perks.includes(34)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
+      }
   }
 
   updateDilationUpgradeCosts()

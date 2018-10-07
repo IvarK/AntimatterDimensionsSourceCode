@@ -40,6 +40,7 @@ var automatorIdx = 0
 var tryingToBuy = 0
 function updateState() {
   automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+  automatorIdx = 0
 }
 
 function getAutomatorRows() {
@@ -52,6 +53,7 @@ function getAutomatorRows() {
 
 function automatorOnOff() {
   automatorOn = !automatorOn;
+  automatorIdx = 0
   if (!automatorOn) {
     $("#automator")[0].blur()
   }
@@ -67,11 +69,8 @@ function highlightcurrent() {
 }
 
 var automatorOn = false
-var timer = 0
-var now = Date.now()
-var waiting = false
+var timeStamp = 0
 var buying = false
-var ifstatement = false
 function mainIteration() {
   if (automatorRows[0] === undefined) return false;
   var cont = false
@@ -93,17 +92,7 @@ function mainIteration() {
               action: row[0],
               target: row[1],
               id: row[2]
-          }
-      } else if (row[0] == "if") {
-          if (!player.reality.automatorCommands.includes(21)) return false;
-          var current = {
-              action: row[0],
-              target: row[1],
-              id: row[2]
-          }
-          ifstatement = true
-          if (wait(current)) automatorIdx += 1
-          else automatorIdx += 2
+          }          
       } else if (row.length >= 4) { //added more flexibility to allow for more arguments in automator commands
           var current = {
               action: row[0],
@@ -112,57 +101,60 @@ function mainIteration() {
               args: row.slice(3)
           }
       }
-    if (!ifstatement) {
-      switch(current.action) {
-        case "buy":
-          if (buy(current) || cont) automatorIdx+=1
-          break;
-        case "wait":
-          if (wait(current)) automatorIdx+=1
-          break;
-        case "unlock":
-          if (unlock(current) || cont) automatorIdx+=1
-          break;
-        case "start":
-          if (start(current) || cont) automatorIdx+=1
-          break;
-        case "change":
-          if (change(current) || cont) automatorIdx+=1
-          break;
-        case "respec":
-          if (!player.reality.automatorCommands.includes(61)) return false
-          player.respec = true
-          automatorIdx+=1
-          break;
-        case "eternity":
-          if (!player.reality.automatorCommands.includes(62)) return false
-          if (eternity(false, true) || cont) automatorIdx+=1
-          break;
-        case "stop":
-          if (!player.reality.automatorCommands.includes(72)) return false
-          automatorOn = false
-          $("#automatorOn")[0].checked = false
-          break;
-        case "load":
-          if (!player.reality.automatorCommands.includes(51)) return false
-          automatorIdx = 0
-          loadScript(current.id)
-          break;
-        case "toggle":
-          if (!player.reality.automatorCommands.includes(53)) return false
-          toggle(current)
-          automatorIdx+=1
-          break;
-          case "goto":
-          if (!player.reality.automatorCommands.includes(31)) return false
-          automatorIdx = parseInt(current.target)-1
-          break;
-      }
+    switch(current.action) {
+      case "buy":
+        if (buy(current) || cont) automatorIdx+=1
+        break;
+      case "wait":
+        if (wait(current)) automatorIdx+=1
+        break;
+      case "unlock":
+        if (unlock(current) || cont) automatorIdx+=1
+        break;
+      case "start":
+        if (start(current) || cont) automatorIdx+=1
+        break;
+      case "change":
+        if (change(current) || cont) automatorIdx+=1
+        break;
+      case "respec":
+        if (!player.reality.automatorCommands.includes(61)) return false
+        player.respec = true
+        automatorIdx+=1
+        break;
+      case "eternity":
+        if (!player.reality.automatorCommands.includes(62)) return false
+        if (eternity(false, true) || cont) automatorIdx+=1
+        break;
+      case "stop":
+        if (!player.reality.automatorCommands.includes(72)) return false
+        automatorOn = false
+        $("#automatorOn")[0].checked = false
+        break;
+      case "load":
+        if (!player.reality.automatorCommands.includes(51)) return false
+        automatorIdx = 0
+        loadScript(current.id)
+        break;
+      case "toggle":
+        if (!player.reality.automatorCommands.includes(53)) return false
+        toggle(current)
+        automatorIdx+=1
+        break;
+        case "goto":
+        if (!player.reality.automatorCommands.includes(31)) return false
+        automatorIdx = parseInt(current.target)-1
+        break;
+
+      case "if":
+        if (!player.reality.automatorCommands.includes(21)) return false;
+          if (wait(current)) automatorIdx += 1
+          else automatorIdx += 2
     }
+    
 
     if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > getAutomatorRows() ) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.7) + 6
     if ( $("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent()
-    if (ifstatement) ifstatement = false
   }
 }
 
@@ -194,6 +186,7 @@ function buy(current) {
     case "ttmax":
       if (!player.reality.automatorCommands.includes(44)) return false
       maxTheorems()
+      return true
       break;
     case "ttip":
       if (!player.reality.automatorCommands.includes(34)) return false
@@ -256,7 +249,8 @@ function unlock(current) {
 
 function wait(current) {
   if (!player.reality.automatorCommands.includes(11)) return false
-  if (current.id !== "max") id = new Decimal(current.id)
+  let id;
+  if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
       if (!player.reality.automatorCommands.includes(22)) return false
@@ -290,18 +284,21 @@ function wait(current) {
       break;
     case "time":
       if (!player.reality.automatorCommands.includes(41)) return false
-      if (waiting = false) {
-        waiting = true
-        now = Date.now()
+      if (timeStamp == 0) {
+        timeStamp = new Date().getTime()
+        return false
+      } else {
+        if (timeStamp + current.id * 1000 < new Date().getTime()) {
+          timeStamp = 0 
+          return true
+        }
+        else return false
       }
-      timer += (Date.now() - now) / 1000
-      now = Date.now()
-      if (timer < id) return false
-      else {
-        waiting = false
-        return true
-      }
+
       break;
+    case "tt":
+      if (id.gt(player.timestudy.theorem)) return false
+      else return true
   }
 }
 
@@ -329,6 +326,10 @@ function change(current) {
       document.getElementById("priority12").value = current.id
       updatePriorities()
       return true
+    case "epautobuyer":
+      document.getElementById("priority13").value = current.id
+      updatePriorities()
+      return true
   }
 }
 
@@ -340,33 +341,33 @@ function toggle(current) {
   } else {
     switch(current.target) {
       case "tickspeed":
-        player.autobuyers[8].isOn = !player.autobuyers[8].isOn
+        $("#9ison")[0].checked = !player.autobuyers[8].isOnn
         updateAutobuyers()
         return true
         break;
       case "dimboost":
-        player.autobuyers[9].isOn = !player.autobuyers[9].isOn
+        $("#10ison")[0].checked = !player.autobuyers[9].isOn
         updateAutobuyers()
         return true
         break;
       case "galaxy":
-        player.autobuyers[10].isOn = !player.autobuyers[9].isOn
+        $("#11ison")[0].checked = !player.autobuyers[10].isOn
         updateAutobuyers()
         return true
         break;
       case "infinity":
-        player.autobuyers[11].isOn = !player.autobuyers[9].isOn
+        $("#12ison")[0].checked = !player.autobuyers[11].isOn
         updateAutobuyers()
         return true
         break;
       case "sacrifice":
-        player.autoSacrifice.isOn = !player.autoSacrifice.isOn
+        $("#13ison")[0].checked = !player.autoSacrifice.isOn
         updateAutobuyers()
         return true
         break;
       case "eternity":
-        player.eternityBuyer.isOn = !player.eternityBuyer.isOn
-        teupdateAutobuyers()
+        $("#eternityison")[0].checked = !player.eternityBuyer.isOn
+        updateAutobuyers()
         return true
         break;
       case "rg":
@@ -390,6 +391,7 @@ function automatorSaveButton(num) {
 function loadScript(num) {
   if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
     importAutomatorScript(localStorage.getItem("automatorScript"+num));
+    automatorIdx = 0
     $.notify("Automator script "+num+" loaded", "info")
   }
 }

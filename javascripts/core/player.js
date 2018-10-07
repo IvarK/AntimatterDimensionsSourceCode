@@ -346,6 +346,7 @@ var player = {
     unlocked: false,
   }],
   wormholePause: false,
+  ttbuyer: false,
   options: {
     newsHidden: false,
     notation: "Mixed scientific",

@@ -554,3 +554,8 @@ function studyTreeSaveButton(num) {
         $.notify("Study tree "+num+" loaded", "info")
     }
 }
+
+function toggleTTAutomation() {
+  player.ttbuyer = !player.ttbuyer
+  $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
+}

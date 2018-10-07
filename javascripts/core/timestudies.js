@@ -172,7 +172,8 @@ function buyDilationStudy(name, cost) {
         document.getElementById("dilstudy"+name).className = "dilationupgbought"
         updateTimeStudyButtons()
         drawStudyTree()
-    }
+        return true
+    } return false
   }
 
 function hasRow(row) {

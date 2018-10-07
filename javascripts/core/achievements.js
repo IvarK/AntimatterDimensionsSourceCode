@@ -105,7 +105,7 @@ const allAchievements = {
   r138 : "This is what I have to do to get rid of you.",
   r141 : "Snap back to reality",
   r142 : "How does this work?",
-  r143 : "r143",
+  r143 : "Yo dawg, I heard you liked reskins...",
   r144 : "r144",
   r145 : "r145",
   r146 : "r146",
@@ -211,6 +211,7 @@ function setAchieveTooltip() {
     let when = document.getElementById("When will it be enough?")
     let thinking = document.getElementById("Now you're thinking with dilation!")
     let thisis = document.getElementById("This is what I have to do to get rid of you.")
+    let dawg2 = document.getElementById("Yo dawg, I heard you liked reskins...")
 
     apocAchieve.setAttribute('ach-tooltip', "Get over " + shortenCosts(1e80) + " antimatter.");
     noPointAchieve.setAttribute('ach-tooltip', "Buy a single First Dimension when you have over " + shortenCosts(1e150) + " of them. Reward: First Dimensions are 10% stronger.");
@@ -241,6 +242,7 @@ function setAchieveTooltip() {
     when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under "+shortenMoney(Number.MAX_VALUE)+" replicanti.")
     thinking.setAttribute('ach-tooltip', "Eternity for "+shortenCosts( new Decimal("1e600"))+" EP in 1 minute or less while dilated.")
     thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e28000'))+" IP without any time studies while dilated. Reward: The active time study path doesn't disable your replicanti autobuyer.")
+    dawg2.setAttribute('ach-tooltip', "Have all your eternities in your past 10 eternities be at least "+shortenMoney(Number.MAX_VALUE)+" times higher EP than the previous one. Reward: nothing right now.")
 }
 
 

@@ -3808,6 +3808,7 @@ function init() {
     updateAutobuyers();
     updateChallengeTimes()
     kong.init();
+    TLN.append_line_numbers("automator") // Automator line numbers
 
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
 }
@@ -3873,6 +3874,7 @@ var unspentBonus = 1
 var postc8Mult = new Decimal(0)
 var mult18 = 1
 var ec10bonus = new Decimal(1)
+
 init();
 setInterval( function() {
     totalMult = Math.pow(player.totalmoney.e+1, 0.5)

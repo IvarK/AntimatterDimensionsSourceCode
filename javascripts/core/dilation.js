@@ -111,8 +111,21 @@ function updateDilationUpgradeCosts() {
   document.getElementById("dil10cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[10]) + " dilated time"
   if (player.reality.perks.includes(11))
     document.getElementById("dil2").innerHTML = document.getElementById("dil2").innerHTML.replace(" and dilated time", "");
+  
+  document.getElementById("dil1mult").textContent = "Currently: " + shortenDimensions(new Decimal(2).pow(player.dilation.rebuyables[1])) + "x";
+  document.getElementById("dil2mult").textContent = "Currently: " + getFreeGalaxyMult().toFixed(4) + "x";
+  document.getElementById("dil3mult").textContent = "Currently: " + shortenDimensions(new Decimal(3).pow(player.dilation.rebuyables[3])) + "x";
 }
 
+function getFreeGalaxyMult() {
+  let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
+  for (i in player.reality.glyphs.active) {
+    var glyph = player.reality.glyphs.active[i]
+    if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
+  }
+  thresholdMult += 1.35;
+  return thresholdMult;
+}
 
 function getDilationGainPerSecond() {
   var ret = new Decimal(player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1]))

@@ -214,6 +214,14 @@ function eternity(force, auto) {
       if (player.reality.perks.includes(82)) player.eternityUpgrades.push(4, 5, 6)
     }
 
+    if (!player.achievements.includes("r143") && player.lastTenEternities[9][1] !== 1) {
+        var n = 0;
+        for (i = 0; i < 9; i++) {
+            if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
+        }
+        if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
+    }
+
     return true;
 }
 

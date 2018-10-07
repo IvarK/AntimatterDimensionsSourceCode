@@ -589,7 +589,7 @@ function buyEPMult(upd, threshold) {
 
 function buyMaxEPMult(threshold) {
     if (threshold == undefined) threshold = 1
-    while (player.eternityPoints.gte(player.epmultCost)) {
+    while (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         buyEPMult(false, threshold)
     }
 }
@@ -756,6 +756,7 @@ function updateInfCosts() {
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
+        document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
         document.getElementById("71desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000"))+"x"
         document.getElementById("72desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))+"x"
@@ -764,11 +765,18 @@ function updateInfCosts() {
         document.getElementById("83desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0004, player.totalTickGained).min("1e30"))+"x"
         document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
         document.getElementById("92desc").textContent = "Currently: "+shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))+"x"
-        document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25))+"x"
+        document.getElementById("93desc").textContent = "Currently: "+shortenMoney(Decimal.pow(player.totalTickGained, 0.25).max(1))+"x"
+        document.getElementById("101desc").textContent = "Currently: "+shortenMoney(Decimal.max(player.replicanti.amount, 1))+"x"
+        document.getElementById("102desc").textContent = "Currently: "+shortenMoney(Decimal.pow(5, player.replicanti.galaxies, 150))+"x"
+        document.getElementById("103desc").textContent = "Currently: "+Math.max(player.replicanti.galaxies, 1)+"x"
 
         var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
-        if (player.reality.perks.includes(72)) study121 = 50
-        document.getElementById("121desc").textContent = "Currently: "+study121.toFixed(1)+"x"
+        if (player.reality.perks.includes(72)) {
+          study121 = 50
+          document.getElementById("121").innerHTML = "You gain 50x more EP<span>Cost: 9 Time Theorems"
+        }
+        else
+          document.getElementById("121desc").textContent = "Currently: "+study121.toFixed(1)+"x"
 
         var study123 = Math.sqrt(1.39*player.thisEternity/1000)
         if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
@@ -784,7 +792,8 @@ function updateInfCosts() {
         document.getElementById("193desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.03, player.eternities).min("1e13000"))+"x"
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
         document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
-
+        document.getElementById("225desc").textContent = "Currently: +" + Math.floor(player.replicanti.amount.exponent / 1000) + " RG"
+        document.getElementById("226desc").textContent = "Currently: +" + Math.floor(player.replicanti.gal / 15) + " RG"
 
             // Text for EC unlock studies
             var ECUnlockQuantity = [0, player.eternities, player.totalTickGained, player.eightAmount, player.infinitied + player.infinitiedBank, player.galaxies, player.replicanti.galaxies, player.money, player.infinityPoints, player.infinityPower, player.eternityPoints];
@@ -1792,7 +1801,7 @@ function generateGlyphSelection(amount) {
       html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
       for (i in glyph.effects)
         html += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
-      if (player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time"))
+      if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
         html += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
       html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
   }
@@ -2432,9 +2441,10 @@ setInterval(function() {
     else document.getElementById("nextAchAt").textContent = ""
 
     var totalAchTime = 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0));
-    $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
-    if (player.realities == 0)
+    if (player.reality.perks.includes(413) || player.realities == 0)
       $("#timeForAchievements").text("")
+    else
+      $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
 	if (player.thisReality < totalAchTime && player.realities != 0)
 		$("#allAchAt").text("(Remaining: " + timeDisplay(totalAchTime - player.thisReality) + ")")
 	else
@@ -2841,12 +2851,7 @@ function gameLoop(diff) {
       freeGalaxyMult = 2;
     if (player.dilation.baseFreeGalaxies == undefined)
       player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
-    let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
-    }
-    thresholdMult += 1.35;
+    let thresholdMult = getFreeGalaxyMult();
     player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), new Decimal(thresholdMult))));
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
@@ -3561,7 +3566,7 @@ function autoBuyDilationUpgrades() {
 
 function autoBuyReplicantiUpgrades() {
   if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
+    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < getMaxReplicantiChance()) upgradeReplicantiChance()
   }
 
   if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {

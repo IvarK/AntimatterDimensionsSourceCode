@@ -155,13 +155,29 @@ function updateTickSpeed() {
   
 	// Accelerated game speed suffix
 	let gameSpeedMult = getGameSpeedupFactor();
-	if (gameSpeedMult != 1)
-    if (gameSpeedMult < 10000)
-      document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   (γ = " + gameSpeedMult.toFixed(3) + ")";
-    else
-      document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   (γ = " + shortenDimensions(gameSpeedMult) + ")";
-	else
-		document.getElementById("tickSpeedAmount").textContent = tickSpeedText;
+  let gammaText = "";
+  let tickspeedTooltip = "";
+	if (gameSpeedMult != 1) {
+    if (gameSpeedMult < 1) {
+      gammaText = "(γ = " + gameSpeedMult.toFixed(3) + ")";
+      tickspeedTooltip = "The game is running " + (1/gameSpeedMult).toFixed(0) + "x slower.";
+    }
+    else {
+      let formattedSpeed = "";
+      if (gameSpeedMult < 10000)
+        formattedSpeed = gameSpeedMult.toFixed(3)
+      else
+        formattedSpeed = shortenDimensions(gameSpeedMult)
+      gammaText = "(γ = " + formattedSpeed + ")";
+      tickspeedTooltip = "The game is running " + formattedSpeed + "x faster.";
+    }
+  }
+  
+  document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   " + gammaText;
+  if (tickspeedTooltip === "")
+    document.getElementById("tickSpeedAmount").removeAttribute('ach-tooltip');
+  else
+    document.getElementById("tickSpeedAmount").setAttribute('ach-tooltip', tickspeedTooltip);
 }
 
 function resetTickspeed() {

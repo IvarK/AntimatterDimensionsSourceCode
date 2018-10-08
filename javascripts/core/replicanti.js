@@ -9,8 +9,12 @@ function unlockReplicantis() {
   }
 }
 
+function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
+  return 1 + (Math.floor(getGlyphSacEffect("replication")) / 100);
+}
+
 function upgradeReplicantiChance() {
-  if (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1 + (getGlyphSacEffect("replication") / 100)&& player.eterc8repl !== 0) {
+  if (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < getMaxReplicantiChance() && player.eterc8repl !== 0) {
       player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
       player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
       player.replicanti.chance += 0.01

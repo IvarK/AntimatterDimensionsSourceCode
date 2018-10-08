@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
     <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/tln.css">
     <script>
         (function(i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -140,7 +141,7 @@
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Each galaxy gives a 1.2x multiplier on IP gained. <span>Cost: 4 Time Theorems</button></td>
+                        <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Each galaxy gives a 1.2x multiplier on IP gained.<span id="41desc">Currently: </span><span>Cost: 4 Time Theorems</button></td>
                         <td><button class="timestudy" id="42" onclick="buyTimeStudy(42, 6)">Galaxy requirement goes up 52 8ths instead of 60.<span>Cost: 6 Time Theorems</button></td>
                     </tr>
                 </table>
@@ -177,9 +178,9 @@
                         <td><button class="timestudy timedimstudy" id="93" onclick="buyTimeStudy(93, 7)">Time dimensions gain a multiplier based on tick upgrades gained<span id="93desc">Currently: 1x</span>Cost: 7 Time Theorems</button></td>
                     </tr>
                     <tr>
-                        <td><button class="timestudy normaldimstudy" id="101" onclick="buyTimeStudy(101, 4)">Replicantis give multiplier to normal dims equal to their amount.<span>Cost: 4 Time Theorems</button></td>
-                        <td><button class="timestudy infdimstudy" id="102" onclick="buyTimeStudy(102, 6)">Replicanti galaxies power replicanti multiplier<span>Cost: 6 Time Theorems</button></td>
-                        <td><button class="timestudy timedimstudy" id="103" onclick="buyTimeStudy(103, 6)">Time dimensions gain a multiplier equal to replicanti galaxy amount<span>Cost: 6 Time Theorems</p></button></td>
+                        <td><button class="timestudy normaldimstudy" id="101" onclick="buyTimeStudy(101, 4)">Replicantis give multiplier to normal dims equal to their amount.<span id="101desc">Currently: 1x</span><span>Cost: 4 Time Theorems</button></td>
+                        <td><button class="timestudy infdimstudy" id="102" onclick="buyTimeStudy(102, 6)">Replicanti galaxies boost replicanti multiplier<span id="102desc">Currently: 1x</span><span>Cost: 6 Time Theorems</button></td>
+                        <td><button class="timestudy timedimstudy" id="103" onclick="buyTimeStudy(103, 6)">Time dimensions gain a multiplier equal to replicanti galaxy amount<span id="103desc">Currently: 1x</span><span>Cost: 6 Time Theorems</p></button></td>
                     </tr>
                 </table>
                 <br>
@@ -276,8 +277,8 @@
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="222" onclick="buyTimeStudy(222, 900)">Dimensional boost costs scale by another 2 less.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="223" onclick="buyTimeStudy(223, 900)">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="224" onclick="buyTimeStudy(224, 900)">Galaxy cost scaling starts 1 galaxy later for every 2000 dimensional boosts.<span>Cost: 900 Time Theorems</button></td>
-                        <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="225" onclick="buyTimeStudy(225, 900)">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems</button></td>
-                        <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="226" onclick="buyTimeStudy(226, 900)">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems</button></td>
+                        <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="225" onclick="buyTimeStudy(225, 900)">You gain extra RGs based on how high your replicanti are.<span id="225desc">Currently: </span><span>Cost: 900 Time Theorems</button></td>
+                        <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="226" onclick="buyTimeStudy(226, 900)">You gain extra RGs based on your max RGs.<span id="226desc">Currently: </span><span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="227" onclick="buyTimeStudy(227, 900)">Sacrifice affects the 4th Time Dimension with reduced effect.<span>Cost: 900 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" style="margin: 1px; width: 120px; font-size: 0.55rem; padding: 3px;" id="228" onclick="buyTimeStudy(228, 900)">Sacrifice scales better.<span>Cost: 900 Time Theorems</button></td>
                     </tr>
@@ -457,13 +458,13 @@
                 <table>
                     <tr>
                         <td>
-                            <button class="timestudy" id="dil1" onclick="buyDilationUpgrade(1)">Double time dilation gain.<br><span id="dil1cost">Cost: 1e5 dilated time</span></button>
+                            <button class="timestudy" id="dil1" onclick="buyDilationUpgrade(1)">Double time dilation gain.<br><span id="dil1mult">Currently: x</span><br><span id="dil1cost">Cost: 1e5 dilated time</span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Decrease the free galaxy threshold multiplier, but resets free galaxies and dilated time.<br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
+                            <button class="timestudy" id="dil2" onclick="buyDilationUpgrade(2)">Free galaxy threshold is lowered, but reset them and dilated time.<br><span id="dil2mult">Currently: x</span><br><span id="dil2cost">Cost: 1e6 dilated time</span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="dil3" onclick="buyDilationUpgrade(3)">Triple the amount of Tachyon Particles gained.<br><span id="dil3cost">Cost: 1e7 dilated time</span></button>
+                            <button class="timestudy" id="dil3" onclick="buyDilationUpgrade(3)">Triple the amount of Tachyon Particles gained.<br><span id="dil3mult">Currently: x</span><br><span id="dil3cost">Cost: 1e7 dilated time</span></button>
                         </td>
                     </tr>
                     <tr>
@@ -2670,6 +2671,7 @@
 <script type="text/javascript" src="javascripts/lz-string.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
 <script type="text/javascript" src="javascripts/vis.js"></script>
+<script type="text/javascript" src="javascripts/tln.js"></script>
 
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>

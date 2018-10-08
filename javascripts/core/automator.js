@@ -313,7 +313,7 @@ function start(current) {
       break;
     case "dilation":
       if (!player.reality.automatorCommands.includes(83)) return false
-      if (startDilatedEternity) return true
+      if (startDilatedEternity()) return true
       else return false
       break;
   }

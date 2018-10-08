@@ -1729,7 +1729,7 @@ function checkForEndMe() {
 }
 
 function checkForRUPG8() {
-    if ( player.thisReality < 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return false
+    if (nextAchIn() !== 0) return false
 
     for (var row = 1; row <= 13; row++) {
         for (var col = 1; col <= 8; col++) {
@@ -3466,7 +3466,7 @@ function autoBuyerTick() {
         if (player.autoEternityMode == "amount") {
             if (player.currentEternityChall != "" || gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
         } else if (player.autoEternityMode == "time") {
-            if (player.thisEternity / 1000 > player.eternityBuyer.limit) eternity(false, true)
+            if (player.thisEternity / 1000 > player.eternityBuyer.limit  * getGameSpeedupFactor(false)) eternity(false, true)
         } else {
             if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
         }   
@@ -3481,7 +3481,7 @@ function autoBuyerTick() {
                     document.getElementById("bigcrunch").click()
                 }
             } else if (player.autoCrunchMode == "time"){
-                if (!player.break || player.currentChallenge != "" || player.autobuyers[11].priority.lt(player.thisInfinityTime/1000)) {
+                if (!player.break || player.currentChallenge != "" || player.autobuyers[11].priority.times(getGameSpeedupFactor(false)).lt(player.thisInfinityTime /1000)) {
                     autoS = false;
                     document.getElementById("bigcrunch").click()
                 }

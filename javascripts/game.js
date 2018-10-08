@@ -1720,7 +1720,7 @@ function checkForEndMe() {
 }
 
 function checkForRUPG8() {
-    if ( player.thisReality < 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0)) ) return false
+    if (nextAchIn() !== 0) return false
 
     for (var row = 1; row <= 13; row++) {
         for (var col = 1; col <= 8; col++) {

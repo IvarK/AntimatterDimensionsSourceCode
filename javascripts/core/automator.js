@@ -227,6 +227,9 @@ function buy(current) {
       }
       else return false
       break;
+    case "ttgen":
+      if (buyDilationUpgrade(10)) return true
+      else return false
   }
 }
 

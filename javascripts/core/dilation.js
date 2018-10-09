@@ -53,35 +53,35 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
 
 function buyDilationUpgrade(id) {
   if (id > 3) { // Not rebuyable
-      if (player.dilation.dilatedTime < DIL_UPG_COSTS[id]) return // Not enough dilated time
-      if (player.dilation.upgrades.includes(id)) return // Has the upgrade
-      player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
-      player.dilation.upgrades.push(id)
-      if (id == 4) player.dilation.freeGalaxies *= 2 // Double the current galaxies
+    if (player.dilation.dilatedTime < DIL_UPG_COSTS[id]) return false // Not enough dilated time
+    if (player.dilation.upgrades.includes(id)) return false // Has the upgrade
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
+    player.dilation.upgrades.push(id)
+    if (id == 4) player.dilation.freeGalaxies *= 2 // Double the current galaxies
   } else { // Is rebuyable
-      let upgAmount = player.dilation.rebuyables[id];
-      let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
-      if (player.dilation.dilatedTime.lt(realCost)) return
+    let upgAmount = player.dilation.rebuyables[id];
+    let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
+    if (player.dilation.dilatedTime.lt(realCost)) return false
 
-      player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
-      player.dilation.rebuyables[id] += 1
-      if (id == 2) {
-          if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
-          player.dilation.nextThreshold = new Decimal(1000)
-          player.dilation.freeGalaxies = 0
-      }
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
+    player.dilation.rebuyables[id] += 1
+    if (id == 2) {
+        if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
+        player.dilation.nextThreshold = new Decimal(1000)
+        player.dilation.freeGalaxies = 0
+    }
 
-      if (id == 3) {
-        if (player.reality.perks.includes(37)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
-        else if (player.reality.perks.includes(36)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
-        else if (player.reality.perks.includes(35)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
-        else if (player.reality.perks.includes(34)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
-      }
+    if (id == 3) {
+      if (player.reality.perks.includes(37)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
+      else if (player.reality.perks.includes(36)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
+      else if (player.reality.perks.includes(35)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
+      else if (player.reality.perks.includes(34)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
+    }
   }
-
   updateDilationUpgradeCosts()
   updateDilationUpgradeButtons()
   updateTimeStudyButtons()
+  return true
 }
 
 function updateDilationUpgradeButtons() {

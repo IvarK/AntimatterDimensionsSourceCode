@@ -203,6 +203,7 @@ function eternity(force, auto) {
     if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
     if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
+    if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
 
     if (player.reality.upg.includes(13)) {
         if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold);
@@ -221,6 +222,7 @@ function eternity(force, auto) {
         }
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
     }
+
 
     return true;
 }

@@ -123,7 +123,7 @@ function importSave(save_data) {
       load_custom_game();
       return;
     }
-    ui.actions.options.hardReset(true);
+    hardReset();
     saved = 0;
     totalMult = 1;
     currentMult = 1;
@@ -163,59 +163,38 @@ ui.actions.options.cloudLoad = function() {
     playFabLoadCheck();
 };
 
-ui.actions.options.hardReset = function (forceHardReset) {
-    if (forceHardReset) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
-        player = defaultStart
-        infDimPow = 1;
-        save_game();
-        load_game();
-        updateCosts();
-
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions', true)
-        updateTickSpeed();
-        updateDimensions();
-        updateChallenges();
-        updateAutobuyers();
-    } else if (confirm("Do you really want to erase all your progress?")) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
-        player = defaultStart
-        infDimPow = 1;
-        save_game();
-        load_game();
-        updateCosts();
-
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
-        showDimTab('antimatterdimensions', true)
-        updateTickSpeed();
-        updateDimensions();
-        updateChallenges();
-        updateAutobuyers();
+ui.actions.options.hardReset = function () {
+    if (confirm("Do you really want to erase all your progress?")) {
+        hardReset();
     }
 };
+
+function hardReset() {
+  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
+  else set_save('dimensionSave', currentSave, defaultStart);
+  player = defaultStart;
+  infDimPow = 1;
+  save_game();
+  load_game();
+  updateCosts();
+
+  document.getElementById("secondRow").style.display = "none";
+  document.getElementById("thirdRow").style.display = "none";
+  document.getElementById("tickSpeed").style.visibility = "hidden";
+  document.getElementById("tickSpeedMax").style.visibility = "hidden";
+  document.getElementById("tickLabel").style.visibility = "hidden";
+  document.getElementById("tickSpeedAmount").style.visibility = "hidden";
+  document.getElementById("fourthRow").style.display = "none";
+  document.getElementById("fifthRow").style.display = "none";
+  document.getElementById("sixthRow").style.display = "none";
+  document.getElementById("seventhRow").style.display = "none";
+  document.getElementById("eightRow").style.display = "none";
+  showDimTab('antimatterdimensions', true);
+  updateTickSpeed();
+  updateDimensions();
+  updateChallenges();
+  updateAutobuyers();
+}
 
 ui.actions.options.refreshUpdateRate = function() {
     if (player.options.updateRate === 200) giveAchievement("You should download some more RAM");

@@ -2464,7 +2464,7 @@ setInterval(function() {
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
-    if (player.replicanti.amount.gte(new Decimal("1e75000"))) unlockRealityUpgrade(21)
+    if (player.replicanti.amount.gte(new Decimal("1e70000"))) unlockRealityUpgrade(21)
     if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
     ttMaxTimer++;
     if (player.reality.perks.includes(8)) maxTheorems()

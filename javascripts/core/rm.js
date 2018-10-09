@@ -732,7 +732,7 @@ function getGlyphSacDescription(type) {
   switch(type) {
     case "power":
     let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Distant galaxies start " + amount + " later (next at " + nextDistantGalaxy.toFixed(0) + ")<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + nextDistantGalaxy.toFixed(0) + ")<br><br>"
 
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"

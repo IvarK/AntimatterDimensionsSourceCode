@@ -3566,7 +3566,9 @@ function autoBuyDilationUpgrades() {
 
 function autoBuyReplicantiUpgrades() {
   if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < getMaxReplicantiChance()) upgradeReplicantiChance()
+    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance())
+      if (!upgradeReplicantiChance())
+        break;
   }
 
   if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {

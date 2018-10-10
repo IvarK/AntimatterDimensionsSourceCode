@@ -126,33 +126,30 @@ function generateRandomGlyph(level) {
     level: level,
     effects: {}
   }
-  switch(type) {
-    case "time":
-      return timeGlyph(glyph, effectAmount)
-      break;
-
-    case "dilation":
-      return dilationGlyph(glyph, effectAmount)
-      break;
-
-    case "replication":
-      return replicationGlyph(glyph, effectAmount)
-      break;
-
-    case "infinity":
-      return infinityGlyph(glyph, effectAmount)
-      break;
-
-    case "power":
-      return powerGlyph(glyph, effectAmount)
-      break;
-  }
+  return newGlyph(glyph, type, effectAmount)
 }
 
-function timeGlyph(glyph, effectAmount) {
+function newGlyph(glyph, type, effectAmount) {
   var effects = []
   while (effects.length < effectAmount) {
-    var toAdd = timeEffects[Math.floor(random() * timeEffects.length)]
+    var toAdd;
+    switch (type) {
+      case "time":
+        toAdd = timeEffects[Math.floor(random() * timeEffects.length)];
+        break;
+      case "dilation":
+        toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)];
+        break;
+      case "replication":
+        toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)];
+        break;
+      case "infinity":
+        toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)];
+        break;
+      case "power":
+        toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
+        break;
+    }
     console.log(toAdd)
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
@@ -160,73 +157,11 @@ function timeGlyph(glyph, effectAmount) {
   for (i in effects) {
     var effect = effects[i]
     if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength("time" + effect, glyph.level, glyph.strength)
+      glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
   }
   return glyph
 }
 
-function dilationGlyph(glyph, effectAmount) {
-  var effects = []
-  while (effects.length < effectAmount) {
-    var toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)]
-    if (!effects.includes(toAdd)) effects.push(toAdd)
-  }
-
-  for (i in effects) {
-    var effect = effects[i]
-    if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength("dilation" + effect, glyph.level, glyph.strength)
-  }
-  return glyph
-}
-
-function replicationGlyph(glyph, effectAmount) {
-  var effects = []
-  while (effects.length < effectAmount) {
-    var toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)]
-    if (!effects.includes(toAdd)) effects.push(toAdd)
-  }
-
-  for (i in effects) {
-    var effect = effects[i]
-    if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength("replication" + effect, glyph.level, glyph.strength)
-  }
-  return glyph
-}
-
-function infinityGlyph(glyph, effectAmount) {
-  var effects = []
-  while (effects.length < effectAmount) {
-    var toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)]
-    if (!effects.includes(toAdd)) effects.push(toAdd)
-  }
-
-  for (i in effects) {
-    var effect = effects[i]
-    if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength("infinity" + effect, glyph.level, glyph.strength)
-  }
-  return glyph
-}
-
-function powerGlyph(glyph, effectAmount) {
-  var effects = []
-  while (effects.length < effectAmount) {
-    var toAdd = powerEffects[Math.floor(random() * powerEffects.length)]
-    if (!effects.includes(toAdd)) effects.push(toAdd)
-  }
-  if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-    effects = ["pow"]
-  }
-
-  for (i in effects) {
-    var effect = effects[i]
-    if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength("power" + effect, glyph.level, glyph.strength)
-  }
-  return glyph
-}
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced
 function getGlyphEffectStrength(effectKey, level, strength) {
@@ -718,7 +653,7 @@ function getGlyphSacEffect(type) {
     return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
 
     case "replication":
-    return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.75)
+    return Math.pow(Math.max(player.reality.glyphs.sac[type], 0), 0.75)
 
     case "dilation":
     return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
@@ -732,7 +667,7 @@ function getGlyphSacDescription(type) {
   switch(type) {
     case "power":
     let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + nextDistantGalaxy.toFixed(0) + ")<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy) + ")<br><br>"
 
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
@@ -741,7 +676,7 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th time dimension.<br><br>"
 
     case "replication":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum replicanti chance cap by +" + Math.floor(amount) + "%<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum replicanti chance cap by +" + (100*getMaxReplicantiChance()).toFixed(0) + "%<br><br>"
 
     case "dilation":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount) + "x<br><br>"

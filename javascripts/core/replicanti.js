@@ -10,20 +10,23 @@ function unlockReplicantis() {
 }
 
 function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
-  return 1 + (Math.floor(getGlyphSacEffect("replication")) / 100);
+  return nearestPercent(1 + getGlyphSacEffect("replication") / 100);
+}
+
+// Rounding errors suck
+function nearestPercent(x) {
+  return Math.round(100 * x) / 100
 }
 
 function upgradeReplicantiChance() {
-  if (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < getMaxReplicantiChance() && player.eterc8repl !== 0) {
+  if (player.infinityPoints.gte(player.replicanti.chanceCost) && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance() && player.eterc8repl !== 0) {
       player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
       player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
-      player.replicanti.chance += 0.01
+      player.replicanti.chance = nearestPercent(player.replicanti.chance + 0.01)
       if (player.currentEternityChall == "eterc8") player.eterc8repl-=1
       document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
   }
 }
-
-
 
 function upgradeReplicantiInterval() {
   if (player.infinityPoints.gte(player.replicanti.intervalCost) && (player.replicanti.interval > 50 || player.timestudy.studies.includes(22)) && player.replicanti.interval !== 1 && player.eterc8repl !== 0) {

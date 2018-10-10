@@ -392,4 +392,11 @@ dev.updateTestSave = function() {
     player.reality.upgReqs.push(false, false, false, false, false)
     player.options.testVersion = 19
   }
+
+  if (player.options.testVersion == 19) {
+    player.reality.tdbuyer = undefined
+    player.reality.tdbuyers = [false, false, false, false, false, false, false, false]
+    player.reality.epmultbuyer = false
+    player.options.testVersion = 20
+  }
 }

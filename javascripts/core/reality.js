@@ -183,6 +183,7 @@ function reality(force, reset) {
     updateAutobuyers();
     resetInfDimensions();
     loadInfAutoBuyers();
+    loadTimeAutoBuyers()
     updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
@@ -271,8 +272,12 @@ function reality(force, reset) {
     glyphSelected = false
     
     if (player.reality.upg.includes(13)) {
-        if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold);
-        if (player.reality.tdbuyer.on) buyMaxTimeDimensions(player.reality.tdbuyer.threshhold)
+        if (player.reality.epmultbuyer) buyMaxEPMult();
+        for (var i = 1; i < 9; i++) {
+            if (player.reality.tdbuyers[i - 1]) {
+                buyMaxTimeDims(i);
+            }
+        }
     }
 }
 

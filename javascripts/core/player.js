@@ -311,14 +311,8 @@ var player = {
     automatorCommands: [],
     perks: [],
     respec: false,
-    tdbuyer: {
-      on: false,
-      threshhold: 1
-    },
-    epmultbuyer: {
-      on: false,
-      threshhold: 1
-    },
+    tdbuyers: [false, false, false, false, false, false, false, false],
+    epmultbuyer: false,
     pp: 0
   },
   wormhole: [{

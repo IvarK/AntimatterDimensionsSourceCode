@@ -163,6 +163,42 @@ function resetTimeDimensions() {
 
 }
 
+function switchAutoTime(tier) {
+  if (player.reality.tdbuyers[tier-1]) {
+      player.reality.tdbuyers[tier-1] = false
+      document.getElementById("timeauto"+tier).textContent = "Auto: OFF"
+  } else {
+      player.reality.tdbuyers[tier-1] = true
+      document.getElementById("timeauto"+tier).textContent = "Auto: ON"
+  }
+}
+
+function toggleAllTimeDims() {
+  if (player.reality.tdbuyers[0]) {
+      for (var i=1; i<9; i++) {
+          player.reality.tdbuyers[i-1] = false
+          document.getElementById("timeauto"+i).textContent = "Auto: OFF"
+      }
+  } else {
+      for (var i=1; i<9; i++) {
+        player.reality.tdbuyers[i-1] = true
+          document.getElementById("timeauto"+i).textContent = "Auto: ON"
+      }
+  }
+}
+
+function loadTimeAutoBuyers() {
+  for (var i=1; i<9; i++) {
+      if (player.reality.tdbuyers[i-1]) document.getElementById("timeauto"+i).textContent = "Auto: ON"
+      else document.getElementById("timeauto"+i).textContent = "Auto: OFF"
+  }
+}
+
+function buyMaxTimeDims(tier) {
+  while(buyTimeDimension(tier, false)) continue
+  updateEternityUpgrades()
+}
+
 function buyMaxTimeDimensions(threshold) {
   if (player.eternityPoints.gte(1e10)) {  // Default behavior: Buy as many as possible, starting with the highest dimension first (reduces overhead at higher EP)
     if (threshold == undefined) threshold = 1
@@ -188,4 +224,5 @@ function buyMaxTimeDimensions(threshold) {
         break;
     }
   }
+  updateEternityUpgrades()
 }

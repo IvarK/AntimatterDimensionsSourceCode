@@ -180,14 +180,8 @@ function onLoad() {
       automatorCommands: [], 
       perks: [],
       respec: false,
-      tdbuyer: {
-        on: false,
-        threshhold: 1
-      },
-      epmultbuyer: {
-        on: false,
-        threshhold: 1
-      },
+      tdbuyers: [false, false, false, false, false, false, false, false],
+      epmultbuyer: false,
       pp: 0
     };
   }
@@ -492,16 +486,21 @@ if (player.version < 5) {
 
 
   if (player.replicanti.galaxybuyer !== undefined) {
-      replicantiGalaxyAutoToggle()
-      replicantiGalaxyAutoToggle()
+    replicantiGalaxyAutoToggle()
+    replicantiGalaxyAutoToggle()
   }
 
   if (player.eternityChallUnlocked !== 0) document.getElementById("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
 
 
   if (player.infMultBuyer !== undefined) {
-      infMultAutoToggle()
-      infMultAutoToggle()
+    infMultAutoToggle()
+    infMultAutoToggle()
+  }
+
+  if (player.reality.epmultbuyer !== undefined) {
+    eterMultAutoToggle()
+    eterMultAutoToggle()
   }
 
   if (player.epmult === undefined || player.epmult == 0) {
@@ -610,7 +609,7 @@ if (player.version < 5) {
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 1;
+        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 20;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -689,6 +688,7 @@ if (player.version < 5) {
   updateMilestones();
   updateEternityUpgrades();
   loadInfAutoBuyers();
+  loadTimeAutoBuyers()
   resizeCanvas();
   checkForEndMe();
   updateEternityChallenges();
@@ -954,8 +954,6 @@ function loadAutoBuyerSettings() {
   document.getElementById("prioritySac").value = player.autoSacrifice.priority
   document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
   document.getElementById("priority13").value = player.eternityBuyer.limit
-  $("#maxspentep").val(player.reality.epmultbuyer.threshhold * 100 + "%")
-  $("#maxspenttd").val(player.reality.tdbuyer.threshhold * 100 + "%")
 
 }
 

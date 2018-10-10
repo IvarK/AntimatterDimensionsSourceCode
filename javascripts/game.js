@@ -862,6 +862,16 @@ function infMultAutoToggle() {
     }
 }
 
+function eterMultAutoToggle() {
+    if (player.reality.epmultbuyer) {
+        player.reality.epmultbuyer = false
+        document.getElementById("epmultbuyer").textContent = "Autobuy EP mult OFF"
+    } else {
+        player.reality.epmultbuyer = true
+        document.getElementById("epmultbuyer").textContent = "Autobuy EP mult ON"
+    }
+}
+
 
 function toggleCrunchMode() {
     if (player.autoCrunchMode == "amount") {
@@ -1433,12 +1443,6 @@ function updateAutobuyers() {
 
     player.autoSacrifice.isOn = document.getElementById("13ison").checked
     player.eternityBuyer.isOn = document.getElementById("eternityison").checked
-    player.reality.epmultbuyer.on = $("#epbuyerison")[0].checked
-    player.reality.tdbuyer.on = $("#tdbuyerison")[0].checked
-    if (player.reality.upg.includes(13)) {
-      $("#autoBuyertd").show()
-      $("#autoBuyerep").show()
-    }
     priorityOrder()
 }
 
@@ -1592,11 +1596,6 @@ function updatePriorities() {
     player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
     const eterValue = fromValue(document.getElementById("priority13").value)
     if (!isNaN(eterValue)) player.eternityBuyer.limit = eterValue
-    
-    const epthresh = $("#maxspentep").val().split("%") / 100
-    const tdthresh = $("#maxspenttd").val().split("%") / 100
-    if (!isNaN(epthresh)) player.reality.epmultbuyer.threshhold = epthresh
-    if (!isNaN(tdthresh)) player.reality.tdbuyer.threshhold = tdthresh
 
     priorityOrder()
 }
@@ -1611,9 +1610,6 @@ function updateCheckBoxes() {
     if (player.autoSacrifice.isOn) document.getElementById("13ison").checked = "true"
     else document.getElementById("13ison").checked = ""
     document.getElementById("eternityison").checked = player.eternityBuyer.isOn
-
-    if (player.reality.epmultbuyer.on) $("#epbuyerison")[0].checked = true
-    if (player.reality.tdbuyer.on) $("#tdbuyerison")[0].checked = true
 
 }
 
@@ -2350,6 +2346,13 @@ setInterval(function() {
         document.getElementById("toggleallinfdims").style.visibility = "hidden"
     }
 
+    if (player.reality.upg.includes(13)) {
+        for (var i=1; i<9; i++) {
+            document.getElementById("timeauto"+i).style.visibility = "visible"
+        }
+        document.getElementById("togglealltimedims").style.visibility = "visible"
+    }
+
     if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
     else document.getElementById("replauto1").style.visibility = "hidden"
     if (player.eternities >= 60) document.getElementById("replauto2").style.visibility = "visible"
@@ -2457,9 +2460,13 @@ setInterval(function() {
         $(".automator-container").hide()
     }
 
-    if (player.reality.upg.includes(13)) document.getElementById("toggleeternitymode").style.display = "inline-block"
-    else document.getElementById("toggleeternitymode").style.display = "none"
-
+    if (player.reality.upg.includes(13)) {
+        document.getElementById("toggleeternitymode").style.display = "inline-block"
+        document.getElementById("epmultbuyer").style.display = "inline-block"
+    } else {
+        document.getElementById("toggleeternitymode").style.display = "none"
+        document.getElementById("epmultbuyer").style.display = "none"
+    }
 
     updateRealityUpgrades()
 
@@ -2744,6 +2751,8 @@ function gameLoop(diff) {
             if (player.autoCrunchMode == "amount") document.getElementById("priority12").value = player.autobuyers[11].priority
         }
     }
+
+    if (player.reality.epmultbuyer) buyMaxEPMult();
 
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
@@ -3591,6 +3600,16 @@ function autoBuyInfDims() {
   }
 }
 
+function autoBuyTimeDims() {
+    if (player.reality.upg.includes(13)) {
+      for (var i = 1; i < 9; i++) {
+        if (player.reality.tdbuyers[i - 1]) {
+          buyMaxTimeDims(i)
+        }
+      }
+    }
+}
+
 function autoBuyExtraTimeDims() {
   if (player.timeDimension8.bought == 0 && player.reality.perks.includes(64)) {
     buyDilationStudy(2, 1000000)
@@ -3612,6 +3631,7 @@ setInterval(function() {
     if (!player.reality.perks.includes(61)) autoBuyInfDims()
     if (!player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
     if (!player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+    autoBuyTimeDims()
 
     autoBuyExtraTimeDims()
   }

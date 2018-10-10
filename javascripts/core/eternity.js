@@ -206,8 +206,12 @@ function eternity(force, auto) {
     if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
 
     if (player.reality.upg.includes(13)) {
-        if (player.reality.epmultbuyer.on) buyMaxEPMult(player.reality.epmultbuyer.threshhold);
-        if (player.reality.tdbuyer.on) buyMaxTimeDimensions(player.reality.tdbuyer.threshhold)
+        if (player.reality.epmultbuyer) buyMaxEPMult();
+        for (var i = 1; i < 9; i++) {
+            if (player.reality.tdbuyers[i - 1]) {
+                buyMaxTimeDims(i);
+            }
+        }
     }
 
     if (player.eternityUpgrades.length == 0 || (player.eternityUpgrades.length == 3 && player.reality.perks.includes(81))) {

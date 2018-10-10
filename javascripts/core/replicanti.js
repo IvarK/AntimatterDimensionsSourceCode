@@ -25,7 +25,10 @@ function upgradeReplicantiChance() {
       player.replicanti.chance = nearestPercent(player.replicanti.chance + 0.01)
       if (player.currentEternityChall == "eterc8") player.eterc8repl-=1
       document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
+      return true
   }
+  else
+    return false
 }
 
 function upgradeReplicantiInterval() {

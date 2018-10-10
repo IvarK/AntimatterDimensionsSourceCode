@@ -22,11 +22,11 @@ function getTickSpeedMultiplier() {
       if (isAchEnabled("r86")) perGalaxy *= 1.01;
       if (player.timestudy.studies.includes(212)) perGalaxy *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
 
-      return new Decimal(baseMultiplier-(galaxies*perGalaxy));
+      return new Decimal(Math.max(0.01, baseMultiplier-(galaxies*perGalaxy)));
   } else {
       let baseMultiplier = 0.8
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
-      let perGalaxy = 0.965
+      let perGalaxy = new Decimal(0.965)
       if (player.infinityUpgrades.includes("galaxyBoost")) galaxies *= 2;
       if (player.infinityUpgrades.includes("postGalaxy")) galaxies *= 1.5;
       if (player.challenges.includes("postc5")) galaxies *= 1.1;
@@ -34,7 +34,7 @@ function getTickSpeedMultiplier() {
       if (player.timestudy.studies.includes(212)) galaxies *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
       if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
 
-      return new Decimal(baseMultiplier * (Math.pow(perGalaxy, (galaxies-2))));
+      return perGalaxy.pow(galaxies-2).times(baseMultiplier);
   }
 }
 

@@ -238,12 +238,7 @@ function reality(force, reset, auto) {
         loadAutoBuyerSettings()
     }
     Marathon2 = 0;
-    toggleCrunchMode();
-    toggleCrunchMode();
-    toggleCrunchMode();
-    toggleEternityMode();
-    toggleEternityMode();
-    toggleEternityMode();
+    updatePrestigeAutoModes()
     updateTimeStudyButtons();
     if (!player.reality.upg.includes(10)) {
         document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF";

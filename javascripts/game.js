@@ -921,6 +921,40 @@ function toggleRealityMode() {
     }
 }
 
+function updatePrestigeAutoModes() {
+    if (player.autoCrunchMode == "amount") {
+        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
+        document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
+    } else if (player.autoCrunchMode == "time"){
+        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
+        document.getElementById("limittext").textContent = "Seconds between crunches:"
+    } else {
+        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
+        document.getElementById("limittext").textContent = "X times last crunch:"
+    }
+
+    if (player.autoEternityMode == "amount") {
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: amount"
+        document.getElementById("eternitylimittext").textContent = "Amount of EP to wait until reset:"
+    } else if (player.autoEternityMode == "time"){
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: time"
+        document.getElementById("eternitylimittext").textContent = "Seconds between eternities:"
+    } else {
+        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: X times last eternity"
+        document.getElementById("eternitylimittext").textContent = "X times last eternity:"
+    }
+
+    if (player.autoRealityMode == "rm") {
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: reality machines"
+    } else if (player.autoRealityMode == "glyph"){
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: glyph level"
+    } else if (player.autoRealityMode == "either"){
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: either"
+    } else {
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: both"
+    }
+}
+
 buyAutobuyer = function(id) {
     if (player.infinityPoints.lt(player.autobuyers[id].cost)) return false;
     if (player.autobuyers[id].bulk >= 1e100) return false;

@@ -646,16 +646,7 @@ if (player.version < 5) {
         updateChallengeTimes();
     }
 
-  toggleCrunchMode()
-  toggleCrunchMode()
-  toggleCrunchMode()
-  toggleEternityMode()
-  toggleEternityMode()
-  toggleEternityMode()
-  toggleRealityMode()
-  toggleRealityMode()
-  toggleRealityMode()
-  toggleRealityMode()
+  updatePrestigeAutoModes()
   updateCheckBoxes()
   loadAutoBuyerSettings()
 

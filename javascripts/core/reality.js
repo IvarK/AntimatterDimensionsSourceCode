@@ -1,8 +1,8 @@
-function reality(force, reset) {
+function reality(force, reset, auto) {
     if (!((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, and unlock various upgrades."))) || force)) {
         return;
     }
-    if (!glyphSelected && player.reality.perks.includes(0)) {
+    if (!glyphSelected && player.reality.perks.includes(0) && !auto) {
         possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()));
         setTimeout(function() {
             possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
@@ -19,7 +19,7 @@ function reality(force, reset) {
         }, 100);
         return
     }
-    if ((player.options.animations.reality) && realizationCheck === 0) {
+    if ((player.options.animations.reality) && realizationCheck === 0 && !auto) {
         realizationCheck = 1;
         document.getElementById("container").style.animation = "realize 10s 1";
         document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
@@ -39,7 +39,7 @@ function reality(force, reset) {
         return
     }
     realizationCheck = 0;
-    if (!player.reality.perks.includes(0) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
+    if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality && !force) {
         player.bestEternity = player.thisEternity
     }
@@ -78,6 +78,19 @@ function reality(force, reset) {
     if (player.reality.respec) {
         respecGlyphs();
     }
+
+    //reset global values to avoid a tick of unupdated production
+    totalMult = 1;
+    currentMult = 1;
+    infinitiedMult = 1;
+    achievementMult = 1;
+    challengeMult = 1;
+    unspentBonus = 1;
+    infDimPow = 1;
+    postc8Mult = new Decimal(0);
+    mult18 = new Decimal(1);
+    ec10bonus = new Decimal(1);
+
     player.sacrificed = new Decimal(0);
     player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";

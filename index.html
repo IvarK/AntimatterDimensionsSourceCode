@@ -1999,77 +1999,89 @@
                 <button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy                     </button>
                 <button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
                 <button class="storebtn" id="toggleeternitymode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleEternityMode()">Auto eternity mode: amount</button>
+                <button class="storebtn" id="togglerealitymode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleRealityMode()">Auto reality mode: RM</button>
                 <br>
                 <tr>
-                    <td>
-                        <div class="autoBuyerDiv" style="opacity: 0">
-                        </div>
-                    </td>
-                  <td>
-                    <div class="autoBuyerDiv" id="autoBuyerEter">
-                      <div>Automatic Eternity</div><br>
-                      <div><span id="eternitylimittext">Amount of EP to wait until reset:</span>
-                      <input type="text" onchange="updatePriorities()" id="priority13"></input></div>
-                      <br>
-                      <span style="font-size: 80%">Is active:</span>
-                      <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="eternityison"></input>
+                <td>
+                    <div class="autoBuyerDiv" id="autoBuyerReality">
+                        <div>Automatic Reality</div><br>
+                        <div><span>Target reality machines:</span>
+                        <input type="text" onchange="updatePriorities()" id="priority14"></input></div>
+                        <div><span>Target glyph level:</span>
+                        <input type="text" onchange="updatePriorities()" id="priority15"></input></div>
+                        <br>
+                        <span style="font-size: 80%">Is active:</span>
+                        <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="realityison"></input>
                     </div>
-                  </td>
+                </td>
+                <td>
+                    <div class="autoBuyerDiv" style="opacity: 0"></div>
+                </td>
+                <td>
+                    <div class="autoBuyerDiv" id="autoBuyerEter" style="margin-left: -268px;">
+                        <div>Automatic Eternity</div><br>
+                        <div><span id="eternitylimittext">Amount of EP to wait until reset:</span>
+                        <input type="text" onchange="updatePriorities()" id="priority13"></input></div>
+                        <br>
+                        <span style="font-size: 80%">Is active:</span>
+                        <input type="checkbox" class="checkbox" onchange="updateAutobuyers()" id="eternityison"></input>
+                    </div>
+                </td>
                 </tr>
                 <tr>
-                        <td>
-                            <div class="autoBuyerDiv" id="autoBuyerDimBoost" style="font-size: 11px;">
-                                <div>Automatic DimBoosts</div>
-                                <button class="autobuyerbtn" id="buyerBtnDimBoost">46% smaller interval<br>Cost: 2 points</button>
-                                <div style="font-size: 80%"id="intervalDimBoost">Current interval: 30 seconds</div>
-                                <span style="font-size: 80%">Max DimBoosts:</span>
-                                <input type="text" onchange="updatePriorities()" id="priority10"></input>
-                                <br>
-                                <span style="font-size: 80%">Galaxies required to always Dimboost:</span>
-                                <input type="text" onchange="updatePriorities()" id="overGalaxies"></input>
-                                <br>
-                                <div id="bulkdimboost">
-                                    <span style="font-size: 80%" id="bulklabel">Bulk DimBoost amount:</span>
-                                    <input type="text" onchange="updatePriorities()" id="bulkDimboost"></input>
-                                </div>
-                                <br>
-                                <span style="font-size: 80%">Is active:</span>
-                                <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="10ison"></input>
+                    <td>
+                        <div class="autoBuyerDiv" id="autoBuyerDimBoost" style="font-size: 11px;">
+                            <div>Automatic DimBoosts</div>
+                            <button class="autobuyerbtn" id="buyerBtnDimBoost">46% smaller interval<br>Cost: 2 points</button>
+                            <div style="font-size: 80%"id="intervalDimBoost">Current interval: 30 seconds</div>
+                            <span style="font-size: 80%">Max DimBoosts:</span>
+                            <input type="text" onchange="updatePriorities()" id="priority10"></input>
+                            <br>
+                            <span style="font-size: 80%">Galaxies required to always Dimboost:</span>
+                            <input type="text" onchange="updatePriorities()" id="overGalaxies"></input>
+                            <br>
+                            <div id="bulkdimboost">
+                                <span style="font-size: 80%" id="bulklabel">Bulk DimBoost amount:</span>
+                                <input type="text" onchange="updatePriorities()" id="bulkDimboost"></input>
                             </div>
-                        </td>
-                        <td>
-                            <div class="autoBuyerDiv" id="autoBuyerGalaxies">
-                                <div>Automatic Galaxies</div>
-                                <button class="autobuyerbtn" id="buyerBtnGalaxies">46% smaller interval<br>Cost: 2 points</button>
-                                <div style="font-size: 80%"id="intervalGalaxies">Current interval: 30 seconds</div>
-                                <span>Max Galaxies:</span>
-                                <input type="text" onchange="updatePriorities()" id="priority11"></input>
-                                <br>
-                                <div id="galaxybulk" style="display: none">
-                                    <span style="font-size: 80%">Buy max galaxies every X seconds (0 to always buy):</span>
-                                    <input type="text" onchange="updatePriorities()" id="bulkgalaxy"></input>
-                                </div>
-                                <br>
-                                <span style="font-size: 80%">Is active:</span>
-                                <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="11ison"></input>
+                            <br>
+                            <span style="font-size: 80%">Is active:</span>
+                            <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="10ison"></input>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="autoBuyerDiv" id="autoBuyerGalaxies">
+                            <div>Automatic Galaxies</div>
+                            <button class="autobuyerbtn" id="buyerBtnGalaxies">46% smaller interval<br>Cost: 2 points</button>
+                            <div style="font-size: 80%"id="intervalGalaxies">Current interval: 30 seconds</div>
+                            <span>Max Galaxies:</span>
+                            <input type="text" onchange="updatePriorities()" id="priority11"></input>
+                            <br>
+                            <div id="galaxybulk" style="display: none">
+                                <span style="font-size: 80%">Buy max galaxies every X seconds (0 to always buy):</span>
+                                <input type="text" onchange="updatePriorities()" id="bulkgalaxy"></input>
                             </div>
-                        </td>
-                        <td>
-                            <div class="autoBuyerDiv" id="autoBuyerInf">
-                                <div>Automatic Big Crunch</div>
-                                <button class="autobuyerbtn" id="buyerBtnInf">46% smaller interval<br>Cost: 2 points</button>
-                                <div style="font-size: 80%"id="intervalInf">Current interval: 60 seconds</div>
-                                <div id="iplimit"><span id="limittext">Amount of IP to wait until reset:</span>
-                                <input type="text" onchange="updatePriorities()" id="priority12"></input></div>
-                                <br>
-                                <span style="font-size: 80%">Is active:</span>
-                                <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="12ison"></input>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
+                            <br>
+                            <span style="font-size: 80%">Is active:</span>
+                            <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="11ison"></input>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="autoBuyerDiv" id="autoBuyerInf">
+                            <div>Automatic Big Crunch</div>
+                            <button class="autobuyerbtn" id="buyerBtnInf">46% smaller interval<br>Cost: 2 points</button>
+                            <div style="font-size: 80%"id="intervalInf">Current interval: 60 seconds</div>
+                            <div id="iplimit"><span id="limittext">Amount of IP to wait until reset:</span>
+                            <input type="text" onchange="updatePriorities()" id="priority12"></input></div>
+                            <br>
+                            <span style="font-size: 80%">Is active:</span>
+                            <input type="checkbox" class="checkbox" onchange="updateAutobuyers()"   id="12ison"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
 
-                    </tr>
+                </tr>
                 <tr>
                     <td>
                         <div class="autoBuyerDiv" id="autoBuyer1">
@@ -2465,7 +2477,7 @@
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(22)" id="rupg22"><b>Requires: 1e85 DT</b><br>Some time based multiplier to TD, Currently Xx<br>Cost: 100,000 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(23)" id="rupg23"><b>Requires: Reality in under 15 minutes</b><br>Eternity multipliers affect eternity generation<br>Cost: 100,000 RM</div></td>
                         <td><div class="realityUpgrade" onclick="buyRealityUpg(24)" id="rupg24"><b>Requires: Reality for 5000 RM without glyphs</b><br>Gain another glyph slot<br>Cost: 100,000 RM</div></td>
-                        <td><div class="realityUpgrade" onclick="buyRealityUpg(25)" id="rupg25"><b>Requires: Gain 1e10500 EP</b><br>Reality autobuyer (not implemented)<br>Cost: 100,000 RM</div></td>
+                        <td><div class="realityUpgrade" onclick="buyRealityUpg(25)" id="rupg25"><b>Requires: Gain 1e10500 EP</b><br>Reality autobuyer<br>Cost: 100,000 RM</div></td>
                     </tr>
                 </table>
             </div>

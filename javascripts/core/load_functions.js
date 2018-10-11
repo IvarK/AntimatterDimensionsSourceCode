@@ -189,6 +189,7 @@ function onLoad() {
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
+  if (player.autoRealityMode === undefined) player.autoRealityMode = "rm";
   Theme.set(player.options.theme);
 
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
@@ -433,10 +434,17 @@ if (player.version < 5) {
 
   if (player.replicanti.auto === undefined) player.replicanti.auto = [false, false, false]
   if (player.eternityBuyer === undefined) {
-      player.eternityBuyer = {
-          limit: new Decimal(0),
-          isOn: false
-      }
+    player.eternityBuyer = {
+      limit: new Decimal(0),
+      isOn: false
+    }
+  }
+  if (player.realityBuyer === undefined) {
+    player.realityBuyer = {
+      rm: new Decimal(0),
+      glyph: 0,
+      isOn: false
+    }
   }
 
   transformSaveToDecimal();
@@ -641,6 +649,13 @@ if (player.version < 5) {
   toggleCrunchMode()
   toggleCrunchMode()
   toggleCrunchMode()
+  toggleEternityMode()
+  toggleEternityMode()
+  toggleEternityMode()
+  toggleRealityMode()
+  toggleRealityMode()
+  toggleRealityMode()
+  toggleRealityMode()
   updateCheckBoxes()
   loadAutoBuyerSettings()
 
@@ -910,6 +925,7 @@ function transformSaveToDecimal() {
   player.epmultCost = new Decimal(player.epmultCost)
   player.epmult = new Decimal(player.epmult)
   player.eternityBuyer.limit = new Decimal(player.eternityBuyer.limit)
+  player.realityBuyer.rm = new Decimal(player.realityBuyer.rm)
   player.eternityChallGoal = new Decimal(player.eternityChallGoal)
   player.replicanti.amount = new Decimal(player.replicanti.amount)
 
@@ -954,6 +970,8 @@ function loadAutoBuyerSettings() {
   document.getElementById("prioritySac").value = player.autoSacrifice.priority
   document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
   document.getElementById("priority13").value = player.eternityBuyer.limit
+  document.getElementById("priority14").value = player.realityBuyer.rm
+  document.getElementById("priority15").value = player.realityBuyer.glyph
 
 }
 

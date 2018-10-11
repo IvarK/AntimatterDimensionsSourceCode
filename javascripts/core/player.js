@@ -248,6 +248,7 @@ var player = {
   infMultBuyer: false,
   autoCrunchMode: "amount",
   autoEternityMode: "amount",
+  autoRealityMode: "amount",
   respec: false,
   eternityBuyer: {
     limit: new Decimal(0),
@@ -276,6 +277,11 @@ var player = {
   realities: 0,
   thisReality: 0,
   bestReality: 999999999999,
+  realityBuyer: {
+    rm: new Decimal(0),
+    glyph: 0,
+    isOn: false
+  },
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {

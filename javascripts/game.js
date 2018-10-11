@@ -905,6 +905,22 @@ function toggleEternityMode() {
     }
 }
 
+function toggleRealityMode() {
+    if (player.autoRealityMode == "rm") {
+        player.autoRealityMode = "glyph"
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: glyph level"
+    } else if (player.autoRealityMode == "glyph"){
+        player.autoRealityMode = "either"
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: either"
+    } else if (player.autoRealityMode == "either"){
+        player.autoRealityMode = "both"
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: both"
+    } else {
+        player.autoRealityMode = "rm"
+        document.getElementById("togglerealitymode").textContent = "Auto reality mode: reality machines"
+    }
+}
+
 buyAutobuyer = function(id) {
     if (player.infinityPoints.lt(player.autobuyers[id].cost)) return false;
     if (player.autobuyers[id].bulk >= 1e100) return false;
@@ -1347,6 +1363,10 @@ function updateAutobuyers() {
         document.getElementById("autoBuyerEter").style.display = "none"
     }
 
+    if (!player.reality.upg.includes(25)) {
+        document.getElementById("autoBuyerReality").style.display = "none"
+    }
+
     if (player.infinityUpgrades.includes("autoBuyerUpgrade")) {
         document.getElementById("interval1").textContent = "Current interval: " + (player.autobuyers[0].interval/2000).toFixed(2) + " seconds"
         document.getElementById("interval2").textContent = "Current interval: " + (player.autobuyers[1].interval/2000).toFixed(2) + " seconds"
@@ -1443,6 +1463,7 @@ function updateAutobuyers() {
 
     player.autoSacrifice.isOn = document.getElementById("13ison").checked
     player.eternityBuyer.isOn = document.getElementById("eternityison").checked
+    player.realityBuyer.isOn = document.getElementById("realityison").checked
     priorityOrder()
 }
 
@@ -1596,6 +1617,9 @@ function updatePriorities() {
     player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
     const eterValue = fromValue(document.getElementById("priority13").value)
     if (!isNaN(eterValue)) player.eternityBuyer.limit = eterValue
+    const realityValue1 = fromValue(document.getElementById("priority14").value)
+    if (!isNaN(realityValue1)) player.realityBuyer.rm = realityValue1
+    player.realityBuyer.glyph = parseInt(document.getElementById("priority15").value)
 
     priorityOrder()
 }
@@ -1610,6 +1634,7 @@ function updateCheckBoxes() {
     if (player.autoSacrifice.isOn) document.getElementById("13ison").checked = "true"
     else document.getElementById("13ison").checked = ""
     document.getElementById("eternityison").checked = player.eternityBuyer.isOn
+    document.getElementById("realityison").checked = player.realityBuyer.isOn
 
 }
 
@@ -1623,6 +1648,7 @@ function toggleAutoBuyers() {
     }
     player.autoSacrifice.isOn = !bool
     player.eternityBuyer.isOn = !bool
+    player.realityBuyer.isOn = !bool
     updateCheckBoxes()
     updateAutobuyers()
 }
@@ -2360,6 +2386,9 @@ setInterval(function() {
     if (player.eternities >= 80) document.getElementById("replauto3").style.visibility = "visible"
     else document.getElementById("replauto3").style.visibility = "hidden"
     if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
+    if (player.reality.upg.includes(25)) {
+        document.getElementById("autoBuyerReality").style.display = "inline-block"
+    }
 
 	
 	// EC goal IP text
@@ -2467,6 +2496,10 @@ setInterval(function() {
         document.getElementById("toggleeternitymode").style.display = "none"
         document.getElementById("epmultbuyer").style.display = "none"
     }
+
+    if (player.reality.upg.includes(25)) document.getElementById("togglerealitymode").style.display = "inline-block"
+    else document.getElementById("togglerealitymode").style.display = "none"
+
 
     updateRealityUpgrades()
 
@@ -3479,6 +3512,18 @@ function autoBuyerTick() {
         } else {
             if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
         }   
+    }
+
+    if (player.reality.upg.includes(25) && player.realityBuyer.isOn ) {
+        if (player.autoRealityMode == "rm") {
+            if (gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
+        } else if (player.autoRealityMode == "glyph") {
+            if (gainedGlyphLevel() >= player.realityBuyer.glyph) reality(false, false, true)
+        } else if (player.autoRealityMode == "either") {
+            if (gainedGlyphLevel() >= player.realityBuyer.glyph || gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
+        } else if (player.autoRealityMode == "both") {
+            if (gainedGlyphLevel() >= player.realityBuyer.glyph && gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
+        }
     }
 
     if (player.autobuyers[11]%1 !== 0) {

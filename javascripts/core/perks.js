@@ -76,20 +76,21 @@ function buyPerk(id, cost) {
   if (hasPerk(id) || !hasConnectedPerk(id)) return false
 
   player.reality.perks.push(id);
-  if (isAchSkipPerk(id)) {
-    achSkipPerkCount++;
-  }
+  Perks.updateAchSkipCount();
   player.reality.pp -= cost
   document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
 }
 
-function isAchSkipPerk(id) {
-  return id >= 41 && id <= 49 || id >= 410 && id <= 413;
+class Perks {
+  static updateAchSkipCount() {
+    Perks.achSkipCount = player.reality.perks
+      .filter(perk => Perks.isAchSkipPerk(perk))
+      .length;
+  }
+
+  static isAchSkipPerk(id) {
+    return id >= 41 && id <= 49 || id >= 410 && id <= 413;
+  }
 }
 
-let achSkipPerkCount = 0;
-function updateAchSkipPerkCount() {
-  achSkipPerkCount = player.reality.perks
-    .filter(perk => isAchSkipPerk(perk))
-    .length;
-}
+Perks.achSkipCount = 0;

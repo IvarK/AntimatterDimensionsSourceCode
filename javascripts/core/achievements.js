@@ -357,36 +357,42 @@ function isAchEnabled(name) {
   const achId = parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
-  if (row <= achSkipPerkCount) return true;
+  if (row <= Perks.achSkipCount) return true;
   const currentSeconds = player.thisReality / 1000;
   return timeRequiredForAchievement(achId) <= currentSeconds;
+}
+
+function timeForAllAchievements() {
+  if (Perks.achSkipCount === TOTAL_PRE_REALITY_ACH_ROWS) {
+    return 0;
+  }
+  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - Perks.achSkipCount);
 }
 
 function nextAchIn() {
   updateRealityAchievementModifiers();
   let currentSeconds = player.thisReality / 1000;
-  if (currentSeconds > realityAchievementModifiers.secondsForAllAchs) return 0;
+  if (currentSeconds > timeForAllAchievements()) return 0;
   const baseAchTime = realityAchievementModifiers.baseAchTime;
   const rowModifier = realityAchievementModifiers.rowModifier;
-  for (let achrow = 1; achrow < 14; achrow++) {
-    if (player.reality.perks.includes(parseInt("4" + achrow))) currentSeconds += (baseAchTime + (achrow - 7) * rowModifier) * 8
-  }
-
   let timeReq = 0;
+
   let row = 1;
-  while (currentSeconds > timeReq) {
-    timeReq += (baseAchTime + ((row - 7) * rowModifier)) * 8;
-    row++
+  function achTime() {
+    return baseAchTime + ((row - 7) * rowModifier);
   }
-  row--;
-  timeReq -= (baseAchTime + ((row - 7) * rowModifier)) * 8;
-
-  let col = 1;
-  while (currentSeconds > timeReq) {
-    timeReq += (baseAchTime + ((row - 7) * rowModifier));
-    col++
+  function rowTime() {
+    return achTime() * ACH_PER_ROW;
   }
 
+  while (currentSeconds > timeReq + rowTime()) {
+    timeReq += rowTime();
+    row++;
+  }
+
+  while (currentSeconds > timeReq) {
+    timeReq += achTime();
+  }
   return (timeReq - currentSeconds) * 1000
 }
 
@@ -397,12 +403,12 @@ function lockedString(name) {
   if (achId > 140 || isNaN(achId))
     return "";
   const row = Math.floor(achId / 10);
-  if (row <= achSkipPerkCount) return "";
+  if (row <= Perks.achSkipCount) return String.empty;
   const currentSeconds = player.thisReality / 1000;
   const remainingTime =  timeRequiredForAchievement(achId) - currentSeconds;
 
   if (remainingTime < 0)
-    return "";
+    return String.empty;
   else if (remainingTime < 60)
     return "\n\n(Locked: " + remainingTime.toFixed(0) + " seconds)";
   else if (remainingTime < 3600)
@@ -419,20 +425,28 @@ function timeRequiredForAchievement(achId) {
   const rowModifier = realityAchievementModifiers.rowModifier;
 
   const row = Math.floor(achId / 10);
-  const perkAdjustedRow = Math.clamp(row - achSkipPerkCount, 1, row);
+  const perkAdjustedRow = Math.clamp(row - Perks.achSkipCount, 1, row);
   const previousRowCount = perkAdjustedRow - 1;
-  const previousRowsAchCount = previousRowCount * 8;
-  // Unoptimized version
-  // const achTime = row => baseAchTime + (row - 7) * rowModifier;
-  // previousRowsTime = 0;
-  // for (let i = 1; i < row; i++) {
-  //   previousRowsTime += achTime(i) * 8
-  // }
-  const previousRowsTime = previousRowsAchCount * (baseAchTime + (previousRowCount - 13) * rowModifier / 2);
+  const previousRowsTime = totalAchRowTime(previousRowCount);
   const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;
   const column = achId % 10;
   const currentRowTime = currentRowAchTime * column;
   return previousRowsTime + currentRowTime;
+}
+
+// Total time required for a row count if we go from the first perk-adjusted row
+function totalAchRowTime(rowCount) {
+  updateRealityAchievementModifiers();
+  const baseAchTime = realityAchievementModifiers.baseAchTime;
+  const rowModifier = realityAchievementModifiers.rowModifier;
+  const achCount = rowCount * ACH_PER_ROW;
+  // Unoptimized version
+  // const achTime = row => baseAchTime + (row - 7) * rowModifier;
+  // totalTime = 0;
+  // for (let i = 1; i < row; i++) {
+  //   totalTime += achTime(i) * 8
+  // }
+  return achCount * (baseAchTime + (rowCount - 13) * rowModifier / 2);
 }
 
 let realityAchievementModifiers = {
@@ -442,9 +456,12 @@ let realityAchievementModifiers = {
   secondsForAllAchs: -1
 };
 
+const SECONDS_IN_DAY = TimeSpan.fromDays(1).totalSeconds;
 const DAYS_FOR_ALL_ACHS = 2;
-const SECONDS_IN_DAY = 60 * 60 * 24;
 const DEFAULT_SECONDS_FOR_ALL_ACHS = SECONDS_IN_DAY * DAYS_FOR_ALL_ACHS;
+const ACH_PER_ROW = 8;
+const TOTAL_PRE_REALITY_ACH_ROWS = 13;
+const TOTAL_PRE_REALITY_ACHS = TOTAL_PRE_REALITY_ACH_ROWS * ACH_PER_ROW;
 
 // TODO: further optimization:
 // pre-generate ach times on reality
@@ -457,7 +474,7 @@ function updateRealityAchievementModifiers() {
   realityAchievementModifiers = {
     realities: player.realities,
     // how much it takes for row 7 achievement to get
-    baseAchTime: secondsForAllAchs / 104,
+    baseAchTime: secondsForAllAchs / TOTAL_PRE_REALITY_ACHS,
     rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
     secondsForAllAchs: secondsForAllAchs
   };

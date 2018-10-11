@@ -44,51 +44,53 @@ var formatPostBreak = false;
 const inflog = Math.log10(Number.MAX_VALUE)
 function formatValue(notation, value, places, placesUnder1000) {
     if ((value <= Number.MAX_VALUE || formatPostBreak || (player.break && (player.currentChallenge == "" || !new Decimal(Number.MAX_VALUE).equals(player.challengeTarget)) )) && (value >= 1000)) {
-        if (value instanceof Decimal) {
-           var power = value.e
-           var matissa = value.mantissa
-        } else {
-            var matissa = value / Math.pow(10, Math.floor(Math.log10(value)));
-            var power = Math.floor(Math.log10(value));
-        }
-        if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
-            matissa = matissa.toFixed(places)
-            if (matissa >= 10) {
-                matissa /= 10;
+      let power, mantissa;
+      if (value instanceof Decimal) {
+         power = value.e
+         mantissa = value.mantissa
+      } else {
+          mantissa = value / Math.pow(10, Math.floor(Math.log10(value)));
+          power = Math.floor(Math.log10(value));
+      }
+      const commas = player.options.commas;
+      if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
+            mantissa = mantissa.toFixed(places)
+            if (mantissa >= 10) {
+                mantissa /= 10;
                 power++;
             }
-            if (power > 100000  && !player.options.commas) return (matissa + "e" + formatValue(notation, power, 3, 3))
-            if (power > 100000  && player.options.commas) return (matissa + "e" + power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            return (matissa + "e" + power);
+            if (power > 100000  && !commas) return (mantissa + "e" + formatValue(notation, power, 3, 3))
+            if (power > 100000  && commas) return (mantissa + "e" + power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            return (mantissa + "e" + power);
         }
         if (notation === "Infinity") {
             const pow = Decimal.log10(value)
             if (pow / inflog < 1000) var infPlaces = 4
             else var infPlaces = 3
-            if (player.options.commas) return (pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"."+(pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[1]+"∞"
+            if (commas) return (pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"."+(pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[1]+"∞"
             else return (pow / inflog).toFixed(Math.max(infPlaces, places))+"∞"
         }
         if (notation !== undefined && (notation.includes("engineering") || notation.includes("Engineering"))) pow = power - (power % 3)
         else pow = power
-        if (power > 100000  && !player.options.commas) pow = formatValue(notation, pow, 3, 3)
-        if (power > 100000  && player.options.commas) pow = pow.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (power > 100000  && !commas) pow = formatValue(notation, pow, 3, 3)
+        if (power > 100000  && commas) pow = pow.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         if (notation === "Logarithm") {
-            if (power > 100000  && !player.options.commas) return "ee"+Math.log10(Decimal.log10(value)).toFixed(3)
-            if (power > 100000  && player.options.commas) return "e"+Decimal.log10(value).toFixed(places).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (power > 100000  && !commas) return "ee"+Math.log10(Decimal.log10(value)).toFixed(3)
+            if (power > 100000  && commas) return "e"+Decimal.log10(value).toFixed(places).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             else return "e"+Decimal.log10(value).toFixed(Math.max(places, 1))
         }
 
         if (notation === "Brackets") {
-          var table = [")", "[", "{", "]", "(", "}"];
-          var log6 = Math.LN10 / Math.log(6) * Decimal.log10(value);
-          var wholePartOfLog = Math.floor(log6);
-          var decimalPartOfLog = log6 - wholePartOfLog;
+          let table = [")", "[", "{", "]", "(", "}"];
+          let log6 = Math.LN10 / Math.log(6) * Decimal.log10(value);
+          let wholePartOfLog = Math.floor(log6);
+          let decimalPartOfLog = log6 - wholePartOfLog;
           //Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
-          var decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
-          var string = "";
+          let decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
+          let string = "";
           while (wholePartOfLog >= 6) {
-            var remainder = wholePartOfLog % 6;
+            let remainder = wholePartOfLog % 6;
             wholePartOfLog -= remainder;
             wholePartOfLog /= 6;
             string = table[remainder] + string;
@@ -99,28 +101,28 @@ function formatValue(notation, value, places, placesUnder1000) {
           return string;
         }
 
-        matissa = (matissa * Decimal.pow(10, power % 3)).toFixed(places)
-        if (matissa >= 1000) {
-            matissa /= 1000;
+        mantissa = (mantissa * Decimal.pow(10, power % 3)).toFixed(places)
+        if (mantissa >= 1000) {
+            mantissa /= 1000;
             power++;
         }
 
         if (notation === "Standard" || notation === "Mixed scientific") {
-            if (power <= 303) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-            else return matissa + " " + getAbbreviation(power);
+            if (power <= 303) return mantissa + " " + FormatList[(power - (power % 3)) / 3];
+            else return mantissa + " " + getAbbreviation(power);
         } else if (notation === "Mixed engineering") {
-            if (power <= 33) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-            else return (matissa + "e" + pow);
+            if (power <= 33) return mantissa + " " + FormatList[(power - (power % 3)) / 3];
+            else return (mantissa + "e" + pow);
         } else if (notation === "Engineering") {
-            return (matissa + "e" + pow);
+            return (mantissa + "e" + pow);
         } else if (notation === "Letters") {
-            return matissa + letter(power,'abcdefghijklmnopqrstuvwxyz');
+            return mantissa + letter(power,'abcdefghijklmnopqrstuvwxyz');
         } else if (notation === "Cancer") {
-            return matissa + letter(power,['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡'])
+            return mantissa + letter(power,['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡'])
         }
 
         else {
-            if (power > 100000  && player.options.commas) power = power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            if (power > 100000  && commas) power = power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             return "1337 H4CK3R"
         }
     } else if (value < 1000) {
@@ -158,32 +160,41 @@ shortenWithCurrentNotation = function(value, places, placesUnder1000) {
     return formatValue(Notation.current().name, value, places, placesUnder1000);
 };
 
-function timeDisplay(time, decimals = true) {
-  if (time <= 10000 && decimals) return (time/1000).toFixed(3) + " seconds"
-  time = Decimal.floor(time / 1000)
-
-
-
-  if (time >= 31536000) {
-      return Decimal.floor(time / 31536000) + ((Decimal.floor(time / 31536000).eq(1)) ? " year, " : " years, ") + Decimal.floor((time % 31536000) / 86400) + ((Decimal.floor((time % 31536000) / 86400).eq(1)) ? " day, " : " days, ") + Decimal.floor((time % 86400) / 3600) + ((Decimal.floor((time % 86400) / 3600).eq(1)) ? " hour, " : " hours, ") + Decimal.floor((time % 3600) / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute, and " : " minutes, and ") + Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
-  } else if (time >= 86400) {
-      return Decimal.floor(time / 86400) + ((Decimal.floor((time % 31536000) / 86400).eq(1)) ? " day, " : " days, ")  + Decimal.floor((time % 86400) / 3600) + ((Decimal.floor((time % 86400) / 3600).eq(1)) ? " hour, " : " hours, ") + Decimal.floor((time % 3600) / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute, and " : " minutes, and ") + Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
-  } else if (time >= 3600) {
-      return Decimal.floor(time / 3600) + ((Decimal.floor((time % 86400) / 3600).eq(1)) ? " hour, " : " hours, ") + Decimal.floor((time % 3600) / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute, and " : " minutes, and ") + Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
-  } else if (time >= 60) {
-      return Decimal.floor(time / 60) + ((Decimal.floor((time % 3600) / 60).eq(1)) ? " minute and " : " minutes and ") + Decimal.floor(time % 60) + " seconds"
-  } else return Decimal.floor(time % 60) + ((Decimal.floor(time % 60).eq(1)) ? " second" : " seconds")
-}
-
-function preformat(int) {
-  if (int.toString().length == 1) return "0"+int
-  else return int
-}
-
-function timeDisplayShort(time) {
-  if (time <= 10000) return (time/1000).toFixed(3) + " seconds"
-  if (time <= 60000) return (time/1000).toFixed(2) + " seconds"
-  time = Decimal.floor(time / 1000)
-  return preformat(Decimal.floor((time) / 3600)) + ":" + preformat(Decimal.floor((time % 3600) / 60)) + ":" + preformat(Decimal.floor(time % 60))
-
+function timeDisplay(ms) {
+  const ts = TimeSpan.fromMilliseconds(ms);
+  const parts = [];
+  function addCheckedComponent(value, name) {
+    if (value === 0) {
+      return;
+    }
+    addComponent(value, name);
   }
+  function addComponent(value, name) {
+    parts.push(value === 1 ? `${value} ${name}` : `${value} ${name}s`);
+  }
+  addCheckedComponent(ts.years, "year");
+  addCheckedComponent(ts.days, "day");
+  addCheckedComponent(ts.hours, "hour");
+  addCheckedComponent(ts.minutes, "minute");
+  addComponent(ts.seconds, "second");
+  // Join with commas and 'and' in the end.
+  return [parts.slice(0, -1).join(', '), parts.slice(-1)[0]].join(parts.length < 2 ? '' : ' and ');
+}
+
+function timeDisplayShort(ms) {
+  const ts = TimeSpan.fromMilliseconds(ms);
+  const totalSeconds = ts.totalSeconds;
+  if (totalSeconds <= 10) {
+    return `${totalSeconds.toFixed(3)} seconds`;
+  }
+  else if (totalSeconds <= 60) {
+    return `${totalSeconds.toFixed(2)} seconds`;
+  }
+  else {
+    return `${format(ts.hours)}:${format(ts.minutes)}:${format(ts.seconds)}`;
+  }
+  function format(value) {
+    const s = value.toString();
+    return s.length === 1 ? "0" + s : s;
+  }
+}

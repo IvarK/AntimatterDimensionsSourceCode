@@ -2506,7 +2506,7 @@ setInterval(function() {
     if (player.realities > 0 && nextAchIn() > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
     else document.getElementById("nextAchAt").textContent = ""
 
-    var totalAchTime = 60000 * 24 * DAYS_FOR_ALL_ACHS * 60 * Math.pow(0.9, Math.max(player.realities-1, 0));
+    const totalAchTime = timeForAllAchievements() * 1000;
     if (player.reality.perks.includes(413) || player.realities == 0)
       $("#timeForAchievements").text("")
     else

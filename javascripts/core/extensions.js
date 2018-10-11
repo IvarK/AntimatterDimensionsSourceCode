@@ -46,3 +46,5 @@ function copyToClipboardAndNotify(str) {
 function safeCall(fn) {
     if (fn) fn();
 }
+
+String.empty = "";

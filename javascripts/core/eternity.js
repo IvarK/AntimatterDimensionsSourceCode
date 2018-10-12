@@ -5,7 +5,9 @@ function eternity(force, auto) {
     if (!force && !auto && !askEternityConfirmation()) {
         return false;
     }
-    if (player.currentEternityChall === "eterc4" && player.infinitied > 16 - (ECTimesCompleted("eterc4") * 4)) return false;
+    if (player.currentEternityChall === "eterc4" && player.infinitied > Math.max(16 - (ECTimesCompleted("eterc4") * 4), 0)) {
+        return false;
+    }
     if (force) player.currentEternityChall = "";
     if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false;
     if (player.thisEternity < player.bestEternity && !force) {

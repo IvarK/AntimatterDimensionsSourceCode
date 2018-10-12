@@ -67,8 +67,9 @@ document.getElementById("tickSpeed").onclick = function () {
 
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return false;
-  const mult = getTickSpeedMultiplier();
   let money = new Decimal(player.money);
+  if (money.eq(0)) return false;
+  const mult = getTickSpeedMultiplier();
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
   let tickSpeedMultDecrease = player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);

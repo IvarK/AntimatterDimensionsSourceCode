@@ -406,6 +406,8 @@ const costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), n
 
 function buyManyDimensionAutobuyer(tier, bulk) {
   if (!canBuyDimension(tier)) return false;
+  let money = new Decimal(player.money);
+  if (money.eq(0)) return false;
   const dimension = new DimensionStats(tier);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
@@ -462,7 +464,6 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       x--;
     }
   } else {
-    let money = new Decimal(player.money);
     let cost = new Decimal(dimension.cost);
     let amount = new Decimal(dimension.amount);
     let bought = dimension.bought;

@@ -552,6 +552,7 @@ function buyRealityUpg(id) {
     $("#whupg2").show()
   }
   updateRealityUpgrades()
+  updateWormholeUpgrades()
   return true
 }
 

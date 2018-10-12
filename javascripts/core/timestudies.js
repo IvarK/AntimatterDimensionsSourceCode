@@ -165,6 +165,7 @@ function buyDilationStudy(name, cost) {
         }
         if (name === 6) {
             showTab("reality")
+            showRealityTab("glyphstab");
         }
         player.dilation.studies.push(name)
         if (name !== 6) player.timestudy.theorem -= cost

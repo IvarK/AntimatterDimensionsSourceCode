@@ -82,7 +82,6 @@ function eternity(force, auto) {
     player.sacrificed = new Decimal(0);
     player.challenges= (player.eternities >= 2 && isAchEnabled("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities >= 2) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";
-    player.infinityPoints = new Decimal(0);
     player.infinitied = 0;
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
@@ -150,8 +149,10 @@ function eternity(force, auto) {
 
     updateAutobuyers();
     if (player.reality.perks.includes(53)) player.infinityPoints = new Decimal(2e15);
-    if (isAchEnabled("r104")) player.infinityPoints = new Decimal(2e25);
-    if (player.reality.perks.includes(54)) player.infinityPoints = new Decimal(2e130);
+    resetInfinityPoints();
+    if (isAchEnabled("r104")) {
+        player.infinityPoints = player.infinityPoints.max(2e25);
+    }
     resetInfDimensions();
     updateChallenges();
     updateChallengeTimes();
@@ -265,4 +266,11 @@ function askEternityConfirmation() {
     let message = "Eternity will reset everything except achievements and challenge records. " +
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
+}
+
+function resetInfinityPoints() {
+  let ip = 0;
+  if (player.reality.perks.includes(54)) ip = 2e130;
+  else if (player.reality.perks.includes(53)) ip = 2e15;
+  player.infinityPoints = new Decimal(ip);
 }

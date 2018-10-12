@@ -191,7 +191,7 @@ function timeDisplayShort(ms) {
     return `${totalSeconds.toFixed(2)} seconds`;
   }
   else {
-    return `${format(ts.hours)}:${format(ts.minutes)}:${format(ts.seconds)}`;
+    return `${format(Math.floor(ts.totalHours))}:${format(ts.minutes)}:${format(ts.seconds)}`;
   }
   function format(value) {
     const s = value.toString();

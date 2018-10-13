@@ -308,7 +308,7 @@ function calculateOrbitParams() {
 	eccentricity = 0.5;
 	maxIter = 1000;
 	for (let k = 0; k < maxIter; k++)
-		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * (player.wormhole[0].duration / period))) - 1)
+		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * Math.min(0.9, player.wormhole[0].duration / period))) - 1)
 			
 	// Black hole size, calculated from orbit shape in order to give the right max boost
 	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(player.wormhole[0].power, -2));

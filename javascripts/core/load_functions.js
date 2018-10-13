@@ -521,7 +521,7 @@ if (player.version < 5) {
 
   clearOldAchieves()
 
-  document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
+  updateEpMultButton();
 
   for (var i=0; i<player.timestudy.studies.length; i++) {
       if (player.timestudy.studies[i] == 71 || player.timestudy.studies[i] == 81 || player.timestudy.studies[i] == 91 || player.timestudy.studies[i] == 101) {

@@ -100,7 +100,7 @@ dev.refundTimeDims = function() {
 dev.refundEPMult = function() {
     player.epmult = new Decimal(1)
     player.epmultCost = new Decimal(500)
-    document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
+    updateEpMultButton();
 }
 
 dev.refundDilStudies = function() {

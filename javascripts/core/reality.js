@@ -250,6 +250,7 @@ function reality(force, reset, auto) {
     updateAutomatorRows();
     updateAutomatorTree();
     drawPerkNetwork();
+    updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
     document.getElementById("eterc12div").innerHTML = document.getElementById("eterc12div").innerHTML.replace("1000x slower.", "1000x slower, wormholes and time glyph effects are disabled.")
 

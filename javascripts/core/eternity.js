@@ -148,11 +148,7 @@ function eternity(force, auto) {
     }
 
     updateAutobuyers();
-    if (player.reality.perks.includes(53)) player.infinityPoints = new Decimal(2e15);
-    resetInfinityPoints();
-    if (isAchEnabled("r104")) {
-        player.infinityPoints = player.infinityPoints.max(2e25);
-    }
+    resetInfinityPointsOnEternity();
     resetInfDimensions();
     updateChallenges();
     updateChallengeTimes();
@@ -269,6 +265,13 @@ function askEternityConfirmation() {
     let message = "Eternity will reset everything except achievements and challenge records. " +
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
+}
+
+function resetInfinityPointsOnEternity() {
+  resetInfinityPoints();
+  if (isAchEnabled("r104")) {
+    player.infinityPoints = player.infinityPoints.max(2e25);
+  }
 }
 
 function resetInfinityPoints() {

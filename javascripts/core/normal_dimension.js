@@ -4,7 +4,7 @@ function getDimensionFinalMultiplier(tier) {
 
   let multiplier = new Decimal(player[name + 'Pow']);
 
-  if (player.currentEternityChall === "eterc11") return player.infinityPower.pow(7).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1));
+  if (player.currentEternityChall === "eterc11") return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1));
   if (player.currentChallenge === "challenge7") {
     if (tier === 4) multiplier = multiplier.pow(1.4);
     if (tier === 2) multiplier = multiplier.pow(1.7)

@@ -81,7 +81,7 @@ function DimensionPower(tier) {
       var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
       if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
       if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
-      replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
+      replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
 
       mult = mult.times(replmult)
   }

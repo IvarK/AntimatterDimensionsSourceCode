@@ -1107,10 +1107,7 @@ function gainedInfinityPoints() {
     if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime/100+1)*Math.pow(player.thisInfinityTime/100+1, 0.11)))
     if (isAchEnabled("r141")) ret = ret.times(4)
     if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000).max(1))
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "infinity" && glyph.effects.ipgain !== undefined) ret = ret.times(glyph.effects.ipgain)
-    }
+    ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("infinityipgain")));
     return ret.floor()
 }
 
@@ -1126,10 +1123,7 @@ function gainedEternityPoints() {
     if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
     else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
     else if (player.timestudy.studies.includes(123)) ret = ret.times(study123)
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "time" && glyph.effects.eternity !== undefined) ret = ret.times(glyph.effects.eternity)
-    }
+    ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
 
     if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
 
@@ -1149,11 +1143,7 @@ function percentToNextRealityMachine() {
 
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
-    var replPow = 0.4
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
-    }
+    var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
     var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
     if (player.reality.upg.includes(18)) ret *= Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1)
     if (round) ret = Math.round(ret)
@@ -1164,11 +1154,7 @@ function gainedGlyphLevel(round) {
 }
 
 function percentToNextGlyphLevel() {
-    var replPow = 0.4
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
-    }
+    var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
     var ret = gainedGlyphLevel(false)
     var retOffset = 0;
     if (Math.round(ret) > ret) {
@@ -1801,10 +1787,7 @@ function gainedInfinities() {
     if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
     if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
     if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "infinity" && glyph.effects.infmult !== undefined) infGain *= glyph.effects.infmult
-    }
+    infGain *= Math.max(1, getAdjustedGlyphEffect("infinityinfmult"));
     if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
 
     if (player.currentEternityChall == "eterc4") {
@@ -2179,11 +2162,7 @@ function updateInfPower() {
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
     else {
-        var conversionRate = 7
-        for (i in player.reality.glyphs.active) {
-          var glyph = player.reality.glyphs.active[i]
-          if (glyph.type == "infinity" && glyph.effects.rate !== undefined) conversionRate += glyph.effects.rate
-        }
+        var conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
         document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(conversionRate).max(1))
     }
     if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
@@ -2577,13 +2556,8 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
   if (player.currentEternityChall === "eterc12") {
     return 1/1000;
   }
-  if (takeGlyphsIntoAccount) {
-    for (i in player.reality.glyphs.active) {
-      var glyph = player.reality.glyphs.active[i]
-      if (glyph.type == "time" && glyph.effects.speed !== undefined)
-        factor *= glyph.effects.speed
-    }
-  }
+  if (takeGlyphsIntoAccount)
+    factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   
   if (player.wormhole[0] !== undefined) {
     if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
@@ -2749,10 +2723,8 @@ function gameLoop(diff) {
     let gain;
     var tickmult = 1.33;
     if (player.timestudy.studies.includes(171)) tickmult = 1.25;
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i];
-        if (glyph.type == "time" && glyph.effects.freeTickMult !== undefined) tickmult = 1+(tickmult-1)*glyph.effects.freeTickMult;
-    }
+    if (getAdjustedGlyphEffect("timefreeTickMult") != 0)
+      tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
     if (player.timeShards.gt(0)) {
         gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(tickmult))
         player.totalTickGained += gain
@@ -2932,10 +2904,7 @@ function gameLoop(diff) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "dilation" && glyph.effects.TTgen !== undefined) player.timestudy.theorem += glyph.effects.TTgen*diff/1000
-    }
+    player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
 
 
 
@@ -3253,11 +3222,7 @@ function gameLoop(diff) {
   // Tooltip for reality button stating more detailed RM and glyph level info
   let nextRMText = gainedRealityMachines() < 100 ? "Next RM gained at " + shortenDimensions(new Decimal("1e" + Math.ceil(4000*(1 + Math.log(parseInt(gainedRealityMachines().toFixed()) + 1)/Math.log(1000))))) + "<br><br>" : "";
   let EPFactor = Math.sqrt(player.eternityPoints.e / 4000);
-  let replPow = 0.4
-  for (i in player.reality.glyphs.active) {
-    let glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "replication" && glyph.effects.glyphlevel !== undefined) replPow += glyph.effects.glyphlevel
-  }
+  let replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
   let replFactor = Math.pow(player.replicanti.amount.e, replPow) / Math.sqrt(100000 / Math.sqrt(4000));
   let DTFactor = Math.pow(player.dilation.dilatedTime.log10(), 1.3) / Math.sqrt(100000 / Math.sqrt(4000));
   if (player.dilation.dilatedTime.exponent == 0)

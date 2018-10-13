@@ -42,10 +42,8 @@ function getTimeDimensionPower(tier) {
     ret = new Decimal(0)
   }
 
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "time" && glyph.effects.pow !== undefined) ret = ret.pow(glyph.effects.pow)
-  }
+  ret = ret.pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")))
+  
 
   if (player.dilation.active) {
     ret = Decimal.pow(10, Math.pow(ret.log10(), 0.75))

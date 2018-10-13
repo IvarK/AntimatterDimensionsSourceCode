@@ -78,7 +78,7 @@ Vue.component('statistics-stats-tab', {
   },
   methods: {
     timeDisplay: function(time) {
-      return detailedTimeDisplay(time);
+      return timeDisplay(time);
     },
     formatAmount: function(value) {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

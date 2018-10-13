@@ -2503,7 +2503,7 @@ setInterval(function() {
     else $("#realitybtn").hide()
 
     updateAchievements()
-    if (player.realities > 0 && nextAchIn() > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplay(nextAchIn(), false)
+    if (player.realities > 0 && nextAchIn() > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplayNoDecimals(nextAchIn())
     else document.getElementById("nextAchAt").textContent = ""
 
     const totalAchTime = timeForAllAchievements() * 1000;

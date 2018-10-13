@@ -162,6 +162,14 @@ shortenWithCurrentNotation = function(value, places, placesUnder1000) {
 
 function timeDisplay(ms) {
   const ts = TimeSpan.fromMilliseconds(ms);
+  if (ts.totalSeconds > 10) {
+    return timeDisplayNoDecimals(ms);
+  }
+  return (ts.totalSeconds).toFixed(3) + " seconds";
+}
+
+function timeDisplayNoDecimals(ms) {
+  const ts = TimeSpan.fromMilliseconds(ms);
   const parts = [];
   function addCheckedComponent(value, name) {
     if (value === 0) {
@@ -179,14 +187,6 @@ function timeDisplay(ms) {
   addComponent(ts.seconds, "second");
   // Join with commas and 'and' in the end.
   return [parts.slice(0, -1).join(', '), parts.slice(-1)[0]].join(parts.length < 2 ? '' : ' and ');
-}
-
-function detailedTimeDisplay(ms) {
-  const ts = TimeSpan.fromMilliseconds(ms);
-  if (ts.totalSeconds > 10) {
-    return timeDisplay(ms);
-  }
-  return (ts.totalSeconds).toFixed(3) + " seconds";
 }
 
 function timeDisplayShort(ms) {

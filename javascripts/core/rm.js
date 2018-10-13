@@ -245,23 +245,29 @@ function getTotalEffect(effectKey) {
   for (let i = 0; i < activeGlyphs.length; i++) {
     let currGlyph = activeGlyphs[i];
     if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
-      if (totalEffect == 0)
+      if (totalEffect == 0) {
         totalEffect = currGlyph.effects[effect];
+      }
       else {  // Combine the effects appropriately (some are additive)
-        if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain")
+        if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
           totalEffect += currGlyph.effects[effect];
-        else if (effectKey === "powermult") // This is a Decimal
+        }
+        else if (effectKey === "powermult") { // This is a Decimal
           totalEffect = totalEffect.times(currGlyph.effects[effect]);
-        else
+        }
+        else {
           totalEffect *= currGlyph.effects[effect];
+        }
       }
     }
   }
   
-  if (effectKey === "powermult" && totalEffect == 0)
+  if (effectKey === "powermult" && totalEffect == 0) {
     return new Decimal(0)
-  else
+  }
+  else {
     return totalEffect
+  }
 }
 
 function recalculateAllGlyphs() {
@@ -304,14 +310,16 @@ let isGlyphSoftcapActive;
 function getDesc(effectKey, x, inTooltip) {
   let spanPrefix = ""
   let spanSuffix = "</span>"
-  if (inTooltip)  // Always color tooltips NUMBERCOLOR, only color total effects if capped
+  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
     spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+  }
   else if ((effectKey === "powermult" && !x.equals(getTotalEffect(effectKey))) || (effectKey !== "powermult" && x != getTotalEffect(effectKey))) {
     spanPrefix = "<span style='color:"+CAPPED_EFFECT_COLOR+"'>"
     isGlyphSoftcapActive = true;
   }
-  else
+  else {
     spanPrefix = "<span>"
+  }
   
   
   const EFFECT_DESCRIPTIONS = {
@@ -361,10 +369,12 @@ function getDesc(effectKey, x, inTooltip) {
     powerbuy10: "Multiplier from \"Buy 10\" x" + spanPrefix + x.toFixed(2) + spanSuffix
   }
 
-  if (inTooltip)  // Always color tooltips NUMBERCOLOR, only color total effects if capped
+  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
     return EFFECT_DESCRIPTIONS[effectKey]
-  else
+  }
+  else {
     return EFFECT_DESCRIPTIONS_SHORT[effectKey]
+  }
 }
 
 function getGlyphTooltip(glyph) {
@@ -437,11 +447,13 @@ function generateGlyphTable() {
   let activeEffectText = "";
   for (let i = 0; i < orderedEffectList.length; i++) {
     let currEffect = orderedEffectList[i];
-    if (allActiveEffects[currEffect] != undefined)
+    if (allActiveEffects[currEffect] != undefined) {
       activeEffectText += "<br>" + getDesc(currEffect, allActiveEffects[currEffect], false);
+    }
   }
-  if (isGlyphSoftcapActive)
+  if (isGlyphSoftcapActive) {
     activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
+  }
   activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
   $("#activeGlyphs").html(activeEffectText)
   updateTickSpeed();
@@ -471,8 +483,9 @@ function getActiveGlyphEffects() {
   for (let i = 0; i < orderedEffectList.length; i++) {
     let effect = orderedEffectList[i]
     let effectTotal = getAdjustedGlyphEffect(effect);
-    if ((effect === "powermult" && !effectTotal.equals(new Decimal(0))) || (effect !== "powermult" && effectTotal != 0))
+    if ((effect === "powermult" && !effectTotal.equals(new Decimal(0))) || (effect !== "powermult" && effectTotal != 0)) {
       allEffects[effect] = getAdjustedGlyphEffect(effect)
+    }
   }
   return allEffects;
 }

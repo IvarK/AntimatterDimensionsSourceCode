@@ -534,7 +534,7 @@ function buyInfinityUpgrade(name, cost) {
 }
 
 document.getElementById("infiMult").onclick = function() {
-    if (player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)) {
+    if (player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost) && player.infMultCost.lte("1e6000000")) {
         player.infinityPoints = player.infinityPoints.minus(player.infMultCost)
         player.infMult = player.infMult.times(2);
         player.autoIP = player.autoIP.times(2);
@@ -543,6 +543,10 @@ document.getElementById("infiMult").onclick = function() {
         document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
         if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = player.autobuyers[11].priority.times(2);
         if (player.autoCrunchMode == "amount") document.getElementById("priority12").value = formatValue("Scientific", player.autobuyers[11].priority, 2, 0);
+    }
+    else if (player.infMultCost.gt("1e6000000")) {
+      document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>(Capped at " +shortenCosts(new Decimal("1e6000000"))+ " IP)"
+      document.getElementById("infiMult").className = "infinistorebtnlocked"
     }
 }
 
@@ -726,7 +730,6 @@ document.getElementById("offlineProd").onclick = function() {
 
 function updateInfCosts() {
 
-    document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
     if (document.getElementById("replicantis").style.display == "block" && document.getElementById("infinity").style.display == "block") {
         if (player.replicanti.chance < 1) document.getElementById("replicantichance").innerHTML = "Replicate chance: "+Math.round(player.replicanti.chance*100)+"%<br>+"+1+"% Costs: "+shortenCosts(player.replicanti.chanceCost)+" IP"
         else document.getElementById("replicantichance").textContent = "Replicate chance: "+Math.round(player.replicanti.chance*100)+"%"
@@ -2556,8 +2559,9 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
   if (player.currentEternityChall === "eterc12") {
     return 1/1000;
   }
-  if (takeGlyphsIntoAccount)
+  if (takeGlyphsIntoAccount) {
     factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
+  }
   
   if (player.wormhole[0] !== undefined) {
     if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
@@ -2723,8 +2727,9 @@ function gameLoop(diff) {
     let gain;
     var tickmult = 1.33;
     if (player.timestudy.studies.includes(171)) tickmult = 1.25;
-    if (getAdjustedGlyphEffect("timefreeTickMult") != 0)
+    if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
       tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
+    }
     if (player.timeShards.gt(0)) {
         gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(tickmult))
         player.totalTickGained += gain
@@ -2773,8 +2778,8 @@ function gameLoop(diff) {
     replicantiLoop(diff)
 
 
-    if (player.infMultBuyer) {
-        if (player.infMultCost.gte("1e3000000")) var dif = Math.floor((player.infinityPoints.e - player.infMultCost.e) / 10) + 1;
+    if (player.infMultBuyer && player.infMultCost.lte("1e6000000")) {
+        if (player.infMultCost.gte("1e3000000")) var dif = Math.floor((Math.min(player.infinityPoints.e, 6000000) - player.infMultCost.e) / 10) + 1;
         else var dif = player.infinityPoints.e - player.infMultCost.e + 1
         if (dif > 0) {
             if (player.infMultCost.lt("1e3000000")) {
@@ -2790,6 +2795,12 @@ function gameLoop(diff) {
             if (player.autoCrunchMode == "amount") document.getElementById("priority12").value = player.autobuyers[11].priority
         }
     }
+    else if (player.infMultCost.gte("1e6000000")) {
+      document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>(Capped at " +shortenCosts(new Decimal("1e6000000"))+ " IP)"
+      document.getElementById("infiMult").className = "infinistorebtnlocked"
+    }
+    else
+      document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
 
     if (player.reality.epmultbuyer) buyMaxEPMult();
 
@@ -2948,7 +2959,7 @@ function gameLoop(diff) {
         else document.getElementById("infi43").className = "infinistorebtnlocked"
         if (player.infinityUpgrades.includes("skipReset3") && player.infinityPoints.gte(300)) document.getElementById("infi44").className = "infinistorebtn4"
         else document.getElementById("infi44").className = "infinistorebtnlocked"
-        if (player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)) {
+        if (player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost) && player.infMultCost.lte("1e6000000")) {
             document.getElementById("infiMult").className = "infinimultbtn"
         } else document.getElementById("infiMult").className = "infinistorebtnlocked"
 

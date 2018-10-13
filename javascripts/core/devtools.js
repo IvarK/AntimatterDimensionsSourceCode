@@ -404,8 +404,9 @@ dev.updateTestSave = function() {
 // Still WIP
 dev.showProductionBreakdown = function() {
   let NDComponent = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
+  }
   let tickComponent = player.tickspeed.reciprocal().pow(8);
   let NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
   let tickPercent = 100 - NDPercent;
@@ -426,14 +427,13 @@ dev.showProductionBreakdown = function() {
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   
-  let IC4pow = 1;
-  if (player.challenges.includes("postc4"))
-    IC4pow = 1.05;
+  IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
   let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
   let DBComponent = getDimensionBoostPower().pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(player[TIER_NAMES[i] + 'Bought'] / 10));
+  }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);
   if (player.timestudy.studies.includes(71)) sacrificeComponent = sacrificeComponent.times(calcTotalSacrificeBoost().pow(0.25).min("1e210000")).pow(7);
@@ -449,11 +449,13 @@ dev.showProductionBreakdown = function() {
   replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
   
   let totalIDMults = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     totalIDMults = totalIDMults.times(DimensionPower(i));
+  }
   let boughtIDComponent = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     boughtIDComponent = boughtIDComponent.times(player["infinityDimension" + i].power);
+  }
   let replicantiComponent = replmult.pow(8);
   let TSmultToIDComponent = new Decimal(1);
   if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))
@@ -462,11 +464,13 @@ dev.showProductionBreakdown = function() {
   let IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
   
   let totalTDMults = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     totalTDMults = totalTDMults.times(getTimeDimensionPower(i));
+  }
   let boughtTDComponent = new Decimal(1);
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 8; i++) {
     boughtTDComponent = boughtTDComponent.times(player["timeDimension" + i].power);
+  }
   let tickspeedToTDComponent = isAchEnabled("r105") ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);
   if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))

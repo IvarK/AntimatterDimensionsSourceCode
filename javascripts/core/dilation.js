@@ -119,8 +119,9 @@ function updateDilationUpgradeCosts() {
 
 function getFreeGalaxyMult() {
   let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-  if (getAdjustedGlyphEffect("dilationgalaxyThreshold") != 0)
+  if (getAdjustedGlyphEffect("dilationgalaxyThreshold") != 0) {
     thresholdMult *= getAdjustedGlyphEffect("dilationgalaxyThreshold")
+  }
   thresholdMult += 1.35;
   return thresholdMult;
 }

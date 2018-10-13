@@ -353,7 +353,7 @@ function studiesUntil(id) {
 function studyPath(mode, args) {
     if (!(mode === 'none' || mode === 'all')) return false;
     if (args === undefined) args = [];
-    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); })
+    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
     let row = 0;
     let master = [];
     let locks = [0, 0, 0];
@@ -403,12 +403,11 @@ function studyPath(mode, args) {
             }
             if (locks[0] === 0) {
                 let temp = [];
-                let options = ['nd', 'id', 'td'];
+                let options = ['nd', 'id', 'td', 'normal', 'infinity', 'time'];
                 for (let k = 0; k < args.length; k++) {
                     for (let i = 70; i <= 100; i += 10) {
                         for (let j = 1; j <= 3; j++) {
-
-                            if (args[k] === i + j || args[k] === options[j - 1]) temp.push(j);
+                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j*2 - 1]) temp.push(j);
                         }
                     }
                 }

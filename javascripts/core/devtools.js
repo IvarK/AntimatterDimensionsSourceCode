@@ -211,8 +211,13 @@ dev.respecPerks = function() {
     drawPerkNetwork()
 }
 
+function isDevEnvironment() {
+  const href = window.location.href;
+  return href.split("//")[1].length > 20 || href.includes("127.0.0.1");
+}
+
 dev.updateTestSave = function() {
-    if (!(window.location.href.split("//")[1].length > 20)) return false
+    if (!isDevEnvironment()) return false
     if (player.options.testVersion === undefined) {
         player.options.testVersion = 1;
         player.realTimePlayed *= 100;

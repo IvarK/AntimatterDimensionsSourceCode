@@ -2799,9 +2799,10 @@ function gameLoop(diff) {
       document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>(Capped at " +shortenCosts(new Decimal("1e6000000"))+ " IP)"
       document.getElementById("infiMult").className = "infinistorebtnlocked"
     }
-    else
+    else {
       document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
-
+    }
+    
     if (player.reality.epmultbuyer) buyMaxEPMult();
 
 	// Text on Eternity button

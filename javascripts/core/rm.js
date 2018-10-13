@@ -212,7 +212,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
 }
 
 const glyphEffectSoftcaps = {
-  replicationglyphlevel: (value) {
+  replicationglyphlevel(value) {
     return value > 0.15 ? 0.15 + 0.2 * (value - 0.15) : value;
   }
 };

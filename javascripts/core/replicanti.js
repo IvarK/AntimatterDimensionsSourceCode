@@ -147,10 +147,7 @@ function getReplicantiInterval(noMod) {
     if (player.timestudy.studies.includes(133) || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[1])
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replication" && glyph.effects.speed !== undefined) interval = interval / glyph.effects.speed
-    }
+    interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
     if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE) && !noMod) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
     if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
@@ -171,10 +168,7 @@ function replicantiLoop(diff) {
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult *= 10
     if (player.timestudy.studies.includes(213)) intervalMult /= 20
     if (player.reality.rebuyables[2] > 0) intervalMult /= Math.pow(3, player.reality.rebuyables[1])
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replication" && glyph.effects.speed !== undefined) intervalMult = intervalMult / glyph.effects.speed
-    }
+    intervalMult = intervalMult / getAdjustedGlyphEffect("replicationspeed");
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) intervalMult /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult = Math.max(intervalMult * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), intervalMult)
     if (player.reality.upg.includes(6)) intervalMult /= 1+(player.replicanti.galaxies/50)
@@ -244,10 +238,7 @@ function replicantiLoop(diff) {
     var replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount, 1)), 2)
     if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
     if (player.timestudy.studies.includes(102))replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies, 150))
-    for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replication" && glyph.effects.pow !== undefined) replmult = replmult.pow(glyph.effects.pow)
-    }
+    replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
     document.getElementById("replicantimult").textContent = shorten(replmult.max(1))
 
 }

@@ -26,7 +26,7 @@ Vue.component('statistics-stats-tab', {
             <div v-else>You haven\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
             <div v-if="hasBestEternity">Your fastest Eternity is in {{ timeDisplay(player.bestEternity) }}.</div>\
             <div v-else>You have no fastest eternity<span v-if="realityUnlocked"> this reality</span>.</div>\
-            <div>You have spent {{ timeDisplay(player.thisEternity) }} in this Eternity.</div>\
+            <div>You have spent {{ thisEternity }} in this Eternity.</div>\
             <br>\
         </div>\
         <div v-if="realityUnlocked">\
@@ -74,6 +74,12 @@ Vue.component('statistics-stats-tab', {
     },
     infoScale: function() {
       return estimateMatterScale(this.player.money);
+    },
+    thisEternity: function() {
+      if (this.player.currentEternityChall === "eterc12") {
+        return detailedTimeDisplay(this.player.thisEternity);
+      }
+      return timeDisplay(this.player.thisEternity);
     }
   },
   methods: {

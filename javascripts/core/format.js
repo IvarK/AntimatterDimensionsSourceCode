@@ -181,6 +181,14 @@ function timeDisplay(ms) {
   return [parts.slice(0, -1).join(', '), parts.slice(-1)[0]].join(parts.length < 2 ? '' : ' and ');
 }
 
+function detailedTimeDisplay(ms) {
+  const ts = TimeSpan.fromMilliseconds(ms);
+  if (ts.totalSeconds > 10) {
+    return timeDisplay(ms);
+  }
+  return (ts.totalSeconds).toFixed(3) + " seconds";
+}
+
 function timeDisplayShort(ms) {
   const ts = TimeSpan.fromMilliseconds(ms);
   const totalSeconds = ts.totalSeconds;

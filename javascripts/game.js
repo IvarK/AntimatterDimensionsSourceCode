@@ -3877,6 +3877,9 @@ function init() {
     document.getElementById('dimensionsbtn').onclick = function () {
         showTab('dimensions');
     };
+    document.getElementById('dimensionsbtnvue').onclick = function () {
+        showTab('dimensionsvue');
+    };
     document.getElementById('optionsbtn').onclick = function () {
         showTab('options');
     };

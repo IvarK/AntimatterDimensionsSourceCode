@@ -64,6 +64,10 @@ function tryShowtab(tab) {
     Tab.statistics.show();
     return true;
   }
+  if (tab === 'dimensionsvue') {
+    Tab.dimensions.show();
+    return true;
+  }
   ui.view.tab.current = undefined;
   return false;
 }
@@ -74,8 +78,9 @@ var Tab = function Tab(component) {
   };
   this.isCurrent = function() {
     return ui.view.tab.current === component;
-  }
+  };
 };
 
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
+Tab.dimensions = new Tab("dimensions-tab");

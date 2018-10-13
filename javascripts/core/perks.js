@@ -77,6 +77,7 @@ function buyPerk(id, cost) {
 
   player.reality.perks.push(id);
   Perks.updateAchSkipCount();
+  updateAutomatorRows();
   player.reality.pp -= cost
   document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
 }

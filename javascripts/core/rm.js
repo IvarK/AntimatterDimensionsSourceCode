@@ -211,54 +211,20 @@ function getGlyphEffectStrength(effectKey, level, strength) {
   }
 }
 
+const glyphEffectSoftcaps = {
+  replicationglyphlevel: (value) {
+    return value > 0.15 ? 0.15 + 0.2 * (value - 0.15) : value;
+  }
+};
+
 // Used for applying glyph effect softcaps if applicable
 function getAdjustedGlyphEffect(effectKey) {
   let value = getTotalEffect(effectKey);
-  switch (effectKey) {
-    case "powerpow":
-      return value
-    case "powermult":
-      return value
-    case "powerdimboost":
-      return value
-    case "powerbuy10":
-      return value
-    case "infinitypow":
-      return value
-    case "infinityrate":
-      return value
-    case "infinityipgain":
-      return value
-    case "infinityinfmult":
-      return value
-    case "replicationspeed":
-      return value
-    case "replicationpow":
-      return value
-    case "replicationdtgain":
-      return value
-    case "replicationglyphlevel":
-      return value
-    case "dilationdilationMult":
-      return value
-    case "dilationgalaxyThreshold":
-      return value
-    case "dilationTTgen":
-      return value
-    case "dilationpow":
-      return value
-    case "timepow":
-      return value
-    case "timespeed":
-      return value
-    case "timefreeTickMult":
-      return value
-    case "timeeternity":
-      return value
-    default:
-      console.log("Unknown effect: \"" + effectKey + "\"")
-      return value
+  if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
+    const softcap = glyphEffectSoftcaps[effectKey];
+    return softcap(value);
   }
+  return value;
 }
 
 // Combines all specified glyph effects (without softcaps), reduces some boilerplate
@@ -333,7 +299,7 @@ function getRarity(x) {
  */
 
 const NUMBERCOLOR = "#85ff85"
-const CAPPED_EFFECT_COLOR = "#ffc800"
+const CAPPED_EFFECT_COLOR = "#ff8000"
 let isGlyphSoftcapActive;
 function getDesc(effectKey, x, inTooltip) {
   let spanPrefix = ""

@@ -36,7 +36,8 @@ function getTimeDimensionPower(tier) {
     ret = ret.times(replmult.pow(0.1))
   }
 
-  if (player.reality.upg.includes(22)) ret = ret.times(Decimal.pow(8,  Math.pow(player.thisReality / (1000 * 60 * 60 * 24), 0.4)))
+  let days = player.thisReality / (1000 * 60 * 60 * 24);
+  if (player.reality.upg.includes(22)) ret = ret.times(Decimal.pow(5,  Math.pow(1 + 2*Math.log10(days + 1), 1.5)))
 
   if (ret.lt(0)) {
     ret = new Decimal(0)

@@ -2724,19 +2724,22 @@ function gameLoop(diff) {
 
     if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
 
-    let gain;
     var tickmult = 1.33;
     if (player.timestudy.studies.includes(171)) tickmult = 1.25;
     if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
       tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
     }
+    // Threshold gets +1 after softcap, unaffected by glyphs
+    let freeTickSoftcap = 300000;
     if (player.timeShards.gt(0)) {
-        gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(tickmult))
-        player.totalTickGained += gain
-        player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
-        player.tickThreshold = new Decimal(1).times(tickmult).pow(player.totalTickGained)
-        document.getElementById("totaltickgained").textContent = "You've gained "+Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
-        updateTickSpeed();
+      let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
+      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(1+tickmult))) : uncapped;
+      let gain = Math.max(0, softcapped - player.totalTickGained);
+      player.totalTickGained += gain
+      player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
+      player.tickThreshold = player.totalTickGained > freeTickSoftcap ? new Decimal(tickmult).pow(freeTickSoftcap).times(new Decimal(1+tickmult).pow(softcapped-freeTickSoftcap)) : new Decimal(tickmult).pow(player.totalTickGained);
+      document.getElementById("totaltickgained").textContent = "You've gained "+Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
+      updateTickSpeed();
     }
 
     if (player.eternities == 0) {

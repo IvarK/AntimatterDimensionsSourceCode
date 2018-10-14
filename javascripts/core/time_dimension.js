@@ -19,7 +19,7 @@ function getTimeDimensionPower(tier) {
   if (player.timestudy.studies.includes(151)) ret = ret.times(1e4)
   if (player.timestudy.studies.includes(221)) ret = ret.times(Decimal.pow(1.0025, player.resets))
   if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(Math.max(Math.pow(calcTotalSacrificeBoost().log10(), 10), 1))
-  if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
+  if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1))
   if (ECTimesCompleted("eterc1") !== 0) ret = ret.times(Math.pow(Math.max(player.thisEternity*10, 0.9), 0.3+(ECTimesCompleted("eterc1")*0.05)))
   let ec10bonus = new Decimal(1)
   if (ECTimesCompleted("eterc10") !== 0) ec10bonus = new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002+1, 1))
@@ -36,16 +36,15 @@ function getTimeDimensionPower(tier) {
     ret = ret.times(replmult.pow(0.1))
   }
 
-  if (player.reality.upg.includes(22)) ret = ret.times(Decimal.pow(8,  Math.pow(player.thisReality / (1000 * 60 * 60 * 24), 0.4)))
+  let days = player.thisReality / (1000 * 60 * 60 * 24);
+  if (player.reality.upg.includes(22)) ret = ret.times(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(days + 1), 1.6)))
 
   if (ret.lt(0)) {
     ret = new Decimal(0)
   }
 
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "time" && glyph.effects.pow !== undefined) ret = ret.pow(glyph.effects.pow)
-  }
+  ret = ret.pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")))
+  
 
   if (player.dilation.active) {
     ret = Decimal.pow(10, Math.pow(ret.log10(), 0.75))

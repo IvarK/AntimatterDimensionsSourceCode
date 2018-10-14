@@ -125,8 +125,7 @@ function wormHoleLoop(diff, i) {
     E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
     r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
     theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
-    if (Math.tan(E0/2) < 0)
-      theta *= -1;
+    if (Math.tan(E0/2) < 0) theta *= -1;
     planet.radius = r;
     planet.angle = theta / (2*Math.PI);
 
@@ -182,10 +181,11 @@ function Dot(dotSize, dotType, r, theta) {
       disp.fillStyle = glow;
       disp.fillRect(0, 0, 400, 400);
     }
-    else if (!this.isInside || (player.wormhole[0].active && player.wormhole[1].active))  // Particle and planet
+    else if (!this.isInside || (player.wormhole[0].active && player.wormhole[1].active)) {  // Particle and planet
       disp.arc(x + 200, y + 200, this.size, 0, 2*Math.PI);
+    }
 		
-		if (this.isParticle)
+		if (this.isParticle) {
 			if (player.wormhole[0].active) {
         if (this.radius > bhSize) { // Trails outside wormhole
           let dist = Math.floor(127 * (this.radius - bhSize) / semimajorAxis);
@@ -196,52 +196,54 @@ function Dot(dotSize, dotType, r, theta) {
           disp.strokeStyle = "rgb(" + dist + ", 0, 0)";
         }
       }
-			else
-				disp.strokeStyle = "rgb(127, 127, 127)";
-		else if (this.isPlanet)
-			disp.strokeStyle = "rgb(0, 0, 255)";
-		else
-			disp.strokeStyle = "rgb(0, 0, 0)";
-    disp.stroke();
-		}
-		
-		// Move particles
-		this.update = function () {
-		if (this.isParticle) {
-			let particleSpeed = 0.05 * Math.min(Math.pow(Math.max(delta,2)/2, 3), 5);
-			if (player.wormhole[0].active) {
-				this.prevAngle = this.angle;
-				this.prevRadius = this.radius;
-			}
-      if (!this.isInside)
-        this.angle = (this.angle + 20*particleSpeed*Math.PI*Math.pow(this.radius, -1.5)) % 1;
-			this.radius /= 1 + 0.3*particleSpeed*Math.pow(this.radius / bhSize, -2);
-				
-			if (this.radius < 0.1*bhSize) // Particle fell in to the center
-				this.respawn();
-			else if (this.radius <= bhSize) // Particle is inside
-        this.isInside = true;
-      else
-				this.respawnTick = false;
-		}
-    
-    this.respawn = function () {
-      this.radius = getRandomRadius();
-      this.angle += Math.random();
-			this.respawnTick = true;
-      this.isInside = false;
+			else disp.strokeStyle = "rgb(127, 127, 127)";
     }
-	}
+		else if (this.isPlanet) disp.strokeStyle = "rgb(0, 0, 255)";
+		else disp.strokeStyle = "rgb(0, 0, 0)";
+    disp.stroke();
+  }
+		
+	// Move particles
+	this.update = function () {
+    if (this.isParticle) {
+      let particleSpeed = 0.05 * Math.min(Math.pow(Math.max(delta,2)/2, 3), 5);
+      if (player.wormhole[0].active) {
+        this.prevAngle = this.angle;
+        this.prevRadius = this.radius;
+      }
+      if (!this.isInside) this.angle = (this.angle + 20*particleSpeed*Math.PI*Math.pow(this.radius, -1.5)) % 1;
+      this.radius /= 1 + 0.3*particleSpeed*Math.pow(this.radius / bhSize, -2);
+				
+      if (this.radius < 0.1*bhSize) { // Particle fell in to the center
+        this.respawn();
+      }
+      else if (this.radius <= bhSize) { // Particle is inside
+        this.isInside = true;
+      }
+      else {
+        this.respawnTick = false;
+      }
+    }
+  }
+    
+  this.respawn = function () {
+    this.radius = getRandomRadius();
+    this.angle += Math.random();
+    this.respawnTick = true;
+    this.isInside = false;
+  }
 }
  
- // Code was originally written to use phase over a cycle of active+inactive time and would be really difficult to rewrite to use the current wormhole phase
- // Example on what this is: if the wormhole has intervals of 100+10 then this ranges from 0 to 110 and is active when less than 5 or more than 105
+// Code was originally written to use phase over a cycle of active+inactive time and would be really difficult to rewrite to use the current wormhole phase
+// Example on what this is: if the wormhole has intervals of 100+10 then this ranges from 0 to 110 and is active when less than 5 or more than 105
 function getTotalPhase() {
-	if (player.wormhole[0].active)
+	if (player.wormhole[0].active) {
 		return (player.wormhole[0].phase - player.wormhole[0].duration/2 + period) % period;
-	else
+  }
+	else {
 		return player.wormhole[0].phase + player.wormhole[0].duration/2;
- }
+  }
+}
 
 // Should only be run once on game load
 let particleList = [];
@@ -262,8 +264,9 @@ function initializeWormhole() {
 	// Particles (scaled to take the same range as the orbit)
 	particleList = [hole];
 	numParticles = 120;
-	for (let i = 0; i < numParticles; i++)
+	for (let i = 0; i < numParticles; i++) {
 		particleList.push(new Dot(planetSize / 3, 'particle', getRandomRadius(), Math.random()));
+  }
 	particleList.push(planet);
 }
 
@@ -279,7 +282,7 @@ function recalculateOrbit() {
 	// Do stuff to make sure the relative position of the planet stays about the same
 	totalPhase = currOrbitPos * period;
 	if (player.wormhole[0].active) {
-		
+    
 	}
 	else {
 		player.wormhole[0].phase = totalPhase - player.wormhole[0].duration/2;
@@ -295,20 +298,22 @@ function recalculateOrbit() {
 function E(eccentricity, M) {
     let E0 = M
     maxIter = 20;	// idk I hope 20 is enough to converge
-    for (let k = 0; k < maxIter; k++)
-        E0 = M + eccentricity * Math.sin(E0);
+    for (let k = 0; k < maxIter; k++) {
+      E0 = M + eccentricity * Math.sin(E0);
+    }
     return E0;
 }
 
 // Finds and sets orbital parameters so the wormhole active time approximately corresponds to time with >2x
 let activeThreshold = 2;
 function calculateOrbitParams() {
-    // Fixed-point iteration for eccentricity (I'm really hoping this always converges)
+  // Fixed-point iteration for eccentricity (I'm really hoping this always converges)
 	y = (1 - Math.pow(activeThreshold, -2)) / (1 - Math.pow(player.wormhole[0].power, -2));
 	eccentricity = 0.5;
 	maxIter = 1000;
-	for (let k = 0; k < maxIter; k++)
-		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * (player.wormhole[0].duration / period))) - 1)
+	for (let k = 0; k < maxIter; k++) {
+		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * Math.min(0.9, player.wormhole[0].duration / period))) - 1)
+  }
 			
 	// Black hole size, calculated from orbit shape in order to give the right max boost
 	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(player.wormhole[0].power, -2));

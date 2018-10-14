@@ -405,3 +405,113 @@ dev.updateTestSave = function() {
     player.options.testVersion = 20
   }
 }
+
+// Still WIP
+dev.showProductionBreakdown = function() {
+  let NDComponent = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
+  }
+  let tickComponent = player.tickspeed.reciprocal().pow(8);
+  let NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
+  let tickPercent = 100 - NDPercent;
+  
+  let totalTickspeedUpgrades = player.tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
+  let freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
+  let purchasedTickPercent = 100 - freeTickPercent;
+  
+  // Assumes >= 3 galaxies
+  let effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
+  let AGCount = player.galaxies
+  let RGCount = player.replicanti.galaxies
+  if (player.timestudy.studies.includes(133)) RGCount += player.replicanti.galaxies/2
+  if (player.timestudy.studies.includes(132)) RGCount += player.replicanti.galaxies*0.4
+  if (player.timestudy.studies.includes(225)) RGCount += Math.floor(player.replicanti.amount.e / 1000)
+  if (player.timestudy.studies.includes(226)) RGCount += Math.floor(player.replicanti.gal / 15)
+  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0)
+  let FGCount = player.dilation.freeGalaxies;
+  let totalCount = AGCount + RGCount + FGCount;
+  
+  IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
+  let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
+  let DBComponent = getDimensionBoostPower().pow(player.resets).pow(8).pow(IC4pow);
+  let buyTenComponent = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(player[TIER_NAMES[i] + 'Bought'] / 10));
+  }
+  buyTenComponent = buyTenComponent.pow(IC4pow);
+  let sacrificeComponent = new Decimal(1);
+  if (player.timestudy.studies.includes(71)) sacrificeComponent = sacrificeComponent.times(calcTotalSacrificeBoost().pow(0.25).min("1e210000")).pow(7);
+  if (player.timestudy.studies.includes(234)) sacrificeComponent = sacrificeComponent.times(calcTotalSacrificeBoost());
+  if (player.timestudy.studies.includes(214)) sacrificeComponent = sacrificeComponent.times((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1).min(new Decimal("1e125000"))));
+  sacrificeComponent = sacrificeComponent.pow(IC4pow);
+  let IC8Component = mult18.pow(6).pow(IC4pow);
+  let NDPowComponent = getAdjustedGlyphEffect("powerpow") == 0 ? 0 : (getAdjustedGlyphEffect("powerpow") - 1) / getAdjustedGlyphEffect("powerpow");
+  
+  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
+  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
+  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+  replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
+  
+  let totalIDMults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    totalIDMults = totalIDMults.times(DimensionPower(i));
+  }
+  let boughtIDComponent = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    boughtIDComponent = boughtIDComponent.times(player["infinityDimension" + i].power);
+  }
+  let replicantiComponent = replmult.pow(8);
+  let TSmultToIDComponent = new Decimal(1);
+  if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))
+  if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
+  let EU1Component = player.eternityPoints.plus(1).pow(8);
+  let IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
+  
+  let totalTDMults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    totalTDMults = totalTDMults.times(getTimeDimensionPower(i));
+  }
+  let boughtTDComponent = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    boughtTDComponent = boughtTDComponent.times(player["timeDimension" + i].power);
+  }
+  let tickspeedToTDComponent = isAchEnabled("r105") ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
+  let TSmultToTDComponent = new Decimal(1);
+  if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))
+  if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(calcTotalSacrificeBoost().pow(0.005).min(new Decimal("1e1300")))  
+  if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent.times(Decimal.pow(1.0025, player.resets)).pow(8)
+  if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent.times(Math.max(Math.pow(calcTotalSacrificeBoost().log10(), 10), 1))
+  let TDPowComponent = getAdjustedGlyphEffect("timepow") == 0 ? 0 : (getAdjustedGlyphEffect("timepow") - 1) / getAdjustedGlyphEffect("timepow");
+  
+  let productionText = ""
+  productionText += tickPercent.toFixed(2) + "% from tickspeed (" + totalTickspeedUpgrades.toFixed(0) + " upgrades + " + effectiveGalaxyCount.toFixed(2) + " effective galaxies)\n";
+  productionText += "  Tickspeed upgrades\n"
+  productionText += "    " + purchasedTickPercent.toFixed(2) + "% purchased\n"
+  productionText += "    " + freeTickPercent.toFixed(2) + "% from TDs\n"
+  productionText += "  Galaxies\n"
+  productionText += "    " + (100*AGCount/totalCount).toFixed(2) + "% Antimatter Galaxies\n"
+  productionText += "    " + (100*RGCount/totalCount).toFixed(2) + "% Replicanti Galaxies\n"
+  productionText += "    " + (100*FGCount/totalCount).toFixed(2) + "% Dilation Galaxies\n"
+  productionText += NDPercent.toFixed(2) + "% from Normal Dimensions\n";
+  productionText += "  " + (100*IDComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Infinity Dimensions\n"
+  productionText += "  " + (100*DBComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Dimension Boosts\n"
+  productionText += "  " + (100*buyTenComponent.log10()/NDComponent.log10()).toFixed(2) + "% from \"Buy 10\"\n"
+  productionText += "  " + (100*sacrificeComponent.log10()/NDComponent.log10()).toFixed(2) + "% from sacrifice\n"
+  productionText += "  " + (100*IC8Component.log10()/NDComponent.log10()).toFixed(2) + "% from IC8\n"
+  productionText += "  " + (100*NDPowComponent).toFixed(2) + "% from ND power glyphs\n"
+  productionText += "\nInfinity Dimension Multipliers:\n"
+  productionText += "  " + (100*boughtIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% purchased\n"
+  productionText += "  " + (100*replicantiComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from replicanti\n"
+  productionText += "  " + (100*TSmultToIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from time studies\n"
+  productionText += "  " + (100*EU1Component.log10()/totalIDMults.log10()).toFixed(2) + "% from EU1\n"
+  productionText += "  " + (100*IDPowComponent).toFixed(2) + "% from ID power glyphs\n"
+  productionText += "\nTime Dimension Multipliers:\n"
+  productionText += "  " + (100*boughtTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% purchased\n"
+  productionText += "  " + (100*tickspeedToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from tickspeed\n"
+  productionText += "  " + (player.dilation.upgrades.includes(5) ? 10*replicantiComponent.log10()/totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n"
+  productionText += "  " + (100*TSmultToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from other time studies\n"
+  productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
+  
+  console.log(productionText);
+}

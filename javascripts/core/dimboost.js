@@ -8,10 +8,7 @@ function getDimensionBoostPower() {
 
   if (isAchEnabled("r101")) ret *= 1.01
   if (isAchEnabled("r142")) ret *= 1.5
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "power" && glyph.effects.dimboost !== undefined) ret *= glyph.effects.dimboost
-  }
+  ret *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"))
   if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).max(1).times(ret)
   

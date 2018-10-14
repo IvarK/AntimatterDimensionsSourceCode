@@ -53,7 +53,7 @@ const powerEffects= ["pow", "mult", "dimboost", "buy10"]
 
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
-
+const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow", "powermult", "powerdimboost", "powerbuy10", "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity", "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed", "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
 
 
 function estimate_curve(iterations, moreThan) {
@@ -211,6 +211,65 @@ function getGlyphEffectStrength(effectKey, level, strength) {
   }
 }
 
+const glyphEffectSoftcaps = {
+  replicationglyphlevel(value) {
+    return value > 0.15 ? 0.15 + 0.2 * (value - 0.15) : value;
+  }
+};
+
+// Used for applying glyph effect softcaps if applicable
+function getAdjustedGlyphEffect(effectKey) {
+  let value = getTotalEffect(effectKey);
+  if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
+    const softcap = glyphEffectSoftcaps[effectKey];
+    return softcap(value);
+  }
+  return value;
+}
+
+// Combines all specified glyph effects (without softcaps), reduces some boilerplate
+function getTotalEffect(effectKey) {
+  // Separate an effect key into type and effect
+  let type = "";
+  let effect = ""
+  for (let i = 0; i < GLYPH_TYPES.length; i++) {
+    if (effectKey.substring(0, GLYPH_TYPES[i].length) === GLYPH_TYPES[i]) {
+      type = GLYPH_TYPES[i];
+      effect = effectKey.substring(GLYPH_TYPES[i].length);
+      break;
+    }
+  }
+  
+  let totalEffect = 0;
+  let activeGlyphs = player.reality.glyphs.active;
+  for (let i = 0; i < activeGlyphs.length; i++) {
+    let currGlyph = activeGlyphs[i];
+    if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
+      if (totalEffect == 0) {
+        totalEffect = currGlyph.effects[effect];
+      }
+      else {  // Combine the effects appropriately (some are additive)
+        if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
+          totalEffect += currGlyph.effects[effect];
+        }
+        else if (effectKey === "powermult") { // This is a Decimal
+          totalEffect = totalEffect.times(currGlyph.effects[effect]);
+        }
+        else {
+          totalEffect *= currGlyph.effects[effect];
+        }
+      }
+    }
+  }
+  
+  if (effectKey === "powermult" && totalEffect == 0) {
+    return new Decimal(0)
+  }
+  else {
+    return totalEffect
+  }
+}
+
 function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++)
     fixGlyph(player.reality.glyphs.active[i]);
@@ -246,9 +305,23 @@ function getRarity(x) {
  */
 
 const NUMBERCOLOR = "#85ff85"
-function getDesc(typeeffect, x, coloredNumber) {
-  let spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+const CAPPED_EFFECT_COLOR = "#ff8000"
+let isGlyphSoftcapActive;
+function getDesc(effectKey, x, inTooltip) {
+  let spanPrefix = ""
   let spanSuffix = "</span>"
+  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
+    spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+  }
+  else if ((effectKey === "powermult" && !x.equals(getTotalEffect(effectKey))) || (effectKey !== "powermult" && x != getTotalEffect(effectKey))) {
+    spanPrefix = "<span style='color:"+CAPPED_EFFECT_COLOR+"'>"
+    isGlyphSoftcapActive = true;
+  }
+  else {
+    spanPrefix = "<span>"
+  }
+  
+  
   const EFFECT_DESCRIPTIONS = {
     timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
@@ -274,32 +347,34 @@ function getDesc(typeeffect, x, coloredNumber) {
   
   // Used for total glyph effects, slightly reworded/shortened
   const EFFECT_DESCRIPTIONS_SHORT = {
-    timepow: "Time dimension multipliers ^" + x.toFixed(3),
-    timespeed: "Game runs x" + x.toFixed(3) + " faster",
-    timefreeTickMult: "Free tickspeed threshold multiplier x" + x.toFixed(3),
-    timeeternity: "EP gain x" + shortenDimensions(x),
-    dilationdilationMult: "DT gain x" + shortenDimensions(x),
-    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + x.toFixed(3),
-    dilationTTgen: "Generating " + (3600*x).toFixed(2) + " TT per hour",
-    dilationpow: "Normal dimension multipliers ^" + x.toFixed(3) + " while dilated",
-    replicationspeed: "Replication speed x" + shortenDimensions(x),
-    replicationpow: "Replicanti multiplier ^" + x.toFixed(3),
-    replicationdtgain: "DT gain from log10(replicanti) x" + x.toFixed(5),
-    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^(0.4 + " + x.toFixed(3) + ")",
-    infinitypow: "Infinity dimension multipliers ^" + x.toFixed(3),
-    infinityrate: "Infinity power conversion rate ^7 -> ^(7 + " + x.toFixed(2) + ")",
-    infinityipgain: "IP gain x" + shortenDimensions(x),
-    infinityinfmult: "Infinity stat gain x" + shortenDimensions(x),
-    powerpow: "Normal dimension multipliers ^" + x.toFixed(3),
-    powermult: "Normal dimension multipliers x" + shortenDimensions(x),
-    powerdimboost: "Dimension boost multiplier x" + x.toFixed(2),
-    powerbuy10: "Multiplier from \"Buy 10\" x" + x.toFixed(2)
+    timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timespeed: "Game runs x" + spanPrefix + x.toFixed(3) + spanSuffix + " faster",
+    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timeeternity: "EP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    dilationdilationMult: "DT gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    dilationTTgen: "Generating " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
+    dilationpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
+    replicationspeed: "Replication speed x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    replicationdtgain: "DT gain from log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
+    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
+    infinitypow: "Infinity dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    infinityrate: "Infinity power conversion rate ^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
+    infinityipgain: "IP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    infinityinfmult: "Infinity stat gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    powermult: "Normal dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerdimboost: "Dimension boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
+    powerbuy10: "Multiplier from \"Buy 10\" x" + spanPrefix + x.toFixed(2) + spanSuffix
   }
 
-  if (coloredNumber)  // Assuming non-colored number text will always be put in the total glyph box
-    return EFFECT_DESCRIPTIONS[typeeffect]
-  else
-    return EFFECT_DESCRIPTIONS_SHORT[typeeffect]
+  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
+    return EFFECT_DESCRIPTIONS[effectKey]
+  }
+  else {
+    return EFFECT_DESCRIPTIONS_SHORT[effectKey]
+  }
 }
 
 function getGlyphTooltip(glyph) {
@@ -367,14 +442,19 @@ function generateGlyphTable() {
   table.innerHTML = html
   
   // Update total effect box (order is specified for consistency
-  let allActiveEffects = getTotalGlyphEffects();
-  let effectOrder = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow", "powermult", "powerdimboost", "powerbuy10", "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity", "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed", "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
-  let activeEffectText = "Current Glyph Effects:<br>";
-  for (let i = 0; i < effectOrder.length; i++) {
-    let currEffect = effectOrder[i];
-    if (allActiveEffects[currEffect] != undefined)
+  isGlyphSoftcapActive = false;
+  let allActiveEffects = getActiveGlyphEffects();
+  let activeEffectText = "";
+  for (let i = 0; i < orderedEffectList.length; i++) {
+    let currEffect = orderedEffectList[i];
+    if (allActiveEffects[currEffect] != undefined) {
       activeEffectText += "<br>" + getDesc(currEffect, allActiveEffects[currEffect], false);
+    }
   }
+  if (isGlyphSoftcapActive) {
+    activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
+  }
+  activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
   $("#activeGlyphs").html(activeEffectText)
   updateTickSpeed();
 
@@ -398,24 +478,13 @@ function generateGlyphTable() {
   updateGlyphDescriptions()
 }
 
-function getTotalGlyphEffects() {
-  let activeGlyphs = player.reality.glyphs.active;
-  let allEffects = {};
-  for (let i = 0; i < activeGlyphs.length; i++) {
-    let currGlyph = activeGlyphs[i];
-    for (let effect in currGlyph.effects) {
-      uniqueEffect = currGlyph.type + effect;
-      if (currGlyph.effects.hasOwnProperty(effect))
-        if (allEffects[uniqueEffect] == undefined)
-          allEffects[uniqueEffect] = currGlyph.effects[effect];
-        else {  // Combine the effects appropriately (some are additive)
-          if (uniqueEffect === "replicationglyphlevel" || uniqueEffect === "dilationTTgen" || uniqueEffect === "infinityrate" || uniqueEffect === "replicationdtgain")
-            allEffects[uniqueEffect] += currGlyph.effects[effect];
-          else if (uniqueEffect === "powermult") // This is a Decimal
-            allEffects[uniqueEffect] = allEffects[uniqueEffect].times(currGlyph.effects[effect]);
-          else
-            allEffects[uniqueEffect] *= currGlyph.effects[effect];
-        }
+function getActiveGlyphEffects() {
+  allEffects = {};
+  for (let i = 0; i < orderedEffectList.length; i++) {
+    let effect = orderedEffectList[i]
+    let effectTotal = getAdjustedGlyphEffect(effect);
+    if ((effect === "powermult" && !effectTotal.equals(new Decimal(0))) || (effect !== "powermult" && effectTotal != 0)) {
+      allEffects[effect] = getAdjustedGlyphEffect(effect)
     }
   }
   return allEffects;
@@ -588,7 +657,7 @@ function updateRealityUpgrades() {
   $("#rupg5").html("You gain 5 times more infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Exponential bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(8,  Math.pow(player.thisReality / (1000 * 60 * 60 * 24), 0.4)))+"x<br>Cost: 100,000 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Exponential bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
 $(".tooltip").parent().mousemove(function(e) {

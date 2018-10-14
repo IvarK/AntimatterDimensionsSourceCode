@@ -436,6 +436,8 @@ function drawPerkNetwork() {
     {id: 62, label: "62", color: getNodeColor(62, 1), title: "Replicanti autobuyers work 3 times faster."}, //DONE
     {id: 63, label: "63", color: getNodeColor(63, 1), title: "Dilation autobuyers work 3 times faster."}, //DONE
     {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time dimension 5-8 unlocks."}, //DONE
+    {id: 65, label: "65", color: getNodeColor(65, 1), title: "Automatically unlock TT generation when you have 1e15 DT."}, //DONE
+    {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock reality at e4000 EP."}, //DONE
     {id: 71, label: "71", color: getNodeColor(71, 1), title: "3x replicanti doesn't require EC5."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
     {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this eternity."}, //DONE

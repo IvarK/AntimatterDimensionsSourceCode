@@ -119,9 +119,8 @@ function updateDilationUpgradeCosts() {
 
 function getFreeGalaxyMult() {
   let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "dilation" && glyph.effects.galaxyThreshold !== undefined) thresholdMult *= glyph.effects.galaxyThreshold
+  if (getAdjustedGlyphEffect("dilationgalaxyThreshold") != 0) {
+    thresholdMult *= getAdjustedGlyphEffect("dilationgalaxyThreshold")
   }
   thresholdMult += 1.35;
   return thresholdMult;
@@ -131,14 +130,8 @@ function getDilationGainPerSecond() {
   var ret = new Decimal(player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1]))
   if (isAchEnabled("r132")) ret = ret.times(Math.max(Math.pow(player.galaxies, 0.04), 1))
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "dilation" && glyph.effects.dilationMult !== undefined) ret = ret.times(glyph.effects.dilationMult)
-  }
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "replication" && glyph.effects.dtgain !== undefined) ret = ret.times(Math.max(player.replicanti.amount.e * glyph.effects.dtgain, 1))
-  }
+  ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
+  ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   return ret
 }
 

@@ -81,10 +81,7 @@ function DimensionPower(tier) {
       var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
       if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
       if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
-      for (i in player.reality.glyphs.active) {
-        var glyph = player.reality.glyphs.active[i]
-        if (glyph.type == "replication" && glyph.effects.pow !== undefined) replmult = replmult.pow(glyph.effects.pow)
-      }
+      replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
 
       mult = mult.times(replmult)
   }
@@ -123,10 +120,7 @@ function DimensionPower(tier) {
     }
   }
 
-  for (i in player.reality.glyphs.active) {
-    var glyph = player.reality.glyphs.active[i]
-    if (glyph.type == "infinity" && glyph.effects.pow !== undefined) mult = mult.pow(glyph.effects.pow)
-  }
+  mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")))
 
   return mult
 }

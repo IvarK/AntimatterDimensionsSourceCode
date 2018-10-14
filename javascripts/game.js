@@ -3277,7 +3277,11 @@ function gameLoop(diff) {
 			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
 		}
 	}
-	
+  
+  // Reality unlock and TTgen perk autobuy
+	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
+  
     player.lastUpdate = thisUpdate;
 }
 

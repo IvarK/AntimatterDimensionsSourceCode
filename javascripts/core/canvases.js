@@ -438,7 +438,9 @@ function drawPerkNetwork() {
     {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time dimension 5-8 unlocks."}, //DONE
     {id: 71, label: "71", color: getNodeColor(71, 1), title: "3x replicanti doesn't require EC5."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
-    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this eternity."}, //DONE
+    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this eternity." }, //DONE
+    {id: 74, label: "74", color: getNodeColor(74, 1), title: "EC2 requirement removed from study 181" }, //DONE
+    {id: 75, label: "75", color: getNodeColor(75, 1), title: "EC3 requirement removed from study 181" }, //DONE
     {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of eternity upgrades after first eternity of a reality."}, //DONE
     {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of eternity upgrades after first eternity of a reality."}, //DONE
     ]; 

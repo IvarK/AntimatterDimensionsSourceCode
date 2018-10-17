@@ -202,7 +202,7 @@ function canBuyStudy(name) {
   }
 
   if (name == 181) {
-      if ( (player.reality.perks.includes(4) || player.eternityChalls.eterc1 !== undefined) && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)) return true; else return false;
+      if ((player.reality.perks.includes(4) || player.eternityChalls.eterc1 !== undefined) && (player.eternityChalls.eterc2 !== undefined || player.reality.perks.includes(74)) && (player.eternityChalls.eterc3 !== undefined || player.reality.perks.includes(75)) && player.timestudy.studies.includes(171)) return true; else return false;
   }
   if (name == 201) if(player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)) return true; else return false
   if (name == 211) if(player.timestudy.studies.includes(191)) return true; else return false
@@ -407,14 +407,14 @@ function studyPath(mode, args) {
                 for (let k = 0; k < args.length; k++) {
                     for (let i = 70; i <= 100; i += 10) {
                         for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j*2 - 1]) temp.push(j);
+                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j+3]) temp.push(j);
                         }
                     }
                 }
                 if (temp.length === 0) break main;
                 locks[0] = temp[0];
                 temp = temp.filter(function (x) { if (x !== locks[0]) return x;});
-                if(temp.length > 0)locks[2] = temp[0];
+                if (temp.length > 0) locks[2] = temp[0];
             }
             master.push(row*10 + locks[0]);
             continue main;

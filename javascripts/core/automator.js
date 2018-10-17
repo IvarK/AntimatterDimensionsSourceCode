@@ -60,11 +60,15 @@ function automatorOnOff() {
 }
 
 function highlightcurrent() {
-  var row = automatorRows[automatorIdx]
-  var idx = $("#automator")[0].value.indexOf(row)
+    var row = automatorRows[automatorIdx];
+    console.log(automatorRows.slice(0, automatorIdx));
+    var idx = automatorRows.slice(0, automatorIdx).reduce(function (acc, x) {
+        return acc + x.length + 1;
+    }, 0);
+    
   if (idx >= 0) {
-    $("#automator")[0].focus()
-    $("#automator")[0].setSelectionRange(idx, idx + row.length)
+      $("#automator")[0].focus();
+      $("#automator")[0].setSelectionRange(idx, idx + row.length);
   }
 }
 

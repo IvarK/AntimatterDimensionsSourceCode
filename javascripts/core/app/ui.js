@@ -12,7 +12,10 @@ Vue.mixin({
     }
 });
 
-var uiInitialized = false;
+VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
+VTooltip.VTooltip.options.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+
+let uiInitialized = false;
 
 function initVue() {
     ui = new Vue({
@@ -50,9 +53,9 @@ function initVue() {
 
 initVue();
 
-var updateVue = function () {
+function updateVue() {
     ui.model.player = player;
-};
+}
 
 // small hack until Vue migration is complete
 function tryShowtab(tab) {
@@ -72,14 +75,19 @@ function tryShowtab(tab) {
   return false;
 }
 
-var Tab = function Tab(component) {
-  this.show = function() {
-    ui.view.tab.current = component;
-  };
-  this.isCurrent = function() {
-    return ui.view.tab.current === component;
-  };
-};
+class Tab {
+  constructor(component) {
+    this._component = component;
+  }
+
+  isCurrent() {
+    return ui.view.tab.current === this._component;
+  }
+
+  show() {
+    ui.view.tab.current = this._component;
+  }
+}
 
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");

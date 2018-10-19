@@ -1,5 +1,5 @@
 Vue.component('subtabbed-container', {
-  props: ['tabs', 'model'],
+  props: ['tabs', 'model', 'view'],
   data: function() {
     return {
       openedTab: this.tabs[0]
@@ -10,7 +10,7 @@ Vue.component('subtabbed-container', {
         <tr>\
             <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="openTab(tab)">{{ tab.name }}</td>\
         </tr>\
-        <component :is="openedTab.component" :model="model"></component>\
+        <component :is="openedTab.component" :model="model" :view="view"></component>\
     </div>',
   computed: {
     visibleTabs: function() {

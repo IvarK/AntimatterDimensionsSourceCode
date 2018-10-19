@@ -11,7 +11,6 @@ let kongEPMult = 1
 
 
 
-
 function showTab(tabName) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName.
     var tabs = document.getElementsByClassName('tab');
@@ -111,13 +110,15 @@ function sacrificeConf() {
 
 
 function updateDimensions() {
-    if (document.getElementById("antimatterdimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
-
+    if (document.getElementById("antimatterdimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block" || true) {
+        let view = ui.view.tab.dimensions.normal;
         for (let tier = 1; tier <= 8; ++tier) {
             var name = TIER_NAMES[tier];
             if (!canBuyDimension(tier) && document.getElementById(name + "Row").style.display !== "table-row") {
                 break;
             }
+            view.multiplier.splice(tier, 1, getDimensionFinalMultiplier(tier));
+            view.rateOfChange.splice(tier, 1, getDimensionRateOfChange(tier));
             document.getElementById(name + "D").childNodes[0].nodeValue = DISPLAY_NAMES[tier] + " Dimension x" + shortenMultiplier(getDimensionFinalMultiplier(tier));
             document.getElementById(name + "Amount").textContent = getDimensionDescription(tier);
         }
@@ -125,11 +126,13 @@ function updateDimensions() {
 
 
         for (let tier = 1; tier <= 8; ++tier) {
-            var name = TIER_NAMES[tier];
-            if (!canBuyDimension(tier)) {
+            const canBuy = canBuyDimension(tier);
+            view.availability.splice(tier, 1, canBuy);
+            if (!canBuy) {
                 break;
             }
 
+            var name = TIER_NAMES[tier];
             document.getElementById(name + "Row").style.display = "table-row";
             document.getElementById(name + "Row").style.visibility = "visible";
 
@@ -141,6 +144,13 @@ function updateDimensions() {
             document.getElementById("resetLabel").textContent = 'Dimension Shift ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
         }
         else document.getElementById("resetLabel").textContent = 'Dimension Boost ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
+
+        view = ui.view.tab.dimensions.normal.shift;
+        view.requirement.tier = shiftRequirement.tier;
+        view.requirement.amount = shiftRequirement.amount;
+        view.isBoost = player.currentChallenge === "challenge4"
+          ? shiftRequirement.tier === 6
+          : shiftRequirement.tier === 8;
 
         if (player.currentChallenge == "challenge4" ? player.resets > 1 : player.resets > 3) {
             document.getElementById("softReset").textContent = "Reset the game for a boost"
@@ -157,10 +167,16 @@ function updateDimensions() {
         galString += player.galaxies;
         if (extraGals > 0) galString += " + "+extraGals;
         if (player.dilation.freeGalaxies > 0) galString += " + "+player.dilation.freeGalaxies;
-        galString += "): requires " + getGalaxyRequirement()
+        const galaxyRequirement = getGalaxyRequirement();
+        galString += "): requires " + galaxyRequirement
         if (player.currentChallenge == "challenge4") galString +=  " Sixth Dimensions";
         else galString +=  " Eighth Dimensions";
         document.getElementById("secondResetLabel").textContent = galString;
+        view = ui.view.tab.dimensions.normal.galaxy;
+        view.type = GalaxyType.current();
+        view.extra = extraGals;
+        view.requirement.amount = galaxyRequirement;
+        view.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
     }
 
     if (canBuyTickSpeed() || player.currentEternityChall == "eterc9") {
@@ -1286,7 +1302,7 @@ function sacrifice(auto) {
 
 function sacrificeBtnClick() {
     if (player.resets < 5) return false
-    if (!document.getElementById("confirmation").checked) {
+    if (player.options.sacrificeConfirmation) {
         if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
             return false;
         }
@@ -1503,22 +1519,6 @@ function updateAutobuyers() {
     player.realityBuyer.isOn = document.getElementById("realityison").checked
     priorityOrder()
 }
-
-
-/*function loadAutoBuyers() {
-    for (var i=0; i<12; i++) {
-        if (player.autobuyers[i]%1 !== 0 ) {
-            switch(i) {
-                case 8: player.autobuyers[i].target = "buyTickSpeed()";
-                case 9: player.autobuyers[i].target = "document.getElementById('softReset').click";
-                case 10: player.autobuyers[i].target = "document.getElementById('secondSoftReset').click";
-                case 11: player.autobuyers[i].target = "document.getElementById('bigcrunch').click";
-                default: player.autobuyers[i].target = "buyOneDimension(" + i+1 + ")";
-            }
-        }
-    }
-
-}*/
 
 
 function autoBuyerArray() {
@@ -2168,11 +2168,13 @@ document.getElementById("ec12unl").onclick = function() {
     } else return false
 }
 
-document.getElementById("quickReset").onclick = function () {
+function quickReset() {
     if (player.resets == 0) player.resets--;
     else player.resets -= 2;
     softReset(1);
 }
+
+document.getElementById("quickReset").onclick = quickReset;
 
 
 function updateInfPower() {
@@ -2587,6 +2589,7 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
 }
 
 function gameLoop(diff) {
+    let view;
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
@@ -2894,21 +2897,25 @@ function gameLoop(diff) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
+    view = ui.view.tab.dimensions.normal;
     for (let tier = 1; tier <= 8; ++tier) {
-        var name = TIER_NAMES[tier];
-        if (player.currentChallenge != "challenge10" && player.currentChallenge != "postc1") {
-            document.getElementById(name).className = canAfford(player[name + 'Cost']) ? 'storebtn' : 'unavailablebtn';
-            document.getElementById(name + 'Max').className = canAfford(player[name + 'Cost'].times(10 - dimBought(tier))) ? 'storebtn' : 'unavailablebtn';
-        } else {
-            if (tier >= 3) {
-                document.getElementById(name).className = player[TIER_NAMES[tier-2] + 'Amount'].gte(player[name + 'Cost']) ? 'storebtn' : 'unavailablebtn';
-                document.getElementById(name + 'Max').className = player[TIER_NAMES[tier-2] + 'Amount'].gte(player[name + 'Cost'].times(10 - dimBought(tier))) ? 'storebtn' : 'unavailablebtn';
-            } else {
-                document.getElementById(name).className = canAfford(player[name + 'Cost']) ? 'storebtn' : 'unavailablebtn';
-                document.getElementById(name + 'Max').className = canAfford(player[name + 'Cost'].times(10 - dimBought(tier))) ? 'storebtn' : 'unavailablebtn';
-            }
-        }
-    }
+      const dimension = new DimensionStats(tier);
+      let canAffordSingle = false;
+      let canAffordUntil10 = false;
+      if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
+        const lowerTier = new DimensionStats(tier - 2);
+        canAffordSingle = lowerTier.amount.gte(dimension.cost);
+        canAffordUntil10 = lowerTier.amount.gte(dimension.costUntil10);
+      } else {
+        canAffordSingle = canAfford(dimension.cost);
+        canAffordUntil10 = canAfford(dimension.costUntil10);
+      }
+      const name = TIER_NAMES[tier];
+      document.getElementById(name).className = canAffordSingle ? 'storebtn' : 'unavailablebtn';
+      document.getElementById(name + 'Max').className = canAffordUntil10 ? 'storebtn' : 'unavailablebtn';
+      view.affordability.splice(tier, 1, canAffordSingle);
+      view.affordabilityUntil10.splice(tier, 1, canAffordUntil10);
+      }
     if (player.firstAmount.lt(1)) document.getElementById("first").className = 'storebtn';
 
     for (var tier = 1; tier < 9; tier++) {
@@ -3054,6 +3061,7 @@ function gameLoop(diff) {
 
     if (player.infinitied > 0) document.getElementById("sacrifice").style.display = "inline-block";
 
+    ui.view.tab.dimensions.normal.sacrifice.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
     if (player.eightAmount > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
     else document.getElementById("sacrifice").className = "unavailablebtn"
 
@@ -3222,6 +3230,7 @@ function gameLoop(diff) {
 
     document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(getNewInfReq()) + " antimatter to unlock a new Dimension."
 
+    ui.view.tab.dimensions.normal.sacrifice.boost = calcSacrificeBoost();
     document.getElementById("sacrifice").setAttribute('ach-tooltip', "Boosts 8th Dimension by " + shorten(calcSacrificeBoost()) + "x");
 
     document.getElementById("sacrifice").textContent = "Dimensional Sacrifice (" + shorten(calcSacrificeBoost())+"x)"
@@ -3590,7 +3599,7 @@ function autoBuyerTick() {
             if (player.eternities < 9 || player.autobuyers[10].bulk == 0) {
                 if (player.autobuyers[10].isOn && player.autobuyers[10].priority > player.galaxies) {
                     autoS = false;
-                    document.getElementById("secondSoftReset").click()
+                    secondSoftResetBtnClick();
                     player.autobuyers[10].ticks = 1;
                 }
             } else if (player.autobuyers[10].isOn && (Math.round(timer * 100))%(Math.round(player.autobuyers[10].bulk * 100)) == 0){

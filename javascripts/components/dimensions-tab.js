@@ -3,7 +3,7 @@ Vue.component('dimensions-tab', {
   data: function() {
     return {
       tabs: [
-        {name: "Dimensions", component: "statistics-stats-tab"},
+        {name: "Dimensions", component: "dimensions-normal"},
         {
           name: "Challenge records",
           component: "statistics-challenges",
@@ -41,7 +41,7 @@ Vue.component('dimensions-tab', {
     }
   },
   template:
-    '<tab-container id="statistics" style="color: black; font-size: 12px; font-family: Typewriter">\
-      <subtabbed-container class="tab-content" :tabs="tabs" :model="model"></subtabbed-container>\
+    '<tab-container>\
+      <subtabbed-container class="tab-content" :tabs="tabs" :model="model" :view="view"></subtabbed-container>\
     </tab-container>'
 });

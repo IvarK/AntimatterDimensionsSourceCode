@@ -10,15 +10,17 @@ function getGalaxyRequirement() {
   if (player.timestudy.studies.includes(42)) amount = 80 + ((player.galaxies) * 52);
   if (player.currentChallenge === "challenge4") amount = 99 + ((player.galaxies) * 90);
 
-  let galaxyCostScalingStart = getGalaxyCostScalingStart();
-  if (player.currentEternityChall === "eterc5") {
-      amount += Math.pow(player.galaxies, 2) + player.galaxies
+  let galaxyType = GalaxyType.current();
+
+  if (galaxyType === GalaxyType.distant) {
+    amount = Math.floor(amount * Math.pow(1.002, (player.galaxies-(799 + getGlyphSacEffect("power")))));
   }
-  else if ((player.galaxies) >= galaxyCostScalingStart) {
-      amount += Math.pow((player.galaxies)-(galaxyCostScalingStart-1),2)+(player.galaxies)-(galaxyCostScalingStart-1)
+  if (galaxyType === GalaxyType.remote && player.currentEternityChall === "eterc5") {
+    amount += Math.pow(player.galaxies, 2) + player.galaxies;
   }
-  if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
-      amount = Math.floor(amount * Math.pow(1.002, (player.galaxies-(799 + getGlyphSacEffect("power")))))
+  else if (galaxyType === GalaxyType.remote) {
+    const galaxyCostScalingStart = getGalaxyCostScalingStart();
+    amount += Math.pow((player.galaxies)-(galaxyCostScalingStart-1),2)+(player.galaxies)-(galaxyCostScalingStart-1);
   }
 
   if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
@@ -26,6 +28,21 @@ function getGalaxyRequirement() {
 
   return amount;
 }
+
+const GalaxyType = {
+  normal: "Antimatter Galaxies",
+  distant: "Distant Antimatter Galaxies",
+  remote: "Remote Antimatter Galaxies",
+  current: function() {
+    if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
+      return GalaxyType.distant;
+    }
+    if (player.currentEternityChall === "eterc5" || player.galaxies >= getGalaxyCostScalingStart()) {
+      return GalaxyType.remote;
+    }
+    return GalaxyType.normal;
+  }
+};
 
 function secondSoftResetBtnClick() {
   if (player.currentEternityChall === "eterc6") return;

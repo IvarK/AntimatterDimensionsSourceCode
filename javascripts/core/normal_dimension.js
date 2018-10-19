@@ -508,87 +508,47 @@ function canAfford(cost) {
   return ((cost.lt(new Decimal("1.79e308")) && !player.break) || player.break) && cost.lte(player.money);
 }
 
-document.getElementById("first").onclick = function() {
-  if (buyOneDimension(1)) {
-    // This achievement is granted only if the buy one button is pressed.
-    if (player.firstAmount >= 1e150) {
-      giveAchievement("There's no point in doing that");
+function buyOneDimensionBtnClick(tier) {
+  resetMatterOnBuy(tier);
+  if (tier === 1) {
+    if (buyOneDimension(1)) {
+      // This achievement is granted only if the buy one button is pressed.
+      if (player.firstAmount >= 1e150) {
+        giveAchievement("There's no point in doing that");
+      }
     }
-    if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
+    if (player.firstAmount.lt(1)) {
+      player.money = new Decimal("0");
+      player.firstAmount = player.firstAmount.plus(1);
+      player.firstBought += 1;
+      giveAchievement("You gotta start somewhere");
+    }
+    return;
   }
-  if (player.firstAmount.lt(1)) {
-    player.money = new Decimal("0");
-    player.firstAmount = player.firstAmount.plus(1);
-    player.firstBought += 1;
-    giveAchievement("You gotta start somewhere");
+  buyOneDimension(tier);
+}
+
+function buyManyDimensionsBtnClick(tier) {
+  resetMatterOnBuy(tier);
+  buyManyDimension(tier);
+}
+
+function resetMatterOnBuy(tier) {
+  function isInMatterChallenge() {
+    return player.currentChallenge === "challenge12" ||
+      player.currentChallenge === "postc1" ||
+      player.currentChallenge === "postc6";
   }
-};
+  if (tier < 5 && isInMatterChallenge() && player.matter.equals(0)) {
+    player.matter = new Decimal(1);
+  }
+}
 
-document.getElementById("second").onclick = function() {
-  buyOneDimension(2);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("third").onclick = function() {
-  buyOneDimension(3);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("fourth").onclick = function() {
-  buyOneDimension(4);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("fifth").onclick = function() {
-  buyOneDimension(5);
-};
-
-document.getElementById("sixth").onclick = function() {
-  buyOneDimension(6);
-};
-
-document.getElementById("seventh").onclick = function() {
-  buyOneDimension(7);
-};
-
-document.getElementById("eight").onclick = function() {
-  buyOneDimension(8);
-};
-
-document.getElementById("firstMax").onclick = function() {
-  buyManyDimension(1);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("secondMax").onclick = function() {
-  buyManyDimension(2);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("thirdMax").onclick = function() {
-  buyManyDimension(3);
-};
-
-document.getElementById("fourthMax").onclick = function() {
-  buyManyDimension(4);
-};
-
-document.getElementById("fifthMax").onclick = function() {
-  buyManyDimension(5);
-};
-
-document.getElementById("sixthMax").onclick = function() {
-  buyManyDimension(6);
-};
-
-document.getElementById("seventhMax").onclick = function() {
-  buyManyDimension(7);
-};
-
-document.getElementById("eightMax").onclick = function() {
-  buyManyDimension(8);
-};
-
+for (let tier = 1; tier <= 8; tier++) {
+  const name = TIER_NAMES[tier];
+  document.getElementById(name).onclick = () => buyOneDimensionBtnClick(tier);
+  document.getElementById(name + "Max").onclick = () => buyManyDimensionsBtnClick(tier);
+}
 
 function timeMult() {
   let mult = new Decimal(1);

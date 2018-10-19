@@ -213,7 +213,7 @@ dev.respecPerks = function() {
 
 function isDevEnvironment() {
   const href = window.location.href;
-  return href.split("//")[1].length > 20 || href.includes("127.0.0.1");
+  return href.split("//")[1].length > 20 || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
 dev.updateTestSave = function() {

@@ -511,6 +511,23 @@ button {
     background: #B84B5F;
 }
 
+.dimension-tab-row {
+  display: flex;
+  flex-direction: row;
+  font-size: 15px;
+  margin-top: 10px
+}
+
+.normal-dimensions-top-row {
+  display: flex;
+  justify-content:
+  center; align-items: center
+}
+
+.normal-dimensions-top-row > * {
+  margin: 0 4px;
+}
+
 .eternitybtn {
     border-radius: 4px;
     transition-duration: 0.2s;
@@ -1645,7 +1662,7 @@ button {
   .tooltip br:last-child {
       display: none;
   }
-  
+
   .tooltip::after {
     content: "";
     position: absolute;
@@ -2399,4 +2416,3 @@ screen and (max-width: 480px) {
 .infotooltip:hover .infotooltiptext {
     visibility: visible;
 }
-

@@ -1,11 +1,23 @@
 Vue.component('primary-button', {
     props: {
-        fontSize: String
+        fontSize: String,
+        enabled: {
+          type: Boolean,
+          default: true
+        }
     },
     template:
-        '<button class="storebtn" :style="{ fontSize: fontSize }" v-on="$listeners">\
+        '<button :class="classObject" :style="{ fontSize: fontSize }" v-on="$listeners">\
             <slot></slot>\
-        </button>'
+        </button>',
+    computed: {
+      classObject: function() {
+        return {
+          storebtn: this.enabled,
+          unavailablebtn: !this.enabled,
+        };
+      }
+    }
 });
 
 Vue.component('primary-on-off', {

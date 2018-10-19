@@ -2,6 +2,7 @@ Vue.component('options-tab', {
   props: ['model', 'view', 'actions'],
   template:
     '<tab-container>\
+        <br>\
         <div class="tab-content">\
           <options-buttons :model="model.player.options" :actions="actions.options"></options-buttons>\
           <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>\

@@ -103,7 +103,7 @@ function updateWorstChallengeTime() {
 
 
 function sacrificeConf() {
-    player.options.sacrificeConfirmation = !player.options.sacrificeConfirmation
+    player.options.noSacrificeConfirmation = !player.options.noSacrificeConfirmation
 }
 
 
@@ -1302,7 +1302,7 @@ function sacrifice(auto) {
 
 function sacrificeBtnClick() {
     if (player.resets < 5) return false
-    if (player.options.sacrificeConfirmation) {
+    if (!player.options.noSacrificeConfirmation) {
         if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
             return false;
         }

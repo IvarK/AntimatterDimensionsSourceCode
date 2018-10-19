@@ -350,7 +350,7 @@ var player = {
   options: {
     newsHidden: false,
     notation: "Mixed scientific",
-    sacrificeConfirmation: true,
+    noSacrificeConfirmation: false,
     retryChallenge: false,
     bulkOn: true,
     cloud: true,

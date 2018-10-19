@@ -25,7 +25,7 @@ function onLoad() {
   }
   if (player.options.invert === true) Theme.set("Inverted"); player.options.invert = undefined;
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
-  if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
+  if (player.options.noSacrificeConfirmation === undefined) player.options.noSacrificeConfirmation = false;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
   if (player.options.bulkOn === undefined) player.options.bulkOn = true
   if (player.options.cloud === undefined) player.options.cloud = true
@@ -319,7 +319,7 @@ function onLoad() {
       player.autobuyers[9].bulk = 1
   }
 
-  if (player.options.sacrificeConfirmation == false) document.getElementById("confirmation").checked = "true"
+  if (player.options.noSacrificeConfirmation == false) document.getElementById("confirmation").checked = "true"
   if (player.version === undefined) { // value will need to be adjusted when update goes live
       for (var i = 0; i < player.autobuyers.length; i++) {
           if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1

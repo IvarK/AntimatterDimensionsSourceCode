@@ -105,7 +105,7 @@ Vue.component('normal-dimensions-top-row', {
     },
     maxAll: function() {
       maxAll();
-    }
+    },
   },
   template:
     `<div class="normal-dimensions-top-row">
@@ -114,7 +114,7 @@ Vue.component('normal-dimensions-top-row', {
         style="width:20px; height: 18px"
         v-if="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        v-model="player.options.sacrificeConfirmation">
+        v-model="player.options.noSacrificeConfirmation">
       <primary-button
         fontSize="12px"
         :enabled="dimensions.sacrifice.isAvailable"

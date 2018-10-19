@@ -56,6 +56,8 @@ const CONNECTED_PERKS = {
   73: [71, 23],
   81: [32],
   82: [81],
+  74: [71],
+  75: [71],
 }
 
 function hasConnectedPerk(id) {

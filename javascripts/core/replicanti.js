@@ -101,8 +101,8 @@ function replicantiGalaxy() {
   }
 }
 
-function replicantiGalaxyAutoToggle() {
-  if (player.replicanti.galaxybuyer) {
+function replicantiGalaxyAutoToggle(forcestate) {
+    if (player.replicanti.galaxybuyer && forcestate !== true) {
       player.replicanti.galaxybuyer = false
       if (player.timestudy.studies.includes(131) && !isAchEnabled("r138")) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
       else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"

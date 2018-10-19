@@ -60,11 +60,15 @@ function automatorOnOff() {
 }
 
 function highlightcurrent() {
-  var row = automatorRows[automatorIdx]
-  var idx = $("#automator")[0].value.indexOf(row)
+    var row = automatorRows[automatorIdx];
+    console.log(automatorRows.slice(0, automatorIdx));
+    var idx = automatorRows.slice(0, automatorIdx).reduce(function (acc, x) {
+        return acc + x.length + 1;
+    }, 0);
+    
   if (idx >= 0) {
-    $("#automator")[0].focus()
-    $("#automator")[0].setSelectionRange(idx, idx + row.length)
+      $("#automator")[0].focus();
+      $("#automator")[0].setSelectionRange(idx, idx + row.length);
   }
 }
 
@@ -337,48 +341,27 @@ function change(current) {
 }
 
 function toggle(current) {
-  if (current.target[0] == "d") {
-    player.autobuyers[parseInt(current.target[1])].isOn = !player.autobuyers[parseInt(current.target[1])].isOn
-    updateAutobuyers()
-    return true
-  } else {
-    switch(current.target) {
-      case "tickspeed":
-        $("#9ison")[0].checked = !player.autobuyers[8].isOnn
-        updateAutobuyers()
-        return true
-        break;
-      case "dimboost":
-        $("#10ison")[0].checked = !player.autobuyers[9].isOn
-        updateAutobuyers()
-        return true
-        break;
-      case "galaxy":
-        $("#11ison")[0].checked = !player.autobuyers[10].isOn
-        updateAutobuyers()
-        return true
-        break;
-      case "infinity":
-        $("#12ison")[0].checked = !player.autobuyers[11].isOn
-        updateAutobuyers()
-        return true
-        break;
-      case "sacrifice":
-        $("#13ison")[0].checked = !player.autoSacrifice.isOn
-        updateAutobuyers()
-        return true
-        break;
-      case "eternity":
-        $("#eternityison")[0].checked = !player.eternityBuyer.isOn
-        updateAutobuyers()
-        return true
-        break;
-      case "rg":
-        replicantiGalaxyAutoToggle()
-        return true
-        break;
+    if (current.target === "rg") { //RG is handled differently
+        replicantiGalaxyAutoToggle(current.id);
+        return true;
     }
-  }
+    const OPTIONS = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'tickspeed', 'dimboost', 'galaxy', 'infinity', 'sacrifice', 'eternity'];
+    let state;
+    let id = OPTIONS.indexOf(current.target);
+    if (id === -1) return false; //Fails if the specified autobuyer doesnt exist
+    if (id >= player.autobuyers.length) { //exceptions such as sacrifice
+        if (id === 12) state = !player.autoSacrifice.isOn;
+        if (id === 13) state = !player.eternityBuyer.isOn;
+    } else
+        state = !player.autobuyers[id].isOn;
+    if (current.id === "on") state = true;
+    else if (current.id === "off") state = false;
+    if (id === 13) { //eternity doesnt follow the same numbering pattern
+        $("#eternityison")[0].checked = state;
+    } else
+        $("#" + (id + 1) + "ison")[0].checked = state;
+    updateAutobuyers();
+    return true;
 }
 
 

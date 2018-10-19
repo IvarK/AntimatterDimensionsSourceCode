@@ -23,3 +23,8 @@ var Autobuyer = function Autobuyer(target) {
     this.tier = 1;
     this.bulk = 1;
 }
+
+Autobuyer.tickTimer = 0;
+Autobuyer.intervalTimer = 0;
+Autobuyer.lastDimBoost = 0;
+Autobuyer.lastGalaxy = 0;

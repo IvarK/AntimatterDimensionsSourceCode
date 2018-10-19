@@ -2596,8 +2596,20 @@ function gameLoop(diff) {
     if (diff < 0) diff = 1;
     speedFactor = getGameSpeedupFactor();
     diff *= speedFactor;
+    const diffTs = TimeSpan.fromMilliseconds(diff);
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
+
+    // Why 20? No fucking idea!
+    // Enjoy legacy!
+    Autobuyer.intervalTimer += diff / 20;
+    Autobuyer.tickTimer += diff;
+    let autobuyerInterval = player.infinityUpgrades.includes("autoBuyerUpgrade") ? 50 : 100;
+    while (Autobuyer.tickTimer >= autobuyerInterval) {
+      Autobuyer.tickTimer -= autobuyerInterval;
+      autoBuyerTick();
+    }
+
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
     /*if (player.currentChallenge == "postc6" && player.matter.gte(1)) player.matter = player.matter.plus(diff/10)
     else */
@@ -3602,8 +3614,12 @@ function autoBuyerTick() {
                     secondSoftResetBtnClick();
                     player.autobuyers[10].ticks = 1;
                 }
-            } else if (player.autobuyers[10].isOn && (Math.round(timer * 100))%(Math.round(player.autobuyers[10].bulk * 100)) == 0){
-                maxBuyGalaxies()
+            } else if (player.autobuyers[10].isOn){
+                const interval = player.autobuyers[10].bulk;
+                if (Autobuyer.intervalTimer - Autobuyer.lastGalaxy >= interval) {
+                  Autobuyer.lastGalaxy = Autobuyer.intervalTimer;
+                  maxBuyGalaxies()
+                }
             }
         } else player.autobuyers[10].ticks += 1;
     }
@@ -3613,7 +3629,13 @@ function autoBuyerTick() {
         if (player.autobuyers[9].isOn && dimBoolean()) {
             if (player.resets < 4) softReset(1)
             else if (player.eternities < 10) softReset(player.autobuyers[9].bulk)
-            else if ((Math.round(timer * 100))%(Math.round(player.autobuyers[9].bulk * 100)) == 0 && player.eightAmount >= getShiftRequirement(0).amount) maxBuyDimBoosts()
+            else {
+              const interval = player.autobuyers[9].bulk;
+              if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= interval) {
+                Autobuyer.lastDimBoost = Autobuyer.intervalTimer;
+                maxBuyDimBoosts()
+              }
+            }
             player.autobuyers[9].ticks = 0
         }
         player.autobuyers[9].ticks += 1;
@@ -3723,16 +3745,6 @@ setInterval(function() {
     autoBuyExtraTimeDims()
   }
 }, 333)
-
-
-setInterval(function() {
-    timer += 0.05
-    if (!player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
-}, 100)
-
-setInterval(function() {
-    if (player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
-}, 50)
 
 
   //start scrolling

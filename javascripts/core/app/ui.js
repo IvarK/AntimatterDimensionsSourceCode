@@ -92,3 +92,4 @@ class Tab {
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
 Tab.dimensions = new Tab("dimensions-tab");
+Tab.currentSubtab = String.empty;

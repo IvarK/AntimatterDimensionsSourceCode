@@ -1,8 +1,10 @@
 Vue.component('subtabbed-container', {
   props: ['tabs', 'model', 'view', 'value'],
   data: function() {
+    const openedTab = this.value && this.isUnlocked(this.value) ? this.value : this.tabs[0];
+    Tab.currentSubtab = openedTab.name;
     return {
-      openedTab: this.value && this.isUnlocked(this.value) ? this.value : this.tabs[0]
+      openedTab: openedTab
     };
   },
   template:
@@ -21,6 +23,7 @@ Vue.component('subtabbed-container', {
     openTab: function(tab) {
       this.openedTab = tab;
       this.emitInput(tab);
+      Tab.currentSubtab = tab.name;
     },
     isUnlocked: function(tab) {
       return tab !== undefined && (tab.condition === undefined || tab.condition());

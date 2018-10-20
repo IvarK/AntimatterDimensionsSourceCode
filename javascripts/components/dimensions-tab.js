@@ -47,7 +47,7 @@ Vue.component('dimensions-tab', {
         :tabs="tabs"
         :model="model"
         :view="view"
-        v-model="view.tabs.dimensions.currentSubtab">
+        v-model="view.tabs.dimensions.subtab">
       </subtabbed-container>
     </tab-container>`
 });

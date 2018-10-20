@@ -108,74 +108,55 @@ function sacrificeConf() {
 
 
 function updateDimensions() {
-    if (document.getElementById("antimatterdimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block" || true) {
-        let view = ui.view.tabs.dimensions.normal;
-        for (let tier = 1; tier <= 8; ++tier) {
-            var name = TIER_NAMES[tier];
-            if (!canBuyDimension(tier) && document.getElementById(name + "Row").style.display !== "table-row") {
-                break;
-            }
-            let dimView = view.dims[tier];
-            dimView.multiplier = getDimensionFinalMultiplier(tier);
-            dimView.rateOfChange = getDimensionRateOfChange(tier);
-            document.getElementById(name + "D").childNodes[0].nodeValue = DISPLAY_NAMES[tier] + " Dimension x" + shortenMultiplier(getDimensionFinalMultiplier(tier));
-            document.getElementById(name + "Amount").textContent = getDimensionDescription(tier);
+    let view = ui.view.tabs.dimensions;
+    // TODO: ditch component dependency
+    if (Tab.currentSubtab === "Dimensions") {
+      const ndView = view.normal;
+      for (let tier = 1; tier <= 8; tier++) {
+        let dimView = ndView.dims[tier];
+        const canBuy = canBuyDimension(tier);
+        dimView.isAvailable = canBuy;
+        if (!canBuy) {
+          break;
         }
-
-
-
-        for (let tier = 1; tier <= 8; ++tier) {
-            const canBuy = canBuyDimension(tier);
-            view.dims[tier].isAvailable = canBuy;
-            if (!canBuy) {
-                break;
-            }
-
-            var name = TIER_NAMES[tier];
-            document.getElementById(name + "Row").style.display = "table-row";
-            document.getElementById(name + "Row").style.visibility = "visible";
-
-
-        }
-
-        var shiftRequirement = getShiftRequirement(0);
-        if (player.currentChallenge == "challenge4" ? shiftRequirement.tier < 6 : shiftRequirement.tier < 8) {
-            document.getElementById("resetLabel").textContent = 'Dimension Shift ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
-        }
-        else document.getElementById("resetLabel").textContent = 'Dimension Boost ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
-
-        view = ui.view.tabs.dimensions.normal.shift;
-        view.requirement.tier = shiftRequirement.tier;
-        view.requirement.amount = shiftRequirement.amount;
-        view.isBoost = player.currentChallenge === "challenge4"
-          ? shiftRequirement.tier === 6
-          : shiftRequirement.tier === 8;
-
-        if (player.currentChallenge == "challenge4" ? player.resets > 1 : player.resets > 3) {
-            document.getElementById("softReset").textContent = "Reset the game for a boost"
+        dimView.multiplier = getDimensionFinalMultiplier(tier);
+        dimView.rateOfChange = getDimensionRateOfChange(tier);
+        const dimension = new DimensionStats(tier);
+        let canAffordSingle = false;
+        let canAffordUntil10 = false;
+        if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
+          const lowerTier = new DimensionStats(tier - 2);
+          canAffordSingle = lowerTier.amount.gte(dimension.cost);
+          canAffordUntil10 = lowerTier.amount.gte(dimension.costUntil10);
         } else {
-            document.getElementById("softReset").textContent = "Reset the game for a new Dimension"
+          canAffordSingle = canAfford(dimension.cost);
+          canAffordUntil10 = canAfford(dimension.costUntil10);
         }
-        let extraGals = player.replicanti.galaxies
-        if (player.timestudy.studies.includes(225)) extraGals += Math.floor(player.replicanti.amount.e / 1000)
-        if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 15)
-        var galString = ""
-        if (player.galaxies >= 800) galString += "Remote Antimatter Galaxies (";
-        else if (player.galaxies >= getGalaxyCostScalingStart() || player.currentEternityChall === "eterc5") galString += "Distant Antimatter Galaxies (";
-        else galString += "Antimatter Galaxies (";
-        galString += player.galaxies;
-        if (extraGals > 0) galString += " + "+extraGals;
-        if (player.dilation.freeGalaxies > 0) galString += " + "+player.dilation.freeGalaxies;
-        const galaxyRequirement = getGalaxyRequirement();
-        galString += "): requires " + galaxyRequirement
-        if (player.currentChallenge == "challenge4") galString +=  " Sixth Dimensions";
-        else galString +=  " Eighth Dimensions";
-        document.getElementById("secondResetLabel").textContent = galString;
-        view = ui.view.tabs.dimensions.normal.galaxy;
-        view.type = GalaxyType.current();
-        view.extra = extraGals;
-        view.requirement.amount = galaxyRequirement;
-        view.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
+        dimView.isAffordable = canAffordSingle;
+        dimView.isAffordableUntil10 = canAffordUntil10;
+      }
+
+      const shiftRequirement = getShiftRequirement(0);
+      const shiftView = ndView.shift;
+      shiftView.requirement.tier = shiftRequirement.tier;
+      shiftView.requirement.amount = shiftRequirement.amount;
+      shiftView.isBoost = player.currentChallenge === "challenge4" ?
+        shiftRequirement.tier === 6 :
+        shiftRequirement.tier === 8;
+
+      let extraGals = player.replicanti.galaxies;
+      if (player.timestudy.studies.includes(225)) {
+        extraGals += Math.floor(player.replicanti.amount.e / 1000);
+      }
+      if (player.timestudy.studies.includes(226)) {
+        extraGals += Math.floor(player.replicanti.gal / 15);
+      }
+      const galaxyRequirement = getGalaxyRequirement();
+      const galaxyView = ndView.galaxy;
+      galaxyView.type = GalaxyType.current();
+      galaxyView.extra = extraGals;
+      galaxyView.requirement.amount = galaxyRequirement;
+      galaxyView.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
     }
 
     if (canBuyTickSpeed() || player.currentEternityChall == "eterc9") {
@@ -2908,26 +2889,6 @@ function gameLoop(diff) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    view = ui.view.tabs.dimensions.normal;
-    for (let tier = 1; tier <= 8; ++tier) {
-      const dimension = new DimensionStats(tier);
-      let canAffordSingle = false;
-      let canAffordUntil10 = false;
-      if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
-        const lowerTier = new DimensionStats(tier - 2);
-        canAffordSingle = lowerTier.amount.gte(dimension.cost);
-        canAffordUntil10 = lowerTier.amount.gte(dimension.costUntil10);
-      } else {
-        canAffordSingle = canAfford(dimension.cost);
-        canAffordUntil10 = canAfford(dimension.costUntil10);
-      }
-      const name = TIER_NAMES[tier];
-      document.getElementById(name).className = canAffordSingle ? 'storebtn' : 'unavailablebtn';
-      document.getElementById(name + 'Max').className = canAffordUntil10 ? 'storebtn' : 'unavailablebtn';
-      let dimView = view.dims[tier];
-      dimView.isAffordable = canAffordSingle;
-      dimView.isAffordableUntil10 = canAffordUntil10;
-    }
     if (player.firstAmount.lt(1)) document.getElementById("first").className = 'storebtn';
 
     for (var tier = 1; tier < 9; tier++) {

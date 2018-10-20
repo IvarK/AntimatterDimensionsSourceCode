@@ -232,8 +232,7 @@ function reality(force, reset, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     updateEternityChallenges();
     if (player.eternities <= 1) {
-        showTab("dimensions");
-        showDimTab("antimatterdimensions");
+        Tab.dimensions.normal.show();
         loadAutoBuyerSettings()
     }
     Marathon2 = 0;

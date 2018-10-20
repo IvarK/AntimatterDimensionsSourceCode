@@ -526,8 +526,6 @@ function maxAll() {
     }
 }
 
-document.getElementById("maxall").onclick = maxAll;
-
 function buyInfinityUpgrade(name, cost) {
     if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
         player.infinityUpgrades.push(name);
@@ -1289,8 +1287,6 @@ function sacrificeBtnClick() {
     auto = false;
     return sacrifice();
 }
-
-document.getElementById("sacrifice").onclick = sacrificeBtnClick;
 
 function updateAutobuyers() {
     var autoBuyerDim1 = new Autobuyer (1)
@@ -3021,20 +3017,7 @@ function gameLoop(diff) {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) document.getElementById("break").className = "infinistorebtnlocked"
     else document.getElementById("break").className = "infinistorebtn2"
 
-
-    if (player.resets > 4) {
-        document.getElementById("confirmation").style.display = "inline-block";
-        document.getElementById("sacrifice").style.display = "inline-block";
-    } else {
-        document.getElementById("confirmation").style.display = "none";
-        document.getElementById("sacrifice").style.display = "none";
-    }
-
-    if (player.infinitied > 0) document.getElementById("sacrifice").style.display = "inline-block";
-
     ui.view.tabs.dimensions.normal.sacrifice.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
-    if (player.eightAmount > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
-    else document.getElementById("sacrifice").className = "unavailablebtn"
 
     if (player.autobuyers[11]%1 !== 0 && player.autobuyers[11].interval == 100) {
         document.getElementById("postinftable").style.display = "inline-block"
@@ -3168,15 +3151,6 @@ function gameLoop(diff) {
         document.getElementById("secondSoftReset").className = 'storebtn';
     }
 
-    if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc1") document.getElementById("chall2Pow").style.display = "inline-block"
-    else document.getElementById("chall2Pow").style.display = "none"
-    if (player.currentChallenge == "challenge3" || player.currentChallenge == "postc1") document.getElementById("chall3Pow").style.display = "inline-block"
-    else document.getElementById("chall3Pow").style.display = "none"
-
-    document.getElementById("chall2Pow").textContent = (player.chall2Pow*100).toFixed(2) + "%"
-    document.getElementById("chall3Pow").textContent = shorten(player.chall3Pow*100) + "%"
-
-
     if (player.infDimensionsUnlocked[7] == false && player.break && player.eternities <= 24) {
         document.getElementById("newDimensionButton").style.display = "inline-block"
     } else document.getElementById("newDimensionButton").style.display = "none"
@@ -3197,9 +3171,6 @@ function gameLoop(diff) {
     document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(getNewInfReq()) + " antimatter to unlock a new Dimension."
 
     ui.view.tabs.dimensions.normal.sacrifice.boost = calcSacrificeBoost();
-    document.getElementById("sacrifice").setAttribute('ach-tooltip', "Boosts 8th Dimension by " + shorten(calcSacrificeBoost()) + "x");
-
-    document.getElementById("sacrifice").textContent = "Dimensional Sacrifice (" + shorten(calcSacrificeBoost())+"x)"
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     if (player.timestudy.studies.includes(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff/100000))
     if (player.dilation.upgrades.includes(10)) {
@@ -3881,7 +3852,6 @@ function init() {
     //show one tab during init or they'll all start hidden
     showTab('dimensions')
     showInfTab('preinf')
-    showDimTab('antimatterdimensions')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)
     load_game();

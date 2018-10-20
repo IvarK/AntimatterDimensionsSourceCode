@@ -189,7 +189,7 @@ function hardReset() {
   document.getElementById("sixthRow").style.display = "none";
   document.getElementById("seventhRow").style.display = "none";
   document.getElementById("eightRow").style.display = "none";
-  showDimTab('antimatterdimensions', true);
+  Tab.dimensions.normal.show();
   updateTickSpeed();
   updateDimensions();
   updateChallenges();

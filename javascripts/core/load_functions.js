@@ -319,7 +319,6 @@ function onLoad() {
       player.autobuyers[9].bulk = 1
   }
 
-  if (player.options.noSacrificeConfirmation == false) document.getElementById("confirmation").checked = "true"
   if (player.version === undefined) { // value will need to be adjusted when update goes live
       for (var i = 0; i < player.autobuyers.length; i++) {
           if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
@@ -804,7 +803,7 @@ function change_save(saveId) {
   load_game();
   updateChallenges()
   transformSaveToDecimal()
-  showDimTab('antimatterdimensions', true)
+  Tab.dimensions.normal.show();
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
   Modal.hide();

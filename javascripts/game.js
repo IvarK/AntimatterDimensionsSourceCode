@@ -2734,11 +2734,12 @@ function gameLoop(diff) {
     if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
       tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
     }
-    // Threshold gets +1 after softcap, unaffected by glyphs
+    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs
     let freeTickSoftcap = 300000;
     if (player.timeShards.gt(0)) {
+      let softcapAddition = getAdjustedGlyphEffect("timefreeTickMult") == 0 ? 1 : 0.8 + 0.2*getAdjustedGlyphEffect("timefreeTickMult");
       let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
-      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(1+tickmult))) : uncapped;
+      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(softcapAddition+tickmult))) : uncapped;
       let gain = Math.max(0, softcapped - player.totalTickGained);
       player.totalTickGained += gain
       player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))

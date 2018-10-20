@@ -212,8 +212,14 @@ function getGlyphEffectStrength(effectKey, level, strength) {
 }
 
 const glyphEffectSoftcaps = {
+  infinityrate(value) {
+    return value > 0.7 ? 0.7 + 0.2*(value - 0.7) : value;
+  },
   replicationglyphlevel(value) {
     return value > 0.15 ? 0.15 + 0.2*(value - 0.15) : value;
+  },
+  timefreeTickMult(value) {
+    return value != 0 ? Math.max(1e-5, value) : 0;
   }
 };
 
@@ -330,7 +336,7 @@ function getDesc(effectKey, x, inTooltip) {
   const EFFECT_DESCRIPTIONS = {
     timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
-    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
     timeeternity: "Multiply EP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationdilationMult: "Multiply dilated time gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
@@ -354,7 +360,7 @@ function getDesc(effectKey, x, inTooltip) {
   const EFFECT_DESCRIPTIONS_SHORT = {
     timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Game runs x" + spanPrefix + x.toFixed(3) + spanSuffix + " faster",
-    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
     timeeternity: "EP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationdilationMult: "DT gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,

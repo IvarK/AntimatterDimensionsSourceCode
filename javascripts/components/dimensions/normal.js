@@ -62,7 +62,7 @@ Vue.component('dimensions-normal', {
           :key="tier"
           :tier="tier"
           :player="player"
-          :dimensions="dimensions">
+          :dimension="dimensions.dims[tier]">
         </normal-dimension-row>
         <normal-dimension-shift-row
           :player="player"
@@ -135,7 +135,7 @@ Vue.component('normal-dimensions-top-row', {
 Vue.component('normal-dimension-row', {
   props: {
     player: Object,
-    dimensions: Object,
+    dimension: Object,
     tier: Number
   },
   computed: {
@@ -143,7 +143,7 @@ Vue.component('normal-dimension-row', {
       return DISPLAY_NAMES[this.tier];
     },
     multiplier: function() {
-      return shortenMultiplier(this.dimensions.multiplier[this.tier]);
+      return shortenMultiplier(this.dimension.multiplier);
     },
     stats: function() {
       return new DimensionStats(this.tier, this.player);
@@ -158,16 +158,16 @@ Vue.component('normal-dimension-row', {
       return this.tier < 8 ? shortenDimensions(this.stats.amount) : Math.round(this.stats.amount);
     },
     rateOfChange: function() {
-      return this.tier < 8 ? ` (+${shorten(this.dimensions.rateOfChange[this.tier])}%/s)` : String.empty;
+      return this.tier < 8 ? ` (+${shorten(this.dimension.rateOfChange)}%/s)` : String.empty;
     },
     isAvailable: function() {
-      return this.dimensions.availability[this.tier];
+      return this.dimension.isAvailable;
     },
     isAffordable: function() {
-      return this.dimensions.affordability[this.tier];
+      return this.dimension.isAffordable;
     },
     isAffordableUntil10: function() {
-      return this.dimensions.affordabilityUntil10[this.tier];
+      return this.dimension.isAffordableUntil10;
     },
   },
   methods: {

@@ -117,8 +117,9 @@ function updateDimensions() {
             if (!canBuyDimension(tier) && document.getElementById(name + "Row").style.display !== "table-row") {
                 break;
             }
-            view.multiplier.splice(tier, 1, getDimensionFinalMultiplier(tier));
-            view.rateOfChange.splice(tier, 1, getDimensionRateOfChange(tier));
+            let dimView = view.dims[tier];
+            dimView.multiplier = getDimensionFinalMultiplier(tier);
+            dimView.rateOfChange = getDimensionRateOfChange(tier);
             document.getElementById(name + "D").childNodes[0].nodeValue = DISPLAY_NAMES[tier] + " Dimension x" + shortenMultiplier(getDimensionFinalMultiplier(tier));
             document.getElementById(name + "Amount").textContent = getDimensionDescription(tier);
         }
@@ -127,7 +128,7 @@ function updateDimensions() {
 
         for (let tier = 1; tier <= 8; ++tier) {
             const canBuy = canBuyDimension(tier);
-            view.availability.splice(tier, 1, canBuy);
+            view.dims[tier].isAvailable = canBuy;
             if (!canBuy) {
                 break;
             }
@@ -2925,9 +2926,10 @@ function gameLoop(diff) {
       const name = TIER_NAMES[tier];
       document.getElementById(name).className = canAffordSingle ? 'storebtn' : 'unavailablebtn';
       document.getElementById(name + 'Max').className = canAffordUntil10 ? 'storebtn' : 'unavailablebtn';
-      view.affordability.splice(tier, 1, canAffordSingle);
-      view.affordabilityUntil10.splice(tier, 1, canAffordUntil10);
-      }
+      let dimView = view.dims[tier];
+      dimView.isAffordable = canAffordSingle;
+      dimView.isAffordableUntil10 = canAffordUntil10;
+    }
     if (player.firstAmount.lt(1)) document.getElementById("first").className = 'storebtn';
 
     for (var tier = 1; tier < 9; tier++) {

@@ -13,11 +13,15 @@ let ui = {
       current: undefined,
       dimensions: {
         normal: {
-          rateOfChange: Array(9).fill(new Decimal(0)),
-          multiplier: Array(9).fill(new Decimal(0)),
-          availability: Array(9).fill(false),
-          affordability: Array(9).fill(false),
-          affordabilityUntil10: Array(9).fill(false),
+          dims: Array.from({length: 9}, () => {
+            return {
+              rateOfChange: new Decimal(0),
+              multiplier: new Decimal(0),
+              isAvailable: false,
+              isAffordable: false,
+              isAffordableUntil10: false
+            };
+          }),
           shift: {
             requirement: {
               tier: 0,

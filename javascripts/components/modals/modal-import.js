@@ -18,7 +18,7 @@ Vue.component('modal-import', {
           <div style="font-size: 75%">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">Not a valid save</div>
-        <primary-button v-if="inputIsValid" style="margin-top: 3px" @click="importSave">Import</primary-button>
+        <store-button v-if="inputIsValid" style="margin-top: 3px" @click="importSave">Import</store-button>
     </div>`,
   computed: {
     player: function() {

@@ -25,7 +25,7 @@ Vue.component('subtabbed-container', {
   components: {
     'subtab-button': {
       template:
-        '<td><secondary-button v-on="$listeners" ><slot></slot></secondary-button></td>'
+        '<td><secondary-tab-button v-on="$listeners" ><slot></slot></secondary-tab-button></td>'
     }
   }
 });

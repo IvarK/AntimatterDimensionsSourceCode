@@ -73,13 +73,13 @@ Vue.component('dimensions-normal', {
           :galaxy="dimensions.galaxy">
         </normal-dimension-galaxy-row>
       </div>
-      <primary-button
+      <store-button
         fontSize="12px"
         style="width: 200px; height: 50px"
         @click="quickReset"
         v-if="isQuickResetAvailable">
         Lose a reset, returning to the start of the reset
-      </primary-button>
+      </store-button>
     </div>`
 });
 
@@ -115,7 +115,7 @@ Vue.component('normal-dimensions-top-row', {
         v-if="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
         v-model="player.options.noSacrificeConfirmation">
-      <primary-button
+      <store-button
         fontSize="12px"
         :enabled="dimensions.sacrifice.isAvailable"
         style="width: 320px"
@@ -123,12 +123,12 @@ Vue.component('normal-dimensions-top-row', {
         v-tooltip="sacrificeTooltip"
         @click="sacrifice">
         Dimensional Sacrifice ({{sacrificeBoost}}x)
-      </primary-button>
-      <primary-button
+      </store-button>
+      <store-button
         fontSize="12px"
         @click="maxAll">
         Max all (M)
-      </primary-button>
+      </store-button>
     </div>`
 });
 
@@ -186,20 +186,20 @@ Vue.component('normal-dimension-row', {
       <div style="text-align: left; flex-grow: 1">
         {{amount}} ({{stats.boughtBefore10}}) {{rateOfChange}}
       </div>
-      <primary-button
+      <store-button
         fontSize="10px"
         :enabled="isAffordable"
         style="height: 25px; width: 135px; margin-right: 16px; flex-shrink: 0"
         @click="buySingle">
         Cost: {{singleCost}}
-      </primary-button>
-      <primary-button
+      </store-button>
+      <store-button
         fontSize="10px"
         :enabled="isAffordableUntil10"
         style="height: 25px; width: 210px; flex-shrink: 0"
         @click="buyUntil10">
         Until 10, Cost: {{until10Cost}}
-      </primary-button>
+      </store-button>
     </div>`,
 });
 
@@ -231,13 +231,13 @@ Vue.component('normal-dimension-shift-row', {
   template:
     `<div class="dimension-tab-row">
       <div style="width: 32%; text-align: left; flex-grow: 1">{{labelText}}</div>
-      <primary-button
+      <store-button
         fontSize="9px"
         :enabled="isAvailable"
         @click="softReset"
         style="height: 25px; width: 200px; margin-right: 100px">
         {{buttonText}}
-      </primary-button>
+      </store-button>
     </div>`
 });
 
@@ -277,12 +277,12 @@ Vue.component('normal-dimension-galaxy-row', {
       <div style="width: 32%; text-align: left; flex-grow: 1">
         {{galaxy.type}} ({{galaxySum}}): requires {{requirement}}
       </div>
-      <primary-button 
+      <store-button 
         fontSize="9px"
         :enabled="isAvailable"
         @click="secondSoftReset"
         style="height: 35px; width: 200px; margin-right: 100px"> 
         Lose all your previous progress, but get a tickspeed boost
-      </primary-button>
+      </store-button>
     </div>`
 });

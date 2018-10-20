@@ -11,7 +11,7 @@ Vue.component('modal-options', {
 
 Vue.component('modal-close-button', {
     template:
-        '<primary-button class="closebtn" @click="emitClick">&times;</primary-button>'
+        '<store-button class="closebtn" @click="emitClick">&times;</store-button>'
 });
 
 var modalUnlocksMixin = {

@@ -80,7 +80,7 @@ class Tab {
     this._component = component;
   }
 
-  isCurrent() {
+  get isOpen() {
     return ui.view.tabs.current === this._component;
   }
 
@@ -89,7 +89,27 @@ class Tab {
   }
 }
 
+class Subtab {
+  constructor(id, parent, view, isDefault) {
+    this._id = id;
+    this._parent = parent;
+    this._view = view;
+    if (isDefault) {
+      this._view.subtab = this._id;
+    }
+  }
+
+  get isOpen() {
+    return this._parent.isOpen && this._view.subtab === this._id;
+  }
+
+  show() {
+    this._view.subtab = this._id;
+    this._parent.show();
+  }
+}
+
+Tab.dimensions = new Tab("dimensions-tab");
+Tab.dimensions.normal = new Subtab("Dimensions", Tab.dimensions, ui.view.tabs.dimensions, true);
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
-Tab.dimensions = new Tab("dimensions-tab");
-Tab.currentSubtab = String.empty;

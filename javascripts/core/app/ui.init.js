@@ -12,6 +12,7 @@ let ui = {
     tabs: {
       current: undefined,
       dimensions: {
+        subtab: String.empty,
         normal: {
           dims: Array.from({length: 9}, () => {
             return {
@@ -47,7 +48,9 @@ let ui = {
           }
         }
       },
-      statistics: { }
+      statistics: {
+        subtab: String.empty
+      }
     },
     shiftDown: false
   }

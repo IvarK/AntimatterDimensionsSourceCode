@@ -108,10 +108,8 @@ function sacrificeConf() {
 
 
 function updateDimensions() {
-    let view = ui.view.tabs.dimensions;
-    // TODO: ditch component dependency
-    if (Tab.currentSubtab === "Dimensions") {
-      const ndView = view.normal;
+    if (Tab.dimensions.normal.isOpen) {
+      const ndView = ui.view.tabs.dimensions.normal;
       for (let tier = 1; tier <= 8; tier++) {
         let dimView = ndView.dims[tier];
         const canBuy = canBuyDimension(tier);
@@ -2882,7 +2880,7 @@ function gameLoop(diff) {
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
 
-    if (Tab.statistics.isCurrent()) {
+    if (Tab.statistics.isOpen) {
         statsTimer += player.options.updateRate/1000;
         if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }

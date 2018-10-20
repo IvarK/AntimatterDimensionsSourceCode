@@ -1,34 +1,35 @@
 Vue.component('subtabbed-container', {
   props: ['tabs', 'model', 'view', 'value'],
-  data: function() {
-    const openedTab = this.value && this.isUnlocked(this.value) ? this.value : this.tabs[0];
-    Tab.currentSubtab = openedTab.name;
-    return {
-      openedTab: openedTab
-    };
-  },
-  template:
-    '<div>\
-        <tr>\
-            <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="openTab(tab)">{{ tab.name }}</td>\
-        </tr>\
-        <component :is="openedTab.component" :model="model" :view="view"></component>\
-    </div>',
   computed: {
     visibleTabs: function() {
       return this.tabs.filter(tab => this.isUnlocked(tab));
+    },
+    firstTab: function() {
+      return this.tabs[0];
+    },
+    openedTab: function() {
+      if (!this.value || this.value === String.empty) {
+        return this.firstTab;
+      }
+      const tab = this.tabs.find(tab => tab.id === this.value);
+      if (!this.isUnlocked(tab)) {
+        return this.firstTab;
+      }
+      return tab;
     }
   },
   methods: {
-    openTab: function(tab) {
-      this.openedTab = tab;
-      this.emitInput(tab);
-      Tab.currentSubtab = tab.name;
-    },
     isUnlocked: function(tab) {
       return tab !== undefined && (tab.condition === undefined || tab.condition());
     }
   },
+  template:
+    '<div>\
+        <tr>\
+            <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">{{ tab.name }}</td>\
+        </tr>\
+        <component :is="openedTab.component" :model="model" :view="view"></component>\
+    </div>',
   components: {
     'subtab-button': {
       template:

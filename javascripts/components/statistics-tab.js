@@ -3,9 +3,14 @@ Vue.component('statistics-tab', {
   data: function() {
     return {
       tabs: [
-        {name: "Statistics", component: "statistics-stats-tab"},
+        {
+          name: "Statistics",
+          id: "Statistics",
+          component: "statistics-stats-tab"
+        },
         {
           name: "Challenge records",
+          id: "Challenge records",
           component: "statistics-challenges",
           condition: function() {
             return this.model.player.challenges.length > 1;
@@ -13,6 +18,7 @@ Vue.component('statistics-tab', {
         },
         {
           name: "Past Infinities",
+          id: "Past Infinities",
           component: "statistic-past-infinities",
           condition: function() {
             return this.progress.infinityUnlocked();
@@ -20,6 +26,7 @@ Vue.component('statistics-tab', {
         },
         {
           name: "Past Eternities",
+          id: "Past Eternities",
           component: "statistic-past-eternities",
           condition: function() {
             return this.progress.eternityUnlocked();
@@ -27,6 +34,7 @@ Vue.component('statistics-tab', {
         },
         {
           name: "Past Realities",
+          id: "Past Realities",
           component: "statistic-past-realities",
           condition: function() {
             return this.progress.realityUnlocked();

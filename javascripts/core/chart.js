@@ -126,6 +126,6 @@ function addData(chart, label, data) {
         if (data < chart.data.datasets[0].data[chart.data.datasets[0].data.length-1] && !player.options.chart.dips) dataset.data.push(chart.data.datasets[0].data[chart.data.datasets[0].data.length-1]);
         else dataset.data.push(data);
     });
-    if (document.getElementById("antimatterdimensions").style.display == "block" && document.getElementById("production").style.display == "block") chart.update(100);
+    if (document.getElementById("dimensions").style.display == "block" && document.getElementById("production").style.display == "block") chart.update(100);
     else chart.update(0);
 }

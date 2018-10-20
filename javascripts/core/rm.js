@@ -216,9 +216,9 @@ const glyphEffectSoftcaps = {
     return value > 0.7 ? 0.7 + 0.2*(value - 0.7) : value;
   },
   replicationglyphlevel(value) {
-    return value > 0.15 ? 0.15 + 0.2*(value - 0.15) : value;
+    return value > 0.1 ? 0.1 + 0.2*(value - 0.1) : value;
   },
-  timefreeTickMult(value) {
+  timefreeTickMult(value) { // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
     return value != 0 ? Math.max(1e-5, value) : 0;
   }
 };

@@ -41,7 +41,12 @@ Vue.component('statistics-tab', {
     }
   },
   template:
-    '<tab-container id="statistics" style="color: black; font-size: 12px; font-family: Typewriter">\
-      <subtabbed-container class="tab-content" :tabs="tabs" :model="model"></subtabbed-container>\
-    </tab-container>'
+    `<tab-container id="statistics" style="color: black; font-size: 12px; font-family: Typewriter">
+      <subtabbed-container
+        class="tab-content"
+        :tabs="tabs"
+        :model="model"
+        v-model="view.tabs.statistics.currentSubtab">
+      </subtabbed-container>
+    </tab-container>`
 });

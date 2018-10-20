@@ -109,7 +109,7 @@ function sacrificeConf() {
 
 function updateDimensions() {
     if (document.getElementById("antimatterdimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block" || true) {
-        let view = ui.view.tab.dimensions.normal;
+        let view = ui.view.tabs.dimensions.normal;
         for (let tier = 1; tier <= 8; ++tier) {
             var name = TIER_NAMES[tier];
             if (!canBuyDimension(tier) && document.getElementById(name + "Row").style.display !== "table-row") {
@@ -144,7 +144,7 @@ function updateDimensions() {
         }
         else document.getElementById("resetLabel").textContent = 'Dimension Boost ('+ player.resets +'): requires ' + shiftRequirement.amount + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 
-        view = ui.view.tab.dimensions.normal.shift;
+        view = ui.view.tabs.dimensions.normal.shift;
         view.requirement.tier = shiftRequirement.tier;
         view.requirement.amount = shiftRequirement.amount;
         view.isBoost = player.currentChallenge === "challenge4"
@@ -171,7 +171,7 @@ function updateDimensions() {
         if (player.currentChallenge == "challenge4") galString +=  " Sixth Dimensions";
         else galString +=  " Eighth Dimensions";
         document.getElementById("secondResetLabel").textContent = galString;
-        view = ui.view.tab.dimensions.normal.galaxy;
+        view = ui.view.tabs.dimensions.normal.galaxy;
         view.type = GalaxyType.current();
         view.extra = extraGals;
         view.requirement.amount = galaxyRequirement;
@@ -2908,7 +2908,7 @@ function gameLoop(diff) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    view = ui.view.tab.dimensions.normal;
+    view = ui.view.tabs.dimensions.normal;
     for (let tier = 1; tier <= 8; ++tier) {
       const dimension = new DimensionStats(tier);
       let canAffordSingle = false;
@@ -3073,7 +3073,7 @@ function gameLoop(diff) {
 
     if (player.infinitied > 0) document.getElementById("sacrifice").style.display = "inline-block";
 
-    ui.view.tab.dimensions.normal.sacrifice.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
+    ui.view.tabs.dimensions.normal.sacrifice.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
     if (player.eightAmount > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
     else document.getElementById("sacrifice").className = "unavailablebtn"
 
@@ -3148,7 +3148,7 @@ function gameLoop(diff) {
     if (player.infinityUpgrades.includes("bulkBoost")) document.getElementById("postinfi23").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("autoBuyerUpgrade")) document.getElementById("postinfi33").className = "infinistorebtnbought"
 
-    view = ui.view.tab.dimensions.normal.progress;
+    view = ui.view.tabs.dimensions.normal.progress;
     function setProgress(current, goal, tooltip) {
       view.fill = Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100);
       view.tooltip = tooltip;
@@ -3237,7 +3237,7 @@ function gameLoop(diff) {
 
     document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(getNewInfReq()) + " antimatter to unlock a new Dimension."
 
-    ui.view.tab.dimensions.normal.sacrifice.boost = calcSacrificeBoost();
+    ui.view.tabs.dimensions.normal.sacrifice.boost = calcSacrificeBoost();
     document.getElementById("sacrifice").setAttribute('ach-tooltip', "Boosts 8th Dimension by " + shorten(calcSacrificeBoost()) + "x");
 
     document.getElementById("sacrifice").textContent = "Dimensional Sacrifice (" + shorten(calcSacrificeBoost())+"x)"

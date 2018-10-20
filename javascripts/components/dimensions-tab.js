@@ -41,7 +41,13 @@ Vue.component('dimensions-tab', {
     }
   },
   template:
-    '<tab-container>\
-      <subtabbed-container class="tab-content" :tabs="tabs" :model="model" :view="view"></subtabbed-container>\
-    </tab-container>'
+    `<tab-container>
+      <subtabbed-container
+        class="tab-content"
+        :tabs="tabs"
+        :model="model"
+        :view="view"
+        v-model="view.tabs.dimensions.currentSubtab">
+      </subtabbed-container>
+    </tab-container>`
 });

@@ -9,7 +9,7 @@ let ui = {
       cloudConflicts: [],
       message: ""
     },
-    tab: {
+    tabs: {
       current: undefined,
       dimensions: {
         normal: {
@@ -46,7 +46,8 @@ let ui = {
             tooltip: String.empty
           }
         }
-      }
+      },
+      statistics: { }
     },
     shiftDown: false
   }

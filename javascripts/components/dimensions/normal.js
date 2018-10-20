@@ -5,7 +5,7 @@ Vue.component('dimensions-normal', {
       return this.model.player;
     },
     dimensions: function() {
-      return this.view.tab.dimensions.normal;
+      return this.view.tabs.dimensions.normal;
     },
     isC2Running: function() {
       return this.player.currentChallenge === "challenge2";

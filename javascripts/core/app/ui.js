@@ -71,7 +71,7 @@ function tryShowtab(tab) {
     Tab.dimensions.show();
     return true;
   }
-  ui.view.tab.current = undefined;
+  ui.view.tabs.current = undefined;
   return false;
 }
 
@@ -81,11 +81,11 @@ class Tab {
   }
 
   isCurrent() {
-    return ui.view.tab.current === this._component;
+    return ui.view.tabs.current === this._component;
   }
 
   show() {
-    ui.view.tab.current = this._component;
+    ui.view.tabs.current = this._component;
   }
 }
 

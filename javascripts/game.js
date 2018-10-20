@@ -272,8 +272,11 @@ function updateCosts() {
 
 
     for (var i=1; i<=8; i++) {
-
-        document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
+      if (player["infinityDimension"+i].baseAmount >= 10*hardcapIDPurchases && i != 8) {
+        document.getElementById("infMax"+i).textContent = "Capped!"
+        document.getElementById("infMax"+i).setAttribute('ach-tooltip', "Limited to " + shortenCosts(hardcapIDPurchases) + " upgrades.")
+      }
+      else  document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
     }
 
     for (var i=1; i<=8; i++) {

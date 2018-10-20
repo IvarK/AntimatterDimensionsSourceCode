@@ -76,9 +76,9 @@ Vue.component('options-buttons', {
                 }
             },
             template:
-                '<div class="storebtn update-rate-btn" style="font-size:130%; text-align: center; cursor: default;"> \
+                '<div class="storebtn update-rate-btn"> \
                    <b>Update Rate: {{ value }} ms</b>\
-                   <input class="slider" style="width: 170px;"\
+                   <input style="width: 170px;"\
                      type="range" min="33" max="200"\
                      :value="value" @input="emitInput(parseInt($event.target.value))" />\
                  </div>'

@@ -270,11 +270,17 @@ function updateCosts() {
 
     document.getElementById("tickSpeed").textContent = 'Cost: ' + shortenCosts(player.tickSpeedCost);
 
-
+    let initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
     for (var i=1; i<=8; i++) {
       if (player["infinityDimension"+i].baseAmount >= 10*hardcapIDPurchases && i != 8) {
         document.getElementById("infMax"+i).textContent = "Capped!"
-        document.getElementById("infMax"+i).setAttribute('ach-tooltip', "Limited to " + shortenCosts(hardcapIDPurchases) + " upgrades.")
+        let capIP;
+        if (ECTimesCompleted("eterc12")) {
+          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(Math.pow(infCostMults[i], 1-ECTimesCompleted("eterc12")*0.008),hardcapIDPurchases));
+        } else {
+          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(infCostMults[i], hardcapIDPurchases));
+        }
+        document.getElementById("infMax"+i).setAttribute('ach-tooltip', "Limited to " + shortenCosts(hardcapIDPurchases) + " upgrades (" + shortenCosts(capIP) + " IP)")
       }
       else  document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
     }

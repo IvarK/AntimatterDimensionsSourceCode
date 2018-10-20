@@ -35,7 +35,7 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 97vh;">
+<body id="body" style="height: 98.5vh; margin-bottom: 0">
 <div id="ui" style="height: 100%;">
     <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; height: 100%">
         <div id='game' style="flex: 0 0 auto">
@@ -2668,9 +2668,6 @@
     </div>
     <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
     <tt-shop :player="model.player" :view="view"></tt-shop>
-    <div id="progress" style="display:none">
-        <div id="progressbar"><span id="progresspercent" ach-tooltip="Percentage until Infinity">0%</span></div>
-    </div>
     <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>

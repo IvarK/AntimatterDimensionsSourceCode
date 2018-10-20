@@ -26,8 +26,6 @@ function showTab(tabName) {
     tryShowtab(tabName);
     if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "flex";
     else document.getElementById("TTbuttons").style.display = "none"
-    if (document.getElementById("antimatterdimensions").style.display != "none" && document.getElementById("dimensions").style.display != "none") document.getElementById("progress").style.display = "block";
-    else document.getElementById("progress").style.display = "none"
     resizeCanvas();
     Modal.hide();
     tryStartTachyonAnimation();
@@ -3157,29 +3155,14 @@ function gameLoop(diff) {
     }
     if (player.currentChallenge !== "") {
         setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
-        document.getElementById("progressbar").style.width = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(player.challengeTarget) * 100), 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").textContent = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(player.challengeTarget) * 100), 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to challenge goal")
     } else if (!player.break) {
         setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
-        document.getElementById("progressbar").style.width = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(Number.MAX_VALUE) * 100), 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").textContent = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(Number.MAX_VALUE) * 100), 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to Infinity")
     } else if (player.infDimensionsUnlocked.includes(false)) {
         setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
-        document.getElementById("progressbar").style.width = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").textContent = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to next dimension unlock")
     } else if (player.currentEternityChall !== "") {
         setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
-        document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to eternity challenge goal")
     } else {
         setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
-        document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"
-        document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to Eternity")
     }
 
     if (player.eternities > 0) {
@@ -3834,8 +3817,6 @@ function showDimTab(tabName, init) {
             tab.style.display = 'none';
         }
     }
-    if (tabName === 'antimatterdimensions' && !init) document.getElementById("progress").style.display = "block"
-    else document.getElementById("progress").style.display = "none"
 }
 
 function showChallengesTab(tabName) {

@@ -142,6 +142,7 @@ button {
   position: fixed;
   z-index: 1;
   pointer-events: none;
+  text-align: left;
 }
 
 #progressbar {

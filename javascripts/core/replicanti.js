@@ -168,7 +168,7 @@ function replicantiLoop(diff) {
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult *= 10
     if (player.timestudy.studies.includes(213)) intervalMult /= 20
     if (player.reality.rebuyables[2] > 0) intervalMult /= Math.pow(3, player.reality.rebuyables[1])
-    intervalMult = intervalMult / getAdjustedGlyphEffect("replicationspeed");
+    intervalMult = intervalMult / Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) intervalMult /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult = Math.max(intervalMult * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), intervalMult)
     if (player.reality.upg.includes(6)) intervalMult /= 1+(player.replicanti.galaxies/50)

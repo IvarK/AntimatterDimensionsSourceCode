@@ -213,7 +213,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
 
 const glyphEffectSoftcaps = {
   replicationglyphlevel(value) {
-    return value > 0.15 ? 0.15 + 0.2 * (value - 0.15) : value;
+    return value > 0.15 ? 0.15 + 0.2*(value - 0.15) : value;
   }
 };
 
@@ -229,16 +229,9 @@ function getAdjustedGlyphEffect(effectKey) {
 
 // Combines all specified glyph effects (without softcaps), reduces some boilerplate
 function getTotalEffect(effectKey) {
-  // Separate an effect key into type and effect
-  let type = "";
-  let effect = ""
-  for (let i = 0; i < GLYPH_TYPES.length; i++) {
-    if (effectKey.substring(0, GLYPH_TYPES[i].length) === GLYPH_TYPES[i]) {
-      type = GLYPH_TYPES[i];
-      effect = effectKey.substring(GLYPH_TYPES[i].length);
-      break;
-    }
-  }
+  let separated = separateEffectKey(effectKey);
+  let type = separated[0];
+  let effect = separated[1];
   
   let totalEffect = 0;
   let activeGlyphs = player.reality.glyphs.active;
@@ -303,6 +296,18 @@ function getRarity(x) {
 /**
  * key is type+effect
  */
+function separateEffectKey(effectKey) {
+  let type = "";
+  let effect = ""
+  for (let i = 0; i < GLYPH_TYPES.length; i++) {
+    if (effectKey.substring(0, GLYPH_TYPES[i].length) === GLYPH_TYPES[i]) {
+      type = GLYPH_TYPES[i];
+      effect = effectKey.substring(GLYPH_TYPES[i].length);
+      break;
+    }
+  }
+  return [type, effect]
+}
 
 const NUMBERCOLOR = "#85ff85"
 const CAPPED_EFFECT_COLOR = "#ff8000"
@@ -381,10 +386,17 @@ function getGlyphTooltip(glyph) {
   let tooltipText = "";
   var rarity = getRarity(glyph.strength)
   tooltipText += "<span class='tooltip'><span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-  for (i in glyph.effects)
-    tooltipText += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
-  if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
+  for (let i = 0; i < orderedEffectList.length; i++) {
+    let separated = separateEffectKey(orderedEffectList[i]);
+    let type = separated[0];
+    let effect = separated[1];
+    if (glyph.type == type && glyph.effects["" + effect] !== undefined) {
+      tooltipText += getDesc(orderedEffectList[i], glyph.effects[effect], true) +" <br><br>"
+    }
+  }
+  if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
     tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
+  }
   tooltipText += "</span>"
   return tooltipText;
 }
@@ -657,7 +669,7 @@ function updateRealityUpgrades() {
   $("#rupg5").html("You gain 5 times more infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Exponential bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
 $(".tooltip").parent().mousemove(function(e) {

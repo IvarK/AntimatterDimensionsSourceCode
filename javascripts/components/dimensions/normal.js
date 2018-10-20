@@ -80,6 +80,7 @@ Vue.component('dimensions-normal', {
         v-if="isQuickResetAvailable">
         Lose a reset, returning to the start of the reset
       </store-button>
+      <normal-dimension-progress :progress="dimensions.progress"></normal-dimension-progress>
     </div>`
 });
 
@@ -284,5 +285,29 @@ Vue.component('normal-dimension-galaxy-row', {
         style="height: 35px; width: 200px; margin-right: 100px"> 
         Lose all your previous progress, but get a tickspeed boost
       </store-button>
+    </div>`
+});
+
+Vue.component('normal-dimension-progress', {
+  props: {
+    progress: Object
+  },
+  computed: {
+    percents: function() {
+      return `${this.progress.fill.toFixed(2)}%`;
+    },
+    progressBarStyle: function() {
+      return {
+        width: this.percents
+      };
+    }
+  },
+  template:
+    `<div id="progress">
+        <div id="progressbar" :style="progressBarStyle">
+            <span id="progresspercent" v-tooltip="progress.tooltip">
+              {{percents}}
+            </span>
+          </div>
     </div>`
 });

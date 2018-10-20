@@ -3150,23 +3150,33 @@ function gameLoop(diff) {
     if (player.infinityUpgrades.includes("bulkBoost")) document.getElementById("postinfi23").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("autoBuyerUpgrade")) document.getElementById("postinfi33").className = "infinistorebtnbought"
 
+    view = ui.view.tab.dimensions.normal.progress;
+    function setProgress(current, goal, tooltip) {
+      view.fill = Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100);
+      view.tooltip = tooltip;
+    }
     if (player.currentChallenge !== "") {
+        setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
         document.getElementById("progressbar").style.width = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(player.challengeTarget) * 100), 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(player.challengeTarget) * 100), 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to challenge goal")
     } else if (!player.break) {
+        setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
         document.getElementById("progressbar").style.width = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(Number.MAX_VALUE) * 100), 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min((Decimal.log10(player.money.plus(1)) / Decimal.log10(Number.MAX_VALUE) * 100), 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to Infinity")
     } else if (player.infDimensionsUnlocked.includes(false)) {
+        setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
         document.getElementById("progressbar").style.width = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min(player.money.e / getNewInfReq().e * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to next dimension unlock")
     } else if (player.currentEternityChall !== "") {
+        setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
         document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(player.eternityChallGoal)  * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to eternity challenge goal")
     } else {
+        setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
         document.getElementById("progressbar").style.width = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").textContent = Decimal.min(Decimal.log10(player.infinityPoints.plus(1)) / Decimal.log10(Number.MAX_VALUE)  * 100, 100).toFixed(2) + "%"
         document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to Eternity")

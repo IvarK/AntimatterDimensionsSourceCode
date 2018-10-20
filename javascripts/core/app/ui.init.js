@@ -40,6 +40,10 @@ let ui = {
           sacrifice: {
             isAvailable: false,
             boost: new Decimal(0)
+          },
+          progress: {
+            fill: 0,
+            tooltip: String.empty
           }
         }
       }

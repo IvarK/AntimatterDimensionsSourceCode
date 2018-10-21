@@ -6,10 +6,6 @@ function startChallenge(name, target) {
     player.challengeTarget = target;
     secondSoftReset();
     if (player.currentChallenge.includes("post")) player.break = true;
-    document.getElementById("fifthRow").style.display = "none";
-    document.getElementById("sixthRow").style.display = "none";
-    document.getElementById("seventhRow").style.display = "none";
-    document.getElementById("eightRow").style.display = "none";
     showTab("dimensions");
     if (player.currentChallenge.includes("post") && player.currentEternityChall !== "")
         giveAchievement("I wish I had gotten 7 eternities");

@@ -115,7 +115,7 @@ function updateDimensions() {
         const canBuy = canBuyDimension(tier);
         dimView.isAvailable = canBuy;
         if (!canBuy) {
-          break;
+          continue;
         }
         dimView.multiplier = getDimensionFinalMultiplier(tier);
         dimView.rateOfChange = getDimensionRateOfChange(tier);
@@ -244,24 +244,6 @@ function updateDimensions() {
 }
 
 function updateCosts() {
-    document.getElementById("first").textContent = 'Cost: ' + shortenCosts(player.firstCost);
-    document.getElementById("second").textContent = 'Cost: ' + shortenCosts(player.secondCost);
-    document.getElementById("third").textContent = 'Cost: ' + shortenCosts(player.thirdCost);
-    document.getElementById("fourth").textContent = 'Cost: ' + shortenCosts(player.fourthCost);
-    document.getElementById("fifth").textContent = 'Cost: ' + shortenCosts(player.fifthCost);
-    document.getElementById("sixth").textContent = 'Cost: ' + shortenCosts(player.sixthCost);
-    document.getElementById("seventh").textContent = 'Cost: ' + shortenCosts(player.seventhCost);
-    document.getElementById("eight").textContent = 'Cost: ' + shortenCosts(player.eightCost);
-
-    document.getElementById("firstMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.firstCost.times(10 - dimBought(1)));
-    document.getElementById("secondMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.secondCost.times(10 - dimBought(2)));
-    document.getElementById("thirdMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.thirdCost.times(10 - dimBought(3)));
-    document.getElementById("fourthMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.fourthCost.times(10 - dimBought(4)));
-    document.getElementById("fifthMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.fifthCost.times(10 - dimBought(5)));
-    document.getElementById("sixthMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.sixthCost.times(10 - dimBought(6)));
-    document.getElementById("seventhMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.seventhCost.times(10 - dimBought(7)));
-    document.getElementById("eightMax").textContent = 'Until 10, Cost: ' + shortenCosts(player.eightCost.times(10 - dimBought(8)));
-
     document.getElementById("tickSpeed").textContent = 'Cost: ' + shortenCosts(player.tickSpeedCost);
 
     let initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
@@ -1171,11 +1153,10 @@ function percentToNextGlyphLevel() {
 }
 
 function resetDimensions() {
-    var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
     for (var i = 1; i <= 8; i++) {
-        player[tiers[i] + "Amount"] = new Decimal(0)
-        player[tiers[i] + "Pow"] = new Decimal(1)
-        player[tiers[i] + "Bought"] = 0
+        player[TIER_NAMES[i] + "Amount"] = new Decimal(0)
+        player[TIER_NAMES[i] + "Pow"] = new Decimal(1)
+        player[TIER_NAMES[i] + "Bought"] = 0
     }
     player.firstCost = new Decimal(10)
     player.secondCost = new Decimal(100)
@@ -1293,7 +1274,7 @@ function updateAutobuyers() {
     var autoBuyerDim7 = new Autobuyer (7)
     var autoBuyerDim8 = new Autobuyer (8)
     var autoBuyerDimBoost = new Autobuyer (9)
-    var autoBuyerGalaxy = new Autobuyer (document.getElementById("secondSoftReset"))
+    var autoBuyerGalaxy = new Autobuyer (10)
     var autoBuyerTickspeed = new Autobuyer (document.getElementById("tickSpeed"))
     var autoBuyerInf = new Autobuyer (document.getElementById("bigcrunch"))
     var autoSacrifice = new Autobuyer(13)
@@ -2143,9 +2124,6 @@ function quickReset() {
     softReset(1);
 }
 
-document.getElementById("quickReset").onclick = quickReset;
-
-
 function updateInfPower() {
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
@@ -2878,8 +2856,6 @@ function gameLoop(diff) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    if (player.firstAmount.lt(1)) document.getElementById("first").className = 'storebtn';
-
     for (var tier = 1; tier < 9; tier++) {
         if (player.infinityPoints.gte(player["infinityDimension"+tier].cost)) document.getElementById("infMax"+tier).className = "storebtn"
         else document.getElementById("infMax"+tier).className = "unavailablebtn"
@@ -3129,22 +3105,6 @@ function gameLoop(diff) {
     document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 
     var shiftRequirement = getShiftRequirement(0);
-
-    if (player[TIER_NAMES[shiftRequirement.tier] + 'Amount'] >= shiftRequirement.amount) {
-        document.getElementById("softReset").className = 'storebtn';
-    } else {
-        document.getElementById("softReset").className = 'unavailablebtn';
-    }
-
-    if (player.eightAmount >= getGalaxyRequirement()) {
-        document.getElementById("secondSoftReset").className = 'storebtn';
-    } else {
-        document.getElementById("secondSoftReset").className = 'unavailablebtn';
-    }
-
-    if (player.currentChallenge == "challenge4" && player.sixthAmount >= getGalaxyRequirement()) {
-        document.getElementById("secondSoftReset").className = 'storebtn';
-    }
 
     if (player.infDimensionsUnlocked[7] == false && player.break && player.eternities <= 24) {
         document.getElementById("newDimensionButton").style.display = "inline-block"

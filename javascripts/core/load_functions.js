@@ -46,7 +46,6 @@ function onLoad() {
   if (player.newsArray === undefined) player.newsArray = [];
   if (player.chall2Pow === undefined) player.chall2Pow = 1;
   if (player.chall3Pow === undefined) player.chall3Pow = 0.01;
-  if (player.firstAmount !== 0) document.getElementById("secondRow").style.display = "table-row";
   if (player.challenges === undefined) player.challenges = []
   if (player.currentChallenge === undefined) player.currentChallenge = ""
   if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
@@ -196,7 +195,6 @@ function onLoad() {
     giveAchievement("Was it even broken?")
   }
   if (player.secondAmount !== 0) {
-      document.getElementById("thirdRow").style.display = "table-row";
       document.getElementById("tickSpeed").style.visibility = "visible";
       document.getElementById("tickSpeedMax").style.visibility = "visible";
       document.getElementById("tickLabel").style.visibility = "visible";
@@ -299,16 +297,6 @@ function onLoad() {
       }
   }
   if (player.autobuyers[8].tier == 10) player.autobuyers[8].tier = 9
-
-  if (player.thirdAmount !== 0 || player.eternities >= 30) document.getElementById("fourthRow").style.display = "table-row";
-  if (player.fourthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 0) document.getElementById("fifthRow").style.display = "table-row";
-  if (player.fifthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 1) document.getElementById("sixthRow").style.display = "table-row";
-  if (player.sixthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 2 && player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") document.getElementById("seventhRow").style.display = "table-row";
-  if (player.seventhAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 3 && player.currentChallenge !== "challenge4") document.getElementById("eightRow").style.display = "table-row";
 
   document.getElementById("totaltickgained").textContent = "You've gained "+shortenDimensions(player.totalTickGained)+" tickspeed upgrades."
 
@@ -476,11 +464,6 @@ if (player.version < 5) {
       document.getElementById("replicantidiv").style.display="none"
       document.getElementById("replicantiunlock").style.display="inline-block"
   }
-
-  if (player.currentChallenge == "challenge12" || player.currentChallenge == "challenge9" || player.currentChallenge == "challenge5" ||
-      player.currentChallenge == "postc1" || player.currentChallenge == "postc4" || player.currentChallenge == "postc5" || player.currentChallenge == "postc6" || player.currentChallenge == "postc8") document.getElementById("quickReset").style.display = "inline-block";
-  else document.getElementById("quickReset").style.display = "none";
-
 
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
   document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
@@ -662,17 +645,10 @@ if (player.version < 5) {
   else document.getElementById("chartDipsOnOff").checked = false
 
   if (player.eternities < 30) {
-    document.getElementById("secondRow").style.display = "none";
-    document.getElementById("thirdRow").style.display = "none";
     document.getElementById("tickSpeed").style.visibility = "hidden";
     document.getElementById("tickSpeedMax").style.visibility = "hidden";
     document.getElementById("tickLabel").style.visibility = "hidden";
     document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-    document.getElementById("fourthRow").style.display = "none";
-    document.getElementById("fifthRow").style.display = "none";
-    document.getElementById("sixthRow").style.display = "none";
-    document.getElementById("seventhRow").style.display = "none";
-    document.getElementById("eightRow").style.display = "none";
   }
 	initializeWormhole();
   recalculateAllGlyphs();

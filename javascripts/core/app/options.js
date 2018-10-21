@@ -178,17 +178,10 @@ function hardReset() {
   load_game();
   updateCosts();
 
-  document.getElementById("secondRow").style.display = "none";
-  document.getElementById("thirdRow").style.display = "none";
   document.getElementById("tickSpeed").style.visibility = "hidden";
   document.getElementById("tickSpeedMax").style.visibility = "hidden";
   document.getElementById("tickLabel").style.visibility = "hidden";
   document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-  document.getElementById("fourthRow").style.display = "none";
-  document.getElementById("fifthRow").style.display = "none";
-  document.getElementById("sixthRow").style.display = "none";
-  document.getElementById("seventhRow").style.display = "none";
-  document.getElementById("eightRow").style.display = "none";
   Tab.dimensions.normal.show();
   updateTickSpeed();
   updateDimensions();

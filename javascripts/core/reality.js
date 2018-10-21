@@ -180,7 +180,6 @@ function reality(force, reset, auto) {
     $("#pp").text("You have " + player.reality.pp + " Perk Points.")
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
-    document.getElementById("quickReset").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
     var autobuyers = document.getElementsByClassName('autoBuyerDiv');
     if (player.eternities < 2) {

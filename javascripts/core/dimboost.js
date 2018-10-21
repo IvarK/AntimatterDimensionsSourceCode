@@ -16,10 +16,9 @@ function getDimensionBoostPower() {
 }
 
 function applyDimensionBoost() {
-    var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
     const power = getDimensionBoostPower();
     for (var i = 1; i <= 8; i++) {
-        player[tiers[i] + "Pow"] = power.pow(player.resets + 1 - i).max(1)
+        player[TIER_NAMES[i] + "Pow"] = power.pow(player.resets + 1 - i).max(1)
     }
 }
 
@@ -83,17 +82,10 @@ function skipResetsIfPossible() {
 
 function hidePreMilestone30Elements() {
     if (player.eternities < 30) {
-        document.getElementById("secondRow").style.display = "none";
-        document.getElementById("thirdRow").style.display = "none";
         document.getElementById("tickSpeed").style.visibility = "hidden";
         document.getElementById("tickSpeedMax").style.visibility = "hidden";
         document.getElementById("tickLabel").style.visibility = "hidden";
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-        document.getElementById("fourthRow").style.display = "none";
-        document.getElementById("fifthRow").style.display = "none";
-        document.getElementById("sixthRow").style.display = "none";
-        document.getElementById("seventhRow").style.display = "none";
-        document.getElementById("eightRow").style.display = "none";
     }
 }
 
@@ -134,6 +126,4 @@ function softResetBtnClick() {
     var mult = getDimensionBoostPower().pow(player.resets + 1 - tier)
     if (mult > 1) floatText(tier, "x" + shortenDimensions(mult))
   }
-};
-
-document.getElementById("softReset").onclick = softResetBtnClick;
+}

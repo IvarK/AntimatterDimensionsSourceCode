@@ -180,7 +180,7 @@ Vue.component('normal-dimension-row', {
     }
   },
   template:
-    `<div class="dimension-tab-row" v-if="isAvailable">
+    `<div class="dimension-tab-row" v-show="isAvailable">
       <div style="width: 32%; text-align: left">
         {{name}} Dimension x{{multiplier}}
       </div>

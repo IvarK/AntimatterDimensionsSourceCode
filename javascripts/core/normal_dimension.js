@@ -148,11 +148,10 @@ function hasInfinityMult(tier) {
 
 
 function multiplySameCosts(cost) {
-  const tiers = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
   const tierCosts = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
 
   for (let i = 1; i <= 8; ++i) {
-    if (player[tiers[i] + "Cost"].e === cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
+    if (player[TIER_NAMES[i] + "Cost"].e === cost.e) player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(tierCosts[i])
 
   }
   if (player.tickSpeedCost.e === cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
@@ -160,20 +159,18 @@ function multiplySameCosts(cost) {
 
 
 function multiplyPC5Costs(cost, tier) {
-  const tiers = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
-
   if (tier < 5) {
     for (let i = 1; i < 9; i++) {
-      if (player[tiers[i] + "Cost"].e <= cost.e) {
-        player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[tiers[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      if (player[TIER_NAMES[i] + "Cost"].e <= cost.e) {
+        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
+        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   } else {
     for (let i = 1; i < 9; i++) {
-      if (player[tiers[i] + "Cost"].e >= cost.e) {
-        player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[tiers[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      if (player[TIER_NAMES[i] + "Cost"].e >= cost.e) {
+        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
+        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   }
@@ -542,12 +539,6 @@ function resetMatterOnBuy(tier) {
   if (tier < 5 && isInMatterChallenge() && player.matter.equals(0)) {
     player.matter = new Decimal(1);
   }
-}
-
-for (let tier = 1; tier <= 8; tier++) {
-  const name = TIER_NAMES[tier];
-  document.getElementById(name).onclick = () => buyOneDimensionBtnClick(tier);
-  document.getElementById(name + "Max").onclick = () => buyManyDimensionsBtnClick(tier);
 }
 
 function timeMult() {

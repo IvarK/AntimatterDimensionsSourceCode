@@ -53,8 +53,6 @@ function secondSoftResetBtnClick() {
   }
 };
 
-document.getElementById("secondSoftReset").onclick = secondSoftResetBtnClick;
-
 function galaxyReset() {
     if (autoS) auto = false;
     autoS = true;

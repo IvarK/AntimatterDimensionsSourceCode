@@ -32,7 +32,7 @@ Vue.component('dimensions-production', {
     }
   },
   template:
-    `<div>
+    `<div style="font-size: 12px">
       <b>seconds of history:</b>
       <number-input
         :min="1"

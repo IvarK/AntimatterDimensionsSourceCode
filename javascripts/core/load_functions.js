@@ -637,13 +637,6 @@ if (player.version < 5) {
       document.getElementById("game").style.display = "none";
   }
 
-  document.getElementById("chartDurationInput").value = player.options.chart.duration;
-  document.getElementById("chartUpdateRateInput").value = player.options.chart.updateRate;
-  if (player.options.chart.on) document.getElementById("chartOnOff").checked = true
-  else document.getElementById("chartOnOff").checked = false
-  if (player.options.chart.dips) document.getElementById("chartDipsOnOff").checked = true
-  else document.getElementById("chartDipsOnOff").checked = false
-
   if (player.eternities < 30) {
     document.getElementById("tickSpeed").style.visibility = "hidden";
     document.getElementById("tickSpeedMax").style.visibility = "hidden";

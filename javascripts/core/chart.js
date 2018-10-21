@@ -59,32 +59,6 @@ const normalDimChart = new Chart(dimChartEl.getContext("2d"), {
     }
 });
 
-function updateChartValues() {
-  const chart = player.options.chart;
-  chart.duration = Math.min(Math.max(parseInt(document.getElementById("chartDurationInput").value), 1), 300);
-    document.getElementById("chartDurationInput").value = chart.duration;
-    chart.updateRate = Math.min(Math.max(parseInt(document.getElementById("chartUpdateRateInput").value), 50), 10000);
-    document.getElementById("chartUpdateRateInput").value = chart.updateRate;
-    if (Number.isInteger(chart.updateRate) === false) {
-        chart.updateRate = 1000;
-    }
-    checkChartWarnings();
-}
-
-function checkChartWarnings() {
-  const chart = player.options.chart;
-  const updateRate = chart.updateRate;
-  const duration = chart.duration;
-  if ((updateRate <= 200 && duration >= 30) && chart.warning === 0) {
-    alert("Warning: setting the duration and update rate too high can cause performance issues.");
-    chart.warning = 1;
-  }
-  if (duration / updateRate * 1000 >= 1000 && chart.warning !== 2) {
-    alert("Warning: you have set the duration and update rate quite high, make sure you know what you're doing or have a good computer");
-    chart.warning = 2;
-  }
-}
-
 function addChartData(data) {
     const chart = normalDimChart;
     var points = Math.ceil(player.options.chart.duration / player.options.chart.updateRate * 1000 - 1);
@@ -138,6 +112,5 @@ function addChartData(data) {
         if (data < chart.data.datasets[0].data[chart.data.datasets[0].data.length-1] && !player.options.chart.dips) dataset.data.push(chart.data.datasets[0].data[chart.data.datasets[0].data.length-1]);
         else dataset.data.push(data);
     });
-    if (document.getElementById("dimensions").style.display == "block" && document.getElementById("production").style.display == "block") chart.update(100);
-    else chart.update(0);
+    chart.update();
 }

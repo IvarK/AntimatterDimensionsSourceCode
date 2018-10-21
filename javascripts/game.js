@@ -3311,23 +3311,6 @@ function startInterval() {
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
 }
 
-function enableChart() {
-    if (document.getElementById("chartOnOff").checked) {
-        player.options.chart.on = true;
-          if (player.options.chart.warning < 1) alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.")
-    } else {
-        player.options.chart.on = false;
-    }
-}
-
-function enableChartDips() {
-    if (document.getElementById("chartDipsOnOff").checked) {
-        player.options.chart.dips = true;
-    } else {
-        player.options.chart.dips = false;
-    }
-}
-
 function updateChart(first) {
     if (first !== true && (player.infinitied >= 1 || player.eternities >= 1) && player.options.chart.on === true) {
         if (player.currentChallenge == "challenge3" || player.currentChallenge == "postc1") {

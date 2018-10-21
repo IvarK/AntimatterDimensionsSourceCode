@@ -169,7 +169,7 @@ Vue.component('normal-dimension-row', {
     },
     isAffordableUntil10: function() {
       return this.dimension.isAffordableUntil10;
-    },
+    }
   },
   methods: {
     buySingle: function() {
@@ -201,6 +201,12 @@ Vue.component('normal-dimension-row', {
         @click="buyUntil10">
         Until 10, Cost: {{until10Cost}}
       </store-button>
+      <div 
+        class='dimension-floating-text'
+        v-for="floatingText in dimension.floatingText"
+        :key="floatingText.key">
+        {{floatingText.text}}
+      </div>
     </div>`,
 });
 

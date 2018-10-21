@@ -312,7 +312,7 @@ function buyOneDimension(tier) {
     else if (player.currentChallenge === "postc5") multiplyPC5Costs(player[name + 'Cost'], tier);
     else multiplySameCosts(cost);
     if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
-    floatText(name + "D", "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
+    floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
   }
 
   if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") player.chall2Pow = 0;
@@ -369,7 +369,7 @@ function buyManyDimension(tier) {
   if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
   if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") player.chall2Pow = 0;
   if (player.currentChallenge === "challenge8" || player.currentChallenge === "postc1") clearDimensions(tier - 1);
-  floatText(name + "D", "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
+  floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
   onBuyDimension(tier);
 
   return true;

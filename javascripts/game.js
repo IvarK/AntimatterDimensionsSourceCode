@@ -285,18 +285,13 @@ function updateCosts() {
     }
 }
 
-function floatText(id, text, leftOffset) {
-    if(!leftOffset)
-        leftOffset = 150;
-    if (!player.options.animations.floatingText) return
-    var el = $("#"+id)
-    el.append("<div class='floatingText' style='left: "+leftOffset+"px'>"+text+"</div>")
-    setTimeout(function() {
-        el.children()[0].remove()
-    }, 1000)
+let floatingTextKey = 0;
+function floatText(tier, text) {
+  if (!player.options.animations.floatingText) return;
+  const floatingText = ui.view.tabs.dimensions.normal.dims[tier].floatingText;
+  floatingText.push({ text: text, key: floatingTextKey++ });
+  setTimeout(() => floatingText.shift(), 1000)
 }
-
-
 
 
 function isEterChall(elem) {
@@ -522,7 +517,7 @@ function maxAll() {
         if (player.currentChallenge == "postc1") clearDimensions(tier-1);
         player.postC4Tier = tier;
         onBuyDimension(tier)
-        floatText(name + "D", "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
+        floatText(tier, "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
     }
 }
 
@@ -1256,7 +1251,7 @@ function sacrifice(auto) {
     if (player.currentEternityChall == "eterc3") return false
     if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE)) return false
     if (player.currentChallenge == "challenge11" && (calcTotalSacrificeBoost().gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))) return false
-    if (!auto) floatText("eightD", "x" + shortenMoney(calcSacrificeBoost()))
+    if (!auto) floatText(8, "x" + shortenMoney(calcSacrificeBoost()))
     if (calcSacrificeBoost().gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference");
     player.eightPow = player.eightPow.times(calcSacrificeBoost())
     player.sacrificed = player.sacrificed.plus(player.firstAmount);

@@ -20,7 +20,8 @@ let ui = {
               multiplier: new Decimal(0),
               isAvailable: false,
               isAffordable: false,
-              isAffordableUntil10: false
+              isAffordableUntil10: false,
+              floatingText: []
             };
           }),
           shift: {

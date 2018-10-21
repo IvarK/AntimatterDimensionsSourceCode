@@ -113,14 +113,14 @@ Vue.component('normal-dimensions-top-row', {
       <input
         type="checkbox"
         style="width:20px; height: 18px"
-        v-if="isSacrificeUnlocked"
+        v-show="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
         v-model="player.options.noSacrificeConfirmation">
       <store-button
         fontSize="12px"
         :enabled="dimensions.sacrifice.isAvailable"
         style="width: 320px"
-        v-if="isSacrificeUnlocked"
+        v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         @click="sacrifice">
         Dimensional Sacrifice ({{sacrificeBoost}}x)

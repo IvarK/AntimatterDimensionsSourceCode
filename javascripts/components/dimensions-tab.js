@@ -9,35 +9,27 @@ Vue.component('dimensions-tab', {
           component: "dimensions-normal"
         },
         {
-          name: "Challenge records",
-          id: "Challenge records",
+          name: "Infinity Dimensions",
+          id: "Infinity Dimensions",
           component: "statistics-challenges",
           condition: function() {
             return this.model.player.challenges.length > 1;
           }.bind(this)
         },
         {
-          name: "Past Infinities",
-          id: "Past Infinities",
+          name: "Time Dimensions",
+          id: "Time Dimensions",
           component: "statistic-past-infinities",
           condition: function() {
             return this.progress.infinityUnlocked();
           }.bind(this)
         },
         {
-          name: "Past Eternities",
-          id: "Past Eternities",
-          component: "statistic-past-eternities",
+          name: "Production",
+          id: "Production",
+          component: "dimensions-production",
           condition: function() {
-            return this.progress.eternityUnlocked();
-          }.bind(this)
-        },
-        {
-          name: "Past Realities",
-          id: "Past Realities",
-          component: "statistic-past-realities",
-          condition: function() {
-            return this.progress.realityUnlocked();
+            return this.progress.infinityUnlocked();
           }.bind(this)
         }
       ]

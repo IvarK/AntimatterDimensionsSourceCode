@@ -112,5 +112,5 @@ function addChartData(data) {
         if (data < chart.data.datasets[0].data[chart.data.datasets[0].data.length-1] && !player.options.chart.dips) dataset.data.push(chart.data.datasets[0].data[chart.data.datasets[0].data.length-1]);
         else dataset.data.push(data);
     });
-    chart.update();
+    chart.update(100);
 }

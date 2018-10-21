@@ -26,6 +26,7 @@ Vue.component('dimensions-production', {
       }
     },
     checkToggleWarnings: function() {
+      if (this.options.on) return;
       if (this.options.warning < 1) {
         alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.");
       }

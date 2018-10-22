@@ -13,7 +13,7 @@ let kongEPMult = 1
 
 
 function showTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName.
     var tabs = document.getElementsByClassName('tab');
     var tab;
     for (var i = 0; i < tabs.length; i++) {

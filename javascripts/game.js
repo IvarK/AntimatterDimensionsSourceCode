@@ -270,10 +270,19 @@ function updateCosts() {
 
     document.getElementById("tickSpeed").textContent = 'Cost: ' + shortenCosts(player.tickSpeedCost);
 
-
+    let initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
     for (var i=1; i<=8; i++) {
-
-        document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
+      if (player["infinityDimension"+i].baseAmount >= 10*hardcapIDPurchases && i != 8) {
+        document.getElementById("infMax"+i).textContent = "Capped!"
+        let capIP;
+        if (ECTimesCompleted("eterc12")) {
+          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(Math.pow(infCostMults[i], 1-ECTimesCompleted("eterc12")*0.008),hardcapIDPurchases));
+        } else {
+          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(infCostMults[i], hardcapIDPurchases));
+        }
+        document.getElementById("infMax"+i).setAttribute('ach-tooltip', "Limited to " + shortenCosts(hardcapIDPurchases) + " upgrades (" + shortenCosts(capIP) + " IP)")
+      }
+      else  document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
     }
 
     for (var i=1; i<=8; i++) {
@@ -752,7 +761,8 @@ function updateInfCosts() {
         if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 15)
         if (extraGals !== 0) document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + "+"+extraGals+ " replicated galaxies created."
         else document.getElementById("replicantireset").innerHTML = (player.replicanti.galaxies !== 1) ? "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created." : "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxy created."
-
+        if (isAchEnabled("r126")) document.getElementById("replicantireset").innerHTML = document.getElementById("replicantireset").innerHTML.replace("Reset replicanti amount", "Divide replicanti by e308")
+        
         document.getElementById("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) ? "storebtn" : "unavailablebtn"
         document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && ((player.replicanti.interval !== 50) || player.timestudy.studies.includes(22)) && (player.replicanti.interval !== 1)) ? "storebtn" : "unavailablebtn"
         document.getElementById("replicantimax").className = (player.infinityPoints.gte(player.replicanti.galCost)) ? "storebtn" : "unavailablebtn"
@@ -2733,11 +2743,12 @@ function gameLoop(diff) {
     if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
       tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
     }
-    // Threshold gets +1 after softcap, unaffected by glyphs
+    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs
     let freeTickSoftcap = 300000;
     if (player.timeShards.gt(0)) {
+      let softcapAddition = getAdjustedGlyphEffect("timefreeTickMult") == 0 ? 1 : 0.8 + 0.2*getAdjustedGlyphEffect("timefreeTickMult");
       let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
-      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(1+tickmult))) : uncapped;
+      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(softcapAddition+tickmult))) : uncapped;
       let gain = Math.max(0, softcapped - player.totalTickGained);
       player.totalTickGained += gain
       player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))

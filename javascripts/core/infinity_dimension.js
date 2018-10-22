@@ -190,6 +190,7 @@ function resetInfDimensions() {
 
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
+var hardcapIDPurchases = 2000000;
 
 function buyManyInfinityDimension(tier) {
   if (player.eterc8ids <= 0 && player.currentEternityChall == "eterc8") return false
@@ -197,6 +198,7 @@ function buyManyInfinityDimension(tier) {
   if (player.infinityPoints.lt(dim.cost)) return false
   if (!player.infDimensionsUnlocked[tier-1]) return false
   if (player.eterc8ids == 0) return false
+  if (dim.baseAmount >= 10*hardcapIDPurchases && tier != 8) return false
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   if (ECTimesCompleted("eterc12")) {
@@ -227,12 +229,16 @@ function buyMaxInfDims(tier) {
   }
 
   var toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult))
+  if (dim.baseAmount >= 10*hardcapIDPurchases && tier != 8)
+    toBuy = Math.min(toBuy, hardcapIDPurchases - dim.baseAmount/10);
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.cost = dim.cost.times(costMult)
   dim.amount = dim.amount.plus(10*toBuy);
-  if (tier == 8) dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
-  else dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
+  if (toBuy > 0) {
+    if (tier == 8) dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
+    else dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
+  }
   dim.baseAmount += 10*toBuy
   buyManyInfinityDimension(tier)
 }

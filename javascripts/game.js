@@ -2535,6 +2535,8 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
   return factor;
 }
 
+let autobuyerOnGameLoop = true;
+
 function gameLoop(diff) {
     let view;
     var thisUpdate = new Date().getTime();
@@ -2547,14 +2549,16 @@ function gameLoop(diff) {
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
-    // Why 20? No fucking idea!
-    // Enjoy legacy!
-    Autobuyer.intervalTimer += diff / 20;
-    Autobuyer.tickTimer += diff;
-    let autobuyerInterval = player.infinityUpgrades.includes("autoBuyerUpgrade") ? 50 : 100;
-    while (Autobuyer.tickTimer >= autobuyerInterval) {
-      Autobuyer.tickTimer -= autobuyerInterval;
-      autoBuyerTick();
+    if (autobuyerOnGameLoop) {
+      // Why 20? No fucking idea!
+      // Enjoy legacy!
+      Autobuyer.intervalTimer += diff / 20;
+      Autobuyer.tickTimer += diff;
+      let autobuyerInterval = player.infinityUpgrades.includes("autoBuyerUpgrade") ? 50 : 100;
+      while (Autobuyer.tickTimer >= autobuyerInterval) {
+        Autobuyer.tickTimer -= autobuyerInterval;
+        autoBuyerTick();
+      }
     }
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
@@ -3220,6 +3224,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = Object.assign({}, player);
     let wormholeActivations = 0;
+    autobuyerOnGameLoop = false;
     
     // Simulation code with wormhole (should be at most 600 ticks)
     if (player.wormhole[0].unlocked) {
@@ -3305,6 +3310,7 @@ function simulateTime(seconds, real, fast) {
     }
 
     Modal.message.show(popupString);
+    autobuyerOnGameLoop = true;
 }
 
 function startInterval() {

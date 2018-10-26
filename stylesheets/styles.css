@@ -177,6 +177,24 @@ button {
 
 /*#endregion Normal*/
 
+/*#region Infinity*/
+
+.infinity-power {
+  font-size: 35px;
+  color: black;
+}
+
+.infinity-dimension-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 16px;
+  margin-top: 10px;
+  position: relative;
+}
+
+/*#endregion Infinity*/
+
 /*#region Time*/
 
 .time-shards {

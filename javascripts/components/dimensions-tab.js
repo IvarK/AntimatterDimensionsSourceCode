@@ -11,9 +11,10 @@ Vue.component('dimensions-tab', {
         {
           name: "Infinity Dimensions",
           id: "Infinity Dimensions",
-          component: "statistics-challenges",
+          component: "dimensions-infinity",
           condition: function() {
-            return this.model.player.challenges.length > 1;
+            return this.player.eternities > 0 ||
+              ui.view.tabs.dimensions.infinity.dims.some(dim => dim.isAvailable);
           }.bind(this)
         },
         {

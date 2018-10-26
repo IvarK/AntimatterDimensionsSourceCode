@@ -45,6 +45,14 @@ function updateInfinityDimensions() {
         document.getElementById("infRow"+tier).style.visibility = "visible";
     }
   }
+  if (Tab.dimensions.infinity.isOpen) {
+    const view = ui.view.tabs.dimensions.infinity;
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimView = view.dims[tier];
+      dimView.multiplier = DimensionPower(tier);
+      dimView.rateOfChange = DimensionRateOfChange(tier);
+    }
+  }
 }
 
 function DimensionProduction(tier) {

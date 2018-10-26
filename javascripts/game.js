@@ -2120,6 +2120,17 @@ function quickReset() {
 }
 
 function updateInfPower() {
+    if (Tab.dimensions.infinity.isOpen) {
+      const view = ui.view.tabs.dimensions.infinity;
+      if (player.currentEternityChall === "eterc9") {
+        view.multiplier = Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1);
+      }
+      else {
+        const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+        view.multiplier = player.infinityPower.pow(conversionRate).max(1);
+      }
+      view.powerPerSecond = DimensionProduction(1);
+    }
     document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
     if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
     else {
@@ -2657,20 +2668,23 @@ function gameLoop(diff) {
     else document.getElementById("tdtabbtn").style.display = "none"
 
     for (let tier=1;tier<9;tier++) {
-        if (tier != 8 && (player.infDimensionsUnlocked[tier-1] || ECTimesCompleted("eterc7") > 0)) player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(DimensionProduction(tier+1).times(diff/10000))
-        if (player.infDimensionsUnlocked[tier-1]) {
-            document.getElementById("infRow"+tier).style.display = "inline-block"
-            document.getElementById("dimTabButtons").style.display = "inline-block"
-            var idtabshown = true;
-        } else {
-            document.getElementById("infRow"+tier).style.display = "none"
-            document.getElementById("idtabbtn").style.display = "none"
-        }
-        if (idtabshown === true || player.eternities >= 1) {
-            document.getElementById("idtabbtn").style.display = "inline-block"
-        }
+      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
+        player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
+      }
+      ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
+      if (player.infDimensionsUnlocked[tier - 1]) {
+        document.getElementById("infRow" + tier).style.display = "inline-block"
+        document.getElementById("dimTabButtons").style.display = "inline-block"
+        var idtabshown = true;
+      } else {
+        document.getElementById("infRow" + tier).style.display = "none"
+        document.getElementById("idtabbtn").style.display = "none"
+      }
+      if (idtabshown === true || player.eternities >= 1) {
+        document.getElementById("idtabbtn").style.display = "inline-block"
+      }
 
-        if (tier <8) player["timeDimension"+tier].amount = player["timeDimension"+tier].amount.plus(getTimeDimensionProduction(tier+1).times(diff/10000))
+      if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
     }
 
     if (player.infinitied > 0 && player.eternities < 1) {

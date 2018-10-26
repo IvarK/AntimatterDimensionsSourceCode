@@ -48,6 +48,17 @@ let ui = {
             tooltip: String.empty
           }
         },
+        infinity: {
+          dims: Array.from({length: 9}, () => {
+            return {
+              rateOfChange: new Decimal(0),
+              multiplier: new Decimal(0),
+              isAvailable: false,
+            };
+          }),
+          multiplier: new Decimal(0),
+          powerPerSecond: new Decimal(0)
+        },
         time: {
           dims: Array.from({length: 9}, () => {
             return {
@@ -55,8 +66,6 @@ let ui = {
               multiplier: new Decimal(0),
               isAvailable: false,
               amount: new Decimal(0),
-              isAffordable: false,
-              isAffordableUntil10: false
             };
           }),
           shardsPerSecond: new Decimal(0)

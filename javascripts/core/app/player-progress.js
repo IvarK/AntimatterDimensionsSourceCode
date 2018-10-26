@@ -1,31 +1,46 @@
-var PlayerProgress = function PlayerProgress(player) {
-  this.infinityUnlocked = function() {
-    return player.infinitied > 0 || this.eternityUnlocked();
-  };
-  this.eternityUnlocked = function() {
-    return player.eternities > 0 || this.realityUnlocked();
-  };
-  this.realityUnlocked = function() {
-    return player.realities > 0;
-  };
-};
+class PlayerProgress {
+  constructor(player) {
+    this._player = player;
+  }
 
-PlayerProgress.current = function() {
-  return new PlayerProgress(player);
-};
+  get isSacrificeUnlocked() {
+    return this._player.infinitied > 0 || this._player.resets > 4;
+  }
 
-PlayerProgress.of = function(player) {
-  return new PlayerProgress(player);
-};
+  get isRealityUnlocked() {
+    return this._player.realities > 0;
+  }
 
-PlayerProgress.infinityUnlocked = function() {
-  return PlayerProgress.current().infinityUnlocked();
-};
+  get isEternityUnlocked() {
+    return this._player.eternities > 0 || this.isRealityUnlocked;
+  }
 
-PlayerProgress.eternityUnlocked = function() {
-  return PlayerProgress.current().eternityUnlocked();
-};
+  get isInfinityUnlocked() {
+    return this._player.infinitied > 0 || this.isEternityUnlocked;
+  }
 
-PlayerProgress.realityUnlocked = function() {
-  return PlayerProgress.current().realityUnlocked();
-};
+  static get current() {
+    return new PlayerProgress(player);
+  }
+
+  static of(player) {
+    return new PlayerProgress(player);
+  }
+
+  static get isSacrificeUnlocked() {
+    return PlayerProgress.current.isSacrificeUnlocked;
+  }
+
+  static infinityUnlocked() {
+    return PlayerProgress.current.isInfinityUnlocked;
+  }
+
+  static eternityUnlocked() {
+    return PlayerProgress.current.isEternityUnlocked;
+  }
+
+  static get realityUnlocked() {
+    return PlayerProgress.current.isRealityUnlocked;
+  }
+}
+

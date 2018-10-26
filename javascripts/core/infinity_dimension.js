@@ -28,23 +28,38 @@ function DimensionRateOfChange(tier) {
   return change;
 }
 
-
-
-
-function updateInfinityDimensions() {
-  if (document.getElementById("infinitydimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
-    for (let tier = 1; tier <= 8; ++tier) {
-        document.getElementById("infD"+tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(DimensionPower(tier));
-        document.getElementById("infAmount"+tier).textContent = DimensionDescription(tier);
-        var name = TIER_NAMES[tier];
-        if (!player.infDimensionsUnlocked[tier-1]) {
-            break;
-        }
-
-        document.getElementById("infRow"+tier).style.display = "table-row";
-        document.getElementById("infRow"+tier).style.visibility = "visible";
+function updateInfinityDimensionTab() {
+  const view = ui.view.tabs.dimensions.infinity;
+  const ec12Completions = ECTimesCompleted("eterc12");
+  for (let tier = 1; tier <= 8; tier++) {
+    const dimView = view.dims[tier];
+    dimView.multiplier = shortenMoney(DimensionPower(tier));
+    dimView.rateOfChange = shorten(DimensionRateOfChange(tier));
+    const stats = player[`infinityDimension${tier}`];
+    dimView.amount = shortenDimensions(stats.amount);
+    dimView.cost = shortenCosts(stats.cost);
+    dimView.isAffordable = player.infinityPoints.gte(stats.cost);
+    const isCapped = tier < 8 && stats.baseAmount >= 10 * hardcapIDPurchases;
+    dimView.isCapped = isCapped;
+    if (isCapped) {
+      let initCost = new Decimal(initIDCost[tier]);
+      const costMult = infCostMults[tier];
+      if (ec12Completions) {
+        initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
+      }
+      dimView.capIP = shortenCosts(initCost.times(Decimal.pow(initCost, hardcapIDPurchases)));
     }
   }
+  const infinityPower = player.infinityPower;
+  if (player.currentEternityChall === "eterc9") {
+    view.multiplier = shortenMoney(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
+  }
+  else {
+    const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    view.multiplier = shortenMoney(infinityPower.pow(conversionRate).max(1));
+  }
+  view.infinityPower = shortenMoney(infinityPower);
+  view.powerPerSecond = shortenDimensions(DimensionProduction(1));
 }
 
 function DimensionProduction(tier) {
@@ -188,6 +203,7 @@ function resetInfDimensions() {
 
 }
 
+const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
 var hardcapIDPurchases = 2000000;
@@ -210,8 +226,9 @@ function buyManyInfinityDimension(tier) {
   else dim.power = dim.power.times(infPowerMults[tier])
   dim.baseAmount += 10
 
-  if (player.currentEternityChall == "eterc8") player.eterc8ids-=1
-  document.getElementById("eterc8ids").textContent = "You have "+player.eterc8ids+" purchases left."
+  if (player.currentEternityChall == "eterc8") {
+    player.eterc8ids -= 1;
+  }
   return true
 }
 
@@ -250,36 +267,10 @@ function buyMaxInfinityDimensions() {
     }
   }
 
-function switchAutoInf(tier) {
-  if (player.infDimBuyers[tier-1]) {
-      player.infDimBuyers[tier-1] = false
-      document.getElementById("infauto"+tier).textContent = "Auto: OFF"
-  } else {
-      player.infDimBuyers[tier-1] = true
-      document.getElementById("infauto"+tier).textContent = "Auto: ON"
-  }
-}
-
 function toggleAllInfDims() {
-  if (player.infDimBuyers[0]) {
-      for (var i=1; i<9; i++) {
-          player.infDimBuyers[i-1] = false
-          document.getElementById("infauto"+i).textContent = "Auto: OFF"
-      }
-  } else {
-      for (var i=1; i<9; i++) {
-          if (player.eternities - 10>=i) {
-              player.infDimBuyers[i-1] = true
-              document.getElementById("infauto"+i).textContent = "Auto: ON"
-          }
-      }
-  }
-}
-
-function loadInfAutoBuyers() {
-  for (var i=1; i<9; i++) {
-      if (player.infDimBuyers[i-1]) document.getElementById("infauto"+i).textContent = "Auto: ON"
-      else document.getElementById("infauto"+i).textContent = "Auto: OFF"
+  const areEnabled = player.infDimBuyers[0];
+  for (let i = 1; i < 9; i++) {
+    player.infDimBuyers[i - 1] = !areEnabled;
   }
 }
 

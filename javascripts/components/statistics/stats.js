@@ -46,16 +46,16 @@ Vue.component('statistics-stats-tab', {
       return shortenMoney(this.player.totalmoney);
     },
     progress: function() {
-      return PlayerProgress.of(this.model.player);
+      return PlayerProgress.of(this.player);
     },
     infinityUnlocked: function() {
-      return this.progress.infinityUnlocked();
+      return this.progress.isInfinityUnlocked;
     },
     eternityUnlocked: function() {
-      return this.progress.eternityUnlocked();
+      return this.progress.isEternityUnlocked;
     },
     realityUnlocked: function() {
-      return this.progress.realityUnlocked();
+      return this.progress.isRealityUnlocked;
     },
     hasInfinities: function() {
       return this.player.infinitied > 0;

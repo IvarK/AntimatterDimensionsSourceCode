@@ -350,7 +350,7 @@ var player = {
   options: {
     newsHidden: false,
     notation: "Mixed scientific",
-    sacrificeConfirmation: true,
+    noSacrificeConfirmation: false,
     retryChallenge: false,
     bulkOn: true,
     cloud: true,
@@ -374,8 +374,15 @@ var player = {
 
 };
 
+function getPlayerGlobal(){
+  return player;
+}
+
 class DimensionStats {
-  constructor(tier) {
+  constructor(tier, player) {
+    if (!player) {
+      player = getPlayerGlobal();
+    }
     const tierProps = DimensionStats.tierProps;
     let props = tierProps[tier];
     if (props === undefined) {
@@ -388,22 +395,27 @@ class DimensionStats {
       };
       tierProps[tier] = props;
     }
-    this.$_props = props;
+    this._props = props;
+    this._player = player;
   }
 
-  get cost() { return player[this.$_props.cost]; }
-  set cost(value) { player[this.$_props.cost] = value; }
+  get cost() { return this._player[this._props.cost]; }
+  set cost(value) { this._player[this._props.cost] = value; }
 
-  get amount() { return player[this.$_props.amount]; }
-  set amount(value) { player[this.$_props.amount] = value; }
+  get amount() { return this._player[this._props.amount]; }
+  set amount(value) { this._player[this._props.amount] = value; }
 
-  get bought() { return player[this.$_props.bought]; }
-  set bought(value) { player[this.$_props.bought] = value; }
+  get bought() { return this._player[this._props.bought]; }
+  set bought(value) { this._player[this._props.bought] = value; }
 
   get boughtBefore10() { return this.bought % 10; }
 
-  get pow() { return player[this.$_props.pow]; }
-  set pow(value) { player[this.$_props.pow] = value; }
+  get remainingUntil10() { return 10 - this.boughtBefore10; }
+
+  get costUntil10() { return this.cost.times(this.remainingUntil10); }
+
+  get pow() { return this._player[this._props.pow]; }
+  set pow(value) { this._player[this._props.pow] = value; }
 }
 
 DimensionStats.tierProps = [];

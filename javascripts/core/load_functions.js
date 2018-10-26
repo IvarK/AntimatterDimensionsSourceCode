@@ -25,7 +25,7 @@ function onLoad() {
   }
   if (player.options.invert === true) Theme.set("Inverted"); player.options.invert = undefined;
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
-  if (player.options.sacrificeConfirmation === undefined) player.options.sacrificeConfirmation = true;
+  if (player.options.noSacrificeConfirmation === undefined) player.options.noSacrificeConfirmation = false;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
   if (player.options.bulkOn === undefined) player.options.bulkOn = true
   if (player.options.cloud === undefined) player.options.cloud = true
@@ -46,7 +46,6 @@ function onLoad() {
   if (player.newsArray === undefined) player.newsArray = [];
   if (player.chall2Pow === undefined) player.chall2Pow = 1;
   if (player.chall3Pow === undefined) player.chall3Pow = 0.01;
-  if (player.firstAmount !== 0) document.getElementById("secondRow").style.display = "table-row";
   if (player.challenges === undefined) player.challenges = []
   if (player.currentChallenge === undefined) player.currentChallenge = ""
   if (player.infinitied > 0 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
@@ -196,7 +195,6 @@ function onLoad() {
     giveAchievement("Was it even broken?")
   }
   if (player.secondAmount !== 0) {
-      document.getElementById("thirdRow").style.display = "table-row";
       document.getElementById("tickSpeed").style.visibility = "visible";
       document.getElementById("tickSpeedMax").style.visibility = "visible";
       document.getElementById("tickLabel").style.visibility = "visible";
@@ -300,18 +298,6 @@ function onLoad() {
   }
   if (player.autobuyers[8].tier == 10) player.autobuyers[8].tier = 9
 
-  if (player.thirdAmount !== 0 || player.eternities >= 30) document.getElementById("fourthRow").style.display = "table-row";
-  if (player.fourthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 0) document.getElementById("fifthRow").style.display = "table-row";
-  if (player.fifthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 1) document.getElementById("sixthRow").style.display = "table-row";
-  if (player.sixthAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 2 && player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") document.getElementById("seventhRow").style.display = "table-row";
-  if (player.seventhAmount !== 0|| player.eternities >= 30)
-  if (player.resets > 3 && player.currentChallenge !== "challenge4") document.getElementById("eightRow").style.display = "table-row";
-
-  document.getElementById("totaltickgained").textContent = "You've gained "+shortenDimensions(player.totalTickGained)+" tickspeed upgrades."
-
   var IPminpeak = new Decimal(0)
   var EPminpeak = new Decimal(0)
 
@@ -319,7 +305,6 @@ function onLoad() {
       player.autobuyers[9].bulk = 1
   }
 
-  if (player.options.sacrificeConfirmation == false) document.getElementById("confirmation").checked = "true"
   if (player.version === undefined) { // value will need to be adjusted when update goes live
       for (var i = 0; i < player.autobuyers.length; i++) {
           if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
@@ -420,14 +405,6 @@ if (player.version < 5) {
 
   if (player.timestudy.shopMinimized === undefined) player.timestudy.shopMinimized = false;
 
-
-
-  if (player.eternities == 0) {
-      document.getElementById("eternityPoints2").style.display = "none";
-      document.getElementById("eternitystorebtn").style.display = "none";
-      document.getElementById("tdtabbtn").style.display = "none";
-  }
-
   if (player.eternityUpgrades === undefined) player.eternityUpgrades = []
 
   if (player.infDimBuyers === undefined) player.infDimBuyers = [false, false, false, false, false, false, false, false]
@@ -477,11 +454,6 @@ if (player.version < 5) {
       document.getElementById("replicantidiv").style.display="none"
       document.getElementById("replicantiunlock").style.display="inline-block"
   }
-
-  if (player.currentChallenge == "challenge12" || player.currentChallenge == "challenge9" || player.currentChallenge == "challenge5" ||
-      player.currentChallenge == "postc1" || player.currentChallenge == "postc4" || player.currentChallenge == "postc5" || player.currentChallenge == "postc6" || player.currentChallenge == "postc8") document.getElementById("quickReset").style.display = "inline-block";
-  else document.getElementById("quickReset").style.display = "none";
-
 
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
   document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
@@ -655,25 +627,11 @@ if (player.version < 5) {
       document.getElementById("game").style.display = "none";
   }
 
-  document.getElementById("chartDurationInput").value = player.options.chart.duration;
-  document.getElementById("chartUpdateRateInput").value = player.options.chart.updateRate;
-  if (player.options.chart.on) document.getElementById("chartOnOff").checked = true
-  else document.getElementById("chartOnOff").checked = false
-  if (player.options.chart.dips) document.getElementById("chartDipsOnOff").checked = true
-  else document.getElementById("chartDipsOnOff").checked = false
-
   if (player.eternities < 30) {
-    document.getElementById("secondRow").style.display = "none";
-    document.getElementById("thirdRow").style.display = "none";
     document.getElementById("tickSpeed").style.visibility = "hidden";
     document.getElementById("tickSpeedMax").style.visibility = "hidden";
     document.getElementById("tickLabel").style.visibility = "hidden";
     document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-    document.getElementById("fourthRow").style.display = "none";
-    document.getElementById("fifthRow").style.display = "none";
-    document.getElementById("sixthRow").style.display = "none";
-    document.getElementById("seventhRow").style.display = "none";
-    document.getElementById("eightRow").style.display = "none";
   }
 	initializeWormhole();
   recalculateAllGlyphs();
@@ -693,8 +651,6 @@ if (player.version < 5) {
   updateChallengeTimes();
   updateMilestones();
   updateEternityUpgrades();
-  loadInfAutoBuyers();
-  loadTimeAutoBuyers()
   resizeCanvas();
   checkForEndMe();
   updateEternityChallenges();
@@ -804,7 +760,7 @@ function change_save(saveId) {
   load_game();
   updateChallenges()
   transformSaveToDecimal()
-  showDimTab('antimatterdimensions', true)
+  Tab.dimensions.normal.show();
   showChallengesTab('challenges')
   showEternityTab('timestudies', true)
   Modal.hide();

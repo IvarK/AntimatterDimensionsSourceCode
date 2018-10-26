@@ -148,11 +148,10 @@ function hasInfinityMult(tier) {
 
 
 function multiplySameCosts(cost) {
-  const tiers = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
   const tierCosts = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
 
   for (let i = 1; i <= 8; ++i) {
-    if (player[tiers[i] + "Cost"].e === cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
+    if (player[TIER_NAMES[i] + "Cost"].e === cost.e) player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(tierCosts[i])
 
   }
   if (player.tickSpeedCost.e === cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
@@ -160,20 +159,18 @@ function multiplySameCosts(cost) {
 
 
 function multiplyPC5Costs(cost, tier) {
-  const tiers = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
-
   if (tier < 5) {
     for (let i = 1; i < 9; i++) {
-      if (player[tiers[i] + "Cost"].e <= cost.e) {
-        player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[tiers[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      if (player[TIER_NAMES[i] + "Cost"].e <= cost.e) {
+        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
+        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   } else {
     for (let i = 1; i < 9; i++) {
-      if (player[tiers[i] + "Cost"].e >= cost.e) {
-        player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[tiers[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      if (player[TIER_NAMES[i] + "Cost"].e >= cost.e) {
+        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
+        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   }
@@ -312,7 +309,7 @@ function buyOneDimension(tier) {
     else if (player.currentChallenge === "postc5") multiplyPC5Costs(player[name + 'Cost'], tier);
     else multiplySameCosts(cost);
     if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
-    floatText(name + "D", "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
+    floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
   }
 
   if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") player.chall2Pow = 0;
@@ -369,7 +366,7 @@ function buyManyDimension(tier) {
   if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
   if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") player.chall2Pow = 0;
   if (player.currentChallenge === "challenge8" || player.currentChallenge === "postc1") clearDimensions(tier - 1);
-  floatText(name + "D", "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
+  floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
   onBuyDimension(tier);
 
   return true;
@@ -508,87 +505,41 @@ function canAfford(cost) {
   return ((cost.lt(new Decimal("1.79e308")) && !player.break) || player.break) && cost.lte(player.money);
 }
 
-document.getElementById("first").onclick = function() {
-  if (buyOneDimension(1)) {
-    // This achievement is granted only if the buy one button is pressed.
-    if (player.firstAmount >= 1e150) {
-      giveAchievement("There's no point in doing that");
+function buyOneDimensionBtnClick(tier) {
+  resetMatterOnBuy(tier);
+  if (tier === 1) {
+    if (buyOneDimension(1)) {
+      // This achievement is granted only if the buy one button is pressed.
+      if (player.firstAmount >= 1e150) {
+        giveAchievement("There's no point in doing that");
+      }
     }
-    if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
+    if (player.firstAmount.lt(1)) {
+      player.money = new Decimal("0");
+      player.firstAmount = player.firstAmount.plus(1);
+      player.firstBought += 1;
+      giveAchievement("You gotta start somewhere");
+    }
+    return;
   }
-  if (player.firstAmount.lt(1)) {
-    player.money = new Decimal("0");
-    player.firstAmount = player.firstAmount.plus(1);
-    player.firstBought += 1;
-    giveAchievement("You gotta start somewhere");
+  buyOneDimension(tier);
+}
+
+function buyManyDimensionsBtnClick(tier) {
+  resetMatterOnBuy(tier);
+  buyManyDimension(tier);
+}
+
+function resetMatterOnBuy(tier) {
+  function isInMatterChallenge() {
+    return player.currentChallenge === "challenge12" ||
+      player.currentChallenge === "postc1" ||
+      player.currentChallenge === "postc6";
   }
-};
-
-document.getElementById("second").onclick = function() {
-  buyOneDimension(2);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("third").onclick = function() {
-  buyOneDimension(3);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("fourth").onclick = function() {
-  buyOneDimension(4);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("fifth").onclick = function() {
-  buyOneDimension(5);
-};
-
-document.getElementById("sixth").onclick = function() {
-  buyOneDimension(6);
-};
-
-document.getElementById("seventh").onclick = function() {
-  buyOneDimension(7);
-};
-
-document.getElementById("eight").onclick = function() {
-  buyOneDimension(8);
-};
-
-document.getElementById("firstMax").onclick = function() {
-  buyManyDimension(1);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("secondMax").onclick = function() {
-  buyManyDimension(2);
-  if ((player.currentChallenge === "challenge12" || player.currentChallenge === "postc1") && player.matter.equals(0)) player.matter = new Decimal(1);
-};
-
-document.getElementById("thirdMax").onclick = function() {
-  buyManyDimension(3);
-};
-
-document.getElementById("fourthMax").onclick = function() {
-  buyManyDimension(4);
-};
-
-document.getElementById("fifthMax").onclick = function() {
-  buyManyDimension(5);
-};
-
-document.getElementById("sixthMax").onclick = function() {
-  buyManyDimension(6);
-};
-
-document.getElementById("seventhMax").onclick = function() {
-  buyManyDimension(7);
-};
-
-document.getElementById("eightMax").onclick = function() {
-  buyManyDimension(8);
-};
-
+  if (tier < 5 && isInMatterChallenge() && player.matter.equals(0)) {
+    player.matter = new Decimal(1);
+  }
+}
 
 function timeMult() {
   let mult = new Decimal(1);
@@ -621,4 +572,78 @@ function getDimensionProductionPerSecond(tier) {
   }
   if (((player.currentChallenge !== "" && !player.currentChallenge.includes("post")) || !player.break) && ret.gte(Number.MAX_VALUE)) ret = ret.min("1e315");
   return ret;
+}
+
+function updateNormalDimensionTab() {
+  const view = ui.view.tabs.dimensions.normal;
+  for (let tier = 1; tier <= 8; tier++) {
+    let dimView = view.dims[tier];
+    const canBuy = canBuyDimension(tier);
+    dimView.isAvailable = canBuy;
+    if (!canBuy) {
+      continue;
+    }
+    dimView.multiplier = shortenMultiplier(getDimensionFinalMultiplier(tier));
+    dimView.rateOfChange = tier < 8 ? shorten(getDimensionRateOfChange(tier)) : String.empty;
+    const dimension = new DimensionStats(tier);
+    dimView.amount = tier < 8 ? shortenDimensions(dimension.amount) : Math.round(dimension.amount).toString();
+    dimView.singleCost = shortenCosts(dimension.cost);
+    dimView.until10Cost = shortenCosts(dimension.costUntil10);
+    let canAffordSingle = false;
+    let canAffordUntil10 = false;
+    if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
+      const lowerTier = new DimensionStats(tier - 2);
+      const lowerTierAmount = lowerTier.amount;
+      canAffordSingle = lowerTierAmount.gte(dimension.cost);
+      canAffordUntil10 = lowerTierAmount.gte(dimension.costUntil10);
+    } else {
+      canAffordSingle = canAfford(dimension.cost);
+      canAffordUntil10 = canAfford(dimension.costUntil10);
+    }
+    dimView.isAffordable = canAffordSingle;
+    dimView.isAffordableUntil10 = canAffordUntil10;
+  }
+
+  const sacrificeView = view.sacrifice;
+  sacrificeView.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
+  sacrificeView.boost = shorten(calcSacrificeBoost());
+
+  const shiftRequirement = getShiftRequirement(0);
+  const shiftView = view.shift;
+  shiftView.requirement.tier = shiftRequirement.tier;
+  shiftView.requirement.amount = shiftRequirement.amount;
+  shiftView.isBoost = player.currentChallenge === "challenge4" ?
+    shiftRequirement.tier === 6 :
+    shiftRequirement.tier === 8;
+
+  let extraGals = player.replicanti.galaxies;
+  if (player.timestudy.studies.includes(225)) {
+    extraGals += Math.floor(player.replicanti.amount.e / 1000);
+  }
+  if (player.timestudy.studies.includes(226)) {
+    extraGals += Math.floor(player.replicanti.gal / 15);
+  }
+  const galaxyRequirement = getGalaxyRequirement();
+  const galaxyView = view.galaxy;
+  galaxyView.type = GalaxyType.current();
+  galaxyView.extra = extraGals;
+  galaxyView.requirement.amount = galaxyRequirement;
+  galaxyView.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
+
+  const progressView = view.progress;
+  function setProgress(current, goal, tooltip) {
+    progressView.fill = Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100);
+    progressView.tooltip = tooltip;
+  }
+  if (player.currentChallenge !== "") {
+    setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
+  } else if (!player.break) {
+    setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
+  } else if (player.infDimensionsUnlocked.includes(false)) {
+    setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
+  } else if (player.currentEternityChall !== "") {
+    setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
+  } else {
+    setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
+  }
 }

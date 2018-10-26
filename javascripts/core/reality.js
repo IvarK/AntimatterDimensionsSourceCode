@@ -180,7 +180,6 @@ function reality(force, reset, auto) {
     $("#pp").text("You have " + player.reality.pp + " Perk Points.")
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
-    document.getElementById("quickReset").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
     var autobuyers = document.getElementsByClassName('autoBuyerDiv');
     if (player.eternities < 2) {
@@ -194,8 +193,6 @@ function reality(force, reset, auto) {
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
     resetInfDimensions();
-    loadInfAutoBuyers();
-    loadTimeAutoBuyers()
     updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
@@ -224,7 +221,6 @@ function reality(force, reset, auto) {
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
-    document.getElementById("totaltickgained").textContent = "You've gained " + Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " tickspeed upgrades.";
     resetTickspeed();
     updateTickSpeed();
     resetMoney();
@@ -232,8 +228,7 @@ function reality(force, reset, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     updateEternityChallenges();
     if (player.eternities <= 1) {
-        showTab("dimensions");
-        showDimTab("antimatterdimensions");
+        Tab.dimensions.normal.show();
         loadAutoBuyerSettings()
     }
     Marathon2 = 0;

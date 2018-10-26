@@ -12,6 +12,7 @@
     <script type="text/javascript" src="javascripts/notify.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+    <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/tln.css">
     <script>
@@ -34,7 +35,7 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 97vh;">
+<body id="body" style="height: 98.5vh; margin-bottom: 0">
 <div id="ui" style="height: 100%;">
     <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; height: 100%">
         <div id='game' style="flex: 0 0 auto">
@@ -505,422 +506,8 @@
                 <footer-links></footer-links>
             </div>
         </div>
-        <div id="dimensions" class="tab">
-            <table class="table" align="center" style="margin: auto" id="dimTabButtons">
-                <tr>
-                    <td id="dtabbtn"><button class="secondarytabbtn" onclick="showDimTab('antimatterdimensions')">Dimensions</button></td>
-                    <td id="idtabbtn"><button class="secondarytabbtn" onclick="showDimTab('infinitydimensions')">Infinity Dimensions</button></td>
-                    <td id="tdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('timedimensions')">Time Dimensions</button></td>
-                    <td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
-                </tr>
-            </table>
-            <div id="antimatterdimensions" class="dimtab">
-                <p></p>
-                <input id="confirmation" type="checkbox" style="width:20px; height: 18px; display: none" ach-tooltip="No confirmation when doing Dimensional Sacrifice" onchange="sacrificeConf()">
-                <button id="sacrifice" class="storebtn" style="font-size:12px; width: 320px; display: none" ach-tooltip="">Dimensional Sacrifice</button>
-                <button id="maxall" class="storebtn" style="font-size: 12px">Max all (M)</Button>
-                <span id="chall2Pow"></span>
-                <span id="chall3Pow"></span>
-                <table class="table" >
-                <tbody id="parent">
-                    <tr style="font-size: 15px" id="firstRow">
-                        <td id="firstD" width="32%" class="rel">
-                            First Dimension x1
-                        </td>
-                        <td>
-                            <div id="firstAmount">0 (0)</div>
-                        </td>
-                        <td align="right" width="10%">
-                            <button id="first" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn" align="right">Cost: 10</button>
-                        </td>
-                        <td align="right" width="10%">
-                            <button id="firstMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" align="right">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="secondRow" style="display: none; font-size: 15px">
-                        <td id="secondD" class="rel">
-                            Second Dimension
-                        </td>
-                        <td>
-                            <div id="secondAmount" align="left">0 (0)</div>
-                        </td>
-                        <td><button id="second" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 100</button>
-                        </td>
-                        <td>
-                            <button id="secondMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="thirdRow" style="display: none; font-size: 15px">
-                        <td id="thirdD" class="rel">
-                            Third Dimension
-                        </td>
-                        <td>
-                            <div id="thirdAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="third" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 10000</button>
-                        </td>
-                        <td>
-                            <button id="thirdMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="fourthRow" style="display: none; font-size: 15px">
-                        <td id="fourthD" class="rel">
-                            Fourth Dimension
-                        </td>
-                        <td>
-                            <div id="fourthAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="fourth" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 1000000</button>
-                        </td>
-                        <td>
-                            <button id="fourthMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="fifthRow" style="display: none; font-size: 15px">
-                        <td id="fifthD" class="rel">
-                            Fifth Dimension
-                        </td>
-                        <td>
-                            <div id="fifthAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="fifth" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 1000000</button>
-                        </td>
-                        <td>
-                            <button id="fifthMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="sixthRow" style="display: none; font-size: 15px">
-                        <td id="sixthD" class="rel">
-                            Sixth Dimension
-                        </td>
-                        <td>
-                            <div id="sixthAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="sixth" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 1000000</button>
-                        </td>
-                        <td>
-                            <button id="sixthMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="seventhRow" style="display: none; font-size: 15px">
-                        <td id="seventhD" class="rel">
-                            Seventh Dimension
-                        </td>
-                        <td>
-                            <div id="seventhAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="seventh" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 1000000</button>
-                        </td>
-                        <td>
-                            <button id="seventhMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="eightRow" style="display: none; font-size: 15px">
-                        <td id="eightD" class="rel">
-                            Eight Dimension
-                        </td>
-                        <td>
-                            <div id="eightAmount" align="left">0 (0)</div>
-                        </td>
-                        <td>
-
-                            <button id="eight" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn">Cost: 1000000</button>
-                        </td>
-                        <td>
-                            <button id="eightMax" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table style="width: 100%">
-                    <tr style="font-size: 15px">
-                        <td id="resetLabel">
-                            Dimension Shift: requires 20 Fourth Dimension
-                        </td>
-                        <td>
-                            <button id="softReset" style="color:black; width: 200px; height: 25px; font-size: 9px" class="storebtn">Reset the game for a new Dimension</button>
-                        </td>
-                    </tr>
-                    <tr style="font-size: 15px">
-                        <td id="secondResetLabel">
-                            Antimatter Galaxies: requires 80 Eight Dimension
-                        </td>
-                        <td>
-                            <button id="secondSoftReset" style="color:black; width: 200px; height: 35px; font-size: 9px" class="storebtn">Lose all your previous progress, but get a tickspeed boost</button>
-                        </td>
-                    </tr>
-                </table>
-                <button id="quickReset" style="color:black; width: 200px; height: 50px; font-size: 12px; display: none" class="storebtn">Lose a reset, returning to the start of the reset</button>
-            </div>
-            <div id="infinitydimensions" class="dimtab">
-                <span id="EC12Pow"></span>
-                <div>
-                    <p>You have <span id="infPowAmount" style="font-size:35px; color: black">0</span> infinity power. translated to <span id="infDimMultAmount" style="font-size:35px; color: black">0</span>x multiplier on all dimensions</p>
-                </div>
-                <div id="infPowPerSec">You are getting 0 infinity power per second.</div>
-                <button id="maxInfinityDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxInfinityDimensions()">Max all</Button>
-                <table class="table" >
-                    <tr style="font-size: 16px" id="infRow1">
-                        <td id="infD1" width="41%">
-                            First Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount1">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto1" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(1)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td align="right" width="10%">
-                            <button id="infMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyManyInfinityDimension(1)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow2" style="display: none; font-size: 16px">
-                        <td id="infD2">
-                            Second Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount2" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto2" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(2)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td>
-                            <button id="infMax2" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(2)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow3" style="display: none; font-size: 16px">
-                        <td id="infD3">
-                            Third Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount3" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto3" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(3)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td>
-                            <button id="infMax3" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(3)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow4" style="display: none; font-size: 16px">
-                        <td id="infD4">
-                            Fourth Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount4" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto4" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(4)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td>
-                            <button id="infMax4" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(4)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow5" style="display: none; font-size: 16px">
-                        <td id="infD5">
-                            Fourth Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount5" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto5" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(5)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td>
-                            <button id="infMax5" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(5)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow6" style="display: none; font-size: 16px">
-                        <td id="infD6">
-                            Fourth Infinity Dimension x1
-                        </td>
-                        <td>
-                            <div id="infAmount6" align="left">0 (0)</div>
-                        </td>
-                        <td>
-                            <button id="infauto6" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(6)" class="storebtn">Auto: ON</button>
-                        </td>
-                        <td>
-                            <button id="infMax6" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(6)">Cost: 10</button>
-                        </td>
-                    </tr>
-                    <tr id="infRow7" style="display: none; font-size: 16px">
-                            <td id="infD7">
-                                Fourth Infinity Dimension x1
-                            </td>
-                            <td>
-                                <div id="infAmount7" align="left">0 (0)</div>
-                            </td>
-                            <td>
-                                <button id="infauto7" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(7)" class="storebtn">Auto: ON</button>
-                            </td>
-                            <td>
-                                <button id="infMax7" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(7)">Cost: 10</button>
-                            </td>
-                        </tr>
-                        <tr id="infRow8" style="display: none; font-size: 16px">
-                                <td id="infD8">
-                                    Fourth Infinity Dimension x1
-                                </td>
-                                <td>
-                                    <div id="infAmount8" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="infauto8" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(8)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="infMax8" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(8)">Cost: 10</button>
-                                </td>
-                            </tr>
-                </table>
-                <div id="eterc8ids" style="display: none;"></div>
-                <button id="toggleallinfdims"style="width:140px; height: 30px; font-size: 12px; visibility: hidden" onclick="toggleAllInfDims()" class="storebtn">Toggle all ON/OFF</button>
-            </div>
-            <div id="timedimensions" class="dimtab">
-                    <div>
-                        <p id="totaltickgained">You've gained 0 tickspeed upgrades.</p>
-                            <p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" style="font-size:35px; color: black">0</span></p>
-                        </div>
-
-                        <div id="timeShardsPerSec">You are getting 0 Timeshards per second.</div>
-                        <button id="maxTimeDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxTimeDimensions()">Max all</Button>
-                        <table class="table" >
-                            <tr style="font-size: 17px" id="timeRow1">
-                                <td id="timeD1" width="43%">
-                                    First Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount1">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto1" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(1)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td align="right" width="10%">
-                                    <button id="timeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimension(1)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow2" style="font-size: 17px">
-                                <td id="timeD2">
-                                    Second Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount2" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto2" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(2)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax2" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(2)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow3" style="font-size: 17px">
-                                <td id="timeD3">
-                                    Third Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount3" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto3" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(3)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax3" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(3)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow4" style="font-size: 17px">
-                                <td id="timeD4">
-                                    Fourth Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount4" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto4" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(4)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax4" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(4)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow5" style="font-size: 17px">
-                                <td id="timeD5">
-                                    Fifth Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount5" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto5" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(5)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax5" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(5)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow6" style="font-size: 17px">
-                                <td id="timeD6">
-                                    Sixth Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount6" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto6" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(6)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax6" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(6)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow7" style="font-size: 17px">
-                                <td id="timeD7">
-                                    Seventh Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount7" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto7" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(7)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax7" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(7)">Cost: 10</button>
-                                </td>
-                            </tr>
-                            <tr id="timeRow8" style="font-size: 17px">
-                                <td id="timeD8">
-                                    Eighth Time Dimension x1
-                                </td>
-                                <td>
-                                    <div id="timeAmount8" align="left">0 (0)</div>
-                                </td>
-                                <td>
-                                    <button id="timeauto8" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoTime(8)" class="storebtn">Auto: ON</button>
-                                </td>
-                                <td>
-                                    <button id="timeMax8" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(8)">Cost: 10</button>
-                                </td>
-                            </tr>
-                        </table>
-                        <button id="togglealltimedims"style="width:140px; height: 30px; font-size: 12px; visibility: hidden" onclick="toggleAllTimeDims()" class="storebtn">Toggle all ON/OFF</button>
-            </div>
-            <div id="production" class="dimtab">
-                <b>seconds of history:</b>
-                <input type="number" value="10" onchange="updateChartValues()" id="chartDurationInput"></input>
-                <b>update rate (in ms):</b>
-                <input type="number" value="1000" onchange="updateChartValues()" id="chartUpdateRateInput"></input>
-                <b>enabled:</b>
-                <input id="chartOnOff" type="checkbox" class="checkbox" style="top: -4px;" onchange="enableChart()"></input>
-                <b>dips:</b>
-                <input id="chartDipsOnOff" type="checkbox" class="checkbox" style="top: -4px;" onchange="enableChartDips()"></input>
-                <canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
-                <b>Exponents of antimatter per second</b>
-            </div>
-            <footer-links sticky="true"></footer-links>
-        </div>
-        <div v-show="view.tab.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
-            <component :is="view.tab.current" :model="model" :view="view" :actions="actions"></component>
+        <div v-show="view.tabs.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
+            <component :is="view.tabs.current" :model="model" :view="view" :actions="actions"></component>
         </div>
         <div id="achievements" class="tab">
             <table class="table" align="center" style="margin: auto" id="achTabButtons">
@@ -2666,9 +2253,6 @@
     </div>
     <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
     <tt-shop :player="model.player" :view="view"></tt-shop>
-    <div id="progress" style="display:none">
-        <div id="progressbar"><span id="progresspercent" ach-tooltip="Percentage until Infinity">0%</span></div>
-    </div>
     <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>
@@ -2684,6 +2268,7 @@
 </div>
 
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
+<script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/lodash.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
@@ -2703,10 +2288,15 @@
 <script type="text/javascript" src="javascripts/core/format.js"></script>
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 
-<script type="text/javascript" src="javascripts/components/primary-button.js"></script>
-<script type="text/javascript" src="javascripts/components/secondary-button.js"></script>
+<script type="text/javascript" src="javascripts/components/store-button.js"></script>
+<script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>
 <script type="text/javascript" src="javascripts/components/tab-container.js"></script>
 <script type="text/javascript" src="javascripts/components/subtabbed-container.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/infinity.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/time.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/production.js"></script>
 <script type="text/javascript" src="javascripts/components/options-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/statistics/stats.js"></script>

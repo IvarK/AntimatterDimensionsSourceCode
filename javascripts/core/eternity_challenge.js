@@ -52,12 +52,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     hidePreMilestone30Elements();
-    document.getElementById("fifthRow").style.display = "none";
-    document.getElementById("sixthRow").style.display = "none";
-    document.getElementById("seventhRow").style.display = "none";
-    document.getElementById("eightRow").style.display = "none";
     document.getElementById("matter").style.display = "none";
-    document.getElementById("quickReset").style.display = "none";
     var autobuyers = document.getElementsByClassName('autoBuyerDiv');
     if (player.eternities < 2) {
         for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
@@ -94,7 +89,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
-    document.getElementById("totaltickgained").textContent = "You've gained " + Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " tickspeed upgrades.";
     resetTickspeed();
     updateTickSpeed();
     resetMoney();

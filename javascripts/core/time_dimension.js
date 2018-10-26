@@ -81,40 +81,24 @@ function getTimeDimensionRateOfChange(tier) {
   return change;
 }
 
-function getTimeDimensionDescription(tier) {
-  var name = TIER_NAMES[tier];
-
-  let description = shortenDimensions(player['timeDimension'+tier].amount);
-
-  if (tier < 8) {
-      description += '  (+' + shorten(getTimeDimensionRateOfChange(tier)) + '%/s)';
-  }
-
-  return description;
-}
-
-function updateTimeDimensions() {
-  if (document.getElementById("timedimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
-    for (let tier = 1; tier <= 4; ++tier) {
-      document.getElementById("timeD"+tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
-      document.getElementById("timeAmount"+tier).textContent = getTimeDimensionDescription(tier);
-    }
-    if (player.dilation.studies.includes(2)) {
-      for (let tier = 5; tier <= 8; ++tier) {
-        if (player.dilation.studies.includes(tier-3)) {
-          document.getElementById("timeD"+tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
-          document.getElementById("timeAmount"+tier).textContent = getTimeDimensionDescription(tier);
-        }
-      }
-    }
-    for (let tier = 1; tier <= 8; ++tier) {
-      if (player.dilation.studies.includes(tier-3) || tier < 5) {
-        document.getElementById("timeRow"+tier).style.display = "table-row"
-      } else {
-        document.getElementById("timeRow"+tier).style.display = "none"
-      }
+function updateTimeDimensionTab() {
+  const view = ui.view.tabs.dimensions.time;
+  for (let tier = 1; tier <= 8; tier++) {
+    const dimView = view.dims[tier];
+    const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
+    dimView.isAvailable = isAvailable;
+    if (!isAvailable) continue;
+    dimView.multiplier = shortenMoney(getTimeDimensionPower(tier));
+    const stats = player[`timeDimension${tier}`];
+    dimView.amount = shortenDimensions(stats.amount);
+    dimView.cost = shortenDimensions(stats.cost);
+    dimView.isAffordable = player.eternityPoints.gte(stats.cost);
+    if (tier < 8) {
+      dimView.rateOfChange = shorten(getTimeDimensionRateOfChange(tier));
     }
   }
+  view.timeShards = shortenMoney(player.timeShards);
+  view.shardsPerSecond = shortenDimensions(getTimeDimensionProduction(1));
 }
 
 var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
@@ -162,34 +146,10 @@ function resetTimeDimensions() {
 
 }
 
-function switchAutoTime(tier) {
-  if (player.reality.tdbuyers[tier-1]) {
-      player.reality.tdbuyers[tier-1] = false
-      document.getElementById("timeauto"+tier).textContent = "Auto: OFF"
-  } else {
-      player.reality.tdbuyers[tier-1] = true
-      document.getElementById("timeauto"+tier).textContent = "Auto: ON"
-  }
-}
-
 function toggleAllTimeDims() {
-  if (player.reality.tdbuyers[0]) {
-      for (var i=1; i<9; i++) {
-          player.reality.tdbuyers[i-1] = false
-          document.getElementById("timeauto"+i).textContent = "Auto: OFF"
-      }
-  } else {
-      for (var i=1; i<9; i++) {
-        player.reality.tdbuyers[i-1] = true
-          document.getElementById("timeauto"+i).textContent = "Auto: ON"
-      }
-  }
-}
-
-function loadTimeAutoBuyers() {
-  for (var i=1; i<9; i++) {
-      if (player.reality.tdbuyers[i-1]) document.getElementById("timeauto"+i).textContent = "Auto: ON"
-      else document.getElementById("timeauto"+i).textContent = "Auto: OFF"
+  const areEnabled = player.reality.tdbuyers[0];
+  for (let i = 1; i < 9; i++) {
+    player.reality.tdbuyers[i - 1] = !areEnabled;
   }
 }
 

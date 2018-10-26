@@ -21,7 +21,7 @@ Vue.component('statistics-tab', {
           id: "Past Infinities",
           component: "statistic-past-infinities",
           condition: function() {
-            return this.progress.infinityUnlocked();
+            return this.progress.isInfinityUnlocked;
           }.bind(this)
         },
         {
@@ -29,7 +29,7 @@ Vue.component('statistics-tab', {
           id: "Past Eternities",
           component: "statistic-past-eternities",
           condition: function() {
-            return this.progress.eternityUnlocked();
+            return this.progress.isEternityUnlocked;
           }.bind(this)
         },
         {
@@ -37,7 +37,7 @@ Vue.component('statistics-tab', {
           id: "Past Realities",
           component: "statistic-past-realities",
           condition: function() {
-            return this.progress.realityUnlocked();
+            return this.progress.isRealityUnlocked;
           }.bind(this)
         }
       ]

@@ -12,9 +12,9 @@ Vue.component('modal-import', {
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatMoney(player.money) }}</div>
-          <div v-if="progress.infinityUnlocked()">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
-          <div v-if="progress.eternityUnlocked()">Eternities: {{ shortenDimensions(player.eternities) }}</div>
-          <div v-if="progress.realityUnlocked()">Realities: {{ shortenDimensions(player.realities) }}</div>
+          <div v-if="progress.isInfinityUnlocked">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
+          <div v-if="progress.isEternityUnlocked">Eternities: {{ shortenDimensions(player.eternities) }}</div>
+          <div v-if="progress.isRealityUnlocked">Realities: {{ shortenDimensions(player.realities) }}</div>
           <div style="font-size: 75%">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">Not a valid save</div>

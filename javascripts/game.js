@@ -2142,6 +2142,7 @@ function updateTimeShards() {
         if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting "+shortenDimensions(getTimeDimensionProduction(1))+" Eighth Infinity Dimensions per second."
         else document.getElementById("timeShardsPerSec").textContent = "You are getting "+shortenDimensions(getTimeDimensionProduction(1))+" Timeshards per second."
     }
+    ui.view.tabs.dimensions.time.shardsPerSecond.fromDecimal(getTimeDimensionProduction(1));
 }
 
 
@@ -2550,13 +2551,15 @@ function gameLoop(diff) {
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (autobuyerOnGameLoop) {
-      // Why 20? No fucking idea!
-      // Enjoy legacy!
       Autobuyer.intervalTimer += diff / 20;
       Autobuyer.tickTimer += diff;
       let autobuyerInterval = player.infinityUpgrades.includes("autoBuyerUpgrade") ? 50 : 100;
-      while (Autobuyer.tickTimer >= autobuyerInterval) {
+      if (Autobuyer.tickTimer >= autobuyerInterval) {
         Autobuyer.tickTimer -= autobuyerInterval;
+        // failsafe
+        if (Autobuyer.tickTimer > autobuyerInterval) {
+            Autobuyer.tickTimer = autobuyerInterval;
+        }
         autoBuyerTick();
       }
     }

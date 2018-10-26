@@ -33,10 +33,10 @@ Vue.component('modal-animation-options', {
     props: ['model'],
     template:
         '<modal-options @close="emitClose" :closeButton="true" class="options-container">\
-            <primary-named-on-off text="Floating text:" v-model="options.floatingText"></primary-named-on-off>\
-            <primary-named-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"></primary-named-on-off>\
-            <primary-named-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"></primary-named-on-off>\
-            <primary-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></primary-named-on-off>\
+            <store-button-named-on-off text="Floating text:" v-model="options.floatingText"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></store-button-named-on-off>\
         </modal-options>',
     computed: {
         options: function () {
@@ -53,10 +53,10 @@ Vue.component('modal-confirmation-options', {
     props: ['model'],
     template:
         '<modal-options @close="emitClose" :closeButton="true" class="options-container">\
-            <primary-named-on-off text="Challenges:" v-model="options.challenges"></primary-named-on-off>\
-            <primary-named-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"></primary-named-on-off>\
-            <primary-named-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"></primary-named-on-off>\
-            <primary-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></primary-named-on-off>\
+            <store-button-named-on-off text="Challenges:" v-model="options.challenges"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"></store-button-named-on-off>\
+            <store-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></store-button-named-on-off>\
         </modal-options>',
     computed: {
         options: function() {

@@ -20,7 +20,7 @@ Vue.component('store-button', {
     }
 });
 
-Vue.component('primary-on-off', {
+Vue.component('store-button-on-off', {
     props: {
         on: String,
         off: String,
@@ -30,7 +30,7 @@ Vue.component('primary-on-off', {
         '<store-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</store-button>'
 });
 
-Vue.component('primary-named-on-off', {
+Vue.component('store-button-named-on-off', {
     props: {
         text: String,
         value: Boolean

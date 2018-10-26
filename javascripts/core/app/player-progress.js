@@ -7,19 +7,19 @@ class PlayerProgress {
     return this._player.infinitied > 0 || this._player.resets > 4;
   }
 
-  realityUnlocked() {
+  get isRealityUnlocked() {
     return this._player.realities > 0;
   }
 
-  eternityUnlocked() {
-    return this._player.eternities > 0 || this.realityUnlocked();
+  get isEternityUnlocked() {
+    return this._player.eternities > 0 || this.isRealityUnlocked;
   }
 
-  infinityUnlocked() {
-    return this._player.infinitied > 0 || this.eternityUnlocked();
+  get isInfinityUnlocked() {
+    return this._player.infinitied > 0 || this.isEternityUnlocked;
   }
 
-  static current() {
+  static get current() {
     return new PlayerProgress(player);
   }
 
@@ -28,19 +28,19 @@ class PlayerProgress {
   }
 
   static get isSacrificeUnlocked() {
-    return PlayerProgress.current().isSacrificeUnlocked;
+    return PlayerProgress.current.isSacrificeUnlocked;
   }
 
   static infinityUnlocked() {
-    return PlayerProgress.current().infinityUnlocked();
+    return PlayerProgress.current.isInfinityUnlocked;
   }
 
   static eternityUnlocked() {
-    return PlayerProgress.current().eternityUnlocked();
+    return PlayerProgress.current.isEternityUnlocked;
   }
 
-  static realityUnlocked() {
-    return PlayerProgress.current().realityUnlocked();
+  static get realityUnlocked() {
+    return PlayerProgress.current.isRealityUnlocked;
   }
 }
 

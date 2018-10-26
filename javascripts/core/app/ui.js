@@ -111,5 +111,6 @@ class Subtab {
 
 Tab.dimensions = new Tab("dimensions-tab");
 Tab.dimensions.normal = new Subtab("Dimensions", Tab.dimensions, ui.view.tabs.dimensions, true);
+Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");

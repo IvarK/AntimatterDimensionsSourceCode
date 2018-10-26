@@ -115,6 +115,8 @@ button {
 
 /*#region Dimensions*/
 
+/*#region Normal*/
+
 .dimension-tab-row {
   display: flex;
   flex-direction: row;
@@ -132,6 +134,7 @@ button {
 .normal-dimensions-top-row > * {
   margin: 0 4px;
 }
+
 .dimension-floating-text {
   position: absolute;
   bottom: 20px;
@@ -171,6 +174,26 @@ button {
 }
 
 /*#endregion Progress*/
+
+/*#endregion Normal*/
+
+/*#region Time*/
+
+.time-shards {
+  font-size: 35px;
+  color: black;
+}
+
+.time-dimension-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 17px;
+  margin-top: 10px;
+  position: relative;
+}
+
+/*#endregion Time*/
 
 /*#endregion Dimensions*/
 

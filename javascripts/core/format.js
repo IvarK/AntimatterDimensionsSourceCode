@@ -1,4 +1,5 @@
 var FormatList = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc', 'TDc', 'QaDc', 'QtDc', 'SxDc', 'SpDc', 'ODc', 'NDc', 'Vg', 'UVg', 'DVg', 'TVg', 'QaVg', 'QtVg', 'SxVg', 'SpVg', 'OVg', 'NVg', 'Tg', 'UTg', 'DTg', 'TTg', 'QaTg', 'QtTg', 'SxTg', 'SpTg', 'OTg', 'NTg', 'Qd', 'UQd', 'DQd', 'TQd', 'QaQd', 'QtQd', 'SxQd', 'SpQd', 'OQd', 'NQd', 'Qi', 'UQi', 'DQi', 'TQi', 'QaQi', 'QtQi', 'SxQi', 'SpQi', 'OQi', 'NQi', 'Se', 'USe', 'DSe', 'TSe', 'QaSe', 'QtSe', 'SxSe', 'SpSe', 'OSe', 'NSe', 'St', 'USt', 'DSt', 'TSt', 'QaSt', 'QtSt', 'SxSt', 'SpSt', 'OSt', 'NSt', 'Og', 'UOg', 'DOg', 'TOg', 'QaOg', 'QtOg', 'SxOg', 'SpOg', 'OOg', 'NOg', 'Nn', 'UNn', 'DNn', 'TNn', 'QaNn', 'QtNn', 'SxNn', 'SpNn', 'ONn', 'NNn', 'Ce',];
+const commaRegexp = /\B(?=(\d{3})+(?!\d))/g;
 
 function letter(power,str) {
     const len = str.length;
@@ -60,24 +61,24 @@ function formatValue(notation, value, places, placesUnder1000) {
                 power++;
             }
             if (power > 100000  && !commas) return (mantissa + "e" + formatValue(notation, power, 3, 3))
-            if (power > 100000  && commas) return (mantissa + "e" + power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            if (power > 100000  && commas) return (mantissa + "e" + formatWithCommas(power));
             return (mantissa + "e" + power);
         }
         if (notation === "Infinity") {
             const pow = Decimal.log10(value)
             if (pow / inflog < 1000) var infPlaces = 4
             else var infPlaces = 3
-            if (commas) return (pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"."+(pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[1]+"∞"
+            if (commas) return (pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[0].replace(commaRegexp, ",")+"."+(pow / inflog).toFixed(Math.max(infPlaces, places)).toString().split(".")[1]+"∞"
             else return (pow / inflog).toFixed(Math.max(infPlaces, places))+"∞"
         }
         if (notation !== undefined && (notation.includes("engineering") || notation.includes("Engineering"))) pow = power - (power % 3)
         else pow = power
         if (power > 100000  && !commas) pow = formatValue(notation, pow, 3, 3)
-        if (power > 100000  && commas) pow = pow.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (power > 100000  && commas) pow = formatWithCommas(pow);
 
         if (notation === "Logarithm") {
             if (power > 100000  && !commas) return "ee"+Math.log10(Decimal.log10(value)).toFixed(3)
-            if (power > 100000  && commas) return "e"+Decimal.log10(value).toFixed(places).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            if (power > 100000  && commas) return "e" + formatWithCommas(Decimal.log10(value).toFixed(places));
             else return "e"+Decimal.log10(value).toFixed(Math.max(places, 1))
         }
 
@@ -122,7 +123,7 @@ function formatValue(notation, value, places, placesUnder1000) {
         }
 
         else {
-            if (power > 100000  && commas) power = power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            if (power > 100000  && commas) power = formatWithCommas(power);
             return "1337 H4CK3R"
         }
     } else if (value < 1000) {
@@ -205,4 +206,8 @@ function timeDisplayShort(ms) {
     const s = value.toString();
     return s.length === 1 ? "0" + s : s;
   }
+}
+
+function formatWithCommas(value) {
+  return value.toString().replace(commaRegexp, ",");
 }

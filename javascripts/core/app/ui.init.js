@@ -47,6 +47,19 @@ let ui = {
             fill: 0,
             tooltip: String.empty
           }
+        },
+        time: {
+          dims: Array.from({length: 9}, () => {
+            return {
+              rateOfChange: new Decimal(0),
+              multiplier: new Decimal(0),
+              isAvailable: false,
+              amount: new Decimal(0),
+              isAffordable: false,
+              isAffordableUntil10: false
+            };
+          }),
+          shardsPerSecond: new Decimal(0)
         }
       },
       statistics: {

@@ -19,9 +19,9 @@ Vue.component('dimensions-tab', {
         {
           name: "Time Dimensions",
           id: "Time Dimensions",
-          component: "statistic-past-infinities",
+          component: "dimensions-time",
           condition: function() {
-            return this.progress.infinityUnlocked();
+            return this.player.eternities > 0;
           }.bind(this)
         },
         {
@@ -29,15 +29,18 @@ Vue.component('dimensions-tab', {
           id: "Production",
           component: "dimensions-production",
           condition: function() {
-            return this.progress.infinityUnlocked();
+            return this.progress.isInfinityUnlocked;
           }.bind(this)
         }
       ]
     };
   },
   computed: {
+    player: function() {
+      return this.model.player;
+    },
     progress: function() {
-      return PlayerProgress.of(this.model.player);
+      return PlayerProgress.of(this.player);
     }
   },
   template:

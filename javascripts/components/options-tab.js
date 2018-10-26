@@ -23,7 +23,7 @@ Vue.component('options-buttons', {
           <td><store-button fontSize="120%" @click="actions.toggleNews">Hide/show the news</store-button></td>\
         </tr>\
         <tr>\
-          <td><primary-named-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"></primary-named-on-off></td>\
+          <td><store-button-named-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"></store-button-named-on-off></td>\
           <td><store-button fontSize="20px" @click="actions.export">Export</store-button></td>\
           <td><store-button fontSize="20px" @click="showImportModal">Import</store-button></td>\
         </tr>\
@@ -35,12 +35,12 @@ Vue.component('options-buttons', {
         <tr>\
           <td><store-button fontSize="120%" @click="actions.cloudSave">Cloud save</store-button></td>\
           <td><store-button fontSize="120%" @click="actions.cloudLoad">Cloud load</store-button></td>\
-          <td><primary-named-on-off fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud"></primary-named-on-off></td>\
+          <td><store-button-named-on-off fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud"></store-button-named-on-off></td>\
         </tr>\
         <tr>\
-          <td><primary-on-off fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys"></primary-on-off></td>\
+          <td><store-button-on-off fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys"></store-button-on-off></td>\
           <td><store-button fontSize="20px" @click="actions.hardReset">RESET THE GAME</store-button></td>\
-          <td><primary-on-off fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"></primary-on-off></td>\
+          <td><store-button-on-off fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"></store-button-on-off></td>\
         </tr>\
         <tr>\
           <td/>\

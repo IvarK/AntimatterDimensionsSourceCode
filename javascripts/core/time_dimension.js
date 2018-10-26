@@ -115,6 +115,20 @@ function updateTimeDimensions() {
       }
     }
   }
+  if (Tab.dimensions.time.isOpen) {
+    const view = ui.view.tabs.dimensions.time;
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimView = view.dims[tier];
+      const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
+      dimView.isAvailable = isAvailable;
+      if (!isAvailable) continue;
+      dimView.multiplier = getTimeDimensionPower(tier);
+      dimView.amount.fromDecimal(player['timeDimension'+tier].amount);
+      if (tier < 8) {
+        dimView.rateOfChange = getTimeDimensionRateOfChange(tier);
+      }
+    }
+  }
 }
 
 var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]

@@ -245,21 +245,6 @@ function updateDimensions() {
 
 function updateCosts() {
     document.getElementById("tickSpeed").textContent = 'Cost: ' + shortenCosts(player.tickSpeedCost);
-
-    let initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
-    for (var i=1; i<=8; i++) {
-      if (player["infinityDimension"+i].baseAmount >= 10*hardcapIDPurchases && i != 8) {
-        document.getElementById("infMax"+i).textContent = "Capped!"
-        let capIP;
-        if (ECTimesCompleted("eterc12")) {
-          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(Math.pow(infCostMults[i], 1-ECTimesCompleted("eterc12")*0.008),hardcapIDPurchases));
-        } else {
-          capIP = new Decimal(initIDCost[i]).times(Decimal.pow(infCostMults[i], hardcapIDPurchases));
-        }
-        document.getElementById("infMax"+i).setAttribute('ach-tooltip', "Limited to " + shortenCosts(hardcapIDPurchases) + " upgrades (" + shortenCosts(capIP) + " IP)")
-      }
-      else  document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
-    }
 }
 
 let floatingTextKey = 0;
@@ -2120,25 +2105,17 @@ function quickReset() {
 }
 
 function updateInfPower() {
-    if (Tab.dimensions.infinity.isOpen) {
-      const view = ui.view.tabs.dimensions.infinity;
-      if (player.currentEternityChall === "eterc9") {
-        view.multiplier = Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1);
-      }
-      else {
-        const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-        view.multiplier = player.infinityPower.pow(conversionRate).max(1);
-      }
-      view.powerPerSecond = DimensionProduction(1);
+  if (Tab.dimensions.infinity.isOpen) {
+    const view = ui.view.tabs.dimensions.infinity;
+    if (player.currentEternityChall === "eterc9") {
+      view.multiplier = Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1);
     }
-    document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-    if (player.currentEternityChall == "eterc9") document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
     else {
-        var conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-        document.getElementById("infDimMultAmount").textContent = shortenMoney(player.infinityPower.pow(conversionRate).max(1))
+      const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+      view.multiplier = player.infinityPower.pow(conversionRate).max(1);
     }
-    if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
-    else document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Infinity Power per second."
+    view.powerPerSecond = DimensionProduction(1);
+  }
 }
 
 function updateTimeShards() {
@@ -2342,18 +2319,6 @@ setInterval(function() {
     if (player.eternities > 9) document.getElementById("bulklabel").textContent = "Buy max dimboosts every X seconds:"
     else document.getElementById("bulklabel").textContent = "Bulk DimBoost Amount:"
 
-    if (player.eternities > 10) {
-        for (var i=1;i<player.eternities-9 && i < 9; i++) {
-            document.getElementById("infauto"+i).style.visibility = "visible"
-        }
-        document.getElementById("toggleallinfdims").style.visibility = "visible"
-    } else {
-        for (var i=1; i<9; i++) {
-            document.getElementById("infauto"+i).style.visibility = "hidden"
-        }
-        document.getElementById("toggleallinfdims").style.visibility = "hidden"
-    }
-
     if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
     else document.getElementById("replauto1").style.visibility = "hidden"
     if (player.eternities >= 60) document.getElementById("replauto2").style.visibility = "visible"
@@ -2383,12 +2348,9 @@ setInterval(function() {
 
     if (player.currentEternityChall == "eterc8") {
         document.getElementById("eterc8repl").style.display = "block"
-        document.getElementById("eterc8ids").style.display = "block"
         document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
-        document.getElementById("eterc8ids").textContent = "You have "+player.eterc8ids+" purchases left."
     } else {
         document.getElementById("eterc8repl").style.display = "none"
-        document.getElementById("eterc8ids").style.display = "none"
     }
 
     if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
@@ -2671,20 +2633,8 @@ function gameLoop(diff) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
         player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
       }
-      ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
-      if (player.infDimensionsUnlocked[tier - 1]) {
-        document.getElementById("infRow" + tier).style.display = "inline-block"
-        document.getElementById("dimTabButtons").style.display = "inline-block"
-        var idtabshown = true;
-      } else {
-        document.getElementById("infRow" + tier).style.display = "none"
-        document.getElementById("idtabbtn").style.display = "none"
-      }
-      if (idtabshown === true || player.eternities >= 1) {
-        document.getElementById("idtabbtn").style.display = "inline-block"
-      }
-
       if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
+      ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
     }
 
     if (player.infinitied > 0 && player.eternities < 1) {
@@ -2859,11 +2809,6 @@ function gameLoop(diff) {
     }
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
-
-    for (var tier = 1; tier < 9; tier++) {
-        if (player.infinityPoints.gte(player["infinityDimension"+tier].cost)) document.getElementById("infMax"+tier).className = "storebtn"
-        else document.getElementById("infMax"+tier).className = "unavailablebtn"
-    }
 
     if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
 

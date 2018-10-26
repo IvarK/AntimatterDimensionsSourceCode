@@ -193,7 +193,6 @@ function reality(force, reset, auto) {
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
     resetInfDimensions();
-    loadInfAutoBuyers();
     updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();

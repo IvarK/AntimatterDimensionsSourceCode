@@ -659,7 +659,6 @@ if (player.version < 5) {
   updateChallengeTimes();
   updateMilestones();
   updateEternityUpgrades();
-  loadInfAutoBuyers();
   resizeCanvas();
   checkForEndMe();
   updateEternityChallenges();

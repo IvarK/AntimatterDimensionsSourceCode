@@ -109,58 +109,6 @@ function sacrificeConf() {
 
 
 function updateDimensions() {
-    if (Tab.dimensions.normal.isOpen) {
-      const ndView = ui.view.tabs.dimensions.normal;
-      for (let tier = 1; tier <= 8; tier++) {
-        let dimView = ndView.dims[tier];
-        const canBuy = canBuyDimension(tier);
-        dimView.isAvailable = canBuy;
-        if (!canBuy) {
-          continue;
-        }
-        dimView.multiplier = shortenMultiplier(getDimensionFinalMultiplier(tier));
-        dimView.rateOfChange = tier < 8 ? shorten(getDimensionRateOfChange(tier)) : String.empty;
-        const dimension = new DimensionStats(tier);
-        dimView.amount = tier < 8 ? shortenDimensions(dimension.amount) : Math.round(dimension.amount).toString();
-        dimView.singleCost = shortenCosts(dimension.cost);
-        dimView.until10Cost = shortenCosts(dimension.costUntil10);
-        let canAffordSingle = false;
-        let canAffordUntil10 = false;
-        if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
-          const lowerTier = new DimensionStats(tier - 2);
-          canAffordSingle = lowerTier.amount.gte(dimension.cost);
-          canAffordUntil10 = lowerTier.amount.gte(dimension.costUntil10);
-        } else {
-          canAffordSingle = canAfford(dimension.cost);
-          canAffordUntil10 = canAfford(dimension.costUntil10);
-        }
-        dimView.isAffordable = canAffordSingle;
-        dimView.isAffordableUntil10 = canAffordUntil10;
-      }
-
-      const shiftRequirement = getShiftRequirement(0);
-      const shiftView = ndView.shift;
-      shiftView.requirement.tier = shiftRequirement.tier;
-      shiftView.requirement.amount = shiftRequirement.amount;
-      shiftView.isBoost = player.currentChallenge === "challenge4" ?
-        shiftRequirement.tier === 6 :
-        shiftRequirement.tier === 8;
-
-      let extraGals = player.replicanti.galaxies;
-      if (player.timestudy.studies.includes(225)) {
-        extraGals += Math.floor(player.replicanti.amount.e / 1000);
-      }
-      if (player.timestudy.studies.includes(226)) {
-        extraGals += Math.floor(player.replicanti.gal / 15);
-      }
-      const galaxyRequirement = getGalaxyRequirement();
-      const galaxyView = ndView.galaxy;
-      galaxyView.type = GalaxyType.current();
-      galaxyView.extra = extraGals;
-      galaxyView.requirement.amount = galaxyRequirement;
-      galaxyView.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
-    }
-
     if (canBuyTickSpeed() || player.currentEternityChall == "eterc9") {
         var tickmult = getTickSpeedMultiplier()
         if (tickmult.lte(1e-9)) document.getElementById("tickLabel").textContent = "Divide the tick interval by " + shortenDimensions(tickmult.reciprocal()) + '.'
@@ -2108,31 +2056,6 @@ function quickReset() {
     softReset(1);
 }
 
-function updateInfPower() {
-  if (Tab.dimensions.infinity.isOpen) {
-    const view = ui.view.tabs.dimensions.infinity;
-    if (player.currentEternityChall === "eterc9") {
-      view.multiplier = shortenMoney(Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1));
-    }
-    else {
-      const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-      view.multiplier = shortenMoney(player.infinityPower.pow(conversionRate).max(1));
-    }
-    view.infinityPower = shortenMoney(player.infinityPower);
-    view.powerPerSecond = shortenDimensions(DimensionProduction(1));
-  }
-}
-
-function updateTimeShards() {
-    if (Tab.dimensions.time.isOpen) {
-      const view = ui.view.tabs.dimensions.time;
-      view.timeShards = shortenMoney(player.timeShards);
-      view.shardsPerSecond = shortenDimensions(getTimeDimensionProduction(1));
-    }
-}
-
-
-
 function getNewInfReq() {
     if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
     else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
@@ -2776,11 +2699,8 @@ function gameLoop(diff) {
     updateCoinPerSec();
     updateDimensions()
     updateInfCosts()
-    updateInfinityDimensions();
-    updateInfPower();
-    updateTimeDimensions()
-    updateTimeShards()
-    updateDilation()
+    updateDilation();
+    updateView();
     if (getDimensionProductionPerSecond(1).gt(player.money) && !isAchEnabled("r44")) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
@@ -2927,8 +2847,6 @@ function gameLoop(diff) {
     if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) document.getElementById("break").className = "infinistorebtnlocked"
     else document.getElementById("break").className = "infinistorebtn2"
 
-    ui.view.tabs.dimensions.normal.sacrifice.isAvailable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
-
     if (player.autobuyers[11]%1 !== 0 && player.autobuyers[11].interval == 100) {
         document.getElementById("postinftable").style.display = "inline-block"
     } else {
@@ -3000,23 +2918,6 @@ function gameLoop(diff) {
     if (player.infinityUpgrades.includes("bulkBoost")) document.getElementById("postinfi23").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("autoBuyerUpgrade")) document.getElementById("postinfi33").className = "infinistorebtnbought"
 
-    view = ui.view.tabs.dimensions.normal.progress;
-    function setProgress(current, goal, tooltip) {
-      view.fill = Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100);
-      view.tooltip = tooltip;
-    }
-    if (player.currentChallenge !== "") {
-        setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
-    } else if (!player.break) {
-        setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
-    } else if (player.infDimensionsUnlocked.includes(false)) {
-        setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
-    } else if (player.currentEternityChall !== "") {
-        setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
-    } else {
-        setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
-    }
-
     if (player.eternities > 0) {
         document.getElementById("infinitybtn").style.display = "inline-block";
         document.getElementById("challengesbtn").style.display = "inline-block";
@@ -3064,7 +2965,6 @@ function gameLoop(diff) {
 
     document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(getNewInfReq()) + " antimatter to unlock a new Dimension."
 
-    ui.view.tabs.dimensions.normal.sacrifice.boost = shorten(calcSacrificeBoost());
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     if (player.timestudy.studies.includes(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff/100000))
     if (player.dilation.upgrades.includes(10)) {
@@ -3246,6 +3146,20 @@ function simulateTime(seconds, real, fast) {
 
 function startInterval() {
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+}
+
+function updateView() {
+  if (Tab.dimensions.isOpen) {
+    if (Tab.dimensions.normal.isOpen) {
+      updateNormalDimensionTab();
+    }
+    if (Tab.dimensions.infinity.isOpen) {
+      updateInfinityDimensionTab();
+    }
+    if (Tab.dimensions.time.isOpen) {
+      updateTimeDimensionTab();
+    }
+  }
 }
 
 function updateChart(first) {

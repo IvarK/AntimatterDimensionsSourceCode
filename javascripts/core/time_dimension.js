@@ -81,24 +81,24 @@ function getTimeDimensionRateOfChange(tier) {
   return change;
 }
 
-function updateTimeDimensions() {
-  if (Tab.dimensions.time.isOpen) {
-    const view = ui.view.tabs.dimensions.time;
-    for (let tier = 1; tier <= 8; tier++) {
-      const dimView = view.dims[tier];
-      const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
-      dimView.isAvailable = isAvailable;
-      if (!isAvailable) continue;
-      dimView.multiplier = shortenMoney(getTimeDimensionPower(tier));
-      const stats = player[`timeDimension${tier}`];
-      dimView.amount = shortenDimensions(stats.amount);
-      dimView.cost = shortenDimensions(stats.cost);
-      dimView.isAffordable = player.eternityPoints.gte(stats.cost);
-      if (tier < 8) {
-        dimView.rateOfChange = shorten(getTimeDimensionRateOfChange(tier));
-      }
+function updateTimeDimensionTab() {
+  const view = ui.view.tabs.dimensions.time;
+  for (let tier = 1; tier <= 8; tier++) {
+    const dimView = view.dims[tier];
+    const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
+    dimView.isAvailable = isAvailable;
+    if (!isAvailable) continue;
+    dimView.multiplier = shortenMoney(getTimeDimensionPower(tier));
+    const stats = player[`timeDimension${tier}`];
+    dimView.amount = shortenDimensions(stats.amount);
+    dimView.cost = shortenDimensions(stats.cost);
+    dimView.isAffordable = player.eternityPoints.gte(stats.cost);
+    if (tier < 8) {
+      dimView.rateOfChange = shorten(getTimeDimensionRateOfChange(tier));
     }
   }
+  view.timeShards = shortenMoney(player.timeShards);
+  view.shardsPerSecond = shortenDimensions(getTimeDimensionProduction(1));
 }
 
 var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]

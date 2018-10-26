@@ -28,30 +28,38 @@ function DimensionRateOfChange(tier) {
   return change;
 }
 
-function updateInfinityDimensions() {
-  if (Tab.dimensions.infinity.isOpen) {
-    const view = ui.view.tabs.dimensions.infinity;
-    const ec12Completions = ECTimesCompleted("eterc12");
-    for (let tier = 1; tier <= 8; tier++) {
-      const dimView = view.dims[tier];
-      dimView.multiplier = shortenMoney(DimensionPower(tier));
-      dimView.rateOfChange = shorten(DimensionRateOfChange(tier));
-      const stats = player[`infinityDimension${tier}`];
-      dimView.amount = shortenDimensions(stats.amount);
-      dimView.cost = shortenCosts(stats.cost);
-      dimView.isAffordable = player.infinityPoints.gte(stats.cost);
-      const isCapped = tier < 8 && stats.baseAmount >= 10 * hardcapIDPurchases;
-      dimView.isCapped = isCapped;
-      if (isCapped) {
-        let initCost = new Decimal(initIDCost[tier]);
-        const costMult = infCostMults[tier];
-        if (ec12Completions) {
-          initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
-        }
-        dimView.capIP = shortenCosts(initCost.times(Decimal.pow(initCost, hardcapIDPurchases)));
+function updateInfinityDimensionTab() {
+  const view = ui.view.tabs.dimensions.infinity;
+  const ec12Completions = ECTimesCompleted("eterc12");
+  for (let tier = 1; tier <= 8; tier++) {
+    const dimView = view.dims[tier];
+    dimView.multiplier = shortenMoney(DimensionPower(tier));
+    dimView.rateOfChange = shorten(DimensionRateOfChange(tier));
+    const stats = player[`infinityDimension${tier}`];
+    dimView.amount = shortenDimensions(stats.amount);
+    dimView.cost = shortenCosts(stats.cost);
+    dimView.isAffordable = player.infinityPoints.gte(stats.cost);
+    const isCapped = tier < 8 && stats.baseAmount >= 10 * hardcapIDPurchases;
+    dimView.isCapped = isCapped;
+    if (isCapped) {
+      let initCost = new Decimal(initIDCost[tier]);
+      const costMult = infCostMults[tier];
+      if (ec12Completions) {
+        initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
       }
+      dimView.capIP = shortenCosts(initCost.times(Decimal.pow(initCost, hardcapIDPurchases)));
     }
   }
+  const infinityPower = player.infinityPower;
+  if (player.currentEternityChall === "eterc9") {
+    view.multiplier = shortenMoney(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
+  }
+  else {
+    const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    view.multiplier = shortenMoney(infinityPower.pow(conversionRate).max(1));
+  }
+  view.infinityPower = shortenMoney(infinityPower);
+  view.powerPerSecond = shortenDimensions(DimensionProduction(1));
 }
 
 function DimensionProduction(tier) {

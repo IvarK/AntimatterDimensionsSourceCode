@@ -260,11 +260,6 @@ function updateCosts() {
       }
       else  document.getElementById("infMax"+i).textContent = "Cost: " + shortenCosts(player["infinityDimension"+i].cost) + " IP"
     }
-
-    for (var i=1; i<=8; i++) {
-
-        document.getElementById("timeMax"+i).textContent = "Cost: " + shortenDimensions(player["timeDimension"+i].cost) + " EP"
-    }
 }
 
 let floatingTextKey = 0;
@@ -2136,13 +2131,9 @@ function updateInfPower() {
 }
 
 function updateTimeShards() {
-    if (document.getElementById("timedimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
-        document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
-        document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
-        if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting "+shortenDimensions(getTimeDimensionProduction(1))+" Eighth Infinity Dimensions per second."
-        else document.getElementById("timeShardsPerSec").textContent = "You are getting "+shortenDimensions(getTimeDimensionProduction(1))+" Timeshards per second."
+    if (Tab.dimensions.time.isOpen) {
+        ui.view.tabs.dimensions.time.shardsPerSecond.fromDecimal(getTimeDimensionProduction(1));
     }
-    ui.view.tabs.dimensions.time.shardsPerSecond.fromDecimal(getTimeDimensionProduction(1));
 }
 
 
@@ -2350,13 +2341,6 @@ setInterval(function() {
             document.getElementById("infauto"+i).style.visibility = "hidden"
         }
         document.getElementById("toggleallinfdims").style.visibility = "hidden"
-    }
-
-    if (player.reality.upg.includes(13)) {
-        for (var i=1; i<9; i++) {
-            document.getElementById("timeauto"+i).style.visibility = "visible"
-        }
-        document.getElementById("togglealltimedims").style.visibility = "visible"
     }
 
     if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
@@ -2722,7 +2706,6 @@ function gameLoop(diff) {
       player.totalTickGained += gain
       player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
       player.tickThreshold = player.totalTickGained > freeTickSoftcap ? new Decimal(tickmult).pow(freeTickSoftcap).times(new Decimal(1+tickmult).pow(softcapped-freeTickSoftcap)) : new Decimal(tickmult).pow(player.totalTickGained);
-      document.getElementById("totaltickgained").textContent = "You've gained "+Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
       updateTickSpeed();
     }
 
@@ -2866,11 +2849,6 @@ function gameLoop(diff) {
     for (var tier = 1; tier < 9; tier++) {
         if (player.infinityPoints.gte(player["infinityDimension"+tier].cost)) document.getElementById("infMax"+tier).className = "storebtn"
         else document.getElementById("infMax"+tier).className = "unavailablebtn"
-    }
-
-    for (var tier = 1; tier < 9; tier++) {
-        if (player.eternityPoints.gte(player["timeDimension"+tier].cost)) document.getElementById("timeMax"+tier).className = "storebtn"
-        else document.getElementById("timeMax"+tier).className = "unavailablebtn"
     }
 
     if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
@@ -3185,11 +3163,7 @@ function gameLoop(diff) {
     wormHoleLoop(diff, 1)
     wormHoleLoop(diff, 2)
   }
-		
-	// Increased cost scaling tooltips
-	if (player.eternityPoints.exponent > 6000)
-		document.getElementById("maxTimeDimensions").setAttribute('ach-tooltip', "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000")));
-	
+
 	// Achievement tooltip editing (for amount of time locked)
 	if (player.realities > 0) {
 		for (var key in allAchievements) {

@@ -298,8 +298,6 @@ function onLoad() {
   }
   if (player.autobuyers[8].tier == 10) player.autobuyers[8].tier = 9
 
-  document.getElementById("totaltickgained").textContent = "You've gained "+shortenDimensions(player.totalTickGained)+" tickspeed upgrades."
-
   var IPminpeak = new Decimal(0)
   var EPminpeak = new Decimal(0)
 
@@ -662,7 +660,6 @@ if (player.version < 5) {
   updateMilestones();
   updateEternityUpgrades();
   loadInfAutoBuyers();
-  loadTimeAutoBuyers()
   resizeCanvas();
   checkForEndMe();
   updateEternityChallenges();

@@ -81,40 +81,7 @@ function getTimeDimensionRateOfChange(tier) {
   return change;
 }
 
-function getTimeDimensionDescription(tier) {
-  var name = TIER_NAMES[tier];
-
-  let description = shortenDimensions(player['timeDimension'+tier].amount);
-
-  if (tier < 8) {
-      description += '  (+' + shorten(getTimeDimensionRateOfChange(tier)) + '%/s)';
-  }
-
-  return description;
-}
-
 function updateTimeDimensions() {
-  if (document.getElementById("timedimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
-    for (let tier = 1; tier <= 4; ++tier) {
-      document.getElementById("timeD"+tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
-      document.getElementById("timeAmount"+tier).textContent = getTimeDimensionDescription(tier);
-    }
-    if (player.dilation.studies.includes(2)) {
-      for (let tier = 5; tier <= 8; ++tier) {
-        if (player.dilation.studies.includes(tier-3)) {
-          document.getElementById("timeD"+tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
-          document.getElementById("timeAmount"+tier).textContent = getTimeDimensionDescription(tier);
-        }
-      }
-    }
-    for (let tier = 1; tier <= 8; ++tier) {
-      if (player.dilation.studies.includes(tier-3) || tier < 5) {
-        document.getElementById("timeRow"+tier).style.display = "table-row"
-      } else {
-        document.getElementById("timeRow"+tier).style.display = "none"
-      }
-    }
-  }
   if (Tab.dimensions.time.isOpen) {
     const view = ui.view.tabs.dimensions.time;
     for (let tier = 1; tier <= 8; tier++) {
@@ -176,34 +143,10 @@ function resetTimeDimensions() {
 
 }
 
-function switchAutoTime(tier) {
-  if (player.reality.tdbuyers[tier-1]) {
-      player.reality.tdbuyers[tier-1] = false
-      document.getElementById("timeauto"+tier).textContent = "Auto: OFF"
-  } else {
-      player.reality.tdbuyers[tier-1] = true
-      document.getElementById("timeauto"+tier).textContent = "Auto: ON"
-  }
-}
-
 function toggleAllTimeDims() {
-  if (player.reality.tdbuyers[0]) {
-      for (var i=1; i<9; i++) {
-          player.reality.tdbuyers[i-1] = false
-          document.getElementById("timeauto"+i).textContent = "Auto: OFF"
-      }
-  } else {
-      for (var i=1; i<9; i++) {
-        player.reality.tdbuyers[i-1] = true
-          document.getElementById("timeauto"+i).textContent = "Auto: ON"
-      }
-  }
-}
-
-function loadTimeAutoBuyers() {
-  for (var i=1; i<9; i++) {
-      if (player.reality.tdbuyers[i-1]) document.getElementById("timeauto"+i).textContent = "Auto: ON"
-      else document.getElementById("timeauto"+i).textContent = "Auto: OFF"
+  const areEnabled = player.reality.tdbuyers[0];
+  for (let i = 1; i < 9; i++) {
+    player.reality.tdbuyers[i - 1] = !areEnabled;
   }
 }
 

@@ -194,7 +194,6 @@ function reality(force, reset, auto) {
     updateAutobuyers();
     resetInfDimensions();
     loadInfAutoBuyers();
-    loadTimeAutoBuyers()
     updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
@@ -223,7 +222,6 @@ function reality(force, reset, auto) {
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
-    document.getElementById("totaltickgained").textContent = "You've gained " + Math.max(player.totalTickGained, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " tickspeed upgrades.";
     resetTickspeed();
     updateTickSpeed();
     resetMoney();

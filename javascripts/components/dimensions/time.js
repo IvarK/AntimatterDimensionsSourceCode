@@ -50,7 +50,7 @@ Vue.component('dimensions-time', {
     `<div>
       <div>
         <p>You've gained {{totalUpgrades}} tickspeed upgrades.</p>
-        <p>You have <span class="time-shards">{{timeShards}}</span> time shards. Next tickspeed upgrade at <span class="time-shards">{{upgradeThreshold}}</span></p>
+        <p>You have <span id="timeShardAmount" class="time-shards">{{timeShards}}</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" class="time-shards">{{upgradeThreshold}}</span></p>
       </div>      
       <div>You are getting {{shardsPerSecond}} {{incomeType}} per second.</div>
       <store-button fontSize="12px" v-tooltip="costScaleTooltip" @click="maxAll">Max all</store-button>

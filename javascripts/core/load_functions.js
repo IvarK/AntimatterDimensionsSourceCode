@@ -405,14 +405,6 @@ if (player.version < 5) {
 
   if (player.timestudy.shopMinimized === undefined) player.timestudy.shopMinimized = false;
 
-
-
-  if (player.eternities == 0) {
-      document.getElementById("eternityPoints2").style.display = "none";
-      document.getElementById("eternitystorebtn").style.display = "none";
-      document.getElementById("tdtabbtn").style.display = "none";
-  }
-
   if (player.eternityUpgrades === undefined) player.eternityUpgrades = []
 
   if (player.infDimBuyers === undefined) player.infDimBuyers = [false, false, false, false, false, false, false, false]

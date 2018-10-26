@@ -190,8 +190,7 @@ function eternity(force, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     updateEternityChallenges();
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
-        showTab("dimensions");
-        showDimTab("timedimensions");
+        Tab.dimensions.time.show();
         loadAutoBuyerSettings()
     }
     Marathon2 = 0;

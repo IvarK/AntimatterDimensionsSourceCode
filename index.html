@@ -67,7 +67,6 @@
         </div>
         <div>
             <button id="dimensionsbtn" class="tabbtn">Dimensions</button>
-            <button id="dimensionsbtnvue" class="tabbtn">Dimensions (Vue)</button>
             <button id="optionsbtn" class="tabbtn">Options</button>
             <button id="statisticsbtn" class="tabbtn">Statistics</button>
             <button id="achievementsbtn" class="tabbtn">Achievements</button>
@@ -506,21 +505,6 @@
                 </table>
                 <footer-links></footer-links>
             </div>
-        </div>
-        <div id="dimensions" class="tab">
-            <table class="table" align="center" style="margin: auto" id="dimTabButtons">
-                <tr>
-                    <td id="dtabbtn"><button class="secondarytabbtn" onclick="showDimTab('antimatterdimensions')">Dimensions</button></td>
-                    <td id="idtabbtn"><button class="secondarytabbtn" onclick="showDimTab('infinitydimensions')">Infinity Dimensions</button></td>
-                    <td id="tdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('timedimensions')">Time Dimensions</button></td>
-                    <td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
-                </tr>
-            </table>
-            <div id="antimatterdimensions" class="dimtab"></div>
-            <div id="infinitydimensions" class="dimtab"></div>
-            <div id="timedimensions" class="dimtab"></div>
-            <div id="production" class="dimtab"></div>
-            <footer-links sticky="true"></footer-links>
         </div>
         <div v-show="view.tabs.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
             <component :is="view.tabs.current" :model="model" :view="view" :actions="actions"></component>

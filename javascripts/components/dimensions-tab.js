@@ -30,7 +30,7 @@ Vue.component('dimensions-tab', {
           id: "Production",
           component: "dimensions-production",
           condition: function() {
-            return this.progress.isInfinityUnlocked;
+            return this.player.eternities > 0 || this.player.infinities > 0;
           }.bind(this)
         }
       ]

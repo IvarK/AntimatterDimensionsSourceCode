@@ -2618,16 +2618,11 @@ function gameLoop(diff) {
         }
     }
 
-    document.getElementById("dimTabButtons").style.display = "none"
-
     player.realTimePlayed += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff
     player.thisReality += diff
-
-    if (player.eternities > 0) document.getElementById("tdtabbtn").style.display = "inline-block"
-    else document.getElementById("tdtabbtn").style.display = "none"
 
     for (let tier=1;tier<9;tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
@@ -2636,13 +2631,6 @@ function gameLoop(diff) {
       if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
       ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
     }
-
-    if (player.infinitied > 0 && player.eternities < 1) {
-        document.getElementById("dimTabButtons").style.display = "inline-block"
-        document.getElementById("dtabbtn").style.display = "inline-block"
-        document.getElementById("prodtabbtn").style.display = "inline-block"
-    }
-    if (player.eternities > 0) document.getElementById("dimTabButtons").style.display = "inline-block"
 
     if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff/1000))
     else if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(DimensionProduction(1).times(diff/1000))
@@ -3615,20 +3603,6 @@ function showInfTab(tabName) {
     }
 }
 
-function showDimTab(tabName, init) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('dimtab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-}
-
 function showChallengesTab(tabName) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('challengeTab');
@@ -3697,12 +3671,8 @@ function showAchTab(tabName) {
 function init() {
     console.log('init');
 
-    //setup the onclick callbacks for the buttons
     document.getElementById('dimensionsbtn').onclick = function () {
         showTab('dimensions');
-    };
-    document.getElementById('dimensionsbtnvue').onclick = function () {
-        showTab('dimensionsvue');
     };
     document.getElementById('optionsbtn').onclick = function () {
         showTab('options');
@@ -3730,7 +3700,8 @@ function init() {
         kong.updatePurchases();
     }
     //show one tab during init or they'll all start hidden
-    showTab('dimensions')
+    showTab('dimensions');
+    Tab.dimensions.normal.show();
     showInfTab('preinf')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)

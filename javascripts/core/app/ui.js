@@ -67,7 +67,7 @@ function tryShowtab(tab) {
     Tab.statistics.show();
     return true;
   }
-  if (tab === 'dimensionsvue') {
+  if (tab === 'dimensions') {
     Tab.dimensions.show();
     return true;
   }

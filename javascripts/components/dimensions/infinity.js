@@ -56,10 +56,10 @@ Vue.component('dimensions-infinity', {
           :dimension="dimensions.dims[tier]">
         </infinity-dimension-row>
       </div>
-      <div v-if="isEC8Running">You have {{player.eterc8ids}} purchases left.</div>
+      <div v-if="isEC8Running" style="margin-top: 10px">You have {{player.eterc8ids}} purchases left.</div>
       <store-button
         fontSize="12px"
-        style="width:140px; height: 30px"
+        style="width:140px; height: 30px; margin-top: 10px"
         v-if="isAnyAutobuyerUnlocked"
         @click="toggleAllAutobuyers">
         Toggle all ON/OFF

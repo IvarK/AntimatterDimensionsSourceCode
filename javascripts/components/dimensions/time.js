@@ -67,7 +67,7 @@ Vue.component('dimensions-time', {
       </div>
       <store-button
         fontSize="12px"
-        style="width:140px; height: 30px"
+        style="width:140px; height: 30px; margin-top: 10px"
         v-if="areAutobuyersUnlocked"
         @click="toggleAllAutobuyers">
         Toggle all ON/OFF

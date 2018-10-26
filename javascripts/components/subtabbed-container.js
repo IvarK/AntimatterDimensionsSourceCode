@@ -25,7 +25,7 @@ Vue.component('subtabbed-container', {
   },
   template:
     '<div>\
-        <tr>\
+        <tr v-if="visibleTabs.length > 1">\
             <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">{{ tab.name }}</td>\
         </tr>\
         <component :is="openedTab.component" :model="model" :view="view"></component>\

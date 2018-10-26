@@ -85,6 +85,7 @@ class Tab {
   }
 
   show() {
+    hideLegacyTabs();
     ui.view.tabs.current = this._component;
   }
 }

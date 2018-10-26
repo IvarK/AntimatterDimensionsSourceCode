@@ -12,18 +12,8 @@ let kongEPMult = 1
 
 
 function showTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName.
-    var tabs = document.getElementsByClassName('tab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
     tryShowtab(tabName);
+    hideLegacyTabs(tabName);
     if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "flex";
     else document.getElementById("TTbuttons").style.display = "none"
     resizeCanvas();
@@ -33,7 +23,18 @@ function showTab(tabName) {
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
-
+function hideLegacyTabs(tabName) {
+  var tabs = document.getElementsByClassName('tab');
+  var tab;
+  for (var i = 0; i < tabs.length; i++) {
+    tab = tabs.item(i);
+    if (tab.id === tabName) {
+      tab.style.display = 'block';
+    } else {
+      tab.style.display = 'none';
+    }
+  }
+}
 
 
 function updateMoney() {
@@ -3699,9 +3700,8 @@ function init() {
         showTab('shop')
         kong.updatePurchases();
     }
-    //show one tab during init or they'll all start hidden
-    showTab('dimensions');
     Tab.dimensions.normal.show();
+    //show one tab during init or they'll all start hidden
     showInfTab('preinf')
     showChallengesTab('challenges')
     showEternityTab('timestudies', true)

@@ -34,9 +34,13 @@ function updateInfinityDimensions() {
     const ec12Completions = ECTimesCompleted("eterc12");
     for (let tier = 1; tier <= 8; tier++) {
       const dimView = view.dims[tier];
-      dimView.multiplier = DimensionPower(tier);
-      dimView.rateOfChange = DimensionRateOfChange(tier);
-      const isCapped = tier < 8 && player["infinityDimension" + tier].baseAmount >= 10 * hardcapIDPurchases;
+      dimView.multiplier = shortenMoney(DimensionPower(tier));
+      dimView.rateOfChange = shorten(DimensionRateOfChange(tier));
+      const stats = player[`infinityDimension${tier}`];
+      dimView.amount = shortenDimensions(stats.amount);
+      dimView.cost = shortenCosts(stats.cost);
+      dimView.isAffordable = player.infinityPoints.gte(stats.cost);
+      const isCapped = tier < 8 && stats.baseAmount >= 10 * hardcapIDPurchases;
       dimView.isCapped = isCapped;
       if (isCapped) {
         let initCost = new Decimal(initIDCost[tier]);
@@ -44,7 +48,7 @@ function updateInfinityDimensions() {
         if (ec12Completions) {
           initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
         }
-        dimView.capIP = initCost.times(Decimal.pow(initCost, hardcapIDPurchases));
+        dimView.capIP = shortenCosts(initCost.times(Decimal.pow(initCost, hardcapIDPurchases)));
       }
     }
   }

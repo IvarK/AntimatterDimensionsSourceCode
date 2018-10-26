@@ -11,13 +11,13 @@ Vue.component('dimensions-infinity', {
       return this.view.tabs.dimensions.infinity;
     },
     infinityPower: function() {
-      return shortenMoney(this.player.infinityPower);
+      return this.dimensions.infinityPower;
     },
     dimMultiplier: function() {
-      return shortenMoney(this.dimensions.multiplier);
+      return this.dimensions.multiplier;
     },
     powerPerSecond: function() {
-      return shortenDimensions(this.dimensions.powerPerSecond);
+      return this.dimensions.powerPerSecond;
     },
     isEC7Running: function() {
       return this.player.currentEternityChall === "eterc7";
@@ -84,32 +84,32 @@ Vue.component('infinity-dimension-row', {
       return this.player[this.statsId];
     },
     multiplier: function() {
-      return shortenMoney(this.dimension.multiplier);
+      return this.dimension.multiplier;
     },
     amount: function() {
-      return shortenDimensions(this.stats.amount);
+      return this.dimension.amount;
     },
     bought: function() {
       return this.stats.bought;
     },
     rateOfChange: function() {
       return this.tier < 8 || ECTimesCompleted("eterc7") > 0 ?
-        `(+${shorten(this.dimension.rateOfChange)}%/s)` :
+        `(+${this.dimension.rateOfChange}%/s)` :
         String.empty;
     },
     cost: function() {
-      return this.dimension.isCapped ? "Capped!" : `Cost: ${shortenCosts(this.stats.cost)} IP`;
+      return this.dimension.isCapped ? "Capped!" : `Cost: ${this.dimension.cost} IP`;
     },
     hardcapAmount: function() {
       return shortenCosts(hardcapIDPurchases);
     },
     capTooltip: function() {
       return this.dimension.isCapped ?
-        `Limited to ${this.hardcapAmount} upgrades (${shortenCosts(this.dimension.capIP)} IP)`:
+        `Limited to ${this.hardcapAmount} upgrades (${this.dimension.capIP} IP)`:
         undefined;
     },
     isAffordable: function() {
-      return this.player.infinityPoints.gte(this.stats.cost);
+      return this.dimension.isAffordable;
     },
     isAvailable: function() {
       return this.dimension.isAvailable;

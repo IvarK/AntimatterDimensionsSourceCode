@@ -14,9 +14,10 @@ Vue.component('dimensions-time', {
       return formatWithCommas(this.player.totalTickGained);
     },
     timeShards: function() {
-      return shortenMoney(this.player.timeShards);
+      return this.dimensions.timeShards;
     },
     upgradeThreshold: function() {
+      // updates infrequently, no need to inline
       return shortenMoney(this.player.tickThreshold);
     },
     isEC7Running: function() {
@@ -26,7 +27,7 @@ Vue.component('dimensions-time', {
       return this.isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
     },
     shardsPerSecond: function() {
-      return shortenDimensions(this.dimensions.shardsPerSecond);
+      return this.dimensions.shardsPerSecond;
     },
     e6000Tooltip: function() {
       return "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000"));
@@ -86,19 +87,13 @@ Vue.component('time-dimension-row', {
       return DISPLAY_NAMES[this.tier];
     },
     multiplier: function() {
-      return shortenMoney(this.dimension.multiplier);
-    },
-    statsId: function() {
-      return `timeDimension${this.tier}`;
-    },
-    stats: function() {
-      return this.player[this.statsId];
+      return this.dimension.multiplier;
     },
     amount: function() {
-      return shortenDimensions(this.stats.amount);
+      return this.dimension.amount;
     },
     rateOfChange: function() {
-      return this.tier < 8 ? ` (+${shorten(this.dimension.rateOfChange)}%/s)` : String.empty;
+      return this.tier < 8 ? ` (+${this.dimension.rateOfChange}%/s)` : String.empty;
     },
     isAvailable: function() {
       return this.dimension.isAvailable;
@@ -107,10 +102,10 @@ Vue.component('time-dimension-row', {
       return this.player.reality.tdbuyers[this.tier - 1];
     },
     cost: function() {
-      return shortenDimensions(this.stats.cost);
+      return this.dimension.cost;
     },
     isAffordable: function() {
-      return this.player.eternityPoints.gte(this.stats.cost);
+      return this.dimension.isAffordable;
     }
   },
   methods: {

@@ -89,10 +89,13 @@ function updateTimeDimensions() {
       const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
       dimView.isAvailable = isAvailable;
       if (!isAvailable) continue;
-      dimView.multiplier = getTimeDimensionPower(tier);
-      dimView.amount.fromDecimal(player['timeDimension'+tier].amount);
+      dimView.multiplier = shortenMoney(getTimeDimensionPower(tier));
+      const stats = player[`timeDimension${tier}`];
+      dimView.amount = shortenDimensions(stats.amount);
+      dimView.cost = shortenDimensions(stats.cost);
+      dimView.isAffordable = player.eternityPoints.gte(stats.cost);
       if (tier < 8) {
-        dimView.rateOfChange = getTimeDimensionRateOfChange(tier);
+        dimView.rateOfChange = shorten(getTimeDimensionRateOfChange(tier));
       }
     }
   }

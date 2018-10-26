@@ -94,7 +94,7 @@ Vue.component('normal-dimensions-top-row', {
       return PlayerProgress.of(this.player).isSacrificeUnlocked;
     },
     sacrificeBoost: function() {
-      return shorten(this.dimensions.sacrifice.boost);
+      return this.dimensions.sacrifice.boost;
     },
     sacrificeTooltip: function() {
       return `Boosts 8th Dimension by ${this.sacrificeBoost}x`;
@@ -144,22 +144,22 @@ Vue.component('normal-dimension-row', {
       return DISPLAY_NAMES[this.tier];
     },
     multiplier: function() {
-      return shortenMultiplier(this.dimension.multiplier);
+      return this.dimension.multiplier;
     },
     stats: function() {
       return new DimensionStats(this.tier, this.player);
     },
     singleCost: function() {
-      return shortenCosts(this.stats.cost);
+      return this.dimension.singleCost;
     },
     until10Cost: function() {
-      return shortenCosts(this.stats.cost.times(this.stats.remainingUntil10));
+      return this.dimension.until10Cost;
     },
     amount: function() {
-      return this.tier < 8 ? shortenDimensions(this.stats.amount) : Math.round(this.stats.amount);
+      return this.dimension.amount;
     },
     rateOfChange: function() {
-      return this.tier < 8 ? ` (+${shorten(this.dimension.rateOfChange)}%/s)` : String.empty;
+      return this.tier < 8 ? ` (+${this.dimension.rateOfChange}%/s)` : String.empty;
     },
     isAvailable: function() {
       return this.dimension.isAvailable;

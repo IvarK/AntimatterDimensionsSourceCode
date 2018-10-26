@@ -16,8 +16,11 @@ let ui = {
         normal: {
           dims: Array.from({length: 9}, () => {
             return {
-              rateOfChange: new Decimal(0),
-              multiplier: new Decimal(0),
+              rateOfChange: String.empty,
+              multiplier: String.empty,
+              amount: String.empty,
+              singleCost: String.empty,
+              until10Cost: String.empty,
               isAvailable: false,
               isAffordable: false,
               isAffordableUntil10: false,
@@ -41,7 +44,7 @@ let ui = {
           },
           sacrifice: {
             isAvailable: false,
-            boost: new Decimal(0)
+            boost: String.empty
           },
           progress: {
             fill: 0,
@@ -51,26 +54,33 @@ let ui = {
         infinity: {
           dims: Array.from({length: 9}, () => {
             return {
-              rateOfChange: new Decimal(0),
-              multiplier: new Decimal(0),
+              amount: String.empty,
+              rateOfChange: String.empty,
+              multiplier: String.empty,
+              cost: String.empty,
               isAvailable: false,
+              isAffordable: false,
               isCapped: false,
-              capIP: new Decimal(0)
+              capIP: String.empty
             };
           }),
-          multiplier: new Decimal(0),
-          powerPerSecond: new Decimal(0)
+          multiplier: String.empty,
+          infinityPower: String.empty,
+          powerPerSecond: String.empty
         },
         time: {
           dims: Array.from({length: 9}, () => {
             return {
-              rateOfChange: new Decimal(0),
-              multiplier: new Decimal(0),
+              amount: String.empty,
+              cost: String.empty,
+              rateOfChange: String.empty,
+              multiplier: String.empty,
               isAvailable: false,
-              amount: new Decimal(0),
+              isAffordable: false
             };
           }),
-          shardsPerSecond: new Decimal(0)
+          timeShards: String.empty,
+          shardsPerSecond: String.empty
         }
       },
       statistics: {

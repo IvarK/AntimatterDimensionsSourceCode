@@ -118,9 +118,12 @@ function updateDimensions() {
         if (!canBuy) {
           continue;
         }
-        dimView.multiplier = getDimensionFinalMultiplier(tier);
-        dimView.rateOfChange = getDimensionRateOfChange(tier);
+        dimView.multiplier = shortenMultiplier(getDimensionFinalMultiplier(tier));
+        dimView.rateOfChange = tier < 8 ? shorten(getDimensionRateOfChange(tier)) : String.empty;
         const dimension = new DimensionStats(tier);
+        dimView.amount = tier < 8 ? shortenDimensions(dimension.amount) : Math.round(dimension.amount).toString();
+        dimView.singleCost = shortenCosts(dimension.cost);
+        dimView.until10Cost = shortenCosts(dimension.costUntil10);
         let canAffordSingle = false;
         let canAffordUntil10 = false;
         if ((player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") && tier >= 3) {
@@ -2109,19 +2112,22 @@ function updateInfPower() {
   if (Tab.dimensions.infinity.isOpen) {
     const view = ui.view.tabs.dimensions.infinity;
     if (player.currentEternityChall === "eterc9") {
-      view.multiplier = Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1);
+      view.multiplier = shortenMoney(Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4).max(1));
     }
     else {
       const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-      view.multiplier = player.infinityPower.pow(conversionRate).max(1);
+      view.multiplier = shortenMoney(player.infinityPower.pow(conversionRate).max(1));
     }
-    view.powerPerSecond = DimensionProduction(1);
+    view.infinityPower = shortenMoney(player.infinityPower);
+    view.powerPerSecond = shortenDimensions(DimensionProduction(1));
   }
 }
 
 function updateTimeShards() {
     if (Tab.dimensions.time.isOpen) {
-        ui.view.tabs.dimensions.time.shardsPerSecond.fromDecimal(getTimeDimensionProduction(1));
+      const view = ui.view.tabs.dimensions.time;
+      view.timeShards = shortenMoney(player.timeShards);
+      view.shardsPerSecond = shortenDimensions(getTimeDimensionProduction(1));
     }
 }
 
@@ -3058,7 +3064,7 @@ function gameLoop(diff) {
 
     document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(getNewInfReq()) + " antimatter to unlock a new Dimension."
 
-    ui.view.tabs.dimensions.normal.sacrifice.boost = calcSacrificeBoost();
+    ui.view.tabs.dimensions.normal.sacrifice.boost = shorten(calcSacrificeBoost());
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     if (player.timestudy.studies.includes(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff/100000))
     if (player.dilation.upgrades.includes(10)) {

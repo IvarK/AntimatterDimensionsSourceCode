@@ -31,10 +31,21 @@ function DimensionRateOfChange(tier) {
 function updateInfinityDimensions() {
   if (Tab.dimensions.infinity.isOpen) {
     const view = ui.view.tabs.dimensions.infinity;
+    const ec12Completions = ECTimesCompleted("eterc12");
     for (let tier = 1; tier <= 8; tier++) {
       const dimView = view.dims[tier];
       dimView.multiplier = DimensionPower(tier);
       dimView.rateOfChange = DimensionRateOfChange(tier);
+      const isCapped = tier < 8 && player["infinityDimension" + tier].baseAmount >= 10 * hardcapIDPurchases;
+      dimView.isCapped = isCapped;
+      if (isCapped) {
+        let initCost = new Decimal(initIDCost[tier]);
+        const costMult = infCostMults[tier];
+        if (ec12Completions) {
+          initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
+        }
+        dimView.capIP = initCost.times(Decimal.pow(initCost, hardcapIDPurchases));
+      }
     }
   }
 }
@@ -180,6 +191,7 @@ function resetInfDimensions() {
 
 }
 
+const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
 var hardcapIDPurchases = 2000000;

@@ -54,6 +54,8 @@ let ui = {
               rateOfChange: new Decimal(0),
               multiplier: new Decimal(0),
               isAvailable: false,
+              isCapped: false,
+              capIP: new Decimal(0)
             };
           }),
           multiplier: new Decimal(0),

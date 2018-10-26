@@ -98,7 +98,15 @@ Vue.component('infinity-dimension-row', {
         String.empty;
     },
     cost: function() {
-      return shortenCosts(this.stats.cost);
+      return this.dimension.isCapped ? "Capped!" : `Cost: ${shortenCosts(this.stats.cost)} IP`;
+    },
+    hardcapAmount: function() {
+      return shortenCosts(hardcapIDPurchases);
+    },
+    capTooltip: function() {
+      return this.dimension.isCapped ?
+        `Limited to ${this.hardcapAmount} upgrades (${shortenCosts(this.dimension.capIP)} IP)`:
+        undefined;
     },
     isAffordable: function() {
       return this.player.infinityPoints.gte(this.stats.cost);
@@ -133,8 +141,9 @@ Vue.component('infinity-dimension-row', {
       <store-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
+        v-tooltip="capTooltip"
         @click="buyManyInfinityDimension">
-        Cost: {{cost}} IP
+        {{cost}}
       </store-button>
     </div>`,
 });

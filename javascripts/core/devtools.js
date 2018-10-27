@@ -94,7 +94,7 @@ dev.refundTimeDims = function() {
         dim.bought = 0;
         dim.power = new Decimal(1);
     }
-    dev.updateCosts()
+    dev.updateTDCosts()
 }
 
 dev.refundEPMult = function() {

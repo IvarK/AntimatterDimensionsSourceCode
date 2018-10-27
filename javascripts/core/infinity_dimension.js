@@ -47,7 +47,7 @@ function updateInfinityDimensionTab() {
       if (ec12Completions) {
         initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
       }
-      dimView.capIP = shortenCosts(initCost.times(Decimal.pow(initCost, hardcapIDPurchases)));
+      dimView.capIP = shortenCosts(Decimal.pow(initCost, hardcapIDPurchases).times(initCost));
     }
   }
   const infinityPower = player.infinityPower;

@@ -202,7 +202,7 @@ function updateCosts() {
 let floatingTextKey = 0;
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
-  const floatingText = ui.view.tabs.dimensions.normal.dims[tier].floatingText;
+  const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
   floatingText.push({ text: text, key: floatingTextKey++ });
   setTimeout(() => floatingText.shift(), 1000)
 }
@@ -2559,7 +2559,6 @@ function gameLoop(diff) {
         player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
       }
       if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
-      ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
     }
 
     if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff/1000))
@@ -2700,7 +2699,6 @@ function gameLoop(diff) {
     updateDimensions()
     updateInfCosts()
     updateDilation();
-    updateView();
     if (getDimensionProductionPerSecond(1).gt(player.money) && !isAchEnabled("r44")) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
@@ -3032,7 +3030,8 @@ function gameLoop(diff) {
   // Reality unlock and TTgen perk autobuy
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
-  
+
+    ui.dispatch(GameEvent.UPDATE);
     player.lastUpdate = thisUpdate;
 }
 
@@ -3146,20 +3145,6 @@ function simulateTime(seconds, real, fast) {
 
 function startInterval() {
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
-}
-
-function updateView() {
-  if (Tab.dimensions.isOpen) {
-    if (Tab.dimensions.normal.isOpen) {
-      updateNormalDimensionTab();
-    }
-    if (Tab.dimensions.infinity.isOpen) {
-      updateInfinityDimensionTab();
-    }
-    if (Tab.dimensions.time.isOpen) {
-      updateTimeDimensionTab();
-    }
-  }
 }
 
 function updateChart(first) {

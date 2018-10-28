@@ -81,26 +81,6 @@ function getTimeDimensionRateOfChange(tier) {
   return change;
 }
 
-function updateTimeDimensionTab() {
-  const view = ui.view.tabs.dimensions.time;
-  for (let tier = 1; tier <= 8; tier++) {
-    const dimView = view.dims[tier];
-    const isAvailable = tier < 5 || player.dilation.studies.includes(tier - 3);
-    dimView.isAvailable = isAvailable;
-    if (!isAvailable) continue;
-    dimView.multiplier = shortenMoney(getTimeDimensionPower(tier));
-    const stats = player[`timeDimension${tier}`];
-    dimView.amount = shortenDimensions(stats.amount);
-    dimView.cost = shortenDimensions(stats.cost);
-    dimView.isAffordable = player.eternityPoints.gte(stats.cost);
-    if (tier < 8) {
-      dimView.rateOfChange = shorten(getTimeDimensionRateOfChange(tier));
-    }
-  }
-  view.timeShards = shortenMoney(player.timeShards);
-  view.shardsPerSecond = shortenDimensions(getTimeDimensionProduction(1));
-}
-
 var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
 var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
 var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]

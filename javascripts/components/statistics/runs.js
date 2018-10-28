@@ -1,73 +1,73 @@
 const pastRunsMixin = {
   methods: {
     runGain(run) {
-      return shortenDimensions(run[1]);
+      return this.shortenDimensions(run[1]);
     }
   }
 };
 
 Vue.component('statistic-past-infinities', {
   mixins: [pastRunsMixin],
-  props: ['model'],
-  template:
-    '<statistic-past-runs\
-        :runs="model.player.lastTenRuns"\
-        singular="Infinity"\
-        plural="Infinities"\
-        points="IP"\
-        :reward="reward"\
-        >\
-    </statistic-past-runs>',
   data: function() {
     return {
+      runs: player.lastTenRuns,
       reward: function(run) {
         return this.runGain(run) + " IP";
       }
     };
-  }
+  },
+  template:
+    `<statistic-past-runs
+      :runs="runs"
+      singular="Infinity"
+      plural="Infinities"
+      points="IP"
+      :reward="reward"
+      >
+    </statistic-past-runs>`
 });
 
 Vue.component('statistic-past-eternities', {
   mixins: [pastRunsMixin],
-  props: ['model'],
+  data: function() {
+    return {
+      runs: player.lastTenEternities,
+      reward: function(run) {
+        return this.runGain(run) + " EP";
+      }
+    };
+  },
   template:
     '<statistic-past-runs\
-        :runs="model.player.lastTenEternities"\
+        :runs="runs"\
         singular="Eternity"\
         plural="Eternities"\
         points="EP"\
         :reward="reward"\
         >\
-    </statistic-past-runs>',
-  data: function() {
-    return {
-      reward: function(run) {
-        return this.runGain(run) + " EP";
-      }
-    };
-  }
+    </statistic-past-runs>'
 });
 
 Vue.component('statistic-past-realities', {
   mixins: [pastRunsMixin],
-  props: ['model'],
-  template:
-    '<statistic-past-runs\
-        :runs="model.player.lastTenRealities"\
-        singular="Reality"\
-        plural="Realities"\
-        points="RM"\
-        :reward="reward"\
-        >\
-    </statistic-past-runs>',
   data: function() {
     return {
+      runs: player.lastTenRealities,
       reward: function(run) {
         let rm = run[1].eq(1) ? " reality machine" : " reality machines";
         return this.runGain(run) + rm + " and a level " + run[2] + " glyph";
       }
     };
-  }
+  },
+  template:
+    '<statistic-past-runs\
+        :runs="runs"\
+        singular="Reality"\
+        plural="Realities"\
+        points="RM"\
+        :reward="reward"\
+        >\
+    </statistic-past-runs>'
 });
 
 Vue.component('statistic-past-runs', {
@@ -78,13 +78,6 @@ Vue.component('statistic-past-runs', {
     plural: String,
     points: String,
     reward: Function
-  },
-  data: function() {
-    return {
-      tabs: [
-        {name: "Statistics", component: "statistics-stats-tab"},
-      ]
-    };
   },
   template:
     '<div class="statstab">\

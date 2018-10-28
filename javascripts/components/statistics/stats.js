@@ -1,92 +1,120 @@
 Vue.component('statistics-stats-tab', {
-  props: ['model'],
-  template:
-    '<div class="statstab">\
-        <br>\
-        <h3>General</h3>\
-        <div>You have made a total of {{ totalAntimatter }} antimatter.</div>\
-        <div>You have done {{ player.resets }} dimensional boosts/shifts.</div>\
-        <div>You have {{ Math.round(player.galaxies) }} Antimatter Galaxies.</div>\
-        <div>You have played for {{ timeDisplay(player.realTimePlayed) }}.</div>\
-        <div v-if="realityUnlocked">Your existence has spanned {{ timeDisplay(player.totalTimePlayed) }} of time.</div>\
-        <br>\
-        <div v-if="infinityUnlocked">\
-            <h3>Infinity</h3>\
-            <div v-if="hasInfinities">You have infinitied {{ formatResetAmount(player.infinitied) }}<span v-if="eternityUnlocked"> this eternity</span>.</div>\
-            <div v-else>You haven\'t infinitied<span v-if="eternityUnlocked"> this eternity</span>.</div>\
-            <div v-if="hasBankedInfinities">You have {{ formatAmount(player.infinitiedBank) }} banked infinities.</div>\
-            <div v-if="hasBestInfinity">Your fastest Infinity is in {{ timeDisplay(player.bestInfinityTime) }}.</div>\
-            <div v-else>You have no fastest infinity<span v-if="eternityUnlocked"> this eternity</span>.</div>\
-            <div>You have spent {{ timeDisplay(player.thisInfinityTime) }} in this Infinity.</div>\
-            <br>\
-        </div>\
-        <div v-if="eternityUnlocked">\
-            <h3>Eternity</h3>\
-            <div v-if="hasEternities">You have Eternitied {{ formatResetAmount(player.eternities) }}<span v-if="realityUnlocked"> this reality</span>.</div>\
-            <div v-else>You haven\'t Eternitied<span v-if="realityUnlocked"> this reality</span>.</div>\
-            <div v-if="hasBestEternity">Your fastest Eternity is in {{ timeDisplay(player.bestEternity) }}.</div>\
-            <div v-else>You have no fastest eternity<span v-if="realityUnlocked"> this reality</span>.</div>\
-            <div>You have spent {{ timeDisplay(player.thisEternity) }} in this Eternity.</div>\
-            <br>\
-        </div>\
-        <div v-if="realityUnlocked">\
-            <h3>Reality</h3>\
-            <div>You have Realitied {{ formatResetAmount(player.realities) }}.</div>\
-            <div>Your fastest Reality is in {{ timeDisplay(player.bestReality) }}.</div>\
-            <div>You have spent {{ timeDisplay(player.thisReality) }} in this Reality.</div>\
-            <br>\
-        </div>\
-        <div v-html="infoScale"></div>\
-    </div>',
-  computed: {
-    player: function() {
-      return this.model.player;
-    },
-    totalAntimatter: function() {
-      return shortenMoney(this.player.totalmoney);
-    },
-    progress: function() {
-      return PlayerProgress.of(this.player);
-    },
-    infinityUnlocked: function() {
-      return this.progress.isInfinityUnlocked;
-    },
-    eternityUnlocked: function() {
-      return this.progress.isEternityUnlocked;
-    },
-    realityUnlocked: function() {
-      return this.progress.isRealityUnlocked;
-    },
-    hasInfinities: function() {
-      return this.player.infinitied > 0;
-    },
-    hasBankedInfinities: function() {
-      return this.player.infinitiedBank > 0;
-    },
-    hasEternities: function() {
-      return this.player.eternities > 0;
-    },
-    hasBestInfinity: function() {
-      return this.player.bestInfinityTime < 999999999999;
-    },
-    hasBestEternity: function() {
-      return this.player.bestEternity < 999999999999;
-    },
-    infoScale: function() {
-      return estimateMatterScale(this.player.money);
-    }
+  data: function() {
+    return {
+      totalAntimatter: new Decimal(0),
+      resets: 0,
+      galaxies: 0,
+      realTimePlayed: 0,
+      infinity: {
+        isUnlocked: false,
+        count: 0,
+        banked: 0,
+        hasBest: false,
+        best: 0,
+        this: 0
+      },
+      eternity: {
+        isUnlocked: false,
+        count: 0,
+        hasBest: false,
+        best: 0,
+        this: 0
+      },
+      reality: {
+        isUnlocked: false,
+        count: 0,
+        best: 0,
+        this: 0,
+        totalTimePlayed: 0
+      },
+      infoScale: String.empty,
+    };
   },
   methods: {
     timeDisplay: function(time) {
       return timeDisplay(time);
     },
     formatAmount: function(value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return formatWithCommas(value);
     },
     formatResetAmount: function(value) {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
+    },
+    update() {
+      this.totalAntimatter.copyFrom(player.totalmoney);
+      this.resets = player.resets;
+      this.galaxies = Math.round(player.galaxies);
+      this.realTimePlayed = player.realTimePlayed;
+      const progress = PlayerProgress.current;
+      const isInfinityUnlocked = progress.isInfinityUnlocked;
+      const infinity = this.infinity;
+      infinity.isUnlocked = isInfinityUnlocked;
+      if (isInfinityUnlocked) {
+        infinity.count = player.infinitied;
+        infinity.banked = player.infinitiedBank;
+        infinity.hasBest = player.bestInfinityTime < 999999999999;
+        infinity.best = player.bestInfinityTime;
+        infinity.this = player.thisInfinityTime;
+      }
+      const isEternityUnlocked = progress.isEternityUnlocked;
+      const eternity = this.eternity;
+      eternity.isUnlocked = isEternityUnlocked;
+      if (isEternityUnlocked) {
+        eternity.count = player.eternities;
+        eternity.hasBest = player.bestEternity < 999999999999;
+        eternity.best = player.bestEternity;
+        eternity.this = player.thisEternity;
+      }
+      const isRealityUnlocked = progress.isRealityUnlocked;
+      const reality = this.reality;
+      reality.isUnlocked = isRealityUnlocked;
+      if (isRealityUnlocked) {
+        reality.count = player.realities;
+        reality.best = player.bestReality;
+        reality.this = player.thisReality;
+        reality.totalTimePlayed = player.totalTimePlayed;
+      }
+      this.infoScale = estimateMatterScale(player.money, this);
     }
-  }
+  },
+  template:
+    `<div class="statstab">
+        <br>
+        <h3>General</h3>
+        <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
+        <div>You have done {{ resets }} dimensional boosts/shifts.</div>
+        <div>You have {{ galaxies }} Antimatter Galaxies.</div>
+        <div>You have played for {{ timeDisplay(realTimePlayed) }}.</div>
+        <div v-if="reality.isUnlocked">Your existence has spanned {{ timeDisplay(reality.totalTimePlayed) }} of time.</div>
+        <br>
+        <div v-if="infinity.isUnlocked">
+            <h3>Infinity</h3>
+            <div v-if="infinity.count > 0">You have infinitied {{ formatResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
+            <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
+            <div v-if="infinity.banked > 0">You have {{ formatAmount(infinity.banked) }} banked infinities.</div>
+            <div v-if="infinity.hasBest">Your fastest Infinity is in {{ timeDisplay(infinity.best) }}.</div>
+            <div v-else>You have no fastest infinity<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
+            <div>You have spent {{ timeDisplay(infinity.this) }} in this Infinity.</div>
+            <br>
+        </div>
+        <div v-if="eternity.isUnlocked">
+            <h3>Eternity</h3>
+            <div v-if="eternity.count > 0">You have Eternitied {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this reality</span>.</div>
+            <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this reality</span>.</div>
+            <div v-if="eternity.hasBest">Your fastest Eternity is in {{ timeDisplay(eternity.best) }}.</div>
+            <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this reality</span>.</div>
+            <div>You have spent {{ timeDisplay(eternity.this) }} in this Eternity.</div>
+            <br>
+        </div>
+        <div v-if="reality.isUnlocked">
+            <h3>Reality</h3>
+            <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
+            <div>Your fastest Reality is in {{ timeDisplay(reality.best) }}.</div>
+            <div>You have spent {{ timeDisplay(reality.this) }} in this Reality.</div>
+            <br>
+        </div>
+        <div v-html="infoScale"></div>
+    </div>`
 });
 
 const planck = 4.22419e-105;
@@ -144,7 +172,7 @@ function largestMatterScale(matter) {
   return matterScale[high - 1];
 }
 
-var matterScale = [
+const matterScale = [
   {amount: proton, name: "protons", verb: "make"},
   {amount: 1e-42, name: "nucleui", verb: "make"},
   {amount: 7.23e-30, name: "Hydrogen atoms", verb: "make"},

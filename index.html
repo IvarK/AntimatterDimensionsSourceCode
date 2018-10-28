@@ -2252,8 +2252,8 @@
         <div id="glyphsToSelect"></div>
     </div>
     <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
-    <tt-shop :player="model.player" :view="view"></tt-shop>
-    <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
+    <tt-shop :view="view"></tt-shop>
+    <link v-if="view.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>
 <div class="videocontainer">
@@ -2316,7 +2316,9 @@
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
 <script type="text/javascript" src="javascripts/core/app/notations.js"></script>
 <script type="text/javascript" src="javascripts/core/app/options.js"></script>
+<script type="text/javascript" src="javascripts/core/app/event-hub.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.js"></script>
+<script type="text/javascript" src="javascripts/core/app/tabs.js"></script>
 
 <script type="text/javascript" src="javascripts/core/achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/chart.js"></script>

@@ -1,36 +1,14 @@
 Vue.component('dimensions-infinity', {
-  props: {
-    model: Object,
-    view: Object
-  },
-  computed: {
-    player: function() {
-      return this.model.player;
-    },
-    dimensions: function() {
-      return this.view.tabs.dimensions.infinity;
-    },
-    infinityPower: function() {
-      return this.dimensions.infinityPower;
-    },
-    dimMultiplier: function() {
-      return this.dimensions.multiplier;
-    },
-    powerPerSecond: function() {
-      return this.dimensions.powerPerSecond;
-    },
-    isEC7Running: function() {
-      return this.player.currentEternityChall === "eterc7";
-    },
-    incomeType: function() {
-      return this.isEC7Running ? "Seventh Dimensions" : "Infinity Power";
-    },
-    isEC8Running: function() {
-      return this.player.currentEternityChall === "eterc8";
-    },
-    isAnyAutobuyerUnlocked: function() {
-      return this.player.eternities > 10;
-    }
+  data: function() {
+    return {
+      infinityPower: new Decimal(0),
+      dimMultiplier: new Decimal(0),
+      powerPerSecond: new Decimal(0),
+      incomeType: String.empty,
+      isEC8Running: false,
+      EC8PurchasesLeft: 0,
+      isAnyAutobuyerUnlocked: false
+    };
   },
   methods: {
     maxAll: function() {
@@ -38,25 +16,42 @@ Vue.component('dimensions-infinity', {
     },
     toggleAllAutobuyers: function() {
       toggleAllInfDims();
+    },
+    update() {
+      const infinityPower = player.infinityPower;
+      this.infinityPower.copyFrom(infinityPower);
+      if (player.currentEternityChall === "eterc9") {
+        this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
+      }
+      else {
+        const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+        this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
+      }
+      this.powerPerSecond.copyFrom(DimensionProduction(1));
+      this.incomeType = player.currentEternityChall === "eterc7" ? "Seventh Dimensions" : "Infinity Power";
+      const isEC8Running = player.currentEternityChall === "eterc8";
+      this.isEC8Running = isEC8Running;
+      if (isEC8Running) {
+        this.EC8PurchasesLeft = player.eterc8ids;
+      }
+      this.isAnyAutobuyerUnlocked = player.eternities > 10;
     }
   },
   template:
     `<div>
       <div>
-        <p>You have <span id="infPowAmount" class="infinity-power">{{infinityPower}}</span> infinity power. translated to <span id="infDimMultAmount" class="infinity-power">{{dimMultiplier}}</span>x multiplier on all dimensions</p>
-      </div>      
-      <div>You are getting {{powerPerSecond}} {{incomeType}} per second.</div>
+        <p>You have <span id="infPowAmount" class="infinity-power">{{shortenMoney(infinityPower)}}</span> infinity power. translated to <span id="infDimMultAmount" class="infinity-power">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions</p>
+      </div>
+      <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
       <store-button fontSize="12px" @click="maxAll">Max all</store-button>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <infinity-dimension-row
           v-for="tier in 8"
           :key="tier"
-          :tier="tier"
-          :player="player"
-          :dimension="dimensions.dims[tier]">
+          :tier="tier">
         </infinity-dimension-row>
       </div>
-      <div v-if="isEC8Running" style="margin-top: 10px">You have {{player.eterc8ids}} purchases left.</div>
+      <div v-if="isEC8Running" style="margin-top: 10px">You have {{EC8PurchasesLeft}} purchases left.</div>
       <store-button
         fontSize="12px"
         style="width:140px; height: 30px; margin-top: 10px"
@@ -69,73 +64,94 @@ Vue.component('dimensions-infinity', {
 
 Vue.component('infinity-dimension-row', {
   props: {
-    player: Object,
-    dimension: Object,
     tier: Number
+  },
+  data: function() {
+    return {
+      isUnlocked: false,
+      multiplier: new Decimal(0),
+      amount: new Decimal(0),
+      bought: 0,
+      tier8HasRateOfChange: false,
+      rateOfChange: new Decimal(0),
+      isAutobuyerUnlocked: false,
+      cost: new Decimal(0),
+      isAffordable: false,
+      isCapped: false,
+      capIP: new Decimal(0),
+      autobuyers: player.infDimBuyers
+    };
   },
   computed: {
     name: function() {
       return DISPLAY_NAMES[this.tier];
     },
-    statsId: function() {
-      return `infinityDimension${this.tier}`;
-    },
-    stats: function() {
-      return this.player[this.statsId];
-    },
-    multiplier: function() {
-      return this.dimension.multiplier;
-    },
-    amount: function() {
-      return this.dimension.amount;
-    },
-    bought: function() {
-      return this.stats.bought;
-    },
-    rateOfChange: function() {
-      return this.tier < 8 || ECTimesCompleted("eterc7") > 0 ?
-        `(+${this.dimension.rateOfChange}%/s)` :
+    rateOfChangeDisplay: function() {
+      return this.tier < 8 || this.tier8HasRateOfChange ?
+        ` (+${this.shorten(this.rateOfChange)}%/s)` :
         String.empty;
     },
-    cost: function() {
-      return this.dimension.isCapped ? "Capped!" : `Cost: ${this.dimension.cost} IP`;
+    costDisplay: function() {
+      return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
     hardcapAmount: function() {
       return shortenCosts(hardcapIDPurchases);
     },
     capTooltip: function() {
-      return this.dimension.isCapped ?
-        `Limited to ${this.hardcapAmount} upgrades (${this.dimension.capIP} IP)`:
+      return this.isCapped ?
+        `Limited to ${this.hardcapAmount} upgrades (${this.shortenCosts(this.capIP)} IP)`:
         undefined;
-    },
-    isAffordable: function() {
-      return this.dimension.isAffordable;
-    },
-    isAvailable: function() {
-      return this.dimension.isAvailable;
-    },
-    isAutobuyerUnlocked: function() {
-      return this.player.eternities >= 10 + this.tier;
     }
   },
   methods: {
     buyManyInfinityDimension: function() {
       buyManyInfinityDimension(this.tier);
+    },
+    update() {
+      const tier = this.tier;
+      const isUnlocked = player.infDimensionsUnlocked[tier - 1];
+      this.isUnlocked = isUnlocked;
+      if (!isUnlocked) return;
+      const dimension = player[`infinityDimension${tier}`];
+      this.multiplier.copyFrom(DimensionPower(tier));
+      this.amount.copyFrom(dimension.amount);
+      this.bought = dimension.bought;
+      let tier8HasRateOfChange = tier === 8 && ECTimesCompleted("eterc7") > 0;
+      if (tier === 8) {
+        this.tier8HasRateOfChange = tier8HasRateOfChange;
+      }
+      if (tier < 8 || tier8HasRateOfChange) {
+        this.rateOfChange.copyFrom(DimensionRateOfChange(tier));
+      }
+      this.isAutobuyerUnlocked = player.eternities >= 10 + tier;
+      this.cost.copyFrom(dimension.cost);
+      this.isAffordable = player.infinityPoints.gte(dimension.cost);
+      const isCapped = tier < 8 && dimension.baseAmount >= 10 * hardcapIDPurchases;
+      this.isCapped = isCapped;
+      if (isCapped) {
+        let initCost = new Decimal(initIDCost[tier]);
+        const costMult = infCostMults[tier];
+        const ec12Completions = ECTimesCompleted("eterc12");
+        if (ec12Completions) {
+          initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
+        }
+        this.capIP.copyFrom(Decimal.pow(initCost, hardcapIDPurchases).times(initCost));
+      }
     }
   },
   template:
-    `<div class="infinity-dimension-row" v-show="isAvailable">
+    `<div class="infinity-dimension-row" v-show="isUnlocked">
       <div style="width: 41%; text-align: left">
-        {{name}} Infinity Dimension x{{multiplier}}
+        {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
       </div>
       <div style="text-align: left; flex-grow: 1">
-        {{amount}} ({{bought}}) {{rateOfChange}}
+        {{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}
       </div>
       <store-button-named-on-off
         fontSize="10px"
-        style="width:70px; margin-right: 16px" 
+        style="width:70px; margin-right: 16px"
         text="Auto:"
-        v-model="player.infDimBuyers[tier - 1]"
+        v-model="autobuyers[tier - 1]"
         v-if="isAutobuyerUnlocked">
       </store-button-named-on-off>
       <store-button
@@ -143,7 +159,7 @@ Vue.component('infinity-dimension-row', {
         :enabled="isAffordable"
         v-tooltip="capTooltip"
         @click="buyManyInfinityDimension">
-        {{cost}}
+        {{costDisplay}}
       </store-button>
     </div>`,
 });

@@ -1,10 +1,12 @@
 Vue.component('dimensions-production', {
-  props: {
-    model: Object,
+  data: function() {
+    return {
+      options: player.options
+    };
   },
   computed: {
-    options: function() {
-      return this.model.player.options.chart;
+    chartOptions: function() {
+      return this.options.chart;
     }
   },
   mounted: function() {
@@ -13,7 +15,7 @@ Vue.component('dimensions-production', {
   },
   methods: {
     checkOptionsWarnings: function() {
-      const options = this.options;
+      const options = this.chartOptions;
       const updateRate = options.updateRate;
       const duration = options.duration;
       if (updateRate <= 200 && duration >= 30 && options.warning === 0) {
@@ -26,8 +28,8 @@ Vue.component('dimensions-production', {
       }
     },
     checkToggleWarnings: function() {
-      if (this.options.on) return;
-      if (this.options.warning < 1) {
+      if (this.chartOptions.on) return;
+      if (this.chartOptions.warning < 1) {
         alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.");
       }
     }
@@ -39,7 +41,7 @@ Vue.component('dimensions-production', {
         :min="1"
         :max="300"
         :default="10"
-        v-model="options.duration"
+        v-model="chartOptions.duration"
         @input="checkOptionsWarnings">
       </number-input>
       <b>update rate (in ms):</b>
@@ -47,7 +49,7 @@ Vue.component('dimensions-production', {
         :min="50"
         :max="10000"
         :default="1000"
-        v-model="options.updateRate"
+        v-model="chartOptions.updateRate"
         @input="checkOptionsWarnings">
       </number-input>
       <b>enabled:</b>
@@ -55,14 +57,14 @@ Vue.component('dimensions-production', {
         type="checkbox"
         class="checkbox"
         style="top: -4px;"
-        v-model="options.on"
+        v-model="chartOptions.on"
         @input="checkToggleWarnings"/>
       <b>dips:</b>
       <input
         type="checkbox"
         class="checkbox"
         style="top: -4px;"
-        v-model="options.dips"
+        v-model="chartOptions.dips"
         @input="checkToggleWarnings"/>
       <div ref="chartContainer"></div>
       <b>Exponents of antimatter per second</b>

@@ -33,7 +33,7 @@ Vue.component('normal-achievements', {
     }
   },
   template:
-    `<div id="normalachievements" class="achtab">
+    `<div>
       <div style="font-size: 140%">Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
       <div v-if="nextAchIn > 0" style="font-size: 140%">Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
       <br>

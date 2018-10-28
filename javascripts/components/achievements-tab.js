@@ -13,7 +13,7 @@ Vue.component('achievements-tab', {
         {
           name: "Secret Achievements",
           id: "Secret Achievements",
-          component: "statistics-challenges"
+          component: "secret-achievements"
         }
       ]
     };

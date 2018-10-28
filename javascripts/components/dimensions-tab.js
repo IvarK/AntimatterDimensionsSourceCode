@@ -1,7 +1,13 @@
 Vue.component('dimensions-tab', {
-  props: ['model', 'view', 'actions'],
+  props: {
+    model: Object,
+    view: Object
+  },
   data: function() {
     return {
+      isIDTabUnlocked: false,
+      isTDTabUnlocked: false,
+      isProductionTabUnlocked: false,
       tabs: [
         {
           name: "Dimensions",
@@ -12,26 +18,19 @@ Vue.component('dimensions-tab', {
           name: "Infinity Dimensions",
           id: "Infinity Dimensions",
           component: "dimensions-infinity",
-          condition: function() {
-            return this.player.eternities > 0 ||
-              ui.view.tabs.dimensions.infinity.dims.some(dim => dim.isAvailable);
-          }.bind(this)
+          condition: function() { return this.isIDTabUnlocked; }.bind(this)
         },
         {
           name: "Time Dimensions",
           id: "Time Dimensions",
           component: "dimensions-time",
-          condition: function() {
-            return this.player.eternities > 0;
-          }.bind(this)
+          condition: function() { return this.isTDTabUnlocked; }.bind(this)
         },
         {
           name: "Production",
           id: "Production",
           component: "dimensions-production",
-          condition: function() {
-            return this.player.eternities > 0 || this.player.infinities > 0;
-          }.bind(this)
+          condition: function() { return this.isProductionTabUnlocked; }.bind(this)
         }
       ]
     };
@@ -42,6 +41,13 @@ Vue.component('dimensions-tab', {
     },
     progress: function() {
       return PlayerProgress.of(this.player);
+    }
+  },
+  methods: {
+    update() {
+      this.isIDTabUnlocked = player.eternities > 0 || player.infDimensionsUnlocked.includes(true);
+      this.isTDTabUnlocked = player.eternities > 0;
+      this.isProductionTabUnlocked = player.eternities > 0 || player.infinities > 0;
     }
   },
   template:

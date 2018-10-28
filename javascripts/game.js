@@ -202,7 +202,7 @@ function updateCosts() {
 let floatingTextKey = 0;
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
-  const floatingText = ui.view.tabs.dimensions.normal.dims[tier].floatingText;
+  const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
   floatingText.push({ text: text, key: floatingTextKey++ });
   setTimeout(() => floatingText.shift(), 1000)
 }
@@ -3149,10 +3149,8 @@ function startInterval() {
 }
 
 function updateView() {
+  ui.dispatch(GameEvent.UPDATE);
   if (Tab.dimensions.isOpen) {
-    if (Tab.dimensions.normal.isOpen) {
-      updateNormalDimensionTab();
-    }
     if (Tab.dimensions.infinity.isOpen) {
       updateInfinityDimensionTab();
     }

@@ -1,15 +1,76 @@
-Vue.mixin({
-    methods: {
-        emitClick: function() {
-            this.$emit('click');
-        },
-        emitInput: function(val) {
-            this.$emit('input', val);
-        },
-        emitClose: function() {
-            this.$emit('close');
-        }
+class EventHub {
+  constructor() {
+    this._handlers = {};
+  }
+
+  on(event, fn, target) {
+    let handlers = this._handlers[event];
+    if (handlers === undefined) {
+      handlers = [];
+      this._handlers[event] = handlers;
     }
+    handlers.push({ fn: fn, target: target });
+  }
+
+  offAll(target) {
+    for (let handlers in this._handlers) {
+      this._handlers[handlers] = this._handlers[handlers]
+        .filter(handler => handler.target !== target);
+    }
+  }
+
+  emit(event) {
+    let handlers = this._handlers[event];
+    if (handlers === undefined) return;
+    for (let handler of handlers) {
+      handler.fn();
+    }
+  }
+}
+
+EventHub.global = new EventHub();
+
+Vue.mixin({
+  methods: {
+    emitClick: function() {
+      this.$emit('click');
+    },
+    emitInput: function(val) {
+      this.$emit('input', val);
+    },
+    emitClose: function() {
+      this.$emit('close');
+    },
+    on$: function(event, fn) {
+      EventHub.global.on(event, fn, this);
+    },
+    shorten: function(value) {
+      return shorten(value);
+    },
+    shortenCosts: function(value) {
+      return shortenCosts(value);
+    },
+    shortenDimensions: function(value) {
+      return shortenDimensions(value);
+    },
+    shortenMoney: function(value) {
+      return shortenMoney(value);
+    },
+    shortenGlyphEffect: function(value) {
+      return shortenGlyphEffect(value);
+    },
+    shortenMultiplier: function(value) {
+      return shortenMultiplier(value);
+    }
+  },
+  created() {
+    if (this.update) {
+      this.on$(GameEvent.UPDATE, this.update);
+    }
+  },
+  destroyed() {
+    EventHub.global.offAll(this);
+  }
 });
 
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
@@ -21,6 +82,7 @@ function initVue() {
     ui = new Vue({
         el: '#ui',
         data: ui,
+        eventHub: new EventHub(),
         methods: {
             hideModal: function() {
                 Modal.hide();
@@ -55,6 +117,7 @@ initVue();
 
 function updateVue() {
     ui.model.player = player;
+    ui.model.options = player.options;
 }
 
 // small hack until Vue migration is complete
@@ -116,3 +179,11 @@ Tab.dimensions.infinity = new Subtab("Infinity Dimensions", Tab.dimensions, ui.v
 Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
+
+const GameEvent = {
+  UPDATE: "UPDATE",
+};
+
+ui.dispatch = function(event) {
+  EventHub.global.emit(event);
+};

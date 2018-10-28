@@ -22,6 +22,14 @@ Decimal.maxReducer = function(a, b) {
   return Decimal.max(a, b);
 };
 
+Decimal.prototype.copyFrom = function(decimal) {
+  if (!(decimal instanceof Decimal)) {
+    throw "Copy value is not Decimal";
+  }
+  this.mantissa = decimal.mantissa;
+  this.exponent = decimal.exponent;
+};
+
 function copyToClipboard(str) {
     try {
         let el = document.createElement('textarea');

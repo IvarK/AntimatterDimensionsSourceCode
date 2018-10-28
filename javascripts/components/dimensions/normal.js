@@ -1,36 +1,38 @@
 Vue.component('dimensions-normal', {
-  props: ['model', 'view'],
-  computed: {
-    player: function() {
-      return this.model.player;
+  props: {
+    model: Object,
+    view: Object
+  },
+  data: function() {
+    return {
+      isChallengePowerVisible: false,
+      challengePower: String.empty,
+      isQuickResetAvailable: false
+    };
+  },
+  methods: {
+    quickReset: function() {
+      quickReset();
     },
-    dimensions: function() {
-      return this.view.tabs.dimensions.normal;
-    },
-    isC2Running: function() {
-      return this.player.currentChallenge === "challenge2";
-    },
-    isC3Running: function() {
-      return this.player.currentChallenge === "challenge3";
-    },
-    isIC1Running: function() {
-      return this.player.currentChallenge === "postc1";
-    },
-    challengePower: function() {
-      const c2Power = `${(this.player.chall2Pow * 100).toFixed(2)}%`;
-      const c3Power = `${shorten(this.player.chall3Pow * 100)}%`;
-      if (this.isC2Running) {
-        return `Production: ${c2Power}`;
+    update() {
+      const isC2Running = player.currentChallenge === "challenge2";
+      const isC3Running = player.currentChallenge === "challenge3";
+      const isIC1Running = player.currentChallenge === "postc1";
+      const isChallengePowerVisible = isC2Running || isC3Running || isIC1Running;
+      this.isChallengePowerVisible = isChallengePowerVisible;
+      if (isChallengePowerVisible) {
+        const c2Power = `${(player.chall2Pow * 100).toFixed(2)}%`;
+        const c3Power = `${this.shorten(player.chall3Pow * 100)}%`;
+        if (isIC1Running) {
+          this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
+        }
+        if (isC2Running) {
+          this.challengePower = `Production: ${c2Power}`;
+        }
+        if (isC3Running) {
+          this.challengePower = `First dimension: ${c3Power}`;
+        }
       }
-      if (this.isC3Running) {
-        return `First dimension: ${c3Power}`;
-      }
-      if (this.isIC1Running) {
-        return `Production: ${c2Power}, First dimension: ${c3Power}`;
-      }
-      return String.empty;
-    },
-    isQuickResetAvailable: function() {
       const resettableChallenges = [
         "challenge12",
         "challenge9",
@@ -41,37 +43,22 @@ Vue.component('dimensions-normal', {
         "postc6",
         "postc8"
       ];
-      return resettableChallenges.includes(this.player.currentChallenge);
-    }
-  },
-  methods: {
-    quickReset: function() {
-      quickReset();
+      this.isQuickResetAvailable = resettableChallenges.includes(player.currentChallenge);
     }
   },
   template:
     `<div style="margin-top: 5px">
-      <normal-dimensions-top-row
-        :player="player"
-        :dimensions="dimensions">
-      </normal-dimensions-top-row>
-      <span v-if="isC2Running || isC3Running || isIC1Running">{{challengePower}}</span>
+      <normal-dimensions-top-row :options="model.options"></normal-dimensions-top-row>
+      <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <normal-dimension-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :player="player"
-          :dimension="dimensions.dims[tier]">
+          :floatingText="view.tabs.dimensions.normal.floatingText[tier]">
         </normal-dimension-row>
-        <normal-dimension-shift-row
-          :player="player"
-          :shift="dimensions.shift">
-        </normal-dimension-shift-row>
-        <normal-dimension-galaxy-row
-          :player="player"
-          :galaxy="dimensions.galaxy">
-        </normal-dimension-galaxy-row>
+        <normal-dimension-shift-row></normal-dimension-shift-row>
+        <normal-dimension-galaxy-row></normal-dimension-galaxy-row>
       </div>
       <store-button
         fontSize="12px"
@@ -80,24 +67,27 @@ Vue.component('dimensions-normal', {
         v-if="isQuickResetAvailable">
         Lose a reset, returning to the start of the reset
       </store-button>
-      <normal-dimension-progress :progress="dimensions.progress"></normal-dimension-progress>
+      <normal-dimension-progress></normal-dimension-progress>
     </div>`
 });
 
 Vue.component('normal-dimensions-top-row', {
   props: {
-    player: Object,
-    dimensions: Object
+    options: Object
+  },
+  data: function() {
+    return {
+      isSacrificeUnlocked: false,
+      isSacrificeAffordable: false,
+      sacrificeBoost: new Decimal(0)
+    };
   },
   computed: {
-    isSacrificeUnlocked: function() {
-      return PlayerProgress.of(this.player).isSacrificeUnlocked;
-    },
-    sacrificeBoost: function() {
-      return this.dimensions.sacrifice.boost;
+    sacrificeBoostDisplay: function() {
+      return this.shorten(this.sacrificeBoost);
     },
     sacrificeTooltip: function() {
-      return `Boosts 8th Dimension by ${this.sacrificeBoost}x`;
+      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
     },
   },
   methods: {
@@ -107,6 +97,13 @@ Vue.component('normal-dimensions-top-row', {
     maxAll: function() {
       maxAll();
     },
+    update() {
+      const isSacrificeUnlocked = PlayerProgress.isSacrificeUnlocked;
+      this.isSacrificeUnlocked = isSacrificeUnlocked;
+      if (!isSacrificeUnlocked) return;
+      this.isSacrificeAffordable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
+      this.sacrificeBoost.copyFrom(calcSacrificeBoost());
+    }
   },
   template:
     `<div class="normal-dimensions-top-row">
@@ -115,15 +112,15 @@ Vue.component('normal-dimensions-top-row', {
         style="width:20px; height: 18px"
         v-show="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        v-model="player.options.noSacrificeConfirmation">
+        v-model="options.noSacrificeConfirmation">
       <store-button
         fontSize="12px"
-        :enabled="dimensions.sacrifice.isAvailable"
+        :enabled="isSacrificeAffordable"
         style="width: 320px"
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         @click="sacrifice">
-        Dimensional Sacrifice ({{sacrificeBoost}}x)
+        Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)
       </store-button>
       <store-button
         fontSize="12px"
@@ -135,40 +132,33 @@ Vue.component('normal-dimensions-top-row', {
 
 Vue.component('normal-dimension-row', {
   props: {
-    player: Object,
-    dimension: Object,
+    floatingText: Array,
     tier: Number
+  },
+  data: function() {
+    return {
+      multiplier: new Decimal(0),
+      amount: new Decimal(0),
+      boughtBefore10: 0,
+      rateOfChange: new Decimal(0),
+      singleCost: new Decimal(0),
+      until10Cost: new Decimal(0),
+      isUnlocked: false,
+      isAffordable: false,
+      isAffordableUntil10: false,
+    };
   },
   computed: {
     name: function() {
       return DISPLAY_NAMES[this.tier];
     },
-    multiplier: function() {
-      return this.dimension.multiplier;
+    amountDisplay: function() {
+      return this.tier < 8 ? this.shortenDimensions(this.amount) : Math.round(this.amount).toString();
     },
-    stats: function() {
-      return new DimensionStats(this.tier, this.player);
-    },
-    singleCost: function() {
-      return this.dimension.singleCost;
-    },
-    until10Cost: function() {
-      return this.dimension.until10Cost;
-    },
-    amount: function() {
-      return this.dimension.amount;
-    },
-    rateOfChange: function() {
-      return this.tier < 8 ? ` (+${this.dimension.rateOfChange}%/s)` : String.empty;
-    },
-    isAvailable: function() {
-      return this.dimension.isAvailable;
-    },
-    isAffordable: function() {
-      return this.dimension.isAffordable;
-    },
-    isAffordableUntil10: function() {
-      return this.dimension.isAffordableUntil10;
+    rateOfChangeDisplay: function() {
+      return this.tier < 8 ?
+        ` (+${this.shorten(this.rateOfChange)}%/s)` :
+        String.empty;
     }
   },
   methods: {
@@ -177,67 +167,110 @@ Vue.component('normal-dimension-row', {
     },
     buyUntil10: function() {
       buyManyDimensionsBtnClick(this.tier);
-    }
+    },
+    update() {
+      const tier = this.tier;
+      const canBuy = canBuyDimension(tier);
+      this.isUnlocked = canBuy;
+      if (!canBuy) return;
+      const dimension = new DimensionStats(tier);
+      this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
+      this.amount.copyFrom(dimension.amount);
+      this.boughtBefore10 = dimension.boughtBefore10;
+      this.singleCost.copyFrom(dimension.cost);
+      this.until10Cost.copyFrom(dimension.costUntil10);
+      if (tier < 8) {
+        this.rateOfChange.copyFrom(getDimensionRateOfChange(tier));
+      }
+      let canAffordSingle = false;
+      let canAffordUntil10 = false;
+      if (tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1")) {
+        const lowerTier = new DimensionStats(tier - 2);
+        const lowerTierAmount = lowerTier.amount;
+        canAffordSingle = lowerTierAmount.gte(dimension.cost);
+        canAffordUntil10 = lowerTierAmount.gte(dimension.costUntil10);
+      } else {
+        canAffordSingle = canAfford(dimension.cost);
+        canAffordUntil10 = canAfford(dimension.costUntil10);
+      }
+      this.isAffordable = canAffordSingle;
+      this.isAffordableUntil10 = canAffordUntil10;
+    },
   },
   template:
-    `<div class="dimension-tab-row" v-show="isAvailable">
+    `<div class="dimension-tab-row" v-show="isUnlocked">
       <div style="width: 32%; text-align: left">
-        {{name}} Dimension x{{multiplier}}
+        {{name}} Dimension x{{shortenMultiplier(multiplier)}}
       </div>
       <div style="text-align: left; flex-grow: 1">
-        {{amount}} ({{stats.boughtBefore10}}) {{rateOfChange}}
+        {{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}
       </div>
       <store-button
         fontSize="10px"
         :enabled="isAffordable"
         style="height: 25px; width: 135px; margin-right: 16px; flex-shrink: 0"
         @click="buySingle">
-        Cost: {{singleCost}}
+        Cost: {{shortenCosts(singleCost)}}
       </store-button>
       <store-button
         fontSize="10px"
         :enabled="isAffordableUntil10"
         style="height: 25px; width: 210px; flex-shrink: 0"
         @click="buyUntil10">
-        Until 10, Cost: {{until10Cost}}
+        Until 10, Cost: {{shortenCosts(until10Cost)}}
       </store-button>
       <div 
         class='dimension-floating-text'
-        v-for="floatingText in dimension.floatingText"
-        :key="floatingText.key">
-        {{floatingText.text}}
+        v-for="text in floatingText"
+        :key="text.key">
+        {{text.text}}
       </div>
     </div>`,
 });
 
 Vue.component('normal-dimension-shift-row', {
-  props: {
-    player: Object,
-    shift: Object
+  data: function() {
+    return {
+      requirement: {
+        tier: 1,
+        amount: 1
+      },
+      isBoost: false,
+      isAvailable: false,
+      resets: 0
+    };
   },
   computed: {
-    labelText: function() {
-      const requirement = this.shift.requirement;
-      const name = this.shift.isBoost ? "Boost" : "Shift";
-      const dimName = DISPLAY_NAMES[requirement.tier];
-      return `Dimension ${name} (${this.player.resets}): requires ${requirement.amount} ${dimName} Dimensions`;
+    name: function() {
+      return this.isBoost ? "Boost" : "Shift";
+    },
+    dimName: function() {
+      return DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText: function() {
-      return `Reset the game for a ${this.shift.isBoost ? "boost" : "new Dimension"}`;
-    },
-    isAvailable: function() {
-      const requirement = this.shift.requirement;
-      return new DimensionStats(requirement.tier, this.player).amount >= requirement.amount;
+      return `Reset the game for a ${this.isBoost ? "boost" : "new Dimension"}`;
     }
   },
   methods: {
     softReset: function() {
       softResetBtnClick();
+    },
+    update() {
+      const requirement = getShiftRequirement(0);
+      this.requirement.tier = requirement.tier;
+      this.requirement.amount = requirement.amount;
+      this.isBoost = player.currentChallenge === "challenge4" ?
+        requirement.tier === 6 :
+        requirement.tier === 8;
+      this.isAvailable = new DimensionStats(requirement.tier).amount >= requirement.amount;
+      this.resets = player.resets;
     }
   },
   template:
     `<div class="dimension-tab-row">
-      <div style="width: 32%; text-align: left; flex-grow: 1">{{labelText}}</div>
+      <div style="width: 32%; text-align: left; flex-grow: 1">
+        Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions
+      </div>
       <store-button
         fontSize="9px"
         :enabled="isAvailable"
@@ -249,44 +282,70 @@ Vue.component('normal-dimension-shift-row', {
 });
 
 Vue.component('normal-dimension-galaxy-row', {
-  props: {
-    player: Object,
-    galaxy: Object
+  data: function() {
+    return {
+      type: String.empty,
+      galaxies: {
+        normal: 0,
+        extra: 0,
+        free: 0
+      },
+      requirement: {
+        tier: 1,
+        amount: 1
+      },
+      isAffordable: false
+    };
   },
   computed: {
-    galaxySum: function() {
-      let sum = this.player.galaxies.toString();
-      if (this.galaxy.extra > 0) {
-        sum += " + " + this.galaxy.extra;
+    galaxySumDisplay: function() {
+      const galaxies = this.galaxies;
+      let sum = galaxies.normal.toString();
+      if (galaxies.extra > 0) {
+        sum += " + " + galaxies.extra;
       }
-      if (this.player.dilation.freeGalaxies > 0) {
-        sum += " + " + this.player.dilation.freeGalaxies;
+      if (galaxies.free > 0) {
+        sum += " + " + galaxies.free;
       }
       return sum;
     },
-    requirement: function() {
-      const requirement = this.galaxy.requirement;
-      const tier = DISPLAY_NAMES[requirement.tier];
-      return `${requirement.amount} ${tier} Dimensions`;
-    },
-    isAvailable: function() {
-      const requirement = this.galaxy.requirement;
-      return new DimensionStats(requirement.tier, this.player).amount >= requirement.amount;
+    dimName: function() {
+      return DISPLAY_NAMES[this.requirement.tier];
     }
   },
   methods: {
     secondSoftReset: function() {
       secondSoftResetBtnClick();
+    },
+    update() {
+      this.type = GalaxyType.current();
+      this.galaxies.normal = player.galaxies;
+      this.galaxies.free = player.dilation.freeGalaxies;
+
+      let extraGals = player.replicanti.galaxies;
+      if (player.timestudy.studies.includes(225)) {
+        extraGals += Math.floor(player.replicanti.amount.e / 1000);
+      }
+      if (player.timestudy.studies.includes(226)) {
+        extraGals += Math.floor(player.replicanti.gal / 15);
+      }
+      this.galaxies.extra = extraGals;
+
+      const requirement = getGalaxyRequirement();
+      this.requirement.amount = requirement;
+      this.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
+
+      this.isAffordable = new DimensionStats(requirement.tier).amount >= requirement.amount;
     }
   },
   template:
     `<div class="dimension-tab-row">
       <div style="width: 32%; text-align: left; flex-grow: 1">
-        {{galaxy.type}} ({{galaxySum}}): requires {{requirement}}
+        {{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
       </div>
       <store-button 
         fontSize="9px"
-        :enabled="isAvailable"
+        :enabled="isAffordable"
         @click="secondSoftReset"
         style="height: 35px; width: 200px; margin-right: 100px"> 
         Lose all your previous progress, but get a tickspeed boost
@@ -295,12 +354,15 @@ Vue.component('normal-dimension-galaxy-row', {
 });
 
 Vue.component('normal-dimension-progress', {
-  props: {
-    progress: Object
+  data: function() {
+    return {
+      fill: new Decimal(0),
+      tooltip: String.empty
+    };
   },
   computed: {
     percents: function() {
-      return `${this.progress.fill.toFixed(2)}%`;
+      return `${this.fill.toFixed(2)}%`;
     },
     progressBarStyle: function() {
       return {
@@ -308,10 +370,29 @@ Vue.component('normal-dimension-progress', {
       };
     }
   },
+  methods: {
+    update() {
+      const setProgress = (current, goal, tooltip) => {
+        this.fill.copyFrom(Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100));
+        this.tooltip = tooltip;
+      };
+      if (player.currentChallenge !== "") {
+        setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
+      } else if (!player.break) {
+        setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
+      } else if (player.infDimensionsUnlocked.includes(false)) {
+        setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
+      } else if (player.currentEternityChall !== "") {
+        setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
+      } else {
+        setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
+      }
+    }
+  },
   template:
     `<div id="progress">
         <div id="progressbar" :style="progressBarStyle">
-            <span id="progresspercent" v-tooltip="progress.tooltip">
+            <span id="progresspercent" v-tooltip="tooltip">
               {{percents}}
             </span>
           </div>

@@ -1,6 +1,7 @@
 let ui = {
   model: {
-    player: player
+    player: player,
+    options: player.options
   },
   actions: {},
   view: {
@@ -14,42 +15,7 @@ let ui = {
       dimensions: {
         subtab: String.empty,
         normal: {
-          dims: Array.from({length: 9}, () => {
-            return {
-              rateOfChange: String.empty,
-              multiplier: String.empty,
-              amount: String.empty,
-              singleCost: String.empty,
-              until10Cost: String.empty,
-              isAvailable: false,
-              isAffordable: false,
-              isAffordableUntil10: false,
-              floatingText: []
-            };
-          }),
-          shift: {
-            requirement: {
-              tier: 0,
-              amount: 0
-            },
-            isBoost: false
-          },
-          galaxy: {
-            type: String.empty,
-            requirement: {
-              tier: 0,
-              amount: 0
-            },
-            extra: 0
-          },
-          sacrifice: {
-            isAvailable: false,
-            boost: String.empty
-          },
-          progress: {
-            fill: 0,
-            tooltip: String.empty
-          }
+          floatingText: Array.from({length: 9}, () => [])
         },
         infinity: {
           dims: Array.from({length: 9}, () => {

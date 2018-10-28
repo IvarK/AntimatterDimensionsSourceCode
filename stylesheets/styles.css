@@ -2484,6 +2484,12 @@ screen and (max-width: 480px) {
     100% {opacity: 0;}
 }
 
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .infotooltip {
     position: relative;
     display: inline-block;

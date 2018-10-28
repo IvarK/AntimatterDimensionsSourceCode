@@ -283,6 +283,7 @@ function giveAchievement(name) {
         if (player.autoCrunchMode == "amount" && player.autobuyers[11].priority != undefined) player.autobuyers[11].priority = player.autobuyers[11].priority.times(4);
     }
     updateAchievements();
+    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 function updateAchievements() {
@@ -396,20 +397,29 @@ function nextAchIn() {
   return (timeReq - currentSeconds) * 1000
 }
 
-function lockedString(name) {
-  if (!player.achievements.includes(name))
-    return "";
+function timeUntilAch(name) {
+  if (!player.achievements.includes(name)) {
+    return NaN;
+  }
   const achId = parseInt(name.split("r")[1]);
-  if (achId > 140 || isNaN(achId))
-    return "";
+  if (achId > 140 || isNaN(achId)) {
+    return NaN;
+  }
   const row = Math.floor(achId / 10);
-  if (row <= Perks.achSkipCount) return String.empty;
+  if (row <= Perks.achSkipCount) {
+    return NaN;
+  }
   const currentSeconds = player.thisReality / 1000;
-  const remainingTime =  timeRequiredForAchievement(achId) - currentSeconds;
+  return timeRequiredForAchievement(achId) - currentSeconds;
+}
 
-  if (remainingTime < 0)
+function lockedString(name) {
+  const remainingTime = timeUntilAch(name);
+  if (isNaN(remainingTime) || remainingTime < 0) {
     return String.empty;
-  else if (remainingTime < 60)
+  }
+
+  if (remainingTime < 60)
     return "\n\n(Locked: " + remainingTime.toFixed(0) + " seconds)";
   else if (remainingTime < 3600)
     return "\n\n(Locked: " + (remainingTime / 60).toFixed(1) + " minutes)";

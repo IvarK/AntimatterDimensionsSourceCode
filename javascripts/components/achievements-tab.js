@@ -8,7 +8,7 @@ Vue.component('achievements-tab', {
         {
           name: "Achievements",
           id: "Achievements",
-          component: "statistics-stats-tab"
+          component: "normal-achievements"
         },
         {
           name: "Secret Achievements",

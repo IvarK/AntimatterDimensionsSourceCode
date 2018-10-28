@@ -12,6 +12,9 @@
   padding: 5px 10px 4px;
   font-family: Typewriter, serif;
   font-size: 14px;
+  line-height: 1.2;
+  user-select: none;
+  pointer-events: none;
 }
 
 .general-tooltip .tooltip-arrow {

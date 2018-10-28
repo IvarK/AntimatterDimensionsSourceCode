@@ -17,6 +17,9 @@ let ui = {
       },
       statistics: {
         subtab: String.empty
+      },
+      achievements: {
+        subtab: String.empty
       }
     },
     shiftDown: false,

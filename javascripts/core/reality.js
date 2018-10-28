@@ -281,6 +281,7 @@ function reality(force, reset, auto) {
             }
         }
     }
+    ui.dispatch(GameEvent.REALITY);
 }
 
 function fullResetTimeDimensions() {

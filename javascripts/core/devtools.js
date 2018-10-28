@@ -182,7 +182,7 @@ dev.giveGlyph = function() {
 
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
-    updateAchievements();
+    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function(name) {

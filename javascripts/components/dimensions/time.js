@@ -1,42 +1,24 @@
 Vue.component('dimensions-time', {
-  props: {
-    model: Object,
-    view: Object
+  data: function() {
+    return {
+      totalUpgrades: 0,
+      timeShards: new Decimal(0),
+      upgradeThreshold: new Decimal(0),
+      shardsPerSecond: new Decimal(0),
+      incomeType: String.empty,
+      showCostScaleTooltip: false,
+      areAutobuyersUnlocked: false
+    };
   },
   computed: {
-    player: function() {
-      return this.model.player;
-    },
-    dimensions: function() {
-      return this.view.tabs.dimensions.time;
-    },
-    totalUpgrades: function() {
-      return formatWithCommas(this.player.totalTickGained);
-    },
-    timeShards: function() {
-      return this.dimensions.timeShards;
-    },
-    upgradeThreshold: function() {
-      // updates infrequently, no need to inline
-      return shortenMoney(this.player.tickThreshold);
-    },
-    isEC7Running: function() {
-      return this.player.currentEternityChall === "eterc7";
-    },
-    incomeType: function() {
-      return this.isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
-    },
-    shardsPerSecond: function() {
-      return this.dimensions.shardsPerSecond;
+    totalUpgradesDisplay: function() {
+      return formatWithCommas(this.totalUpgrades);
     },
     e6000Tooltip: function() {
       return "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000"));
     },
     costScaleTooltip: function() {
-      return this.player.eternityPoints.exponent > 6000 ? this.e6000Tooltip : undefined;
-    },
-    areAutobuyersUnlocked: function() {
-      return this.player.reality.upg.includes(13);
+      return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
     }
   },
   methods: {
@@ -45,23 +27,31 @@ Vue.component('dimensions-time', {
     },
     toggleAllAutobuyers: function() {
       toggleAllTimeDims();
+    },
+    update() {
+      this.totalUpgrades = player.totalTickGained;
+      this.timeShards.copyFrom(player.timeShards);
+      this.upgradeThreshold.copyFrom(player.tickThreshold);
+      this.shardsPerSecond.copyFrom(getTimeDimensionProduction(1));
+      const isEC7Running = player.currentEternityChall === "eterc7";
+      this.incomeType = isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
+      this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
+      this.areAutobuyersUnlocked = player.reality.upg.includes(13);
     }
   },
   template:
     `<div>
       <div>
-        <p>You've gained {{totalUpgrades}} tickspeed upgrades.</p>
-        <p>You have <span id="timeShardAmount" class="time-shards">{{timeShards}}</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" class="time-shards">{{upgradeThreshold}}</span></p>
+        <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
+        <p>You have <span id="timeShardAmount" class="time-shards">{{shortenMoney(timeShards)}}</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" class="time-shards">{{shortenMoney(upgradeThreshold)}}</span></p>
       </div>      
-      <div>You are getting {{shardsPerSecond}} {{incomeType}} per second.</div>
+      <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
       <store-button fontSize="12px" v-tooltip="costScaleTooltip" @click="maxAll">Max all</store-button>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <time-dimension-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :player="player"
-          :dimension="dimensions.dims[tier]"
           :areAutobuyersUnlocked="areAutobuyersUnlocked">
         </time-dimension-row>
       </div>
@@ -77,62 +67,69 @@ Vue.component('dimensions-time', {
 
 Vue.component('time-dimension-row', {
   props: {
-    player: Object,
-    dimension: Object,
     tier: Number,
     areAutobuyersUnlocked: Boolean
+  },
+  data: function() {
+    return {
+      isUnlocked: false,
+      multiplier: new Decimal(0),
+      amount: new Decimal(0),
+      rateOfChange: new Decimal(0),
+      cost: new Decimal(0),
+      isAffordable: false,
+      autobuyers: player.reality.tdbuyers
+    };
   },
   computed: {
     name: function() {
       return DISPLAY_NAMES[this.tier];
     },
-    multiplier: function() {
-      return this.dimension.multiplier;
-    },
-    amount: function() {
-      return this.dimension.amount;
-    },
-    rateOfChange: function() {
-      return this.tier < 8 ? ` (+${this.dimension.rateOfChange}%/s)` : String.empty;
-    },
-    isAvailable: function() {
-      return this.dimension.isAvailable;
-    },
-    autobuyerState: function() {
-      return this.player.reality.tdbuyers[this.tier - 1];
-    },
-    cost: function() {
-      return this.dimension.cost;
-    },
-    isAffordable: function() {
-      return this.dimension.isAffordable;
+    rateOfChangeDisplay: function() {
+      return this.tier < 8 ?
+        ` (+${this.shorten(this.rateOfChange)}%/s)` :
+        String.empty;
     }
   },
   methods: {
     buyTimeDimension: function() {
       buyTimeDimension(this.tier);
+    },
+    update() {
+      const tier = this.tier;
+      const isUnlocked = tier < 5 || player.dilation.studies.includes(tier - 3);
+      this.isUnlocked = isUnlocked;
+      if (!isUnlocked) return;
+      this.multiplier.copyFrom(getTimeDimensionPower(tier));
+      const dimension = player[`timeDimension${tier}`];
+      this.amount.copyFrom(dimension.amount);
+      if (tier < 8) {
+        this.rateOfChange.copyFrom(getTimeDimensionRateOfChange(tier));
+      }
+      this.cost.copyFrom(dimension.cost);
+      this.isAffordable = player.eternityPoints.gte(dimension.cost);
     }
   },
   template:
-    `<div class="time-dimension-row" v-show="isAvailable">
+    `<div class="time-dimension-row" v-show="isUnlocked">
       <div style="width: 43%; text-align: left">
-        {{name}} Time Dimension x{{multiplier}}
+        {{name}} Time Dimension x{{shortenMoney(multiplier)}}
       </div>
       <div style="text-align: left; flex-grow: 1">
-        {{amount}} {{rateOfChange}}
+        {{shortenDimensions(amount)}}{{rateOfChangeDisplay}}
       </div>
       <store-button-named-on-off
         fontSize="10px"
         style="width:70px; margin-right: 16px" 
         text="Auto:"
-        v-model="player.reality.tdbuyers[tier - 1]"
+        v-model="autobuyers[tier - 1]"
         v-if="areAutobuyersUnlocked">
       </store-button-named-on-off>
       <store-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
         @click="buyTimeDimension">
-        Cost: {{cost}} EP
+        Cost: {{shortenDimensions(cost)}} EP
       </store-button>
     </div>`,
 });

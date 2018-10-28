@@ -22,20 +22,6 @@ let ui = {
               isAvailable: false,
             };
           })
-        },
-        time: {
-          dims: Array.from({length: 9}, () => {
-            return {
-              amount: String.empty,
-              cost: String.empty,
-              rateOfChange: String.empty,
-              multiplier: String.empty,
-              isAvailable: false,
-              isAffordable: false
-            };
-          }),
-          timeShards: String.empty,
-          shardsPerSecond: String.empty
         }
       },
       statistics: {

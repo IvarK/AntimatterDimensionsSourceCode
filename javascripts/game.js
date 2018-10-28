@@ -2700,7 +2700,6 @@ function gameLoop(diff) {
     updateDimensions()
     updateInfCosts()
     updateDilation();
-    updateView();
     if (getDimensionProductionPerSecond(1).gt(player.money) && !isAchEnabled("r44")) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
@@ -3032,7 +3031,8 @@ function gameLoop(diff) {
   // Reality unlock and TTgen perk autobuy
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
-  
+
+    ui.dispatch(GameEvent.UPDATE);
     player.lastUpdate = thisUpdate;
 }
 
@@ -3146,15 +3146,6 @@ function simulateTime(seconds, real, fast) {
 
 function startInterval() {
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
-}
-
-function updateView() {
-  ui.dispatch(GameEvent.UPDATE);
-  if (Tab.dimensions.isOpen) {
-    if (Tab.dimensions.time.isOpen) {
-      updateTimeDimensionTab();
-    }
-  }
 }
 
 function updateChart(first) {

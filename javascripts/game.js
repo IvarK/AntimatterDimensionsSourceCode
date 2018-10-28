@@ -3151,9 +3151,6 @@ function startInterval() {
 function updateView() {
   ui.dispatch(GameEvent.UPDATE);
   if (Tab.dimensions.isOpen) {
-    if (Tab.dimensions.infinity.isOpen) {
-      updateInfinityDimensionTab();
-    }
     if (Tab.dimensions.time.isOpen) {
       updateTimeDimensionTab();
     }

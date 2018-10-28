@@ -117,7 +117,6 @@ initVue();
 
 function updateVue() {
     ui.model.player = player;
-    ui.model.options = player.options;
 }
 
 // small hack until Vue migration is complete

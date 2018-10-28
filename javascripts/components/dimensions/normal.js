@@ -1,6 +1,5 @@
 Vue.component('dimensions-normal', {
   props: {
-    model: Object,
     view: Object
   },
   data: function() {
@@ -48,7 +47,7 @@ Vue.component('dimensions-normal', {
   },
   template:
     `<div style="margin-top: 5px">
-      <normal-dimensions-top-row :options="model.options"></normal-dimensions-top-row>
+      <normal-dimensions-top-row></normal-dimensions-top-row>
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <normal-dimension-row
@@ -72,14 +71,12 @@ Vue.component('dimensions-normal', {
 });
 
 Vue.component('normal-dimensions-top-row', {
-  props: {
-    options: Object
-  },
   data: function() {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
-      sacrificeBoost: new Decimal(0)
+      sacrificeBoost: new Decimal(0),
+      options: player.options
     };
   },
   computed: {
@@ -137,13 +134,13 @@ Vue.component('normal-dimension-row', {
   },
   data: function() {
     return {
+      isUnlocked: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       boughtBefore10: 0,
       rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
-      isUnlocked: false,
       isAffordable: false,
       isAffordableUntil10: false,
     };
@@ -170,9 +167,9 @@ Vue.component('normal-dimension-row', {
     },
     update() {
       const tier = this.tier;
-      const canBuy = canBuyDimension(tier);
-      this.isUnlocked = canBuy;
-      if (!canBuy) return;
+      const isUnlocked = canBuyDimension(tier);
+      this.isUnlocked = isUnlocked;
+      if (!isUnlocked) return;
       const dimension = new DimensionStats(tier);
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);

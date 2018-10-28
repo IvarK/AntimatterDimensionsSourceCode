@@ -1,7 +1,6 @@
 let ui = {
   model: {
-    player: player,
-    options: player.options
+    player: player
   },
   actions: {},
   view: {
@@ -20,19 +19,9 @@ let ui = {
         infinity: {
           dims: Array.from({length: 9}, () => {
             return {
-              amount: String.empty,
-              rateOfChange: String.empty,
-              multiplier: String.empty,
-              cost: String.empty,
               isAvailable: false,
-              isAffordable: false,
-              isCapped: false,
-              capIP: String.empty
             };
-          }),
-          multiplier: String.empty,
-          infinityPower: String.empty,
-          powerPerSecond: String.empty
+          })
         },
         time: {
           dims: Array.from({length: 9}, () => {

@@ -43,12 +43,9 @@ Vue.component('modal-import', {
   methods: {
     formatMoney: function(money) {
       formatPostBreak = true;
-      let formatted = shortenMoney(new Decimal(money));
+      let formatted = this.shortenMoney(new Decimal(money));
       formatPostBreak = false;
       return formatted;
-    },
-    shortenDimensions: function(value) {
-      return shortenDimensions(value);
     },
     importSave: function() {
       Modal.hide();

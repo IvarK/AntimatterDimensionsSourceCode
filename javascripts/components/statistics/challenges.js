@@ -1,5 +1,10 @@
 Vue.component('statistics-challenges', {
-  props: ['model'],
+  data: function() {
+    return {
+      challengeTimes: player.challengeTimes,
+      infchallengeTimes: player.infchallengeTimes,
+    };
+  },
   template:
     '<div class="statstab statsistics-challenges">\
         <statistics-challenge-times\
@@ -16,7 +21,7 @@ Vue.component('statistics-challenges', {
     </div>',
   computed: {
     normalChallenges: function() {
-      let challenges = this.model.player.challengeTimes;
+      let challenges = this.challengeTimes;
       return [
         challenges[0],
         challenges[1],
@@ -32,7 +37,7 @@ Vue.component('statistics-challenges', {
       ];
     },
     infinityChallenges: function() {
-      return this.model.player.infchallengeTimes;
+      return this.infchallengeTimes;
     }
   }
 });

@@ -2431,11 +2431,6 @@ function gameLoop(diff) {
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
-    speedFactor = getGameSpeedupFactor();
-    diff *= speedFactor;
-    const diffTs = TimeSpan.fromMilliseconds(diff);
-    if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
-    if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (autobuyerOnGameLoop) {
       Autobuyer.intervalTimer += diff / 20;
@@ -2445,11 +2440,17 @@ function gameLoop(diff) {
         Autobuyer.tickTimer -= autobuyerInterval;
         // failsafe
         if (Autobuyer.tickTimer > autobuyerInterval) {
-            Autobuyer.tickTimer = autobuyerInterval;
+          Autobuyer.tickTimer = autobuyerInterval;
         }
         autoBuyerTick();
       }
     }
+
+    speedFactor = getGameSpeedupFactor();
+    diff *= speedFactor;
+    const diffTs = TimeSpan.fromMilliseconds(diff);
+    if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
+    if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
     /*if (player.currentChallenge == "postc6" && player.matter.gte(1)) player.matter = player.matter.plus(diff/10)

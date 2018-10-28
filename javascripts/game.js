@@ -311,13 +311,6 @@ document.getElementById("secretstudy").onclick = function () {
     setTimeout(drawStudyTree, 2000);
 };
 
-document.getElementById("The first one's always free").onclick = function () {
-    giveAchievement("The first one's always free")
-};
-
-
-
-
 function glowText(id) {
   var text = document.getElementById(id);
   text.style.setProperty("-webkit-animation", "glow 1s");
@@ -1004,7 +997,6 @@ function breakInfinity() {
         document.getElementById("break").textContent = "FIX INFINITY"
         giveAchievement("Limit Break")
     }
-    setAchieveTooltip()
 }
 
 function gainedInfinityPoints() {
@@ -2086,7 +2078,6 @@ function newDimension() {
         }
     }
 }
-var blink = true
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -2193,14 +2184,6 @@ setInterval(function() {
     if (player.infinitied == 0 && player.infinityPoints.lt(new Decimal(1e50)) && player.eternities <= 0) document.getElementById("infinityPoints2").style.display = "none"
     else document.getElementById("infinityPoints2").style.display = "inline-block"
 
-    if (blink && !isAchEnabled("r78")) {
-        document.getElementById("Blink of an eye").style.display = "none"
-        blink = false
-    }
-    else {
-        document.getElementById("Blink of an eye").style.display = "block"
-        blink = true
-    }
     if (player.challenges.includes("postc1")) {
         let temp = 1
         for (var i=0; i < player.challenges.length; i++) {
@@ -2335,19 +2318,6 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
-    updateAchievements()
-    if (player.realities > 0 && nextAchIn() > 0) document.getElementById("nextAchAt").textContent = "Next achievement in " + timeDisplayNoDecimals(nextAchIn())
-    else document.getElementById("nextAchAt").textContent = ""
-
-    const totalAchTime = timeForAllAchievements() * 1000;
-    if (player.reality.perks.includes(413) || player.realities == 0)
-      $("#timeForAchievements").text("")
-    else
-      $("#timeForAchievements").text("You will gain your achievements back over the span of " + timeDisplay(totalAchTime))
-	if (player.thisReality < totalAchTime && player.realities != 0)
-		$("#allAchAt").text("(Remaining: " + timeDisplay(totalAchTime - player.thisReality) + ")")
-	else
-		$("#allAchAt").text("")
     if (player.realities > 3) {
         $("#automatorUnlock").hide()
         $(".automator-container").show()
@@ -2367,7 +2337,7 @@ setInterval(function() {
     if (player.reality.upg.includes(25)) document.getElementById("togglerealitymode").style.display = "inline-block"
     else document.getElementById("togglerealitymode").style.display = "none"
 
-
+    updateAchievementPower();
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
@@ -3016,17 +2986,6 @@ function gameLoop(diff) {
     wormHoleLoop(diff, 1)
     wormHoleLoop(diff, 2)
   }
-
-	// Achievement tooltip editing (for amount of time locked)
-	if (player.realities > 0) {
-		for (var key in allAchievements) {
-			var achName = allAchievements[key];
-			var oldText = document.getElementById(allAchievements[key]).getAttribute("ach-tooltip");
-			var lockText = lockedString(key);
-			var textLines = oldText.split("\n");
-			document.getElementById(allAchievements[key]).setAttribute("ach-tooltip", textLines[0] + lockText);
-		}
-	}
   
   // Reality unlock and TTgen perk autobuy
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
@@ -3558,23 +3517,6 @@ function showRealityTab(tabName) {
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
-function showAchTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('achtab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-}
-
-
-
-
 function init() {
     console.log('init');
 
@@ -3589,9 +3531,6 @@ function init() {
     };
     document.getElementById('achievementsbtn').onclick = function () {
         showTab('achievements');
-    };
-    document.getElementById('achievementsvuebtn').onclick = function () {
-        showTab('achievementsvue');
     };
     document.getElementById('challengesbtn').onclick=function () {
       showTab('challenges');

@@ -55,7 +55,7 @@ function tryShowtab(tab) {
     Tab.dimensions.show();
     return true;
   }
-  if (tab === 'achievementsvue') {
+  if (tab === 'achievements') {
     Tab.achievements.show();
     return true;
   }

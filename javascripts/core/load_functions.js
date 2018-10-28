@@ -427,7 +427,6 @@ if (player.version < 5) {
   transformSaveToDecimal();
   updateCosts();
   updateTickSpeed();
-  updateAchievements();
   updateChallenges();
   toggleBulk()
   toggleBulk()
@@ -546,7 +545,6 @@ if (player.version < 5) {
       }
 
       for (var i=0; i<achs.length;i++) player.achievements.push(achs[i])
-      updateAchievements()
       player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
   }
 
@@ -579,7 +577,6 @@ if (player.version < 5) {
     player.version = 12.1
     if (player.achievements.includes("s36")) {
         player.achievements.splice(player.achievements.indexOf("s36"), 1)
-        updateAchievements();
     }
   }
 
@@ -637,7 +634,6 @@ if (player.version < 5) {
   recalculateAllGlyphs();
 
   updateAutobuyers();
-  setAchieveTooltip();
   updatePriorities();
   updateTimeStudyButtons();
   totalMult = Math.pow(player.totalmoney.e+1, 0.5)
@@ -648,6 +644,7 @@ if (player.version < 5) {
   unspentBonus = player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
+  updateAchievementPower();
   updateChallengeTimes();
   updateMilestones();
   updateEternityUpgrades();

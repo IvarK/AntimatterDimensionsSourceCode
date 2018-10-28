@@ -106,15 +106,11 @@ function initVue() {
         },
         computed: {
             themeCss: function() {
-                return "stylesheets/theme-" + this.model.player.options.theme + ".css";
+                return "stylesheets/theme-" + this.view.theme + ".css";
             }
         }
     });
     uiInitialized = true;
-}
-
-function updateVue() {
-    ui.model.player = player;
 }
 
 // small hack until Vue migration is complete

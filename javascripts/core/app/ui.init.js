@@ -1,8 +1,6 @@
 let ui = {
-  model: {
-    player: player
-  },
-  actions: {},
+  model: { },
+  actions: { },
   view: {
     modal: {
       current: undefined,
@@ -16,18 +14,12 @@ let ui = {
         normal: {
           floatingText: Array.from({length: 9}, () => [])
         },
-        infinity: {
-          dims: Array.from({length: 9}, () => {
-            return {
-              isAvailable: false,
-            };
-          })
-        }
       },
       statistics: {
         subtab: String.empty
       }
     },
-    shiftDown: false
+    shiftDown: false,
+    theme: undefined
   }
 };

@@ -31,6 +31,7 @@ var Theme = function Theme(name, colors) {
 
     this.set = function () {
         player.options.theme = name;
+        ui.view.theme = name;
         if (this.isSecret())
             player.options.secretThemeKey = this.displayName();
 

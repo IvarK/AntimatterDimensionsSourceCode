@@ -35,14 +35,6 @@ Vue.component('dimensions-tab', {
       ]
     };
   },
-  computed: {
-    player: function() {
-      return this.model.player;
-    },
-    progress: function() {
-      return PlayerProgress.of(this.player);
-    }
-  },
   methods: {
     update() {
       this.isIDTabUnlocked = player.eternities > 0 || player.infDimensionsUnlocked.includes(true);

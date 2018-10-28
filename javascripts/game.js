@@ -2559,7 +2559,6 @@ function gameLoop(diff) {
         player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
       }
       if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
-      ui.view.tabs.dimensions.infinity.dims[tier].isAvailable = player.infDimensionsUnlocked[tier - 1];
     }
 
     if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff/1000))

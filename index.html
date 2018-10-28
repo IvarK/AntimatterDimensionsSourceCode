@@ -2253,7 +2253,7 @@
     </div>
     <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
     <tt-shop :view="view"></tt-shop>
-    <link v-if="model.player.options.theme" type="text/css" rel="stylesheet" :href="themeCss">
+    <link v-if="view.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>
 <div class="videocontainer">

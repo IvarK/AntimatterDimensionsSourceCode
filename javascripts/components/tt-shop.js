@@ -1,45 +1,38 @@
 Vue.component('tt-shop', {
-  props: ['player', 'view'],
-  template:
-    `<div id="TTbuttons" style="display: none">
-      <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
-        <div class="ttbuttons-row ttbuttons-top-row">
-          <button class="timetheorembtn" style="width:130px; font-size: 0.6em" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
-          <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
-          <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmount }}</span> Time {{ theoremNoun }}.</p>
-          <div style="display: flex; flex-direction: row; align-items: center">
-            <p id="studytreeloadsavetext">{{ view.shiftDown ? 'save:' : 'load:' }}</p>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(1)">1</button>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(2)">2</button>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>
-          </div>
-        </div>
-        <div class="ttbuttons-row" v-if="!minimized">
-          <tt-buy-button :budget="player.money" :cost="player.timestudy.amcost" :format="formatAM" :action="buyWithAM"></tt-buy-button>
-          <tt-buy-button :budget="player.infinityPoints" :cost="player.timestudy.ipcost" :format="formatIP" :action="buyWithIP"></tt-buy-button>
-          <tt-buy-button :budget="player.eternityPoints" :cost="player.timestudy.epcost" :format="formatEP" :action="buyWithEP"></tt-buy-button>
-        </div>
-      </div>
-      <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
-        <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
-      </button>
-    </div>`,
+  props: {
+    view: Object
+  },
+  data: function() {
+    return {
+      theoremAmount: 0,
+      shopMinimized: false,
+      minimizeAvailable: false,
+      hasTTAutobuyer: false,
+      budget: {
+        am: new Decimal(0),
+        ip: new Decimal(0),
+        ep: new Decimal(0)
+      },
+      costs: {
+        am: new Decimal(0),
+        ip: new Decimal(0),
+        ep: new Decimal(0)
+      }
+    };
+  },
   computed: {
-    theoremAmount: function() {
-      let theorems = this.player.timestudy.theorem;
+    theoremAmountDisplay: function() {
+      let theorems = this.theoremAmount;
       if (theorems > 99999) {
-        return shortenMoney(theorems);
+        return this.shortenMoney(theorems);
       }
       return Math.floor(theorems).toFixed(0);
     },
     theoremNoun: function() {
-      return this.player.timestudy.theorem === 1 ? "Theorem" : "Theorems";
+      return this.theoremAmount === 1 ? "Theorem" : "Theorems";
     },
     minimized: function() {
-      return this.minimizeAvailable && this.player.timestudy.shopMinimized;
-    },
-    minimizeAvailable: function() {
-      return this.player.dilation.upgrades.includes(10);
+      return this.minimizeAvailable && this.shopMinimized;
     },
     minimizeArrowStyle: function() {
       return {
@@ -51,34 +44,69 @@ Vue.component('tt-shop', {
         transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
       };
-    },
-    hasTTAutobuyer: function() {
-      return this.player.reality.perks.includes(5)
     }
   },
   methods: {
     minimize: function() {
-      this.player.timestudy.shopMinimized = !this.player.timestudy.shopMinimized;
+      player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM: function(am) {
-      return shortenCosts(am);
+      return this.shortenCosts(am);
     },
     buyWithAM: function() {
       buyWithAntimatter();
     },
     formatIP: function(ip) {
-      return shortenCosts(ip) + " IP";
+      return this.shortenCosts(ip) + " IP";
     },
     buyWithIP: function() {
       buyWithIP();
     },
     formatEP: function(ep) {
-      return shortenDimensions(ep) + " EP";
+      return this.shortenDimensions(ep) + " EP";
     },
     buyWithEP: function() {
       buyWithEP();
+    },
+    update() {
+      this.theoremAmount = player.timestudy.theorem;
+      this.shopMinimized = player.timestudy.shopMinimized;
+      this.minimizeAvailable = player.dilation.upgrades.includes(10);
+      this.hasTTAutobuyer = player.reality.perks.includes(5);
+      const budget = this.budget;
+      budget.am.copyFrom(player.money);
+      budget.ip.copyFrom(player.infinityPoints);
+      budget.ep.copyFrom(player.eternityPoints);
+      const costs = this.costs;
+      costs.am.copyFrom(player.timestudy.amcost);
+      costs.ip.copyFrom(player.timestudy.ipcost);
+      costs.ep.copyFrom(player.timestudy.epcost);
     }
-  }
+  },
+  template:
+    `<div id="TTbuttons" style="display: none">
+      <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
+        <div class="ttbuttons-row ttbuttons-top-row">
+          <button class="timetheorembtn" style="width:130px; font-size: 0.6em" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
+          <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
+          <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
+          <div style="display: flex; flex-direction: row; align-items: center">
+            <p id="studytreeloadsavetext">{{ view.shiftDown ? 'save:' : 'load:' }}</p>
+            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(1)">1</button>
+            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(2)">2</button>
+            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>
+          </div>
+        </div>
+        <div class="ttbuttons-row" v-if="!minimized">
+          <tt-buy-button :budget="budget.am" :cost="costs.am" :format="formatAM" :action="buyWithAM"></tt-buy-button>
+          <tt-buy-button :budget="budget.ip" :cost="costs.ip" :format="formatIP" :action="buyWithIP"></tt-buy-button>
+          <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"></tt-buy-button>
+        </div>
+      </div>
+      <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
+        <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
+      </button>
+    </div>`
 });
 
 Vue.component('tt-buy-button', {

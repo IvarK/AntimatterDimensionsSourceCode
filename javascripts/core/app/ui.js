@@ -113,8 +113,6 @@ function initVue() {
     uiInitialized = true;
 }
 
-initVue();
-
 function updateVue() {
     ui.model.player = player;
 }
@@ -182,6 +180,8 @@ Tab.statistics = new Tab("statistics-tab");
 const GameEvent = {
   UPDATE: "UPDATE",
 };
+
+initVue();
 
 ui.dispatch = function(event) {
   EventHub.global.emit(event);

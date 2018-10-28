@@ -3590,6 +3590,9 @@ function init() {
     document.getElementById('achievementsbtn').onclick = function () {
         showTab('achievements');
     };
+    document.getElementById('achievementsvuebtn').onclick = function () {
+        showTab('achievementsvue');
+    };
     document.getElementById('challengesbtn').onclick=function () {
       showTab('challenges');
     };

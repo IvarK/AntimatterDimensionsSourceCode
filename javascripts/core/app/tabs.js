@@ -39,6 +39,7 @@ Tab.dimensions.infinity = new Subtab("Infinity Dimensions", Tab.dimensions, ui.v
 Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("statistics-tab");
+Tab.achievements = new Tab("achievements-tab");
 
 // small hack until Vue migration is complete
 function tryShowtab(tab) {
@@ -52,6 +53,10 @@ function tryShowtab(tab) {
   }
   if (tab === 'dimensions') {
     Tab.dimensions.show();
+    return true;
+  }
+  if (tab === 'achievementsvue') {
+    Tab.achievements.show();
     return true;
   }
   ui.view.tabs.current = undefined;

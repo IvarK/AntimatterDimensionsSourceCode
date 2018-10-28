@@ -174,7 +174,7 @@ function largestMatterScale(matter) {
 
 const matterScale = [
   {amount: proton, name: "protons", verb: "make"},
-  {amount: 1e-42, name: "nucleui", verb: "make"},
+  {amount: 1e-42, name: "nuclei", verb: "make"},
   {amount: 7.23e-30, name: "Hydrogen atoms", verb: "make"},
   {amount: 5e-21, name: "viruses", verb: "make"},
   {amount: 9e-17, name: "red blood cells", verb: "make"},

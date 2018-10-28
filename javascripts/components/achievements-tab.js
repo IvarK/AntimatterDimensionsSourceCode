@@ -19,7 +19,7 @@ Vue.component('achievements-tab', {
     };
   },
   template:
-    `<tab-container id="achievements">
+    `<tab-container>
       <subtabbed-container
         class="tab-content"
         :tabs="tabs"

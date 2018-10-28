@@ -23,16 +23,19 @@ Vue.component('achievement', {
     details: function() {
       return achDetails[this.ordinalId];
     },
+    isBlinkOfAnEye: function() {
+      return this.achId === "r78";
+    },
     styleObject: function() {
-      const isBlinkOfAnEye = this.achId === "r78";
+      const isBlinkOfAnEye = this.isBlinkOfAnEye;
       const extension = isBlinkOfAnEye ? "gif" : "png";
       return {
         "background-image": `url(images/${this.details.imageId}.${extension})`,
-        animation: isBlinkOfAnEye && !this.isUnlocked ? "blink 2s step-start 0s infinite" : undefined
       };
     },
     classObject: function() {
       return {
+        "blink-of-an-eye": this.isBlinkOfAnEye && !this.isUnlocked,
         achievementlocked: !this.isUnlocked,
         achievementunlocked: this.isUnlocked && this.isEnabled,
         achievementdisabled: this.isUnlocked && !this.isEnabled

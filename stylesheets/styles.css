@@ -251,6 +251,85 @@ button {
 
 /*#endregion Statistics*/
 
+/*#region Achievements*/
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink-of-an-eye {
+  animation: blink 2s step-start 0s infinite;
+}
+
+#timeForAchievements {
+  color: black;
+  font-size: 12px;
+  width: 40%;
+  margin: 5px auto;
+}
+
+.achievementhidden {
+  background-image: url("../images/achhidden.png") !important;
+  background-color: #555;
+  border: 2px solid #000;
+  width: 104px;
+  height: 104px;
+  border-radius: 8px;
+  margin: 0px auto;
+  text-align: center;
+  font-family: TypeWriter;
+  color: black;
+  font-size: 70%;
+  user-select: none;
+}
+
+.achievementdisabled {
+  background-color: #c45a5a;
+  border: 2px solid #781212;
+  width: 104px;
+  height: 104px;
+  border-radius: 8px;
+  margin: 0px auto;
+  text-align: center;
+  font-family: TypeWriter;
+  color: black;
+  font-size: 70%;
+  user-select: none;
+}
+
+.achievementlocked {
+  background: #A3A3A3;
+  border: 2px solid #B84B5F;
+  width: 104px;
+  height: 104px;
+  border-radius: 8px;
+  margin: 0px auto;
+  text-align: center;
+  font-family: TypeWriter;
+  color: black;
+  font-size: 70%;
+  user-select: none;
+}
+
+.achievementunlocked {
+  border: 2px solid #127A20;
+  background: #5AC467;
+  color: black;
+  width: 104px;
+  height: 104px;
+  border-radius: 8px;
+  margin: 0px auto;
+  text-align: center;
+  font-family: TypeWriter;
+  color: black;
+  font-size: 70%;
+  user-select: none;
+}
+
+/*#endregion Achievements*/
+
 .tab-container {
   display: flex;
   flex-direction: column;
@@ -977,64 +1056,6 @@ button {
     background-color: #0b600e;
     border: 2px solid #0b600e;
     color: white;
-}
-
-.achievementhidden {
-    background-image: url("../images/achhidden.png") !important;
-    background-color: #555;
-    border: 2px solid #000;
-    width: 104px;
-    height: 104px;
-    border-radius: 8px;
-    margin: 0px auto;
-    text-align: center;
-    font-family: TypeWriter;
-    color: black;
-    font-size: 70%;
-    user-select: none;
-}
-
-.achievementdisabled {
-    background-color: #c45a5a;
-    border: 2px solid #781212;
-    width: 104px;
-    height: 104px;
-    border-radius: 8px;
-    margin: 0px auto;
-    text-align: center;
-    font-family: TypeWriter;
-    color: black;
-    font-size: 70%;
-    user-select: none;
-}
-
-.achievementlocked {
-    background: #A3A3A3;
-    border: 2px solid #B84B5F;
-    width: 104px;
-    height: 104px;
-    border-radius: 8px;
-    margin: 0px auto;
-    text-align: center;
-    font-family: TypeWriter;
-    color: black;
-    font-size: 70%;
-    user-select: none;
-}
-
-.achievementunlocked {
-    border: 2px solid #127A20;
-    background: #5AC467;
-    color: black;
-    width: 104px;
-    height: 104px;
-    border-radius: 8px;
-    margin: 0px auto;
-    text-align: center;
-    font-family: TypeWriter;
-    color: black;
-    font-size: 70%;
-    user-select: none;
 }
 
 .autoBuyerDiv {
@@ -2482,12 +2503,6 @@ screen and (max-width: 480px) {
     70% {opacity: 1;}
     80% {opacity: 0;}
     100% {opacity: 0;}
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
 }
 
 .infotooltip {

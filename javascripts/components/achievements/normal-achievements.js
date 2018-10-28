@@ -37,9 +37,7 @@ Vue.component('normal-achievements', {
       <div style="font-size: 140%">Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
       <div v-if="nextAchIn > 0" style="font-size: 140%">Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
       <br>
-      <div id="timeForAchievements"
-        style="color: black; font-size: 12px; width: 40%; margin: 5px auto"
-        v-if="timeForAchs > 0">
+      <div id="timeForAchievements" v-if="timeForAchs > 0">
         You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}
       </div>
       <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}}</div>

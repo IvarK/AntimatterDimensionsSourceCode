@@ -45,6 +45,6 @@ Keyboard.bind("up up down down left right left right b a", () => {
 });
 
 Keyboard.bindRepeatable("f", () => {
-  $.notify("Paying respects", "info");
+  ui.notify.info("Paying respects");
   giveAchievement("It pays to have respect");
 });

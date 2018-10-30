@@ -368,7 +368,7 @@ function toggle(current) {
 function automatorSaveButton(num) {
   if (shiftDown) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
-      $.notify("Automator script "+num+" saved", "info")
+      ui.notify.info(`Automator script ${num} saved`);
   } else {
     loadScript(num)
   }
@@ -378,7 +378,7 @@ function loadScript(num) {
   if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
     importAutomatorScript(localStorage.getItem("automatorScript"+num));
     automatorIdx = 0
-    $.notify("Automator script "+num+" loaded", "info")
+    ui.notify.info(`Automator script ${num} loaded`);
   }
 }
 

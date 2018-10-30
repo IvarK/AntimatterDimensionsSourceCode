@@ -100,7 +100,7 @@ function wormHoleLoop(diff, i) {
         player.wormhole[i].phase -= player.wormhole[i].duration
         player.wormhole[i].active = false
         incPhase = 0
-        $.notify("Wormhole "+ (i + 1) +" duration ended.", "success");
+        ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
         updateTickSpeed();
       }
     } else {
@@ -108,7 +108,7 @@ function wormHoleLoop(diff, i) {
         player.wormhole[i].phase -= player.wormhole[i].speed
         player.wormhole[i].active = true
         incPhase = 0
-        $.notify("Wormhole "+ (i + 1) +" is active!", "success");
+        ui.notify.success("Wormhole "+ (i + 1) +" is active!");
         updateTickSpeed();
       }
     }

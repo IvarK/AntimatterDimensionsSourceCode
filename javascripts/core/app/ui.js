@@ -86,3 +86,8 @@ initVue();
 ui.dispatch = function(event) {
   EventHub.global.emit(event);
 };
+
+const UIID = function() {
+  let id = 0;
+  return { next: () => id++ };
+}();

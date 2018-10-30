@@ -28,6 +28,9 @@ Notation.set = function (name) {
         name = "Cancer";
     }
     player.options.notation = name;
+    if (name === "Cancer") {
+        ui.notify.success("😂😂😂");
+    }
     updateLastTenRuns();
     updateLastTenEternities();
     updateLastTenRealities();

@@ -38,7 +38,7 @@ var playFabId = -1
 function playFabLoginCallback(data, error) {
   if (error) {
     console.log(error.errorMessage);
-    $.notify("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.", "error")
+    ui.notify.error("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.");
     document.getElementById("cloudOptions").style.display = "none"
     document.getElementById("cloud").style.display = "none"
     return;
@@ -46,7 +46,7 @@ function playFabLoginCallback(data, error) {
   if (data) {
     //NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
     playFabId = data.data.PlayFabId;
-    $.notify("Logged in to PlayFab Cloud", "info")
+    ui.notify.info("Logged in to PlayFab Cloud");
 
     if (player.options.cloud) playFabLoadCheck()
     console.log("Logged in to playFab")
@@ -59,7 +59,7 @@ function saveToPlayFab(root) {
   // Cut compressed root object into strings of 10,000 bytes for PlayFab
   var chunks = LZString.compressToEncodedURIComponent(JSON.stringify(root)).match(/.{1,10000}/g);
   if (chunks.length > 10) {
-    $.notify("Error saving to cloud: size limit exceeded", "error");
+    ui.notify.error("Error saving to cloud: size limit exceeded");
   }
 
   var requestData = {
@@ -83,7 +83,7 @@ function saveToPlayFabCallback(data, error) {
   }
   if (data) {
     console.log("Game Saved!");
-    $.notify("Game saved to cloud", "info")
+    ui.notify.info("Game saved to cloud");
     save_game()
     return true;
   }
@@ -192,7 +192,7 @@ function newestSave(first, second) {
 
 function playFabLoadCheck() {
   loadFromPlayFab(function(cloudRoot) {
-    $.notify("Loaded from cloud", "info");
+    ui.notify.info("Loaded from cloud");
 
     for (var i = 0; i < 3; i++) {
       let saveId = i;

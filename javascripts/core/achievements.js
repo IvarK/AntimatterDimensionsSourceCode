@@ -197,7 +197,7 @@ function giveAchievement(name) {
 
     if (player.achievements.includes(allAchievementNums[name])) return false
 
-    $.notify(name, "success");
+    ui.notify.success(name);
     player.achievements.push(allAchievementNums[name]);
     kong.submitStats('Achievements', player.achievements.length);
     if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {

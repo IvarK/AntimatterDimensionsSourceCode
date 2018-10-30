@@ -97,11 +97,11 @@ Vue.component('achievement', {
       this.enablesAt = new Date().getTime() / 1000 + remainingTime;
     },
     onMouseEnter: function() {
-      clearInterval(this.mouseOverInterval);
+      clearTimeout(this.mouseOverInterval);
       this.isMouseOver = true;
     },
     onMouseLeave: function() {
-      this.mouseOverInterval = setInterval(() => this.isMouseOver = false, 500);
+      this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
     }
   },
   template:

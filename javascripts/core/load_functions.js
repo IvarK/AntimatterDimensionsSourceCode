@@ -729,7 +729,7 @@ function save_game(changed, silent) {
   if ( possibleGlyphs.length > 0 ) return
   if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
-  if (!silent) $.notify(changed ? "Game loaded" : "Game saved", "info")
+  if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
 }
 
 function change_save(saveId) {

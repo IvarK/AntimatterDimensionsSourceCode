@@ -199,11 +199,10 @@ function updateCosts() {
     document.getElementById("tickSpeed").textContent = 'Cost: ' + shortenCosts(player.tickSpeedCost);
 }
 
-let floatingTextKey = 0;
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
-  floatingText.push({ text: text, key: floatingTextKey++ });
+  floatingText.push({ text: text, key: UIID.next() });
   setTimeout(() => floatingText.shift(), 1000)
 }
 

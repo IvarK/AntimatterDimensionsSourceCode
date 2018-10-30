@@ -2525,3 +2525,70 @@ screen and (max-width: 480px) {
 .infotooltip:hover .infotooltiptext {
     visibility: visible;
 }
+
+/*******
+ * BEM *
+ *******/
+
+.l-notification-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin-top: 5px;
+  margin-right: 10px;
+  z-index: 1000;
+}
+
+/*#region c-notification*/
+
+.c-notification {
+  padding: 8px 15px;
+  margin-top: 3px;
+  color: black;
+  background-color: white;
+  font-size: 0.8rem;
+  font-family: TypeWriter, serif;
+  font-weight: bold;
+  white-space: nowrap;
+  border: 1px solid;
+  cursor: pointer;
+  animation-name: c-notification--show-hide;
+  animation-duration: 2.5s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+.c-notification--success {
+  background-color: #dbd800;
+  border-color: #bab700;
+}
+
+.c-notification--error {
+  background-color: #bf352d;
+  border-color: #330000;
+}
+
+.c-notification--info {
+  background-color: #48c0e8;
+  border-color: #4980cc;
+}
+
+@keyframes c-notification--show-hide {
+  0%   { transform: translateX(500px) }
+  10%  { transform: translateX(-20px) }
+  15%  { transform: translateX(10px) }
+  20%  { transform: translateX(0) }
+  90%  { transform: translateX(0) }
+  100% { transform: translateX(500px) }
+}
+
+@keyframes c-notification--hide {
+  0%   { transform: translateX(0) }
+  10%  { transform: translateX(500px) }
+  100% { transform: translateX(500px) }
+}
+
+/*#endregion c-notification*/

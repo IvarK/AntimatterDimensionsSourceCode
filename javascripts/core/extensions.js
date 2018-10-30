@@ -47,7 +47,7 @@ function copyToClipboard(str) {
 
 function copyToClipboardAndNotify(str) {
     if (copyToClipboard(str)) {
-        $.notify("Exported to clipboard", "info");
+        ui.notify.info("Exported to clipboard");
     }
 }
 
@@ -56,3 +56,7 @@ function safeCall(fn) {
 }
 
 String.empty = "";
+
+String.prototype.capitalize = function() {
+  return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+};

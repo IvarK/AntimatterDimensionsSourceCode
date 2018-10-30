@@ -75,7 +75,7 @@ Theme.tryUnlock = function(name) {
       return false;
     }
     let prefix = "S" + (index + 1);
-    player.secretUnlocks.themes.push(prefix + _.capitalize(name));
+    player.secretUnlocks.themes.push(prefix + name.capitalize());
     Theme.set(prefix);
     giveAchievement("Shhh... It's a secret");
     return true;

@@ -32,17 +32,7 @@ Vue.component('dimensions-normal', {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      const resettableChallenges = [
-        "challenge12",
-        "challenge9",
-        "challenge5",
-        "postc1",
-        "postc4",
-        "postc5",
-        "postc6",
-        "postc8"
-      ];
-      this.isQuickResetAvailable = resettableChallenges.includes(player.currentChallenge);
+      this.isQuickResetAvailable = isQuickResettable(player.currentChallenge);
     }
   },
   template:

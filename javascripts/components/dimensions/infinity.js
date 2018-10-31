@@ -34,7 +34,7 @@ Vue.component('dimensions-infinity', {
       if (isEC8Running) {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
-      this.isAnyAutobuyerUnlocked = player.eternities > 10;
+      this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
     }
   },
   template:
@@ -72,7 +72,7 @@ Vue.component('infinity-dimension-row', {
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       bought: 0,
-      tier8HasRateOfChange: false,
+      hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
@@ -87,7 +87,7 @@ Vue.component('infinity-dimension-row', {
       return DISPLAY_NAMES[this.tier];
     },
     rateOfChangeDisplay: function() {
-      return this.tier < 8 || this.tier8HasRateOfChange ?
+      return this.hasRateOfChange ?
         ` (+${this.shorten(this.rateOfChange)}%/s)` :
         String.empty;
     },
@@ -109,24 +109,22 @@ Vue.component('infinity-dimension-row', {
     },
     update() {
       const tier = this.tier;
-      const isUnlocked = player.infDimensionsUnlocked[tier - 1];
+      const dimension = InfinityDimension(tier);
+      const isUnlocked = dimension.isUnlocked;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = InfinityDimension(tier);
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
       this.bought = dimension.bought;
-      let tier8HasRateOfChange = tier === 8 && ECTimesCompleted("eterc7") > 0;
-      if (tier === 8) {
-        this.tier8HasRateOfChange = tier8HasRateOfChange;
-      }
-      if (tier < 8 || tier8HasRateOfChange) {
+      const hasRateOfChange = dimension.hasRateOfChange;
+      this.hasRateOfChange = hasRateOfChange;
+      if (hasRateOfChange) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
-      this.isAutobuyerUnlocked = player.eternities >= 10 + tier;
+      this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
-      this.isAffordable = player.infinityPoints.gte(dimension.cost);
-      const isCapped = tier < 8 && dimension.baseAmount >= HARDCAP_ID_BASE_AMOUNT;
+      this.isAffordable = dimension.isAffordable;
+      const isCapped = dimension.isCapped;
       this.isCapped = isCapped;
       if (isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);

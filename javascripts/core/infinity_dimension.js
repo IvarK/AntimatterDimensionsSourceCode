@@ -114,9 +114,8 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  if (tier < 8 && dim.baseAmount >= HARDCAP_ID_BASE_AMOUNT) return false;
-  if (player.infinityPoints.lt(dim.cost)) return false;
-  if (!player.infDimensionsUnlocked[tier - 1]) return false;
+  if (dim.isCapped) return false;
+  if (!dim.isAffordable) return false;
   if (player.currentEternityChall === "eterc8" && player.eterc8ids <= 0) return false;
   return true;
 }
@@ -181,6 +180,22 @@ class InfinityDimensionInfo {
 
   set baseAmount(value) {
     this._props.baseAmount = value;
+  }
+
+  get isUnlocked() {
+    return player.infDimensionsUnlocked[this._tier - 1];
+  }
+
+  get isAutobuyerUnlocked() {
+    return player.eternities >= 10 + this._tier;
+  }
+
+  get isAffordable() {
+    return player.infinityPoints.gte(this.cost);
+  }
+
+  get hasRateOfChange() {
+    return this._tier < 8 || ECTimesCompleted("eterc7") > 0;
   }
 
   get rateOfChange() {
@@ -296,6 +311,10 @@ class InfinityDimensionInfo {
     return ec12Completions !== 0 ?
       Math.pow(costMult, 1 - ec12Completions * 0.008) :
       costMult;
+  }
+
+  get isCapped() {
+    return this._tier < 8 && this.baseAmount >= HARDCAP_ID_BASE_AMOUNT;
   }
 
   get hardcapIPAmount() {

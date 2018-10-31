@@ -27,7 +27,7 @@ Vue.component('dimensions-infinity', {
         const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
         this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
       }
-      this.powerPerSecond.copyFrom(DimensionProduction(1));
+      this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
       this.incomeType = player.currentEternityChall === "eterc7" ? "Seventh Dimensions" : "Infinity Power";
       const isEC8Running = player.currentEternityChall === "eterc8";
       this.isEC8Running = isEC8Running;
@@ -112,8 +112,8 @@ Vue.component('infinity-dimension-row', {
       const isUnlocked = player.infDimensionsUnlocked[tier - 1];
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = player[`infinityDimension${tier}`];
-      this.multiplier.copyFrom(DimensionPower(tier));
+      const dimension = InfinityDimension(tier);
+      this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
       this.bought = dimension.bought;
       let tier8HasRateOfChange = tier === 8 && ECTimesCompleted("eterc7") > 0;
@@ -121,7 +121,7 @@ Vue.component('infinity-dimension-row', {
         this.tier8HasRateOfChange = tier8HasRateOfChange;
       }
       if (tier < 8 || tier8HasRateOfChange) {
-        this.rateOfChange.copyFrom(DimensionRateOfChange(tier));
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.isAutobuyerUnlocked = player.eternities >= 10 + tier;
       this.cost.copyFrom(dimension.cost);
@@ -129,7 +129,7 @@ Vue.component('infinity-dimension-row', {
       const isCapped = tier < 8 && dimension.baseAmount >= HARDCAP_ID_BASE_AMOUNT;
       this.isCapped = isCapped;
       if (isCapped) {
-        this.capIP.copyFrom(hardcapIPAmount(tier));
+        this.capIP.copyFrom(dimension.hardcapIPAmount);
       }
     }
   },

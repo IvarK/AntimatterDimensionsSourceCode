@@ -2452,17 +2452,22 @@ function gameLoop(diff) {
     player.thisReality += diff
 
     for (let tier=1;tier<9;tier++) {
+      const dimension = InfinityDimension(tier);
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
-        player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
+        dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
       if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
     }
 
-    if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff/1000))
-    else if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(DimensionProduction(1).times(diff/1000))
-
-
-
+    const ID1Production = InfinityDimension(1).productionPerSecond.times(diff / 1000);
+    if (player.currentEternityChall === "eterc7") {
+      if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") {
+        player.seventhAmount = player.seventhAmount.plus(ID1Production)
+      }
+    }
+    else {
+      player.infinityPower = player.infinityPower.plus(ID1Production);
+    }
 
     if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff/1000))
     else player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff/1000))
@@ -2602,7 +2607,7 @@ function gameLoop(diff) {
     } else {
         Marathon = 0;
     }
-    if (DimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
+    if (InfinityDimension(1).productionPerSecond.gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
         Marathon2+=player.options.updateRate/1000;
         if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
     } else {

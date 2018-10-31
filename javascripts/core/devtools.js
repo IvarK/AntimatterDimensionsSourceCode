@@ -454,8 +454,8 @@ dev.showProductionBreakdown = function() {
   replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
   
   let totalIDMults = new Decimal(1);
-  for (let i = 1; i <= 8; i++) {
-    totalIDMults = totalIDMults.times(DimensionPower(i));
+  for (let tier = 1; tier <= 8; tier++) {
+    totalIDMults = totalIDMults.times(InfinityDimension(tier).multiplier);
   }
   let boughtIDComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {

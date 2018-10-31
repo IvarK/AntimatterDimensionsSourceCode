@@ -606,7 +606,7 @@ class NormalDimensionInfo {
 
     let toGain;
     if (tier === 7 && player.currentEternityChall === "eterc7") {
-      toGain = DimensionProduction(1).times(10);
+      toGain = InfinityDimension(1).productionPerSecond.times(10);
     }
     else if (player.currentChallenge === "challenge7") {
       toGain = getDimensionProductionPerSecond(tier + 2);

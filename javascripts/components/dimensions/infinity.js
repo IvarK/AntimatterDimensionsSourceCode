@@ -94,12 +94,12 @@ Vue.component('infinity-dimension-row', {
     costDisplay: function() {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
-    hardcapAmount: function() {
-      return shortenCosts(hardcapIDPurchases);
+    hardcapPurchases: function() {
+      return this.shortenCosts(HARDCAP_ID_PURCHASES);
     },
     capTooltip: function() {
       return this.isCapped ?
-        `Limited to ${this.hardcapAmount} upgrades (${this.shortenCosts(this.capIP)} IP)`:
+        `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`:
         undefined;
     }
   },
@@ -126,16 +126,10 @@ Vue.component('infinity-dimension-row', {
       this.isAutobuyerUnlocked = player.eternities >= 10 + tier;
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = player.infinityPoints.gte(dimension.cost);
-      const isCapped = tier < 8 && dimension.baseAmount >= 10 * hardcapIDPurchases;
+      const isCapped = tier < 8 && dimension.baseAmount >= HARDCAP_ID_BASE_AMOUNT;
       this.isCapped = isCapped;
       if (isCapped) {
-        let initCost = new Decimal(initIDCost[tier]);
-        const costMult = infCostMults[tier];
-        const ec12Completions = ECTimesCompleted("eterc12");
-        if (ec12Completions) {
-          initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
-        }
-        this.capIP.copyFrom(Decimal.pow(initCost, hardcapIDPurchases).times(initCost));
+        this.capIP.copyFrom(hardcapIPAmount(tier));
       }
     }
   },

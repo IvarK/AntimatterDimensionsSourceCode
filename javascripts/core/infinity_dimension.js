@@ -169,28 +169,44 @@ function resetInfDimensions() {
 
 }
 
+function IDPurchasesToIDAmount(purchases) {
+  // Because each ID purchase gives 10 IDs
+  return purchases * 10;
+}
+
+function IDAmountToIDPurchases(baseAmount) {
+  // Because each ID purchase gives 10 IDs
+  return baseAmount / 10;
+}
+
 const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
-var hardcapIDPurchases = 2000000;
+const HARDCAP_ID_PURCHASES = 2000000;
+const HARDCAP_ID_BASE_AMOUNT = IDPurchasesToIDAmount(HARDCAP_ID_PURCHASES);
+
+function hardcapIPAmount(tier) {
+  const initCost = new Decimal(initIDCost[tier]);
+  const costMult = IDCostMultiplier(tier);
+  return initCost.times(Decimal.pow(costMult, HARDCAP_ID_PURCHASES));
+}
+
+function IDCostMultiplier(tier) {
+  const ec12Completions = ECTimesCompleted("eterc12");
+  return ec12Completions ?
+    Math.pow(infCostMults[tier], 1 - ec12Completions * 0.008) :
+    infCostMults[tier];
+}
 
 function buyManyInfinityDimension(tier) {
-  if (player.eterc8ids <= 0 && player.currentEternityChall == "eterc8") return false
-  var dim = player["infinityDimension"+tier]
-  if (player.infinityPoints.lt(dim.cost)) return false
-  if (!player.infDimensionsUnlocked[tier-1]) return false
-  if (player.eterc8ids == 0) return false
-  if (dim.baseAmount >= 10*hardcapIDPurchases && tier != 8) return false
+  if (!canBuyInfinityDimension(tier)) return false;
+  const dim = infinityDimensionStats(tier);
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
-  if (ECTimesCompleted("eterc12")) {
-      dim.cost = Decimal.round(dim.cost.times(Math.pow(infCostMults[tier], 1-ECTimesCompleted("eterc12")*0.008)))
-  } else {
-      dim.cost = Decimal.round(dim.cost.times(infCostMults[tier]))
-  }
+  dim.cost = Decimal.round(dim.cost.times(IDCostMultiplier(tier)))
   if (tier == 8) dim.power = dim.power.times(infPowerMults[tier] * getGlyphSacEffect("infinity"))
   else dim.power = dim.power.times(infPowerMults[tier])
-  dim.baseAmount += 10
+  dim.baseAmount += IDPurchasesToIDAmount(1)
 
   if (player.currentEternityChall == "eterc8") {
     player.eterc8ids -= 1;
@@ -199,21 +215,15 @@ function buyManyInfinityDimension(tier) {
 }
 
 function buyMaxInfDims(tier) {
-  var dim = player["infinityDimension"+tier]
-
-  if (player.infinityPoints.lt(dim.cost)) return false
-  if (!player.infDimensionsUnlocked[tier-1]) return false
-
-  let costMult;
-  if (ECTimesCompleted("eterc12")) {
-      costMult = Math.pow(infCostMults[tier], 1-ECTimesCompleted("eterc12")*0.008)
-  } else {
-      costMult = infCostMults[tier]
-  }
+  if (!canBuyInfinityDimension(tier)) return false;
+  const dim = infinityDimensionStats(tier);
+  const costMult = IDCostMultiplier(tier);
 
   var toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult))
-  if (dim.baseAmount >= 10*hardcapIDPurchases && tier != 8)
-    toBuy = Math.min(toBuy, hardcapIDPurchases - dim.baseAmount/10);
+  if (tier !== 8) {
+    const purchasesUntilHardcap = IDAmountToIDPurchases(HARDCAP_ID_BASE_AMOUNT - dim.baseAmount);
+    toBuy = Math.min(toBuy, purchasesUntilHardcap);
+  }
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.cost = dim.cost.times(costMult)
@@ -222,8 +232,21 @@ function buyMaxInfDims(tier) {
     if (tier == 8) dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
     else dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
   }
-  dim.baseAmount += 10*toBuy
+  dim.baseAmount += IDPurchasesToIDAmount(toBuy);
   buyManyInfinityDimension(tier)
+}
+
+function canBuyInfinityDimension(tier) {
+  const dim = infinityDimensionStats(tier);
+  if (tier < 8 && dim.baseAmount >= HARDCAP_ID_BASE_AMOUNT) return false;
+  if (player.infinityPoints.lt(dim.cost)) return false;
+  if (!player.infDimensionsUnlocked[tier - 1]) return false;
+  if (player.currentEternityChall === "eterc8" && player.eterc8ids <= 0) return false;
+  return true;
+}
+
+function infinityDimensionStats(tier) {
+  return player[`infinityDimension${tier}`];
 }
 
 function buyMaxInfinityDimensions() {

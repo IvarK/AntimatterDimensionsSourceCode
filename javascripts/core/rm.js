@@ -776,7 +776,7 @@ function sacrificeGlyph(glyph) {
   if (!confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
-  if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), player.infinityDimension8.baseAmount / 10)
+  if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
   let inv = player.reality.glyphs.inventory
   let g = inv.find(function(x) {
     return x.id == glyph.id

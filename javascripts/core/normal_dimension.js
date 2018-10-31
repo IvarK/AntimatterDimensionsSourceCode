@@ -1,6 +1,7 @@
 function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const name = TIER_NAMES[tier];
+  const dim = NormalDimension(tier);
 
   let multiplier = new Decimal(player[name + 'Pow']);
 
@@ -28,7 +29,7 @@ function getDimensionFinalMultiplier(tier) {
   if (infinityUpgrades.includes("achievementMult")) multiplier = multiplier.times(achievementMult);
   if (infinityUpgrades.includes("challengeMult")) multiplier = multiplier.times(challengeMult);
 
-  if (hasInfinityMult(tier)) multiplier = multiplier.times(dimMults());
+  if (dim.hasInfinityMultiplier) multiplier = multiplier.times(dimMults());
   if (tier === 1) {
     if (infinityUpgrades.includes("unspentBonus")) multiplier = multiplier.times(unspentBonus);
     if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
@@ -91,43 +92,6 @@ function getDimensionFinalMultiplier(tier) {
 
   return multiplier;
 }
-
-function getDimensionRateOfChange(tier) {
-  if (tier === 8 || (player.currentEternityChall === "eterc3" && tier > 3)) {
-    return 0;
-  }
-
-  let toGain = getDimensionProductionPerSecond(tier + 1);
-  if (tier === 7 && player.currentEternityChall === "eterc7") toGain = DimensionProduction(1).times(10);
-
-  const name = TIER_NAMES[tier];
-  if (player.currentChallenge === "challenge7") {
-    if (tier === 7) return 0;
-    else toGain = getDimensionProductionPerSecond(tier + 2);
-  }
-  const current = player[name + 'Amount'].max(1);
-  const change = toGain.times(10).dividedBy(current);
-
-  return change;
-}
-
-function hasInfinityMult(tier) {
-  switch (tier) {
-    case 1:
-    case 8:
-      return player.infinityUpgrades.includes("18Mult");
-    case 2:
-    case 7:
-      return player.infinityUpgrades.includes("27Mult");
-    case 3:
-    case 6:
-      return player.infinityUpgrades.includes("36Mult");
-    case 4:
-    case 5:
-      return player.infinityUpgrades.includes("45Mult");
-  }
-}
-
 
 function multiplySameCosts(cost) {
   const tierCosts = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
@@ -484,7 +448,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
 
 
 function canAfford(cost) {
-  return ((cost.lt(new Decimal("1.79e308")) && !player.break) || player.break) && cost.lte(player.money);
+  return (player.break || cost.lt(new Decimal("1.79e308"))) && cost.lte(player.money);
 }
 
 function buyOneDimensionBtnClick(tier) {
@@ -570,6 +534,7 @@ class NormalDimensionInfo {
       };
       tierProps[tier] = props;
     }
+    this._tier = tier;
     this._props = props;
     this._player = player;
   }
@@ -616,6 +581,64 @@ class NormalDimensionInfo {
 
   set pow(value) {
     this._player[this._props.pow] = value;
+  }
+
+  get hasInfinityMultiplier() {
+    switch (this._tier) {
+      case 1:
+      case 8:
+        return player.infinityUpgrades.includes("18Mult");
+      case 2:
+      case 7:
+        return player.infinityUpgrades.includes("27Mult");
+      case 3:
+      case 6:
+        return player.infinityUpgrades.includes("36Mult");
+      case 4:
+      case 5:
+        return player.infinityUpgrades.includes("45Mult");
+    }
+  }
+
+  get rateOfChange() {
+    const tier = this._tier;
+    if (tier === 8 ||
+      (tier > 4 && player.currentEternityChall === "eterc3") ||
+      (tier > 6 && player.currentChallenge === "challenge7")) {
+      return new Decimal(0);
+    }
+
+    let toGain;
+    if (tier === 7 && player.currentEternityChall === "eterc7") {
+      toGain = DimensionProduction(1).times(10);
+    }
+    else if (player.currentChallenge === "challenge7") {
+      toGain = getDimensionProductionPerSecond(tier + 2);
+    }
+    else {
+      toGain = getDimensionProductionPerSecond(tier + 1);
+    }
+    return toGain.times(10).dividedBy(this.amount.max(1));
+  }
+
+  get isAffordable() {
+    if (this._isAffectedByChallenge10) {
+      return NormalDimension(this._tier - 2).amount.gte(this.cost);
+    } else {
+      return canAfford(this.cost);
+    }
+  }
+
+  get isAffordableUntil10() {
+    if (this._isAffectedByChallenge10) {
+      return NormalDimension(this._tier - 2).amount.gte(this.costUntil10);
+    } else {
+      return canAfford(this.costUntil10);
+    }
+  }
+
+  get _isAffectedByChallenge10() {
+    return this._tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1");
   }
 }
 

@@ -177,21 +177,10 @@ Vue.component('normal-dimension-row', {
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
       if (tier < 8) {
-        this.rateOfChange.copyFrom(getDimensionRateOfChange(tier));
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
-      let canAffordSingle = false;
-      let canAffordUntil10 = false;
-      if (tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1")) {
-        const lowerTier = NormalDimension(tier - 2);
-        const lowerTierAmount = lowerTier.amount;
-        canAffordSingle = lowerTierAmount.gte(dimension.cost);
-        canAffordUntil10 = lowerTierAmount.gte(dimension.costUntil10);
-      } else {
-        canAffordSingle = canAfford(dimension.cost);
-        canAffordUntil10 = canAfford(dimension.costUntil10);
-      }
-      this.isAffordable = canAffordSingle;
-      this.isAffordableUntil10 = canAffordUntil10;
+      this.isAffordable = dimension.isAffordable;
+      this.isAffordableUntil10 = dimension.isAffordableUntil10;
     },
   },
   template:

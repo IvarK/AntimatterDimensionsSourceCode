@@ -44,19 +44,12 @@ function getTimeDimensionPower(tier) {
   }
 
   ret = ret.pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")))
-  
 
   if (player.dilation.active) {
-    ret = Decimal.pow(10, Math.pow(ret.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      ret = Decimal.pow(10, Math.pow(ret.log10(), 1.05))
-    }
+    ret = dilatedValueOf(ret);
   }
 
-  
-
   return ret
-
 }
 
 

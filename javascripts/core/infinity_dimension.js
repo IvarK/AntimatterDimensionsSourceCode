@@ -15,13 +15,7 @@ function DimensionProduction(tier) {
   if (player.currentEternityChall == "eterc11") return ret
   if (player.currentEternityChall == "eterc7") ret = ret.dividedBy(player.tickspeed.dividedBy(1000))
   if (player.challenges.includes("postc6")) {
-      let tick = new Decimal(player.tickspeed)
-      if (player.dilation.active) {
-        tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 0.75))
-        if (player.dilation.upgrades.includes(9)) {
-          tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 1.05))
-        }
-      }
+      let tick = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
       tick = new Decimal(1).dividedBy(tick)
       return ret.times(DimensionPower(tier)).times(tick.times(1000).pow(0.0005))
   }
@@ -75,10 +69,7 @@ function DimensionPower(tier) {
   if (mult.lt(0)) mult = new Decimal(0)
 
   if (player.dilation.active) {
-    mult = Decimal.pow(10, Math.pow(mult.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      mult = Decimal.pow(10, Math.pow(mult.log10(), 1.05))
-    }
+    mult = dilatedValueOf(mult);
   }
 
   mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")))

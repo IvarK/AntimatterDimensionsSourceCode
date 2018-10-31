@@ -165,3 +165,16 @@ function updateDilation() {
       document.getElementById("dilatedGalaxies").textContent = player.dilation.freeGalaxies
   }
 }
+
+function dilatedValueOf(value) {
+  let dilationPenalty = 0.75;
+  if (player.dilation.upgrades.includes(9)) {
+    dilationPenalty *= 1.05;
+  }
+  const log10 = value.log10();
+  return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
+}
+
+function dilatedTickspeed() {
+  return dilatedValueOf(player.tickspeed);
+}

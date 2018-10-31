@@ -80,11 +80,7 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier);
 
   if (player.dilation.active) {
-    multiplier = Decimal.pow(10, Math.pow(multiplier.log10(), 0.75));
-    if (player.dilation.upgrades.includes(9)) {
-      multiplier = Decimal.pow(10, Math.pow(multiplier.log10(), 1.05));
-    }
-    multiplier = multiplier.pow(glyphDilationPowMultiplier);
+    multiplier = dilatedValueOf(multiplier).pow(glyphDilationPowMultiplier);
   }
 
   if (player.dilation.upgrades.includes(6)) multiplier = multiplier.times(player.dilation.dilatedTime.pow(308).max(1));
@@ -501,23 +497,23 @@ function dimMults() {
 }
 
 function getDimensionProductionPerSecond(tier) {
-  let ret = Decimal.floor(player[TIER_NAMES[tier] + 'Amount']).times(getDimensionFinalMultiplier(tier)).times(1000).dividedBy(player.tickspeed);
-  if (player.currentChallenge === "challenge7") {
-    if (tier === 4) ret = player[TIER_NAMES[tier] + 'Amount'].floor().pow(1.3).times(getDimensionFinalMultiplier(tier)).dividedBy(player.tickspeed.dividedBy(1000));
-    else if (tier === 2) ret = player[TIER_NAMES[tier] + 'Amount'].floor().pow(1.5).times(getDimensionFinalMultiplier(tier)).dividedBy(player.tickspeed.dividedBy(1000))
+  const multiplier = getDimensionFinalMultiplier(tier);
+  const dimension = NormalDimension(tier);
+  let amount = dimension.amount.floor();
+  if (player.currentChallenge === "challenge7" && tier === 4) {
+    if (tier === 2) amount = amount.pow(1.5);
+    if (tier === 4) amount = amount.pow(1.3);
   }
-  if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") ret = ret.times(player.chall2Pow);
-  if (player.dilation.active) {
-    let tick = new Decimal(player.tickspeed);
-    tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 0.75));
-    if (player.dilation.upgrades.includes(9)) {
-      tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 1.05))
-    }
-    tick = new Decimal(1).dividedBy(tick);
-    ret = Decimal.floor(player[TIER_NAMES[tier] + 'Amount']).times(getDimensionFinalMultiplier(tier)).times(1000).dividedBy(tick)
+  const tickspeed = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
+  let production = amount.times(multiplier).dividedBy(tickspeed.dividedBy(1000));
+  if (player.currentChallenge === "challenge2" || player.currentChallenge === "postc1") {
+    production = production.times(player.chall2Pow);
   }
-  if (((player.currentChallenge !== "" && !player.currentChallenge.includes("post")) || !player.break) && ret.gte(Number.MAX_VALUE)) ret = ret.min("1e315");
-  return ret;
+  const postBreak = (player.break && player.currentChallenge === "") || player.currentChallenge.includes("post");
+  if (!postBreak && production.gte(Number.MAX_VALUE)) {
+    production = production.min("1e315");
+  }
+  return production;
 }
 
 class NormalDimensionInfo {

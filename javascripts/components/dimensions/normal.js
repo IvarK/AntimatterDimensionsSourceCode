@@ -316,12 +316,11 @@ Vue.component('normal-dimension-galaxy-row', {
         extraGals += Math.floor(player.replicanti.gal / 15);
       }
       this.galaxies.extra = extraGals;
-
       const requirement = getGalaxyRequirement();
       this.requirement.amount = requirement;
-      this.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
-
-      this.isAffordable = NormalDimension(requirement.tier).amount >= requirement.amount;
+      const tierRequirement = player.currentChallenge === "challenge4" ? 6 : 8;
+      this.requirement.tier = tierRequirement;
+      this.isAffordable = NormalDimension(tierRequirement).amount.gte(requirement);
     }
   },
   template:

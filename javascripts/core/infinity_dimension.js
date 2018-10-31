@@ -1,25 +1,5 @@
 //infinity dimensions
 
-
-function DimensionDescription(tier) {
-  var name = TIER_NAMES[tier];
-
-  let description = shortenDimensions(player['infinityDimension'+tier].amount) + ' (' + player['infinityDimension'+tier].bought + ')';
-
-  if (ECTimesCompleted("eterc7")) {
-    if (tier < 9) {
-        description += '  (+' + shorten(DimensionRateOfChange(tier)) + '%/s)';
-    }
-  } else {
-    if (tier < 8) {
-        description += '  (+' + shorten(DimensionRateOfChange(tier)) + '%/s)';
-    }
-  }
-
-  return description;
-}
-
-
 function DimensionRateOfChange(tier) {
   if (tier === 8) var toGain = getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0)
   else var toGain = DimensionProduction(tier+1)

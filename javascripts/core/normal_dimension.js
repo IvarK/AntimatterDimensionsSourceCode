@@ -92,24 +92,6 @@ function getDimensionFinalMultiplier(tier) {
   return multiplier;
 }
 
-
-function getMoneyPerSecond() {
-  return getDimensionFinalMultiplier(1) * Math.floor(player.firstAmount) / player.tickspeed;
-}
-
-function getDimensionDescription(tier) {
-  const name = TIER_NAMES[tier];
-
-  let description = shortenDimensions(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
-  if (tier === 8) description = Math.round(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
-
-  if (tier < 8) {
-    description += '  (+' + shorten(getDimensionRateOfChange(tier)) + '%/s)';
-  }
-
-  return description;
-}
-
 function getDimensionRateOfChange(tier) {
   if (tier === 8 || (player.currentEternityChall === "eterc3" && tier > 3)) {
     return 0;

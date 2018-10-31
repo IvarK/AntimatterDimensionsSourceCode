@@ -3065,7 +3065,7 @@ function dimBoolean() {
 function maxBuyGalaxies(manual) {
     if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc1" || player.currentChallenge == "postc7") return
     if (player.autobuyers[10].priority > player.galaxies || manual) {
-        while(player.eightAmount >= getGalaxyRequirement() && (player.autobuyers[10].priority > player.galaxies || manual)) {
+        while(player.eightAmount >= Galaxy.requirement.amount && (player.autobuyers[10].priority > player.galaxies || manual)) {
             if (Notation.current().isCancer()) player.spreadingCancer += 1;
             player.galaxies++
         }
@@ -3192,11 +3192,11 @@ function autoBuyerTick() {
 
 
     if (player.autobuyers[10]%1 !== 0) {
-        if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && (player.currentChallenge == "challenge4" ? player.sixthAmount >= getGalaxyRequirement() : player.eightAmount >= getGalaxyRequirement())) {
+        if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && Galaxy.requirement.isSatisfied) {
             if (player.eternities < 9 || player.autobuyers[10].bulk == 0) {
                 if (player.autobuyers[10].isOn && player.autobuyers[10].priority > player.galaxies) {
                     autoS = false;
-                    secondSoftResetBtnClick();
+                    galaxyResetBtnClick();
                     player.autobuyers[10].ticks = 1;
                 }
             } else if (player.autobuyers[10].isOn){

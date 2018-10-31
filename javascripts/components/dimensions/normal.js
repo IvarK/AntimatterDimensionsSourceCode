@@ -263,8 +263,8 @@ Vue.component('normal-dimension-galaxy-row', {
       type: String.empty,
       galaxies: {
         normal: 0,
-        extra: 0,
-        free: 0
+        replicanti: 0,
+        dilation: 0
       },
       requirement: {
         tier: 1,
@@ -277,11 +277,11 @@ Vue.component('normal-dimension-galaxy-row', {
     galaxySumDisplay: function() {
       const galaxies = this.galaxies;
       let sum = galaxies.normal.toString();
-      if (galaxies.extra > 0) {
-        sum += " + " + galaxies.extra;
+      if (galaxies.replicanti > 0) {
+        sum += " + " + galaxies.replicanti;
       }
-      if (galaxies.free > 0) {
-        sum += " + " + galaxies.free;
+      if (galaxies.dilation > 0) {
+        sum += " + " + galaxies.dilation;
       }
       return sum;
     },
@@ -291,26 +291,17 @@ Vue.component('normal-dimension-galaxy-row', {
   },
   methods: {
     secondSoftReset: function() {
-      secondSoftResetBtnClick();
+      galaxyResetBtnClick();
     },
     update() {
-      this.type = GalaxyType.current();
+      this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
-      this.galaxies.free = player.dilation.freeGalaxies;
-
-      let extraGals = player.replicanti.galaxies;
-      if (player.timestudy.studies.includes(225)) {
-        extraGals += Math.floor(player.replicanti.amount.e / 1000);
-      }
-      if (player.timestudy.studies.includes(226)) {
-        extraGals += Math.floor(player.replicanti.gal / 15);
-      }
-      this.galaxies.extra = extraGals;
-      const requirement = getGalaxyRequirement();
-      this.requirement.amount = requirement;
-      const tierRequirement = player.currentChallenge === "challenge4" ? 6 : 8;
-      this.requirement.tier = tierRequirement;
-      this.isAffordable = NormalDimension(tierRequirement).amount.gte(requirement);
+      this.galaxies.dilation = player.dilation.freeGalaxies;
+      this.galaxies.replicanti = Galaxy.totalReplicantiGalaxies;
+      const requirement = Galaxy.requirement;
+      this.requirement.amount = requirement.amount;
+      this.requirement.tier = requirement.tier;
+      this.isAffordable = requirement.isSatisfied;
     }
   },
   template:

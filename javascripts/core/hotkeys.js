@@ -9,7 +9,7 @@
 
 Keyboard.bindRepeatableHotkey("m", () => maxAll());
 Keyboard.bindRepeatableHotkey("d", () => softResetBtnClick());
-Keyboard.bindRepeatableHotkey("g", () => secondSoftResetBtnClick());
+Keyboard.bindRepeatableHotkey("g", () => galaxyResetBtnClick());
 Keyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 Keyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 Keyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());

@@ -184,7 +184,7 @@ function canBuyDimension(tier) {
 
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
   if (tier > player.resets + 4) return false;
-  if (tier > 1 && new DimensionStats(tier - 1).amount === 0 && player.eternities < 30) return false;
+  if (tier > 1 && NormalDimension(tier - 1).amount === 0 && player.eternities < 30) return false;
   return !((player.currentChallenge === "challenge4" || player.currentChallenge === "postc1") && tier >= 7);
 }
 
@@ -208,7 +208,7 @@ function getDimensionPowerMultiplier(tier) {
 
 function clearDimensions(amount) {
   for (let i = 1; i <= amount; i++) {
-    new DimensionStats(i).amount = new Decimal(0);
+    NormalDimension(i).amount = new Decimal(0);
   }
 }
 
@@ -380,7 +380,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (!canBuyDimension(tier)) return false;
   let money = new Decimal(player.money);
   if (money.eq(0)) return false;
-  const dimension = new DimensionStats(tier);
+  const dimension = NormalDimension(tier);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = player.costMultipliers[tier - 1];
@@ -390,7 +390,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const costUntil10 = dimension.cost.times(remainingUntil10);
 
   if (tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1")) {
-    let lowerDimension = new DimensionStats(tier - 2);
+    let lowerDimension = NormalDimension(tier - 2);
     if (lowerDimension.amount.lt(costUntil10)) return false;
     if (costUntil10.lt(lowerDimension.amount) && boughtBefore10 !== 0) {
       lowerDimension.amount = lowerDimension.amount.minus(costUntil10);
@@ -572,4 +572,73 @@ function getDimensionProductionPerSecond(tier) {
   }
   if (((player.currentChallenge !== "" && !player.currentChallenge.includes("post")) || !player.break) && ret.gte(Number.MAX_VALUE)) ret = ret.min("1e315");
   return ret;
+}
+
+class NormalDimensionInfo {
+  constructor(tier) {
+    const tierProps = NormalDimensionInfo.tierProps;
+    let props = tierProps[tier];
+    if (props === undefined) {
+      const name = TIER_NAMES[tier];
+      props = {
+        cost: name + "Cost",
+        amount: name + "Amount",
+        bought: name + "Bought",
+        pow: name + "Pow",
+      };
+      tierProps[tier] = props;
+    }
+    this._props = props;
+    this._player = player;
+  }
+
+  get cost() {
+    return this._player[this._props.cost];
+  }
+
+  set cost(value) {
+    this._player[this._props.cost] = value;
+  }
+
+  get amount() {
+    return this._player[this._props.amount];
+  }
+
+  set amount(value) {
+    this._player[this._props.amount] = value;
+  }
+
+  get bought() {
+    return this._player[this._props.bought];
+  }
+
+  set bought(value) {
+    this._player[this._props.bought] = value;
+  }
+
+  get boughtBefore10() {
+    return this.bought % 10;
+  }
+
+  get remainingUntil10() {
+    return 10 - this.boughtBefore10;
+  }
+
+  get costUntil10() {
+    return this.cost.times(this.remainingUntil10);
+  }
+
+  get pow() {
+    return this._player[this._props.pow];
+  }
+
+  set pow(value) {
+    this._player[this._props.pow] = value;
+  }
+}
+
+NormalDimensionInfo.tierProps = [];
+
+function NormalDimension(tier) {
+  return new NormalDimensionInfo(tier);
 }

@@ -264,3 +264,53 @@ function toggleAllInfDims() {
 }
 
 var infDimPow = 1
+
+class InfinityDimensionInfo {
+  constructor(tier) {
+    this._props = player[`infinityDimension${tier}`];
+  }
+
+  get cost() {
+    return this._props.cost;
+  }
+
+  set cost(value) {
+    this._props.cost = value;
+  }
+
+  get amount() {
+    return this._props.amount;
+  }
+
+  set amount(value) {
+    this._props.amount = value;
+  }
+
+  get bought() {
+    return this._props.bought;
+  }
+
+  set bought(value) {
+    this._props.bought = value;
+  }
+
+  get power() {
+    return this._props.power;
+  }
+
+  set power(value) {
+    this._props.power = value;
+  }
+
+  get baseAmount() {
+    return this._props.baseAmount;
+  }
+
+  set baseAmount(value) {
+    this._props.baseAmount = value;
+  }
+}
+
+function InfinityDimension(tier) {
+  return new InfinityDimensionInfo(tier);
+}

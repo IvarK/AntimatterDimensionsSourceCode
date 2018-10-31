@@ -165,3 +165,13 @@ function buyMaxTimeDimensions(threshold) {
   }
   updateEternityUpgrades()
 }
+
+class TimeDimensionInfo {
+  constructor(tier) {
+
+  }
+}
+
+function TimeDimension(tier) {
+  return new TimeDimensionInfo(tier);
+}

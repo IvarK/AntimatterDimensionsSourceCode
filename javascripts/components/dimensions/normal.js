@@ -170,7 +170,7 @@ Vue.component('normal-dimension-row', {
       const isUnlocked = canBuyDimension(tier);
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = new DimensionStats(tier);
+      const dimension = NormalDimension(tier);
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
@@ -182,7 +182,7 @@ Vue.component('normal-dimension-row', {
       let canAffordSingle = false;
       let canAffordUntil10 = false;
       if (tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1")) {
-        const lowerTier = new DimensionStats(tier - 2);
+        const lowerTier = NormalDimension(tier - 2);
         const lowerTierAmount = lowerTier.amount;
         canAffordSingle = lowerTierAmount.gte(dimension.cost);
         canAffordUntil10 = lowerTierAmount.gte(dimension.costUntil10);
@@ -259,7 +259,7 @@ Vue.component('normal-dimension-shift-row', {
       this.isBoost = player.currentChallenge === "challenge4" ?
         requirement.tier === 6 :
         requirement.tier === 8;
-      this.isAvailable = new DimensionStats(requirement.tier).amount >= requirement.amount;
+      this.isAvailable = NormalDimension(requirement.tier).amount >= requirement.amount;
       this.resets = player.resets;
     }
   },
@@ -332,7 +332,7 @@ Vue.component('normal-dimension-galaxy-row', {
       this.requirement.amount = requirement;
       this.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
 
-      this.isAffordable = new DimensionStats(requirement.tier).amount >= requirement.amount;
+      this.isAffordable = NormalDimension(requirement.tier).amount >= requirement.amount;
     }
   },
   template:

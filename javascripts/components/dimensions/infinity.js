@@ -27,14 +27,14 @@ Vue.component('dimensions-infinity', {
         const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
         this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
       }
-      this.powerPerSecond.copyFrom(DimensionProduction(1));
+      this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
       this.incomeType = player.currentEternityChall === "eterc7" ? "Seventh Dimensions" : "Infinity Power";
       const isEC8Running = player.currentEternityChall === "eterc8";
       this.isEC8Running = isEC8Running;
       if (isEC8Running) {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
-      this.isAnyAutobuyerUnlocked = player.eternities > 10;
+      this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
     }
   },
   template:
@@ -72,7 +72,7 @@ Vue.component('infinity-dimension-row', {
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       bought: 0,
-      tier8HasRateOfChange: false,
+      hasRateOfChange: false,
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
@@ -87,19 +87,19 @@ Vue.component('infinity-dimension-row', {
       return DISPLAY_NAMES[this.tier];
     },
     rateOfChangeDisplay: function() {
-      return this.tier < 8 || this.tier8HasRateOfChange ?
+      return this.hasRateOfChange ?
         ` (+${this.shorten(this.rateOfChange)}%/s)` :
         String.empty;
     },
     costDisplay: function() {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
-    hardcapAmount: function() {
-      return shortenCosts(hardcapIDPurchases);
+    hardcapPurchases: function() {
+      return this.shortenCosts(HARDCAP_ID_PURCHASES);
     },
     capTooltip: function() {
       return this.isCapped ?
-        `Limited to ${this.hardcapAmount} upgrades (${this.shortenCosts(this.capIP)} IP)`:
+        `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`:
         undefined;
     }
   },
@@ -109,33 +109,25 @@ Vue.component('infinity-dimension-row', {
     },
     update() {
       const tier = this.tier;
-      const isUnlocked = player.infDimensionsUnlocked[tier - 1];
+      const dimension = InfinityDimension(tier);
+      const isUnlocked = dimension.isUnlocked;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = player[`infinityDimension${tier}`];
-      this.multiplier.copyFrom(DimensionPower(tier));
+      this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
       this.bought = dimension.bought;
-      let tier8HasRateOfChange = tier === 8 && ECTimesCompleted("eterc7") > 0;
-      if (tier === 8) {
-        this.tier8HasRateOfChange = tier8HasRateOfChange;
+      const hasRateOfChange = dimension.hasRateOfChange;
+      this.hasRateOfChange = hasRateOfChange;
+      if (hasRateOfChange) {
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
-      if (tier < 8 || tier8HasRateOfChange) {
-        this.rateOfChange.copyFrom(DimensionRateOfChange(tier));
-      }
-      this.isAutobuyerUnlocked = player.eternities >= 10 + tier;
+      this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
-      this.isAffordable = player.infinityPoints.gte(dimension.cost);
-      const isCapped = tier < 8 && dimension.baseAmount >= 10 * hardcapIDPurchases;
+      this.isAffordable = dimension.isAffordable;
+      const isCapped = dimension.isCapped;
       this.isCapped = isCapped;
       if (isCapped) {
-        let initCost = new Decimal(initIDCost[tier]);
-        const costMult = infCostMults[tier];
-        const ec12Completions = ECTimesCompleted("eterc12");
-        if (ec12Completions) {
-          initCost = Math.pow(costMult, 1 - ec12Completions * 0.008);
-        }
-        this.capIP.copyFrom(Decimal.pow(initCost, hardcapIDPurchases).times(initCost));
+        this.capIP.copyFrom(dimension.hardcapIPAmount);
       }
     }
   },

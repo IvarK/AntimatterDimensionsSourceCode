@@ -31,3 +31,17 @@ function setInfChallengeTime(id, time) {
     // Use splice so Vue could track changes
     player.infchallengeTimes.splice(id, 1, time);
 }
+
+function isQuickResettable(challenge) {
+  const resettableChallenges = [
+    "challenge12",
+    "challenge9",
+    "challenge5",
+    "postc1",
+    "postc4",
+    "postc5",
+    "postc6",
+    "postc8"
+  ];
+  return resettableChallenges.includes(challenge);
+}

@@ -32,7 +32,7 @@ Vue.component('dimensions-time', {
       this.totalUpgrades = player.totalTickGained;
       this.timeShards.copyFrom(player.timeShards);
       this.upgradeThreshold.copyFrom(player.tickThreshold);
-      this.shardsPerSecond.copyFrom(getTimeDimensionProduction(1));
+      this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
       const isEC7Running = player.currentEternityChall === "eterc7";
       this.incomeType = isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
@@ -97,17 +97,17 @@ Vue.component('time-dimension-row', {
     },
     update() {
       const tier = this.tier;
-      const isUnlocked = tier < 5 || player.dilation.studies.includes(tier - 3);
+      const dimension = TimeDimension(tier);
+      const isUnlocked = dimension.isUnlocked;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      this.multiplier.copyFrom(getTimeDimensionPower(tier));
-      const dimension = player[`timeDimension${tier}`];
+      this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
       if (tier < 8) {
-        this.rateOfChange.copyFrom(getTimeDimensionRateOfChange(tier));
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.cost.copyFrom(dimension.cost);
-      this.isAffordable = player.eternityPoints.gte(dimension.cost);
+      this.isAffordable = dimension.isAffordable;
     }
   },
   template:

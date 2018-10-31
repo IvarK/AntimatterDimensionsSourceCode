@@ -3,10 +3,6 @@ class PlayerProgress {
     this._player = player;
   }
 
-  get isSacrificeUnlocked() {
-    return this._player.infinitied > 0 || this._player.resets > 4;
-  }
-
   get isRealityUnlocked() {
     return this._player.realities > 0;
   }
@@ -25,10 +21,6 @@ class PlayerProgress {
 
   static of(player) {
     return new PlayerProgress(player);
-  }
-
-  static get isSacrificeUnlocked() {
-    return PlayerProgress.current.isSacrificeUnlocked;
   }
 
   static infinityUnlocked() {

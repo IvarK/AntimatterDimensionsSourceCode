@@ -668,9 +668,9 @@ function updateInfCosts() {
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
         document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
-        document.getElementById("71desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000"))+"x"
-        document.getElementById("72desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))+"x"
-        document.getElementById("73desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.005).max(1).min("1e1300"))+"x"
+        document.getElementById("71desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.25).max(1).min("1e210000"))+"x"
+        document.getElementById("72desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))+"x"
+        document.getElementById("73desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.005).max(1).min("1e1300"))+"x"
         document.getElementById("82desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0000109, Decimal.pow(player.resets, 2)))+"x"
         document.getElementById("83desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0004, player.totalTickGained).min("1e30"))+"x"
         document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
@@ -701,7 +701,7 @@ function updateInfCosts() {
         document.getElementById("192desc").textContent = "You can get beyond "+shortenMoney(Number.MAX_VALUE)+" replicantis, but the interval is increased the more you have"
         document.getElementById("193desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.03, player.eternities).min("1e13000"))+"x"
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
-        document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
+        document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1)).div(Sacrifice.totalBoost)).max(1).min(new Decimal("1e125000")))+"x"
         document.getElementById("225desc").textContent = "Currently: +" + Math.floor(player.replicanti.amount.exponent / 1000) + " RG"
         document.getElementById("226desc").textContent = "Currently: +" + Math.floor(player.replicanti.gal / 15) + " RG"
 
@@ -1112,79 +1112,6 @@ function resetMoney() {
     else if (isAchEnabled("r21")) money = 100;
     else if (player.reality.perks.includes(51)) money = 100;
     player.money = new Decimal(money);
-}
-
-function calcSacrificeBoost() {
-    if (player.firstAmount == 0) return new Decimal(1);
-    if (player.challenges.includes("postc2")) {
-        if (player.timestudy.studies.includes(228)) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.013).max(1)
-        if (isAchEnabled("r88")) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.011).max(1)
-        return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.01).max(1)
-    }
-    if (player.currentChallenge != "challenge11") {
-        var sacrificePow=2;
-        if (isAchEnabled("r32")) sacrificePow += 0.2;
-        if (isAchEnabled("r57")) sacrificePow += 0.2; //this upgrade was too OP lol
-        return Decimal.pow((player.firstAmount.e/10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
-    } else {
-        return player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
-    }
-}
-
-function calcTotalSacrificeBoost() {
-    if (player.sacrificed == 0) return new Decimal(1);
-    if (player.challenges.includes("postc2")) {
-        if (player.timestudy.studies.includes(228)) return player.sacrificed.pow(0.013).max(1)
-        if (isAchEnabled("r88")) return player.sacrificed.pow(0.011).max(1)
-        else return player.sacrificed.pow(0.01)
-    }
-    if (player.currentChallenge != "challenge11") {
-        var sacrificePow=2;
-        if (isAchEnabled("r32")) sacrificePow += 0.2;
-        if (isAchEnabled("r57")) sacrificePow += 0.2;
-        return Decimal.pow((player.sacrificed.e/10.0), sacrificePow);
-    } else {
-        return player.sacrificed.pow(0.05) //this is actually off but like im not sure how youd make it good. not that it matters.
-    }
-}
-
-
-function sacrifice(auto) {
-    if (player.eightAmount == 0) return false;
-    if (player.resets < 5) return false
-    if (player.currentEternityChall == "eterc3") return false
-    if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE)) return false
-    if (player.currentChallenge == "challenge11" && (calcTotalSacrificeBoost().gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))) return false
-    if (!auto) floatText(8, "x" + shortenMoney(calcSacrificeBoost()))
-    if (calcSacrificeBoost().gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference");
-    player.eightPow = player.eightPow.times(calcSacrificeBoost())
-    player.sacrificed = player.sacrificed.plus(player.firstAmount);
-    if (player.currentChallenge != "challenge11") {
-        if (player.currentChallenge == "challenge7" && !isAchEnabled("r118")) clearDimensions(6);
-        else if (!isAchEnabled("r118")) clearDimensions(7);
-    } else {
-        player.chall11Pow = player.chall11Pow.times(calcSacrificeBoost())
-        if (!isAchEnabled("r118")) resetDimensions();
-        player.money = new Decimal(100)
-
-    }
-    if (calcTotalSacrificeBoost() >= 600) giveAchievement("The Gods are pleased");
-    if (calcTotalSacrificeBoost().gte("1e9000")) giveAchievement("IT'S OVER 9000");
-}
-
-
-
-
-function sacrificeBtnClick() {
-    if (player.resets < 5) return false
-    if (!player.options.noSacrificeConfirmation) {
-        if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
-            return false;
-        }
-    }
-
-    auto = false;
-    return sacrifice();
 }
 
 function updateAutobuyers() {
@@ -2437,7 +2364,7 @@ function gameLoop(diff) {
     if (player.currentChallenge == "postc2") {
         postC2Count++;
         if (postC2Count >= 8 || diff > 8000) {
-            sacrifice();
+            sacrificeReset();
             postC2Count = 0;
         }
     }
@@ -2524,23 +2451,39 @@ function gameLoop(diff) {
     player.thisEternity += diff
     player.thisReality += diff
 
-    for (let tier=1;tier<9;tier++) {
+    for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
-        player["infinityDimension" + tier].amount = player["infinityDimension" + tier].amount.plus(DimensionProduction(tier + 1).times(diff / 10000))
+        const dimension = InfinityDimension(tier);
+        dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
-      if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
+      if (tier < 8) {
+        const dimension = TimeDimension(tier);
+        dimension.amount = dimension.amount.plus(TimeDimension(tier + 1).productionPerSecond.times(diff / 10000))
+      }
     }
 
-    if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff/1000))
-    else if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(DimensionProduction(1).times(diff/1000))
+    const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
+    if (player.currentEternityChall === "eterc7") {
+      if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") {
+        player.seventhAmount = player.seventhAmount.plus(ID1ProductionThisTick)
+      }
+    }
+    else {
+      player.infinityPower = player.infinityPower.plus(ID1ProductionThisTick);
+    }
 
+    const TD1Production = TimeDimension(1).productionPerSecond;
+    const TD1ProductionThisTick = TD1Production.times(diff/1000);
+    if (player.currentEternityChall === "eterc7") {
+      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
+    }
+    else {
+      player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
+    }
 
-
-
-    if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff/1000))
-    else player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff/1000))
-
-    if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    if (TD1Production.gt(0) && ECTimesCompleted("eterc7") > 0) {
+      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    }
 
     var tickmult = 1.33;
     if (player.timestudy.studies.includes(171)) tickmult = 1.25;
@@ -2675,7 +2618,7 @@ function gameLoop(diff) {
     } else {
         Marathon = 0;
     }
-    if (DimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
+    if (InfinityDimension(1).productionPerSecond.gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
         Marathon2+=player.options.updateRate/1000;
         if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
     } else {
@@ -2897,7 +2840,7 @@ function gameLoop(diff) {
     document.getElementById("ec4reward").textContent = "Reward: Infinity Dimension multiplier from unspent IP, Currently: "+shortenMoney(player.infinityPoints.pow(0.003 + ECTimesCompleted("eterc4")*0.002).min(new Decimal("1e200")))+"x"
     document.getElementById("ec5reward").textContent = "Reward: Galaxy cost scaling starts "+((ECTimesCompleted("eterc5")*5))+" galaxies later."
     document.getElementById("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase, Currently: "+player.dimensionMultDecrease.toFixed(1)+"x "
-    document.getElementById("ec7reward").textContent = "Reward: First Time dimension produces Eighth Infinity Dimensions, Currently: "+shortenMoney(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0))+" per second. "
+    document.getElementById("ec7reward").textContent = "Reward: First Time dimension produces Eighth Infinity Dimensions, Currently: "+shortenMoney(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0))+" per second. "
     document.getElementById("ec8reward").textContent = "Reward: Infinity power powers up replicanti galaxies, Currently: " + (Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0) * 100).toFixed(2) + "%"
     document.getElementById("ec9reward").textContent = "Reward: Infinity Dimension multiplier based on time shards, Currently: "+shortenMoney(player.timeShards.pow(ECTimesCompleted("eterc9")*0.1).min(new Decimal("1e400")))+"x "
     document.getElementById("ec10reward").textContent = "Reward: Time dimensions gain a multiplier from infinitied stat, Currently: "+shortenMoney(new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002+1, 1)).pow((player.timestudy.studies.includes(31)) ? 4 : 1))+"x "
@@ -2911,8 +2854,6 @@ function gameLoop(diff) {
     // else document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
 
     document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
-
-    var shiftRequirement = getShiftRequirement(0);
 
     if (player.infDimensionsUnlocked[7] == false && player.break && player.eternities <= 24) {
         document.getElementById("newDimensionButton").style.display = "inline-block"
@@ -3123,14 +3064,14 @@ function updateChart(first) {
 updateChart(true);
 
 function dimBoolean() {
-    var name = TIER_NAMES[getShiftRequirement(0).tier]
+    const requirement = DimBoost.requirement;
     if (!player.autobuyers[9].isOn) return false
     if (player.autobuyers[9].ticks*100 < player.autobuyers[9].interval) return false
-    if (player[name + "Amount"] > getShiftRequirement(0)) return true
-    if (player.eternities < 10 && player[name + "Amount"] < getShiftRequirement(player.autobuyers[9].bulk-1).amount) return false
+    if (requirement.isSatisfied) return true
+    if (player.eternities < 10 && !DimBoost.bulkRequirement(player.autobuyers[9].bulk - 1).isSatisfied) return false
     if (player.overXGalaxies <= player.galaxies) return true
-    if ((player.currentChallenge =="challenge4" || player.currentChallenge == "postc1") && player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 6) return false
-    if (player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 8) return false
+    if ((player.currentChallenge =="challenge4" || player.currentChallenge == "postc1") && player.autobuyers[9].priority < requirement.amount && requirement.tier == 6) return false
+    if (player.autobuyers[9].priority < requirement.amount && requirement.tier == 8) return false
     return true
 }
 
@@ -3138,7 +3079,7 @@ function dimBoolean() {
 function maxBuyGalaxies(manual) {
     if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc1" || player.currentChallenge == "postc7") return
     if (player.autobuyers[10].priority > player.galaxies || manual) {
-        while(player.eightAmount >= getGalaxyRequirement() && (player.autobuyers[10].priority > player.galaxies || manual)) {
+        while(player.eightAmount >= Galaxy.requirement.amount && (player.autobuyers[10].priority > player.galaxies || manual)) {
             if (Notation.current().isCancer()) player.spreadingCancer += 1;
             player.galaxies++
         }
@@ -3194,18 +3135,15 @@ function maxBuyDimBoosts(manual) {
     tryBoost(maxBoosts - 1);
 
     function ensureShift(bulk) {
-        requirement = getShiftRequirement(bulk);
-        if (requirementIsMet(requirement)) {
+        requirement = DimBoost.bulkRequirement(bulk);
+        if (requirement.isSatisfied) {
             return requirement;
         }
         tryBoost(bulk);
-        return undefined;
+        return false;
     }
     function canBoost(bulk) {
-        return requirementIsMet(getShiftRequirement(bulk));
-    }
-    function requirementIsMet(requirement) {
-        return player[TIER_NAMES[requirement.tier]+"Amount"] >= requirement.amount;
+        return DimBoost.bulkRequirement(bulk).isSatisfied;
     }
     function tryBoost(bulk) {
         if (bulk > 0) {
@@ -3265,11 +3203,11 @@ function autoBuyerTick() {
 
 
     if (player.autobuyers[10]%1 !== 0) {
-        if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && (player.currentChallenge == "challenge4" ? player.sixthAmount >= getGalaxyRequirement() : player.eightAmount >= getGalaxyRequirement())) {
+        if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && Galaxy.requirement.isSatisfied) {
             if (player.eternities < 9 || player.autobuyers[10].bulk == 0) {
                 if (player.autobuyers[10].isOn && player.autobuyers[10].priority > player.galaxies) {
                     autoS = false;
-                    secondSoftResetBtnClick();
+                    galaxyResetBtnClick();
                     player.autobuyers[10].ticks = 1;
                 }
             } else if (player.autobuyers[10].isOn){
@@ -3300,8 +3238,8 @@ function autoBuyerTick() {
     }
 
     if (player.autoSacrifice%1 !== 0) {
-        if (calcSacrificeBoost().gte(player.autoSacrifice.priority) && player.autoSacrifice.isOn) {
-            sacrifice(true)
+        if (Sacrifice.nextBoost.gte(player.autoSacrifice.priority) && player.autoSacrifice.isOn) {
+          sacrificeReset(true)
         }
     }
 

@@ -1,24 +1,77 @@
-function getDimensionBoostPower() {
-  if (player.currentChallenge == "challenge11" || player.currentChallenge == "postc1") return Decimal.fromNumber(1);
+class DimBoostRequirement {
+  constructor(tier, amount) {
+    this.tier = tier;
+    this.amount = amount;
+  }
 
-  var ret = 2
-  if (player.infinityUpgrades.includes("resetMult")) ret = 2.5
-  if (player.challenges.includes("postc7")) ret = 4
-  if (player.currentChallenge == "postc7" || player.timestudy.studies.includes(81)) ret = 10
+  get isSatisfied() {
+    return NormalDimension(this.tier).amount.gte(this.amount);
+  }
+}
 
-  if (isAchEnabled("r101")) ret *= 1.01
-  if (isAchEnabled("r142")) ret *= 1.5
-  ret *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"))
-  if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(ret);
-  if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).max(1).times(ret)
-  
-  return Decimal.fromValue(ret)
+class DimBoost {
+  static get power() {
+    if (player.currentChallenge === "challenge11" || player.currentChallenge === "postc1") {
+      return Decimal.fromNumber(1);
+    }
+
+    let power = 2;
+    if (player.infinityUpgrades.includes("resetMult")) power = 2.5;
+    if (player.challenges.includes("postc7")) power = 4;
+    if (player.currentChallenge === "postc7" || player.timestudy.studies.includes(81)) power = 10;
+
+    if (isAchEnabled("r101")) power *= 1.01;
+    if (isAchEnabled("r142")) power *= 1.5;
+    power *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"));
+    if (player.timestudy.studies.includes(83)) power = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(power);
+    if (player.timestudy.studies.includes(231)) power = Decimal.pow(player.resets, 0.3).max(1).times(power);
+
+    return Decimal.fromValue(power);
+  }
+
+  static get maxShiftTier() {
+    return player.currentChallenge === "challenge4" ? 6 : 8;
+  }
+
+  static get isShift() {
+    // Player starts with 4 unlocked dimensions,
+    // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
+    return player.resets + 4 < this.maxShiftTier;
+  }
+
+  static get requirement() {
+    return this.bulkRequirement(0);
+  }
+
+  static bulkRequirement(bulk) {
+    let targetResets = player.resets + bulk;
+    let tier = Math.min(targetResets + 4, this.maxShiftTier);
+    let amount = 20;
+    let mult = 15;
+    if (player.timestudy.studies.includes(211)) mult -= 5;
+    if (player.timestudy.studies.includes(222)) mult -= 2;
+
+    if (tier === 6 && player.currentChallenge === "challenge4") {
+      amount += Math.ceil((targetResets - 2) * 20);
+    }
+    else if (tier === 8) {
+      amount += Math.ceil((targetResets - 4) * mult);
+    }
+    if (player.currentEternityChall === "eterc5") {
+      amount += Math.pow(targetResets, 3) + targetResets;
+    }
+
+    if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+    if (player.challenges.includes("postc5")) amount -= 1;
+
+    return new DimBoostRequirement(tier, amount);
+  }
 }
 
 function applyDimensionBoost() {
-    const power = getDimensionBoostPower();
-    for (var i = 1; i <= 8; i++) {
-        player[TIER_NAMES[i] + "Pow"] = power.pow(player.resets + 1 - i).max(1)
+    const power = DimBoost.power;
+    for (let tier = 1; tier <= 8; tier++) {
+        NormalDimension(tier).pow = power.pow(player.resets + 1 - tier).max(1);
     }
 }
 
@@ -89,41 +142,14 @@ function hidePreMilestone30Elements() {
     }
 }
 
-function getShiftRequirement(bulk) {
-    let maxShiftTier = player.currentChallenge === "challenge4" ? 6 : 8;
-    let targetResets = player.resets + bulk;
-    let tier = Math.min(targetResets + 4, maxShiftTier);
-    let amount = 20;
-    let mult = 15;
-    if (player.timestudy.studies.includes(211)) mult -= 5;
-    if (player.timestudy.studies.includes(222)) mult -= 2;
-
-    if (tier === 6 && player.currentChallenge === "challenge4") {
-        amount += Math.ceil((targetResets - 2) * 20);
-    }
-    else if (tier === 8) {
-        amount += Math.ceil((targetResets - 4) * mult);
-    }
-    if (player.currentEternityChall === "eterc5") {
-        amount += Math.pow(targetResets, 3) + targetResets;
-    }
-
-    if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
-    if (player.challenges.includes("postc5")) amount -= 1;
-
-    return { tier: tier, amount: amount };
-}
-
 function softResetBtnClick() {
-  var name = TIER_NAMES[getShiftRequirement(0).tier]
-  if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getShiftRequirement(0).amount) return;
+  if ((!player.break && player.money.gt(Number.MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
   auto = false;
   if (player.infinityUpgrades.includes("bulkBoost")) maxBuyDimBoosts(true);
   else softReset(1)
   
-  for (var tier = 1; tier<9; tier++) {
-    var name = TIER_NAMES[tier];
-    var mult = getDimensionBoostPower().pow(player.resets + 1 - tier)
-    if (mult > 1) floatText(tier, "x" + shortenDimensions(mult))
+  for (let tier = 1; tier<9; tier++) {
+    const mult = DimBoost.power.pow(player.resets + 1 - tier);
+    if (mult > 1) floatText(tier, "x" + shortenDimensions(mult));
   }
 }

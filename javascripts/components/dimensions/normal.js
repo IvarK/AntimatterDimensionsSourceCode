@@ -32,17 +32,7 @@ Vue.component('dimensions-normal', {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      const resettableChallenges = [
-        "challenge12",
-        "challenge9",
-        "challenge5",
-        "postc1",
-        "postc4",
-        "postc5",
-        "postc6",
-        "postc8"
-      ];
-      this.isQuickResetAvailable = resettableChallenges.includes(player.currentChallenge);
+      this.isQuickResetAvailable = isQuickResettable(player.currentChallenge);
     }
   },
   template:
@@ -95,11 +85,11 @@ Vue.component('normal-dimensions-top-row', {
       maxAll();
     },
     update() {
-      const isSacrificeUnlocked = PlayerProgress.isSacrificeUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
-      this.sacrificeBoost.copyFrom(calcSacrificeBoost());
+      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     }
   },
   template:
@@ -170,28 +160,17 @@ Vue.component('normal-dimension-row', {
       const isUnlocked = canBuyDimension(tier);
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
-      const dimension = new DimensionStats(tier);
+      const dimension = NormalDimension(tier);
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
       if (tier < 8) {
-        this.rateOfChange.copyFrom(getDimensionRateOfChange(tier));
+        this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
-      let canAffordSingle = false;
-      let canAffordUntil10 = false;
-      if (tier >= 3 && (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1")) {
-        const lowerTier = new DimensionStats(tier - 2);
-        const lowerTierAmount = lowerTier.amount;
-        canAffordSingle = lowerTierAmount.gte(dimension.cost);
-        canAffordUntil10 = lowerTierAmount.gte(dimension.costUntil10);
-      } else {
-        canAffordSingle = canAfford(dimension.cost);
-        canAffordUntil10 = canAfford(dimension.costUntil10);
-      }
-      this.isAffordable = canAffordSingle;
-      this.isAffordableUntil10 = canAffordUntil10;
+      this.isAffordable = dimension.isAffordable;
+      this.isAffordableUntil10 = dimension.isAffordableUntil10;
     },
   },
   template:
@@ -232,14 +211,14 @@ Vue.component('normal-dimension-shift-row', {
         tier: 1,
         amount: 1
       },
-      isBoost: false,
-      isAvailable: false,
+      isShift: false,
+      isAffordable: false,
       resets: 0
     };
   },
   computed: {
     name: function() {
-      return this.isBoost ? "Boost" : "Shift";
+      return this.isShift ? "Shift" : "Boost";
     },
     dimName: function() {
       return DISPLAY_NAMES[this.requirement.tier];
@@ -253,13 +232,11 @@ Vue.component('normal-dimension-shift-row', {
       softResetBtnClick();
     },
     update() {
-      const requirement = getShiftRequirement(0);
+      const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBoost = player.currentChallenge === "challenge4" ?
-        requirement.tier === 6 :
-        requirement.tier === 8;
-      this.isAvailable = new DimensionStats(requirement.tier).amount >= requirement.amount;
+      this.isAffordable = requirement.isSatisfied;
+      this.isShift = DimBoost.isShift;
       this.resets = player.resets;
     }
   },
@@ -270,7 +247,7 @@ Vue.component('normal-dimension-shift-row', {
       </div>
       <store-button
         fontSize="9px"
-        :enabled="isAvailable"
+        :enabled="isAffordable"
         @click="softReset"
         style="height: 25px; width: 200px; margin-right: 100px">
         {{buttonText}}
@@ -284,8 +261,8 @@ Vue.component('normal-dimension-galaxy-row', {
       type: String.empty,
       galaxies: {
         normal: 0,
-        extra: 0,
-        free: 0
+        replicanti: 0,
+        dilation: 0
       },
       requirement: {
         tier: 1,
@@ -298,11 +275,11 @@ Vue.component('normal-dimension-galaxy-row', {
     galaxySumDisplay: function() {
       const galaxies = this.galaxies;
       let sum = galaxies.normal.toString();
-      if (galaxies.extra > 0) {
-        sum += " + " + galaxies.extra;
+      if (galaxies.replicanti > 0) {
+        sum += " + " + galaxies.replicanti;
       }
-      if (galaxies.free > 0) {
-        sum += " + " + galaxies.free;
+      if (galaxies.dilation > 0) {
+        sum += " + " + galaxies.dilation;
       }
       return sum;
     },
@@ -312,27 +289,17 @@ Vue.component('normal-dimension-galaxy-row', {
   },
   methods: {
     secondSoftReset: function() {
-      secondSoftResetBtnClick();
+      galaxyResetBtnClick();
     },
     update() {
-      this.type = GalaxyType.current();
+      this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
-      this.galaxies.free = player.dilation.freeGalaxies;
-
-      let extraGals = player.replicanti.galaxies;
-      if (player.timestudy.studies.includes(225)) {
-        extraGals += Math.floor(player.replicanti.amount.e / 1000);
-      }
-      if (player.timestudy.studies.includes(226)) {
-        extraGals += Math.floor(player.replicanti.gal / 15);
-      }
-      this.galaxies.extra = extraGals;
-
-      const requirement = getGalaxyRequirement();
-      this.requirement.amount = requirement;
-      this.requirement.tier = player.currentChallenge === "challenge4" ? 6 : 8;
-
-      this.isAffordable = new DimensionStats(requirement.tier).amount >= requirement.amount;
+      this.galaxies.dilation = player.dilation.freeGalaxies;
+      this.galaxies.replicanti = Galaxy.totalReplicantiGalaxies;
+      const requirement = Galaxy.requirement;
+      this.requirement.amount = requirement.amount;
+      this.requirement.tier = requirement.tier;
+      this.isAffordable = requirement.isSatisfied;
     }
   },
   template:

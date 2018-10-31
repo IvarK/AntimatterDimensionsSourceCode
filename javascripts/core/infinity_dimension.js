@@ -42,7 +42,7 @@ function DimensionPower(tier) {
   }
 
   if (player.timestudy.studies.includes(72) && tier == 4) {
-      mult = mult.times(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))
+      mult = mult.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
   }
 
   if (player.timestudy.studies.includes(82)) {

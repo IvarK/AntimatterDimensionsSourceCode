@@ -668,9 +668,9 @@ function updateInfCosts() {
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
         document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
-        document.getElementById("71desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000"))+"x"
-        document.getElementById("72desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))+"x"
-        document.getElementById("73desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.005).max(1).min("1e1300"))+"x"
+        document.getElementById("71desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.25).max(1).min("1e210000"))+"x"
+        document.getElementById("72desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))+"x"
+        document.getElementById("73desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.005).max(1).min("1e1300"))+"x"
         document.getElementById("82desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0000109, Decimal.pow(player.resets, 2)))+"x"
         document.getElementById("83desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.0004, player.totalTickGained).min("1e30"))+"x"
         document.getElementById("91desc").textContent = "Currently: "+shortenMoney(Decimal.pow(10, Math.min(player.thisEternity/100, 18000)/60))+"x"
@@ -701,7 +701,7 @@ function updateInfCosts() {
         document.getElementById("192desc").textContent = "You can get beyond "+shortenMoney(Number.MAX_VALUE)+" replicantis, but the interval is increased the more you have"
         document.getElementById("193desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.03, player.eternities).min("1e13000"))+"x"
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
-        document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1)).div(calcTotalSacrificeBoost())).max(1).min(new Decimal("1e125000")))+"x"
+        document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1)).div(Sacrifice.totalBoost)).max(1).min(new Decimal("1e125000")))+"x"
         document.getElementById("225desc").textContent = "Currently: +" + Math.floor(player.replicanti.amount.exponent / 1000) + " RG"
         document.getElementById("226desc").textContent = "Currently: +" + Math.floor(player.replicanti.gal / 15) + " RG"
 
@@ -2364,7 +2364,7 @@ function gameLoop(diff) {
     if (player.currentChallenge == "postc2") {
         postC2Count++;
         if (postC2Count >= 8 || diff > 8000) {
-            sacrifice();
+            sacrificeReset();
             postC2Count = 0;
         }
     }
@@ -3227,8 +3227,8 @@ function autoBuyerTick() {
     }
 
     if (player.autoSacrifice%1 !== 0) {
-        if (calcSacrificeBoost().gte(player.autoSacrifice.priority) && player.autoSacrifice.isOn) {
-            sacrifice(true)
+        if (Sacrifice.nextBoost.gte(player.autoSacrifice.priority) && player.autoSacrifice.isOn) {
+          sacrificeReset(true)
         }
     }
 

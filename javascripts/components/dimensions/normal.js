@@ -85,11 +85,11 @@ Vue.component('normal-dimensions-top-row', {
       maxAll();
     },
     update() {
-      const isSacrificeUnlocked = PlayerProgress.isSacrificeUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
-      this.sacrificeBoost.copyFrom(calcSacrificeBoost());
+      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     }
   },
   template:

@@ -557,7 +557,7 @@ if (player.version < 5) {
       player.version = 10
       if (player.timestudy.studies.includes(72)) {
           for (i=4; i<8; i++) {
-              player["infinityDimension"+i].amount = player["infinityDimension"+i].amount.div(calcTotalSacrificeBoost().pow(0.02))
+              player["infinityDimension"+i].amount = player["infinityDimension"+i].amount.div(Sacrifice.totalBoost.pow(0.02))
           }
       }
   }

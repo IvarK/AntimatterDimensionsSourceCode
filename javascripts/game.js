@@ -2451,28 +2451,39 @@ function gameLoop(diff) {
     player.thisEternity += diff
     player.thisReality += diff
 
-    for (let tier=1;tier<9;tier++) {
-      const dimension = InfinityDimension(tier);
+    for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
+        const dimension = InfinityDimension(tier);
         dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
-      if (tier < 8) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + 1).times(diff / 10000))
+      if (tier < 8) {
+        const dimension = TimeDimension(tier);
+        dimension.amount = dimension.amount.plus(TimeDimension(tier + 1).productionPerSecond.times(diff / 10000))
+      }
     }
 
-    const ID1Production = InfinityDimension(1).productionPerSecond.times(diff / 1000);
+    const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
     if (player.currentEternityChall === "eterc7") {
       if (player.currentChallenge !== "challenge4" && player.currentChallenge !== "postc1") {
-        player.seventhAmount = player.seventhAmount.plus(ID1Production)
+        player.seventhAmount = player.seventhAmount.plus(ID1ProductionThisTick)
       }
     }
     else {
-      player.infinityPower = player.infinityPower.plus(ID1Production);
+      player.infinityPower = player.infinityPower.plus(ID1ProductionThisTick);
     }
 
-    if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff/1000))
-    else player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff/1000))
+    const TD1Production = TimeDimension(1).productionPerSecond;
+    const TD1ProductionThisTick = TD1Production.times(diff/1000);
+    if (player.currentEternityChall === "eterc7") {
+      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
+    }
+    else {
+      player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
+    }
 
-    if (getTimeDimensionProduction(1).gt(0) && ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    if (TD1Production.gt(0) && ECTimesCompleted("eterc7") > 0) {
+      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    }
 
     var tickmult = 1.33;
     if (player.timestudy.studies.includes(171)) tickmult = 1.25;
@@ -2829,7 +2840,7 @@ function gameLoop(diff) {
     document.getElementById("ec4reward").textContent = "Reward: Infinity Dimension multiplier from unspent IP, Currently: "+shortenMoney(player.infinityPoints.pow(0.003 + ECTimesCompleted("eterc4")*0.002).min(new Decimal("1e200")))+"x"
     document.getElementById("ec5reward").textContent = "Reward: Galaxy cost scaling starts "+((ECTimesCompleted("eterc5")*5))+" galaxies later."
     document.getElementById("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase, Currently: "+player.dimensionMultDecrease.toFixed(1)+"x "
-    document.getElementById("ec7reward").textContent = "Reward: First Time dimension produces Eighth Infinity Dimensions, Currently: "+shortenMoney(getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0))+" per second. "
+    document.getElementById("ec7reward").textContent = "Reward: First Time dimension produces Eighth Infinity Dimensions, Currently: "+shortenMoney(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0))+" per second. "
     document.getElementById("ec8reward").textContent = "Reward: Infinity power powers up replicanti galaxies, Currently: " + (Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0) * 100).toFixed(2) + "%"
     document.getElementById("ec9reward").textContent = "Reward: Infinity Dimension multiplier based on time shards, Currently: "+shortenMoney(player.timeShards.pow(ECTimesCompleted("eterc9")*0.1).min(new Decimal("1e400")))+"x "
     document.getElementById("ec10reward").textContent = "Reward: Time dimensions gain a multiplier from infinitied stat, Currently: "+shortenMoney(new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002+1, 1)).pow((player.timestudy.studies.includes(31)) ? 4 : 1))+"x "

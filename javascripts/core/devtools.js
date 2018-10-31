@@ -469,8 +469,8 @@ dev.showProductionBreakdown = function() {
   let IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
   
   let totalTDMults = new Decimal(1);
-  for (let i = 1; i <= 8; i++) {
-    totalTDMults = totalTDMults.times(getTimeDimensionPower(i));
+  for (let tier = 1; tier <= 8; tier++) {
+    totalTDMults = totalTDMults.times(TimeDimension(tier).multiplier);
   }
   let boughtTDComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {

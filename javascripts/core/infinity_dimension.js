@@ -189,7 +189,7 @@ class InfinityDimensionInfo {
     if (tier === 8) {
       const ec7Completions = ECTimesCompleted("eterc7");
       if (ec7Completions) {
-        toGain = getTimeDimensionProduction(1).pow(ec7Completions * 0.2).minus(1).max(0)
+        toGain = TimeDimension(1).productionPerSecond.pow(ec7Completions * 0.2).minus(1).max(0)
       }
     }
     else {

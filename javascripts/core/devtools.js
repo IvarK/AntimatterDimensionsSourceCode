@@ -434,7 +434,7 @@ dev.showProductionBreakdown = function() {
   
   IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
   let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
-  let DBComponent = getDimensionBoostPower().pow(player.resets).pow(8).pow(IC4pow);
+  let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(player[TIER_NAMES[i] + 'Bought'] / 10));

@@ -2839,8 +2839,6 @@ function gameLoop(diff) {
 
     document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 
-    var shiftRequirement = getShiftRequirement(0);
-
     if (player.infDimensionsUnlocked[7] == false && player.break && player.eternities <= 24) {
         document.getElementById("newDimensionButton").style.display = "inline-block"
     } else document.getElementById("newDimensionButton").style.display = "none"
@@ -3050,14 +3048,14 @@ function updateChart(first) {
 updateChart(true);
 
 function dimBoolean() {
-    var name = TIER_NAMES[getShiftRequirement(0).tier]
+    const requirement = DimBoost.requirement;
     if (!player.autobuyers[9].isOn) return false
     if (player.autobuyers[9].ticks*100 < player.autobuyers[9].interval) return false
-    if (player[name + "Amount"] > getShiftRequirement(0)) return true
-    if (player.eternities < 10 && player[name + "Amount"] < getShiftRequirement(player.autobuyers[9].bulk-1).amount) return false
+    if (requirement.isSatisfied) return true
+    if (player.eternities < 10 && !DimBoost.bulkRequirement(player.autobuyers[9].bulk - 1).isSatisfied) return false
     if (player.overXGalaxies <= player.galaxies) return true
-    if ((player.currentChallenge =="challenge4" || player.currentChallenge == "postc1") && player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 6) return false
-    if (player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 8) return false
+    if ((player.currentChallenge =="challenge4" || player.currentChallenge == "postc1") && player.autobuyers[9].priority < requirement.amount && requirement.tier == 6) return false
+    if (player.autobuyers[9].priority < requirement.amount && requirement.tier == 8) return false
     return true
 }
 
@@ -3121,18 +3119,15 @@ function maxBuyDimBoosts(manual) {
     tryBoost(maxBoosts - 1);
 
     function ensureShift(bulk) {
-        requirement = getShiftRequirement(bulk);
-        if (requirementIsMet(requirement)) {
+        requirement = DimBoost.bulkRequirement(bulk);
+        if (requirement.isSatisfied) {
             return requirement;
         }
         tryBoost(bulk);
-        return undefined;
+        return false;
     }
     function canBoost(bulk) {
-        return requirementIsMet(getShiftRequirement(bulk));
-    }
-    function requirementIsMet(requirement) {
-        return player[TIER_NAMES[requirement.tier]+"Amount"] >= requirement.amount;
+        return DimBoost.bulkRequirement(bulk).isSatisfied;
     }
     function tryBoost(bulk) {
         if (bulk > 0) {

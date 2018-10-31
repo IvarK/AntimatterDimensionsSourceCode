@@ -211,14 +211,14 @@ Vue.component('normal-dimension-shift-row', {
         tier: 1,
         amount: 1
       },
-      isBoost: false,
-      isAvailable: false,
+      isShift: false,
+      isAffordable: false,
       resets: 0
     };
   },
   computed: {
     name: function() {
-      return this.isBoost ? "Boost" : "Shift";
+      return this.isShift ? "Shift" : "Boost";
     },
     dimName: function() {
       return DISPLAY_NAMES[this.requirement.tier];
@@ -232,13 +232,11 @@ Vue.component('normal-dimension-shift-row', {
       softResetBtnClick();
     },
     update() {
-      const requirement = getShiftRequirement(0);
+      const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isBoost = player.currentChallenge === "challenge4" ?
-        requirement.tier === 6 :
-        requirement.tier === 8;
-      this.isAvailable = NormalDimension(requirement.tier).amount >= requirement.amount;
+      this.isAffordable = requirement.isSatisfied;
+      this.isShift = DimBoost.isShift;
       this.resets = player.resets;
     }
   },
@@ -249,7 +247,7 @@ Vue.component('normal-dimension-shift-row', {
       </div>
       <store-button
         fontSize="9px"
-        :enabled="isAvailable"
+        :enabled="isAffordable"
         @click="softReset"
         style="height: 25px; width: 200px; margin-right: 100px">
         {{buttonText}}

@@ -1,4 +1,4 @@
-Vue.component('store-button', {
+Vue.component('primary-button', {
     props: {
         fontSize: String,
         enabled: {
@@ -13,30 +13,30 @@ Vue.component('store-button', {
     computed: {
       classObject: function() {
         return {
-          storebtn: this.enabled,
-          unavailablebtn: !this.enabled,
+          "c-primary-btn": true,
+          "c-primary-btn--disabled": !this.enabled,
         };
       }
     }
 });
 
-Vue.component('store-button-on-off', {
+Vue.component('primary-button-on-off', {
     props: {
         on: String,
         off: String,
         value: Boolean
     },
     template:
-        '<store-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</store-button>'
+        '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</primary-button>'
 });
 
-Vue.component('store-button-named-on-off', {
+Vue.component('primary-button-named-on-off', {
     props: {
         text: String,
         value: Boolean
     },
     template:
-        '<store-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</store-button>',
+        '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</primary-button>',
     computed: {
         displayText: function () {
             let text = this.text;

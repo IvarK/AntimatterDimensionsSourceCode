@@ -95,7 +95,7 @@ body {
     background: #dbd242
 }
 
-#progressbar {
+.c-progress-bar__fill {
     background-color: #4baf4e !important;
 }
 

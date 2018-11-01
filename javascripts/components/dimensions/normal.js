@@ -36,10 +36,10 @@ Vue.component('dimensions-normal', {
     }
   },
   template:
-    `<div style="margin-top: 5px">
+    `<div class="l-normal-dimensions-tab">
       <normal-dimensions-top-row></normal-dimensions-top-row>
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <div style="display: flex; flex-direction: column; margin: 0 8px">
+      <div class="l-normal-dimension-row-container l-normal-dimensions-tab__row-container">
         <normal-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -49,13 +49,12 @@ Vue.component('dimensions-normal', {
         <normal-dimension-shift-row></normal-dimension-shift-row>
         <normal-dimension-galaxy-row></normal-dimension-galaxy-row>
       </div>
-      <store-button
-        fontSize="12px"
-        style="width: 200px; height: 50px"
+      <primary-button
+        class="c-primary-btn--quick-reset"
         @click="quickReset"
         v-if="isQuickResetAvailable">
         Lose a reset, returning to the start of the reset
-      </store-button>
+      </primary-button>
       <normal-dimension-progress></normal-dimension-progress>
     </div>`
 });
@@ -93,27 +92,26 @@ Vue.component('normal-dimensions-top-row', {
     }
   },
   template:
-    `<div class="normal-dimensions-top-row">
+    `<div class="l-normal-dimensions-top-row">
       <input
         type="checkbox"
-        style="width:20px; height: 18px"
+        class="c-sacrifice-checkbox"
         v-show="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
         v-model="options.noSacrificeConfirmation">
-      <store-button
-        fontSize="12px"
+      <primary-button
+        class="c-primary-btn--sacrifice"
         :enabled="isSacrificeAffordable"
-        style="width: 320px"
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         @click="sacrifice">
         Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)
-      </store-button>
-      <store-button
-        fontSize="12px"
+      </primary-button>
+      <primary-button
+        class="c-primary-btn--buy-max"
         @click="maxAll">
         Max all (M)
-      </store-button>
+      </primary-button>
     </div>`
 });
 
@@ -174,29 +172,27 @@ Vue.component('normal-dimension-row', {
     },
   },
   template:
-    `<div class="dimension-tab-row" v-show="isUnlocked">
-      <div style="width: 32%; text-align: left">
+    `<div class="c-normal-dimension-row" v-show="isUnlocked">
+      <div class="c-normal-dimension-row__name">
         {{name}} Dimension x{{shortenMultiplier(multiplier)}}
       </div>
-      <div style="text-align: left; flex-grow: 1">
+      <div class="c-normal-dimension-row__amount">
         {{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}
       </div>
-      <store-button
-        fontSize="10px"
+      <primary-button
+        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-single"
         :enabled="isAffordable"
-        style="height: 25px; width: 135px; margin-right: 16px; flex-shrink: 0"
         @click="buySingle">
         Cost: {{shortenCosts(singleCost)}}
-      </store-button>
-      <store-button
-        fontSize="10px"
+      </primary-button>
+      <primary-button
+        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-10"
         :enabled="isAffordableUntil10"
-        style="height: 25px; width: 210px; flex-shrink: 0"
         @click="buyUntil10">
         Until 10, Cost: {{shortenCosts(until10Cost)}}
-      </store-button>
+      </primary-button>
       <div 
-        class='dimension-floating-text'
+        class='c-normal-dimension-row__floating-text'
         v-for="text in floatingText"
         :key="text.key">
         {{text.text}}
@@ -224,7 +220,7 @@ Vue.component('normal-dimension-shift-row', {
       return DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText: function() {
-      return `Reset the game for a ${this.isBoost ? "boost" : "new Dimension"}`;
+      return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
     }
   },
   methods: {
@@ -241,17 +237,16 @@ Vue.component('normal-dimension-shift-row', {
     }
   },
   template:
-    `<div class="dimension-tab-row">
-      <div style="width: 32%; text-align: left; flex-grow: 1">
+    `<div class="c-normal-dimension-row">
+      <div class="c-normal-dimension-row__dimboost">
         Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions
       </div>
-      <store-button
-        fontSize="9px"
+      <primary-button
+        class="c-primary-btn--dimboost c-normal-dimension-row__buy_dimboost"
         :enabled="isAffordable"
-        @click="softReset"
-        style="height: 25px; width: 200px; margin-right: 100px">
+        @click="softReset">
         {{buttonText}}
-      </store-button>
+      </primary-button>
     </div>`
 });
 
@@ -303,17 +298,16 @@ Vue.component('normal-dimension-galaxy-row', {
     }
   },
   template:
-    `<div class="dimension-tab-row">
-      <div style="width: 32%; text-align: left; flex-grow: 1">
+    `<div class="c-normal-dimension-row">
+      <div class="c-normal-dimension-row__galaxy">
         {{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
       </div>
-      <store-button 
-        fontSize="9px"
+      <primary-button
+        class="c-primary-btn--galaxy c-normal-dimension-row__buy_galaxy"
         :enabled="isAffordable"
-        @click="secondSoftReset"
-        style="height: 35px; width: 200px; margin-right: 100px"> 
+        @click="secondSoftReset"> 
         Lose all your previous progress, but get a tickspeed boost
-      </store-button>
+      </primary-button>
     </div>`
 });
 
@@ -354,9 +348,9 @@ Vue.component('normal-dimension-progress', {
     }
   },
   template:
-    `<div id="progress">
-        <div id="progressbar" :style="progressBarStyle">
-            <span id="progresspercent" v-tooltip="tooltip">
+    `<div class="c-progress-bar">
+        <div class="c-progress-bar__fill" :style="progressBarStyle">
+            <span class="c-progress-bar__percents" v-tooltip="tooltip">
               {{percents}}
             </span>
           </div>

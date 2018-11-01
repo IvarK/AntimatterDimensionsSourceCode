@@ -3,6 +3,6 @@ Vue.component('modal-message', {
     template:
         '<div class="modal-message">\
             <div v-html="view.modal.message"/>\
-            <store-button @click="emitClose">Okay</store-button>\
+            <primary-button @click="emitClose">Okay</primary-button>\
         </div>'
 });

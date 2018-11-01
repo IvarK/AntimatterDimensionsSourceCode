@@ -89,7 +89,7 @@ input {
     animation: antimatterGlow 25s infinite;
 }
 
-#progressbar {
+.c-progress-bar__fill {
     background-color: #1B5E20 !important;
 }
 

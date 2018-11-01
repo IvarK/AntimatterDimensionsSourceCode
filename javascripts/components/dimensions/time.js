@@ -46,7 +46,7 @@ Vue.component('dimensions-time', {
         <p>You have <span id="timeShardAmount" class="time-shards">{{shortenMoney(timeShards)}}</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" class="time-shards">{{shortenMoney(upgradeThreshold)}}</span></p>
       </div>      
       <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
-      <store-button fontSize="12px" v-tooltip="costScaleTooltip" @click="maxAll">Max all</store-button>
+      <primary-button fontSize="12px" v-tooltip="costScaleTooltip" @click="maxAll">Max all</primary-button>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <time-dimension-row
           v-for="tier in 8"
@@ -55,13 +55,13 @@ Vue.component('dimensions-time', {
           :areAutobuyersUnlocked="areAutobuyersUnlocked">
         </time-dimension-row>
       </div>
-      <store-button
+      <primary-button
         fontSize="12px"
         style="width:140px; height: 30px; margin-top: 10px"
         v-if="areAutobuyersUnlocked"
         @click="toggleAllAutobuyers">
         Toggle all ON/OFF
-      </store-button>
+      </primary-button>
     </div>`
 });
 
@@ -118,18 +118,18 @@ Vue.component('time-dimension-row', {
       <div style="text-align: left; flex-grow: 1">
         {{shortenDimensions(amount)}}{{rateOfChangeDisplay}}
       </div>
-      <store-button-named-on-off
+      <primary-button-named-on-off
         fontSize="10px"
         style="width:70px; margin-right: 16px" 
         text="Auto:"
         v-model="autobuyers[tier - 1]"
         v-if="areAutobuyersUnlocked">
-      </store-button-named-on-off>
-      <store-button
+      </primary-button-named-on-off>
+      <primary-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
         @click="buyTimeDimension">
         Cost: {{shortenDimensions(cost)}} EP
-      </store-button>
+      </primary-button>
     </div>`,
 });

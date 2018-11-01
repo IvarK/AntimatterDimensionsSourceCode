@@ -14,7 +14,7 @@ body {
     filter: invert(1);
 }
 
-#progressbar {
+.c-progress-bar__fill {
     color: white !important;
     background-color: #ED85DF !important;
 }

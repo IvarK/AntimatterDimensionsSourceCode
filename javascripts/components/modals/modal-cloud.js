@@ -27,8 +27,8 @@ Vue.component('modal-cloud-save-conflict', {
             <strong>Your local save appears to be older than your cloud save. Would you like to overwrite the cloud save?</strong>\
             <modal-cloud-conflict-record :view="conflict.local" :saveId="conflict.saveId" saveType="local"></modal-cloud-conflict-record>\
             <modal-cloud-conflict-record :view="conflict.cloud" :saveId="conflict.saveId" saveType="cloud"></modal-cloud-conflict-record>\
-            <store-button @click="handleClick(true)">Yes</store-button>\
-            <store-button @click="handleClick(false)">No</store-button>\
+            <primary-button @click="handleClick(true)">Yes</primary-button>\
+            <primary-button @click="handleClick(false)">No</primary-button>\
         </div>'
 });
 
@@ -39,10 +39,10 @@ Vue.component('modal-cloud-load-conflict', {
         '<div class="modal-options">\
             <strong>Your cloud save appears to be older than your local save. Please select which one you would like to keep.</strong>\
             <modal-cloud-conflict-record :view="conflict.local" :saveId="conflict.saveId" saveType="local">\
-                <store-button @click="handleClick(false)">Load local</store-button>\
+                <primary-button @click="handleClick(false)">Load local</primary-button>\
             </modal-cloud-conflict-record>\
             <modal-cloud-conflict-record :view="conflict.cloud" :saveId="conflict.saveId" saveType="cloud">\
-                <store-button @click="handleClick(true)">Load cloud</store-button>\
+                <primary-button @click="handleClick(true)">Load cloud</primary-button>\
             </modal-cloud-conflict-record>\
         </div>'
 });

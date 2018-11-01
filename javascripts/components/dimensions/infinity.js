@@ -43,7 +43,7 @@ Vue.component('dimensions-infinity', {
         <p>You have <span id="infPowAmount" class="infinity-power">{{shortenMoney(infinityPower)}}</span> infinity power. translated to <span id="infDimMultAmount" class="infinity-power">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions</p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
-      <store-button fontSize="12px" @click="maxAll">Max all</store-button>
+      <primary-button fontSize="12px" @click="maxAll">Max all</primary-button>
       <div style="display: flex; flex-direction: column; margin: 0 8px">
         <infinity-dimension-row
           v-for="tier in 8"
@@ -52,13 +52,13 @@ Vue.component('dimensions-infinity', {
         </infinity-dimension-row>
       </div>
       <div v-if="isEC8Running" style="margin-top: 10px">You have {{EC8PurchasesLeft}} purchases left.</div>
-      <store-button
+      <primary-button
         fontSize="12px"
         style="width:140px; height: 30px; margin-top: 10px"
         v-if="isAnyAutobuyerUnlocked"
         @click="toggleAllAutobuyers">
         Toggle all ON/OFF
-      </store-button>
+      </primary-button>
     </div>`
 });
 
@@ -139,19 +139,19 @@ Vue.component('infinity-dimension-row', {
       <div style="text-align: left; flex-grow: 1">
         {{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}
       </div>
-      <store-button-named-on-off
+      <primary-button-named-on-off
         fontSize="10px"
         style="width:70px; margin-right: 16px"
         text="Auto:"
         v-model="autobuyers[tier - 1]"
         v-if="isAutobuyerUnlocked">
-      </store-button-named-on-off>
-      <store-button
+      </primary-button-named-on-off>
+      <primary-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
         v-tooltip="capTooltip"
         @click="buyManyInfinityDimension">
         {{costDisplay}}
-      </store-button>
+      </primary-button>
     </div>`,
 });

@@ -342,34 +342,6 @@ button {
 
 /*#endregion Tabs*/
 
-/*#region Footer*/
-
-.footer-wrapper {
-  flex-shrink: 0;
-}
-
-.sticky-footer {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.footer {
-  margin-left: auto;
-  margin-right: auto;
-  text-align:center;
-  font-size: 15px;
-  font-family: Typewriter;
-}
-
-.footer tr td div {
-  pointer-events: all !important;
-}
-
-/*#endregion Footer*/
-
 /*#region Modals*/
 
 .modal {
@@ -2592,3 +2564,27 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-notification*/
+
+/*#region c-footer*/
+
+.c-footer {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 0.9rem;
+  font-family: Typewriter, serif;
+  /* TODO: move to c-tab element*/
+  flex-shrink: 0;
+}
+
+.c-footer--sticky {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+/*#endregion c-footer*/
+
+/*#region component*/
+/*#endregion component*/

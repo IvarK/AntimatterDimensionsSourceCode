@@ -10,9 +10,6 @@ Vue.component('dimensions-normal', {
     };
   },
   methods: {
-    quickReset: function() {
-      quickReset();
-    },
     update() {
       const isC2Running = player.currentChallenge === "challenge2";
       const isC3Running = player.currentChallenge === "challenge3";
@@ -33,6 +30,9 @@ Vue.component('dimensions-normal', {
         }
       }
       this.isQuickResetAvailable = isQuickResettable(player.currentChallenge);
+    },
+    quickReset: function() {
+      quickReset();
     }
   },
   template:
@@ -50,9 +50,9 @@ Vue.component('dimensions-normal', {
         <normal-dimension-galaxy-row />
       </div>
       <primary-button
+        v-if="isQuickResetAvailable"
         class="c-primary-btn--quick-reset"
         @click="quickReset"
-        v-if="isQuickResetAvailable"
       >Lose a reset, returning to the start of the reset</primary-button>
       <normal-dimension-progress class="l-normal-dimensions-tab__progress_bar" />
     </div>`
@@ -76,34 +76,34 @@ Vue.component('normal-dimensions-top-row', {
     },
   },
   methods: {
-    sacrifice: function() {
-      sacrificeBtnClick();
-    },
-    maxAll: function() {
-      maxAll();
-    },
     update() {
       const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.isAffordable;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
+    },
+    sacrifice: function() {
+      sacrificeBtnClick();
+    },
+    maxAll: function() {
+      maxAll();
     }
   },
   template:
     `<div class="l-normal-dimensions-top-row">
       <input
+        v-show="isSacrificeUnlocked"
+        v-model="options.noSacrificeConfirmation"
+        v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
         type="checkbox"
         class="c-sacrifice-checkbox"
-        v-show="isSacrificeUnlocked"
-        v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        v-model="options.noSacrificeConfirmation"
       />
       <primary-button
-        class="c-primary-btn--sacrifice"
-        :enabled="isSacrificeAffordable"
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
+        :enabled="isSacrificeAffordable"
+        class="c-primary-btn--sacrifice"
         @click="sacrifice"
       >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
       <primary-button
@@ -145,12 +145,6 @@ Vue.component('normal-dimension-row', {
     }
   },
   methods: {
-    buySingle: function() {
-      buyOneDimensionBtnClick(this.tier);
-    },
-    buyUntil10: function() {
-      buyManyDimensionsBtnClick(this.tier);
-    },
     update() {
       const tier = this.tier;
       const isUnlocked = canBuyDimension(tier);
@@ -168,9 +162,15 @@ Vue.component('normal-dimension-row', {
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
     },
+    buySingle: function() {
+      buyOneDimensionBtnClick(this.tier);
+    },
+    buyUntil10: function() {
+      buyManyDimensionsBtnClick(this.tier);
+    },
   },
   template:
-    `<div class="c-normal-dimension-row" v-show="isUnlocked">
+    `<div v-show="isUnlocked" class="c-normal-dimension-row">
       <div
         class="c-normal-dimension-row__name c-normal-dimension-row__label"
       >{{name}} Dimension x{{shortenMultiplier(multiplier)}}</div>
@@ -178,19 +178,19 @@ Vue.component('normal-dimension-row', {
         class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
       >{{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}</div>
       <primary-button
-        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordable"
+        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-button"
         @click="buySingle"
       >Cost: {{shortenCosts(singleCost)}}</primary-button>
       <primary-button
-        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordableUntil10"
+        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-button"
         @click="buyUntil10"
       >Until 10, Cost: {{shortenCosts(until10Cost)}}</primary-button>
       <div
-        class='c-normal-dimension-row__floating-text'
         v-for="text in floatingText"
         :key="text.key"
+        class='c-normal-dimension-row__floating-text'
       >{{text.text}}</div>
     </div>`,
 });
@@ -219,9 +219,6 @@ Vue.component('normal-dimension-shift-row', {
     }
   },
   methods: {
-    softReset: function() {
-      softResetBtnClick();
-    },
     update() {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
@@ -229,6 +226,9 @@ Vue.component('normal-dimension-shift-row', {
       this.isAffordable = requirement.isSatisfied;
       this.isShift = DimBoost.isShift;
       this.resets = player.resets;
+    },
+    softReset: function() {
+      softResetBtnClick();
     }
   },
   template:
@@ -237,8 +237,8 @@ Vue.component('normal-dimension-shift-row', {
         class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
       >Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
-        class="c-primary-btn--dimboost c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
+        class="c-primary-btn--dimboost c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         @click="softReset"
       >{{buttonText}}</primary-button>
     </div>`
@@ -277,9 +277,6 @@ Vue.component('normal-dimension-galaxy-row', {
     }
   },
   methods: {
-    secondSoftReset: function() {
-      galaxyResetBtnClick();
-    },
     update() {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
@@ -289,6 +286,9 @@ Vue.component('normal-dimension-galaxy-row', {
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
       this.isAffordable = requirement.isSatisfied;
+    },
+    secondSoftReset: function() {
+      galaxyResetBtnClick();
     }
   },
   template:
@@ -297,8 +297,8 @@ Vue.component('normal-dimension-galaxy-row', {
         class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
       >{{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
-        class="c-primary-btn--galaxy c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
+        class="c-primary-btn--galaxy c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         @click="secondSoftReset"
       >Lose all your previous progress, but get a tickspeed boost</primary-button>
     </div>`
@@ -342,8 +342,8 @@ Vue.component('normal-dimension-progress', {
   },
   template:
     `<div class="c-progress-bar">
-        <div class="c-progress-bar__fill" :style="progressBarStyle">
-            <span class="c-progress-bar__percents" v-tooltip="tooltip">{{percents}}</span>
+        <div :style="progressBarStyle" class="c-progress-bar__fill">
+            <span v-tooltip="tooltip" class="c-progress-bar__percents">{{percents}}</span>
           </div>
     </div>`
 });

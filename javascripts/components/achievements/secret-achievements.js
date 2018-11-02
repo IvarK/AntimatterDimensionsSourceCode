@@ -2,7 +2,7 @@ Vue.component('secret-achievements', {
   template:
     `<div>
       <table>
-        <tr is="secret-achievement-row" v-for="row in 4" :row="row"></tr>
+        <tr is="secret-achievement-row" v-for="row in 4" :row="row" />
       </table>
     </div>`
 });
@@ -39,8 +39,8 @@ Vue.component('secret-achievement-row', {
       <td v-for="column in 8" style="width=1%">
         <secret-achievement
           :row="row"
-          :column="column">
-        </secret-achievement>
+          :column="column"
+        />
       </td>
     </tr>`
 });

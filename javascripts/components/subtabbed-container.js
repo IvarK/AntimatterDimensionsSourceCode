@@ -30,12 +30,6 @@ Vue.component('subtabbed-container', {
             {{ tab.name }}
           </secondary-tab-button>
         </div>
-        <component :is="openedTab.component" :model="model" :view="view"></component>
-    </tab-container>`,
-  components: {
-    'subtab-button': {
-      template:
-        '<td><secondary-tab-button v-on="$listeners" ><slot></slot></secondary-tab-button></td>'
-    }
-  }
+        <component :is="openedTab.component" :model="model" :view="view"/>
+    </tab-container>`
 });

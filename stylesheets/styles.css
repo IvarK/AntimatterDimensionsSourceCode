@@ -2670,6 +2670,22 @@ screen and (max-width: 480px) {
 
 /*#endregion Normal Dimensions*/
 
+/*#region Special Dimensions*/
+
+/*#region c-special-dimension-tab*/
+
+.c-special-dimension-tab {
+
+}
+
+.c-special-dimension-tab__resource-label {
+
+}
+
+/*#endregion c-special-dimension-tab*/
+
+/*#endregion Special Dimensions*/
+
 .l-notification-container {
   display: flex;
   flex-direction: column-reverse;

@@ -54,6 +54,6 @@ Vue.component('statistics-tab', {
       class="tab-content"
       :tabs="tabs"
       :model="model"
-      v-model="view.tabs.statistics.subtab">
-    </subtabbed-container>`
+      v-model="view.tabs.statistics.subtab"
+    />`
 });

@@ -37,25 +37,24 @@ Vue.component('dimensions-normal', {
   },
   template:
     `<div class="l-normal-dimensions-tab l-flex-expand">
-      <normal-dimensions-top-row></normal-dimensions-top-row>
+      <normal-dimensions-top-row />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-normal-dimensions-tab__row-container l-flex-expand">
         <normal-dimension-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="view.tabs.dimensions.normal.floatingText[tier]">
-        </normal-dimension-row>
-        <normal-dimension-shift-row></normal-dimension-shift-row>
-        <normal-dimension-galaxy-row></normal-dimension-galaxy-row>
+          :floatingText="view.tabs.dimensions.normal.floatingText[tier]"
+        />
+        <normal-dimension-shift-row />
+        <normal-dimension-galaxy-row />
       </div>
       <primary-button
         class="c-primary-btn--quick-reset"
         @click="quickReset"
-        v-if="isQuickResetAvailable">
-        Lose a reset, returning to the start of the reset
-      </primary-button>
-      <normal-dimension-progress class="l-normal-dimensions-tab__progress_bar"></normal-dimension-progress>
+        v-if="isQuickResetAvailable"
+      >Lose a reset, returning to the start of the reset</primary-button>
+      <normal-dimension-progress class="l-normal-dimensions-tab__progress_bar" />
     </div>`
 });
 
@@ -98,20 +97,19 @@ Vue.component('normal-dimensions-top-row', {
         class="c-sacrifice-checkbox"
         v-show="isSacrificeUnlocked"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        v-model="options.noSacrificeConfirmation">
+        v-model="options.noSacrificeConfirmation"
+      />
       <primary-button
         class="c-primary-btn--sacrifice"
         :enabled="isSacrificeAffordable"
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
-        @click="sacrifice">
-        Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)
-      </primary-button>
+        @click="sacrifice"
+      >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
       <primary-button
         class="c-primary-btn--buy-max"
-        @click="maxAll">
-        Max all (M)
-      </primary-button>
+        @click="maxAll"
+      >Max all (M)</primary-button>
     </div>`
 });
 
@@ -173,30 +171,27 @@ Vue.component('normal-dimension-row', {
   },
   template:
     `<div class="c-normal-dimension-row" v-show="isUnlocked">
-      <div class="c-normal-dimension-row__name c-normal-dimension-row__label">
-        {{name}} Dimension x{{shortenMultiplier(multiplier)}}
-      </div>
-      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
-        {{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}
-      </div>
+      <div
+        class="c-normal-dimension-row__name c-normal-dimension-row__label"
+      >{{name}} Dimension x{{shortenMultiplier(multiplier)}}</div>
+      <div
+        class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
+      >{{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}</div>
       <primary-button
         class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordable"
-        @click="buySingle">
-        Cost: {{shortenCosts(singleCost)}}
-      </primary-button>
+        @click="buySingle"
+      >Cost: {{shortenCosts(singleCost)}}</primary-button>
       <primary-button
         class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordableUntil10"
-        @click="buyUntil10">
-        Until 10, Cost: {{shortenCosts(until10Cost)}}
-      </primary-button>
-      <div 
+        @click="buyUntil10"
+      >Until 10, Cost: {{shortenCosts(until10Cost)}}</primary-button>
+      <div
         class='c-normal-dimension-row__floating-text'
         v-for="text in floatingText"
-        :key="text.key">
-        {{text.text}}
-      </div>
+        :key="text.key"
+      >{{text.text}}</div>
     </div>`,
 });
 
@@ -238,15 +233,14 @@ Vue.component('normal-dimension-shift-row', {
   },
   template:
     `<div class="c-normal-dimension-row">
-      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
-        Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions
-      </div>
+      <div 
+        class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
+      >Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
         class="c-primary-btn--dimboost c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
-        @click="softReset">
-        {{buttonText}}
-      </primary-button>
+        @click="softReset"
+      >{{buttonText}}</primary-button>
     </div>`
 });
 
@@ -299,15 +293,14 @@ Vue.component('normal-dimension-galaxy-row', {
   },
   template:
     `<div class="c-normal-dimension-row">
-      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
-        {{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
-      </div>
+      <div
+        class="c-normal-dimension-row__label c-normal-dimension-row__label--growable"
+      >{{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
         class="c-primary-btn--galaxy c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
-        @click="secondSoftReset"> 
-        Lose all your previous progress, but get a tickspeed boost
-      </primary-button>
+        @click="secondSoftReset"
+      >Lose all your previous progress, but get a tickspeed boost</primary-button>
     </div>`
 });
 
@@ -350,9 +343,7 @@ Vue.component('normal-dimension-progress', {
   template:
     `<div class="c-progress-bar">
         <div class="c-progress-bar__fill" :style="progressBarStyle">
-            <span class="c-progress-bar__percents" v-tooltip="tooltip">
-              {{percents}}
-            </span>
+            <span class="c-progress-bar__percents" v-tooltip="tooltip">{{percents}}</span>
           </div>
     </div>`
 });

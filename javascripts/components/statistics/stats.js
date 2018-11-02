@@ -113,7 +113,7 @@ Vue.component('statistics-stats-tab', {
             <div>You have spent {{ timeDisplay(reality.this) }} in this Reality.</div>
             <br>
         </div>
-        <div v-html="infoScale"></div>
+        <div v-html="infoScale"/>
     </div>`
 });
 

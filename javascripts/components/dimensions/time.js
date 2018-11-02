@@ -52,16 +52,15 @@ Vue.component('dimensions-time', {
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :areAutobuyersUnlocked="areAutobuyersUnlocked">
-        </time-dimension-row>
+          :areAutobuyersUnlocked="areAutobuyersUnlocked"
+        />
       </div>
       <primary-button
         fontSize="12px"
         style="width:140px; height: 30px; margin-top: 10px"
         v-if="areAutobuyersUnlocked"
-        @click="toggleAllAutobuyers">
-        Toggle all ON/OFF
-      </primary-button>
+        @click="toggleAllAutobuyers"
+      >Toggle all ON/OFF</primary-button>
     </div>`
 });
 
@@ -123,13 +122,12 @@ Vue.component('time-dimension-row', {
         style="width:70px; margin-right: 16px" 
         text="Auto:"
         v-model="autobuyers[tier - 1]"
-        v-if="areAutobuyersUnlocked">
-      </primary-button-named-on-off>
+        v-if="areAutobuyersUnlocked"
+      />
       <primary-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
-        @click="buyTimeDimension">
-        Cost: {{shortenDimensions(cost)}} EP
-      </primary-button>
+        @click="buyTimeDimension"
+      >Cost: {{shortenDimensions(cost)}} EP</primary-button>
     </div>`,
 });

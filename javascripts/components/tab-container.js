@@ -3,8 +3,8 @@ Vue.component('tab-container', {
   template:
     `<div class="l-flex-expand" align="center">
       <div class="l-flex-expand">
-        <slot></slot>
+        <slot/>
       </div>
-      <footer-links></footer-links>
+      <footer-links/>
     </div>`
 });

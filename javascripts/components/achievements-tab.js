@@ -21,6 +21,6 @@ Vue.component('achievements-tab', {
   template:
     `<subtabbed-container
       :tabs="tabs"
-      v-model="view.tabs.achievements.subtab">
-    </subtabbed-container>`
+      v-model="view.tabs.achievements.subtab"
+    />`
 });

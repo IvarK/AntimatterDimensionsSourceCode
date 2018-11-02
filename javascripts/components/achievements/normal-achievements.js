@@ -37,12 +37,13 @@ Vue.component('normal-achievements', {
       <div style="font-size: 140%">Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
       <div v-if="nextAchIn > 0" style="font-size: 140%">Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
       <br>
-      <div id="timeForAchievements" v-if="timeForAchs > 0">
-        You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}
-      </div>
+      <div
+        id="timeForAchievements"
+        v-if="timeForAchs > 0"
+      >You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}</div>
       <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}}</div>
       <div class="l-flex-expand" style="justify-content: center">
-        <normal-achievement-row v-for="row in 14" :row="row" :key="row"></normal-achievement-row>
+        <normal-achievement-row v-for="row in 14" :row="row" :key="row" />
       </div>
     </div>`
 });
@@ -97,7 +98,7 @@ Vue.component('normal-achievement-row', {
         v-for="column in 8"
         :row="row"
         :column="column"
-        :key="column">
-      </achievement>
+        :key="column"
+      />
     </div>`
 });

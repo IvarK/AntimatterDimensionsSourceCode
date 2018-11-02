@@ -23,8 +23,7 @@ Vue.component('statistic-past-infinities', {
       plural="Infinities"
       points="IP"
       :reward="reward"
-      >
-    </statistic-past-runs>`
+    />`
 });
 
 Vue.component('statistic-past-eternities', {
@@ -38,14 +37,13 @@ Vue.component('statistic-past-eternities', {
     };
   },
   template:
-    '<statistic-past-runs\
-        :runs="runs"\
-        singular="Eternity"\
-        plural="Eternities"\
-        points="EP"\
-        :reward="reward"\
-        >\
-    </statistic-past-runs>'
+    `<statistic-past-runs
+        :runs="runs"
+        singular="Eternity"
+        plural="Eternities"
+        points="EP"
+        :reward="reward"
+    />`
 });
 
 Vue.component('statistic-past-realities', {
@@ -60,14 +58,13 @@ Vue.component('statistic-past-realities', {
     };
   },
   template:
-    '<statistic-past-runs\
-        :runs="runs"\
-        singular="Reality"\
-        plural="Realities"\
-        points="RM"\
-        :reward="reward"\
-        >\
-    </statistic-past-runs>'
+    `<statistic-past-runs
+        :runs="runs"
+        singular="Reality"
+        plural="Realities"
+        points="RM"
+        :reward="reward"
+    />`
 });
 
 Vue.component('statistic-past-runs', {

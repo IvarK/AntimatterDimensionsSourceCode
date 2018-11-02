@@ -6,19 +6,19 @@ Vue.component('statistics-challenges', {
     };
   },
   template:
-    '<div class="statstab statsistics-challenges">\
-        <statistics-challenge-times\
-            name="Challenge"\
-            :times="normalChallenges"\
-            :start="2">\
-        </statistics-challenge-times>\
-        <statistics-challenge-times\
-            name="Infinity Challenge"\
-            :times="infinityChallenges"\
-            :start="1"\
-            style="margin-top: auto; margin-left: 20px;">\
-        </statistics-challenge-times>\
-    </div>',
+    `<div class="statstab statsistics-challenges">
+        <statistics-challenge-times
+            name="Challenge"
+            :times="normalChallenges"
+            :start="2"
+        />
+        <statistics-challenge-times
+            name="Infinity Challenge"
+            :times="infinityChallenges"
+            :start="1"
+            style="margin-top: auto; margin-left: 20px;"
+        />
+    </div>`,
   computed: {
     normalChallenges: function() {
       let challenges = this.challengeTimes;

@@ -42,31 +42,33 @@ Vue.component('dimensions-production', {
         :max="300"
         :default="10"
         v-model="chartOptions.duration"
-        @input="checkOptionsWarnings">
-      </number-input>
+        @input="checkOptionsWarnings"
+      />
       <b>update rate (in ms):</b>
       <number-input
         :min="50"
         :max="10000"
         :default="1000"
         v-model="chartOptions.updateRate"
-        @input="checkOptionsWarnings">
-      </number-input>
+        @input="checkOptionsWarnings"
+      />
       <b>enabled:</b>
       <input
         type="checkbox"
         class="checkbox"
         style="top: -4px;"
         v-model="chartOptions.on"
-        @input="checkToggleWarnings"/>
+        @input="checkToggleWarnings"
+      />
       <b>dips:</b>
       <input
         type="checkbox"
         class="checkbox"
         style="top: -4px;"
         v-model="chartOptions.dips"
-        @input="checkToggleWarnings"/>
-      <div ref="chartContainer"></div>
+        @input="checkToggleWarnings"
+      />
+      <div ref="chartContainer" />
       <b>Exponents of antimatter per second</b>
     </div>`,
   components: {
@@ -94,7 +96,7 @@ Vue.component('dimensions-production', {
         }
       },
       template:
-        `<input type="number" :value="inputValue" @input="handleInput"/>`
+        `<input type="number" :value="inputValue" @input="handleInput" />`
     }
   }
 });

@@ -3,10 +3,10 @@ Vue.component('modal-options', {
         closeButton: Boolean
     },
     template:
-    '<div class="modal-options">\
-        <modal-close-button v-if="closeButton" @click="emitClose"></modal-close-button>\
-        <slot></slot>\
-    </div>'
+    `<div class="modal-options">
+        <modal-close-button v-if="closeButton" @click="emitClose"/>
+        <slot/>
+    </div>`
 });
 
 Vue.component('modal-close-button', {
@@ -42,12 +42,12 @@ Vue.component('modal-animation-options', {
     };
   },
   template:
-    '<modal-options @close="emitClose" :closeButton="true" class="options-container">\
-        <primary-button-named-on-off text="Floating text:" v-model="options.floatingText"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></primary-button-named-on-off>\
-    </modal-options>'
+    `<modal-options @close="emitClose" :closeButton="true" class="options-container">
+        <primary-button-named-on-off text="Floating text:" v-model="options.floatingText"/>
+        <primary-button-named-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"/>
+        <primary-button-named-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"/>
+        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+    </modal-options>`
 });
 
 Vue.component('modal-confirmation-options', {
@@ -58,10 +58,10 @@ Vue.component('modal-confirmation-options', {
     };
   },
   template:
-    '<modal-options @close="emitClose" :closeButton="true" class="options-container">\
-        <primary-button-named-on-off text="Challenges:" v-model="options.challenges"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"></primary-button-named-on-off>\
-        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"></primary-button-named-on-off>\
-    </modal-options>'
+    `<modal-options @close="emitClose" :closeButton="true" class="options-container">
+        <primary-button-named-on-off text="Challenges:" v-model="options.challenges"/>
+        <primary-button-named-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"/>
+        <primary-button-named-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"/>
+        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+    </modal-options>`
 });

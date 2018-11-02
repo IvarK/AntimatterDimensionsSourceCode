@@ -48,17 +48,16 @@ Vue.component('dimensions-infinity', {
         <infinity-dimension-row
           v-for="tier in 8"
           :key="tier"
-          :tier="tier">
-        </infinity-dimension-row>
+          :tier="tier"
+        />
       </div>
       <div v-if="isEC8Running" style="margin-top: 10px">You have {{EC8PurchasesLeft}} purchases left.</div>
       <primary-button
         fontSize="12px"
         style="width:140px; height: 30px; margin-top: 10px"
         v-if="isAnyAutobuyerUnlocked"
-        @click="toggleAllAutobuyers">
-        Toggle all ON/OFF
-      </primary-button>
+        @click="toggleAllAutobuyers"
+      >Toggle all ON/OFF</primary-button>
     </div>`
 });
 
@@ -133,25 +132,20 @@ Vue.component('infinity-dimension-row', {
   },
   template:
     `<div class="infinity-dimension-row" v-show="isUnlocked">
-      <div style="width: 41%; text-align: left">
-        {{name}} Infinity Dimension x{{shortenMoney(multiplier)}}
-      </div>
-      <div style="text-align: left; flex-grow: 1">
-        {{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}
-      </div>
+      <div style="width: 41%; text-align: left">{{name}} Infinity Dimension x{{shortenMoney(multiplier)}}</div>
+      <div style="text-align: left; flex-grow: 1">{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
       <primary-button-named-on-off
         fontSize="10px"
         style="width:70px; margin-right: 16px"
         text="Auto:"
         v-model="autobuyers[tier - 1]"
-        v-if="isAutobuyerUnlocked">
-      </primary-button-named-on-off>
+        v-if="isAutobuyerUnlocked"
+      />
       <primary-button
         style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
         v-tooltip="capTooltip"
-        @click="buyManyInfinityDimension">
-        {{costDisplay}}
-      </primary-button>
+        @click="buyManyInfinityDimension"
+      >{{costDisplay}}</primary-button>
     </div>`,
 });

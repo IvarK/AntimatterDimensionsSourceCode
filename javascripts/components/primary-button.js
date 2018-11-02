@@ -7,9 +7,9 @@ Vue.component('primary-button', {
         }
     },
     template:
-        '<button :class="classObject" :style="{ fontSize: fontSize }" v-on="$listeners">\
-            <slot></slot>\
-        </button>',
+        `<button :class="classObject" :style="{ fontSize: fontSize }" v-on="$listeners">
+            <slot/>
+        </button>`,
     computed: {
       classObject: function() {
         return {

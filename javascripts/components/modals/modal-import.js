@@ -6,9 +6,9 @@ Vue.component('modal-import', {
   },
   template:
     `<div class="modal-import">
-        <modal-close-button @click="emitClose"></modal-close-button>
+        <modal-close-button @click="emitClose"/>
         <h3>Input your save</h3>
-        <input ref="input" type="text" v-model="input" @keyup.enter="importSave">
+        <input ref="input" type="text" v-model="input" @keyup.enter="importSave"/>
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatMoney(player.money) }}</div>

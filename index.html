@@ -503,9 +503,15 @@
                 <footer-links></footer-links>
             </div>
         </div>
-        <div class="l-flex-expand" v-show="view.tabs.current">
-            <component :is="view.tabs.current" :model="model" :view="view" :actions="actions"></component>
-        </div>
+        <component
+            :is="view.tabs.current"
+            v-show="view.tabs.current"
+            :model="model"
+            :view="view"
+            :actions="actions"
+            style="display: flex; flex: 1 0 auto; flex-direction: column;"
+        >
+        </component>
         <div id="challenges" class="tab">
             <br>
             <button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button><br><br>
@@ -1797,8 +1803,8 @@
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>
-<script type="text/javascript" src="javascripts/components/tab-container.js"></script>
-<script type="text/javascript" src="javascripts/components/subtabbed-container.js"></script>
+<script type="text/javascript" src="javascripts/components/game-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/game-tab-with-subtabs.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/normal.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/infinity.js"></script>

@@ -36,10 +36,10 @@ Vue.component('dimensions-normal', {
     }
   },
   template:
-    `<div class="l-normal-dimensions-tab l-flex-expand">
+    `<div class="l-normal-dimensions-tab">
       <normal-dimensions-top-row />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <div class="l-normal-dimensions-tab__row-container l-flex-expand">
+      <div class="l-normal-dimensions-tab__row-container l-normal-dimension-row-container">
         <normal-dimension-row
           v-for="tier in 8"
           :key="tier"

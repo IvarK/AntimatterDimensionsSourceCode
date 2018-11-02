@@ -43,7 +43,7 @@ Vue.component('dimensions-tab', {
     }
   },
   template:
-    `<subtabbed-container
+    `<game-tab-with-subtabs
       :tabs="tabs"
       :model="model"
       :view="view"

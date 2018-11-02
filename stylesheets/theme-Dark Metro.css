@@ -171,12 +171,8 @@ input {
     color: #757575 !important;
 }
 
-#infPowAmount {
-    color: #FF9800 !important;
-}
-
-#infDimMultAmount {
-    color: #FF9800 !important;
+.c-infinity-power-label {
+  color: #FF9800 !important;
 }
 
 #timeShardAmount {

@@ -38,13 +38,21 @@ Vue.component('dimensions-infinity', {
     }
   },
   template:
-    `<div>
+    `<div class="l-infinity-dimensions-tab">
       <div>
-        <p>You have <span id="infPowAmount" class="infinity-power">{{shortenMoney(infinityPower)}}</span> infinity power. translated to <span id="infDimMultAmount" class="infinity-power">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions</p>
+        <p>
+          You have
+          <span class="c-infinity-power-label">{{shortenMoney(infinityPower)}}</span> infinity power,
+          translated to
+          <span class="c-infinity-power-label">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions
+        </p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
-      <primary-button fontSize="12px" @click="maxAll">Max all</primary-button>
-      <div style="display: flex; flex-direction: column; margin: 0 8px">
+      <primary-button
+        class="c-primary-btn--buy-max"
+        @click="maxAll"
+      >Max all</primary-button>
+      <div class="l-infinity-dimensions-tab__row-container">
         <infinity-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -136,7 +144,7 @@ Vue.component('infinity-dimension-row', {
       <div style="text-align: left; flex-grow: 1">{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
       <primary-button-named-on-off
         fontSize="10px"
-        style="width:70px; margin-right: 16px"
+        style="width:80px; margin-right: 16px"
         text="Auto:"
         v-model="autobuyers[tier - 1]"
         v-if="isAutobuyerUnlocked"

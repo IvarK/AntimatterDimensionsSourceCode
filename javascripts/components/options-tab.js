@@ -1,7 +1,7 @@
 Vue.component('options-tab', {
   props: ['model', 'view', 'actions'],
   template:
-    `<tab-container>
+    `<game-tab>
         <br>
         <div>
           <options-buttons :actions="actions.options"/>
@@ -10,7 +10,7 @@ S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A
 You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>
 Hotkeys do not work while holding control.</p>
         </div>
-    </tab-container>`
+    </game-tab>`
 });
 
 Vue.component('options-buttons', {

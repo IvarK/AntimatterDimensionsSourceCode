@@ -19,7 +19,7 @@ Vue.component('achievements-tab', {
     };
   },
   template:
-    `<subtabbed-container
+    `<game-tab-with-subtabs
       :tabs="tabs"
       v-model="view.tabs.achievements.subtab"
     />`

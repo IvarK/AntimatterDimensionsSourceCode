@@ -1,4 +1,4 @@
-Vue.component('subtabbed-container', {
+Vue.component('game-tab-with-subtabs', {
   props: ['tabs', 'model', 'view', 'value'],
   computed: {
     visibleTabs: function() {
@@ -24,12 +24,21 @@ Vue.component('subtabbed-container', {
     }
   },
   template:
-    `<tab-container>
-        <div v-if="visibleTabs.length > 1" style="display: flex; justify-content: center; flex-wrap: wrap">
-          <secondary-tab-button style="margin: 5px 8px; flex-shrink: 0" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">
-            {{ tab.name }}
-          </secondary-tab-button>
+    `<game-tab>
+      <div class="l-game-tab-with-subtabs">
+        <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
+          <secondary-tab-button
+            v-for="tab in visibleTabs"
+            :key="tab.name"
+            class="l-game-tab-with-subtabs__tab-button"
+            @click="emitInput(tab.id)"
+          >{{ tab.name }}</secondary-tab-button>
         </div>
-        <component :is="openedTab.component" :model="model" :view="view"/>
-    </tab-container>`
+        <component
+          :is="openedTab.component"
+          :model="model"
+          :view="view"
+        />
+      </div>
+    </game-tab>`
 });

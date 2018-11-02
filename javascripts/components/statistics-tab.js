@@ -49,7 +49,7 @@ Vue.component('statistics-tab', {
     }
   },
   template:
-    `<subtabbed-container
+    `<game-tab-with-subtabs
       style="color: black; font-size: 12px; font-family: Typewriter"
       class="tab-content"
       :tabs="tabs"

@@ -36,10 +36,10 @@ Vue.component('dimensions-normal', {
     }
   },
   template:
-    `<div class="l-normal-dimensions-tab">
+    `<div class="l-normal-dimensions-tab l-flex-expand">
       <normal-dimensions-top-row></normal-dimensions-top-row>
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
-      <div class="l-normal-dimension-row-container l-normal-dimensions-tab__row-container">
+      <div class="l-normal-dimensions-tab__row-container l-flex-expand">
         <normal-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -55,7 +55,7 @@ Vue.component('dimensions-normal', {
         v-if="isQuickResetAvailable">
         Lose a reset, returning to the start of the reset
       </primary-button>
-      <normal-dimension-progress></normal-dimension-progress>
+      <normal-dimension-progress class="l-normal-dimensions-tab__progress_bar"></normal-dimension-progress>
     </div>`
 });
 
@@ -173,20 +173,20 @@ Vue.component('normal-dimension-row', {
   },
   template:
     `<div class="c-normal-dimension-row" v-show="isUnlocked">
-      <div class="c-normal-dimension-row__name">
+      <div class="c-normal-dimension-row__name c-normal-dimension-row__label">
         {{name}} Dimension x{{shortenMultiplier(multiplier)}}
       </div>
-      <div class="c-normal-dimension-row__amount">
+      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
         {{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}
       </div>
       <primary-button
-        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-single"
+        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordable"
         @click="buySingle">
         Cost: {{shortenCosts(singleCost)}}
       </primary-button>
       <primary-button
-        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-10"
+        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dimension-row__buy-button"
         :enabled="isAffordableUntil10"
         @click="buyUntil10">
         Until 10, Cost: {{shortenCosts(until10Cost)}}
@@ -238,11 +238,11 @@ Vue.component('normal-dimension-shift-row', {
   },
   template:
     `<div class="c-normal-dimension-row">
-      <div class="c-normal-dimension-row__dimboost">
+      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
         Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions
       </div>
       <primary-button
-        class="c-primary-btn--dimboost c-normal-dimension-row__buy_dimboost"
+        class="c-primary-btn--dimboost c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
         @click="softReset">
         {{buttonText}}
@@ -299,11 +299,11 @@ Vue.component('normal-dimension-galaxy-row', {
   },
   template:
     `<div class="c-normal-dimension-row">
-      <div class="c-normal-dimension-row__galaxy">
+      <div class="c-normal-dimension-row__label c-normal-dimension-row__label--growable">
         {{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
       </div>
       <primary-button
-        class="c-primary-btn--galaxy c-normal-dimension-row__buy_galaxy"
+        class="c-primary-btn--galaxy c-normal-dimension-row__buy-button c-normal-dimension-row__buy-button--right-offset"
         :enabled="isAffordable"
         @click="secondSoftReset"> 
         Lose all your previous progress, but get a tickspeed boost

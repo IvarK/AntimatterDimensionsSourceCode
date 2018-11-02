@@ -1,7 +1,5 @@
 <!doctype html>
-
 <html>
-
 <head>
     <title>Antimatter Dimensions</title>
     <link rel="icon" type="image/png" href="icon.png">
@@ -34,9 +32,9 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 98.5vh; margin-bottom: 0">
-<div id="ui" style="height: 100%;">
-    <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; height: 100%">
+<body id="body" style="height: 100%; width: 100%; margin: 0; padding: 0">
+<div id="ui" style="height: 100%; width: 100%">
+    <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
         <div id='game' style="flex: 0 0 auto">
             <div id='news'>.</div>
         </div>
@@ -505,7 +503,7 @@
                 <footer-links></footer-links>
             </div>
         </div>
-        <div v-show="view.tabs.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
+        <div class="l-flex-expand" v-show="view.tabs.current">
             <component :is="view.tabs.current" :model="model" :view="view" :actions="actions"></component>
         </div>
         <div id="challenges" class="tab">

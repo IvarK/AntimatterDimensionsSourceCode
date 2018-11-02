@@ -24,12 +24,14 @@ Vue.component('subtabbed-container', {
     }
   },
   template:
-    '<div>\
-        <tr v-if="visibleTabs.length > 1">\
-            <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">{{ tab.name }}</td>\
-        </tr>\
-        <component :is="openedTab.component" :model="model" :view="view"></component>\
-    </div>',
+    `<tab-container>
+        <div v-if="visibleTabs.length > 1" style="display: flex; justify-content: center; flex-wrap: wrap">
+          <secondary-tab-button style="margin: 5px 8px; flex-shrink: 0" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">
+            {{ tab.name }}
+          </secondary-tab-button>
+        </div>
+        <component :is="openedTab.component" :model="model" :view="view"></component>
+    </tab-container>`,
   components: {
     'subtab-button': {
       template:

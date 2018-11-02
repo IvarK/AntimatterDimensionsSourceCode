@@ -1,5 +1,7 @@
 html {
   font-size: 62.5%;
+  height: 100%;
+  width: 100%;
 }
 
 @font-face {
@@ -2074,7 +2076,6 @@ reality upgrade unavailable
     width: 100%;
     height: 100%; 
     overflow: hidden;
-    margin-left: -16px;
     pointer-events: none;
 }
 
@@ -2525,13 +2526,13 @@ screen and (max-width: 480px) {
 
 .c-primary-btn--dimboost {
   font-size: .9rem;
-  width: 20rem;
+  width: 21rem;
   height: 2.5rem;
 }
 
 .c-primary-btn--galaxy {
   font-size: .9rem;
-  width: 20rem;
+  width: 21rem;
   height: 3.5rem;
 }
 
@@ -2548,11 +2549,21 @@ screen and (max-width: 480px) {
 /*#region l-normal-dimension-tab*/
 
 .l-normal-dimensions-tab {
+  display: flex;
+  flex-direction: column;
   margin-top: .5rem;
+}
+
+.l-normal-dimensions-tab > * {
+  flex-shrink: 0;
 }
 
 .l-normal-dimensions-tab__row-container {
   margin: 0 0.8rem;
+}
+
+.l-normal-dimensions-tab__progress_bar {
+  margin-top: 1rem;
 }
 
 /*#endregion l-normal-dimension-tab*/
@@ -2561,6 +2572,7 @@ screen and (max-width: 480px) {
 
 .l-normal-dimensions-top-row {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center
 }
@@ -2569,12 +2581,7 @@ screen and (max-width: 480px) {
   margin: 0 .4rem;
 }
 
-/*#endregion component*/
-
-.l-normal-dimension-row-container {
-  display: flex;
-  flex-direction: column;
-}
+/*#endregion l-normal-dimensions-top-row*/
 
 /*#region c-normal-dimension-row*/
 
@@ -2583,27 +2590,37 @@ screen and (max-width: 480px) {
   position: relative;
   display: flex;
   flex-direction: row;
+  align-items: center;
   font-size: 1.5rem;
   margin-top: 1rem;
 }
 
+.c-normal-dimension-row > * {
+  margin-left: 1.6rem;
+}
+
+.c-normal-dimension-row:first-child {
+  margin-left: 0;
+}
+
+.c-normal-dimension-row__label {
+  text-align: left;
+}
+
+.c-normal-dimension-row__label--growable {
+  flex-grow: 1;
+}
+
 .c-normal-dimension-row__name {
   width: 32%;
-  text-align: left;
 }
 
-.c-normal-dimension-row__amount {
-  flex-grow: 1;
-  text-align: left;
-}
-
-.c-normal-dimension-row__buy-single {
+.c-normal-dimension-row__buy-button {
   flex-shrink: 0;
-  margin-right: 1.6rem;
 }
 
-.c-normal-dimension-row__buy-10 {
-  flex-shrink: 0;
+.c-normal-dimension-row__buy-button--right-offset {
+  margin-right: 10rem;
 }
 
 .c-normal-dimension-row__floating-text {
@@ -2613,26 +2630,6 @@ screen and (max-width: 480px) {
   animation: float 1s 1;
   color: green;
   opacity: 0;
-}
-
-.c-normal-dimension-row__dimboost {
-  width: 32%;
-  text-align: left;
-  flex-grow: 1;
-}
-
-.c-normal-dimension-row__buy_dimboost {
-  margin-right: 10rem;
-}
-
-.c-normal-dimension-row__galaxy {
-  width: 32%;
-  text-align: left;
-  flex-grow: 1;
-}
-
-.c-normal-dimension-row__buy_galaxy {
-  margin-right: 10rem;
 }
 
 /*#endregion c-dimension-row*/
@@ -2645,9 +2642,6 @@ screen and (max-width: 480px) {
 /*#region c-progress-bar*/
 
 .c-progress-bar {
-  position: fixed;
-  bottom: 3.5rem;
-  z-index: 1;
   width: 98%;
   background-color: #A3A3A3;
   border-radius: .5rem;
@@ -2759,6 +2753,16 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-footer*/
+
+/*#region l-flex-expand*/
+
+.l-flex-expand {
+  flex: 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/*#endregion l-flex-expand*/
 
 /*#region component*/
 /*#endregion component*/

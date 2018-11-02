@@ -41,9 +41,9 @@ Vue.component('normal-achievements', {
         You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}
       </div>
       <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}}</div>
-      <table>
-        <tr is="normal-achievement-row" v-for="row in 14" :row="row"></tr>
-      </table>
+      <div class="l-flex-expand" style="justify-content: center">
+        <normal-achievement-row v-for="row in 14" :row="row" :key="row"></normal-achievement-row>
+      </div>
     </div>`
 });
 
@@ -91,12 +91,13 @@ Vue.component('normal-achievement-row', {
     }
   },
   template:
-    `<tr :class="classObject">
-      <td v-for="column in 8">
-        <achievement
-          :row="row"
-          :column="column">
-        </achievement>
-      </td>
-    </tr>`
+    `<div :class="classObject" style="display:flex; flex-direction: row; justify-content: center; width: fit-content;">
+      <achievement
+        style="margin: 5px 8px"
+        v-for="column in 8"
+        :row="row"
+        :column="column"
+        :key="column">
+      </achievement>
+    </div>`
 });

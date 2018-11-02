@@ -36,7 +36,7 @@ Vue.component('secret-achievement-row', {
   },
   template:
     `<tr :class="classObject">
-      <td v-for="column in 8">
+      <td v-for="column in 8" style="width=1%">
         <secret-achievement
           :row="row"
           :column="column">

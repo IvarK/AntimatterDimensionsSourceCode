@@ -19,11 +19,8 @@ Vue.component('achievements-tab', {
     };
   },
   template:
-    `<tab-container>
-      <subtabbed-container
-        class="tab-content"
-        :tabs="tabs"
-        v-model="view.tabs.achievements.subtab">
-      </subtabbed-container>
-    </tab-container>`
+    `<subtabbed-container
+      :tabs="tabs"
+      v-model="view.tabs.achievements.subtab">
+    </subtabbed-container>`
 });

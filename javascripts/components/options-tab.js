@@ -28,7 +28,7 @@ Vue.component('options-buttons', {
           <td><primary-button fontSize="120%" @click="actions.toggleNews">Hide/show the news</primary-button></td>\
         </tr>\
         <tr>\
-          <td><primary-button-named-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"/></td>\
+          <td><primary-button-on-off fontSize="120%" text="Automatically retry challenges" v-model="model.retryChallenge"/></td>\
           <td><primary-button fontSize="20px" @click="actions.export">Export</primary-button></td>\
           <td><primary-button fontSize="20px" @click="showImportModal">Import</primary-button></td>\
         </tr>\
@@ -40,12 +40,12 @@ Vue.component('options-buttons', {
         <tr>\
           <td><primary-button fontSize="120%" @click="actions.cloudSave">Cloud save</primary-button></td>\
           <td><primary-button fontSize="120%" @click="actions.cloudLoad">Cloud load</primary-button></td>\
-          <td><primary-button-named-on-off fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud"/></td>\
+          <td><primary-button-on-off fontSize="120%" text="Automatic cloud saving/loading" v-model="model.cloud"/></td>\
         </tr>\
         <tr>\
-          <td><primary-button-on-off fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys"/></td>\
+          <td><primary-button-on-off-custom fontSize="120%" on="Disable hotkeys" off="Enable hotkeys" v-model="model.hotkeys"/></td>\
           <td><primary-button fontSize="20px" @click="actions.hardReset">RESET THE GAME</primary-button></td>\
-          <td><primary-button-on-off fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"/></td>\
+          <td><primary-button-on-off-custom fontSize="120%" on="Commas on exponents" off="Notation on exponents" v-model="model.commas"/></td>\
         </tr>\
         <tr>\
           <td/>\

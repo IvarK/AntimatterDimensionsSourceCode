@@ -124,7 +124,7 @@ Vue.component('time-dimension-row', {
       <div
         class="c-time-dim-row__label c-time-dim-row__label--growable"
       >{{shortenDimensions(amount)}}{{rateOfChangeDisplay}}</div>
-      <primary-button-named-on-off
+      <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="autobuyers[tier - 1]"
         class="c-primary-btn--td-autobuyer"

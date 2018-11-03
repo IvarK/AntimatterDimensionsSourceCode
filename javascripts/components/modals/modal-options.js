@@ -43,10 +43,10 @@ Vue.component('modal-animation-options', {
   },
   template:
     `<modal-options @close="emitClose" :closeButton="true" class="options-container">
-        <primary-button-named-on-off text="Floating text:" v-model="options.floatingText"/>
-        <primary-button-named-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"/>
-        <primary-button-named-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"/>
-        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+        <primary-button-on-off text="Floating text:" v-model="options.floatingText"/>
+        <primary-button-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"/>
+        <primary-button-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"/>
+        <primary-button-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
     </modal-options>`
 });
 
@@ -59,9 +59,9 @@ Vue.component('modal-confirmation-options', {
   },
   template:
     `<modal-options @close="emitClose" :closeButton="true" class="options-container">
-        <primary-button-named-on-off text="Challenges:" v-model="options.challenges"/>
-        <primary-button-named-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"/>
-        <primary-button-named-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"/>
-        <primary-button-named-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+        <primary-button-on-off text="Challenges:" v-model="options.challenges"/>
+        <primary-button-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"/>
+        <primary-button-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"/>
+        <primary-button-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
     </modal-options>`
 });

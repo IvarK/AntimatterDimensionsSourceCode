@@ -148,7 +148,7 @@ Vue.component('infinity-dimension-row', {
       <div
         class="c-infinity-dim-row__label c-infinity-dim-row__label--growable"
       >{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
-      <primary-button-named-on-off
+      <primary-button-on-off
         v-if="isAutobuyerUnlocked"
         v-model="autobuyers[tier - 1]"
         class="c-primary-btn--id-autobuyer"

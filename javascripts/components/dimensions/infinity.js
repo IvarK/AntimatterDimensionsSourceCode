@@ -11,12 +11,6 @@ Vue.component('dimensions-infinity', {
     };
   },
   methods: {
-    maxAll: function() {
-      buyMaxInfinityDimensions();
-    },
-    toggleAllAutobuyers: function() {
-      toggleAllInfDims();
-    },
     update() {
       const infinityPower = player.infinityPower;
       this.infinityPower.copyFrom(infinityPower);
@@ -35,6 +29,12 @@ Vue.component('dimensions-infinity', {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
       this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
+    },
+    maxAll: function() {
+      buyMaxInfinityDimensions();
+    },
+    toggleAllAutobuyers: function() {
+      toggleAllInfDims();
     }
   },
   template:
@@ -113,9 +113,6 @@ Vue.component('infinity-dimension-row', {
     }
   },
   methods: {
-    buyManyInfinityDimension: function() {
-      buyManyInfinityDimension(this.tier);
-    },
     update() {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
@@ -138,23 +135,29 @@ Vue.component('infinity-dimension-row', {
       if (isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
       }
+    },
+    buyManyInfinityDimension: function() {
+      buyManyInfinityDimension(this.tier);
     }
   },
   template:
-    `<div class="infinity-dimension-row" v-show="isUnlocked">
-      <div style="width: 41%; text-align: left">{{name}} Infinity Dimension x{{shortenMoney(multiplier)}}</div>
-      <div style="text-align: left; flex-grow: 1">{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
+    `<div v-show="isUnlocked" class="c-infinity-dim-row">
+      <div
+        class="c-infinity-dim-row__label c-infinity-dim-row__name"
+      >{{name}} Infinity Dimension x{{shortenMoney(multiplier)}}</div>
+      <div
+        class="c-infinity-dim-row__label c-infinity-dim-row__label--growable"
+      >{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
       <primary-button-named-on-off
-        fontSize="10px"
-        style="width:80px; margin-right: 16px"
-        text="Auto:"
-        v-model="autobuyers[tier - 1]"
         v-if="isAutobuyerUnlocked"
+        v-model="autobuyers[tier - 1]"
+        class="c-primary-btn--id-autobuyer"
+        text="Auto:"
       />
       <primary-button
-        style="color:black; width:195px; height:30px"
-        :enabled="isAffordable"
         v-tooltip="capTooltip"
+        :enabled="isAffordable"
+        class="c-primary-btn--buy-id"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
     </div>`,

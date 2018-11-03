@@ -4,6 +4,21 @@ html {
   width: 100%;
 }
 
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color:#4F5957;
+  font-size: 1.1rem;
+  font-family: Typewriter, serif;
+  line-height: 1.5;
+  font-weight: 300;
+  text-align:center;
+  background-color: #fff;
+  overflow-y: scroll;
+}
+
 @font-face {
     font-family: 'Open Sans Condensed';
     font-style: normal;
@@ -1785,15 +1800,6 @@ button {
     opacity: 1;
 }
 
-body {
-    background-color: #fff;
-    padding: 1px 7px;
-    font: 1.4rem/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #727272;
-    font-weight: 300;
-    overflow-y: scroll;
-}
-
 h1,
 h2,
 h3,
@@ -2542,6 +2548,12 @@ screen and (max-width: 480px) {
   height: 5rem;
 }
 
+.c-primary-btn--id-all-autobuyers {
+  font-size: 1.2rem;
+  width: 15rem;
+  height: 3rem;
+}
+
 /*#endregion c-primary-btn*/
 
 /*#region l-game-tab*/
@@ -2582,9 +2594,9 @@ screen and (max-width: 480px) {
 
 /*#region Normal Dimensions*/
 
-/*#region l-normal-dimension-tab*/
+/*#region l-normal-dim-tab*/
 
-.l-normal-dimensions-tab {
+.l-normal-dim-tab {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2592,46 +2604,42 @@ screen and (max-width: 480px) {
   margin-top: .5rem;
 }
 
-.l-normal-dimensions-tab > * {
+.l-normal-dim-tab > * {
   flex-shrink: 0;
 }
 
-.l-normal-dimensions-tab__row-container {
+.l-normal-dim-tab__row-container {
   width: 100%;
   flex: 1 0;
   margin: 0 0.8rem;
 }
 
-.l-normal-dimensions-tab__progress_bar {
+.l-normal-dim-tab__progress_bar {
   margin-top: 1rem;
 }
 
-/*#endregion l-normal-dimension-tab*/
-
-/*#region l-normal-dimensions-top-row*/
-
-.l-normal-dimensions-top-row {
+.l-normal-dim-tab__top-row {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center
 }
 
-.l-normal-dimensions-top-row > * {
+.l-normal-dim-tab__top-row > * {
   margin: 0 .4rem;
 }
 
-/*#endregion l-normal-dimensions-top-row*/
+/*#endregion l-normal-dim-tab*/
 
-.l-normal-dimension-row-container {
+.l-normal-dim-row-container {
   display: flex;
   flex-direction: column;
   flex: 1 0;
 }
 
-/*#region c-normal-dimension-row*/
+/*#region c-normal-dim-row*/
 
-.c-normal-dimension-row {
+.c-normal-dim-row {
   /* relative because floating text is 'position: absolute' */
   position: relative;
   display: flex;
@@ -2641,35 +2649,35 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.c-normal-dimension-row > * {
+.c-normal-dim-row > * {
   margin-left: 1.6rem;
 }
 
-.c-normal-dimension-row > *:first-child {
+.c-normal-dim-row > *:first-child {
   margin-left: 0;
 }
 
-.c-normal-dimension-row__label {
+.c-normal-dim-row__label {
   text-align: left;
 }
 
-.c-normal-dimension-row__label--growable {
+.c-normal-dim-row__label--growable {
   flex-grow: 1;
 }
 
-.c-normal-dimension-row__name {
+.c-normal-dim-row__name {
   width: 32%;
 }
 
-.c-normal-dimension-row__buy-button {
+.c-normal-dim-row__buy-button {
   flex-shrink: 0;
 }
 
-.c-normal-dimension-row__buy-button--right-offset {
+.c-normal-dim-row__buy-button--right-offset {
   margin-right: 10rem;
 }
 
-.c-normal-dimension-row__floating-text {
+.c-normal-dim-row__floating-text {
   position: absolute;
   bottom: 2rem;
   left: 15rem;
@@ -2688,7 +2696,7 @@ screen and (max-width: 480px) {
 /*#region c-progress-bar*/
 
 .c-progress-bar {
-  width: 98%;
+  width: 100%;
   background-color: #A3A3A3;
   border-radius: .5rem;
   pointer-events: none;
@@ -2720,31 +2728,34 @@ screen and (max-width: 480px) {
 
 /*#region Infinity Dimensions*/
 
-/*#region l-infinity-dimension-tab*/
+/*#region l-infinity-dim-tab*/
 
-.l-infinity-dimensions-tab {
+.l-infinity-dim-tab {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
 }
 
-.l-infinity-dimensions-tab > * {
-  flex-shrink: 0;
-}
-
-.l-infinity-dimensions-tab__row-container {
+.l-infinity-dim-tab__row-container {
   width: 100%;
   margin: 0 0.8rem;
 }
 
-.l-infinity-dimensions-tab__progress_bar {
+.l-infinity-dim-tab__buy-max {
+  margin-top: .5rem;
+}
+
+.l-infinity-dim-tab__ec8-purchases {
   margin-top: 1rem;
 }
 
-/*#endregion l-infinity-dimension-tab*/
+.l-infinity-dim-tab__all-autobuyers {
+  margin-top: 1rem;
+}
 
-.c-infinity-power-label {
+/*#endregion l-infinity-dim-tab*/
+
+.c-infinity-dim-description__accent {
   font-size: 3.5rem;
   color: black;
 }

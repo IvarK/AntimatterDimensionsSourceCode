@@ -38,32 +38,34 @@ Vue.component('dimensions-infinity', {
     }
   },
   template:
-    `<div class="l-infinity-dimensions-tab">
+    `<div class="l-infinity-dim-tab">
       <div>
         <p>
           You have
-          <span class="c-infinity-power-label">{{shortenMoney(infinityPower)}}</span> infinity power,
+          <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
           translated to
-          <span class="c-infinity-power-label">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions
+          <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions
         </p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
       <primary-button
-        class="c-primary-btn--buy-max"
+        class="c-primary-btn--buy-max l-infinity-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
-      <div class="l-infinity-dimensions-tab__row-container">
+      <div class="l-infinity-dim-tab__row-container">
         <infinity-dimension-row
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
         />
       </div>
-      <div v-if="isEC8Running" style="margin-top: 10px">You have {{EC8PurchasesLeft}} purchases left.</div>
+      <div
+        v-if="isEC8Running"
+        class="l-infinity-dim-tab__ec8-purchases"
+      >You have {{EC8PurchasesLeft}} purchases left.</div>
       <primary-button
-        fontSize="12px"
-        style="width:140px; height: 30px; margin-top: 10px"
         v-if="isAnyAutobuyerUnlocked"
+        class="c-primary-btn--id-all-autobuyers l-infinity-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
     </div>`

@@ -1,5 +1,5 @@
 Vue.component('game-tab-with-subtabs', {
-  props: ['tabs', 'model', 'view', 'value'],
+  props: ['tabs', 'value'],
   computed: {
     visibleTabs: function() {
       return this.tabs.filter(tab => this.isUnlocked(tab));
@@ -33,10 +33,6 @@ Vue.component('game-tab-with-subtabs', {
             @click="emitInput(tab.id)"
           >{{ tab.name }}</secondary-tab-button>
         </div>
-        <component
-          :is="openedTab.component"
-          :model="model"
-          :view="view"
-        />
+        <component :is="openedTab.component" />
     </div>`
 });

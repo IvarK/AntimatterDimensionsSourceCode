@@ -1,8 +1,4 @@
 Vue.component('dimensions-tab', {
-  props: {
-    model: Object,
-    view: Object
-  },
   data: function() {
     return {
       isIDTabUnlocked: false,
@@ -44,9 +40,7 @@ Vue.component('dimensions-tab', {
   },
   template:
     `<game-tab-with-subtabs
+      v-model="$viewModel.tabs.dimensions.subtab"
       :tabs="tabs"
-      :model="model"
-      :view="view"
-      v-model="view.tabs.dimensions.subtab"
     />`
 });

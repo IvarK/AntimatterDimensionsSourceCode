@@ -1,17 +1,15 @@
 Vue.component('modal-load-game', {
-  props: ['model'],
   template:
     `<modal-options @close="emitClose" :closeButton="true">
-        <modal-load-record :saveId="0" :model="model"/>
-        <modal-load-record :saveId="1" :model="model"/>
-        <modal-load-record :saveId="2" :model="model"/>
+        <modal-load-record :saveId="0" />
+        <modal-load-record :saveId="1" />
+        <modal-load-record :saveId="2" />
     </modal-options>`
 });
 
 Vue.component('modal-load-record', {
   props: {
-    saveId: Number,
-    model: Object
+    saveId: Number
   },
   data: function() {
     const save = saves[this.saveId];

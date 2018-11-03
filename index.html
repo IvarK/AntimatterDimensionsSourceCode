@@ -504,12 +504,7 @@
             </div>
         </div>
         <game-tab v-show="view.tabs.current" style="flex: 1 0">
-            <component
-                :is="view.tabs.current"
-                :model="model"
-                :view="view"
-                :actions="actions"
-            ></component>
+            <component :is="view.tabs.current"></component>
         </game-tab>
         <div id="challenges" class="tab">
             <br>
@@ -1764,8 +1759,8 @@
         <h3>Select one of the following glyphs</h3>
         <div id="glyphsToSelect"></div>
     </div>
-    <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
-    <tt-shop :view="view"></tt-shop>
+    <modal-popup v-if="view.modal.current"></modal-popup>
+    <tt-shop></tt-shop>
     <link v-if="view.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>

@@ -1,4 +1,9 @@
 Vue.mixin({
+  computed: {
+    $viewModel: function() {
+      return ui.view;
+    }
+  },
   methods: {
     emitClick: function() {
       this.$emit('click');
@@ -44,44 +49,32 @@ Vue.mixin({
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
 VTooltip.VTooltip.options.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 
-let uiInitialized = false;
+ui = new Vue({
+  el: '#ui',
+  data: ui,
+  computed: {
+    themeCss: function() {
+      return "stylesheets/theme-" + this.view.theme + ".css";
+    }
+  }
+});
 
-function initVue() {
-    ui = new Vue({
-        el: '#ui',
-        data: ui,
-        eventHub: new EventHub(),
-        methods: {
-            hideModal: function() {
-                Modal.hide();
-            },
-            addCloudConflict: function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
-                ui.view.modal.cloudConflicts.push({
-                    saveId: saveId,
-                    cloud: getSaveInfo(cloudSave),
-                    local: getSaveInfo(localSave),
-                    onAccept: onAccept,
-                    onLastConflict: onLastConflict
-                });
+ui.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
+  ui.view.modal.cloudConflicts.push({
+    saveId: saveId,
+    cloud: getSaveInfo(cloudSave),
+    local: getSaveInfo(localSave),
+    onAccept: onAccept,
+    onLastConflict: onLastConflict
+  });
 
-                function getSaveInfo(save) {
-                    return {
-                        infinities: save ? save.infinitied : 0,
-                        eternities: save ? save.eternities : 0
-                    }
-                }
-            }
-        },
-        computed: {
-            themeCss: function() {
-                return "stylesheets/theme-" + this.view.theme + ".css";
-            }
-        }
-    });
-    uiInitialized = true;
-}
-
-initVue();
+  function getSaveInfo(save) {
+    return {
+      infinities: save ? save.infinitied : 0,
+      eternities: save ? save.eternities : 0
+    };
+  }
+};
 
 ui.dispatch = function(event) {
   EventHub.global.emit(event);
@@ -91,3 +84,5 @@ const UIID = function() {
   let id = 0;
   return { next: () => id++ };
 }();
+
+const uiInitialized = true;

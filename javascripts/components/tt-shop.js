@@ -1,7 +1,4 @@
 Vue.component('tt-shop', {
-  props: {
-    view: Object
-  },
   data: function() {
     return {
       theoremAmount: 0,
@@ -91,7 +88,7 @@ Vue.component('tt-shop', {
           <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">
-            <p id="studytreeloadsavetext">{{ view.shiftDown ? 'save:' : 'load:' }}</p>
+            <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
             <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(1)">1</button>
             <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(2)">2</button>
             <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>

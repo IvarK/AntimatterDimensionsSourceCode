@@ -1,7 +1,4 @@
 Vue.component('achievements-tab', {
-  props: {
-    view: Object
-  },
   data: function() {
     return {
       tabs: [
@@ -21,6 +18,6 @@ Vue.component('achievements-tab', {
   template:
     `<game-tab-with-subtabs
       :tabs="tabs"
-      v-model="view.tabs.achievements.subtab"
+      v-model="$viewModel.tabs.achievements.subtab"
     />`
 });

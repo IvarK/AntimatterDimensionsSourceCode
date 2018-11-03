@@ -1,7 +1,11 @@
 Vue.component('modal-popup', {
-    props: ['view', 'model'],
-    template:
-        '<div class="modal">\
-            <div :is="view.modal.current" @close="emitClose" :model="model" :view="view"/>\
-        </div>'
+  methods: {
+    hide: function() {
+      Modal.hide();
+    }
+  },
+  template:
+    `<div class="modal">
+        <component :is="$viewModel.modal.current" @close="hide" />
+    </div>`
 });

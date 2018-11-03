@@ -1,7 +1,4 @@
 Vue.component('dimensions-normal', {
-  props: {
-    view: Object
-  },
   data: function() {
     return {
       isChallengePowerVisible: false,
@@ -44,7 +41,7 @@ Vue.component('dimensions-normal', {
           v-for="tier in 8"
           :key="tier"
           :tier="tier"
-          :floatingText="view.tabs.dimensions.normal.floatingText[tier]"
+          :floatingText="$viewModel.tabs.dimensions.normal.floatingText[tier]"
         />
         <normal-dimension-shift-row />
         <normal-dimension-galaxy-row />

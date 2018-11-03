@@ -1,5 +1,4 @@
 Vue.component('statistics-tab', {
-  props: ['model', 'view', 'actions'],
   data: function() {
     return {
       isChallengeTabUnlocked: false,
@@ -51,9 +50,7 @@ Vue.component('statistics-tab', {
   template:
     `<game-tab-with-subtabs
       style="color: black; font-size: 12px; font-family: Typewriter"
-      class="tab-content"
       :tabs="tabs"
-      :model="model"
-      v-model="view.tabs.statistics.subtab"
+      v-model="$viewModel.tabs.statistics.subtab"
     />`
 });

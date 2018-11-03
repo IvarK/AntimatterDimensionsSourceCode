@@ -1,9 +1,7 @@
 Vue.component('modal-load-game', {
   template:
-    `<modal-options @close="emitClose" :closeButton="true">
-        <modal-load-record :saveId="0" />
-        <modal-load-record :saveId="1" />
-        <modal-load-record :saveId="2" />
+    `<modal-options @close="emitClose">
+        <modal-load-record v-for="id in 3" :key="id" :saveId="id - 1" />
     </modal-options>`
 });
 
@@ -39,9 +37,12 @@ Vue.component('modal-load-record', {
     }
   },
   template:
-    `<div>
+    `<div class="l-modal-options__save-record">
       <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
-      <span style="width: 320px;">Antimatter: {{ formatMoney(antimatter) }}</span>
-      <primary-button @click="loadSave">Load</primary-button>
+      <span>Antimatter: {{ formatMoney(antimatter) }}</span>
+      <primary-button
+        class="c-primary-btn--width-medium"
+        @click="loadSave"
+      >Load</primary-button>
     </div>`
 });

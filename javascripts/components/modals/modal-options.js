@@ -1,20 +1,12 @@
 Vue.component('modal-options', {
-    props: {
-        closeButton: Boolean
-    },
     template:
-    `<div class="modal-options">
-        <modal-close-button v-if="closeButton" @click="emitClose"/>
+    `<div class="c-modal-options l-modal-options">
+        <modal-close-button @click="emitClose"/>
         <slot/>
     </div>`
 });
 
-Vue.component('modal-close-button', {
-    template:
-        '<primary-button class="closebtn" @click="emitClick">&times;</primary-button>'
-});
-
-var modalUnlocksMixin = {
+const modalOptionsMixin = {
   data: function() {
     return {
       bigCrunchUnlocked: false,
@@ -31,37 +23,49 @@ var modalUnlocksMixin = {
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);
     }
+  },
+  components: {
+    "on-off-button": {
+      props: ["value", "text"],
+      template:
+        `<primary-button-on-off
+          :value="value"
+          :text="text"
+          @input="emitInput"
+          class="c-primary-btn--option"
+        />`
+    }
   }
 };
 
 Vue.component('modal-animation-options', {
-  mixins: [modalUnlocksMixin],
+  mixins: [modalOptionsMixin],
   data: function() {
     return {
       options: player.options.animations
     };
   },
   template:
-    `<modal-options @close="emitClose" :closeButton="true" class="options-container">
-        <primary-button-on-off text="Floating text:" v-model="options.floatingText"/>
-        <primary-button-on-off v-if="bigCrunchUnlocked" text="Big crunch:" v-model="options.bigCrunch"/>
-        <primary-button-on-off v-if="dilationUnlocked" text="Tachyon particles:" v-model="options.tachyonParticles"/>
-        <primary-button-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+    `<modal-options @close="emitClose">
+        <on-off-button v-model="options.floatingText" text="Floating text:"/>
+        <on-off-button v-if="bigCrunchUnlocked" v-model="options.bigCrunch" text="Big crunch:"/>
+        <on-off-button v-if="dilationUnlocked" v-model="options.tachyonParticles" text="Tachyon particles:"/>
+        <on-off-button v-if="realityUnlocked" v-model="options.reality" text="Reality:"/>
     </modal-options>`
 });
 
 Vue.component('modal-confirmation-options', {
-  mixins: [modalUnlocksMixin],
+  mixins: [modalOptionsMixin],
   data: function() {
     return {
       options: player.options.confirmations
     };
   },
   template:
-    `<modal-options @close="emitClose" :closeButton="true" class="options-container">
-        <primary-button-on-off text="Challenges:" v-model="options.challenges"/>
-        <primary-button-on-off v-if="eternityUnlocked" text="Eternity:" v-model="options.eternity"/>
-        <primary-button-on-off v-if="dilationUnlocked" text="Dilation:" v-model="options.dilation"/>
-        <primary-button-on-off v-if="realityUnlocked" text="Reality:" v-model="options.reality"/>
+    `<modal-options @close="emitClose">
+        <on-off-button v-model="options.challenges" text="Challenges:"/>
+        <on-off-button v-model="options.eternity" v-if="eternityUnlocked" text="Eternity:"/>
+        <on-off-button v-model="options.dilation" v-if="dilationUnlocked" text="Dilation:"/>
+        <on-off-button v-model="options.reality" v-if="realityUnlocked" text="Reality:"/>
     </modal-options>`
 });

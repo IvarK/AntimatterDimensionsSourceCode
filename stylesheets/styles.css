@@ -229,109 +229,7 @@ button {
 
 /*#endregion Achievements*/
 
-.tab-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-}
-
-.tab-content {
-  flex: 1 0 auto;
-}
-
 /*#endregion Tabs*/
-
-/*#region Modals*/
-
-.modal {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  border: 3px solid black;
-  background-color: #E0E0E0;
-  border-radius: 6px;
-  text-align:center;
-  z-index: 2;
-  color: black;
-  font-family: Typewriter, serif;
-  padding: 10px 10px 15px;
-  display: inline-block;
-}
-
-.modal-message {
-  min-width: 500px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-message div {
-  max-width: 500px;
-}
-
-.modal-message .storebtn {
-  margin-top: 10px;
-}
-
-.modal-import {
-  width: 475px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-import div {
-  margin-top: 2px;
-}
-
-.modal-import input {
-  border: 1px solid black;
-  background-color: #F2F2F2;
-  border-radius: 3px;
-  width: 450px;
-  text-align: center;
-}
-
-.modal-options {
-  width: 300px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-options div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-}
-
-.modal-import .closebtn,
-.modal-options .closebtn {
-  width: 30px;
-  height: 30px;
-  font-size: 2.4rem;
-  line-height: 2.4rem;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-.modal-options .storebtn {
-  margin: 5px;
-}
-
-.modal-options button {
-  font-size: 15px
-}
-
-/*#endregion Modals*/
 
 /*#region TT shop*/
 
@@ -2448,6 +2346,10 @@ screen and (max-width: 480px) {
   background: #B84B5F;
 }
 
+.c-primary-btn--width-medium {
+  width: 12rem;
+}
+
 .c-primary-btn--buy-max {
   font-size: 1.2rem;
   width: 12rem;
@@ -2494,7 +2396,7 @@ screen and (max-width: 480px) {
 
 .c-primary-btn--id-autobuyer {
   font-size: 1rem;
-  width: 7rem;
+  width: 8rem;
 }
 
 .c-primary-btn--id-all-autobuyers {
@@ -2510,7 +2412,7 @@ screen and (max-width: 480px) {
 
 .c-primary-btn--td-autobuyer {
   font-size: 1rem;
-  width: 7rem;
+  width: 8rem;
 }
 
 .c-primary-btn--td-all-autobuyers {
@@ -2519,17 +2421,17 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
-.c-primary-btn--options {
+.c-primary-btn--option {
   width: 20rem;
   height: 5.5rem;
   box-sizing: border-box;
 }
 
-.c-primary-btn--options_font-large {
+.c-primary-btn--option_font-large {
   font-size: 1.8rem;
 }
 
-.c-primary-btn--options_font-x-large {
+.c-primary-btn--option_font-x-large {
   font-size: 2rem;
 }
 
@@ -2541,6 +2443,14 @@ screen and (max-width: 480px) {
 
 .c-primary-btn--update-rate__slider {
   width: 100%;
+}
+
+.c-primary-btn--modal-close {
+  width: 3rem;
+  height: 3rem;
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+  padding: 0;
 }
 
 /*#endregion c-primary-btn*/
@@ -2916,6 +2826,113 @@ screen and (max-width: 480px) {
 /*#endregion l-options-grid*/
 
 /*#endregion Options*/
+
+/*#region Modals*/
+
+/*#region c-modal*/
+
+.c-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border: .3rem solid black;
+  background-color: #E0E0E0;
+  border-radius: .6rem;
+  text-align: center;
+  z-index: 2;
+  color: black;
+  font-family: Typewriter, serif;
+  font-size: 1.4rem;
+  padding: 1rem 1rem 1.5rem;
+  display: inline-block;
+}
+
+.c-modal__close-btn {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+}
+
+/*#endregion c-modal*/
+
+.l-modal-content--centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/*#region c-modal-message*/
+
+.c-modal-message {
+  min-width: 50rem;
+}
+
+.c-modal-message__text {
+  max-width: 50rem;
+}
+
+.c-modal-message__okay-btn {
+  margin-top: 1rem;
+}
+
+/*#endregion c-modal-message*/
+
+/*#region c-modal-import*/
+
+.c-modal-import {
+  width: 47.5rem;
+}
+
+.c-modal-import__save-info > * {
+  margin-top: .2rem;
+}
+
+.c-modal-import__warning {
+  font-size: 1rem;
+}
+
+.c-modal-import__input {
+  width: 45rem;
+}
+
+.c-modal-import__import-btn {
+  margin-top: .3rem;
+}
+
+/*#endregion c-modal-import*/
+
+.c-modal-input {
+  border: .1rem solid black;
+  background-color: #F2F2F2;
+  border-radius: .3rem;
+  text-align: center;
+}
+
+.c-modal-options {
+  width: 30rem;
+  height: 30rem;
+}
+
+/*#region l-modal-options*/
+
+.l-modal-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.l-modal-options__save-record {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*#endregion l-modal-options*/
+
+/*#endregion Modals*/
 
 .l-notification-container {
   display: flex;

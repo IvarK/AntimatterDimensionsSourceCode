@@ -2555,6 +2555,10 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.c-primary-btn--update-rate__slider {
+  width: 100%;
+}
+
 /*#endregion c-primary-btn*/
 
 /*#region l-game-tab*/
@@ -2898,8 +2902,6 @@ screen and (max-width: 480px) {
 
 /*#region Options*/
 
-/*#region l-options-tab*/
-
 .l-options-tab {
   display: flex;
   flex-direction: column;
@@ -2907,7 +2909,27 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-/*#endregion l-options-tab*/
+/*#region l-options-grid*/
+
+.l-options-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-options-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-options-grid__button {
+  margin: .5rem .8rem;
+}
+
+.l-options-grid__button--hidden {
+  visibility: hidden;
+}
+
+/*#endregion l-options-grid*/
 
 /*#endregion Options*/
 

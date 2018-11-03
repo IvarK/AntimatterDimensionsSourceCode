@@ -1,13 +1,12 @@
 Vue.component('primary-button', {
     props: {
-        fontSize: String,
         enabled: {
           type: Boolean,
           default: true
         }
     },
     template:
-        `<button :class="classObject" :style="{ fontSize: fontSize }" v-on="$listeners">
+        `<button :class="classObject" v-on="$listeners">
             <slot/>
         </button>`,
     computed: {

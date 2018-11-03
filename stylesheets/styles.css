@@ -148,10 +148,6 @@ button {
   cursor: default;
 }
 
-.options-buttons {
-  align-self: center;
-}
-
 /*#endregion Options*/
 
 /*#region Statistics*/
@@ -2539,6 +2535,26 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
+.c-primary-btn--options {
+  width: 20rem;
+  height: 5.5rem;
+  box-sizing: border-box;
+}
+
+.c-primary-btn--options_font-large {
+  font-size: 1.8rem;
+}
+
+.c-primary-btn--options_font-x-large {
+  font-size: 2rem;
+}
+
+.c-primary-btn--update-rate {
+  font-size: 1.4rem;
+  text-align: center;
+  cursor: default;
+}
+
 /*#endregion c-primary-btn*/
 
 /*#region l-game-tab*/
@@ -2546,6 +2562,12 @@ screen and (max-width: 480px) {
 .l-game-tab {
   display: flex;
   flex-direction: column;
+}
+
+.l-game-tab__inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0;
 }
 
 .l-game-tab__content {
@@ -2603,24 +2625,27 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
-.l-normal-dim-tab__top-row {
+/*#endregion l-normal-dim-tab*/
+
+/*#region l-normal-dim-tab-header*/
+
+.l-normal-dim-tab__header {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center
 }
 
-.l-normal-dim-tab__top-row > * {
+.l-normal-dim-tab__header > * {
   margin-right: .4rem;
   margin-left: .4rem;
 }
 
-/*#endregion l-normal-dim-tab*/
+/*#endregion l-normal-dim-tab-header*/
 
 .l-normal-dim-row-container {
   display: flex;
   flex-direction: column;
-  flex: 1 0;
 }
 
 /*#region c-normal-dim-row*/
@@ -2870,6 +2895,21 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion Production*/
+
+/*#region Options*/
+
+/*#region l-options-tab*/
+
+.l-options-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+/*#endregion l-options-tab*/
+
+/*#endregion Options*/
 
 .l-notification-container {
   display: flex;

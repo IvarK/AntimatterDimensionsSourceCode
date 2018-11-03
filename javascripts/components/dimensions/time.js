@@ -40,7 +40,7 @@ Vue.component('dimensions-time', {
     }
   },
   template:
-    `<div class="l-time-dim-tab">
+    `<div class="l-time-dim-tab l-centered-vertical-tab">
       <div>
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
         <p>

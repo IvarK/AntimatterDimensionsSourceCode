@@ -503,15 +503,14 @@
                 <footer-links></footer-links>
             </div>
         </div>
-        <component
-            :is="view.tabs.current"
-            v-show="view.tabs.current"
-            :model="model"
-            :view="view"
-            :actions="actions"
-            style="display: flex; flex: 1 0 auto; flex-direction: column;"
-        >
-        </component>
+        <game-tab v-show="view.tabs.current" style="flex: 1 0">
+            <component
+                :is="view.tabs.current"
+                :model="model"
+                :view="view"
+                :actions="actions"
+            ></component>
+        </game-tab>
         <div id="challenges" class="tab">
             <br>
             <button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button><br><br>

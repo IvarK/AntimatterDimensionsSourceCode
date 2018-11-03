@@ -24,8 +24,7 @@ Vue.component('game-tab-with-subtabs', {
     }
   },
   template:
-    `<game-tab>
-      <div class="l-game-tab-with-subtabs">
+    `<div class="l-game-tab-with-subtabs">
         <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
           <secondary-tab-button
             v-for="tab in visibleTabs"
@@ -39,6 +38,5 @@ Vue.component('game-tab-with-subtabs', {
           :model="model"
           :view="view"
         />
-      </div>
-    </game-tab>`
+    </div>`
 });

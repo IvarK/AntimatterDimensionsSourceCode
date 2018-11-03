@@ -91,7 +91,7 @@ Vue.component('normal-dimensions-top-row', {
     }
   },
   template:
-    `<div class="l-normal-dim-tab__top-row">
+    `<div class="l-normal-dim-tab__header">
       <input
         v-show="isSacrificeUnlocked"
         v-model="options.noSacrificeConfirmation"

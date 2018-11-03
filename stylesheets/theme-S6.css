@@ -283,14 +283,9 @@ input {
     text-shadow: 0 0 .7rem #fff;
 }
 
-#timeShardAmount {
+.c-time-dim-description__accent {
     color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
-}
-
-#tickThreshold {
-    color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
+    text-shadow: 0 0 .7rem #64DD17;
 }
 
 #replicantiamount {

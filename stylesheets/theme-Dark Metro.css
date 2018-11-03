@@ -175,12 +175,8 @@ input {
   color: #FF9800 !important;
 }
 
-#timeShardAmount {
-    color: #673AB7 !important;
-}
-
-#tickThreshold {
-    color: #673AB7 !important;
+.c-time-dim-description__accent {
+  color: #673AB7 !important;
 }
 
 #replicantiamount {

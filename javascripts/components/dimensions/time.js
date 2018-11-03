@@ -22,12 +22,6 @@ Vue.component('dimensions-time', {
     }
   },
   methods: {
-    maxAll: function() {
-      buyMaxTimeDimensions();
-    },
-    toggleAllAutobuyers: function() {
-      toggleAllTimeDims();
-    },
     update() {
       this.totalUpgrades = player.totalTickGained;
       this.timeShards.copyFrom(player.timeShards);
@@ -37,17 +31,31 @@ Vue.component('dimensions-time', {
       this.incomeType = isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = player.reality.upg.includes(13);
+    },
+    maxAll: function() {
+      buyMaxTimeDimensions();
+    },
+    toggleAllAutobuyers: function() {
+      toggleAllTimeDims();
     }
   },
   template:
-    `<div>
+    `<div class="l-time-dim-tab">
       <div>
         <p>You've gained {{totalUpgradesDisplay}} tickspeed upgrades.</p>
-        <p>You have <span id="timeShardAmount" class="time-shards">{{shortenMoney(timeShards)}}</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" class="time-shards">{{shortenMoney(upgradeThreshold)}}</span></p>
+        <p>
+          You have
+          <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.
+          Next tickspeed upgrade at <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
+        </p>
       </div>      
       <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
-      <primary-button fontSize="12px" v-tooltip="costScaleTooltip" @click="maxAll">Max all</primary-button>
-      <div style="display: flex; flex-direction: column; margin: 0 8px">
+      <primary-button
+        v-tooltip="costScaleTooltip"
+        class="c-primary-btn--buy-max l-time-dim-tab__buy-max"
+        @click="maxAll"
+      >Max all</primary-button>
+      <div class="l-time-dim-tab__row-container">
         <time-dimension-row
           v-for="tier in 8"
           :key="tier"
@@ -56,9 +64,8 @@ Vue.component('dimensions-time', {
         />
       </div>
       <primary-button
-        fontSize="12px"
-        style="width:140px; height: 30px; margin-top: 10px"
         v-if="areAutobuyersUnlocked"
+        class="c-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
     </div>`
@@ -91,9 +98,6 @@ Vue.component('time-dimension-row', {
     }
   },
   methods: {
-    buyTimeDimension: function() {
-      buyTimeDimension(this.tier);
-    },
     update() {
       const tier = this.tier;
       const dimension = TimeDimension(tier);
@@ -107,26 +111,28 @@ Vue.component('time-dimension-row', {
       }
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
+    },
+    buyTimeDimension: function() {
+      buyTimeDimension(this.tier);
     }
   },
   template:
-    `<div class="time-dimension-row" v-show="isUnlocked">
-      <div style="width: 43%; text-align: left">
-        {{name}} Time Dimension x{{shortenMoney(multiplier)}}
-      </div>
-      <div style="text-align: left; flex-grow: 1">
-        {{shortenDimensions(amount)}}{{rateOfChangeDisplay}}
-      </div>
+    `<div v-show="isUnlocked" class="c-time-dim-row">
+      <div
+        class="c-time-dim-row__label c-time-dim-row__name"
+      >{{name}} Time Dimension x{{shortenMoney(multiplier)}}</div>
+      <div
+        class="c-time-dim-row__label c-time-dim-row__label--growable"
+      >{{shortenDimensions(amount)}}{{rateOfChangeDisplay}}</div>
       <primary-button-named-on-off
-        fontSize="10px"
-        style="width:70px; margin-right: 16px" 
-        text="Auto:"
-        v-model="autobuyers[tier - 1]"
         v-if="areAutobuyersUnlocked"
+        v-model="autobuyers[tier - 1]"
+        class="c-primary-btn--td-autobuyer"
+        text="Auto:"
       />
       <primary-button
-        style="color:black; width:195px; height:30px"
         :enabled="isAffordable"
+        class="c-primary-btn--buy-td"
         @click="buyTimeDimension"
       >Cost: {{shortenDimensions(cost)}} EP</primary-button>
     </div>`,

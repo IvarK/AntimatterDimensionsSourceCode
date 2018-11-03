@@ -134,28 +134,6 @@ button {
 
 /*#region Tabs*/
 
-/*#region Dimensions*/
-
-/*#region Time*/
-
-.time-shards {
-  font-size: 35px;
-  color: black;
-}
-
-.time-dimension-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: 17px;
-  margin-top: 10px;
-  position: relative;
-}
-
-/*#endregion Time*/
-
-/*#endregion Dimensions*/
-
 /*#region Options*/
 
 .options-container button,
@@ -2545,6 +2523,22 @@ screen and (max-width: 480px) {
   height: 3rem;
 }
 
+.c-primary-btn--buy-td {
+  width: 19.5rem;
+  height: 3rem;
+}
+
+.c-primary-btn--td-autobuyer {
+  font-size: 1rem;
+  width: 7rem;
+}
+
+.c-primary-btn--td-all-autobuyers {
+  font-size: 1.2rem;
+  width: 15rem;
+  height: 3rem;
+}
+
 /*#endregion c-primary-btn*/
 
 /*#region l-game-tab*/
@@ -2748,7 +2742,6 @@ screen and (max-width: 480px) {
 
 .c-infinity-dim-description__accent {
   font-size: 3.5rem;
-  color: black;
 }
 
 /*#region c-infinity-dim-row*/
@@ -2788,6 +2781,73 @@ screen and (max-width: 480px) {
 /*#endregion c-infinity-dim-row*/
 
 /*#endregion Infinity Dimensions*/
+
+/*#region Time Dimensions*/
+
+/*#region l-time-dim-tab*/
+
+.l-time-dim-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-time-dim-tab__row-container {
+  width: 100%;
+  margin: 0 0.8rem;
+}
+
+.l-time-dim-tab__buy-max {
+  margin-top: .5rem;
+}
+
+.l-time-dim-tab__all-autobuyers {
+  margin-top: 1rem;
+}
+
+/*#endregion l-time-dim-tab*/
+
+.c-time-dim-description__accent {
+  font-size: 3.5rem;
+}
+
+/*#region c-time-dim-row*/
+
+.c-time-dim-row {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1.6rem;
+}
+
+.c-time-dim-row > * {
+  margin-left: 1.6rem;
+}
+
+.c-time-dim-row > *:first-child {
+  margin-left: 0;
+}
+
+.c-time-dim-row__label {
+  text-align: left;
+}
+
+.c-time-dim-row__label--growable {
+  flex-grow: 1;
+}
+
+.c-time-dim-row__name {
+  width: 43%;
+}
+
+.c-time-dim-row__buy-button {
+  flex-shrink: 0;
+}
+
+/*#endregion c-time-dim-row*/
+
+/*#endregion Time Dimensions*/
 
 .l-notification-container {
   display: flex;

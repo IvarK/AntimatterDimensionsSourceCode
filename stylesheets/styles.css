@@ -2611,7 +2611,8 @@ screen and (max-width: 480px) {
 }
 
 .l-normal-dim-tab__top-row > * {
-  margin: 0 .4rem;
+  margin-right: .4rem;
+  margin-left: .4rem;
 }
 
 /*#endregion l-normal-dim-tab*/
@@ -2774,7 +2775,7 @@ screen and (max-width: 480px) {
   width: 41%;
 }
 
-.c-normal-dim-row__buy-button {
+.c-infinity-dim-row__button {
   flex-shrink: 0;
 }
 
@@ -2841,13 +2842,34 @@ screen and (max-width: 480px) {
   width: 43%;
 }
 
-.c-time-dim-row__buy-button {
+.c-time-dim-row__button {
   flex-shrink: 0;
 }
 
 /*#endregion c-time-dim-row*/
 
 /*#endregion Time Dimensions*/
+
+/*#region Production*/
+
+.c-production-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.c-production-header > * {
+  margin-right: .4rem;
+  margin-left: .4rem;
+}
+
+.c-production-header__checkbox {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/*#endregion Production*/
 
 .l-notification-container {
   display: flex;

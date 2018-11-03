@@ -151,13 +151,13 @@ Vue.component('infinity-dimension-row', {
       <primary-button-on-off
         v-if="isAutobuyerUnlocked"
         v-model="autobuyers[tier - 1]"
-        class="c-primary-btn--id-autobuyer"
+        class="c-primary-btn--id-autobuyer c-infinity-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-tooltip="capTooltip"
         :enabled="isAffordable"
-        class="c-primary-btn--buy-id"
+        class="c-primary-btn--buy-id c-infinity-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
     </div>`,

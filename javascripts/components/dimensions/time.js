@@ -127,12 +127,12 @@ Vue.component('time-dimension-row', {
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="autobuyers[tier - 1]"
-        class="c-primary-btn--td-autobuyer"
+        class="c-primary-btn--td-autobuyer c-time-dim-row__button"
         text="Auto:"
       />
       <primary-button
         :enabled="isAffordable"
-        class="c-primary-btn--buy-td"
+        class="c-primary-btn--buy-td c-time-dim-row__button"
         @click="buyTimeDimension"
       >Cost: {{shortenDimensions(cost)}} EP</primary-button>
     </div>`,

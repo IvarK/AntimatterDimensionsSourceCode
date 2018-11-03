@@ -35,39 +35,39 @@ Vue.component('dimensions-production', {
     }
   },
   template:
-    `<div style="font-size: 12px">
-      <b>seconds of history:</b>
-      <number-input
-        :min="1"
-        :max="300"
-        :default="10"
-        v-model="chartOptions.duration"
-        @input="checkOptionsWarnings"
-      />
-      <b>update rate (in ms):</b>
-      <number-input
-        :min="50"
-        :max="10000"
-        :default="1000"
-        v-model="chartOptions.updateRate"
-        @input="checkOptionsWarnings"
-      />
-      <b>enabled:</b>
-      <input
-        type="checkbox"
-        class="checkbox"
-        style="top: -4px;"
-        v-model="chartOptions.on"
-        @input="checkToggleWarnings"
-      />
-      <b>dips:</b>
-      <input
-        type="checkbox"
-        class="checkbox"
-        style="top: -4px;"
-        v-model="chartOptions.dips"
-        @input="checkToggleWarnings"
-      />
+    `<div>
+      <div class="c-production-header">
+        <b>seconds of history:</b>
+        <number-input
+          v-model="chartOptions.duration"
+          :min="1"
+          :max="300"
+          :default="10"
+          @input="checkOptionsWarnings"
+        />
+        <b>update rate (in ms):</b>
+        <number-input
+          v-model="chartOptions.updateRate"
+          :min="50"
+          :max="10000"
+          :default="1000"
+          @input="checkOptionsWarnings"
+        />
+        <b>enabled:</b>
+        <input
+          v-model="chartOptions.on"
+          class="c-production-header__checkbox"
+          type="checkbox"
+          @input="checkToggleWarnings"
+        />
+        <b>dips:</b>
+        <input
+          class="c-production-header__checkbox"
+          type="checkbox"
+          v-model="chartOptions.dips"
+          @input="checkToggleWarnings"
+        />
+      </div>
       <div ref="chartContainer" />
       <b>Exponents of antimatter per second</b>
     </div>`,

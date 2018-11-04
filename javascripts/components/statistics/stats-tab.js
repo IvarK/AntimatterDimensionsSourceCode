@@ -1,4 +1,4 @@
-Vue.component('statistics-tab', {
+Vue.component('stats-tab', {
   data: function() {
     return {
       isChallengeTabUnlocked: false,
@@ -9,30 +9,30 @@ Vue.component('statistics-tab', {
         {
           name: "Statistics",
           id: "Statistics",
-          component: "statistics-stats-tab"
+          component: "statistics-tab"
         },
         {
           name: "Challenge records",
           id: "Challenge records",
-          component: "statistics-challenges",
+          component: "challenge-records-tab",
           condition: function() { return this.isChallengeTabUnlocked; }.bind(this)
         },
         {
           name: "Past Infinities",
           id: "Past Infinities",
-          component: "statistic-past-infinities",
+          component: "past-infinities-tab",
           condition: function() { return this.isInfinitiesTabUnlocked; }.bind(this)
         },
         {
           name: "Past Eternities",
           id: "Past Eternities",
-          component: "statistic-past-eternities",
+          component: "past-eternities-tab",
           condition: function() { return this.isEternitiesTabUnlocked; }.bind(this)
         },
         {
           name: "Past Realities",
           id: "Past Realities",
-          component: "statistic-past-realities",
+          component: "past-realities-tab",
           condition: function() { return this.isRealitiesTabUnlocked; }.bind(this)
         }
       ]

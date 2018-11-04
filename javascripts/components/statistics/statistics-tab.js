@@ -1,4 +1,4 @@
-Vue.component('statistics-stats-tab', {
+Vue.component('statistics-tab', {
   data: function() {
     return {
       totalAntimatter: new Decimal(0),
@@ -117,7 +117,6 @@ Vue.component('statistics-stats-tab', {
     </div>`
 });
 
-const planck = 4.22419e-105;
 const proton = 2.82e-45;
 
 function estimateMatterScale(matter) {
@@ -127,6 +126,7 @@ function estimateMatterScale(matter) {
       "<br>" + timeDisplay(matter.log10() * 1000 / 3) +
       "<br> to write down your antimatter amount.";
   }
+  const planck = 4.22419e-105;
   let planckedMatter = matter.times(planck);
   if (planckedMatter.gt(proton)) {
     let scale = largestMatterScale(planckedMatter);
@@ -144,7 +144,7 @@ function smallestProtonScale(matter) {
     {amount: 1e-54, name: "attometers cubed"},
     {amount: 1e-63, name: "zeptometers cubed"},
     {amount: 1e-72, name: "yoctometers cubed"},
-    {amount: planck, name: "planck volumes"}
+    {amount: 4.22419e-105, name: "planck volumes"}
   ];
   for (let i = 0; i < scales.length; i++) {
     let scale = scales[i];

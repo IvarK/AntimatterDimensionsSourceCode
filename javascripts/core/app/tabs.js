@@ -38,7 +38,7 @@ Tab.dimensions.normal = new Subtab("Dimensions", Tab.dimensions, ui.view.tabs.di
 Tab.dimensions.infinity = new Subtab("Infinity Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.options = new Tab("options-tab");
-Tab.statistics = new Tab("statistics-tab");
+Tab.statistics = new Tab("stats-tab");
 Tab.achievements = new Tab("achievements-tab");
 
 // small hack until Vue migration is complete

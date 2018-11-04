@@ -5,20 +5,33 @@ Vue.component('modal-import', {
     };
   },
   template:
-    `<div class="modal-import">
-        <modal-close-button @click="emitClose"></modal-close-button>
-        <h3>Input your save</h3>
-        <input ref="input" type="text" v-model="input" @keyup.enter="importSave">
+    `<div class="c-modal-import l-modal-content--centered">
+      <modal-close-button @click="emitClose"/>
+      <h3>Input your save</h3>
+      <input
+        v-model="input"
+        ref="input"
+        type="text"
+        class="c-modal-input c-modal-import__input"
+        @keyup.enter="importSave"
+        @keyup.esc="emitClose"
+      />
+      <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
           <div>Antimatter: {{ formatMoney(player.money) }}</div>
           <div v-if="progress.isInfinityUnlocked">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
           <div v-if="progress.isEternityUnlocked">Eternities: {{ shortenDimensions(player.eternities) }}</div>
           <div v-if="progress.isRealityUnlocked">Realities: {{ shortenDimensions(player.realities) }}</div>
-          <div style="font-size: 75%">(your current save file will be overwritten!)</div>
+          <div class="c-modal-import__warning">(your current save file will be overwritten!)</div>
         </template>
         <div v-else-if="hasInput">Not a valid save</div>
-        <store-button v-if="inputIsValid" style="margin-top: 3px" @click="importSave">Import</store-button>
+      </div>
+      <primary-button
+        v-if="inputIsValid"
+        class="o-primary-btn--width-medium c-modal-import__import-btn"
+        @click="importSave"
+      >Import</primary-button>
     </div>`,
   computed: {
     player: function() {
@@ -48,6 +61,7 @@ Vue.component('modal-import', {
       return formatted;
     },
     importSave: function() {
+      if (!this.inputIsValid) return;
       Modal.hide();
       importSave(this.input);
     }

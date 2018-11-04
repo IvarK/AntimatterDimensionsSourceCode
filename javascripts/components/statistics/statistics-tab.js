@@ -1,4 +1,4 @@
-Vue.component('statistics-stats-tab', {
+Vue.component('statistics-tab', {
   data: function() {
     return {
       totalAntimatter: new Decimal(0),
@@ -31,15 +31,6 @@ Vue.component('statistics-stats-tab', {
     };
   },
   methods: {
-    timeDisplay: function(time) {
-      return timeDisplay(time);
-    },
-    formatAmount: function(value) {
-      return formatWithCommas(value);
-    },
-    formatResetAmount: function(value) {
-      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
-    },
     update() {
       this.totalAntimatter.copyFrom(player.totalmoney);
       this.resets = player.resets;
@@ -75,10 +66,19 @@ Vue.component('statistics-stats-tab', {
         reality.totalTimePlayed = player.totalTimePlayed;
       }
       this.infoScale = estimateMatterScale(player.money, this);
+    },
+    timeDisplay: function(time) {
+      return timeDisplay(time);
+    },
+    formatAmount: function(value) {
+      return formatWithCommas(value);
+    },
+    formatResetAmount: function(value) {
+      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
     }
   },
   template:
-    `<div class="statstab">
+    `<div>
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
@@ -113,11 +113,10 @@ Vue.component('statistics-stats-tab', {
             <div>You have spent {{ timeDisplay(reality.this) }} in this Reality.</div>
             <br>
         </div>
-        <div v-html="infoScale"></div>
+        <div v-html="infoScale"/>
     </div>`
 });
 
-const planck = 4.22419e-105;
 const proton = 2.82e-45;
 
 function estimateMatterScale(matter) {
@@ -127,6 +126,7 @@ function estimateMatterScale(matter) {
       "<br>" + timeDisplay(matter.log10() * 1000 / 3) +
       "<br> to write down your antimatter amount.";
   }
+  const planck = 4.22419e-105;
   let planckedMatter = matter.times(planck);
   if (planckedMatter.gt(proton)) {
     let scale = largestMatterScale(planckedMatter);
@@ -144,7 +144,7 @@ function smallestProtonScale(matter) {
     {amount: 1e-54, name: "attometers cubed"},
     {amount: 1e-63, name: "zeptometers cubed"},
     {amount: 1e-72, name: "yoctometers cubed"},
-    {amount: planck, name: "planck volumes"}
+    {amount: 4.22419e-105, name: "planck volumes"}
   ];
   for (let i = 0; i < scales.length; i++) {
     let scale = scales[i];

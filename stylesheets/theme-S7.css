@@ -13,21 +13,7 @@
     filter: saturate(0) !important;
 }
 
-.achievementunlocked {
-    background-color: #BBB !important;
-    border-color: #666 !important;
-}
-
-.achievementlocked {
-    background-color: #555 !important;
-    border-color: #111 !important;
-}
-
-.completedrow {
-    background-color: #AAA !important;
-}
-
-.notify-jscorner {
+#notification-container {
     filter: saturate(0) !important;
 }
 

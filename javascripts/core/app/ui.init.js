@@ -1,6 +1,4 @@
 let ui = {
-  model: { },
-  actions: { },
   view: {
     modal: {
       current: undefined,

@@ -1,5 +1,5 @@
-Vue.component('subtabbed-container', {
-  props: ['tabs', 'model', 'view', 'value'],
+Vue.component('game-tab-with-subtabs', {
+  props: ['tabs', 'value'],
   computed: {
     visibleTabs: function() {
       return this.tabs.filter(tab => this.isUnlocked(tab));
@@ -24,16 +24,15 @@ Vue.component('subtabbed-container', {
     }
   },
   template:
-    '<div>\
-        <tr v-if="visibleTabs.length > 1">\
-            <td is="subtab-button" v-for="tab in visibleTabs" :key="tab.name" @click="emitInput(tab.id)">{{ tab.name }}</td>\
-        </tr>\
-        <component :is="openedTab.component" :model="model" :view="view"></component>\
-    </div>',
-  components: {
-    'subtab-button': {
-      template:
-        '<td><secondary-tab-button v-on="$listeners" ><slot></slot></secondary-tab-button></td>'
-    }
-  }
+    `<div class="l-game-tab-with-subtabs">
+      <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
+        <secondary-tab-button
+          v-for="tab in visibleTabs"
+          :key="tab.name"
+          class="l-game-tab-with-subtabs__tab-button"
+          @click="emitInput(tab.id)"
+        >{{ tab.name }}</secondary-tab-button>
+      </div>
+      <component :is="openedTab.component" />
+    </div>`
 });

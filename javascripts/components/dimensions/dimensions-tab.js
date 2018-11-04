@@ -1,8 +1,4 @@
 Vue.component('dimensions-tab', {
-  props: {
-    model: Object,
-    view: Object
-  },
   data: function() {
     return {
       isIDTabUnlocked: false,
@@ -12,24 +8,24 @@ Vue.component('dimensions-tab', {
         {
           name: "Dimensions",
           id: "Dimensions",
-          component: "dimensions-normal"
+          component: "normal-dim-tab"
         },
         {
           name: "Infinity Dimensions",
           id: "Infinity Dimensions",
-          component: "dimensions-infinity",
+          component: "infinity-dim-tab",
           condition: function() { return this.isIDTabUnlocked; }.bind(this)
         },
         {
           name: "Time Dimensions",
           id: "Time Dimensions",
-          component: "dimensions-time",
+          component: "time-dim-tab",
           condition: function() { return this.isTDTabUnlocked; }.bind(this)
         },
         {
           name: "Production",
           id: "Production",
-          component: "dimensions-production",
+          component: "dim-production-tab",
           condition: function() { return this.isProductionTabUnlocked; }.bind(this)
         }
       ]
@@ -43,13 +39,9 @@ Vue.component('dimensions-tab', {
     }
   },
   template:
-    `<tab-container>
-      <subtabbed-container
-        class="tab-content"
-        :tabs="tabs"
-        :model="model"
-        :view="view"
-        v-model="view.tabs.dimensions.subtab">
-      </subtabbed-container>
-    </tab-container>`
+    `<game-tab-with-subtabs
+      v-model="$viewModel.tabs.dimensions.subtab"
+      :tabs="tabs"
+      class="c-dim-tab"
+    />`
 });

@@ -14,11 +14,6 @@ body {
     filter: invert(1);
 }
 
-#progressbar {
-    color: white !important;
-    background-color: #ED85DF !important;
-}
-
 * {
     border-radius: 0px !important;
     border-width: 1px !important;
@@ -133,24 +128,6 @@ input, select {
 .eternitytabbtn:hover {
     background: #FFF !important;
     border: 1px solid #673AB7 !important;
-}
-
-.completedrow {
-    background: #1B5E20 !important;
-}
-
-.achievementunlocked {
-    background-color: #66BB6A !important;
-    border: 1px solid #43A047 !important;
-}
-
-.achievementlocked {
-    background-color: #9E9E9E !important;
-    border: 1px solid #EF5350 !important;
-}
-
-.achievementhidden {
-    border-width: 1px !important;
 }
 
 .infinistorebtn1 {

@@ -1,14 +1,12 @@
 <!doctype html>
-
 <html>
-
 <head>
     <title>Antimatter Dimensions</title>
     <link rel="icon" type="image/png" href="icon.png">
     <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
     <h1 id="hiddenheader" style="display: none">Antimatter Dimensions</h1>
     <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
-    <script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
     <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
@@ -34,9 +32,9 @@
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
-<body id="body" style="height: 98.5vh; margin-bottom: 0">
-<div id="ui" style="height: 100%;">
-    <div id="container" class="container" style="color:#4F5957; font-family: Typewriter; text-align:center; font-size: 11px; display:none; flex-direction: column; height: 100%">
+<body>
+<div id="ui" style="height: 100%; width: 100%">
+    <div id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
         <div id='game' style="flex: 0 0 auto">
             <div id='news'>.</div>
         </div>
@@ -505,9 +503,9 @@
                 <footer-links></footer-links>
             </div>
         </div>
-        <div v-show="view.tabs.current" style="flex: 1 0 auto; display: flex; flex-direction: column">
-            <component :is="view.tabs.current" :model="model" :view="view" :actions="actions"></component>
-        </div>
+        <game-tab v-show="view.tabs.current" style="flex: 1 0">
+            <component :is="view.tabs.current"></component>
+        </game-tab>
         <div id="challenges" class="tab">
             <br>
             <button class="storebtn" style="font-size: 100%; width:200px" onclick="exitChallenge()">Exit Challenge</button><br><br>
@@ -1761,8 +1759,8 @@
         <h3>Select one of the following glyphs</h3>
         <div id="glyphsToSelect"></div>
     </div>
-    <modal-popup v-if="view.modal.current" :view="view" :model="model" @close="hideModal"></modal-popup>
-    <tt-shop :view="view"></tt-shop>
+    <modal-popup v-if="view.modal.current"></modal-popup>
+    <tt-shop></tt-shop>
     <link v-if="view.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>
@@ -1780,16 +1778,15 @@
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
 <script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/breakinfinity.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/chart.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/lz-string.js"></script>
+<script type="text/javascript" src="javascripts/lib/vis.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/sha512.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/autobuyer.js"></script>
-<!-- script type="text/javascript" src="javascripts/decimal.js"></script> -->
-<script type="text/javascript" src="javascripts/breakinfinity.js"></script>
-<script type="text/javascript" src="javascripts/chart.js"></script>
-<script type="text/javascript" src="javascripts/lz-string.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
-<script type="text/javascript" src="javascripts/vis.js"></script>
 <script type="text/javascript" src="javascripts/tln.js"></script>
-
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
@@ -1797,32 +1794,59 @@
 <script type="text/javascript" src="javascripts/core/format.js"></script>
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 
-<script type="text/javascript" src="javascripts/components/store-button.js"></script>
+
+<script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>
-<script type="text/javascript" src="javascripts/components/tab-container.js"></script>
-<script type="text/javascript" src="javascripts/components/subtabbed-container.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/normal.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/infinity.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/time.js"></script>
-<script type="text/javascript" src="javascripts/components/dimensions/production.js"></script>
-<script type="text/javascript" src="javascripts/components/options-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/statistics-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/statistics/stats.js"></script>
-<script type="text/javascript" src="javascripts/components/statistics/challenges.js"></script>
-<script type="text/javascript" src="javascripts/components/statistics/runs.js"></script>
+<script type="text/javascript" src="javascripts/components/game-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/game-tab-with-subtabs.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
-<script type="text/javascript" src="javascripts/components/achievements-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/achievements/normal-achievements.js"></script>
-<script type="text/javascript" src="javascripts/components/achievements/secret-achievements.js"></script>
-<script type="text/javascript" src="javascripts/components/achievements/achievement.js"></script>
+<script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
+
+<script type="text/javascript" src="javascripts/components/dimensions/dimensions-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-header.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-shift-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-galaxy-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-progress-bar.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/infinity/infinity-dim-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/infinity/infinity-dim-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/time/time-dim-row.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/time/time-dim-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/dimensions/dim-production-tab.js"></script>
+
+<script type="text/javascript" src="javascripts/components/options/options-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/options/options-button-grid.js"></script>
+
+<script type="text/javascript" src="javascripts/components/statistics/stats-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/statistics-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/challenges/challenge-records-list.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/challenges/challenge-records-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/runs/past-runs-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/runs/past-infinities-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/runs/past-eternities-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/statistics/runs/past-realities-tab.js"></script>
+
+<script type="text/javascript" src="javascripts/components/achievements/achievements-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievement.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievement-row.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/normal/normal-achievements-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievement.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievements-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievement-row.js"></script>
+
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
-<script type="text/javascript" src="javascripts/components/modals/modal-options.js"></script>
-<script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
-<script type="text/javascript" src="javascripts/components/modals/modal-cloud.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import.js"></script>
-<script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/modal-load-game.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-animation-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/options/modal-confirmation-options.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-conflict-record.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-load-conflict.js"></script>
+<script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-save-conflict.js"></script>
+
+
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
 <script type="text/javascript" src="javascripts/core/app/modal.js"></script>
@@ -1864,6 +1888,4 @@
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>
-
-<script type="text/javascript" src="javascripts/sha512.js"></script>
 </html>

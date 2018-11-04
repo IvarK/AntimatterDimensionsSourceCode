@@ -95,10 +95,6 @@ body {
     background: #dbd242
 }
 
-#progressbar {
-    background-color: #4baf4e !important;
-}
-
 #container.container {
     color: black !important;
 }
@@ -155,15 +151,6 @@ body {
 .IPAmount2 {
     color: #7d3c1b;
     text-shadow: 1px 1px 0px black;
-}
-
-.completedrow {
-    background: #9a921d !important;
-}
-
-.achievementunlocked {
-    background-color: #dbd242 !important;
-    border-color: #c5ba26 !important;
 }
 
 .challengediv {

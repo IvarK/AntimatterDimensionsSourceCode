@@ -1,7 +1,7 @@
 ui.notify = function() {
   const container = document.getElementById("notification-container");
   const template = document.createElement('div');
-  template.classList.add("c-notification");
+  template.classList.add("o-notification");
   function showNotification(text, elClass) {
     const el = template.cloneNode();
     el.classList.add(elClass);
@@ -9,13 +9,13 @@ ui.notify = function() {
     container.appendChild(el);
     el.onclick = () => {
       el.onclick = undefined;
-      el.style["animation-name"] = "c-notification--hide";
+      el.style["animation-name"] = "o-notification--hide";
     };
     setTimeout(() => el.remove(), 2500);
   }
   return {
-    success: (text) => showNotification(text, "c-notification--success"),
-    error: (text) => showNotification(text, "c-notification--error"),
-    info: (text) => showNotification(text, "c-notification--info")
+    success: (text) => showNotification(text, "o-notification--success"),
+    error: (text) => showNotification(text, "o-notification--error"),
+    info: (text) => showNotification(text, "o-notification--info")
   };
 }();

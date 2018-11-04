@@ -1,50 +1,3 @@
-Vue.component('secret-achievements', {
-  template:
-    `<div>
-      <table>
-        <tr is="secret-achievement-row" v-for="row in 4" :row="row"></tr>
-      </table>
-    </div>`
-});
-
-Vue.component('secret-achievement-row', {
-  props: {
-    row: Number
-  },
-  data: function() {
-    return {
-      isCompleted: false
-    };
-  },
-  computed: {
-    classObject: function() {
-      return {
-        completedrow: this.isCompleted
-      };
-    }
-  },
-  created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
-    this.updateState();
-  },
-  methods: {
-    updateState() {
-      const unlockState = Array.from({length: 8}, (v, i) => `s${this.row}${i + 1}`)
-        .map(achId => player.achievements.includes(achId));
-      this.isCompleted = !unlockState.includes(false);
-    }
-  },
-  template:
-    `<tr :class="classObject">
-      <td v-for="column in 8">
-        <secret-achievement
-          :row="row"
-          :column="column">
-        </secret-achievement>
-      </td>
-    </tr>`
-});
-
 Vue.component('secret-achievement', {
   props: {
     row: Number,
@@ -69,8 +22,9 @@ Vue.component('secret-achievement', {
     },
     classObject: function() {
       return {
-        achievementhidden: !this.isUnlocked,
-        achievementunlocked: this.isUnlocked
+        "o-achievement": true,
+        "o-achievement--hidden": !this.isUnlocked,
+        "o-achievement--unlocked": this.isUnlocked
       };
     },
     details: function() {

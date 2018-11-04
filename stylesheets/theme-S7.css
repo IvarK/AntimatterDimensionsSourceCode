@@ -27,7 +27,7 @@
     background-color: #AAA !important;
 }
 
-.notify-jscorner {
+#notification-container {
     filter: saturate(0) !important;
 }
 

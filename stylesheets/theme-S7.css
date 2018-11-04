@@ -13,10 +13,6 @@
     filter: saturate(0) !important;
 }
 
-.completedrow {
-    background-color: #AAA !important;
-}
-
 #notification-container {
     filter: saturate(0) !important;
 }

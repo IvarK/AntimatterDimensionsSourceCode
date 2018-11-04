@@ -1,9 +1,7 @@
 Vue.component('secret-achievements', {
   template:
-    `<div>
-      <table>
-        <tr is="secret-achievement-row" v-for="row in 4" :row="row" />
-      </table>
+    `<div class="l-achievement-grid">
+        <secret-achievement-row v-for="row in 4" :key="row" :row="row" />
     </div>`
 });
 
@@ -19,7 +17,8 @@ Vue.component('secret-achievement-row', {
   computed: {
     classObject: function() {
       return {
-        completedrow: this.isCompleted
+        "l-achievement-grid__row": true,
+        "c-achievement-grid__row--completed": this.isCompleted
       };
     }
   },
@@ -35,14 +34,15 @@ Vue.component('secret-achievement-row', {
     }
   },
   template:
-    `<tr :class="classObject">
-      <td v-for="column in 8" style="width=1%">
-        <secret-achievement
-          :row="row"
-          :column="column"
-        />
-      </td>
-    </tr>`
+    `<div :class="classObject">
+      <secret-achievement
+        v-for="column in 8"
+        :key="column"
+        :row="row"
+        :column="column"
+        class="l-achievement-grid__cell"
+      />
+    </div>`
 });
 
 Vue.component('secret-achievement', {

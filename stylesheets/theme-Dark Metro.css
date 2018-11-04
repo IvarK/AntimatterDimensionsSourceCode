@@ -145,10 +145,6 @@ input {
     box-shadow: 1px 1px 1px 0px black;
 }
 
-.completedrow {
-    background: #1B5E20 !important;
-}
-
 #infinityPoints1 {
     color: #757575 !important;
 }
@@ -541,10 +537,6 @@ input {
 }
 
 #realitymachines {
-    color: #757575 !important;
-}
-
-#timeForAchievements {
     color: #757575 !important;
 }
 

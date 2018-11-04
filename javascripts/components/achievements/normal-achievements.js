@@ -34,16 +34,22 @@ Vue.component('normal-achievements', {
   },
   template:
     `<div>
-      <div style="font-size: 140%">Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
-      <div v-if="nextAchIn > 0" style="font-size: 140%">Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
+      <div
+        class="c-achievements-tab__header"
+      >Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
+      <div
+        v-if="nextAchIn > 0"
+        class="c-achievements-tab__header"
+      >Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
       <br>
       <div
-        id="timeForAchievements"
         v-if="timeForAchs > 0"
+        id="timeForAchievements"
+        class="c-achievements-tab__timer"
       >You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}</div>
       <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}}</div>
-      <div class="l-flex-expand" style="justify-content: center">
-        <normal-achievement-row v-for="row in 14" :row="row" :key="row" />
+      <div class="l-achievement-grid">
+        <normal-achievement-row v-for="row in 14" :key="row" :row="row" />
       </div>
     </div>`
 });
@@ -61,7 +67,8 @@ Vue.component('normal-achievement-row', {
   computed: {
     classObject: function() {
       return {
-        completedrow: this.isCompleted
+        "l-achievement-grid__row": true,
+        "c-achievement-grid__row--completed": this.isCompleted
       };
     }
   },
@@ -92,13 +99,13 @@ Vue.component('normal-achievement-row', {
     }
   },
   template:
-    `<div :class="classObject" style="display:flex; flex-direction: row; justify-content: center; width: fit-content;">
+    `<div :class="classObject">
       <achievement
-        style="margin: 5px 8px"
         v-for="column in 8"
+        :key="column"
         :row="row"
         :column="column"
-        :key="column"
+        class="l-achievement-grid__cell"
       />
     </div>`
 });

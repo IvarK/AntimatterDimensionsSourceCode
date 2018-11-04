@@ -132,21 +132,6 @@ button {
 
 /*#endregion Controls*/
 
-/*#region Tabs*/
-
-/*#region Achievements*/
-
-#timeForAchievements {
-  color: black;
-  font-size: 12px;
-  width: 40%;
-  margin: 5px auto;
-}
-
-/*#endregion Achievements*/
-
-/*#endregion Tabs*/
-
 /*#region TT shop*/
 
 #TTbuttons {
@@ -417,12 +402,6 @@ button {
   border-radius: 10px;
   font-size: 140%;
   transition-duration: 0.2s;
-}
-
-.completedrow {
-    background: #007308;
-    border: 4px solid #127A20;
-    border-radius: 10px;
 }
 
 .infinimultbtn {
@@ -3230,6 +3209,67 @@ screen and (max-width: 480px) {
 /*#endregion themes*/
 
 /*#endregion o-achievement*/
+
+/*#region c-achievements-tab*/
+
+.c-achievements-tab__header {
+  font-size: 1.6rem;
+}
+
+.c-achievements-tab__timer {
+  color: black;
+  font-size: 1.2rem;
+  width: 40%;
+  margin: .5rem auto;
+}
+
+.t-dark .c-achievements-tab__timer,
+.t-dark-metro .c-achievements-tab__timer,
+.t-s6 .c-achievements-tab__timer {
+   color: #757575 !important;
+}
+
+/*#endregion c-achievements-tab*/
+
+/*#region achievement-grid*/
+
+.l-achievement-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-achievement-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-achievement-grid__cell {
+  margin: .5rem .8rem;
+}
+
+.c-achievement-grid__row--completed {
+  background-color: #007308;
+  border: 4px solid #127A20;
+  border-radius: 10px;
+}
+
+.t-metro .c-achievement-grid__row--completed,
+.t-dark-metro .c-achievement-grid__row--completed,
+.t-inverted-metro .c-achievement-grid__row--completed,
+.t-s8 .c-achievement-grid__row--completed {
+  background-color: #1b5e20 !important;
+}
+
+.t-s1 .c-achievement-grid__row--completed {
+  background-color: #9a921d !important;
+}
+
+.t-s7 .c-achievement-grid__row--completed {
+  background-color: #aaa !important;
+}
+
+/*#endregion achievement-grid*/
 
 /*#endregion Achievements*/
 

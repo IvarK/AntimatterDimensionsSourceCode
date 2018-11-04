@@ -503,11 +503,6 @@ button {
   transition-duration: 0.2s;
 }
 
-#quickReset {
-    position: relative;
-    z-index: 2;
-}
-
 .completedrow {
     background: #007308;
     border: 4px solid #127A20;
@@ -1233,10 +1228,6 @@ button {
 
 .milestoneText {
     font-size: 20px;
-}
-
-#production {
-    font-size: 12px;
 }
 
 .dilationbtn {
@@ -3085,7 +3076,7 @@ screen and (max-width: 480px) {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   border: .3rem solid black;
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
   border-radius: .6rem;
   text-align: center;
   z-index: 2;
@@ -3094,6 +3085,7 @@ screen and (max-width: 480px) {
   font-size: 1.4rem;
   padding: 1rem 1rem 1.5rem;
   display: inline-block;
+  transition-duration: 0.2s;
 }
 
 .c-modal__close-btn {
@@ -3101,6 +3093,76 @@ screen and (max-width: 480px) {
   top: .5rem;
   right: .5rem;
 }
+
+/*#region themes*/
+
+/*#region t-dark t-dark-metro*/
+
+.t-dark .c-modal,
+.t-dark-metro .c-modal {
+  background-color: #455a64 !important;
+}
+
+.t-dark .c-modal {
+  box-shadow: 0 0 1.5rem 0 black !important;
+}
+
+.t-dark-metro .c-modal {
+  box-shadow: 0 0 1rem 0 black !important;
+}
+
+/*#endregion t-dark*/
+
+/*#region t-inverted t-inverted-metro t-metro*/
+
+.t-inverted .c-modal,
+.t-inverted-metro .c-modal {
+  filter: invert(100%);
+}
+
+.t-metro .c-modal,
+.t-inverted-metro .c-modal {
+  border: .1rem solid black !important;
+}
+
+/*#endregion t-inverted*/
+
+/*#region t-s1*/
+
+.t-s1 .c-modal {
+  background-color: #dbd242 !important;
+}
+
+/*#endregion t-s1*/
+
+/*#region t-s6*/
+
+.t-s6 .c-modal {
+  color: #e0e0e0 !important;
+  background-color: black !important;
+  border: 1px solid #1b5e20 !important;
+  box-shadow: 0 0 1.5rem 0 black !important;
+}
+
+/*#endregion t-s6*/
+
+/*#region t-s7*/
+
+.t-s7 .c-modal {
+  filter: saturate(0) !important;
+}
+
+/*#endregion t-s7*/
+
+/*#region t-s8*/
+
+.t-s8 .c-modal {
+  border: .1rem solid black !important;
+}
+
+/*#endregion t-s8*/
+
+/*#endregion themes*/
 
 /*#endregion c-modal*/
 

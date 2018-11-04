@@ -30,8 +30,14 @@ var Theme = function Theme(name, colors) {
     };
 
     this.set = function () {
-        Theme.current().unmount();
-        this.mount();
+        for (let c of document.body.classList) {
+          if (c.startsWith("t-")) {
+            document.body.classList.remove(c);
+          }
+        }
+        if (!this.isDefault()) {
+          document.body.classList.add(this.cssClass());
+        }
         player.options.theme = name;
         ui.view.theme = name;
         if (this.isSecret())
@@ -39,16 +45,6 @@ var Theme = function Theme(name, colors) {
 
         Chart.defaults.global.defaultFontColor = colors.chartFont;
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
-    };
-
-    this.mount = function() {
-      if (this.isDefault()) return;
-      document.body.classList.add(this.cssClass());
-    };
-
-    this.unmount = function() {
-      if (this.isDefault()) return;
-      document.body.classList.remove(this.cssClass());
     };
 
     this.cssClass = function() {

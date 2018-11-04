@@ -39,6 +39,7 @@ Vue.mixin({
   created() {
     if (this.update) {
       this.on$(GameEvent.UPDATE, this.update);
+      this.update();
     }
   },
   destroyed() {

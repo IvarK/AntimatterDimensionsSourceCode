@@ -7,10 +7,6 @@ Vue.component('normal-achievements-tab', {
       allAchIn: 0
     };
   },
-  created() {
-    // To prevent flickering
-    this.update();
-  },
   methods: {
     update() {
       this.achPower.copyFrom(player.achPow);

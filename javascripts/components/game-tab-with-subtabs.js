@@ -25,14 +25,14 @@ Vue.component('game-tab-with-subtabs', {
   },
   template:
     `<div class="l-game-tab-with-subtabs">
-        <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
-          <secondary-tab-button
-            v-for="tab in visibleTabs"
-            :key="tab.name"
-            class="l-game-tab-with-subtabs__tab-button"
-            @click="emitInput(tab.id)"
-          >{{ tab.name }}</secondary-tab-button>
-        </div>
-        <component :is="openedTab.component" />
+      <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
+        <secondary-tab-button
+          v-for="tab in visibleTabs"
+          :key="tab.name"
+          class="l-game-tab-with-subtabs__tab-button"
+          @click="emitInput(tab.id)"
+        >{{ tab.name }}</secondary-tab-button>
+      </div>
+      <component :is="openedTab.component" />
     </div>`
 });

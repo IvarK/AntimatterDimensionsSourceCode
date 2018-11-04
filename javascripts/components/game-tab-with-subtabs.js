@@ -33,6 +33,7 @@ Vue.component('game-tab-with-subtabs', {
           @click="emitInput(tab.id)"
         >{{ tab.name }}</secondary-tab-button>
       </div>
+      <slot name="before-content"/>
       <component :is="openedTab.component" />
     </div>`
 });

@@ -3,6 +3,7 @@ Vue.component('challenges-tab', {
     return {
       isICTabUnlocked: false,
       isECTabUnlocked: false,
+      isInChallenge: false,
       tabs: [
         {
           name: "Challenges",
@@ -26,13 +27,23 @@ Vue.component('challenges-tab', {
   },
   methods: {
     update() {
-      this.isICTabUnlocked = true;
-      this.isECTabUnlocked = true;
+      const ecTabUnlocked = player.eternityChallUnlocked !== 0 || Object.keys(player.eternityChalls).length > 0;
+      this.isECTabUnlocked = ecTabUnlocked;
+      this.isICTabUnlocked = ecTabUnlocked || player.money.gte(new Decimal("1e2000"));
+      this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
     }
   },
   template:
     `<game-tab-with-subtabs
       v-model="$viewModel.tabs.challenges.subtab"
       :tabs="tabs"
-    />`
+      class="l-challenges-tab"
+    >
+      <primary-button
+        v-if="isInChallenge"
+        slot="before-content"
+        class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
+        onclick="exitChallenge()"
+      >Exit Challenge</primary-button>
+    </game-tab-with-subtabs>`
 });

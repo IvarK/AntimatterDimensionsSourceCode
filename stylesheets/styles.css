@@ -2451,6 +2451,11 @@ screen and (max-width: 480px) {
   padding: 0;
 }
 
+.o-primary-btn--exit-challenge {
+  width: 20rem;
+  font-size: 1.1rem;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -3287,6 +3292,328 @@ screen and (max-width: 480px) {
 /*#endregion achievement-grid*/
 
 /*#endregion Achievements*/
+
+/*#region Challenges*/
+
+/*#region l-challenges-tab*/
+
+.l-challenges-tab {
+  align-items: center;
+}
+
+.l-challenges-tab__exit-btn {
+  margin: 1rem;
+}
+
+/*#endregion l-challenges-tab*/
+
+/*#region l-challenge-grid*/
+
+.l-challenge-grid {
+  /* grid cell is <40rem, so the grid is 2x(N/2) */
+  width: 80rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.l-challenge-grid__cell {
+  margin: .8rem 1.2rem;
+  flex-shrink: 0;
+}
+
+/*#endregion l-challenge-grid*/
+
+/*#region c-challenge-box*/
+
+.c-challenge-box {
+  width: 35rem;
+  height: 10.5rem;
+  padding: .2rem .4rem .4rem .4rem;
+  box-sizing: border-box;
+  font-weight: bold;
+  border: .2rem solid black;
+  border-radius: .5rem;
+  font-size: 1rem;
+  transition: all 0.2s, visibility 0s;
+}
+
+.c-challenge-box--normal {
+  color: black;
+  background-color: #f2f2f2;
+}
+
+.c-challenge-box--infinity {
+  color: white;
+  background-color: #181818;
+}
+
+.c-challenge-box--eternity {
+  color: #b341e0;
+  background-color: black;
+  border: .3rem solid #b341e0;
+  border-radius: 1rem;
+}
+
+/*#region themes*/
+
+/*#region t-dark*/
+
+.t-dark .c-challenge-box--normal {
+  background-color: #455a64 !important;
+}
+
+/*#endregion t-dark*/
+
+/*#region t-metro t-dark-metro t-inverted-metro t-s8*/
+
+.t-metro .c-challenge-box,
+.t-dark-metro .c-challenge-box,
+.t-inverted-metro .c-challenge-box,
+.t-s8 .c-challenge-box {
+  border: .1rem solid black !important;
+}
+
+.t-dark-metro .c-challenge-box--normal {
+  background-color: #455a64 !important;
+}
+
+.t-metro .c-challenge-box--eternity,
+.t-dark-metro .c-challenge-box--eternity,
+.t-inverted-metro .c-challenge-box--eternity,
+.t-s8 .c-challenge-box--eternity {
+  color: #673ab7 !important;
+  border-color: #673ab7 !important;
+}
+
+/*#endregion t-metro t-dark-metro t-inverted-metro*/
+
+/*#region t-s1*/
+
+.t-s1 .c-challenge-box--normal,
+.t-s1 .c-challenge-box--infinity {
+  background-color: #dbd242 !important;
+}
+
+.t-s1 .c-challenge-box--eternity {
+  color: #639565 !important;
+  border: .3rem solid #639565 !important;
+}
+
+/*#endregion t-s1*/
+
+/*#region t-s6*/
+
+.t-s6 .c-challenge-box--normal,
+.t-s6 .c-challenge-box--infinity {
+  background-color: black !important;
+  border: .1rem solid !important;
+}
+
+.t-s6 .c-challenge-box--normal {
+  color: #e0e0e0 !important;
+  border-color: grey !important;
+}
+
+.t-s6 .c-challenge-box--infinity {
+  border-color: white !important;
+}
+
+/*#endregion t-s6*/
+
+/*#region t-s7*/
+
+.t-s7 .c-challenge-box {
+  color: black !important;
+  border: .1rem solid #9b9b9b !important;
+  background: white !important;
+}
+
+/*#endregion t-s7*/
+
+/*#endregion themes*/
+
+/*#endregion c-challenge-box*/
+
+/*#region l-challenge-box*/
+
+.l-challenge-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.l-challenge-box > * {
+  flex-shrink: 0;
+}
+
+.l-challenge-box__fill {
+  flex-grow: 1;
+}
+
+/*#endregion l-challenge-box*/
+
+/*#region o-challenge-btn*/
+
+.o-challenge-btn {
+  width: 15rem;
+  height: 3rem;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  border: .3rem solid #127a20;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  transition: all 0.2s, visibility 0s;
+  cursor: pointer;
+}
+
+.o-challenge-btn--unlocked {
+  color: black;
+  background-color: #f2f2f2;
+}
+
+.o-challenge-btn--unlocked:hover,
+.o-challenge-btn--completed {
+  color: white;
+  background-color: #5ac467;
+}
+
+.o-challenge-btn--running {
+  color: white;
+  background-color: #1f1f1f;
+}
+
+.o-challenge-btn--locked {
+  color: black;
+  background-color: #5c5c5c;
+  border-color: #881d1d;
+  cursor: default;
+}
+
+/*#region themes*/
+
+/*#region t-dark*/
+
+.t-dark .o-challenge-btn--unlocked {
+  background-color: #546e7a !important;
+}
+
+.t-dark .o-challenge-btn--unlocked:hover,
+.t-dark .o-challenge-btn--completed {
+  background-color: #43a047 !important;
+}
+
+.t-dark .o-challenge-btn--completed {
+  box-shadow: none !important;
+  border-color: #388e3c !important;
+}
+
+.t-dark .o-challenge-btn--running {
+  background-color: #263238 !important;
+}
+
+.t-dark .o-challenge-btn--locked {
+  background-color: #23292a !important;
+  border-color: #b84b5f !important;
+}
+
+/*#endregion t-dark*/
+
+/*#region t-metro t-dark-metro t-inverted-metro t-s8*/
+
+.t-metro .o-challenge-btn--unlocked,
+.t-metro .o-challenge-btn--completed,
+.t-dark-metro .o-challenge-btn--unlocked,
+.t-dark-metro .o-challenge-btn--completed,
+.t-inverted-metro .o-challenge-btn--unlocked,
+.t-inverted-metro .o-challenge-btn--completed,
+.t-s8 .o-challenge-btn--unlocked,
+.t-s8 .o-challenge-btn--completed {
+  border: .3rem solid #43a047 !important;
+  border-bottom-color: #388e3c !important;
+  border-right-color: #388e3c !important;
+}
+
+.t-metro .o-challenge-btn--unlocked:hover,
+.t-metro .o-challenge-btn--completed,
+.t-inverted-metro .o-challenge-btn--unlocked:hover,
+.t-inverted-metro .o-challenge-btn--completed,
+.t-s8 .o-challenge-btn--unlocked:hover,
+.t-s8 .o-challenge-btn--completed {
+  background-color: #66bb6a !important;
+}
+
+.t-dark-metro .o-challenge-btn--unlocked:hover,
+.t-dark-metro .o-challenge-btn--completed {
+  background-color: #43a047 !important;
+}
+
+.t-metro .o-challenge-btn--locked,
+.t-dark-metro .o-challenge-btn--locked,
+.t-inverted-metro .o-challenge-btn--locked,
+.t-s8 .o-challenge-btn--locked {
+  background-color: #9e9e9e !important;
+  border: .3rem solid #757575 !important;
+  border-bottom-color: #616161 !important;
+  border-right-color: #616161 !important;
+}
+
+/*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
+
+/*#region t-s1*/
+
+.t-s1 .o-challenge-btn--unlocked {
+  color: white !important;
+  background: none !important;
+  border: .3rem solid #507751 !important;
+}
+
+.t-s1 .o-challenge-btn--unlocked:hover,
+.t-s1 .o-challenge-btn--completed {
+  background-color: #639565 !important;
+}
+
+/*#endregion t-s1*/
+
+/*#region t-s6*/
+
+.t-s6 .o-challenge-btn {
+  border-color: #388e3c !important;
+}
+
+.t-s6 .o-challenge-btn--unlocked {
+  color: white !important;
+  background-color: black !important;
+}
+
+.t-s6 .o-challenge-btn--unlocked:hover,
+.t-s6 .o-challenge-btn--completed {
+  background-color: #43a047 !important;
+}
+
+.t-s6 .o-challenge-btn--completed {
+  box-shadow: none !important;
+}
+
+.t-s6 .o-challenge-btn--running {
+  background: #263238 !important;
+}
+
+.t-s6 .o-challenge-btn--locked {
+  color: grey !important;
+  background: black !important;
+  border-color: #b84b5f !important;
+}
+
+/*#endregion t-s6*/
+
+/*#endregion themes*/
+
+/*#endregion o-challenge-btn*/
+
+/*#endregion Challenges*/
 
 /*#region Modals*/
 

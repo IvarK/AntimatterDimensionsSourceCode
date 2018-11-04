@@ -3475,6 +3475,9 @@ function init() {
     document.getElementById('challengesbtn').onclick=function () {
       showTab('challenges');
     };
+    document.getElementById('challengesbtnvue').onclick=function () {
+      showTab('challengesbtnvue');
+    };
     document.getElementById('infinitybtn').onclick = function () {
         showTab('infinity');
     };

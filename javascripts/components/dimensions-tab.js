@@ -40,6 +40,7 @@ Vue.component('dimensions-tab', {
   },
   template:
     `<game-tab-with-subtabs
+      class="c-dim-tab"
       v-model="$viewModel.tabs.dimensions.subtab"
       :tabs="tabs"
     />`

@@ -2740,6 +2740,11 @@ screen and (max-width: 480px) {
 
 /*#endregion l-game-tab-with-subtabs*/
 
+.t-s2 .c-dim-tab {
+  color: black !important;
+  text-shadow: .05rem .05rem 0 white, -.05rem -.05rem 0 white;
+}
+
 /*#region Normal Dimensions*/
 
 /*#region l-normal-dim-tab*/

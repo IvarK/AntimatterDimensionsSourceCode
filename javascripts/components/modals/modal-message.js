@@ -6,7 +6,7 @@ Vue.component('modal-message', {
               v-html="$viewModel.modal.message"
             />
             <primary-button
-              class="c-primary-btn--width-medium c-modal-message__okay-btn"
+              class="o-primary-btn--width-medium c-modal-message__okay-btn"
               @click="emitClose"
             >Okay</primary-button>
         </div>`

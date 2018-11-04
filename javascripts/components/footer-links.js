@@ -1,7 +1,7 @@
 Vue.component('footer-links', {
   props: ['sticky'],
   template:
-    `<div :class="['c-footer', sticky ? 'c-footer--sticky' : '']">
+    `<div :class="['o-footer', sticky ? 'o-footer--sticky' : '']">
       <a href="howto.html" target="_newtab">How to play</a> |
       <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
       <a href="changelog.html" target="_newtab">Changelog</a> |

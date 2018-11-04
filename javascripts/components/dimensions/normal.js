@@ -48,7 +48,7 @@ Vue.component('dimensions-normal', {
       </div>
       <primary-button
         v-if="isQuickResetAvailable"
-        class="c-primary-btn--quick-reset"
+        class="o-primary-btn--quick-reset"
         @click="quickReset"
       >Lose a reset, returning to the start of the reset</primary-button>
       <normal-dimension-progress class="l-normal-dim-tab__progress_bar" />
@@ -100,11 +100,11 @@ Vue.component('normal-dimensions-top-row', {
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"
         :enabled="isSacrificeAffordable"
-        class="c-primary-btn--sacrifice"
+        class="o-primary-btn--sacrifice"
         @click="sacrifice"
       >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
       <primary-button
-        class="c-primary-btn--buy-max"
+        class="o-primary-btn--buy-max"
         @click="maxAll"
       >Max all (M)</primary-button>
     </div>`
@@ -176,12 +176,12 @@ Vue.component('normal-dimension-row', {
       >{{amountDisplay}} ({{boughtBefore10}}){{rateOfChangeDisplay}}</div>
       <primary-button
         :enabled="isAffordable"
-        class="c-primary-btn--buy-nd c-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
+        class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
         @click="buySingle"
       >Cost: {{shortenCosts(singleCost)}}</primary-button>
       <primary-button
         :enabled="isAffordableUntil10"
-        class="c-primary-btn--buy-nd c-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
+        class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
         @click="buyUntil10"
       >Until 10, Cost: {{shortenCosts(until10Cost)}}</primary-button>
       <div
@@ -235,7 +235,7 @@ Vue.component('normal-dimension-shift-row', {
       >Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
         :enabled="isAffordable"
-        class="c-primary-btn--dimboost c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
+        class="o-primary-btn--dimboost c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="softReset"
       >{{buttonText}}</primary-button>
     </div>`
@@ -295,7 +295,7 @@ Vue.component('normal-dimension-galaxy-row', {
       >{{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
       <primary-button
         :enabled="isAffordable"
-        class="c-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
+        class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="secondSoftReset"
       >Lose all your previous progress, but get a tickspeed boost</primary-button>
     </div>`

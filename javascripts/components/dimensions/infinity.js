@@ -49,7 +49,7 @@ Vue.component('dimensions-infinity', {
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
       <primary-button
-        class="c-primary-btn--buy-max l-infinity-dim-tab__buy-max"
+        class="o-primary-btn--buy-max l-infinity-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
       <div class="l-infinity-dim-tab__row-container">
@@ -65,7 +65,7 @@ Vue.component('dimensions-infinity', {
       >You have {{EC8PurchasesLeft}} purchases left.</div>
       <primary-button
         v-if="isAnyAutobuyerUnlocked"
-        class="c-primary-btn--id-all-autobuyers l-infinity-dim-tab__all-autobuyers"
+        class="o-primary-btn--id-all-autobuyers l-infinity-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
     </div>`
@@ -151,13 +151,13 @@ Vue.component('infinity-dimension-row', {
       <primary-button-on-off
         v-if="isAutobuyerUnlocked"
         v-model="autobuyers[tier - 1]"
-        class="c-primary-btn--id-autobuyer c-infinity-dim-row__button"
+        class="o-primary-btn--id-autobuyer c-infinity-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-tooltip="capTooltip"
         :enabled="isAffordable"
-        class="c-primary-btn--buy-id c-infinity-dim-row__button"
+        class="o-primary-btn--buy-id c-infinity-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>
     </div>`,

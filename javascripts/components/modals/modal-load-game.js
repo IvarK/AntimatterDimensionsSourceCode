@@ -41,7 +41,7 @@ Vue.component('modal-load-record', {
       <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
       <span>Antimatter: {{ formatMoney(antimatter) }}</span>
       <primary-button
-        class="c-primary-btn--width-medium"
+        class="o-primary-btn--width-medium"
         @click="loadSave"
       >Load</primary-button>
     </div>`

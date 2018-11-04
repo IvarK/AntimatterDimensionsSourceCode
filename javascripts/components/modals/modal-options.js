@@ -32,7 +32,7 @@ const modalOptionsMixin = {
           :value="value"
           :text="text"
           @input="emitInput"
-          class="c-primary-btn--option"
+          class="o-primary-btn--option"
         />`
     }
   }

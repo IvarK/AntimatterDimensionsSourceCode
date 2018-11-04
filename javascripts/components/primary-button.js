@@ -12,8 +12,8 @@ Vue.component('primary-button', {
     computed: {
       classObject: function() {
         return {
-          "c-primary-btn": true,
-          "c-primary-btn--disabled": !this.enabled,
+          "o-primary-btn": true,
+          "o-primary-btn--disabled": !this.enabled,
         };
       }
     }

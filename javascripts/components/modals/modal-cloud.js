@@ -35,11 +35,11 @@ Vue.component('modal-cloud-save-conflict', {
         saveType="cloud"
       />
       <primary-button
-        class="c-primary-btn--width-medium"
+        class="o-primary-btn--width-medium"
         @click="handleClick(true)"
       >Yes</primary-button>
       <primary-button
-        class="c-primary-btn--width-medium"
+        class="o-primary-btn--width-medium"
         @click="handleClick(false)"
       >No</primary-button>
     </div>`
@@ -56,7 +56,7 @@ Vue.component('modal-cloud-load-conflict', {
         saveType="local"
       >
         <primary-button
-          class="c-primary-btn--width-medium"
+          class="o-primary-btn--width-medium"
           @click="handleClick(false)"
         >Load local</primary-button>
       </modal-cloud-conflict-record>
@@ -66,7 +66,7 @@ Vue.component('modal-cloud-load-conflict', {
         saveType="cloud"
       >
         <primary-button
-          class="c-primary-btn--width-medium"
+          class="o-primary-btn--width-medium"
           @click="handleClick(true)"
         >Load cloud</primary-button>
       </modal-cloud-conflict-record>

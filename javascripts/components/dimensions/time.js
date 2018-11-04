@@ -52,7 +52,7 @@ Vue.component('dimensions-time', {
       <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>
       <primary-button
         v-tooltip="costScaleTooltip"
-        class="c-primary-btn--buy-max l-time-dim-tab__buy-max"
+        class="o-primary-btn--buy-max l-time-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
       <div class="l-time-dim-tab__row-container">
@@ -65,7 +65,7 @@ Vue.component('dimensions-time', {
       </div>
       <primary-button
         v-if="areAutobuyersUnlocked"
-        class="c-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
+        class="o-primary-btn--td-all-autobuyers l-time-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>
     </div>`
@@ -127,12 +127,12 @@ Vue.component('time-dimension-row', {
       <primary-button-on-off
         v-if="areAutobuyersUnlocked"
         v-model="autobuyers[tier - 1]"
-        class="c-primary-btn--td-autobuyer c-time-dim-row__button"
+        class="o-primary-btn--td-autobuyer c-time-dim-row__button"
         text="Auto:"
       />
       <primary-button
         :enabled="isAffordable"
-        class="c-primary-btn--buy-td c-time-dim-row__button"
+        class="o-primary-btn--buy-td c-time-dim-row__button"
         @click="buyTimeDimension"
       >Cost: {{shortenDimensions(cost)}} EP</primary-button>
     </div>`,

@@ -33,10 +33,10 @@ Vue.component("normal-challenges-tab", {
       },
       template:
         `<challenge-box
-          class="c-challenge-box--normal"
           :isUnlocked="true"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
+          class="c-challenge-box--normal"
           @start="start"
         >
           <span slot="top">{{details.description}}</span>

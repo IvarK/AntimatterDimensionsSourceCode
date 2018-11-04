@@ -3335,21 +3335,28 @@ screen and (max-width: 480px) {
   font-weight: bold;
   border: .2rem solid black;
   border-radius: .5rem;
-  font-size: 1rem;
+  font-size: .9rem;
   transition: all 0.2s, visibility 0s;
+}
+
+.c-challenge-box--hidden {
+  visibility: hidden;
 }
 
 .c-challenge-box--normal {
   color: black;
+  font-size: 1rem;
   background-color: #f2f2f2;
 }
 
 .c-challenge-box--infinity {
+  height: 14rem;
   color: white;
   background-color: #181818;
 }
 
 .c-challenge-box--eternity {
+  height: 14rem;
   color: #b341e0;
   background-color: black;
   border: .3rem solid #b341e0;

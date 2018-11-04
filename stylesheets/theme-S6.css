@@ -274,16 +274,6 @@ input {
     color: #FFF !important;
 }
 
-.c-infinity-dim-description__accent {
-    color: white !important;
-    text-shadow: 0 0 .7rem #fff;
-}
-
-.c-time-dim-description__accent {
-    color: #64DD17 !important;
-    text-shadow: 0 0 .7rem #64DD17;
-}
-
 #replicantiamount {
     color: #03A9F4 !important;
     text-shadow: 0px 0px 7px #03A9F4;

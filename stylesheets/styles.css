@@ -2934,9 +2934,23 @@ screen and (max-width: 480px) {
 
 /*#endregion l-infinity-dim-tab*/
 
+/*#region c-infinity-dim-description__accent*/
+
 .c-infinity-dim-description__accent {
   font-size: 3.5rem;
 }
+
+.t-dark .c-infinity-dim-description__accent,
+.t-s6 .c-infinity-dim-description__accent {
+  color: white !important;
+  text-shadow: 0 0 .7rem #fff;
+}
+
+.t-dark-metro .c-infinity-dim-description__accent {
+  color: #ff9800 !important;
+}
+
+/*#endregion c-infinity-dim-description__accent*/
 
 /*#region c-infinity-dim-row*/
 
@@ -3001,9 +3015,23 @@ screen and (max-width: 480px) {
 
 /*#endregion l-time-dim-tab*/
 
+/*#region c-time-dim-description__accent*/
+
 .c-time-dim-description__accent {
   font-size: 3.5rem;
 }
+
+.t-dark .c-time-dim-description__accent,
+.t-s6 .c-time-dim-description__accent {
+  color: #64dd17 !important;
+  text-shadow: 0 0 .7rem #64dd17;
+}
+
+.t-dark-metro .c-time-dim-description__accent {
+  color: #673ab7 !important;
+}
+
+/*#endregion c-time-dim-description__accent*/
 
 /*#region c-time-dim-row*/
 

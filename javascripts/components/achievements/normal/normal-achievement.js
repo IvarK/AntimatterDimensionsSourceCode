@@ -1,4 +1,4 @@
-Vue.component('achievement', {
+Vue.component('normal-achievement', {
   props: {
     row: Number,
     column: Number

@@ -5,12 +5,12 @@ Vue.component('achievements-tab', {
         {
           name: "Achievements",
           id: "Achievements",
-          component: "normal-achievements"
+          component: "normal-achievements-tab"
         },
         {
           name: "Secret Achievements",
           id: "Secret Achievements",
-          component: "secret-achievements"
+          component: "secret-achievements-tab"
         }
       ]
     };

@@ -35,10 +35,11 @@ Vue.component('achievement', {
     },
     classObject: function() {
       return {
-        "blink-of-an-eye": this.isBlinkOfAnEye && !this.isUnlocked,
-        achievementlocked: !this.isUnlocked,
-        achievementunlocked: this.isUnlocked && this.isEnabled,
-        achievementdisabled: this.isUnlocked && !this.isEnabled
+        "o-achievement": true,
+        "o-achievement--locked": !this.isUnlocked,
+        "o-achievement--unlocked": this.isUnlocked && this.isEnabled,
+        "o-achievement--disabled": this.isUnlocked && !this.isEnabled,
+        "o-achievement--blink": this.isBlinkOfAnEye && !this.isUnlocked
       };
     },
     detailsTooltip: function() {

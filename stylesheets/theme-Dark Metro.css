@@ -149,20 +149,6 @@ input {
     background: #1B5E20 !important;
 }
 
-.achievementunlocked {
-    background-color: #4CAF50 !important;
-    border: 1px solid #388E3C !important;
-}
-
-.achievementlocked {
-    background-color: #9E9E9E !important;
-    border: 1px solid #E53935 !important;
-}
-
-.achievementhidden {
-    border-width: 1px !important;
-}
-
 #infinityPoints1 {
     color: #757575 !important;
 }

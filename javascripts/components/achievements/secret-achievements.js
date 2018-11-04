@@ -69,8 +69,9 @@ Vue.component('secret-achievement', {
     },
     classObject: function() {
       return {
-        achievementhidden: !this.isUnlocked,
-        achievementunlocked: this.isUnlocked
+        "o-achievement": true,
+        "o-achievement--hidden": !this.isUnlocked,
+        "o-achievement--unlocked": this.isUnlocked
       };
     },
     details: function() {

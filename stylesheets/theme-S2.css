@@ -12,7 +12,3 @@ body {
     background: none !important;
     filter: sepia(100%) hue-rotate(180deg) saturate(250%);
 }
-
-.achievementlocked {
-    background-color: rgba(0, 0, 0, 0) !important;
-}

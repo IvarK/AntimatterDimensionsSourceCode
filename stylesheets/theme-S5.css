@@ -21,12 +21,3 @@ body {
 .autoBuyerDiv {
     background: #ddd !important;
 }
-
-.achievementunlocked {
-    border: 2px solid #bbb !important;
-}
-
-.achievementlocked {
-    border: 2px solid #000 !important;
-    background-color: #222 !important;
-}

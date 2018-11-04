@@ -1,4 +1,32 @@
-Vue.component('dimensions-production', {
+Vue.component('dim-production-tab', {
+  components: {
+    "number-input": {
+      props: {
+        value: Number,
+        min: Number,
+        max: Number,
+        default: Number
+      },
+      data: function() {
+        return {
+          inputValue: this.clamp(this.value)
+        };
+      },
+      methods: {
+        clamp: function(value) {
+          return Math.clamp(value, this.min, this.max);
+        },
+        handleInput: function(event) {
+          const input = parseInt(event.target.value);
+          const finalValue = isNaN(input) ? this.min : this.clamp(input);
+          this.inputValue = finalValue;
+          this.emitInput(finalValue);
+        }
+      },
+      template:
+        `<input type="number" :value="inputValue" @input="handleInput" />`
+    }
+  },
   data: function() {
     return {
       options: player.options
@@ -62,41 +90,13 @@ Vue.component('dimensions-production', {
         />
         <b>dips:</b>
         <input
+          v-model="chartOptions.dips"
           class="c-production-header__checkbox"
           type="checkbox"
-          v-model="chartOptions.dips"
           @input="checkToggleWarnings"
         />
       </div>
       <div ref="chartContainer" />
       <b>Exponents of antimatter per second</b>
-    </div>`,
-  components: {
-    "number-input": {
-      props: {
-        value: Number,
-        min: Number,
-        max: Number,
-        default: Number
-      },
-      data: function() {
-        return {
-          inputValue: this.clamp(this.value)
-        };
-      },
-      methods: {
-        clamp: function(value) {
-          return Math.clamp(value, this.min, this.max);
-        },
-        handleInput: function(event) {
-          const input = parseInt(event.target.value);
-          const finalValue = isNaN(input) ? this.min : this.clamp(input);
-          this.inputValue = finalValue;
-          this.emitInput(finalValue);
-        }
-      },
-      template:
-        `<input type="number" :value="inputValue" @input="handleInput" />`
-    }
-  }
+    </div>`
 });

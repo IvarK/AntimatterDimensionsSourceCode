@@ -89,10 +89,6 @@ input {
     animation: antimatterGlow 25s infinite;
 }
 
-.c-progress-bar__fill {
-    background-color: #1B5E20 !important;
-}
-
 #news {
     color: #E0E0E0 !important;
 }

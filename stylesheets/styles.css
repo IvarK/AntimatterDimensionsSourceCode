@@ -2626,7 +2626,7 @@ screen and (max-width: 480px) {
   background-color: #ef5350 !important;
 }
 
-/*#endregion t-metro t-inverted-metro*/
+/*#endregion t-metro t-inverted-metro t-s8*/
 
 /*#region t-s1*/
 
@@ -2870,6 +2870,37 @@ screen and (max-width: 480px) {
   pointer-events: all !important;
 }
 
+/*#region themes*/
+
+/*#region t-dark t-s6*/
+
+.t-s6 .c-progress-bar__fill,
+.t-dark .c-progress-bar__fill {
+  background-color: #1b5e20 !important;
+}
+
+/*#endregion t-dark t-s6*/
+
+/*#region t-inverted t-inverted-metro*/
+
+.t-dark .c-progress-bar__fill,
+.t-inverted-metro .c-progress-bar__fill {
+  color: white !important;
+  background-color: #ed85df !important;
+}
+
+/*#endregion t-inverted t-inverted-metro*/
+
+/*#region t-s1*/
+
+.t-s1 .c-progress-bar__fill {
+  background-color: #4baf4e !important;
+}
+
+/*#endregion t-s1*/
+
+/*#endregion themes*/
+
 /*#endregion c-progress-bar*/
 
 /*#endregion Normal Dimensions*/
@@ -3111,7 +3142,7 @@ screen and (max-width: 480px) {
   box-shadow: 0 0 1rem 0 black !important;
 }
 
-/*#endregion t-dark*/
+/*#endregion t-dark t-dark-metro*/
 
 /*#region t-inverted t-inverted-metro t-metro*/
 
@@ -3125,7 +3156,7 @@ screen and (max-width: 480px) {
   border: .1rem solid black !important;
 }
 
-/*#endregion t-inverted*/
+/*#endregion t-inverted t-inverted-metro t-metro*/
 
 /*#region t-s1*/
 

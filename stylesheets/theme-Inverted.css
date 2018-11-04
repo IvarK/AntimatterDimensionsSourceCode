@@ -43,8 +43,3 @@ body {
 .timetheorembtnlocked:hover {
     background: #9ad0d0 !important;
 }
-
-.c-progress-bar__fill {
-    color: white !important;
-    background-color: #ED85DF !important;
-}

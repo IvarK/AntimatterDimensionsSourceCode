@@ -14,11 +14,6 @@ body {
     filter: invert(1);
 }
 
-.c-progress-bar__fill {
-    color: white !important;
-    background-color: #ED85DF !important;
-}
-
 * {
     border-radius: 0px !important;
     border-width: 1px !important;

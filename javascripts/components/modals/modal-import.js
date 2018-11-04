@@ -14,6 +14,7 @@ Vue.component('modal-import', {
         type="text"
         class="c-modal-input c-modal-import__input"
         @keyup.enter="importSave"
+        @keyup.esc="emitClose"
       />
       <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>

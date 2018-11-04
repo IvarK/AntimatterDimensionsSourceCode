@@ -31,15 +31,6 @@ Vue.component('statistics-stats-tab', {
     };
   },
   methods: {
-    timeDisplay: function(time) {
-      return timeDisplay(time);
-    },
-    formatAmount: function(value) {
-      return formatWithCommas(value);
-    },
-    formatResetAmount: function(value) {
-      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
-    },
     update() {
       this.totalAntimatter.copyFrom(player.totalmoney);
       this.resets = player.resets;
@@ -75,10 +66,19 @@ Vue.component('statistics-stats-tab', {
         reality.totalTimePlayed = player.totalTimePlayed;
       }
       this.infoScale = estimateMatterScale(player.money, this);
+    },
+    timeDisplay: function(time) {
+      return timeDisplay(time);
+    },
+    formatAmount: function(value) {
+      return formatWithCommas(value);
+    },
+    formatResetAmount: function(value) {
+      return this.formatAmount(value) + ((value === 1) ? " time" : " times");
     }
   },
   template:
-    `<div class="statstab">
+    `<div>
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>

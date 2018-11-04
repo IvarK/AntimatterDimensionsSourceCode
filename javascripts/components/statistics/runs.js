@@ -77,7 +77,7 @@ Vue.component('statistic-past-runs', {
     reward: Function
   },
   template:
-    '<div class="statstab">\
+    '<div>\
         <br>\
         <div v-for="(run, index) in runs" :key="index">\
             <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\

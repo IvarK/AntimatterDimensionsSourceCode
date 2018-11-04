@@ -49,8 +49,8 @@ Vue.component('statistics-tab', {
   },
   template:
     `<game-tab-with-subtabs
-      style="color: black; font-size: 12px; font-family: Typewriter"
-      :tabs="tabs"
       v-model="$viewModel.tabs.statistics.subtab"
+      :tabs="tabs"
+      class="c-stats-tab"
     />`
 });

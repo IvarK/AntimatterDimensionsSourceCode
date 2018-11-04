@@ -6,17 +6,17 @@ Vue.component('statistics-challenges', {
     };
   },
   template:
-    `<div class="statstab statsistics-challenges">
+    `<div class="l-challenge-records-tab">
         <statistics-challenge-times
-            name="Challenge"
-            :times="normalChallenges"
             :start="2"
+            :times="normalChallenges"
+            name="Challenge"
         />
         <statistics-challenge-times
-            name="Infinity Challenge"
-            :times="infinityChallenges"
             :start="1"
-            style="margin-top: auto; margin-left: 20px;"
+            :times="infinityChallenges"
+            name="Infinity Challenge"
+            class="l-challenge-records-tab__infinity_challenges"
         />
     </div>`,
   computed: {

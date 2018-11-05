@@ -2763,6 +2763,8 @@ screen and (max-width: 480px) {
   font-size: 1.6rem;
   color: black;
   pointer-events: all !important;
+  user-select: none;
+  overflow-wrap: normal;
 }
 
 /*#region themes*/

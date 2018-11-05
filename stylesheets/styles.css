@@ -2602,6 +2602,11 @@ screen and (max-width: 480px) {
 
 /*#endregion o-primary-btn*/
 
+.o-big-checkbox {
+  width: 2rem;
+  height: 1.8rem;
+}
+
 /*#region l-game-tab*/
 
 .l-game-tab {
@@ -2643,6 +2648,27 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion l-game-tab-with-subtabs*/
+
+/*#region hint-text*/
+
+.o-hint-text {
+  font-size: 1.5rem;
+  color: white;
+  text-shadow:
+      -1px -1px 0 black,
+      1px -1px 0 black,
+      -1px 1px 0 black,
+      1px 1px 0 black;
+}
+
+.l-hint-text {
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  z-index: -999;
+}
+
+/*#endregion hint-text*/
 
 .t-s2 .c-dim-tab {
   color: black !important;
@@ -2749,11 +2775,6 @@ screen and (max-width: 480px) {
 
 /*#endregion c-dimension-row*/
 
-.c-sacrifice-checkbox {
-  width: 2rem;
-  height: 1.8rem;
-}
-
 /*#region c-progress-bar*/
 
 .c-progress-bar {
@@ -2798,7 +2819,7 @@ screen and (max-width: 480px) {
 
 /*#region t-inverted t-inverted-metro*/
 
-.t-dark .c-progress-bar__fill,
+.t-inverted .c-progress-bar__fill,
 .t-inverted-metro .c-progress-bar__fill {
   color: white !important;
   background-color: #ed85df !important;
@@ -3301,8 +3322,18 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
+.l-challenges-tab__header {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .l-challenges-tab__exit-btn {
-  margin: 1rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 /*#endregion l-challenges-tab*/
@@ -3310,7 +3341,7 @@ screen and (max-width: 480px) {
 /*#region l-challenge-grid*/
 
 .l-challenge-grid {
-  /* grid cell is <40rem, so the grid is 2x(N/2) */
+  /* grid cell is 30rem < cell.width < 40rem, so the grid is 2x(N/2) */
   width: 80rem;
   display: flex;
   flex-direction: row;
@@ -3319,8 +3350,11 @@ screen and (max-width: 480px) {
 }
 
 .l-challenge-grid__cell {
-  margin: .8rem 1.2rem;
-  flex-shrink: 0;
+  margin: .8rem 1.6rem;
+}
+
+.l-challenge-grid__cell--hidden {
+  display: none;
 }
 
 /*#endregion l-challenge-grid*/
@@ -3337,10 +3371,6 @@ screen and (max-width: 480px) {
   border-radius: .5rem;
   font-size: .9rem;
   transition: all 0.2s, visibility 0s;
-}
-
-.c-challenge-box--hidden {
-  visibility: hidden;
 }
 
 .c-challenge-box--normal {
@@ -3446,10 +3476,13 @@ screen and (max-width: 480px) {
 /*#region l-challenge-box*/
 
 .l-challenge-box {
+  margin-top: .5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  /* because of hint-text */
+  position: relative;
 }
 
 .l-challenge-box > * {

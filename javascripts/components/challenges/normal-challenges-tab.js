@@ -19,6 +19,9 @@ Vue.component("normal-challenges-tab", {
         },
         details: function() {
           return normalChallengeDetails[this.challengeId];
+        },
+        name: function() {
+          return `C${this.challengeId}`;
         }
       },
       methods: {
@@ -33,6 +36,7 @@ Vue.component("normal-challenges-tab", {
       },
       template:
         `<challenge-box
+          :name="name"
           :isUnlocked="true"
           :isRunning="isRunning"
           :isCompleted="isCompleted"

@@ -4,6 +4,8 @@ Vue.component('challenges-tab', {
       isICTabUnlocked: false,
       isECTabUnlocked: false,
       isInChallenge: false,
+      isRealityUnlocked: false,
+      options: player.options,
       tabs: [
         {
           name: "Challenges",
@@ -31,6 +33,7 @@ Vue.component('challenges-tab', {
       this.isECTabUnlocked = ecTabUnlocked;
       this.isICTabUnlocked = ecTabUnlocked || player.money.gte(new Decimal("1e2000"));
       this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
+      this.isRealityUnlocked = PlayerProgress.realityUnlocked;
     }
   },
   template:
@@ -39,11 +42,20 @@ Vue.component('challenges-tab', {
       :tabs="tabs"
       class="l-challenges-tab"
     >
-      <primary-button
-        v-if="isInChallenge"
-        slot="before-content"
-        class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
-        onclick="exitChallenge()"
-      >Exit Challenge</primary-button>
+      <div v-if="isInChallenge || isRealityUnlocked" slot="before-content" class="l-challenges-tab__header">
+        <primary-button
+          v-if="isInChallenge"
+          class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
+          onclick="exitChallenge()"
+        >Exit Challenge</primary-button>
+        <template v-if="isRealityUnlocked">
+          <input
+            v-model="options.showAllChallenges"
+            type="checkbox"
+            class="o-big-checkbox"
+          />
+          <b>Show all</b>
+        </template>
+      </div>
     </game-tab-with-subtabs>`
 });

@@ -27,6 +27,7 @@ function onLoad() {
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.noSacrificeConfirmation === undefined) player.options.noSacrificeConfirmation = false;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
+  if (player.options.showAllChallenges === undefined) player.options.showAllChallenges = false;
   if (player.options.bulkOn === undefined) player.options.bulkOn = true
   if (player.options.cloud === undefined) player.options.cloud = true
   if (player.options.hotkeys === undefined) player.options.hotkeys = true

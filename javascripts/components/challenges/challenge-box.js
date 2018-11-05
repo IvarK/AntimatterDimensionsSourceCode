@@ -1,5 +1,6 @@
 Vue.component("challenge-box", {
   props: {
+    name: String,
     isUnlocked: false,
     isRunning: false,
     isCompleted: false
@@ -32,6 +33,7 @@ Vue.component("challenge-box", {
   },
   template:
     `<div class="c-challenge-box l-challenge-box">
+      <hint-text>{{name}}</hint-text>
       <slot name="top" />
       <div class="l-challenge-box__fill" />
       <button

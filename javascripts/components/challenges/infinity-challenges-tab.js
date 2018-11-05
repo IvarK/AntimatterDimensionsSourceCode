@@ -6,7 +6,7 @@ Vue.component("infinity-challenges-tab", {
       },
       data: function() {
         return {
-          isHidden: false,
+          isUnlocked: false,
           isRunning: false,
           isCompleted: false
         };
@@ -18,17 +18,14 @@ Vue.component("infinity-challenges-tab", {
         details: function() {
           return infinityChallengeDetails[this.challengeId];
         },
-        classObject: function() {
-          return {
-            "c-challenge-box--infinity": true,
-            "c-challenge-box--hidden": this.isHidden
-          };
+        name: function() {
+          return `IC${this.challengeId}`;
         }
       },
       methods: {
         update() {
           const id = this.fullId;
-          this.isHidden = player.postChallUnlocked < this.challengeId;
+          this.isUnlocked = player.postChallUnlocked >= this.challengeId;
           this.isRunning = player.currentChallenge === id;
           this.isCompleted = player.challenges.includes(id);
         },
@@ -38,10 +35,11 @@ Vue.component("infinity-challenges-tab", {
       },
       template:
         `<challenge-box
-          :isUnlocked="true"
+          :name="name"
+          :isUnlocked="isUnlocked"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
-          :class="classObject"
+          class="c-challenge-box--infinity"
           @start="start"
         >
           <span slot="top">{{details.description}}</span>
@@ -58,6 +56,13 @@ Vue.component("infinity-challenges-tab", {
       nextAt: new Decimal(0)
     };
   },
+  computed: {
+    nextAtDisplay: function() {
+      return this.hasChallengesToUnlock ?
+        `Next challenge unlocks at ${this.shortenCosts(this.nextAt)} antimatter.` :
+        "All Infinity Challenges unlocked";
+    }
+  },
   methods: {
     update() {
       const hasChallengesToUnlock = nextAt[player.postChallUnlocked] !== undefined;
@@ -65,12 +70,15 @@ Vue.component("infinity-challenges-tab", {
       if (hasChallengesToUnlock) {
         this.nextAt.copyFrom(nextAt[player.postChallUnlocked]);
       }
+    },
+    isChallengeVisible: function(id) {
+      return player.postChallUnlocked >= id;
     }
   },
   template:
     `<div>
-      <div v-if="hasChallengesToUnlock">Next challenge unlocks at {{shortenCosts(nextAt)}} antimatter.</div>
-      <challenge-grid :count="8">
+      <div>{{nextAtDisplay}}</div>
+      <challenge-grid :count="8" :isChallengeVisible="isChallengeVisible">
         <infinity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />
       </challenge-grid>
     </div>`

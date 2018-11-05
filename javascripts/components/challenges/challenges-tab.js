@@ -4,7 +4,7 @@ Vue.component('challenges-tab', {
       isICTabUnlocked: false,
       isECTabUnlocked: false,
       isInChallenge: false,
-      isRealityUnlocked: false,
+      isShowAllVisible: false,
       options: player.options,
       tabs: [
         {
@@ -29,11 +29,12 @@ Vue.component('challenges-tab', {
   },
   methods: {
     update() {
-      const ecTabUnlocked = player.eternityChallUnlocked !== 0 || Object.keys(player.eternityChalls).length > 0;
-      this.isECTabUnlocked = ecTabUnlocked;
-      this.isICTabUnlocked = ecTabUnlocked || player.money.gte(new Decimal("1e2000"));
+      const isECTabUnlocked = player.eternityChallUnlocked !== 0 || Object.keys(player.eternityChalls).length > 0;
+      this.isECTabUnlocked = isECTabUnlocked;
+      const isICTabUnlocked = isECTabUnlocked || player.money.gte(new Decimal("1e2000"));
+      this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
-      this.isRealityUnlocked = PlayerProgress.realityUnlocked;
+      this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
     }
   },
   template:
@@ -42,13 +43,13 @@ Vue.component('challenges-tab', {
       :tabs="tabs"
       class="l-challenges-tab"
     >
-      <div v-if="isInChallenge || isRealityUnlocked" slot="before-content" class="l-challenges-tab__header">
+      <div v-if="isInChallenge || isShowAllVisible" slot="before-content" class="l-challenges-tab__header">
         <primary-button
           v-if="isInChallenge"
           class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
           onclick="exitChallenge()"
         >Exit Challenge</primary-button>
-        <template v-if="isRealityUnlocked">
+        <template v-if="isShowAllVisible">
           <input
             v-model="options.showAllChallenges"
             type="checkbox"

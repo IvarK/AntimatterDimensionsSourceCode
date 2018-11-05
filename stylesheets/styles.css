@@ -1452,7 +1452,8 @@ button {
     z-index: 2;
     left: 50%;
     transition: opacity 0.3s;
-    font-size: 1em;
+    font-size: 1.4rem;
+    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
     padding: 12px;
     pointer-events: none;

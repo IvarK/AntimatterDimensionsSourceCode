@@ -132,7 +132,7 @@ function isSecretImport(data) {
 function tryImportSecret(data) {
   let index = secretImportIndex(data);
   if (index === 0) {
-    document.getElementById("body").style.animation = "barrelRoll 5s 1";
+    document.body.style.animation = "barrelRoll 5s 1";
     giveAchievement("Do a barrel roll!");
     setTimeout(() => document.getElementById("body").style.animation = "", 5000);
     return true;

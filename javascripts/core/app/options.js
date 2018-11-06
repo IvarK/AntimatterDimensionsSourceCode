@@ -134,7 +134,7 @@ function tryImportSecret(data) {
   if (index === 0) {
     document.body.style.animation = "barrelRoll 5s 1";
     giveAchievement("Do a barrel roll!");
-    setTimeout(() => document.getElementById("body").style.animation = "", 5000);
+    setTimeout(() => document.body.style.animation = "", 5000);
     return true;
   }
   if (index === 1) {

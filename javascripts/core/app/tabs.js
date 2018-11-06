@@ -40,6 +40,7 @@ Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("stats-tab");
 Tab.achievements = new Tab("achievements-tab");
+Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
 function tryShowtab(tab) {
@@ -57,6 +58,10 @@ function tryShowtab(tab) {
   }
   if (tab === 'achievements') {
     Tab.achievements.show();
+    return true;
+  }
+  if (tab === 'celestials') {
+    Tab.celestials.show();
     return true;
   }
   ui.view.tabs.current = undefined;

@@ -18,6 +18,9 @@ let ui = {
       },
       achievements: {
         subtab: String.empty
+      },
+      celestials: {
+        subtab: String.empty
       }
     },
     shiftDown: false,

@@ -2244,6 +2244,9 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
+    if ( [20, 21, 22, 23, 24, 25].every(id => { return player.reality.upg.includes(id)}) ) $("#celestialsbtn").show()
+    else $("#celestialsbtn").hide()
+
     if (player.realities > 3) {
         $("#automatorUnlock").hide()
         $(".automator-container").show()
@@ -3485,6 +3488,9 @@ function init() {
         showTab('shop')
         kong.updatePurchases();
     }
+    document.getElementById('celestialsbtn').onclick = function () {
+      showTab('celestials');
+    };
     Tab.dimensions.normal.show();
     //show one tab during init or they'll all start hidden
     showInfTab('preinf')

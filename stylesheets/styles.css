@@ -717,6 +717,19 @@ button {
     color: white;
 }
 
+.celestialtabbtn {
+  background-color: rgb(81, 81, 236);
+  border: 2px solid rgb(208, 208, 208);
+  color: rgb(255, 255, 255);
+  display: none;
+}
+
+.celestialtabbtn:hover {
+  background-color: rgb(208, 208, 208);
+  border: 2px solid rgb(208, 208, 208);
+  color: rgb(81, 81, 236);
+}
+
 .autoBuyerDiv {
     border: solid 1px grey;
     width:230px;

@@ -22,6 +22,9 @@ let ui = {
       challenges: {
         subtab: String.empty
       },
+      infinity: {
+        subtab: String.empty
+      },
       celestials: {
         subtab: String.empty
       }

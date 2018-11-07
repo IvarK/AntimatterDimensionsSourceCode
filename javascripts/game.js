@@ -3224,6 +3224,9 @@ function init() {
     document.getElementById('infinitybtn').onclick = function () {
         showTab('infinity');
     };
+    document.getElementById('infinitybtnvue').onclick = function () {
+        showTab('infinityvue');
+    };
     document.getElementById("eternitystorebtn").onclick = function () {
         showTab('eternitystore')
     }

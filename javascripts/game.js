@@ -58,39 +58,6 @@ function updateCoinPerSec() {
 
 function getInfinitied() {return Math.max(player.infinitied + player.infinitiedBank, 0)}
 
-function getETA(cost) {
-    var a = 100;
-    if (player.money.gte(cost)) return 0
-    while (ETACalc(a).lt(cost)) {
-        a *= 10;
-        if (a > 1e20) return Infinity;
-    }
-    var b = a / 10;
-    var q = ETACalc((a+b)/2);
-    while (q.gt(cost.times(1.0001)) || q.lt(cost.dividedBy(1.0001))) {
-        console.log("q = "+q)
-        console.log("a = "+a)
-        console.log("b = "+b)
-        if (q.lt(cost)) a = (a+b)/2;
-        else b = (a+b)/2;
-        q = ETACalc((a+b)/2);
-    }
-    return (a+b)/2;
-}
-
-function ETACalc(t) {
-    var value = player.money.plus(getDimensionProductionPerSecond(1).times(t));
-    var div = 1;
-    for (let tier = 2; tier <= 8; ++tier) {
-        var name = TIER_NAMES[tier-1]
-        div *= tier;
-        value = value.plus(getDimensionProductionPerSecond(tier).times(getDimensionProductionPerSecond(tier-1)).times(Decimal.pow(t,tier)).dividedBy(Decimal.max(player[name+"Amount"].times(div).times(10), 1))) ;
-    }
-    return value
-}
-
-
-
 var worstChallengeTime = 1
 
 function updateWorstChallengeTime() {
@@ -99,14 +66,6 @@ function updateWorstChallengeTime() {
         if (player.challengeTimes[i]/100 > worstChallengeTime) worstChallengeTime = player.challengeTimes[i]/100
     }
 }
-
-
-function sacrificeConf() {
-    player.options.noSacrificeConfirmation = !player.options.noSacrificeConfirmation
-}
-
-
-
 
 function updateDimensions() {
     if (canBuyTickSpeed() || player.currentEternityChall == "eterc9") {
@@ -218,12 +177,6 @@ document.getElementById("secretstudy").onclick = function () {
     giveAchievement("Go study in real life instead");
     setTimeout(drawStudyTree, 2000);
 };
-
-function glowText(id) {
-  var text = document.getElementById(id);
-  text.style.setProperty("-webkit-animation", "glow 1s");
-  text.style.setProperty("animation", "glow 1s");
-}
 
 function maxAll() {
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
@@ -1983,8 +1936,6 @@ setInterval(function() {
 
 var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000"), new Decimal("1e14000"), new Decimal("1e18000"), new Decimal("1e20000"), new Decimal("1e23000"), new Decimal("1e28000")]
 
-var goals = [new Decimal("1e850"), new Decimal("1e10500"), new Decimal("1e5000"), new Decimal("1e13000"), new Decimal("1e11111"), new Decimal("2e22222"), new Decimal("1e10000"), new Decimal("1e27000")]
-
 var ttMaxTimer = 0
 setInterval(function() {
     if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
@@ -2206,7 +2157,6 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
 let autobuyerOnGameLoop = true;
 
 function gameLoop(diff) {
-    let view;
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
@@ -2228,7 +2178,6 @@ function gameLoop(diff) {
 
     speedFactor = getGameSpeedupFactor();
     diff *= speedFactor;
-    const diffTs = TimeSpan.fromMilliseconds(diff);
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 

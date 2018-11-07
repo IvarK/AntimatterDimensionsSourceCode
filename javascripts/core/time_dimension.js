@@ -173,13 +173,11 @@ class TimeDimensionInfo {
     if (player.currentEternityChall === "eterc9") {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
     }
-    if (ECTimesCompleted("eterc1") !== 0) {
-      mult = mult.times(Math.pow(Math.max(player.thisEternity * 10, 0.9), 0.3 + (ECTimesCompleted("eterc1") * 0.05)));
-    }
+
+    EternityChallenge(1).applyReward(value => mult = mult.times(value));
+
     let ec10bonus = new Decimal(1);
-    if (ECTimesCompleted("eterc10") !== 0) {
-      ec10bonus = new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002 + 1, 1));
-    }
+    EternityChallenge(10).applyReward(value => ec10bonus = value);
     if (player.timestudy.studies.includes(31)) {
       ec10bonus = ec10bonus.pow(4);
     }

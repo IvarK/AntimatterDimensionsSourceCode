@@ -100,3 +100,164 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
 
     return true
 }
+
+const TIERS_PER_EC = 5;
+
+class EternityChallengeInfo {
+  constructor(id) {
+    this._id = id;
+    this._fullId = `eterc${id}`;
+    this._details = EternityChallengeInfo.details[id];
+  }
+
+  get fullId() {
+    return this._fullId;
+  }
+
+  get isUnlocked() {
+    return player.eternityChallUnlocked === this._id;
+  }
+
+  get isRunning() {
+    return player.currentEternityChall === this.fullId;
+  }
+
+  get completions() {
+    if (player.eternityChalls[this.fullId] === undefined) {
+      return 0;
+    }
+    return player.eternityChalls[this.fullId];
+  }
+
+  get isFullyCompleted() {
+    return this.completions === TIERS_PER_EC;
+  }
+
+  get initialGoal() {
+    return this._details.goal;
+  }
+
+  get goalIncrease() {
+    return this._details.goalIncrease;
+  }
+
+  get currentGoal() {
+    return this.goalAtCompletions(this.completions);
+  }
+
+  goalAtCompletions(completions) {
+    return completions > 0 ?
+      this.initialGoal.times(this.goalIncrease.pow(completions)) :
+      this.initialGoal;
+  }
+
+  get rewardValue() {
+    const completions = this.completions;
+    if (completions === 0) {
+      throw `EC${this._id} has 0 completions - there's no effect yet`;
+    }
+    return this.rewardValueAtCompletions(completions);
+  }
+
+  get nextRewardValue() {
+    const completions = this.completions;
+    if (completions === TIERS_PER_EC) {
+      throw `EC${this._id} has max completions - there's no effect value of next tier`;
+    }
+    return this.rewardValueAtCompletions(completions + 1);
+  }
+
+  rewardValueAtCompletions(completions) {
+    return this._details.rewardValue(completions);
+  }
+
+  applyReward(applyFn) {
+    if (this.completions > 0) {
+      applyFn(this.rewardValue);
+    }
+  }
+
+  start() {
+    startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
+  }
+}
+
+EternityChallengeInfo.details = [
+  null,
+  {
+    /* EC1 */
+    goal: new Decimal('1e1800'),
+    goalIncrease: new Decimal('1e200'),
+    rewardValue: completions => Math.pow(Math.max(player.thisEternity * 10, 0.9), 0.3 + (completions * 0.05))
+  },
+  {
+    /* EC2 */
+    goal: new Decimal('1e975'),
+    goalIncrease: new Decimal('1e175'),
+    rewardValue: completions => player.infinityPower.pow(1.5 / (700 - completions * 100)).min(new Decimal("1e100")).plus(1)
+  },
+  {
+    /* EC3 */
+    goal: new Decimal('1e600'),
+    goalIncrease: new Decimal('1e75'),
+    rewardValue: completions => completions * 0.8
+  },
+  {
+    /* EC4 */
+    goal: new Decimal('1e2750'),
+    goalIncrease: new Decimal('1e550'),
+    rewardValue: completions => player.infinityPoints.pow(0.003 + completions * 0.002).min(new Decimal("1e200"))
+  },
+  {
+    /* EC5 */
+    goal: new Decimal('1e750'),
+    goalIncrease: new Decimal('1e400'),
+    rewardValue: completions => completions * 5
+  },
+  {
+    /* EC6 */
+    goal: new Decimal('1e850'),
+    goalIncrease: new Decimal('1e250'),
+    rewardValue: completions => completions * 0.2
+  },
+  {
+    /* EC7 */
+    goal: new Decimal('1e2000'),
+    goalIncrease: new Decimal('1e530'),
+    rewardValue: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).max(0)
+  },
+  {
+    /* EC8 */
+    goal: new Decimal('1e1300'),
+    goalIncrease: new Decimal('1e900'),
+    rewardValue: completions => Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 * completions) - 1, 0)
+  },
+  {
+    /* EC9 */
+    goal: new Decimal('1e1750'),
+    goalIncrease: new Decimal('1e250'),
+    rewardValue: completions => player.timeShards.pow(completions * 0.1).plus(1).min(new Decimal("1e400"))
+  },
+  {
+    /* EC10 */
+    goal: new Decimal('1e3000'),
+    goalIncrease: new Decimal('1e300'),
+    rewardValue: completions => new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * completions * 0.000002 + 1, 1))
+  },
+  {
+    /* EC11 */
+    goal: new Decimal('1e500'),
+    goalIncrease: new Decimal('1e200'),
+    rewardValue: completions => completions * 0.07
+  },
+  {
+    /* EC12 */
+    goal: new Decimal('1e110000'),
+    goalIncrease: new Decimal('1e12000'),
+    rewardValue: completions => 1 - completions * 0.008
+  }
+];
+
+function EternityChallenge(id) {
+  return new EternityChallengeInfo(id);
+}

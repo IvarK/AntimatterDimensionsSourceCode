@@ -3381,13 +3381,13 @@ screen and (max-width: 480px) {
 }
 
 .c-challenge-box--infinity {
-  height: 14rem;
+  height: 15rem;
   color: white;
   background-color: #181818;
 }
 
 .c-challenge-box--eternity {
-  height: 14rem;
+  height: 15rem;
   color: #b341e0;
   background-color: black;
   border: .3rem solid #b341e0;

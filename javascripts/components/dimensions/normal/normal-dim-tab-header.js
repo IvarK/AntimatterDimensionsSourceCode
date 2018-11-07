@@ -37,7 +37,7 @@ Vue.component('normal-dim-tab-header', {
         v-model="options.noSacrificeConfirmation"
         v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
         type="checkbox"
-        class="c-sacrifice-checkbox"
+        class="o-big-checkbox"
       />
       <primary-button
         v-show="isSacrificeUnlocked"

@@ -140,7 +140,7 @@ function getDimensionPowerMultiplier(tier) {
 
   if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
   if (isAchEnabled("r58")) dimMult *= 1.01;
-  dimMult += ECTimesCompleted("eterc3") * 0.8;
+  EternityChallenge(3).applyReward(value => dimMult += value);
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 

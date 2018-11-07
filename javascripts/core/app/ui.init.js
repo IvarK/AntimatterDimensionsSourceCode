@@ -3,7 +3,7 @@ let ui = {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: ""
+      message: String.empty
     },
     tabs: {
       current: undefined,
@@ -17,6 +17,9 @@ let ui = {
         subtab: String.empty
       },
       achievements: {
+        subtab: String.empty
+      },
+      challenges: {
         subtab: String.empty
       },
       celestials: {

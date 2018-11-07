@@ -42,7 +42,8 @@ class Galaxy {
   }
 
   static get costScalingStart() {
-    let amount = 100 + ECTimesCompleted("eterc5") * 5;
+    let amount = 100;
+    EternityChallenge(5).applyReward(value => amount += value);
     const studies = player.timestudy.studies;
     if (studies.includes(223)) amount += 7;
     if (studies.includes(224)) amount += Math.floor(player.resets / 2000);

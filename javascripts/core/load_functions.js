@@ -27,6 +27,7 @@ function onLoad() {
   if (player.options.newsHidden === undefined) player.options.newsHidden = false;
   if (player.options.noSacrificeConfirmation === undefined) player.options.noSacrificeConfirmation = false;
   if (player.options.retryChallenge === undefined) player.options.retryChallenge = false;
+  if (player.options.showAllChallenges === undefined) player.options.showAllChallenges = false;
   if (player.options.bulkOn === undefined) player.options.bulkOn = true
   if (player.options.cloud === undefined) player.options.cloud = true
   if (player.options.hotkeys === undefined) player.options.hotkeys = true
@@ -427,7 +428,6 @@ if (player.version < 5) {
   transformSaveToDecimal();
   updateCosts();
   updateTickSpeed();
-  updateChallenges();
   toggleBulk()
   toggleBulk()
   respecToggle()
@@ -469,9 +469,6 @@ if (player.version < 5) {
     replicantiGalaxyAutoToggle()
   }
 
-  if (player.eternityChallUnlocked !== 0) document.getElementById("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
-
-
   if (player.infMultBuyer !== undefined) {
     infMultAutoToggle()
     infMultAutoToggle()
@@ -487,9 +484,6 @@ if (player.version < 5) {
       player.epmultCost = new Decimal(500)
   }
   
-  if (player.realities > 0)
-    document.getElementById("eterc12div").innerHTML = document.getElementById("eterc12div").innerHTML.replace("1000x slower.", "1000x slower, wormholes and time glyph effects are disabled.")
-
   clearOldAchieves()
 
   updateEpMultButton();
@@ -650,7 +644,6 @@ if (player.version < 5) {
   updateEternityUpgrades();
   resizeCanvas();
   checkForEndMe();
-  updateEternityChallenges();
   updateDilationUpgradeCosts();
   generateGlyphTable();
   updateRealityUpgrades();
@@ -692,7 +685,6 @@ function load_cloud_save(saveId, cloudPlayer) {
 
   if (currentSave == saveId) {
     load_game();
-    updateChallenges();
     transformSaveToDecimal();
   }
 }
@@ -754,10 +746,8 @@ function change_save(saveId) {
   player = saves[saveId] || defaultStart;
   save_game(true, false);
   load_game();
-  updateChallenges()
   transformSaveToDecimal()
   Tab.dimensions.normal.show();
-  showChallengesTab('challenges')
   showEternityTab('timestudies', true)
   Modal.hide();
 }

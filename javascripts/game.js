@@ -206,97 +206,6 @@ function floatText(tier, text) {
   setTimeout(() => floatingText.shift(), 1000)
 }
 
-
-function isEterChall(elem) {
-    return !elem.id.includes("eter")
-}
-
-function updateChallenges() {
-    try {
-        var buttons = Array.from(document.getElementsByClassName('onchallengebtn')).filter(isEterChall)
-        for (var i=0; i < buttons.length; i++) {
-            buttons[i].className = "challengesbtn";
-            buttons[i].textContent = "Start"
-        }
-
-        var buttonss = Array.from(document.getElementsByClassName('completedchallengesbtn')).filter(isEterChall)
-        for (var i=0; i < buttonss.length; i++) {
-            buttonss[i].className = "challengesbtn";
-            buttonss[i].textContent = "Start"
-        }
-
-
-        for (var i=0; i < player.challenges.length; i++) {
-            document.getElementById(player.challenges[i]).className = "completedchallengesbtn";
-            document.getElementById(player.challenges[i]).textContent = "Completed"
-        }
-
-        if (player.currentChallenge != "") {
-            document.getElementById(player.currentChallenge).className = "onchallengebtn"
-            document.getElementById(player.currentChallenge).textContent = "Running"
-        }
-
-        if (player.money.gte(new Decimal("1e2000")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
-        for (var i=1; i<9; i++) {
-            if (player.postChallUnlocked >= i) document.getElementById("postc"+i+"div").style.display = "inline-block"
-            else document.getElementById("postc"+i+"div").style.display = "none"
-        }
-
-
-
-    } catch (err) {
-        console.log(err)
-        updateChallenges()
-
-    }
-
-}
-
-
-function updateEternityChallenges() {
-
-    for (var property in player.eternityChalls) {
-        document.getElementById(property+"div").style.display = "inline-block"
-        if (player.eternityChalls[property] < 5) {
-            document.getElementById(property).textContent = "Locked"
-            document.getElementById(property).className = "lockedchallengesbtn"
-        }
-        else {
-            document.getElementById(property).textContent = "Completed"
-            document.getElementById(property).className = "completedchallengesbtn"
-        }
-    }
-
-    if (player.eternityChallUnlocked !== 0) {
-        document.getElementById("eterc"+player.eternityChallUnlocked).textContent = "Start"
-        document.getElementById("eterc"+player.eternityChallUnlocked).className = "challengesbtn"
-        document.getElementById("eterctabbtn").style.display = "block"
-    } else {
-        for (i=1; i<13; i++) {
-            if (player.eternityChalls["eterc"+i] !== 5) {
-                document.getElementById("eterc"+i).textContent = "Locked"
-                document.getElementById("eterc"+i).className = "lockedchallengesbtn"
-            }
-        }
-    }
-
-    if (player.eternityChallUnlocked == 0 && Object.keys(player.eternityChalls).length === 0) {
-        document.getElementById("eterctabbtn").style.display = "none"
-        for (i=1; i<13; i++) {
-            document.getElementById("eterc"+i+"div").style.display = "none"
-        }
-    }
-
-    if (player.eternityChalls.eterc1 !== undefined) document.getElementById("eterctabbtn").style.display = "block"
-    if (player.etercreq !== 0) document.getElementById("eterc"+player.etercreq+"div").style.display = "block"
-
-    if (player.currentEternityChall !== "") {
-        document.getElementById(player.currentEternityChall).textContent = "Running"
-        document.getElementById(player.currentEternityChall).className = "onchallengebtn"
-    }
-}
-
-
 document.getElementById("news").onclick = function () {
     if (document.getElementById("news").textContent === "Click this to unlock a secret achievement.") {
         giveAchievement("Real news")
@@ -315,10 +224,6 @@ function glowText(id) {
   text.style.setProperty("-webkit-animation", "glow 1s");
   text.style.setProperty("animation", "glow 1s");
 }
-
-
-
-
 
 function maxAll() {
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
@@ -1685,26 +1590,20 @@ var glyphSelected = false
 
 function exitChallenge() {
     if (player.currentChallenge !== "") {
-        document.getElementById(player.currentChallenge).textContent = "Start"
         startChallenge("");
-        updateChallenges();
     } else if (player.currentEternityChall !== "") {
         player.currentEternityChall = ""
         player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
         eternity(true)
-        updateEternityChallenges();
     }
 }
 
 function unlockEChall(idx) {
     if (player.eternityChallUnlocked == 0) {
         player.eternityChallUnlocked = idx
-        document.getElementById("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
-        if (!justImported) showTab("challenges")
-        if (!justImported) showChallengesTab("eternitychallenges")
+        if (!justImported) Tab.challenges.eternity.show();
         if (idx !== 12 && idx !== 13) player.etercreq = idx
     }
-    updateEternityChallenges()
     updateTimeStudyButtons()
 }
 
@@ -2120,8 +2019,6 @@ setInterval(function() {
         infDimPow = temp
     }
 
-    if (player.money.gte(new Decimal("1e2000")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
-
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
     document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
@@ -2133,9 +2030,6 @@ setInterval(function() {
 
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     else document.getElementById("eternitystorebtn").style.display = "none"
-    for (var i=1; i <=8; i++) {
-        document.getElementById("postc"+i+"goal").textContent = "Goal: "+shortenCosts(goals[i-1])
-    }
 
     if (player.replicanti.galaxybuyer !== undefined) document.getElementById("replicantiresettoggle").style.display = "inline-block"
     else document.getElementById("replicantiresettoggle").style.display = "none"
@@ -2169,19 +2063,6 @@ setInterval(function() {
         document.getElementById("autoBuyerReality").style.display = "inline-block"
     }
 
-	
-	// EC goal IP text
-	for (var ECNum = 1; ECNum <= 12; ECNum++) {
-		var ECComp = ECTimesCompleted("eterc" + ECNum);
-		var extraText = "";
-		if (ECNum == 4)
-			extraText = " in "+Math.max((16 - 4*ECComp), 0)+" infinities or less.";
-		if (ECNum == 12)
-			extraText = " in "+(Math.max(10 - 2*ECComp, 1)/10) + ((ECComp == 0) ? " second or less." :" seconds or less.");
-		
-		document.getElementById("eterc" + ECNum + "goal").textContent = "Goal: "+shortenCosts(getECGoalIP(ECNum, ECComp)) + " IP" + extraText;
-		document.getElementById("eterc" + ECNum + "completed").textContent = "Completed " + ECComp + ((ECComp == 1) ? " time." : " times.");
-	}
     updateECUnlockButtons()
 
 
@@ -2535,12 +2416,9 @@ function gameLoop(diff) {
     if (IPminpeak.lte("1e100000")) document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b><br>"+shortenDimensions(currentIPmin) + " IP/min"+"<br>Peaked at "+shortenDimensions(IPminpeak)+" IP/min"
     else document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b>"
 
-    if (nextAt[player.postChallUnlocked] === undefined) document.getElementById("nextchall").textContent = " "
-    else document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextAt[player.postChallUnlocked]) + " antimatter."
     while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
         if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
         if (player.eternities > 6) player.challenges.push("postc"+player.postChallUnlocked)
-        updateChallenges()
     }
     replicantiLoop(diff)
 
@@ -2836,27 +2714,6 @@ function gameLoop(diff) {
         document.getElementById("infinitybtn").style.display = "inline-block";
         document.getElementById("challengesbtn").style.display = "inline-block";
     }
-
-    document.getElementById("ec1reward").textContent = "Reward: Time dimensions gain a multiplier based on time spent this eternity, Currently: "+shortenMoney(Math.pow(Math.max(player.thisEternity*10, 1), 0.3+(ECTimesCompleted("eterc1")*0.05)))+"x"
-    document.getElementById("ec2reward").textContent = "Reward: Infinity power affects 1st Infinity Dimension with reduced effect, Currently: "+shortenMoney(player.infinityPower.pow(1.5/(700 - ECTimesCompleted("eterc2")*100)).min(new Decimal("1e100")).max(1))+"x"
-    document.getElementById("ec3reward").textContent = "Reward: Increase the multiplier for buying 10 dimensions, Currently: "+getDimensionPowerMultiplier().toFixed(2)+"x"
-    document.getElementById("ec4reward").textContent = "Reward: Infinity Dimension multiplier from unspent IP, Currently: "+shortenMoney(player.infinityPoints.pow(0.003 + ECTimesCompleted("eterc4")*0.002).min(new Decimal("1e200")))+"x"
-    document.getElementById("ec5reward").textContent = "Reward: Galaxy cost scaling starts "+((ECTimesCompleted("eterc5")*5))+" galaxies later."
-    document.getElementById("ec6reward").textContent = "Reward: Further reduce the dimension cost multiplier increase, Currently: "+player.dimensionMultDecrease.toFixed(1)+"x "
-    document.getElementById("ec7reward").textContent = "Reward: First Time dimension produces Eighth Infinity Dimensions, Currently: "+shortenMoney(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).max(0))+" per second. "
-    document.getElementById("ec8reward").textContent = "Reward: Infinity power powers up replicanti galaxies, Currently: " + (Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0) * 100).toFixed(2) + "%"
-    document.getElementById("ec9reward").textContent = "Reward: Infinity Dimension multiplier based on time shards, Currently: "+shortenMoney(player.timeShards.pow(ECTimesCompleted("eterc9")*0.1).min(new Decimal("1e400")))+"x "
-    document.getElementById("ec10reward").textContent = "Reward: Time dimensions gain a multiplier from infinitied stat, Currently: "+shortenMoney(new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * ECTimesCompleted("eterc10") * 0.000002+1, 1)).pow((player.timestudy.studies.includes(31)) ? 4 : 1))+"x "
-    document.getElementById("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase, Currently: "+player.tickSpeedMultDecrease.toFixed(2)+"x "
-    document.getElementById("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^"+(1-ECTimesCompleted("eterc12")*0.008)+")"
-
-    // let extraGals = 0
-    // if (player.timestudy.studies.includes(225)) extraGals += Math.floor(player.replicanti.amount.e / 2500)
-    // if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 40)
-    // if (extraGals !== 0) document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + "+"+extraGals+ " replicated galaxies created."
-    // else document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
-
-    document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 
     if (player.infDimensionsUnlocked[7] == false && player.break && player.eternities <= 24) {
         document.getElementById("newDimensionButton").style.display = "inline-block"
@@ -3346,72 +3203,12 @@ setInterval(function() {
 }, 333)
 
 
-  //start scrolling
-  scrollNextMessage();
-
-document.getElementById("challenge2").onclick = function () {
-  startChallenge("challenge2", Number.MAX_VALUE)
-}
-
-document.getElementById("challenge3").onclick = function () {
-  startChallenge("challenge3", Number.MAX_VALUE)
-}
-
-document.getElementById("challenge4").onclick = function () {
-  startChallenge("challenge4", Number.MAX_VALUE)
-}
-
-document.getElementById("challenge5").onclick = function () {
-  startChallenge("challenge5", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge6").onclick = function () {
-  startChallenge("challenge6", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge7").onclick = function () {
-  startChallenge("challenge7", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge8").onclick = function () {
-  startChallenge("challenge8", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge9").onclick = function () {
-  startChallenge("challenge9", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge10").onclick = function () {
-  startChallenge("challenge10", Number.MAX_VALUE);
-}
-
-document.getElementById("challenge11").onclick = function () {
-    startChallenge("challenge11", Number.MAX_VALUE);
-  }
-
-document.getElementById("challenge12").onclick = function () {
-  startChallenge("challenge12", Number.MAX_VALUE);
-}
-
-
+//start scrolling
+scrollNextMessage();
 
 function showInfTab(tabName) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('inftab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-}
-
-function showChallengesTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('challengeTab');
     var tab;
     for (var i = 0; i < tabs.length; i++) {
         tab = tabs.item(i);
@@ -3494,7 +3291,6 @@ function init() {
     Tab.dimensions.normal.show();
     //show one tab during init or they'll all start hidden
     showInfTab('preinf')
-    showChallengesTab('challenges')
     showEternityTab('timestudies', true)
     load_game();
     updateTickSpeed();

@@ -193,7 +193,6 @@ function reality(force, reset, auto) {
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
     resetInfDimensions();
-    updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
@@ -226,7 +225,6 @@ function reality(force, reset, auto) {
     resetMoney();
     playerInfinityUpgradesOnEternity();
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
-    updateEternityChallenges();
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
         loadAutoBuyerSettings()
@@ -247,7 +245,6 @@ function reality(force, reset, auto) {
     drawPerkNetwork();
     updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
-    document.getElementById("eterc12div").innerHTML = document.getElementById("eterc12div").innerHTML.replace("1000x slower.", "1000x slower, wormholes and time glyph effects are disabled.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")
 

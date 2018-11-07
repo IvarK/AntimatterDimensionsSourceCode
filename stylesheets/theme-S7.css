@@ -33,9 +33,3 @@ button {
 button:hover {
     border: 1px solid #737373 !important;
 }
-
-.challengediv, .infchallengediv, .eterchallengediv {
-    color: #000 !important;
-    border: 1px solid #9B9B9B !important;
-    background: #FFF !important;
-}

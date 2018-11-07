@@ -64,23 +64,6 @@ input {
     color: #888888 !important;
 }
 
-.challengesbtn {
-    background: #546E7A !important;
-}
-
-.challengesbtn:hover {
-    background: #43A047 !important;
-}
-
-.lockedchallengesbtn {
-    background: #23292a !important;
-    border-color: #B84B5F !important;
-}
-
-.onchallengebtn {
-    background: #263238 !important;
-}
-
 .tabbtn {
     border: 2px solid #1565C0 !important;
 }
@@ -117,16 +100,6 @@ input {
 
 .infinitytabbtn:hover {
     background: #FF9800 !important;
-}
-
-.challengediv {
-    background: #455A64 !important;
-}
-
-.completedchallengesbtn {
-    background: #43A047 !important;
-    box-shadow: none;
-    border: 3px solid #388E3C;
 }
 
 .autobuyerbtn {

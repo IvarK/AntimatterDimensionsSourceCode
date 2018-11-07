@@ -31,7 +31,7 @@ Vue.component("normal-challenges-tab", {
           this.isCompleted = player.challenges.includes(id);
         },
         start() {
-          startChallenge(this.fullId);
+          startChallenge(this.fullId, Number.MAX_VALUE);
         }
       },
       template:

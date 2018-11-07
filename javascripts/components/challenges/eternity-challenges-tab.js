@@ -6,6 +6,7 @@ Vue.component("eternity-challenges-tab", {
       },
       data: function() {
         return {
+          description: String.empty,
           isUnlocked: false,
           isRunning: false,
           isCompleted: false,
@@ -62,6 +63,13 @@ Vue.component("eternity-challenges-tab", {
       },
       methods: {
         update() {
+          const visuals = this.visuals;
+          if (typeof visuals.description === "function") {
+            this.description = visuals.description(this.shortenMoney);
+          }
+          else {
+            this.description = visuals.description;
+          }
           const challenge = EternityChallenge(this.challengeId);
           this.isUnlocked = challenge.isUnlocked;
           this.isRunning = challenge.isRunning;
@@ -88,7 +96,7 @@ Vue.component("eternity-challenges-tab", {
           class="c-challenge-box--eternity"
           @start="start"
         >
-          <span slot="top">{{visuals.description}}</span>
+          <span slot="top">{{description}}</span>
           <template slot="bottom">
             <span v-if="completions < 5">{{completionDisplay}}</span>
             <span v-if="completions < 5">{{goalDisplay}}</span>
@@ -195,7 +203,13 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC10 */
-    description: "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000)",
+    description: function(shortenMoney) {
+      let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000)";
+      if (EternityChallenge(10).isRunning) {
+        description += `, Currently: ${shortenMoney(ec10bonus)}x`;
+      }
+      return description;
+    },
     reward: "Time Dimension multiplier based on infinitied stat",
     rewardValueTemplate: "{0}x",
     formatReward: (reward, shortenMoney) => shortenMoney(reward)
@@ -209,7 +223,7 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC12 */
-    description: "The game runs 1000x slower.",
+    description: () => player.realities > 0 ? "The game runs 1000x slower, wormholes and time glyph effects are disabled." : "The game runs 1000x slower.",
     reward: "Infinity Dimension cost multipliers are reduced",
     additionalRequirements: completions => `in ${Math.max(10 - 2 * completions, 1) / 10} ${completions === 0 ? "second" : "seconds"} or less.`,
     rewardValueTemplate: "x^{0}",

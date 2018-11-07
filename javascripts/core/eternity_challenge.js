@@ -64,12 +64,9 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
-    var infchalls = Array.from(document.getElementsByClassName('infchallengediv'));
-    for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
     updateMilestones();
@@ -94,8 +91,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     resetMoney();
     playerInfinityUpgradesOnEternity();
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
-    updateChallenges();
-    updateEternityChallenges();
     Marathon2 = 0;
 
     return true

@@ -153,34 +153,6 @@ body {
     text-shadow: 1px 1px 0px black;
 }
 
-.challengediv {
-    background: #dbd242 !important;
-}
-
-.infchallengediv {
-    color: #dbd242 !important;
-}
-
-.eterchallengediv {
-    color: #639565 !important;
-    border: 3px solid #639565 !important;
-}
-
-.challengesbtn {
-    color: #FFF !important;
-    background: none !important;
-    border: 3px solid #507751 !important;
-}
-
-.challengesbtn:hover {
-    background: #639565 !important;
-}
-
-.completedchallengesbtn {
-    background: #639565 !important;
-    border: 3px solid #507751 !important;
-}
-
 .infinistorebtn1 {
     border-color: black !important;
 }

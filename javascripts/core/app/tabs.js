@@ -41,6 +41,9 @@ Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("stats-tab");
 Tab.achievements = new Tab("achievements-tab");
 Tab.challenges = new Tab("challenges-tab");
+Tab.challenges.normal = new Subtab("Challenges", Tab.challenges, ui.view.tabs.challenges, true);
+Tab.challenges.infinity = new Subtab("Infinity Challenges", Tab.challenges, ui.view.tabs.challenges);
+Tab.challenges.eternity = new Subtab("Eternity Challenges", Tab.challenges, ui.view.tabs.challenges);
 Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
@@ -61,7 +64,7 @@ function tryShowtab(tab) {
     Tab.achievements.show();
     return true;
   }
-  if (tab === 'challengesbtnvue') {
+  if (tab === 'challenges') {
     Tab.challenges.show();
     return true;
   }

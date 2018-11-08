@@ -177,7 +177,7 @@ const eternityChallengeVisuals = [
     /* EC6 */
     description: "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max replicanti galaxies is massively reduced.",
     reward: "Reduce the dimension cost multiplier growth",
-    rewardValueTemplate: "{0}x",
+    rewardValueTemplate: "x - {0}",
     formatReward: reward => reward.toFixed(1)
   },
   {
@@ -218,7 +218,7 @@ const eternityChallengeVisuals = [
     /* EC11 */
     description: "All dimension multipliers are disabled except for the multipliers from Infinity Power and Dimension Boosts (to normal dimensions)",
     reward: "Reduce Tickspeed cost multiplier growth",
-    rewardValueTemplate: "{0}x",
+    rewardValueTemplate: "x - {0}",
     formatReward: reward => reward.toFixed(1)
   },
   {

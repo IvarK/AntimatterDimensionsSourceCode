@@ -2,6 +2,16 @@ Vue.mixin({
   computed: {
     $viewModel: function() {
       return ui.view;
+    },
+    formatter: function() {
+      return {
+        shorten: this.shorten,
+        shortenCosts: this.shortenCosts,
+        shortenDimensions: this.shortenDimensions,
+        shortenMoney: this.shortenMoney,
+        shortenGlyphEffect: this.shortenGlyphEffect,
+        shortenMultiplier: this.shortenMultiplier
+      };
     }
   },
   methods: {

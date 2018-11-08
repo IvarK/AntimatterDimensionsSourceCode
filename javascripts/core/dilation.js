@@ -22,7 +22,6 @@ function startDilatedEternity() {
   infinitiedMult = 1
   achievementMult = 1
   challengeMult = 1
-  unspentBonus = 1
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
   ec10bonus = new Decimal(1)

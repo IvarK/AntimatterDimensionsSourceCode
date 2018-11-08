@@ -3537,6 +3537,100 @@ screen and (max-width: 480px) {
 
 /*#endregion Challenges*/
 
+/*#region Infinity Upgrades*/
+
+.l-infinity-tab {
+  align-items: center;
+}
+
+.c-infinity-tab__header {
+  color: black;
+  font-size: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.c-infinity-tab__infinity-points {
+}
+
+.l-infinity-upgrade-grid {
+  display: flex;
+  flex-direction: row;
+  margin: 1.5rem 0;
+}
+
+.l-infinity-upgrade-grid__column {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-infinity-upgrade-grid__cell {
+  margin: .5rem .8rem;
+}
+
+/*#region o-infinity-upgrade-btn*/
+
+.o-infinity-upgrade-btn {
+  color: white;
+  background-color: #1f1f1f;
+  font-weight: bold;
+  font-size:  1rem;
+  border: .1rem solid #ed85df;
+  width: 19rem;
+  height: 9rem;
+  transition-duration: 0.2s;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+  cursor: pointer;
+}
+
+.o-infinity-upgrade-btn:hover {
+  color: black;
+}
+
+.o-infinity-upgrade-btn--available:hover {
+  background-color: #a53b98;
+}
+
+.o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #ff3300;
+}
+
+.o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #c6d50d;
+}
+
+.o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #0cfec5;
+}
+
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  color: #c93a3a;
+  border-color: #17b3b5;
+}
+
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  background: #e0d8e0;
+}
+
+.o-infinity-upgrade-btn--unavailable {
+  color: black;
+  background-color: #f7f7f7;
+}
+
+.o-infinity-upgrade-btn--unavailable:hover {
+  background-color: white;
+}
+
+.o-infinity-upgrade-btn--bought {
+  color: black;
+  background: #5ac467;
+  cursor: default;
+}
+
+/*#endregion o-infinity-upgrade-btn*/
+
+/*#endregion Infinity Upgrades*/
+
 /*#region Modals*/
 
 /*#region c-modal*/

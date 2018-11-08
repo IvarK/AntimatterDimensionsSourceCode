@@ -299,7 +299,6 @@ function onLoad() {
   infinitiedMult = 1+Math.log10(getInfinitied()+1)*10
   achievementMult = Math.max(Math.pow((player.achievements.length-30), 3)/40,1)
   challengeMult = Decimal.max(10*3000/worstChallengeTime, 1)
-  unspentBonus = player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
@@ -400,7 +399,6 @@ function change_save(saveId) {
   infinitiedMult = 1
   achievementMult = 1
   challengeMult = 1
-  unspentBonus = 1
   infDimPow = 1
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)

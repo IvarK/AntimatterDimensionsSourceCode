@@ -1,6 +1,7 @@
 Vue.component('infinity-tab', {
   data: function() {
     return {
+      infinityPoints: new Decimal(0),
       tabs: [
         {
           name: "Upgrades",
@@ -25,10 +26,25 @@ Vue.component('infinity-tab', {
       ]
     };
   },
+  computed: {
+    ipNoun: function() {
+      return player.infinityPoints.equals(1) ? "Infinity Point" : "Infinity Points";
+    }
+  },
+  methods: {
+    update() {
+      this.infinityPoints.copyFrom(player.infinityPoints);
+    }
+  },
   template:
     `<game-tab-with-subtabs
-      v-model="$viewModel.tabs.infinity.subtab"
-      :tabs="tabs"
-      class="c-dim-tab"
-    />`
+        v-model="$viewModel.tabs.infinity.subtab"
+        :tabs="tabs"
+        class="l-infinity-tab"
+    >
+      <div
+        slot="before-subtabs"
+        class="c-infinity-tab__header"
+      >You have <span class="c-infinity-tab__infinity-points">{{shortenDimensions(infinityPoints)}}</span> {{ipNoun}}.</div>
+    </game-tab-with-subtabs>`
 });

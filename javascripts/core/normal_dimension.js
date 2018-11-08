@@ -29,9 +29,13 @@ function getDimensionFinalMultiplier(tier) {
   if (infinityUpgrades.includes("achievementMult")) multiplier = multiplier.times(achievementMult);
   if (infinityUpgrades.includes("challengeMult")) multiplier = multiplier.times(challengeMult);
 
-  if (dim.hasInfinityMultiplier) multiplier = multiplier.times(dimMults());
+  let infinityMult = new Decimal(1);
+  dim.infinityUpgrade.applyEffect(value => infinityMult = new Decimal(value));
+  if (player.timestudy.studies.includes(31)) {
+    infinityMult = infinityMult.pow(4);
+  }
   if (tier === 1) {
-    if (infinityUpgrades.includes("unspentBonus")) multiplier = multiplier.times(unspentBonus);
+    InfinityUpgrade.unspentIPMult.applyEffect(value => multiplier = multiplier.times(value));
     if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
     if (isAchEnabled("r31")) multiplier = multiplier.times(1.05);
     if (isAchEnabled("r71")) multiplier = multiplier.times(3);
@@ -138,6 +142,7 @@ function getDimensionPowerMultiplier(tier) {
 
   if (isAchEnabled("r141")) dimMult += 0.1;
 
+  InfinityUpgrade.buy10Mult.applyEffect(value => dimMult *= value);
   if (player.infinityUpgrades.includes('dimMult')) dimMult *= 1.1;
   if (isAchEnabled("r58")) dimMult *= 1.01;
   EternityChallenge(3).applyReward(value => dimMult += value);
@@ -485,8 +490,8 @@ function resetMatterOnBuy(tier) {
 
 function timeMult() {
   let mult = new Decimal(1);
-  if (player.infinityUpgrades.includes("timeMult")) mult = mult.times(Math.pow(player.totalTimePlayed / 120000, 0.15));
-  if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(Decimal.max(Math.pow(player.thisInfinityTime / 240000, 0.25), 1));
+  InfinityUpgrade.totalTimeMult.applyEffect(value => mult = mult.times(value));
+  InfinityUpgrade.thisInfinityTimeMult.applyEffect(value => mult = mult.times(value));
   if (isAchEnabled("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (60000 * 60 * 48), 0.05));
   return mult;
 }
@@ -577,6 +582,23 @@ class NormalDimensionInfo {
 
   set pow(value) {
     this._player[this._props.pow] = value;
+  }
+
+  get infinityUpgrade() {
+    switch (this._tier) {
+      case 1:
+      case 8:
+        return InfinityUpgrade.dim18mult;
+      case 2:
+      case 7:
+        return InfinityUpgrade.dim27mult;
+      case 3:
+      case 6:
+        return InfinityUpgrade.dim36mult;
+      case 4:
+      case 5:
+        return InfinityUpgrade.dim45mult;
+    }
   }
 
   get hasInfinityMultiplier() {

@@ -3311,7 +3311,6 @@ var currentMult = 1
 var infinitiedMult = 1
 var achievementMult = 1
 var challengeMult = 1
-var unspentBonus = 1
 var postc8Mult = new Decimal(0)
 var mult18 = 1
 var ec10bonus = new Decimal(1)
@@ -3324,7 +3323,6 @@ setInterval( function() {
     else infinitiedMult = 1+Math.log10(getInfinitied()+1)*10
     achievementMult = Math.max(Math.pow((player.achievements.length-30-getSecretAchAmount()), 3)/40,1)
     challengeMult = Decimal.max(10*3000/worstChallengeTime, 1)
-    unspentBonus = player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
     if (player.currentEternityChall == "eterc10") {
         ec10bonus = Decimal.pow(getInfinitied(), 1000).max(1)

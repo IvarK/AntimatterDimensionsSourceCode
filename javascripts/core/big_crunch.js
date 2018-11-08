@@ -167,3 +167,146 @@ function checkBigCrunchAchievements() {
 }
 
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
+
+class InfinityUpgrade {
+  constructor(props) {
+    this._id = props.id;
+    this._cost = props.cost;
+    this._requirement = props.requirement;
+    this._staticEffect = props.staticEffect;
+    this._dynamicEffect = props.dynamicEffect;
+  }
+
+  get cost() {
+    return this._cost;
+  }
+  
+  get isBought() {
+    return player.infinityUpgrades.includes(this._id);
+  }
+
+  get isAvailable() {
+    return this.isRequirementSatisfied && player.infinityPoints.gte(this._cost);
+  }
+
+  get isRequirementSatisfied() {
+    return this._requirement === undefined || this._requirement.isBought;
+  }
+  
+  purchase() {
+    if (!this.isAvailable) return;
+    player.infinityUpgrades.push(this._id);
+    player.infinityPoints = player.infinityPoints.minus(this._cost);
+  }
+
+  get hasStaticEffect() {
+    return this._staticEffect !== undefined;
+  }
+
+  get hasDynamicEffect() {
+    return this._dynamicEffect !== undefined;
+  }
+
+  get effectValue() {
+    return this.hasStaticEffect ? this._staticEffect : this._dynamicEffect();
+  }
+
+  applyEffect(applyFn) {
+    if (this.isBought) {
+      applyFn(this.effectValue);
+    }
+  }
+}
+
+InfinityUpgrade.totalTimeMult = new InfinityUpgrade({
+  id: "timeMult",
+  cost: 1,
+  dynamicEffect: () => Math.pow(player.totalTimePlayed / 120000, 0.15)
+});
+InfinityUpgrade.dimInfinityMult = () => 1 + (getInfinitied() * 0.2);
+InfinityUpgrade.dim18mult = new InfinityUpgrade({
+  id: "18Mult",
+  cost: 1,
+  requirement: InfinityUpgrade.totalTimeMult,
+  dynamicEffect: InfinityUpgrade.dimInfinityMult
+});
+InfinityUpgrade.dim36mult = new InfinityUpgrade({
+  id: "36Mult",
+  cost: 1,
+  requirement: InfinityUpgrade.dim18mult,
+  dynamicEffect: InfinityUpgrade.dimInfinityMult
+});
+InfinityUpgrade.resetBoost = new InfinityUpgrade({
+  id: "resetBoost",
+  cost: 1,
+  requirement: InfinityUpgrade.dim36mult,
+  staticEffect: 9
+});
+
+InfinityUpgrade.buy10Mult = new InfinityUpgrade({
+  id: "dimMult",
+  cost: 1,
+  staticEffect: 1.1
+});
+InfinityUpgrade.dim27mult = new InfinityUpgrade({
+  id: "27Mult",
+  cost: 1,
+  requirement: InfinityUpgrade.buy10Mult,
+  dynamicEffect: InfinityUpgrade.dimInfinityMult
+});
+InfinityUpgrade.dim45mult = new InfinityUpgrade({
+  id: "45Mult",
+  cost: 1,
+  requirement: InfinityUpgrade.dim27mult,
+  dynamicEffect: InfinityUpgrade.dimInfinityMult
+});
+InfinityUpgrade.galaxyBoost = new InfinityUpgrade({
+  id: "galaxyBoost",
+  cost: 2,
+  requirement: InfinityUpgrade.dim45mult,
+  staticEffect: 2
+});
+
+InfinityUpgrade.thisInfinityTimeMult = new InfinityUpgrade({
+  id: "timeMult2",
+  cost: 3,
+  dynamicEffect: () => Decimal.max(Math.pow(player.thisInfinityTime / 240000, 0.25), 1)
+});
+InfinityUpgrade.unspentIPMult = new InfinityUpgrade({
+  id: "unspentBonus",
+  cost: 5,
+  requirement: InfinityUpgrade.thisInfinityTimeMult,
+  dynamicEffect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
+});
+InfinityUpgrade.dimboostMult = new InfinityUpgrade({
+  id: "resetMult",
+  cost: 7,
+  requirement: InfinityUpgrade.unspentIPMult,
+  staticEffect: 2.5
+});
+InfinityUpgrade.ipGen = new InfinityUpgrade({
+  id: "passiveGen",
+  cost: 10,
+  requirement: InfinityUpgrade.dimboostMult,
+  dynamicEffect: () => player.bestInfinityTime
+});
+
+InfinityUpgrade.skipReset1 = new InfinityUpgrade({
+  id: "skipReset1",
+  cost: 20
+});
+InfinityUpgrade.skipReset2 = new InfinityUpgrade({
+  id: "skipReset2",
+  cost: 40,
+  requirement: InfinityUpgrade.skipReset1
+});
+InfinityUpgrade.skipReset3 = new InfinityUpgrade({
+  id: "skipReset3",
+  cost: 80,
+  requirement: InfinityUpgrade.skipReset2
+});
+InfinityUpgrade.skipResetGalaxy = new InfinityUpgrade({
+  id: "skipResetGalaxy",
+  cost: 300,
+  requirement: InfinityUpgrade.skipReset3
+});

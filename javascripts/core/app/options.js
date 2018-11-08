@@ -112,7 +112,6 @@ function importSave(save_data) {
     infinitiedMult = 1;
     achievementMult = 1;
     challengeMult = 1;
-    unspentBonus = 1;
     infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);

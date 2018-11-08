@@ -16,7 +16,7 @@ class DimBoost {
     }
 
     let power = 2;
-    if (player.infinityUpgrades.includes("resetMult")) power = 2.5;
+    InfinityUpgrade.dimboostMult.applyEffect(value => power = value);
     if (player.challenges.includes("postc7")) power = 4;
     if (player.currentChallenge === "postc7" || player.timestudy.studies.includes(81)) power = 10;
 
@@ -61,7 +61,7 @@ class DimBoost {
       amount += Math.pow(targetResets, 3) + targetResets;
     }
 
-    if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+    InfinityUpgrade.resetBoost.applyEffect(value => amount -= value);
     if (player.challenges.includes("postc5")) amount -= 1;
 
     return new DimBoostRequirement(tier, amount);
@@ -123,13 +123,13 @@ function applyChallengeModifiers() {
 
 function skipResetsIfPossible() {
     if (player.resets < 4 && player.currentChallenge === "") {
-        if (player.infinityUpgrades.includes("skipResetGalaxy")) {
+        if (InfinityUpgrade.skipResetGalaxy.isBought) {
             player.resets = 4;
             if (player.galaxies === 0) player.galaxies = 1
         }
-        else if (player.infinityUpgrades.includes("skipReset3") && player.resets < 3) player.resets = 3;
-        else if (player.infinityUpgrades.includes("skipReset2") && player.resets < 2) player.resets = 2;
-        else if (player.infinityUpgrades.includes("skipReset1") && player.resets < 1) player.resets = 1;
+        else if (InfinityUpgrade.skipReset3.isBought) player.resets = 3;
+        else if (InfinityUpgrade.skipReset2.isBought) player.resets = 2;
+        else if (InfinityUpgrade.skipReset1.isBought) player.resets = 1;
     }
 }
 

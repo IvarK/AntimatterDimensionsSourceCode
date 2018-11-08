@@ -347,6 +347,11 @@ var player = {
   }],
   wormholePause: false,
   ttbuyer: false,
+  celestials: {
+    effarig: {
+      rmStore: 0
+    }
+  },
   options: {
     newsHidden: false,
     notation: "Mixed scientific",

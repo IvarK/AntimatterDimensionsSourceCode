@@ -37,7 +37,6 @@ class InfinityUpgradeViewModel {
     this._description = props.description;
     this._formatCurrentEffect = props.formatCurrentEffect;
     this._staticEffect = props.staticEffect;
-    this._hasComplexEffect = props.hasComplexEffect;
     this._formatComplexEffect = props.formatComplexEffect;
   }
 
@@ -57,16 +56,16 @@ class InfinityUpgradeViewModel {
     return this._upgrade.isAvailable;
   }
 
-  get hasDynamicEffectDisplay() {
-    return this._upgrade.hasDynamicEffect;
-  }
-
   get hasStaticEffectDisplay() {
     return this._staticEffect !== undefined;
   }
 
   get staticEffect() {
     return this._staticEffect;
+  }
+
+  get hasDynamicEffectDisplay() {
+    return this._upgrade.hasDynamicEffect;
   }
 
   get effectValue() {
@@ -78,7 +77,7 @@ class InfinityUpgradeViewModel {
   }
 
   get hasComplexEffect() {
-    return this._hasComplexEffect;
+    return this._formatComplexEffect !== undefined;
   }
 
   formatComplexEffect(formatter) {
@@ -152,10 +151,9 @@ const infinityUpgradeGridViewModels = () => [
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.ipGen,
       description: "Infinity Point generation based on fastest infinity",
-      hasComplexEffect: true,
       formatComplexEffect: function(formatter) {
-        const income = formatter.shortenDimensions(player.infMult.times(kongIPMult * (isAchEnabled("r85") ? 4 : 1) * (isAchEnabled("r93") ? 4 : 1)));
-        const period = timeDisplay(player.bestInfinityTime * 10);
+        const income = formatter.shortenDimensions(totalIPMult());
+        const period = Time.bestInfinity.multiply(10);
         return `${income} every ${period}`;
       }
     }),

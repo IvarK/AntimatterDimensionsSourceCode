@@ -860,22 +860,8 @@ function gainedInfinityPoints() {
     let div = 308;
     if (player.timestudy.studies.includes(111)) div = 285;
     else if (isAchEnabled("r103")) div = 307.8;
-
-    if(player.break) var ret = Decimal.pow(10, player.money.e/div -0.75).times(player.infMult).times(kongIPMult)
-    else var ret = new Decimal(308/div).times(player.infMult).times(kongIPMult)
-    if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))
-    if (player.timestudy.studies.includes(51)) ret = ret.times(1e15)
-    if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime/100+1)*Math.pow(player.thisInfinityTime/100+1, 0.125))).max(1))
-    if (player.timestudy.studies.includes(142)) ret = ret.times(1e25)
-    if (player.timestudy.studies.includes(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime/100+1)*Math.pow(player.thisInfinityTime/100+1, 0.125)))
-    if (isAchEnabled("r85")) ret = ret.times(4);
-    if (isAchEnabled("r93")) ret = ret.times(4);
-    if (isAchEnabled("r116")) ret = ret.times(Decimal.pow(2, Math.log10(getInfinitied()+1)))
-    if (isAchEnabled("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime/100+1)*Math.pow(player.thisInfinityTime/100+1, 0.11)))
-    if (isAchEnabled("r141")) ret = ret.times(4)
-    if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000).max(1))
-    ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("infinityipgain")));
-    return ret.floor()
+    let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
+    return ret.times(totalIPMult()).floor()
 }
 
 function gainedEternityPoints() {
@@ -2176,7 +2162,8 @@ function gameLoop(diff) {
       }
     }
 
-    speedFactor = getGameSpeedupFactor();
+    const speedFactor = getGameSpeedupFactor();
+    DeltaTimeInfo.update(diff, speedFactor);
     diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
@@ -2201,18 +2188,16 @@ function gameLoop(diff) {
             postC2Count = 0;
         }
     }
-    if (player.infinityUpgrades.includes("passiveGen")) player.partInfinityPoint += diff / player.bestInfinityTime;
-    if (player.partInfinityPoint >= 100) {
-        player.infinityPoints = player.infinityPoints.plus(player.infMult.times(kongIPMult * (isAchEnabled("r85") ? 4 : 1) * (isAchEnabled("r93") ? 4 : 1) * (player.partInfinityPoint/10)));
-        player.partInfinityPoint = 0;
+    if (InfinityUpgrade.ipGen.isBought) {
+      const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
+      // player.partInfinityPoint - progress until next ipGen income (fractional, from 0 to 1)
+      player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+      if (player.partInfinityPoint >= 1) {
+        const genCount = Math.floor(player.partInfinityPoint);
+        player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+        player.partInfinityPoint -= genCount;
+      }
     }
-
-    if (player.partInfinityPoint >= 10) {
-        player.partInfinityPoint -= 10;
-        player.infinityPoints = player.infinityPoints.plus(player.infMult.times(kongIPMult * (isAchEnabled("r85") ? 4 : 1) * (isAchEnabled("r93") ? 4 : 1)));
-    }
-
-
 
     if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") {
         if (player.reality.upg.includes(11)) {

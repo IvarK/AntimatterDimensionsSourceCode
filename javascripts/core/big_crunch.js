@@ -169,7 +169,44 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  return player.infMult.times(kongIPMult);
+  let mult = player.infMult.times(kongIPMult);
+  if (player.timestudy.studies.includes(41)) {
+    mult = mult.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies));
+  }
+  if (player.timestudy.studies.includes(51)) {
+    mult = mult.times(1e15);
+  }
+  // All "this inf time" or "best inf time" mults are * 10
+  const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
+  const timStudyMult = Decimal.pow(15, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.125));
+  if (player.timestudy.studies.includes(141)) {
+    mult = mult.times(Decimal.divide(1e45, timStudyMult).max(1));
+  }
+  if (player.timestudy.studies.includes(142)) {
+    mult = mult.times(1e25);
+  }
+  if (player.timestudy.studies.includes(143)) {
+    mult = mult.times(timStudyMult);
+  }
+  if (isAchEnabled("r85")) {
+    mult = mult.times(4);
+  }
+  if (isAchEnabled("r93")) {
+    mult = mult.times(4);
+  }
+  if (isAchEnabled("r116")) {
+    mult = mult.times(Decimal.pow(2, Math.log10(getInfinitied() + 1)));
+  }
+  if (isAchEnabled("r125")) {
+    mult = mult.times(Decimal.pow(2, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.11)));
+  }
+  if (isAchEnabled("r141")) {
+    mult = mult.times(4);
+  }
+  if (player.dilation.upgrades.includes(7)) {
+    mult = mult.times(player.dilation.dilatedTime.pow(1000).max(1));
+  }
+  return mult.times(Decimal.max(getAdjustedGlyphEffect("infinityipgain"), 1));
 }
 
 class InfinityUpgrade {
@@ -225,7 +262,7 @@ class InfinityUpgrade {
 InfinityUpgrade.totalTimeMult = new InfinityUpgrade({
   id: "timeMult",
   cost: 1,
-  dynamicEffect: () => Math.pow(player.totalTimePlayed / 120000, 0.15)
+  dynamicEffect: () => Math.pow(Time.totalTimePlayed.totalMinutes / 2, 0.15)
 });
 InfinityUpgrade.dimInfinityMult = () => 1 + (getInfinitied() * 0.2);
 InfinityUpgrade.dim18mult = new InfinityUpgrade({
@@ -274,7 +311,7 @@ InfinityUpgrade.galaxyBoost = new InfinityUpgrade({
 InfinityUpgrade.thisInfinityTimeMult = new InfinityUpgrade({
   id: "timeMult2",
   cost: 3,
-  dynamicEffect: () => Decimal.max(Math.pow(player.thisInfinityTime / 240000, 0.25), 1)
+  dynamicEffect: () => Decimal.max(Math.pow(Time.totalTimePlayed.totalMinutes / 4, 0.25), 1)
 });
 InfinityUpgrade.unspentIPMult = new InfinityUpgrade({
   id: "unspentBonus",
@@ -292,7 +329,7 @@ InfinityUpgrade.ipGen = new InfinityUpgrade({
   id: "passiveGen",
   cost: 10,
   requirement: InfinityUpgrade.dimboostMult,
-  dynamicEffect: () => player.bestInfinityTime
+  dynamicEffect: () => Time.bestInfinity.totalMilliseconds
 });
 
 InfinityUpgrade.skipReset1 = new InfinityUpgrade({

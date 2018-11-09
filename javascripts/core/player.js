@@ -349,7 +349,8 @@ var player = {
   ttbuyer: false,
   celestials: {
     effarig: {
-      rmStore: 0
+      rmStore: 0,
+      quoteIdx: 0
     }
   },
   options: {

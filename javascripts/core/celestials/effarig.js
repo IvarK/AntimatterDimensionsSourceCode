@@ -1,5 +1,11 @@
 
-
+var effarigQuotes = [
+  "We've been observing you",
+  "You have shown promise with your bending of the reality",
+  "We are the Celestials, and we want you to join us.",
+  "My name is Effarig, the Celestial Of Reality",
+  "Prove your worth."
+]
 
 var Effarig = {
   timePoured: 0,
@@ -21,5 +27,11 @@ var Effarig = {
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
+  },
+  get quote() {
+    return effarigQuotes[player.celestials.effarig.quoteIdx]
+  },
+  nextQuote() {
+    if (player.celestials.effarig.quoteIdx !== effarigQuotes.length - 1) player.celestials.effarig.quoteIdx++
   }
 }

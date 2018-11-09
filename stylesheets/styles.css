@@ -3800,6 +3800,11 @@ screen and (max-width: 480px) {
 
 
 /* Effarig tab */
+.l-mechanics-container {
+  display: flex;
+  justify-content: space-around;
+}
+
 .c-rm-store {
   border: .1rem solid black;
   height: 50rem;
@@ -3831,6 +3836,22 @@ screen and (max-width: 480px) {
   border: .2rem solid #8c1f1f;
   background: #636363;
   color: white;
+}
+
+.o-effarig-quotes {
+  display: inline-block;
+  margin: 1.5rem 1.5rem;
+  font-size: 1.9rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.o-quote-button {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  font-size: 3rem;
+  cursor: pointer;
 }
 
 /* End Effarig tab*/

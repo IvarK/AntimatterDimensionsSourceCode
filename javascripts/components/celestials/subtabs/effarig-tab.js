@@ -17,8 +17,8 @@ Vue.component('effarig-tab', {
       }
       this.time = now
       this.rmStore = player.celestials.effarig.rmStore
-      this.percentage = Effarig.getPercentage()
-      this.rmMult = Effarig.getRmMultiplier()
+      this.percentage = (Effarig.fill * 100) + "%"
+      this.rmMult = Effarig.rmMultiplier
     },
   },
   template:
@@ -27,9 +27,10 @@ Vue.component('effarig-tab', {
       </div>
 
       <div class="l-rm-container">
-        <button class="storebtn effarigPour" 
+        <button class="o-primary-btn c-effarig-pour" 
           @mousedown="pour = true"
           @mouseup="pour = false"
+          @mouseleave="pour = false"
         >Pour RM</button>
         <div class="c-rm-store">
           <div class="c-rm-store-inner" :style="{ height: percentage}">

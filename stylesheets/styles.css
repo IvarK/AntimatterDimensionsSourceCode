@@ -3801,9 +3801,9 @@ screen and (max-width: 480px) {
 
 /* Effarig tab */
 .c-rm-store {
-  border: 1px solid black;
-  height: 500px;
-  width: 130px;
+  border: .1rem solid black;
+  height: 50rem;
+  width: 13rem;
   margin: auto;
   position: relative;
 }
@@ -3825,10 +3825,10 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
-.effarigPour {
-  width: 130px;
-  height: 40px;
-  border: 2px solid #8c1f1f;
+.c-effarig-pour {
+  width: 13rem;
+  height: 4rem;
+  border: .2rem solid #8c1f1f;
   background: #636363;
   color: white;
 }

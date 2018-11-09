@@ -3,6 +3,7 @@ Vue.component('effarig-tab', {
     return {
       pour: false,
       time: new Date().getTime(),
+      rmStore: 0
     };
   },
   methods: {
@@ -13,19 +14,20 @@ Vue.component('effarig-tab', {
         Effarig.pourRM(diff)
       }
       this.time = now
+      this.rmStore = player.celestials.effarig.rmStore
     },
   },
   template:
     `<div class="l-effarig-celestial-tab">
       <div class="l-effarig-unlocks">
-      </div
+      </div>
 
-      <div class="c-rm-container"
-        <button class="c-primary-button" 
+      <div class="c-rm-container">
+        <button class="storebtn" 
           @mousedown="pour = true"
           @mouseup="pour = false"
         >Pour RM</button>
-        {{this.shorten(rmStore)}} RM poured
+        {{shorten(rmStore)}} RM poured
       </div>
 
       <div class="c-unlock-descriptions">

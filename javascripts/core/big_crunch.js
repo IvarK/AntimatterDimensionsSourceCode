@@ -168,6 +168,10 @@ function checkBigCrunchAchievements() {
 
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
+function totalIPMult() {
+  return player.infMult.times(kongIPMult);
+}
+
 class InfinityUpgrade {
   constructor(props) {
     this._id = props.id;

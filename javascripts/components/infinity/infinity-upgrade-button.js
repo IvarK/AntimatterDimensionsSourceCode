@@ -26,7 +26,7 @@ Vue.component("infinity-upgrade-button", {
     },
     dynamicEffectDisplay: function() {
       const upgrade = this.upgrade;
-      if (upgrade.updateEachTick) {
+      if (upgrade.hasComplexEffect) {
         return this.effectDisplay;
       }
       return upgrade.formatEffectValue(this.effectValue, this.formatter);
@@ -43,8 +43,8 @@ Vue.component("infinity-upgrade-button", {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought;
       this.isAvailable = upgrade.isAvailable;
-      if (upgrade.updateEachTick) {
-        this.effectDisplay = upgrade.formatEffectValue(this.formatter);
+      if (upgrade.hasComplexEffect) {
+        this.effectDisplay = upgrade.formatComplexEffect(this.formatter);
       }
       else if (this.hasDynamicEffectDisplay) {
         this.effectValue.copyFrom(new Decimal(upgrade.effectValue));

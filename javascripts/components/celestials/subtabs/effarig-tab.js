@@ -3,7 +3,9 @@ Vue.component('effarig-tab', {
     return {
       pour: false,
       time: new Date().getTime(),
-      rmStore: 0
+      rmStore: 0,
+      percentage: "",
+      rmMult: 0,
     };
   },
   methods: {
@@ -15,6 +17,8 @@ Vue.component('effarig-tab', {
       }
       this.time = now
       this.rmStore = player.celestials.effarig.rmStore
+      this.percentage = Effarig.getPercentage()
+      this.rmMult = Effarig.getRmMultiplier()
     },
   },
   template:
@@ -22,12 +26,16 @@ Vue.component('effarig-tab', {
       <div class="l-effarig-unlocks">
       </div>
 
-      <div class="c-rm-container">
-        <button class="storebtn" 
+      <div class="l-rm-container">
+        <button class="storebtn effarigPour" 
           @mousedown="pour = true"
           @mouseup="pour = false"
         >Pour RM</button>
-        {{shorten(rmStore)}} RM poured
+        <div class="c-rm-store">
+          <div class="c-rm-store-inner" :style="{ height: percentage}">
+            <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e15) }}</div>
+          </div>
+        </div>
       </div>
 
       <div class="c-unlock-descriptions">

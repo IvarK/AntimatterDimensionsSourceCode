@@ -1041,7 +1041,7 @@ function gainedEternityPoints() {
 
 function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-
+    ret = ret.times(Effarig.getRmMultiplier)
     return Decimal.floor(ret)
 }
 

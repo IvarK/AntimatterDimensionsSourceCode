@@ -3555,3 +3555,40 @@ screen and (max-width: 480px) {
 
 /*#region component*/
 /*#endregion component*/
+
+
+/* Effarig tab */
+.c-rm-store {
+  border: 1px solid black;
+  height: 500px;
+  width: 130px;
+  margin: auto;
+  position: relative;
+}
+
+.c-rm-store-inner {
+  position: absolute;
+  background: green;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.c-rm-store-label {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: green;
+  mix-blend-mode: difference;
+  font-weight: bold;
+}
+
+.effarigPour {
+  width: 130px;
+  height: 40px;
+  border: 2px solid #8c1f1f;
+  background: #636363;
+  color: white;
+}
+
+/* End Effarig tab*/

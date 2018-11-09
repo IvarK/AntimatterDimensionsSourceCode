@@ -282,17 +282,13 @@ class InfinityDimensionInfo {
     if (player.timestudy.studies.includes(162)) {
       mult = mult.times(1e11)
     }
-    if (tier === 1 && ECTimesCompleted("eterc2") !== 0) {
-      mult = mult.times(player.infinityPower.pow(1.5 / (700 - ECTimesCompleted("eterc2") * 100)).min(new Decimal("1e100")).plus(1))
+
+    if (tier === 1) {
+      EternityChallenge(2).applyReward(value => mult = mult.times(value));
     }
 
-    if (ECTimesCompleted("eterc4") !== 0) {
-      mult = mult.times(player.infinityPoints.pow(0.003 + ECTimesCompleted("eterc4")*0.002).min(new Decimal("1e200")))
-    }
-
-    if (ECTimesCompleted("eterc9") !== 0) {
-      mult = mult.times(player.timeShards.pow(ECTimesCompleted("eterc9")*0.1).plus(1).min(new Decimal("1e400")))
-    }
+    EternityChallenge(4).applyReward(value => mult = mult.times(value));
+    EternityChallenge(9).applyReward(value => mult = mult.times(value));
 
     mult = mult.max(0);
 
@@ -306,11 +302,9 @@ class InfinityDimensionInfo {
   }
 
   get costMultiplier() {
-    const ec12Completions = ECTimesCompleted("eterc12");
-    const costMult = infCostMults[this._tier];
-    return ec12Completions !== 0 ?
-      Math.pow(costMult, 1 - ec12Completions * 0.008) :
-      costMult;
+    let costMult = infCostMults[this._tier];
+    EternityChallenge(12).applyReward(value => costMult = Math.pow(costMult, value));
+    return costMult;
   }
 
   get isCapped() {

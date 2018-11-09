@@ -149,14 +149,9 @@ function eternity(force, auto) {
     updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateChallenges();
     updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
-    if (!isAchEnabled("r133")) {
-        var infchalls = Array.from(document.getElementsByClassName('infchallengediv'));
-        for (let i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
-    }
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
     updateMilestones();
@@ -188,7 +183,6 @@ function eternity(force, auto) {
     resetMoney();
     playerInfinityUpgradesOnEternity();
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
-    updateEternityChallenges();
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
         loadAutoBuyerSettings()

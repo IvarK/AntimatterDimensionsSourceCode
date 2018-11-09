@@ -111,7 +111,6 @@ function importSave(save_data) {
     console.log(player);
     load_game();
     console.log(player);
-    updateChallenges();
     transformSaveToDecimal();
 }
 
@@ -178,6 +177,5 @@ function hardReset() {
   Tab.dimensions.normal.show();
   updateTickSpeed();
   updateDimensions();
-  updateChallenges();
   updateAutobuyers();
 }

@@ -64,7 +64,6 @@ dev.fixSave = function() {
     player = save_data;
     save_game();
     load_game();
-    updateChallenges()
     transformSaveToDecimal()
 }
 

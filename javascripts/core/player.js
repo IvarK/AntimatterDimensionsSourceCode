@@ -357,6 +357,7 @@ var player = {
     notation: "Mixed scientific",
     noSacrificeConfirmation: false,
     retryChallenge: false,
+    showAllChallenges: false,
     bulkOn: true,
     cloud: true,
     hotkeys: true,

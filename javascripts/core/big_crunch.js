@@ -111,7 +111,6 @@ function secondSoftReset() {
     softReset(0);
     updateAutobuyers();
     resetInfDimensions();
-    updateChallenges();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);

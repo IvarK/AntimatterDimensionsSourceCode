@@ -12,9 +12,9 @@ function bigCrunchReset() {
 
     if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
         implosionCheck = 1;
-        document.getElementById("body").style.animation = "implode 2s 1";
+        document.body.style.animation = "implode 2s 1";
         setTimeout(function() {
-            document.getElementById("body").style.animation = "";
+            document.body.style.animation = "";
         }, 2000);
         setTimeout(bigCrunchReset, 1000);
         return

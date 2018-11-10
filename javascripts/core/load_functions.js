@@ -16,16 +16,20 @@ function updateState() {
   }
 
 function onLoad() {
-  if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
-  player = Object.assign(defaultStart, player) // This adds all the undefined properties to the save which are in player.js
+  if (player.totalmoney === undefined || isNaN(player.totalmoney)) {
+    player.totalmoney = player.money;
+  }
+  if (player.thisEternity === undefined) {
+    player.thisEternity = player.totalTimePlayed;
+  }
+  player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
+  if (player.infinitied > 0 && !player.challenges.includes("challenge1")) {
+    player.challenges.push("challenge1");
+  }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
-  
-  if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";
-  if (player.autoRealityMode === undefined) player.autoRealityMode = "rm";
   Theme.set(player.options.theme);
-
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
-    giveAchievement("Was it even broken?")
+    giveAchievement("Was it even broken?");
   }
   if (player.secondAmount !== 0) {
       document.getElementById("tickSpeed").style.visibility = "visible";
@@ -34,88 +38,6 @@ function onLoad() {
       document.getElementById("tickSpeedAmount").style.visibility = "visible";
   }
 
-  if (player.infinityPower === undefined) {
-      player.infinityPower = new Decimal(1)
-      player.infinityDimension1 = {
-          cost: new Decimal(1e8),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infinityDimension2 = {
-          cost: new Decimal(1e9),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infinityDimension3 = {
-          cost: new Decimal(1e10),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infinityDimension4 = {
-          cost: new Decimal(1e20),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infDimensionsUnlocked = [false, false, false, false]
-  }
-
-  if (player.timeShards === undefined) {
-      player.timeShards = new Decimal(0)
-      player.eternityPoints = new Decimal(0)
-      player.tickThreshold = new Decimal(1)
-      player.totalTickGained = 0
-      player.eternities = 0
-      player.timeDimension1 = {
-          cost: new Decimal(1),
-          amount: new Decimal(0),
-          power: new Decimal(1),
-          bought: 0
-      }
-      player.timeDimension2 = {
-          cost: new Decimal(5),
-          amount: new Decimal(0),
-          power: new Decimal(1),
-          bought: 0
-      }
-      player.timeDimension3 = {
-          cost: new Decimal(100),
-          amount: new Decimal(0),
-          power: new Decimal(1),
-          bought: 0
-      }
-      player.timeDimension4 = {
-          cost: new Decimal(1000),
-          amount: new Decimal(0),
-          power: new Decimal(1),
-          bought: 0
-      }
-  }
-
-  if (player.infinityDimension1.baseAmount === undefined) {
-      player.infinityDimension1.baseAmount = 0;
-      player.infinityDimension2.baseAmount = 0;
-      player.infinityDimension3.baseAmount = 0;
-      player.infinityDimension4.baseAmount = 0;
-
-      player.infinityDimension1.baseAmount = new Decimal(player.infinityDimension1.power).log(50).times(10).toNumber()
-      player.infinityDimension2.baseAmount = new Decimal(player.infinityDimension2.power).log(30).times(10).toNumber()
-      player.infinityDimension3.baseAmount = new Decimal(player.infinityDimension3.power).log(10).times(10).toNumber()
-      player.infinityDimension4.baseAmount = new Decimal(player.infinityDimension4.power).log(5).times(10).toNumber()
-
-
-  }
-  if (player.autoIP === undefined) player.autoIP = new Decimal(0)
-  if (player.autoTime === undefined) player.autoTime = 1e300;
-
-  if (player.matter === null) player.matter = new Decimal(0)
   for (var i=0; i<12; i++) {
       if (player.autobuyers[i]%1 !== 0 && player.autobuyers[i].tier === undefined) {
           player.autobuyers[i].tier = i+1
@@ -131,8 +53,8 @@ function onLoad() {
   }
   if (player.autobuyers[8].tier == 10) player.autobuyers[8].tier = 9
 
-  var IPminpeak = new Decimal(0)
-  var EPminpeak = new Decimal(0)
+  IPminpeak = new Decimal(0)
+  EPminpeak = new Decimal(0)
 
   if (typeof player.autobuyers[9].bulk !== "number") {
       player.autobuyers[9].bulk = 1
@@ -165,96 +87,9 @@ function onLoad() {
       }
       player.version = 2
   }
-if (player.version < 5) {
-  player.newsArray = []
-  player.version = 5
-  }
-
-  if (player.infinityDimension5 === undefined) {
-      player.infDimensionsUnlocked.push(false)
-      player.infDimensionsUnlocked.push(false)
-      player.infinityDimension5 = {
-          cost: new Decimal(1e140),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infinityDimension6 = {
-          cost: new Decimal(1e200),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.version = 6
-  }
-
-  if (player.infinityDimension7 == undefined) {
-      player.infDimensionsUnlocked.push(false)
-      player.infDimensionsUnlocked.push(false)
-      player.infinityDimension7 = {
-          cost: new Decimal(1e250),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-      player.infinityDimension8 = {
-          cost: new Decimal(1e280),
-          amount: new Decimal(0),
-          bought: 0,
-          power: new Decimal(1),
-          baseAmount: 0
-      }
-  }
-
-  if (player.replicanti === undefined) {
-      player.replicanti = {
-          amount: new Decimal(0),
-          unl: false,
-          chance: 0.01,
-          chanceCost: new Decimal(1e150),
-          interval: 1000,
-          intervalCost: new Decimal(1e140),
-          gal: 0,
-          galaxies: 0,
-          galCost: new Decimal(1e170)
-      }
-  }
-  if (player.bestEternity === undefined) {
-      player.bestEternity = 9999999999
-      player.thisEternity = player.totalTimePlayed
-  }
-  if (player.timestudy === undefined) {
-      player.timestudy = {
-          theorem: 0,
-          amcost: new Decimal("1e20000"),
-          ipcost: new Decimal(1),
-          epcost: new Decimal(1),
-          studies: [],
-      }
-  }
-
-  if (player.timestudy.shopMinimized === undefined) player.timestudy.shopMinimized = false;
-
-  if (player.eternityUpgrades === undefined) player.eternityUpgrades = []
-
-  if (player.infDimBuyers === undefined) player.infDimBuyers = [false, false, false, false, false, false, false, false]
-
-  if (player.replicanti.auto === undefined) player.replicanti.auto = [false, false, false]
-  if (player.eternityBuyer === undefined) {
-    player.eternityBuyer = {
-      limit: new Decimal(0),
-      isOn: false
-    }
-  }
-  if (player.realityBuyer === undefined) {
-    player.realityBuyer = {
-      rm: new Decimal(0),
-      glyph: 0,
-      isOn: false
-    }
+  if (player.version < 5) {
+    player.newsArray = []
+    player.version = 5
   }
 
   transformSaveToDecimal();
@@ -309,11 +144,6 @@ if (player.version < 5) {
   if (player.reality.epmultbuyer !== undefined) {
     eterMultAutoToggle()
     eterMultAutoToggle()
-  }
-
-  if (player.epmult === undefined || player.epmult == 0) {
-      player.epmult = new Decimal(1)
-      player.epmultCost = new Decimal(500)
   }
   
   clearOldAchieves()
@@ -416,6 +246,8 @@ if (player.version < 5) {
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
+        player.realTimePlayed = player.totalTimePlayed;
+        player.thisReality = player.totalTimePlayed;
         player.realTimePlayed *= 100;
         player.totalTimePlayed *= 100;
         player.thisInfinityTime*= 100;
@@ -585,122 +417,9 @@ function change_save(saveId) {
 }
 
 function transformSaveToDecimal() {
-
-  player.infinityPoints = new Decimal(player.infinityPoints)
   document.getElementById("eternitybtn").style.display = (player.infinityPoints.gte(Number.MAX_VALUE) || player.eternities > 0) ? "inline-block" : "none"
 
-  player.money = new Decimal(player.money)
-  player.tickSpeedCost = new Decimal(player.tickSpeedCost)
-  player.tickspeed = new Decimal(player.tickspeed)
-  player.firstCost = new Decimal(player.firstCost)
-  player.secondCost = new Decimal(player.secondCost)
-  player.thirdCost = new Decimal(player.thirdCost)
-  player.fourthCost = new Decimal(player.fourthCost)
-  player.fifthCost = new Decimal(player.fifthCost)
-  player.sixthCost = new Decimal(player.sixthCost)
-  player.seventhCost = new Decimal(player.seventhCost)
-  player.eightCost = new Decimal(player.eightCost)
-  player.firstAmount = new Decimal(player.firstAmount)
-  player.secondAmount = new Decimal(player.secondAmount)
-  player.thirdAmount = new Decimal(player.thirdAmount)
-  player.fourthAmount = new Decimal(player.fourthAmount)
-  player.fifthAmount = new Decimal(player.fifthAmount)
-  player.sixthAmount = new Decimal(player.sixthAmount)
-  player.seventhAmount = new Decimal(player.seventhAmount)
-  player.eightAmount = new Decimal(player.eightAmount)
-  player.firstPow = new Decimal(player.firstPow)
-  player.secondPow = new Decimal(player.secondPow)
-  player.thirdPow = new Decimal(player.thirdPow)
-  player.fourthPow = new Decimal(player.fourthPow)
-  player.fifthPow = new Decimal(player.fifthPow)
-  player.sixthPow = new Decimal(player.sixthPow)
-  player.seventhPow = new Decimal(player.seventhPow)
-  player.eightPow = new Decimal(player.eightPow)
-  player.sacrificed = new Decimal(player.sacrificed)
-  player.totalmoney = new Decimal(player.totalmoney)
-  player.chall3Pow = new Decimal(player.chall3Pow)
-  player.chall11Pow = new Decimal(player.chall11Pow)
-  player.costMultipliers = [new Decimal(player.costMultipliers[0]), new Decimal(player.costMultipliers[1]), new Decimal(player.costMultipliers[2]), new Decimal(player.costMultipliers[3]), new Decimal(player.costMultipliers[4]), new Decimal(player.costMultipliers[5]), new Decimal(player.costMultipliers[6]), new Decimal(player.costMultipliers[7])]
-  player.tickspeedMultiplier = new Decimal(player.tickspeedMultiplier)
-  player.matter = new Decimal(player.matter)
-  player.infinityPower = new Decimal(player.infinityPower)
-  player.infinityDimension1.amount = new Decimal(player.infinityDimension1.amount)
-  player.infinityDimension2.amount = new Decimal(player.infinityDimension2.amount)
-  player.infinityDimension3.amount = new Decimal(player.infinityDimension3.amount)
-  player.infinityDimension4.amount = new Decimal(player.infinityDimension4.amount)
-  player.infinityDimension5.amount = new Decimal(player.infinityDimension5.amount)
-  player.infinityDimension6.amount = new Decimal(player.infinityDimension6.amount)
-  player.infinityDimension7.amount = new Decimal(player.infinityDimension7.amount)
-  player.infinityDimension8.amount = new Decimal(player.infinityDimension8.amount)
-
-  player.timeDimension1.amount = new Decimal(player.timeDimension1.amount)
-  player.timeDimension2.amount = new Decimal(player.timeDimension2.amount)
-  player.timeDimension3.amount = new Decimal(player.timeDimension3.amount)
-  player.timeDimension4.amount = new Decimal(player.timeDimension4.amount)
-  player.timeDimension5.amount = new Decimal(player.timeDimension5.amount)
-  player.timeDimension6.amount = new Decimal(player.timeDimension6.amount)
-  player.timeDimension7.amount = new Decimal(player.timeDimension7.amount)
-  player.timeDimension8.amount = new Decimal(player.timeDimension8.amount)
-  player.timeDimension1.cost = new Decimal(player.timeDimension1.cost)
-  player.timeDimension2.cost = new Decimal(player.timeDimension2.cost)
-  player.timeDimension3.cost = new Decimal(player.timeDimension3.cost)
-  player.timeDimension4.cost = new Decimal(player.timeDimension4.cost)
-  player.timeDimension5.cost = new Decimal(player.timeDimension5.cost)
-  player.timeDimension6.cost = new Decimal(player.timeDimension6.cost)
-  player.timeDimension7.cost = new Decimal(player.timeDimension7.cost)
-  player.timeDimension8.cost = new Decimal(player.timeDimension8.cost)
-  player.timeDimension1.power = new Decimal(player.timeDimension1.power)
-  player.timeDimension2.power = new Decimal(player.timeDimension2.power)
-  player.timeDimension3.power = new Decimal(player.timeDimension3.power)
-  player.timeDimension4.power = new Decimal(player.timeDimension4.power)
-  player.timeDimension5.power = new Decimal(player.timeDimension5.power)
-  player.timeDimension6.power = new Decimal(player.timeDimension6.power)
-  player.timeDimension7.power = new Decimal(player.timeDimension7.power)
-  player.timeDimension8.power = new Decimal(player.timeDimension8.power)
-  player.timeShards = new Decimal(player.timeShards)
-  player.eternityPoints = new Decimal(player.eternityPoints)
-  player.tickThreshold = new Decimal(player.tickThreshold)
-  player.postC3Reward = new Decimal(player.postC3Reward)
-
-  for (var i=0; i<10; i++) {
-      player.lastTenRuns[i][1] = new Decimal(player.lastTenRuns[i][1])
-      player.lastTenEternities[i][1] = new Decimal(player.lastTenEternities[i][1])
-      player.lastTenRealities[i][1] = new Decimal(player.lastTenRealities[i][1])
-  }
-  player.lastTenRuns = [[parseFloat(player.lastTenRuns[0][0]), player.lastTenRuns[0][1]], [parseFloat(player.lastTenRuns[1][0]), player.lastTenRuns[1][1]], [parseFloat(player.lastTenRuns[2][0]), player.lastTenRuns[2][1]], [parseFloat(player.lastTenRuns[3][0]), player.lastTenRuns[3][1]], [parseFloat(player.lastTenRuns[4][0]), player.lastTenRuns[4][1]], [parseFloat(player.lastTenRuns[5][0]), player.lastTenRuns[5][1]], [parseFloat(player.lastTenRuns[6][0]), player.lastTenRuns[6][1]], [parseFloat(player.lastTenRuns[7][0]), player.lastTenRuns[7][1]], [parseFloat(player.lastTenRuns[8][0]), player.lastTenRuns[8][1]], [parseFloat(player.lastTenRuns[9][0]), player.lastTenRuns[9][1]]]
-  player.replicanti.chanceCost = new Decimal(player.replicanti.chanceCost)
-  player.replicanti.intervalCost = new Decimal(player.replicanti.intervalCost)
-  player.replicanti.galCost = new Decimal(player.replicanti.galCost)
-
-  for (var i=1; i<=8; i++) {
-      player["infinityDimension"+i].cost = new Decimal(player["infinityDimension"+i].cost)
-      player["infinityDimension"+i].power = new Decimal(player["infinityDimension"+i].power)
-  }
-
-  player.infMultCost = new Decimal(player.infMultCost)
-  player.infMult = new Decimal(player.infMult)
-  player.timestudy.amcost = new Decimal(player.timestudy.amcost)
-  player.timestudy.ipcost = new Decimal(player.timestudy.ipcost)
-  player.timestudy.epcost = new Decimal(player.timestudy.epcost)
-
-  player.autoIP = new Decimal(player.autoIP)
-
   if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autobuyers[11].priority !== "undefined")player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority)
-
-  player.epmultCost = new Decimal(player.epmultCost)
-  player.epmult = new Decimal(player.epmult)
-  player.eternityBuyer.limit = new Decimal(player.eternityBuyer.limit)
-  player.realityBuyer.rm = new Decimal(player.realityBuyer.rm)
-  player.eternityChallGoal = new Decimal(player.eternityChallGoal)
-  player.replicanti.amount = new Decimal(player.replicanti.amount)
-
-  player.dilation.tachyonParticles = new Decimal(player.dilation.tachyonParticles)
-  player.dilation.dilatedTime = new Decimal(player.dilation.dilatedTime)
-  player.dilation.totalTachyonParticles = new Decimal(player.dilation.totalTachyonParticles)
-  player.dilation.nextThreshold = new Decimal(player.dilation.nextThreshold)
-
-  player.reality.realityMachines = new Decimal(player.reality.realityMachines)
-
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     let glyph = player.reality.glyphs.active[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
@@ -713,8 +432,7 @@ function transformSaveToDecimal() {
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
       glyph.effects.mult = new Decimal(glyph.effects.mult)
     }
-  } 
-  
+  }
 }
 
 
@@ -757,6 +475,3 @@ function getRootSaveObject() {
     saves: saves
   };
 }
-
-setTimeout(drawPerkNetwork, 100)
-setTimeout(onLoad, 100)

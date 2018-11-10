@@ -1370,12 +1370,12 @@ function ratePerMinute(amount, time) {
 function averageRun(runs) {
     let totalTime = runs
         .map(function(run) { return run[0] })
-        .reduce(Decimal.sumReducer);
+        .reduce(Number.sumReducer);
     let totalAmount = runs
         .map(function(run) { return run[1] })
         .reduce(Decimal.sumReducer);
     return [
-        totalTime.dividedBy(runs.length),
+        totalTime / runs.length,
         totalAmount.dividedBy(runs.length)
     ];
 }
@@ -2358,23 +2358,9 @@ function gameLoop(diff) {
 
 
     if (player.infMultBuyer && player.infMultCost.lte("1e6000000")) {
-        if (player.infMultCost.gte("1e3000000")) var dif = Math.floor((Math.min(player.infinityPoints.e, 6000000) - player.infMultCost.e) / 10) + 1;
-        else var dif = player.infinityPoints.e - player.infMultCost.e + 1
-        if (dif > 0) {
-            if (player.infMultCost.lt("1e3000000")) {
-                if (player.infMultCost.e + dif > 3000000) dif = Math.max(3000000 - player.infMultCost.e, 1)
-            }
-            player.infMult = player.infMult.times(Decimal.pow(2, dif))
-            if (player.infMultCost.gte("1e3000000")) player.infMultCost = player.infMultCost.times(Decimal.pow("1e10", dif))
-            else player.infMultCost = player.infMultCost.times(Decimal.pow(10, dif))
-            document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
-            if (player.infMultCost.gte("1e3000000")) player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(1e10))
-            else player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(10))
-            if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autoCrunchMode == "amount") player.autobuyers[11].priority = player.autobuyers[11].priority.times(Decimal.pow(2, dif));
-            if (player.autoCrunchMode == "amount") document.getElementById("priority12").value = player.autobuyers[11].priority
-        }
+      InfinityUpgrade.ipMult.autobuyerTick();
     }
-    else if (player.infMultCost.gte("1e6000000")) {
+    if (player.infMultCost.gte("1e6000000")) {
       document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(player.infMult.times(kongIPMult)) +"x<br>(Capped at " +shortenCosts(new Decimal("1e6000000"))+ " IP)"
       document.getElementById("infiMult").className = "infinistorebtnlocked"
     }

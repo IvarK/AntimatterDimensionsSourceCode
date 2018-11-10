@@ -351,3 +351,60 @@ InfinityUpgrade.skipResetGalaxy = new InfinityUpgrade({
   cost: 300,
   requirement: InfinityUpgrade.skipReset3
 });
+
+InfinityUpgrade.ipMult = {
+  capValue: new Decimal("1e6000000"),
+  costIncreaseThreshold: new Decimal("1e3000000"),
+  get cost() {
+    return player.infMultCost;
+  },
+  set cost(value) {
+    player.infMultCost = value;
+  },
+  get hasIncreasedCost() {
+    return this.cost.gte(this.costIncreaseThreshold);
+  },
+  get costIncrease() {
+    return this.hasIncreasedCost ? 1e10 : 10;
+  },
+  get isCapped() {
+    return this.cost.gte(this.capValue);
+  },
+  get isRequirementSatisfied() {
+    return InfinityUpgrade.resetBoost.isBought &&
+      InfinityUpgrade.galaxyBoost.isBought &&
+      InfinityUpgrade.ipGen.isBought &&
+      InfinityUpgrade.skipResetGalaxy.isBought;
+  },
+  get effectValue() {
+    return player.infMult;
+  },
+  get isAvailable() {
+    return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+  },
+  purchase(amount = 1) {
+    if (!this.isAvailable) return;
+    const costIncrease = this.costIncrease;
+    player.infMult = player.infMult.times(Decimal.pow(2, amount));
+    player.autoIP = player.autoIP.times(Decimal.pow(2, amount));
+    this.cost = this.cost.times(Decimal.pow(costIncrease, amount));
+    player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
+  },
+  autobuyerTick() {
+    if (!this.isAvailable) return;
+    if (!this.hasIncreasedCost) {
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.costIncreaseThreshold.exponent);
+      const purchases = buyUntil - this.cost.exponent + 1;
+      if (purchases <= 0) return;
+      this.purchase(purchases);
+    }
+    // do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
+    // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
+    if (this.hasIncreasedCost) {
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.capValue.exponent);
+      const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
+      if (purchases <= 0) return;
+      this.purchase(purchases);
+    }
+  }
+};

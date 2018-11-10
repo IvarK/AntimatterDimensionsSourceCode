@@ -2332,6 +2332,10 @@ screen and (max-width: 480px) {
   font-size: 1.1rem;
 }
 
+.o-primary-btn--small-spoon {
+  font-size: 1rem;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -2477,6 +2481,20 @@ screen and (max-width: 480px) {
 /*#endregion themes*/
 
 /*#endregion o-primary-btn*/
+
+/*#region l-spoon-btn-group*/
+
+.l-spoon-btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.l--spoon-btn-group__little-spoon {
+  align-self: stretch;
+  margin-top: .3rem;
+}
+
+/*#endregion l-spoon-btn-group*/
 
 .o-big-checkbox {
   width: 2rem;
@@ -3537,7 +3555,7 @@ screen and (max-width: 480px) {
 
 /*#endregion Challenges*/
 
-/*#region Infinity Upgrades*/
+/*#region infinity-tab*/
 
 .l-infinity-tab {
   align-items: center;
@@ -3552,10 +3570,33 @@ screen and (max-width: 480px) {
 .c-infinity-tab__infinity-points {
 }
 
+/*#endregion infinity-tab*/
+
+/*#region Infinity Upgrades*/
+
+/*#region l-infinity-upgrades-tab*/
+
+.l-infinity-upgrades-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-infinity-upgrades-tab__grid {
+  margin-top: 1.5rem;
+}
+
+.l-infinity-upgrades-tab__mult-btn {
+  margin: 1.5rem 0;
+}
+
+/*#endregion l-infinity-upgrades-tab*/
+
+/*#region l-infinity-upgrade-grid*/
+
 .l-infinity-upgrade-grid {
   display: flex;
   flex-direction: row;
-  margin: 1.5rem 0;
 }
 
 .l-infinity-upgrade-grid__column {
@@ -3566,6 +3607,8 @@ screen and (max-width: 480px) {
 .l-infinity-upgrade-grid__cell {
   margin: .5rem .8rem;
 }
+
+/*#endregion l-infinity-upgrade-grid*/
 
 /*#region o-infinity-upgrade-btn*/
 
@@ -3903,8 +3946,7 @@ screen and (max-width: 480px) {
 /*#region component*/
 /*#endregion component*/
 
-
-/* Effarig tab */
+/*#region Effarig tab*/
 .l-mechanics-container {
   display: flex;
   justify-content: space-around;
@@ -3959,4 +4001,4 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-/* End Effarig tab*/
+/*#endregion Effarig tab*/

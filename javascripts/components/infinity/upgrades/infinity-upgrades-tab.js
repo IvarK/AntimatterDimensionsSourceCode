@@ -17,8 +17,8 @@ Vue.component("infinity-upgrades-tab", {
     }
   },
   template:
-    `<div>
-      <div class="l-infinity-upgrade-grid">
+    `<div class="l-infinity-upgrades-tab">
+      <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnIdx) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button
             v-for="(upgrade, rowIdx) in column"
@@ -28,66 +28,9 @@ Vue.component("infinity-upgrades-tab", {
           />
         </div>
       </div>
+      <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn"/>
     </div>`
 });
-
-class InfinityUpgradeViewModel {
-  constructor(props) {
-    this._upgrade = props.upgrade;
-    this._description = props.description;
-    this._formatCurrentEffect = props.formatCurrentEffect;
-    this._staticEffect = props.staticEffect;
-    this._formatComplexEffect = props.formatComplexEffect;
-  }
-
-  get cost() {
-    return this._upgrade.cost;
-  }
-
-  get description() {
-    return this._description;
-  }
-
-  get isBought() {
-    return this._upgrade.isBought;
-  }
-
-  get isAvailable() {
-    return this._upgrade.isAvailable;
-  }
-
-  get hasStaticEffectDisplay() {
-    return this._staticEffect !== undefined;
-  }
-
-  get staticEffect() {
-    return this._staticEffect;
-  }
-
-  get hasDynamicEffectDisplay() {
-    return this._upgrade.hasDynamicEffect;
-  }
-
-  get effectValue() {
-    return this._upgrade.effectValue;
-  }
-
-  formatEffectValue(value, formatter) {
-    return this._formatCurrentEffect(value, formatter);
-  }
-
-  get hasComplexEffect() {
-    return this._formatComplexEffect !== undefined;
-  }
-
-  formatComplexEffect(formatter) {
-    return this._formatComplexEffect(formatter);
-  }
-
-  purchase() {
-    this._upgrade.purchase();
-  }
-}
 
 const infinityUpgradeGridViewModels = () => [
   [

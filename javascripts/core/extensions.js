@@ -18,6 +18,10 @@ Decimal.sumReducer = function(accumulator, previous) {
   return Decimal.add(accumulator, previous);
 };
 
+Number.sumReducer = function(accumulator, previous) {
+  return accumulator + previous;
+};
+
 Decimal.maxReducer = function(a, b) {
   return Decimal.max(a, b);
 };

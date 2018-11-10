@@ -160,7 +160,7 @@ class TimeSpan {
    */
   add(other) {
     Guard.isTimeSpan(other);
-    return new TimeSpan(this.milliseconds + other.milliseconds);
+    return new TimeSpan(this._ms + other._ms);
   }
 
   /**
@@ -169,7 +169,7 @@ class TimeSpan {
    */
   subtract(other) {
     Guard.isTimeSpan(other);
-    return new TimeSpan(this.milliseconds - other.milliseconds);
+    return new TimeSpan(this._ms - other._ms);
   }
 
   /**
@@ -178,7 +178,7 @@ class TimeSpan {
    */
   multiply(other) {
     Guard.isNumber(other);
-    return new TimeSpan(this.milliseconds * other);
+    return new TimeSpan(this._ms * other);
   }
 
   /**
@@ -187,7 +187,7 @@ class TimeSpan {
    */
   divide(other) {
     Guard.isNumber(other);
-    return new TimeSpan(this.milliseconds / other);
+    return new TimeSpan(this._ms / other);
   }
 
   /**

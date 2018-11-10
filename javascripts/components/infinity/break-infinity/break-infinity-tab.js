@@ -11,7 +11,7 @@ Vue.component("break-infinity-tab", {
   },
   methods: {
     update() {
-      this.isUnlocked = player.autobuyers[11].interval <= 100;
+      this.isUnlocked = player.autobuyers[11] % 1 !== 0 && player.autobuyers[11].interval === 100;
     },
     btnClassObject: function(column) {
       return {
@@ -24,7 +24,7 @@ Vue.component("break-infinity-tab", {
     `<div class="l-break-infinity-tab">
       <div v-if="!isUnlocked">You need to get Automated Big Crunch interval to 0.1 to be able to break infinity</div>
       <break-infinity-button class="l-break-infinity-tab__break-btn" />
-      <div class="l-break-infinity-upgrade-grid l-break-infinity-tab__grid">
+      <div v-if="isUnlocked" class="l-break-infinity-upgrade-grid l-break-infinity-tab__grid">
         <div v-for="(column, columnIdx) in grid" class="l-break-infinity-upgrade-grid__row">
           <infinity-upgrade-button
             v-for="(upgrade, rowIdx) in column"

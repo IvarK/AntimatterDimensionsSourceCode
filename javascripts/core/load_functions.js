@@ -121,8 +121,6 @@ function onLoad() {
       document.getElementById("replicantiunlock").style.display="inline-block"
   }
 
-  if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
-
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 
   if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc1" || player.currentChallenge == "postc6") document.getElementById("matter").style.display = "inline-block";

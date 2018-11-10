@@ -98,7 +98,7 @@ function updateDimensions() {
             document.getElementById("postinfi21").innerHTML = "Normal dimensions gain a multiplier based on current antimatter<br>Currently: "+ Math.pow(player.money.e+1, 0.5).toFixed(2)+"x<br>Cost: "+shortenCosts(5e4)+" IP"
             document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
             if (player.tickSpeedMultDecrease <= 2) document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x"
-            document.getElementById("postinfi22").innerHTML = "Normal dimensions gain a multiplier based on non-secret achievements completed <br>Currently: "+achievementMult.toFixed(2)+"x<br>Cost: "+shortenCosts(1e6)+" IP"
+            document.getElementById("postinfi22").innerHTML = "Normal dimensions gain a multiplier based on non-secret achievements completed <br>Currently: "+(1).toFixed(2)+"x<br>Cost: "+shortenCosts(1e6)+" IP"
             document.getElementById("postinfi12").innerHTML = "Normal dimensions gain a multiplier based on amount infinitied <br>Currently: "+(1+Math.log10(getInfinitied()+1)*10).toFixed(2)+"x<br>Cost: "+shortenCosts(1e5)+" IP"
             if (player.timestudy.studies.includes(31)) document.getElementById("postinfi12").innerHTML = "Normal dimensions gain a multiplier based on amount infinitied <br>Currently: "+shortenMoney(Math.pow((Math.log10(getInfinitied()+1)*10).toFixed(2), 4))+"x<br>Cost: "+shortenCosts(1e5)+" IP"
             document.getElementById("postinfi41").innerHTML = "Make galaxies 50% stronger <br>Cost: "+shortenCosts(5e11)+" IP"
@@ -959,7 +959,7 @@ function updateAutobuyers() {
         document.getElementById("autoBuyerReality").style.display = "none"
     }
 
-    if (player.infinityUpgrades.includes("autoBuyerUpgrade")) {
+    if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
         document.getElementById("interval1").textContent = "Current interval: " + (player.autobuyers[0].interval/2000).toFixed(2) + " seconds"
         document.getElementById("interval2").textContent = "Current interval: " + (player.autobuyers[1].interval/2000).toFixed(2) + " seconds"
         document.getElementById("interval3").textContent = "Current interval: " + (player.autobuyers[2].interval/2000).toFixed(2) + " seconds"
@@ -2046,7 +2046,7 @@ function gameLoop(diff) {
     if (autobuyerOnGameLoop) {
       Autobuyer.intervalTimer += diff / 20;
       Autobuyer.tickTimer += diff;
-      let autobuyerInterval = player.infinityUpgrades.includes("autoBuyerUpgrade") ? 50 : 100;
+      let autobuyerInterval = BreakInfinityUpgrade.autobuyerSpeed.isBought ? 50 : 100;
       if (Autobuyer.tickTimer >= autobuyerInterval) {
         Autobuyer.tickTimer -= autobuyerInterval;
         // failsafe
@@ -2094,7 +2094,7 @@ function gameLoop(diff) {
       }
     }
 
-    if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") {
+    if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
         if (player.reality.upg.includes(11)) {
             player.infinitied += Math.floor(gainedInfinities() * 0.1)
         } else player.partInfinitied += diff / player.bestInfinityTime;
@@ -2430,7 +2430,7 @@ function gameLoop(diff) {
 
     document.getElementById("epmult").className = player.eternityPoints.gte(player.epmultCost) ? "eternityupbtn" : "eternityupbtnlocked"
 
-    if (player.infinityUpgrades.includes("bulkBoost")) document.getElementById("bulkdimboost").style.display = "inline"
+    if (BreakInfinityUpgrade.bulkDimBoost.isBought) document.getElementById("bulkdimboost").style.display = "inline"
     else document.getElementById("bulkdimboost").style.display = "none"
 
     if (player.infinityUpgrades.includes("totalMult")) document.getElementById("postinfi11").className = "infinistorebtnbought"
@@ -3095,23 +3095,12 @@ function setControlKey(isDown) {
   controlDown = isDown;
 }
 
-var totalMult = 1
-var currentMult = 1
-var infinitiedMult = 1
-var achievementMult = 1
-var challengeMult = 1
 var postc8Mult = new Decimal(0)
 var mult18 = 1
 var ec10bonus = new Decimal(1)
 
 init();
 setInterval( function() {
-    totalMult = Math.pow(player.totalmoney.e+1, 0.5)
-    currentMult = Math.pow(player.money.e+1, 0.5)
-    if (player.timestudy.studies.includes(31)) infinitiedMult = 1 + Math.pow(Math.log10(getInfinitied()+1)*10, 4)
-    else infinitiedMult = 1+Math.log10(getInfinitied()+1)*10
-    achievementMult = Math.max(Math.pow((player.achievements.length-30-getSecretAchAmount()), 3)/40,1)
-    challengeMult = Decimal.max(10*3000/worstChallengeTime, 1)
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
     if (player.currentEternityChall == "eterc10") {
         ec10bonus = Decimal.pow(getInfinitied(), 1000).max(1)

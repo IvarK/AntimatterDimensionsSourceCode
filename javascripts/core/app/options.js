@@ -107,11 +107,6 @@ function importSave(save_data) {
     }
     hardReset();
     saved = 0;
-    totalMult = 1;
-    currentMult = 1;
-    infinitiedMult = 1;
-    achievementMult = 1;
-    challengeMult = 1;
     infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);

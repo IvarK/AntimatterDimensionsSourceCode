@@ -32,6 +32,7 @@ Vue.component("infinity-upgrades-tab", {
     </div>`
 });
 
+// [ [column], [column], [column], [column] ]
 const infinityUpgradeGridViewModels = () => [
   [
     new InfinityUpgradeViewModel({
@@ -96,8 +97,10 @@ const infinityUpgradeGridViewModels = () => [
       description: "Infinity Point generation based on fastest infinity",
       formatComplexEffect: function(formatter) {
         const income = formatter.shortenDimensions(totalIPMult());
-        const period = Time.bestInfinity.multiply(10);
-        return `${income} every ${period}`;
+        const period = player.bestInfinityTime === 999999999999  ?
+          "hundred or so years" :
+          Time.bestInfinity.multiply(10);
+        return `Currently: ${income} every ${period}`;
       }
     }),
   ],

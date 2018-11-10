@@ -3652,6 +3652,7 @@ screen and (max-width: 480px) {
 }
 
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: black;
   background: #e0d8e0;
 }
 
@@ -3673,6 +3674,46 @@ screen and (max-width: 480px) {
 /*#endregion o-infinity-upgrade-btn*/
 
 /*#endregion Infinity Upgrades*/
+
+/*#region Break Infinity*/
+
+/*#region l-break-infinity-tab*/
+
+.l-break-infinity-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-break-infinity-tab__break-btn {
+  margin-top: 2rem;
+}
+
+.l-break-infinity-tab__grid {
+  margin-top: 1rem;
+}
+
+/*#endregion l-break-infinity-tab*/
+
+/*#region l-break-infinity-upgrade-grid*/
+
+.l-break-infinity-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-break-infinity-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-break-infinity-upgrade-grid__cell {
+  margin: .5rem .8rem;
+}
+
+/*#endregion l-break-infinity-upgrade-grid*/
+
+/*#endregion Break Infinity*/
 
 /*#region Modals*/
 

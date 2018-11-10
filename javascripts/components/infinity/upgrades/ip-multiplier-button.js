@@ -47,7 +47,7 @@ class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
   }
 
   formatCost(formatter) {
-    return `${formatter.shortenCosts(this._upgrade.cost)}x`;
+    return formatter.shortenCosts(this._upgrade.cost);
   }
 
   get hasDynamicEffectDisplay() {

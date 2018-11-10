@@ -80,11 +80,6 @@ function reality(force, reset, auto) {
     }
 
     //reset global values to avoid a tick of unupdated production
-    totalMult = 1;
-    currentMult = 1;
-    infinitiedMult = 1;
-    achievementMult = 1;
-    challengeMult = 1;
     infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);

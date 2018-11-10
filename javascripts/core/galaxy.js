@@ -35,7 +35,7 @@ class Galaxy {
       amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + getGlyphSacEffect("power")))));
     }
 
-    InfinityUpgrade.resetBoost.applyEffect(value => amount -= value);
+    InfinityUpgrade.resetBoost.apply(value => amount -= value);
     if (player.challenges.includes("postc5")) amount -= 1;
     const tier = player.currentChallenge === "challenge4" ? 6 : 8;
     return new GalaxyRequirement(tier, amount);

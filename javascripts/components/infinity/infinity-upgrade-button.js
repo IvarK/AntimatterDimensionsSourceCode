@@ -5,10 +5,11 @@ Vue.component("infinity-upgrade-button", {
   data: function() {
     return {
       cost: String.empty,
+      description: String.empty,
       isAvailable: false,
       isBought: false,
       effectValue: new Decimal(0),
-      effectDisplay: String.empty,
+      complexEffect: String.empty,
       isCapped: false
     };
   },
@@ -23,54 +24,56 @@ Vue.component("infinity-upgrade-button", {
         "o-infinity-upgrade-btn--unavailable": !isBought && !isAvailable
       };
     },
-    hasDynamicEffectDisplay: function() {
-      return this.upgrade.hasDynamicEffectDisplay;
-    },
-    dynamicEffectDisplay: function() {
+    effectDisplay: function() {
       const upgrade = this.upgrade;
       if (upgrade.hasComplexEffect) {
-        return this.effectDisplay;
+        return this.complexEffect;
       }
-      return upgrade.formatEffectValue(this.effectValue, this.formatter);
-    },
-    hasStaticEffectDisplay: function() {
-      return this.upgrade.hasStaticEffectDisplay;
-    },
-    staticEffectDisplay: function() {
-      return this.upgrade.staticEffect;
+      if (upgrade.hasDynamicEffectDisplay) {
+        return `Currently: ${upgrade.formatEffectValue(this.effectValue, this.formatter)}`;
+      }
+      if (upgrade.hasStaticEffectDisplay) {
+        return upgrade.staticEffect;
+      }
     },
     capDisplay: function() {
       return this.upgrade.formatCapValue(this.formatter);
     }
   },
+  created() {
+    this.on$(GameEvent.INFINITY_UPGRADE_BOUGHT, this.update);
+  },
   methods: {
     update() {
       const upgrade = this.upgrade;
       this.cost = upgrade.formatCost(this.formatter);
+      this.description = typeof upgrade.description === "function" ?
+        upgrade.description() :
+        upgrade.description;
       this.isBought = upgrade.isBought;
       this.isAvailable = upgrade.isAvailable;
       this.isCapped = upgrade.isCapped;
       if (upgrade.hasComplexEffect) {
-        this.effectDisplay = upgrade.formatComplexEffect(this.formatter);
+        this.complexEffect = upgrade.formatComplexEffect(this.formatter);
       }
-      else if (this.hasDynamicEffectDisplay) {
+      else if (upgrade.hasDynamicEffectDisplay) {
         this.effectValue.copyFrom(new Decimal(upgrade.effectValue));
       }
     },
     purchase() {
       this.upgrade.purchase();
-      this.update();
     }
   },
   template:
     `<button :class="classObject" @click="purchase">
-      {{upgrade.description}}
-      <br v-if="hasDynamicEffectDisplay || hasStaticEffectDisplay">
-      <span v-if="hasDynamicEffectDisplay">Currently: {{dynamicEffectDisplay}}</span>
-      <span v-else-if="hasStaticEffectDisplay">{{staticEffectDisplay}}</span>
+      {{description}}
+      <template v-if="effectDisplay">
+        <br>
+        <span>{{effectDisplay}}</span>
+      </template>
       <br>
       <span v-if="isCapped">{{capDisplay}}</span>
-      <span v-else>Cost {{cost}} IP</span>
+      <span v-else-if="!isBought">Cost {{cost}} IP</span>
     </button>`
 });
 

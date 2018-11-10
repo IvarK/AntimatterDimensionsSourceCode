@@ -16,7 +16,7 @@ class DimBoost {
     }
 
     let power = 2;
-    InfinityUpgrade.dimboostMult.applyEffect(value => power = value);
+    InfinityUpgrade.dimboostMult.apply(value => power = value);
     if (player.challenges.includes("postc7")) power = 4;
     if (player.currentChallenge === "postc7" || player.timestudy.studies.includes(81)) power = 10;
 
@@ -61,7 +61,7 @@ class DimBoost {
       amount += Math.pow(targetResets, 3) + targetResets;
     }
 
-    InfinityUpgrade.resetBoost.applyEffect(value => amount -= value);
+    InfinityUpgrade.resetBoost.apply(value => amount -= value);
     if (player.challenges.includes("postc5")) amount -= 1;
 
     return new DimBoostRequirement(tier, amount);
@@ -145,7 +145,7 @@ function hidePreMilestone30Elements() {
 function softResetBtnClick() {
   if ((!player.break && player.money.gt(Number.MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
   auto = false;
-  if (player.infinityUpgrades.includes("bulkBoost")) maxBuyDimBoosts(true);
+  if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1)
   
   for (let tier = 1; tier<9; tier++) {

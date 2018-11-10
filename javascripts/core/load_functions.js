@@ -17,7 +17,7 @@ function updateState() {
 
 function onLoad() {
   if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
-  player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
+  player = Object.assign(defaultStart, player) // This adds all the undefined properties to the save which are in player.js
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   
   if (player.autoEternityMode === undefined) player.autoEternityMode = "amount";

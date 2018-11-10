@@ -4,7 +4,7 @@ Vue.component("infinity-upgrade-button", {
   },
   data: function() {
     return {
-      cost: 0,
+      cost: String.empty,
       isAvailable: false,
       isBought: false,
       effectValue: new Decimal(0),

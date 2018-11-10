@@ -34,6 +34,7 @@ function getDimensionFinalMultiplier(tier) {
   if (player.timestudy.studies.includes(31)) {
     infinityMult = infinityMult.pow(4);
   }
+  multiplier = multiplier.times(infinityMult);
   if (tier === 1) {
     InfinityUpgrade.unspentIPMult.applyEffect(value => multiplier = multiplier.times(value));
     if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
@@ -598,23 +599,6 @@ class NormalDimensionInfo {
       case 4:
       case 5:
         return InfinityUpgrade.dim45mult;
-    }
-  }
-
-  get hasInfinityMultiplier() {
-    switch (this._tier) {
-      case 1:
-      case 8:
-        return player.infinityUpgrades.includes("18Mult");
-      case 2:
-      case 7:
-        return player.infinityUpgrades.includes("27Mult");
-      case 3:
-      case 6:
-        return player.infinityUpgrades.includes("36Mult");
-      case 4:
-      case 5:
-        return player.infinityUpgrades.includes("45Mult");
     }
   }
 

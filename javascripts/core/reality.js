@@ -217,7 +217,6 @@ function reality(force, reset, auto) {
     if (player.eternities < 2) document.getElementById("break").textContent = "BREAK INFINITY";
     document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
-    document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
     resetTickspeed();
     updateTickSpeed();

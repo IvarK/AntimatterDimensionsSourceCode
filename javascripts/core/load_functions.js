@@ -122,7 +122,6 @@ function onLoad() {
   }
 
   if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
-  document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
 
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 

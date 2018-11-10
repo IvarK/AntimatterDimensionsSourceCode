@@ -39,15 +39,15 @@ class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
   }
 
   get isCapped() {
-    return InfinityUpgrade.ipMult.isCapped;
+    return this._upgrade.isCapped;
   }
 
   formatCapValue(formatter) {
-    return `(Capped at ${formatter.shortenCosts(InfinityUpgrade.ipMult.capValue)} IP)`;
+    return `(Capped at ${formatter.shortenCosts(this._upgrade.capValue)} IP)`;
   }
 
   formatCost(formatter) {
-    return `${formatter.shortenCosts(InfinityUpgrade.ipMult.cost)}x`;
+    return `${formatter.shortenCosts(this._upgrade.cost)}x`;
   }
 
   get hasDynamicEffectDisplay() {

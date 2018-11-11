@@ -239,7 +239,7 @@ function onLoad() {
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 21;
+        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 22;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -268,6 +268,7 @@ function onLoad() {
         updateLastTenEternities();
         updateLastTenRealities();
         updateChallengeTimes();
+        convertAutobuyerMode();
     }
 
   updatePrestigeAutoModes()
@@ -329,6 +330,28 @@ function onLoad() {
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
+  }
+}
+
+function convertAutobuyerMode() {
+  for (let i = 1; i <= 8; i++) {
+    const autobuyer = Autobuyer.dim(i);
+    if (!autobuyer.isUnlocked) continue;
+    if (autobuyer.mode < 10) {
+      autobuyer.mode = AutobuyerMode.BUY_SINGLE;
+    }
+    else {
+      autobuyer.mode = AutobuyerMode.BUY_10;
+    }
+  }
+  const tickspeedAutobuyer = Autobuyer.tickspeed;
+  if (tickspeedAutobuyer.isUnlocked) {
+    if (tickspeedAutobuyer.mode < 10) {
+      tickspeedAutobuyer.mode = AutobuyerMode.BUY_SINGLE;
+    }
+    else {
+      tickspeedAutobuyer.mode = AutobuyerMode.BUY_MAX;
+    }
   }
 }
 

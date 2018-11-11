@@ -127,6 +127,9 @@ function multiplyPC5Costs(cost, tier) {
   }
 }
 
+function isTickspeedPurchaseUnlocked() {
+  return player.secondAmount.gt(0);
+}
 
 function canBuyDimension(tier) {
   if (tier === 9) {

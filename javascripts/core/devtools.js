@@ -404,6 +404,11 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 21
   }
+
+  if (player.options.testVersion === 21) {
+    convertAutobuyerMode();
+    player.options.testVersion = 22;
+  }
 }
 
 // Still WIP

@@ -1,33 +1,24 @@
-/*class Autobuyer {
-  constructor(target) {
+const Autobuyer = function Autobuyer(target) {
     this.target = target;
-    this.cost = 1
+    this.cost = 1;
     this.interval = 5000;
     this.priority = 1;
     this.ticks = 0;
     this.isOn = false;
     this.tier = 1;
     this.bulk = 1;
-  }
-
-}*/
-
-
-var Autobuyer = function Autobuyer(target) {
-    this.target = target
-    this.cost = 1
-    this.interval = 5000;
-    this.priority = 1;
-    this.ticks = 0;
-    this.isOn = false;
-    this.tier = 1;
-    this.bulk = 1;
-}
+};
 
 Autobuyer.tickTimer = 0;
 Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
+
+const AutobuyerMode = {
+  BUY_SINGLE: 1,
+  BUY_10: 10,
+  BUY_MAX: 100,
+};
 
 class AutobuyerInfo {
   constructor(getAutobuyer) {
@@ -155,9 +146,147 @@ class AutobuyerInfo {
   }
 }
 
-Autobuyer.dim = dimIdx => new AutobuyerInfo(() => player.autobuyers[dimIdx - 1]);
-Autobuyer.tickspeed = new AutobuyerInfo(() => player.autobuyers[8]);
-Autobuyer.dimboost = new AutobuyerInfo(() => player.autobuyers[9]);
+class DimensionAutobuyerInfo extends AutobuyerInfo {
+  constructor(tier) {
+    super(() => player.autobuyers[tier - 1]);
+    this._tier = tier;
+  }
+
+  /**
+   * @returns {AutobuyerMode}
+   */
+  get mode() {
+    return this.autobuyer.target;
+  }
+
+  /**
+   * @param {AutobuyerMode} value
+   */
+  set mode(value) {
+    this.autobuyer.target = value;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    const tier = this._tier;
+    if (!canBuyDimension(tier)) return;
+    if (this.mode === AutobuyerMode.BUY_SINGLE) {
+      buyOneDimension(tier);
+    }
+    else {
+      const bulk = player.options.bulkOn ? this.bulk : 1;
+      buyManyDimensionAutobuyer(tier, bulk);
+    }
+    this.resetTicks();
+  }
+}
+
+Autobuyer.dim = tier => new DimensionAutobuyerInfo(tier);
+
+class TickspeedAutobuyerInfo extends AutobuyerInfo {
+  constructor() {
+    super(() => player.autobuyers[8]);
+  }
+
+  /**
+   * @returns {AutobuyerMode}
+   */
+  get mode() {
+    return this.autobuyer.target;
+  }
+
+  /**
+   * @param {AutobuyerMode} value
+   */
+  set mode(value) {
+    this.autobuyer.target = value;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    if (!isTickspeedPurchaseUnlocked()) return;
+    if (this.mode === AutobuyerMode.BUY_SINGLE) {
+      buyTickSpeed();
+    }
+    else {
+      buyMaxTickSpeed();
+    }
+    this.resetTicks();
+  }
+}
+
+Autobuyer.tickspeed = new TickspeedAutobuyerInfo();
+
+Autobuyer.priorityQueue = function() {
+  const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
+  autobuyers.push(Autobuyer.tickspeed);
+  return autobuyers
+    .filter(autobuyer => autobuyer.isUnlocked)
+    .sort((a, b) => a.priority - b.priority);
+};
+
+class DimboostAutobuyerInfo extends AutobuyerInfo {
+  constructor() {
+    super(() => player.autobuyers[9]);
+  }
+
+  /**
+   * @returns {number}
+   */
+  get limit() {
+    return this.priority;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set limit(value) {
+    this.priority = value;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get buyMaxInterval() {
+    return this.bulk;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set buyMaxInterval(value) {
+    this.bulk = value;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    if (!this.dimBoolean()) return;
+    if (player.resets < 4) {
+      softReset(1);
+    }
+    else if (player.eternities < 10) {
+      softReset(this.buyMaxInterval);
+    }
+    else {
+      if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
+        Autobuyer.lastDimBoost = Autobuyer.intervalTimer;
+        maxBuyDimBoosts();
+      }
+    }
+    this.resetTicks();
+  }
+
+  dimBoolean() {
+    const requirement = DimBoost.requirement;
+    if (requirement.isSatisfied) return true;
+    if (player.eternities < 10 && !DimBoost.bulkRequirement(this.buyMaxInterval - 1).isSatisfied) return false;
+    if (player.overXGalaxies <= player.galaxies) return true;
+    if ((player.currentChallenge === "challenge4" || player.currentChallenge === "postc1") && this.limit < requirement.amount && requirement.tier === 6) return false;
+    return this.limit > requirement.amount && requirement.tier === 8;
+  }
+}
+
+Autobuyer.dimboost = new DimboostAutobuyerInfo();
 
 class GalaxyAutobuyerInfo extends AutobuyerInfo {
   constructor() {
@@ -516,5 +645,17 @@ Autobuyer.reality = {
         break;
     }
     if (proc) reality(false, false, true);
+  }
+};
+
+Autobuyer.tick = function() {
+  Autobuyer.eternity.tick();
+  Autobuyer.reality.tick();
+  Autobuyer.infinity.tick();
+  Autobuyer.galaxy.tick();
+  Autobuyer.dimboost.tick();
+  Autobuyer.sacrifice.tick();
+  for (let autobuyer of Autobuyer.priorityQueue()) {
+    autobuyer.tick();
   }
 };

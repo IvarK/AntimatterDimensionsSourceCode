@@ -72,3 +72,11 @@ String.empty = "";
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };
+
+Array.range = function(start, count) {
+  return [...Array(count).keys()].map(i => i + start);
+};
+
+Array.repeat = function(value, count) {
+  return Array(count).fill(value);
+};

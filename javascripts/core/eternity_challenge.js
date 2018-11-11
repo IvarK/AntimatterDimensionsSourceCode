@@ -73,8 +73,8 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     EPminpeak = new Decimal(0);
     updateMilestones();
     resetTimeDimensions();
-    if (player.eternities < 20) player.autobuyers[9].bulk = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk;
+    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
+    if (player.eternities < 20) document.getElementById("bulkDimboost").value = Autobuyer.dimboost.buyMaxInterval;
     if (player.eternities < 50) {
         document.getElementById("replicantidiv").style.display = "none";
         document.getElementById("replicantiunlock").style.display = "inline-block"

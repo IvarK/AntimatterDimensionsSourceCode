@@ -153,3 +153,67 @@ function softResetBtnClick() {
     if (mult > 1) floatText(tier, "x" + shortenDimensions(mult));
   }
 }
+
+function maxBuyDimBoosts(manual) {
+  let requirement;
+  let bulk = 0;
+  do {
+    if (!ensureShift(bulk++)) return;
+  } while (requirement.tier < 8);
+
+  let availableBoosts = Number.MAX_VALUE;
+  if (player.overXGalaxies > player.galaxies && !manual) {
+    availableBoosts = Autobuyer.dimboost.limit - player.resets - bulk;
+  }
+
+  if (availableBoosts <= 0) {
+    bulk += availableBoosts;
+    tryBoost(bulk);
+    return;
+  }
+
+  let firstBoost = requirement;
+  let secondBoost = ensureShift(bulk);
+  if (!secondBoost) return;
+
+  let increase = secondBoost.amount - firstBoost.amount;
+  let minBoosts = bulk;
+  let maxBoosts = bulk + Math.floor((player.eightAmount - secondBoost.amount) / increase);
+  maxBoosts = Math.min(maxBoosts, availableBoosts);
+
+  // Usually enough, as boost scaling is linear most of the time
+  if (canBoost(maxBoosts)){
+    tryBoost(maxBoosts);
+    return;
+  }
+
+  // But in case of EC5 it's not, so do binarysearch-like search for appropriate boost amount
+  while (maxBoosts !== (minBoosts + 1)) {
+    let middle = Math.floor((maxBoosts + minBoosts) / 2);
+    if (canBoost(middle)) {
+      minBoosts = middle;
+    }
+    else {
+      maxBoosts = middle;
+    }
+  }
+
+  tryBoost(maxBoosts - 1);
+
+  function ensureShift(bulk) {
+    requirement = DimBoost.bulkRequirement(bulk);
+    if (requirement.isSatisfied) {
+      return requirement;
+    }
+    tryBoost(bulk);
+    return false;
+  }
+  function canBoost(bulk) {
+    return DimBoost.bulkRequirement(bulk).isSatisfied;
+  }
+  function tryBoost(bulk) {
+    if (bulk > 0) {
+      softReset(bulk);
+    }
+  }
+}

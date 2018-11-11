@@ -966,8 +966,6 @@ function updateAutobuyers() {
     }
 
     player.autoSacrifice.isOn = document.getElementById("13ison").checked
-    player.eternityBuyer.isOn = document.getElementById("eternityison").checked
-    player.realityBuyer.isOn = document.getElementById("realityison").checked
     priorityOrder()
 }
 

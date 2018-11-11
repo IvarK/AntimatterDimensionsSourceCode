@@ -157,6 +157,10 @@ shortenMultiplier = function (money) {
   return shortenWithCurrentNotation(money, 1, 1);
 };
 
+shortenAutobuyerInput = function (money) {
+  return shortenWithCurrentNotation(money, 2, 0);
+};
+
 shortenWithCurrentNotation = function(value, places, placesUnder1000) {
     return formatValue(Notation.current().name, value, places, placesUnder1000);
 };

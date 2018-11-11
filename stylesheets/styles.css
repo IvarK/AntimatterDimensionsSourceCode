@@ -3703,6 +3703,73 @@ screen and (max-width: 480px) {
   margin: 0 .3rem;
 }
 
+.l-autobuyer-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-autobuyer-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-autobuyer-grid__row > * {
+  margin: .5rem .8rem;
+}
+
+.o-autobuyer-input {
+  border: .01rem solid rgb(194, 194, 194);
+}
+
+.o-autobuyer-input--invalid {
+  background-color: tomato;
+}
+
+.o-autobuyer-toggle-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.o-autobuyer-toggle-checkbox__label {
+  font-size: .9rem;
+}
+
+.o-autobuyer-btn {
+  width: 18rem;
+  height: 3.5rem;
+  color: white;
+  background: #1f1f1f;
+  border: .1rem solid #ed85df;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  font-size: .8rem;
+  border-radius: .4rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.o-autobuyer-btn:hover {
+  color: black;
+  background: #b67f33;
+  border: .2rem solid #b67f33;
+}
+
+.c-autobuyer-box {
+  width: 23rem;
+  height: 15.5rem;
+  padding: 1rem;
+  border: solid .1rem grey;
+  border-radius: .4rem;
+  font-size: 1.1rem;
+}
+
+.l-autobuyer-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /*#endregion Autobuyers*/
 
 /*#region Break Infinity*/
@@ -4007,12 +4074,6 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion o-footer*/
-
-.l-flex-expand {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0;
-}
 
 /*#region component*/
 /*#endregion component*/

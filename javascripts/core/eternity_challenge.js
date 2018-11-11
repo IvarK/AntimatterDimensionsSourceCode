@@ -34,7 +34,9 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.eternities >= 7 ? player.autoSacrifice : 1;
+    if (player.eternities < 7) {
+      player.autoSacrifice = 1;
+    }
     player.eternityChallGoal = startgoal.times(goalIncrease.pow(ECTimesCompleted(name))).max(startgoal);
     player.currentEternityChall = name;
     player.autoIP = new Decimal(0);

@@ -752,7 +752,7 @@ function updateAutobuyers() {
     autoBuyerInf.interval = 300000
 
     autoSacrifice.interval = 100
-    autoSacrifice.priority = 5
+    autoSacrifice.priority = new Decimal(5)
 
     autoBuyerDim1.tier = 1
     autoBuyerDim2.tier = 2
@@ -790,6 +790,7 @@ function updateAutobuyers() {
     }
     if (player.challenges.includes("challenge7") && player.autobuyers[11] == 12) {
         player.autobuyers[11] = autoBuyerInf
+        Autobuyer.infinity.limit = new Decimal(1);
         document.getElementById("autoBuyerInf").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge8") && player.autobuyers[3] == 4) {
@@ -882,7 +883,7 @@ function updateAutobuyers() {
         document.getElementById("buyerBtnDimBoost").style.display = "none"
         maxedAutobuy++;
     }
-    if (player.autobuyers[10].interval <= 100) {
+    if (Autobuyer.galaxy.hasMaxedInterval) {
         document.getElementById("buyerBtnGalaxies").style.display = "none"
         maxedAutobuy++;
     }
@@ -1037,7 +1038,7 @@ function updatePriorities() {
     || parseInt(fromValue(document.getElementById("prioritySac").value).toString()) === 69
     || parseInt(document.getElementById("bulkgalaxy").value) === 69) giveAchievement("Nice.");
     player.autobuyers[9].priority = parseInt(document.getElementById("priority10").value)
-    player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
+    //player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
     //Autobuyer.infinity.limit = fromValue(document.getElementById("priority12").value)
     if (player.eternities < 10) {
         var bulk = Math.floor(Math.max(parseFloat(document.getElementById("bulkDimboost").value), 1))
@@ -1048,7 +1049,7 @@ function updatePriorities() {
     player.overXGalaxies = parseInt(document.getElementById("overGalaxies").value)
     player.autoSacrifice.priority = fromValue(document.getElementById("prioritySac").value)
     if (isNaN(player.autoSacrifice.priority) || player.autoSacrifice.priority === null || player.autoSacrifice.priority === undefined || player.autoSacrifice.priority <= 1) player.autoSacrifice.priority = Decimal.fromNumber(1.01)
-    player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
+    //player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
     priorityOrder()
 }
 
@@ -1071,9 +1072,9 @@ function toggleAutoBuyers() {
             player.autobuyers[i].isOn = !bool
         }
     }
-    player.autoSacrifice.isOn = !bool
+    Autobuyer.sacrifice.isOn = !bool;
     Autobuyer.eternity.isOn = !bool;
-    Autobuyer.reality.isOn = !bool
+    Autobuyer.reality.isOn = !bool;
     updateCheckBoxes()
     updateAutobuyers()
 }
@@ -2448,19 +2449,6 @@ function dimBoolean() {
     return true
 }
 
-
-function maxBuyGalaxies(manual) {
-    if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc1" || player.currentChallenge == "postc7") return
-    if (player.autobuyers[10].priority > player.galaxies || manual) {
-        while(player.eightAmount >= Galaxy.requirement.amount && (player.autobuyers[10].priority > player.galaxies || manual)) {
-            if (Notation.current().isCancer()) player.spreadingCancer += 1;
-            player.galaxies++
-        }
-        player.galaxies--
-        galaxyReset()
-    }
-}
-
 function maxBuyDimBoosts(manual) {
     let requirement = undefined;
     let bulk = 0;
@@ -2530,27 +2518,7 @@ function autoBuyerTick() {
   Autobuyer.eternity.tick();
   Autobuyer.reality.tick();
   Autobuyer.infinity.tick();
-
-
-
-    if (player.autobuyers[10]%1 !== 0) {
-        if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && Galaxy.requirement.isSatisfied) {
-            if (player.eternities < 9 || player.autobuyers[10].bulk == 0) {
-                if (player.autobuyers[10].isOn && player.autobuyers[10].priority > player.galaxies) {
-                    autoS = false;
-                    galaxyResetBtnClick();
-                    player.autobuyers[10].ticks = 1;
-                }
-            } else if (player.autobuyers[10].isOn){
-                const interval = player.autobuyers[10].bulk;
-                if (Autobuyer.intervalTimer - Autobuyer.lastGalaxy >= interval) {
-                  Autobuyer.lastGalaxy = Autobuyer.intervalTimer;
-                  maxBuyGalaxies()
-                }
-            }
-        } else player.autobuyers[10].ticks += 1;
-    }
-
+  Autobuyer.galaxy.tick();
 
     if (player.autobuyers[9]%1 !== 0) {
         if (player.autobuyers[9].isOn && dimBoolean()) {
@@ -2568,14 +2536,7 @@ function autoBuyerTick() {
         player.autobuyers[9].ticks += 1;
     }
 
-    if (player.autoSacrifice%1 !== 0) {
-        if (Sacrifice.nextBoost.gte(player.autoSacrifice.priority) && player.autoSacrifice.isOn) {
-          sacrificeReset(true)
-        }
-    }
-
-
-
+    Autobuyer.sacrifice.tick();
 
     for (var i=0; i<priority.length; i++) {
         if (priority[i].ticks*100 >= priority[i].interval || priority[i].interval == 100) {

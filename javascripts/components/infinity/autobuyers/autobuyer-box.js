@@ -41,7 +41,7 @@ Vue.component("autobuyer-box", {
 class AutobuyerBoxSetup {
   /**
    * @param {string} name
-   * @param autobuyer
+   * @param {AutobuyerInfo|Autobuyer.eternity|Autobuyer.reality} autobuyer
    */
   constructor(name, autobuyer) {
     this.name = name;

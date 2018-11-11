@@ -126,7 +126,9 @@ function reality(force, reset, auto) {
     player.offlineProd = player.reality.upg.includes(10) ? player.offlineProd : 0;
     player.offlineProdCost = player.reality.upg.includes(10) ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.reality.upg.includes(10) ? player.autoSacrifice : 1;
+    if (!player.reality.upg.includes(10)) {
+        player.autoSacrifice = 1;
+    }
     player.eternityChalls = {};
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
     player.currentEternityChall = "";

@@ -350,7 +350,7 @@ function toggle(current) {
     let id = OPTIONS.indexOf(current.target);
     if (id === -1) return false; //Fails if the specified autobuyer doesnt exist
     if (id >= player.autobuyers.length) { //exceptions such as sacrifice
-        if (id === 12) state = !player.autoSacrifice.isOn;
+        if (id === 12) state = !Autobuyer.sacrifice.isOn;
         if (id === 13) state = !Autobuyer.eternity.isOn;
     } else
         state = !player.autobuyers[id].isOn;

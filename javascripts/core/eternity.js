@@ -109,7 +109,9 @@ function eternity(force, auto) {
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.eternities >= 7 ? player.autoSacrifice : 1;
+    if (player.eternities < 7) {
+        player.autoSacrifice = 1;
+    }
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
     player.currentEternityChall = "";
     player.autoIP = new Decimal(0);

@@ -108,3 +108,15 @@ function galaxyResetBtnClick() {
   if (player.eternities >= 7 && !shiftDown) maxBuyGalaxies(true);
   else galaxyReset();
 }
+
+function maxBuyGalaxies(manual) {
+  if (player.currentEternityChall === "eterc6" || player.currentChallenge === "challenge11" || player.currentChallenge === "postc1" || player.currentChallenge === "postc7") return
+  if (Autobuyer.galaxy.limit > player.galaxies || manual) {
+    while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
+      if (Notation.current().isCancer()) player.spreadingCancer += 1;
+      player.galaxies++;
+    }
+    player.galaxies--;
+    galaxyReset();
+  }
+}

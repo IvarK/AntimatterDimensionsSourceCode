@@ -79,6 +79,36 @@ class AutobuyerInfo {
   }
 
   /**
+   * @returns {boolean}
+   */
+  canTick() {
+    if (!this.isUnlocked) return false;
+    if (this.ticks * 100 < this.interval) {
+      this.ticks++;
+      return false;
+    }
+    return this.isOn;
+  }
+
+  resetTicks() {
+    this.ticks = 1;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get priority() {
+    return this.autobuyer.priority;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set priority(value) {
+    this.autobuyer.priority = value;
+  }
+
+  /**
    * @returns {number}
    */
   get interval() {
@@ -100,6 +130,20 @@ class AutobuyerInfo {
   }
 
   /**
+   * @returns {number}
+   */
+  get bulk() {
+    return this.autobuyer.bulk;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set bulk(value) {
+    this.autobuyer.bulk = value;
+  }
+
+  /**
    * @returns {boolean}
    */
   get isActive() {
@@ -114,8 +158,96 @@ class AutobuyerInfo {
 Autobuyer.dim = dimIdx => new AutobuyerInfo(() => player.autobuyers[dimIdx - 1]);
 Autobuyer.tickspeed = new AutobuyerInfo(() => player.autobuyers[8]);
 Autobuyer.dimboost = new AutobuyerInfo(() => player.autobuyers[9]);
-Autobuyer.galaxy = new AutobuyerInfo(() => player.autobuyers[10]);
-Autobuyer.sacrifice = new AutobuyerInfo(() => player.autoSacrifice);
+
+class GalaxyAutobuyerInfo extends AutobuyerInfo {
+  constructor() {
+    super(() => player.autobuyers[10]);
+  }
+
+  /**
+   * @returns {number}
+   */
+  get limit() {
+    return this.priority;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set limit(value) {
+    this.priority = value;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get buyMaxInterval() {
+    return this.bulk;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set buyMaxInterval(value) {
+    this.bulk = value;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    if (!Galaxy.requirement.isSatisfied) return;
+    if (this.limit <= player.galaxies) return;
+    if (player.eternities >= 9 && this.buyMaxInterval > 0) {
+      this.buyMax();
+    }
+    else {
+      this.buySingle();
+      this.resetTicks();
+    }
+  }
+
+  buyMax() {
+    if (Autobuyer.intervalTimer - Autobuyer.lastGalaxy >= this.buyMaxInterval) {
+      Autobuyer.lastGalaxy = Autobuyer.intervalTimer;
+      maxBuyGalaxies();
+    }
+  }
+
+  buySingle() {
+    autoS = false;
+    galaxyResetBtnClick();
+  }
+}
+
+Autobuyer.galaxy = new GalaxyAutobuyerInfo();
+
+class SacrificeAutobuyerInfo extends AutobuyerInfo {
+  constructor() {
+    super(() => player.autoSacrifice);
+  }
+
+  /**
+   * @returns {Decimal}
+   */
+  get limit() {
+    return this.autobuyer.priority;
+  }
+
+  /**
+   * @param {Decimal} value
+   */
+  set limit(value) {
+    this.autobuyer.priority = value;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    if (!Sacrifice.nextBoost.gte(this.limit)) return;
+    sacrificeReset(true);
+    this.resetTicks();
+  }
+}
+
+Autobuyer.sacrifice = new SacrificeAutobuyerInfo();
 
 const AutoCrunchMode = {
   AMOUNT: "amount",
@@ -174,12 +306,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 
   tick() {
-    if (!this.isUnlocked) return;
-    if (this.ticks * 100 < this.interval) {
-      this.ticks++;
-      return;
-    }
-    if (!this.isOn) return;
+    if (!this.canTick()) return;
     if (!player.money.gte(Number.MAX_VALUE)) return;
     let proc = !player.break || player.currentChallenge !== "";
     if (!proc) {
@@ -199,7 +326,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
       autoS = false;
       bigCrunchReset();
     }
-    this.ticks = 1;
+    this.resetTicks();
   }
 }
 

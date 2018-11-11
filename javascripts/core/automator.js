@@ -334,7 +334,7 @@ function change(current) {
       updatePriorities()
       return true
     case "epautobuyer":
-      player.eternityBuyer.limit = new Decimal(current.id);
+      Autobuyer.eternity.limit = new Decimal(current.id);
       updatePriorities()
       return true
   }
@@ -351,13 +351,13 @@ function toggle(current) {
     if (id === -1) return false; //Fails if the specified autobuyer doesnt exist
     if (id >= player.autobuyers.length) { //exceptions such as sacrifice
         if (id === 12) state = !player.autoSacrifice.isOn;
-        if (id === 13) state = !player.eternityBuyer.isOn;
+        if (id === 13) state = !Autobuyer.eternity.isOn;
     } else
         state = !player.autobuyers[id].isOn;
     if (current.id === "on") state = true;
     else if (current.id === "off") state = false;
     if (id === 13) { //eternity doesnt follow the same numbering pattern
-      player.eternityBuyer.isOn = state;
+      Autobuyer.eternity.isOn = state;
     } else
         $("#" + (id + 1) + "ison")[0].checked = state;
     updateAutobuyers();

@@ -275,8 +275,8 @@ function buyEPMult(upd, threshold) {
     if (threshold == undefined) threshold = 1
     if (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         player.epmult = player.epmult.times(5)
-        if (player.autoEternityMode === AutoEternityMode.AMOUNT) {
-            player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
+        if (Autobuyer.eternity.mode === AutoEternityMode.AMOUNT) {
+            Autobuyer.eternity.limit = Autobuyer.eternity.limit.times(5)
         }
         player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
         let count = player.epmult.ln()/Math.log(5)
@@ -471,11 +471,11 @@ function toggleCrunchMode() {
 }
 
 function toggleEternityMode() {
-    player.autoEternityMode = Object.values(AutoEternityMode).next(player.autoEternityMode);
+  Autobuyer.eternity.toggleMode();
 }
 
 function toggleRealityMode() {
-    player.autoRealityMode = Object.values(AutoRealityMode).next(player.autoRealityMode);
+  Autobuyer.reality.toggleMode();
 }
 
 function updatePrestigeAutoModes() {
@@ -1074,8 +1074,8 @@ function toggleAutoBuyers() {
         }
     }
     player.autoSacrifice.isOn = !bool
-    player.eternityBuyer.isOn = !bool
-    player.realityBuyer.isOn = !bool
+    Autobuyer.eternity.isOn = !bool;
+    Autobuyer.reality.isOn = !bool
     updateCheckBoxes()
     updateAutobuyers()
 }
@@ -1818,15 +1818,10 @@ setInterval(function() {
     }
 
     if (player.reality.upg.includes(13)) {
-        document.getElementById("toggleeternitymode").style.display = "inline-block"
         document.getElementById("epmultbuyer").style.display = "inline-block"
     } else {
-        document.getElementById("toggleeternitymode").style.display = "none"
         document.getElementById("epmultbuyer").style.display = "none"
     }
-
-    if (player.reality.upg.includes(25)) document.getElementById("togglerealitymode").style.display = "inline-block"
-    else document.getElementById("togglerealitymode").style.display = "none"
 
     updateAchievementPower();
     updateRealityUpgrades()
@@ -2534,27 +2529,8 @@ function maxBuyDimBoosts(manual) {
 
 var timer = 0
 function autoBuyerTick() {
-    if ( player.eternities >= 100 && player.eternityBuyer.isOn ) {
-        if (player.autoEternityMode == "amount") {
-            if (player.currentEternityChall != "" || gainedEternityPoints().gte(player.eternityBuyer.limit)) eternity(false, true)
-        } else if (player.autoEternityMode == "time") {
-            if (player.thisEternity / 1000 > player.eternityBuyer.limit  * getGameSpeedupFactor(false)) eternity(false, true)
-        } else {
-            if (gainedEternityPoints().gte(player.lastTenEternities[0][1].times(player.eternityBuyer.limit))) eternity(false, true)
-        }   
-    }
-
-    if (player.reality.upg.includes(25) && player.realityBuyer.isOn ) {
-        if (player.autoRealityMode == "rm") {
-            if (gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
-        } else if (player.autoRealityMode == "glyph") {
-            if (gainedGlyphLevel() >= player.realityBuyer.glyph) reality(false, false, true)
-        } else if (player.autoRealityMode == "either") {
-            if (gainedGlyphLevel() >= player.realityBuyer.glyph || gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
-        } else if (player.autoRealityMode == "both") {
-            if (gainedGlyphLevel() >= player.realityBuyer.glyph && gainedRealityMachines().gte(player.realityBuyer.rm)) reality(false, false, true)
-        }
-    }
+  Autobuyer.eternity.tick();
+  Autobuyer.reality.tick();
 
     if (player.autobuyers[11]%1 !== 0) {
     if (player.autobuyers[11].ticks*100 >= player.autobuyers[11].interval && player.money.gte(Number.MAX_VALUE)) {

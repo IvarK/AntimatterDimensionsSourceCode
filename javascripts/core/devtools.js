@@ -399,8 +399,8 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 20) {
-    if (!Object.values(AutoRealityMode).includes(player.autoRealityMode)) {
-      player.autoRealityMode = AutoRealityMode.RM;
+    if (!Object.values(AutoRealityMode).includes(Autobuyer.reality.mode)) {
+      Autobuyer.reality.mode = AutoRealityMode.RM;
     }
     player.options.testVersion = 21
   }

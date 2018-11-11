@@ -7,9 +7,9 @@ Vue.component("eternity-autobuyer-box", {
   computed: {
     boxSetup: function() {
       return new AutobuyerBoxSetup(
-        () => player.eternities >= 100,
-        () => player.eternityBuyer.isOn,
-        value => player.eternityBuyer.isOn = value
+        () => Autobuyer.eternity.isUnlocked,
+        () => Autobuyer.eternity.isOn,
+        value => Autobuyer.eternity.isOn = value
       );
     },
     modeDisplay: function() {
@@ -23,14 +23,14 @@ Vue.component("eternity-autobuyer-box", {
     limitInputSetup: function() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
-        () => player.eternityBuyer.limit,
-        value => player.eternityBuyer.limit = value
+        () => Autobuyer.eternity.limit,
+        value => Autobuyer.eternity.limit = value
       );
     }
   },
   methods: {
     update() {
-      this.mode = player.autoEternityMode;
+      this.mode = Autobuyer.eternity.mode;
     }
   },
   template:

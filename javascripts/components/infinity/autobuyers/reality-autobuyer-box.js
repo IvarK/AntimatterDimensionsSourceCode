@@ -2,23 +2,23 @@ Vue.component("reality-autobuyer-box", {
   computed: {
     boxSetup: function() {
       return new AutobuyerBoxSetup(
-        () => player.reality.upg.includes(25),
-        () => player.realityBuyer.isOn,
-        value => player.realityBuyer.isOn = value
+        () => Autobuyer.reality.isUnlocked,
+        () => Autobuyer.reality.isOn,
+        value => Autobuyer.reality.isOn = value
       );
     },
     targetRMInputSetup: function() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
-        () => player.realityBuyer.rm,
-        value => player.realityBuyer.rm = value
+        () => Autobuyer.reality.rm,
+        value => Autobuyer.reality.rm = value
       );
     },
     targetGlyphInputSetup: function() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
-        () => player.realityBuyer.glyph,
-        value => player.realityBuyer.glyph = value
+        () => Autobuyer.reality.glyph,
+        value => Autobuyer.reality.glyph = value
       );
     }
   },

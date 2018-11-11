@@ -1,11 +1,7 @@
 Vue.component("reality-autobuyer-box", {
   computed: {
     boxSetup: function() {
-      return new AutobuyerBoxSetup(
-        () => Autobuyer.reality.isUnlocked,
-        () => Autobuyer.reality.isOn,
-        value => Autobuyer.reality.isOn = value
-      );
+      return new AutobuyerBoxSetup("Automatic Reality", Autobuyer.reality);
     },
     targetRMInputSetup: function() {
       return new AutobuyerInputSetup(
@@ -24,7 +20,6 @@ Vue.component("reality-autobuyer-box", {
   },
   template:
     `<autobuyer-box :setup="boxSetup">
-      <div>Automatic Reality</div>
       <br>
       <div>
         <span>Target reality machines:</span>

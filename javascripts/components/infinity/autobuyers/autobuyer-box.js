@@ -4,45 +4,47 @@ Vue.component("autobuyer-box", {
   },
   data: function() {
     return {
-      isVisible: false,
-      isActive: false
+      isUnlocked: false,
+      isOn: false
     };
+  },
+  computed: {
+    autobuyer: function() {
+      return this.setup.autobuyer;
+    }
   },
   methods: {
     update() {
-      const setup = this.setup;
-      if (setup === undefined) return;
-      const isVisible = setup.isVisible();
-      this.isVisible = isVisible;
-      if (!isVisible) return;
-      this.isActive = setup.getActive();
+      if (this.setup === undefined) return;
+      const autobuyer = this.autobuyer;
+      this.isUnlocked = autobuyer.isUnlocked;
+      if (!this.isUnlocked) return;
+      this.isOn = autobuyer.isOn;
     },
     changeActive: function() {
-      const current = this.setup.getActive();
-      const next = !current;
-      this.setup.setActive(next);
-      this.active = next;
+      const newValue = !this.autobuyer.isOn;
+      this.autobuyer.isOn = newValue;
+      this.active = newValue;
     }
   },
   template:
-    `<div v-if="isVisible" class="c-autobuyer-box l-autobuyer-box">
+    `<div v-if="isUnlocked" class="c-autobuyer-box l-autobuyer-box">
+      <div>{{setup.name}}</div>
       <slot />
       <div class="o-autobuyer-toggle-checkbox" @click="changeActive">
         <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
-        <input :checked="isActive" type="checkbox"/>
+        <input :checked="isOn" type="checkbox"/>
       </div>
     </div>`
 });
 
 class AutobuyerBoxSetup {
   /**
-   * @param {Function} isVisible
-   * @param {Function} getActive
-   * @param {Function} setActive
+   * @param {string} name
+   * @param autobuyer
    */
-  constructor(isVisible, getActive, setActive) {
-    this.isVisible = isVisible;
-    this.getActive = getActive;
-    this.setActive = setActive;
+  constructor(name, autobuyer) {
+    this.name = name;
+    this.autobuyer = autobuyer;
   }
 }

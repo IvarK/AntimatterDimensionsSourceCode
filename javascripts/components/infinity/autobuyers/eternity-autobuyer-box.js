@@ -6,10 +6,13 @@ Vue.component("eternity-autobuyer-box", {
   },
   computed: {
     boxSetup: function() {
-      return new AutobuyerBoxSetup(
-        () => Autobuyer.eternity.isUnlocked,
-        () => Autobuyer.eternity.isOn,
-        value => Autobuyer.eternity.isOn = value
+      return new AutobuyerBoxSetup("Automatic Eternity", Autobuyer.eternity);
+    },
+    limitInputSetup: function() {
+      return new AutobuyerInputSetup(
+        AutobuyerInputType.DECIMAL,
+        () => Autobuyer.eternity.limit,
+        value => Autobuyer.eternity.limit = value
       );
     },
     modeDisplay: function() {
@@ -19,13 +22,6 @@ Vue.component("eternity-autobuyer-box", {
         case AutoEternityMode.RELATIVE: return "X times last eternity";
       }
       throw "Unknown auto eternity mode";
-    },
-    limitInputSetup: function() {
-      return new AutobuyerInputSetup(
-        AutobuyerInputType.DECIMAL,
-        () => Autobuyer.eternity.limit,
-        value => Autobuyer.eternity.limit = value
-      );
     }
   },
   methods: {
@@ -35,7 +31,6 @@ Vue.component("eternity-autobuyer-box", {
   },
   template:
     `<autobuyer-box :setup="boxSetup">
-      <div>Automatic Eternity</div><br>
       <div>
         <span>{{modeDisplay}}:</span>
         <autobuyer-input :setup="limitInputSetup" />

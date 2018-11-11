@@ -84,7 +84,7 @@ Vue.component('tt-shop', {
     `<div id="TTbuttons" style="display: none">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div class="ttbuttons-row ttbuttons-top-row">
-          <button class="timetheorembtn" style="width:130px; font-size: 0.6em" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
+          <button class="timetheorembtn" style="width:130px; white-space:nowrap;" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
           <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">

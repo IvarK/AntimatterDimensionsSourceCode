@@ -98,8 +98,11 @@ Vue.component("eternity-challenges-tab", {
         >
           <span slot="top">{{description}}</span>
           <template slot="bottom">
-            <span v-if="completions < 5">{{completionDisplay}}</span>
-            <span v-if="completions < 5">{{goalDisplay}}</span>
+            <div class="c-challenge-box__spacer">
+              <span v-if="completions < 5">{{completionDisplay}}</span>
+              <br>
+              <span v-if="completions < 5">{{goalDisplay}}</span>
+            </div>
             <span :style="rewardStyleObject">Reward: {{visuals.reward}}</span>
             <span>{{rewardValueDisplay}}</span>
           </template>

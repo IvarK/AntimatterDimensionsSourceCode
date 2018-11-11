@@ -334,7 +334,7 @@ function change(current) {
       updatePriorities()
       return true
     case "epautobuyer":
-      document.getElementById("priority13").value = current.id
+      player.eternityBuyer.limit = new Decimal(current.id);
       updatePriorities()
       return true
   }
@@ -357,7 +357,7 @@ function toggle(current) {
     if (current.id === "on") state = true;
     else if (current.id === "off") state = false;
     if (id === 13) { //eternity doesnt follow the same numbering pattern
-        $("#eternityison")[0].checked = state;
+      player.eternityBuyer.isOn = state;
     } else
         $("#" + (id + 1) + "ison")[0].checked = state;
     updateAutobuyers();

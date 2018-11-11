@@ -437,10 +437,6 @@ function loadAutoBuyerSettings() {
   document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
   document.getElementById("prioritySac").value = player.autoSacrifice.priority
   document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
-  document.getElementById("priority13").value = player.eternityBuyer.limit
-  document.getElementById("priority14").value = player.realityBuyer.rm
-  document.getElementById("priority15").value = player.realityBuyer.glyph
-
 }
 
 function set_save(name, saveId, value) {

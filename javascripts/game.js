@@ -275,9 +275,8 @@ function buyEPMult(upd, threshold) {
     if (threshold == undefined) threshold = 1
     if (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         player.epmult = player.epmult.times(5)
-        if (player.autoEternityMode == "amount") {
+        if (player.autoEternityMode === AutoEternityMode.AMOUNT) {
             player.eternityBuyer.limit = player.eternityBuyer.limit.times(5)
-            document.getElementById("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
         }
         player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
         let count = player.epmult.ln()/Math.log(5)
@@ -473,29 +472,10 @@ function toggleCrunchMode() {
 
 function toggleEternityMode() {
     player.autoEternityMode = Object.values(AutoEternityMode).next(player.autoEternityMode);
-    if (player.autoEternityMode == "amount") {
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: time"
-        document.getElementById("eternitylimittext").textContent = "Seconds between eternities:"
-    } else if (player.autoEternityMode == "time"){
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: X times last eternity"
-        document.getElementById("eternitylimittext").textContent = "X times last eternity:"
-    } else {
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: amount"
-        document.getElementById("eternitylimittext").textContent = "Amount of EP to wait until reset:"
-    }
 }
 
 function toggleRealityMode() {
     player.autoRealityMode = Object.values(AutoRealityMode).next(player.autoRealityMode);
-    if (player.autoRealityMode == "rm") {
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: glyph level"
-    } else if (player.autoRealityMode == "glyph"){
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: either"
-    } else if (player.autoRealityMode == "either"){
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: both"
-    } else {
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: reality machines"
-    }
 }
 
 function updatePrestigeAutoModes() {
@@ -508,27 +488,6 @@ function updatePrestigeAutoModes() {
     } else {
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
         document.getElementById("limittext").textContent = "X times last crunch:"
-    }
-
-    if (player.autoEternityMode == "amount") {
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: amount"
-        document.getElementById("eternitylimittext").textContent = "Amount of EP to wait until reset:"
-    } else if (player.autoEternityMode == "time"){
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: time"
-        document.getElementById("eternitylimittext").textContent = "Seconds between eternities:"
-    } else {
-        document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: X times last eternity"
-        document.getElementById("eternitylimittext").textContent = "X times last eternity:"
-    }
-
-    if (player.autoRealityMode == "rm") {
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: reality machines"
-    } else if (player.autoRealityMode == "glyph"){
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: glyph level"
-    } else if (player.autoRealityMode == "either"){
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: either"
-    } else {
-        document.getElementById("togglerealitymode").textContent = "Auto reality mode: both"
     }
 }
 
@@ -863,14 +822,6 @@ function updateAutobuyers() {
         document.getElementById("autoBuyerSac").style.display = "none"
     }
 
-    if (player.eternities < 100) {
-        document.getElementById("autoBuyerEter").style.display = "none"
-    }
-
-    if (!player.reality.upg.includes(25)) {
-        document.getElementById("autoBuyerReality").style.display = "none"
-    }
-
     if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
         document.getElementById("interval1").textContent = "Current interval: " + (player.autobuyers[0].interval/2000).toFixed(2) + " seconds"
         document.getElementById("interval2").textContent = "Current interval: " + (player.autobuyers[1].interval/2000).toFixed(2) + " seconds"
@@ -1086,8 +1037,7 @@ function updatePriorities() {
     || parseInt(document.getElementById("bulkDimboost").value) === 69
     || parseInt(document.getElementById("overGalaxies").value) === 69
     || parseInt(fromValue(document.getElementById("prioritySac").value).toString()) === 69
-    || parseInt(document.getElementById("bulkgalaxy").value) === 69
-    || parseInt(fromValue(document.getElementById("priority13").value).toString()) === 69) giveAchievement("Nice.");
+    || parseInt(document.getElementById("bulkgalaxy").value) === 69) giveAchievement("Nice.");
     player.autobuyers[9].priority = parseInt(document.getElementById("priority10").value)
     player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
     player.autobuyers[11].priority = fromValue(document.getElementById("priority12").value)
@@ -1101,12 +1051,6 @@ function updatePriorities() {
     player.autoSacrifice.priority = fromValue(document.getElementById("prioritySac").value)
     if (isNaN(player.autoSacrifice.priority) || player.autoSacrifice.priority === null || player.autoSacrifice.priority === undefined || player.autoSacrifice.priority <= 1) player.autoSacrifice.priority = Decimal.fromNumber(1.01)
     player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
-    const eterValue = fromValue(document.getElementById("priority13").value)
-    if (!isNaN(eterValue)) player.eternityBuyer.limit = eterValue
-    const realityValue1 = fromValue(document.getElementById("priority14").value)
-    if (!isNaN(realityValue1)) player.realityBuyer.rm = realityValue1
-    player.realityBuyer.glyph = parseInt(document.getElementById("priority15").value)
-
     priorityOrder()
 }
 
@@ -1119,9 +1063,6 @@ function updateCheckBoxes() {
     }
     if (player.autoSacrifice.isOn) document.getElementById("13ison").checked = "true"
     else document.getElementById("13ison").checked = ""
-    document.getElementById("eternityison").checked = player.eternityBuyer.isOn
-    document.getElementById("realityison").checked = player.realityBuyer.isOn
-
 }
 
 
@@ -1803,11 +1744,6 @@ setInterval(function() {
     else document.getElementById("replauto2").style.visibility = "hidden"
     if (player.eternities >= 80) document.getElementById("replauto3").style.visibility = "visible"
     else document.getElementById("replauto3").style.visibility = "hidden"
-    if (player.eternities >= 100) document.getElementById("autoBuyerEter").style.display = "inline-block"
-    if (player.reality.upg.includes(25)) {
-        document.getElementById("autoBuyerReality").style.display = "inline-block"
-    }
-
     updateECUnlockButtons()
 
 

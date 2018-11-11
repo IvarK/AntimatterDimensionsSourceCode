@@ -1,4 +1,4 @@
-var defaultStart = $.extend(true, {}, player);
+var defaultStart = deepmerge.all([{}, player]);
 
 let kongIPMult = 1
 let kongDimMult = 1

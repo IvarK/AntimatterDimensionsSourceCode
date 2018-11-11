@@ -13,6 +13,7 @@ var realizationCheck = 0;
 var statsTimer = 0;
 var TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
 var DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+const defaultMaxTime = 60000 * 60 * 24 * 31;
 var player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
@@ -65,7 +66,7 @@ var player = {
   galaxies: 0,
   tickDecrease: 0.9,
   totalmoney: new Decimal(0),
-  achPow: 1,
+  achPow: new Decimal(1),
   newsArray: [],
   // TODO: Not used, remove
   interval: null,
@@ -87,11 +88,11 @@ var player = {
     dragging: 0,
     themes: []
   },
-  challengeTimes: [60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31],
-  infchallengeTimes: [60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31, 60000 * 60 * 24 * 31],
-  lastTenRuns: [[60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1]],
-  lastTenEternities: [[60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1], [60000 * 60 * 24 * 31, 1]],
-  lastTenRealities: [[60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0], [60000 * 60 * 24 * 31, 1, 0]],
+  challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
+  infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
+  lastTenRuns: [[defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)]],
+  lastTenEternities: [[defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)]],
+  lastTenRealities: [[defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0]],
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   tickSpeedMultDecrease: 10,
@@ -313,7 +314,7 @@ var player = {
       5: 0,
     },
     upg: [],
-    upgReqs: [null, true, true, true, true, true, 
+    upgReqs: [null, true, true, true, true, true,
               false, false, false, false, false, 
               false, false, false, false, false, 
               false, false, false, false, false, 
@@ -377,12 +378,21 @@ var player = {
       updateRate: 1000,
       duration: 10,
       warning: 0,
+      on: false,
+      dips: true
     },
     animations: {
       floatingText: true,
       bigCrunch: true,
       eternity: true,
       tachyonParticles: true,
+      reality: true
+    },
+    confirmations: {
+      challenges: true,
+      eternity: true,
+      dilation: true,
+      reality: true
     }
   }
 };

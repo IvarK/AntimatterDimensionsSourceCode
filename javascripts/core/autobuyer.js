@@ -334,6 +334,13 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
   }
 
   /**
+   * @returns {boolean}
+   */
+  get isBuyMaxUnlocked() {
+    return player.eternities > 8;
+  }
+
+  /**
    * @returns {number}
    */
   get buyMaxInterval() {

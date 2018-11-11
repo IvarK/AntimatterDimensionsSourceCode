@@ -15,8 +15,8 @@ Vue.component("big-crunch-autobuyer-box", {
     limitInputSetup: function() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
-        () => Autobuyer.infinity.limit,
-        value => Autobuyer.infinity.limit = value
+        () => this.autobuyer.limit,
+        value => this.autobuyer.limit = value
       );
     },
     modeDisplay: function() {

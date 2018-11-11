@@ -27,7 +27,7 @@ Vue.component("autobuyer-box", {
         }
       },
       template:
-        `<div class="c-autobuyer-box__interval-label">Current interval: {{intervalDisplay}} seconds</div>`
+        `<div class="c-autobuyer-box__small-text">Current interval: {{intervalDisplay}} seconds</div>`
     }
   },
   props: {

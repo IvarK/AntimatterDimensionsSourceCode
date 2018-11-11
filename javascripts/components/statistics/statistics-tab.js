@@ -86,6 +86,7 @@ Vue.component('statistics-tab', {
         <div>You have {{ galaxies }} Antimatter Galaxies.</div>
         <div>You have played for {{ timeDisplay(realTimePlayed) }}.</div>
         <div v-if="reality.isUnlocked">Your existence has spanned {{ timeDisplay(reality.totalTimePlayed) }} of time.</div>
+        <div v-html="infoScale"/>
         <br>
         <div v-if="infinity.isUnlocked">
             <h3>Infinity</h3>
@@ -113,7 +114,6 @@ Vue.component('statistics-tab', {
             <div>You have spent {{ timeDisplay(reality.this) }} in this Reality.</div>
             <br>
         </div>
-        <div v-html="infoScale"/>
     </div>`
 });
 

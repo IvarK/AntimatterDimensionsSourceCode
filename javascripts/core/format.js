@@ -158,7 +158,7 @@ shortenMultiplier = function (money) {
 };
 
 shortenAutobuyerInput = function (money) {
-  return shortenWithCurrentNotation(money, 2, 0);
+  return formatValue("Scientific", money, 2, 0);
 };
 
 shortenWithCurrentNotation = function(value, places, placesUnder1000) {

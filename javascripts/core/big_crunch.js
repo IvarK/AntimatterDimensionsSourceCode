@@ -385,8 +385,10 @@ InfinityUpgrade.ipMult = {
   purchase(amount = 1) {
     if (!this.isAvailable) return;
     const costIncrease = this.costIncrease;
-    player.infMult = player.infMult.times(Decimal.pow(2, amount));
-    player.autoIP = player.autoIP.times(Decimal.pow(2, amount));
+    const mult = Decimal.pow(2, amount);
+    player.infMult = player.infMult.times(mult);
+    player.autoIP = player.autoIP.times(mult);
+    Autobuyer.infinity.bumpLimit(mult);
     this.cost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     ui.dispatch(GameEvent.INFINITY_UPGRADE_BOUGHT);

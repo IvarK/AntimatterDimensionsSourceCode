@@ -275,9 +275,7 @@ function buyEPMult(upd, threshold) {
     if (threshold == undefined) threshold = 1
     if (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
         player.epmult = player.epmult.times(5)
-        if (Autobuyer.eternity.mode === AutoEternityMode.AMOUNT) {
-            Autobuyer.eternity.limit = Autobuyer.eternity.limit.times(5)
-        }
+        Autobuyer.eternity.bumpLimit(5);
         player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
         let count = player.epmult.ln()/Math.log(5)
         if (player.epmultCost.gte(new Decimal("1e4000"))) player.epmultCost = Decimal.pow(1000, count + Math.pow(count-1334, 1.2)).times(500)
@@ -457,7 +455,7 @@ function eterMultAutoToggle() {
 
 
 function toggleCrunchMode() {
-    player.autoCrunchMode = Object.values(AutoCrunchMode).next(player.autoCrunchMode);
+    Autobuyer.infinity.toggleMode();
     if (player.autoCrunchMode == "amount") {
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
         document.getElementById("limittext").textContent = "Seconds between crunches:"
@@ -612,7 +610,7 @@ document.getElementById("toggleBtnTickSpeed").onclick = function () {
 };
 
 function breakInfinity() {
-    if (player.autobuyers[11]%1 === 0 || player.autobuyers[11].interval>100) return false
+    if (!Autobuyer.infinity.isUnlocked || !Autobuyer.infinity.hasMaxedInterval) return false;
     if (player.break && !player.currentChallenge.includes("post")) {
         player.break = false
         if (player.dilation.active) giveAchievement("Time fixes everything")
@@ -888,7 +886,7 @@ function updateAutobuyers() {
         document.getElementById("buyerBtnGalaxies").style.display = "none"
         maxedAutobuy++;
     }
-    if (player.autobuyers[11].interval <= 100) {
+    if (Autobuyer.infinity.hasMaxedInterval) {
         document.getElementById("buyerBtnInf").style.display = "none"
         maxedAutobuy++;
     }
@@ -1040,7 +1038,7 @@ function updatePriorities() {
     || parseInt(document.getElementById("bulkgalaxy").value) === 69) giveAchievement("Nice.");
     player.autobuyers[9].priority = parseInt(document.getElementById("priority10").value)
     player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
-    player.autobuyers[11].priority = fromValue(document.getElementById("priority12").value)
+    //Autobuyer.infinity.limit = fromValue(document.getElementById("priority12").value)
     if (player.eternities < 10) {
         var bulk = Math.floor(Math.max(parseFloat(document.getElementById("bulkDimboost").value), 1))
     } else {
@@ -2531,31 +2529,8 @@ var timer = 0
 function autoBuyerTick() {
   Autobuyer.eternity.tick();
   Autobuyer.reality.tick();
+  Autobuyer.infinity.tick();
 
-    if (player.autobuyers[11]%1 !== 0) {
-    if (player.autobuyers[11].ticks*100 >= player.autobuyers[11].interval && player.money.gte(Number.MAX_VALUE)) {
-        if (player.autobuyers[11].isOn) {
-            if (player.autoCrunchMode == "amount") {
-                if (!player.break || player.currentChallenge != "" || player.autobuyers[11].priority.lt(gainedInfinityPoints())) {
-                    autoS = false;
-                    document.getElementById("bigcrunch").click()
-                }
-            } else if (player.autoCrunchMode == "time"){
-                if (!player.break || player.currentChallenge != "" || player.autobuyers[11].priority.times(getGameSpeedupFactor(false)).lt(player.thisInfinityTime /1000)) {
-                    autoS = false;
-                    document.getElementById("bigcrunch").click()
-                }
-            } else {
-                if (!player.break || player.currentChallenge != "" || gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(player.autobuyers[11].priority))) {
-                    autoS = false;
-                    document.getElementById("bigcrunch").click()
-                }
-            }
-            player.autobuyers[11].ticks = 1;
-        }
-    } else player.autobuyers[11].ticks += 1;
-
-    }
 
 
     if (player.autobuyers[10]%1 !== 0) {

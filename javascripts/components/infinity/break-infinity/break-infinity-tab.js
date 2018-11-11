@@ -11,7 +11,7 @@ Vue.component("break-infinity-tab", {
   },
   methods: {
     update() {
-      this.isUnlocked = player.autobuyers[11] % 1 !== 0 && player.autobuyers[11].interval === 100;
+      this.isUnlocked = Autobuyer.infinity.isUnlocked && Autobuyer.infinity.hasMaxedInterval;
     },
     btnClassObject: function(column) {
       return {

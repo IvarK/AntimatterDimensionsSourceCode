@@ -34,16 +34,20 @@ class AutobuyerInfo {
     this._getAutobuyer = getAutobuyer;
   }
 
+  /**
+   * @returns {Autobuyer|undefined}
+   */
   get autobuyer() {
-    return this._getAutobuyer();
+    // What
+    const autobuyer = this._getAutobuyer();
+    return autobuyer % 1 !== 0 ? autobuyer : undefined;
   }
 
   /**
    * @returns {boolean}
    */
   get isUnlocked() {
-    // What
-    return this.autobuyer % 1 !== 0;
+    return this.autobuyer !== undefined;
   }
 
   /**
@@ -58,6 +62,41 @@ class AutobuyerInfo {
    */
   set isOn(value) {
     this.autobuyer.isOn = value;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get ticks() {
+    return this.autobuyer.ticks;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set ticks(value) {
+    this.autobuyer.ticks = value;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get interval() {
+    return this.autobuyer.interval;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set interval(value) {
+    this.autobuyer.interval = value;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  get hasMaxedInterval() {
+    return this.isUnlocked && this.interval <= 100;
   }
 
   /**
@@ -76,7 +115,6 @@ Autobuyer.dim = dimIdx => new AutobuyerInfo(() => player.autobuyers[dimIdx - 1])
 Autobuyer.tickspeed = new AutobuyerInfo(() => player.autobuyers[8]);
 Autobuyer.dimboost = new AutobuyerInfo(() => player.autobuyers[9]);
 Autobuyer.galaxy = new AutobuyerInfo(() => player.autobuyers[10]);
-Autobuyer.infinity = new AutobuyerInfo(() => player.autobuyers[11]);
 Autobuyer.sacrifice = new AutobuyerInfo(() => player.autoSacrifice);
 
 const AutoCrunchMode = {
@@ -84,6 +122,88 @@ const AutoCrunchMode = {
   TIME: "time",
   RELATIVE: "relative"
 };
+
+class InfinityAutobuyerInfo extends AutobuyerInfo {
+  constructor() {
+    super(() => player.autobuyers[11]);
+  }
+
+  /**
+   * @returns {AutoCrunchMode}
+   */
+  get mode() {
+    return player.autoCrunchMode;
+  }
+
+  /**
+   * @param {AutoCrunchMode} value
+   */
+  set mode(value) {
+    player.autoCrunchMode = value;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  get hasAdditionalModes() {
+    return player.eternities > 4;
+  }
+
+  /**
+   * @returns {Decimal}
+   */
+  get limit() {
+    return this.autobuyer.priority;
+  }
+
+  /**
+   * @param {Decimal} value
+   */
+  set limit(value) {
+    this.autobuyer.priority = value;
+  }
+
+  bumpLimit(mult) {
+    if (this.mode === AutoCrunchMode.AMOUNT && this.limit !== undefined) {
+      this.limit = this.limit.times(mult);
+    }
+  }
+
+  toggleMode() {
+    this.mode = Object.values(AutoCrunchMode).next(this.mode);
+  }
+
+  tick() {
+    if (!this.isUnlocked) return;
+    if (this.ticks * 100 < this.interval) {
+      this.ticks++;
+      return;
+    }
+    if (!this.isOn) return;
+    if (!player.money.gte(Number.MAX_VALUE)) return;
+    let proc = !player.break || player.currentChallenge !== "";
+    if (!proc) {
+      switch (this.mode) {
+        case AutoCrunchMode.AMOUNT:
+          proc = gainedInfinityPoints().gte(this.limit);
+          break;
+        case AutoCrunchMode.TIME:
+          proc = Decimal.gt(Time.thisInfinity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
+          break;
+        case AutoCrunchMode.RELATIVE:
+          proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.limit));
+          break;
+      }
+    }
+    if (proc) {
+      autoS = false;
+      bigCrunchReset();
+    }
+    this.ticks = 1;
+  }
+}
+
+Autobuyer.infinity = new InfinityAutobuyerInfo();
 
 const AutoEternityMode = {
   AMOUNT: "amount",
@@ -116,6 +236,9 @@ Autobuyer.eternity = {
   set isOn(value) {
     player.eternityBuyer.isOn = value;
   },
+  toggle() {
+    this.isOn = !this.isOn;
+  },
   /**
    * @returns {boolean}
    */
@@ -133,6 +256,11 @@ Autobuyer.eternity = {
    */
   set limit(value) {
     player.eternityBuyer.limit = value;
+  },
+  bumpLimit(mult) {
+    if (this.mode === AutoEternityMode.AMOUNT) {
+      this.limit = this.limit.times(mult);
+    }
   },
   /**
    * @returns {AutoEternityMode}
@@ -157,7 +285,7 @@ Autobuyer.eternity = {
         proc = player.currentEternityChall !== "" || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
-        proc = Time.thisEternity.totalSeconds > this.limit * getGameSpeedupFactor(false);
+        proc = Decimal.gt(Time.thisEternity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
         break;
       case AutoEternityMode.RELATIVE:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));
@@ -192,6 +320,9 @@ Autobuyer.reality = {
    */
   set isOn(value) {
     player.realityBuyer.isOn = value;
+  },
+  toggle() {
+    this.isOn = !this.isOn;
   },
   /**
    * @returns {boolean}

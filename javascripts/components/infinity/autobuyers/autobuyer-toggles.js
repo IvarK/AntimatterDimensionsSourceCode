@@ -2,7 +2,7 @@ Vue.component("autobuyer-toggles", {
   data: function() {
     return {
       options: player.options,
-      isAutoCrunchUnlocked: false,
+      hasAdditionalCrunchModes: false,
       autoCrunchMode: AutoCrunchMode.AMOUNT,
       hasAdditionalEternityModes: false,
       autoEternityMode: AutoEternityMode.AMOUNT,
@@ -39,8 +39,8 @@ Vue.component("autobuyer-toggles", {
   },
   methods: {
     update() {
-      this.isAutoCrunchUnlocked = player.eternities > 4;
-      this.autoCrunchMode = player.autoCrunchMode;
+      this.hasAdditionalCrunchModes = Autobuyer.infinity.hasAdditionalModes;
+      this.autoCrunchMode = Autobuyer.infinity.mode;
       this.hasAdditionalEternityModes = Autobuyer.eternity.hasAdditionalModes;
       this.autoEternityMode = Autobuyer.eternity.mode;
       this.isAutoRealityUnlocked = Autobuyer.reality.isUnlocked;
@@ -60,7 +60,7 @@ Vue.component("autobuyer-toggles", {
         class="o-primary-btn--autobuyer-toggle"
       />
       <primary-button
-        v-if="isAutoCrunchUnlocked"
+        v-if="hasAdditionalCrunchModes"
         class="o-primary-btn--autobuyer-toggle"
         onclick="toggleCrunchMode()"
       >Auto crunch mode: {{autoCrunchModeDisplay}}</primary-button>

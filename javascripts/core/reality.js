@@ -135,7 +135,9 @@ function reality(force, reset, auto) {
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.infMultBuyer = player.reality.upg.includes(10) ? player.infMultBuyer : false;
-    player.autoCrunchMode = player.reality.upg.includes(10) ? player.autoCrunchMode : "amount";
+    if (!player.reality.upg.includes(10)) {
+      player.autoCrunchMode = AutoCrunchMode.AMOUNT;
+    }
     player.respec = false;
     player.eterc8ids = 50;
     player.eterc8repl = 40;

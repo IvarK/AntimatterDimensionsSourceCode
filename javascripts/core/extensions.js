@@ -14,6 +14,14 @@ Math.clamp = function(value, min, max) {
     return (value < min) ? min : (value > max ? max : value);
 };
 
+Array.prototype.next = function(current) {
+  const currentIndex = this.indexOf(current);
+  if (currentIndex === -1)
+    throw "Current item is not in array";
+  const nextIndex = Math.wrap(currentIndex + 1, 0, this.length - 1);
+  return this[nextIndex];
+};
+
 Decimal.sumReducer = function(accumulator, previous) {
   return Decimal.add(accumulator, previous);
 };

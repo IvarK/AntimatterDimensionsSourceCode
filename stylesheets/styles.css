@@ -2336,6 +2336,12 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
+.o-primary-btn--autobuyer-toggle {
+  font-size: 1.1rem;
+  width: 16rem;
+  height: 4rem;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -3674,6 +3680,29 @@ screen and (max-width: 480px) {
 /*#endregion o-infinity-upgrade-btn*/
 
 /*#endregion Infinity Upgrades*/
+
+/*#region Autobuyers*/
+
+.l-autobuyers-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-autobuyers-tab__toggles {
+  margin-top: 1.5rem;
+}
+
+.l-autobuyer-toggles {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-autobuyer-toggles > * {
+  margin: 0 .3rem;
+}
+
+/*#endregion Autobuyers*/
 
 /*#region Break Infinity*/
 

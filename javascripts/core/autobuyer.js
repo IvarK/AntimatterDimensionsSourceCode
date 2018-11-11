@@ -28,3 +28,22 @@ Autobuyer.tickTimer = 0;
 Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
+
+const AutoCrunchMode = {
+  AMOUNT: "amount",
+  TIME: "time",
+  RELATIVE: "relative"
+};
+
+const AutoEternityMode = {
+  AMOUNT: "amount",
+  TIME: "time",
+  RELATIVE: "relative"
+};
+
+const AutoRealityMode = {
+  RM: "rm",
+  GLYPH: "glyph",
+  EITHER: "either",
+  BOTH: "both"
+};

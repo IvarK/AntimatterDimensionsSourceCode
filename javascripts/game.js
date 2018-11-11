@@ -459,49 +459,42 @@ function eterMultAutoToggle() {
 
 
 function toggleCrunchMode() {
+    player.autoCrunchMode = Object.values(AutoCrunchMode).next(player.autoCrunchMode);
     if (player.autoCrunchMode == "amount") {
-        player.autoCrunchMode = "time"
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
         document.getElementById("limittext").textContent = "Seconds between crunches:"
     } else if (player.autoCrunchMode == "time"){
-        player.autoCrunchMode = "relative"
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
         document.getElementById("limittext").textContent = "X times last crunch:"
     } else {
-        player.autoCrunchMode = "amount"
         document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
         document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
     }
 }
 
 function toggleEternityMode() {
+    player.autoEternityMode = Object.values(AutoEternityMode).next(player.autoEternityMode);
     if (player.autoEternityMode == "amount") {
-        player.autoEternityMode = "time"
         document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: time"
         document.getElementById("eternitylimittext").textContent = "Seconds between eternities:"
     } else if (player.autoEternityMode == "time"){
-        player.autoEternityMode = "relative"
         document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: X times last eternity"
         document.getElementById("eternitylimittext").textContent = "X times last eternity:"
     } else {
-        player.autoEternityMode = "amount"
         document.getElementById("toggleeternitymode").textContent = "Auto eternity mode: amount"
         document.getElementById("eternitylimittext").textContent = "Amount of EP to wait until reset:"
     }
 }
 
 function toggleRealityMode() {
+    player.autoRealityMode = Object.values(AutoRealityMode).next(player.autoRealityMode);
     if (player.autoRealityMode == "rm") {
-        player.autoRealityMode = "glyph"
         document.getElementById("togglerealitymode").textContent = "Auto reality mode: glyph level"
     } else if (player.autoRealityMode == "glyph"){
-        player.autoRealityMode = "either"
         document.getElementById("togglerealitymode").textContent = "Auto reality mode: either"
     } else if (player.autoRealityMode == "either"){
-        player.autoRealityMode = "both"
         document.getElementById("togglerealitymode").textContent = "Auto reality mode: both"
     } else {
-        player.autoRealityMode = "rm"
         document.getElementById("togglerealitymode").textContent = "Auto reality mode: reality machines"
     }
 }

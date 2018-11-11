@@ -397,6 +397,13 @@ dev.updateTestSave = function() {
     player.reality.epmultbuyer = false
     player.options.testVersion = 20
   }
+
+  if (player.options.testVersion === 20) {
+    if (!Object.values(AutoRealityMode).includes(player.autoRealityMode)) {
+      player.autoRealityMode = AutoRealityMode.RM;
+    }
+    player.options.testVersion = 21
+  }
 }
 
 // Still WIP

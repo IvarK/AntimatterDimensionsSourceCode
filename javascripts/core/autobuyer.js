@@ -267,6 +267,34 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   }
 
   /**
+   * @returns {boolean}
+   */
+  get isBulkBuyUnlocked() {
+    return BreakInfinityUpgrade.bulkDimBoost.isBought || this.isBuyMaxUnlocked;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  get isBuyMaxUnlocked() {
+    return player.eternities >= 10;
+  }
+
+  /**
+   * @returns {number}
+   */
+  get galaxies() {
+    return player.overXGalaxies;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set galaxies(value) {
+    player.overXGalaxies = value;
+  }
+
+  /**
    * @returns {number}
    */
   get buyMaxInterval() {
@@ -283,17 +311,18 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   tick() {
     if (!this.canTick()) return;
     if (!this.dimBoolean()) return;
-    if (player.resets < 4) {
-      softReset(1);
-    }
-    else if (player.eternities < 10) {
-      softReset(this.buyMaxInterval);
-    }
-    else {
+    if (this.isBuyMaxUnlocked) {
       if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
         Autobuyer.lastDimBoost = Autobuyer.intervalTimer;
         maxBuyDimBoosts();
       }
+      return;
+    }
+    else if (player.resets >= 4) {
+      softReset(this.bulk);
+    }
+    else {
+      softReset(1);
     }
     this.resetTicks();
   }

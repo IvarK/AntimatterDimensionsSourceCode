@@ -30,6 +30,7 @@ let ui = {
       }
     },
     shiftDown: false,
-    theme: undefined
+    theme: undefined,
+    ttshop: false
   }
 };

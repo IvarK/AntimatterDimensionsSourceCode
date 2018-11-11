@@ -140,6 +140,7 @@ button {
   left: 50%;
   transform: translateX(-50%);
   font-family: Typewriter, serif;
+  display: flex;
   align-items: flex-end;
 }
 

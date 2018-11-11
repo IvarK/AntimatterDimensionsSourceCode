@@ -8,8 +8,7 @@ let kongEPMult = 1
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);
-    if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") document.getElementById("TTbuttons").style.display = "flex";
-    else document.getElementById("TTbuttons").style.display = "none"
+    ui.view.ttshop = document.getElementById("timestudies").style.display !== "none" && document.getElementById("eternitystore").style.display !== "none";
     resizeCanvas();
     Modal.hide();
     tryStartTachyonAnimation();
@@ -1348,7 +1347,10 @@ function exitChallenge() {
 function unlockEChall(idx) {
     if (player.eternityChallUnlocked == 0) {
         player.eternityChallUnlocked = idx
-        if (!justImported) Tab.challenges.eternity.show();
+        if (!justImported) {
+          ui.view.ttshop = false;
+          Tab.challenges.eternity.show();
+        }
         if (idx !== 12 && idx !== 13) player.etercreq = idx
     }
     updateTimeStudyButtons()
@@ -2816,8 +2818,7 @@ function showEternityTab(tabName, init) {
             tab.style.display = 'none';
         }
     }
-    if (tabName === 'timestudies' && !init) document.getElementById("TTbuttons").style.display = "flex"
-    else document.getElementById("TTbuttons").style.display = "none"
+    ui.view.ttshop = tabName === 'timestudies' && !init;
     resizeCanvas()
     tryStartTachyonAnimation();
 }

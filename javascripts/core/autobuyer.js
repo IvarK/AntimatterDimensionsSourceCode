@@ -58,6 +58,20 @@ class AutobuyerInfo {
   /**
    * @returns {number}
    */
+  get cost() {
+    return this.autobuyer.cost;
+  }
+
+  /**
+   * @param {number} value
+   */
+  set cost(value) {
+    this.autobuyer.cost = value;
+  }
+
+  /**
+   * @returns {number}
+   */
   get ticks() {
     return this.autobuyer.ticks;
   }
@@ -179,6 +193,10 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
     }
     this.resetTicks();
   }
+
+  buy() {
+    buyAutobuyer(this._tier - 1);
+  }
 }
 
 Autobuyer.dim = tier => new DimensionAutobuyerInfo(tier);
@@ -212,6 +230,10 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
       buyMaxTickSpeed();
     }
     this.resetTicks();
+  }
+
+  buy() {
+    buyAutobuyer(8);
   }
 }
 
@@ -284,6 +306,10 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
     if ((player.currentChallenge === "challenge4" || player.currentChallenge === "postc1") && this.limit < requirement.amount && requirement.tier === 6) return false;
     return this.limit > requirement.amount && requirement.tier === 8;
   }
+
+  buy() {
+    buyAutobuyer(9);
+  }
 }
 
 Autobuyer.dimboost = new DimboostAutobuyerInfo();
@@ -344,6 +370,10 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
   buySingle() {
     autoS = false;
     galaxyResetBtnClick();
+  }
+
+  buy() {
+    buyAutobuyer(10);
   }
 }
 
@@ -456,6 +486,10 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
       bigCrunchReset();
     }
     this.resetTicks();
+  }
+
+  buy() {
+    buyAutobuyer(11);
   }
 }
 

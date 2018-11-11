@@ -1,4 +1,35 @@
 Vue.component("autobuyer-box", {
+  components: {
+    "interval-label": {
+      props: {
+        autobuyer: Object
+      },
+      data: function() {
+        return {
+          interval: 0
+        };
+      },
+      computed: {
+        intervalDisplay: function() {
+          let seconds = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
+          if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
+            seconds /= 2;
+          }
+          return seconds.toFixed(2);
+        }
+      },
+      created() {
+        this.on$(GameEvent.AUTOBUYER_BOUGHT, this.update);
+      },
+      methods: {
+        update() {
+          this.interval = this.autobuyer.interval;
+        }
+      },
+      template:
+        `<div class="c-autobuyer-box__interval-label">Current interval: {{intervalDisplay}} seconds</div>`
+    }
+  },
   props: {
     setup: Object
   },
@@ -11,6 +42,9 @@ Vue.component("autobuyer-box", {
   computed: {
     autobuyer: function() {
       return this.setup.autobuyer;
+    },
+    hasInterval: function() {
+      return (this.autobuyer instanceof AutobuyerInfo);
     }
   },
   methods: {
@@ -30,6 +64,10 @@ Vue.component("autobuyer-box", {
   template:
     `<div v-if="isUnlocked" class="c-autobuyer-box l-autobuyer-box">
       <div>{{setup.name}}</div>
+      <template v-if="hasInterval">
+        <slot name="beforeInterval" />
+        <interval-label :autobuyer="autobuyer"/>
+      </template>
       <slot />
       <div class="o-autobuyer-toggle-checkbox" @click="changeActive">
         <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>

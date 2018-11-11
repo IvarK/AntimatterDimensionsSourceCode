@@ -3711,6 +3711,7 @@ screen and (max-width: 480px) {
 .l-autobuyer-grid__row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .l-autobuyer-grid__row > * {
@@ -3718,7 +3719,8 @@ screen and (max-width: 480px) {
 }
 
 .o-autobuyer-input {
-  border: .01rem solid rgb(194, 194, 194);
+  border: .01rem solid #c2c2c2;
+  padding: .3rem .3rem 0 .3rem;
 }
 
 .o-autobuyer-input--invalid {
@@ -3762,6 +3764,10 @@ screen and (max-width: 480px) {
   border: solid .1rem grey;
   border-radius: .4rem;
   font-size: 1.1rem;
+}
+
+.c-autobuyer-box__interval-label {
+  font-size: .9rem;
 }
 
 .l-autobuyer-box {

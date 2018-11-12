@@ -82,11 +82,9 @@ function updateDimensions() {
 
   if (!(getInfinitied() === 0 && player.realities === 0 && player.eternities === 0)) {
     if (player.infinityPoints.equals(1)) {
-      document.getElementById("infinityPoints1").textContent = "You have 1 Infinity point."
       document.getElementById("infinityPoints2").textContent = "You have 1 Infinity point."
     }
     else {
-      document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
       document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
     }
   }
@@ -1911,7 +1909,6 @@ function gameLoop(diff) {
         }
     }
 
-    document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity point" + ((player.infinityPoints.eq(1)) ? "." : "s.")
   
   // Adjust the text on the reality button in order to minimize text overflowing

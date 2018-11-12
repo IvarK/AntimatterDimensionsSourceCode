@@ -145,10 +145,6 @@ input {
     box-shadow: 1px 1px 1px 0px black;
 }
 
-#infinityPoints1 {
-    color: #757575 !important;
-}
-
 #replicantiamount {
     color: #03A9F4 !important;
 }
@@ -242,10 +238,6 @@ input {
 
 .EPAmount2 {
     color: #673AB7;
-}
-
-.IPAmount1 {
-    color: #FF9800;
 }
 
 .IPAmount2 {

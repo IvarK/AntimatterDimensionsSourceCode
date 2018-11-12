@@ -15,10 +15,6 @@ body {
     color: black !important;
 }
 
-.IPAmount1 {
-    color: black !important;
-}
-
 .IPAmount2 {
     color: black !important;
 }
@@ -232,10 +228,6 @@ input, select {
 
 .EPAmount2 {
     color: #673AB7;
-}
-
-.IPAmount1 {
-    color: #FF9800;
 }
 
 .IPAmount2 {

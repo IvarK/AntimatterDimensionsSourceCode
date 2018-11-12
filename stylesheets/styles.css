@@ -3604,6 +3604,52 @@ screen and (max-width: 480px) {
 .c-infinity-tab__infinity-points {
 }
 
+/*#region themes*/
+
+/*#region t-dark t-s6*/
+
+.t-dark .c-infinity-tab__header {
+  color: #4f5957 !important;
+}
+
+.t-s6 .c-infinity-tab__header {
+  color: #999 !important;
+}
+
+.t-dark .c-infinity-tab__infinity-points,
+.t-s6 .c-infinity-tab__infinity-points {
+  color: white !important;
+  text-shadow: 0 0 .7rem white;
+}
+
+/*#endregion t-dark*/
+
+/*#region t-metro t-dark-metro t-inverted-metro t-s8*/
+
+.t-dark-metro .c-infinity-tab__header {
+  color: #757575 !important;
+}
+
+.t-metro .c-infinity-tab__infinity-points,
+.t-dark-metro .c-infinity-tab__infinity-points,
+.t-inverted-metro .c-infinity-tab__infinity-points,
+.t-s8 .c-infinity-tab__infinity-points {
+  color: #ff9800;
+}
+
+/*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
+
+/*#region t-s1*/
+
+.t-s1 .c-infinity-tab__infinity-points {
+  color: #7d3c1b;
+  text-shadow: .1rem .1rem 0 black;
+}
+
+/*#endregion t-s1*/
+
+/*#endregion themes*/
+
 /*#endregion infinity-tab*/
 
 /*#region Infinity Upgrades*/

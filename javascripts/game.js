@@ -727,18 +727,18 @@ function resetMoney() {
 
 function updateAutobuyers() {
     var autoBuyerDim1 = new Autobuyer (1)
-    var autoBuyerDim2 = new Autobuyer (2)
-    var autoBuyerDim3 = new Autobuyer (3)
-    var autoBuyerDim4 = new Autobuyer (4)
-    var autoBuyerDim5 = new Autobuyer (5)
-    var autoBuyerDim6 = new Autobuyer (6)
-    var autoBuyerDim7 = new Autobuyer (7)
-    var autoBuyerDim8 = new Autobuyer (8)
-    var autoBuyerDimBoost = new Autobuyer (9)
-    var autoBuyerGalaxy = new Autobuyer (10)
+    var autoBuyerDim2 = new Autobuyer (1)
+    var autoBuyerDim3 = new Autobuyer (1)
+    var autoBuyerDim4 = new Autobuyer (1)
+    var autoBuyerDim5 = new Autobuyer (1)
+    var autoBuyerDim6 = new Autobuyer (1)
+    var autoBuyerDim7 = new Autobuyer (1)
+    var autoBuyerDim8 = new Autobuyer (1)
+    var autoBuyerDimBoost = new Autobuyer (1)
+    var autoBuyerGalaxy = new Autobuyer (1)
     var autoBuyerTickspeed = new Autobuyer (1)
-    var autoBuyerInf = new Autobuyer (document.getElementById("bigcrunch"))
-    var autoSacrifice = new Autobuyer(13)
+    var autoBuyerInf = new Autobuyer (1)
+    var autoSacrifice = new Autobuyer(1)
 
 
     autoBuyerDim1.interval = 1500

@@ -167,6 +167,13 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
   }
 
   /**
+   * @returns {boolean}
+   */
+  get hasMaxedBulk() {
+    return this.bulk >= 1e100;
+  }
+
+  /**
    * @returns {AutobuyerMode}
    */
   get mode() {
@@ -178,6 +185,10 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
    */
   set mode(value) {
     this.autobuyer.target = value;
+  }
+
+  toggleMode() {
+    this.mode = this.mode === AutobuyerMode.BUY_SINGLE ? AutobuyerMode.BUY_10 : AutobuyerMode.BUY_SINGLE;
   }
 
   tick() {
@@ -218,6 +229,10 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
    */
   set mode(value) {
     this.autobuyer.target = value;
+  }
+
+  toggleMode() {
+    this.mode = this.mode === AutobuyerMode.BUY_SINGLE ? AutobuyerMode.BUY_MAX : AutobuyerMode.BUY_SINGLE;
   }
 
   tick() {

@@ -28,7 +28,7 @@ Vue.component('infinity-tab', {
   },
   computed: {
     ipNoun: function() {
-      return player.infinityPoints.equals(1) ? "Infinity Point" : "Infinity Points";
+      return this.infinityPoints.equals(1) ? "Infinity Point" : "Infinity Points";
     }
   },
   methods: {

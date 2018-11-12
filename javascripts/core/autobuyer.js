@@ -512,7 +512,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 
   toggleMode() {
-    this.mode = Object.values(AutoCrunchMode).next(this.mode);
+    this.mode = Object.values(AutoCrunchMode).nextSibling(this.mode);
   }
 
   tick() {
@@ -616,7 +616,7 @@ Autobuyer.eternity = {
     player.autoEternityMode = value;
   },
   toggleMode() {
-    this.mode = Object.values(AutoEternityMode).next(this.mode);
+    this.mode = Object.values(AutoEternityMode).nextSibling(this.mode);
   },
   tick() {
     if (!this.isActive) return;
@@ -708,7 +708,7 @@ Autobuyer.reality = {
     player.autoRealityMode = value;
   },
   toggleMode() {
-    this.mode = Object.values(AutoRealityMode).next(this.mode);
+    this.mode = Object.values(AutoRealityMode).nextSibling(this.mode);
   },
   tick() {
     if (!this.isActive) return;

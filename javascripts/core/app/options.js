@@ -1,15 +1,9 @@
 class GameOptions {
   static changeTheme() {
     const themes = Themes.available();
-    const current = themes.indexOf(Theme.current());
-    let next;
-    if (shiftDown) {
-      next = Math.wrap(current -1, 0, themes.length - 1);
-      if (current === 0 && next === 0) next = themes.length - 1;
-    } else {
-      next = Math.wrap(current + 1, 0, themes.length - 1);
-    }
-    themes[next].set();
+    const current = Theme.current();
+    const next = shiftDown ? themes.previousSibling(current) : themes.nextSibling(current);
+    next.set();
   }
 
   static changeNotation() {
@@ -25,15 +19,9 @@ class GameOptions {
       "Brackets",
       "Infinity"
     ];
-    const current = notations.indexOf(player.options.notation);
-    let next;
-    if (shiftDown) {
-      next = Math.wrap(current - 1, 0, notations.length - 1);
-      if (current === 0 && next === 0) next = notations.length - 1;
-    } else {
-      next = Math.wrap(current + 1, 0, notations.length - 1);
-    }
-    Notation.set(notations[next]);
+    const current = player.options.notation;
+    const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
+    Notation.set(next);
   }
 
   static toggleNews() {

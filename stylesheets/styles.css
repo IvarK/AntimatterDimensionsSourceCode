@@ -3720,7 +3720,7 @@ screen and (max-width: 480px) {
 
 .o-autobuyer-input {
   border: .01rem solid #c2c2c2;
-  padding: .3rem .3rem 0 .3rem;
+  padding: .3rem;
 }
 
 .o-autobuyer-input--invalid {

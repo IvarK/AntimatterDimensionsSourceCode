@@ -130,63 +130,6 @@ input, select {
     border: 1px solid #673AB7 !important;
 }
 
-.infinistorebtn1 {
-    border: 1px solid black !important;
-}
-
-.infinistorebtn2 {
-    border: 1px solid black !important;
-}
-
-.infinistorebtn3 {
-    border: 1px solid black !important;
-}
-
-.infinistorebtn4 {
-    border: 1px solid black !important;
-}
-
-.infinistorebtn1:hover {
-    background: #9C27B0 !important;
-}
-
-.infinistorebtn2:hover {
-    background: #F44336 !important;
-}
-
-.infinistorebtn3:hover {
-    background: #FFEB3B !important;
-}
-
-.infinistorebtn4:hover {
-    background: #00BCD4 !important;
-}
-
-.infinistorebtnbought {
-    background: #66BB6A !important;
-    border: 1px solid black !important;
-}
-
-.infinimultbtn {
-    color: #EF5350 !important;
-    border: 1px solid #00BCD4 !important;
-}
-
-.infinimultbtn:hover {
-    color: black !important;
-    background: #00BCD4 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtnlocked {
-    border: 1px solid #616161 !important;
-    background: #9E9E9E !important;
-}
-
-.infinistorebtnlocked:hover {
-    background: #BDBDBD !important;
-}
-
 .autobuyerbtn {
     border: 1px solid #E91E63 !important;
     margin-bottom: -1px;

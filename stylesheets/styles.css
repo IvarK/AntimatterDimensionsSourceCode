@@ -3706,25 +3706,111 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
+.t-dark .o-infinity-upgrade-btn,
+.t-metro .o-infinity-upgrade-btn,
+.t-dark-metro .o-infinity-upgrade-btn,
+.t-inverted-metro .o-infinity-upgrade-btn,
+.t-s1 .o-infinity-upgrade-btn,
+.t-s6 .o-infinity-upgrade-btn,
+.t-s8 .o-infinity-upgrade-btn {
+  border-color: black;
+}
+
+.t-dark .o-infinity-upgrade-btn {
+  color: black;
+  background-color: whitesmoke;
+}
+
+.t-s6 .o-infinity-upgrade-btn {
+  color: white;
+  background-color: whitesmoke;
+}
+
 .o-infinity-upgrade-btn:hover {
   color: black;
 }
+
+/*#region o-infinity-upgrade-btn--available*/
 
 .o-infinity-upgrade-btn--available:hover {
   background-color: #a53b98;
 }
 
+.t-dark .o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--available:hover {
+  background-color: #6200ea !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--available:hover {
+  background-color: #9c27b0 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--available*/
+
+/*#region o-infinity-upgrade-btn--color-2*/
+
 .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
   background-color: #ff3300;
 }
+
+.t-dark .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #d50000 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #f44336 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-2*/
+
+/*#region o-infinity-upgrade-btn--color-3*/
 
 .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
   background-color: #c6d50d;
 }
 
+.t-dark .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #ffd600 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #ffeb3b !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-3*/
+
+/*#region o-infinity-upgrade-btn--color-4*/
+
 .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
   background-color: #0cfec5;
 }
+
+.t-dark .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #00e5ff !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #00bcd4 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-4*/
+
+/*#region o-infinity-upgrade-btn--multiplier*/
 
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
   color: #c93a3a;
@@ -3733,8 +3819,50 @@ screen and (max-width: 480px) {
 
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
   color: black;
-  background: #e0d8e0;
+  background-color: #e0d8e0;
 }
+
+.t-dark .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-s6 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  background-color: #1f1f1f !important;
+}
+
+.t-dark .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: white !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-dark-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-inverted-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-s8 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  color: #e53935 !important;
+  border-color: #00bcd4 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: black !important;
+  background-color: #00bcd4 !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  background-color: black !important;
+  color: #d72621 !important;
+  border-color: #dbd242 !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--multiplier*/
+
+/*#region o-infinity-upgrade-btn--unavailable*/
 
 .o-infinity-upgrade-btn--unavailable {
   color: black;
@@ -3745,11 +3873,79 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
+.t-dark .o-infinity-upgrade-btn--unavailable {
+  background-color: #263238 !important;
+  border-color: black !important;
+}
+
+.t-dark .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #37474F !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--unavailable,
+.t-dark-metro .o-infinity-upgrade-btn--unavailable,
+.t-inverted-metro .o-infinity-upgrade-btn--unavailable,
+.t-s8 .o-infinity-upgrade-btn--unavailable {
+  background-color: #9e9e9e !important;
+  border-color: #616161 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-dark-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-s8 .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #bdbdbd !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--unavailable {
+  background-color: #9a921d !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #c5ba26 !important;
+}
+
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
+  color: grey !important;
+  background-color: black !important;
+  border-color: grey !important;
+}
+
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover:hover {
+  background-color: #222 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--unavailable*/
+
+/*#region o-infinity-upgrade-btn--bought*/
+
 .o-infinity-upgrade-btn--bought {
   color: black;
-  background: #5ac467;
+  background-color: #5ac467;
   cursor: default;
 }
+
+.t-dark .o-infinity-upgrade-btn--bought,
+.t-dark-metro .o-infinity-upgrade-btn--bought,
+.t-s6 .o-infinity-upgrade-btn--bought{
+  background-color: #43a047 !important;
+  border-color: black !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--bought,
+.t-inverted-metro .o-infinity-upgrade-btn--bought,
+.t-s8 .o-infinity-upgrade-btn--bought {
+  background-color: #66bb6a !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--bought {
+  background-color: #4baf4e !important;
+  border-color: black !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--bought*/
 
 /*#endregion o-infinity-upgrade-btn*/
 

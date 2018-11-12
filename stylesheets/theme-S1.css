@@ -148,47 +148,6 @@ body {
     text-shadow: 1px 1px 0px black;
 }
 
-.infinistorebtn1 {
-    border-color: black !important;
-}
-
-.infinistorebtn2 {
-    border-color: black !important;
-}
-
-.infinistorebtn3 {
-    border-color: black !important;
-}
-
-.infinistorebtn4 {
-    border-color: black !important;
-}
-
-.infinimultbtn {
-    background: black !important;
-    color: #d72621 !important;
-    border-color: #dbd242 !important;
-}
-
-.infinimultbtn:hover {
-    background: white !important;
-    color: black !important;
-}
-
-.infinistorebtnbought {
-    background-color: #4baf4e !important;
-    border-color: black !important;
-}
-
-.infinistorebtnlocked {
-    background: #9a921d !important;
-    border-color: black !important;
-}
-
-.infinistorebtnlocked:hover {
-    background: #c5ba26 !important;
-}
-
 input {
     background-color: #9a921d !important;
     border: 1px solid black !important;

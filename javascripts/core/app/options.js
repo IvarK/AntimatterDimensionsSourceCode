@@ -2,7 +2,13 @@ class GameOptions {
   static changeTheme() {
     const themes = Themes.available();
     const current = themes.indexOf(Theme.current());
-    const next = Math.wrap(current + 1, 0, themes.length - 1);
+    let next;
+    if (shiftDown) {
+      next = Math.wrap(current -1, 0, themes.length - 1);
+      if (current === 0 && next === 0) next = themes.length - 1;
+    } else {
+      next = Math.wrap(current + 1, 0, themes.length - 1);
+    }
     themes[next].set();
   }
 
@@ -19,9 +25,15 @@ class GameOptions {
       "Brackets",
       "Infinity"
     ];
-    const currentIndex = notations.indexOf(player.options.notation);
-    const nextIndex = Math.wrap(currentIndex + 1, 0, notations.length - 1);
-    Notation.set(notations[nextIndex]);
+    const current = notations.indexOf(player.options.notation);
+    let next;
+    if (shiftDown) {
+      next = Math.wrap(current - 1, 0, notations.length - 1);
+      if (current === 0 && next === 0) next = notations.length - 1;
+    } else {
+      next = Math.wrap(current + 1, 0, notations.length - 1);
+    }
+    Notation.set(notations[next]);
   }
 
   static toggleNews() {

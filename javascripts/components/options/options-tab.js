@@ -7,7 +7,7 @@ Vue.component('options-tab', {
         <br>
         S for sacrifice, D for dimension boost, G for antimatter galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.
         <br>
-        Shift is a modifier key that shows additional information on certain things.
+        Shift is a modifier key that shows additional information on certain things and adjusts the function of certain buttons.
         <br>
         You can hold shift while buying time studies to buy all up until that point, save study trees, cycle backwards through themes and notations, and delete glyphs.
         <br>

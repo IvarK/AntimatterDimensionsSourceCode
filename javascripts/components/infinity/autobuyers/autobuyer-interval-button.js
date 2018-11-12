@@ -8,9 +8,6 @@ Vue.component("autobuyer-interval-button", {
       isMaxed: false
     };
   },
-  created() {
-    this.on$(GameEvent.AUTOBUYER_BOUGHT, this.update);
-  },
   methods: {
     update() {
       this.cost = this.autobuyer.cost;

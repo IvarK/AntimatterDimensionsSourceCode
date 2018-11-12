@@ -1959,7 +1959,7 @@ function gameLoop(diff) {
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
 
-    ui.dispatch(GameEvent.UPDATE);
+    GameUI.update();
     player.lastUpdate = thisUpdate;
 }
 

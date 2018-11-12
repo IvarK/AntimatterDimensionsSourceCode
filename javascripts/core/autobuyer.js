@@ -762,7 +762,7 @@ function buyAutobuyer(id) {
     autobuyer.interval = Math.max(autobuyer.interval*0.6, 100);
     if (autobuyer.interval > 120) autobuyer.cost *= 2; //if your last purchase wont be very strong, dont double the cost
   }
-  ui.dispatch(GameEvent.AUTOBUYER_BOUGHT);
+  GameUI.update();
   updateAutobuyers();
 }
 

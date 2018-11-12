@@ -60,18 +60,6 @@ class Galaxy {
     return GalaxyType.NORMAL;
   }
 
-  // TODO: Move to replicanti class once it's established
-  static get totalReplicantiGalaxies() {
-    let extraGals = player.replicanti.galaxies;
-    if (player.timestudy.studies.includes(225)) {
-      extraGals += Math.floor(player.replicanti.amount.e / 1000);
-    }
-    if (player.timestudy.studies.includes(226)) {
-      extraGals += Math.floor(player.replicanti.gal / 15);
-    }
-    return extraGals;
-  }
-
   static checkAchievements() {
     if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer");
     if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread");

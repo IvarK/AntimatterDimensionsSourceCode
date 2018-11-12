@@ -175,7 +175,7 @@ dev.giveGlyph = function() {
 
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
-    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function(name) {

@@ -2343,6 +2343,33 @@ screen and (max-width: 480px) {
   height: 4rem;
 }
 
+.o-primary-btn--replicanti-unlock {
+  width: 20rem;
+  height: 8rem;
+}
+
+.o-primary-btn--replicanti-upgrade {
+  width: 18rem;
+  height: 5rem;
+  font-size: 1rem;
+  padding: .1rem .6rem;
+}
+
+.o-primary-btn--replicanti-upgrade-toggle {
+  font-size: 1rem;
+}
+
+.o-primary-btn--replicanti-galaxy {
+  width: 20rem;
+  height: 7rem;
+  font-size: 1.2rem;
+  padding: .1rem .6rem;
+}
+
+.o-primary-btn--replicanti-galaxy-toggle {
+  font-size: 1.2rem;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -3777,6 +3804,36 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion Autobuyers*/
+
+/*#region Replicanti*/
+
+.l-replicanti-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* To prevent button jitter*/
+  width: 100%;
+}
+
+.c-replicanti-description {
+  font-size: 1.5rem;
+}
+
+.c-replicanti-description__accent {
+  font-size: 2.3rem;
+  color: black
+}
+
+.l-replicanti-upgrade-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-replicanti-upgrade-row > * {
+  margin: .3rem;
+}
+
+/*#endregion Replicanti*/
 
 /*#region Break Infinity*/
 

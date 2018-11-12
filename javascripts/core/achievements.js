@@ -204,7 +204,7 @@ function giveAchievement(name) {
       Autobuyer.infinity.bumpLimit(4);
     }
     updateAchievementPower();
-    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 function getSecretAchAmount() {

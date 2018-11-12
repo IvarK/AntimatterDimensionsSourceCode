@@ -238,7 +238,7 @@ class InfinityUpgrade {
     if (!this.isAvailable) return;
     player.infinityUpgrades.push(this._id);
     player.infinityPoints = player.infinityPoints.minus(this._cost);
-    ui.dispatch(GameEvent.INFINITY_UPGRADE_BOUGHT);
+    GameUI.update();
   }
 
   get hasStaticEffect() {
@@ -391,7 +391,7 @@ InfinityUpgrade.ipMult = {
     Autobuyer.infinity.bumpLimit(mult);
     this.cost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
-    ui.dispatch(GameEvent.INFINITY_UPGRADE_BOUGHT);
+    GameUI.update();
   },
   autobuyerTick() {
     if (!this.isAvailable) return;
@@ -489,7 +489,7 @@ class BreakInfinityMultiplierCostUpgrade extends BreakInfinityUpgrade {
     const cost = this.cost;
     player.infinityPoints = player.infinityPoints.minus(cost)
     this._setCost(cost * this._costIncrease);
-    ui.dispatch(GameEvent.INFINITY_UPGRADE_BOUGHT);
+    GameUI.update();
   }
 
   get effectValue() {
@@ -538,7 +538,7 @@ class BreakInfinityIPGenUpgrade extends BreakInfinityUpgrade {
     player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
     player.offlineProdCost *= 10;
     player.offlineProd += 5;
-    ui.dispatch(GameEvent.INFINITY_UPGRADE_BOUGHT);
+    GameUI.update();
   }
 
   get effectValue() {

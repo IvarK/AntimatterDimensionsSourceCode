@@ -18,9 +18,6 @@ Vue.component("autobuyer-box", {
           return seconds.toFixed(2);
         }
       },
-      created() {
-        this.on$(GameEvent.AUTOBUYER_BOUGHT, this.update);
-      },
       methods: {
         update() {
           this.interval = this.autobuyer.interval;

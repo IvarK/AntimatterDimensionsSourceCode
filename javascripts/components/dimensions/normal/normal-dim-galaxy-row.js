@@ -35,7 +35,7 @@ Vue.component('normal-dim-galaxy-row', {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
       this.galaxies.dilation = player.dilation.freeGalaxies;
-      this.galaxies.replicanti = Galaxy.totalReplicantiGalaxies;
+      this.galaxies.replicanti = Replicanti.galaxies.total;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;

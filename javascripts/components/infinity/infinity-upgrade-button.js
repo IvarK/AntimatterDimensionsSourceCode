@@ -40,9 +40,6 @@ Vue.component("infinity-upgrade-button", {
       return this.upgrade.formatCapValue(this.formatter);
     }
   },
-  created() {
-    this.on$(GameEvent.INFINITY_UPGRADE_BOUGHT, this.update);
-  },
   methods: {
     update() {
       const upgrade = this.upgrade;

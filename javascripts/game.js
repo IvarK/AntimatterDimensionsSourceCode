@@ -1031,9 +1031,9 @@ function updatePriorities() {
         var bulk = Math.max(parseFloat(document.getElementById("bulkDimboost").value), 0.05)
     }
     //player.autobuyers[9].bulk = (isNaN(bulk)) ? 1 : bulk
-    player.overXGalaxies = parseInt(document.getElementById("overGalaxies").value)
-    player.autoSacrifice.priority = fromValue(document.getElementById("prioritySac").value)
-    if (isNaN(player.autoSacrifice.priority) || player.autoSacrifice.priority === null || player.autoSacrifice.priority === undefined || player.autoSacrifice.priority <= 1) player.autoSacrifice.priority = Decimal.fromNumber(1.01)
+    //player.overXGalaxies = parseInt(document.getElementById("overGalaxies").value)
+    //player.autoSacrifice.priority = fromValue(document.getElementById("prioritySac").value)
+    //if (isNaN(player.autoSacrifice.priority) || player.autoSacrifice.priority === null || player.autoSacrifice.priority === undefined || player.autoSacrifice.priority <= 1) player.autoSacrifice.priority = Decimal.fromNumber(1.01)
     //player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
 }
 

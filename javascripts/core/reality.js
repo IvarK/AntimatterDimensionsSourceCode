@@ -179,14 +179,6 @@ function reality(force, reset, auto) {
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
@@ -201,7 +193,6 @@ function reality(force, reset, auto) {
     resetTimeDimensions();
     showEternityTab('timestudies', true)
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = Autobuyer.dimboost.buyMaxInterval;
     if(player.eternities < 50) {
         document.getElementById("replicantidiv").style.display = "none";
         document.getElementById("replicantiunlock").style.display = "inline-block"
@@ -223,10 +214,8 @@ function reality(force, reset, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
-        loadAutoBuyerSettings()
     }
     Marathon2 = 0;
-    updatePrestigeAutoModes()
     updateTimeStudyButtons();
     if (!player.reality.upg.includes(10)) {
         document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF";

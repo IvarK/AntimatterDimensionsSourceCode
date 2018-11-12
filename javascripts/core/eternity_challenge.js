@@ -55,14 +55,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.replicanti.galaxies = 0;
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
     updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
@@ -74,7 +66,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     updateMilestones();
     resetTimeDimensions();
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = Autobuyer.dimboost.buyMaxInterval;
     if (player.eternities < 50) {
         document.getElementById("replicantidiv").style.display = "none";
         document.getElementById("replicantiunlock").style.display = "inline-block"

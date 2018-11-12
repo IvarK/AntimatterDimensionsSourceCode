@@ -271,11 +271,6 @@ function onLoad() {
         convertAutobuyerMode();
     }
 
-  updatePrestigeAutoModes()
-  updateCheckBoxes()
-  loadAutoBuyerSettings()
-
-
   if (player.options.newsHidden) {
       document.getElementById("game").style.display = "none";
   }
@@ -290,7 +285,6 @@ function onLoad() {
   recalculateAllGlyphs();
 
   updateAutobuyers();
-  updatePriorities();
   updateTimeStudyButtons();
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
@@ -441,25 +435,6 @@ function transformSaveToDecimal() {
       glyph.effects.mult = new Decimal(glyph.effects.mult)
     }
   }
-}
-
-
-function loadAutoBuyerSettings() {
-  for (var i=0; i<9; i++) {
-      document.getElementById("priority" + (i+1)).selectedIndex = player.autobuyers[i].priority-1
-      if (i == 8 && player.autobuyers[i].target == 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys max"
-      else if (i == 8 && player.autobuyers[i].target !== 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys singles"
-      else if (player.autobuyers[i].target > 10) document.getElementById("toggleBtn" + (i+1)).textContent = "Buys until 10"
-      else document.getElementById("toggleBtn" + (i+1)).textContent = "Buys singles"
-
-  }
-  document.getElementById("priority10").value = player.autobuyers[9].priority
-  document.getElementById("priority11").value = player.autobuyers[10].priority
-  document.getElementById("priority12").value = player.autobuyers[11].priority
-  document.getElementById("overGalaxies").value = player.overXGalaxies
-  document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
-  document.getElementById("prioritySac").value = player.autoSacrifice.priority
-  document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
 }
 
 function set_save(name, saveId, value) {

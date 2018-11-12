@@ -330,12 +330,10 @@ function change(current) {
   if (!player.reality.automatorCommands.includes(71)) return false
   switch(current.target) {
     case "ipautobuyer":
-      document.getElementById("priority12").value = current.id
-      updatePriorities()
+      Autobuyer.infinity.limit = new Decimal(current.id);
       return true
     case "epautobuyer":
       Autobuyer.eternity.limit = new Decimal(current.id);
-      updatePriorities()
       return true
   }
 }
@@ -345,22 +343,22 @@ function toggle(current) {
         replicantiGalaxyAutoToggle(current.id);
         return true;
     }
-    const OPTIONS = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'tickspeed', 'dimboost', 'galaxy', 'infinity', 'sacrifice', 'eternity'];
+    let options = Array.range(1, 8)
+      .map(tier => { return { name: `d${tier}`, autobuyer: Autobuyer.dim(tier) }; });
+    options.push({ name: "tickspeed", autobuyer: Autobuyer.tickspeed });
+    options.push({ name: "dimboost", autobuyer: Autobuyer.dimboost });
+    options.push({ name: "galaxy", autobuyer: Autobuyer.galaxy });
+    options.push({ name: "infinity", autobuyer: Autobuyer.infinity });
+    options.push({ name: "sacrifice", autobuyer: Autobuyer.sacrifice });
+    options.push({ name: "eternity", autobuyer: Autobuyer.eternity });
     let state;
-    let id = OPTIONS.indexOf(current.target);
+    let id = options.map(o => o.name).indexOf(current.target);
     if (id === -1) return false; //Fails if the specified autobuyer doesnt exist
-    if (id >= player.autobuyers.length) { //exceptions such as sacrifice
-        if (id === 12) state = !Autobuyer.sacrifice.isOn;
-        if (id === 13) state = !Autobuyer.eternity.isOn;
-    } else
-        state = !player.autobuyers[id].isOn;
+    const autobuyer = options[id].autobuyer;
     if (current.id === "on") state = true;
     else if (current.id === "off") state = false;
-    if (id === 13) { //eternity doesnt follow the same numbering pattern
-      Autobuyer.eternity.isOn = state;
-    } else
-        $("#" + (id + 1) + "ison")[0].checked = state;
-    updateAutobuyers();
+    else state = !autobuyer.isOn;
+    autobuyer.isOn = state;
     return true;
 }
 

@@ -414,12 +414,7 @@ function updateInfCosts() {
         }
     }
 
-
-
-
 // Replicanti stuff
-
-
 
 function updateMilestones() {
     var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100]
@@ -452,165 +447,6 @@ function eterMultAutoToggle() {
         document.getElementById("epmultbuyer").textContent = "Autobuy EP mult ON"
     }
 }
-
-
-function toggleCrunchMode() {
-    Autobuyer.infinity.toggleMode();
-    if (player.autoCrunchMode == "amount") {
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
-        document.getElementById("limittext").textContent = "Seconds between crunches:"
-    } else if (player.autoCrunchMode == "time"){
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
-        document.getElementById("limittext").textContent = "X times last crunch:"
-    } else {
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
-        document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
-    }
-}
-
-function toggleEternityMode() {
-  Autobuyer.eternity.toggleMode();
-}
-
-function toggleRealityMode() {
-  Autobuyer.reality.toggleMode();
-}
-
-function updatePrestigeAutoModes() {
-    if (player.autoCrunchMode == "amount") {
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
-        document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
-    } else if (player.autoCrunchMode == "time"){
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
-        document.getElementById("limittext").textContent = "Seconds between crunches:"
-    } else {
-        document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
-        document.getElementById("limittext").textContent = "X times last crunch:"
-    }
-}
-
-buyAutobuyer = function(id) {
-  const autobuyer = player.autobuyers[id];
-  if (player.infinityPoints.lt(autobuyer.cost)) return false;
-    if (autobuyer.bulk >= 1e100) return false;
-    player.infinityPoints = player.infinityPoints.minus(autobuyer.cost);
-    if (autobuyer.interval <= 100) {
-        autobuyer.bulk = Math.min(autobuyer.bulk * 2, 1e100);
-        autobuyer.cost = Math.ceil(2.4*autobuyer.cost);
-        var b1 = true;
-	    for (let i=0;i<8;i++) {
-            if (player.autobuyers[i].bulk < 512) b1 = false;
-        }
-        if (b1) giveAchievement("Bulked up");
-    } else {
-        autobuyer.interval = Math.max(autobuyer.interval*0.6, 100);
-        if (autobuyer.interval > 120) autobuyer.cost *= 2; //if your last purchase wont be very strong, dont double the cost
-    }
-    ui.dispatch(GameEvent.AUTOBUYER_BOUGHT);
-    updateAutobuyers();
-}
-
-document.getElementById("buyerBtn1").onclick = function () {
-    buyAutobuyer(0);
-}
-
-document.getElementById("buyerBtn2").onclick = function () {
-
-    buyAutobuyer(1);
-}
-
-document.getElementById("buyerBtn3").onclick = function () {
-    buyAutobuyer(2);
-}
-
-document.getElementById("buyerBtn4").onclick = function () {
-    buyAutobuyer(3);
-}
-
-document.getElementById("buyerBtn5").onclick = function () {
-    buyAutobuyer(4);
-}
-
-document.getElementById("buyerBtn6").onclick = function () {
-    buyAutobuyer(5);
-}
-
-document.getElementById("buyerBtn7").onclick = function () {
-    buyAutobuyer(6);
-}
-
-document.getElementById("buyerBtn8").onclick = function () {
-    buyAutobuyer(7);
-}
-
-document.getElementById("buyerBtnTickSpeed").onclick = function () {
-    buyAutobuyer(8);
-}
-
-document.getElementById("buyerBtnDimBoost").onclick = function () {
-    buyAutobuyer(9);
-}
-
-document.getElementById("buyerBtnGalaxies").onclick = function () {
-    buyAutobuyer(10);
-}
-
-document.getElementById("buyerBtnInf").onclick = function () {
-    buyAutobuyer(11);
-}
-
-toggleAutobuyerTarget = function(id) {
-  const autobuyer = player.autobuyers[id-1];
-  if (autobuyer.target === AutobuyerMode.BUY_SINGLE) {
-        autobuyer.target = AutobuyerMode.BUY_10
-        document.getElementById("toggleBtn" + id).textContent = "Buys until 10"
-    } else {
-        autobuyer.target = AutobuyerMode.BUY_SINGLE
-        document.getElementById("toggleBtn" + id).textContent = "Buys singles"
-    }
-}
-
-document.getElementById("toggleBtn1").onclick = function () {
-    toggleAutobuyerTarget(1)
-}
-
-document.getElementById("toggleBtn2").onclick = function () {
-    toggleAutobuyerTarget(2)
-}
-
-document.getElementById("toggleBtn3").onclick = function () {
-    toggleAutobuyerTarget(3)
-}
-
-document.getElementById("toggleBtn4").onclick = function () {
-    toggleAutobuyerTarget(4)
-}
-
-document.getElementById("toggleBtn5").onclick = function () {
-    toggleAutobuyerTarget(5)
-}
-
-document.getElementById("toggleBtn6").onclick = function () {
-    toggleAutobuyerTarget(6)
-}
-
-document.getElementById("toggleBtn7").onclick = function () {
-    toggleAutobuyerTarget(7)
-}
-
-document.getElementById("toggleBtn8").onclick = function () {
-    toggleAutobuyerTarget(8)
-}
-
-document.getElementById("toggleBtnTickSpeed").onclick = function () {
-    if (Autobuyer.tickspeed.mode === AutobuyerMode.BUY_SINGLE) {
-        Autobuyer.tickspeed.mode = AutobuyerMode.BUY_MAX;
-        document.getElementById("toggleBtnTickSpeed").textContent = "Buys max"
-    } else {
-        Autobuyer.tickspeed.mode = AutobuyerMode.BUY_SINGLE;
-        document.getElementById("toggleBtnTickSpeed").textContent = "Buys singles"
-    }
-};
 
 function breakInfinity() {
     if (!Autobuyer.infinity.isUnlocked || !Autobuyer.infinity.hasMaxedInterval) return false;
@@ -765,171 +601,80 @@ function updateAutobuyers() {
     autoBuyerDim6.tier = 6
     autoBuyerDim7.tier = 7
     autoBuyerDim8.tier = 8
-    autoBuyerTickSpeed.tier = 9
+    autoBuyerTickspeed.tier = 9
 
     if (player.challenges.includes("challenge1") && player.autobuyers[0] == 1) {
         player.autobuyers[0] = autoBuyerDim1
-        document.getElementById("autoBuyer1").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge2") && player.autobuyers[1] == 2) {
         player.autobuyers[1] = autoBuyerDim2
-        document.getElementById("autoBuyer2").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge3") && player.autobuyers[2] == 3) {
         player.autobuyers[2] = autoBuyerDim3
-        document.getElementById("autoBuyer3").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge4") && player.autobuyers[9] == 10) {
         player.autobuyers[9] = autoBuyerDimBoost
-        document.getElementById("autoBuyerDimBoost").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge5") && player.autobuyers[8] == 9) {
         player.autobuyers[8] = autoBuyerTickspeed
-        document.getElementById("autoBuyerTickSpeed").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge6") && player.autobuyers[4] == 5) {
         player.autobuyers[4] = autoBuyerDim5
-        document.getElementById("autoBuyer5").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge7") && player.autobuyers[11] == 12) {
         player.autobuyers[11] = autoBuyerInf
         Autobuyer.infinity.limit = new Decimal(1);
-        document.getElementById("autoBuyerInf").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge8") && player.autobuyers[3] == 4) {
         player.autobuyers[3] = autoBuyerDim4
-        document.getElementById("autoBuyer4").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge9") && player.autobuyers[6] == 7) {
         player.autobuyers[6] = autoBuyerDim7
-        document.getElementById("autoBuyer7").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge10") && player.autobuyers[5] == 6) {
         player.autobuyers[5] = autoBuyerDim6
-        document.getElementById("autoBuyer6").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge11") && player.autobuyers[7] == 8) {
         player.autobuyers[7] = autoBuyerDim8
-        document.getElementById("autoBuyer8").style.display = "inline-block"
     }
     if (player.challenges.includes("challenge12") && player.autobuyers[10] == 11) {
         player.autobuyers[10] = autoBuyerGalaxy
-        document.getElementById("autoBuyerGalaxies").style.display = "inline-block"
     }
 
     if (player.challenges.includes("postc2") && player.autoSacrifice == 1) {
         player.autoSacrifice = autoSacrifice
-        document.getElementById("autoBuyerSac").style.display = "inline-block"
-    } else {
-        document.getElementById("autoBuyerSac").style.display = "none"
-    }
-
-    if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
-        document.getElementById("interval1").textContent = "Current interval: " + (player.autobuyers[0].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval2").textContent = "Current interval: " + (player.autobuyers[1].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval3").textContent = "Current interval: " + (player.autobuyers[2].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval4").textContent = "Current interval: " + (player.autobuyers[3].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval5").textContent = "Current interval: " + (player.autobuyers[4].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval6").textContent = "Current interval: " + (player.autobuyers[5].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval7").textContent = "Current interval: " + (player.autobuyers[6].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("interval8").textContent = "Current interval: " + (player.autobuyers[7].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("intervalTickSpeed").textContent = "Current interval: " + (player.autobuyers[8].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("intervalDimBoost").textContent = "Current interval: " + (player.autobuyers[9].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("intervalGalaxies").textContent = "Current interval: " + (player.autobuyers[10].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("intervalInf").textContent = "Current interval: " + (player.autobuyers[11].interval/2000).toFixed(2) + " seconds"
-        document.getElementById("intervalSac").textContent = "Current interval: 0.05 seconds"
-    } else {
-        document.getElementById("interval1").textContent = "Current interval: " + (player.autobuyers[0].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval2").textContent = "Current interval: " + (player.autobuyers[1].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval3").textContent = "Current interval: " + (player.autobuyers[2].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval4").textContent = "Current interval: " + (player.autobuyers[3].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval5").textContent = "Current interval: " + (player.autobuyers[4].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval6").textContent = "Current interval: " + (player.autobuyers[5].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval7").textContent = "Current interval: " + (player.autobuyers[6].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("interval8").textContent = "Current interval: " + (player.autobuyers[7].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("intervalTickSpeed").textContent = "Current interval: " + (player.autobuyers[8].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("intervalDimBoost").textContent = "Current interval: " + (player.autobuyers[9].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("intervalGalaxies").textContent = "Current interval: " + (player.autobuyers[10].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("intervalInf").textContent = "Current interval: " + (player.autobuyers[11].interval/1000).toFixed(2) + " seconds"
-        document.getElementById("intervalSac").textContent = "Current interval: 0.10 seconds"
     }
 
     var maxedAutobuy = 0;
     var e100autobuy = 0;
     for (let tier = 1; tier <= 8; ++tier) {
-    document.getElementById("toggleBtn" + tier).style.display = "inline-block";
-        if (player.autobuyers[tier-1].bulk >= 1e100) {
-        player.autobuyers[tier-1].bulk = 1e100;
-        document.getElementById("buyerBtn" + tier).textContent = shortenDimensions(player.autobuyers[tier-1].bulk)+"x bulk purchase";
+      if (player.autobuyers[tier - 1].bulk >= 1e100) {
+        player.autobuyers[tier - 1].bulk = 1e100;
         e100autobuy++;
+      }
+      else {
+        if (player.autobuyers[tier - 1].interval <= 100) {
+          maxedAutobuy++;
         }
-        else {
-        if (player.autobuyers[tier-1].interval <= 100) {
-            if (player.autobuyers[tier-1].bulk * 2 >= 1e100) {
-                document.getElementById("buyerBtn" + tier).innerHTML = shortenDimensions(1e100)+"x bulk purchase<br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + " IP";
-            }
-            else {
-                document.getElementById("buyerBtn" + tier).innerHTML = shortenDimensions(player.autobuyers[tier-1].bulk*2)+"x bulk purchase<br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + " IP";
-            }
-            maxedAutobuy++;
-        }
-        else document.getElementById("buyerBtn" + tier).innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + " IP"
-        }
+      }
     }
 
     if (Autobuyer.tickspeed.hasMaxedInterval) {
-        document.getElementById("buyerBtnTickSpeed").style.display = "none"
-        document.getElementById("toggleBtnTickSpeed").style.display = "inline-block"
         maxedAutobuy++;
     }
     if (Autobuyer.dimboost.hasMaxedInterval) {
-        document.getElementById("buyerBtnDimBoost").style.display = "none"
         maxedAutobuy++;
     }
     if (Autobuyer.galaxy.hasMaxedInterval) {
-        document.getElementById("buyerBtnGalaxies").style.display = "none"
         maxedAutobuy++;
     }
     if (Autobuyer.infinity.hasMaxedInterval) {
-        document.getElementById("buyerBtnInf").style.display = "none"
         maxedAutobuy++;
     }
 
     if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
     if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
     if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
-
-    document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[8].cost) + " IP"
-    document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[9].cost) + " IP"
-    document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[10].cost) + " IP"
-    document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[11].cost) + " IP"
-
-
-    for (var i=0; i<8; i++) {
-        if (player.autobuyers[i]%1 !== 0) document.getElementById("autoBuyer"+(i+1)).style.display = "inline-block"
-    }
-    if (player.autobuyers[8]%1 !== 0) document.getElementById("autoBuyerTickSpeed").style.display = "inline-block"
-    if (player.autobuyers[9]%1 !== 0) document.getElementById("autoBuyerDimBoost").style.display = "inline-block"
-    if (player.autobuyers[10]%1 !== 0) document.getElementById("autoBuyerGalaxies").style.display = "inline-block"
-    if (player.autobuyers[11]%1 !== 0) document.getElementById("autoBuyerInf").style.display = "inline-block"
-    if (player.autoSacrifice%1 !== 0) document.getElementById("autoBuyerSac").style.display = "inline-block"
-
-    for (var i=1; i<=12; i++) {
-        player.autobuyers[i-1].isOn = document.getElementById(i + "ison").checked;
-    }
-
-    player.autoSacrifice.isOn = document.getElementById("13ison").checked
-}
-
-
-function autoBuyerArray() {
-    var tempArray = []
-    for (var i=0; i<player.autobuyers.length && i<9; i++) {
-        if (player.autobuyers[i]%1 !== 0 ) {
-            tempArray.push(player.autobuyers[i])
-        }
-    }
-    return tempArray;
 }
 
 function fromValue(value) {
@@ -1008,70 +753,6 @@ function fromValue(value) {
   value = value.replace(',','')
   if (value.split("e")[0] === "") return Decimal.fromMantissaExponent(Math.pow(10,parseFloat(value.split("e")[1])%1), parseInt(value.split("e")[1]))
   return Decimal.fromString(value)
-}
-
-function updatePriorities() {
-    auto = false;
-    for (var x=0 ; x < autoBuyerArray().length; x++) {
-        if (x < 9) autoBuyerArray()[x].priority = parseInt(document.getElementById("priority" + (x+1)).value)
-    }
-    if (parseInt(document.getElementById("priority10").value) === 69
-    || parseInt(document.getElementById("priority11").value) === 69
-    || parseInt(fromValue(document.getElementById("priority12").value).toString()) === 69
-    || parseInt(document.getElementById("bulkDimboost").value) === 69
-    || parseInt(document.getElementById("overGalaxies").value) === 69
-    || parseInt(fromValue(document.getElementById("prioritySac").value).toString()) === 69
-    || parseInt(document.getElementById("bulkgalaxy").value) === 69) giveAchievement("Nice.");
-    //player.autobuyers[9].priority = parseInt(document.getElementById("priority10").value)
-    //player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
-    //Autobuyer.infinity.limit = fromValue(document.getElementById("priority12").value)
-    if (player.eternities < 10) {
-        var bulk = Math.floor(Math.max(parseFloat(document.getElementById("bulkDimboost").value), 1))
-    } else {
-        var bulk = Math.max(parseFloat(document.getElementById("bulkDimboost").value), 0.05)
-    }
-    //player.autobuyers[9].bulk = (isNaN(bulk)) ? 1 : bulk
-    //player.overXGalaxies = parseInt(document.getElementById("overGalaxies").value)
-    //player.autoSacrifice.priority = fromValue(document.getElementById("prioritySac").value)
-    //if (isNaN(player.autoSacrifice.priority) || player.autoSacrifice.priority === null || player.autoSacrifice.priority === undefined || player.autoSacrifice.priority <= 1) player.autoSacrifice.priority = Decimal.fromNumber(1.01)
-    //player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
-}
-
-function updateCheckBoxes() {
-    for (var i = 0; i < 12; i++) {
-        if (player.autobuyers[i]%1 !== 0) {
-            if (player.autobuyers[i].isOn) document.getElementById((i+1) + "ison").checked = "true";
-            else document.getElementById((i+1) + "ison").checked = ""
-        }
-    }
-    if (player.autoSacrifice.isOn) document.getElementById("13ison").checked = "true"
-    else document.getElementById("13ison").checked = ""
-}
-
-
-function toggleAutoBuyers() {
-    var bool = player.autobuyers[0].isOn
-    for (var i = 0; i<12; i++) {
-        if (player.autobuyers[i]%1 !== 0) {
-            player.autobuyers[i].isOn = !bool
-        }
-    }
-    Autobuyer.sacrifice.isOn = !bool;
-    Autobuyer.eternity.isOn = !bool;
-    Autobuyer.reality.isOn = !bool;
-    updateCheckBoxes()
-    updateAutobuyers()
-}
-
-function toggleBulk() {
-
-    if (player.options.bulkOn) {
-        player.options.bulkOn = false
-        document.getElementById("togglebulk").textContent = "Enable bulk buy"
-    } else {
-        player.options.bulkOn = true
-        document.getElementById("togglebulk").textContent = "Disable bulk buy"
-    }
 }
 
 function updateChallengeTimes() {
@@ -1705,10 +1386,6 @@ setInterval(function() {
 
     if (player.eternities > 0) document.getElementById("infmultbuyer").style.display = "inline-block"
     else document.getElementById("infmultbuyer").style.display = "none"
-    if (player.eternities > 4) document.getElementById("togglecrunchmode").style.display = "inline-block"
-    else document.getElementById("togglecrunchmode").style.display = "none"
-    if (player.eternities > 8) document.getElementById("galaxybulk").style.display = "inline-block"
-    else document.getElementById("galaxybulk").style.display = "none"
 
     document.getElementById("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) ? "storebtn" : "unavailablebtn"
     document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && ((player.replicanti.interval !== 50) || player.timestudy.studies.includes(22)) && (player.replicanti.interval !== 1)) ? "storebtn" : "unavailablebtn"
@@ -1717,9 +1394,6 @@ setInterval(function() {
     document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e140)) ? "storebtn" : "unavailablebtn"
 
     if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
-
-    if (player.eternities > 9) document.getElementById("bulklabel").textContent = "Buy max dimboosts every X seconds:"
-    else document.getElementById("bulklabel").textContent = "Bulk DimBoost Amount:"
 
     if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
     else document.getElementById("replauto1").style.visibility = "hidden"
@@ -2062,10 +1736,6 @@ function gameLoop(diff) {
     } else {
         document.getElementById("postInfinityButton").style.display = "none"
     }
-
-
-    if (player.break) document.getElementById("iplimit").style.display = "inline"
-    else document.getElementById("iplimit").style.display = "none"
 
     var currentIPmin = gainedInfinityPoints().dividedBy(player.thisInfinityTime/60000)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin

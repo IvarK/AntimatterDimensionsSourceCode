@@ -62,17 +62,17 @@ Vue.component("autobuyer-toggles", {
       <primary-button
         v-if="hasAdditionalCrunchModes"
         class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleCrunchMode()"
+        onclick="Autobuyer.infinity.toggleMode();"
       >Auto crunch mode: {{autoCrunchModeDisplay}}</primary-button>
       <primary-button
         v-if="hasAdditionalEternityModes"
         class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleEternityMode()"
+        onclick="Autobuyer.eternity.toggleMode();"
       >Auto eternity mode: {{autoEternityModeDisplay}}</primary-button>
       <primary-button
         v-if="isAutoRealityUnlocked"
         class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleRealityMode()"
+        onclick="Autobuyer.reality.toggleMode();"
       >Auto reality mode: {{autoRealityModeDisplay}}</primary-button>
     </div>`
 });

@@ -744,3 +744,43 @@ Autobuyer.tick = function() {
     autobuyer.tick();
   }
 };
+
+function buyAutobuyer(id) {
+  const autobuyer = player.autobuyers[id];
+  if (player.infinityPoints.lt(autobuyer.cost)) return false;
+  if (autobuyer.bulk >= 1e100) return false;
+  player.infinityPoints = player.infinityPoints.minus(autobuyer.cost);
+  if (autobuyer.interval <= 100) {
+    autobuyer.bulk = Math.min(autobuyer.bulk * 2, 1e100);
+    autobuyer.cost = Math.ceil(2.4*autobuyer.cost);
+    var b1 = true;
+    for (let i=0;i<8;i++) {
+      if (player.autobuyers[i].bulk < 512) b1 = false;
+    }
+    if (b1) giveAchievement("Bulked up");
+  } else {
+    autobuyer.interval = Math.max(autobuyer.interval*0.6, 100);
+    if (autobuyer.interval > 120) autobuyer.cost *= 2; //if your last purchase wont be very strong, dont double the cost
+  }
+  ui.dispatch(GameEvent.AUTOBUYER_BOUGHT);
+  updateAutobuyers();
+}
+
+function toggleAutoBuyers() {
+  const isOn = Autobuyer.dim(1).isOn;
+  const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
+  autobuyers.push(Autobuyer.tickspeed);
+  autobuyers.push(Autobuyer.dimboost);
+  autobuyers.push(Autobuyer.galaxy);
+  autobuyers.push(Autobuyer.infinity);
+  autobuyers.push(Autobuyer.sacrifice);
+  autobuyers.push(Autobuyer.eternity);
+  autobuyers.push(Autobuyer.reality);
+  for (let autobuyer of autobuyers) {
+    autobuyer.isOn = !isOn;
+  }
+}
+
+function toggleBulk() {
+  player.options.bulkOn = !player.options.bulkOn;
+}

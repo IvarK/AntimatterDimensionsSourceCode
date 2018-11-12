@@ -139,14 +139,6 @@ function eternity(force, auto) {
 
     document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (let i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
 
     updateAutobuyers();
     resetInfinityPointsOnEternity();
@@ -159,7 +151,6 @@ function eternity(force, auto) {
     updateMilestones();
     resetTimeDimensions();
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = Autobuyer.dimboost.buyMaxInterval;
     if (player.eternities < 50) {
         document.getElementById("replicantidiv").style.display = "none";
         document.getElementById("replicantiunlock").style.display = "inline-block"
@@ -185,7 +176,6 @@ function eternity(force, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
-        loadAutoBuyerSettings()
     }
     Marathon2 = 0;
     if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);

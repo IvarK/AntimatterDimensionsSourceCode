@@ -605,39 +605,6 @@ button {
   color: rgb(81, 81, 236);
 }
 
-.autoBuyerDiv {
-    border: solid 1px grey;
-    width:230px;
-    height:155px;
-    text-align:center;
-    font-size:100%;
-    padding:10px;
-    display: none;
-    border-radius: 4px;
-}
-
-.autobuyerbtn {
-      color: white;
-      background: #1F1F1F;
-      font-weight: bold;
-      font-size: 70%;
-      border: 1px solid #ED85DF;
-      width: 180px;
-      height: 35px;
-      transition-duration: 0.2s;
-      cursor: pointer;
-      border-radius: 4px;
-      font-family: Typewriter;
-}
-
-.autobuyerbtn:hover {
-    color: #000000;
-    background: #B67F33;
-    font-weight: bold;
-    border: 2px solid #B67F33;
-    border-radius: 4px;
-}
-
 .crunchbtn {
     background: #E0E0E0;
     font-weight: bold;
@@ -3953,6 +3920,8 @@ screen and (max-width: 480px) {
 
 /*#region Autobuyers*/
 
+/*#region l-autobuyers-tab*/
+
 .l-autobuyers-tab {
   display: flex;
   flex-direction: column;
@@ -3963,6 +3932,10 @@ screen and (max-width: 480px) {
   margin-top: 1.5rem;
 }
 
+/*#endregion l-autobuyers-tab*/
+
+/*#region l-autobuyer-toggles*/
+
 .l-autobuyer-toggles {
   display: flex;
   flex-direction: row;
@@ -3971,6 +3944,10 @@ screen and (max-width: 480px) {
 .l-autobuyer-toggles > * {
   margin: 0 .3rem;
 }
+
+/*#endregion l-autobuyer-toggles*/
+
+/*#region l-autobuyer-grid*/
 
 .l-autobuyer-grid {
   display: flex;
@@ -3987,6 +3964,10 @@ screen and (max-width: 480px) {
   margin: .5rem .8rem;
 }
 
+/*#endregion l-autobuyer-grid*/
+
+/*#region o-autobuyer-input*/
+
 .o-autobuyer-input {
   border: .01rem solid #c2c2c2;
   padding: .3rem;
@@ -3995,6 +3976,10 @@ screen and (max-width: 480px) {
 .o-autobuyer-input--invalid {
   background-color: tomato;
 }
+
+/*#endregion o-autobuyer-input*/
+
+/*#region o-autobuyer-toggle-checkbox*/
 
 .o-autobuyer-toggle-checkbox {
   display: flex;
@@ -4005,6 +3990,10 @@ screen and (max-width: 480px) {
 .o-autobuyer-toggle-checkbox__label {
   font-size: .9rem;
 }
+
+/*#endregion o-autobuyer-toggle-checkbox*/
+
+/*#region o-autobuyer-btn*/
 
 .o-autobuyer-btn {
   width: 18rem;
@@ -4022,9 +4011,78 @@ screen and (max-width: 480px) {
 
 .o-autobuyer-btn:hover {
   color: black;
-  background: #b67f33;
+  background-color: #b67f33;
   border: .2rem solid #b67f33;
 }
+
+.t-dark .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-s1 .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  border-width: .1rem !important;
+}
+
+.t-metro .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-s1 .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  margin-bottom: -0.1rem;
+}
+
+.t-dark .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn {
+  box-shadow: none !important;
+}
+
+.t-dark .o-autobuyer-btn {
+  color: black !important;
+  border-color: black !important;
+}
+
+.t-dark-metro .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn {
+  border-color: #ff9800 !important;
+}
+
+.t-metro .o-autobuyer-btn,
+.t-inverted-metro .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  border-color: #e91e63 !important;
+}
+
+.t-metro .o-autobuyer-btn:hover,
+.t-inverted-metro .o-autobuyer-btn:hover,
+.t-s6 .o-autobuyer-btn:hover,
+.t-s8 .o-autobuyer-btn:hover {
+  border-color: #ff9800 !important;
+}
+
+.t-dark .o-autobuyer-btn:hover,
+.t-dark-metro .o-autobuyer-btn:hover,
+.t-metro .o-autobuyer-btn:hover,
+.t-inverted-metro .o-autobuyer-btn:hover,
+.t-s6 .o-autobuyer-btn:hover,
+.t-s8 .o-autobuyer-btn:hover {
+  background-color: #ff9800 !important;
+}
+
+.t-s1 .o-autobuyer-btn {
+  border-color: #7d3c1b !important;
+}
+
+.t-s1 .o-autobuyer-btn:hover {
+  background-color: #7d3c1b !important;
+}
+
+.t-s6 .o-autobuyer-btn {
+  color: white !important;
+}
+
+/*#endregion o-autobuyer-btn*/
+
+/*#region autobuyer-box*/
 
 .c-autobuyer-box {
   width: 23rem;
@@ -4033,6 +4091,20 @@ screen and (max-width: 480px) {
   border: solid .1rem grey;
   border-radius: .4rem;
   font-size: 1.1rem;
+}
+
+.t-s1 .c-autobuyer-box {
+  color: black !important;
+  border-color: black !important;
+  background-color: #dbd242 !important;
+}
+
+.t-s5 .c-autobuyer-box {
+  background: #ddd !important;
+}
+
+.t-s8 .c-autobuyer-box {
+  border-color: black;
 }
 
 .c-autobuyer-box__small-text {
@@ -4044,6 +4116,8 @@ screen and (max-width: 480px) {
   flex-direction: column;
   align-items: center;
 }
+
+/*#endregion autobuyer-box*/
 
 /*#endregion Autobuyers*/
 

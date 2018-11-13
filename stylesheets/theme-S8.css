@@ -27,10 +27,6 @@ body {
     color: black !important;
 }
 
-.autoBuyerDiv {
-    border-color: black;
-}
-
 .glyphDescriptions {
     border-color: black;
 }
@@ -143,16 +139,6 @@ input, select {
 .eternitytabbtn:hover {
     background: #FFF !important;
     border: 1px solid #673AB7 !important;
-}
-
-.autobuyerbtn {
-    border: 1px solid #E91E63 !important;
-    margin-bottom: -1px;
-}
-
-.autobuyerbtn:hover {
-    background: #FF9800 !important;
-    border: #FF9800 !important;
 }
 
 .postinfcrunch {

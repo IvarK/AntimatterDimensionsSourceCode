@@ -153,16 +153,6 @@ input {
     color: #03A9F4 !important;
 }
 
-.autobuyerbtn {
-    border: 1px solid #FF9800 !important;
-    margin-bottom: -1px;
-}
-
-.autobuyerbtn:hover {
-    background: #FF9800 !important;
-    border: #FF9800 !important;
-}
-
 .postinfcrunch {
     color: black !important;
     background: #455A64 !important;

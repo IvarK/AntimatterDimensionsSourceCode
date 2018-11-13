@@ -154,21 +154,6 @@ input {
     border-radius: 3px !important;
 }
 
-.autoBuyerDiv {
-    color: black !important;
-    border-color: black !important;
-    background-color: #dbd242 !important;
-}
-
-.autobuyerbtn {
-    border: 1px solid #7d3c1b !important;
-    margin-bottom: -1px;
-}
-
-.autobuyerbtn:hover {
-    background: #7d3c1b !important;
-}
-
 .eternityupbtn {
     color: #639565 !important;
     background-color: black !important;

@@ -29,7 +29,7 @@
   </style>
 </head>
 <body>
-<div id="themes" style="position: sticky; top: 5px">
+<div id="themes" style="position: sticky; top: 5px; z-index: 100; background-color: whitesmoke">
   <span>Theme: </span>
 </div>
 
@@ -37,11 +37,16 @@
 
 <div id="container">
   <div style="margin: 10px; display: flex; flex-direction: column">
-    <span>Primary button</span>
+
+
+    <span>Common buttons</span>
     <div class="c-component-block">
       <button class="o-primary-btn">Normal button</button>
       <button class="o-primary-btn o-primary-btn--disabled">Disabled button</button>
+      <button class="o-btn o-btn--secondary-tab">Secondary tab</button>
     </div>
+
+
     <span>Infinity upgrades</span>
     <div class="c-component-block">
       <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available">1st column or Post Break</button>
@@ -52,7 +57,46 @@
       <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--unavailable">Disabled</button>
       <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--bought">Bought</button>
     </div>
+
+
+    <span>Autobuyers</span>
+    <div class="c-component-block">
+      <div class="c-autobuyer-box" style="display: flex; flex-direction: column; align-items: center">
+        <span>Automatic Input Fields</span>
+        <span class="c-autobuyer-box__small-text">Current interval: 420.00 seconds</span>
+        <span class="c-autobuyer-box__small-text">Text:</span>
+        <input type="text" class="o-autobuyer-input">
+        <span class="c-autobuyer-box__small-text">Number:</span>
+        <input type="number" class="o-autobuyer-input">
+        <span class="c-autobuyer-box__small-text">Invalid:</span>
+        <input type="text" class="o-autobuyer-input o-autobuyer-input--invalid">
+        <div style="display: flex; flex-direction: row; align-items: center">
+          <span class="o-autobuyer-toggle-checkbox__label">Is active</span>
+          <input type="checkbox" class="o-autobuyer-toggle-checkbox">
+        </div>
+      </div>
+      <div class="c-autobuyer-box" style="display: flex; flex-direction: column; align-items: center">
+        <span>Automatic Buttons</span>
+        <span class="c-autobuyer-box__small-text">Current interval: 0.05 seconds</span>
+        <br>
+        <button class="o-autobuyer-btn">Decrease update rate by 5 hours<br>Cost: 1 Hevi</button>
+        <button class="o-autobuyer-btn">Buys 11</button>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center">
+          <span class="o-autobuyer-toggle-checkbox__label">Is active</span>
+          <input type="checkbox" class="o-autobuyer-toggle-checkbox">
+        </div>
+      </div>
+    </div>
+
+
   </div>
+</div>
+
+<div class="videocontainer">
+  <video autoplay muted loop id="stars" style="display: none;">
+    <source src="images/s6-bg.webm" type="video/webm">
+  </video>
 </div>
 
 <script>

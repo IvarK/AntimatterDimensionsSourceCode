@@ -130,16 +130,6 @@ input, select {
     border: 1px solid #673AB7 !important;
 }
 
-.autobuyerbtn {
-    border: 1px solid #E91E63 !important;
-    margin-bottom: -1px;
-}
-
-.autobuyerbtn:hover {
-    background: #FF9800 !important;
-    border: #FF9800 !important;
-}
-
 .postinfcrunch {
     background: #EEEEEE !important;
     border: 1px solid #2196F3 !important;

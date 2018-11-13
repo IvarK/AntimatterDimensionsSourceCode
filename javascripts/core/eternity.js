@@ -151,13 +151,6 @@ function eternity(force, auto) {
     updateMilestones();
     resetTimeDimensions();
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    } else if (document.getElementById("replicantidiv").style.display === "none" && player.eternities >= 50) {
-        document.getElementById("replicantidiv").style.display = "inline-block";
-        document.getElementById("replicantiunlock").style.display = "none"
-    }
     try {
         kong.submitStats('Eternities', player.eternities);
     } catch (err) {
@@ -165,7 +158,6 @@ function eternity(force, auto) {
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();

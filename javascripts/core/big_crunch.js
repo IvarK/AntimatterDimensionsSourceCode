@@ -116,8 +116,6 @@ function secondSoftReset() {
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
-    document.getElementById("replicantireset").innerHTML =
-        "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     updateChallengeElements();
     Marathon2 = 0;
 }

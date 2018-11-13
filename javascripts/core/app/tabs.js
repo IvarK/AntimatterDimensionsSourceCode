@@ -69,7 +69,7 @@ function tryShowtab(tab) {
     Tab.challenges.show();
     return true;
   }
-  if (tab === 'infinityvue') {
+  if (tab === 'infinity') {
     Tab.infinity.show();
     return true;
   }

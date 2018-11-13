@@ -241,14 +241,6 @@ function maxAll() {
     }
 }
 
-function buyInfinityUpgrade(name, cost) {
-    if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
-        player.infinityUpgrades.push(name);
-        player.infinityPoints = player.infinityPoints.minus(cost);
-        return true
-    } else return false
-}
-
 function updateEternityUpgrades() {
     document.getElementById("eter1").className = (player.eternityUpgrades.includes(1)) ? "eternityupbtnbought" : (player.eternityPoints.gte(5)) ? "eternityupbtn" : "eternityupbtnlocked"
     document.getElementById("eter2").className = (player.eternityUpgrades.includes(2)) ? "eternityupbtnbought" : (player.eternityPoints.gte(10)) ? "eternityupbtn" : "eternityupbtnlocked"
@@ -258,7 +250,6 @@ function updateEternityUpgrades() {
     document.getElementById("eter6").className = (player.eternityUpgrades.includes(6)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1e50)) ? "eternityupbtn" : "eternityupbtnlocked"
 }
 
-
 function buyEternityUpgrade(name, cost) {
     if (player.eternityPoints.gte(cost) && !player.eternityUpgrades.includes(name)) {
         player.eternityUpgrades.push(name)
@@ -266,7 +257,6 @@ function buyEternityUpgrade(name, cost) {
         updateEternityUpgrades()
     }
 }
-
 
 function buyEPMult(upd, threshold) {
     if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
@@ -304,34 +294,6 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function updateInfCosts() {
-
-    if (document.getElementById("replicantis").style.display == "block" && document.getElementById("infinity").style.display == "block") {
-        if (player.replicanti.chance < 1) document.getElementById("replicantichance").innerHTML = "Replicate chance: "+Math.round(player.replicanti.chance*100)+"%<br>+"+1+"% Costs: "+shortenCosts(player.replicanti.chanceCost)+" IP"
-        else document.getElementById("replicantichance").textContent = "Replicate chance: "+Math.round(player.replicanti.chance*100)+"%"
-        let replGalOver = 0
-        if (player.timestudy.studies.includes(131)) replGalOver += Math.floor(player.replicanti.gal / 2)
-        if (player.timestudy.studies.includes(233)) {
-            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
-            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
-        } else {
-            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
-            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
-        }
-        document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: "+shortenCosts(1e140)+" IP"
-        let extraGals = 0
-        if (player.timestudy.studies.includes(225)) extraGals += Math.floor(player.replicanti.amount.e / 1000)
-        if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 15)
-        if (extraGals !== 0) document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + "+"+extraGals+ " replicated galaxies created."
-        else document.getElementById("replicantireset").innerHTML = (player.replicanti.galaxies !== 1) ? "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created." : "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxy created."
-        if (isAchEnabled("r126")) document.getElementById("replicantireset").innerHTML = document.getElementById("replicantireset").innerHTML.replace("Reset replicanti amount", "Divide replicanti by e308")
-        
-        document.getElementById("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) ? "storebtn" : "unavailablebtn"
-        document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && ((player.replicanti.interval !== 50) || player.timestudy.studies.includes(22)) && (player.replicanti.interval !== 1)) ? "storebtn" : "unavailablebtn"
-        document.getElementById("replicantimax").className = (player.infinityPoints.gte(player.replicanti.galCost)) ? "storebtn" : "unavailablebtn"
-        document.getElementById("replicantireset").className = ((player.replicanti.galaxies < player.replicanti.gal && player.replicanti.amount.gte(Number.MAX_VALUE)) || (player.replicanti.galaxies < Math.floor(player.replicanti.gal * 1.5) && player.replicanti.amount.gte(Number.MAX_VALUE) && player.timestudy.studies.includes(131))) ? "storebtn" : "unavailablebtn"
-        document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e140)) ? "storebtn" : "unavailablebtn"
-    }
-
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
@@ -423,16 +385,6 @@ function updateMilestones() {
         } else {
             document.getElementById(name).className = "milestonerewardlocked"
         }
-    }
-}
-
-function infMultAutoToggle() {
-    if (player.infMultBuyer) {
-        player.infMultBuyer = false
-        document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF"
-    } else {
-        player.infMultBuyer = true
-        document.getElementById("infmultbuyer").textContent = "Autobuy IP mult ON"
     }
 }
 
@@ -1379,35 +1331,8 @@ setInterval(function() {
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     else document.getElementById("eternitystorebtn").style.display = "none"
 
-    if (player.replicanti.galaxybuyer !== undefined) document.getElementById("replicantiresettoggle").style.display = "inline-block"
-    else document.getElementById("replicantiresettoggle").style.display = "none"
-
-    if (player.eternities > 0) document.getElementById("infmultbuyer").style.display = "inline-block"
-    else document.getElementById("infmultbuyer").style.display = "none"
-
-    document.getElementById("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) ? "storebtn" : "unavailablebtn"
-    document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && ((player.replicanti.interval !== 50) || player.timestudy.studies.includes(22)) && (player.replicanti.interval !== 1)) ? "storebtn" : "unavailablebtn"
-    document.getElementById("replicantimax").className = (player.infinityPoints.gte(player.replicanti.galCost)) ? "storebtn" : "unavailablebtn"
-    document.getElementById("replicantireset").className = (player.replicanti.galaxies < player.replicanti.gal && player.replicanti.amount.gte(Number.MAX_VALUE)) ? "storebtn" : "unavailablebtn"
-    document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e140)) ? "storebtn" : "unavailablebtn"
-
     if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
-
-    if (player.eternities >= 40) document.getElementById("replauto1").style.visibility = "visible"
-    else document.getElementById("replauto1").style.visibility = "hidden"
-    if (player.eternities >= 60) document.getElementById("replauto2").style.visibility = "visible"
-    else document.getElementById("replauto2").style.visibility = "hidden"
-    if (player.eternities >= 80) document.getElementById("replauto3").style.visibility = "visible"
-    else document.getElementById("replauto3").style.visibility = "hidden"
     updateECUnlockButtons()
-
-
-    if (player.currentEternityChall == "eterc8") {
-        document.getElementById("eterc8repl").style.display = "block"
-        document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
-    } else {
-        document.getElementById("eterc8repl").style.display = "none"
-    }
 
     if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
         failChallenge();
@@ -2169,20 +2094,6 @@ setInterval(function() {
 //start scrolling
 scrollNextMessage();
 
-function showInfTab(tabName) {
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('inftab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-}
-
 function showEternityTab(tabName, init) {
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('eternitytab');
@@ -2237,9 +2148,6 @@ function init() {
     document.getElementById('infinitybtn').onclick = function () {
         showTab('infinity');
     };
-    document.getElementById('infinitybtnvue').onclick = function () {
-        showTab('infinityvue');
-    };
     document.getElementById("eternitystorebtn").onclick = function () {
         showTab('eternitystore')
     }
@@ -2255,7 +2163,6 @@ function init() {
     };
     Tab.dimensions.normal.show();
     //show one tab during init or they'll all start hidden
-    showInfTab('preinf')
     showEternityTab('timestudies', true)
     load_game();
     updateTickSpeed();

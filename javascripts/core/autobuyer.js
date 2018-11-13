@@ -766,7 +766,7 @@ function buyAutobuyer(id) {
   updateAutobuyers();
 }
 
-function toggleAutoBuyers() {
+function toggleAutobuyers() {
   const isOn = Autobuyer.dim(1).isOn;
   const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
   autobuyers.push(Autobuyer.tickspeed);
@@ -779,8 +779,4 @@ function toggleAutoBuyers() {
   for (let autobuyer of autobuyers) {
     autobuyer.isOn = !isOn;
   }
-}
-
-function toggleBulk() {
-  player.options.bulkOn = !player.options.bulkOn;
 }

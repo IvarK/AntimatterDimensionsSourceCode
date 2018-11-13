@@ -66,14 +66,9 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     updateMilestones();
     resetTimeDimensions();
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    }
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();

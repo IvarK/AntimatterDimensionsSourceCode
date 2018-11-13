@@ -95,31 +95,13 @@ function onLoad() {
   transformSaveToDecimal();
   updateCosts();
   updateTickSpeed();
-  toggleBulk()
-  toggleBulk()
   respecToggle()
   respecToggle()
-  if (!player.replicanti.auto[0]) document.getElementById("replauto1").textContent = "Auto: OFF"
-  else document.getElementById("replauto1").textContent = "Auto: ON"
-  if (!player.replicanti.auto[1]) document.getElementById("replauto2").textContent = "Auto: OFF"
-  else document.getElementById("replauto2").textContent = "Auto: ON"
-  if (!player.replicanti.auto[2]) document.getElementById("replauto3").textContent = "Auto: OFF"
-  else document.getElementById("replauto3").textContent = "Auto: ON"
-
   updateLastTenRuns()
   updateLastTenEternities()
   updateLastTenRealities()
 
   updateInfCosts()
-
-
-  if (player.replicanti.unl == true) {
-      document.getElementById("replicantidiv").style.display="inline-block"
-      document.getElementById("replicantiunlock").style.display="none"
-  } else {
-      document.getElementById("replicantidiv").style.display="none"
-      document.getElementById("replicantiunlock").style.display="inline-block"
-  }
 
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 
@@ -131,11 +113,6 @@ function onLoad() {
   if (player.replicanti.galaxybuyer !== undefined) {
     replicantiGalaxyAutoToggle()
     replicantiGalaxyAutoToggle()
-  }
-
-  if (player.infMultBuyer !== undefined) {
-    infMultAutoToggle()
-    infMultAutoToggle()
   }
 
   if (player.reality.epmultbuyer !== undefined) {

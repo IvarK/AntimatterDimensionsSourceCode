@@ -279,133 +279,6 @@ button {
     font-weight: bold
 }
 
-.infinimultbtn {
-    color: #C93A3A;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #17B3B5;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinimultbtn:hover {
-    color: #000;
-    background: #E0D8E0;
-}
-
-.infinistorebtn1 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn1:hover {
-    color: #000;
-    background: #A53B98;
-}
-
-.infinistorebtn2 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn2:hover {
-    color: #000;
-    background: #ff3300;
-}
-
-.infinistorebtn3 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn3:hover {
-    color: #000;
-    background: #C6D50D;
-}
-
-.infinistorebtn4 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn4:hover {
-    color: #000;
-    background: #0CFEC5;
-}
-
-.infinistorebtnlocked {
-    color: black;
-    background: #F7F7F7;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtnlocked:hover {
-    color: #000;
-    background: white;
-}
-
-.infinistorebtnbought {
-    color: black;
-    background: #5AC467;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
 .tabbtn {
     background: #E0E0E0;
     font-weight: bold;
@@ -424,9 +297,6 @@ button {
     border: 2px solid #4980CC;
     border-radius: 4px;
 }
-
-
-
 
 .postinfcrunch {
     background: #E0E0E0;
@@ -660,23 +530,6 @@ button {
     cursor: pointer;
     background-color: #9E913A;
 
-}
-
-#replauto1 {
-    margin-top: 3px;
-}
-
-#replauto2 {
-    margin-top: 3px;
-}
-
-#replauto3 {
-    margin-top: 3px;
-}
-
-#replicantiresettoggle {
-    margin-top: 3px;
-    margin-right: 6px;
 }
 
 .eternitychallengestudy {

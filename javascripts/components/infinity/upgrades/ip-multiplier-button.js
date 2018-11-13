@@ -1,7 +1,8 @@
 Vue.component("ip-multiplier-button", {
   data: function() {
     return {
-      isAutobuyerOn: false
+      isAutobuyerOn: false,
+      isAutoUnlocked: false,
     };
   },
   watch: {
@@ -16,6 +17,7 @@ Vue.component("ip-multiplier-button", {
   },
   methods: {
     update() {
+      this.isAutoUnlocked = player.eternities > 0;
       this.isAutobuyerOn = player.infMultBuyer;
     }
   },
@@ -26,6 +28,7 @@ Vue.component("ip-multiplier-button", {
         class="o-infinity-upgrade-btn--multiplier"
       />
       <primary-button-on-off
+        v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"
         text="Autobuy IP mult"
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"

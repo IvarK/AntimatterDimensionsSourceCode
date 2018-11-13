@@ -51,7 +51,7 @@ Vue.component("autobuyer-toggles", {
     `<div class="l-autobuyer-toggles">
       <primary-button
         class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleAutoBuyers()"
+        onclick="toggleAutobuyers()"
       >Enable/disable autobuyers</primary-button>
       <primary-button-on-off-custom
         v-model="options.bulkOn"

@@ -193,18 +193,9 @@ function reality(force, reset, auto) {
     resetTimeDimensions();
     showEternityTab('timestudies', true)
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if(player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    }
-    else if (document.getElementById("replicantidiv").style.display === "none" && player.eternities >= 50) {
-        document.getElementById("replicantidiv").style.display = "inline-block";
-        document.getElementById("replicantiunlock").style.display = "none"
-    }
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
@@ -217,12 +208,6 @@ function reality(force, reset, auto) {
     }
     Marathon2 = 0;
     updateTimeStudyButtons();
-    if (!player.reality.upg.includes(10)) {
-        document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF";
-        document.getElementById("replauto1").textContent = "Auto: OFF";
-        document.getElementById("replauto2").textContent = "Auto: OFF";
-        document.getElementById("replauto3").textContent = "Auto: OFF"
-    }
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();

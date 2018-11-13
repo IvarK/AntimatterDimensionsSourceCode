@@ -22,7 +22,7 @@ for (let i = 1; i < 9; i++) {
   Keyboard.bindRepeatableHotkey(`shift+${i}`, () => buyOneDimension(i));
 }
 
-Keyboard.bindHotkey("a", () => toggleAutoBuyers());
+Keyboard.bindHotkey("a", () => toggleAutobuyers());
 Keyboard.bindHotkey("esc", () => Modal.hide());
 
 Keyboard.bind("shift", () => setShiftKey(true), "keydown");

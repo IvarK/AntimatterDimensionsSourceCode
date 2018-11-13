@@ -2,6 +2,16 @@ Vue.mixin({
   computed: {
     $viewModel: function() {
       return ui.view;
+    },
+    formatter: function() {
+      return {
+        shorten: this.shorten,
+        shortenCosts: this.shortenCosts,
+        shortenDimensions: this.shortenDimensions,
+        shortenMoney: this.shortenMoney,
+        shortenGlyphEffect: this.shortenGlyphEffect,
+        shortenMultiplier: this.shortenMultiplier
+      };
     }
   },
   methods: {
@@ -77,8 +87,32 @@ ui.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastCon
   }
 };
 
-ui.dispatch = function(event) {
-  EventHub.global.emit(event);
+const GameUI = {
+  events: [],
+  flushPromise: undefined,
+  dispatch(event) {
+    const index = this.events.indexOf(event);
+    if (index !== -1) {
+      this.events = this.events.splice(index, 1);
+    }
+    if (event !== GameEvent.UPDATE) {
+      this.events.push(event);
+    }
+    if (this.flushPromise) return;
+    this.flushPromise = Promise.resolve()
+      .then(this.flushEvents.bind(this));
+  },
+  flushEvents() {
+    this.flushPromise = undefined;
+    for (let event of this.events) {
+      EventHub.global.emit(event);
+    }
+    EventHub.global.emit(GameEvent.UPDATE);
+    this.events = [];
+  },
+  update() {
+    this.dispatch(GameEvent.UPDATE);
+  }
 };
 
 const UIID = function() {

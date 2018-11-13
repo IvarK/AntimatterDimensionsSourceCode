@@ -102,25 +102,6 @@ input {
     background: #FF9800 !important;
 }
 
-.autobuyerbtn {
-    color: black !important;
-    box-shadow: none !important;
-    border: 1px solid black !important;
-}
-
-.autobuyerbtn:hover {
-    background: #FF9800 !important;
-}
-
-#infinityPoints1 {
-    color: #4F5957 !important;
-}
-
-.IPAmount1 {
-    color: white !important;
-    text-shadow: 0px 0px 7px #fff;
-}
-
 .IPAmount2 {
     color: white !important;
     text-shadow: 0px 0px 7px #fff;
@@ -154,86 +135,8 @@ input {
     border: 2px solid #1565C0 !important;
 }
 
-.infinimultbtn {
-    background: #1F1F1F !important;
-}
-
-.infinimultbtn:hover {
-    color: white !important;
-    background: #1F1F1F !important;
-}
-
-.infinistorebtn1 {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtn2 {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtn3 {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtn4 {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtnlocked {
-    background: #263238 !important;
-    border: 1px solid black !important;
-}
-
-.infinistorebtnlocked:hover {
-    background: #37474F !important;
-}
-
-.infinistorebtn2:hover {
-    color: #000;
-    background: #D50000 !important;
-}
-
-.infinistorebtn1:hover {
-    color: #000;
-    background: #6200EA !important;
-}
-
-.infinistorebtn3:hover {
-    color: #000;
-    background: #FFD600 !important;
-}
-
-.infinistorebtn4:hover {
-    color: #000;
-    background: #00E5FF !important;
-}
-
-.infinistorebtnbought {
-    color: black;
-    background: #43A047 !important;
-    border: 1px solid black !important;
-}
-
 .storebtn:hover {
     color: #FFF !important;
-}
-
-#replicantiamount {
-    color: #03A9F4 !important;
-    text-shadow: 0px 0px 7px #03A9F4;
-}
-
-#replicantimult {
-    color: #03A9F4 !important;
-    text-shadow: 0px 0px 7px #03A9F4;
 }
 
 .eternitybtn {

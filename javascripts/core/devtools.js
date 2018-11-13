@@ -51,12 +51,6 @@ dev.fixSave = function() {
     }
 
     saved = 0;
-    totalMult = 1
-    currentMult = 1
-    infinitiedMult = 1
-    achievementMult = 1
-    challengeMult = 1
-    unspentBonus = 1
     infDimPow = 1
     postc8Mult = new Decimal(0)
     mult18 = new Decimal(1)
@@ -181,7 +175,7 @@ dev.giveGlyph = function() {
 
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
-    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function(name) {
@@ -402,6 +396,18 @@ dev.updateTestSave = function() {
     player.reality.tdbuyers = [false, false, false, false, false, false, false, false]
     player.reality.epmultbuyer = false
     player.options.testVersion = 20
+  }
+
+  if (player.options.testVersion === 20) {
+    if (!Object.values(AutoRealityMode).includes(Autobuyer.reality.mode)) {
+      Autobuyer.reality.mode = AutoRealityMode.RM;
+    }
+    player.options.testVersion = 21
+  }
+
+  if (player.options.testVersion === 21) {
+    convertAutobuyerMode();
+    player.options.testVersion = 22;
   }
 }
 

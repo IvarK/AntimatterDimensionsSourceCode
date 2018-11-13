@@ -95,34 +95,13 @@ function onLoad() {
   transformSaveToDecimal();
   updateCosts();
   updateTickSpeed();
-  toggleBulk()
-  toggleBulk()
   respecToggle()
   respecToggle()
-  if (!player.replicanti.auto[0]) document.getElementById("replauto1").textContent = "Auto: OFF"
-  else document.getElementById("replauto1").textContent = "Auto: ON"
-  if (!player.replicanti.auto[1]) document.getElementById("replauto2").textContent = "Auto: OFF"
-  else document.getElementById("replauto2").textContent = "Auto: ON"
-  if (!player.replicanti.auto[2]) document.getElementById("replauto3").textContent = "Auto: OFF"
-  else document.getElementById("replauto3").textContent = "Auto: ON"
-
   updateLastTenRuns()
   updateLastTenEternities()
   updateLastTenRealities()
 
   updateInfCosts()
-
-
-  if (player.replicanti.unl == true) {
-      document.getElementById("replicantidiv").style.display="inline-block"
-      document.getElementById("replicantiunlock").style.display="none"
-  } else {
-      document.getElementById("replicantidiv").style.display="none"
-      document.getElementById("replicantiunlock").style.display="inline-block"
-  }
-
-  if (player.break == true) document.getElementById("break").textContent = "FIX INFINITY"
-  document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shortenDimensions(player.infMult.times(kongIPMult)) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
 
   if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
 
@@ -134,11 +113,6 @@ function onLoad() {
   if (player.replicanti.galaxybuyer !== undefined) {
     replicantiGalaxyAutoToggle()
     replicantiGalaxyAutoToggle()
-  }
-
-  if (player.infMultBuyer !== undefined) {
-    infMultAutoToggle()
-    infMultAutoToggle()
   }
 
   if (player.reality.epmultbuyer !== undefined) {
@@ -242,7 +216,7 @@ function onLoad() {
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 20;
+        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 22;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -271,12 +245,8 @@ function onLoad() {
         updateLastTenEternities();
         updateLastTenRealities();
         updateChallengeTimes();
+        convertAutobuyerMode();
     }
-
-  updatePrestigeAutoModes()
-  updateCheckBoxes()
-  loadAutoBuyerSettings()
-
 
   if (player.options.newsHidden) {
       document.getElementById("game").style.display = "none";
@@ -292,14 +262,7 @@ function onLoad() {
   recalculateAllGlyphs();
 
   updateAutobuyers();
-  updatePriorities();
   updateTimeStudyButtons();
-  totalMult = Math.pow(player.totalmoney.e+1, 0.5)
-  currentMult = Math.pow(player.money.e+1, 0.5)
-  infinitiedMult = 1+Math.log10(getInfinitied()+1)*10
-  achievementMult = Math.max(Math.pow((player.achievements.length-30), 3)/40,1)
-  challengeMult = Decimal.max(10*3000/worstChallengeTime, 1)
-  unspentBonus = player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
@@ -338,6 +301,28 @@ function onLoad() {
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
+  }
+}
+
+function convertAutobuyerMode() {
+  for (let i = 1; i <= 8; i++) {
+    const autobuyer = Autobuyer.dim(i);
+    if (!autobuyer.isUnlocked) continue;
+    if (autobuyer.mode < 10) {
+      autobuyer.mode = AutobuyerMode.BUY_SINGLE;
+    }
+    else {
+      autobuyer.mode = AutobuyerMode.BUY_10;
+    }
+  }
+  const tickspeedAutobuyer = Autobuyer.tickspeed;
+  if (tickspeedAutobuyer.isUnlocked) {
+    if (tickspeedAutobuyer.mode < 10) {
+      tickspeedAutobuyer.mode = AutobuyerMode.BUY_SINGLE;
+    }
+    else {
+      tickspeedAutobuyer.mode = AutobuyerMode.BUY_MAX;
+    }
   }
 }
 
@@ -395,12 +380,6 @@ function change_save(saveId) {
   currentSave = saveId;
 
   saved = 0;
-  totalMult = 1
-  currentMult = 1
-  infinitiedMult = 1
-  achievementMult = 1
-  challengeMult = 1
-  unspentBonus = 1
   infDimPow = 1
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
@@ -433,29 +412,6 @@ function transformSaveToDecimal() {
       glyph.effects.mult = new Decimal(glyph.effects.mult)
     }
   }
-}
-
-
-function loadAutoBuyerSettings() {
-  for (var i=0; i<9; i++) {
-      document.getElementById("priority" + (i+1)).selectedIndex = player.autobuyers[i].priority-1
-      if (i == 8 && player.autobuyers[i].target == 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys max"
-      else if (i == 8 && player.autobuyers[i].target !== 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys singles"
-      else if (player.autobuyers[i].target > 10) document.getElementById("toggleBtn" + (i+1)).textContent = "Buys until 10"
-      else document.getElementById("toggleBtn" + (i+1)).textContent = "Buys singles"
-
-  }
-  document.getElementById("priority10").value = player.autobuyers[9].priority
-  document.getElementById("priority11").value = player.autobuyers[10].priority
-  document.getElementById("priority12").value = player.autobuyers[11].priority
-  document.getElementById("overGalaxies").value = player.overXGalaxies
-  document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
-  document.getElementById("prioritySac").value = player.autoSacrifice.priority
-  document.getElementById("bulkgalaxy").value = player.autobuyers[10].bulk
-  document.getElementById("priority13").value = player.eternityBuyer.limit
-  document.getElementById("priority14").value = player.realityBuyer.rm
-  document.getElementById("priority15").value = player.realityBuyer.glyph
-
 }
 
 function set_save(name, saveId, value) {

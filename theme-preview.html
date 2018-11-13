@@ -1,0 +1,163 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
+  <link id="Metro" rel="stylesheet" type="text/css" href="stylesheets/theme-Metro.css">
+  <link id="Dark" rel="stylesheet" type="text/css" href="stylesheets/theme-Dark.css">
+  <link id="Dark Metro" rel="stylesheet" type="text/css" href="stylesheets/theme-Dark Metro.css">
+  <link id="Inverted" rel="stylesheet" type="text/css" href="stylesheets/theme-Inverted.css">
+  <link id="Inverted Metro" rel="stylesheet" type="text/css" href="stylesheets/theme-Inverted Metro.css">
+  <link id="S1" rel="stylesheet" type="text/css" href="stylesheets/theme-S1.css">
+  <link id="S2" rel="stylesheet" type="text/css" href="stylesheets/theme-S2.css">
+  <link id="S3" rel="stylesheet" type="text/css" href="stylesheets/theme-S3.css">
+  <link id="S4" rel="stylesheet" type="text/css" href="stylesheets/theme-S4.css">
+  <link id="S5" rel="stylesheet" type="text/css" href="stylesheets/theme-S5.css">
+  <link id="S6" rel="stylesheet" type="text/css" href="stylesheets/theme-S6.css">
+  <link id="S7" rel="stylesheet" type="text/css" href="stylesheets/theme-S7.css">
+  <link id="S8" rel="stylesheet" type="text/css" href="stylesheets/theme-S8.css">
+  <style>
+    .c-component-block {
+      padding: 10px;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .c-component-block > * {
+      margin: 8px;
+    }
+  </style>
+</head>
+<body>
+<div id="themes" style="position: sticky; top: 5px; z-index: 100; background-color: whitesmoke">
+  <span>Theme: </span>
+</div>
+
+<div style="height: 10px"></div>
+
+<div id="container">
+  <div style="margin: 10px; display: flex; flex-direction: column">
+
+
+    <span>Common buttons</span>
+    <div class="c-component-block">
+      <button class="o-primary-btn">Normal button</button>
+      <button class="o-primary-btn o-primary-btn--disabled">Disabled button</button>
+      <button class="o-btn o-btn--secondary-tab">Secondary tab</button>
+    </div>
+
+
+    <span>Infinity upgrades</span>
+    <div class="c-component-block">
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available">1st column or Post Break</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available o-infinity-upgrade-btn--color-2">2nd column</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available o-infinity-upgrade-btn--color-3">3rd column</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available o-infinity-upgrade-btn--color-4">4th column</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--available o-infinity-upgrade-btn--multiplier">Multiplier</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--unavailable">Disabled</button>
+      <button class="o-infinity-upgrade-btn o-infinity-upgrade-btn--bought">Bought</button>
+    </div>
+
+
+    <span>Autobuyers</span>
+    <div class="c-component-block">
+      <div class="c-autobuyer-box" style="display: flex; flex-direction: column; align-items: center">
+        <span>Automatic Input Fields</span>
+        <span class="c-autobuyer-box__small-text">Current interval: 420.00 seconds</span>
+        <span class="c-autobuyer-box__small-text">Text:</span>
+        <input type="text" class="o-autobuyer-input">
+        <span class="c-autobuyer-box__small-text">Number:</span>
+        <input type="number" class="o-autobuyer-input">
+        <span class="c-autobuyer-box__small-text">Invalid:</span>
+        <input type="text" class="o-autobuyer-input o-autobuyer-input--invalid">
+        <div style="display: flex; flex-direction: row; align-items: center">
+          <span class="o-autobuyer-toggle-checkbox__label">Is active</span>
+          <input type="checkbox" class="o-autobuyer-toggle-checkbox">
+        </div>
+      </div>
+      <div class="c-autobuyer-box" style="display: flex; flex-direction: column; align-items: center">
+        <span>Automatic Buttons</span>
+        <span class="c-autobuyer-box__small-text">Current interval: 0.05 seconds</span>
+        <br>
+        <button class="o-autobuyer-btn">Decrease update rate by 5 hours<br>Cost: 1 Hevi</button>
+        <button class="o-autobuyer-btn">Buys 11</button>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center">
+          <span class="o-autobuyer-toggle-checkbox__label">Is active</span>
+          <input type="checkbox" class="o-autobuyer-toggle-checkbox">
+        </div>
+      </div>
+    </div>
+
+
+    <span>Texts</span>
+      <div class="c-component-block">
+        <p class="c-replicanti-description">
+          You have <span class="c-replicanti-description__accent">1e300</span> replicanti.
+          Translated to <span class="c-replicanti-description__accent">1e1234</span>x multiplier on all infinity dimensions
+        </p>
+    </div>
+
+
+  </div>
+</div>
+
+<div class="videocontainer">
+  <video autoplay muted loop id="stars" style="display: none;">
+    <source src="images/s6-bg.webm" type="video/webm">
+  </video>
+</div>
+
+<script>
+  const themes = [
+    'Normal',
+    'Metro',
+    'Dark',
+    'Dark Metro',
+    'Inverted',
+    'Inverted Metro',
+    'S1',
+    'S2',
+    'S3',
+    'S4',
+    'S5',
+    'S6',
+    'S7',
+    'S8',
+  ];
+  const buttonContainer = document.getElementById("themes");
+  for (let theme of themes) {
+    const button = document.createElement("button");
+    button.textContent = theme;
+    button.onclick = () => setTheme(theme);
+    buttonContainer.appendChild(button);
+    if (theme !== "Normal") {
+      document.getElementById(theme).disabled = true;
+    }
+  }
+  let current = "Normal";
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+  }
+  function setTheme(theme) {
+    if (theme === current) return;
+    const body = document.body;
+    const classList = body.classList;
+    if (classList.length === 1) {
+      classList.remove(classList[0]);
+    }
+    if (current !== "Normal") {
+      document.getElementById(current).disabled = true;
+    }
+    current = theme;
+    localStorage.setItem("theme", theme);
+    if (theme === "Normal") {
+      return;
+    }
+    classList.add(`t-${theme.replace(/\s+/g, '-').toLowerCase()}`);
+    document.getElementById(theme).disabled = false;
+  }
+</script>
+</body>
+</html>

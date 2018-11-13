@@ -25,6 +25,7 @@ Vue.component('game-tab-with-subtabs', {
   },
   template:
     `<div class="l-game-tab-with-subtabs">
+      <slot name="before-subtabs"/>
       <div v-if="visibleTabs.length > 1" class="l-game-tab-with-subtabs__tab-buttons-container">
         <secondary-tab-button
           v-for="tab in visibleTabs"

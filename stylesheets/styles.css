@@ -140,6 +140,7 @@ button {
   left: 50%;
   transform: translateX(-50%);
   font-family: Typewriter, serif;
+  display: flex;
   align-items: flex-end;
 }
 
@@ -278,133 +279,6 @@ button {
     font-weight: bold
 }
 
-.infinimultbtn {
-    color: #C93A3A;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #17B3B5;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinimultbtn:hover {
-    color: #000;
-    background: #E0D8E0;
-}
-
-.infinistorebtn1 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn1:hover {
-    color: #000;
-    background: #A53B98;
-}
-
-.infinistorebtn2 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn2:hover {
-    color: #000;
-    background: #ff3300;
-}
-
-.infinistorebtn3 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn3:hover {
-    color: #000;
-    background: #C6D50D;
-}
-
-.infinistorebtn4 {
-    color: white;
-    background: #1F1F1F;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtn4:hover {
-    color: #000;
-    background: #0CFEC5;
-}
-
-.infinistorebtnlocked {
-    color: black;
-    background: #F7F7F7;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
-.infinistorebtnlocked:hover {
-    color: #000;
-    background: white;
-}
-
-.infinistorebtnbought {
-    color: black;
-    background: #5AC467;
-    font-weight: bold;
-    font-size:  10px;
-    border: 1px solid #ED85DF;
-    width: 190px;
-    height: 90px;
-    transition-duration: 0.2s;
-    border-radius: 4px;
-    font-family: Typewriter;
-}
-
 .tabbtn {
     background: #E0E0E0;
     font-weight: bold;
@@ -423,9 +297,6 @@ button {
     border: 2px solid #4980CC;
     border-radius: 4px;
 }
-
-
-
 
 .postinfcrunch {
     background: #E0E0E0;
@@ -604,39 +475,6 @@ button {
   color: rgb(81, 81, 236);
 }
 
-.autoBuyerDiv {
-    border: solid 1px grey;
-    width:230px;
-    height:155px;
-    text-align:center;
-    font-size:100%;
-    padding:10px;
-    display: none;
-    border-radius: 4px;
-}
-
-.autobuyerbtn {
-      color: white;
-      background: #1F1F1F;
-      font-weight: bold;
-      font-size: 70%;
-      border: 1px solid #ED85DF;
-      width: 180px;
-      height: 35px;
-      transition-duration: 0.2s;
-      cursor: pointer;
-      border-radius: 4px;
-      font-family: Typewriter;
-}
-
-.autobuyerbtn:hover {
-    color: #000000;
-    background: #B67F33;
-    font-weight: bold;
-    border: 2px solid #B67F33;
-    border-radius: 4px;
-}
-
 .crunchbtn {
     background: #E0E0E0;
     font-weight: bold;
@@ -692,23 +530,6 @@ button {
     cursor: pointer;
     background-color: #9E913A;
 
-}
-
-#replauto1 {
-    margin-top: 3px;
-}
-
-#replauto2 {
-    margin-top: 3px;
-}
-
-#replauto3 {
-    margin-top: 3px;
-}
-
-#replicantiresettoggle {
-    margin-top: 3px;
-    margin-right: 6px;
 }
 
 .eternitychallengestudy {
@@ -2332,6 +2153,43 @@ screen and (max-width: 480px) {
   font-size: 1.1rem;
 }
 
+.o-primary-btn--small-spoon {
+  font-size: 1rem;
+}
+
+.o-primary-btn--autobuyer-toggle {
+  font-size: 1.1rem;
+  width: 16rem;
+  height: 4rem;
+}
+
+.o-primary-btn--replicanti-unlock {
+  width: 20rem;
+  height: 8rem;
+}
+
+.o-primary-btn--replicanti-upgrade {
+  width: 18rem;
+  height: 5rem;
+  font-size: 1rem;
+  padding: .1rem .6rem;
+}
+
+.o-primary-btn--replicanti-upgrade-toggle {
+  font-size: 1rem;
+}
+
+.o-primary-btn--replicanti-galaxy {
+  width: 20rem;
+  height: 7rem;
+  font-size: 1.2rem;
+  padding: .1rem .6rem;
+}
+
+.o-primary-btn--replicanti-galaxy-toggle {
+  font-size: 1.2rem;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -2477,6 +2335,20 @@ screen and (max-width: 480px) {
 /*#endregion themes*/
 
 /*#endregion o-primary-btn*/
+
+/*#region l-spoon-btn-group*/
+
+.l-spoon-btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.l--spoon-btn-group__little-spoon {
+  align-self: stretch;
+  margin-top: .3rem;
+}
+
+/*#endregion l-spoon-btn-group*/
 
 .o-big-checkbox {
   width: 2rem;
@@ -3537,6 +3409,656 @@ screen and (max-width: 480px) {
 
 /*#endregion Challenges*/
 
+/*#region infinity-tab*/
+
+.l-infinity-tab {
+  align-items: center;
+}
+
+.c-infinity-tab__header {
+  color: black;
+  font-size: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.c-infinity-tab__infinity-points {
+}
+
+/*#region themes*/
+
+/*#region t-dark t-s6*/
+
+.t-dark .c-infinity-tab__header {
+  color: #4f5957 !important;
+}
+
+.t-s6 .c-infinity-tab__header {
+  color: #999 !important;
+}
+
+.t-dark .c-infinity-tab__infinity-points,
+.t-s6 .c-infinity-tab__infinity-points {
+  color: white !important;
+  text-shadow: 0 0 .7rem white;
+}
+
+/*#endregion t-dark*/
+
+/*#region t-metro t-dark-metro t-inverted-metro t-s8*/
+
+.t-dark-metro .c-infinity-tab__header {
+  color: #757575 !important;
+}
+
+.t-metro .c-infinity-tab__infinity-points,
+.t-dark-metro .c-infinity-tab__infinity-points,
+.t-inverted-metro .c-infinity-tab__infinity-points,
+.t-s8 .c-infinity-tab__infinity-points {
+  color: #ff9800;
+}
+
+/*#endregion t-metro t-dark-metro t-inverted-metro t-s8*/
+
+/*#region t-s1*/
+
+.t-s1 .c-infinity-tab__infinity-points {
+  color: #7d3c1b;
+  text-shadow: .1rem .1rem 0 black;
+}
+
+/*#endregion t-s1*/
+
+/*#endregion themes*/
+
+/*#endregion infinity-tab*/
+
+/*#region Infinity Upgrades*/
+
+/*#region l-infinity-upgrades-tab*/
+
+.l-infinity-upgrades-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-infinity-upgrades-tab__grid {
+  margin-top: 1.5rem;
+}
+
+.l-infinity-upgrades-tab__mult-btn {
+  margin: 1.5rem 0;
+}
+
+/*#endregion l-infinity-upgrades-tab*/
+
+/*#region l-infinity-upgrade-grid*/
+
+.l-infinity-upgrade-grid {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-infinity-upgrade-grid__column {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-infinity-upgrade-grid__cell {
+  margin: .5rem .8rem;
+}
+
+/*#endregion l-infinity-upgrade-grid*/
+
+/*#region o-infinity-upgrade-btn*/
+
+.o-infinity-upgrade-btn {
+  color: white;
+  background-color: #1f1f1f;
+  font-weight: bold;
+  font-size:  1rem;
+  border: .1rem solid #ed85df;
+  width: 19rem;
+  height: 9rem;
+  transition-duration: 0.2s;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+  cursor: pointer;
+}
+
+.t-dark .o-infinity-upgrade-btn,
+.t-metro .o-infinity-upgrade-btn,
+.t-dark-metro .o-infinity-upgrade-btn,
+.t-inverted-metro .o-infinity-upgrade-btn,
+.t-s1 .o-infinity-upgrade-btn,
+.t-s6 .o-infinity-upgrade-btn,
+.t-s8 .o-infinity-upgrade-btn {
+  border-color: black;
+}
+
+.t-dark .o-infinity-upgrade-btn {
+  color: black;
+  background-color: whitesmoke;
+}
+
+.t-s6 .o-infinity-upgrade-btn {
+  color: white;
+  background-color: whitesmoke;
+}
+
+.o-infinity-upgrade-btn:hover {
+  color: black;
+}
+
+/*#region o-infinity-upgrade-btn--available*/
+
+.o-infinity-upgrade-btn--available:hover {
+  background-color: #a53b98;
+}
+
+.t-dark .o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--available:hover {
+  background-color: #6200ea !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--available:hover {
+  background-color: #9c27b0 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--available*/
+
+/*#region o-infinity-upgrade-btn--color-2*/
+
+.o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #ff3300;
+}
+
+.t-dark .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #d50000 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-2.o-infinity-upgrade-btn--available:hover {
+  background-color: #f44336 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-2*/
+
+/*#region o-infinity-upgrade-btn--color-3*/
+
+.o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #c6d50d;
+}
+
+.t-dark .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #ffd600 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-3.o-infinity-upgrade-btn--available:hover {
+  background-color: #ffeb3b !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-3*/
+
+/*#region o-infinity-upgrade-btn--color-4*/
+
+.o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #0cfec5;
+}
+
+.t-dark .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #00e5ff !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--color-4.o-infinity-upgrade-btn--available:hover {
+  background-color: #00bcd4 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--color-4*/
+
+/*#region o-infinity-upgrade-btn--multiplier*/
+
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  color: #c93a3a;
+  border-color: #17b3b5;
+}
+
+.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: black;
+  background-color: #e0d8e0;
+}
+
+.t-dark .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-s6 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  background-color: #1f1f1f !important;
+}
+
+.t-dark .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-s6 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: white !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-dark-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-inverted-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available,
+.t-s8 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  color: #e53935 !important;
+  border-color: #00bcd4 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-dark-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover,
+.t-s8 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  color: black !important;
+  background-color: #00bcd4 !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
+  background-color: black !important;
+  color: #d72621 !important;
+  border-color: #dbd242 !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--multiplier*/
+
+/*#region o-infinity-upgrade-btn--unavailable*/
+
+.o-infinity-upgrade-btn--unavailable {
+  color: black;
+  background-color: #f7f7f7;
+}
+
+.o-infinity-upgrade-btn--unavailable:hover {
+  background-color: white;
+}
+
+.t-dark .o-infinity-upgrade-btn--unavailable {
+  background-color: #263238 !important;
+  border-color: black !important;
+}
+
+.t-dark .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #37474F !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--unavailable,
+.t-dark-metro .o-infinity-upgrade-btn--unavailable,
+.t-inverted-metro .o-infinity-upgrade-btn--unavailable,
+.t-s8 .o-infinity-upgrade-btn--unavailable {
+  background-color: #9e9e9e !important;
+  border-color: #616161 !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-dark-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-inverted-metro .o-infinity-upgrade-btn--unavailable:hover,
+.t-s8 .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #bdbdbd !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--unavailable {
+  background-color: #9a921d !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--unavailable:hover {
+  background-color: #c5ba26 !important;
+}
+
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover {
+  color: grey !important;
+  background-color: black !important;
+  border-color: grey !important;
+}
+
+.t-s6 .o-infinity-upgrade-btn--unavailable:hover:hover {
+  background-color: #222 !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--unavailable*/
+
+/*#region o-infinity-upgrade-btn--bought*/
+
+.o-infinity-upgrade-btn--bought {
+  color: black;
+  background-color: #5ac467;
+  cursor: default;
+}
+
+.t-dark .o-infinity-upgrade-btn--bought,
+.t-dark-metro .o-infinity-upgrade-btn--bought,
+.t-s6 .o-infinity-upgrade-btn--bought{
+  background-color: #43a047 !important;
+  border-color: black !important;
+}
+
+.t-metro .o-infinity-upgrade-btn--bought,
+.t-inverted-metro .o-infinity-upgrade-btn--bought,
+.t-s8 .o-infinity-upgrade-btn--bought {
+  background-color: #66bb6a !important;
+  border-color: black !important;
+}
+
+.t-s1 .o-infinity-upgrade-btn--bought {
+  background-color: #4baf4e !important;
+  border-color: black !important;
+}
+
+/*#endregion o-infinity-upgrade-btn--bought*/
+
+/*#endregion o-infinity-upgrade-btn*/
+
+/*#endregion Infinity Upgrades*/
+
+/*#region Autobuyers*/
+
+/*#region l-autobuyers-tab*/
+
+.l-autobuyers-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-autobuyers-tab__toggles {
+  margin-top: 1.5rem;
+}
+
+/*#endregion l-autobuyers-tab*/
+
+/*#region l-autobuyer-toggles*/
+
+.l-autobuyer-toggles {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-autobuyer-toggles > * {
+  margin: 0 .3rem;
+}
+
+/*#endregion l-autobuyer-toggles*/
+
+/*#region l-autobuyer-grid*/
+
+.l-autobuyer-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-autobuyer-grid__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-autobuyer-grid__row > * {
+  margin: .5rem .8rem;
+}
+
+/*#endregion l-autobuyer-grid*/
+
+/*#region o-autobuyer-input*/
+
+.o-autobuyer-input {
+  border: .01rem solid #c2c2c2;
+  padding: .3rem;
+}
+
+.o-autobuyer-input--invalid {
+  background-color: tomato;
+}
+
+/*#endregion o-autobuyer-input*/
+
+/*#region o-autobuyer-toggle-checkbox*/
+
+.o-autobuyer-toggle-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.o-autobuyer-toggle-checkbox__label {
+  font-size: .9rem;
+}
+
+/*#endregion o-autobuyer-toggle-checkbox*/
+
+/*#region o-autobuyer-btn*/
+
+.o-autobuyer-btn {
+  width: 18rem;
+  height: 3.5rem;
+  color: white;
+  background: #1f1f1f;
+  border: .1rem solid #ed85df;
+  font-family: Typewriter, serif;
+  font-weight: bold;
+  font-size: .8rem;
+  border-radius: .4rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.o-autobuyer-btn:hover {
+  color: black;
+  background-color: #b67f33;
+  border: .2rem solid #b67f33;
+}
+
+.t-dark .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-s1 .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  border-width: .1rem !important;
+}
+
+.t-metro .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-dark-metro .o-autobuyer-btn,
+.t-s1 .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  margin-bottom: -0.1rem;
+}
+
+.t-dark .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn {
+  box-shadow: none !important;
+}
+
+.t-dark .o-autobuyer-btn {
+  color: black !important;
+  border-color: black !important;
+}
+
+.t-dark-metro .o-autobuyer-btn,
+.t-s6 .o-autobuyer-btn {
+  border-color: #ff9800 !important;
+}
+
+.t-metro .o-autobuyer-btn,
+.t-inverted-metro .o-autobuyer-btn,
+.t-s8 .o-autobuyer-btn {
+  border-color: #e91e63 !important;
+}
+
+.t-metro .o-autobuyer-btn:hover,
+.t-inverted-metro .o-autobuyer-btn:hover,
+.t-s6 .o-autobuyer-btn:hover,
+.t-s8 .o-autobuyer-btn:hover {
+  border-color: #ff9800 !important;
+}
+
+.t-dark .o-autobuyer-btn:hover,
+.t-dark-metro .o-autobuyer-btn:hover,
+.t-metro .o-autobuyer-btn:hover,
+.t-inverted-metro .o-autobuyer-btn:hover,
+.t-s6 .o-autobuyer-btn:hover,
+.t-s8 .o-autobuyer-btn:hover {
+  background-color: #ff9800 !important;
+}
+
+.t-s1 .o-autobuyer-btn {
+  border-color: #7d3c1b !important;
+}
+
+.t-s1 .o-autobuyer-btn:hover {
+  background-color: #7d3c1b !important;
+}
+
+.t-s6 .o-autobuyer-btn {
+  color: white !important;
+}
+
+/*#endregion o-autobuyer-btn*/
+
+/*#region autobuyer-box*/
+
+.c-autobuyer-box {
+  width: 23rem;
+  height: 15.5rem;
+  padding: 1rem;
+  border: solid .1rem grey;
+  border-radius: .4rem;
+  font-size: 1.1rem;
+}
+
+.t-s1 .c-autobuyer-box {
+  color: black !important;
+  border-color: black !important;
+  background-color: #dbd242 !important;
+}
+
+.t-s5 .c-autobuyer-box {
+  background: #ddd !important;
+}
+
+.t-s8 .c-autobuyer-box {
+  border-color: black;
+}
+
+.c-autobuyer-box__small-text {
+  font-size: .9rem;
+}
+
+.l-autobuyer-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*#endregion autobuyer-box*/
+
+/*#endregion Autobuyers*/
+
+/*#region Replicanti*/
+
+.l-replicanti-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* To prevent button jitter*/
+  width: 100%;
+}
+
+/*#region c-replicanti-description*/
+
+.c-replicanti-description {
+  font-size: 1.5rem;
+}
+
+.c-replicanti-description__accent {
+  font-size: 2.3rem;
+  color: black
+}
+
+.t-dark .c-replicanti-description__accent,
+.t-dark-metro .c-replicanti-description__accent,
+.t-s6 .c-replicanti-description__accent {
+  color: #03a9f4 !important;
+}
+
+.t-dark .c-replicanti-description__accent,
+.t-s6 .c-replicanti-description__accent {
+  text-shadow: 0 0 .7rem #03a9f4;
+}
+
+/*#endregion c-replicanti-description*/
+
+.l-replicanti-upgrade-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-replicanti-upgrade-row > * {
+  margin: .3rem;
+}
+
+/*#endregion Replicanti*/
+
+/*#region Break Infinity*/
+
+/*#region l-break-infinity-tab*/
+
+.l-break-infinity-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-break-infinity-tab__break-btn {
+  margin-top: 2rem;
+}
+
+.l-break-infinity-tab__grid {
+  margin-top: 1rem;
+}
+
+/*#endregion l-break-infinity-tab*/
+
+/*#region l-break-infinity-upgrade-grid*/
+
+.l-break-infinity-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-break-infinity-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-break-infinity-upgrade-grid__cell {
+  margin: .5rem .8rem;
+}
+
+/*#endregion l-break-infinity-upgrade-grid*/
+
+/*#endregion Break Infinity*/
+
 /*#region Modals*/
 
 /*#region c-modal*/
@@ -3800,17 +4322,10 @@ screen and (max-width: 480px) {
 
 /*#endregion o-footer*/
 
-.l-flex-expand {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0;
-}
-
 /*#region component*/
 /*#endregion component*/
 
-
-/* Effarig tab */
+/*#region Effarig tab*/
 .l-mechanics-container {
   display: flex;
   justify-content: space-around;
@@ -3865,4 +4380,4 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-/* End Effarig tab*/
+/*#endregion Effarig tab*/

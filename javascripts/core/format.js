@@ -157,55 +157,24 @@ shortenMultiplier = function (money) {
   return shortenWithCurrentNotation(money, 1, 1);
 };
 
+shortenAutobuyerInput = function (money) {
+  return formatValue("Scientific", money, 2, 0);
+};
+
 shortenWithCurrentNotation = function(value, places, placesUnder1000) {
     return formatValue(Notation.current().name, value, places, placesUnder1000);
 };
 
 function timeDisplay(ms) {
-  const ts = TimeSpan.fromMilliseconds(ms);
-  if (ts.totalSeconds > 10) {
-    return timeDisplayNoDecimals(ms);
-  }
-  return (ts.totalSeconds).toFixed(3) + " seconds";
+  return TimeSpan.fromMilliseconds(ms).toString();
 }
 
 function timeDisplayNoDecimals(ms) {
-  const ts = TimeSpan.fromMilliseconds(ms);
-  const parts = [];
-  function addCheckedComponent(value, name) {
-    if (value === 0) {
-      return;
-    }
-    addComponent(value, name);
-  }
-  function addComponent(value, name) {
-    parts.push(value === 1 ? `${value} ${name}` : `${value} ${name}s`);
-  }
-  addCheckedComponent(ts.years, "year");
-  addCheckedComponent(ts.days, "day");
-  addCheckedComponent(ts.hours, "hour");
-  addCheckedComponent(ts.minutes, "minute");
-  addComponent(ts.seconds, "second");
-  // Join with commas and 'and' in the end.
-  return [parts.slice(0, -1).join(', '), parts.slice(-1)[0]].join(parts.length < 2 ? '' : ' and ');
+  return TimeSpan.fromMilliseconds(ms).toStringNoDecimals();
 }
 
 function timeDisplayShort(ms) {
-  const ts = TimeSpan.fromMilliseconds(ms);
-  const totalSeconds = ts.totalSeconds;
-  if (totalSeconds <= 10) {
-    return `${totalSeconds.toFixed(3)} seconds`;
-  }
-  else if (totalSeconds <= 60) {
-    return `${totalSeconds.toFixed(2)} seconds`;
-  }
-  else {
-    return `${format(Math.floor(ts.totalHours))}:${format(ts.minutes)}:${format(ts.seconds)}`;
-  }
-  function format(value) {
-    const s = value.toString();
-    return s.length === 1 ? "0" + s : s;
-  }
+  return TimeSpan.fromMilliseconds(ms).toStringShort();
 }
 
 function formatWithCommas(value) {

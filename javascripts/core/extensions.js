@@ -14,8 +14,34 @@ Math.clamp = function(value, min, max) {
     return (value < min) ? min : (value > max ? max : value);
 };
 
+Array.prototype.nextSiblingIndex = function(current) {
+  const currentIndex = this.indexOf(current);
+  if (currentIndex === -1)
+    throw "Current item is not in array";
+  return currentIndex === this.length - 1 ? 0 : currentIndex + 1;
+};
+
+Array.prototype.nextSibling = function(current) {
+  return this[this.nextSiblingIndex(current)];
+};
+
+Array.prototype.previousSiblingIndex = function(current) {
+  const currentIndex = this.indexOf(current);
+  if (currentIndex === -1)
+    throw "Current item is not in array";
+  return currentIndex === 0 ? this.length - 1 : currentIndex - 1;
+};
+
+Array.prototype.previousSibling = function(current) {
+  return this[this.previousSiblingIndex(current)];
+};
+
 Decimal.sumReducer = function(accumulator, previous) {
   return Decimal.add(accumulator, previous);
+};
+
+Number.sumReducer = function(accumulator, previous) {
+  return accumulator + previous;
 };
 
 Decimal.maxReducer = function(a, b) {
@@ -59,4 +85,12 @@ String.empty = "";
 
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+};
+
+Array.range = function(start, count) {
+  return [...Array(count).keys()].map(i => i + start);
+};
+
+Array.repeat = function(value, count) {
+  return Array(count).fill(value);
 };

@@ -109,7 +109,9 @@ function eternity(force, auto) {
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.eternities >= 7 ? player.autoSacrifice : 1;
+    if (player.eternities < 7) {
+        player.autoSacrifice = 1;
+    }
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
     player.currentEternityChall = "";
     player.autoIP = new Decimal(0);
@@ -137,14 +139,6 @@ function eternity(force, auto) {
 
     document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (let i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
 
     updateAutobuyers();
     resetInfinityPointsOnEternity();
@@ -156,27 +150,15 @@ function eternity(force, auto) {
     EPminpeak = new Decimal(0);
     updateMilestones();
     resetTimeDimensions();
-    if (player.eternities < 20) player.autobuyers[9].bulk = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk;
-    if (player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    } else if (document.getElementById("replicantidiv").style.display === "none" && player.eternities >= 50) {
-        document.getElementById("replicantidiv").style.display = "inline-block";
-        document.getElementById("replicantiunlock").style.display = "none"
-    }
+    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     try {
         kong.submitStats('Eternities', player.eternities);
     } catch (err) {
         console.log("Couldn't load Kongregate API")
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    if (player.eternities < 2) document.getElementById("break").textContent = "BREAK INFINITY";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
-    document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
     resetTickspeed();
     updateTickSpeed();
@@ -185,7 +167,6 @@ function eternity(force, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
-        loadAutoBuyerSettings()
     }
     Marathon2 = 0;
     if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);

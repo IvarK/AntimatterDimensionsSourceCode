@@ -254,9 +254,9 @@ var player = {
   autoIP: new Decimal(0),
   autoTime: 1e300,
   infMultBuyer: false,
-  autoCrunchMode: "amount",
-  autoEternityMode: "amount",
-  autoRealityMode: "amount",
+  autoCrunchMode: AutoCrunchMode.AMOUNT,
+  autoEternityMode: AutoEternityMode.AMOUNT,
+  autoRealityMode: AutoRealityMode.RM,
   respec: false,
   eternityBuyer: {
     limit: new Decimal(0),

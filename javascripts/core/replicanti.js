@@ -1,63 +1,29 @@
 var repMs = 0;
-function unlockReplicantis() {
-  if (player.infinityPoints.gte(1e140)) {
-      document.getElementById("replicantidiv").style.display="inline-block"
-      document.getElementById("replicantiunlock").style.display="none"
-      player.replicanti.unl = true
-      player.replicanti.amount = new Decimal(1)
-      player.infinityPoints = player.infinityPoints.minus(1e140)
-  }
-}
-
 function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
   return nearestPercent(1 + getGlyphSacEffect("replication") / 100);
 }
 
 // Rounding errors suck
 function nearestPercent(x) {
-  return Math.round(100 * x) / 100
+  return Math.round(100 * x) / 100;
 }
 
 function upgradeReplicantiChance() {
-  if (player.infinityPoints.gte(player.replicanti.chanceCost) && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance() && player.eterc8repl !== 0) {
-      player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
-      player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
-      player.replicanti.chance = nearestPercent(player.replicanti.chance + 0.01)
-      if (player.currentEternityChall == "eterc8") player.eterc8repl-=1
-      document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
-      return true
-  }
-  else
-    return false
+  const upgrade = ReplicantiUpgrade.chance;
+  if (!ReplicantiUpgrade.isAvailable(upgrade)) return false;
+  ReplicantiUpgrade.purchase(upgrade);
+  return true;
 }
 
 function upgradeReplicantiInterval() {
-  if (player.infinityPoints.gte(player.replicanti.intervalCost) && (player.replicanti.interval > 50 || player.timestudy.studies.includes(22)) && player.replicanti.interval !== 1 && player.eterc8repl !== 0) {
-      player.infinityPoints = player.infinityPoints.minus(player.replicanti.intervalCost)
-      player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
-      player.replicanti.interval *= 0.9
-      if (!player.timestudy.studies.includes(22) && player.replicanti.interval < 50) player.replicanti.interval = 50
-      if (player.timestudy.studies.includes(22) && player.replicanti.interval < 1) player.replicanti.interval = 1
-      var places = Math.floor(Math.log10(player.replicanti.interval/1000)) * (-1)
-      if (player.currentEternityChall == "eterc8") player.eterc8repl-=1
-      document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
-  }
+  ReplicantiUpgrade.purchase(ReplicantiUpgrade.interval);
 }
 
 function upgradeReplicantiGalaxy() {
-    let cost = player.replicanti.galCost;
-  if (player.timestudy.studies.includes(233)) cost = cost.dividedBy(player.replicanti.amount.pow(0.3))
-  if (player.infinityPoints.gte(cost) && player.eterc8repl !== 0) {
-      player.infinityPoints = player.infinityPoints.minus(cost)
-      if (player.currentEternityChall == "eterc6") player.replicanti.galCost = player.replicanti.galCost.times(Decimal.pow(1e2, player.replicanti.gal)).times(1e2)
-      else player.replicanti.galCost = player.replicanti.galCost.times(Decimal.pow(1e5, player.replicanti.gal)).times(1e25)
-      if (player.replicanti.gal >= 100) player.replicanti.galCost = player.replicanti.galCost.times(Decimal.pow(1e50, player.replicanti.gal - 95))
-      player.replicanti.gal += 1
-      if (player.currentEternityChall == "eterc8") player.eterc8repl-=1
-      document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
-      return true
-  }
-  return false
+  const upgrade = ReplicantiUpgrade.galaxies;
+  if (!ReplicantiUpgrade.isAvailable(upgrade)) return false;
+  ReplicantiUpgrade.purchase(upgrade);
+  return true;
 }
 
 function maxReplicantiGalaxy(diff) {
@@ -82,67 +48,31 @@ return diff;
 }
 
 function replicantiGalaxy() {
-  var maxGal = player.replicanti.gal
-  if (player.timestudy.studies.includes(131)) maxGal = Math.floor(player.replicanti.gal * 1.5)
-  if (player.replicanti.amount.gte(Number.MAX_VALUE) && player.replicanti.galaxies < maxGal) {
-      player.reality.upgReqChecks[0] = false;
-      var galaxyGain = 1
-      if (isAchEnabled("r126")) {
-          if (player.replicanti.amount.e >= 616) {
-              galaxyGain = Math.min(Math.floor(player.replicanti.amount.e / 308), maxGal - player.replicanti.galaxies)
-              player.replicanti.amount = player.replicanti.amount.dividedBy(new Decimal("1e"+(308*galaxyGain)))
-          }
-          else player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
-      }
-      else player.replicanti.amount = new Decimal(1)
-      player.replicanti.galaxies += galaxyGain
-      player.galaxies-=1
-      galaxyReset();
+  if (!Replicanti.galaxies.canBuyMore) return;
+  player.reality.upgReqChecks[0] = false;
+  var galaxyGain = 1
+  if (isAchEnabled("r126")) {
+    if (player.replicanti.amount.e >= 616) {
+      const maxGal = Replicanti.galaxies.max;
+      galaxyGain = Math.min(Math.floor(player.replicanti.amount.e / 308), maxGal - player.replicanti.galaxies)
+      player.replicanti.amount = player.replicanti.amount.dividedBy(new Decimal("1e" + (308 * galaxyGain)))
+    }
+    else player.replicanti.amount = player.replicanti.amount.dividedBy(Number.MAX_VALUE)
   }
+  else player.replicanti.amount = new Decimal(1)
+  player.replicanti.galaxies += galaxyGain
+  player.galaxies -= 1
+  galaxyReset();
 }
 
 function replicantiGalaxyAutoToggle(forcestate) {
-    if (player.replicanti.galaxybuyer && forcestate !== true) {
-      player.replicanti.galaxybuyer = false
-      if (player.timestudy.studies.includes(131) && !isAchEnabled("r138")) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
-      else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"
-  } else {
-      player.replicanti.galaxybuyer = true
-      if (player.timestudy.studies.includes(131) && !isAchEnabled("r138")) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
-      else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON"
-  }
+  player.replicanti.galaxybuyer = !player.replicanti.galaxybuyer || forcestate === true;
 }
 
-function toggleReplAuto(i) {
-  if (i == "chance") {
-      if (player.replicanti.auto[0]) {
-          player.replicanti.auto[0] = false
-          document.getElementById("replauto1").textContent = "Auto: OFF"
-      } else {
-          player.replicanti.auto[0] = true
-          document.getElementById("replauto1").textContent = "Auto: ON"
-      }
-  } else if (i == "interval") {
-      if (player.replicanti.auto[1]) {
-          player.replicanti.auto[1] = false
-          document.getElementById("replauto2").textContent = "Auto: OFF"
-      } else {
-          player.replicanti.auto[1] = true
-          document.getElementById("replauto2").textContent = "Auto: ON"
-      }
-  } else if (i == "galaxy") {
-      if (player.replicanti.auto[2]) {
-          player.replicanti.auto[2] = false
-          document.getElementById("replauto3").textContent = "Auto: OFF"
-      } else {
-          player.replicanti.auto[2] = true
-          document.getElementById("replauto3").textContent = "Auto: ON"
-      }
-  }
-}
-
-function getReplicantiInterval(noMod) {
-    let interval = player.replicanti.interval
+function getReplicantiInterval(noMod, interval) {
+    if (!interval) {
+      interval = player.replicanti.interval;
+    }
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
@@ -163,15 +93,6 @@ function replicantiLoop(diff) {
         return;
     }
     let interval = getReplicantiInterval();
-    let intervalMult = 1;
-    if (player.timestudy.studies.includes(62)) intervalMult /= 3
-    if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult *= 10
-    if (player.timestudy.studies.includes(213)) intervalMult /= 20
-    if (player.reality.rebuyables[2] > 0) intervalMult /= Math.pow(3, player.reality.rebuyables[1])
-    intervalMult = intervalMult / Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
-    if (player.replicanti.amount.lt(Number.MAX_VALUE) && isAchEnabled("r134")) intervalMult /= 2
-    if (player.replicanti.amount.gt(Number.MAX_VALUE)) intervalMult = Math.max(intervalMult * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), intervalMult)
-    if (player.reality.upg.includes(6)) intervalMult /= 1+(player.replicanti.galaxies/50)
 
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
@@ -203,19 +124,15 @@ function replicantiLoop(diff) {
                     }
                     player.replicanti.amount = Decimal.min(Number.MAX_VALUE, temp.times(counter).plus(player.replicanti.amount))
                     if (player.timestudy.studies.includes(192)) player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
-                    counter = 0
                 } else {
                     if (player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.times(2)
                     else player.replicanti.amount = Decimal.min(Number.MAX_VALUE, player.replicanti.amount.times(2))
-
                 }
             }
             replicantiTicks -= interval
         }
-
     }
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
-
 
     if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
@@ -223,26 +140,188 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
         replicantiGalaxy();
     }
-    if (player.timestudy.studies.includes(22) ? player.replicanti.interval !== 1 : (player.replicanti.interval !== 50)) document.getElementById("replicantiinterval").innerHTML = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) : Math.floor(interval)) + "ms<br>-> " + (interval < 1000 ? Math.max(interval * 0.9, 1 * intervalMult).toPrecision(3) : Math.floor(Math.max(interval * 0.9, 1 * intervalMult))) + "ms Costs: " + shortenCosts(player.replicanti.intervalCost) + " IP"
-    else document.getElementById("replicantiinterval").textContent = "Interval: " + (interval < 1000 ? (interval).toPrecision(3) + "ms" : timeDisplay(interval));
-      if(speedCheck){
-        var estimate = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance+1) * getReplicantiInterval(true),0);
-        var gps = 1000 / estimate;
-          if (gps < 1000) document.getElementById("replicantiapprox").textContent = "You gain Approximately " + gps.toPrecision(3) + " RGs per Second";
-          else document.getElementById("replicantiapprox").textContent = "You gain Approximately " + Math.floor(gps).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " RGs per Second"
-      } else{
-    var estimate = Math.max((Math.log(Number.MAX_VALUE) - current) / est, 0)
-    document.getElementById("replicantiapprox").textContent ="Approximately "+ timeDisplay(estimate*1000) + " Until Infinite Replicanti"
-  }
-    document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount)
-    var replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount, 1)), 2)
-    if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
-    if (player.timestudy.studies.includes(102))replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies, 150))
-    replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
-    document.getElementById("replicantimult").textContent = shorten(replmult.max(1))
-
 }
 
-document.getElementById('replicantireset').addEventListener("click", function () {
-    if (Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < player.options.updateRate && repMs === 0) repMs = player.options.updateRate - maxReplicantiGalaxy(player.options.updateRate);
-})
+function replicantiMult() {
+  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2);
+  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032));
+  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies));
+  replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
+  return replmult;
+}
+
+const ReplicantiUpgrade = {
+  chance: {
+    get current() {
+      return player.replicanti.chance;
+    },
+    set current(value) {
+      player.replicanti.chance = value;
+    },
+    get cost() {
+      return player.replicanti.chanceCost;
+    },
+    set cost(value) {
+      player.replicanti.chanceCost = value;
+    },
+    get costIncrease() {
+      return 1e15;
+    },
+    get next() {
+      return nearestPercent(this.current + 0.01);
+    },
+    get cap() {
+      return getMaxReplicantiChance();
+    },
+    get isCapped() {
+      return nearestPercent(this.current) >= this.cap;
+    },
+    get isAutobuyerUnlocked() {
+      return player.eternities >= 40;
+    }
+  },
+  interval: {
+    get current() {
+      return player.replicanti.interval;
+    },
+    set current(value) {
+      player.replicanti.interval = value;
+    },
+    get cost() {
+      return player.replicanti.intervalCost;
+    },
+    set cost(value) {
+      player.replicanti.intervalCost = value;
+    },
+    get costIncrease() {
+      return 1e10;
+    },
+    get next() {
+      return Math.max(this.current * 0.9, this.cap);
+    },
+    get cap() {
+      return player.timestudy.studies.includes(22) ? 1 : 50;
+    },
+    get isCapped() {
+      return this.current <= this.cap;
+    },
+    get isAutobuyerUnlocked() {
+      return player.eternities >= 60;
+    },
+    applyModifiers(value) {
+      return getReplicantiInterval(false, value);
+    }
+  },
+  galaxies: {
+    get current() {
+      return player.replicanti.gal;
+    },
+    set current(value) {
+      player.replicanti.gal = value;
+    },
+    get cost() {
+      let cost = player.replicanti.galCost;
+      if (player.timestudy.studies.includes(233)) {
+        return cost.dividedBy(Replicanti.amount.pow(0.3))
+      }
+      return cost;
+    },
+    set cost(value) {
+      player.replicanti.galCost = value;
+    },
+    get costIncrease() {
+      const galaxies = this.current;
+      let increase = player.currentEternityChall === "eterc6" ?
+        Decimal.pow(1e2, galaxies).times(1e2) :
+        Decimal.pow(1e5, galaxies).times(1e25);
+      if (galaxies >= 100) {
+        increase = increase.times(Decimal.pow(1e50, galaxies - 95))
+      }
+      return increase;
+    },
+    get next() {
+      return this.current + 1;
+    },
+    get isCapped() {
+      return false;
+    },
+    get isAutobuyerUnlocked() {
+      return player.eternities >= 80;
+    },
+    get extra() {
+      return player.timestudy.studies.includes(131) ? Math.floor(this.current / 2) : 0;
+    }
+  },
+  isAvailable(upgrade) {
+    return player.infinityPoints.gte(upgrade.cost) && !upgrade.isCapped && player.eterc8repl !== 0;
+  },
+  purchase(upgrade) {
+    if (!this.isAvailable(upgrade)) return;
+    player.infinityPoints = player.infinityPoints.minus(upgrade.cost);
+    upgrade.cost = Decimal.times(upgrade.cost, upgrade.costIncrease);
+    upgrade.current = upgrade.next;
+    if (player.currentEternityChall === "eterc8") player.eterc8repl--;
+    GameUI.update();
+  }
+};
+
+const Replicanti = {
+  get areUnlocked() {
+    return player.replicanti.unl;
+  },
+  unlock() {
+    if (!player.infinityPoints.gte(1e140) || player.replicanti.unl) return;
+    player.replicanti.unl = true;
+    player.replicanti.amount = new Decimal(1);
+    player.infinityPoints = player.infinityPoints.minus(1e140);
+  },
+  get amount() {
+    return player.replicanti.amount;
+  },
+  get chance() {
+    return ReplicantiUpgrade.chance.current;
+  },
+  galaxies: {
+    get bought() {
+      return player.replicanti.galaxies;
+    },
+    get extra() {
+      let bonusGalaxies = 0;
+      if (player.timestudy.studies.includes(225)) {
+        bonusGalaxies += Math.floor(Replicanti.amount.e / 1000);
+      }
+      if (player.timestudy.studies.includes(226)) {
+        bonusGalaxies += Math.floor(ReplicantiUpgrade.galaxies.current / 15);
+      }
+      return bonusGalaxies;
+    },
+    get total() {
+      return this.bought + this.extra;
+    },
+    get max() {
+      return ReplicantiUpgrade.galaxies.current + ReplicantiUpgrade.galaxies.extra;
+    },
+    get canBuyMore() {
+      if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
+      return this.bought < this.max;
+    },
+    autobuyer: {
+      get isUnlocked() {
+        return player.replicanti.galaxybuyer !== undefined;
+      },
+      get isOn() {
+        return player.replicanti.galaxybuyer;
+      },
+      set isOn(value) {
+        player.replicanti.galaxybuyer = value;
+      },
+      toggle() {
+        if (!this.isUnlocked) return;
+        this.isOn = !this.isOn;
+      },
+      get isEnabled() {
+        return !player.timestudy.studies.includes(131) || isAchEnabled("r138");
+      }
+    }
+  },
+};

@@ -201,10 +201,10 @@ function giveAchievement(name) {
     player.achievements.push(allAchievementNums[name]);
     kong.submitStats('Achievements', player.achievements.length);
     if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
-        if (player.autoCrunchMode == "amount" && player.autobuyers[11].priority != undefined) player.autobuyers[11].priority = player.autobuyers[11].priority.times(4);
+      Autobuyer.infinity.bumpLimit(4);
     }
     updateAchievementPower();
-    ui.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 function getSecretAchAmount() {

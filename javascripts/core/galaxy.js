@@ -35,7 +35,7 @@ class Galaxy {
       amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + getGlyphSacEffect("power")))));
     }
 
-    if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
+    InfinityUpgrade.resetBoost.apply(value => amount -= value);
     if (player.challenges.includes("postc5")) amount -= 1;
     const tier = player.currentChallenge === "challenge4" ? 6 : 8;
     return new GalaxyRequirement(tier, amount);
@@ -58,18 +58,6 @@ class Galaxy {
       return GalaxyType.DISTANT;
     }
     return GalaxyType.NORMAL;
-  }
-
-  // TODO: Move to replicanti class once it's established
-  static get totalReplicantiGalaxies() {
-    let extraGals = player.replicanti.galaxies;
-    if (player.timestudy.studies.includes(225)) {
-      extraGals += Math.floor(player.replicanti.amount.e / 1000);
-    }
-    if (player.timestudy.studies.includes(226)) {
-      extraGals += Math.floor(player.replicanti.gal / 15);
-    }
-    return extraGals;
   }
 
   static checkAchievements() {
@@ -107,4 +95,16 @@ function galaxyResetBtnClick() {
   }
   if (player.eternities >= 7 && !shiftDown) maxBuyGalaxies(true);
   else galaxyReset();
+}
+
+function maxBuyGalaxies(manual) {
+  if (player.currentEternityChall === "eterc6" || player.currentChallenge === "challenge11" || player.currentChallenge === "postc1" || player.currentChallenge === "postc7") return
+  if (Autobuyer.galaxy.limit > player.galaxies || manual) {
+    while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
+      if (Notation.current().isCancer()) player.spreadingCancer += 1;
+      player.galaxies++;
+    }
+    player.galaxies--;
+    galaxyReset();
+  }
 }

@@ -34,7 +34,9 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.eternities >= 7 ? player.autoSacrifice : 1;
+    if (player.eternities < 7) {
+      player.autoSacrifice = 1;
+    }
     player.eternityChallGoal = startgoal.times(goalIncrease.pow(ECTimesCompleted(name))).max(startgoal);
     player.currentEternityChall = name;
     player.autoIP = new Decimal(0);
@@ -53,14 +55,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.replicanti.galaxies = 0;
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
     updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
@@ -71,20 +65,11 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     EPminpeak = new Decimal(0);
     updateMilestones();
     resetTimeDimensions();
-    if (player.eternities < 20) player.autobuyers[9].bulk = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk;
-    if (player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    }
+    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    if (player.eternities < 2) document.getElementById("break").textContent = "BREAK INFINITY";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
-    document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
     resetTickspeed();
     updateTickSpeed();

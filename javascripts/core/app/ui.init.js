@@ -22,11 +22,15 @@ let ui = {
       challenges: {
         subtab: String.empty
       },
+      infinity: {
+        subtab: String.empty
+      },
       celestials: {
         subtab: String.empty
       }
     },
     shiftDown: false,
-    theme: undefined
+    theme: undefined,
+    ttshop: false
   }
 };

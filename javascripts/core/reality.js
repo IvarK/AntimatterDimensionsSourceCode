@@ -80,12 +80,6 @@ function reality(force, reset, auto) {
     }
 
     //reset global values to avoid a tick of unupdated production
-    totalMult = 1;
-    currentMult = 1;
-    infinitiedMult = 1;
-    achievementMult = 1;
-    challengeMult = 1;
-    unspentBonus = 1;
     infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
@@ -132,7 +126,9 @@ function reality(force, reset, auto) {
     player.offlineProd = player.reality.upg.includes(10) ? player.offlineProd : 0;
     player.offlineProdCost = player.reality.upg.includes(10) ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    player.autoSacrifice = player.reality.upg.includes(10) ? player.autoSacrifice : 1;
+    if (!player.reality.upg.includes(10)) {
+        player.autoSacrifice = 1;
+    }
     player.eternityChalls = {};
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
     player.currentEternityChall = "";
@@ -141,7 +137,9 @@ function reality(force, reset, auto) {
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.infMultBuyer = player.reality.upg.includes(10) ? player.infMultBuyer : false;
-    player.autoCrunchMode = player.reality.upg.includes(10) ? player.autoCrunchMode : "amount";
+    if (!player.reality.upg.includes(10)) {
+      player.autoCrunchMode = AutoCrunchMode.AMOUNT;
+    }
     player.respec = false;
     player.eterc8ids = 50;
     player.eterc8repl = 40;
@@ -181,14 +179,6 @@ function reality(force, reset, auto) {
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-    var autobuyers = document.getElementsByClassName('autoBuyerDiv');
-    if (player.eternities < 2) {
-        for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-        document.getElementById("buyerBtnDimBoost").style.display = "inline-block";
-        document.getElementById("buyerBtnGalaxies").style.display = "inline-block";
-        document.getElementById("buyerBtnInf").style.display = "inline-block";
-        document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-    }
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     updateAutobuyers();
@@ -202,23 +192,11 @@ function reality(force, reset, auto) {
     updateMilestones();
     resetTimeDimensions();
     showEternityTab('timestudies', true)
-    if (player.eternities < 20) player.autobuyers[9].bulk = 1;
-    if (player.eternities < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk;
-    if(player.eternities < 50) {
-        document.getElementById("replicantidiv").style.display = "none";
-        document.getElementById("replicantiunlock").style.display = "inline-block"
-    }
-    else if (document.getElementById("replicantidiv").style.display === "none" && player.eternities >= 50) {
-        document.getElementById("replicantidiv").style.display = "inline-block";
-        document.getElementById("replicantiunlock").style.display = "none"
-    }
+    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
-    if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = falsedocument.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
+    if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    if (player.eternities < 2) document.getElementById("break").textContent = "BREAK INFINITY";
-    document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>" + player.replicanti.galaxies + " replicated galaxies created.";
     document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
-    document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: " + shorten(player.infMult.times(kongIPMult)) + "x<br>Cost: " + shortenCosts(player.infMultCost) + " IP";
     updateEternityUpgrades();
     resetTickspeed();
     updateTickSpeed();
@@ -227,17 +205,9 @@ function reality(force, reset, auto) {
     document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
-        loadAutoBuyerSettings()
     }
     Marathon2 = 0;
-    updatePrestigeAutoModes()
     updateTimeStudyButtons();
-    if (!player.reality.upg.includes(10)) {
-        document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF";
-        document.getElementById("replauto1").textContent = "Auto: OFF";
-        document.getElementById("replauto2").textContent = "Auto: OFF";
-        document.getElementById("replauto3").textContent = "Auto: OFF"
-    }
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();
@@ -278,7 +248,7 @@ function reality(force, reset, auto) {
             }
         }
     }
-    ui.dispatch(GameEvent.REALITY);
+    GameUI.dispatch(GameEvent.REALITY);
 }
 
 function fullResetTimeDimensions() {

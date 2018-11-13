@@ -4131,6 +4131,8 @@ screen and (max-width: 480px) {
   width: 100%;
 }
 
+/*#region c-replicanti-description*/
+
 .c-replicanti-description {
   font-size: 1.5rem;
 }
@@ -4139,6 +4141,19 @@ screen and (max-width: 480px) {
   font-size: 2.3rem;
   color: black
 }
+
+.t-dark .c-replicanti-description__accent,
+.t-dark-metro .c-replicanti-description__accent,
+.t-s6 .c-replicanti-description__accent {
+  color: #03a9f4 !important;
+}
+
+.t-dark .c-replicanti-description__accent,
+.t-s6 .c-replicanti-description__accent {
+  text-shadow: 0 0 .7rem #03a9f4;
+}
+
+/*#endregion c-replicanti-description*/
 
 .l-replicanti-upgrade-row {
   display: flex;

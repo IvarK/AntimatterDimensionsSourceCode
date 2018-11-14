@@ -124,13 +124,6 @@ const GameUI = {
   }
 };
 
-function sleep(miliseconds) {
-  var currentTime = new Date().getTime();
-
-  while (currentTime + miliseconds >= new Date().getTime()) {
-  }
-}
-
 const UIID = function() {
   let id = 0;
   return { next: () => id++ };

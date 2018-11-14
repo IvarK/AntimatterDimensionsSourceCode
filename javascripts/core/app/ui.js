@@ -104,16 +104,32 @@ const GameUI = {
   },
   flushEvents() {
     this.flushPromise = undefined;
+    if (PerformanceStats.isOn) {
+      Vue.nextTick(() => PerformanceStats.start("Vue Render"));
+      PerformanceStats.start("Vue Update");
+    }
     for (let event of this.events) {
       EventHub.global.emit(event);
     }
     EventHub.global.emit(GameEvent.UPDATE);
+    if (PerformanceStats.isOn) {
+      PerformanceStats.end();
+      Vue.nextTick(() => PerformanceStats.end());
+      Vue.nextTick(() => PerformanceStats.render());
+    }
     this.events = [];
   },
   update() {
     this.dispatch(GameEvent.UPDATE);
   }
 };
+
+function sleep(miliseconds) {
+  var currentTime = new Date().getTime();
+
+  while (currentTime + miliseconds >= new Date().getTime()) {
+  }
+}
 
 const UIID = function() {
   let id = 0;

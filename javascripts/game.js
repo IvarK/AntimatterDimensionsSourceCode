@@ -1444,6 +1444,7 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
 let autobuyerOnGameLoop = true;
 
 function gameLoop(diff) {
+    PerformanceStats.start("Update");
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
@@ -1865,6 +1866,7 @@ function gameLoop(diff) {
 
     GameUI.update();
     player.lastUpdate = thisUpdate;
+    PerformanceStats.end();
 }
 
 // Reducing boilerplate code a bit (runs a specified number of ticks with a specified length and triggers autobuyers after each tick)

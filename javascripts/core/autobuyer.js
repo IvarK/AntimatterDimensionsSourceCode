@@ -734,6 +734,7 @@ Autobuyer.reality = {
 };
 
 Autobuyer.tick = function() {
+  PerformanceStats.start("Autobuyers");
   Autobuyer.eternity.tick();
   Autobuyer.reality.tick();
   Autobuyer.infinity.tick();
@@ -743,6 +744,7 @@ Autobuyer.tick = function() {
   for (let autobuyer of Autobuyer.priorityQueue()) {
     autobuyer.tick();
   }
+  PerformanceStats.end();
 };
 
 function buyAutobuyer(id) {

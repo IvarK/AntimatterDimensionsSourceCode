@@ -85,6 +85,7 @@ function getReplicantiInterval(noMod, interval) {
 }
 
 function replicantiLoop(diff) {
+    PerformanceStats.start("Replicanti");
     if (diff > repMs) {
         diff -= repMs;
         repMs = 0;
@@ -140,6 +141,7 @@ function replicantiLoop(diff) {
     if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
         replicantiGalaxy();
     }
+    PerformanceStats.end();
 }
 
 function replicantiMult() {

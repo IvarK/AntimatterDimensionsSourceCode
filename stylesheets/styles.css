@@ -4380,3 +4380,14 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion Effarig tab*/
+
+.c-performance-stats {
+  width: 25rem;
+  padding: .3rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border: .1rem solid black;
+  text-align: left;
+  background-color: whitesmoke;
+}

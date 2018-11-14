@@ -500,3 +500,7 @@ dev.showProductionBreakdown = function() {
   
   console.log(productionText);
 }
+
+dev.togglePerformanceStats = function() {
+  PerformanceStats.toggle();
+};

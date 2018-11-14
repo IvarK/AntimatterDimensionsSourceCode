@@ -4267,10 +4267,6 @@ screen and (max-width: 480px) {
   white-space: nowrap;
   border: .1rem solid;
   cursor: pointer;
-  animation-name: o-notification--show-hide;
-  animation-duration: 2.5s;
-  animation-fill-mode: both;
-  animation-timing-function: ease-in-out;
 }
 
 .o-notification--success {
@@ -4288,19 +4284,21 @@ screen and (max-width: 480px) {
   border-color: #4980cc;
 }
 
-@keyframes o-notification--show-hide {
-  0%   { transform: translateX(50rem) }
-  10%  { transform: translateX(-2rem) }
-  15%  { transform: translateX(1rem) }
-  20%  { transform: translateX(0) }
-  90%  { transform: translateX(0) }
-  100% { transform: translateX(50rem) }
+.a-notification--enter {
+  animation: a-notification--enter 0.5s ease-out;
+  animation-fill-mode: both;
 }
 
-@keyframes o-notification--hide {
-  0%   { transform: translateX(0) }
-  10%  { transform: translateX(50rem) }
-  100% { transform: translateX(50rem) }
+@keyframes a-notification--enter {
+  0%   { transform: translateX(125%) }
+  50%  { transform: translateX(-2rem) }
+  75%  { transform: translateX(1rem) }
+  100% { transform: translateX(0) }
+}
+
+.a-notification--leave {
+  transform: translateX(125%);
+  transition: transform 0.25s ease-in;
 }
 
 /*#endregion o-notification*/

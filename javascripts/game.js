@@ -859,8 +859,6 @@ function generateGlyphSelection(amount) {
       var rarity = getRarity(glyph.strength)
       html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'>"
       html += getGlyphTooltip(glyph)
-      if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
-        html += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
       html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
   }
   $("#glyphsToSelect").html(html)

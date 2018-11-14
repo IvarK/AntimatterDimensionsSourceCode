@@ -290,10 +290,11 @@ function fixGlyph(glyph) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 3) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
-  if (x >= 2.75) return { name: "Mythical", color: "#D50000" } // ~0.01%
-  if (x >= 2.5) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
-  if (x >= 2.25) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
+  if (x >= 3.5) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
+  if (x >= 3.25) return { name: "Transcendent", color: "#03FFEC" } // ~0.0005%
+  if (x >= 3) return { name: "Mythical", color: "#D50000" } // ~0.01%
+  if (x >= 2.75) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
+  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
   if (x >= 2) return { name:  "Rare", color:  "#2196F3" } // ~2.84%
   if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }  // ~19%
   if (x >= 1) return { name:  "Common", color:  "white" } // 100%
@@ -391,19 +392,19 @@ function getDesc(effectKey, x, inTooltip) {
 function getGlyphTooltip(glyph) {
   let tooltipText = "";
   var rarity = getRarity(glyph.strength)
-  tooltipText += "<span class='tooltip'><span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
+  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: "+rarity.color+"; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2.5 * 100).toFixed(1)+"%)"+"</span> <span style='margin-left: auto'> Level: "+glyph.level+"</span></div><div style='margin-top: 5px'>"
   for (let i = 0; i < orderedEffectList.length; i++) {
     let separated = separateEffectKey(orderedEffectList[i]);
     let type = separated[0];
     let effect = separated[1];
     if (glyph.type == type && glyph.effects["" + effect] !== undefined) {
-      tooltipText += getDesc(orderedEffectList[i], glyph.effects[effect], true) +" <br><br>"
+      tooltipText += getDesc(orderedEffectList[i], glyph.effects[effect], true) + "<br><br>"
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
     tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
   }
-  tooltipText += "</span>"
+  tooltipText += "</div></span>"
   return tooltipText;
 }
 
@@ -475,24 +476,7 @@ function generateGlyphTable() {
   activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
   $("#activeGlyphs").html(activeEffectText)
   updateTickSpeed();
-
-  $(".tooltip").parent(".glyph").mousemove(function(e) {
-    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
-  })
-  var that = this
-  $(".tooltip").parent(".glyph").mouseenter(function(e) {
-    e.stopPropagation();
-    mouseOn = $(this).find(".tooltip")
-    mouseOn.appendTo("#body")
-  })
-
-  $(".tooltip").parent(".glyph").mouseleave(function(e) {
-    e.stopPropagation();
-    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
-    mouseOn.appendTo($(this))
-    mouseOn = $("document")
-  })
-
+  updateTooltips();
   updateGlyphDescriptions()
 }
 
@@ -547,10 +531,12 @@ function deleteGlyph(id) {
 }
 
 function drag(ev) {
+  var rect = ev.target.getBoundingClientRect()
   ev.dataTransfer.setData("text", ev.target.id);
   ev.target.style.opacity = 0.5
   mouseOn.css({"left": "0", "top": "0px", "display": "none"})
   mouseOn.appendTo($(ev.target))
+  ev.dataTransfer.setDragImage(ev.target, ev.clientX-rect.left, ev.clientY-rect.top)
   mouseOn = $("document")
 }
 
@@ -678,22 +664,6 @@ function updateRealityUpgrades() {
   $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
-$(".tooltip").parent().mousemove(function(e) {
-  mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
-})
-$(".tooltip").parent().mouseenter(function(e) {
-  e.stopPropagation();
-  mouseOn = $(this).find(".tooltip")
-  mouseOn.appendTo("#body")
-})
-
-$(".tooltip").parent().mouseleave(function(e) {
-  e.stopPropagation();
-  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
-  mouseOn.appendTo($(this))
-  mouseOn = $("document")
-})
-
 function toggleGlyphRespec() {
   player.reality.respec = !player.reality.respec
   if (player.reality.respec) {
@@ -793,4 +763,22 @@ function updateGlyphDescriptions() {
     html += getGlyphSacDescription(i)
   }
   $("#sacrificedGlyphs").html(html)
+}
+
+function updateTooltips() {
+  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function(e) {
+    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "flex"})
+  })
+  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function(e) {
+    e.stopPropagation();
+    mouseOn = $(this).find(".tooltip")
+    mouseOn.appendTo("body")
+  })
+
+  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function(e) {
+    e.stopPropagation();
+    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+    mouseOn.appendTo($(this))
+    mouseOn = $("document")
+  })
 }

@@ -136,27 +136,7 @@ dev.generateSpecialGlyph = function(color, symbol, level) {
       symbol: symbol,
       effects: {}
     }
-    switch(type) {
-      case "time":
-        return timeGlyph(glyph, effectAmount)
-        break;
-  
-      case "dilation":
-        return dilationGlyph(glyph, effectAmount)
-        break;
-  
-      case "replication":
-        return replicationGlyph(glyph, effectAmount)
-        break;
-  
-      case "infinity":
-        return infinityGlyph(glyph, effectAmount)
-        break;
-  
-      case "power":
-        return powerGlyph(glyph, effectAmount)
-        break;
-    }
+    return newGlyph(glyph, type, effectAmount)
 }
 
 dev.giveSpecialGlyph = function(color, symbol, level) {

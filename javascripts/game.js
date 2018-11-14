@@ -857,31 +857,15 @@ function generateGlyphSelection(amount) {
   for (let idx = 0; idx< amount; idx++) {
       var glyph = possibleGlyphs[idx]
       var rarity = getRarity(glyph.strength)
-      html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'><span class='tooltip'>"
-      html += "<span class='glyphraritytext' style='color: "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2 * 100).toFixed(1)+"%)"+"</span> <span style='float: right'> Level: "+glyph.level+"</span><br><br>"
-      for (i in glyph.effects)
-        html += getDesc(glyph.type + i, glyph.effects[i], true) +" <br><br>"
+      html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'>"
+      html += getGlyphTooltip(glyph)
       if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21))
         html += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
       html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
   }
   $("#glyphsToSelect").html(html)
-  $(".tooltip").parent(".glyph").mousemove(function(e) {
-      mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "block"})
-  })
-
-  $(".tooltip").parent(".glyph").mouseenter(function(e) {
-      e.stopPropagation();
-      mouseOn = $(this).find(".tooltip")
-      mouseOn.appendTo("#body")
-  })
-
-  $(".tooltip").parent(".glyph").mouseleave(function(e) {
-      e.stopPropagation();
-      mouseOn.css({"left": "0", "top": "0px", "display": "none"})
-      mouseOn.appendTo($(this))
-      mouseOn = $("document")
-  })
+  
+  updateTooltips();
 }
 
 var possibleGlyphs = []

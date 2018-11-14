@@ -180,7 +180,7 @@ dev.respecPerks = function() {
     player.reality.pp += player.reality.perks.length
     player.reality.perks = [];
     Perks.updateAchSkipCount();
-    document.getElementById("pp").textContent = "You have "+player.reality.pp+" Perk Points."
+    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
     drawPerkNetwork()
 }
 

@@ -289,7 +289,7 @@ function onLoad() {
   if (player.wormhole[1].unlocked) $("#whupg2").show()
   if (player.wormhole[2].unlocked) $("#whupg3").show()
   
-  $("#pp").text("You have " + player.reality.pp + " Perk Points.")
+  $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (player.reality.respec) {
     $("#glyphRespec").addClass("rUpgBought")
     document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");

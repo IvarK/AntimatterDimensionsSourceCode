@@ -175,7 +175,7 @@ function reality(force, reset, auto) {
     resetDimensions();
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
-    $("#pp").text("You have " + player.reality.pp + " Perk Points.")
+    $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
     hidePreMilestone30Elements();
     document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
@@ -214,7 +214,7 @@ function reality(force, reset, auto) {
     updateAutomatorTree();
     drawPerkNetwork();
     updateEpMultButton();
-    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Points."
+    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")
 

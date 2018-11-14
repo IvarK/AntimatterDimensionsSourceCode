@@ -215,7 +215,7 @@ const eternityChallengeVisuals = [
     },
     reward: "Time Dimension multiplier based on infinitied stat",
     rewardValueTemplate: "{0}x",
-    formatReward: (reward, shortenMoney) => shortenMoney(reward)
+    formatReward: (reward, shortenMoney) => shortenMoney((player.timestudy.studies.includes(31) ? reward.pow(4) : reward))
   },
   {
     /* EC11 */

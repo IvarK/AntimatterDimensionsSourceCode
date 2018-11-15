@@ -44,6 +44,7 @@ const PerformanceStats = {
     let indentLevel = -1;
     let text = "";
     const samplePeriod = 10 * 1000;
+    let fps;
     function render(rootBlock) {
       indentLevel++;
       for (let blockName in rootBlock) {
@@ -65,6 +66,11 @@ const PerformanceStats = {
             if (duration < min) min = duration;
           }
           const average = sum / records.length;
+          if (fps === undefined) {
+            // we are at root frame block
+            fps = 1000 / average;
+            text = `FPS: ${Math.floor(fps)}<br>` + text;
+          }
           text += `${average.toFixed(3)}/${min.toFixed(3)}/${max.toFixed(3)}`;
         }
         text += "<br>";

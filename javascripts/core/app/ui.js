@@ -114,8 +114,11 @@ const GameUI = {
     EventHub.global.emit(GameEvent.UPDATE);
     if (PerformanceStats.isOn) {
       PerformanceStats.end();
-      Vue.nextTick(() => PerformanceStats.end());
-      Vue.nextTick(() => PerformanceStats.render());
+      Vue.nextTick(() => {
+        PerformanceStats.end("Vue Render");
+        PerformanceStats.end("Frame Time");
+        PerformanceStats.render();
+      });
     }
     this.events = [];
   },

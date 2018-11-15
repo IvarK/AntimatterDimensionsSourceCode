@@ -104,7 +104,7 @@ const GameUI = {
   },
   flushEvents() {
     this.flushPromise = undefined;
-    if (PerformanceStats.isOn) {
+    if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       Vue.nextTick(() => PerformanceStats.start("Vue Render"));
       PerformanceStats.start("Vue Update");
     }
@@ -112,7 +112,7 @@ const GameUI = {
       EventHub.global.emit(event);
     }
     EventHub.global.emit(GameEvent.UPDATE);
-    if (PerformanceStats.isOn) {
+    if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
       Vue.nextTick(() => {
         PerformanceStats.end("Vue Render");

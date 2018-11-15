@@ -1,5 +1,6 @@
 const PerformanceStats = {
   container: document.getElementById("performance-stats"),
+  samplePeriod: 10 * 1000,
   isOn: false,
   currentBlocks: [],
   stats: {},
@@ -43,7 +44,7 @@ const PerformanceStats = {
     if (!this.isOn) return;
     let indentLevel = -1;
     let text = "";
-    const samplePeriod = 10 * 1000;
+    const samplePeriod = this.samplePeriod;
     let fps;
     function render(rootBlock) {
       indentLevel++;

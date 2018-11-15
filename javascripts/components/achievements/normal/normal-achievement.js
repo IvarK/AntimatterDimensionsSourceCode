@@ -27,10 +27,8 @@ Vue.component('normal-achievement', {
       return this.achId === "r78";
     },
     styleObject: function() {
-      const isBlinkOfAnEye = this.isBlinkOfAnEye;
-      const extension = isBlinkOfAnEye ? "gif" : "png";
       return {
-        "background-image": `url(images/${this.details.imageId}.${extension})`,
+        "background-image": `url(images/${allAchievementNums[this.details.name]}.png)`,
       };
     },
     classObject: function() {

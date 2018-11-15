@@ -85,7 +85,6 @@ function getReplicantiInterval(noMod, interval) {
 }
 
 function replicantiLoop(diff) {
-    PerformanceStats.start("Replicanti");
     if (diff > repMs) {
         diff -= repMs;
         repMs = 0;
@@ -93,6 +92,7 @@ function replicantiLoop(diff) {
         repMs -= diff;
         return;
     }
+    PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval

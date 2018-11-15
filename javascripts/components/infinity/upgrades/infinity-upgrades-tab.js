@@ -52,7 +52,7 @@ const infinityUpgradeGridViewModels = () => [
     }),
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.resetBoost,
-      description: "Decrease the number of Dimensions needed for Dimensional Boosts and Antimatter Galaxies by 9"
+      description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9"
     }),
   ],
   [

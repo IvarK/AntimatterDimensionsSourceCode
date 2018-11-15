@@ -16,7 +16,7 @@ Vue.component('options-button-grid', {
       },
       template:
         `<div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
-          <b>Update Rate: {{ value }} ms</b>
+          <b>Update rate: {{ value }} ms</b>
           <input
             :value="value"
             class="o-primary-btn--update-rate__slider"
@@ -63,7 +63,7 @@ Vue.component('options-button-grid', {
         <primary-button-on-off
           v-model="options.retryChallenge"
           class="o-primary-btn--option l-options-grid__button"
-          text="Automatically retry challenges"
+          text="Automatically retry challenges:"
         />
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -98,7 +98,7 @@ Vue.component('options-button-grid', {
         <primary-button-on-off
           class="o-primary-btn--option l-options-grid__button"
           v-model="options.cloud"
-          text="Automatic cloud saving/loading"
+          text="Automatic cloud saving/loading:"
         />
       </div>
       <div class="l-options-grid__row">

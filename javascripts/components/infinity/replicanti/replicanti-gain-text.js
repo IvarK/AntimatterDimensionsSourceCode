@@ -18,7 +18,7 @@ Vue.component("replicanti-gain-text", {
         const est = logChance * 1000 / getReplicantiInterval();
         const estimate = Math.max((logInfinity - Replicanti.amount.ln()) / est, 0);
         const timeSpan = TimeSpan.fromSeconds(estimate);
-        this.text = `Approximately ${timeSpan} Until Infinite Replicanti`;
+        this.text = `Approximately ${timeSpan} until infinite Replicanti.`;
       }
     }
   },

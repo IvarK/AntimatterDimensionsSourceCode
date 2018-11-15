@@ -79,7 +79,7 @@ Vue.component('statistics-tab', {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have done {{ resets }} dimensional boosts/shifts.</div>
+        <div>You have done {{ resets }} Dimension Boosts/Shifts.</div>
         <div>You have {{ galaxies }} Antimatter Galaxies.</div>
         <div>You have played for {{ realTimePlayed.toString() }}.</div>
         <div v-if="reality.isUnlocked">Your existence has spanned {{ reality.totalTimePlayed.toString() }} of time.</div>
@@ -87,27 +87,27 @@ Vue.component('statistics-tab', {
         <br>
         <div v-if="infinity.isUnlocked">
             <h3>Infinity</h3>
-            <div v-if="infinity.count > 0">You have infinitied {{ formatResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
-            <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
+            <div v-if="infinity.count > 0">You have infinitied {{ formatResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
+            <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-if="infinity.banked > 0">You have {{ formatAmount(infinity.banked) }} banked infinities.</div>
-            <div v-if="infinity.hasBest">Your fastest Infinity is in {{ infinity.best.toString() }}.</div>
-            <div v-else>You have no fastest infinity<span v-if="eternity.isUnlocked"> this eternity</span>.</div>
+            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toString() }}.</div>
+            <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div>You have spent {{ infinity.this.toString() }} in this Infinity.</div>
             <br>
         </div>
         <div v-if="eternity.isUnlocked">
             <h3>Eternity</h3>
-            <div v-if="eternity.count > 0">You have Eternitied {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this reality</span>.</div>
-            <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this reality</span>.</div>
-            <div v-if="eternity.hasBest">Your fastest Eternity is in {{ eternity.best.toString() }}.</div>
-            <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this reality</span>.</div>
+            <div v-if="eternity.count > 0">You have Eternitied {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.</div>
+            <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
+            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toString() }}.</div>
+            <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div>You have spent {{ eternity.this.toString() }} in this Eternity.</div>
             <br>
         </div>
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
-            <div>Your fastest Reality is in {{ reality.best.toString() }}.</div>
+            <div>Your fastest Reality was {{ reality.best.toString() }}.</div>
             <div>You have spent {{ reality.this.toString() }} in this Reality.</div>
             <br>
         </div>

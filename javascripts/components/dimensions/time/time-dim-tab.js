@@ -28,7 +28,7 @@ Vue.component('time-dim-tab', {
       this.upgradeThreshold.copyFrom(player.tickThreshold);
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
       const isEC7Running = player.currentEternityChall === "eterc7";
-      this.incomeType = isEC7Running ? "Eighth Infinity Dimensions" : "Timeshards";
+      this.incomeType = isEC7Running ? "Eighth Infinity Dimensions" : "time shards";
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = player.reality.upg.includes(13);
     },

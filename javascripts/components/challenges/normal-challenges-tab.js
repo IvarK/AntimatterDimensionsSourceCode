@@ -57,7 +57,7 @@ Vue.component("normal-challenges-tab", {
 const normalChallengeDetails = [
   null,
   {
-    description: "Reach infinity for the first time.",
+    description: "Reach Infinity for the first time.",
     reward: "First Dimension autobuyer"
   },
   {
@@ -65,7 +65,7 @@ const normalChallengeDetails = [
     reward: "Second Dimension autobuyer"
   },
   {
-    description: "First dimension is heavily weakened but gets an exponentially increasing bonus that resets on reset.",
+    description: "The 1st Dimension is heavily weakened but gets an exponentially increasing bonus that resets on reset.",
     reward: "Third Dimension autobuyer"
   },
   {
@@ -73,7 +73,7 @@ const normalChallengeDetails = [
     reward: "Fourth Dimension autobuyer"
   },
   {
-    description: "Tickspeed starts at 7%",
+    description: "Tickspeed starts at 7%.",
     reward: "Fifth Dimension autobuyer"
   },
   {
@@ -81,7 +81,7 @@ const normalChallengeDetails = [
     reward: "Sixth Dimension autobuyer"
   },
   {
-    description: "Multiplier per 10 dimensions is random from 0.30 and 10",
+    description: "Multiplier per 10 dimensions is random from 0.30 and 10.",
     reward: "Seventh Dimension autobuyer"
   },
   {
@@ -97,7 +97,7 @@ const normalChallengeDetails = [
     reward: "Automated Dimension Boosts"
   },
   {
-    description: "There's normal matter which rises once you have at least 1 second dimension. If it exceeds your antimatter, it will dimension boost without giving the bonus.",
+    description: "There's normal matter which rises once you have at least 1 2nd Dimension. If it exceeds your antimatter, it will dimension boost without giving the bonus.",
     reward: "Automated Antimatter Galaxies"
   },
   {

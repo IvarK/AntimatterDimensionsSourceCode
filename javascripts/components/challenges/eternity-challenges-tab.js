@@ -171,7 +171,7 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC5 */
-    description: "Galaxy cost increase scaling starts instantly (Normally at 100 galaxies). Dimension boost costs scaling is massively increased.",
+    description: "Galaxy cost increase scaling starts instantly (normally at 100 galaxies). Dimension boost costs scaling is massively increased.",
     reward: "Galaxy cost scaling starts later",
     rewardValueTemplate: "{0} galaxies later",
     formatReward: reward => reward.toString()
@@ -207,7 +207,7 @@ const eternityChallengeVisuals = [
   {
     /* EC10 */
     description: function(shortenMoney) {
-      let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000)";
+      let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000).";
       if (EternityChallenge(10).isRunning) {
         description += `, Currently: ${shortenMoney(ec10bonus)}x`;
       }
@@ -219,14 +219,14 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC11 */
-    description: "All dimension multipliers are disabled except for the multipliers from Infinity Power and Dimension Boosts (to normal dimensions)",
+    description: "All dimension multipliers are disabled except for the multipliers from Infinity Power and Dimension Boosts (to normal dimensions).",
     reward: "Reduce Tickspeed cost multiplier growth",
     rewardValueTemplate: "x - {0}",
     formatReward: reward => reward.toFixed(1)
   },
   {
     /* EC12 */
-    description: () => player.realities > 0 ? "The game runs 1000x slower, wormholes and time glyph effects are disabled." : "The game runs 1000x slower.",
+    description: () => player.realities > 0 ? "The game runs 1000x slower; wormholes and time glyph effects are disabled." : "The game runs 1000x slower.",
     reward: "Infinity Dimension cost multipliers are reduced",
     additionalRequirements: completions => `in ${Math.max(10 - 2 * completions, 1) / 10} ${completions === 0 ? "second" : "seconds"} or less.`,
     rewardValueTemplate: "x^{0}",

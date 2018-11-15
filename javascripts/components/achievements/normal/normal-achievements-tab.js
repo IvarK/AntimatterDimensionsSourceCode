@@ -42,7 +42,7 @@ Vue.component('normal-achievements-tab', {
         v-if="timeForAchs > 0"
         id="timeForAchievements"
         class="c-achievements-tab__timer"
-      >You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}</div>
+      >You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}.</div>
       <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}}</div>
       <div class="l-achievement-grid">
         <normal-achievement-row v-for="row in 14" :key="row" :row="row" />

@@ -30,7 +30,7 @@ const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
  * 
  * replgain multiplies DT gain by replicanti amount ^ something
  * 
- * glyphlevel increases glyph level scaling from replicantis
+ * glyphlevel increases glyph level scaling from replicanti
  */
 const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 
@@ -38,7 +38,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
  * pow: inf dim mult ^ x
  * rate: inf power conversion rate, ^(7+x)
  * ipgain: ip gain ^ x
- * infMult: multiplier to Infinitied stat gain
+ * infMult: multiplier to infinitied stat gain
  * 
  */
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
@@ -335,49 +335,49 @@ function getDesc(effectKey, x, inTooltip) {
   
   
   const EFFECT_DESCRIPTIONS = {
-    timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
     timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
     timeeternity: "Multiply EP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    dilationdilationMult: "Multiply dilated time gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
+    dilationdilationMult: "Multiply Dilated Time gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
     dilationTTgen: "Generates " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
-    dilationpow: "Normal dimension multipliers <br>^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
+    dilationpow: "Normal Dimension multipliers <br>^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
     replicationspeed: "Multiply replication speed by " + spanPrefix + shortenDimensions(x) + spanSuffix,
     replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     replicationdtgain: "Multiply DT gain by <br>log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
     replicationglyphlevel: "Replicanti scaling for next glyph level: <br>^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
-    infinitypow: "Infinity dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    infinitypow: "Infinity Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     infinityrate: "Infinity power conversion rate: <br>^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
     infinityipgain: "Multiply IP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
     infinityinfmult: "Multiply infinitied stat gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    powermult: "Normal dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerdimboost: "Dimension boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
-    powerbuy10: "Multiplies the bonus gained from buying 10 dimensions by " + spanPrefix + x.toFixed(2) + spanSuffix
+    powerpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    powermult: "Normal Dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerdimboost: "Dimension Boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
+    powerbuy10: "Multiplies the bonus gained from buying 10 Dimensions by " + spanPrefix + x.toFixed(2) + spanSuffix
   }
   
   // Used for total glyph effects, slightly reworded/shortened
   const EFFECT_DESCRIPTIONS_SHORT = {
-    timepow: "Time dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Game runs x" + spanPrefix + x.toFixed(3) + spanSuffix + " faster",
     timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
     timeeternity: "EP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationdilationMult: "DT gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
     dilationTTgen: "Generating " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
-    dilationpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
+    dilationpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
     replicationspeed: "Replication speed x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     replicationdtgain: "DT gain from log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
     replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
-    infinitypow: "Infinity dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    infinitypow: "Infinity Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     infinityrate: "Infinity power conversion rate ^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
     infinityipgain: "IP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
     infinityinfmult: "Infinity stat gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerpow: "Normal dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    powermult: "Normal dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerdimboost: "Dimension boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
+    powerpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
+    powermult: "Normal Dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
+    powerdimboost: "Dimension Boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
     powerbuy10: "Multiplier from \"Buy 10\" x" + spanPrefix + x.toFixed(2) + spanSuffix
   }
 
@@ -654,14 +654,14 @@ function updateRealityUpgrades() {
 	  row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
   }
 
-  $("#rupg1").html("You gain dilated time 3 times faster<br>Currently: "+ row1Mults[1] +"x<br>Cost: "+row1Costs[1]+" RM")
-  $("#rupg2").html("You gain replicanti 3 times faster<br>Currently: "+ row1Mults[2] +"x<br>Cost: "+row1Costs[2]+" RM")
-  $("#rupg3").html("You gain 3 times more eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
+  $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: "+ row1Mults[1] +"x<br>Cost: "+row1Costs[1]+" RM")
+  $("#rupg2").html("You gain Replicanti 3 times faster<br>Currently: "+ row1Mults[2] +"x<br>Cost: "+row1Costs[2]+" RM")
+  $("#rupg3").html("You gain 3 times more Eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
   $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: "+ row1Mults[4] +"x<br>Cost: "+row1Costs[4]+" RM")
-  $("#rupg5").html("You gain 5 times more infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
+  $("#rupg5").html("You gain 5 times more Infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
 function toggleGlyphRespec() {
@@ -728,13 +728,13 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy) + ")<br><br>"
 
     case "infinity":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th infinity dimension.<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
 
     case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th time dimension.<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
 
     case "replication":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
     case "dilation":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount) + "x<br><br>"

@@ -109,17 +109,17 @@ const infinityChallengeDetails = [
   {
     description: "When buying dimensions 1-4, everything with costs smaller or equal increases. When buying dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.",
     goal: new Decimal('1e11111'),
-    reward: "Galaxies are 10% more powerful and reduce the requirements for them and dimensional boosts by 1"
+    reward: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1"
   },
   {
-    description: "Once you have at least 1 second dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
+    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
     goal: new Decimal('2e22222'),
     reward: "Tickspeed affects Infinity Dimensions with reduced effect"
   },
   {
-    description: "You can't get Antimatter Galaxies, but dimensional boost multiplier 2.5x -> 10x",
+    description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x -> 10x",
     goal: new Decimal('1e10000'),
-    reward: "Dimensional boost multiplier 2.5x -> 4x"
+    reward: "Dimension Boost multiplier 2.5x -> 4x"
   },
   {
     description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",

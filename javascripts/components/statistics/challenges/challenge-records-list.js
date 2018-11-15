@@ -23,6 +23,6 @@ Vue.component('challenge-records-list', {
         <span>{{ name }} {{ start + index }} time record: {{ timeDisplayShort(time) }}</span>\
       </div>\
       <br>\
-      <div>Sum of {{ name }} time records is {{ timeDisplayShort(timeSum) }}</div>\
+      <div>Sum of {{ name }} time records: {{ timeDisplayShort(timeSum) }}</div>\
     </div>'
 });

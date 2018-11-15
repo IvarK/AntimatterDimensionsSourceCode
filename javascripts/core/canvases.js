@@ -387,64 +387,64 @@ function showPerkLabels() {
 //20: glyphs
 //30: ecs
 function drawPerkNetwork() {
-    nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on reality."}, //DONE
+    nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on Reality."}, //DONE
     {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."}, //DONE
     {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."}, //DONE
-    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Improve the automator row per reality scaling."}, //DONE
-    {id: 4, label: "4", color: getNodeColor(4, 1), title: "EC1 requirement removed from study 181"}, //DONE
-    {id: 5, label: "5", color: getNodeColor(5, 1), title: "Every 10 seconds automatically buys max TT"}, //DONE
-    {id: 6, label: "6", color: getNodeColor(6, 1), title: "Every 5 seconds automatically buys max TT"}, //DONE
-    {id: 7, label: "7", color: getNodeColor(7, 1), title: "Every 3 seconds automatically buys max TT"}, //DONE
-    {id: 8, label: "8", color: getNodeColor(8, 1), title: "Every second automatically buys max TT"}, //DONE
-    {id: 11, label: "11", color: getNodeColor(11, 1), title: "The 2nd rebuyable dilation upgrade no longer resets your dilated time."}, //DONE
-    {id: 12, label: "12", color: getNodeColor(12, 1), title: "Rebuyable dilation upgrade autobuyers."}, //DONE
+    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Improve the Automator row per Reality scaling."}, //DONE
+    {id: 4, label: "4", color: getNodeColor(4, 1), title: "Remove the EC1 requirement from study 181."}, //DONE
+    {id: 5, label: "5", color: getNodeColor(5, 1), title: "Every 10 seconds automatically buy max TT."}, //DONE
+    {id: 6, label: "6", color: getNodeColor(6, 1), title: "Every 5 seconds automatically buy max TT."}, //DONE
+    {id: 7, label: "7", color: getNodeColor(7, 1), title: "Every 3 seconds automatically buy max TT."}, //DONE
+    {id: 8, label: "8", color: getNodeColor(8, 1), title: "Every second automatically buy max TT."}, //DONE
+    {id: 11, label: "11", color: getNodeColor(11, 1), title: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time."}, //DONE
+    {id: 12, label: "12", color: getNodeColor(12, 1), title: "Rebuyable Dilation upgrade autobuyers."}, //DONE
     {id: 13, label: "13", color: getNodeColor(13, 1), title: "Remove the unlock requirement for Time Dilation."}, //DONE
-    {id: 14, label: "14", color: getNodeColor(14, 1), title: "Gain second row of dilation upgrades on dilation unlock."}, //DONE
-    {id: 15, label: "15", color: getNodeColor(15, 1), title: "Gain third row of dilation upgrades on dilation unlock."}, //DONE
+    {id: 14, label: "14", color: getNodeColor(14, 1), title: "Gain the second row of Dilation upgrades on Dilation unlock."}, //DONE
+    {id: 15, label: "15", color: getNodeColor(15, 1), title: "Gain the third row of Dilation upgrades on Dilation unlock."}, //DONE
     {id: 21, label: "21", color: getNodeColor(21, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on reality."}, //DONE
+    {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on Reality."}, //DONE
     {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."}, //DONE
     {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking eternity challenges."}, //DONE
-    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of eternity challenges at once if you reach the goal for a higher completion of that challenge."},
-    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking dilation."},
+    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking Eternity Challenges."}, //DONE
+    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge."},
+    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking Dilation."},
     {id: 34, label: "34", color: getNodeColor(34, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 1.5."},
     {id: 35, label: "35", color: getNodeColor(35, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2."},
     {id: 36, label: "36", color: getNodeColor(36, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2.5."},
     {id: 37, label: "37", color: getNodeColor(37, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 3."},
-    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after reality."}, //DONE
-    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after reality."}, //DONE
-    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after reality."}, //DONE
-    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with the 4th achievement row after reality."}, //DONE
-    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with the 5th achievement row after reality."}, //DONE
-    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with the 6th achievement row after reality."}, //DONE
-    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with the 7th achievement row after reality."}, //DONE
-    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with the 8th achievement row after reality."}, //DONE
-    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with the 9th achievement row after reality."}, //DONE
-    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with the 10th achievement row after reality."}, //DONE
-    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with the 11th achievement row after reality."}, //DONE
-    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with the 12th achievement row after reality."},//DONE
-    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with the 13th achievement row after reality."},//DONE
+    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after Reality."}, //DONE
+    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after Reality."}, //DONE
+    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after Reality."}, //DONE
+    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with the 4th achievement row after Reality."}, //DONE
+    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with the 5th achievement row after Reality."}, //DONE
+    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with the 6th achievement row after Reality."}, //DONE
+    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with the 7th achievement row after Reality."}, //DONE
+    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with the 8th achievement row after Reality."}, //DONE
+    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with the 9th achievement row after Reality."}, //DONE
+    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with the 10th achievement row after Reality."}, //DONE
+    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with the 11th achievement row after Reality."}, //DONE
+    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with the 12th achievement row after Reality."},//DONE
+    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with the 13th achievement row after Reality."},//DONE
     {id: 51, label: "51", color: getNodeColor(51, 1), title: "Start with 100 antimatter after every reset"}, //DONE
     {id: 52, label: "52", color: getNodeColor(52, 1), title: "Start with 1e130 antimatter after every reset"}, //DONE
     {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 2e15 IP after every Eternity and Reality"}, //DONE
     {id: 54, label: "54", color: getNodeColor(54, 1), title: "Start with 2e130 IP after every Eternity and Reality"}, //DONE
     {id: 55, label: "55", color: getNodeColor(55, 1), title: "Start with 10 EP after every Reality"}, //DONE
-    {id: 56, label: "56", color: getNodeColor(56, 1), title: "Start with 2000 EP after every Reality"}, //DONE
+    {id: 56, label: "56", color: getNodeColor(56, 1), title: "Start with 2,000 EP after every Reality"}, //DONE
     {id: 57, label: "57", color: getNodeColor(57, 1), title: "Start with 1e9 EP after every Reality"}, //DONE
     {id: 61, label: "61", color: getNodeColor(61, 1), title: "Infinity dimension autobuyers work 3 times faster."}, //DONE
     {id: 62, label: "62", color: getNodeColor(62, 1), title: "Replicanti autobuyers work 3 times faster."}, //DONE
     {id: 63, label: "63", color: getNodeColor(63, 1), title: "Dilation autobuyers work 3 times faster."}, //DONE
-    {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time dimension 5-8 unlocks."}, //DONE
+    {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time Dimension 5-8 unlocks."}, //DONE
     {id: 65, label: "65", color: getNodeColor(65, 1), title: "Automatically unlock TT generation when you have 1e15 DT."}, //DONE
-    {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock reality at e4000 EP."}, //DONE
-    {id: 71, label: "71", color: getNodeColor(71, 1), title: "3x replicanti doesn't require EC5."}, //DONE
+    {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock Reality at e4000 EP."}, //DONE
+    {id: 71, label: "71", color: getNodeColor(71, 1), title: "Remove the EC5 requirement from study 62."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
-    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this eternity." }, //DONE
-    {id: 74, label: "74", color: getNodeColor(74, 1), title: "EC2 requirement removed from study 181" }, //DONE
-    {id: 75, label: "75", color: getNodeColor(75, 1), title: "EC3 requirement removed from study 181" }, //DONE
-    {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of eternity upgrades after first eternity of a reality."}, //DONE
-    {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of eternity upgrades after first eternity of a reality."}, //DONE
+    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this Eternity." }, //DONE
+    {id: 74, label: "74", color: getNodeColor(74, 1), title: "Remove the EC2 requirement from study 181." }, //DONE
+    {id: 75, label: "75", color: getNodeColor(75, 1), title: "Remove the EC3 requirement from study 181." }, //DONE
+    {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of Eternity upgrades after first Eternity of a Reality."}, //DONE
+    {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of Eternity upgrades after first Eternity of a Reality."}, //DONE
     ]; 
     nodes = new vis.DataSet(nodesArray);
 

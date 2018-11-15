@@ -458,7 +458,7 @@ function updateAutomatorRows() {
   if (player.reality.perks.includes(3)) pow = 0.85
   var rows = 6 + Math.ceil(Math.pow(player.realities, pow))
   var next = Math.ceil( Math.pow(rows - 6, 1 / pow) )
-  $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows, next row at " + next + " realities")
+  $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows; next row at " + next + " realities.")
 }
 
 setInterval(mainIteration, 50)

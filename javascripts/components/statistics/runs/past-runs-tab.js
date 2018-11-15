@@ -45,8 +45,8 @@ Vue.component('past-runs-tab', {
       </div>\
       <br>\
       <div>\
-        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }} </span>\
-        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }} {{ points }}.</span>\
+        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }}. </span>\
+        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>\
       </div>\
     </div>'
 });

@@ -296,7 +296,7 @@ function playerInfinityUpgradesOnEternity() {
 function updateInfCosts() {
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
-        document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
+        document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on Dimension Boosts)"
         document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
         document.getElementById("71desc").textContent = "Currently: "+shortenMoney(Sacrifice.totalBoost.pow(0.25).max(1).min("1e210000"))+"x"
@@ -326,10 +326,10 @@ function updateInfCosts() {
         document.getElementById("141desc").textContent = "Currently: "+shortenMoney(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125))).max(1))+"x"
         document.getElementById("142desc").textContent = "You gain "+shortenCosts(1e25)+"x more IP"
         document.getElementById("143desc").textContent = "Currently: "+shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125)))+"x"
-        document.getElementById("151desc").textContent = shortenCosts(1e4)+"x multiplier on all Time dimensions"
-        document.getElementById("161desc").textContent = shortenCosts(new Decimal("1e616"))+"x multiplier on all normal dimensions"
-        document.getElementById("162desc").textContent = shortenCosts(1e11)+"x multiplier on all Infinity dimensions"
-        document.getElementById("192desc").textContent = "You can get beyond "+shortenMoney(Number.MAX_VALUE)+" replicantis, but the interval is increased the more you have"
+        document.getElementById("151desc").textContent = shortenCosts(1e4)+"x multiplier on all Time Dimensions"
+        document.getElementById("161desc").textContent = shortenCosts(new Decimal("1e616"))+"x multiplier on all Normal Dimensions"
+        document.getElementById("162desc").textContent = shortenCosts(1e11)+"x multiplier on all Infinity Dimensions"
+        document.getElementById("192desc").textContent = "You can get beyond "+shortenMoney(Number.MAX_VALUE)+" Replicanti, but the interval is increased the more you have"
         document.getElementById("193desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.03, player.eternities).min("1e13000"))+"x"
         document.getElementById("212desc").textContent = "Currently: "+((Math.pow(player.timeShards.max(2).log2(), 0.005)-1)*100).toFixed(2)+"%"
         document.getElementById("214desc").textContent = "Currently: "+shortenMoney(((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1)).div(Sacrifice.totalBoost)).max(1).min(new Decimal("1e125000")))+"x"
@@ -1823,7 +1823,7 @@ function gameLoop(diff) {
   // Adjust the text on the reality button in order to minimize text overflowing
   let glyphLevelText = "<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)";
   if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
-    document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to reality again!"
+    document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to Reality again!"
 	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely
 		document.getElementById("realitymachine").innerHTML = "Make a new reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+glyphLevelText;
   else if (player.eternityPoints.exponent > 4986)  // At more than (4986 EP, 5.48 RM) each +1 EP exponent always adds at least one more RM percent, so drop the decimal points

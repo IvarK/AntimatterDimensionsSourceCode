@@ -599,7 +599,7 @@ Autobuyer.eternity = {
     player.eternityBuyer.limit = value;
   },
   bumpLimit(mult) {
-    if (this.mode === AutoEternityMode.AMOUNT) {
+    if (this.isUnlocked && this.mode === AutoEternityMode.AMOUNT) {
       this.limit = this.limit.times(mult);
     }
   },

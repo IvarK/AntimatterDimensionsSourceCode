@@ -192,7 +192,6 @@ function reality(force, reset, auto) {
     updateMilestones();
     resetTimeDimensions();
     showEternityTab('timestudies', true)
-    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";

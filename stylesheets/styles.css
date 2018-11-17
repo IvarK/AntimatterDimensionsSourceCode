@@ -2046,6 +2046,11 @@ screen and (max-width: 480px) {
   width: 12rem;
 }
 
+.o-primary-btn--tickspeed {
+  width: 17rem;
+  font-size: 1.2rem;
+}
+
 .o-primary-btn--buy-max {
   font-size: 1.2rem;
   width: 12rem;
@@ -2418,6 +2423,62 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion hint-text*/
+
+/*#region Header*/
+
+.l-game-header__amounts-line {
+  position: relative;
+  font-size: 1.2rem;
+}
+
+/*#region IP Amount*/
+
+.l-game-header__infinity-points {
+  position: absolute;
+  left: 75%;
+}
+
+.c-game-header__infinity-points {
+  width: 21rem;
+}
+
+.c-game-header__ip-amount {
+  font-weight: bold;
+}
+
+/*#endregion IP Amount*/
+
+/*#region EP Amount*/
+
+.l-game-header__eternity-points {
+  position: absolute;
+  right: 75%;
+}
+
+.c-game-header__eternity-points {
+  width: 21rem;
+}
+
+.c-game-header__ep-amount {
+  font-weight: bold;
+}
+
+/*#endregion EP Amount*/
+
+.c-game-header__antimatter {
+  font-size: 2.5rem;
+  color: black;
+}
+
+.l-game-header__buttons-line {
+  position: relative;
+}
+
+.c-game-header__tickspeed-row--hidden {
+  visibility: hidden;
+}
+
+/*#endregion Header*/
 
 .t-s2 .c-dim-tab {
   color: black !important;

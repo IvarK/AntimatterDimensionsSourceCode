@@ -48,8 +48,6 @@ function updateCoinPerSec() {
     }
 }
 
-function getInfinitied() {return Math.max(player.infinitied + player.infinitiedBank, 0)}
-
 var worstChallengeTime = 1
 
 function updateWorstChallengeTime() {
@@ -80,7 +78,7 @@ function updateDimensions() {
         document.getElementById("tickSpeedAmount").style.visibility = "hidden";
     }
 
-  if (!(getInfinitied() === 0 && player.realities === 0 && player.eternities === 0)) {
+  if (!(Player.totalInfinitied === 0 && player.realities === 0 && player.eternities === 0)) {
     if (player.infinityPoints.equals(1)) {
       document.getElementById("infinityPoints2").textContent = "You have 1 Infinity point."
     }
@@ -919,7 +917,7 @@ function canUnlockEC(idx, cost, study, study2) {
         break;
 
         case 4:
-        if (1e8 + (ECTimesCompleted("eterc4")*5e7) <= getInfinitied()) return true
+        if (1e8 + (ECTimesCompleted("eterc4")*5e7) <= Player.totalInfinitied) return true
         break;
 
         case 5:
@@ -1649,7 +1647,7 @@ function gameLoop(diff) {
         document.getElementById("postInfinityButton").style.display = "none"
     }
 
-    var currentIPmin = gainedInfinityPoints().dividedBy(player.thisInfinityTime/60000)
+    var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
     if (IPminpeak.lte("1e100000")) document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b><br>"+shortenDimensions(currentIPmin) + " IP/min"+"<br>Peaked at "+shortenDimensions(IPminpeak)+" IP/min"
     else document.getElementById("postInfinityButton").innerHTML = "<b>Big Crunch for "+shortenDimensions(gainedInfinityPoints())+" Infinity Points.</b>"
@@ -2224,7 +2222,7 @@ init();
 setInterval( function() {
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
     if (player.currentEternityChall == "eterc10") {
-        ec10bonus = Decimal.pow(getInfinitied(), 1000).max(1)
+        ec10bonus = Decimal.pow(Player.totalInfinitied, 1000).max(1)
         if (player.timestudy.studies.includes(31)) ec10bonus = ec10bonus.pow(4)
     } else {
         ec10bonus = new Decimal(1)

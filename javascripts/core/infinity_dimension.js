@@ -136,6 +136,7 @@ function toggleAllInfDims() {
 
 var infDimPow = 1
 
+
 class InfinityDimensionInfo {
   constructor(tier) {
     this._props = player[`infinityDimension${tier}`];
@@ -183,7 +184,11 @@ class InfinityDimensionInfo {
   }
 
   get isUnlocked() {
-    return player.infDimensionsUnlocked[this._tier - 1];
+    return player.infDimensionsUnlocked[this._tier - 1] || player.eternities >= 25;
+  }
+
+  get requirement() {
+    return InfinityDimensionInfo.requirements[this._tier];
   }
 
   get isAutobuyerUnlocked() {
@@ -313,6 +318,27 @@ class InfinityDimensionInfo {
   }
 }
 
+InfinityDimensionInfo.requirements = [
+  null,
+  new Decimal("1e1100"),
+  new Decimal("1e1900"),
+  new Decimal("1e2400"),
+  new Decimal("1e10500"),
+  new Decimal("1e30000"),
+  new Decimal("1e45000"),
+  new Decimal("1e54000"),
+  new Decimal("1e60000")
+];
+
 function InfinityDimension(tier) {
   return new InfinityDimensionInfo(tier);
 }
+
+InfinityDimension.nextRequirement = function() {
+  if (InfinityDimension(8).isUnlocked)
+    throw "All Infinity Dimensions are unlocked";
+  return Array.dimensionTiers
+    .map(tier => InfinityDimension(tier))
+    .first(dim => !dim.isUnlocked)
+    .requirement;
+};

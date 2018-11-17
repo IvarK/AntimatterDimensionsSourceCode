@@ -57,6 +57,7 @@ function buyTickSpeed() {
   if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
   player.secretUnlocks.why++
+  GameUI.update();
   return true;
 }
 
@@ -192,3 +193,12 @@ function resetTickspeed() {
     tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
     player.tickspeed = tickspeed;
 }
+
+const Tickspeed = {
+  get isUnlocked() {
+    return player.secondAmount.gt(0) || player.eternities >= 30;
+  },
+  get multiplier() {
+    return getTickSpeedMultiplier();
+  }
+};

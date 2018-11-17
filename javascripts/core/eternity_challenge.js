@@ -228,7 +228,7 @@ EternityChallengeInfo.details = [
     /* EC10 */
     goal: new Decimal('1e3000'),
     goalIncrease: new Decimal('1e300'),
-    rewardValue: completions => new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * completions * 0.000002 + 1, 1))
+    rewardValue: completions => new Decimal(Math.max(Math.pow(Player.totalInfinitied, 0.9) * completions * 0.000002 + 1, 1))
   },
   {
     /* EC11 */
@@ -244,9 +244,19 @@ EternityChallengeInfo.details = [
   }
 ];
 
+
 function EternityChallenge(id) {
   return new EternityChallengeInfo(id);
 }
+
+/**
+ * @returns {EternityChallengeInfo}
+ */
+EternityChallenge.current = function() {
+  if (player.currentEternityChall === String.empty) return undefined;
+  const id = parseInt(player.currentEternityChall.split("eterc")[1]);
+  return EternityChallenge(id);
+};
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
   if (player.reality.perks.includes(95)) return TimeSpan.fromHours(2).totalMilliseconds

@@ -147,10 +147,10 @@ function newGlyph(glyph, type, effectAmount) {
         toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)];
         break;
       case "power":
-        toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
+        if (player.realities == 0) toAdd = "pow";
+        else toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
         break;
     }
-    console.log(toAdd)
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 

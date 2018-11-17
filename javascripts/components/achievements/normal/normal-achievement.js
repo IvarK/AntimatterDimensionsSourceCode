@@ -28,7 +28,7 @@ Vue.component('normal-achievement', {
     },
     styleObject: function() {
       return {
-        "background-image": `url(images/${allAchievementNums[this.details.name]}.png)`,
+        "background-image": `url(images/${this.achId}.png)`,
       };
     },
     classObject: function() {
@@ -232,7 +232,7 @@ const achDetails = [
   { name: "Now you're thinking with dilation!", imageId: 103, tooltip: () => `Eternity for ${shortenCosts(new Decimal("1e600"))} EP in 1 minute or less while Dilated.` },
   { name: "This is what I have to do to get rid of you.", imageId: 104, tooltip: () => `Reach ${shortenCosts(new Decimal('1e28000'))} IP without any time studies while Dilated. Reward: The active time study path doesn't disable your Replicanti autobuyer.` },
 
-  { name: "Snap back to reality", imageId: 105, tooltip: () => "Make a new reality. Reward: 4x IP gain and boost from buying 10 Dimensions +0.1" },
+  { name: "Snap back to reality", imageId: 105, tooltip: () => "Make a new Reality. Reward: 4x IP gain and boost from buying 10 Dimensions +0.1" },
   { name: "How does this work?", imageId: 106, tooltip: () => "Unlock the automator. Reward: Dimension Boosts are 50% more effective." },
   { name: "Yo dawg, I heard you liked reskins...", imageId: 107, tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shortenMoney(Number.MAX_VALUE)} times higher EP than the previous one. Reward: nothing right now.` },
   { name: "r144", imageId: 108, tooltip: () => "I appreciate your curiosity :)" },

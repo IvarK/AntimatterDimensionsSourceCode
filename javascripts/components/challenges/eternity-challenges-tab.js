@@ -141,7 +141,7 @@ const eternityChallengeVisuals = [
   {
     /* EC1 */
     description: "Time Dimensions are disabled.",
-    reward: "Time dimension multiplier based on time spent this eternity",
+    reward: "Time Dimension multiplier based on time spent this Eternity",
     rewardValueTemplate: "{0}x",
     formatReward: (reward, shortenMoney) => shortenMoney(reward),
     fontSizeOverride: ".85rem"
@@ -171,14 +171,14 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC5 */
-    description: "Galaxy cost increase scaling starts instantly (normally at 100 galaxies). Dimension boost costs scaling is massively increased.",
+    description: "Galaxy cost increase scaling starts instantly (normally at 100 galaxies). Dimension Boost costs scaling is massively increased.",
     reward: "Galaxy cost scaling starts later",
     rewardValueTemplate: "{0} galaxies later",
     formatReward: reward => reward.toString()
   },
   {
     /* EC6 */
-    description: "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max replicanti galaxies is massively reduced.",
+    description: "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti galaxies is massively reduced.",
     reward: "Reduce the dimension cost multiplier growth",
     rewardValueTemplate: "x - {0}",
     formatReward: reward => reward.toFixed(1)
@@ -186,14 +186,14 @@ const eternityChallengeVisuals = [
   {
     /* EC7 */
     description: "1st Time Dimension produces 8th Infinity Dimension, and 1st Infinity Dimension produces 7th Dimensions. Tickspeed affects all dimensions normally.",
-    reward: "1st Time dimension produces 8th Infinity Dimensions",
+    reward: "1st Time Dimension produces 8th Infinity Dimensions",
     rewardValueTemplate: "{0} per second",
     formatReward: (reward, shortenMoney) => shortenMoney(reward)
   },
   {
     /* EC8 */
     description: "You can only upgrade Infinity Dimensions 50 times, and Replicanti upgrades 40 times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.",
-    reward: "Infinity power powers up replicanti galaxies",
+    reward: "Infinity Power powers up Replicanti galaxies",
     rewardValueTemplate: "{0}%",
     formatReward: reward => (reward * 100).toFixed(2)
   },

@@ -92,12 +92,12 @@ const infinityChallengeDetails = [
     reward: "1.3x on all Infinity Dimensions for each Infinity Challenge completed"
   },
   {
-    description: "Automatically sacrifice every 8 ticks once you have 8th Dimension.",
+    description: "Automatically sacrifice every 8 ticks once you have an 8th Dimension.",
     goal: new Decimal('1e10500'),
     reward: "Sacrifice autobuyer and more powerful sacrifice"
   },
   {
-    description: "Tickspeed interval decrease is always at 0%, but every tickspeed purchase you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
+    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
     goal: new Decimal('1e5000'),
     reward: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies"
   },

@@ -85,7 +85,7 @@ const normalChallengeDetails = [
     reward: "Seventh Dimension autobuyer"
   },
   {
-    description: "Dimension Boost and galaxies are useless, sacrifice resets everything but is immensely more powerful.",
+    description: "Dimension Boosts and galaxies are useless, sacrifice resets everything but is immensely more powerful.",
     reward: "Eighth Dimension autobuyer"
   },
   {
@@ -93,15 +93,15 @@ const normalChallengeDetails = [
     reward: "Tickspeed autobuyer"
   },
   {
-    description: "There are only 6 dimensions, with dimension boost and antimatter galaxy costs modified.",
+    description: "There are only 6 dimensions, with Dimension Boost and Antimatter Galaxy costs modified.",
     reward: "Automated Dimension Boosts"
   },
   {
-    description: "There's normal matter which rises once you have at least 1 2nd Dimension. If it exceeds your antimatter, it will dimension boost without giving the bonus.",
+    description: "There's normal matter which rises once you have at least 1 2nd Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus.",
     reward: "Automated Antimatter Galaxies"
   },
   {
-    description: "Each dimension produces the dimension 2 below it; first dimensions produce reduced antimatter.",
+    description: "Each dimension produces the dimension 2 below it; 1st Dimensions produce reduced antimatter.",
     reward: "Automated Big Crunches"
   }
 ];

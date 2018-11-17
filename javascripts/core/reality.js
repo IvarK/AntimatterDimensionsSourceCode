@@ -39,8 +39,7 @@ function reality(force, reset, auto) {
         return
     }
     realizationCheck = 0;
-    let g = generateRandomGlyph(gainedGlyphLevel())
-    if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(g);
+    if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality && !force) {
         player.bestEternity = player.thisEternity
     }

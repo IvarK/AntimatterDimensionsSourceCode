@@ -148,9 +148,9 @@ function newGlyph(glyph, type, effectAmount) {
         break;
       case "power":
         toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
+        if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) toAdd = "pow"
         break;
     }
-    console.log(toAdd)
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
 

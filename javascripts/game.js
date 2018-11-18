@@ -418,23 +418,24 @@ function gainedInfinityPoints() {
 }
 
 function gainedEternityPoints() {
-    if (player.celestials.effarig.run) return Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(kongEPMult)
-    var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+  let ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(kongEPMult);
+  if (player.celestials.effarig.run) return ret;
+  ret = ret.times(player.epmult);
 
-    var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
-    if (player.reality.perks.includes(72)) study121 = 50
+  var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
+  if (player.reality.perks.includes(72)) study121 = 50
 
-    var study123 = Math.sqrt(1.39*player.thisEternity/1000)
-    if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
-    if (player.timestudy.studies.includes(61)) ret = ret.times(10)
-    if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
-    else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
-    else if (player.timestudy.studies.includes(123)) ret = ret.times(study123)
-    ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
+  var study123 = Math.sqrt(1.39*player.thisEternity/1000)
+  if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
+  if (player.timestudy.studies.includes(61)) ret = ret.times(10)
+  if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
+  else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
+  else if (player.timestudy.studies.includes(123)) ret = ret.times(study123)
+  ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
 
-    if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
+  if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
 
-    return ret.floor()
+  return ret.floor()
 }
 
 function gainedRealityMachines() {

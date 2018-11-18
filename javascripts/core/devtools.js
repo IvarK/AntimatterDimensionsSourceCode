@@ -433,11 +433,6 @@ dev.showProductionBreakdown = function() {
   let IC8Component = mult18.pow(6).pow(IC4pow);
   let NDPowComponent = getAdjustedGlyphEffect("powerpow") == 0 ? 0 : (getAdjustedGlyphEffect("powerpow") - 1) / getAdjustedGlyphEffect("powerpow");
   
-  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
-  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
-  replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
-  
   let totalIDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
     totalIDMults = totalIDMults.times(InfinityDimension(tier).multiplier);
@@ -446,7 +441,7 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     boughtIDComponent = boughtIDComponent.times(player["infinityDimension" + i].power);
   }
-  let replicantiComponent = replmult.pow(8);
+  let replicantiComponent = replicantiMult().pow(8);
   let TSmultToIDComponent = new Decimal(1);
   if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
   if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))

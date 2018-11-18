@@ -187,14 +187,7 @@ class TimeDimensionInfo {
     }
 
     if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
-      let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2);
-      if (player.timestudy.studies.includes(21)) {
-        replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032));
-      }
-      if (player.timestudy.studies.includes(102)) {
-        replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies));
-      }
-      mult = mult.times(replmult.pow(0.1));
+      mult = mult.times(replicantiMult().pow(0.1));
     }
 
     if (player.reality.upg.includes(22)) {

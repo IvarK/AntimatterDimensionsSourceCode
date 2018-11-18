@@ -295,7 +295,7 @@ function playerInfinityUpgradesOnEternity() {
 
 function updateInfCosts() {
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
-        document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
+        document.getElementById("11desc").textContent = "Currently: "+shortenMoney(new Decimal(1).dividedBy(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, -2500))))+"x"
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on Dimension Boosts)"
         document.getElementById("41desc").textContent = "Currently: "+shortenMoney(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))+"x"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"

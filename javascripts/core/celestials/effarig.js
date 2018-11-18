@@ -5,7 +5,7 @@ var effarigQuotes = [
   "We are the Celestials, and we want you to join us.",
   "My name is Effarig, the Celestial Of Reality",
   "Prove your worth.",
-  "I'll let you inside my Reality, mortal. Don't be crushed by it."
+  "I'll let you inside my Reality, mortal. Don't get crushed by it."
 ]
 
 const EFFARIG_UNLOCKS = {

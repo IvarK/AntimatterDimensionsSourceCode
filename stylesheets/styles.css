@@ -4330,6 +4330,14 @@ screen and (max-width: 480px) {
   justify-content: space-around;
 }
 
+.l-mechanics-container > div {
+  min-width: 400px;
+}
+
+.l-mechanics-container >.l-rm-container {
+  min-width: 13rem;
+}
+
 .c-rm-store {
   border: .1rem solid black;
   height: 50rem;
@@ -4361,6 +4369,15 @@ screen and (max-width: 480px) {
   border: .2rem solid #8c1f1f;
   background: #636363;
   color: white;
+  margin-bottom: 1rem
+}
+
+.c-effarig-unlock-description {
+  position: absolute;
+  left: 131px;
+  width: 200px;
+  border-bottom: 1px solid black;
+  margin-bottom: -1px
 }
 
 .o-effarig-quotes {
@@ -4377,6 +4394,25 @@ screen and (max-width: 480px) {
   font-weight: bold;
   font-size: 3rem;
   cursor: pointer;
+}
+
+.c-effarig-unlock {
+  width: 200px;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 10px;
+  margin: auto;
+  background-color: rgb(81, 81, 236);
+  color: white;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  user-select: none;
+}
+
+.c-effarig-unlock:hover {
+  background-color: rgb(208, 208, 208);
+  border: 1px solid rgb(208, 208, 208);
+  color: rgb(81, 81, 236);
 }
 
 /*#endregion Effarig tab*/

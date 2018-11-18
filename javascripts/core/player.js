@@ -358,7 +358,10 @@ var player = {
   celestials: {
     effarig: {
       rmStore: 0,
-      quoteIdx: 0
+      quoteIdx: 0,
+      unlocks: [],
+      run: true,
+      bestRunAM: new Decimal(0)
     }
   },
   options: {

@@ -78,6 +78,7 @@ function reality(force, reset, auto) {
     if (player.reality.respec) {
         respecGlyphs();
     }
+    handleCelestialRuns()
 
     //reset global values to avoid a tick of unupdated production
     infDimPow = 1;
@@ -238,7 +239,6 @@ function reality(force, reset, auto) {
     }
     possibleGlyphs = []
     glyphSelected = false
-    
     if (player.reality.upg.includes(13)) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
@@ -248,6 +248,13 @@ function reality(force, reset, auto) {
         }
     }
     GameUI.dispatch(GameEvent.REALITY);
+}
+
+function handleCelestialRuns() {
+  if (player.celestials.effarig.run) {
+    player.celestials.effarig.run = false
+    if (player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+  }
 }
 
 function fullResetTimeDimensions() {

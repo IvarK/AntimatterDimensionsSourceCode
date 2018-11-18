@@ -38,7 +38,7 @@ Vue.component('effarig-tab', {
       <div class="o-effarig-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
       <div class="l-mechanics-container">
         <div class="l-effarig-unlocks l-effarig-mechanic-container">
-          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers and TT generation is disabled. The further you get the better the reward.</div>
+          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.</div>
         </div>
         <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 

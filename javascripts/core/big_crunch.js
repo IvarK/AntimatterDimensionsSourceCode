@@ -167,7 +167,6 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (player.celestials.effarig.run) return new Decimal(1)
   let mult = player.infMult.times(kongIPMult);
   if (player.timestudy.studies.includes(41)) {
     mult = mult.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies));

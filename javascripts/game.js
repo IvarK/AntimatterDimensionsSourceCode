@@ -414,14 +414,13 @@ function gainedInfinityPoints() {
     if (player.timestudy.studies.includes(111)) div = 285;
     else if (isAchEnabled("r103")) div = 307.8;
     let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
+    if (player.celestials.effarig.run) return ret.times(totalIPMult()).pow(0.9).floor()
     return ret.times(totalIPMult()).floor()
 }
 
 function gainedEternityPoints() {
-  let ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(kongEPMult);
-  if (player.celestials.effarig.run) return ret;
-  ret = ret.times(player.epmult);
-
+  var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+  
   var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
   if (player.reality.perks.includes(72)) study121 = 50
 
@@ -434,7 +433,7 @@ function gainedEternityPoints() {
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
 
   if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
-
+  if (player.celestials.effarig.run) return ret.pow(0.9).floor()
   return ret.floor()
 }
 

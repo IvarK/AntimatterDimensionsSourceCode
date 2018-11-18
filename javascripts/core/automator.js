@@ -61,7 +61,6 @@ function automatorOnOff() {
 
 function highlightcurrent() {
     var row = automatorRows[automatorIdx];
-    console.log(automatorRows.slice(0, automatorIdx));
     var idx = automatorRows.slice(0, automatorIdx).reduce(function (acc, x) {
         return acc + x.length + 1;
     }, 0);

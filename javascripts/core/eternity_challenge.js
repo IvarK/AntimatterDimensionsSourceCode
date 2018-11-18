@@ -157,6 +157,12 @@ class EternityChallengeInfo {
     }
   }
 
+  addCompletion() {
+    player.eternityChalls[this.fullId] = this.completions + 1
+    if (this._id === 6) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1));
+    if (this._id === 11) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2));
+  }
+
   start() {
     startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
   }
@@ -240,4 +246,32 @@ EternityChallengeInfo.details = [
 
 function EternityChallenge(id) {
   return new EternityChallengeInfo(id);
+}
+
+EternityChallenge.currentAutoCompleteThreshold = function() {
+  if (player.reality.perks.includes(95)) return TimeSpan.fromHours(2).totalMilliseconds
+  if (player.reality.perks.includes(94)) return TimeSpan.fromHours(4).totalMilliseconds
+  if (player.reality.perks.includes(93)) return TimeSpan.fromHours(6).totalMilliseconds
+  if (player.reality.perks.includes(92)) return TimeSpan.fromHours(8).totalMilliseconds
+  if (player.reality.perks.includes(91)) return TimeSpan.fromHours(12).totalMilliseconds
+  else return Infinity
+}
+
+EternityChallenge.autoCompleteNext = function() {
+  for (let i=1; i<=12; i++) {
+    let c = EternityChallenge(i)
+    if (!c.isFullyCompleted) {
+      c.addCompletion()
+      return true
+    }
+  }
+  return false
+}
+
+EternityChallenge.autoCompleteTick  = function() {
+  let threshold = this.currentAutoCompleteThreshold()
+  while (player.reality.lastAutoEC - threshold > 0) {
+    this.autoCompleteNext()
+    player.reality.lastAutoEC -= threshold
+  }
 }

@@ -327,7 +327,8 @@ var player = {
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
-    pp: 0
+    pp: 0,
+    lastAutoEC: 0
   },
   wormhole: [{
     speed: 60 * 60, // Seconds to fill

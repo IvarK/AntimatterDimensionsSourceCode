@@ -1405,6 +1405,8 @@ setInterval(function() {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
+
+    EternityChallenge.autoCompleteTick()
 }, 1000)
 
 function getECGoalIP(challNum, timesCompleted) {
@@ -1567,6 +1569,7 @@ function gameLoop(diff) {
     }
 
     player.realTimePlayed += diff / speedFactor
+    if (player.reality.perks.includes(91)) player.reality.lastAutoEC += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisEternity += diff

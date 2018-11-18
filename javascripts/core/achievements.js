@@ -209,7 +209,7 @@ function giveAchievement(name) {
 
 function getSecretAchAmount() {
     var n = 0
-    for (var i=1; i<4; i++) {
+    for (var i=1; i<5; i++) {
         var achNum = i * 10
         for (var l=0; l<8; l++) {
             achNum += 1;

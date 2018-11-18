@@ -4,7 +4,7 @@ function canBuyTickSpeed() {
 }
 
 function getTickSpeedMultiplier() {
-  if (player.currentChallenge == "postc3") return 1;
+  if (player.currentChallenge == "postc3") return new Decimal(1);
   let galaxies = player.galaxies+player.replicanti.galaxies+player.dilation.freeGalaxies
   if (player.timestudy.studies.includes(133)) galaxies += player.replicanti.galaxies/2
   if (player.timestudy.studies.includes(132)) galaxies += player.replicanti.galaxies*0.4

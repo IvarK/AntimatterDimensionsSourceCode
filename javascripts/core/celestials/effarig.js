@@ -4,7 +4,8 @@ var effarigQuotes = [
   "You have shown promise with your bending of the reality",
   "We are the Celestials, and we want you to join us.",
   "My name is Effarig, the Celestial Of Reality",
-  "Prove your worth."
+  "Prove your worth.",
+  "I'll let you inside my Reality, mortal. Don't be crushed by it."
 ]
 
 const EFFARIG_UNLOCKS = {
@@ -47,6 +48,6 @@ var Effarig = {
     return effarigQuotes[player.celestials.effarig.quoteIdx]
   },
   nextQuote() {
-    if (player.celestials.effarig.quoteIdx !== effarigQuotes.length - 1) player.celestials.effarig.quoteIdx++
+    if (player.celestials.effarig.quoteIdx < 4 + player.celestials.effarig.unlocks.length) player.celestials.effarig.quoteIdx++
   }
 }

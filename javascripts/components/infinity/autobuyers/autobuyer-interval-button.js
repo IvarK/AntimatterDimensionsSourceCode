@@ -20,7 +20,7 @@ Vue.component("autobuyer-interval-button", {
   template:
     `<button
       v-if="!isMaxed"
-      class="o-autobuyer-btn"
+      class="o-autobuyer-btn l-autobuyer-box__button"
       @click="buy"
     >40% smaller interval<br>Cost: {{shortenDimensions(cost)}} IP</button>`
 });

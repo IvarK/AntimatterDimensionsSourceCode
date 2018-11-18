@@ -1,4 +1,5 @@
 function startChallenge(name, target) {
+    if (name === "challenge1") return;
     if (!askChallengeConfirmation(name)) {
         return;
     }

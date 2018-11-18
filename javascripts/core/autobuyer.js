@@ -270,14 +270,14 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   /**
    * @returns {number}
    */
-  get limit() {
+  get maxDimBoosts() {
     return this.priority;
   }
 
   /**
    * @param {number} value
    */
-  set limit(value) {
+  set maxDimBoosts(value) {
     this.priority = value;
   }
 
@@ -325,7 +325,6 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
 
   tick() {
     if (!this.canTick()) return;
-    if (!this.dimBoolean()) return;
     if (this.isBuyMaxUnlocked) {
       if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
         Autobuyer.lastDimBoost = Autobuyer.intervalTimer;
@@ -333,22 +332,18 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
       }
       return;
     }
-    else if (player.resets >= 4) {
+    if (this.maxDimBoosts <= player.resets && this.galaxies > player.galaxies) {
+      return;
+    }
+    if (this.isBulkBuyUnlocked) {
+      if (!DimBoost.bulkRequirement(this.bulk).isSatisfied) return;
       softReset(this.bulk);
     }
     else {
+      if (!DimBoost.requirement.isSatisfied) return;
       softReset(1);
     }
     this.resetTicks();
-  }
-
-  dimBoolean() {
-    const requirement = DimBoost.requirement;
-    if (requirement.isSatisfied) return true;
-    if (player.eternities < 10 && !DimBoost.bulkRequirement(this.buyMaxInterval - 1).isSatisfied) return false;
-    if (player.overXGalaxies <= player.galaxies) return true;
-    if ((player.currentChallenge === "challenge4" || player.currentChallenge === "postc1") && this.limit < requirement.amount && requirement.tier === 6) return false;
-    return this.limit > requirement.amount && requirement.tier === 8;
   }
 
   buy() {

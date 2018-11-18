@@ -15,8 +15,8 @@ Vue.component("dimboost-autobuyer-box", {
     limitInputSetup: function() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
-        () => this.autobuyer.limit,
-        value => this.autobuyer.limit = value
+        () => this.autobuyer.maxDimBoosts,
+        value => this.autobuyer.maxDimBoosts = value
       );
     },
     galaxiesInputSetup: function() {

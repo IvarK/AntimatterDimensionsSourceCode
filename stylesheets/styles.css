@@ -3971,6 +3971,10 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
+.l-autobuyer-box__button {
+  flex-shrink: 0;
+}
+
 /*#endregion autobuyer-box*/
 
 /*#endregion Autobuyers*/

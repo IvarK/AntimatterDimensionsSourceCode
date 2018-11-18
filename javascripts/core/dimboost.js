@@ -122,15 +122,16 @@ function applyChallengeModifiers() {
 }
 
 function skipResetsIfPossible() {
-    if (player.resets < 4 && player.currentChallenge === "") {
-        if (InfinityUpgrade.skipResetGalaxy.isBought) {
-            player.resets = 4;
-            if (player.galaxies === 0) player.galaxies = 1
-        }
-        else if (InfinityUpgrade.skipReset3.isBought) player.resets = 3;
-        else if (InfinityUpgrade.skipReset2.isBought) player.resets = 2;
-        else if (InfinityUpgrade.skipReset1.isBought) player.resets = 1;
-    }
+  if (player.currentChallenge !== "") {
+    return;
+  }
+  if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {
+    player.resets = 4;
+    if (player.galaxies === 0) player.galaxies = 1;
+  }
+  else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
+  else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
+  else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
 }
 
 function hidePreMilestone30Elements() {
@@ -163,7 +164,7 @@ function maxBuyDimBoosts(manual) {
 
   let availableBoosts = Number.MAX_VALUE;
   if (player.overXGalaxies > player.galaxies && !manual) {
-    availableBoosts = Autobuyer.dimboost.limit - player.resets - bulk;
+    availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets - bulk;
   }
 
   if (availableBoosts <= 0) {

@@ -414,7 +414,7 @@ function gainedInfinityPoints() {
     if (player.timestudy.studies.includes(111)) div = 285;
     else if (isAchEnabled("r103")) div = 307.8;
     let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
-    if (player.celestials.effarig.run) return ret.times(totalIPMult()).pow(0.1).floor()
+    if (player.celestials.effarig.run) return ret.times(totalIPMult()).pow(0.6).floor()
     return ret.times(totalIPMult()).floor()
 }
 
@@ -433,7 +433,7 @@ function gainedEternityPoints() {
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
 
   if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
-  if (player.celestials.effarig.run) return ret.pow(0.1).floor()
+  if (player.celestials.effarig.run) return ret.pow(0.6).floor()
   return ret.floor()
 }
 
@@ -1500,7 +1500,8 @@ function gameLoop(diff) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+        if (!player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
         player.partInfinityPoint -= genCount;
       }
     }

@@ -501,7 +501,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 
   bumpLimit(mult) {
-    if (this.mode === AutoCrunchMode.AMOUNT && this.limit !== undefined) {
+    if (this.isUnlocked && this.mode === AutoCrunchMode.AMOUNT) {
       this.limit = this.limit.times(mult);
     }
   }

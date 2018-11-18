@@ -310,7 +310,7 @@ InfinityUpgrade.galaxyBoost = new InfinityUpgrade({
 InfinityUpgrade.thisInfinityTimeMult = new InfinityUpgrade({
   id: "timeMult2",
   cost: 3,
-  dynamicEffect: () => Decimal.max(Math.pow(Time.totalTimePlayed.totalMinutes / 4, 0.25), 1)
+  dynamicEffect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 4, 0.25), 1)
 });
 InfinityUpgrade.unspentIPMult = new InfinityUpgrade({
   id: "unspentBonus",

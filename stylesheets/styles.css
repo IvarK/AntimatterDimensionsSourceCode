@@ -4402,7 +4402,7 @@ screen and (max-width: 480px) {
   border-radius: .5rem;
   padding: 1rem;
   margin: auto;
-  background-color: rgb(81, 81, 236);
+  background-color: #5151ec;
   color: white;
   cursor: pointer;
   transition-duration: 0.12s;
@@ -4410,9 +4410,9 @@ screen and (max-width: 480px) {
 }
 
 .c-effarig-unlock:hover {
-  background-color: rgb(208, 208, 208);
-  border: 1px solid rgb(208, 208, 208);
-  color: rgb(81, 81, 236);
+  background-color: #d0d0d0;
+  border: 1px solid #d0d0d0;
+  color: #5151ec;
 }
 
 /* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is amount^0.15 / 1e15^0.15 * 100 */

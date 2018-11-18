@@ -508,7 +508,7 @@ function getDimensionProductionPerSecond(tier) {
   const multiplier = getDimensionFinalMultiplier(tier);
   const dimension = NormalDimension(tier);
   let amount = dimension.amount.floor();
-  if (player.currentChallenge === "challenge7" && tier === 4) {
+  if (player.currentChallenge === "challenge7") {
     if (tier === 2) amount = amount.pow(1.5);
     if (tier === 4) amount = amount.pow(1.3);
   }

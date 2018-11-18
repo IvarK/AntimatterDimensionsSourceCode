@@ -360,7 +360,7 @@ var player = {
       rmStore: 0,
       quoteIdx: 0,
       unlocks: [],
-      run: true,
+      run: false,
       bestRunAM: new Decimal(0)
     }
   },

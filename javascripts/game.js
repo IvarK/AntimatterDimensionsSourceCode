@@ -418,7 +418,7 @@ function gainedInfinityPoints() {
 }
 
 function gainedEternityPoints() {
-    if (player.celestials.effarig.run) return new Decimal(1)
+    if (player.celestials.effarig.run) return Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(kongEPMult)
     var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
 
     var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5

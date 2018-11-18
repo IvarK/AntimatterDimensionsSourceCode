@@ -121,7 +121,7 @@ function secondSoftReset() {
 }
 
 function updateChallengeElements() {
-    if (name === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6")
+    if (player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6")
         document.getElementById("matter").style.display = "block";
     else
         document.getElementById("matter").style.display = "none";

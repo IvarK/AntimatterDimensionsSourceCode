@@ -30,7 +30,7 @@ Vue.component("game-header-big-crunch-button", {
   template:
     `<button
       v-if="isVisible"
-      class="postinfcrunch"
+      class="o-prestige-btn o-prestige-btn--big-crunch"
       onclick="bigCrunchReset()"
     >
       <b>Big Crunch for {{shortenDimensions(gainedIP)}} Infinity {{ "point" | pluralize(gainedIP) }}.</b>

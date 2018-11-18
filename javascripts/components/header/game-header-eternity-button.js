@@ -94,7 +94,7 @@ Vue.component("game-header-eternity-button", {
   template:
     `<button
       v-if="isVisible"
-      class="eternitybtn"
+      class="o-prestige-btn o-prestige-btn--eternity"
       onclick="eternity()"
     >
       <!-- First time -->
@@ -130,10 +130,10 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b>{{shortenDimensions(gainedEP)}} EP</b>
+          Gain <b>{{shortenDimensions(gainedEP)}}</b> EP
         </template>
         <template v-else>
-          Gain <b>{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}</b>
+          Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}
         </template>
         <br>
         You should explore a bit and look at new content before clicking me!

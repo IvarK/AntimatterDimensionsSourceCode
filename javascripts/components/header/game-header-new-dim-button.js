@@ -9,8 +9,9 @@ Vue.component("game-header-new-dim-button", {
   computed: {
     classObject: function() {
       return {
-        newdim: this.isAffordable,
-        newdimlocked: !this.isAffordable
+        "o-primary-btn": true,
+        "o-primary-btn--new-dim": true,
+        "o-primary-btn--disabled": !this.isAffordable
       };
     }
   },

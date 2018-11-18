@@ -177,8 +177,6 @@ function reality(force, reset, auto) {
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-    hidePreMilestone30Elements();
-    document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
@@ -195,14 +193,10 @@ function reality(force, reset, auto) {
     showEternityTab('timestudies', true)
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
-    updateTickSpeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
     }

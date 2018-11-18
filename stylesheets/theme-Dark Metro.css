@@ -21,10 +21,6 @@ body {
     box-shadow: 0px 0px 10px 0px black !important;
 }
 
-#coinAmount {
-    color: #E0E0E0 !important;
-}
-
 #news {
     color: #E0E0E0 !important;
 }
@@ -81,38 +77,6 @@ input {
     background: #E53935 !important;
 }
 
-.newdim {
-    color: black !important;
-    background: #455A64 !important;
-    border: 1px solid #43A047 !important;
-    box-shadow: 1px 1px 1px 0px black;
-}
-
-.newdim:hover {
-    background: #43A047 !important;
-}
-
-.newdimlocked {
-    background: #37474F !important;
-    border: 1px solid #E53935 !important;
-    box-shadow: 1px 1px 1px 0px black;
-}
-
-.newdimlocked:hover {
-    background: #E53935 !important;
-}
-
-.infinitybtn {
-    color: black !important;
-    background: white !important;
-    border: 1px solid #FF9800 !important;
-    box-shadow: 1px 1px 1px 0px black;
-}
-
-.infinitybtn:hover {
-    background: #FF9800 !important;
-}
-
 .infinitytabbtn {
     color: black !important;
     background: white !important;
@@ -122,15 +86,6 @@ input {
 
 .infinitytabbtn:hover {
     background: #FF9800 !important;
-}
-
-.eternitybtn {
-    color: #673AB7 !important;
-    border: 1px solid #673AB7 !important;
-}
-
-.eternitybtn:hover {
-    background: white !important;
 }
 
 .eternitytabbtn {
@@ -143,30 +98,6 @@ input {
 .eternitytabbtn:hover {
     background: white !important;
     box-shadow: 1px 1px 1px 0px black;
-}
-
-.postinfcrunch {
-    color: black !important;
-    background: #455A64 !important;
-    border: 1px solid #1E88E5 !important;
-    box-shadow: 1px 1px 1px 0px black;
-}
-
-.postinfcrunch:hover {
-    background: #1E88E5 !important;
-    border: 1px solid #1E88E5 !important;
-}
-
-.EPAmount1 {
-    color: #673AB7;
-}
-
-.EPAmount2 {
-    color: #673AB7;
-}
-
-.IPAmount2 {
-    color: #FF9800;
 }
 
 .RMAmount1 {

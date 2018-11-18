@@ -116,15 +116,7 @@ function secondSoftReset() {
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
-    updateChallengeElements();
     Marathon2 = 0;
-}
-
-function updateChallengeElements() {
-    if (player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6")
-        document.getElementById("matter").style.display = "block";
-    else
-        document.getElementById("matter").style.display = "none";
 }
 
 function checkBigCrunchAchievements() {

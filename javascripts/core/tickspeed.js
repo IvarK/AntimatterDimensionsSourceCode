@@ -61,12 +61,6 @@ function buyTickSpeed() {
   return true;
 }
 
-document.getElementById("tickSpeed").onclick = function () {
-  buyTickSpeed();
-
-  updateTickSpeed();
-};
-
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return false;
   let money = new Decimal(player.money);
@@ -143,43 +137,6 @@ function buyMaxTickSpeed() {
   }
 
   flushValues();
-  updateTickSpeed()
-}
-
-
-function updateTickSpeed() {
-	let exp = player.tickspeed.e;
-	let tickSpeedText;
-	if (exp > 1)
-		tickSpeedText = 'Tickspeed: ' + player.tickspeed.toFixed(0);
-	else 
-		tickSpeedText = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
-  
-	// Accelerated game speed suffix
-	let gameSpeedMult = getGameSpeedupFactor();
-  let gammaText = "";
-  let tickspeedTooltip = "";
-	if (gameSpeedMult != 1) {
-    if (gameSpeedMult < 1) {
-      gammaText = "(γ = " + gameSpeedMult.toFixed(3) + ")";
-      tickspeedTooltip = "The game is running " + (1/gameSpeedMult).toFixed(0) + "x slower.";
-    }
-    else {
-      let formattedSpeed = "";
-      if (gameSpeedMult < 10000)
-        formattedSpeed = gameSpeedMult.toFixed(3)
-      else
-        formattedSpeed = shortenDimensions(gameSpeedMult)
-      gammaText = "(γ = " + formattedSpeed + ")";
-      tickspeedTooltip = "The game is running " + formattedSpeed + "x faster.";
-    }
-  }
-  
-  document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   " + gammaText;
-  if (tickspeedTooltip === "")
-    document.getElementById("tickSpeedAmount").removeAttribute('ach-tooltip');
-  else
-    document.getElementById("tickSpeedAmount").setAttribute('ach-tooltip', tickspeedTooltip);
 }
 
 function resetTickspeed() {

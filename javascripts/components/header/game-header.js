@@ -7,6 +7,13 @@ Vue.component("game-header", {
       antimatterPerSec: new Decimal(0)
     };
   },
+  computed: {
+    classObject: function() {
+      return {
+        "l-game-header--hidden": this.$viewModel.bigCrunch
+      };
+    }
+  },
   methods: {
     update() {
       this.isInMatterChallenge = ["challenge12", "postc1", "postc6"].includes(player.currentChallenge);
@@ -18,7 +25,7 @@ Vue.component("game-header", {
     }
   },
   template:
-    `<div>
+    `<div :class="classObject">
       <div v-if="isInMatterChallenge">There is {{shortenMoney(matter)}} matter.</div>
         <game-header-amounts-line />
         <div>

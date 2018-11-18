@@ -298,127 +298,6 @@ button {
     border-radius: 4px;
 }
 
-.postinfcrunch {
-    background: #E0E0E0;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: absolute;
-    left: 75%;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    font-size: 11px
-}
-
-.postinfcrunch br {
-    pointer-events: none;
-}
-
-.postinfcrunch b {
-    pointer-events: none;
-}
-
-.postinfcrunch:hover {
-    color: #FFFFFF;
-    background: #4980CC;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-}
-
-.IP {
-    left: 75%;
-    position: absolute;
-    font-size: 12px;
-    width: 210px;
-}
-
-.IPAmount2 {
-    font-weight: bold;
-}
-
-.EP {
-    right: 75%;
-    position: absolute;
-    font-size: 12px;
-    width: 210px;
-}
-
-.EPAmount2 {
-    font-weight: bold;
-}
-
-.newdim {
-    font-weight: bold;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: absolute;
-    right: 75%;
-    width: 200px;
-    height: 60px;
-    font-family: Typewriter;
-    color: black;
-    background: #F2F2F2;
-    border: 1px solid #127A20;
-    cursor: pointer;
-    z-index: 1;
-}
-
-
-
-.newdim:hover {
-    color: #FFF;
-    background: #5AC467;
-}
-
-
-.newdimlocked {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    position: absolute;
-    right: 75%;
-    width: 200px;
-    height: 60px;
-    color: #000000;
-    background: #A3A3A3;
-    font-weight: bold;
-    font-family: Typewriter;
-    border: 1px solid #B84B5F;
-    z-index: 1;
-}
-
-.newdimlocked:hover {
-    color: #000000;
-    background: #B84B5F;
-}
-
-.eternitybtn {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: absolute;
-    right: 75%;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-    cursor: pointer;
-    font-size: 11px;
-}
-
-
-
-.eternitybtn:hover {
-    color: #511568;
-    background: white;
-}
-
-
-
 .infinitytabbtn {
     color: #FFFFFF;
     background: #1F1F1F;
@@ -2577,6 +2456,10 @@ screen and (max-width: 480px) {
 
 /*#region Header*/
 
+.l-game-header--hidden {
+  visibility: hidden;
+}
+
 .l-game-header__amounts-line {
   position: relative;
   font-size: 1.2rem;
@@ -2684,6 +2567,16 @@ screen and (max-width: 480px) {
 .l-game-header__big-crunch-btn {
   position: absolute;
   left: 75%;
+}
+
+.l-game-header__eternity-btn {
+  position: absolute;
+  right: 75%;
+}
+
+.l-game-header__new-dim-btn {
+  position: absolute;
+  right: 75%;
 }
 
 .c-game-header__tickspeed-row--hidden {

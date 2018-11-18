@@ -59,11 +59,12 @@ Vue.component("game-header-tickspeed-row", {
   },
   methods: {
     update() {
-      this.isVisible = Tickspeed.isUnlocked;
+      const isEC9Running = EternityChallenge(9).isRunning;
+      this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(player.tickSpeedCost);
-      this.isAffordable = canAfford(player.tickSpeedCost);
+      this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
       this.tickspeed.copyFrom(player.tickspeed);
       this.gameSpeedMult = getGameSpeedupFactor();
     }

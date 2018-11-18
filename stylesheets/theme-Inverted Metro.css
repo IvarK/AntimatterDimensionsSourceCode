@@ -77,27 +77,6 @@ input, select {
     background: #EF5350 !important;
 }
 
-.newdim {
-    color: black !important;
-    background: #EEEEEE !important;
-    border: 1px solid #66BB6A !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.newdim:hover {
-    background: #66BB6A !important;
-}
-
-.newdimlocked {
-    background: #9E9E9E !important;
-    border: 1px solid #EF5350 !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.newdimlocked:hover {
-    background: #EF5350 !important;
-}
-
 .infinitytabbtn {
     border: 1px solid #FF9800 !important;
     background: #1F1F1F !important;
@@ -107,15 +86,6 @@ input, select {
 .infinitytabbtn:hover {
     background: #FF9800 !important;
     border: 1px solid #FF9800 !important;
-}
-
-.eternitybtn {
-    color: #673AB7 !important;
-    border: 1px solid #673AB7 !important;
-}
-
-.eternitybtn:hover {
-    background: white !important;
 }
 
 .eternitytabbtn {
@@ -128,29 +98,6 @@ input, select {
 .eternitytabbtn:hover {
     background: #FFF !important;
     border: 1px solid #673AB7 !important;
-}
-
-.postinfcrunch {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.postinfcrunch:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
-}
-
-.EPAmount1 {
-    color: #673AB7;
-}
-
-.EPAmount2 {
-    color: #673AB7;
-}
-
-.IPAmount2 {
-    color: #FF9800;
 }
 
 .RMAmount1 {

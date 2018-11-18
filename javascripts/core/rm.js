@@ -475,7 +475,6 @@ function generateGlyphTable() {
   }
   activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
   $("#activeGlyphs").html(activeEffectText)
-  updateTickSpeed();
   updateTooltips();
   updateGlyphDescriptions()
 }

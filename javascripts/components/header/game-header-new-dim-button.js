@@ -11,7 +11,8 @@ Vue.component("game-header-new-dim-button", {
       return {
         "o-primary-btn": true,
         "o-primary-btn--new-dim": true,
-        "o-primary-btn--disabled": !this.isAffordable
+        "o-primary-btn--disabled": !this.isAffordable,
+        "l-game-header__new-dim-btn": true
       };
     }
   },

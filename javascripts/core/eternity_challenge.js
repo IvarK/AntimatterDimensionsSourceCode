@@ -53,8 +53,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     resetDimensions();
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
-    hidePreMilestone30Elements();
-    document.getElementById("matter").style.display = "none";
     updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
@@ -68,17 +66,12 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
-    updateTickSpeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     Marathon2 = 0;
-
-    return true
+    return true;
 }
 
 const TIERS_PER_EC = 5;

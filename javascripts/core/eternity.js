@@ -135,9 +135,6 @@ function eternity(force, auto) {
     player.replicanti.galaxies = 0;
     document.getElementById("respec").className = "storebtn";
 
-    hidePreMilestone30Elements();
-
-    document.getElementById("matter").style.display = "none";
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
 
     updateAutobuyers();
@@ -157,14 +154,10 @@ function eternity(force, auto) {
         console.log("Couldn't load Kongregate API")
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
-    updateTickSpeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
     }

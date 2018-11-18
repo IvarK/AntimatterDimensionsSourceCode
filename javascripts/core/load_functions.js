@@ -31,12 +31,6 @@ function onLoad() {
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?");
   }
-  if (player.secondAmount !== 0) {
-      document.getElementById("tickSpeed").style.visibility = "visible";
-      document.getElementById("tickSpeedMax").style.visibility = "visible";
-      document.getElementById("tickLabel").style.visibility = "visible";
-      document.getElementById("tickSpeedAmount").style.visibility = "visible";
-  }
 
   for (var i=0; i<12; i++) {
       if (player.autobuyers[i]%1 !== 0 && player.autobuyers[i].tier === undefined) {
@@ -93,8 +87,6 @@ function onLoad() {
   }
 
   transformSaveToDecimal();
-  updateCosts();
-  updateTickSpeed();
   respecToggle()
   respecToggle()
   updateLastTenRuns()
@@ -102,13 +94,6 @@ function onLoad() {
   updateLastTenRealities()
 
   updateInfCosts()
-
-  if (player.infinitied == 0 && player.eternities == 0) document.getElementById("infinityPoints2").style.display = "none"
-
-  if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc1" || player.currentChallenge == "postc6") document.getElementById("matter").style.display = "inline-block";
-  else document.getElementById("matter").style.display = "none";
-
-
 
   if (player.replicanti.galaxybuyer !== undefined) {
     replicantiGalaxyAutoToggle()
@@ -252,12 +237,6 @@ function onLoad() {
       document.getElementById("game").style.display = "none";
   }
 
-  if (player.eternities < 30) {
-    document.getElementById("tickSpeed").style.visibility = "hidden";
-    document.getElementById("tickSpeedMax").style.visibility = "hidden";
-    document.getElementById("tickLabel").style.visibility = "hidden";
-    document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-  }
 	initializeWormhole();
   recalculateAllGlyphs();
 
@@ -396,8 +375,6 @@ function change_save(saveId) {
 }
 
 function transformSaveToDecimal() {
-  document.getElementById("eternitybtn").style.display = (player.infinityPoints.gte(Number.MAX_VALUE) || player.eternities > 0) ? "inline-block" : "none"
-
   if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autobuyers[11].priority !== "undefined")player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority)
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     let glyph = player.reality.glyphs.active[i]

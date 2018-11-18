@@ -94,7 +94,7 @@ Vue.component("game-header-eternity-button", {
   template:
     `<button
       v-if="isVisible"
-      class="o-prestige-btn o-prestige-btn--eternity"
+      class="o-prestige-btn o-prestige-btn--eternity l-game-header__eternity-btn"
       onclick="eternity()"
     >
       <!-- First time -->

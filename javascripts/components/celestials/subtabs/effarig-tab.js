@@ -8,7 +8,8 @@ Vue.component('effarig-tab', {
       rmMult: 0,
       quote: "",
       quoteIdx: 0,
-      quoteLength: 0 // I'm going to add quotes to the array on certain breakpoints, so this value will change
+      quoteLength: 0, // I'm going to add quotes to the array on certain breakpoints, so this value will change
+      unlocks: []
     };
   },
   methods: {
@@ -25,19 +26,23 @@ Vue.component('effarig-tab', {
       this.quote = Effarig.quote
       this.quoteIdx = player.celestials.effarig.quoteIdx
       this.quoteLength = effarigQuotes.length
+      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(id => Effarig.has(id))
     },
     nextQuote() {
       Effarig.nextQuote()
+    },
+    startRun() {
+      Effarig.startRun()
     }
   },
   template:
     `<div class="l-effarig-celestial-tab">
       <div class="o-effarig-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < quoteLength - 1">→</button>
       <div class="l-mechanics-container">
-        <div class="l-effarig-unlocks">
+        <div class="l-effarig-unlocks l-effarig-mechanic-container">
+          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers and TT generation is disabled. The further you get the better the reward.</div>
         </div>
-
-        <div class="l-rm-container">
+        <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 
             @mousedown="pour = true"
             @mouseup="pour = false"
@@ -47,11 +52,11 @@ Vue.component('effarig-tab', {
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e15) }}</div>
             </div>
+            <div class="c-effarig-unlock-description" id="effarig-run-description">{{ shorten(5e12) }}: unlock Effarig's reality.</div>
           </div>
         </div>
 
-        <div class="c-unlock-descriptions">
-        </div>
+        <div class="c-unlock-descriptions l-effarig-mechanic-container"></div>
       </div>
     </div>`
 });

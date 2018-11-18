@@ -1742,7 +1742,7 @@ function gameLoop(diff) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
+    if (!player.celestials.effarig.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
 
 
 

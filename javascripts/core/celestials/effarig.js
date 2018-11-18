@@ -7,6 +7,10 @@ var effarigQuotes = [
   "Prove your worth."
 ]
 
+const EFFARIG_UNLOCKS = {
+  RUN: 0
+}
+
 var Effarig = {
   timePoured: 0,
   pourRM(diff) {
@@ -15,6 +19,17 @@ var Effarig = {
     let rmPoured = Math.min(1e6 * Math.pow(this.timePoured, 2), rm)
     this.rmStore += rmPoured
     player.reality.realityMachines = rm.minus(rmPoured)
+    this.checkForUnlocks()
+  },
+  checkForUnlocks() {
+    if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
+  },
+  has(id) {
+    return player.celestials.effarig.unlocks.includes(id)
+  },
+  startRun() {
+    startRealityOver()
+    player.celestials.effarig.run = true
   },
   get rmStore() {
     return player.celestials.effarig.rmStore

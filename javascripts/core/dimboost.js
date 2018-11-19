@@ -90,9 +90,7 @@ function softReset(bulk) {
     applyDimensionBoost();
     applyChallengeModifiers();
     skipResetsIfPossible();
-    hidePreMilestone30Elements();
     resetTickspeed();
-    updateTickSpeed();
     let currentMoney = player.money;
     resetMoney();
     if (isAchEnabled("r111")) {
@@ -132,15 +130,6 @@ function skipResetsIfPossible() {
   else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
   else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
   else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
-}
-
-function hidePreMilestone30Elements() {
-    if (player.eternities < 30) {
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-    }
 }
 
 function softResetBtnClick() {

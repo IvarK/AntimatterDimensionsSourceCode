@@ -162,14 +162,7 @@ function hardReset() {
   infDimPow = 1;
   save_game();
   load_game();
-  updateCosts();
-
-  document.getElementById("tickSpeed").style.visibility = "hidden";
-  document.getElementById("tickSpeedMax").style.visibility = "hidden";
-  document.getElementById("tickLabel").style.visibility = "hidden";
-  document.getElementById("tickSpeedAmount").style.visibility = "hidden";
   Tab.dimensions.normal.show();
-  updateTickSpeed();
   updateDimensions();
   updateAutobuyers();
 }

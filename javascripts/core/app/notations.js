@@ -34,8 +34,6 @@ Notation.set = function (name) {
     updateLastTenRuns();
     updateLastTenEternities();
     updateLastTenRealities();
-    updateTickSpeed();
-    updateCosts();
     updateDilationUpgradeCosts();
     updateAutobuyers();
     updateEpMultButton();

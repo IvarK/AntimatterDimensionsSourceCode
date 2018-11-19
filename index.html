@@ -38,27 +38,7 @@
         <div id='game' style="flex: 0 0 auto">
             <div id='news'>.</div>
         </div>
-        <div id="matter"></div>
-        <div style="position: relative"><div class="IP" id="infinityPoints2"></div></div>
-        <div style="position: relative"><div class="EP" id="eternityPoints2"></div></div>
-        <div>
-            <p>You have <span id="coinAmount" style="font-size:25px; color: black">0</span> antimatter.</p>
-        </div>
-
-        <div style="position: relative">
-            <button id="postInfinityButton" class="postinfcrunch">Big Crunch for x Infinity Points</button>
-            <button id="newDimensionButton" class="newdim" onclick="newDimension()">Get x antimatter to unlock a new Dimension.</button>
-            <button id="eternitybtn" class="eternitybtn" onclick="eternity()">Other times await.. I need to become Eternal</button>
-        </div>
-        <div id="coinsPerSec">You are getting 0 antimatter per second.</div>
-
-        <div id="tickSpeedRow" style="visibility: hidden">
-            <div id="tickLabel" style="visibility: hidden">Make the game 10% faster.</div>
-            <button id="tickSpeed" style="color:black; visibility: hidden; height: 25px;width: 170px; font-size: 12px" class="storebtn">Cost: 1000</button>
-            <button id="tickSpeedMax" onclick="buyMaxTickSpeed()" style="color:black; visibility: hidden; height: 25px; font-size: 12px" class="storebtn">Buy Max</button>
-            <div id="tickSpeedAmount" style="display: table; margin: 0 auto; visibility: hidden">Tickspeed: 1000</div>
-        </div>
-        <p></p>
+        <game-header></game-header>
         <div style="position:absolute; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 360px; top: 19px">
             <button id="bigcrunch" style="font-family: Typewriter; font-size: 50px; width: 360px; height: 100px;" class="tabbtn">Big Crunch</button>
         </div>
@@ -823,6 +803,13 @@
 <script type="text/javascript" src="javascripts/components/hint-text.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
+
+<script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-tickspeed-row.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-big-crunch-button.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-new-dim-button.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-eternity-button.js"></script>
 
 <script type="text/javascript" src="javascripts/components/dimensions/dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/dimensions/normal/normal-dim-tab-header.js"></script>

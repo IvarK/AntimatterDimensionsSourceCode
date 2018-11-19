@@ -87,18 +87,55 @@ String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };
 
+/**
+ * @param {number} start
+ * @param {number} count
+ * @returns {number[]}
+ */
 Array.range = function(start, count) {
   return [...Array(count).keys()].map(i => i + start);
 };
 
+/**
+ * @param {number} value
+ * @param {number} count
+ * @returns {number[]}
+ */
 Array.repeat = function(value, count) {
   return Array(count).fill(value);
 };
 
-Array.prototype.first = function() {
-  return this.length > 0 ? this[0] : undefined;
+/**
+ * @param {function} predicate
+ */
+Array.prototype.first = function(predicate) {
+  if (predicate === undefined) {
+    return this.length > 0 ? this[0] : undefined;
+  }
+  if (typeof predicate !== "function")
+    throw "Predicate must be a function";
+  for (let i = 0; i < this.length; i++) {
+    if (predicate(this[i]) === true) return this[i];
+  }
+  throw "Array doesn't contain a matching item";
 };
 
-Array.prototype.last = function() {
-  return this.length > 0 ? this[this.length - 1] : undefined;
+/**
+ * @param {function} predicate
+ */
+Array.prototype.last = function(predicate) {
+  if (predicate === undefined) {
+    return this.length > 0 ? this[this.length - 1] : undefined;
+  }
+  if (typeof predicate !== "function")
+    throw "Predicate must be a function";
+  for (let i = this.length - 1; i >= 0; i--) {
+    if (predicate(this[i]) === true) return this[i];
+  }
+  throw "Array doesn't contain a matching item";
 };
+
+/**
+ * @type {number[]}
+ */
+Array.dimensionTiers = Array.range(1, 8);

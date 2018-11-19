@@ -101,7 +101,6 @@ function wormHoleLoop(diff, i) {
         player.wormhole[i].active = false
         incPhase = 0
         ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
-        updateTickSpeed();
       }
     } else {
       if (player.wormhole[i].phase >= player.wormhole[i].speed) {
@@ -109,7 +108,6 @@ function wormHoleLoop(diff, i) {
         player.wormhole[i].active = true
         incPhase = 0
         ui.notify.success("Wormhole "+ (i + 1) +" is active!");
-        updateTickSpeed();
       }
     }
   incPhase /= getGameSpeedupFactor(false);

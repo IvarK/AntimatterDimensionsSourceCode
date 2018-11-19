@@ -88,7 +88,9 @@ function eternity(force, auto) {
     player.resets = (player.eternities >= 4) ? 4  : 0;
     player.galaxies = (player.eternities >= 4) ? 1  : 0;
     player.tickDecrease = 0.9;
-    player.autobuyers= (player.eternities >= 2) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    if (player.eternities < 2) {
+      Autobuyer.resetUnlockables();
+    }
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break= player.eternities >= 2 ? player.break : false;
@@ -135,9 +137,10 @@ function eternity(force, auto) {
     player.replicanti.galaxies = 0;
     document.getElementById("respec").className = "storebtn";
 
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-
-    updateAutobuyers();
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
+      player.challenges.push("challenge1");
+      Autobuyer.tryUnlockAny();
+    }
     resetInfinityPointsOnEternity();
     resetInfDimensions();
     updateChallengeTimes();

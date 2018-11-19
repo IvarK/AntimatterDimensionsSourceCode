@@ -53,7 +53,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     resetDimensions();
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
-    updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
     updateChallengeTimes();

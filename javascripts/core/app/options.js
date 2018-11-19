@@ -164,5 +164,4 @@ function hardReset() {
   load_game();
   Tab.dimensions.normal.show();
   updateDimensions();
-  updateAutobuyers();
 }

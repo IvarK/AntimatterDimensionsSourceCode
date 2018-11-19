@@ -11,8 +11,6 @@ var failureCount = 0;
 var implosionCheck = 0;
 var realizationCheck = 0;
 var statsTimer = 0;
-var TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
-var DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 var player = {
   money: new Decimal(10),

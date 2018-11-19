@@ -458,122 +458,6 @@ function resetMoney() {
     player.money = new Decimal(money);
 }
 
-function updateAutobuyers() {
-    var autoBuyerDim1 = new Autobuyer (1)
-    var autoBuyerDim2 = new Autobuyer (1)
-    var autoBuyerDim3 = new Autobuyer (1)
-    var autoBuyerDim4 = new Autobuyer (1)
-    var autoBuyerDim5 = new Autobuyer (1)
-    var autoBuyerDim6 = new Autobuyer (1)
-    var autoBuyerDim7 = new Autobuyer (1)
-    var autoBuyerDim8 = new Autobuyer (1)
-    var autoBuyerDimBoost = new Autobuyer (1)
-    var autoBuyerGalaxy = new Autobuyer (1)
-    var autoBuyerTickspeed = new Autobuyer (1)
-    var autoBuyerInf = new Autobuyer (1)
-    var autoSacrifice = new Autobuyer(1)
-
-
-    autoBuyerDim1.interval = 1500
-    autoBuyerDim2.interval = 2000
-    autoBuyerDim3.interval = 2500
-    autoBuyerDim4.interval = 3000
-    autoBuyerDim5.interval = 4000
-    autoBuyerDim6.interval = 5000
-    autoBuyerDim7.interval = 6000
-    autoBuyerDim8.interval = 7500
-    autoBuyerDimBoost.interval = 8000
-    autoBuyerGalaxy.interval = 150000
-    autoBuyerTickspeed.interval = 5000
-    autoBuyerInf.interval = 300000
-
-    autoSacrifice.interval = 100
-    autoSacrifice.priority = new Decimal(5)
-
-    autoBuyerDim1.tier = 1
-    autoBuyerDim2.tier = 2
-    autoBuyerDim3.tier = 3
-    autoBuyerDim4.tier = 4
-    autoBuyerDim5.tier = 5
-    autoBuyerDim6.tier = 6
-    autoBuyerDim7.tier = 7
-    autoBuyerDim8.tier = 8
-    autoBuyerTickspeed.tier = 9
-
-    if (player.challenges.includes("challenge1") && player.autobuyers[0] == 1) {
-        player.autobuyers[0] = autoBuyerDim1
-    }
-    if (player.challenges.includes("challenge2") && player.autobuyers[1] == 2) {
-        player.autobuyers[1] = autoBuyerDim2
-    }
-    if (player.challenges.includes("challenge3") && player.autobuyers[2] == 3) {
-        player.autobuyers[2] = autoBuyerDim3
-    }
-    if (player.challenges.includes("challenge4") && player.autobuyers[9] == 10) {
-        player.autobuyers[9] = autoBuyerDimBoost
-    }
-    if (player.challenges.includes("challenge5") && player.autobuyers[8] == 9) {
-        player.autobuyers[8] = autoBuyerTickspeed
-    }
-    if (player.challenges.includes("challenge6") && player.autobuyers[4] == 5) {
-        player.autobuyers[4] = autoBuyerDim5
-    }
-    if (player.challenges.includes("challenge7") && player.autobuyers[11] == 12) {
-        player.autobuyers[11] = autoBuyerInf
-        Autobuyer.infinity.limit = new Decimal(1);
-    }
-    if (player.challenges.includes("challenge8") && player.autobuyers[3] == 4) {
-        player.autobuyers[3] = autoBuyerDim4
-    }
-    if (player.challenges.includes("challenge9") && player.autobuyers[6] == 7) {
-        player.autobuyers[6] = autoBuyerDim7
-    }
-    if (player.challenges.includes("challenge10") && player.autobuyers[5] == 6) {
-        player.autobuyers[5] = autoBuyerDim6
-    }
-    if (player.challenges.includes("challenge11") && player.autobuyers[7] == 8) {
-        player.autobuyers[7] = autoBuyerDim8
-    }
-    if (player.challenges.includes("challenge12") && player.autobuyers[10] == 11) {
-        player.autobuyers[10] = autoBuyerGalaxy
-    }
-
-    if (player.challenges.includes("postc2") && player.autoSacrifice == 1) {
-        player.autoSacrifice = autoSacrifice
-    }
-
-    var maxedAutobuy = 0;
-    var e100autobuy = 0;
-    for (let tier = 1; tier <= 8; ++tier) {
-      if (player.autobuyers[tier - 1].bulk >= 1e100) {
-        player.autobuyers[tier - 1].bulk = 1e100;
-        e100autobuy++;
-      }
-      else {
-        if (player.autobuyers[tier - 1].interval <= 100) {
-          maxedAutobuy++;
-        }
-      }
-    }
-
-    if (Autobuyer.tickspeed.hasMaxedInterval) {
-        maxedAutobuy++;
-    }
-    if (Autobuyer.dimboost.hasMaxedInterval) {
-        maxedAutobuy++;
-    }
-    if (Autobuyer.galaxy.hasMaxedInterval) {
-        maxedAutobuy++;
-    }
-    if (Autobuyer.infinity.hasMaxedInterval) {
-        maxedAutobuy++;
-    }
-
-    if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
-    if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
-    if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
-}
-
 function fromValue(value) {
   value = value.replace(/,/g, '')
   if (value.toUpperCase().split("E").length > 2 && value.split(" ")[0] !== value) {
@@ -1574,7 +1458,10 @@ function gameLoop(diff) {
 
     while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
         if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
-        if (player.eternities > 6) player.challenges.push("postc"+player.postChallUnlocked)
+        if (player.eternities > 6) {
+          player.challenges.push("postc"+player.postChallUnlocked)
+          Autobuyer.tryUnlockAny();
+        }
     }
     replicantiLoop(diff)
 
@@ -2013,7 +1900,6 @@ function init() {
     //show one tab during init or they'll all start hidden
     showEternityTab('timestudies', true)
     load_game();
-    updateAutobuyers();
     updateChallengeTimes()
     kong.init();
     TLN.append_line_numbers("automator") // Automator line numbers

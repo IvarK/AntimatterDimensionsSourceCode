@@ -22,6 +22,7 @@ function bigCrunchReset() {
     implosionCheck = 0;
     if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
         player.challenges.push(player.currentChallenge);
+        Autobuyer.tryUnlockAny();
     }
     if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) {
         setChallengeTime(challNumber - 2, player.thisInfinityTime);
@@ -109,7 +110,6 @@ function secondSoftReset() {
     player.tickDecrease = 0.9;
     resetMoney();
     softReset(0);
-    updateAutobuyers();
     resetInfDimensions();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
@@ -122,7 +122,10 @@ function secondSoftReset() {
 function checkBigCrunchAchievements() {
     giveAchievement("To infinity!");
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
+      player.challenges.push("challenge1");
+      Autobuyer.tryUnlockAny();
+    }
     if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
     if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
     if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");

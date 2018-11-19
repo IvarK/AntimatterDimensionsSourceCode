@@ -32,20 +32,15 @@ function onLoad() {
     giveAchievement("Was it even broken?");
   }
 
-  for (var i=0; i<12; i++) {
-      if (player.autobuyers[i]%1 !== 0 && player.autobuyers[i].tier === undefined) {
-          player.autobuyers[i].tier = i+1
-      }
-      if (player.autobuyers[i]%1 !== 0 && player.autobuyers[i].target%1 !== 0) {
-          player.autobuyers[i].target = i+1
-          if (i == 8) player.autobuyers[i].target = 1
-      }
+  for (let i=0; i<12; i++) {
+    if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
+      player.autobuyers[i].target = AutobuyerMode.BUY_SINGLE;
+    }
 
-      if (player.autobuyers[i]%1 !== 0 && (player.autobuyers[i].bulk === undefined || isNaN(player.autobuyers[i].bulk) || player.autobuyers[i].bulk === null)) {
-          player.autobuyers[i].bulk = 1
-      }
+    if (player.autobuyers[i] % 1 !== 0 && (player.autobuyers[i].bulk === undefined || isNaN(player.autobuyers[i].bulk) || player.autobuyers[i].bulk === null)) {
+      player.autobuyers[i].bulk = 1;
+    }
   }
-  if (player.autobuyers[8].tier == 10) player.autobuyers[8].tier = 9
 
   IPminpeak = new Decimal(0)
   EPminpeak = new Decimal(0)
@@ -240,7 +235,8 @@ function onLoad() {
 	initializeWormhole();
   recalculateAllGlyphs();
 
-  updateAutobuyers();
+  Autobuyer.tryUnlockAny();
+  Autobuyer.checkAllAchievements();
   updateTimeStudyButtons();
   Perks.updateAchSkipCount();
   transformSaveToDecimal();

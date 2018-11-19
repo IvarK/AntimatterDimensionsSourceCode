@@ -30,16 +30,15 @@ Vue.component("dim-autobuyer-box", {
           this.bulk = autobuyer.bulk;
           this.cost = autobuyer.cost;
         },
-        buy() {
-          this.autobuyer.buy();
-          this.update();
+        upgradeBulk() {
+          this.autobuyer.upgradeBulk();
         }
       },
       template:
         `<button
           v-if="hasMaxedInterval"
           class="o-autobuyer-btn"
-          @click="buy"
+          @click="upgradeBulk"
         >
         <span>{{bulkDisplay}}</span>
         <template v-if="!hasMaxedBulk">

@@ -98,7 +98,9 @@ function reality(force, reset, auto) {
     player.galaxies = player.reality.upg.includes(10) ? 1 : 0;
     player.tickDecrease = 0.9;
     player.interval = null;
-    player.autobuyers = player.reality.upg.includes(10) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    if (!player.reality.upg.includes(10)) {
+      Autobuyer.resetUnlockables();
+    }
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break = player.reality.upg.includes(10) ? player.break : false;
@@ -177,10 +179,12 @@ function reality(force, reset, auto) {
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
+        player.challenges.push("challenge1");
+        Autobuyer.tryUnlockAny();
+    }
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
-    updateAutobuyers();
     resetInfDimensions();
     updateChallengeTimes();
     updateLastTenRuns();

@@ -5,7 +5,7 @@ Vue.component('options-tab', {
       <p>
         Hotkeys: 1-8 to buy 10 Dimensions, shift + 1-8 to buy 1 Dimension, T to buy max tickspeed, shift + T to buy one tickspeed, M for max all,
         <br>
-        S for sacrifice, D for Dimension Boost, G for Antimatter Balaxy, C for Big Crunch, A for toggle autobuyers, R for Replicanti galaxies, E for Eternity.
+        S for sacrifice, D for Dimension Boost, G for Antimatter Galaxy, C for Big Crunch, A for toggle autobuyers, R for Replicanti galaxies, E for Eternity.
         <br>
         Shift is a modifier key that shows additional information on certain things and adjusts the function of certain buttons.
         <br>

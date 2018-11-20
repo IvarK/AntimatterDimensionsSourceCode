@@ -46,3 +46,33 @@ function isQuickResettable(challenge) {
   ];
   return resettableChallenges.includes(challenge);
 }
+
+class InfinityChallengeInfo {
+  constructor(id) {
+    this._id = id;
+    this._fullId = `postc${id}`;
+  }
+
+  get isRunning() {
+    return player.currentChallenge === this._fullId;
+  }
+}
+
+function InfinityChallenge(id) {
+  return new InfinityChallengeInfo(id);
+}
+
+/**
+ * @returns {InfinityChallengeInfo}
+ */
+InfinityChallenge.current = function() {
+  const challenge = player.currentChallenge;
+  if (challenge === String.empty) return undefined;
+  if (!challenge.includes("postc")) return undefined;
+  const id = parseInt(challenge.split("postc")[1]);
+  return InfinityChallenge(id);
+};
+
+InfinityChallenge.isRunning = function() {
+  return InfinityChallenge.current() !== undefined;
+};

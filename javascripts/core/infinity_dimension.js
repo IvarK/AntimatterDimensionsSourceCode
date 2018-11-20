@@ -114,18 +114,17 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  if (dim.isCapped) return false;
-  if (!dim.isAffordable) return false;
-  if (player.currentEternityChall === "eterc8" && player.eterc8ids <= 0) return false;
-  return true;
+  if (dim.isCapped || !dim.isAffordable || !dim.isUnlocked) return false;
+  return !EternityChallenge(8).isRunning || player.eterc8ids > 0;
+
 }
 
 function buyMaxInfinityDimensions() {
-    if (player.currentEternityChall == "eterc8") return false;
-    for (var i=1; i<9; i++) {
-        buyMaxInfDims(i)
-    }
+  if (EternityChallenge(8).isRunning) return false;
+  for (let tier of Array.dimensionTiers) {
+    buyMaxInfDims(tier)
   }
+}
 
 function toggleAllInfDims() {
   const areEnabled = player.infDimBuyers[0];

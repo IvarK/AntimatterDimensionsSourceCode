@@ -2579,6 +2579,12 @@ screen and (max-width: 480px) {
   right: 75%;
 }
 
+.c-game-header__tickspeed-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .c-game-header__tickspeed-row--hidden {
   visibility: hidden;
 }

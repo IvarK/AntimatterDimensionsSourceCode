@@ -12,6 +12,7 @@ Vue.component("game-header-tickspeed-row", {
   computed: {
     classObject: function() {
       return {
+        "c-game-header__tickspeed-row": true,
         "c-game-header__tickspeed-row--hidden": !this.isVisible
       };
     },
@@ -54,7 +55,7 @@ Vue.component("game-header-tickspeed-row", {
     tooltip: function() {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
-      return `The game is running ${displayValue}x `+((this.isGameSpeedSlow) ? "slower." : "faster.");
+      return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
     }
   },
   methods: {
@@ -72,16 +73,18 @@ Vue.component("game-header-tickspeed-row", {
   template:
     `<div :class="classObject">
       <div>{{multiplierDisplay}}</div>
-      <primary-button
-        :enabled="isAffordable"
-        class="o-primary-btn--tickspeed"
-        onclick="buyTickSpeed()"
-      >Cost: {{shortenCosts(cost)}}</primary-button>
-      <primary-button
-        :enabled="isAffordable"
-        class="o-primary-btn--buy-max"
-        onclick="buyMaxTickSpeed()"
-      >Buy Max</primary-button>
+      <div>
+        <primary-button
+          :enabled="isAffordable"
+          class="o-primary-btn--tickspeed"
+          onclick="buyTickSpeed()"
+        >Cost: {{shortenCosts(cost)}}</primary-button>
+        <primary-button
+          :enabled="isAffordable"
+          class="o-primary-btn--buy-max"
+          onclick="buyMaxTickSpeed()"
+        >Buy Max</primary-button>
+      </div>
       <div v-tooltip="tooltip">{{tickspeedDisplay}} <span v-if="!isGameSpeedNormal">{{gammaDisplay}}</span></div>
     </div>`
 });

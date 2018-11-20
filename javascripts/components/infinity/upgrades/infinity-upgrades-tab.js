@@ -37,7 +37,7 @@ const infinityUpgradeGridViewModels = () => [
   [
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.totalTimeMult,
-      description: "Normal dimensions gain a multiplier based on time played",
+      description: "Normal Dimensions gain a multiplier based on time played",
       formatCurrentEffect: value => `${value.toFixed(2)}x`
     }),
     new InfinityUpgradeViewModel({
@@ -79,7 +79,7 @@ const infinityUpgradeGridViewModels = () => [
   [
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.thisInfinityTimeMult,
-      description: "Normal dimensions gain a multiplier based on time spent in current infinity",
+      description: "Normal Dimensions gain a multiplier based on time spent in current Infinity",
       formatCurrentEffect: value => `${value.toFixed(2)}x`
     }),
     new InfinityUpgradeViewModel({
@@ -94,7 +94,7 @@ const infinityUpgradeGridViewModels = () => [
     }),
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.ipGen,
-      description: "Infinity Point generation based on fastest infinity",
+      description: "Infinity Point generation based on fastest Infinity",
       formatComplexEffect: function(formatter) {
         const income = formatter.shortenDimensions(totalIPMult());
         const period = player.bestInfinityTime === 999999999999  ?
@@ -107,19 +107,19 @@ const infinityUpgradeGridViewModels = () => [
   [
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.skipReset1,
-      description: "You start with the 5th dimension unlocked"
+      description: "You start with the 5th Dimension unlocked"
     }),
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.skipReset2,
-      description: "You start with the 6th dimension unlocked"
+      description: "You start with the 6th Dimension unlocked"
     }),
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.skipReset3,
-      description: "You start with the 7th dimension unlocked"
+      description: "You start with the 7th Dimension unlocked"
     }),
     new InfinityUpgradeViewModel({
       upgrade: InfinityUpgrade.skipResetGalaxy,
-      description: "You start with the 8th dimension unlocked, and an Antimatter Galaxy"
+      description: "You start with the 8th Dimension unlocked, and an Antimatter Galaxy"
     }),
   ]
 ];

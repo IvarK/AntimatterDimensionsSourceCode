@@ -112,11 +112,6 @@ function applyChallengeModifiers() {
     }
     if (player.currentChallenge === "postc1")
         player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
-    if (player.currentChallenge === "postc2") {
-        player.eightAmount = new Decimal(1);
-        player.eightBought = 1;
-        player.resets = 4;
-    }
 }
 
 function skipResetsIfPossible() {

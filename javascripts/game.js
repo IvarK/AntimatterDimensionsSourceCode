@@ -1306,11 +1306,15 @@ function gameLoop(diff) {
 
     if (player.currentChallenge == "challenge3" || player.matter.gte(1)) player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff/100));
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
-    if (player.currentChallenge == "postc2") {
-        postC2Count++;
+    if (player.currentChallenge === "postc2") {
         if (postC2Count >= 8 || diff > 8000) {
-            sacrificeReset();
+            if (player.eightAmount > 0) {
+                sacrificeReset();
+            }
             postC2Count = 0;
+        }
+        else {
+          postC2Count++;
         }
     }
     if (InfinityUpgrade.ipGen.isBought) {

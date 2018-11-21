@@ -57,14 +57,9 @@ function buyTickSpeed() {
   if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
   player.secretUnlocks.why++
+  GameUI.update();
   return true;
 }
-
-document.getElementById("tickSpeed").onclick = function () {
-  buyTickSpeed();
-
-  updateTickSpeed();
-};
 
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return false;
@@ -142,43 +137,6 @@ function buyMaxTickSpeed() {
   }
 
   flushValues();
-  updateTickSpeed()
-}
-
-
-function updateTickSpeed() {
-	let exp = player.tickspeed.e;
-	let tickSpeedText;
-	if (exp > 1)
-		tickSpeedText = 'Tickspeed: ' + player.tickspeed.toFixed(0);
-	else 
-		tickSpeedText = 'Tickspeed: ' + player.tickspeed.times(new Decimal(100).dividedBy(Decimal.pow(10, exp))).toFixed(0) + ' / ' + shorten(new Decimal(100).dividedBy(Decimal.pow(10, exp)));
-  
-	// Accelerated game speed suffix
-	let gameSpeedMult = getGameSpeedupFactor();
-  let gammaText = "";
-  let tickspeedTooltip = "";
-	if (gameSpeedMult != 1) {
-    if (gameSpeedMult < 1) {
-      gammaText = "(γ = " + gameSpeedMult.toFixed(3) + ")";
-      tickspeedTooltip = "The game is running " + (1/gameSpeedMult).toFixed(0) + "x slower.";
-    }
-    else {
-      let formattedSpeed = "";
-      if (gameSpeedMult < 10000)
-        formattedSpeed = gameSpeedMult.toFixed(3)
-      else
-        formattedSpeed = shortenDimensions(gameSpeedMult)
-      gammaText = "(γ = " + formattedSpeed + ")";
-      tickspeedTooltip = "The game is running " + formattedSpeed + "x faster.";
-    }
-  }
-  
-  document.getElementById("tickSpeedAmount").textContent = tickSpeedText + "   " + gammaText;
-  if (tickspeedTooltip === "")
-    document.getElementById("tickSpeedAmount").removeAttribute('ach-tooltip');
-  else
-    document.getElementById("tickSpeedAmount").setAttribute('ach-tooltip', tickspeedTooltip);
 }
 
 function resetTickspeed() {
@@ -192,3 +150,12 @@ function resetTickspeed() {
     tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
     player.tickspeed = tickspeed;
 }
+
+const Tickspeed = {
+  get isUnlocked() {
+    return player.secondAmount.gt(0) || player.eternities >= 30;
+  },
+  get multiplier() {
+    return getTickSpeedMultiplier();
+  }
+};

@@ -49,7 +49,9 @@ Vue.mixin({
   created() {
     if (this.update) {
       this.on$(GameEvent.UPDATE, this.update);
-      this.update();
+      if (uiInitialized) {
+        this.update();
+      }
     }
   },
   destroyed() {
@@ -57,8 +59,25 @@ Vue.mixin({
   }
 });
 
+Vue.filter('pluralize', function (value, amount) {
+  if (value === undefined || amount === undefined)
+    throw "Arguments must be defined";
+  let isSingular = true;
+  if (typeof amount === "number") {
+    isSingular = amount === 1;
+  }
+  else if (amount instanceof Decimal) {
+    isSingular = amount.eq(1);
+  }
+  else
+    throw "Amount must be either a number or Decimal";
+  return isSingular ? value : value + "s";
+});
+
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
 VTooltip.VTooltip.options.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+
+let uiInitialized = false;
 
 ui = new Vue({
   el: '#ui',
@@ -69,6 +88,8 @@ ui = new Vue({
     }
   }
 });
+
+uiInitialized = true;
 
 ui.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
   ui.view.modal.cloudConflicts.push({
@@ -131,5 +152,3 @@ const UIID = function() {
   let id = 0;
   return { next: () => id++ };
 }();
-
-const uiInitialized = true;

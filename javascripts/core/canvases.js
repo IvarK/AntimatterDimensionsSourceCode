@@ -406,12 +406,12 @@ function drawPerkNetwork() {
     {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."}, //DONE
     {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
     {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking Eternity Challenges."}, //DONE
-    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge."},
-    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking Dilation."},
-    {id: 34, label: "34", color: getNodeColor(34, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 1.5."},
-    {id: 35, label: "35", color: getNodeColor(35, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2."},
-    {id: 36, label: "36", color: getNodeColor(36, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2.5."},
-    {id: 37, label: "37", color: getNodeColor(37, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 3."},
+    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge."}, //DONE
+    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking Dilation."}, //DONE
+    {id: 34, label: "34", color: getNodeColor(34, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 1.5."}, //DONE
+    {id: 35, label: "35", color: getNodeColor(35, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2."}, //DONE
+    {id: 36, label: "36", color: getNodeColor(36, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2.5."}, //DONE
+    {id: 37, label: "37", color: getNodeColor(37, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 3."}, //DONE
     {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after Reality."}, //DONE
     {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after Reality."}, //DONE
     {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after Reality."}, //DONE

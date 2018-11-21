@@ -26,29 +26,9 @@ button {
     background: #1B5E20 !important;
 }
 
-.newdim:hover {
-    background: #1B5E20 !important;
-}
-
-.newdimlocked {
-    background: #37474F !important;
-}
-
-.newdimlocked:hover {
-    background: #B84B5F !important;
-}
-
-.postinfcrunch:hover {
-    background: #1565C0 !important;
-}
-
 input {
     background-color: #455A64 !important;
     border: 1px solid black !important;
-}
-
-#coinAmount {
-    animation: antimatterGlow 25s infinite;
 }
 
 #news {
@@ -82,16 +62,6 @@ input {
     border: 2px solid #1565C0 !important;
 }
 
-.infinitybtn {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 2px solid #FF9800 !important;
-}
-
-.infinitybtn:hover {
-    background: #FF9800 !important;
-}
-
 .infinitytabbtn {
     color: #000 !important;
     background: #F5F5F5 !important;
@@ -100,21 +70,6 @@ input {
 
 .infinitytabbtn:hover {
     background: #FF9800 !important;
-}
-
-.IPAmount2 {
-    color: white !important;
-    text-shadow: 0px 0px 7px #fff;
-}
-
-.EPAmount1 {
-    color: #b341e0 !important;
-    text-shadow: 0px 0px 7px #b341e0;
-}
-
-.EPAmount2 {
-    color: #b341e0 !important;
-    text-shadow: 0px 0px 7px #b341e0;
 }
 
 .RMAmount1 {
@@ -130,24 +85,8 @@ input {
     background: #B84B5F !important;
 }
 
-.postinfcrunch {
-    color: black;
-    border: 2px solid #1565C0 !important;
-}
-
 .storebtn:hover {
     color: #FFF !important;
-}
-
-.eternitybtn {
-    color: #b341e0 !important;
-    background: black !important;
-    border: 2px solid #b341e0 !important;
-}
-
-.eternitybtn:hover {
-    color: #511568 !important;
-    background: white !important;
 }
 
 .eternitytabbtn {
@@ -159,10 +98,6 @@ input {
 .eternitytabbtn:hover {
     color: #511568 !important;
     background: white !important;
-}
-
-#eternityPoints1 {
-    color: #4F5957 !important;
 }
 
 .TheoremAmount {
@@ -539,11 +474,4 @@ input {
 
 #realityanimbg {
     filter: invert(1);
-}
-
-@keyframes antimatterGlow {
-    0%  {color: #2196F3;}
-    33% {color: #673AB7;}
-    66%  {color: #00BCD4;}
-    100%  {color: #2196F3;}
 }

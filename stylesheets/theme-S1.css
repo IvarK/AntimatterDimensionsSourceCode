@@ -39,28 +39,6 @@ body {
     background: black !important;
 }
 
-.newdim {
-    color: black !important;
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
-.newdim:hover {
-    background-color: #4baf4e !important;
-    border-color: black !important;
-}
-
-.newdimlocked {
-    color: black !important;
-    background: #9a921d !important;
-    border-color: black !important;
-}
-
-.newdimlocked:hover {
-    background: #d72621 !important;
-    border: 1px solid black !important;
-}
-
 .storebtn {
     background: #dbd242 !important;
     border-color: black !important;
@@ -69,16 +47,6 @@ body {
 .storebtn:hover {
     background-color: #4baf4e !important;
     border-color: black !important;
-}
-
-.postinfcrunch {
-    background: #dbd242 !important;
-    border-color: black !important;
-}
-
-.postinfcrunch:hover {
-    color: #dbd242 !important;
-    background: black !important;
 }
 
 .unavailablebtn {
@@ -99,18 +67,6 @@ body {
     color: black !important;
 }
 
-.eternitybtn {
-    color: #639565 !important;
-    background: black !important;
-    border-color: #639565 !important;
-}
-
-.eternitybtn:hover {
-    color: black !important;
-    background: #639565 !important;
-    border-color: black !important;
-}
-
 .eternitytabbtn {
     color: #639565 !important;
     background: black !important;
@@ -121,31 +77,6 @@ body {
     color: black !important;
     background: #639565 !important;
     border-color: black !important;
-}
-
-.EPAmount1 {
-    color: #639565;
-}
-
-.EPAmount2 {
-    color: #639565;
-    text-shadow: 1px 1px 0px black;
-}
-
-.infinitybtn {
-    color: #FFFFFF !important;
-    background: black !important;
-    border: 2px solid #7d3c1b !important;
-}
-
-.infinitybtn:hover {
-    color: #FFFFFF !important;
-    background: #7d3c1b !important;
-}
-
-.IPAmount2 {
-    color: #7d3c1b;
-    text-shadow: 1px 1px 0px black;
 }
 
 input {

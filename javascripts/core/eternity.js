@@ -88,7 +88,9 @@ function eternity(force, auto) {
     player.resets = (player.eternities >= 4) ? 4  : 0;
     player.galaxies = (player.eternities >= 4) ? 1  : 0;
     player.tickDecrease = 0.9;
-    player.autobuyers= (player.eternities >= 2) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    if (player.eternities < 2) {
+      Autobuyer.resetUnlockables();
+    }
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break= player.eternities >= 2 ? player.break : false;
@@ -135,12 +137,10 @@ function eternity(force, auto) {
     player.replicanti.galaxies = 0;
     document.getElementById("respec").className = "storebtn";
 
-    hidePreMilestone30Elements();
-
-    document.getElementById("matter").style.display = "none";
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-
-    updateAutobuyers();
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
+      player.challenges.push("challenge1");
+      Autobuyer.tryUnlockAny();
+    }
     resetInfinityPointsOnEternity();
     resetInfDimensions();
     updateChallengeTimes();
@@ -157,14 +157,10 @@ function eternity(force, auto) {
         console.log("Couldn't load Kongregate API")
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
-    updateTickSpeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
     }

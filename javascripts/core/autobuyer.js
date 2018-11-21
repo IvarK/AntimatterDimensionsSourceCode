@@ -1,11 +1,10 @@
-const Autobuyer = function Autobuyer(target) {
-    this.target = target;
+const Autobuyer = function Autobuyer(interval) {
+    this.target = 1;
     this.cost = 1;
-    this.interval = 5000;
+    this.interval = interval;
     this.priority = 1;
     this.ticks = 0;
     this.isOn = false;
-    this.tier = 1;
     this.bulk = 1;
 };
 
@@ -13,12 +12,6 @@ Autobuyer.tickTimer = 0;
 Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
-
-const AutobuyerMode = {
-  BUY_SINGLE: 1,
-  BUY_10: 10,
-  BUY_MAX: 100,
-};
 
 class AutobuyerInfo {
   constructor(getAutobuyer) {
@@ -39,6 +32,23 @@ class AutobuyerInfo {
    */
   get isUnlocked() {
     return this.autobuyer !== undefined;
+  }
+
+  tryUnlock() {
+    if (this.isUnlocked) return;
+    if (!player.challenges.includes(this.challenge)) return;
+    this.initialize();
+  }
+
+  /**
+   * @returns {string}
+   */
+  get challenge() {
+    throw "This method should be overridden in inheriting class";
+  }
+
+  initialize() {
+    throw "This method should be overridden in inheriting class";
   }
 
   /**
@@ -158,6 +168,19 @@ class AutobuyerInfo {
   toggle() {
     this.isOn = !this.isOn;
   }
+
+  upgradeInterval() {
+    if (this.hasMaxedInterval) return;
+    if (player.infinityPoints.lt(this.cost)) return;
+    player.infinityPoints = player.infinityPoints.minus(this.cost);
+    this.interval = Math.max(this.interval * 0.6, 100);
+    if (this.interval > 120) {
+      // if your last purchase wont be very strong, dont double the cost
+      this.cost *= 2;
+    }
+    Autobuyer.checkIntervalAchievements();
+    GameUI.update();
+  }
 }
 
 class DimensionAutobuyerInfo extends AutobuyerInfo {
@@ -166,11 +189,41 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
     this._tier = tier;
   }
 
+  initialize() {
+    const baseIntervals = [
+      null,
+      1500,
+      2000,
+      2500,
+      3000,
+      4000,
+      5000,
+      6000,
+      7500,
+    ];
+    player.autobuyers[this._tier - 1] = new Autobuyer(baseIntervals[this._tier]);
+  }
+
+  get challenge() {
+    const challenges = [
+      null,
+      "challenge1",
+      "challenge2",
+      "challenge3",
+      "challenge8",
+      "challenge6",
+      "challenge10",
+      "challenge9",
+      "challenge11"
+    ];
+    return challenges[this._tier];
+  }
+
   /**
    * @returns {boolean}
    */
   get hasMaxedBulk() {
-    return this.bulk >= 1e100;
+    return this.isUnlocked && this.bulk >= 1e100;
   }
 
   /**
@@ -205,16 +258,32 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
     this.resetTicks();
   }
 
-  buy() {
-    buyAutobuyer(this._tier - 1);
+  upgradeBulk() {
+    if (this.hasMaxedBulk) return;
+    if (player.infinityPoints.lt(this.cost)) return;
+    player.infinityPoints = player.infinityPoints.minus(this.cost);
+    this.bulk = Math.min(this.bulk * 2, 1e100);
+    this.cost = Math.ceil(2.4 * this.cost);
+    Autobuyer.checkBulkAchievements();
+    GameUI.update();
   }
 }
 
 Autobuyer.dim = tier => new DimensionAutobuyerInfo(tier);
 
+Autobuyer.allDims = Array.dimensionTiers.map(Autobuyer.dim);
+
 class TickspeedAutobuyerInfo extends AutobuyerInfo {
   constructor() {
     super(() => player.autobuyers[8]);
+  }
+
+  initialize() {
+    player.autobuyers[8] = new Autobuyer(5000);
+  }
+
+  get challenge() {
+    return "challenge5";
   }
 
   /**
@@ -246,10 +315,6 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
     }
     this.resetTicks();
   }
-
-  buy() {
-    buyAutobuyer(8);
-  }
 }
 
 Autobuyer.tickspeed = new TickspeedAutobuyerInfo();
@@ -265,6 +330,14 @@ Autobuyer.priorityQueue = function() {
 class DimboostAutobuyerInfo extends AutobuyerInfo {
   constructor() {
     super(() => player.autobuyers[9]);
+  }
+
+  initialize() {
+    player.autobuyers[9] = new Autobuyer(8000);
+  }
+
+  get challenge() {
+    return "challenge4";
   }
 
   /**
@@ -345,10 +418,6 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
     }
     this.resetTicks();
   }
-
-  buy() {
-    buyAutobuyer(9);
-  }
 }
 
 Autobuyer.dimboost = new DimboostAutobuyerInfo();
@@ -356,6 +425,14 @@ Autobuyer.dimboost = new DimboostAutobuyerInfo();
 class GalaxyAutobuyerInfo extends AutobuyerInfo {
   constructor() {
     super(() => player.autobuyers[10]);
+  }
+
+  initialize() {
+    player.autobuyers[10] = new Autobuyer(150000);
+  }
+
+  get challenge() {
+    return "challenge12";
   }
 
   /**
@@ -417,10 +494,6 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
     autoS = false;
     galaxyResetBtnClick();
   }
-
-  buy() {
-    buyAutobuyer(10);
-  }
 }
 
 Autobuyer.galaxy = new GalaxyAutobuyerInfo();
@@ -428,6 +501,15 @@ Autobuyer.galaxy = new GalaxyAutobuyerInfo();
 class SacrificeAutobuyerInfo extends AutobuyerInfo {
   constructor() {
     super(() => player.autoSacrifice);
+  }
+
+  initialize() {
+    player.autoSacrifice = new Autobuyer(100);
+    this.limit = new Decimal(5);
+  }
+
+  get challenge() {
+    return "postc2";
   }
 
   /**
@@ -454,15 +536,18 @@ class SacrificeAutobuyerInfo extends AutobuyerInfo {
 
 Autobuyer.sacrifice = new SacrificeAutobuyerInfo();
 
-const AutoCrunchMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
-};
-
 class InfinityAutobuyerInfo extends AutobuyerInfo {
   constructor() {
     super(() => player.autobuyers[11]);
+  }
+
+  initialize() {
+    player.autobuyers[11] = new Autobuyer(300000);
+    this.limit = new Decimal(1);
+  }
+
+  get challenge() {
+    return "challenge7";
   }
 
   /**
@@ -533,18 +618,31 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
     }
     this.resetTicks();
   }
-
-  buy() {
-    buyAutobuyer(11);
-  }
 }
 
 Autobuyer.infinity = new InfinityAutobuyerInfo();
 
-const AutoEternityMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
+/**
+ * @type {AutobuyerInfo[]}
+ */
+Autobuyer.unlockables = Autobuyer.allDims
+  .concat([
+    Autobuyer.tickspeed,
+    Autobuyer.dimboost,
+    Autobuyer.galaxy,
+    Autobuyer.sacrifice,
+    Autobuyer.infinity
+  ]);
+
+Autobuyer.tryUnlockAny = function() {
+  for (let autobuyer of this.unlockables) {
+    autobuyer.tryUnlock();
+  }
+};
+
+Autobuyer.resetUnlockables = function() {
+  player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  Autobuyer.tryUnlockAny();
 };
 
 Autobuyer.eternity = {
@@ -629,13 +727,6 @@ Autobuyer.eternity = {
     }
     if (proc) eternity(false, true);
   }
-};
-
-const AutoRealityMode = {
-  RM: "rm",
-  GLYPH: "glyph",
-  EITHER: "either",
-  BOTH: "both"
 };
 
 Autobuyer.reality = {
@@ -742,37 +833,44 @@ Autobuyer.tick = function() {
   PerformanceStats.end();
 };
 
-function buyAutobuyer(id) {
-  const autobuyer = player.autobuyers[id];
-  if (player.infinityPoints.lt(autobuyer.cost)) return false;
-  if (autobuyer.bulk >= 1e100) return false;
-  player.infinityPoints = player.infinityPoints.minus(autobuyer.cost);
-  if (autobuyer.interval <= 100) {
-    autobuyer.bulk = Math.min(autobuyer.bulk * 2, 1e100);
-    autobuyer.cost = Math.ceil(2.4*autobuyer.cost);
-    var b1 = true;
-    for (let i=0;i<8;i++) {
-      if (player.autobuyers[i].bulk < 512) b1 = false;
-    }
-    if (b1) giveAchievement("Bulked up");
-  } else {
-    autobuyer.interval = Math.max(autobuyer.interval*0.6, 100);
-    if (autobuyer.interval > 120) autobuyer.cost *= 2; //if your last purchase wont be very strong, dont double the cost
-  }
-  GameUI.update();
-  updateAutobuyers();
-}
+Autobuyer.checkIntervalAchievements = function() {
+  const maxedAutobuy = Autobuyer.unlockables
+    .filter(a => a.hasMaxedInterval)
+    .length;
+
+  if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
+  if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
+};
+
+Autobuyer.checkBulkAchievements = function() {
+  const dims = Autobuyer.allDims;
+  const bulk512Count = dims
+    .filter(a => a.isUnlocked && a.bulk >= 512)
+    .length;
+  if (bulk512Count === DIMENSION_COUNT) giveAchievement("Bulked up");
+  const maxedBulkCount = dims
+    .filter(a => a.hasMaxedBulk)
+    .length;
+  if (maxedBulkCount === DIMENSION_COUNT) giveAchievement("Professional bodybuilder");
+};
+
+Autobuyer.checkAllAchievements = function() {
+  Autobuyer.checkIntervalAchievements();
+  Autobuyer.checkBulkAchievements();
+};
 
 function toggleAutobuyers() {
   const isOn = Autobuyer.dim(1).isOn;
-  const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
-  autobuyers.push(Autobuyer.tickspeed);
-  autobuyers.push(Autobuyer.dimboost);
-  autobuyers.push(Autobuyer.galaxy);
-  autobuyers.push(Autobuyer.infinity);
-  autobuyers.push(Autobuyer.sacrifice);
-  autobuyers.push(Autobuyer.eternity);
-  autobuyers.push(Autobuyer.reality);
+  const autobuyers = Autobuyer.allDims
+    .concat([
+      Autobuyer.tickspeed,
+      Autobuyer.dimboost,
+      Autobuyer.galaxy,
+      Autobuyer.sacrifice,
+      Autobuyer.infinity,
+      Autobuyer.eternity,
+      Autobuyer.reality
+    ]);
   for (let autobuyer of autobuyers) {
     autobuyer.isOn = !isOn;
   }

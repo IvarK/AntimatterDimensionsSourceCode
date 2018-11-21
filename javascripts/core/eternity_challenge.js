@@ -53,9 +53,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     resetDimensions();
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
-    hidePreMilestone30Elements();
-    document.getElementById("matter").style.display = "none";
-    updateAutobuyers();
     resetInfinityPointsOnEternity();
     resetInfDimensions();
     updateChallengeTimes();
@@ -68,17 +65,12 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points.";
-    document.getElementById("eternitybtn").style.display = player.infinityPoints.gte(player.eternityChallGoal) ? "inline-block" : "none";
     updateEternityUpgrades();
     resetTickspeed();
-    updateTickSpeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">" + shortenDimensions(player.eternityPoints) + "</span> Eternity point" + ((player.eternityPoints.eq(1)) ? "." : "s.");
     Marathon2 = 0;
-
-    return true
+    return true;
 }
 
 const TIERS_PER_EC = 5;
@@ -228,7 +220,7 @@ EternityChallengeInfo.details = [
     /* EC10 */
     goal: new Decimal('1e3000'),
     goalIncrease: new Decimal('1e300'),
-    rewardValue: completions => new Decimal(Math.max(Math.pow(getInfinitied(), 0.9) * completions * 0.000002 + 1, 1))
+    rewardValue: completions => new Decimal(Math.max(Math.pow(Player.totalInfinitied, 0.9) * completions * 0.000002 + 1, 1))
   },
   {
     /* EC11 */
@@ -244,9 +236,19 @@ EternityChallengeInfo.details = [
   }
 ];
 
+
 function EternityChallenge(id) {
   return new EternityChallengeInfo(id);
 }
+
+/**
+ * @returns {EternityChallengeInfo}
+ */
+EternityChallenge.current = function() {
+  if (player.currentEternityChall === String.empty) return undefined;
+  const id = parseInt(player.currentEternityChall.split("eterc")[1]);
+  return EternityChallenge(id);
+};
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
   if (player.reality.perks.includes(95)) return TimeSpan.fromHours(2).totalMilliseconds

@@ -90,9 +90,7 @@ function softReset(bulk) {
     applyDimensionBoost();
     applyChallengeModifiers();
     skipResetsIfPossible();
-    hidePreMilestone30Elements();
     resetTickspeed();
-    updateTickSpeed();
     let currentMoney = player.money;
     resetMoney();
     if (isAchEnabled("r111")) {
@@ -114,11 +112,6 @@ function applyChallengeModifiers() {
     }
     if (player.currentChallenge === "postc1")
         player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
-    if (player.currentChallenge === "postc2") {
-        player.eightAmount = new Decimal(1);
-        player.eightBought = 1;
-        player.resets = 4;
-    }
 }
 
 function skipResetsIfPossible() {
@@ -132,15 +125,6 @@ function skipResetsIfPossible() {
   else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
   else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
   else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
-}
-
-function hidePreMilestone30Elements() {
-    if (player.eternities < 30) {
-        document.getElementById("tickSpeed").style.visibility = "hidden";
-        document.getElementById("tickSpeedMax").style.visibility = "hidden";
-        document.getElementById("tickLabel").style.visibility = "hidden";
-        document.getElementById("tickSpeedAmount").style.visibility = "hidden";
-    }
 }
 
 function softResetBtnClick() {

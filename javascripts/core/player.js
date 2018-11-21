@@ -11,8 +11,6 @@ var failureCount = 0;
 var implosionCheck = 0;
 var realizationCheck = 0;
 var statsTimer = 0;
-var TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
-var DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 var player = {
   money: new Decimal(10),
@@ -397,6 +395,35 @@ var player = {
       eternity: true,
       dilation: true,
       reality: true
+    }
+  }
+};
+
+
+const Player = {
+  get totalInfinitied() {
+    return Math.max(player.infinitied + player.infinitiedBank, 0);
+  },
+  get effectiveMatterAmount() {
+    switch (player.currentChallenge) {
+      case "challenge12":
+      case "postc1":
+        return player.matter;
+      case "postc6":
+        return Decimal.pow(player.matter, 20);
+    }
+    return new Decimal(0);
+  },
+  get antimatterPerSecond() {
+    const basePerSecond = getDimensionProductionPerSecond(1);
+    switch (player.currentChallenge) {
+      case "challenge3":
+      case "postc1":
+        return basePerSecond.times(player.chall3Pow);
+      case "challenge7":
+        return basePerSecond.plus(getDimensionProductionPerSecond(2));
+      default:
+        return basePerSecond;
     }
   }
 };

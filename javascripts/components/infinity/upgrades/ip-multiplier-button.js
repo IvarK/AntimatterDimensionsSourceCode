@@ -68,6 +68,6 @@ class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
 
 const infinityMultViewModel = () => new InfinityMultiplierViewModel({
   upgrade: InfinityUpgrade.ipMult,
-  description: "Multiply infinity points from all sources by 2",
+  description: "Multiply Infinity Points from all sources by 2",
   formatCurrentEffect: (value, formatter) => `${formatter.shorten(value)}x`,
 });

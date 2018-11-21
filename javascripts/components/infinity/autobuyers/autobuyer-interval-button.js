@@ -13,14 +13,14 @@ Vue.component("autobuyer-interval-button", {
       this.cost = this.autobuyer.cost;
       this.isMaxed = this.autobuyer.hasMaxedInterval;
     },
-    buy() {
-      this.autobuyer.buy();
+    upgradeInterval() {
+      this.autobuyer.upgradeInterval();
     }
   },
   template:
     `<button
       v-if="!isMaxed"
       class="o-autobuyer-btn l-autobuyer-box__button"
-      @click="buy"
+      @click="upgradeInterval"
     >40% smaller interval<br>Cost: {{shortenDimensions(cost)}} IP</button>`
 });

@@ -215,6 +215,9 @@ const glyphEffectSoftcaps = {
   infinityrate(value) {
     return value > 0.7 ? 0.7 + 0.2*(value - 0.7) : value;
   },
+  dilationpow(value) {
+    return value > 10 ? 10 + Math.pow(value - 10, 0.5) : value;
+  },
   replicationglyphlevel(value) {
     return value > 0.1 ? 0.1 + 0.2*(value - 0.1) : value;
   },
@@ -475,7 +478,6 @@ function generateGlyphTable() {
   }
   activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
   $("#activeGlyphs").html(activeEffectText)
-  updateTickSpeed();
   updateTooltips();
   updateGlyphDescriptions()
 }

@@ -160,6 +160,9 @@ const ReplicantiUpgrade = {
     set current(value) {
       player.replicanti.chance = value;
     },
+    get baseCost() {
+      return this.cost;
+    },
     get cost() {
       return player.replicanti.chanceCost;
     },
@@ -188,6 +191,9 @@ const ReplicantiUpgrade = {
     },
     set current(value) {
       player.replicanti.interval = value;
+    },
+    get baseCost() {
+      return this.cost;
     },
     get cost() {
       return player.replicanti.intervalCost;
@@ -221,10 +227,13 @@ const ReplicantiUpgrade = {
     set current(value) {
       player.replicanti.gal = value;
     },
+    get baseCost() {
+      return player.replicanti.galCost;
+    },
     get cost() {
-      let cost = player.replicanti.galCost;
+      let cost = this.baseCost;
       if (player.timestudy.studies.includes(233)) {
-        return cost.dividedBy(Replicanti.amount.pow(0.3))
+        return cost.dividedBy(Replicanti.amount.pow(0.3));
       }
       return cost;
     },
@@ -260,9 +269,9 @@ const ReplicantiUpgrade = {
   purchase(upgrade) {
     if (!this.isAvailable(upgrade)) return;
     player.infinityPoints = player.infinityPoints.minus(upgrade.cost);
-    upgrade.cost = Decimal.times(upgrade.cost, upgrade.costIncrease);
+    upgrade.cost = Decimal.times(upgrade.baseCost, upgrade.costIncrease);
     upgrade.current = upgrade.next;
-    if (player.currentEternityChall === "eterc8") player.eterc8repl--;
+    if (EternityChallenge(8).isRunning) player.eterc8repl--;
     GameUI.update();
   }
 };

@@ -66,10 +66,22 @@ function buyDilationUpgrade(id) {
     }
 
     if (id == 3) {
-      if (player.reality.perks.includes(37)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
-      else if (player.reality.perks.includes(36)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
-      else if (player.reality.perks.includes(35)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
-      else if (player.reality.perks.includes(34)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
+      if (player.reality.perks.includes(37)) {
+        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
+        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(3)
+      }
+      else if (player.reality.perks.includes(36)) {
+        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
+        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2.5)
+      }
+      else if (player.reality.perks.includes(35)) {
+        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
+        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2)
+      }
+      else if (player.reality.perks.includes(34)) {
+        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
+        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(1.5)
+      }
     }
   }
   updateDilationUpgradeCosts()
@@ -129,12 +141,14 @@ function getDilationGainPerSecond() {
 }
 
 function getTachyonGain() {
-  let mult = Math.pow(3, player.dilation.rebuyables[3])
-  if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
-  if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
-  if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
+  let mult = Decimal.pow(3, player.dilation.rebuyables[3])
+  if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
+  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(player.achPow))
+  if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
+  let sacEffect = getGlyphSacEffect("dilation")
+  if (sacEffect > 1) mult *= sacEffect
 
-  let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (mult) - player.dilation.totalTachyonParticles, 0)            
+  let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
 }
 
@@ -145,7 +159,8 @@ function getTachyonReq() {
   if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
   let sacEffect = getGlyphSacEffect("dilation")
   if (sacEffect > 1) mult *= sacEffect
-  let req = Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
+  
+  let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
   return req
 }
 

@@ -22,6 +22,7 @@ function bigCrunchReset() {
     implosionCheck = 0;
     if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
         player.challenges.push(player.currentChallenge);
+        Autobuyer.tryUnlockAny();
     }
     if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) {
         setChallengeTime(challNumber - 2, player.thisInfinityTime);
@@ -36,7 +37,7 @@ function bigCrunchReset() {
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addTime(player.thisInfinityTime, infinityPoints);
-    if (player.realities > 0 && getInfinitied() === 0 && player.eternities === 0 && player.galaxies <= 1) {
+    if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
     if (player.currentEternityChall === "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4") * 4)) {
@@ -64,7 +65,7 @@ function bigCrunchReset() {
 
     checkForEndMe();
 
-    kong.submitStats('Infinitied', getInfinitied());
+    kong.submitStats('Infinitied', Player.totalInfinitied);
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 
     let currenReplicanti = player.replicanti.amount;
@@ -109,28 +110,22 @@ function secondSoftReset() {
     player.tickDecrease = 0.9;
     resetMoney();
     softReset(0);
-    updateAutobuyers();
     resetInfDimensions();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
-    updateChallengeElements();
     Marathon2 = 0;
-}
-
-function updateChallengeElements() {
-    if (player.currentChallenge === "challenge12" || player.currentChallenge === "postc1" || player.currentChallenge === "postc6")
-        document.getElementById("matter").style.display = "block";
-    else
-        document.getElementById("matter").style.display = "none";
 }
 
 function checkBigCrunchAchievements() {
     giveAchievement("To infinity!");
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
+      player.challenges.push("challenge1");
+      Autobuyer.tryUnlockAny();
+    }
     if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
     if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
     if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
@@ -193,7 +188,7 @@ function totalIPMult() {
     mult = mult.times(4);
   }
   if (isAchEnabled("r116")) {
-    mult = mult.times(Decimal.pow(2, Math.log10(getInfinitied() + 1)));
+    mult = mult.times(Decimal.pow(2, Math.log10(Player.totalInfinitied + 1)));
   }
   if (isAchEnabled("r125")) {
     mult = mult.times(Decimal.pow(2, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.11)));
@@ -263,7 +258,7 @@ InfinityUpgrade.totalTimeMult = new InfinityUpgrade({
   cost: 1,
   dynamicEffect: () => Math.pow(Time.totalTimePlayed.totalMinutes / 2, 0.15)
 });
-InfinityUpgrade.dimInfinityMult = () => 1 + (getInfinitied() * 0.2);
+InfinityUpgrade.dimInfinityMult = () => 1 + (Player.totalInfinitied * 0.2);
 InfinityUpgrade.dim18mult = new InfinityUpgrade({
   id: "18Mult",
   cost: 1,
@@ -435,7 +430,7 @@ BreakInfinityUpgrade.galaxyBoost = new BreakInfinityUpgrade({
 BreakInfinityUpgrade.infinitiedMult = new BreakInfinityUpgrade({
   id: "infinitiedMult",
   cost: 1e5,
-  dynamicEffect: () => 1 + Math.log10(getInfinitied() + 1) * 10
+  dynamicEffect: () => 1 + Math.log10(Player.totalInfinitied + 1) * 10
 });
 BreakInfinityUpgrade.achievementMult = new BreakInfinityUpgrade({
   id: "achievementMult",

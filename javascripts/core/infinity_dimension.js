@@ -114,18 +114,17 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  if (dim.isCapped) return false;
-  if (!dim.isAffordable) return false;
-  if (player.currentEternityChall === "eterc8" && player.eterc8ids <= 0) return false;
-  return true;
+  if (dim.isCapped || !dim.isAffordable || !dim.isUnlocked) return false;
+  return !EternityChallenge(8).isRunning || player.eterc8ids > 0;
+
 }
 
 function buyMaxInfinityDimensions() {
-    if (player.currentEternityChall == "eterc8") return false;
-    for (var i=1; i<9; i++) {
-        buyMaxInfDims(i)
-    }
+  if (EternityChallenge(8).isRunning) return false;
+  for (let tier of Array.dimensionTiers) {
+    buyMaxInfDims(tier)
   }
+}
 
 function toggleAllInfDims() {
   const areEnabled = player.infDimBuyers[0];
@@ -135,6 +134,7 @@ function toggleAllInfDims() {
 }
 
 var infDimPow = 1
+
 
 class InfinityDimensionInfo {
   constructor(tier) {
@@ -183,7 +183,11 @@ class InfinityDimensionInfo {
   }
 
   get isUnlocked() {
-    return player.infDimensionsUnlocked[this._tier - 1];
+    return player.infDimensionsUnlocked[this._tier - 1] || player.eternities >= 25;
+  }
+
+  get requirement() {
+    return InfinityDimensionInfo.requirements[this._tier];
   }
 
   get isAutobuyerUnlocked() {
@@ -313,6 +317,27 @@ class InfinityDimensionInfo {
   }
 }
 
+InfinityDimensionInfo.requirements = [
+  null,
+  new Decimal("1e1100"),
+  new Decimal("1e1900"),
+  new Decimal("1e2400"),
+  new Decimal("1e10500"),
+  new Decimal("1e30000"),
+  new Decimal("1e45000"),
+  new Decimal("1e54000"),
+  new Decimal("1e60000")
+];
+
 function InfinityDimension(tier) {
   return new InfinityDimensionInfo(tier);
 }
+
+InfinityDimension.nextRequirement = function() {
+  if (InfinityDimension(8).isUnlocked)
+    throw "All Infinity Dimensions are unlocked";
+  return Array.dimensionTiers
+    .map(tier => InfinityDimension(tier))
+    .first(dim => !dim.isUnlocked)
+    .requirement;
+};

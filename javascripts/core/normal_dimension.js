@@ -138,7 +138,7 @@ function canBuyDimension(tier) {
 
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
   if (tier > player.resets + 4) return false;
-  if (tier > 1 && NormalDimension(tier - 1).amount === 0 && player.eternities < 30) return false;
+  if (tier > 1 && NormalDimension(tier - 1).amount.eq(0) && player.eternities < 30) return false;
   return !((player.currentChallenge === "challenge4" || player.currentChallenge === "postc1") && tier >= 7);
 }
 
@@ -543,50 +543,88 @@ class NormalDimensionInfo {
     this._player = player;
   }
 
+
+  /**
+   * @returns {Decimal}
+   */
   get cost() {
     return this._player[this._props.cost];
   }
 
+
+  /**
+   * @param {Decimal} value
+   */
   set cost(value) {
     this._player[this._props.cost] = value;
   }
 
+  /**
+   * @returns {Decimal}
+   */
   get amount() {
     return this._player[this._props.amount];
   }
 
+  /**
+   * @param {Decimal} value
+   */
   set amount(value) {
     this._player[this._props.amount] = value;
   }
 
+  /**
+   * @returns {number}
+   */
   get bought() {
     return this._player[this._props.bought];
   }
 
+  /**
+   * @param {number} value
+   */
   set bought(value) {
     this._player[this._props.bought] = value;
   }
 
+  /**
+   * @returns {number}
+   */
   get boughtBefore10() {
     return this.bought % 10;
   }
 
+  /**
+   * @returns {number}
+   */
   get remainingUntil10() {
     return 10 - this.boughtBefore10;
   }
 
+  /**
+   * @returns {Decimal}
+   */
   get costUntil10() {
     return this.cost.times(this.remainingUntil10);
   }
 
+  /**
+   * @returns {Decimal}
+   */
   get pow() {
     return this._player[this._props.pow];
   }
 
+  /**
+   * @param {Decimal} value
+   */
   set pow(value) {
     this._player[this._props.pow] = value;
   }
 
+  /**
+   * @returns {InfinityUpgrade}
+   */
   get infinityUpgrade() {
     switch (this._tier) {
       case 1:
@@ -604,6 +642,9 @@ class NormalDimensionInfo {
     }
   }
 
+  /**
+   * @returns {Decimal}
+   */
   get rateOfChange() {
     const tier = this._tier;
     if (tier === 8 ||
@@ -625,6 +666,9 @@ class NormalDimensionInfo {
     return toGain.times(10).dividedBy(this.amount.max(1));
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isAffordable() {
     if (this._isAffectedByChallenge10) {
       return NormalDimension(this._tier - 2).amount.gte(this.cost);
@@ -633,6 +677,9 @@ class NormalDimensionInfo {
     }
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isAffordableUntil10() {
     if (this._isAffectedByChallenge10) {
       return NormalDimension(this._tier - 2).amount.gte(this.costUntil10);

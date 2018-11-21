@@ -63,7 +63,7 @@ class Sacrifice {
   }
 
   static get totalBoost() {
-    if (player.sacrificed === 0) return new Decimal(1);
+    if (player.sacrificed.eq(0)) return new Decimal(1);
 
     if (player.challenges.includes("postc2")) {
       if (player.timestudy.studies.includes(228)) return player.sacrificed.pow(0.013).max(1);

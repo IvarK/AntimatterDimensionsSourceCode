@@ -1,0 +1,232 @@
+@font-face {
+  font-family: Typewriter;
+  src: url('MonospaceTypewriter.ttf');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+#page {
+  width: 1050px;
+  height: 700px;
+  margin: auto;
+  margin-top: 100px;
+  display: flex;
+  font-family: Typewriter, serif;
+  background-color: #000022;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+.resource {
+  height: 57px;
+  display: flex;
+  flex-direction: column;
+  background-color: #392F5A;
+  border: 2px solid #00A4A1;
+  margin-bottom: -2px;
+}
+
+.resource img {
+  height: 20px;
+}
+
+.resource h2 {
+  margin: 0;
+  color: #00A4A1;
+  font-size: 1.3em;
+  padding-left: 10px;
+}
+
+.resource-information {
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: space-between;
+  padding: 0 5px;
+  font-size: 0.9em;
+}
+
+.resource-per-second {
+  font-size: 0.7em;
+  color: white;
+  padding-left: 10px;
+}
+
+.resource-name {
+  font-size: 0.9em;
+}
+
+#ip { color: #B67F33 }
+#ep { color: #B341E0 }
+
+.tab-buttons {
+  position: relative;
+}
+
+.tab-button {
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+  background-color: #392F5A;
+  border: 2px solid #00A4A1;
+  margin-bottom: -2px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.6em;
+}
+
+.tab-button.infinity {
+  background-color: black;
+  color: #B67F33;
+}
+
+.tab-button.eternity {
+  background-color: black;
+  color: #B341E0;
+}
+
+.tab-button.shop {
+  background-color: #8c7b21;
+}
+
+.game-container {
+  width: 100%
+}
+
+.quote {
+  width: 80%;
+  margin: 10px auto;
+  border: 2px solid #00A4A1;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  padding: 6px 0;
+}
+
+.subtabs {
+  position: absolute;
+  top: 0;
+  right: -55px;
+}
+
+.subtab {
+  height: 55px;
+  width: 55px;
+  display: flex;
+  flex-direction: column;
+  background-color: #392F5A;
+  border: 2px solid #00A4A1;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.6em;
+}
+
+.active {
+  background-color: #1f1a31;
+}
+
+.dimensions-container {
+  padding: 20px 70px;
+}
+
+.dimension-row {
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dimension-row h3 {
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.dimension-row h3 .mult {
+  font-size: 0.6em;
+  margin-left: 10px;
+}
+
+.dimension-row span {
+  font-weight: bold;
+}
+
+
+.storebtn {
+  background-color: #392F5A;
+  border: 1px solid green;
+  padding: 10px;
+  color: white;
+  font-family: Typewriter, serif;
+  border-radius: 5px;
+  position: relative;
+  width: 175px;
+  height: 47px;
+}
+
+.button-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.fill1 {
+  height: 100%;
+  width: 20%;
+  background-color: green;
+  float: left;
+}
+
+.fill2 {
+  height: 100%;
+  width: 40%;
+  background-color: #1d423c;
+  float: left;
+}
+
+.modes-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 70px;
+}
+
+.resets-container {
+  display: flex;
+  justify-content: space-around;
+  color: white;
+}
+
+.reset-container h4 {
+  margin: 0;
+}
+
+.reset-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

@@ -25,6 +25,9 @@ let ui = {
       infinity: {
         subtab: String.empty
       },
+      eternity: {
+        subtab: String.empty
+      },
       celestials: {
         subtab: String.empty
       }

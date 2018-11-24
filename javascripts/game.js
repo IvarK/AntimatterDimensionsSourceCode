@@ -1896,6 +1896,9 @@ function init() {
     document.getElementById("eternitystorebtn").onclick = function () {
         showTab('eternitystore')
     }
+    document.getElementById("eternitystorebtnvue").onclick = function () {
+        showTab('eternitystorevue')
+    }
     document.getElementById("realitybtn").onclick = function () {
         showTab('reality')
     }

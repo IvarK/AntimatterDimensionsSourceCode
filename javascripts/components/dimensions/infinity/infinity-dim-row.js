@@ -12,10 +12,11 @@ Vue.component('infinity-dim-row', {
       rateOfChange: new Decimal(0),
       isAutobuyerUnlocked: false,
       cost: new Decimal(0),
-      isAffordable: false,
+      isAvailableForPuchase: false,
       isCapped: false,
       capIP: new Decimal(0),
-      autobuyers: player.infDimBuyers
+      autobuyers: player.infDimBuyers,
+      isEC8Running: false
     };
   },
   computed: {
@@ -43,25 +44,23 @@ Vue.component('infinity-dim-row', {
     update() {
       const tier = this.tier;
       const dimension = InfinityDimension(tier);
-      const isUnlocked = dimension.isUnlocked;
-      this.isUnlocked = isUnlocked;
-      if (!isUnlocked) return;
+      this.isUnlocked = dimension.isUnlocked;
+      if (!this.isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
       this.bought = dimension.bought;
-      const hasRateOfChange = dimension.hasRateOfChange;
-      this.hasRateOfChange = hasRateOfChange;
-      if (hasRateOfChange) {
+      this.hasRateOfChange = dimension.hasRateOfChange;
+      if (this.hasRateOfChange) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.isAutobuyerUnlocked = dimension.isAutobuyerUnlocked;
       this.cost.copyFrom(dimension.cost);
-      this.isAffordable = dimension.isAffordable;
-      const isCapped = dimension.isCapped;
-      this.isCapped = isCapped;
-      if (isCapped) {
+      this.isAvailableForPuchase = dimension.isAvailableForPuchase;
+      this.isCapped = dimension.isCapped;
+      if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
       }
+      this.isEC8Running = EternityChallenge(8).isRunning;
     },
     buyManyInfinityDimension: function() {
       buyManyInfinityDimension(this.tier);
@@ -76,14 +75,14 @@ Vue.component('infinity-dim-row', {
         class="c-infinity-dim-row__label c-infinity-dim-row__label--growable"
       >{{shortenDimensions(amount)}} ({{bought}}){{rateOfChangeDisplay}}</div>
       <primary-button-on-off
-        v-if="isAutobuyerUnlocked"
+        v-if="isAutobuyerUnlocked && !isEC8Running"
         v-model="autobuyers[tier - 1]"
         class="o-primary-btn--id-autobuyer c-infinity-dim-row__button"
         text="Auto:"
       />
       <primary-button
         v-tooltip="capTooltip"
-        :enabled="isAffordable"
+        :enabled="isAvailableForPuchase"
         class="o-primary-btn--buy-id c-infinity-dim-row__button"
         @click="buyManyInfinityDimension"
       >{{costDisplay}}</primary-button>

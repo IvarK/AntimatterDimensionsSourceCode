@@ -53,12 +53,21 @@ Vue.component("time-study", {
         top: this.rem(this.setup.top),
         left: this.rem(this.setup.left)
       };
+    },
+    classObject: function() {
+      const study = this.setup.study;
+      return {
+        "o-time-study": true,
+        "o-time-study--small": study.type === TimeStudyType.NORMAL && study._id > 220 && study._id < 230,
+        "l-time-study": true
+      };
     }
   },
   template:
-    `<div class="o-time-study l-time-study" :style="styleObject">
+    `<button :class="classObject" :style="styleObject">
       <hint-text>{{setup.study._id}}</hint-text>
-    </div>`
+      Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
+    </button>`
 });
 
 Vue.component("time-study-connection", {
@@ -147,7 +156,14 @@ class TimeStudyTreeLayout {
       itemHeight: 8,
       spacing: 3
     });
+
+    const wideRowLayout = new TimeStudyRowLayout({
+      itemWidth: 12,
+      itemHeight: 8,
+      spacing: 0.6
+    });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
+    const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items);
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
@@ -156,36 +172,36 @@ class TimeStudyTreeLayout {
      * @type {TimeStudyRow[]}
      */
     this.rows = [
-      normalRow(null, TS(11), null),
-      normalRow(TS(21), TS(22)),
-      normalRow(TS(33), TS(31), TS(32), null),
-      normalRow(TS(41), TS(42)),
-      normalRow(null, TS(51), EC(5)),
-      normalRow(null, TS(61), TS(62)),
-      normalRow(TS(71), TS(72), TS(73)),
-      normalRow(TS(81), TS(82), TS(83)),
-      normalRow(TS(91), TS(92), TS(93)),
-      normalRow(TS(101), TS(102), TS(103)),
-      normalRow(EC(7), TS(111), null),
-      normalRow(TS(121), TS(122), TS(123)),
-      normalRow(EC(6), TS(131), TS(132), TS(133), EC(8)),
-      normalRow(TS(141), TS(142), TS(143)),
-      normalRow(null, EC(9), TS(151), null, EC(4)),
-      normalRow(TS(161), TS(162)),
-      normalRow(TS(171)),
-      normalRow(EC(1), EC(2), EC(3)),
-      normalRow(TS(181)),
-      normalRow(EC(10)),
-      normalRow(TS(191), TS(192), TS(193)),
-      normalRow(TS(201)),
-      normalRow(TS(211), TS(212), TS(213), TS(214)),
-      normalRow(TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228)),
-      normalRow(TS(231), TS(232), TS(233), TS(234)),
-      normalRow(EC(11), EC(12)),
-      normalRow(TimeStudy.dilation),
-      normalRow(TimeStudy.timeDimension(5), TimeStudy.timeDimension(6)),
-      normalRow(TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)),
-      normalRow(TimeStudy.reality),
+      normalRow(                       null,   TS(11),   null                         ),
+      normalRow(                           TS(21), TS(22)                             ),
+      normalRow(                   TS(33), TS(31), TS(32), null                       ),
+      normalRow(                           TS(41), TS(42)                             ),
+      normalRow(                       null,   TS(51),  EC(5)                         ),
+      normalRow(                       null,   TS(61),  TS(62)                        ),
+      normalRow(                      TS(71),  TS(72),  TS(73)                        ),
+      normalRow(                      TS(81),  TS(82),  TS(83)                        ),
+      normalRow(                      TS(91),  TS(92),  TS(93)                        ),
+      normalRow(                      TS(101), TS(102), TS(103)                       ),
+      normalRow(                       EC(7),  TS(111),  null                         ),
+      normalRow(                      TS(121), TS(122), TS(123)                       ),
+      normalRow(               EC(6), TS(131), TS(132), TS(133), EC(8)                ),
+      normalRow(                      TS(141), TS(142), TS(143)                       ),
+      normalRow(               null,   EC(9), TS(151),   null,   EC(4)                ),
+      normalRow(                          TS(161), TS(162)                            ),
+      normalRow(                               TS(171)                                ),
+      normalRow(                         EC(1), EC(2), EC(3)                          ),
+      normalRow(                               TS(181)                                ),
+      normalRow(                               EC(10)                                 ),
+      normalRow(             TS(191),          TS(192),          TS(193)              ),
+      normalRow(                               TS(201)                                ),
+      normalRow(    TS(211),          TS(212),          TS(213),          TS(214)     ),
+      wideRow  (TS(221), TS(222), TS(223), TS(224), TS(225), TS(226), TS(227), TS(228)),
+      normalRow(    TS(231),          TS(232),          TS(233),          TS(234)     ),
+      normalRow(              EC(11),                             EC(12)              ),
+      normalRow(                          TimeStudy.dilation                          ),
+      normalRow(          TimeStudy.timeDimension(5), TimeStudy.timeDimension(6)      ),
+      normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
+      normalRow(                          TimeStudy.reality                           ),
     ];
 
     /**

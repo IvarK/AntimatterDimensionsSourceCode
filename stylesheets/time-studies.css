@@ -1,7 +1,6 @@
 .l-time-studies-tab {
   align-self: center;
   position: relative;
-  margin: 0 -1000%;
 }
 
 .l-time-study {
@@ -29,6 +28,11 @@
   border-radius: .4rem;
   font-size: 1.05rem;
   animation: studyGlowIn 7s infinite;
+}
+
+.o-time-study--small {
+  width: 12rem;
+  font-size: 0.9rem;
 }
 
 .o-time-study-connection {

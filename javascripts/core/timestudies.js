@@ -593,18 +593,24 @@ const TimeStudyPath = {
 
 class TimeStudyInfo {
   constructor(props) {
-    this._id = props.id;
     this._cost = props.cost;
-    this.type = TimeStudyType.NORMAL;
     this.incomingConnections = [];
-  }
-
-  get id() {
-    return this._id;
   }
 
   get cost() {
     return this._cost;
+  }
+}
+
+class NormalTimeStudyInfo extends TimeStudyInfo {
+  constructor(props) {
+    super(props);
+    this._id = props.id;
+    this.type = TimeStudyType.NORMAL;
+  }
+
+  get id() {
+    return this._id;
   }
 
   get isBought() {
@@ -612,7 +618,7 @@ class TimeStudyInfo {
   }
 }
 
-TimeStudyInfo.studies = function() {
+NormalTimeStudyInfo.studies = function() {
   const allProps = [
     {
       id: 11,
@@ -620,237 +626,237 @@ TimeStudyInfo.studies = function() {
     },
     {
       id: 21,
-      cost: 1
+      cost: 3
     },
     {
       id: 22,
-      cost: 1
+      cost: 2
     },
     {
       id: 31,
-      cost: 1
+      cost: 3
     },
     {
       id: 32,
-      cost: 1
+      cost: 2
     },
     {
       id: 33,
-      cost: 1
+      cost: 2
     },
     {
       id: 41,
-      cost: 1
+      cost: 4
     },
     {
       id: 42,
-      cost: 1
+      cost: 6
     },
     {
       id: 51,
-      cost: 1
+      cost: 3
     },
     {
       id: 61,
-      cost: 1
+      cost: 3
     },
     {
       id: 62,
-      cost: 1
+      cost: 3
     },
     {
       id: 71,
-      cost: 1
+      cost: 4
     },
     {
       id: 72,
-      cost: 1
+      cost: 6
     },
     {
       id: 73,
-      cost: 1
+      cost: 5
     },
     {
       id: 81,
-      cost: 1
+      cost: 4
     },
     {
       id: 82,
-      cost: 1
+      cost: 6
     },
     {
       id: 83,
-      cost: 1
+      cost: 5
     },
     {
       id: 91,
-      cost: 1
+      cost: 4
     },
     {
       id: 92,
-      cost: 1
+      cost: 5
     },
     {
       id: 93,
-      cost: 1
+      cost: 7
     },
     {
       id: 101,
-      cost: 1
+      cost: 4
     },
     {
       id: 102,
-      cost: 1
+      cost: 6
     },
     {
       id: 103,
-      cost: 1
+      cost: 6
     },
     {
       id: 111,
-      cost: 1
+      cost: 12
     },
     {
       id: 121,
-      cost: 1
+      cost: 9
     },
     {
       id: 122,
-      cost: 1
+      cost: 9
     },
     {
       id: 123,
-      cost: 1
+      cost: 9
     },
     {
       id: 131,
-      cost: 1
+      cost: 5
     },
     {
       id: 132,
-      cost: 1
+      cost: 5
     },
     {
       id: 133,
-      cost: 1
+      cost: 5
     },
     {
       id: 141,
-      cost: 1
+      cost: 4
     },
     {
       id: 142,
-      cost: 1
+      cost: 4
     },
     {
       id: 143,
-      cost: 1
+      cost: 4
     },
     {
       id: 151,
-      cost: 1
+      cost: 8
     },
     {
       id: 161,
-      cost: 1
+      cost: 7
     },
     {
       id: 162,
-      cost: 1
+      cost: 7
     },
     {
       id: 171,
-      cost: 1
+      cost: 15
     },
     {
       id: 181,
-      cost: 1
+      cost: 200
     },
     {
       id: 191,
-      cost: 1
+      cost: 400
     },
     {
       id: 192,
-      cost: 1
+      cost: 730
     },
     {
       id: 193,
-      cost: 1
+      cost: 300
     },
     {
       id: 201,
-      cost: 1
+      cost: 900
     },
     {
       id: 211,
-      cost: 1
+      cost: 120
     },
     {
       id: 212,
-      cost: 1
+      cost: 150
     },
     {
       id: 213,
-      cost: 1
+      cost: 200
     },
     {
       id: 214,
-      cost: 1
+      cost: 120
     },
     {
       id: 221,
-      cost: 1
+      cost: 900
     },
     {
       id: 222,
-      cost: 1
+      cost: 900
     },
     {
       id: 223,
-      cost: 1
+      cost: 900
     },
     {
       id: 224,
-      cost: 1
+      cost: 900
     },
     {
       id: 225,
-      cost: 1
+      cost: 900
     },
     {
       id: 226,
-      cost: 1
+      cost: 900
     },
     {
       id: 227,
-      cost: 1
+      cost: 900
     },
     {
       id: 228,
-      cost: 1
+      cost: 900
     },
     {
       id: 231,
-      cost: 1
+      cost: 500
     },
     {
       id: 232,
-      cost: 1
+      cost: 500
     },
     {
       id: 233,
-      cost: 1
+      cost: 500
     },
     {
       id: 234,
-      cost: 1
+      cost: 500
     },
   ];
 
   const studies = [];
   for (let props of allProps) {
-    studies[props.id] = new TimeStudyInfo(props);
+    studies[props.id] = new NormalTimeStudyInfo(props);
   }
 
   return studies;
@@ -860,14 +866,14 @@ TimeStudyInfo.studies = function() {
  * @returns {TimeStudyInfo}
  */
 function TimeStudy(id) {
-  return TimeStudyInfo.studies[id];
+  return NormalTimeStudyInfo.studies[id];
 }
 
-class ECTimeStudyInfo {
+class ECTimeStudyInfo extends TimeStudyInfo {
   constructor(props) {
+    super(props);
     this._id = props.id;
     this.type = TimeStudyType.EC;
-    this.incomingConnections = [];
   }
 
   get isBought() {
@@ -875,17 +881,66 @@ class ECTimeStudyInfo {
   }
 }
 
-ECTimeStudyInfo.studies = Array.range(1, 12).map(id => new ECTimeStudyInfo({ id: id }));
+ECTimeStudyInfo.studies = [
+  {
+    id: 1,
+    cost: 30
+  },
+  {
+    id: 2,
+    cost: 35
+  },
+  {
+    id: 3,
+    cost: 40
+  },
+  {
+    id: 4,
+    cost: 70
+  },
+  {
+    id: 5,
+    cost: 130
+  },
+  {
+    id: 6,
+    cost: 85
+  },
+  {
+    id: 7,
+    cost: 115
+  },
+  {
+    id: 8,
+    cost: 115
+  },
+  {
+    id: 9,
+    cost: 415
+  },
+  {
+    id: 10,
+    cost: 550
+  },
+  {
+    id: 11,
+    cost: 1
+  },
+  {
+    id: 12,
+    cost: 1
+  }
+].map(props => new ECTimeStudyInfo(props));
 
 TimeStudy.eternityChallenge = function(id) {
   return ECTimeStudyInfo.studies[id - 1];
 };
 
-class DilationTimeStudy {
+class DilationTimeStudy extends TimeStudyInfo {
   constructor(props) {
+    super(props);
     this._id = props.id;
     this.type = TimeStudyType.DILATION;
-    this.incomingConnections = [];
   }
 
   get isBought() {
@@ -893,15 +948,40 @@ class DilationTimeStudy {
   }
 }
 
-TimeStudy.dilation = new DilationTimeStudy({ id: 1 });
+DilationTimeStudy.studies = [
+  {
+    id: 1,
+    cost: 5000
+  },
+  {
+    id: 2,
+    cost: 1000000
+  },
+  {
+    id: 3,
+    cost: 10000000
+  },
+  {
+    id: 4,
+    cost: 100000000
+  },
+  {
+    id: 5,
+    cost: 1000000000
+  },
+  {
+    id: 6,
+    cost: 5000000000
+  }
+].map(props => new DilationTimeStudy(props));
 
-DilationTimeStudy.tdStudies = Array.range(5, 4).map(tier => new DilationTimeStudy({ id: tier - 3 }));
+TimeStudy.dilation = DilationTimeStudy.studies[0];
 
 TimeStudy.timeDimension = function(tier) {
-  return DilationTimeStudy.tdStudies[tier - 5];
+  return DilationTimeStudy.studies[tier - 4];
 };
 
-TimeStudy.reality = new DilationTimeStudy({ id: 6 });
+TimeStudy.reality = DilationTimeStudy.studies[5];
 
 class TimeStudyConnection {
   constructor(from, to, override) {

@@ -1,0 +1,37 @@
+.l-time-studies-tab {
+  align-self: center;
+  position: relative;
+  margin: 0 -1000%;
+}
+
+.l-time-study {
+  position: absolute;
+  z-index: 1;
+}
+
+.l-time-study-connection {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.o-time-study {
+  color: #b341e0;
+  background: black;
+  border: .1rem solid #b341e0;
+  font-weight: bold;
+  font-family: Typewriter, serif;
+  width: 17rem;
+  height: 8rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: .4rem;
+  font-size: 1.05rem;
+  animation: studyGlowIn 7s infinite;
+}
+
+.o-time-study-connection {
+  stroke-width: 1rem;
+  stroke: #444444;
+}

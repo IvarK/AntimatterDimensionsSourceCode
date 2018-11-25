@@ -573,3 +573,489 @@ $(document).ready(function() {
     }
   });
 });
+
+const TimeStudyType = {
+  NORMAL: 0,
+  EC: 1,
+  DILATION: 2
+};
+
+const TimeStudyPath = {
+  NORMAL: 0,
+  INFINITY: 1,
+  TIME: 2,
+  ACTIVE: 3,
+  PASSIVE: 4,
+  IDLE: 5,
+  LIGHT: 6,
+  DARK: 7
+};
+
+class TimeStudyInfo {
+  constructor(props) {
+    this._id = props.id;
+    this._cost = props.cost;
+    this.type = TimeStudyType.NORMAL;
+    this.incomingConnections = [];
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get cost() {
+    return this._cost;
+  }
+
+  get isBought() {
+    return player.timestudy.studies.includes(this._id);
+  }
+}
+
+TimeStudyInfo.studies = function() {
+  const allProps = [
+    {
+      id: 11,
+      cost: 1
+    },
+    {
+      id: 21,
+      cost: 1
+    },
+    {
+      id: 22,
+      cost: 1
+    },
+    {
+      id: 31,
+      cost: 1
+    },
+    {
+      id: 32,
+      cost: 1
+    },
+    {
+      id: 33,
+      cost: 1
+    },
+    {
+      id: 41,
+      cost: 1
+    },
+    {
+      id: 42,
+      cost: 1
+    },
+    {
+      id: 51,
+      cost: 1
+    },
+    {
+      id: 61,
+      cost: 1
+    },
+    {
+      id: 62,
+      cost: 1
+    },
+    {
+      id: 71,
+      cost: 1
+    },
+    {
+      id: 72,
+      cost: 1
+    },
+    {
+      id: 73,
+      cost: 1
+    },
+    {
+      id: 81,
+      cost: 1
+    },
+    {
+      id: 82,
+      cost: 1
+    },
+    {
+      id: 83,
+      cost: 1
+    },
+    {
+      id: 91,
+      cost: 1
+    },
+    {
+      id: 92,
+      cost: 1
+    },
+    {
+      id: 93,
+      cost: 1
+    },
+    {
+      id: 101,
+      cost: 1
+    },
+    {
+      id: 102,
+      cost: 1
+    },
+    {
+      id: 103,
+      cost: 1
+    },
+    {
+      id: 111,
+      cost: 1
+    },
+    {
+      id: 121,
+      cost: 1
+    },
+    {
+      id: 122,
+      cost: 1
+    },
+    {
+      id: 123,
+      cost: 1
+    },
+    {
+      id: 131,
+      cost: 1
+    },
+    {
+      id: 132,
+      cost: 1
+    },
+    {
+      id: 133,
+      cost: 1
+    },
+    {
+      id: 141,
+      cost: 1
+    },
+    {
+      id: 142,
+      cost: 1
+    },
+    {
+      id: 143,
+      cost: 1
+    },
+    {
+      id: 151,
+      cost: 1
+    },
+    {
+      id: 161,
+      cost: 1
+    },
+    {
+      id: 162,
+      cost: 1
+    },
+    {
+      id: 171,
+      cost: 1
+    },
+    {
+      id: 181,
+      cost: 1
+    },
+    {
+      id: 191,
+      cost: 1
+    },
+    {
+      id: 192,
+      cost: 1
+    },
+    {
+      id: 193,
+      cost: 1
+    },
+    {
+      id: 201,
+      cost: 1
+    },
+    {
+      id: 211,
+      cost: 1
+    },
+    {
+      id: 212,
+      cost: 1
+    },
+    {
+      id: 213,
+      cost: 1
+    },
+    {
+      id: 214,
+      cost: 1
+    },
+    {
+      id: 221,
+      cost: 1
+    },
+    {
+      id: 222,
+      cost: 1
+    },
+    {
+      id: 223,
+      cost: 1
+    },
+    {
+      id: 224,
+      cost: 1
+    },
+    {
+      id: 225,
+      cost: 1
+    },
+    {
+      id: 226,
+      cost: 1
+    },
+    {
+      id: 227,
+      cost: 1
+    },
+    {
+      id: 228,
+      cost: 1
+    },
+    {
+      id: 231,
+      cost: 1
+    },
+    {
+      id: 232,
+      cost: 1
+    },
+    {
+      id: 233,
+      cost: 1
+    },
+    {
+      id: 234,
+      cost: 1
+    },
+  ];
+
+  const studies = [];
+  for (let props of allProps) {
+    studies[props.id] = new TimeStudyInfo(props);
+  }
+
+  return studies;
+}();
+
+/**
+ * @returns {TimeStudyInfo}
+ */
+function TimeStudy(id) {
+  return TimeStudyInfo.studies[id];
+}
+
+class ECTimeStudyInfo {
+  constructor(props) {
+    this._id = props.id;
+    this.type = TimeStudyType.EC;
+    this.incomingConnections = [];
+  }
+
+  get isBought() {
+    return player.eternityChallUnlocked === this._id;
+  }
+}
+
+ECTimeStudyInfo.studies = Array.range(1, 12).map(id => new ECTimeStudyInfo({ id: id }));
+
+TimeStudy.eternityChallenge = function(id) {
+  return ECTimeStudyInfo.studies[id - 1];
+};
+
+class DilationTimeStudy {
+  constructor(props) {
+    this._id = props.id;
+    this.type = TimeStudyType.DILATION;
+    this.incomingConnections = [];
+  }
+
+  get isBought() {
+    return player.dilation.studies.includes(this._id);
+  }
+}
+
+TimeStudy.dilation = new DilationTimeStudy({ id: 1 });
+
+DilationTimeStudy.tdStudies = Array.range(5, 4).map(tier => new DilationTimeStudy({ id: tier - 3 }));
+
+TimeStudy.timeDimension = function(tier) {
+  return DilationTimeStudy.tdStudies[tier - 5];
+};
+
+TimeStudy.reality = new DilationTimeStudy({ id: 6 });
+
+class TimeStudyConnection {
+  constructor(from, to, override) {
+    this._from = from;
+    this._to = to;
+    this._override = override;
+  }
+
+  get from() {
+    return this._from;
+  }
+
+  get to() {
+    return this._to;
+  }
+
+  get isOverridden() {
+    return this._override !== undefined && this._override();
+  }
+
+  get isSatisfied() {
+    return this.isOverridden || this._from.isBought;
+  }
+}
+
+/**
+ * @type {TimeStudyConnection[]}
+ */
+TimeStudy.allConnections = function() {
+  const TS = id => TimeStudy(id);
+  const EC = id => TimeStudy.eternityChallenge(id);
+  const connections = [
+    [TS(11), TS(21)],
+    [TS(11), TS(22)],
+
+    [TS(21), TS(31)],
+    [TS(21), TS(33)],
+    [TS(22), TS(32)],
+
+    [TS(31), TS(41)],
+    [TS(32), TS(42)],
+
+    [TS(41), TS(51)],
+    [TS(42), TS(51)],
+    [TS(42), EC(5)],
+
+    [TS(51), TS(61)],
+    [EC(5), TS(62)],
+
+    [TS(61), TS(71)],
+    [TS(61), TS(72)],
+    [TS(61), TS(73)],
+
+    [TS(71), TS(81)],
+    [TS(72), TS(82)],
+    [TS(73), TS(83)],
+
+    [TS(81), TS(91)],
+    [TS(82), TS(92)],
+    [TS(83), TS(93)],
+
+    [TS(91), TS(101)],
+    [TS(92), TS(102)],
+    [TS(93), TS(103)],
+
+    [TS(101), TS(111)],
+    [TS(102), TS(111)],
+    [TS(103), TS(111)],
+
+    [TS(111), EC(7)],
+
+    [TS(111), TS(121)],
+    [TS(111), TS(122)],
+    [TS(111), TS(123)],
+
+    [TS(121), TS(131)],
+    [TS(122), TS(132)],
+    [TS(123), TS(133)],
+    [TS(121), EC(6)],
+    [TS(123), EC(8)],
+
+    [TS(131), TS(141)],
+    [TS(132), TS(142)],
+    [TS(133), TS(143)],
+
+    [TS(141), TS(151)],
+    [TS(142), TS(151)],
+    [TS(143), TS(151)],
+    [TS(143), EC(4)],
+
+    [TS(151), EC(9)],
+
+    [TS(151), TS(161)],
+    [TS(151), TS(162)],
+
+    [TS(161), TS(171)],
+    [TS(162), TS(171)],
+
+    [TS(171), EC(1)],
+    [TS(171), EC(2)],
+    [TS(171), EC(3)],
+
+    [EC(1), TS(181)],
+    [EC(2), TS(181)],
+    [EC(3), TS(181)],
+
+    [TS(181), EC(10)],
+
+    [EC(10), TS(191)],
+    [EC(10), TS(192)],
+    [EC(10), TS(193)],
+
+    [TS(192), TS(201)],
+
+    [TS(191), TS(211)],
+    [TS(191), TS(212)],
+    [TS(193), TS(213)],
+    [TS(193), TS(214)],
+
+    [TS(211), TS(221)],
+    [TS(211), TS(222)],
+    [TS(212), TS(223)],
+    [TS(212), TS(224)],
+    [TS(213), TS(225)],
+    [TS(213), TS(226)],
+    [TS(214), TS(227)],
+    [TS(214), TS(228)],
+
+    [TS(221), TS(231)],
+    [TS(222), TS(231)],
+    [TS(223), TS(232)],
+    [TS(224), TS(232)],
+    [TS(225), TS(233)],
+    [TS(226), TS(233)],
+    [TS(227), TS(234)],
+    [TS(228), TS(234)],
+
+    [TS(231), EC(11)],
+    [TS(232), EC(11)],
+    [TS(233), EC(12)],
+    [TS(234), EC(12)],
+
+    [EC(11), TimeStudy.dilation],
+    [EC(12), TimeStudy.dilation],
+
+    [TimeStudy.dilation, TimeStudy.timeDimension(5)],
+    [TimeStudy.timeDimension(5), TimeStudy.timeDimension(6)],
+    [TimeStudy.timeDimension(6), TimeStudy.timeDimension(7)],
+    [TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)],
+    [TimeStudy.timeDimension(8), TimeStudy.reality]
+  ]
+    .map(props => new TimeStudyConnection(props[0], props[1], props[2]));
+  for (let connection of connections) {
+    connection.to.incomingConnections.push(connection);
+  }
+  return connections;
+}();

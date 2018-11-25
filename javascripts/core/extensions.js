@@ -139,3 +139,13 @@ Array.prototype.last = function(predicate) {
  * @type {number[]}
  */
 Array.dimensionTiers = Array.range(1, 8);
+
+Array.prototype.sum = function() {
+  if (this.length === 0) return 0;
+  return this.reduce(Number.sumReducer);
+};
+
+Array.prototype.max = function() {
+  if (this.length === 0) return 0;
+  return this.reduce((a, b) => Math.max(a, b));
+};

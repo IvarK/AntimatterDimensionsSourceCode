@@ -870,7 +870,8 @@ function toggleAutobuyers() {
       Autobuyer.infinity,
       Autobuyer.eternity,
       Autobuyer.reality
-    ]);
+    ])
+    .filter(autobuyer => autobuyer.isUnlocked);
   for (let autobuyer of autobuyers) {
     autobuyer.isOn = !isOn;
   }

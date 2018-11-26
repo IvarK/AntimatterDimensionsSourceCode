@@ -142,6 +142,7 @@ button {
   font-family: Typewriter, serif;
   display: flex;
   align-items: flex-end;
+  z-index: 2;
 }
 
 #TTbuttons br {

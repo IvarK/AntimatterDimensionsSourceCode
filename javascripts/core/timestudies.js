@@ -1132,8 +1132,8 @@ TimeStudy.allConnections = function() {
     [TimeStudy.timeDimension(6), TimeStudy.timeDimension(7)],
     [TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)],
     [TimeStudy.timeDimension(8), TimeStudy.reality]
-  ]
-    .map(props => new TimeStudyConnection(props[0], props[1], props[2]));
+  ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
+
   for (let connection of connections) {
     connection.to.incomingConnections.push(connection);
   }

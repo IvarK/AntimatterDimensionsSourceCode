@@ -34,7 +34,6 @@ let ui = {
     },
     shiftDown: false,
     theme: undefined,
-    ttshop: false,
     bigCrunch: false
   }
 };

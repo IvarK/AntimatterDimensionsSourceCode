@@ -12,7 +12,7 @@ Vue.component("time-studies-tab", {
     const layout = TimeStudyTreeLayout.instance;
     return {
       width: this.rem(layout.width),
-      height: this.rem(layout.height),
+      height: this.rem(layout.height + 10),
       studies: layout.studies,
       connections: layout.connections
     };
@@ -39,6 +39,7 @@ Vue.component("time-studies-tab", {
           :setup="setup"
         />
       </svg>
+      <tt-shop />
     </div>`
 });
 
@@ -55,10 +56,9 @@ Vue.component("time-study", {
       };
     },
     classObject: function() {
-      const study = this.setup.study;
       return {
         "o-time-study": true,
-        "o-time-study--small": study.type === TimeStudyType.NORMAL && study._id > 220 && study._id < 230,
+        "o-time-study--small": this.setup.isSmall,
         "l-time-study": true
       };
     }
@@ -77,11 +77,12 @@ Vue.component("time-study-connection", {
   },
   template:
     `<line
-        :x1="rem(setup.x1)"
-        :y1="rem(setup.y1)"
-        :x2="rem(setup.x2)"
-        :y2="rem(setup.y2)"
-        class="o-time-study-connection" />`
+      :x1="rem(setup.x1)"
+      :y1="rem(setup.y1)"
+      :x2="rem(setup.x2)"
+      :y2="rem(setup.y2)"
+      class="o-time-study-connection"
+    />`
 });
 
 class TimeStudyRow {
@@ -117,6 +118,10 @@ class TimeStudySetup {
     this.study = props.study;
     this.row = props.row;
     this.column = props.column;
+  }
+
+  get isSmall() {
+    return this.row === 23;
   }
 
   setPosition(layout) {

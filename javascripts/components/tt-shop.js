@@ -81,7 +81,7 @@ Vue.component("tt-shop", {
     }
   },
   template:
-    `<div id="TTbuttons" v-if="$viewModel.ttshop">
+    `<div id="TTbuttons">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <button class="timetheorembtn" style="width:130px; white-space:nowrap;" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>

@@ -8,7 +8,6 @@ let kongEPMult = 1
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);
-    ui.view.ttshop = document.getElementById("timestudies").style.display !== "none" && document.getElementById("eternitystore").style.display !== "none";
     resizeCanvas();
     Modal.hide();
     tryStartTachyonAnimation();
@@ -711,7 +710,6 @@ function unlockEChall(idx) {
     if (player.eternityChallUnlocked == 0) {
         player.eternityChallUnlocked = idx
         if (!justImported) {
-          ui.view.ttshop = false;
           Tab.challenges.eternity.show();
         }
         if (idx !== 12 && idx !== 13) player.etercreq = idx
@@ -1851,7 +1849,6 @@ function showEternityTab(tabName, init) {
             tab.style.display = 'none';
         }
     }
-    ui.view.ttshop = tabName === 'timestudies' && !init;
     resizeCanvas()
     tryStartTachyonAnimation();
 }

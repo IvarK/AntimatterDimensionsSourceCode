@@ -5,6 +5,7 @@ var particles = {}
 var direction = 0;
 var velocityX = 0;
 var velocityY = 0;
+var minSpeed = 10;
 
 var canvas = document.getElementById("studyTreeCanvas");
 var ctx = canvas.getContext("2d");
@@ -69,10 +70,13 @@ function drawTachyonAnimationFrame(ts){
                 particles["particle"+i].direction = Math.ceil(Math.random() * 8);
                 particles["particle"+i].velocityX = Math.ceil((Math.random() - 0.5) * 25)
                 particles["particle"+i].velocityY = Math.ceil((Math.random() - 0.5) * 25)
-                if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= 10
-                else particles["particle"+i].velocityX += 10
-                if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= 10
-                else particles["particle"+i].velocityY += 10
+                if (Math.abs(particles["particle"+i].velocityX) > Math.abs(particles["particle"+i].velocityY)) {
+                    if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= minSpeed
+                    else particles["particle"+i].velocityX += minSpeed
+                } else {
+                    if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= minSpeed
+                    else particles["particle"+i].velocityY += minSpeed
+                }
                 }
             goalX = particles["particle"+i].goalX
             goalY = particles["particle"+i].goalY
@@ -82,10 +86,21 @@ function drawTachyonAnimationFrame(ts){
                 particles["particle"+i].direction = Math.ceil(Math.random() * 8);
                 particles["particle"+i].velocityX = Math.ceil((Math.random() - 0.5) * 25)
                 particles["particle"+i].velocityY = Math.ceil((Math.random() - 0.5) * 25)
-                if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= 10
-                else particles["particle"+i].velocityX += 10
-                if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= 10
-                else particles["particle"+i].velocityY += 10
+                if (Math.abs(particles["particle"+i].velocityX) > Math.abs(particles["particle"+i].velocityY)) {
+                    if (Math.random > 0.5) {
+                        if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= minSpeed
+                        else particles["particle"+i].velocityY += minSpeed
+                    }
+                    if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= minSpeed
+                    else particles["particle"+i].velocityX += minSpeed
+                } else {
+                    if (Math.random > 0.5) {
+                        if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= minSpeed
+                        else particles["particle"+i].velocityX += minSpeed
+                    }
+                    if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= minSpeed
+                    else particles["particle"+i].velocityY += minSpeed
+                }
                 }
             point(particles["particle"+i].goalX, particles["particle"+i].goalY, ctx3)
             particles["particle"+i].goalX += particles["particle"+i].velocityX * tachyonAnimation.delta * 60

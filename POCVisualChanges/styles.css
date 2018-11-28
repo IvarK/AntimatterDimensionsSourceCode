@@ -7,6 +7,20 @@
   box-sizing: border-box;
 }
 
+*:focus {
+  outline: none;
+}
+
+:root {
+  --color-light: #FFFFFF;
+  --color-medium: #AEAEAE;
+  --color-dark: #1d1b22;
+  --color-accent-1: #E64C66;
+  --color-accent-2: #1BBC9B;
+  --color-good: #1bbb36;
+  --color-good-dark: #138626;
+}
+
 
 #page {
   width: 1050px;
@@ -15,7 +29,7 @@
   margin-top: 100px;
   display: flex;
   font-family: Typewriter, serif;
-  background-color: #000022;
+  background-color: #111014;
 }
 
 .sidebar {
@@ -26,8 +40,8 @@
   height: 57px;
   display: flex;
   flex-direction: column;
-  background-color: #392F5A;
-  border: 2px solid #00A4A1;
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-accent-2);
   margin-bottom: -2px;
 }
 
@@ -37,7 +51,7 @@
 
 .resource h2 {
   margin: 0;
-  color: #00A4A1;
+  color: var(--color-accent-2);
   font-size: 1.3em;
   padding-left: 10px;
 }
@@ -72,8 +86,8 @@
   height: 55px;
   display: flex;
   flex-direction: column;
-  background-color: #392F5A;
-  border: 2px solid #00A4A1;
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-accent-2);
   margin-bottom: -2px;
   justify-content: center;
   align-items: center;
@@ -92,7 +106,7 @@
 }
 
 .tab-button.shop {
-  background-color: #8c7b21;
+  background-color: #bba11b;
 }
 
 .game-container {
@@ -102,7 +116,7 @@
 .quote {
   width: 80%;
   margin: 10px auto;
-  border: 2px solid #00A4A1;
+  border: 1px solid var(--color-accent-2);
   border-radius: 5px;
   color: white;
   text-align: center;
@@ -113,6 +127,7 @@
   position: absolute;
   top: 0;
   right: -55px;
+  margin-right: 1px;
 }
 
 .subtab {
@@ -120,8 +135,8 @@
   width: 55px;
   display: flex;
   flex-direction: column;
-  background-color: #392F5A;
-  border: 2px solid #00A4A1;
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-accent-2);
   justify-content: center;
   align-items: center;
   color: white;
@@ -129,7 +144,7 @@
 }
 
 .active {
-  background-color: #1f1a31;
+  background-color: #2c2933;
 }
 
 .dimensions-container {
@@ -162,8 +177,8 @@
 
 
 .storebtn {
-  background-color: #392F5A;
-  border: 1px solid green;
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-good);
   padding: 10px;
   color: white;
   font-family: Typewriter, serif;
@@ -196,14 +211,14 @@
 .fill1 {
   height: 100%;
   width: 20%;
-  background-color: green;
+  background-color: var(--color-good);
   float: left;
 }
 
 .fill2 {
   height: 100%;
   width: 40%;
-  background-color: #1d423c;
+  background-color: var(--color-good-dark);
   float: left;
 }
 

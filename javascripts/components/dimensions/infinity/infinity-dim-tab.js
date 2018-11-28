@@ -14,7 +14,7 @@ Vue.component('infinity-dim-tab', {
     update() {
       const infinityPower = player.infinityPower;
       this.infinityPower.copyFrom(infinityPower);
-      if (player.currentEternityChall === "eterc9") {
+      if (EternityChallenge(9).isRunning) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
       }
       else {
@@ -22,10 +22,9 @@ Vue.component('infinity-dim-tab', {
         this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
       }
       this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
-      this.incomeType = player.currentEternityChall === "eterc7" ? "Seventh Dimensions" : "Infinity Power";
-      const isEC8Running = player.currentEternityChall === "eterc8";
-      this.isEC8Running = isEC8Running;
-      if (isEC8Running) {
+      this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
+      this.isEC8Running = EternityChallenge(8).isRunning;
+      if (this.isEC8Running) {
         this.EC8PurchasesLeft = player.eterc8ids;
       }
       this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
@@ -49,6 +48,7 @@ Vue.component('infinity-dim-tab', {
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>
       <primary-button
+        v-if="!isEC8Running"
         class="o-primary-btn--buy-max l-infinity-dim-tab__buy-max"
         @click="maxAll"
       >Max all</primary-button>
@@ -64,7 +64,7 @@ Vue.component('infinity-dim-tab', {
         class="l-infinity-dim-tab__ec8-purchases"
       >You have {{EC8PurchasesLeft}} purchases left.</div>
       <primary-button
-        v-if="isAnyAutobuyerUnlocked"
+        v-if="isAnyAutobuyerUnlocked && !isEC8Running"
         class="o-primary-btn--id-all-autobuyers l-infinity-dim-tab__all-autobuyers"
         @click="toggleAllAutobuyers"
       >Toggle all ON/OFF</primary-button>

@@ -9,7 +9,8 @@ Vue.component("replicanti-upgrade-button", {
       costDescription: String.empty,
       isCapped: false,
       isAutoUnlocked: false,
-      auto: player.replicanti.auto
+      auto: player.replicanti.auto,
+      isEC8Running: false
     };
   },
   computed: {
@@ -29,6 +30,7 @@ Vue.component("replicanti-upgrade-button", {
       }
       this.isAutoUnlocked = upgrade.isAutobuyerUnlocked;
       this.auto = player.replicanti.auto;
+      this.isEC8Running = EternityChallenge(8).isRunning;
     },
     purchase() {
       ReplicantiUpgrade.purchase(this.upgrade);
@@ -48,7 +50,7 @@ Vue.component("replicanti-upgrade-button", {
         </template>
       </primary-button>
       <primary-button-on-off
-        v-if="isAutoUnlocked"
+        v-if="isAutoUnlocked && !isEC8Running"
         v-model="auto[setup.index]"
         text="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"

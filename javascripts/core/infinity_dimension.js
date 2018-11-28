@@ -114,8 +114,7 @@ function buyMaxInfDims(tier) {
 
 function canBuyInfinityDimension(tier) {
   const dim = InfinityDimension(tier);
-  if (dim.isCapped || !dim.isAffordable || !dim.isUnlocked) return false;
-  return !EternityChallenge(8).isRunning || player.eterc8ids > 0;
+  return !dim.isCapped && dim.isAvailableForPuchase && dim.isUnlocked;
 
 }
 
@@ -194,6 +193,10 @@ class InfinityDimensionInfo {
     return player.eternities >= 10 + this._tier;
   }
 
+  get isAvailableForPuchase() {
+    return this.isAffordable && (player.eterc8ids > 0 || !EternityChallenge(8).isRunning);
+  }
+
   get isAffordable() {
     return player.infinityPoints.gte(this.cost);
   }
@@ -204,12 +207,9 @@ class InfinityDimensionInfo {
 
   get rateOfChange() {
     const tier = this._tier;
-    let toGain = 0;
+    let toGain = new Decimal(0);
     if (tier === 8) {
-      const ec7Completions = ECTimesCompleted("eterc7");
-      if (ec7Completions) {
-        toGain = TimeDimension(1).productionPerSecond.pow(ec7Completions * 0.2).minus(1).max(0)
-      }
+      EternityChallenge(7).applyReward(value => toGain = value);
     }
     else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
@@ -219,17 +219,17 @@ class InfinityDimensionInfo {
   }
 
   get productionPerSecond() {
-    if (player.currentEternityChall === "eterc10") {
+    if (EternityChallenge(10).isRunning) {
       return new Decimal(0);
     }
     let production = this.amount;
-    if (player.currentEternityChall === "eterc11") {
+    if (EternityChallenge(11).isRunning) {
       return production;
     }
-    if (player.currentEternityChall === "eterc7") {
+    if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(player.tickspeed.dividedBy(1000));
     }
-    if (player.challenges.includes("postc6")) {
+    if (InfinityChallenge(6).isCompleted) {
       let tick = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
       tick = new Decimal(1).dividedBy(tick);
       production = production.times(tick.times(1000).pow(0.0005))
@@ -239,10 +239,10 @@ class InfinityDimensionInfo {
 
   get multiplier() {
     const tier = this._tier;
-    if (player.currentEternityChall === "eterc2") {
+    if (EternityChallenge(2).isRunning) {
       return new Decimal(0);
     }
-    if (player.currentEternityChall === "eterc11") {
+    if (EternityChallenge(11).isRunning) {
       return new Decimal(1);
     }
     let mult = this.power;

@@ -56,6 +56,10 @@ class InfinityChallengeInfo {
   get isRunning() {
     return player.currentChallenge === this._fullId;
   }
+
+  get isCompleted() {
+    return player.challenges.includes(this._fullId);
+  }
 }
 
 function InfinityChallenge(id) {

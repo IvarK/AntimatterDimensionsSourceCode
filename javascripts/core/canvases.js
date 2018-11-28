@@ -5,6 +5,8 @@ var particles = {}
 var direction = 0;
 var velocityX = 0;
 var velocityY = 0;
+var minSpeed = 10;
+var minSpeeds = [{X: 0, Y: -minSpeed}, {X: minSpeed, Y: -minSpeed}, {X: minSpeed, Y: 0}, {X: minSpeed, Y: minSpeed}, {X: 0, Y: minSpeed}, {X: -minSpeed, Y: minSpeed}, {X: -minSpeed, Y: 0}, {X: -minSpeed, Y: -minSpeed}]
 
 var canvas = document.getElementById("studyTreeCanvas");
 var ctx = canvas.getContext("2d");
@@ -44,6 +46,25 @@ var tachyonAnimation = {
     lastTs: 0
 };
 
+function getParticleSpeed(direction) {
+    var tempX = minSpeeds[direction-1].X
+    var tempY = minSpeeds[direction-1].Y
+
+    if (tempX > 0) {
+        tempX += Math.random() * 10
+    } else {
+        tempX -= Math.random() * 10
+    }
+
+    if (tempY > 0) {
+        tempY += Math.random() * 10
+    } else {
+        tempY -= Math.random() * 10
+    }
+
+    return {X: tempX, Y: tempY}
+}
+
 function tryStartTachyonAnimation() {
     if (tachyonAnimation.running || !player.options.animations.tachyonParticles) return;
     tachyonAnimation.running = true;
@@ -67,12 +88,9 @@ function drawTachyonAnimationFrame(ts){
                 particles["particle"+i].goalX = Math.ceil(Math.random() * canvas3.width);
                 particles["particle"+i].goalY = Math.ceil(Math.random() * canvas3.height);
                 particles["particle"+i].direction = Math.ceil(Math.random() * 8);
-                particles["particle"+i].velocityX = Math.ceil((Math.random() - 0.5) * 25)
-                particles["particle"+i].velocityY = Math.ceil((Math.random() - 0.5) * 25)
-                if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= 10
-                else particles["particle"+i].velocityX += 10
-                if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= 10
-                else particles["particle"+i].velocityY += 10
+                var speed = getParticleSpeed(particles["particle"+i].direction)
+                particles["particle"+i].velocityX = speed.X
+                particles["particle"+i].velocityY = speed.Y
                 }
             goalX = particles["particle"+i].goalX
             goalY = particles["particle"+i].goalY
@@ -80,12 +98,9 @@ function drawTachyonAnimationFrame(ts){
                 particles["particle"+i].goalX = Math.ceil(Math.random() * canvas3.width);
                 particles["particle"+i].goalY = Math.ceil(Math.random() * canvas3.height);
                 particles["particle"+i].direction = Math.ceil(Math.random() * 8);
-                particles["particle"+i].velocityX = Math.ceil((Math.random() - 0.5) * 25)
-                particles["particle"+i].velocityY = Math.ceil((Math.random() - 0.5) * 25)
-                if (particles["particle"+i].velocityX < 0) particles["particle"+i].velocityX -= 10
-                else particles["particle"+i].velocityX += 10
-                if (particles["particle"+i].velocityY < 0) particles["particle"+i].velocityY -= 10
-                else particles["particle"+i].velocityY += 10
+                var speed = getParticleSpeed(particles["particle"+i].direction)
+                particles["particle"+i].velocityX = speed.X
+                particles["particle"+i].velocityY = speed.Y
                 }
             point(particles["particle"+i].goalX, particles["particle"+i].goalY, ctx3)
             particles["particle"+i].goalX += particles["particle"+i].velocityX * tachyonAnimation.delta * 60

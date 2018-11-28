@@ -445,11 +445,11 @@ function drawPerkNetwork() {
     {id: 75, label: "75", color: getNodeColor(75, 1), title: "Remove the EC3 requirement from study 181." }, //DONE
     {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of Eternity upgrades after first Eternity of a Reality."}, //DONE
     {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of Eternity upgrades after first Eternity of a Reality."}, //DONE
-    {id: 91, label: "91", color: getNodeColor(91, 1), title: "Automatically complete one EC every 12 hours."}, //DONE
-    {id: 92, label: "92", color: getNodeColor(92, 1), title: "Automatically complete one EC every 8 hours."}, //DONE
-    {id: 93, label: "93", color: getNodeColor(93, 1), title: "Automatically complete one EC every 6 hours."}, //DONE
-    {id: 94, label: "94", color: getNodeColor(94, 1), title: "Automatically complete one EC every 4 hours."}, //DONE
-    {id: 95, label: "95", color: getNodeColor(95, 1), title: "Automatically complete one EC every 2 hours."}, //DONE
+    {id: 91, label: "91", color: getNodeColor(91, 1), title: "Automatically complete one EC every 6 hours."}, //DONE
+    {id: 92, label: "92", color: getNodeColor(92, 1), title: "Automatically complete one EC every 4 hours."}, //DONE
+    {id: 93, label: "93", color: getNodeColor(93, 1), title: "Automatically complete one EC every 2 hours."}, //DONE
+    {id: 94, label: "94", color: getNodeColor(94, 1), title: "Automatically complete one EC every 1 hours."}, //DONE
+    {id: 95, label: "95", color: getNodeColor(95, 1), title: "Automatically complete one EC every 30 minutes."}, //DONE
     ]; 
     nodes = new vis.DataSet(nodesArray);
 

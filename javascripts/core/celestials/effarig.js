@@ -17,7 +17,7 @@ var Effarig = {
   pourRM(diff) {
     this.timePoured += diff
     let rm = player.reality.realityMachines
-    let rmPoured = Math.min(1e6 * Math.pow(this.timePoured, 2), rm)
+    let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm)
     this.rmStore += rmPoured
     player.reality.realityMachines = rm.minus(rmPoured)
     this.checkForUnlocks()

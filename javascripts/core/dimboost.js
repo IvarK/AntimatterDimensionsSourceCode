@@ -23,7 +23,8 @@ class DimBoost {
     if (isAchEnabled("r101")) power *= 1.01;
     if (isAchEnabled("r142")) power *= 1.5;
     power *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"));
-    if (player.timestudy.studies.includes(83)) power = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(power);
+    power = new Decimal(power)
+      .timesEffectOf(TimeStudy(83));
     if (player.timestudy.studies.includes(231)) power = Decimal.pow(player.resets, 0.3).max(1).times(power);
 
     return Decimal.fromValue(power);

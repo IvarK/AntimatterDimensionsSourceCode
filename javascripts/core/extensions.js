@@ -140,12 +140,99 @@ Array.prototype.last = function(predicate) {
  */
 Array.dimensionTiers = Array.range(1, 8);
 
+/**
+ * @returns {number}
+ */
 Array.prototype.sum = function() {
   if (this.length === 0) return 0;
   return this.reduce(Number.sumReducer);
 };
 
+/**
+ * @returns {number}
+ */
 Array.prototype.max = function() {
   if (this.length === 0) return 0;
   return this.reduce((a, b) => Math.max(a, b));
 };
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clamp = function(min, max) {
+  return this.max(min).min(max);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clampMin = function(min) {
+  return this.max(min);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clampMax = function(max) {
+  return this.min(max);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.plusEffectOf = function(effectSource) {
+  let result = this;
+  effectSource.applyEffect(value => result = result.plus(value));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.plusEffectsOf = function(...effectSources) {
+  let result = this;
+  applyEffectsOf(effectSources, value => result = result.plus(value));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.timesEffectOf = function(effectSource) {
+  let result = this;
+  effectSource.applyEffect(value => result = result.times(value));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.timesEffectsOf = function(...effectSources) {
+  let result = this;
+  applyEffectsOf(effectSources, value => result = result.times(value));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.dividedByEffectOf = function(effectSource) {
+  let result = this;
+  effectSource.applyEffect(value => result = result.dividedBy(value));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
+  let result = this;
+  applyEffectsOf(effectSources, value => result = result.dividedBy(value));
+  return result;
+};
+
+function applyEffectsOf(effectSources, applyFn) {
+  for (let effectSource of effectSources.filter(s => s !== null && s !== undefined)) {
+    effectSource.applyEffect(applyFn);
+  }
+}

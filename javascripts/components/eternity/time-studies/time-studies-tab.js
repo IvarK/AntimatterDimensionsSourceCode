@@ -1,11 +1,3 @@
-const remMixin = {
-  methods: {
-    rem(value) {
-      return value + "rem";
-    }
-  }
-};
-
 Vue.component("time-studies-tab", {
   mixins: [remMixin],
   data: function() {
@@ -25,12 +17,23 @@ Vue.component("time-studies-tab", {
       };
     }
   },
+  methods: {
+    studyComponent(study) {
+      switch (study.type) {
+        case TimeStudyType.NORMAL: return "normal-time-study";
+        case TimeStudyType.EC: return "ec-time-study";
+        case TimeStudyType.DILATION: return "dilation-time-study";
+      }
+      throw "Unknown study type";
+    }
+  },
   template:
     `<div class="l-time-studies-tab" :style="tabStyleObject">
-      <time-study
+      <component
         v-for="(setup, index) in studies"
         :key="'study' + index"
         :setup="setup"
+        :is="studyComponent(setup.study)"
       />
       <svg :style="tabStyleObject" class="l-time-study-connection">
         <time-study-connection
@@ -41,48 +44,6 @@ Vue.component("time-studies-tab", {
       </svg>
       <tt-shop />
     </div>`
-});
-
-Vue.component("time-study", {
-  mixins: [remMixin],
-  props: {
-    setup: Object
-  },
-  computed: {
-    styleObject: function() {
-      return {
-        top: this.rem(this.setup.top),
-        left: this.rem(this.setup.left)
-      };
-    },
-    classObject: function() {
-      return {
-        "o-time-study": true,
-        "o-time-study--small": this.setup.isSmall,
-        "l-time-study": true
-      };
-    }
-  },
-  template:
-    `<button :class="classObject" :style="styleObject">
-      <hint-text>{{setup.study._id}}</hint-text>
-      Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
-    </button>`
-});
-
-Vue.component("time-study-connection", {
-  mixins: [remMixin],
-  props: {
-    setup: Object
-  },
-  template:
-    `<line
-      :x1="rem(setup.x1)"
-      :y1="rem(setup.y1)"
-      :x2="rem(setup.x2)"
-      :y2="rem(setup.y2)"
-      class="o-time-study-connection"
-    />`
 });
 
 class TimeStudyRow {
@@ -110,45 +71,6 @@ class TimeStudyRowLayout {
     this.itemWidth = props.itemWidth;
     this.itemHeight = props.itemHeight;
     this.spacing = props.spacing;
-  }
-}
-
-class TimeStudySetup {
-  constructor(props) {
-    this.study = props.study;
-    this.row = props.row;
-    this.column = props.column;
-  }
-
-  get isSmall() {
-    return this.row === 23;
-  }
-
-  setPosition(layout) {
-    this.top = layout.itemPosition(this.row);
-    const row = layout.rows[this.row];
-    this.left = row.itemPosition(this.column, layout);
-    this.width = row.layout.itemWidth;
-    this.height = row.layout.itemHeight;
-  }
-}
-
-class TimeStudyConnectionSetup {
-  constructor(from, to) {
-    this.from = from;
-    this.to = to;
-  }
-
-  /**
-   * @param {TimeStudySetup[]} studies
-   */
-  setPosition(studies) {
-    const from = studies.find(study => study.study === this.from);
-    const to = studies.find(study => study.study === this.to);
-    this.x1 = from.left + from.width / 2;
-    this.y1 = from.top + from.height / 2;
-    this.x2 = to.left + to.width / 2;
-    this.y2 = to.top + to.height / 2;
   }
 }
 
@@ -230,7 +152,7 @@ class TimeStudyTreeLayout {
      * @type {TimeStudyConnectionSetup[]}
      */
     this.connections = TimeStudy.allConnections
-      .map(c => new TimeStudyConnectionSetup(c.from, c.to));
+      .map(c => new TimeStudyConnectionSetup(c));
 
     this.width = this.rows.map(row => row.width).max();
     const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).sum();

@@ -134,8 +134,8 @@ class TimeDimensionInfo {
     if (player.currentEternityChall === "eterc11") return new Decimal(1);
     let mult = this.power.pow(2);
 
-    if (player.timestudy.studies.includes(11) && tier === 1) {
-      mult = mult.dividedBy(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, -2500)));
+    if (tier === 1) {
+      mult = mult.dividedByEffectOf(TimeStudy(11));
     }
     if (isAchEnabled("r105")) {
       mult = mult.div(player.tickspeed.div(1000).pow(0.000005));
@@ -152,15 +152,11 @@ class TimeDimensionInfo {
     if (player.eternityUpgrades.includes(6)) {
       mult = mult.times(player.totalTimePlayed / 1000 / 60 / 60 / 24);
     }
-    if (player.timestudy.studies.includes(73) && tier === 3) {
-      mult = mult.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")));
-    }
-    if (player.timestudy.studies.includes(93)) {
-      mult = mult.times(Decimal.pow(player.totalTickGained, 0.25).max(1));
-    }
-    if (player.timestudy.studies.includes(103)) {
-      mult = mult.times(Math.max(player.replicanti.galaxies, 1));
-    }
+    mult = mult.timesEffectsOf(
+      tier === 3 ? TimeStudy(73) : null,
+      TimeStudy(93),
+      TimeStudy(103)
+    );
     if (player.timestudy.studies.includes(151)) {
       mult = mult.times(1e4);
     }

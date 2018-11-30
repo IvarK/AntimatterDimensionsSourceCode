@@ -366,16 +366,21 @@ function gainedInfinityPoints() {
 
 function gainedEternityPoints() {
   var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
-  
-  var study121 = (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5
-  if (player.reality.perks.includes(72)) study121 = 50
 
-  var study123 = Math.sqrt(1.39*player.thisEternity/1000)
-  if (player.reality.perks.includes(73)) study123 = Math.sqrt(1.39*(player.thisEternity + 15 * 60 * 1000)/1000)
-  if (player.timestudy.studies.includes(61)) ret = ret.times(10)
-  if (player.timestudy.studies.includes(121)) ret = ret.times(study121)
-  else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
-  else if (player.timestudy.studies.includes(123)) ret = ret.times(study123)
+  const hasPerk72 = player.reality.perks.includes(72);
+  const hasPerk73 = player.reality.perks.includes(73);
+  ret = ret.timesEffectsOf(
+    TimeStudy(61),
+    TimeStudy(122),
+    hasPerk72 ? null : TimeStudy(121),
+    hasPerk73 ? null : TimeStudy(123)
+  );
+  if (hasPerk72) {
+    ret = ret.times(50);
+  }
+  if (hasPerk73) {
+    ret = ret.times(Math.sqrt(1.39 * (player.thisEternity + 15 * 60 * 1000) / 1000));
+  }
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
 
   if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
@@ -633,7 +638,7 @@ function checkForRUPG8() {
 function gainedInfinities() {
     let infGain = 1;
     if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
-    if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
+    TimeStudy(32).applyEffect(value => infGain *= value);
     if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
     infGain *= Math.max(1, getAdjustedGlyphEffect("infinityinfmult"));
     if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)

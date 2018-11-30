@@ -256,13 +256,11 @@ class InfinityDimensionInfo {
       mult = mult.times(replicantiMult());
     }
 
-    if (player.timestudy.studies.includes(72) && tier === 4) {
-      mult = mult.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
+    if (tier === 4) {
+      mult = mult.timesEffectOf(TimeStudy(72));
     }
 
-    if (player.timestudy.studies.includes(82)) {
-      mult = mult.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
-    }
+    mult = mult.timesEffectOf(TimeStudy(82));
 
     if (player.eternityUpgrades.includes(1)) {
       mult = mult.times(player.eternityPoints.max(1))
@@ -276,9 +274,7 @@ class InfinityDimensionInfo {
       mult = mult.times(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))
     }
 
-    if (player.timestudy.studies.includes(92)) {
-      mult = mult.times(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))
-    }
+    mult = mult.timesEffectOf(TimeStudy(92));
     if (player.timestudy.studies.includes(162)) {
       mult = mult.times(1e11)
     }

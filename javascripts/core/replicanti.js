@@ -145,11 +145,10 @@ function replicantiLoop(diff) {
 }
 
 function replicantiMult() {
-  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2);
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032));
-  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies));
-  replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
-  return replmult;
+  return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
+    .plusEffectOf(TimeStudy(21))
+    .timesEffectOf(TimeStudy(102))
+    .pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
 }
 
 const ReplicantiUpgrade = {
@@ -298,12 +297,8 @@ const Replicanti = {
     },
     get extra() {
       let bonusGalaxies = 0;
-      if (player.timestudy.studies.includes(225)) {
-        bonusGalaxies += Math.floor(Replicanti.amount.e / 1000);
-      }
-      if (player.timestudy.studies.includes(226)) {
-        bonusGalaxies += Math.floor(ReplicantiUpgrade.galaxies.current / 15);
-      }
+      TimeStudy(225).applyEffect(value => bonusGalaxies += value);
+      TimeStudy(226).applyEffect(value => bonusGalaxies += value);
       return bonusGalaxies;
     },
     get total() {

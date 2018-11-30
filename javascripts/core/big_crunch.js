@@ -163,26 +163,16 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  let mult = player.infMult.times(kongIPMult);
-  if (player.timestudy.studies.includes(41)) {
-    mult = mult.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies));
-  }
-  if (player.timestudy.studies.includes(51)) {
-    mult = mult.times(1e15);
-  }
-  // All "this inf time" or "best inf time" mults are * 10
-  const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-  const cappedInf = Math.min(Math.pow(thisInfinity, 0.125), 500);
-  const timStudyMult = Decimal.pow(15, Math.log(thisInfinity) * cappedInf);
-  if (player.timestudy.studies.includes(141)) {
-    mult = mult.times(Decimal.divide(1e45, timStudyMult).max(1));
-  }
-  if (player.timestudy.studies.includes(142)) {
-    mult = mult.times(1e25);
-  }
-  if (player.timestudy.studies.includes(143)) {
-    mult = mult.times(timStudyMult);
-  }
+  let mult = player.infMult
+    .times(kongIPMult)
+    .timesEffectsOf(
+      TimeStudy(41),
+      TimeStudy(51),
+      TimeStudy(141),
+      TimeStudy(142),
+      TimeStudy(143)
+    );
+
   if (isAchEnabled("r85")) {
     mult = mult.times(4);
   }
@@ -193,6 +183,8 @@ function totalIPMult() {
     mult = mult.times(Decimal.pow(2, Math.log10(Player.totalInfinitied + 1)));
   }
   if (isAchEnabled("r125")) {
+    // All "this inf time" or "best inf time" mults are * 10
+    const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
     mult = mult.times(Decimal.pow(2, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.11)));
   }
   if (isAchEnabled("r141")) {

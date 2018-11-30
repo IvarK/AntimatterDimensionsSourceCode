@@ -176,6 +176,7 @@ function reality(force, reset, auto) {
     resetReplicanti();
     resetChallengeStuff();
     resetDimensions();
+    secondSoftReset();
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))

@@ -182,8 +182,8 @@ function reality(force, reset, auto) {
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
         player.challenges.push("challenge1");
-        Autobuyer.tryUnlockAny();
     }
+    Autobuyer.tryUnlockAny()
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     resetInfDimensions();

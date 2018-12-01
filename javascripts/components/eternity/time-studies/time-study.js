@@ -7,7 +7,11 @@ Vue.component("time-study", {
     };
   },
   props: {
-    setup: Object
+    setup: Object,
+    showCost: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     styleObject: function() {
@@ -39,8 +43,10 @@ Vue.component("time-study", {
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick">
       <slot />
-      <br>
-      Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
+      <template v-if="showCost">
+        <br>
+        Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
+      </template>
     </button>`
 });
 

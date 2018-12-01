@@ -1036,8 +1036,16 @@ class DilationTimeStudy extends TimeStudyInfo {
     this.type = TimeStudyType.DILATION;
   }
 
+  get id() {
+    return this._id;
+  }
+
   get isBought() {
     return player.dilation.studies.includes(this._id);
+  }
+
+  get canBeBought() {
+    return canBuyDilationStudy(this.id);
   }
 }
 

@@ -63,62 +63,12 @@ function maxTheorems() {
 }
 
 function calculateTimeStudiesCost() {
-    var totalCost = 0;
-    for (var i=0; i<all.length; i++) {
-        if (player.timestudy.studies.includes(all[i])) {
-            totalCost += studyCosts[i]
-        }
-    }
-    switch(player.eternityChallUnlocked) {
-        case 1:
-        totalCost += 30
-        break;
-  
-        case 2:
-        totalCost += 35
-        break;
-  
-        case 3:
-        totalCost += 40
-        break;
-  
-        case 4:
-        totalCost += 70
-        break;
-  
-        case 5:
-        totalCost += 130
-        break;
-  
-        case 6:
-        totalCost += 85
-        break;
-  
-        case 7:
-        totalCost += 115
-        break;
-  
-        case 8:
-        totalCost += 115
-        break;
-  
-        case 9:
-        totalCost += 415
-        break;
-  
-        case 10:
-        totalCost += 550
-        break;
-  
-        case 11:
-        totalCost += 1
-        break;
-  
-        case 12:
-        totalCost += 1
-        break;
-    }
-    return totalCost
+  let totalCost = TimeStudy.boughtNormalTS().reduce(Number.sumReducer, 0);
+  const ecStudy = TimeStudy.eternityChallenge.current();
+  if (ecStudy !== undefined) {
+    totalCost += ecStudy.cost;
+  }
+  return totalCost;
 }
 
 function buyTimeStudy(name, cost, check) {
@@ -460,63 +410,18 @@ function studyPath(mode, args) {
 
 
 function respecTimeStudies() {
-  for (var i=0; i<all.length; i++) {
-      if (player.timestudy.studies.includes(all[i])) {
-          player.timestudy.theorem += studyCosts[i]
-      }
+  for (let study of TimeStudy.boughtNormalTS()) {
+    study.refund();
   }
-  if (player.timestudy.studies.length === 0) giveAchievement("You do know how these work, right?")
-  player.timestudy.studies = []
-  switch(player.eternityChallUnlocked) {
-      case 1:
-      player.timestudy.theorem += 30
-      break;
-
-      case 2:
-      player.timestudy.theorem += 35
-      break;
-
-      case 3:
-      player.timestudy.theorem += 40
-      break;
-
-      case 4:
-      player.timestudy.theorem += 70
-      break;
-
-      case 5:
-      player.timestudy.theorem += 130
-      break;
-
-      case 6:
-      player.timestudy.theorem += 85
-      break;
-
-      case 7:
-      player.timestudy.theorem += 115
-      break;
-
-      case 8:
-      player.timestudy.theorem += 115
-      break;
-
-      case 9:
-      player.timestudy.theorem += 415
-      break;
-
-      case 10:
-      player.timestudy.theorem += 550
-      break;
-
-      case 11:
-      player.timestudy.theorem += 1
-      break;
-
-      case 12:
-      player.timestudy.theorem += 1
-      break;
+  if (player.timestudy.studies.length === 0) {
+    giveAchievement("You do know how these work, right?")
   }
-  player.eternityChallUnlocked = 0
+  player.timestudy.studies = [];
+  const ecStudy = TimeStudy.eternityChallenge.current();
+  if (ecStudy !== undefined) {
+    ecStudy.refund();
+    player.eternityChallUnlocked = 0;
+  }
   updateTimeStudyButtons()
   drawStudyTree()
 }
@@ -583,11 +488,18 @@ const TimeStudyType = {
 class TimeStudyInfo {
   constructor(props) {
     this._cost = props.cost;
+    /**
+     * @type {TimeStudyConnection[]}
+     */
     this.incomingConnections = [];
   }
 
   get cost() {
     return this._cost;
+  }
+
+  refund() {
+    player.timestudy.theorem += this.cost;
   }
 
   get isAffordable() {
@@ -931,10 +843,18 @@ function TimeStudy(id) {
   return NormalTimeStudyInfo.studies[id];
 }
 
+/**
+ * @returns {NormalTimeStudyInfo[]}
+ */
+TimeStudy.boughtNormalTS = function() {
+  return player.timestudy.studies.map(id => TimeStudy(id));
+};
+
 class ECTimeStudyInfo extends TimeStudyInfo {
   constructor(props) {
     super(props);
     this._id = props.id;
+    this._requirement = props.requirement;
     this.type = TimeStudyType.EC;
   }
 
@@ -945,48 +865,142 @@ class ECTimeStudyInfo extends TimeStudyInfo {
   get isBought() {
     return player.eternityChallUnlocked === this._id;
   }
+
+  purchase() {
+    if (!this.canBeBought) return false;
+    unlockEChall(this._id);
+    player.timestudy.theorem -= this.cost;
+    return true;
+  }
+
+  get canBeBought() {
+    function studyOf(connection) {
+      return connection === undefined ? undefined : connection.from.id;
+    }
+    const study1 = studyOf(this.incomingConnections[0]);
+    const study2 = studyOf(this.incomingConnections[1]);
+    return canUnlockEC(this._id, this.cost, study1, study2);
+  }
+
+  /**
+   * @returns {EternityChallengeInfo}
+   */
+  get challenge() {
+    return EternityChallenge(this._id);
+  }
+
+  get isAvailable() {
+    const tsRequirement = this.areRequiredTSBought;
+    const secondaryRequirement = player.reality.perks.includes(31) || this.isSecondaryRequirementMet;
+    return tsRequirement && secondaryRequirement;
+  }
+
+  get areRequiredTSBought() {
+    return this.incomingConnections
+      .every(c => c.from.isBought);
+  }
+
+  get requirementTotal() {
+    return this._requirement.required(this.challenge.completions);
+  }
+
+  get requirementCurrent() {
+    return this._requirement.current();
+  }
+
+  get isSecondaryRequirementMet() {
+    if (this._id === 11) {
+      return TimeStudy(71).isBought && !TimeStudy(72).isBought && !TimeStudy(73).isBought;
+    }
+    if (this._id === 12) {
+      return !TimeStudy(71).isBought && !TimeStudy(72).isBought && TimeStudy(73).isBought;
+    }
+    const current = this.requirementCurrent;
+    const total = this.requirementTotal;
+    return typeof current === "number" ? current >= total : current.gte(total);
+  }
 }
 
 ECTimeStudyInfo.studies = [
   {
     id: 1,
-    cost: 30
+    cost: 30,
+    requirement: {
+      current: () => player.eternities,
+      required: completions => 20000 + completions * 20000
+    }
   },
   {
     id: 2,
-    cost: 35
+    cost: 35,
+    requirement: {
+      current: () => player.totalTickGained,
+      required: completions => 1300 + completions * 150
+    }
   },
   {
     id: 3,
-    cost: 40
+    cost: 40,
+    requirement: {
+      current: () => player.eightAmount,
+      required: completions => 17300 + completions * 1250
+    }
   },
   {
     id: 4,
-    cost: 70
+    cost: 70,
+    requirement: {
+      current: () => Player.totalInfinitied,
+      required: completions => 1e8 + completions * 5e7
+    }
   },
   {
     id: 5,
-    cost: 130
+    cost: 130,
+    requirement: {
+      current: () => player.galaxies,
+      required: completions => 160 + completions * 14
+    }
   },
   {
     id: 6,
-    cost: 85
+    cost: 85,
+    requirement: {
+      current: () => player.replicanti.galaxies,
+      required: completions => 40 + completions * 5
+    }
   },
   {
     id: 7,
-    cost: 115
+    cost: 115,
+    requirement: {
+      current: () => player.money,
+      required: completions => new Decimal("1e300000").pow(completions).times("1e500000")
+    }
   },
   {
     id: 8,
-    cost: 115
+    cost: 115,
+    requirement: {
+      current: () => player.infinityPoints,
+      required: completions => new Decimal("1e1000").pow(completions).times("1e4000")
+    }
   },
   {
     id: 9,
-    cost: 415
+    cost: 415,
+    requirement: {
+      current: () => player.infinityPower,
+      required: completions => new Decimal("1e2000").pow(completions).times("1e17500")
+    }
   },
   {
     id: 10,
-    cost: 550
+    cost: 550,
+    requirement: {
+      current: () => player.eternityPoints,
+      required: completions => new Decimal("1e20").pow(completions).times("1e100")
+    }
   },
   {
     id: 11,
@@ -998,8 +1012,21 @@ ECTimeStudyInfo.studies = [
   }
 ].map(props => new ECTimeStudyInfo(props));
 
+/**
+ * @param {number} id
+ * @returns {ECTimeStudyInfo}
+ */
 TimeStudy.eternityChallenge = function(id) {
   return ECTimeStudyInfo.studies[id - 1];
+};
+
+/**
+ * @returns {ECTimeStudyInfo|undefined}
+ */
+TimeStudy.eternityChallenge.current = function() {
+  return player.eternityChallUnlocked !== 0 ?
+    TimeStudy.eternityChallenge(player.eternityChallUnlocked) :
+    undefined;
 };
 
 class DilationTimeStudy extends TimeStudyInfo {

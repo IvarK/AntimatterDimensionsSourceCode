@@ -158,7 +158,7 @@ class EternityChallengeInfo {
   }
 
   start() {
-    startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
+    return startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
   }
 }
 

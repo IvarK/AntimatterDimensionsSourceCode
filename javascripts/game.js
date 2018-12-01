@@ -1034,62 +1034,6 @@ setInterval(function() {
     })
 }, 60000)
 
-
-const ETERNITY_CHALLS = {
-    ec1: {
-        start: new Decimal("1e1800"),
-        inc: new Decimal("1e200")
-    },
-    ec2: {
-        start: new Decimal("1e975"),
-        inc: new Decimal("1e175")
-    },
-    ec3: {
-        start: new Decimal("1e600"),
-        inc: new Decimal("1e75")
-    },
-    ec4: {
-        start: new Decimal("1e2750"),
-        inc: new Decimal("1e550")
-    },
-    ec5: {
-        start: new Decimal("1e750"),
-        inc: new Decimal("1e400")
-    },
-    ec6: {
-        start: new Decimal("1e850"),
-        inc: new Decimal("1e250")
-    },
-    ec7: {
-        start: new Decimal("1e2000"),
-        inc: new Decimal("1e530")
-    },
-    ec8: {
-        start: new Decimal("1e1300"),
-        inc: new Decimal("1e900")
-    },
-    ec9: {
-        start: new Decimal("1e1750"),
-        inc: new Decimal("1e250")
-    },
-    ec10: {
-        start: new Decimal("1e3000"),
-        inc: new Decimal("1e300")
-    },
-    ec11: {
-        start: new Decimal("1e500"),
-        inc: new Decimal("1e200")
-    },
-    ec12: {
-        start: new Decimal("1e110000"),
-        inc: new Decimal("1e12000")
-    },
-}
-
-
-
-
-
 setInterval(function() {
     kong.submitStats('Log10 of total antimatter', player.totalmoney.e);
     kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);

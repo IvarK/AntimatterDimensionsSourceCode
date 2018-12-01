@@ -315,11 +315,10 @@ function start(current) {
   if (!player.reality.automatorCommands.includes(73)) return false
   switch(current.target) {
     case "ec":
-      if (!player.reality.automatorCommands.includes(84)) return false
-      if (player.currentEternityChall == "eterc" + current.id) return true
-      if (startEternityChallenge("eterc" + current.id, ETERNITY_CHALLS["ec"+current.id].start, ETERNITY_CHALLS["ec"+current.id].inc)) return true
-      else return false
-      break;
+      if (!player.reality.automatorCommands.includes(84)) return false;
+      const ec = EternityChallenge(current.id);
+      if (ec.isRunning) return true;
+      return ec.start();
     case "dilation":
       if (!player.reality.automatorCommands.includes(83)) return false
       if (startDilatedEternity()) return true

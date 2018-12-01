@@ -38,7 +38,6 @@ Vue.component("time-study", {
   },
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick">
-      <hint-text v-if="isBought">{{setup.study._id}}</hint-text>
       <slot />
       <br>
       Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
@@ -59,9 +58,14 @@ const TimeStudyPath = {
 
 class TimeStudySetup {
   constructor(props) {
-    this.study = props.study;
+    this._getStudy = () => props.study;
     this.row = props.row;
     this.column = props.column;
+  }
+
+  // To prevent Vue reactification of study
+  get study() {
+    return this._getStudy();
   }
 
   get isSmall() {

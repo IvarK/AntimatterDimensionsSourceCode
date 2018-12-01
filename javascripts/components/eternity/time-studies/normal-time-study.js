@@ -67,6 +67,7 @@ Vue.component("normal-time-study", {
   },
   template:
     `<time-study :setup="setup" :class="classObject" @purchase="purchase">
+      <hint-text>{{study.id}}</hint-text>
       {{description}}
       <template v-if="hasEffectDisplay">
         <br>

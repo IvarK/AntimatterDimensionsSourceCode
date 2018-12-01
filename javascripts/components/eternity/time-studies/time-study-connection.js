@@ -3,14 +3,55 @@ Vue.component("time-study-connection", {
   data: function() {
     return {
       isOverridden: false,
+      isBought: false
     };
   },
   props: {
     setup: Object
   },
+  computed: {
+    classObject: function() {
+      const classObject = {
+        "o-time-study-connection": true,
+        "o-time-study-connection--bought": this.isBought,
+      };
+      let pathClass;
+      const connection = this.setup.connection;
+      const from = connection.from;
+      const to = connection.to;
+      switch (to.type) {
+        case TimeStudyType.NORMAL:
+          function setPath(study) {
+            switch (study.path) {
+              case TimeStudyPath.NORMAL_DIM: pathClass = "o-time-study-connection--normal-dim"; break;
+              case TimeStudyPath.INFINITY_DIM: pathClass = "o-time-study-connection--infinity-dim"; break;
+              case TimeStudyPath.TIME_DIM: pathClass = "o-time-study-connection--time-dim"; break;
+              case TimeStudyPath.ACTIVE: pathClass = "o-time-study-connection--active"; break;
+              case TimeStudyPath.PASSIVE: pathClass = "o-time-study-connection--passive"; break;
+              case TimeStudyPath.IDLE: pathClass = "o-time-study-connection--idle"; break;
+            }
+          }
+          setPath(from);
+          setPath(to);
+          break;
+        case TimeStudyType.ETERNITY_CHALLENGE:
+          pathClass = "o-time-study-connection--eternity-challenge";
+          break;
+        case TimeStudyType.DILATION:
+          pathClass = "o-time-study-connection--dilation";
+          break;
+      }
+
+      if (pathClass !== undefined) {
+        classObject[pathClass] = true;
+      }
+      return classObject;
+    }
+  },
   methods: {
     update() {
       this.isOverridden = this.setup.connection.isOverridden;
+      this.isBought = this.setup.isBought;
     }
   },
   template:
@@ -20,7 +61,7 @@ Vue.component("time-study-connection", {
       :y1="rem(setup.y1)"
       :x2="rem(setup.x2)"
       :y2="rem(setup.y2)"
-      class="o-time-study-connection"
+      :class="classObject"
     />`
 });
 
@@ -51,5 +92,9 @@ class TimeStudyConnectionSetup {
     this.y1 = from.top + from.height / 2;
     this.x2 = to.left + to.width / 2;
     this.y2 = to.top + to.height / 2;
+  }
+
+  get isBought() {
+    return this.from.isBought && this.to.isBought;
   }
 }

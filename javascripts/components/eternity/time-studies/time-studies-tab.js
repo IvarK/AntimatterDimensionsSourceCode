@@ -21,7 +21,7 @@ Vue.component("time-studies-tab", {
     studyComponent(study) {
       switch (study.type) {
         case TimeStudyType.NORMAL: return "normal-time-study";
-        case TimeStudyType.EC: return "ec-time-study";
+        case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
         case TimeStudyType.DILATION: return "dilation-time-study";
       }
       throw "Unknown study type";

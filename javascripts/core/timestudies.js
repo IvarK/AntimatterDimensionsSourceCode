@@ -481,8 +481,20 @@ $(document).ready(function() {
 
 const TimeStudyType = {
   NORMAL: 0,
-  EC: 1,
+  ETERNITY_CHALLENGE: 1,
   DILATION: 2
+};
+
+const TimeStudyPath = {
+  NONE: 0,
+  NORMAL_DIM: 1,
+  INFINITY_DIM: 2,
+  TIME_DIM: 3,
+  ACTIVE: 4,
+  PASSIVE: 5,
+  IDLE: 6,
+  LIGHT: 7,
+  DARK: 8
 };
 
 class TimeStudyInfo {
@@ -545,7 +557,23 @@ class NormalTimeStudyInfo extends TimeStudyInfo {
       applyFn(this.effectValue);
     }
   }
+
+  get path() {
+    const path = NormalTimeStudyInfo.paths.find(p => p.studies.includes(this.id));
+    return path !== undefined ? path.path : TimeStudyPath.NONE;
+  }
 }
+
+NormalTimeStudyInfo.paths = [
+  { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
+  { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
+  { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
+  { path: TimeStudyPath.ACTIVE, studies: [121, 131, 141] },
+  { path: TimeStudyPath.PASSIVE, studies: [122, 132, 142] },
+  { path: TimeStudyPath.IDLE, studies: [123, 133, 143] },
+  { path: TimeStudyPath.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
+  { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
+];
 
 NormalTimeStudyInfo.studies = function() {
   // For studies 141 and 143
@@ -855,7 +883,7 @@ class ECTimeStudyInfo extends TimeStudyInfo {
     super(props);
     this._id = props.id;
     this._requirement = props.requirement;
-    this.type = TimeStudyType.EC;
+    this.type = TimeStudyType.ETERNITY_CHALLENGE;
   }
 
   get id() {

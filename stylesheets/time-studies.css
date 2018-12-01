@@ -206,4 +206,73 @@
 .o-time-study-connection {
   stroke-width: 1rem;
   stroke: #444444;
+  transition: stroke 0.3s;
+}
+
+.o-time-study-connection--normal-dim {
+  stroke: #37533f;
+}
+
+.o-time-study-connection--infinity-dim {
+  stroke: #534737;
+}
+
+.o-time-study-connection--time-dim {
+  stroke: #4a3753;
+}
+
+.o-time-study-connection--active {
+  stroke: #533737;
+}
+
+.o-time-study-connection--passive {
+  stroke: #403753;
+}
+
+.o-time-study-connection--idle {
+  stroke: #374553;
+}
+
+.o-time-study-connection--eternity-challenge {
+  stroke: #4b3753;
+}
+
+.o-time-study-connection--dilation {
+  stroke: #759362;
+}
+
+.o-time-study-connection--bought {
+  stroke: black;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--normal-dim {
+  stroke: #22aa48;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--infinity-dim {
+  stroke: #b67f33;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--time-dim {
+  stroke: #b241e3;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--active {
+  stroke: #ff0100;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--passive {
+  stroke: #5e33b6;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--idle {
+  stroke: #0080ff;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--eternity-challenge {
+  stroke: #490066;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--dilation {
+  stroke: #64dd17;
 }

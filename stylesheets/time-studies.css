@@ -204,7 +204,7 @@
 /*#endregion o-time-study*/
 
 .o-time-study-connection {
-  stroke-width: 1rem;
+  stroke-width: 1.2rem;
   stroke: #444444;
   transition: stroke 0.3s;
 }

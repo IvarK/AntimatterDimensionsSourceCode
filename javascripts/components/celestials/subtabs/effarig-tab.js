@@ -8,7 +8,8 @@ Vue.component('effarig-tab', {
       rmMult: 0,
       quote: "",
       quoteIdx: 0,
-      unlocks: []
+      unlocks: [],
+      runReward: new Decimal(0)
     };
   },
   methods: {
@@ -25,6 +26,7 @@ Vue.component('effarig-tab', {
       this.quote = Effarig.quote
       this.quoteIdx = player.celestials.effarig.quoteIdx
       this.unlocks = Object.values(EFFARIG_UNLOCKS).map(id => Effarig.has(id))
+      this.runReward = Effarig.runRewardMultiplier
     },
     nextQuote() {
       Effarig.nextQuote()
@@ -38,7 +40,7 @@ Vue.component('effarig-tab', {
       <div class="o-effarig-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
       <div class="l-mechanics-container">
         <div class="l-effarig-unlocks l-effarig-mechanic-container">
-          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.</div>
+          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
         </div>
         <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 

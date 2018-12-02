@@ -44,6 +44,9 @@ var Effarig = {
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
+  get runRewardMultiplier() {
+    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, Math.pow(player.realities, 0.3)), 1)
+  },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]
   },

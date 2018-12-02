@@ -201,6 +201,17 @@
   border-color: black;
 }
 
+.o-time-study--secret {
+  transition: opacity 2s;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.o-time-study--secret-unlocked {
+  opacity: 1;
+  cursor: default;
+}
+
 /*#endregion o-time-study*/
 
 .o-time-study-connection {
@@ -275,4 +286,13 @@
 
 .o-time-study-connection--bought.o-time-study-connection--dilation {
   stroke: #64dd17;
+}
+
+.o-time-study-connection--secret {
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+.o-time-study-connection--secret-unlocked {
+  opacity: 1;
 }

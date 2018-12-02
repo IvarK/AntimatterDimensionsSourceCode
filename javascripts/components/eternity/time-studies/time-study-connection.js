@@ -67,19 +67,20 @@ Vue.component("time-study-connection", {
 
 class TimeStudyConnectionSetup {
   constructor(connection) {
-    this._connection = connection;
+    this._getConnection = () => connection;
   }
 
+  // To prevent Vue reactification of studies
   get connection() {
-    return this._connection;
+    return this._getConnection();
   }
 
   get from() {
-    return this._connection.from;
+    return this.connection.from;
   }
 
   get to() {
-    return this._connection.to;
+    return this.connection.to;
   }
 
   /**

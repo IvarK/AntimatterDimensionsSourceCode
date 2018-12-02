@@ -23,7 +23,7 @@ Vue.component("time-study", {
     classObject: function() {
       return {
         "o-time-study": true,
-        "o-time-study--unavailable": !this.isAvailable,
+        "o-time-study--unavailable": !this.isAvailable && !this.isBought,
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,
         "l-time-study": true
@@ -34,7 +34,9 @@ Vue.component("time-study", {
     update() {
       const study = this.setup.study;
       this.isBought = study.isBought;
-      this.isAvailable = study.canBeBought && study.isAffordable;
+      if (!this.isBought) {
+        this.isAvailable = study.canBeBought && study.isAffordable;
+      }
     },
     handleClick() {
       this.$emit("purchase");

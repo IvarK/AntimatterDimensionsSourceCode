@@ -6,7 +6,9 @@ Vue.component("time-studies-tab", {
       width: this.rem(layout.width),
       height: this.rem(layout.height + 10),
       studies: layout.studies,
-      connections: layout.connections
+      secretStudySetup: layout.secretStudy,
+      connections: layout.connections,
+      secretConnectionSetup: layout.secretStudyConnection
     };
   },
   computed: {
@@ -35,12 +37,14 @@ Vue.component("time-studies-tab", {
         :setup="setup"
         :is="studyComponent(setup.study)"
       />
+      <secret-time-study :setup="secretStudySetup" />
       <svg :style="tabStyleObject" class="l-time-study-connection">
         <time-study-connection
           v-for="(setup, index) in connections"
           :key="'connection' + index"
           :setup="setup"
         />
+        <secret-time-study-connection :setup="secretConnectionSetup" />
       </svg>
       <tt-shop />
     </div>`
@@ -147,12 +151,21 @@ class TimeStudyTreeLayout {
         }));
       }
     }
+    const secretStudy = {};
+    this.secretStudy = new TimeStudySetup({
+      study: secretStudy,
+      row: 0,
+      column: 2
+    });
 
     /**
      * @type {TimeStudyConnectionSetup[]}
      */
     this.connections = TimeStudy.allConnections
       .map(c => new TimeStudyConnectionSetup(c));
+    this.secretStudyConnection = new TimeStudyConnectionSetup(
+      new TimeStudyConnection(TS(11), secretStudy)
+    );
 
     this.width = this.rows.map(row => row.width).max();
     const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).sum();
@@ -161,10 +174,12 @@ class TimeStudyTreeLayout {
     for (let study of this.studies) {
       study.setPosition(this);
     }
+    this.secretStudy.setPosition(this);
 
     for (let connection of this.connections) {
       connection.setPosition(this.studies);
     }
+    this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy));
   }
 
   itemPosition(row) {

@@ -76,9 +76,3 @@ Vue.component("secret-time-study-connection", {
       :class="classObject"
     />`
 });
-
-const secretTimeStudyInfo = () => {
-  return {
-    isUnlocked: player.achievements.includes("s21")
-  };
-};

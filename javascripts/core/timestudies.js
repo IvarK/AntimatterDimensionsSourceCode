@@ -1158,7 +1158,7 @@ TimeStudy.allConnections = function() {
     [TS(42), EC(5)],
 
     [TS(51), TS(61)],
-    [EC(5), TS(62)],
+    [EC(5), TS(62), () => player.reality.perks.includes(71)],
 
     [TS(61), TS(71)],
     [TS(61), TS(72)],
@@ -1213,9 +1213,9 @@ TimeStudy.allConnections = function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [EC(1), TS(181)],
-    [EC(2), TS(181)],
-    [EC(3), TS(181)],
+    [EC(1), TS(181), () => player.reality.perks.includes(4)],
+    [EC(2), TS(181), () => player.reality.perks.includes(74)],
+    [EC(3), TS(181), () => player.reality.perks.includes(75)],
 
     [TS(181), EC(10)],
 

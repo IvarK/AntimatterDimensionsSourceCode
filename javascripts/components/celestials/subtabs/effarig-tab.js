@@ -40,7 +40,8 @@ Vue.component('effarig-tab', {
       <div class="o-effarig-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
       <div class="l-mechanics-container">
         <div class="l-effarig-unlocks l-effarig-mechanic-container">
-          <div class="c-effarig-unlock" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
+          <div class="c-effarig-unlock c-effarig-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
+          <div class="c-effarig-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
         </div>
         <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 
@@ -50,9 +51,10 @@ Vue.component('effarig-tab', {
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e15) }}</div>
+              <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e24) }}</div>
             </div>
             <div class="c-effarig-unlock-description" id="effarig-run-description">{{ shorten(5e12) }}: unlock Effarig's reality.</div>
+            <div class="c-effarig-unlock-description" id="effarig-epgen-description">{{ shorten(1e15) }}: unlock Effarig's EP generation.</div>
           </div>
         </div>
 

@@ -4580,20 +4580,24 @@ screen and (max-width: 480px) {
   margin: auto;
   background-color: #5151ec;
   color: white;
-  cursor: pointer;
   transition-duration: 0.12s;
   user-select: none;
 }
 
-.c-effarig-unlock:hover {
+.c-effarig-run-button {
+  cursor: pointer;
+}
+
+.c-effarig-run-button:hover {
   background-color: #d0d0d0;
   border: 1px solid #d0d0d0;
   color: #5151ec;
 }
 
-/* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is amount^0.15 / 1e15^0.15 * 100 */
+/* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is log10(amount) / log10(1e24) * 100 */
 
-#effarig-run-description { bottom: 45.169% } /* amount=5e12 */
+#effarig-run-description { bottom: 52.912% } /* amount=5e12 */
+#effarig-epgen-description { bottom: 62.5% } /* amount=1e15 */
 
 /*#endregion Effarig tab*/
 

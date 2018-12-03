@@ -1356,6 +1356,13 @@ function gameLoop(diff) {
         }
     }
 
+    if (player.celestials.effarig.unlocks.includes(1)) { // Effarig EP gen.
+      let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
+      if (isPostEc) {
+        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01))
+      }
+    }
+
     player.infinityPoints = player.infinityPoints.plus(bestRunIppm.times(player.offlineProd/100).times(diff/60000))
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {

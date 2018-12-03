@@ -9,7 +9,8 @@ var effarigQuotes = [
 ]
 
 const EFFARIG_UNLOCKS = {
-  RUN: 0
+  RUN: 0,
+  EPGEN: 1
 }
 
 var Effarig = {
@@ -24,6 +25,7 @@ var Effarig = {
   },
   checkForUnlocks() {
     if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
+    else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e15) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
   },
   has(id) {
     return player.celestials.effarig.unlocks.includes(id)
@@ -39,7 +41,7 @@ var Effarig = {
     player.celestials.effarig.rmStore = amount
   },
   get fill() {
-    return Math.pow(this.rmStore, 0.15) / Math.pow(1e15, 0.15)
+    return Math.log10(this.rmStore) / 24
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)

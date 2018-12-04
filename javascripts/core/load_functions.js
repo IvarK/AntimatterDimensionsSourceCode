@@ -132,7 +132,7 @@ function onLoad() {
     } else {
         document.getElementById("automator"+player.reality.automatorCommands[i]).className = "automatorinstructionbought target"
     }
-}
+  }
 
   if (player.version < 9 ) {
       player.version = 9
@@ -273,6 +273,10 @@ function onLoad() {
 	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
     
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
+  automatorOn = player.reality.automatorOn;
+  if (automatorOn) $("#automatorOn")[0].checked = true
+  automatorIdx = player.reality.automatorCurrentRow;
+
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
       simulateTime(diff/1000)

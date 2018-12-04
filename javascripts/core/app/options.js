@@ -63,6 +63,8 @@ class GameOptions {
   static save() {
     saved++;
     if (saved > 99) giveAchievement("Just in case");
+    player.reality.automatorOn = automatorOn;
+    player.reality.automatorCurrentRow = automatorIdx;
     save_game();
   }
 

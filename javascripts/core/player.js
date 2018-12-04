@@ -319,6 +319,8 @@ var player = {
               false, false, false, false, false, 
               false, false, false, false, false],
     upgReqChecks: [false],
+    automatorOn: false,
+    automatorCurrentRow: 0,
     automatorRows: 0,
     automatorCommands: [],
     perks: [],

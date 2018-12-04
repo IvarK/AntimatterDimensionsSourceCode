@@ -10,7 +10,8 @@ Vue.component('celestials-tab', {
         {
           name: "Teresa",
           id: "Teresa",
-          component: "teresa-tab"
+          component: "teresa-tab",
+          condition: function() { return Effarig.has(EFFARIG_UNLOCKS.TERESA) }.bind(this)
         },
         {
           name: "V",
@@ -18,9 +19,9 @@ Vue.component('celestials-tab', {
           component: "v-tab"
         },
         {
-          name: "Tapoto",
-          id: "Tapoto",
-          component: "tapoto-tab"
+          name: "The Enslaved Ones",
+          id: "Enslaved",
+          component: "enslaved-tab"
         },
         {
           name: "Ra",
@@ -33,9 +34,9 @@ Vue.component('celestials-tab', {
           component: "laitela-tab"
         },
         {
-          name: "Heiv",
-          id: "Heiv",
-          component: "heiv-tab"
+          name: "The Pelle",
+          id: "pelle",
+          component: "pelle-tab"
         },
         // Leave these for future references
         /*{

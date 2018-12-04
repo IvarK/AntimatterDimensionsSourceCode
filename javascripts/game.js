@@ -386,6 +386,7 @@ function gainedEternityPoints() {
 function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     ret = ret.times(Effarig.rmMultiplier)
+    ret = ret.times(player.celestials.effarig.rmMult)
     return Decimal.floor(ret)
 }
 
@@ -399,6 +400,7 @@ function gainedGlyphLevel(round) {
     var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
     var ret = Math.pow(player.eternityPoints.e, 0.5) * Math.pow(player.replicanti.amount.e, replPow) * Math.pow(player.dilation.dilatedTime.log10(), 1.3) / 100000
     if (player.reality.upg.includes(18)) ret *= Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1)
+    ret *= player.celestials.effarig.glyphLevelMult
     if (round) ret = Math.round(ret)
     if (player.reality.perks.includes(21)) ret += 1
     if (player.reality.perks.includes(24)) ret += 1
@@ -1227,6 +1229,7 @@ setInterval(function() {
     }
 
     EternityChallenge.autoCompleteTick()
+    if (!Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
 }, 1000)
 
 function getECGoalIP(challNum, timesCompleted) {
@@ -1356,7 +1359,7 @@ function gameLoop(diff) {
         }
     }
 
-    if (player.celestials.effarig.unlocks.includes(1)) { // Effarig EP gen.
+    if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.
       let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01))

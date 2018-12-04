@@ -4574,18 +4574,22 @@ screen and (max-width: 480px) {
 
 .c-effarig-unlock {
   width: 20rem;
-  border: 1px solid white;
   border-radius: .5rem;
   padding: 1rem;
   margin: auto;
-  background-color: #5151ec;
-  color: white;
   transition-duration: 0.12s;
   user-select: none;
+  background-color: #d0d0d0;
+  border: 1px solid #d0d0d0;
+  color: #5151ec;
+  margin-bottom: 1rem;
 }
 
 .c-effarig-run-button {
   cursor: pointer;
+  background-color: #5151ec;
+  border: 1px solid white;
+  color: white;
 }
 
 .c-effarig-run-button:hover {
@@ -4594,10 +4598,37 @@ screen and (max-width: 480px) {
   color: #5151ec;
 }
 
+.c-effarig-shop {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  margin: 4rem auto;
+}
+
+.o-effarig-shop-button {
+  background-color: #5151ec;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: .5rem;
+  margin-bottom: 1rem;
+  font-family: Typewriter, serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.o-effarig-shop-button:hover {
+  background-color: #d0d0d0;
+  color: #5151ec;
+}
+
 /* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is log10(amount) / log10(1e24) * 100 */
 
 #effarig-run-description { bottom: 52.912% } /* amount=5e12 */
 #effarig-epgen-description { bottom: 62.5% } /* amount=1e15 */
+#effarig-teresa-description { bottom: 75% } /* amount=1e18 */
+#effarig-shop-description { bottom: 100% } /* amount=1e24 */
 
 /*#endregion Effarig tab*/
 

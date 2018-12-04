@@ -1,4 +1,4 @@
-Vue.component('heiv-tab', {
+Vue.component('pelle-tab', {
   data: function() {
     return {
       
@@ -10,7 +10,7 @@ Vue.component('heiv-tab', {
     },
   },
   template:
-    `<div class="l-heiv-celestial-tab">
-      <p>heiv here</p>
+    `<div class="l-pelle-celestial-tab">
+      <p>pelle here</p>
     </div>`
 });

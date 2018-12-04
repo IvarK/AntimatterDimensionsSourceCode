@@ -1,4 +1,4 @@
-Vue.component('tapoto-tab', {
+Vue.component('enslaved-tab', {
   data: function() {
     return {
       
@@ -10,7 +10,7 @@ Vue.component('tapoto-tab', {
     },
   },
   template:
-    `<div class="l-tapoto-celestial-tab">
-      <p>tapoto here</p>
+    `<div class="l-enslaved-celestial-tab">
+      <p>enslaved here</p>
     </div>`
 });

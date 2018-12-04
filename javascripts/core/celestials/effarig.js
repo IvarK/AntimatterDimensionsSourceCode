@@ -5,12 +5,15 @@ var effarigQuotes = [
   "We are the Celestials, and we want you to join us.",
   "My name is Effarig, the Celestial Of Reality",
   "Prove your worth.",
-  "I'll let you inside my Reality, mortal. Don't get crushed by it."
+  "I'll let you inside my Reality, mortal. Don't get crushed by it.",
+  "You've proven your worth mortal, if you wish to join us you need to start over..."
 ]
 
 const EFFARIG_UNLOCKS = {
   RUN: 0,
-  EPGEN: 1
+  EPGEN: 1,
+  TERESA: 2,
+  SHOP: 3
 }
 
 var Effarig = {
@@ -26,6 +29,8 @@ var Effarig = {
   checkForUnlocks() {
     if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
     else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e15) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
+    else if (!this.has(EFFARIG_UNLOCKS.TERESA) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.TERESA)
+    else if (!this.has(EFFARIG_UNLOCKS.SHOP) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.SHOP)
   },
   has(id) {
     return player.celestials.effarig.unlocks.includes(id)
@@ -33,6 +38,18 @@ var Effarig = {
   startRun() {
     startRealityOver()
     player.celestials.effarig.run = true
+  },
+  buyGlyphLevelPower() {
+    let cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )
+    if (player.reality.pp < cost) return false
+    player.celestials.effarig.glyphLevelMult *= 1.05
+    player.reality.pp -= cost
+  },
+  buyRmMult() {
+    let cost = player.celestials.effarig.rmMult
+    if (player.reality.pp < cost) return false
+    player.celestials.effarig.rmMult *= 2
+    player.reality.pp -= cost
   },
   get rmStore() {
     return player.celestials.effarig.rmStore

@@ -365,6 +365,16 @@ var player = {
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
       rmMult: 1
+    },
+    teresa: {
+      relicShards: 0,
+      unlocks: [],
+      glyphWeights: {
+        ep: 0.25,
+        repl: 0.25,
+        dt: 0.25,
+        eternities: 0.25
+      }
     }
   },
   autoEcIsOn: true,

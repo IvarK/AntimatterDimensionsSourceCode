@@ -4623,6 +4623,11 @@ screen and (max-width: 480px) {
   color: #5151ec;
 }
 
+.c-teresa-relics {
+  padding: 20px;
+  font-size: 1.5em;
+}
+
 /* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is log10(amount) / log10(1e24) * 100 */
 
 #effarig-run-description { bottom: 52.912% } /* amount=5e12 */

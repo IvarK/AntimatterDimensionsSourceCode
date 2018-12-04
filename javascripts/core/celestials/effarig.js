@@ -30,7 +30,7 @@ var Effarig = {
     if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
     else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e15) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
     else if (!this.has(EFFARIG_UNLOCKS.TERESA) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.TERESA)
-    else if (!this.has(EFFARIG_UNLOCKS.SHOP) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.SHOP)
+    else if (!this.has(EFFARIG_UNLOCKS.SHOP) && this.rmStore > 1e24) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.SHOP)
   },
   has(id) {
     return player.celestials.effarig.unlocks.includes(id)

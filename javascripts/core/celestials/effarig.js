@@ -6,7 +6,8 @@ var effarigQuotes = [
   "My name is Effarig, the Celestial Of Reality",
   "Prove your worth.",
   "I'll let you inside my Reality, mortal. Don't get crushed by it.",
-  "You've proven your worth mortal, if you wish to join us you need to start over..."
+  "You've proven your worth mortal, if you wish to join us you need to start over...",
+  "Why are you still here... You were supposed to vanish... You are still no match for us though."
 ]
 
 const EFFARIG_UNLOCKS = {

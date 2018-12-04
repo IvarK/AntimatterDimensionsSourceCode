@@ -11,32 +11,37 @@ Vue.component('celestials-tab', {
           name: "Teresa",
           id: "Teresa",
           component: "teresa-tab",
-          condition: function() { return Effarig.has(EFFARIG_UNLOCKS.TERESA) }.bind(this)
+          condition: function() { return Effarig.has(EFFARIG_UNLOCKS.TERESA) }
         },
         {
           name: "V",
           id: "V",
-          component: "v-tab"
+          component: "v-tab",
+          condition: function() { return false }
         },
         {
           name: "The Enslaved Ones",
           id: "Enslaved",
-          component: "enslaved-tab"
+          component: "enslaved-tab",
+          condition: function() { return false }
         },
         {
           name: "Ra",
           id: "Ra",
-          component: "ra-tab"
+          component: "ra-tab",
+          condition: function() { return false }
         },
         {
           name: "Lai'tela",
           id: "Lai'tela",
-          component: "laitela-tab"
+          component: "laitela-tab",
+          condition: function() { return false }
         },
         {
           name: "The Pelle",
           id: "pelle",
-          component: "pelle-tab"
+          component: "pelle-tab",
+          condition: function() { return false }
         },
         // Leave these for future references
         /*{

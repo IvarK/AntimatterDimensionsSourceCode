@@ -59,7 +59,7 @@ Vue.component('effarig-tab', {
       <div>You have {{shorten(rm)}} Reality Machines.</div>
       <div class="l-mechanics-container">
         <div class="l-effarig-unlocks l-effarig-mechanic-container">
-          <div class="c-effarig-unlock c-effarig-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality, all IP multipliers, EP multipliers and TT generation is disabled. The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
+          <div class="c-effarig-unlock c-effarig-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
           <div class="c-effarig-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-effarig-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-effarig-shop" v-if="unlocks[3]">

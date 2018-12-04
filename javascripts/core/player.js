@@ -367,6 +367,7 @@ var player = {
       rmMult: 1
     }
   },
+  autoEcIsOn: true,
   options: {
     newsHidden: false,
     notation: "Mixed scientific",

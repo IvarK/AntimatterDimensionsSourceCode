@@ -53,15 +53,14 @@ Vue.component("autobuyer-input", {
         this.isValid = false;
         return;
       }
-      const isValid = this.validate(input);
-      this.isValid = isValid;
-      if (isValid) {
-        this.setValue(this.actualValue);
-      }
+      this.isValid = this.validate(input);
     },
     handleBlur: function() {
       if (this.displayValue === "69") {
         giveAchievement("Nice.");
+      }
+      if (this.isValid) {
+        this.setValue(this.actualValue);
       }
       this.displayValue = this.formatActualValue();
       this.isValid = true;

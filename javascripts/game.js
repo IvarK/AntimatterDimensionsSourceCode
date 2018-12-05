@@ -356,9 +356,10 @@ function breakInfinity() {
 }
 
 function gainedInfinityPoints() {
-    let div = 308;
-    if (player.timestudy.studies.includes(111)) div = 285;
-    else if (isAchEnabled("r103")) div = 307.8;
+    const div = Effects.last(
+      isAchEnabled("r103") ? 307.8 : 308,
+      TimeStudy(111)
+    );
     let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
     if (player.celestials.effarig.run) return ret.times(totalIPMult()).pow(0.6).floor()
     return ret.times(totalIPMult()).floor()
@@ -638,7 +639,7 @@ function checkForRUPG8() {
 function gainedInfinities() {
     let infGain = 1;
     if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
-    TimeStudy(32).applyEffect(value => infGain *= value);
+    infGain *= Effects.product(TimeStudy(32));
     if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
     infGain *= Math.max(1, getAdjustedGlyphEffect("infinityinfmult"));
     if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
@@ -1391,8 +1392,10 @@ function gameLoop(diff) {
       player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
     }
 
-    var tickmult = 1.33;
-    if (player.timestudy.studies.includes(171)) tickmult = 1.25;
+    let tickmult = Effects.last(
+      1.33,
+      TimeStudy(171)
+    );
     if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
       tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
     }
@@ -1464,7 +1467,7 @@ function gameLoop(diff) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
+    if (TimeStudy.dilation.isBought) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
 
     // Free galaxies (2x doesn't apply past 1000)
     let freeGalaxyMult = 1;
@@ -1524,7 +1527,7 @@ function gameLoop(diff) {
     }
 
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
-    if (player.timestudy.studies.includes(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff/100000))
+    player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     if (player.dilation.upgrades.includes(10)) {
         player.timestudy.theorem += parseFloat(player.dilation.tachyonParticles.div(20000).times(diff/1000).toString())
         if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") {
@@ -1726,7 +1729,7 @@ function autoBuyReplicantiUpgrades() {
   }
 
   if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && ((player.timestudy.studies.includes(22)) ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
+    while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
   }
 
   if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
@@ -1923,9 +1926,8 @@ var ec10bonus = new Decimal(1)
 init();
 setInterval( function() {
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-    if (player.currentEternityChall == "eterc10") {
-        ec10bonus = Decimal.pow(Player.totalInfinitied, 1000).max(1)
-        if (player.timestudy.studies.includes(31)) ec10bonus = ec10bonus.pow(4)
+    if (EternityChallenge(10).isRunning) {
+        ec10bonus = Decimal.pow(Player.totalInfinitied, 1000).max(1).pow(Effects.product(TimeStudy(31)));
     } else {
         ec10bonus = new Decimal(1)
     }

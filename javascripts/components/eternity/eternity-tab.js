@@ -29,7 +29,7 @@ Vue.component("eternity-tab", {
   },
   methods: {
     update() {
-      this.isDilationUnlocked = player.dilation.studies.includes(1);
+      this.isDilationUnlocked = TimeStudy.dilation.isBought;
     }
   },
   template:

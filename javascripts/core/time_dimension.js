@@ -7,7 +7,7 @@ function buyTimeDimension(tier, upd, threshold) {
   if (threshold == undefined) threshold = 1
 
   const dim = TimeDimension(tier);
-  if (tier > 4 && !player.dilation.studies.includes(tier-3)) return false
+  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
   if (player.eternityPoints.lt(dim.cost.times(1/threshold))) return false
 
   player.eternityPoints = player.eternityPoints.minus(dim.cost)
@@ -122,7 +122,7 @@ class TimeDimensionInfo {
   }
 
   get isUnlocked() {
-    return this._tier < 5 || player.dilation.studies.includes(this._tier - 3);
+    return this._tier < 5 || TimeStudy.timeDimension(this._tier).isBought;
   }
 
   get isAffordable() {
@@ -155,17 +155,11 @@ class TimeDimensionInfo {
     mult = mult.timesEffectsOf(
       tier === 3 ? TimeStudy(73) : null,
       TimeStudy(93),
-      TimeStudy(103)
+      TimeStudy(103),
+      TimeStudy(151),
+      TimeStudy(221),
+      tier === 4 ? TimeStudy(227) : null
     );
-    if (player.timestudy.studies.includes(151)) {
-      mult = mult.times(1e4);
-    }
-    if (player.timestudy.studies.includes(221)) {
-      mult = mult.times(Decimal.pow(1.0025, player.resets));
-    }
-    if (player.timestudy.studies.includes(227) && tier === 4) {
-      mult = mult.times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
-    }
     if (player.currentEternityChall === "eterc9") {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
     }
@@ -174,9 +168,7 @@ class TimeDimensionInfo {
 
     let ec10bonus = new Decimal(1);
     EternityChallenge(10).applyReward(value => ec10bonus = value);
-    if (player.timestudy.studies.includes(31)) {
-      ec10bonus = ec10bonus.pow(4);
-    }
+    ec10bonus = ec10bonus.pow(Effects.product(TimeStudy(31)));
     mult = mult.times(ec10bonus);
     if (isAchEnabled("r128")) {
       mult = mult.times(Math.max(player.timestudy.studies.length, 1));

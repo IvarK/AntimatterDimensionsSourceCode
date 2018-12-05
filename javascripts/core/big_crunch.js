@@ -75,7 +75,7 @@ function bigCrunchReset() {
     if (isAchEnabled("r95")) {
         player.replicanti.amount = currenReplicanti;
     }
-    if (player.timestudy.studies.includes(33)) {
+    if (TimeStudy(33).isBought) {
         player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
     }
 
@@ -93,7 +93,7 @@ function bigCrunchReset() {
     }
 
     if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && ((player.timestudy.studies.includes(22)) ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
+        while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
     }
 
     if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {

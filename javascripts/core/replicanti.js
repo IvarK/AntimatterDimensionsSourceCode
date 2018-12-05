@@ -29,7 +29,7 @@ function upgradeReplicantiGalaxy() {
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
-    if (player.timestudy.studies.includes(131)) maxGal = Math.floor(player.replicanti.gal * 1.5);
+    maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
     let gainGal = 0;
     if (curGal < maxGal) { 
@@ -73,9 +73,11 @@ function getReplicantiInterval(noMod, interval) {
     if (!interval) {
       interval = player.replicanti.interval;
     }
-    if (player.timestudy.studies.includes(62)) interval = interval/3
-    if (player.timestudy.studies.includes(133) || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
-    if (player.timestudy.studies.includes(213)) interval /= 20
+    if (TimeStudy(133).isBought || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
+    interval /= Effects.product(
+      TimeStudy(62),
+      TimeStudy(213)
+    );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
     if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && isAchEnabled("r134")) interval /= 2
@@ -99,13 +101,14 @@ function replicantiLoop(diff) {
 
     var current = player.replicanti.amount.ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
-    if (speedCheck && player.replicanti.galaxybuyer && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
+    if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
 
-    if (player.replicanti.unl && (diff > 500 || interval < 50 || player.timestudy.studies.includes(192))) {
+    const isTS192Bought = TimeStudy(192).isBought;
+    if (player.replicanti.unl && (diff > 500 || interval < 50 || isTS192Bought)) {
         var gained = Decimal.pow(Math.E, current +(diff/100*est/10))
-        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
+        if (isTS192Bought) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
         player.replicanti.amount = Decimal.min(Number.MAX_VALUE, gained)
-        if (player.timestudy.studies.includes(192)) player.replicanti.amount = gained
+        if (isTS192Bought) player.replicanti.amount = gained
         replicantiTicks = 0
     } else {
         if (interval <= replicantiTicks && player.replicanti.unl) {
@@ -124,9 +127,9 @@ function replicantiLoop(diff) {
                         }
                     }
                     player.replicanti.amount = Decimal.min(Number.MAX_VALUE, temp.times(counter).plus(player.replicanti.amount))
-                    if (player.timestudy.studies.includes(192)) player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
+                    if (isTS192Bought) player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
                 } else {
-                    if (player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.times(2)
+                    if (isTS192Bought) player.replicanti.amount = player.replicanti.amount.times(2)
                     else player.replicanti.amount = Decimal.min(Number.MAX_VALUE, player.replicanti.amount.times(2))
                 }
             }
@@ -138,7 +141,7 @@ function replicantiLoop(diff) {
     if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
-    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
+    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!TimeStudy(131).isBought || isAchEnabled("r138"))) {
         replicantiGalaxy();
     }
     PerformanceStats.end();
@@ -207,7 +210,10 @@ const ReplicantiUpgrade = {
       return Math.max(this.current * 0.9, this.cap);
     },
     get cap() {
-      return player.timestudy.studies.includes(22) ? 1 : 50;
+      return Effects.last(
+        50,
+        TimeStudy(22)
+      );
     },
     get isCapped() {
       return this.current <= this.cap;
@@ -230,11 +236,7 @@ const ReplicantiUpgrade = {
       return player.replicanti.galCost;
     },
     get cost() {
-      let cost = this.baseCost;
-      if (player.timestudy.studies.includes(233)) {
-        return cost.dividedBy(Replicanti.amount.pow(0.3));
-      }
-      return cost;
+      return this.baseCost.dividedByEffectOf(TimeStudy(233));
     },
     set cost(value) {
       player.replicanti.galCost = value;
@@ -259,7 +261,10 @@ const ReplicantiUpgrade = {
       return player.eternities >= 80;
     },
     get extra() {
-      return player.timestudy.studies.includes(131) ? Math.floor(this.current / 2) : 0;
+      return Effects.last(
+        0,
+        TimeStudy(131)
+      );
     }
   },
   isAvailable(upgrade) {
@@ -296,10 +301,10 @@ const Replicanti = {
       return player.replicanti.galaxies;
     },
     get extra() {
-      let bonusGalaxies = 0;
-      TimeStudy(225).applyEffect(value => bonusGalaxies += value);
-      TimeStudy(226).applyEffect(value => bonusGalaxies += value);
-      return bonusGalaxies;
+      return Effects.sum(
+        TimeStudy(225),
+        TimeStudy(226)
+      );
     },
     get total() {
       return this.bought + this.extra;
@@ -326,7 +331,7 @@ const Replicanti = {
         this.isOn = !this.isOn;
       },
       get isEnabled() {
-        return !player.timestudy.studies.includes(131) || isAchEnabled("r138");
+        return !TimeStudy(131).isBought || isAchEnabled("r138");
       }
     }
   },

@@ -6,10 +6,12 @@ function canBuyTickSpeed() {
 function getTickSpeedMultiplier() {
   if (player.currentChallenge == "postc3") return new Decimal(1);
   let galaxies = player.galaxies+player.replicanti.galaxies+player.dilation.freeGalaxies
-  if (player.timestudy.studies.includes(133)) galaxies += player.replicanti.galaxies/2
-  if (player.timestudy.studies.includes(132)) galaxies += player.replicanti.galaxies*0.4
-  TimeStudy(225).applyEffect(value => galaxies += value);
-  TimeStudy(226).applyEffect(value => galaxies += value);
+  galaxies += Effects.sum(
+    TimeStudy(132),
+    TimeStudy(133),
+    TimeStudy(225),
+    TimeStudy(226)
+  );
   let replicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
   EternityChallenge(8).applyReward(value => galaxies += replicantiGalaxies * value);
   if (galaxies < 3) {
@@ -21,7 +23,7 @@ function getTickSpeedMultiplier() {
       BreakInfinityUpgrade.galaxyBoost.apply(value => perGalaxy *= value);
       if (player.challenges.includes("postc5")) perGalaxy *= 1.1;
       if (isAchEnabled("r86")) perGalaxy *= 1.01;
-      TimeStudy(212).applyEffect(value => perGalaxy *= value);
+      perGalaxy *= Effects.product(TimeStudy(212));
 
       return new Decimal(Math.max(0.01, baseMultiplier-(galaxies*perGalaxy)));
   } else {
@@ -32,9 +34,10 @@ function getTickSpeedMultiplier() {
       BreakInfinityUpgrade.galaxyBoost.apply(value => galaxies *= value);
       if (player.challenges.includes("postc5")) galaxies *= 1.1;
       if (isAchEnabled("r86")) galaxies *= 1.01
-      TimeStudy(212).applyEffect(value => galaxies *= value);
-      if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
-
+      galaxies *= Effects.product(
+        TimeStudy(212),
+        TimeStudy(232)
+      );
       return perGalaxy.pow(galaxies-2).times(baseMultiplier);
   }
 }

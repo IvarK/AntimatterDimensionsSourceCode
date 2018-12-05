@@ -164,13 +164,13 @@ function buy(current) {
   switch(current.target) {
     case "study":
       id = parseInt(current.id)
-      if (player.timestudy.studies.includes(id)) return true
+      if (TimeStudy(id).isBought) return true
       else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
       else return false
       break;
       case "studyuntil":
           id = parseInt(current.id);
-          if (!player.timestudy.studies.includes(id)) {
+          if (!TimeStudy(id).isBought) {
               studiesUntil(id);//passes arguments into the studies until function.
         return true
       } else return false
@@ -285,7 +285,7 @@ function wait(current) {
       if (!player.reality.automatorCommands.includes(42)) return false
       if (current.id == "max") {
         if (!player.reality.automatorCommands.includes(51)) return false
-        if ((!player.timestudy.studies.includes(131) ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
+        if ((!TimeStudy(131).isBought ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
         else return false
       }
       if (id.gt(player.replicanti.galaxies)) return false

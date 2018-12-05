@@ -47,9 +47,12 @@ class Sacrifice {
     if (player.firstAmount === 0) return new Decimal(1);
 
     if (player.challenges.includes("postc2")) {
-      if (player.timestudy.studies.includes(228)) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.013).max(1);
-      if (isAchEnabled("r88")) return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.011).max(1);
-      return player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.01).max(1);
+      let boost = player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.01).max(1);
+      if (isAchEnabled("r88")) boost = player.firstAmount.dividedBy(player.sacrificed.max(1)).pow(0.011).max(1);
+      return Effects.last(
+        boost,
+        TimeStudy(228)
+      );
     }
 
     if (player.currentChallenge !== "challenge11") {
@@ -66,9 +69,12 @@ class Sacrifice {
     if (player.sacrificed.eq(0)) return new Decimal(1);
 
     if (player.challenges.includes("postc2")) {
-      if (player.timestudy.studies.includes(228)) return player.sacrificed.pow(0.013).max(1);
-      if (isAchEnabled("r88")) return player.sacrificed.pow(0.011).max(1);
-      else return player.sacrificed.pow(0.01);
+      let boost = player.sacrificed.pow(0.01);
+      if (isAchEnabled("r88")) boost = player.sacrificed.pow(0.011).max(1);
+      return Effects.last(
+        boost,
+        TimeStudy(228)
+      );
     }
 
     if (player.currentChallenge !== "challenge11") {

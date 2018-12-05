@@ -274,10 +274,10 @@ class InfinityDimensionInfo {
       mult = mult.times(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))
     }
 
-    mult = mult.timesEffectOf(TimeStudy(92));
-    if (player.timestudy.studies.includes(162)) {
-      mult = mult.times(1e11)
-    }
+    mult = mult.timesEffectsOf(
+      TimeStudy(92),
+      TimeStudy(162)
+    );
 
     if (tier === 1) {
       EternityChallenge(2).applyReward(value => mult = mult.times(value));

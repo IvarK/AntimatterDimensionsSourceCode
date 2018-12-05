@@ -18,9 +18,16 @@ class GalaxyRequirement {
 class Galaxy {
   static get requirement() {
     const galaxies = player.galaxies;
-    let amount = 80 + (galaxies * 60);
-    if (player.timestudy.studies.includes(42)) amount = 80 + ((galaxies) * 52);
-    if (player.currentChallenge === "challenge4") amount = 99 + ((galaxies) * 90);
+    let costBase = 80;
+    let costMult = Effects.last(
+      60,
+      TimeStudy(42)
+    );
+    if (player.currentChallenge === "challenge4") {
+      costBase = 99;
+      costMult = 90;
+    }
+    let amount = costBase + (galaxies * costMult);
 
     let type = this.type;
 
@@ -44,9 +51,10 @@ class Galaxy {
   static get costScalingStart() {
     let amount = 100;
     EternityChallenge(5).applyReward(value => amount += value);
-    const studies = player.timestudy.studies;
-    if (studies.includes(223)) amount += 7;
-    if (studies.includes(224)) amount += Math.floor(player.resets / 2000);
+    amount += Effects.sum(
+      TimeStudy(223),
+      TimeStudy(224)
+    );
     return amount;
   }
 

@@ -18,16 +18,20 @@ class DimBoost {
     let power = 2;
     InfinityUpgrade.dimboostMult.apply(value => power = value);
     if (player.challenges.includes("postc7")) power = 4;
-    if (player.currentChallenge === "postc7" || player.timestudy.studies.includes(81)) power = 10;
+    if (player.currentChallenge === "postc7") power = 10;
+    power = Effects.last(
+      power,
+      TimeStudy(81)
+    );
 
     if (isAchEnabled("r101")) power *= 1.01;
     if (isAchEnabled("r142")) power *= 1.5;
     power *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"));
-    power = new Decimal(power)
-      .timesEffectOf(TimeStudy(83));
-    if (player.timestudy.studies.includes(231)) power = Decimal.pow(player.resets, 0.3).max(1).times(power);
-
-    return Decimal.fromValue(power);
+    return new Decimal(power)
+      .timesEffectsOf(
+        TimeStudy(83),
+        TimeStudy(231)
+      );
   }
 
   static get maxShiftTier() {
@@ -48,17 +52,18 @@ class DimBoost {
     let targetResets = player.resets + bulk;
     let tier = Math.min(targetResets + 4, this.maxShiftTier);
     let amount = 20;
-    let mult = 15;
-    if (player.timestudy.studies.includes(211)) mult -= 5;
-    if (player.timestudy.studies.includes(222)) mult -= 2;
 
     if (tier === 6 && player.currentChallenge === "challenge4") {
       amount += Math.ceil((targetResets - 2) * 20);
     }
     else if (tier === 8) {
+      const mult = 15 - Effects.sum(
+        TimeStudy(211),
+        TimeStudy(222)
+      );
       amount += Math.ceil((targetResets - 4) * mult);
     }
-    if (player.currentEternityChall === "eterc5") {
+    if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets, 3) + targetResets;
     }
 

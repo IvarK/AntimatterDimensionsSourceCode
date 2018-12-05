@@ -35,9 +35,7 @@ function getDimensionFinalMultiplier(tier) {
   let infinitiedMult = new Decimal(1);
   dim.infinityUpgrade.apply(value => infinitiedMult = infinitiedMult.times(value));
   BreakInfinityUpgrade.infinitiedMult.apply(value => infinitiedMult = infinitiedMult.times(value));
-  if (player.timestudy.studies.includes(31)) {
-    infinitiedMult = infinitiedMult.pow(4);
-  }
+  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
   multiplier = multiplier.times(infinitiedMult);
   if (tier === 1) {
     InfinityUpgrade.unspentIPMult.apply(value => multiplier = multiplier.times(value));
@@ -65,15 +63,13 @@ function getDimensionFinalMultiplier(tier) {
   if (isAchEnabled("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
   else if (isAchEnabled("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
 
-
-  let timeStudies = player.timestudy.studies;
   multiplier = multiplier.timesEffectsOf(
     tier < 8 ? TimeStudy(71) : null,
     TimeStudy(91),
-    TimeStudy(101)
+    TimeStudy(101),
+    TimeStudy(161),
+    tier === 1 ? TimeStudy(234) : null
   );
-  if (timeStudies.includes(161)) multiplier = multiplier.times(new Decimal("1e616"));
-  if (timeStudies.includes(234) && tier === 1) multiplier = multiplier.times(Sacrifice.totalBoost);
 
   multiplier = multiplier.times(player.postC3Reward);
   if (player.challenges.includes("postc8") && tier < 8 && tier > 1) multiplier = multiplier.times(mult18);

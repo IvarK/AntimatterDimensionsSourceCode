@@ -205,7 +205,7 @@ const newsArray = [
   ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],  //might not be poss?
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
   ["Achievement Unlocked!", "c4", () => player.achievements.length === 88],
-  ["Did you use an autoclicker for that?", "c5", () => player.timestudy.studies.includes(131) && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
+  ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied > 72000 * 168],
   ["The achievement is for two million, not two billion...", "c8", () => player.infinitied > 2e9],

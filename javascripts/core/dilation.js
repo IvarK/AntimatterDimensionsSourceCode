@@ -1,5 +1,5 @@
 function startDilatedEternity() {
-  if (!player.dilation.studies.includes(1)) return false
+  if (!TimeStudy.dilation.isBought) return false
   clearInterval(gameLoopIntervalId);
   if (player.dilation.active) {
       eternity(true)

@@ -63,7 +63,7 @@ function eternity(force, auto) {
     for (let i = 0; i < player.challenges.length; i++) {
         if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
     }
-    if (player.timestudy.studies.includes(191)) player.infinitiedBank += Math.floor(player.infinitied * 0.05);
+    player.infinitiedBank += Effects.sum(TimeStudy(191));
     if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied * 0.05);
     if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
     if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {

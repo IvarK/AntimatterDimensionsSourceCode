@@ -1,6 +1,7 @@
 Vue.component('celestials-tab', {
   data: function() {
     return {
+      teresaUnlocked: false,
       tabs: [
         {
           name: "Effarig",
@@ -11,7 +12,7 @@ Vue.component('celestials-tab', {
           name: "Teresa",
           id: "Teresa",
           component: "teresa-tab",
-          condition: function() { return Effarig.has(EFFARIG_UNLOCKS.TERESA) }
+          condition: function() { return this.teresaUnlocked }.bind(this)
         },
         {
           name: "V",
@@ -67,7 +68,7 @@ Vue.component('celestials-tab', {
   },
   methods: {
     update() {
-      
+      this.teresaUnlocked = Effarig.has(EFFARIG_UNLOCKS.TERESA)
     }
   },
   template:

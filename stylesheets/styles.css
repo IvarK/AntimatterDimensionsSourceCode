@@ -4637,6 +4637,42 @@ screen and (max-width: 480px) {
 
 /*#endregion Effarig tab*/
 
+/* #region teresa tab */
+
+.o-teresa-shop-button {
+  padding: 17px;
+  font-size: 2rem;
+  background-color: #5151ec;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.o-teresa-shop-button:hover {
+  background-color: #d0d0d0;
+  color: #5151ec;
+}
+
+.teresa-unlock-bought {
+  background-color: #d0d0d0;
+  color: #5151ec;
+  cursor: default;
+}
+
+.teresa-run-button {
+  width: 300px;
+}
+
+.l-teresa-glyph-settings {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* #endregion teresa tab*/
+
 .c-performance-stats {
   width: 25rem;
   padding: .3rem;

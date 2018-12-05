@@ -274,7 +274,7 @@ GameDatabase.timeStudies.normal = [
   {
     id: 228,
     cost: 900,
-    effect: () => player.firstAmount.dividedBy(player.sacrificed.clampMin(1)).pow(0.013).clampMin(1)
+    effect: () => 0.013
   },
   {
     id: 231,

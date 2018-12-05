@@ -18,23 +18,23 @@ function getTickSpeedMultiplier() {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.93;
-      let perGalaxy = 0.02;
-      InfinityUpgrade.galaxyBoost.apply(value => perGalaxy *= value);
-      BreakInfinityUpgrade.galaxyBoost.apply(value => perGalaxy *= value);
+      let perGalaxy = 0.02 * Effects.product(
+        InfinityUpgrade.galaxyBoost,
+        BreakInfinityUpgrade.galaxyBoost,
+        TimeStudy(212)
+      );
       if (player.challenges.includes("postc5")) perGalaxy *= 1.1;
       if (isAchEnabled("r86")) perGalaxy *= 1.01;
-      perGalaxy *= Effects.product(TimeStudy(212));
-
       return new Decimal(Math.max(0.01, baseMultiplier-(galaxies*perGalaxy)));
   } else {
       let baseMultiplier = 0.8
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
       let perGalaxy = new Decimal(0.965)
-      InfinityUpgrade.galaxyBoost.apply(value => galaxies *= value);
-      BreakInfinityUpgrade.galaxyBoost.apply(value => galaxies *= value);
       if (player.challenges.includes("postc5")) galaxies *= 1.1;
       if (isAchEnabled("r86")) galaxies *= 1.01
       galaxies *= Effects.product(
+        InfinityUpgrade.galaxyBoost,
+        BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
         TimeStudy(232)
       );

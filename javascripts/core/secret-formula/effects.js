@@ -11,7 +11,17 @@ const Effects = {
   },
   last(defaultValue, ...effectSources) {
     let result = defaultValue;
-    applyEffectsOf(effectSources, v => result = v);
+    let foundLast = false;
+    let reversedSources = effectSources
+      .filter(s => s !== null && s !== undefined)
+      .reverse();
+    for (let effectSource of reversedSources) {
+      effectSource.applyEffect(v => {
+        result = v;
+        foundLast = true;
+      });
+      if (foundLast) break;
+    }
     return result;
   }
 };

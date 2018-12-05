@@ -15,8 +15,10 @@ class DimBoost {
       return Decimal.fromNumber(1);
     }
 
-    let power = 2;
-    InfinityUpgrade.dimboostMult.apply(value => power = value);
+    let power = Effects.last(
+      2,
+      InfinityUpgrade.dimboostMult
+    );
     if (player.challenges.includes("postc7")) power = 4;
     if (player.currentChallenge === "postc7") power = 10;
     power = Effects.last(
@@ -67,7 +69,7 @@ class DimBoost {
       amount += Math.pow(targetResets, 3) + targetResets;
     }
 
-    InfinityUpgrade.resetBoost.apply(value => amount -= value);
+    amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (player.challenges.includes("postc5")) amount -= 1;
 
     return new DimBoostRequirement(tier, amount);

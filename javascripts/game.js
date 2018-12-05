@@ -353,6 +353,7 @@ function breakInfinity() {
         player.break = true
         giveAchievement("Limit Break")
     }
+    GameUI.update();
 }
 
 function gainedInfinityPoints() {

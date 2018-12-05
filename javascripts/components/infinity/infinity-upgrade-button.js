@@ -29,7 +29,7 @@ Vue.component("infinity-upgrade-button", {
       if (upgrade.hasComplexEffect) {
         return this.complexEffect;
       }
-      if (upgrade.hasDynamicEffectDisplay) {
+      if (upgrade.hasDynamicEffect) {
         return `Currently: ${upgrade.formatEffectValue(this.effectValue, this.formatter)}`;
       }
       if (upgrade.hasStaticEffectDisplay) {
@@ -44,16 +44,14 @@ Vue.component("infinity-upgrade-button", {
     update() {
       const upgrade = this.upgrade;
       this.cost = upgrade.formatCost(this.formatter);
-      this.description = typeof upgrade.description === "function" ?
-        upgrade.description() :
-        upgrade.description;
+      this.description = upgrade.description;
       this.isBought = upgrade.isBought;
       this.isAvailable = upgrade.isAvailable;
       this.isCapped = upgrade.isCapped;
       if (upgrade.hasComplexEffect) {
         this.complexEffect = upgrade.formatComplexEffect(this.formatter);
       }
-      else if (upgrade.hasDynamicEffectDisplay) {
+      else if (upgrade.hasDynamicEffect) {
         this.effectValue.copyFrom(new Decimal(upgrade.effectValue));
       }
     },
@@ -74,11 +72,11 @@ Vue.component("infinity-upgrade-button", {
     </button>`
 });
 
-class InfinityUpgradeViewModel {
+class InfinityUpgradeSetup {
   constructor(props) {
     this._upgrade = props.upgrade;
     this._description = props.description;
-    this._formatCurrentEffect = props.formatCurrentEffect;
+    this._formatEffect = props.formatEffect;
     this._staticEffect = props.staticEffect;
     this._formatComplexEffect = props.formatComplexEffect;
   }
@@ -96,7 +94,8 @@ class InfinityUpgradeViewModel {
   }
 
   get description() {
-    return this._description;
+    const description = this._description;
+    return typeof description === "function" ? description() : description;
   }
 
   get isBought() {
@@ -115,8 +114,8 @@ class InfinityUpgradeViewModel {
     return this._staticEffect;
   }
 
-  get hasDynamicEffectDisplay() {
-    return this._upgrade.hasDynamicEffect;
+  get hasDynamicEffect() {
+    return this._formatEffect !== undefined;
   }
 
   get effectValue() {
@@ -124,7 +123,7 @@ class InfinityUpgradeViewModel {
   }
 
   formatEffectValue(value, formatter) {
-    return this._formatCurrentEffect(value, formatter);
+    return this._formatEffect(value, formatter);
   }
 
   get hasComplexEffect() {

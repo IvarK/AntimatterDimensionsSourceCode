@@ -16,10 +16,10 @@ Vue.component("normal-time-study", {
       return normalTimeStudyDisplaySetup.find(s => s.study === this.study.id);
     },
     hasDynamicDescription: function() {
-      return this.displaySetup !== undefined && this.displaySetup.formatDescription !== undefined;
+      return this.displaySetup.formatDescription !== undefined;
     },
     hasEffectDisplay: function() {
-      return this.displaySetup !== undefined && this.displaySetup.formatEffect !== undefined;
+      return this.displaySetup.formatEffect !== undefined;
     },
     effectDisplay: function() {
       return this.displaySetup.formatEffect(this.effectValue, this.formatter);

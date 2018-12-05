@@ -197,12 +197,11 @@ function totalIPMult() {
 }
 
 class InfinityUpgrade {
-  constructor(props) {
+  constructor(props, requirement) {
     this._id = props.id;
     this._cost = props.cost;
-    this._requirement = props.requirement;
-    this._staticEffect = props.staticEffect;
-    this._dynamicEffect = props.dynamicEffect;
+    this._effect = props.effect;
+    this._requirement = requirement;
   }
 
   get cost() {
@@ -228,116 +227,40 @@ class InfinityUpgrade {
     GameUI.update();
   }
 
-  get hasStaticEffect() {
-    return this._staticEffect !== undefined;
-  }
-
-  get hasDynamicEffect() {
-    return this._dynamicEffect !== undefined;
-  }
-
   get effectValue() {
-    return this.hasStaticEffect ? this._staticEffect : this._dynamicEffect();
+    return this._effect();
   }
 
-  apply(applyFn) {
+  applyEffect(applyFn) {
     if (this.isBought) {
       applyFn(this.effectValue);
     }
   }
 }
 
-InfinityUpgrade.totalTimeMult = new InfinityUpgrade({
-  id: "timeMult",
-  cost: 1,
-  dynamicEffect: () => Math.pow(Time.totalTimePlayed.totalMinutes / 2, 0.15)
-});
-InfinityUpgrade.dimInfinityMult = () => 1 + (Player.totalInfinitied * 0.2);
-InfinityUpgrade.dim18mult = new InfinityUpgrade({
-  id: "18Mult",
-  cost: 1,
-  requirement: InfinityUpgrade.totalTimeMult,
-  dynamicEffect: InfinityUpgrade.dimInfinityMult
-});
-InfinityUpgrade.dim36mult = new InfinityUpgrade({
-  id: "36Mult",
-  cost: 1,
-  requirement: InfinityUpgrade.dim18mult,
-  dynamicEffect: InfinityUpgrade.dimInfinityMult
-});
-InfinityUpgrade.resetBoost = new InfinityUpgrade({
-  id: "resetBoost",
-  cost: 1,
-  requirement: InfinityUpgrade.dim36mult,
-  staticEffect: 9
-});
+(function() {
+  const db = GameDatabase.infinity.upgrades;
+  const upgrade = (props, requirement) => new InfinityUpgrade(props, requirement);
+  InfinityUpgrade.totalTimeMult = upgrade(db.totalTimeMult);
+  InfinityUpgrade.dim18mult = upgrade(db.dim18mult, InfinityUpgrade.totalTimeMult);
+  InfinityUpgrade.dim36mult = upgrade(db.dim36mult, InfinityUpgrade.dim18mult);
+  InfinityUpgrade.resetBoost = upgrade(db.resetBoost, InfinityUpgrade.dim36mult);
 
-InfinityUpgrade.buy10Mult = new InfinityUpgrade({
-  id: "dimMult",
-  cost: 1,
-  staticEffect: 1.1
-});
-InfinityUpgrade.dim27mult = new InfinityUpgrade({
-  id: "27Mult",
-  cost: 1,
-  requirement: InfinityUpgrade.buy10Mult,
-  dynamicEffect: InfinityUpgrade.dimInfinityMult
-});
-InfinityUpgrade.dim45mult = new InfinityUpgrade({
-  id: "45Mult",
-  cost: 1,
-  requirement: InfinityUpgrade.dim27mult,
-  dynamicEffect: InfinityUpgrade.dimInfinityMult
-});
-InfinityUpgrade.galaxyBoost = new InfinityUpgrade({
-  id: "galaxyBoost",
-  cost: 2,
-  requirement: InfinityUpgrade.dim45mult,
-  staticEffect: 2
-});
+  InfinityUpgrade.buy10Mult = upgrade(db.buy10Mult);
+  InfinityUpgrade.dim27mult = upgrade(db.dim27mult, InfinityUpgrade.buy10Mult);
+  InfinityUpgrade.dim45mult = upgrade(db.dim45mult, InfinityUpgrade.dim27mult);
+  InfinityUpgrade.galaxyBoost = upgrade(db.galaxyBoost, InfinityUpgrade.dim45mult);
 
-InfinityUpgrade.thisInfinityTimeMult = new InfinityUpgrade({
-  id: "timeMult2",
-  cost: 3,
-  dynamicEffect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 4, 0.25), 1)
-});
-InfinityUpgrade.unspentIPMult = new InfinityUpgrade({
-  id: "unspentBonus",
-  cost: 5,
-  requirement: InfinityUpgrade.thisInfinityTimeMult,
-  dynamicEffect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1)
-});
-InfinityUpgrade.dimboostMult = new InfinityUpgrade({
-  id: "resetMult",
-  cost: 7,
-  requirement: InfinityUpgrade.unspentIPMult,
-  staticEffect: 2.5
-});
-InfinityUpgrade.ipGen = new InfinityUpgrade({
-  id: "passiveGen",
-  cost: 10,
-  requirement: InfinityUpgrade.dimboostMult
-});
+  InfinityUpgrade.thisInfinityTimeMult = upgrade(db.thisInfinityTimeMult);
+  InfinityUpgrade.unspentIPMult = upgrade(db.unspentIPMult, InfinityUpgrade.thisInfinityTimeMult);
+  InfinityUpgrade.dimboostMult = upgrade(db.dimboostMult, InfinityUpgrade.unspentIPMult);
+  InfinityUpgrade.ipGen = upgrade(db.ipGen, InfinityUpgrade.dimboostMult);
 
-InfinityUpgrade.skipReset1 = new InfinityUpgrade({
-  id: "skipReset1",
-  cost: 20
-});
-InfinityUpgrade.skipReset2 = new InfinityUpgrade({
-  id: "skipReset2",
-  cost: 40,
-  requirement: InfinityUpgrade.skipReset1
-});
-InfinityUpgrade.skipReset3 = new InfinityUpgrade({
-  id: "skipReset3",
-  cost: 80,
-  requirement: InfinityUpgrade.skipReset2
-});
-InfinityUpgrade.skipResetGalaxy = new InfinityUpgrade({
-  id: "skipResetGalaxy",
-  cost: 300,
-  requirement: InfinityUpgrade.skipReset3
-});
+  InfinityUpgrade.skipReset1 = upgrade(db.skipReset1);
+  InfinityUpgrade.skipReset2 = upgrade(db.skipReset2, InfinityUpgrade.skipReset1);
+  InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
+  InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
+})();
 
 InfinityUpgrade.ipMult = {
   capValue: new Decimal("1e6000000"),
@@ -405,50 +328,21 @@ class BreakInfinityUpgrade extends InfinityUpgrade {
   }
 }
 
-BreakInfinityUpgrade.totalAMMult = new BreakInfinityUpgrade({
-  id: "totalMult",
-  cost: 1e4,
-  dynamicEffect: () => Math.pow(player.totalmoney.exponent + 1, 0.5)
-});
-BreakInfinityUpgrade.currentAMMult = new BreakInfinityUpgrade({
-  id: "currentMult",
-  cost: 5e4,
-  dynamicEffect: () => Math.pow(player.money.exponent + 1, 0.5)
-});
-BreakInfinityUpgrade.galaxyBoost = new BreakInfinityUpgrade({
-  id: "postGalaxy",
-  cost: 5e11,
-  staticEffect: 1.5
-});
+(function() {
+  const db = GameDatabase.infinity.breakUpgrades;
+  const upgrade = props => new BreakInfinityUpgrade(props);
+  BreakInfinityUpgrade.totalAMMult = upgrade(db.totalAMMult);
+  BreakInfinityUpgrade.currentAMMult = upgrade(db.currentAMMult);
+  BreakInfinityUpgrade.galaxyBoost = upgrade(db.galaxyBoost);
 
-BreakInfinityUpgrade.infinitiedMult = new BreakInfinityUpgrade({
-  id: "infinitiedMult",
-  cost: 1e5,
-  dynamicEffect: () => 1 + Math.log10(Player.totalInfinitied + 1) * 10
-});
-BreakInfinityUpgrade.achievementMult = new BreakInfinityUpgrade({
-  id: "achievementMult",
-  cost: 1e6,
-  dynamicEffect: () => Math.max(Math.pow((player.achievements.length - 30 - getSecretAchAmount()), 3) / 40, 1)
-});
-BreakInfinityUpgrade.slowestChallengeMult = new BreakInfinityUpgrade({
-  id: "challengeMult",
-  cost: 1e7,
-  dynamicEffect: () => Decimal.max(10 * 3000 / worstChallengeTime, 1)
-});
+  BreakInfinityUpgrade.infinitiedMult = upgrade(db.infinitiedMult);
+  BreakInfinityUpgrade.achievementMult = upgrade(db.achievementMult);
+  BreakInfinityUpgrade.slowestChallengeMult = upgrade(db.slowestChallengeMult);
 
-BreakInfinityUpgrade.infinitiedGen = new BreakInfinityUpgrade({
-  id: "infinitiedGeneration",
-  cost: 2e7
-});
-BreakInfinityUpgrade.bulkDimBoost = new BreakInfinityUpgrade({
-  id: "bulkBoost",
-  cost: 5e9
-});
-BreakInfinityUpgrade.autobuyerSpeed = new BreakInfinityUpgrade({
-  id: "autoBuyerUpgrade",
-  cost: 1e15
-});
+  BreakInfinityUpgrade.infinitiedGen = upgrade(db.infinitiedGen);
+  BreakInfinityUpgrade.bulkDimBoost = upgrade(db.bulkDimBoost);
+  BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
+})();
 
 class BreakInfinityMultiplierCostUpgrade extends BreakInfinityUpgrade {
   constructor(props) {
@@ -474,7 +368,7 @@ class BreakInfinityMultiplierCostUpgrade extends BreakInfinityUpgrade {
     if (!this.isAvailable) return;
     this._setValue(this.effectValue - 1);
     const cost = this.cost;
-    player.infinityPoints = player.infinityPoints.minus(cost)
+    player.infinityPoints = player.infinityPoints.minus(cost);
     this._setCost(cost * this._costIncrease);
     GameUI.update();
   }

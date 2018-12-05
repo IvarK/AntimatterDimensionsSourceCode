@@ -1,3 +1,4 @@
 const GameDatabase = {
+  infinity: {},
   timeStudies: {}
 };

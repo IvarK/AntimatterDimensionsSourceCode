@@ -6,6 +6,7 @@ Vue.component("autobuyer-input", {
     return {
       isValid: true,
       actualValue: undefined,
+      isFocused: false,
       displayValue: "0"
     };
   },
@@ -25,6 +26,10 @@ Vue.component("autobuyer-input", {
   },
   methods: {
     update() {
+      if (this.isFocused) return;
+      this.fetchActualValue();
+    },
+    fetchActualValue() {
       const actualValue = this.getValue();
       if (!this.areEqual(this.actualValue, actualValue)) {
         this.actualValue = actualValue;
@@ -44,7 +49,8 @@ Vue.component("autobuyer-input", {
       return this.setup.getValue();
     },
     setValue(value) {
-      return this.setup.setValue(value);
+      this.setup.setValue(value);
+      this.displayValue = this.formatActualValue();
     },
     handleInput: function(event) {
       const input = event.target.value;
@@ -55,6 +61,9 @@ Vue.component("autobuyer-input", {
       }
       this.isValid = this.validate(input);
     },
+    handleFocus: function() {
+      this.isFocused = true;
+    },
     handleBlur: function() {
       if (this.displayValue === "69") {
         giveAchievement("Nice.");
@@ -62,8 +71,11 @@ Vue.component("autobuyer-input", {
       if (this.isValid) {
         this.setValue(this.actualValue);
       }
-      this.displayValue = this.formatActualValue();
+      else {
+        this.fetchActualValue();
+      }
       this.isValid = true;
+      this.isFocused = false;
     },
     formatActualValue() {
       return this.formatValue(this.getValue());
@@ -114,6 +126,7 @@ Vue.component("autobuyer-input", {
       :class="classObject"
       :type="inputType"
       @blur="handleBlur"
+      @focus="handleFocus"
       @input="handleInput"
     />`
 });

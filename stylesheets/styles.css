@@ -4671,6 +4671,19 @@ screen and (max-width: 480px) {
   justify-content: space-around;
 }
 
+.o-teresa-glyph-type {
+  padding: 12px;
+  background-color: #5151ec;
+  color: white;
+  margin-bottom: 7px;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+.sortable-drag {
+  cursor: grabbing;
+}
+
 /* #endregion teresa tab*/
 
 .c-performance-stats {

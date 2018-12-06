@@ -743,9 +743,9 @@ function getGlyphSacDescription(type) {
   }
 }
 
-function sacrificeGlyph(glyph) {
+function sacrificeGlyph(glyph, force = false) {
   let toGain = glyph.level * glyph.strength * Effarig.runRewardMultiplier;
-  if (!confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
+  if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
   if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))

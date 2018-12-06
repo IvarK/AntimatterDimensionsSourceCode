@@ -3,17 +3,22 @@ Vue.component('teresa-tab', {
     return {
       relicShards: 0,
       shardsGained: 0,
-      unlocks: []
+      unlocks: [],
+      typePriorities: ["Power", "Time", "Infinity", "Dilation", "Replication"]
     };
   },
   methods: {
     update() {
       this.relicShards = player.celestials.teresa.relicShards
       this.shardsGained = Teresa.shardsGained
-      this.unlocks = Object.values(TERESA_UNLOCKS).map(id => Teresa.has(id)).filter((x) => x)
+      this.unlocks = Object.values(TERESA_UNLOCKS).map(id => Teresa.has(id))
+      this.typePriorities = player.celestials.teresa.typePriorityOrder
     },
     buyUnlock(id, cost) {
       Teresa.buyUnlock(id, cost)
+    },
+    move() {
+      player.celestials.teresa.typePriorityOrder = this.typePriorities
     }
   },
   template:
@@ -27,7 +32,12 @@ Vue.component('teresa-tab', {
       </div>
       <button class="o-teresa-shop-button" @click="buyUnlock(3, 1e7)" :class="{ 'teresa-unlock-bought': unlocks[3] }">Unlock Teresa's reality.<br>Cost: 10 000 000 Relic Shards</button>
       <div class="l-teresa-glyph-settings">
-        <div v-if="unlocks[1]">Glyph type priorities here</div>
+        <div v-if="unlocks[1]">
+          Highest type will be picked, lowest sacrificed.
+          <draggable :list="typePriorities" @end="move()">
+            <div v-for="element in typePriorities" class="o-teresa-glyph-type">{{element}}</div>
+          </draggable>
+        </div>
         <div v-if="unlocks[0]">Glyph level adjuster here</div>
         <div v-if="unlocks[2]">Glyph effect weight settings here</div>
       </div>

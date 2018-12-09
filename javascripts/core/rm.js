@@ -405,7 +405,7 @@ function getGlyphTooltip(glyph) {
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength * Effarig.runRewardMultiplier).toFixed(2) + " power</span>";
   }
   tooltipText += "</div></span>"
   return tooltipText;
@@ -627,6 +627,7 @@ function buyRealityUpg(id) {
     $("#whupg2").show()
   }
   updateRealityUpgrades()
+  if (id == 19 || id == 21) generateGlyphTable();   // Add sacrifice value to tooltips
   updateWormholeUpgrades()
   return true
 }
@@ -760,7 +761,7 @@ function sacrificeGlyph(glyph, force = false) {
 }
 
 function updateGlyphDescriptions() {
-  let html = ""
+  let html = "Glyph Sacrifice Effects:<br><br>"
   for (let i in player.reality.glyphs.sac) {
     html += getGlyphSacDescription(i)
   }

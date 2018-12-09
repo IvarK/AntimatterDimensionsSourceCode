@@ -58,7 +58,7 @@ Vue.component('normal-dim-galaxy-row', {
   template:
     `<div class="c-normal-dim-row">
       <div
-        class="c-normal-dim-row__label c-normal-dim-row__label--growable" v-tooltip="galaxyTooltip"
+        class="c-normal-dim-row__label c-normal-dim-row__label--growable"
       >{{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>

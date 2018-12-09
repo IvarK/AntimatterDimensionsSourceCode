@@ -1614,13 +1614,13 @@ function gameLoop(diff) {
   if (player.reality.perks.includes(21)) perkFactor++;
   if (player.reality.perks.includes(24)) perkFactor++;
   let factorNames = ["EP", "Replicanti", "DT", "Eternities", "Perks"];
-  let factorNumbers = [EPFactor.toFixed(2), "x"+replFactor.toFixed(2), "x"+DTFactor.toFixed(2), "x"+eterFactor.toFixed(2), "+"+perkFactor]
+  let factorNumbers = [EPFactor.toFixed(3), "x"+replFactor.toFixed(3), "x"+DTFactor.toFixed(3), "x"+eterFactor.toFixed(3), "+"+perkFactor]
   let isFactorDisplayed = [true, true, true, player.reality.upg.includes(18), perkFactor != 0]
   let glyphLevelFactorText = 'Glyph level factors:<table style="width:100%">';
   for (let i = 0; i < factorNames.length; i++)
     if (isFactorDisplayed[i])
       glyphLevelFactorText += "<tr><td>" + factorNames[i] + "</td><td>" + factorNumbers[i] + "</td></tr>";
-  glyphLevelFactorText += "</table>";
+  glyphLevelFactorText += "</table>Note: Level is rounded, not floored.";
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   

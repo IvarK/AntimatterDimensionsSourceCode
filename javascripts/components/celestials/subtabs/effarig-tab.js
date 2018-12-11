@@ -80,7 +80,7 @@ Vue.component('effarig-tab', {
             </div>
             <div class="c-effarig-unlock-description" id="effarig-run-description">{{ shorten(5e12) }}: unlock Effarig's reality.</div>
             <div class="c-effarig-unlock-description" id="effarig-epgen-description">{{ shorten(1e15) }}: unlock Effarig's EP generation.</div>
-            <div class="c-effarig-unlock-description" id="effarig-teresa-description">{{ shorten(1e18) }}: unlock Teresa, Celestial of Ancient Relics.</div>
+            <div class="c-effarig-unlock-description" id="effarig-teresa-description">{{ shorten(5e16) }}: unlock Teresa, Celestial of Ancient Relics.</div>
             <div class="c-effarig-unlock-description" id="effarig-shop-description">{{ shorten(1e24) }}: unlock Perk Point Shop.</div>
           </div>
         </div>

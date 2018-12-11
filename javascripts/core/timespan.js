@@ -194,6 +194,9 @@ class TimeSpan {
    * @returns {String}
    */
   toString() {
+    if (this.years > 1e6) {
+      return shortenWithCurrentNotation(this.totalYears, 6, 0) + " years";
+    }
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
     }
@@ -234,8 +237,14 @@ class TimeSpan {
     else if (totalSeconds <= 60) {
       return `${totalSeconds.toFixed(2)} seconds`;
     }
-    else {
+    else if (this.totalHours < 10000) {
       return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+    }
+    else if (this.totalDays < 10000) {
+      return `${this.totalDays.toFixed(2)} days`;
+    }
+    else {
+      return `${shortenWithCurrentNotation(this.totalYears, 3, 0)} years`;
     }
     function format(value) {
       const s = value.toString();

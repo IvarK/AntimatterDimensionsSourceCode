@@ -369,12 +369,14 @@ var player = {
     teresa: {
       relicShards: 0,
       unlocks: [],
+      run: false,
       glyphWeights: {
         ep: 0.25,
         repl: 0.25,
         dt: 0.25,
         eternities: 0.25
-      }
+      },
+      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
     }
   },
   autoEcIsOn: true,

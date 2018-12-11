@@ -4632,10 +4632,59 @@ screen and (max-width: 480px) {
 
 #effarig-run-description { bottom: 52.912% } /* amount=5e12 */
 #effarig-epgen-description { bottom: 62.5% } /* amount=1e15 */
-#effarig-teresa-description { bottom: 75% } /* amount=1e18 */
+#effarig-teresa-description { bottom: 69.579% } /* amount=5e16 */
 #effarig-shop-description { bottom: 100% } /* amount=1e24 */
 
 /*#endregion Effarig tab*/
+
+/* #region teresa tab */
+
+.o-teresa-shop-button {
+  padding: 17px;
+  font-size: 2rem;
+  background-color: #5151ec;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.o-teresa-shop-button:hover {
+  background-color: #d0d0d0;
+  color: #5151ec;
+}
+
+.teresa-unlock-bought {
+  background-color: #d0d0d0;
+  color: #5151ec;
+  cursor: default;
+}
+
+.teresa-run-button {
+  width: 300px;
+}
+
+.l-teresa-glyph-settings {
+  display: flex;
+  justify-content: space-around;
+}
+
+.o-teresa-glyph-type {
+  padding: 12px;
+  background-color: #5151ec;
+  color: white;
+  margin-bottom: 7px;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+.sortable-drag {
+  cursor: grabbing;
+}
+
+/* #endregion teresa tab*/
 
 .c-performance-stats {
   width: 25rem;

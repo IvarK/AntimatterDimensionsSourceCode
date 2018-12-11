@@ -108,7 +108,8 @@ const breakInfinityUpgradeViewModels = () => [
       description: "Decrease Tickspeed cost multiplier growth by",
       formatComplexEffect: function() {
         const upgrade = BreakInfinityUpgrade.tickspeedCostMult;
-        const current = upgrade.maxValue - upgrade.effectValue;
+        let tickspeedScaleDecimalPoints = player.eternityChalls.eterc11 == undefined ? 0 : 3;
+        const current = (upgrade.maxValue - upgrade.effectValue).toFixed(tickspeedScaleDecimalPoints);
         if (upgrade.isBought) {
           return `${current}x`;
         }

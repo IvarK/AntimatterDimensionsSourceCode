@@ -4,7 +4,10 @@ var teresaQuotes = [
 ]
 
 const TERESA_UNLOCKS = {
-  ADJUSTER: 0
+  ADJUSTER: 0,
+  AUTOSACRIFICE: 1,
+  AUTOPICKER: 2,
+  RUN: 3
 }
 
 var Teresa = {

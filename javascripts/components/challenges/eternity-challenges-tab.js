@@ -192,7 +192,7 @@ const eternityChallengeVisuals = [
   },
   {
     /* EC8 */
-    description: "You can only upgrade Infinity Dimensions 50 times, and Replicanti upgrades 40 times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.",
+    description: "You can only upgrade Infinity Dimensions 50 times and Replicanti upgrades 40 times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.",
     reward: "Infinity Power powers up Replicanti galaxies",
     rewardValueTemplate: "{0}%",
     formatReward: reward => (reward * 100).toFixed(2)

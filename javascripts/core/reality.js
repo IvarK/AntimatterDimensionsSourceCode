@@ -39,6 +39,7 @@ function reality(force, reset, auto) {
         return
     }
     realizationCheck = 0;
+    if (player.reality.glyphs.inventory.length >= 100 && Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
     if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality && !force) {
         player.bestEternity = player.thisEternity
@@ -280,4 +281,19 @@ function startRealityOver() {
         realizationCheck = 1
         reality(true, true)
     }
+}
+
+function autoSacrificeGlyph() {
+  let list = []
+  let x = player.celestials.teresa.typePriorityOrder.length - 1
+  while(list.length == 0){
+    list = player.reality.glyphs.inventory.filter((g) => g.type == player.celestials.teresa.typePriorityOrder[x].toLowerCase())
+    x--
+  }
+  let toSacrifice = list.sort((a, b) => {
+                      if (a.level * a.strength > b.level * b.strength) return 1
+                      else return -1
+                    })[0]
+  sacrificeGlyph(toSacrifice, true)
+  
 }

@@ -25,6 +25,7 @@ function eternity(force, auto) {
     let temp = [];
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, gainedEternityPoints());
+    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     if (player.currentEternityChall !== "") {
         var challNum = parseInt(player.currentEternityChall.split("eterc")[1]);
         var completitions = 1;
@@ -34,12 +35,12 @@ function eternity(force, auto) {
             while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
             player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1;
             var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions;
-
+ 
             if (player.currentEternityChall === "eterc4" && totalCompletions >= maxEC4Valid)
                 completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall);
             if (player.currentEternityChall === "eterc12" && totalCompletions >= maxEC12Valid)
                 completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
-
+ 
         }
         if (player.currentEternityChall === "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2 * completitions).toFixed(1));
         if (player.currentEternityChall === "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07 * completitions).toFixed(2));
@@ -57,7 +58,7 @@ function eternity(force, auto) {
                 giveAchievement("5 more eternities until the update");
             }
         }
-
+ 
     }
     for (let i = 0; i < player.challenges.length; i++) {
         if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
@@ -122,9 +123,9 @@ function eternity(force, auto) {
     player.eterc8repl = 40;
     player.dimlife = true;
     player.dead = true;
-
+ 
     player.dilation.active = false;
-
+ 
     fullResetInfDimensions();
     eternityResetReplicanti();
     resetChallengeStuff();
@@ -136,7 +137,7 @@ function eternity(force, auto) {
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     document.getElementById("respec").className = "storebtn";
-
+ 
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
       player.challenges.push("challenge1");
       Autobuyer.tryUnlockAny();
@@ -150,7 +151,6 @@ function eternity(force, auto) {
     EPminpeak = new Decimal(0);
     updateMilestones();
     resetTimeDimensions();
-    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     try {
         kong.submitStats('Eternities', player.eternities);
     } catch (err) {
@@ -159,7 +159,6 @@ function eternity(force, auto) {
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     updateEternityUpgrades();
     resetTickspeed();
-    resetMoney();
     playerInfinityUpgradesOnEternity();
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
@@ -171,7 +170,7 @@ function eternity(force, auto) {
     if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
     if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
-
+ 
     if (player.reality.upg.includes(13)) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
@@ -180,15 +179,15 @@ function eternity(force, auto) {
             }
         }
     }
-
+ 
     if (player.eternityUpgrades.length < 3 && player.reality.perks.includes(81)) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(1).add(2).add(3)];
     }
-
+ 
     if (player.eternityUpgrades.length < 6 && player.reality.perks.includes(82)) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
     }
-
+ 
     if (!player.achievements.includes("r143") && player.lastTenEternities[9][1] !== 1) {
         var n = 0;
         for (i = 0; i < 9; i++) {
@@ -196,11 +195,12 @@ function eternity(force, auto) {
         }
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
     }
-
-
+ 
+    resetMoney();
+ 
     return true;
 }
-
+ 
 function eternityResetReplicanti() {
     player.replicanti.amount = player.eternities >= 50 ? new Decimal(1) : new Decimal(0);
     player.replicanti.unl = player.eternities >= 50;
@@ -213,7 +213,7 @@ function eternityResetReplicanti() {
     player.replicanti.galCost = new Decimal(1e170);
     player.replicanti.galaxybuyer = (player.eternities > 1) ? player.replicanti.galaxybuyer : undefined;
 }
-
+ 
 function fullResetInfDimensions() {
     const cost = [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
     for (let i = 0; i < 8; i++) {
@@ -225,7 +225,7 @@ function fullResetInfDimensions() {
         dimension.baseAmount = 0;
     }
 }
-
+ 
 function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
         return true;
@@ -234,14 +234,14 @@ function askEternityConfirmation() {
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
 }
-
+ 
 function resetInfinityPointsOnEternity() {
   resetInfinityPoints();
   if (isAchEnabled("r104")) {
     player.infinityPoints = player.infinityPoints.max(2e25);
   }
 }
-
+ 
 function resetInfinityPoints() {
   let ip = 0;
   if (player.reality.perks.includes(54)) ip = 2e130;

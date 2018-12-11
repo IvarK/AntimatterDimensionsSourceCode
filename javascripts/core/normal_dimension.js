@@ -439,7 +439,21 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       bought += 10 * buying;
       pow = pow.times(Decimal.pow(dimensionPowerMultiplier, buying));
 
-      let newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
+      let newCost = null;
+      let postInfBuyOriginal = postInfBuy;
+      postInfBuy++;
+
+      do
+      {
+          postInfBuy--;
+          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
+      }
+      while (newCost.gt(money) && postInfBuy >= 0);
+
+      if (postInfBuyOriginal < postInfBuy)
+      {
+        console.log("Had to decrease postInfBuy. Tier = " + tier + ", a = " + a + ", b = " + b + ", c = " + c + ", discriminant = " + discriminant + ", buying = " + buying + ", amount = " + amount + ", preInfBuy = " + preInfBuy + ", postInfBuy = " + postInfBuy + ", postInfBuyOriginal = " + postInfBuyOriginal + ", postInfInitCost = ", + postInfInitCost.toString() + " , bought = " + bought + ", newCost = " + newCost.toString() + ", money = " + money.toString() + ".");
+      }
 
       costMultiplier.fromDecimal(costMults[tier].times(Decimal.pow(dimensionMultDecrease, postInfBuy + 1)));
       money = money.minus(newCost).max(0);

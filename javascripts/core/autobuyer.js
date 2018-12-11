@@ -408,7 +408,7 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
     if (this.maxDimBoosts <= player.resets && this.galaxies > player.galaxies) {
       return;
     }
-    if (this.isBulkBuyUnlocked) {
+    if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
       if (!DimBoost.bulkRequirement(this.bulk).isSatisfied) return;
       softReset(this.bulk);
     }

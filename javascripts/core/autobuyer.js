@@ -409,8 +409,9 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
       return;
     }
     if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
-      if (!DimBoost.bulkRequirement(this.bulk).isSatisfied) return;
-      softReset(this.bulk);
+      var bulk = Math.max(this.bulk, 1);
+      if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
+      softReset(bulk);
     }
     else {
       if (!DimBoost.requirement.isSatisfied) return;

@@ -242,7 +242,11 @@ function unlock(current) {
     case "ec":
       if (!player.reality.automatorCommands.includes(64)) return false
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
-      if ( document.getElementById("ec" + current.id + "unl").click() ) return true
+      justImported = true;
+      if ( document.getElementById("ec" + current.id + "unl").click() ) {
+        justImported = false;
+        return true;
+      }
       else return false
       break;
     case "dilation":

@@ -389,6 +389,13 @@ dev.updateTestSave = function() {
     convertAutobuyerMode();
     player.options.testVersion = 22;
   }
+
+  if (player.options.testVersion === 22) {
+      for (i in player.celestials.teresa.glyphWeights) {
+          player.celestials.teresa.glyphWeights[i] *= 100
+      }
+    player.options.testVersion = 23;
+  }
 }
 
 // Still WIP

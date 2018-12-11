@@ -4666,6 +4666,18 @@ screen and (max-width: 480px) {
   width: 300px;
 }
 
+.o-teresa-slider {
+  font-size: 1.2rem;
+  background-color: #5151ec;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 20rem;
+  cursor: default;
+  margin: 0.4rem;
+  padding: 0.5rem;
+}
+
 .l-teresa-glyph-settings {
   display: flex;
   justify-content: space-around;

@@ -3,7 +3,8 @@ Vue.component('teresa-tab', {
     return {
       relicShards: 0,
       shardsGained: 0,
-      unlocks: []
+      unlocks: [],
+      weights: player.celestials.teresa.glyphWeights
     };
   },
   methods: {
@@ -12,8 +13,37 @@ Vue.component('teresa-tab', {
       this.shardsGained = Teresa.shardsGained
       this.unlocks = player.celestials.teresa.unlocks
     },
+    adjustWeights() {
+      player.celestials.teresa.glyphWeights.ep = this.weights.ep
+    },
     buyUnlock(id, cost) {
       Teresa.buyUnlock(id, cost)
+    }
+  },
+  components: {
+    "glyph-weight-sliders": {
+      props: {
+        value: {
+          type: Number,
+          default: 50
+        },
+        name: {
+          type: String
+        }, 
+      },
+      template:
+        `<div class="o-primary-btn o-primary-btn--option o-primary-btn--update-rate l-options-grid__button"> 
+          <b>{{ name }} weight: {{ value }}%</b>
+          <input
+            style="font-size: 1.2rem"
+            :value="value"
+            class="o-primary-btn--update-rate__slider"
+            type="range"
+            min="0"
+            max="100"
+            @input="emitInput(parseInt($event.target.value))"
+          />
+         </div>`
     }
   },
   template:
@@ -24,5 +54,7 @@ Vue.component('teresa-tab', {
         <button class="o-teresa-shop-button" @click="buyUnlock(0, 50000)">Unlock glyph level adjustment.<br>Cost: 50 000 Relic Shards</button>
       </div>
       <div>Glyph level adjuster here</div>
+      <glyph-weight-sliders v-model="weights.ep" name="EP" oninput="adjustWeights()"/>
+      <glyph-weight-sliders v-model="weights.repl" name="Replicanti" oninput="adjustWeights()"/>
     </div>`
 });

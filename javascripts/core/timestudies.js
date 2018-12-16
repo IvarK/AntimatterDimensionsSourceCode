@@ -540,8 +540,8 @@ function importStudyTree(input) {
   }
 };
 
-function studyTreeSaveButton(num) {
-    if (shiftDown) {
+function studyTreeSaveButton(num, forceSave) {
+    if (shiftDown || forceSave) {
         localStorage.setItem("studyTree"+num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
         ui.notify.info("Study tree "+num+" saved")
     } else if (localStorage.getItem("studyTree"+num) !== null && localStorage.getItem("studyTree"+num) !== "|0") {

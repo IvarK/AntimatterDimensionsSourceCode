@@ -83,15 +83,13 @@ Vue.component('tt-shop', {
   template:
     `<div id="TTbuttons" v-if="$viewModel.ttshop">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
-        <div class="ttbuttons-row ttbuttons-top-row">
+        <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <button class="timetheorembtn" style="width:130px; white-space:nowrap;" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
           <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">
             <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(1)">1</button>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(2)">2</button>
-            <button class="timetheorembtn tt-save-load-btn" onclick="studyTreeSaveButton(3)">3</button>
+            <tt-save-load-button v-for="saveslot in 3" :key="saveslot" v-bind:saveslot="saveslot"></tt-save-load-button>
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
@@ -104,6 +102,43 @@ Vue.component('tt-shop', {
         <span id="minimizeArrow" :style="minimizeArrowStyle">▼</span>
       </button>
     </div>`
+});
+
+Vue.component('tt-save-load-button', {
+  props: ['saveslot'],
+  data: function() { return {
+    msg: 'Hold to save',
+    showTip: false,
+  }},
+  template:
+    `<button class="timetheorembtn tt-save-load-btn"
+             v-tooltip="{
+               content: msg,
+               placement: 'top',
+               show: showTip,
+               trigger: 'manual'
+             }">{{saveslot}}</button>`,
+  mounted: function() {
+    var _this = this;
+    LongPress.addTo(this.$el, 1000, {
+      longPress: function(e) {
+        studyTreeSaveButton(_this.saveslot, true)
+        _this.msg = 'Saved'
+      },
+      cancel: null,
+      click: function(e) {
+        studyTreeSaveButton(_this.saveslot, false);
+      }
+    })
+    var resetTip = function() {
+      _this.showTip = false;
+      _this.msg = 'Hold to save';
+    }
+    // In order for the tip to pop up on mobile, need to manage it manually:
+    $(this.$el).hover(function(e) { _this.showTip = true; }, resetTip);
+    $(this.$el).on("touchstart", function(e) { _this.showTip = true; });
+    $(this.$el).on("touchend touchleave touchcancel", resetTip);
+  },
 });
 
 Vue.component('tt-buy-button', {

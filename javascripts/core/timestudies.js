@@ -554,3 +554,22 @@ function toggleTTAutomation() {
   player.ttbuyer = !player.ttbuyer
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
 }
+
+// Add long-press to all studies as shift click alternative
+$(document).ready(function() {
+  all.forEach(function(id) {
+    obj = document.getElementById(id);
+    if (obj.onclick) {
+      var savedHandler = obj.onclick;
+      LongPress.addTo(obj, 750, {
+        longPress : function(e) {
+          var savedShiftDown = shiftDown;
+          shiftDown = true;
+          savedHandler();
+          shiftDown = savedShiftDown;
+        },
+        click : savedHandler
+      })
+    }
+  });
+});

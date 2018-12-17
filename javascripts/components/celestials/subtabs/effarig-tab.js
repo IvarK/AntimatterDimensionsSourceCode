@@ -71,7 +71,9 @@ Vue.component('effarig-tab', {
         <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 
             @mousedown="pour = true"
+            @touchstart="pour = true"
             @mouseup="pour = false"
+            @touchend="pour = false"
             @mouseleave="pour = false"
           >Pour RM</button>
           <div class="c-rm-store">

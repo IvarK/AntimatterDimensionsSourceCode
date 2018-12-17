@@ -137,7 +137,14 @@ Vue.component('tt-save-load-button', {
     // In order for the tip to pop up on mobile, need to manage it manually:
     $(this.$el).hover(function(e) { _this.showTip = true; }, resetTip);
     $(this.$el).on("touchstart", function(e) { _this.showTip = true; });
-    $(this.$el).on("touchend touchleave touchcancel", resetTip);
+    $(this.$el).on("touchend touchcancel", resetTip);
+    $(this.$el).on("touchmove", function(e) {
+      e.preventDefault();  // suggested in stackoverflow example
+      var t = e.changedTouches[0];
+      if (_this.$el !== document.elementFromPoint(t.pageX,t.pageY)) {
+        resetTip();
+      }
+    })
   },
 });
 

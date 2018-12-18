@@ -74,6 +74,7 @@ class LongPressC {
     this._currentCancelHandler = cancel_handler;
     this._wasLongPress = false;
     this._currentTarget = e.target;
+    e.target.focus();
     this._pressTimer = setTimeout(function () {
       _this._wasLongPress = true;
       handler(e);

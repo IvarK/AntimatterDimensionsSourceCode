@@ -366,8 +366,8 @@ function toggle(current) {
 }
 
 
-function automatorSaveButton(num) {
-  if (shiftDown) {
+function automatorSaveButton(num, forceSave) {
+  if (shiftDown || forceSave) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
       ui.notify.info(`Automator script ${num} saved`);
   } else {

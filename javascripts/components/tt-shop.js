@@ -89,7 +89,7 @@ Vue.component('tt-shop', {
           <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
           <div style="display: flex; flex-direction: row; align-items: center">
             <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
-            <tt-save-load-button v-for="saveslot in 3" :key="saveslot" v-bind:saveslot="saveslot"></tt-save-load-button>
+            <tt-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
@@ -105,11 +105,15 @@ Vue.component('tt-shop', {
 });
 
 Vue.component('tt-save-load-button', {
-  props: ['saveslot'],
-  data: function() { return {
-    msg: 'Hold to save',
-    showTip: false,
-  }},
+  props: {
+    'saveslot': Number
+  },
+  data: () => {
+    return {
+      msg: 'Hold to save',
+      showTip: false,
+    }
+  },
   template:
     `<button class="timetheorembtn tt-save-load-btn"
              v-tooltip="{
@@ -118,30 +122,27 @@ Vue.component('tt-save-load-button', {
                show: showTip,
                trigger: 'manual'
              }">{{saveslot}}</button>`,
-  mounted: function() {
-    var _this = this;
+  mounted: function () {
     LongPress.addTo(this.$el, 1000, {
-      longPress: function(e) {
-        studyTreeSaveButton(_this.saveslot, true)
-        _this.msg = 'Saved'
+      longPress: (e) => {
+        studyTreeSaveButton(this.saveslot, true)
+        this.msg = 'Saved'
       },
       cancel: null,
-      click: function(e) {
-        studyTreeSaveButton(_this.saveslot, false);
-      }
+      click: (e) => { studyTreeSaveButton(this.saveslot, false); }
     })
-    var resetTip = function() {
-      _this.showTip = false;
-      _this.msg = 'Hold to save';
+    var resetTip = () => {
+      this.showTip = false;
+      this.msg = 'Hold to save';
     }
     // In order for the tip to pop up on mobile, need to manage it manually:
-    $(this.$el).hover(function(e) { _this.showTip = true; }, resetTip);
-    $(this.$el).on("touchstart", function(e) { _this.showTip = true; });
+    $(this.$el).hover((e) => { this.showTip = true; }, resetTip);
+    $(this.$el).on("touchstart", (e) => { this.showTip = true; });
     $(this.$el).on("touchend touchcancel", resetTip);
-    $(this.$el).on("touchmove", function(e) {
+    $(this.$el).on("touchmove", (e) => {
       e.preventDefault();  // suggested in stackoverflow example
       var t = e.changedTouches[0];
-      if (_this.$el !== document.elementFromPoint(t.pageX,t.pageY)) {
+      if (this.$el !== document.elementFromPoint(t.pageX, t.pageY)) {
         resetTip();
       }
     })

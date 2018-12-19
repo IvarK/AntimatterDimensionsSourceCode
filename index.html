@@ -580,7 +580,7 @@
                     <div>
                         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
                             <p id="automatorloadsavetext">load:</p>
-                            <automator-save-load-button v-for="saveslot in 3" :key="saveslot" v-bind:saveslot="saveslot"></automator-save-load-button>
+                            <automator-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></automator-save-load-button>
                             <label for="automatorOn" style="margin-left: 40px;">on:</label>
                             <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOnOff()">
                         </div>

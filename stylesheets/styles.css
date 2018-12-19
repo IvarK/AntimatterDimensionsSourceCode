@@ -335,6 +335,16 @@ button {
     color: white;
 }
 
+.automator-save-load-btn {
+  width:30px;
+  height: 30px;
+  font-size: 1.2rem;
+  display: block;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
 .celestialtabbtn {
   background-color: rgb(81, 81, 236);
   border: 2px solid rgb(208, 208, 208);

@@ -87,7 +87,7 @@ Vue.component('teresa-tab', {
             <div v-for="element in typePriorities" class="o-teresa-glyph-type">{{element}}</div>
           </draggable>
         </div>
-        <div v-if="unlocks[0]" style="display: none;">
+        <div v-if="unlocks[0]">
           <div>
             <glyph-weight-sliders v-model="weights.ep" name="EP" @input="adjustWeights('ep')"/>
             <glyph-weight-sliders v-model="weights.repl" name="Replicanti" @input="adjustWeights('repl')"/>

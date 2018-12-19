@@ -76,7 +76,7 @@ function getReplicantiInterval(noMod, interval) {
     if (player.timestudy.studies.includes(62)) interval = interval/3
     if (player.timestudy.studies.includes(133) || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
-    if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[1])
+    if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
     if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && isAchEnabled("r134")) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE) && !noMod) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)

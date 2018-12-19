@@ -223,6 +223,11 @@ const glyphEffectSoftcaps = {
   },
   timefreeTickMult(value) { // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
     return value != 0 ? Math.max(1e-5, value) : 0;
+  },
+  replicationpow(value) {
+    const T = 8;
+    const S = 1; // softness; 1: 12->10, 20->12, 32->14
+    return value < T ? value : T - S + Math.sqrt(2*S*(value-T-S/2));
   }
 };
 

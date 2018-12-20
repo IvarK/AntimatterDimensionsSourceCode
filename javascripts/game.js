@@ -585,9 +585,9 @@ function updateLastTenEternities() {
       .dividedBy(player.lastTenEternities.length);
 }
 
-function addEternityTime(time, ep) {
+function addEternityTime(time, realTime, ep) {
     player.lastTenEternities.pop();
-    player.lastTenEternities.unshift([time, ep]);
+    player.lastTenEternities.unshift([time, ep, realTime]);
 }
 
 var averageRm = new Decimal(0)
@@ -598,15 +598,15 @@ function updateLastTenRealities() {
     .dividedBy(player.lastTenRealities.length);
 }
 
-function addRealityTime(time, rm, level) {
+function addRealityTime(time, realTime, rm, level) {
     player.lastTenRealities.pop();
-    player.lastTenRealities.unshift([time, rm, level]);
+    player.lastTenRealities.unshift([time, rm, level, realTime]);
 }
 
 
-function addTime(time, ip) {
+function addTime(time, realTime, ip) {
     player.lastTenRuns.pop();
-    player.lastTenRuns.unshift([time, ip]);
+    player.lastTenRuns.unshift([time, ip, realTime]);
 }
 
 var infchallengeTimes = 999999999
@@ -1411,8 +1411,11 @@ function gameLoop(diff) {
     if (player.reality.perks.includes(91)) player.reality.lastAutoEC += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
+    player.thisInfinityRealTime += diff / speedFactor
     player.thisEternity += diff
+    player.thisEternityRealTime += diff / speedFactor
     player.thisReality += diff
+    player.thisRealityRealTime += diff / speedFactor
 
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {

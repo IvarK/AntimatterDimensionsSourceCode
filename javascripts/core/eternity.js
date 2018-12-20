@@ -24,7 +24,7 @@ function eternity(force, auto) {
     if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!");
     let temp = [];
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(player.thisEternity, gainedEternityPoints());
+    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     if (player.currentEternityChall !== "") {
         var challNum = parseInt(player.currentEternityChall.split("eterc")[1]);
@@ -86,6 +86,7 @@ function eternity(force, auto) {
     player.infinitied = 0;
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
+    player.thisInfinityRealTime = 0;
     player.resets = (player.eternities >= 4) ? 4  : 0;
     player.galaxies = (player.eternities >= 4) ? 1  : 0;
     player.tickDecrease = 0.9;
@@ -95,7 +96,7 @@ function eternity(force, auto) {
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break= player.eternities >= 2 ? player.break : false;
-    player.lastTenRuns = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
+    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease= player.eternities >= 20 ? player.tickSpeedMultDecrease : 10;
@@ -108,6 +109,7 @@ function eternity(force, auto) {
     player.timeShards = new Decimal(0);
     player.tickThreshold = new Decimal(1);
     player.thisEternity = 0;
+    player.thisEternityRealTime = 0;
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;

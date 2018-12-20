@@ -15,5 +15,6 @@ Vue.component('past-eternities-tab', {
       plural="Eternities"
       points="EP"
       :reward="reward"
+      :real-time-index=2
     />`
 });

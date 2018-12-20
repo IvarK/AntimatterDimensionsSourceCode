@@ -207,6 +207,9 @@ function onLoad() {
         player.thisInfinityTime*= 100;
         player.thisEternity *= 100;
         player.thisReality *= 100;
+        player.thisInfinityRealTime = player.thisInfinity;
+        player.thisEternityRealTime = player.thisEternity;
+        player.thisRealityRealTime = player.thisReality;
         if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
         else player.bestInfinityTime *= 100;
         if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
@@ -214,6 +217,8 @@ function onLoad() {
         for (var i=0; i<10; i++) {
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
+            player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
+            player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
         }
         for (var i=0; i<11; i++) {
             setChallengeTime(i, player.challengeTimes[i] * 100);

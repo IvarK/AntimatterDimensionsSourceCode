@@ -95,6 +95,19 @@ const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get thisInfinityRealTime() {
+    return this.formMilliseconds(() => player.thisInfinityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisInfinityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisInfinityRealTime = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get bestInfinity() {
     return this.formMilliseconds(() => player.bestInfinityTime);
   },
@@ -121,6 +134,19 @@ const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get thisEternityRealTime() {
+    return this.formMilliseconds(() => player.thisEternityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisEternityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisEternityRealTime = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get bestEternity() {
     return this.formMilliseconds(() => player.bestEternity);
   },
@@ -129,5 +155,31 @@ const Time = {
    */
   set bestEternity(timespan) {
     this.toMilliseconds(timespan, value => player.bestEternity = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisReality() {
+    return this.formMilliseconds(() => player.thisReality);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisReality(timespan) {
+    this.toMilliseconds(timespan, value => player.thisReality = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisRealityRealTime() {
+    return this.formMilliseconds(() => player.thisRealityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisRealityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisRealityRealTime = value);
   },
 };

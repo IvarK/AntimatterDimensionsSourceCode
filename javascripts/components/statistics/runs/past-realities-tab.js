@@ -16,5 +16,6 @@ Vue.component('past-realities-tab', {
       plural="Realities"
       points="RM"
       :reward="reward"
+      :real-time-index=3
     />`
 });

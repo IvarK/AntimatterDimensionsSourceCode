@@ -402,7 +402,21 @@ dev.updateTestSave = function() {
     for (i in player.celestials.teresa.glyphWeights) {
         player.celestials.teresa.glyphWeights[i] = 25
     }
-  player.options.testVersion = 24;
+    player.options.testVersion = 24;
+  }
+
+  if (player.options.testVersion === 24) {
+    // following logic from autobuyers (before the addition of wall clock time stats)
+    var speedup = getGameSpeedupFactor(false);
+    player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
+    player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
+    player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
+    for (var i=0; i<10; i++) {
+      player.lastTenRuns[i][2] = undefined;
+      player.lastTenEternities[i][2] = undefined;
+      player.lastTenRealities[i][3] = undefined;
+    }
+    player.options.testVersion = 25;
   }
 }
 

@@ -1,6 +1,6 @@
 Vue.component('automator-save-load-button', {
   props: {
-    'saveslot' : Number
+    saveslot : Number
   },
   data: function () {
     return {
@@ -8,14 +8,19 @@ Vue.component('automator-save-load-button', {
       showTip: false,
     }
   },
+  computed: {
+    tooltip: function () {
+      return {
+        content: this.msg,
+        placement: 'top',
+        show: this.showTip,
+        trigger: 'manual'
+      };
+    }
+  },
   template:
-    `<button class="realitytabbtn automator-save-load-btn"
-             v-tooltip="{
-               content: msg,
-               placement: 'top',
-               show: showTip,
-               trigger: 'manual'
-             }">{{saveslot}}</button>`,
+    `<button class="realitytabbtn automator-save-load-btn" v-tooltip="tooltip">{{saveslot}}</button>`,
+
   mounted: function () {
     LongPress.addTo(this.$el, 1000, {
       longPress: (e) => {
@@ -28,8 +33,6 @@ Vue.component('automator-save-load-button', {
       }
     })
     var resetTip = () => {
-      this.showTip = false;
-      this.msg = 'Hold to save';
     }
     // In order for the tip to pop up on mobile, need to manage it manually:
     $(this.$el).hover(e => { this.showTip = true; }, resetTip);

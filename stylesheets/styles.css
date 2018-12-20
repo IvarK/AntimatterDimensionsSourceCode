@@ -336,13 +336,13 @@ button {
 }
 
 .automator-save-load-btn {
-  width:30px;
-  height: 30px;
+  width:3rem;
+  height: 3rem;
   font-size: 1.2rem;
   display: block;
   cursor: pointer;
-  border-radius: 4px;
-  margin-left: 5px;
+  border-radius: .4rem;
+  margin-left: .5rem;
 }
 
 .celestialtabbtn {

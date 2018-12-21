@@ -224,6 +224,13 @@ const glyphEffectSoftcaps = {
   timefreeTickMult(value) { // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
     return value != 0 ? Math.max(1e-5, value) : 0;
   }
+  /*, I'm leaving this as as template for other caps; this provides a smooth transition,
+  unlike, say, the dilationpow cap above
+  replicationpow(value) {
+    const T = 8;
+    const S = 1; // softness; 1: 12->10, 20->12, 32->14
+    return value < T ? value : T - S + Math.sqrt(2*S*(value-T-S/2));
+  }*/
 };
 
 // Used for applying glyph effect softcaps if applicable
@@ -249,15 +256,14 @@ function getTotalEffect(effectKey) {
     if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
       if (totalEffect == 0) {
         totalEffect = currGlyph.effects[effect];
-      }
-      else {  // Combine the effects appropriately (some are additive)
+      } else {  // Combine the effects appropriately (some are additive)
         if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
           totalEffect += currGlyph.effects[effect];
-        }
-        else if (effectKey === "powermult") { // This is a Decimal
+        } else if (effectKey == "replicationpow") {
+          totalEffect = currGlyph.effects[effect] + totalEffect - 1;
+        } else if (effectKey === "powermult") { // This is a Decimal
           totalEffect = totalEffect.times(currGlyph.effects[effect]);
-        }
-        else {
+        } else {
           totalEffect *= currGlyph.effects[effect];
         }
       }

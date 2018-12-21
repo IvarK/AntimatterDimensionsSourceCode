@@ -1,4 +1,22 @@
 'use strict';
+
+// There's a vue directive, long-press, defined at the bottom, which may be
+// what you want to use.
+
+// LongPress produces 3 possible events:
+// 1) a long press (longPress property in handlers)
+// 2) a long press cancellation (early release, cancel property)
+// 3) a click (a short click, click property)
+//
+// Don't add your own click handlers to the object; get your clicks through
+// LongPress
+//
+// The long-press directive (v-long-press="{ delay:1000 }")
+// attaches LongPress for you, and emits the following events you can listen for:
+// long-press
+// long-press-cancel
+// long-press-click
+
 class LongPress {
   static initializeVars() {
     LongPress._wasLongPress = false;    
@@ -91,3 +109,20 @@ class LongPress {
 }
 
 LongPress.initializeVars();
+
+Vue.directive('long-press', {
+  bind: function (el, binding, vnode) {
+    // This seems to be the only way to get events to our component
+    var emit = (name, data) => {
+      var handlers = (vnode.data && vnode.data.on);
+      if (handlers && handlers[name]) {
+        handlers[name].fns(data)
+      }
+    }
+    LongPress.addTo(el, binding.value.delay, {
+      longPress: (e) => emit('long-press'),
+      cancel: (e) => emit('long-press-cancel'),
+      click: (e) => emit('long-press-click'),
+    });
+  }
+});

@@ -114,38 +114,47 @@ Vue.component('tt-save-load-button', {
       showTip: false,
     }
   },
-  template:
-    `<button class="timetheorembtn tt-save-load-btn"
-             v-tooltip="{
-               content: msg,
-               placement: 'top',
-               show: showTip,
-               trigger: 'manual'
-             }">{{saveslot}}</button>`,
-  mounted: function () {
-    LongPress.addTo(this.$el, 1000, {
-      longPress: (e) => {
-        studyTreeSaveButton(this.saveslot, true)
-        this.msg = 'Saved'
-      },
-      cancel: null,
-      click: (e) => { studyTreeSaveButton(this.saveslot, false); }
-    })
-    var resetTip = () => {
-      this.showTip = false;
-      this.msg = 'Hold to save';
+  computed: {
+    tooltip: function () {
+      return {
+        content: this.msg,
+        placement: 'top',
+        show: this.showTip,
+        trigger: 'manual'
+      };
+    },
+    listeners: function () {
+      return Object.assign({}, this.$listeners, {
+        touchstart: e => this.showTip = true,
+        mouseover: e => this.showTip = true,
+        mouseout: e => this.resetTip(),
+        touchend: e => this.resetTip(),
+        touchcancel: e => this.resetTip(),
+        touchmove: e => {
+          e.preventDefault();  // suggested in stackoverflow example
+          var t = e.changedTouches[0];
+          if (this.$el !== document.elementFromPoint(t.pageX, t.pageY)) {
+            this.resetTip();
+          }
+        },
+        'long-press': e => {
+          studyTreeSaveButton(this.saveslot, true)
+          this.msg = 'Saved'
+        },
+        'long-press-click': e => {
+          studyTreeSaveButton(this.saveslot, false);
+        }
+      });
     }
-    // In order for the tip to pop up on mobile, need to manage it manually:
-    $(this.$el).hover((e) => { this.showTip = true; }, resetTip);
-    $(this.$el).on("touchstart", (e) => { this.showTip = true; });
-    $(this.$el).on("touchend touchcancel", resetTip);
-    $(this.$el).on("touchmove", (e) => {
-      e.preventDefault();  // suggested in stackoverflow example
-      var t = e.changedTouches[0];
-      if (this.$el !== document.elementFromPoint(t.pageX, t.pageY)) {
-        resetTip();
-      }
-    })
+  },
+  template:
+    `<button class="timetheorembtn tt-save-load-btn" v-on="listeners"
+             v-tooltip="tooltip" v-long-press="{ delay: 1000 }">{{saveslot}}</button>`,
+  methods: {
+    resetTip: function () {
+      this.msg = 'Hold to save';
+      this.showTip = false;
+    }
   },
 });
 

@@ -46,7 +46,7 @@ function reality(force, reset, auto) {
     }
     giveAchievement("Snap back to reality");
     if (!reset) player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    if (!reset) addRealityTime(player.thisReality, gainedRealityMachines(), gainedGlyphLevel());
+    if (!reset) addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
     if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3 && !reset ) unlockRealityUpgrade(9);
     if(!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
         var tempBool = true;
@@ -96,6 +96,7 @@ function reality(force, reset, auto) {
     player.infinitiedBank = 0;
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
+    player.thisInfinityRealTime = 0;
     player.resets = player.reality.upg.includes(10) ? 4 : 0;
     player.galaxies = player.reality.upg.includes(10) ? 1 : 0;
     player.tickDecrease = 0.9;
@@ -106,8 +107,8 @@ function reality(force, reset, auto) {
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break = player.reality.upg.includes(10) ? player.break : false;
-    player.lastTenRuns = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
-    player.lastTenEternities = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
+    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+    player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
@@ -123,6 +124,7 @@ function reality(force, reset, auto) {
     player.eternityPoints = new Decimal(0);
     player.eternities = 0;
     player.thisEternity = 0;
+    player.thisEternityRealTime = 0;
     player.bestEternity = 999999999999;
     player.eternityUpgrades = [];
     player.epmult = new Decimal(1);
@@ -153,6 +155,7 @@ function reality(force, reset, auto) {
     if (!reset) player.realities = player.realities + 1;
     if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
     player.thisReality = 0;
+    player.thisRealityRealTime = 0;
     player.timestudy.theorem = 0;
     player.timestudy.amcost = new Decimal("1e20000");
     player.timestudy.ipcost = new Decimal(1);

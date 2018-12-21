@@ -7,13 +7,19 @@ const pastRunsMixin = {
 };
 
 Vue.component('past-runs-tab', {
+  data: function() {
+    return {
+      isRealityUnlocked: false,
+    };
+  },
   mixins: [pastRunsMixin],
   props: {
     runs: Array,
     singular: String,
     plural: String,
     points: String,
-    reward: Function
+    reward: Function,
+    realTimeIndex: Number,
   },
   computed: {
     averageRun: function() {
@@ -21,6 +27,9 @@ Vue.component('past-runs-tab', {
     }
   },
   methods: {
+    update: function() {
+      this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
+    },
     averageGain: function(time, amount) {
       let rpm = ratePerMinute(amount, time);
       let tempstring = shorten(rpm) + " " + this.points + "/min";
@@ -34,6 +43,9 @@ Vue.component('past-runs-tab', {
     },
     runTime(run) {
       return timeDisplayShort(run[0]);
+    },
+    realRunTime(run) {
+      return run[this.realTimeIndex] == undefined ? "unrecorded" : timeDisplayShort(run[this.realTimeIndex]);
     }
   },
   template:
@@ -41,6 +53,7 @@ Vue.component('past-runs-tab', {
       <br>\
       <div v-for="(run, index) in runs" :key="index">\
         <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\
+        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>\
         <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>\
       </div>\
       <br>\

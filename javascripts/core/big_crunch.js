@@ -36,7 +36,7 @@ function bigCrunchReset() {
     }
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-    addTime(player.thisInfinityTime, infinityPoints);
+    addTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
     if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
@@ -116,6 +116,7 @@ function secondSoftReset() {
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
+    player.thisInfinityRealTime = 0;
     Marathon2 = 0;
 }
 

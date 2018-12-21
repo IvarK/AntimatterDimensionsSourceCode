@@ -10,6 +10,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.infinitied = 0;
     player.bestInfinityTime = 9999999999;
     player.thisInfinityTime = 0;
+    player.thisInfinityRealTime = 0;
     player.resets = (player.eternities >= 4) ? 4 : 0;
     player.galaxies = (player.eternities >= 4) ? 1 : 0;
     player.tickDecrease = 0.9;
@@ -17,7 +18,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.partInfinitied = 0;
     player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
     player.tickspeedMultiplier = new Decimal(10);
-    player.lastTenRuns = [[600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)], [600 * 60 * 24 * 31, new Decimal(1)]];
+    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease = player.eternities >= 20 ? player.tickSpeedMultDecrease : 10;
@@ -30,6 +31,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.timeShards = new Decimal(0);
     player.tickThreshold = new Decimal(1);
     player.thisEternity = 0;
+    player.thisEternityRealTime = 0;
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;

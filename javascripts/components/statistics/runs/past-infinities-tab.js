@@ -15,5 +15,6 @@ Vue.component('past-infinities-tab', {
       plural="Infinities"
       points="IP"
       :reward="reward"
+      :real-time-index=2
     />`
 });

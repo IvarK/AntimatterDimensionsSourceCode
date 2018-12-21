@@ -606,7 +606,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
           proc = gainedInfinityPoints().gte(this.limit);
           break;
         case AutoCrunchMode.TIME:
-          proc = Decimal.gt(Time.thisInfinity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
+          proc = Decimal.gt(Time.thisInfinityRealTime.totalSeconds, this.limit);
           break;
         case AutoCrunchMode.RELATIVE:
           proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.limit));
@@ -720,7 +720,7 @@ Autobuyer.eternity = {
         proc = player.currentEternityChall !== "" || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
-        proc = Decimal.gt(Time.thisEternity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
+        proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)
         break;
       case AutoEternityMode.RELATIVE:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));

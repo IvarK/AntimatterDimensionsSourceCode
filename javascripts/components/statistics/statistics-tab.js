@@ -11,7 +11,8 @@ Vue.component('statistics-tab', {
         banked: 0,
         hasBest: false,
         best: TimeSpan.zero,
-        this: TimeSpan.zero
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
       },
       eternity: {
         isUnlocked: false,
@@ -19,12 +20,14 @@ Vue.component('statistics-tab', {
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
+        thisReal : TimeSpan.zero,
       },
       reality: {
         isUnlocked: false,
         count: 0,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
       },
       infoScale: String.empty,
@@ -64,6 +67,10 @@ Vue.component('statistics-tab', {
         reality.best.setFrom(player.bestReality);
         reality.this.setFrom(player.thisReality);
         reality.totalTimePlayed.setFrom(player.totalTimePlayed);
+        // real time tracking is only a thing once reality is unlocked:
+        infinity.thisReal.setFrom(player.thisInfinityRealTime);
+        eternity.thisReal.setFrom(player.thisEternityRealTime);
+        reality.thisReal.setFrom(player.thisRealityRealTime);
       }
       this.infoScale = estimateMatterScale(player.money, this);
     },
@@ -92,7 +99,11 @@ Vue.component('statistics-tab', {
             <div v-if="infinity.banked > 0">You have {{ formatAmount(infinity.banked) }} banked infinities.</div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toString() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div>You have spent {{ infinity.this.toString() }} in this Infinity.</div>
+            <div>You have spent {{ infinity.this.toString() }} in this Infinity.
+              <span v-if="reality.isUnlocked">
+                ({{infinity.thisReal.toStringShort()}} real time)
+              </span>
+            </div>
             <br>
         </div>
         <div v-if="eternity.isUnlocked">
@@ -101,14 +112,18 @@ Vue.component('statistics-tab', {
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toString() }}.</div>
             <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div>You have spent {{ eternity.this.toString() }} in this Eternity.</div>
+            <div>You have spent {{ eternity.this.toString() }} in this Eternity.
+              <span v-if="reality.isUnlocked">
+                ({{eternity.thisReal.toStringShort()}} real time)
+              </span>
+            </div>
             <br>
         </div>
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
             <div>Your fastest Reality was {{ reality.best.toString() }}.</div>
-            <div>You have spent {{ reality.this.toString() }} in this Reality.</div>
+            <div>You have spent {{ reality.this.toString() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)</div>
             <br>
         </div>
     </div>`

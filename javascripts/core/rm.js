@@ -260,12 +260,7 @@ function getTotalEffect(effectKey) {
         if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
           totalEffect += currGlyph.effects[effect];
         } else if (effectKey == "replicationpow") {
-          // If f(x)=1+x+x^2/4, then g(y)=2(sqrt(x)-1) is its inverse.
-          // Much like you can do multiplication by taking a log, adding, and taking exp,
-          // we can use f and g to do the same thing. This makes for something more generous
-          // than addition, but not nearly as generous as multiplication
-          y = Math.sqrt(currGlyph.effects[effect]) + Math.sqrt(totalEffect) - 2;
-          totalEffect = 1 + 2*y + y*y;
+          totalEffect = currGlyph.effects[effect] + totalEffect - 1;
         } else if (effectKey === "powermult") { // This is a Decimal
           totalEffect = totalEffect.times(currGlyph.effects[effect]);
         } else {

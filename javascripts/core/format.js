@@ -53,7 +53,11 @@ function formatValue(notation, value, places, placesUnder1000) {
           mantissa = value / Math.pow(10, Math.floor(Math.log10(value)));
           power = Math.floor(Math.log10(value));
       }
-      const commas = player.options.commas;
+      if (power >= 1000000000) {
+        var commas = false
+      } else {
+        var commas = player.options.commas;
+      }
       if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
             mantissa = mantissa.toFixed(places)
             if (mantissa >= 10) {

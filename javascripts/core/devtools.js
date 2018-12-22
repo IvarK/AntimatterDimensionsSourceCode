@@ -396,6 +396,14 @@ dev.updateTestSave = function() {
       }
     player.options.testVersion = 23;
   }
+
+  //the above line of code didn't work if loading a test save before celestials were added, whoops
+  if (player.options.testVersion === 23) {
+    for (i in player.celestials.teresa.glyphWeights) {
+        player.celestials.teresa.glyphWeights[i] = 25
+    }
+  player.options.testVersion = 24;
+  }
 }
 
 // Still WIP

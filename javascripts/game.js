@@ -398,10 +398,10 @@ function percentToNextRealityMachine() {
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
     var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
-    let epEffect = Math.pow(Math.pow(player.eternityPoints.e, 0.5), 4*(player.celestials.teresa.glyphWeights.ep/100))
-    let replEffect = Math.pow(Math.pow(player.replicanti.amount.e, replPow), 4*(player.celestials.teresa.glyphWeights.repl/100))
-    let dtEffect = Math.pow(Math.pow(player.dilation.dilatedTime.log10(), 1.3), 4*(player.celestials.teresa.glyphWeights.dt/100))
-    let eterEffect = Math.max(Math.pow(Math.sqrt(Math.log10(player.eternities)) * 0.45, 4*(player.celestials.teresa.glyphWeights.eternities/100)), 1)
+    let epEffect = Math.pow(Math.pow(player.eternityPoints.e, 0.5), Math.pow(4*(player.celestials.teresa.glyphWeights.ep/100), 1/3))
+    let replEffect = Math.pow(Math.pow(player.replicanti.amount.e, replPow), Math.pow(4*(player.celestials.teresa.glyphWeights.repl/100), 1/3))
+    let dtEffect = Math.pow(Math.pow(player.dilation.dilatedTime.log10(), 1.3), Math.pow(4*(player.celestials.teresa.glyphWeights.dt/100), 1/3))
+    let eterEffect = Math.max(Math.pow(Math.sqrt(Math.log10(player.eternities)) * 0.45, Math.pow(4*(player.celestials.teresa.glyphWeights.eternities/100), 1/3)), 1)
     var ret = epEffect * replEffect * dtEffect / 100000
     if (player.reality.upg.includes(18)) ret *= eterEffect
     ret *= player.celestials.effarig.glyphLevelMult
@@ -1603,13 +1603,13 @@ function gameLoop(diff) {
   
   // Tooltip for reality button stating more detailed RM and glyph level info
   let nextRMText = gainedRealityMachines() < 100 ? "Next RM gained at " + shortenDimensions(new Decimal("1e" + Math.ceil(4000*(1 + Math.log(parseInt(gainedRealityMachines().toFixed()) + 1)/Math.log(1000))))) + "<br><br>" : "";
-  let EPFactor = Math.pow(Math.sqrt(player.eternityPoints.e / 4000), 4*(player.celestials.teresa.glyphWeights.ep/100));
+  let EPFactor = Math.pow(Math.sqrt(player.eternityPoints.e / 4000), Math.pow(4*(player.celestials.teresa.glyphWeights.ep/100), 1/3));
   let replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
-  let replFactor = Math.pow(Math.pow(player.replicanti.amount.e, replPow), 4*(player.celestials.teresa.glyphWeights.repl/100)) / Math.sqrt(100000 / Math.sqrt(4000));
-  let DTFactor = Math.pow(Math.pow(player.dilation.dilatedTime.log10(), 1.3), 4*(player.celestials.teresa.glyphWeights.dt/100)) / Math.sqrt(100000 / Math.sqrt(4000));
+  let replFactor = Math.pow(Math.pow(player.replicanti.amount.e, replPow), Math.pow(4*(player.celestials.teresa.glyphWeights.repl/100), 1/3)) / Math.sqrt(100000 / Math.sqrt(4000));
+  let DTFactor = Math.pow(Math.pow(player.dilation.dilatedTime.log10(), 1.3), Math.pow(4*(player.celestials.teresa.glyphWeights.dt/100), 1/3)) / Math.sqrt(100000 / Math.sqrt(4000));
   if (player.dilation.dilatedTime.exponent == 0)
     DTFactor = 0;
-  let eterFactor = Math.max(Math.pow(Math.sqrt(Math.log10(player.eternities)) * 0.45, 4*(player.celestials.teresa.glyphWeights.eternities/100)), 1);
+  let eterFactor = Math.max(Math.pow(Math.sqrt(Math.log10(player.eternities)) * 0.45, Math.pow(4*(player.celestials.teresa.glyphWeights.eternities/100), 1/3)), 1);
   let perkFactor = 0;
   if (player.reality.perks.includes(21)) perkFactor++;
   if (player.reality.perks.includes(24)) perkFactor++;

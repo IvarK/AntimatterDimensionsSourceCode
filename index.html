@@ -580,9 +580,7 @@
                     <div>
                         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
                             <p id="automatorloadsavetext">load:</p>
-                            <button class="realitytabbtn" onclick="automatorSaveButton(1)" style="width:30px; height: 30px; font-size: 1.2rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">1</button>
-                            <button class="realitytabbtn" onclick="automatorSaveButton(2)" style="width:30px; height: 30px; font-size: 1.2rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">2</button>
-                            <button class="realitytabbtn" onclick="automatorSaveButton(3)" style="width:30px; height: 30px; font-size: 1.2rem; display: block; cursor: pointer; border-radius: 4px; margin-left: 5px;">3</button>
+                            <automator-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></automator-save-load-button>
                             <label for="automatorOn" style="margin-left: 40px;">on:</label>
                             <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOnOff()">
                         </div>
@@ -788,6 +786,7 @@
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
 <script type="text/javascript" src="javascripts/tln.js"></script>
+<script type="text/javascript" src="javascripts/longpress.js"></script>
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
@@ -806,6 +805,7 @@
 <script type="text/javascript" src="javascripts/components/hint-text.js"></script>
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
+<script type="text/javascript" src="javascripts/components/automator-buttons.js"></script>
 
 <script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>

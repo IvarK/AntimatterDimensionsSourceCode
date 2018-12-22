@@ -1,4 +1,4 @@
-Vue.component('tt-shop', {
+Vue.component("tt-shop", {
   data: function() {
     return {
       theoremAmount: 0,
@@ -104,13 +104,13 @@ Vue.component('tt-shop', {
     </div>`
 });
 
-Vue.component('tt-save-load-button', {
+Vue.component("tt-save-load-button", {
   props: {
-    'saveslot': Number
+    saveslot: Number
   },
   data: () => {
     return {
-      msg: 'Hold to save',
+      msg: "Hold to save",
       showTip: false,
     }
   },
@@ -118,18 +118,18 @@ Vue.component('tt-save-load-button', {
     tooltip: function () {
       return {
         content: this.msg,
-        placement: 'top',
+        placement: "top",
         show: this.showTip,
-        trigger: 'manual'
+        trigger: "manual"
       };
     },
     listeners: function () {
       return Object.assign({}, this.$listeners, {
-        touchstart: e => this.showTip = true,
-        mouseover: e => this.showTip = true,
-        mouseout: e => this.resetTip(),
-        touchend: e => this.resetTip(),
-        touchcancel: e => this.resetTip(),
+        touchstart: () => this.showTip = true,
+        mouseover: () => this.showTip = true,
+        mouseout: () => this.resetTip(),
+        touchend: () => this.resetTip(),
+        touchcancel: () => this.resetTip(),
         touchmove: e => {
           e.preventDefault();  // suggested in stackoverflow example
           var t = e.changedTouches[0];
@@ -137,11 +137,11 @@ Vue.component('tt-save-load-button', {
             this.resetTip();
           }
         },
-        'long-press': e => {
+        "longpress": () => {
           studyTreeSaveButton(this.saveslot, true)
-          this.msg = 'Saved'
+          this.msg = "Saved"
         },
-        'long-press-click': e => {
+        "longpressclick": () => {
           studyTreeSaveButton(this.saveslot, false);
         }
       });
@@ -152,16 +152,16 @@ Vue.component('tt-save-load-button', {
              v-tooltip="tooltip" v-long-press="{ delay: 1000 }">{{saveslot}}</button>`,
   methods: {
     resetTip: function () {
-      this.msg = 'Hold to save';
+      this.msg = "Hold to save";
       this.showTip = false;
     }
   },
 });
 
-Vue.component('tt-buy-button', {
-  props: ['budget', 'cost', 'format', 'action'],
+Vue.component("tt-buy-button", {
+  props: ["budget", "cost", "format", "action"],
   template:
-    '<button :class="cssClass" @click="action">Buy Time Theorems Cost: {{ format(cost) }}</button>',
+    `<button :class="cssClass" @click="action">Buy Time Theorems Cost: {{ format(cost) }}</button>`,
   computed: {
     isEnabled: function() {
       return this.budget.gte(this.cost);

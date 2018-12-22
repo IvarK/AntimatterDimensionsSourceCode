@@ -1,10 +1,10 @@
-Vue.component('automator-save-load-button', {
+Vue.component("automator-save-load-button", {
   props: {
     saveslot: Number
   },
   data: function () {
     return {
-      msg: 'Hold to save',
+      msg: "Hold to save",
       showTip: false,
     }
   },
@@ -12,9 +12,9 @@ Vue.component('automator-save-load-button', {
     tooltip: function () {
       return {
         content: this.msg,
-        placement: 'top',
+        placement: "top",
         show: this.showTip,
-        trigger: 'manual'
+        trigger: "manual"
       };
     },
     listeners: function () {
@@ -31,11 +31,11 @@ Vue.component('automator-save-load-button', {
             this.resetTip();
           }
         },
-        'long-press': e => {
+        "longpress": e => {
           automatorSaveButton(this.saveslot, true)
-          this.msg = 'Saved'
+          this.msg = "Saved"
         },
-        'long-press-click': e => {
+        "longpressclick": e => {
           automatorSaveButton(this.saveslot, false);
         }
       });
@@ -46,7 +46,7 @@ Vue.component('automator-save-load-button', {
              v-tooltip="tooltip" v-long-press="{ delay: 1000 }">{{saveslot}}</button>`,
   methods: {
     resetTip: function () {
-      this.msg = 'Hold to save';
+      this.msg = "Hold to save";
       this.showTip = false;
     }
   },

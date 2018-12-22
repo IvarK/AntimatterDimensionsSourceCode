@@ -13,9 +13,9 @@
 //
 // The long-press directive (v-long-press="{ delay:1000 }")
 // attaches LongPress for you, and emits the following events you can listen for:
-// long-press
-// long-press-cancel
-// long-press-click
+// longpress
+// longpresscancel
+// longpressclick
 
 class LongPress {
   static initializeVars() {
@@ -28,7 +28,7 @@ class LongPress {
 
   static addTo(obj, timeout, handlers) {
     if (!handlers.hasOwnProperty("longPress")) {
-      throw 'Need to specify a longPress handler'
+      throw "Need to specify a longPress handler"
     }
     var begin = (e) => {
       return LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, e)
@@ -110,7 +110,7 @@ class LongPress {
 
 LongPress.initializeVars();
 
-Vue.directive('long-press', {
+Vue.directive("long-press", {
   bind: function (el, binding, vnode) {
     // This seems to be the only way to get events to our component
     var emit = (name, data) => {
@@ -120,9 +120,9 @@ Vue.directive('long-press', {
       }
     }
     LongPress.addTo(el, binding.value.delay, {
-      longPress: (e) => emit('long-press'),
-      cancel: (e) => emit('long-press-cancel'),
-      click: (e) => emit('long-press-click'),
+      longPress: () => emit("longpress"),
+      cancel: () => emit("longpresscancel"),
+      click: () => emit("longpressclick"),
     });
   }
 });

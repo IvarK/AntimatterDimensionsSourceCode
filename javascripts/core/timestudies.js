@@ -575,13 +575,10 @@ NormalTimeStudyInfo.paths = [
   { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
 ];
 
-NormalTimeStudyInfo.studies = function() {
-  const studies = [];
-  for (let props of GameDatabase.timeStudies.normal) {
-    studies[props.id] = new NormalTimeStudyInfo(props);
-  }
-  return studies;
-}();
+NormalTimeStudyInfo.studies = mapGameData(
+  GameDatabase.timeStudies.normal,
+  data => new NormalTimeStudyInfo(data)
+);
 
 /**
  * @returns {NormalTimeStudyInfo}
@@ -667,14 +664,17 @@ class ECTimeStudyInfo extends TimeStudyInfo {
   }
 }
 
-ECTimeStudyInfo.studies = GameDatabase.timeStudies.ec.map(props => new ECTimeStudyInfo(props));
+ECTimeStudyInfo.studies = mapGameData(
+  GameDatabase.timeStudies.ec,
+  data => new ECTimeStudyInfo(data)
+);
 
 /**
  * @param {number} id
  * @returns {ECTimeStudyInfo}
  */
 TimeStudy.eternityChallenge = function(id) {
-  return ECTimeStudyInfo.studies[id - 1];
+  return ECTimeStudyInfo.studies[id];
 };
 
 /**
@@ -706,25 +706,28 @@ class DilationTimeStudyInfo extends TimeStudyInfo {
   }
 }
 
-DilationTimeStudyInfo.studies = GameDatabase.timeStudies.dilation.map(props => new DilationTimeStudyInfo(props));
+DilationTimeStudyInfo.studies = mapGameData(
+  GameDatabase.timeStudies.dilation,
+  data => new DilationTimeStudyInfo(data)
+);
 
 /**
  * @type {DilationTimeStudyInfo}
  */
-TimeStudy.dilation = DilationTimeStudyInfo.studies[0];
+TimeStudy.dilation = DilationTimeStudyInfo.studies[1];
 
 /**
  * @param {number} tier
  * @returns {DilationTimeStudyInfo}
  */
 TimeStudy.timeDimension = function(tier) {
-  return DilationTimeStudyInfo.studies[tier - 4];
+  return DilationTimeStudyInfo.studies[tier - 3];
 };
 
 /**
  * @type {DilationTimeStudyInfo}
  */
-TimeStudy.reality = DilationTimeStudyInfo.studies[5];
+TimeStudy.reality = DilationTimeStudyInfo.studies[6];
 
 class TimeStudyConnection {
   constructor(from, to, override) {

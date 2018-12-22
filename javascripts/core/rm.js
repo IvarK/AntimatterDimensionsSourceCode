@@ -866,3 +866,24 @@ function getGlyphLevelInputs() {
     finalLevel: glyphScaledLevel + perkFactor,
   };
 }
+
+class GlyphEffectInfo {
+  constructor(id, props) {
+    this._id = id;
+    this._adjustApply = props.adjustApply;
+  }
+
+  applyEffect(applyFn) {
+    let effectValue = getAdjustedGlyphEffect(this._id);
+    if (this._adjustApply !== undefined) {
+      effectValue = this._adjustApply(effectValue);
+    }
+    applyFn(effectValue);
+  }
+}
+
+const GlyphEffect = {
+  dimBoostPower: new GlyphEffectInfo("powerdimboost", {
+    adjustApply: value => Math.max(1, value)
+  })
+};

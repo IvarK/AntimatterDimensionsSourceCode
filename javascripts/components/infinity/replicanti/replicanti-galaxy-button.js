@@ -36,7 +36,7 @@ Vue.component("replicanti-galaxy-button", {
       this.isAvailable = Replicanti.galaxies.canBuyMore;
       this.boughtGalaxies = Replicanti.galaxies.bought;
       this.extraGalaxies = Replicanti.galaxies.extra;
-      this.isDivideUnlocked = isAchEnabled("r126");
+      this.isDivideUnlocked = Achievement(126).isEnabled;
       this.isAutoUnlocked = this.autobuyer.isUnlocked;
       this.isAutoOn = this.autobuyer.isOn;
       this.isAutoEnabled = this.autobuyer.isEnabled;

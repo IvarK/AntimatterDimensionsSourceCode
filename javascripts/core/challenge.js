@@ -47,10 +47,10 @@ function isQuickResettable(challenge) {
   return resettableChallenges.includes(challenge);
 }
 
-class InfinityChallengeInfo {
+class ChallengeInfo {
   constructor(id) {
     this._id = id;
-    this._fullId = `postc${id}`;
+    this._fullId = `challenge${id}`;
   }
 
   get isRunning() {
@@ -62,8 +62,52 @@ class InfinityChallengeInfo {
   }
 }
 
+class InfinityChallengeInfo {
+  constructor(props) {
+    this._id = props.id;
+    this._fullId = `postc${this._id}`;
+    this._effect = props.effect;
+    this._reward = props.reward;
+  }
+
+  get isRunning() {
+    return player.currentChallenge === this._fullId;
+  }
+
+  get isCompleted() {
+    return player.challenges.includes(this._fullId);
+  }
+
+  applyEffect(applyFn) {
+    if (this.isRunning) {
+      applyFn(this._effect());
+    }
+  }
+
+  get reward() {
+    const isCompleted = this.isCompleted;
+    const reward = this._reward;
+    return {
+      applyEffect: function(applyFn) {
+        if (isCompleted) {
+          applyFn(reward());
+        }
+      }
+    };
+  }
+}
+
+InfinityChallengeInfo.allChallenges = mapGameData(
+  GameDatabase.challenges.infinity,
+  data => new InfinityChallengeInfo(data)
+);
+
+/**
+ * @param {number} id
+ * @return {InfinityChallengeInfo}
+ */
 function InfinityChallenge(id) {
-  return new InfinityChallengeInfo(id);
+  return InfinityChallengeInfo.allChallenges[id];
 }
 
 /**

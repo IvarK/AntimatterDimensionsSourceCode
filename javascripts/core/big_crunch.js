@@ -72,7 +72,7 @@ function bigCrunchReset() {
     let currentReplicantiGalaxies = player.replicanti.galaxies;
     secondSoftReset();
 
-    if (isAchEnabled("r95")) {
+    if (Achievement(95).isEnabled) {
         player.replicanti.amount = currenReplicanti;
     }
     if (TimeStudy(33).isBought) {
@@ -170,26 +170,14 @@ function totalIPMult() {
       TimeStudy(51),
       TimeStudy(141),
       TimeStudy(142),
-      TimeStudy(143)
+      TimeStudy(143),
+      Achievement(85),
+      Achievement(93),
+      Achievement(116),
+      Achievement(125),
+      Achievement(141)
     );
 
-  if (isAchEnabled("r85")) {
-    mult = mult.times(4);
-  }
-  if (isAchEnabled("r93")) {
-    mult = mult.times(4);
-  }
-  if (isAchEnabled("r116")) {
-    mult = mult.times(Decimal.pow(2, Math.log10(Player.totalInfinitied + 1)));
-  }
-  if (isAchEnabled("r125")) {
-    // All "this inf time" or "best inf time" mults are * 10
-    const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-    mult = mult.times(Decimal.pow(2, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.11)));
-  }
-  if (isAchEnabled("r141")) {
-    mult = mult.times(4);
-  }
   if (player.dilation.upgrades.includes(7)) {
     mult = mult.times(player.dilation.dilatedTime.pow(1000).max(1));
   }

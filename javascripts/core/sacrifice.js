@@ -49,7 +49,7 @@ class Sacrifice {
     if (player.challenges.includes("postc2")) {
       let scale = 0.01;
       if (isAchEnabled("r88")) scale = 0.011;
-      scale = Effects.last(
+      scale = Effects.max(
         scale,
         TimeStudy(228)
       );
@@ -72,7 +72,7 @@ class Sacrifice {
     if (player.challenges.includes("postc2")) {
       let scale = 0.01;
       if (isAchEnabled("r88")) scale = 0.011;
-      scale = Effects.last(
+      scale = Effects.max(
         scale,
         TimeStudy(228)
       );

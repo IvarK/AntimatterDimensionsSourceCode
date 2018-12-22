@@ -357,8 +357,9 @@ function breakInfinity() {
 }
 
 function gainedInfinityPoints() {
-    const div = Effects.last(
-      isAchEnabled("r103") ? 307.8 : 308,
+    const div = Effects.min(
+      308,
+      Achievement(103),
       TimeStudy(111)
     );
     let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
@@ -452,15 +453,16 @@ function resetChallengeStuff() {
 }
 
 function resetMoney() {
-    let money = 10;
-    if (player.reality.perks.includes(52)) money = 1e130
-    else if (isAchEnabled("r78")) money = 1e25;
-    else if (isAchEnabled("r55")) money = 1e10;
-    else if (isAchEnabled("r54")) money = 2e5;
-    else if (isAchEnabled("r37")) money = 1000;
-    else if (isAchEnabled("r21")) money = 100;
-    else if (player.reality.perks.includes(51)) money = 100;
-    player.money = new Decimal(money);
+    player.money = Effects.max(
+      10,
+      Perk(51),
+      Achievement(21),
+      Achievement(37),
+      Achievement(54),
+      Achievement(55),
+      Achievement(78),
+      Perk(52)
+    ).toDecimal();
 }
 
 function fromValue(value) {
@@ -638,17 +640,19 @@ function checkForRUPG8() {
 }
 
 function gainedInfinities() {
-    let infGain = 1;
-    if (player.thisInfinityTime > 5000 && isAchEnabled("r87")) infGain = 250;
-    infGain *= Effects.product(TimeStudy(32));
+    if (EternityChallenge(4).isRunning) {
+        return 1;
+    }
+    let infGain = Effects.max(
+      1,
+      Achievement(87)
+    );
+    infGain *= Effects.product(
+      TimeStudy(32)
+    );
     if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
     infGain *= Math.max(1, getAdjustedGlyphEffect("infinityinfmult"));
     if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
-
-    if (player.currentEternityChall == "eterc4") {
-        infGain = 1
-    }
-
     return infGain
 }
 
@@ -1393,7 +1397,7 @@ function gameLoop(diff) {
       player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
     }
 
-    let tickmult = Effects.last(
+    let tickmult = Effects.min(
       1.33,
       TimeStudy(171)
     );
@@ -1444,13 +1448,13 @@ function gameLoop(diff) {
     updateDimensions()
     updateInfCosts()
     updateDilation();
-    if (getDimensionProductionPerSecond(1).gt(player.money) && !isAchEnabled("r44")) {
+    if (!Achievement(44).isEnabled && getDimensionProductionPerSecond(1).gt(player.money)) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
     } else {
         Marathon = 0;
     }
-    if (InfinityDimension(1).productionPerSecond.gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !isAchEnabled("r113")) {
+    if (!Achievement(113).isEnabled && !EternityChallenge(7).isRunning && InfinityDimension(1).productionPerSecond.gt(player.infinityPower)) {
         Marathon2+=player.options.updateRate/1000;
         if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
     } else {

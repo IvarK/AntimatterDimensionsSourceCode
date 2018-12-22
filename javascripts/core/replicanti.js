@@ -210,7 +210,7 @@ const ReplicantiUpgrade = {
       return Math.max(this.current * 0.9, this.cap);
     },
     get cap() {
-      return Effects.last(
+      return Effects.min(
         50,
         TimeStudy(22)
       );
@@ -261,7 +261,7 @@ const ReplicantiUpgrade = {
       return player.eternities >= 80;
     },
     get extra() {
-      return Effects.last(
+      return Effects.max(
         0,
         TimeStudy(131)
       );

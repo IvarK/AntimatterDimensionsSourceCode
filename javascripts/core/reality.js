@@ -175,6 +175,11 @@ function reality(force, reset, auto) {
         2: 0,
         3: 0
     };
+    player.money = Effects.max(
+      10,
+      Perk(51),
+      Perk(52)
+    ).toDecimal();
 
     fullResetInfDimensions();
     fullResetTimeDimensions();
@@ -205,7 +210,6 @@ function reality(force, reset, auto) {
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     updateEternityUpgrades();
     resetTickspeed();
-    resetMoney();
     playerInfinityUpgradesOnEternity();
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();

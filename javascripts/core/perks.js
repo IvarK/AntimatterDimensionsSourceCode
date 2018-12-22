@@ -91,6 +91,40 @@ function buyPerk(id, cost) {
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 }
 
+class PerkInfo {
+  constructor(props) {
+    this._id = props.id;
+    this._effect = props.effect;
+  }
+
+  get isBought() {
+    return player.reality.perks.includes(this._id);
+  }
+
+  get effectValue() {
+    return this._effect();
+  }
+
+  applyEffect(applyFn) {
+    if (this.isBought) {
+      applyFn(this.effectValue);
+    }
+  }
+}
+
+PerkInfo.allPerks = mapGameData(
+  GameDatabase.reality.perks,
+  data => new PerkInfo(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {PerkInfo}
+ */
+function Perk(id) {
+  return PerkInfo.allPerks[id];
+}
+
 class Perks {
   static updateAchSkipCount() {
     Perks.achSkipCount = player.reality.perks

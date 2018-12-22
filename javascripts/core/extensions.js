@@ -176,3 +176,10 @@ Decimal.prototype.clampMin = function(min) {
 Decimal.prototype.clampMax = function(max) {
   return this.min(max);
 };
+
+/**
+ * @return {Decimal}
+ */
+Number.prototype.toDecimal = function() {
+  return new Decimal(this.valueOf());
+};

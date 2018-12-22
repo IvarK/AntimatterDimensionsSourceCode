@@ -12,27 +12,24 @@ class DimBoostRequirement {
 class DimBoost {
   static get power() {
     if (player.currentChallenge === "challenge11" || player.currentChallenge === "postc1") {
-      return Decimal.fromNumber(1);
+      return new Decimal(1);
     }
 
-    let power = Effects.last(
-      2,
-      InfinityUpgrade.dimboostMult
-    );
-    if (player.challenges.includes("postc7")) power = 4;
-    if (player.currentChallenge === "postc7") power = 10;
-    power = Effects.last(
-      power,
-      TimeStudy(81)
-    );
-
-    if (isAchEnabled("r101")) power *= 1.01;
-    if (isAchEnabled("r142")) power *= 1.5;
-    power *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"));
-    return new Decimal(power)
+    return Effects
+      .max(
+        2,
+        InfinityUpgrade.dimboostMult,
+        InfinityChallenge(7),
+        InfinityChallenge(7).reward,
+        TimeStudy(81)
+      )
+      .toDecimal()
       .timesEffectsOf(
         TimeStudy(83),
-        TimeStudy(231)
+        TimeStudy(231),
+        Achievement(101),
+        Achievement(142),
+        GlyphEffect.dimBoostPower
       );
   }
 

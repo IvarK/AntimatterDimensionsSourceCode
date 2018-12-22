@@ -19,7 +19,7 @@ class Galaxy {
   static get requirement() {
     const galaxies = player.galaxies;
     let costBase = 80;
-    let costMult = Effects.last(
+    let costMult = Effects.min(
       60,
       TimeStudy(42)
     );

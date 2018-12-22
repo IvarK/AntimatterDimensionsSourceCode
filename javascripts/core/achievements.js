@@ -221,10 +221,10 @@ function getSecretAchAmount() {
     return n
 }
 
-function isAchEnabled(name) {
+function isAchEnabled(name, id) {
   if (!player.achievements.includes(name)) return false;
   if (player.realities === 0) return true;
-  const achId = parseInt(name.split("r")[1]);
+  const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
   if (row <= Perks.achSkipCount) return true;
@@ -342,4 +342,45 @@ function updateRealityAchievementModifiers() {
     rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
     secondsForAllAchs: secondsForAllAchs
   };
+}
+
+class AchievementInfo {
+  constructor(props) {
+    this._id = props.id;
+    this._fullId = "r" + this._id;
+    this._effect = props.effect;
+    this._effectCondition = props.effectCondition;
+  }
+
+  get isEnabled() {
+    return isAchEnabled(this._fullId, this._id);
+  }
+
+  get effectValue() {
+    return this._effect();
+  }
+
+  get isEffectConditionSatisfied() {
+    return this._effectCondition === undefined || this._effectCondition();
+  }
+
+  applyEffect(applyFn) {
+    if (this.isEnabled && this.isEffectConditionSatisfied) {
+      applyFn(this.effectValue);
+    }
+  }
+}
+
+AchievementInfo.allAchievements = mapGameData(
+  GameDatabase.achievements,
+  data => new AchievementInfo(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementInfo}
+ */
+function Achievement(id) {
+  const achievement = AchievementInfo.allAchievements[id];
+  return achievement !== undefined ? achievement : new AchievementInfo({id: id});
 }

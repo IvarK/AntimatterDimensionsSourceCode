@@ -331,6 +331,7 @@ var player = {
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     pp: 0,
+    autoEC: true,
     lastAutoEC: 0
   },
   wormhole: [{

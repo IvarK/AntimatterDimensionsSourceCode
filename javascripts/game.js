@@ -1408,7 +1408,7 @@ function gameLoop(diff) {
     }
 
     player.realTimePlayed += diff / speedFactor
-    if (player.reality.perks.includes(91)) player.reality.lastAutoEC += diff / speedFactor
+    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += diff / speedFactor
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisInfinityRealTime += diff / speedFactor

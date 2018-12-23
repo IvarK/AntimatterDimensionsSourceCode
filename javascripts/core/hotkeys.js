@@ -24,6 +24,7 @@ for (let i = 1; i < 9; i++) {
 
 Keyboard.bindHotkey("a", () => toggleAutobuyers());
 Keyboard.bindHotkey("esc", () => Modal.hide());
+Keyboard.bindHotkey("w", () => pauseWormhole());
 
 Keyboard.bind("shift", () => setShiftKey(true), "keydown");
 Keyboard.bind("shift", () => setShiftKey(false), "keyup");

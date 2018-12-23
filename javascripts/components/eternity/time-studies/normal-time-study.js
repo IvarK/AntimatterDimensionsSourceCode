@@ -37,6 +37,20 @@ Vue.component("normal-time-study", {
         classObject[pathClass] = true;
       }
       return classObject;
+    },
+    hintText() {
+      const id = this.study.id;
+      switch (this.setup.path) {
+        case TimeStudyPath.NORMAL_DIM: return id + " Normal Dims";
+        case TimeStudyPath.INFINITY_DIM: return id + " Infinity Dims";
+        case TimeStudyPath.TIME_DIM: return id + " Time Dims";
+        case TimeStudyPath.ACTIVE: return id + " Active";
+        case TimeStudyPath.PASSIVE: return id + " Passive";
+        case TimeStudyPath.IDLE: return id + " Idle";
+        case TimeStudyPath.LIGHT: return id + " Light";
+        case TimeStudyPath.DARK: return id + " Dark";
+      }
+      return id;
     }
   },
   created() {
@@ -56,7 +70,7 @@ Vue.component("normal-time-study", {
   },
   template:
     `<time-study :setup="setup" :class="classObject" @purchase="purchase">
-      <hint-text>{{study.id}}</hint-text>
+      <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
       {{description}}
       <template v-if="hasEffectDisplay">
         <br>

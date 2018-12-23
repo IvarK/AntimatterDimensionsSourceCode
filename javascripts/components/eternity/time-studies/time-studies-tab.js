@@ -8,18 +8,28 @@ Vue.component("time-studies-tab", {
       studies: layout.studies,
       secretStudySetup: layout.secretStudy,
       connections: layout.connections,
-      secretConnectionSetup: layout.secretStudyConnection
+      secretConnectionSetup: layout.secretStudyConnection,
+      respec: player.respec
     };
   },
   computed: {
-    tabStyleObject: function() {
+    treeStyleObject() {
       return {
         width: this.width,
         height: this.height
       };
+    },
+    respecClassObject() {
+      return {
+        "o-primary-btn--time-study-options": true,
+        "o-primary-btn--respec-active": this.respec
+      };
     }
   },
   methods: {
+    update() {
+      this.respec = player.respec;
+    },
     studyComponent(study) {
       switch (study.type) {
         case TimeStudyType.NORMAL: return "normal-time-study";
@@ -27,26 +37,46 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.DILATION: return "dilation-time-study";
       }
       throw "Unknown study type";
+    },
+    toggleRespec() {
+      player.respec = !player.respec;
+      this.update();
     }
   },
   template:
-    `<div class="l-time-studies-tab" :style="tabStyleObject">
-      <component
-        v-for="(setup, index) in studies"
-        :key="'study' + index"
-        :setup="setup"
-        :is="studyComponent(setup.study)"
-      />
-      <secret-time-study :setup="secretStudySetup" />
-      <svg :style="tabStyleObject" class="l-time-study-connection">
-        <time-study-connection
-          v-for="(setup, index) in connections"
-          :key="'connection' + index"
+    `<div class="l-time-studies-tab">
+      <div class="l-time-study-options">
+        <primary-button
+          class="o-primary-btn--time-study-options"
+          onclick="exportStudyTree()"
+        >Export tree</primary-button>
+        <primary-button
+          :class="respecClassObject"
+          @click="toggleRespec"
+        >Respec time studies on next Eternity</primary-button>
+        <primary-button
+          class="o-primary-btn--time-study-options"
+          onclick="importStudyTree()"
+        >Import tree</primary-button>
+      </div>
+      <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
+        <component
+          v-for="(setup, index) in studies"
+          :key="'study' + index"
           :setup="setup"
+          :is="studyComponent(setup.study)"
         />
-        <secret-time-study-connection :setup="secretConnectionSetup" />
-      </svg>
-      <tt-shop />
+        <secret-time-study :setup="secretStudySetup" />
+        <svg :style="treeStyleObject" class="l-time-study-connection">
+          <time-study-connection
+            v-for="(setup, index) in connections"
+            :key="'connection' + index"
+            :setup="setup"
+          />
+          <secret-time-study-connection :setup="secretConnectionSetup" />
+        </svg>
+        <tt-shop />
+      </div>
     </div>`
 });
 

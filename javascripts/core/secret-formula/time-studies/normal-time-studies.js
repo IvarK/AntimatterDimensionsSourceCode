@@ -182,7 +182,7 @@ GameDatabase.timeStudies.normal = [
     effect: () => {
       let thisEternity = Time.thisEternity;
       Perk(73).applyEffect(effect => thisEternity = thisEternity.add(effect));
-      return Math.sqrt(1.39 * thisEternity);
+      return Math.sqrt(1.39 * thisEternity.totalSeconds);
     },
     formatEffect: value => `${value.toFixed(1)}x`
   },

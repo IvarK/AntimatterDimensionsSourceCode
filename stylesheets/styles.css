@@ -2086,6 +2086,16 @@ screen and (max-width: 480px) {
   font-size: 1.2rem;
 }
 
+.o-primary-btn--time-study-options {
+  width: 15rem;
+  height: 4rem;
+  font-size: 1rem;
+}
+
+.o-primary-btn--respec-active {
+  background-color: #0bd251;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -2458,9 +2468,17 @@ screen and (max-width: 480px) {
 
 .l-hint-text {
   position: absolute;
-  top: -2rem;
+  top: -1.5rem;
   left: 0;
   z-index: -999;
+}
+
+.l-hint-text--challenge {
+  top: -2rem;
+}
+
+.l-hint-text--time-study {
+  top: -1.8rem;
 }
 
 /*#endregion hint-text*/

@@ -22,18 +22,7 @@ Vue.component("ec-time-study", {
       return this.id > 6;
     },
     requirementResource: function() {
-      switch (this.id) {
-        case 1: return "Eternities";
-        case 2: return "Tickspeed upgrades gained from time dimensions";
-        case 3: return "8th dimensions";
-        case 4: return "infinities";
-        case 5: return "antimatter galaxies";
-        case 6: return "replicanti galaxies";
-        case 7: return "antimatter";
-        case 8: return "IP";
-        case 9: return "infinity power";
-        case 10: return "EP";
-      }
+      return this.study.data.requirement.resource;
     }
   },
   methods: {

@@ -498,16 +498,25 @@ const TimeStudyPath = {
 };
 
 class TimeStudyInfo {
-  constructor(props) {
-    this._cost = props.cost;
+  constructor(data, type) {
+    this._getData = () => data;
+    this.type = type;
     /**
      * @type {TimeStudyConnection[]}
      */
     this.incomingConnections = [];
   }
 
+  get data() {
+    return this._getData();
+  }
+
+  get id() {
+    return this.data.id;
+  }
+
   get cost() {
-    return this._cost;
+    return this.data.cost;
   }
 
   refund() {
@@ -524,15 +533,8 @@ class TimeStudyInfo {
 }
 
 class NormalTimeStudyInfo extends TimeStudyInfo {
-  constructor(props) {
-    super(props);
-    this._id = props.id;
-    this._effect = props.effect;
-    this.type = TimeStudyType.NORMAL;
-  }
-
-  get id() {
-    return this._id;
+  constructor(data) {
+    super(data, TimeStudyType.NORMAL);
   }
 
   get isBought() {
@@ -549,7 +551,7 @@ class NormalTimeStudyInfo extends TimeStudyInfo {
   }
 
   get effectValue() {
-    return this._effect();
+    return this.data.effect();
   }
 
   applyEffect(applyFn) {
@@ -561,6 +563,22 @@ class NormalTimeStudyInfo extends TimeStudyInfo {
   get path() {
     const path = NormalTimeStudyInfo.paths.find(p => p.studies.includes(this.id));
     return path !== undefined ? path.path : TimeStudyPath.NONE;
+  }
+
+  get hasDynamicDescription() {
+    return typeof this.data.description === "function";
+  }
+
+  get description() {
+    return this.hasDynamicDescription ? this.data.description() : this.data.description;
+  }
+
+  get hasDynamicEffect() {
+    return this.data.formatEffect !== undefined;
+  }
+
+  formatEffect(value) {
+    return this.data.formatEffect(value);
   }
 }
 
@@ -595,24 +613,17 @@ TimeStudy.boughtNormalTS = function() {
 };
 
 class ECTimeStudyInfo extends TimeStudyInfo {
-  constructor(props) {
-    super(props);
-    this._id = props.id;
-    this._requirement = props.requirement;
-    this.type = TimeStudyType.ETERNITY_CHALLENGE;
-  }
-
-  get id() {
-    return this._id;
+  constructor(data) {
+    super(data, TimeStudyType.ETERNITY_CHALLENGE);
   }
 
   get isBought() {
-    return player.eternityChallUnlocked === this._id;
+    return player.eternityChallUnlocked === this.id;
   }
 
   purchase() {
     if (!this.canBeBought) return false;
-    unlockEChall(this._id);
+    unlockEChall(this.id);
     player.timestudy.theorem -= this.cost;
     return true;
   }
@@ -623,19 +634,19 @@ class ECTimeStudyInfo extends TimeStudyInfo {
     }
     const study1 = studyOf(this.incomingConnections[0]);
     const study2 = studyOf(this.incomingConnections[1]);
-    return canUnlockEC(this._id, this.cost, study1, study2);
+    return canUnlockEC(this.id, this.cost, study1, study2);
   }
 
   /**
    * @returns {EternityChallengeInfo}
    */
   get challenge() {
-    return EternityChallenge(this._id);
+    return EternityChallenge(this.id);
   }
 
   get isAvailable() {
     const tsRequirement = this.areRequiredTSBought;
-    const secondaryRequirement = player.reality.perks.includes(31) || this.isSecondaryRequirementMet;
+    const secondaryRequirement = Perk(31).isBought || this.isSecondaryRequirementMet;
     return tsRequirement && secondaryRequirement;
   }
 
@@ -644,11 +655,11 @@ class ECTimeStudyInfo extends TimeStudyInfo {
   }
 
   get requirementTotal() {
-    return this._requirement.required(this.challenge.completions);
+    return this.data.requirement.required(this.challenge.completions);
   }
 
   get requirementCurrent() {
-    return this._requirement.current();
+    return this.data.requirement.current();
   }
 
   get isSecondaryRequirementMet() {
@@ -687,22 +698,20 @@ TimeStudy.eternityChallenge.current = function() {
 };
 
 class DilationTimeStudyInfo extends TimeStudyInfo {
-  constructor(props) {
-    super(props);
-    this._id = props.id;
-    this.type = TimeStudyType.DILATION;
-  }
-
-  get id() {
-    return this._id;
+  constructor(data) {
+    super(data, TimeStudyType.DILATION);
   }
 
   get isBought() {
-    return player.dilation.studies.includes(this._id);
+    return player.dilation.studies.includes(this.id);
   }
 
   get canBeBought() {
     return canBuyDilationStudy(this.id);
+  }
+
+  get description() {
+    return this.data.description;
   }
 }
 

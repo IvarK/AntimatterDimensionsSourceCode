@@ -271,7 +271,8 @@ function updateInfCosts() {
 
         document.getElementById("141desc").textContent = "Currently: "+shortenMoney(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125))).max(1))+"x"
         document.getElementById("142desc").textContent = "You gain "+shortenCosts(1e25)+"x more IP"
-        document.getElementById("143desc").textContent = "Currently: "+shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*Math.pow(player.thisInfinityTime/100, 0.125)))+"x"
+        const cappedExp = Math.min(Math.pow(player.thisInfinityTime/100, 0.125), 500.0);
+        document.getElementById("143desc").textContent = "Currently: "+shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime/100)*cappedExp))+"x"
         document.getElementById("151desc").textContent = shortenCosts(1e4)+"x multiplier on all Time Dimensions"
         document.getElementById("161desc").textContent = shortenCosts(new Decimal("1e616"))+"x multiplier on all Normal Dimensions"
         document.getElementById("162desc").textContent = shortenCosts(1e11)+"x multiplier on all Infinity Dimensions"

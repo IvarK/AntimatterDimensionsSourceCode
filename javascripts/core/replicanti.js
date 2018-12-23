@@ -184,7 +184,7 @@ const ReplicantiUpgrade = {
       return nearestPercent(this.current) >= this.cap;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 40;
+      return EternityMilestone.autobuyerReplicantiChance.isReached;
     }
   },
   interval: {
@@ -219,7 +219,7 @@ const ReplicantiUpgrade = {
       return this.current <= this.cap;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 60;
+      return EternityMilestone.autobuyerReplicantiInterval.isReached;
     },
     applyModifiers(value) {
       return getReplicantiInterval(false, value);
@@ -258,7 +258,7 @@ const ReplicantiUpgrade = {
       return false;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 80;
+      return EternityMilestone.autobuyerReplicantiMaxGalaxies.isReached;
     },
     get extra() {
       return Effects.max(

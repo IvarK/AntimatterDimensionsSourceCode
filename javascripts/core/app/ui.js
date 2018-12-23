@@ -59,7 +59,7 @@ Vue.mixin({
   }
 });
 
-Vue.filter('pluralize', function (value, amount) {
+Vue.filter("pluralize", function (value, amount, plural) {
   if (value === undefined || amount === undefined)
     throw "Arguments must be defined";
   let isSingular = true;
@@ -71,7 +71,7 @@ Vue.filter('pluralize', function (value, amount) {
   }
   else
     throw "Amount must be either a number or Decimal";
-  return isSingular ? value : value + "s";
+  return isSingular ? value : (plural !== undefined ? plural : value + "s");
 });
 
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';

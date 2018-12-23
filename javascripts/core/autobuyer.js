@@ -365,7 +365,7 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities >= 10;
+    return EternityMilestone.autobuyMaxDimboosts.isReached;
   }
 
   /**
@@ -454,7 +454,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities > 8;
+    return EternityMilestone.autobuyMaxGalaxies.isReached;
   }
 
   /**
@@ -475,7 +475,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
     if (!this.canTick()) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
-    if (player.eternities >= 9 && this.buyMaxInterval > 0) {
+    if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
       this.buyMax();
     }
     else {
@@ -569,7 +569,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get hasAdditionalModes() {
-    return player.eternities > 4;
+    return EternityMilestone.bigCrunchModes.isReached;
   }
 
   /**
@@ -651,7 +651,7 @@ Autobuyer.eternity = {
    * @returns {boolean}
    */
   get isUnlocked() {
-    return player.eternities >= 100;
+    return EternityMilestone.autobuyerEternity.isReached;
   },
   /**
    * @returns {boolean}

@@ -1,4 +1,4 @@
-GameDatabase.timeStudies.ec = [
+GameDatabase.eternity.timeStudies.ec = [
   {
     id: 1,
     cost: 30,

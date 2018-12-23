@@ -1,4 +1,4 @@
-GameDatabase.timeStudies.dilation = [
+GameDatabase.eternity.timeStudies.dilation = [
   {
     id: 1,
     cost: 5000,

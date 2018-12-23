@@ -4265,6 +4265,56 @@ screen and (max-width: 480px) {
 
 /*#endregion Break Infinity*/
 
+/*#region Eternity Milestones*/
+
+.l-eternity-milestone-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-eternity-milestone-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-eternity-milestone-grid__cell {
+  margin: .5rem .8rem;
+}
+
+.o-eternity-milestone__goal {
+  font-size: 2rem;
+  text-align: left;
+}
+
+.o-eternity-milestone__description {
+  width: 25rem;
+  height: 6rem;
+  color: black;
+  background-color: dimgrey;
+  font-weight: bold;
+  border: .1rem solid #691fa5;
+  transition-duration: 0.2s;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+  font-size: 1.2rem;
+}
+
+.o-eternity-milestone__description--reached {
+  background-color: #8d48c3;
+}
+
+.o-eternity-milestone__description--small-font {
+  font-size: 1.1rem;
+}
+
+.l-eternity-milestone {
+  display: flex;
+  flex-direction: column;
+}
+
+/*#endregion Eternity Milestones*/
+
 /*#region Modals*/
 
 /*#region c-modal*/

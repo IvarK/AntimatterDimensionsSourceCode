@@ -594,7 +594,7 @@ NormalTimeStudyInfo.paths = [
 ];
 
 NormalTimeStudyInfo.studies = mapGameData(
-  GameDatabase.timeStudies.normal,
+  GameDatabase.eternity.timeStudies.normal,
   data => new NormalTimeStudyInfo(data)
 );
 
@@ -676,7 +676,7 @@ class ECTimeStudyInfo extends TimeStudyInfo {
 }
 
 ECTimeStudyInfo.studies = mapGameData(
-  GameDatabase.timeStudies.ec,
+  GameDatabase.eternity.timeStudies.ec,
   data => new ECTimeStudyInfo(data)
 );
 
@@ -716,7 +716,7 @@ class DilationTimeStudyInfo extends TimeStudyInfo {
 }
 
 DilationTimeStudyInfo.studies = mapGameData(
-  GameDatabase.timeStudies.dilation,
+  GameDatabase.eternity.timeStudies.dilation,
   data => new DilationTimeStudyInfo(data)
 );
 

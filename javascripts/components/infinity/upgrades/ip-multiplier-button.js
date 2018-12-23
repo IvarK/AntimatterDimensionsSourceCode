@@ -17,7 +17,7 @@ Vue.component("ip-multiplier-button", {
   },
   methods: {
     update() {
-      this.isAutoUnlocked = player.eternities > 0;
+      this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
       this.isAutobuyerOn = player.infMultBuyer;
     }
   },

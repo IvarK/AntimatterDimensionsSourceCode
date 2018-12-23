@@ -250,3 +250,42 @@ function resetInfinityPoints() {
   else if (player.reality.perks.includes(53)) ip = 2e15;
   player.infinityPoints = new Decimal(ip);
 }
+
+class EternityMilestoneInfo {
+  constructor(data) {
+    this._getData = () => data;
+  }
+
+  get data() {
+    return this._getData();
+  }
+
+  get isReached() {
+    return player.eternities >= this.data.eternities;
+  }
+}
+
+const EternityMilestone = function() {
+  const db = GameDatabase.eternity.milestones;
+  const infinityDims = Array.dimensionTiers
+    .map(tier => new EternityMilestoneInfo(db["autobuyerID" + tier]));
+  return {
+    autobuyerIPMult: new EternityMilestoneInfo(db.autobuyerIPMult),
+    keepAutobuyers: new EternityMilestoneInfo(db.keepAutobuyers),
+    autobuyerReplicantiGalaxy: new EternityMilestoneInfo(db.autobuyerReplicantiGalaxy),
+    keepInfinityUpgrades: new EternityMilestoneInfo(db.keepInfinityUpgrades),
+    bigCrunchModes: new EternityMilestoneInfo(db.bigCrunchModes),
+    autoIC: new EternityMilestoneInfo(db.autoIC),
+    autobuyMaxGalaxies: new EternityMilestoneInfo(db.autobuyMaxGalaxies),
+    autobuyMaxDimboosts: new EternityMilestoneInfo(db.autobuyMaxDimboosts),
+    autobuyerID: tier => infinityDims[tier - 1],
+    keepBreakUpgrades: new EternityMilestoneInfo(db.keepBreakUpgrades),
+    autoUnlockID: new EternityMilestoneInfo(db.autoUnlockID),
+    unlockAllND: new EternityMilestoneInfo(db.unlockAllND),
+    autobuyerReplicantiChance: new EternityMilestoneInfo(db.autobuyerReplicantiChance),
+    unlockReplicanti: new EternityMilestoneInfo(db.unlockReplicanti),
+    autobuyerReplicantiInterval: new EternityMilestoneInfo(db.autobuyerReplicantiInterval),
+    autobuyerReplicantiMaxGalaxies: new EternityMilestoneInfo(db.autobuyerReplicantiMaxGalaxies),
+    autobuyerEternity: new EternityMilestoneInfo(db.autobuyerEternity),
+  };
+}();

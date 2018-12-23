@@ -1,4 +1,4 @@
-GameDatabase.timeStudies.normal = [
+GameDatabase.eternity.timeStudies.normal = [
   {
     id: 11,
     cost: 1,

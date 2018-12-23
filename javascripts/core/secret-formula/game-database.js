@@ -1,7 +1,9 @@
 const GameDatabase = {
   challenges: {},
   infinity: {},
-  timeStudies: {},
+  eternity: {
+    timeStudies: {}
+  },
   reality: {}
 };
 

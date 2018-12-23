@@ -172,7 +172,8 @@ function totalIPMult() {
   }
   // All "this inf time" or "best inf time" mults are * 10
   const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-  const timStudyMult = Decimal.pow(15, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.125));
+  const cappedInf = Math.min(Math.pow(thisInfinity, 0.125), 500);
+  const timStudyMult = Decimal.pow(15, Math.log(thisInfinity) * cappedInf);
   if (player.timestudy.studies.includes(141)) {
     mult = mult.times(Decimal.divide(1e45, timStudyMult).max(1));
   }

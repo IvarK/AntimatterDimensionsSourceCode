@@ -389,5 +389,6 @@ GameDatabase.eternity.timeStudies.normal = [
 const _TS_thisInfinityMult = () => {
   // All "this inf time" or "best inf time" mults are * 10
   const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-  return Decimal.pow(15, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.125));
+  const cappedInfinity = Math.min(Math.pow(thisInfinity, 0.125), 500);
+  return Decimal.pow(15, Math.log(thisInfinity) * cappedInfinity);
 };

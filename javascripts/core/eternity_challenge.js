@@ -160,6 +160,17 @@ class EternityChallengeInfo {
   start() {
     return startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
   }
+
+  get reward() {
+    const ec = this;
+    return {
+      applyEffect: function(applyFn) {
+        if (ec.completions > 0) {
+          applyFn(ec.rewardValue);
+        }
+      }
+    };
+  }
 }
 
 EternityChallengeInfo.details = [

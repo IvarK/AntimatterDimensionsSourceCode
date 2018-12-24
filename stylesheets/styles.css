@@ -2478,7 +2478,7 @@ screen and (max-width: 480px) {
 }
 
 .l-hint-text--time-study {
-  top: -1.8rem;
+  top: -1.85rem;
 }
 
 /*#endregion hint-text*/
@@ -4264,6 +4264,63 @@ screen and (max-width: 480px) {
 /*#endregion l-break-infinity-upgrade-grid*/
 
 /*#endregion Break Infinity*/
+
+/*#region Eternity Upgrades*/
+
+.l-eternity-upgrades-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.l-eternity-upgrades-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-eternity-upgrades-grid__cell {
+  margin: .5rem .8rem;
+}
+
+.o-eternity-upgrade {
+  font-weight: bold;
+  font-size: 1rem;
+  border: .1rem solid #b341e0;
+  width: 19rem;
+  height: 9rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+}
+
+.o-eternity-upgrade--available {
+  color: #b341e0;
+  background-color: black;
+}
+
+.o-eternity-upgrade--available:hover {
+  color: #511568;
+  background-color: white;
+}
+
+.o-eternity-upgrade--unavailable {
+  color: #181818;
+  background-color: #5f5f5f;
+}
+
+.o-eternity-upgrade--unavailable:hover {
+  background-color: #737373;
+}
+
+.o-eternity-upgrade--bought {
+  color: #511568;
+  background-color: #5ac467;
+  cursor: default;
+}
+
+/*#endregion Eternity Upgrades*/
 
 /*#region Eternity Milestones*/
 

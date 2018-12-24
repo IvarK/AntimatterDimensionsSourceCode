@@ -141,30 +141,23 @@ class TimeDimensionInfo {
       mult = mult.div(player.tickspeed.div(1000).pow(0.000005));
     }
 
-    mult = mult.times(kongAllDimMult);
-
-    if (player.eternityUpgrades.includes(4)) {
-      mult = mult.times(player.achPow);
-    }
-    if (player.eternityUpgrades.includes(5)) {
-      mult = mult.times(Math.max(player.timestudy.theorem, 1));
-    }
-    if (player.eternityUpgrades.includes(6)) {
-      mult = mult.times(player.totalTimePlayed / 1000 / 60 / 60 / 24);
-    }
-    mult = mult.timesEffectsOf(
-      tier === 3 ? TimeStudy(73) : null,
-      TimeStudy(93),
-      TimeStudy(103),
-      TimeStudy(151),
-      TimeStudy(221),
-      tier === 4 ? TimeStudy(227) : null
-    );
+    mult = mult
+      .times(kongAllDimMult)
+      .timesEffectsOf(
+        tier === 3 ? TimeStudy(73) : null,
+        TimeStudy(93),
+        TimeStudy(103),
+        TimeStudy(151),
+        TimeStudy(221),
+        tier === 4 ? TimeStudy(227) : null,
+        EternityChallenge(1).reward,
+        EternityUpgrade.tdMultAchs,
+        EternityUpgrade.tdMultTheorems,
+        EternityUpgrade.tdMultRealTime
+      );
     if (player.currentEternityChall === "eterc9") {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
     }
-
-    EternityChallenge(1).applyReward(value => mult = mult.times(value));
 
     let ec10bonus = new Decimal(1);
     EternityChallenge(10).applyReward(value => ec10bonus = value);

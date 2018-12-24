@@ -41,6 +41,10 @@ GameDatabase.achievements = [
     effect: () => 307.8
   },
   {
+    id: 112,
+    effect: () => 610
+  },
+  {
     id: 116,
     effect: () => Decimal.pow(2, Math.log10(Player.totalInfinitied + 1))
   },

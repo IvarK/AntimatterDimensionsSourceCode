@@ -85,12 +85,11 @@ class InfinityChallengeInfo {
   }
 
   get reward() {
-    const isCompleted = this.isCompleted;
-    const reward = this._reward;
+    const ic = this;
     return {
       applyEffect: function(applyFn) {
-        if (isCompleted) {
-          applyFn(reward());
+        if (ic.isCompleted) {
+          applyFn(ic._reward());
         }
       }
     };

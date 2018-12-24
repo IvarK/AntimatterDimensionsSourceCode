@@ -183,3 +183,5 @@ Decimal.prototype.clampMax = function(max) {
 Number.prototype.toDecimal = function() {
   return new Decimal(this.valueOf());
 };
+
+Math.log4 = Math.log(4);

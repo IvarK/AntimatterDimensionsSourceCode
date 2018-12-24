@@ -256,35 +256,18 @@ class InfinityDimensionInfo {
       mult = mult.times(replicantiMult());
     }
 
-    if (tier === 4) {
-      mult = mult.timesEffectOf(TimeStudy(72));
-    }
-
-    mult = mult.timesEffectOf(TimeStudy(82));
-
-    if (player.eternityUpgrades.includes(1)) {
-      mult = mult.times(player.eternityPoints.max(1))
-    }
-
-    if (player.eternityUpgrades.includes(2)) {
-      mult = mult.times(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))
-    }
-
-    if (player.eternityUpgrades.includes(3)) {
-      mult = mult.times(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))
-    }
-
     mult = mult.timesEffectsOf(
+      tier === 4 ? TimeStudy(72) : null,
+      TimeStudy(82),
       TimeStudy(92),
-      TimeStudy(162)
+      TimeStudy(162),
+      tier === 1 ? EternityChallenge(2).reward : null,
+      EternityChallenge(4).reward,
+      EternityChallenge(9).reward,
+      EternityUpgrade.idMultEP,
+      EternityUpgrade.idMultEternities,
+      EternityUpgrade.idMultICRecords
     );
-
-    if (tier === 1) {
-      EternityChallenge(2).applyReward(value => mult = mult.times(value));
-    }
-
-    EternityChallenge(4).applyReward(value => mult = mult.times(value));
-    EternityChallenge(9).applyReward(value => mult = mult.times(value));
 
     mult = mult.max(0);
 

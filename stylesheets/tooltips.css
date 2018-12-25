@@ -17,6 +17,31 @@
   pointer-events: none;
 }
 
+.tooltip-inner.automator-tooltip {
+  overflow: auto;
+  width: unset;
+  height: 100%;
+  display: inline-block !important;
+  text-align: left;
+}
+
+.automator-tooltip-header {
+  white-space: nowrap;
+  font-weight: bold;
+  min-width: 16rem;
+  padding-bottom: 1rem;
+}
+
+.automator-tooltip-content {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.automator-tooltip-content div {
+  width: 0;
+  flex-grow: 1;
+}
+
 .general-tooltip .tooltip-arrow {
   width: 0;
   height: 0;

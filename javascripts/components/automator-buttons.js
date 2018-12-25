@@ -51,3 +51,27 @@ Vue.component("automator-save-load-button", {
     }
   },
 });
+
+Vue.component('automator-shop-button', {
+  props: {
+    "instruction-type": String,
+    id: String,
+    action: String,
+  },
+  template:
+  `<v-popover trigger="hover" popover-inner-class="tooltip-inner automator-tooltip">
+    <button :class="['automatorinstruction', instruction-type]"
+            :id="id"
+            @click="action">
+      <slot name="button-content"></slot>
+    </button>
+    <div slot="popover">
+      <div class="automator-tooltip-header">
+        <slot name="tooltip-header"></slot>
+      </div>
+      <div class="automator-tooltip-content"><div>
+        <slot name="tooltip-content"></slot>
+      </div></div>
+    </div>
+  </v-popover>`
+});

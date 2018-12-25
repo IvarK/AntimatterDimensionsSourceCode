@@ -286,27 +286,9 @@ const EternityMilestone = function() {
   };
 }();
 
-class EternityUpgradeState {
+class EternityUpgradeState extends PurchasableMechanicState {
   constructor(config) {
-    this.config = config;
-  }
-
-  get isAffordable() {
-    return player.eternityPoints.gte(this.config.cost);
-  }
-
-  get isBought() {
-    return player.eternityUpgrades.includes(this.config.id);
-  }
-
-  get effectValue() {
-    return this.config.effect();
-  }
-
-  applyEffect(applyFn) {
-    if (this.isBought) {
-      applyFn(this.effectValue);
-    }
+    super(config, Currency.eternityPoints, () => player.eternityUpgrades);
   }
 }
 
@@ -326,6 +308,9 @@ const EternityUpgrade = function() {
       },
       get cost() {
         return player.epmultCost;
+      },
+      purchase() {
+        buyEPMult();
       },
       get effectValue() {
         return player.epmult;

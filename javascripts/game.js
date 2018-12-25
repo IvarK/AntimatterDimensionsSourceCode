@@ -1475,9 +1475,10 @@ function gameLoop(diff) {
     if (TimeStudy.dilation.isBought) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
 
     // Free galaxies (2x doesn't apply past 1000)
-    let freeGalaxyMult = 1;
-    if (player.dilation.upgrades.includes(4)) 
-      freeGalaxyMult = 2;
+    let freeGalaxyMult = Effects.max(
+      1,
+      DilationUpgrade.doubleGalaxies
+    );
     if (player.dilation.baseFreeGalaxies == undefined)
       player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
     let thresholdMult = getFreeGalaxyMult();
@@ -1533,8 +1534,9 @@ function gameLoop(diff) {
 
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
+    player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator);
     if (player.dilation.upgrades.includes(10)) {
-        player.timestudy.theorem += parseFloat(player.dilation.tachyonParticles.div(20000).times(diff/1000).toString())
+        //player.timestudy.theorem += parseFloat(player.dilation.tachyonParticles.div(20000).times(diff/1000).toString())
         if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") {
             updateTimeStudyButtons()
         }

@@ -34,10 +34,13 @@ Vue.component("eternity-upgrade-button", {
       this.isBought = upgrade.isBought;
       this.isAffordable = upgrade.isAffordable;
       this.effectValue.copyFrom(new Decimal(upgrade.effectValue));
+    },
+    purchase() {
+      this.upgrade.purchase();
     }
   },
   template:
-    `<button :class="classObject">
+    `<button :class="classObject" @click="purchase">
       {{config.description}}
       <br>
       Currently: {{effectDisplay}}

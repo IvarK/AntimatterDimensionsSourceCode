@@ -163,7 +163,7 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  let mult = player.infMult
+  return player.infMult
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -175,13 +175,10 @@ function totalIPMult() {
       Achievement(93),
       Achievement(116),
       Achievement(125),
-      Achievement(141)
+      Achievement(141),
+      DilationUpgrade.ipMultDT,
+      GlyphEffect.ipMult
     );
-
-  if (player.dilation.upgrades.includes(7)) {
-    mult = mult.times(player.dilation.dilatedTime.pow(1000).max(1));
-  }
-  return mult.times(Decimal.max(getAdjustedGlyphEffect("infinityipgain"), 1));
 }
 
 class InfinityUpgrade {

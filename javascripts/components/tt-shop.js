@@ -68,8 +68,8 @@ Vue.component("tt-shop", {
     update() {
       this.theoremAmount = player.timestudy.theorem;
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = player.dilation.upgrades.includes(10);
-      this.hasTTAutobuyer = player.reality.perks.includes(5);
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
+      this.hasTTAutobuyer = Perk(5).isBought;
       const budget = this.budget;
       budget.am.copyFrom(player.money);
       budget.ip.copyFrom(player.infinityPoints);

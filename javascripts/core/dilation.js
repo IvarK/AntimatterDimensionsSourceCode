@@ -124,7 +124,7 @@ function updateDilationUpgradeCosts() {
 }
 
 function getFreeGalaxyMult() {
-  let thresholdMult = 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
+  let thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue;
   let glyphReduction = getAdjustedGlyphEffect("dilationgalaxyThreshold") == 0 ? 1 : getAdjustedGlyphEffect("dilationgalaxyThreshold");
   thresholdMult *= glyphReduction;
   thresholdMult += 1.3 + 0.05 * glyphReduction;
@@ -132,8 +132,11 @@ function getFreeGalaxyMult() {
 }
 
 function getDilationGainPerSecond() {
-  var ret = new Decimal(player.dilation.tachyonParticles * Math.pow(2, player.dilation.rebuyables[1]))
-  ret = ret.timesEffectOf(Achievement(132));
+  let ret = new Decimal(player.dilation.tachyonParticles)
+    .timesEffectsOf(
+      DilationUpgrade.dtGain,
+      Achievement(132)
+    );
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
@@ -141,7 +144,7 @@ function getDilationGainPerSecond() {
 }
 
 function getTachyonGain() {
-  let mult = Decimal.pow(3, player.dilation.rebuyables[3])
+  let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
   if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(player.achPow))
   if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
@@ -153,7 +156,7 @@ function getTachyonGain() {
 }
 
 function getTachyonReq() {
-  let mult = Math.pow(3, player.dilation.rebuyables[3])
+  let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
   if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
   if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
@@ -176,14 +179,54 @@ function updateDilation() {
 }
 
 function dilatedValueOf(value) {
-  let dilationPenalty = 0.75;
-  if (player.dilation.upgrades.includes(9)) {
-    dilationPenalty *= 1.05;
-  }
   const log10 = value.log10();
+  const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 
 function dilatedTickspeed() {
   return dilatedValueOf(player.tickspeed);
 }
+
+class DilationUpgradeState extends PurchasableMechanicState {
+  constructor(config) {
+    super(config, Currency.dilatedTime, () => player.dilation.upgrades);
+  }
+
+  purchase() {
+    const purchaseSucceeded = super.purchase();
+    if (purchaseSucceeded && this.id === 4) {
+      player.dilation.freeGalaxies *= 2;
+    }
+  }
+}
+
+class RebuyableDilationUpgradeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+  }
+
+  get canBeApplied() {
+    return true;
+  }
+
+  purchase() {
+    buyDilationUpgrade(this.config.id);
+  }
+}
+
+const DilationUpgrade = (function() {
+  const db = GameDatabase.eternity.dilation;
+  return {
+    dtGain: new RebuyableDilationUpgradeState(db.dtGain),
+    galaxyThreshold: new RebuyableDilationUpgradeState(db.galaxyThreshold),
+    tachyonGain: new RebuyableDilationUpgradeState(db.tachyonGain),
+    doubleGalaxies: new DilationUpgradeState(db.doubleGalaxies),
+    tdMultReplicanti: new DilationUpgradeState(db.tdMultReplicanti),
+    ndMultDT: new DilationUpgradeState(db.ndMultDT),
+    ipMultDT: new DilationUpgradeState(db.ipMultDT),
+    timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
+    dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
+    ttGenerator: new DilationUpgradeState(db.ttGenerator)
+  };
+})();

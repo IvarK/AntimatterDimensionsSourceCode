@@ -167,8 +167,8 @@ class TimeDimensionInfo {
       mult = mult.times(Math.max(player.timestudy.studies.length, 1));
     }
 
-    if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
-      mult = mult.times(replicantiMult().pow(0.1));
+    if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
+      mult = mult.timesEffectOf(DilationUpgrade.tdMultReplicanti);
     }
 
     if (player.reality.upg.includes(22)) {

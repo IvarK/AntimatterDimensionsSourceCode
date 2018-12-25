@@ -885,5 +885,8 @@ class GlyphEffectInfo {
 const GlyphEffect = {
   dimBoostPower: new GlyphEffectInfo("powerdimboost", {
     adjustApply: value => Math.max(1, value)
+  }),
+  ipMult: new GlyphEffectInfo("infinityipgain", {
+    adjustApply: value => Decimal.max(1, value)
   })
 };

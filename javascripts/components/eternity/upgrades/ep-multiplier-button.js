@@ -10,10 +10,13 @@ Vue.component("ep-multiplier-button", {
   },
   watch: {
     isAutobuyerOn(newValue) {
-      player.reality.epmultbuyer = newValue;
+      this.upgrade.autobuyer.isOn = newValue;
     }
   },
   computed: {
+    upgrade() {
+      return EternityUpgrade.epMult;
+    },
     classObject() {
       return {
         "o-eternity-upgrade": true,
@@ -24,18 +27,21 @@ Vue.component("ep-multiplier-button", {
   },
   methods: {
     update() {
-      const upgrade = EternityUpgrade.epMult;
+      const upgrade = this.upgrade;
       const autobuyer = upgrade.autobuyer;
       this.isAutoUnlocked = autobuyer.isUnlocked;
       this.isAutobuyerOn = autobuyer.isOn;
       this.multiplier.copyFrom(upgrade.effectValue);
       this.cost.copyFrom(upgrade.cost);
       this.isAffordable = upgrade.isAffordable;
+    },
+    purchase() {
+      this.upgrade.purchase();
     }
   },
   template:
     `<div class="l-spoon-btn-group">
-      <button :class="classObject">
+      <button :class="classObject" @click="purchase">
         You gain 5 times more EP
         <br>
         Currently: {{shortenDimensions(multiplier)}}x

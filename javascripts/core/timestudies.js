@@ -150,7 +150,7 @@ function canBuyStudy(name) {
   if (name == 181) {
       if ((player.reality.perks.includes(4) || player.eternityChalls.eterc1 !== undefined) && (player.eternityChalls.eterc2 !== undefined || player.reality.perks.includes(74)) && (player.eternityChalls.eterc3 !== undefined || player.reality.perks.includes(75)) && player.timestudy.studies.includes(171)) return true; else return false;
   }
-  if (name == 201) if(player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)) return true; else return false
+  if (name == 201) if(player.timestudy.studies.includes(192) && !DilationUpgrade.timeStudySplit.isBought) return true; else return false
   if (name == 211) if(player.timestudy.studies.includes(191)) return true; else return false
   if (name == 212) if(player.timestudy.studies.includes(191)) return true; else return false
   if (name == 213) if(player.timestudy.studies.includes(193)) return true; else return false
@@ -185,7 +185,7 @@ function canBuyStudy(name) {
       break;
 
       case 7:
-      if (player.dilation.upgrades.includes(8)) {
+      if (DilationUpgrade.timeStudySplit.isBought) {
         if (player.timestudy.studies.includes(61)) return true; else return false;
       } else if (!player.timestudy.studies.includes(201)) {
           if (player.timestudy.studies.includes(61) && !hasRow(row)) return true; else return false
@@ -284,7 +284,7 @@ function studiesUntil(id) {
         if (player.timestudy.studies.includes(70 + i)) path[0] = i;
         if (player.timestudy.studies.includes(120 + i)) path[1] = i;
     }
-  if ((row > 10 && path[0] === 0 && !player.dilation.upgrades.includes(8)) || (row > 14 && path[1] === 0)) return;
+  if ((row > 10 && path[0] === 0 && !DilationUpgrade.timeStudySplit.isBought) || (row > 14 && path[1] === 0)) return;
   for (let i = 1; i < row; i++) {
       let chosenPath = path[i > 11 ? 1 : 0];
       let secondPath;
@@ -343,7 +343,7 @@ function studyPath(mode, args) {
             }
         }
         if (row >= 7 && row <= 10) {
-            if (mode === 'all' && player.dilation.upgrades.includes(8)) {
+            if (mode === 'all' && DilationUpgrade.timeStudySplit.isBought) {
                 master.push(row*10 + 1, row*10 + 2, row*10 + 3);
                 continue main;
             }

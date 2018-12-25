@@ -95,8 +95,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   }
 
-  if (player.dilation.upgrades.includes(6)) multiplier = multiplier.times(player.dilation.dilatedTime.pow(308).max(1));
-
+  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   return multiplier;
 }

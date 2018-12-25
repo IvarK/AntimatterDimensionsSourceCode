@@ -589,7 +589,7 @@
                     <table class="table" id="studytable">
                       <tr>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator11" action="buyAutomatorInstruction(11, 1)">
+                          <automator-shop-button name="WAIT">
                             <template slot="button-content">
                               WAIT<br>
                               Cost: 1 RM
@@ -605,7 +605,7 @@
                         </td>
                         <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator12" action="">
+                          <automator-shop-button name="BUY">
                             <template slot="button-content">
                               BUY<br>
                             </template>
@@ -621,18 +621,14 @@
                     <br>
                     <table class="table" id="studytable">
                       <tr>
-                        <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 1)">
-                            IF<br>Cost: 1 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 3)">
-                            ANTIMATTER<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator23" onclick="buyAutomatorInstruction(23, 2)">
-                            EP<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstructionbought target" id="automator24">
-                            STUDY<br></button></td>
-                        <td><button class="automatorinstructionbought target" id="automator25">
-                            STUDYUNTIL</button></td>
+                        <td><automator-shop-button name="IF">
+                        </automator-shop-button></td>
+                        <td><automator-shop-button name="ANTIMATTER"></automator-shop-button></td>
+                        <td><automator-shop-button name="EP"></automator-shop-button></td>
+                        <td><automator-shop-button name="STUDY"></automator-shop-button></td>
+                        <td><automator-shop-button name="STUDYUNTIL"></automator-shop-button></td>
                         <td>
-                          <automator-shop-button instruction-type="target" id="automator26" action="buyAutomatorInstruction(26, 50)">
+                          <automator-shop-button name="STUDYPATH">
                             <template slot="button-content">
                               STUDYPATH<br>Cost: 50 RM
                             </template>
@@ -650,36 +646,26 @@
                     </table>
                     <table class="table" id="studytable">
                       <tr>
-                        <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 1)">
-                            GOTO<br>Cost: 1 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 3)">
-                            IP<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 2)">
-                            REPLICANTI<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 3)">
-                            TTEP<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator35" onclick="buyAutomatorInstruction(35, 2)">
-                            TTIP<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator36" onclick="buyAutomatorInstruction(36, 500)">
-                            STUDYIMPORT<br>Cost: 500 RM</button></td>
+                          <td><automator-shop-button name="GOTO"></automator-shop-button></td>
+                          <td><automator-shop-button name="IP"></automator-shop-button></td>
+                          <td><automator-shop-button name="REPLICANTI"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTEP"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTIP"></automator-shop-button></td>
+                          <td><automator-shop-button name="STUDYIMPORT"></automator-shop-button></td>
                       </tr>
                     </table>
                     <table class="table" id="studytable">
                       <tr>
-                        <td><button class="automatorinstruction target" id="automator41" onclick="buyAutomatorInstruction(41, 3)">
-                            TIME<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator42" onclick="buyAutomatorInstruction(42, 2)">
-                            RG<br>Cost: 2 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator43" onclick="buyAutomatorInstruction(43, 3)">
-                            TTAM<br>Cost: 3 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator44" onclick="buyAutomatorInstruction(44, 20)">
-                            TTMAX<br>Cost: 20 RM</button></td>
+                          <td><automator-shop-button name="TIME"></automator-shop-button></td>
+                          <td><automator-shop-button name="RG"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTAM"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTMAX"></automator-shop-button></td>
                       </tr>
                     </table>
                     <table class="table" id="studytable">
                       <tr>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator51" action="buyAutomatorInstruction(51, 30)">
+                          <automator-shop-button name="LOAD">
                             <template slot="button-content">
                               LOAD<br>Cost: 30 RM
                             </template>
@@ -691,10 +677,9 @@
                             </template>
                           </automator-shop-button>
                         </td>
-                        <td><button class="automatorinstruction target" id="automator52" onclick="buyAutomatorInstruction(52, 10)">
-                            MAX<br>Cost: 10 RM</button></td>
+                        <td><automator-shop-button name="MAX"></automator-shop-button></td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator53" action="buyAutomatorInstruction(53, 30)">
+                          <automator-shop-button name="TOGGLE">
                             <template slot="button-content">
                               TOGGLE<br>Cost: 30 RM
                             </template>
@@ -708,7 +693,7 @@
                           </automator-shop-button>
                         </td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator54" action="buyAutomatorInstruction(54, 30)">
+                          <automator-shop-button name="UNLOCK">
                             <template slot="button-content">
                               UNLOCK<br>Cost: 30 RM
                             </template>
@@ -723,7 +708,7 @@
                       </tr>
                       <tr>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator61" action="buyAutomatorInstruction(61, 30)">
+                          <automator-shop-button name="RESPEC">
                             <template slot="button-content">
                               RESPEC<br>Cost: 30 RM
                             </template>
@@ -736,7 +721,7 @@
                           </automator-shop-button>
                         </td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator62" action="buyAutomatorInstruction(62, 30)">
+                          <automator-shop-button name="ETERNITY">
                             <template slot="button-content">
                               ETERNITY<br>Cost: 30 RM
                             </template>
@@ -748,14 +733,12 @@
                             </template>
                           </automator-shop-button>
                         </td>
-                        <td><button class="automatorinstruction target" id="automator63" onclick="buyAutomatorInstruction(63, 30)">
-                            DILATION<br>Cost: 30 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator64" onclick="buyAutomatorInstruction(64, 30)">
-                            EC<br>Cost: 30 RM</button></td>
+                        <td><automator-shop-button name="UNLOCK_DILATION"></automator-shop-button></td>
+                        <td><automator-shop-button name="UNLOCK_EC"></automator-shop-button></td>
                       </tr>
                       <tr>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator71" action="buyAutomatorInstruction(71, 30)">
+                          <automator-shop-button name="CHANGE">
                             <template slot="button-content">
                               CHANGE<br>Cost: 30 RM
                             </template>
@@ -768,7 +751,7 @@
                           </automator-shop-button>
                         </td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator72" action="buyAutomatorInstruction(72, 30)">
+                          <automator-shop-button name="STOP">
                             <template slot="button-content">
                               STOP<br>Cost: 30 RM
                             </template>
@@ -782,7 +765,7 @@
                         </td>
                         <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
                         <td>
-                          <automator-shop-button instruction-type="command" id="automator73" action="buyAutomatorInstruction(73, 30)">
+                          <automator-shop-button name="START">
                             <template slot="button-content">
                               START<br>Cost: 30 RM
                             </template>
@@ -796,14 +779,10 @@
                         </td>
                       </tr>
                       <tr>
-                        <td><button class="automatorinstruction target" id="automator81" onclick="buyAutomatorInstruction(81, 30)">
-                            IPAUTOBUYER<br>Cost: 30 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator82" onclick="buyAutomatorInstruction(82, 30)">
-                            EPAUTOBUYER<br>Cost: 30 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator83" onclick="buyAutomatorInstruction(83, 30)">
-                            DILATION<br>Cost: 30 RM</button></td>
-                        <td><button class="automatorinstruction target" id="automator84" onclick="buyAutomatorInstruction(84, 30)">
-                            EC<br>Cost: 30 RM</button></td>
+                        <td><automator-shop-button name="IPAUTOBUYER"></automator-shop-button></td>
+                        <td><automator-shop-button name="EPAUTOBUYER"></automator-shop-button></td>
+                        <td><automator-shop-button name="START_DILATION"></automator-shop-button></td>
+                        <td><automator-shop-button name="START_EC"></automator-shop-button></td>
                       </tr>
                     </table>
                 </div>
@@ -888,7 +867,6 @@
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
-
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>

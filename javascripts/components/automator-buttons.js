@@ -62,7 +62,7 @@ Vue.component('automator-shop-button', {
   `<v-popover trigger="hover" popover-inner-class="tooltip-inner automator-tooltip">
     <button :class="['automatorinstruction', instruction-type]"
             :id="id"
-            @click="action">
+            :onclick="action">
       <slot name="button-content"></slot>
     </button>
     <div slot="popover">

@@ -126,14 +126,6 @@ function onLoad() {
       }
   }
 
-  for (var i=0; i<player.reality.automatorCommands.length; i++) {
-    if (player.reality.automatorCommands[i] == 11 || player.reality.automatorCommands[i] == 12) {
-        document.getElementById("automator"+player.reality.automatorCommands[i]).className = "automatorinstructionbought command"
-    } else {
-        document.getElementById("automator"+player.reality.automatorCommands[i]).className = "automatorinstructionbought target"
-    }
-  }
-
   if (player.version < 9 ) {
       player.version = 9
       let achs = []

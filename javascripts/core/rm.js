@@ -791,3 +791,56 @@ function updateTooltips() {
     mouseOn = $("document")
   })
 }
+
+function getGlyphLevelInputs() {
+  // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
+  // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
+  // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
+  let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
+  var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
+  // factors assigned to repl and dt can be arbitrarily tuned
+  let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
+  let dtBase = player.dilation.dilatedTime.exponent ?
+    Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
+  let eterBase = player.reality.upg.includes(18) ?
+    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45,1) : 1;
+  // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
+  // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
+  // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
+  // largest term -- so probably replicants, So, instead of using the weights directly, a
+  // function of the weights is used: n_i = (4 w_i)^blendExp; put differently, the exponents
+  // don't add up to 4, but their powers do (for blendExp = 1/3, the cubes of the exponents sum to
+  // 4.
+  // The optimal weights, given a blendExp, are proportional to log(x)^(1/(1- blendExp))
+  const blendExp = 1/3;
+  // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
+  // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
+  // Then, we can divide the result by s⁴; this does nothing for even weights
+  // This can reduce the effect that Teresa can have; consider the following examples:
+  // Inputs : 100, 1, 1, 1. Nominal result : 100
+  // blendExp = 1/3; optimal weights: 1, 0, 0, 0; result = 1493
+  // Scaling by 100: 10000, 100, 100, 100
+  //                 optimal weights: 0.485, 0.17, 0.17, 0.17; result = 191.5
+  // The degree of this effect depends on the scale of the inputs:
+  // Inputs: 1000, 1, 1, 1. Nominal result: 1000
+  //                 optimal weights: 1, 0, 0, 0; result = 57836
+  // Scaling by 100: 100000, 100, 100, 100
+  //                 optimal weights: 0.57, 0.14, 0.14, 0.14; result = 3675
+  // Scaling does allow the user to produce results less than 1
+  // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
+  // For display purposes, each term is divided independently by s.
+  const preScale = 100;
+  var scaleHelper = (input, weight) => Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale;
+  let perkFactor = 0;
+  if (player.reality.perks.includes(21)) perkFactor++;
+  if (player.reality.perks.includes(24)) perkFactor++;
+ return {
+    epEffect: scaleHelper(epBase, player.celestials.teresa.glyphWeights.ep / 100),
+    replEffect: scaleHelper(replBase, player.celestials.teresa.glyphWeights.repl / 100),
+    dtEffect: scaleHelper(dtBase, player.celestials.teresa.glyphWeights.dt / 100),
+    eterEffect: scaleHelper(eterBase, player.celestials.teresa.glyphWeights.eternities / 100),
+    perkShop: player.celestials.effarig.glyphLevelMult,
+    perkFactor: perkFactor,
+  };
+}

@@ -215,7 +215,6 @@ function reality(force, reset, auto) {
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();
-    updateAutomatorTree();
     drawPerkNetwork();
     updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")

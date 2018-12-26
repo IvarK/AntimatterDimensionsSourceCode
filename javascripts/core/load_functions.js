@@ -254,7 +254,6 @@ function onLoad() {
   updateDilationUpgradeCosts();
   generateGlyphTable();
   updateRealityUpgrades();
-  updateAutomatorTree();
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()

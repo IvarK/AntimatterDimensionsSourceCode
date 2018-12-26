@@ -52,18 +52,60 @@ Vue.component("automator-save-load-button", {
   },
 });
 
-Vue.component('automator-shop-button', {
+Vue.component("automator-shop-button", {
   props: {
-    "instruction-type": String,
-    id: String,
-    action: String,
+    name: {
+      type: String,
+      required: true,
+    },
+  },
+  data: function() {
+    return {
+      purchased: false,
+      available: false,
+    }
+  },
+  computed: {
+    getClass: function() {
+      return [this.purchased ? "automatorinstructionbought" :
+        this.available ? "automatorinstruction" : "automatorinstructionlocked",
+        Automator.Instructions[this.name].type];
+    },
+    // this assumes prices are constant
+    getPrice: function() {
+      return Automator.Instructions[this.name].price;
+    },
+    instructionID: function() {
+      return Automator.Instructions[this.name].id;
+    },
+    domID: function() {
+      return "automator" + Automator.Instructions[this.name].id;
+    },
+    displayName: function() {
+      return Automator.Instructions[this.name].displayName;
+    },
+    popoverTrigger: function() {
+      // If the html did not specify a tooltip, we set the trigger to
+      // manual so that it doesn't show up:
+      return this.$slots["tooltip-header"] ? "hover" : "manual";
+    },
+  },
+  methods: {
+    update: function() {
+      this.purchased = player.reality.automatorCommands.includes(this.instructionID);
+      this.available = !this.purchased && canBuyAutomatorInstruction(this.instructionID);
+    },
+    buy: function() {
+      buyAutomatorInstruction(this.instructionID);
+    }
   },
   template:
-  `<v-popover trigger="hover" popover-inner-class="tooltip-inner automator-tooltip">
-    <button :class="['automatorinstruction', instruction-type]"
-            :id="id"
-            :onclick="action">
-      <slot name="button-content"></slot>
+  `<v-popover :trigger="popoverTrigger" popover-inner-class="tooltip-inner automator-tooltip">
+    <button :class="getClass"
+            :id="domID"
+            @click="buy">
+            <div>{{displayName}}</div>
+            <div v-if="!this.purchased">Cost: {{getPrice}} RM</div>
     </button>
     <div slot="popover">
       <div class="automator-tooltip-header">

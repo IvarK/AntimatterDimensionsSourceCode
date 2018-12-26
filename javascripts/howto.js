@@ -49,7 +49,7 @@ function showspoilers() {
 function updateSpoilers() {
 	var displayed = 0;
 	if (spoilers === 0) {
-		for (i=1; i<18; i++) {
+		for (i=1; i<19; i++) {
 			displayed = 0;
 			if (i === 5 && (player.resets >= 4 || player.infinitied >= 1 || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;

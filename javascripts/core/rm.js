@@ -672,9 +672,9 @@ function updateRealityUpgrades() {
   $("#rupg3").html("You gain 3 times more Eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
   $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: "+ row1Mults[4] +"x<br>Cost: "+row1Costs[4]+" RM")
   $("#rupg5").html("You gain 5 times more Infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
-  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shortenRateOfChange(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
+  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently "+shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shortenRateOfChange(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
 function toggleGlyphRespec() {
@@ -733,12 +733,12 @@ function getGlyphSacEffect(type) {
 
 function getGlyphSacDescription(type) {
   let amount = getGlyphSacEffect(type)
-  let total = shorten(player.reality.glyphs.sac[type])
+  let total = shortenRateOfChange(player.reality.glyphs.sac[type])
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power":
     let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy) + ")<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
 
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
@@ -750,7 +750,7 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
     case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
   }
 }
 

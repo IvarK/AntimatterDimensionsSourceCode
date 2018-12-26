@@ -69,5 +69,5 @@ class InfinityMultiplierSetup extends InfinityUpgradeSetup {
 const infinityMultSetup = () => new InfinityMultiplierSetup({
   upgrade: InfinityUpgrade.ipMult,
   description: "Multiply Infinity Points from all sources by 2",
-  formatEffect: (value, formatter) => `${formatter.shorten(value)}x`,
+  formatEffect: (value, formatter) => `${formatter.shortenRateOfChange(value)}x`,
 });

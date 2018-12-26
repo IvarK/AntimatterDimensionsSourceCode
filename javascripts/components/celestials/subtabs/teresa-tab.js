@@ -72,8 +72,8 @@ Vue.component('teresa-tab', {
   },
   template:
     `<div class="l-teresa-celestial-tab">
-      <div class="c-teresa-relics">You have {{ shorten(relicShards) }} Relic Shards.</div>
-      <div class="c-teresa-relic-description">You gain {{ shorten(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
+      <div class="c-teresa-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
+      <div class="c-teresa-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-teresa-shop">
         <button class="o-teresa-shop-button" @click="buyUnlock(0, 50000)" :class="{ 'teresa-unlock-bought': unlocks[0] }">Unlock glyph level adjustment.<br>Cost: 50,000 Relic Shards</button>
         <button class="o-teresa-shop-button" @click="buyUnlock(1, 2e6)" :class="{ 'teresa-unlock-bought': unlocks[1] }">Unlock automatic glyph sacrifice.<br>Cost: 2,000,000 Relic Shards</button>

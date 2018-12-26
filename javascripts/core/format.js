@@ -137,37 +137,46 @@ function formatValue(notation, value, places, placesUnder1000) {
     }
 }
 
-shorten = function (money) {
-  return shortenWithCurrentNotation(money, 2, 2);
+shortenRateOfChange = function (money) {
+  return shorten(money, 2, 2);
 };
 
 shortenCosts = function (money) {
-  return shortenWithCurrentNotation(money, 0, 0);
+  return shorten(money, 0, 0);
 };
 
 shortenDimensions = function (money) {
-  return shortenWithCurrentNotation(money, 2, 0);
+  return shorten(money, 2, 0);
 };
 
 shortenMoney = function (money) {
-  return shortenWithCurrentNotation(money, 2, 1);
+  return shorten(money, 2, 1);
 };
 
 shortenGlyphEffect = function (money) {
-  return shortenWithCurrentNotation(money, 2, 3);
+  return shorten(money, 2, 3);
 };
 
 shortenMultiplier = function (money) {
-  return shortenWithCurrentNotation(money, 1, 1);
+  return shorten(money, 1, 1);
 };
 
 shortenAutobuyerInput = function (money) {
   return formatValue("Scientific", money, 2, 0);
 };
 
-shortenWithCurrentNotation = function(value, places, placesUnder1000) {
+function shorten(value, places, placesUnder1000) {
     return formatValue(Notation.current().name, value, places, placesUnder1000);
-};
+}
+
+function formatX(value, places, placesUnder1000) {
+  return shorten(value, places, placesUnder1000) + "x";
+}
+
+function formatPercents(value, places) {
+  const placesOOM = Math.pow(10, places);
+  return Math.round(value * 100 * placesOOM) / placesOOM + "%";
+}
 
 function timeDisplay(ms) {
   return TimeSpan.fromMilliseconds(ms).toString();

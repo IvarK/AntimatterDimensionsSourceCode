@@ -74,7 +74,7 @@ Vue.component("replicanti-tab", {
         <div v-if="isInEC8">You have {{ec8Purchases}} purchases left.</div>
         <p class="c-replicanti-description">
           You have <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
-          Translated to <span class="c-replicanti-description__accent">{{shorten(mult)}}</span>x multiplier on all Infinity Dimensions.
+          Translated to <span class="c-replicanti-description__accent">{{shortenRateOfChange(mult)}}</span>x multiplier on all Infinity Dimensions.
         </p>
         <br>
         <div class="l-replicanti-upgrade-row">

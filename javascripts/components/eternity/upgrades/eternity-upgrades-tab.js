@@ -17,10 +17,10 @@ Vue.component("eternity-upgrades-tab", {
   },
   template:
     `<div class="l-eternity-upgrades-grid">
-      <div v-for="(row, rowIdx) in grid" class="l-eternity-upgrades-grid__row">
+      <div v-for="row in grid" class="l-eternity-upgrades-grid__row">
         <eternity-upgrade-button
-          v-for="(getUpgrade, columnIdx) in row"
-          :key="rowIdx * 3 + columnIdx"
+          v-for="getUpgrade in row"
+          :key="getUpgrade().id"
           :getUpgrade="getUpgrade"
           class="l-eternity-upgrades-grid__cell"
         />

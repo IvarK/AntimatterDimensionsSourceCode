@@ -206,6 +206,14 @@ class RebuyableDilationUpgradeState extends GameMechanicState {
     super(config);
   }
 
+  get cost() {
+    return this.config.cost();
+  }
+
+  get isAffordable() {
+    return player.dilation.dilatedTime.gte(this.cost);
+  }
+
   get canBeApplied() {
     return true;
   }

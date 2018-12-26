@@ -1534,7 +1534,7 @@ function gameLoop(diff) {
 
     if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
-    player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator);
+    player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
     if (player.dilation.upgrades.includes(10)) {
         //player.timestudy.theorem += parseFloat(player.dilation.tachyonParticles.div(20000).times(diff/1000).toString())
         if (document.getElementById("timestudies").style.display != "none" && document.getElementById("eternitystore").style.display != "none") {

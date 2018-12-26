@@ -85,7 +85,7 @@ const infinityUpgradeGridSetup = () => [
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.unspentIPMult,
       description: "Multiplier for unspent Infinity Points on 1st Dimension",
-      formatEffect: (value, formatter) => `${formatter.shorten(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenRateOfChange(value)}x`
     }),
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dimboostMult,

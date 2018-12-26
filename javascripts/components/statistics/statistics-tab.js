@@ -75,7 +75,7 @@ Vue.component('statistics-tab', {
       this.infoScale = estimateMatterScale(player.money, this);
     },
     formatAmount: function(value) { 
-      return value > 1e18 ? shortenWithCurrentNotation(value, 6, 0) : formatWithCommas(value);
+      return value > 1e18 ? shorten(value, 6, 0) : formatWithCommas(value);
     },
     formatResetAmount: function(value) {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");

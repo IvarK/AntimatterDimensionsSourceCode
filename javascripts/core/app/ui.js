@@ -30,6 +30,9 @@ Vue.mixin({
     shorten: function(value) {
       return shorten(value);
     },
+    shortenRateOfChange: function(value) {
+      return shortenRateOfChange(value);
+    },
     shortenCosts: function(value) {
       return shortenCosts(value);
     },

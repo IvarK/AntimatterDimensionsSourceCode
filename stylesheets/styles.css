@@ -4372,6 +4372,152 @@ screen and (max-width: 480px) {
 
 /*#endregion Eternity Milestones*/
 
+/*#region Dilation*/
+
+.l-dilation-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*#region c-dilation-tab*/
+
+.c-dilation-tab__tachyons {
+  color: black;
+  font-size: 3.5rem;
+}
+
+.c-dilation-tab__dilated-time {
+  color: black;
+  font-size: 3.5rem;
+}
+
+.c-dilation-tab__dilated-time-income {
+  color: black;
+  font-size: 2.5rem;
+}
+
+.c-dilation-tab__galaxy-threshold {
+  color: black;
+  font-size: 2.5rem;
+}
+
+.c-dilation-tab__galaxies {
+  color: black;
+  font-size: 2.5rem;
+}
+
+/*#endregion c-dilation-tab*/
+
+/*#region l-dilation-upgrades-grid*/
+
+.l-dilation-upgrades-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-dilation-upgrades-grid__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-dilation-upgrades-grid__cell {
+  margin: 1.2rem 1.5rem;
+}
+
+/*#endregion l-dilation-upgrades-grid*/
+
+/*#region o-dilation-btn*/
+
+.o-dilation-btn {
+  color: #64dd17;
+  background-color: black;
+  font-weight: bold;
+  font-size: 1.12rem;
+  border: .2rem solid #64dd17;
+  width: 19rem;
+  height: 9rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+  animation: a-dilation-btn-glow 10s infinite;
+}
+
+.o-dilation-btn:hover {
+  background-color: white;
+}
+
+@keyframes a-dilation-btn-glow {
+  0%   { box-shadow: inset 0.5rem  0       2rem }
+  25%  { box-shadow: inset 0       0.5rem  2rem }
+  50%  { box-shadow: inset -0.5rem 0       2rem }
+  75%  { box-shadow: inset 0       -0.5rem 2rem }
+  100% { box-shadow: inset 0.5rem  0       2rem }
+}
+
+/*#endregion o-dilation-btn*/
+
+/*#region o-dilation-upgrade*/
+
+.o-dilation-upgrade {
+  background: black;
+  font-weight: bold;
+  font-size: 1.05rem;
+  border: .1rem solid;
+  width: 17rem;
+  height: 8rem;
+  transition-duration: 0.2s;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+}
+
+.o-dilation-upgrade--available {
+  color: #64dd17;
+  border-color: #64dd17;
+  animation: a-dilation-btn-glow 10s infinite;
+  cursor: pointer;
+}
+
+.o-dilation-upgrade--rebuyable.o-dilation-upgrade--available {
+  color: #64ddad;
+  border-color: #64ddad;
+}
+
+.o-dilation-upgrade--available:hover {
+  background-color: white;
+}
+
+.o-dilation-upgrade--bought {
+  color: black;
+  background-color: #64dd17;
+  border-color: black;
+}
+
+.o-dilation-upgrade--unavailable {
+  color: #181818;
+  background-color: #5f5f5f;
+  border-color: #3e8a0f;
+}
+
+.o-dilation-upgrade--rebuyable.o-dilation-upgrade--unavailable {
+  border-color: #64ddad;
+}
+
+.o-dilation-upgrade--unavailable:hover {
+  color: #1d1d1d;
+  background-color: #660000;
+}
+
+.o-dilation-upgrade__description--small-text {
+  font-size: 0.95rem;
+}
+
+/*#endregion o-dilation-upgrade*/
+
+/*#endregion Dilation*/
+
 /*#region Modals*/
 
 /*#region c-modal*/

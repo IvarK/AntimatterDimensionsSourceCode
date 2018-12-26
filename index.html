@@ -587,132 +587,203 @@
                         <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateState()"></textarea>
                     </div>
                     <table class="table" id="studytable">
-                        <tr>
-                            <td><button class="automatorinstruction command" id="automator11" onclick="buyAutomatorInstruction(11, 1)">
-                                <span class="tooltip">
-                                    <h3>WAIT [target] [amount]</h3>
-                                    Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10" waits 10 seconds.
-                                </span>
-                                WAIT<br>
-                                Cost: 1 RM
-                            </button></td>
-                            <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
-                            <td><button class="automatorinstructionbought command" id="automator12">
-                                <span class="tooltip">
-                                    <h3>BUY [target] [amount/ID]</h3>
-                                    Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.
-                                </span>
-                                BUY<br>
-                            </button></td>
-                        </tr>
+                      <tr>
+                        <td>
+                          <automator-shop-button name="WAIT">
+                            <template slot="button-content">
+                              WAIT<br>
+                              Cost: 1 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              WAIT [target] [amount]
+                            </template>
+                            <template slot="tooltip-content">
+                              Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10"
+                              waits 10 seconds.
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
+                        <td>
+                          <automator-shop-button name="BUY">
+                            <template slot="button-content">
+                              BUY<br>
+                            </template>
+                            <template slot="tooltip-header">
+                              BUY [target] [amount/ID]
+                            </template>
+                            <template slot="tooltip-content">
+                              Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.</template>
+                          </automator-shop-button>
+                        </td>
+                      </tr>
                     </table>
                     <br>
                     <table class="table" id="studytable">
-                        <tr>
-                            <td><button class="automatorinstruction target" id="automator21" onclick="buyAutomatorInstruction(21, 1)">IF<br>Cost: 1 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator22" onclick="buyAutomatorInstruction(22, 3)">ANTIMATTER<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator23" onclick="buyAutomatorInstruction(23, 2)">EP<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstructionbought target" id="automator24">STUDY<br></button></td>
-                            <td><button class="automatorinstructionbought target" id="automator25">STUDYUNTIL</button></td>
-                            <td><button class="automatorinstruction target" id="automator26" onclick="buyAutomatorInstruction(26, 50)">
-                                    <span class="tooltip">
-                                        <h3>BUY  STUDYPATH [all/none] [study ids and path names]</h3>
-                                        <br />
-                                        Buys studies top-down using arguments after the mode specification. The 2 modes specify to buy "all" or "none" of the studies on non-locked splits (incl. 62 and 33). Locked paths must be specified by ID # or split name.
-                                    </span>STUDYPATH<br>Cost: 50 RM</button></td>
-                        </tr>
+                      <tr>
+                        <td><automator-shop-button name="IF">
+                        </automator-shop-button></td>
+                        <td><automator-shop-button name="ANTIMATTER"></automator-shop-button></td>
+                        <td><automator-shop-button name="EP"></automator-shop-button></td>
+                        <td><automator-shop-button name="STUDY"></automator-shop-button></td>
+                        <td><automator-shop-button name="STUDYUNTIL"></automator-shop-button></td>
+                        <td>
+                          <automator-shop-button name="STUDYPATH">
+                            <template slot="button-content">
+                              STUDYPATH<br>Cost: 50 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              BUY STUDYPATH [all/none] [study ids and path names]
+                            </template>
+                            <template slot="tooltip-content">
+                              Buys studies top-down using arguments after the mode specification. The 2 modes specify to buy "all" or
+                              "none" of the studies on non-locked splits (incl. 62 and 33). Locked paths must be specified by ID # or split
+                              name.
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                      </tr>
                     </table>
                     <table class="table" id="studytable">
-                        <tr>
-                            <td><button class="automatorinstruction target" id="automator31" onclick="buyAutomatorInstruction(31, 1)">GOTO<br>Cost: 1 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator32" onclick="buyAutomatorInstruction(32, 3)">IP<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator33" onclick="buyAutomatorInstruction(33, 2)">REPLICANTI<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator34" onclick="buyAutomatorInstruction(34, 3)">TTEP<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator35" onclick="buyAutomatorInstruction(35, 2)">TTIP<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator36" onclick="buyAutomatorInstruction(36, 500)">STUDYIMPORT<br>Cost: 500 RM</button></td>
-                        </tr>
+                      <tr>
+                          <td><automator-shop-button name="GOTO"></automator-shop-button></td>
+                          <td><automator-shop-button name="IP"></automator-shop-button></td>
+                          <td><automator-shop-button name="REPLICANTI"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTEP"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTIP"></automator-shop-button></td>
+                          <td><automator-shop-button name="STUDYIMPORT"></automator-shop-button></td>
+                      </tr>
                     </table>
                     <table class="table" id="studytable">
-                        <tr>
-                            <td><button class="automatorinstruction target" id="automator41" onclick="buyAutomatorInstruction(41, 3)">TIME<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator42" onclick="buyAutomatorInstruction(42, 2)">RG<br>Cost: 2 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator43" onclick="buyAutomatorInstruction(43, 3)">TTAM<br>Cost: 3 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator44" onclick="buyAutomatorInstruction(44, 20)">TTMAX<br>Cost: 20 RM</button></td>
-                        </tr>
+                      <tr>
+                          <td><automator-shop-button name="TIME"></automator-shop-button></td>
+                          <td><automator-shop-button name="RG"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTAM"></automator-shop-button></td>
+                          <td><automator-shop-button name="TTMAX"></automator-shop-button></td>
+                      </tr>
                     </table>
                     <table class="table" id="studytable">
-                        <tr>
-                            <td><button class="automatorinstruction command" id="automator51" onclick="buyAutomatorInstruction(51, 30)">
-                                <span class="tooltip">
-                                    <h3>LOAD [automatorscriptnumber]</h3>
-                                    You can load different automatorscripts with this, "Load 2" loads the second script
-                                </span>
-                                LOAD<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction target" id="automator52" onclick="buyAutomatorInstruction(52, 10)">MAX<br>Cost: 10 RM</button></td>
-                            <td><button class="automatorinstruction command" id="automator53" onclick="buyAutomatorInstruction(53, 30)">
-                                <span class="tooltip">
-                                    <h3>TOGGLE [autobuyer]</h3>
-                                    Toggles autobuyers on and off, "Toggle D1" for example. Targets include: DX, Tickspeed, Galaxy, Dimboost, Infinity, Eternity, Sacrifice, and RG
-                                </span>
-                                TOGGLE<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction command" id="automator54" onclick="buyAutomatorInstruction(54, 30)">
-                                <span class="tooltip">
-                                    <h3>UNLOCK [target] [(id)]</h3>
-                                    Unlocks either ECs "Unlock EC 3", or dilation "Unlock dilation"
-                                </span>
-                                UNLOCK<br>Cost: 30 RM
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td><button class="automatorinstruction command" id="automator61" onclick="buyAutomatorInstruction(61, 30)">
-                                <span class="tooltip">
-                                    <h3>RESPEC</h3>
-                                    Toggles respec on, so next eternity you will respec.
-                                </span>
-                                RESPEC<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction command" id="automator62" onclick="buyAutomatorInstruction(62, 30)">
-                                <span class="tooltip">
-                                    <h3>ETERNITY</h3>
-                                    Does an eternity if able, if not it waits until it can eternity.
-                                </span>
-                                ETERNITY<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction target" id="automator63" onclick="buyAutomatorInstruction(63, 30)">DILATION<br>Cost: 30 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator64" onclick="buyAutomatorInstruction(64, 30)">EC<br>Cost: 30 RM</button></td>
-                        </tr>
-                        <tr>
-                            <td><button class="automatorinstruction command" id="automator71" onclick="buyAutomatorInstruction(71, 30)">
-                                <span class="tooltip">
-                                    <h3>CHANGE [IPAUTOBUYER/EPAUTOBUYER] [amount]</h3>
-                                    You can change the amount in your autobuyers "CHANGE IPAUTOBUYER 1e2000" for example
-                                </span>
-                                CHANGE<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction command" id="automator72" onclick="buyAutomatorInstruction(72, 30)">
-                                <span class="tooltip">
-                                    <h3>STOP</h3>
-                                    Stops the whole automator.
-                                </span>
-                                STOP<br>Cost: 30 RM
-                            </button></td>
-                            <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
-                            <td><button class="automatorinstruction command" id="automator73" onclick="buyAutomatorInstruction(73, 30)">
-                                <span class="tooltip">
-                                    <h3>START [target] [(id)]</h3>
-                                    Starts either ECs "Start EC 3", or dilation "Start dilation"
-                                </span>
-                                START<br>Cost: 30 RM
-                            </button></td>
-                        </tr>
-                        <tr>
-                            <td><button class="automatorinstruction target" id="automator81" onclick="buyAutomatorInstruction(81, 30)">IPAUTOBUYER<br>Cost: 30 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator82" onclick="buyAutomatorInstruction(82, 30)">EPAUTOBUYER<br>Cost: 30 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator83" onclick="buyAutomatorInstruction(83, 30)">DILATION<br>Cost: 30 RM</button></td>
-                            <td><button class="automatorinstruction target" id="automator84" onclick="buyAutomatorInstruction(84, 30)">EC<br>Cost: 30 RM</button></td>
-                        </tr>
+                      <tr>
+                        <td>
+                          <automator-shop-button name="LOAD">
+                            <template slot="button-content">
+                              LOAD<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              LOAD [automatorscriptnumber]
+                            </template>
+                            <template slot="tooltip-content">
+                              You can load different automatorscripts with this, "Load 2" loads the second script
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td><automator-shop-button name="MAX"></automator-shop-button></td>
+                        <td>
+                          <automator-shop-button name="TOGGLE">
+                            <template slot="button-content">
+                              TOGGLE<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              TOGGLE [autobuyer]
+                            </template>
+                            <template slot="tooltip-content">
+                              Toggles autobuyers on and off, "Toggle D1" for example. Targets include: DX, Tickspeed, Galaxy, Dimboost,
+                              Infinity, Eternity, Sacrifice, and RG
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td>
+                          <automator-shop-button name="UNLOCK">
+                            <template slot="button-content">
+                              UNLOCK<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              UNLOCK [target] [(id)]
+                            </template>
+                            <template slot="tooltip-content">
+                              Unlocks either ECs "Unlock EC 3", or dilation "Unlock dilation"
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <automator-shop-button name="RESPEC">
+                            <template slot="button-content">
+                              RESPEC<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              RESPEC
+                            </template>
+                            <template slot="tooltip-content">
+                              Toggles respec on, so next eternity your time studies will reset.
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td>
+                          <automator-shop-button name="ETERNITY">
+                            <template slot="button-content">
+                              ETERNITY<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              ETERNITY
+                            </template>
+                            <template slot="tooltip-content">
+                              Does an eternity if able, if not it waits until it can eternity.
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td><automator-shop-button name="UNLOCK_DILATION"></automator-shop-button></td>
+                        <td><automator-shop-button name="UNLOCK_EC"></automator-shop-button></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <automator-shop-button name="CHANGE">
+                            <template slot="button-content">
+                              CHANGE<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              CHANGE [IPAUTOBUYER/EPAUTOBUYER] [amount]
+                            </template>
+                            <template slot="tooltip-content">
+                              You can change the amount in your autobuyers "CHANGE IPAUTOBUYER 1e2000" for example
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td>
+                          <automator-shop-button name="STOP">
+                            <template slot="button-content">
+                              STOP<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              STOP
+                            </template>
+                            <template slot="tooltip-content">
+                              Stops the whole automator.
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                        <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
+                        <td>
+                          <automator-shop-button name="START">
+                            <template slot="button-content">
+                              START<br>Cost: 30 RM
+                            </template>
+                            <template slot="tooltip-header">
+                              START [target] [(id)]
+                            </template>
+                            <template slot="tooltip-content">
+                              Starts either ECs "Start EC 3", or dilation "Start dilation"
+                            </template>
+                          </automator-shop-button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><automator-shop-button name="IPAUTOBUYER"></automator-shop-button></td>
+                        <td><automator-shop-button name="EPAUTOBUYER"></automator-shop-button></td>
+                        <td><automator-shop-button name="START_DILATION"></automator-shop-button></td>
+                        <td><automator-shop-button name="START_EC"></automator-shop-button></td>
+                      </tr>
                     </table>
                 </div>
             </div>
@@ -796,7 +867,6 @@
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
-
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
 <script type="text/javascript" src="javascripts/components/secondary-tab-button.js"></script>

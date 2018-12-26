@@ -30,7 +30,6 @@
  * LOAD SCRIPT 2: loads the second script
  */
 
-
  /**
   * 
   * The player can use rows equal to Math.ceil(realities^0.5)
@@ -383,77 +382,18 @@ function loadScript(num) {
   }
 }
 
-function buyAutomatorInstruction(id, cost) {
+function buyAutomatorInstruction(id) {
   if (!canBuyAutomatorInstruction(id)) return false
-  if (player.reality.realityMachines.lt(cost)) return false
   if (player.reality.automatorCommands.includes(id)) return false
-  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price)
   player.reality.automatorCommands.push(id)
-  if (id == 11 || id == 12) {
-      document.getElementById("automator"+id).className = "automatorinstructionbought command"
-  } else {
-      document.getElementById("automator"+id).className = "automatorinstructionbought target"
-  }
-  updateAutomatorTree()
   return true
 }
 
-// child: parent
-var automatorparents = {
-  21: 11,
-  22: 11,
-  23: 11,
-  31: 21,
-  32: 11,
-  33: 11,
-  36: 26,
-  41: 11,
-  42: 11,
-  51: 41,
-  52: 42,
-  53: 43,
-  54: 44,
-  61: 51,
-  62: 52,
-  63: 54,
-  64: 54,
-  71: 61,
-  72: 62,
-  73: 64,
-  81: 71,
-  82: 71,
-  83: 73,
-  84: 73,
-}
-
 function canBuyAutomatorInstruction(id) {
-  if (player.reality.realityMachines.lt(instructionCosts[allInstructions.indexOf(id)])) return false
-  var parent = automatorparents[id]
-  if (parent === undefined || player.reality.automatorCommands.includes(parent)) return true
-  return false
-}
-
-var allInstructions = [11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]
-var instructionCosts = [1, 0, 1, 3,  2,  0,  0, 50, 1, 3,  2,  3,  2,  3,  2, 500,  3,  20, 30, 10, 30, 30, 30, 10, 30, 30, 30, 30, 30, 30, 30, 30, 30]
-var automatorCommands = [11, 12, 21, 31, 51, 53, 54, 61, 62, 71, 72, 73]
-function updateAutomatorTree() {
-  for (var i=0; i<allInstructions.length; i++) {
-    if (!player.reality.automatorCommands.includes(allInstructions[i])) {
-      if (canBuyAutomatorInstruction(allInstructions[i]) && player.reality.realityMachines.gte(instructionCosts[i])) {
-        if (automatorCommands.includes(allInstructions[i])) {
-          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction command"
-        } else {
-          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction target"
-        }
-      } else {
-          if (automatorCommands.includes(allInstructions[i])) {
-            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked command"
-          } else {
-            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked target"
-          }
-        }
-    }
-  }
+  var info = Automator.InstructionsById[id];
+  if (player.reality.realityMachines.lt(info.price)) return false;
+  return info.parent === undefined || player.reality.automatorCommands.includes(info.parent);
 }
 
 function updateAutomatorRows() {

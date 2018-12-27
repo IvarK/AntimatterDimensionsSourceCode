@@ -29,8 +29,8 @@ var Effarig = {
   },
   checkForUnlocks() {
     if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
-    else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e15) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
-    else if (!this.has(EFFARIG_UNLOCKS.TERESA) && this.rmStore > 5e16) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.TERESA)
+    else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
+    else if (!this.has(EFFARIG_UNLOCKS.TERESA) && this.rmStore > 5e21) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.TERESA)
     else if (!this.has(EFFARIG_UNLOCKS.SHOP) && this.rmStore > 1e24) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.SHOP)
   },
   has(id) {
@@ -65,7 +65,7 @@ var Effarig = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, Math.pow(player.realities, 0.3)), 1)
+    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, 1+Math.pow(Math.log10(player.realities), 1.5)), 1)
   },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]

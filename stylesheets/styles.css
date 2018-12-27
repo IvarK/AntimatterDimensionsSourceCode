@@ -4641,8 +4641,8 @@ screen and (max-width: 480px) {
 /* Style: bottom is to align the bottom of the unlock with a specific amount, formula to get the percentage is log10(amount) / log10(1e24) * 100 */
 
 #effarig-run-description { bottom: 52.912% } /* amount=5e12 */
-#effarig-epgen-description { bottom: 62.5% } /* amount=1e15 */
-#effarig-teresa-description { bottom: 69.579% } /* amount=5e16 */
+#effarig-epgen-description { bottom: 75.0% } /* amount=1e18 */
+#effarig-teresa-description { bottom: 90.41% } /* amount=5e21 */
 #effarig-shop-description { bottom: 100% } /* amount=1e24 */
 
 /*#endregion Effarig tab*/

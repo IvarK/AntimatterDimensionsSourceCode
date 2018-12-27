@@ -399,9 +399,7 @@ function percentToNextRealityMachine() {
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
     let glyphInfo = getGlyphLevelInputs();
-    var ret = glyphInfo.epEffect * glyphInfo.replEffect * glyphInfo.dtEffect * glyphInfo.eterEffect;
-    ret *= glyphInfo.perkShop;
-    ret += glyphInfo.perkFactor;
+    var ret = glyphInfo.finalLevel;
     if (round) ret = Math.round(ret)
     if (ret == Infinity || isNaN(ret)) return 0
     return ret
@@ -1602,11 +1600,13 @@ function gameLoop(diff) {
   // Tooltip for reality button stating more detailed RM and glyph level info
   let nextRMText = gainedRealityMachines() < 100 ? "Next RM gained at " + shortenDimensions(new Decimal("1e" + Math.ceil(4000*(1 + Math.log(parseInt(gainedRealityMachines().toFixed()) + 1)/Math.log(1000))))) + "<br><br>" : "";
   let glyphInfo = getGlyphLevelInputs();
-  let factorNames = ["EP", "Replicanti", "DT", "Eternities", "Perk Shop", "Perks"];
-  let factorNumbers = ["&nbsp;"+glyphInfo.epEffect .toFixed(3), "×"+glyphInfo.replEffect.toFixed(3),
+  let factorNames = ["EP", "Replicanti", "DT", "Eternities", "Instability", "Perk Shop", "Perks"];
+  let factorNumbers = [
+    "&nbsp;"+glyphInfo.epEffect .toFixed(3), "×"+glyphInfo.replEffect.toFixed(3),
     "×" + glyphInfo.dtEffect.toFixed(3), "×" + glyphInfo.eterEffect.toFixed(3),
+    "/" + glyphInfo.scalePenalty.toFixed(3),
     "+" + (glyphInfo.perkShop * 100 - 100).toFixed(1) + "%", "+" + glyphInfo.perkFactor]
-  let isFactorDisplayed = [true, true, true, player.reality.upg.includes(18), glyphInfo.perkShop > 1, glyphInfo.perkFactor != 0]
+  let isFactorDisplayed = [true, true, true, player.reality.upg.includes(18), glyphInfo.scalePenalty > 1, glyphInfo.perkShop > 1, glyphInfo.perkFactor != 0]
   let glyphLevelFactorText = 'Glyph level factors:<table style="width:100%">';
   for (let i = 0; i < factorNames.length; i++)
     if (isFactorDisplayed[i])

@@ -238,9 +238,9 @@ function getAdjustedGlyphEffect(effectKey) {
   let value = getTotalEffect(effectKey);
   if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
     const softcap = glyphEffectSoftcaps[effectKey];
-    return softcap(value);
+    return softcap(value.effect);
   }
-  return value;
+  return value.effect;
 }
 
 // Combines all specified glyph effects (without softcaps), reduces some boilerplate
@@ -250,10 +250,12 @@ function getTotalEffect(effectKey) {
   let effect = separated[1];
   
   let totalEffect = 0;
+  let glyphCount = 0;
   let activeGlyphs = player.reality.glyphs.active;
   for (let i = 0; i < activeGlyphs.length; i++) {
     let currGlyph = activeGlyphs[i];
     if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
+      ++glyphCount;
       if (totalEffect == 0) {
         totalEffect = currGlyph.effects[effect];
       } else {  // Combine the effects appropriately (some are additive)
@@ -271,10 +273,13 @@ function getTotalEffect(effectKey) {
   }
   
   if (effectKey === "powermult" && totalEffect == 0) {
-    return new Decimal(0)
-  }
-  else {
-    return totalEffect
+    return { effect: new Decimal(0), count: glyphCount, capped: true };
+  } else if (effectKey === "replicationglyphlevel" && glyphCount > 2) {
+    // past two glyphs, stacking offers diminishing returns; this makes 4 glyphs
+    // look like 3:
+    return { effect: totalEffect * 6 / (glyphCount + 4), count: glyphCount, capped:true };
+  } else {
+    return { effect: totalEffect, count: glyphCount, capped: false };
   }
 }
 
@@ -332,17 +337,16 @@ function getDesc(effectKey, x, inTooltip) {
   let spanPrefix = ""
   let spanSuffix = "</span>"
   if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+    spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
+  } else {
+    let total = getTotalEffect(effectKey);
+    if (total.capped || (effectKey === "powermult" && !x.equals(total.effect)) || (effectKey !== "powermult" && x != total.effect)) {
+      spanPrefix = "<span style='color:" + CAPPED_EFFECT_COLOR + "'>"
+      isGlyphSoftcapActive = true;
+    } else {
+      spanPrefix = "<span>"
+    }
   }
-  else if ((effectKey === "powermult" && !x.equals(getTotalEffect(effectKey))) || (effectKey !== "powermult" && x != getTotalEffect(effectKey))) {
-    spanPrefix = "<span style='color:"+CAPPED_EFFECT_COLOR+"'>"
-    isGlyphSoftcapActive = true;
-  }
-  else {
-    spanPrefix = "<span>"
-  }
-  
-  
   const EFFECT_DESCRIPTIONS = {
     timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
@@ -779,12 +783,14 @@ function updateTooltips() {
     mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "flex"})
   })
   $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function(e) {
+    console.log("mouseenter of " + e.target)
     e.stopPropagation();
     mouseOn = $(this).find(".tooltip")
     mouseOn.appendTo("body")
   })
 
   $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function(e) {
+    console.log("mouseleave of " + e.target)
     e.stopPropagation();
     mouseOn.css({"left": "0", "top": "0px", "display": "none"})
     mouseOn.appendTo($(this))
@@ -829,18 +835,35 @@ function getGlyphLevelInputs() {
   //                 optimal weights: 0.57, 0.14, 0.14, 0.14; result = 3675
   // Scaling does allow the user to produce results less than 1
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
-  // For display purposes, each term is divided independently by s.
+  // For display purposes, each term is divided independently by s.  
   const preScale = 100;
-  var scaleHelper = (input, weight) => Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale;
+  var scaleHelper = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
+  var epEffect = scaleHelper(epBase, player.celestials.teresa.glyphWeights.ep / 100);
+  var replEffect = scaleHelper(replBase, player.celestials.teresa.glyphWeights.repl / 100);
+  var dtEffect = scaleHelper(dtBase, player.celestials.teresa.glyphWeights.dt / 100);
+  var eterEffect = scaleHelper(eterBase, player.celestials.teresa.glyphWeights.eternities / 100);
+  // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
+  const glyphScaleBegin = 1000;
+  const glyphScaleRate = 500;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect;
+  var glyphScalePenalty = 1;
+  var glyphScaledLevel = glyphBaseLevel;
+  if (glyphBaseLevel > glyphScaleBegin) {
+    var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
+    glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
+    glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
+  }
   let perkFactor = 0;
   if (player.reality.perks.includes(21)) perkFactor++;
   if (player.reality.perks.includes(24)) perkFactor++;
  return {
-    epEffect: scaleHelper(epBase, player.celestials.teresa.glyphWeights.ep / 100),
-    replEffect: scaleHelper(replBase, player.celestials.teresa.glyphWeights.repl / 100),
-    dtEffect: scaleHelper(dtBase, player.celestials.teresa.glyphWeights.dt / 100),
-    eterEffect: scaleHelper(eterBase, player.celestials.teresa.glyphWeights.eternities / 100),
+    epEffect: epEffect,
+    replEffect: replEffect,
+    dtEffect: dtEffect,
+    eterEffect: eterEffect,
+    scalePenalty: glyphScalePenalty,
     perkShop: player.celestials.effarig.glyphLevelMult,
     perkFactor: perkFactor,
+    finalLevel: glyphScaledLevel * player.celestials.effarig.glyphLevelMult + perkFactor,
   };
 }

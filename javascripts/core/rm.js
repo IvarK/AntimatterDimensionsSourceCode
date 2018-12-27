@@ -831,15 +831,16 @@ function getGlyphLevelInputs() {
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
   const preScale = 100;
-  var scaleHelper = (input, weight) => Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale;
+  let weights =  player.celestials.teresa.glyphWeights;
+  var adjustFactor = (input, weight) => Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale;
   let perkFactor = 0;
   if (player.reality.perks.includes(21)) perkFactor++;
   if (player.reality.perks.includes(24)) perkFactor++;
  return {
-    epEffect: scaleHelper(epBase, player.celestials.teresa.glyphWeights.ep / 100),
-    replEffect: scaleHelper(replBase, player.celestials.teresa.glyphWeights.repl / 100),
-    dtEffect: scaleHelper(dtBase, player.celestials.teresa.glyphWeights.dt / 100),
-    eterEffect: scaleHelper(eterBase, player.celestials.teresa.glyphWeights.eternities / 100),
+    epEffect: adjustFactor(epBase, weights.ep / 100),
+    replEffect: adjustFactor(replBase, weights.repl / 100),
+    dtEffect: adjustFactor(dtBase, weights.dt / 100),
+    eterEffect: adjustFactor(eterBase, weights.eternities / 100),
     perkShop: player.celestials.effarig.glyphLevelMult,
     perkFactor: perkFactor,
   };

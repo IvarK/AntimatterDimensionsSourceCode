@@ -783,14 +783,12 @@ function updateTooltips() {
     mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "flex"})
   })
   $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function(e) {
-    console.log("mouseenter of " + e.target)
     e.stopPropagation();
     mouseOn = $(this).find(".tooltip")
     mouseOn.appendTo("body")
   })
 
   $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function(e) {
-    console.log("mouseleave of " + e.target)
     e.stopPropagation();
     mouseOn.css({"left": "0", "top": "0px", "display": "none"})
     mouseOn.appendTo($(this))

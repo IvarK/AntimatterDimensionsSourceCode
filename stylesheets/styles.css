@@ -4405,6 +4405,43 @@ screen and (max-width: 480px) {
   font-size: 2.5rem;
 }
 
+.t-dark .c-dilation-tab__tachyons,
+.t-dark-metro .c-dilation-tab__tachyons,
+.t-s6  .c-dilation-tab__tachyons {
+  color: #64ddad !important;
+}
+
+.t-dark .c-dilation-tab__tachyons,
+.t-s6  .c-dilation-tab__tachyons {
+  text-shadow: 0 0 .7rem #64ddad;
+}
+
+.t-dark .c-dilation-tab__dilated-time,
+.t-dark .c-dilation-tab__dilated-time-income,
+.t-dark .c-dilation-tab__galaxy-threshold,
+.t-dark .c-dilation-tab__galaxies,
+.t-dark-metro .c-dilation-tab__dilated-time,
+.t-dark-metro .c-dilation-tab__dilated-time-income,
+.t-dark-metro .c-dilation-tab__galaxy-threshold,
+.t-dark-metro .c-dilation-tab__galaxies,
+.t-s6 .c-dilation-tab__dilated-time,
+.t-s6 .c-dilation-tab__dilated-time-income,
+.t-s6 .c-dilation-tab__galaxy-threshold,
+.t-s6 .c-dilation-tab__galaxies {
+  color: #64dd17 !important;
+}
+
+.t-dark .c-dilation-tab__dilated-time,
+.t-dark .c-dilation-tab__dilated-time-income,
+.t-dark .c-dilation-tab__galaxy-threshold,
+.t-dark .c-dilation-tab__galaxies,
+.t-s6 .c-dilation-tab__dilated-time,
+.t-s6 .c-dilation-tab__dilated-time-income,
+.t-s6 .c-dilation-tab__galaxy-threshold,
+.t-s6 .c-dilation-tab__galaxies {
+  text-shadow: 0 0 .7rem #64dd17;
+}
+
 /*#endregion c-dilation-tab*/
 
 /*#region l-dilation-upgrades-grid*/
@@ -4447,12 +4484,51 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
+.t-dark .o-dilation-btn {
+  color: #64dd17 !important;
+  background-color: black !important;
+}
+
+.t-dark .o-dilation-btn:hover,
+.t-s6 .o-dilation-btn:hover {
+  color: #64dd17 !important;
+  background-color: white !important;
+}
+
+.t-s4 .o-dilation-btn {
+  animation: a-dilation-btn-glow--cancer 10s infinite;
+}
+
 @keyframes a-dilation-btn-glow {
   0%   { box-shadow: inset 0.5rem  0       2rem }
   25%  { box-shadow: inset 0       0.5rem  2rem }
   50%  { box-shadow: inset -0.5rem 0       2rem }
   75%  { box-shadow: inset 0       -0.5rem 2rem }
   100% { box-shadow: inset 0.5rem  0       2rem }
+}
+
+@keyframes a-dilation-btn-glow--cancer {
+  0%   { box-shadow: inset  0.5px -0.5rem 2rem }
+  10%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  20%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  22%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  25%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  29%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  39%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  44%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  53%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  57%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  63%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  69%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  71%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  74%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  75%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  84%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  88%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  92%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  93%  { box-shadow: inset  0.5px -0.5rem 2rem }
+  95%  { box-shadow: inset -0.5px  0.5rem 2rem }
+  100% { box-shadow: inset  0.5px -0.5rem 2rem }
 }
 
 /*#endregion o-dilation-btn*/
@@ -4510,6 +4586,75 @@ screen and (max-width: 480px) {
 
 .o-dilation-upgrade__description--small-text {
   font-size: 0.95rem;
+}
+
+.t-metro .o-dilation-upgrade--unavailable,
+.t-dark-metro .o-dilation-upgrade--unavailable,
+.t-inverted-metro .o-dilation-upgrade--unavailable,
+.t-s1 .o-dilation-upgrade--unavailable,
+.t-s8 .o-dilation-upgrade--unavailable {
+  color: black;
+  background-color: #9e9e9e;
+  box-shadow: .1rem .1rem .1rem 0 black;
+  border: none;
+}
+
+.t-metro .o-dilation-upgrade--unavailable:hover,
+.t-dark-metro .o-dilation-upgrade--unavailable:hover,
+.t-inverted-metro .o-dilation-upgrade--unavailable:hover,
+.t-s8 .o-dilation-upgrade--unavailable:hover {
+  background-color: #ef5350;
+}
+
+.t-s1 .o-dilation-upgrade--unavailable:hover {
+  background-color: #d72621;
+}
+
+.t-dark .o-dilation-upgrade {
+  background-color: black !important;
+}
+
+.t-dark .o-dilation-upgrade--available:hover,
+.t-s6 .o-dilation-upgrade--available:hover {
+  color: #64dd17 !important;
+  background-color: white !important;
+}
+
+.t-dark .o-dilation-upgrade--rebuyable.o-dilation-upgrade--available:hover,
+.t-s6 .o-dilation-upgrade--rebuyable.o-dilation-upgrade--available:hover {
+  color: #64ddad !important;
+}
+
+.t-dark .o-dilation-upgrade--bought {
+  background-color: #64dd17 !important;
+}
+
+.t-dark .o-dilation-upgrade--unavailable,
+.t-s6 .o-dilation-upgrade--unavailable {
+  color: gray !important;
+}
+
+.t-dark .o-dilation-upgrade--unavailable {
+  background-color: #23292a !important;
+}
+
+.t-dark .o-dilation-upgrade--unavailable:hover,
+.t-s6 .o-dilation-upgrade--unavailable:hover {
+  color: black !important;
+  border: .1rem solid #b84b5f !important;
+  background-color: #b84b5f !important;
+}
+
+.t-s4 .o-dilation-upgrade--available {
+  animation: a-dilation-btn-glow--cancer 10s infinite;
+}
+
+.t-s6 .o-dilation-upgrade--bought {
+  background: #64dd17 !important;
+}
+
+.t-s6 .o-dilation-upgrade--unavailable {
+  background-color: black !important;
 }
 
 /*#endregion o-dilation-upgrade*/

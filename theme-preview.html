@@ -14,18 +14,36 @@
   <link id="S6" rel="stylesheet" type="text/css" href="stylesheets/theme-S6.css">
   <link id="S7" rel="stylesheet" type="text/css" href="stylesheets/theme-S7.css">
   <link id="S8" rel="stylesheet" type="text/css" href="stylesheets/theme-S8.css">
+  <link id="S8" rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
   <style>
+    body {
+      height: auto;
+    }
+
     .c-component-block {
       padding: 10px;
       border: 1px solid black;
+    }
+
+    .c-component-block,
+    .l-component-row {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
     }
 
-    .c-component-block > * {
+    .c-component-block > *,
+    .l-component-row > * {
       margin: 8px;
+    }
+
+    .c-tachyon-container {
+      animation: a-tachyon-container infinite 2s linear;
+    }
+
+    @keyframes a-tachyon-container {
+      100% { transform: rotateZ(360deg) }
     }
   </style>
 </head>
@@ -228,13 +246,78 @@
     </div>
 
 
+    <span>Dilation</span>
+    <div class="c-component-block" style="flex-direction: column">
+      <span>You have <span class="c-dilation-tab__tachyons">1e308</span> Tachyon Particles.</span>
+      <span>
+        You have
+        <span class="c-dilation-tab__dilated-time">1e308</span>
+        Dilated Time.
+        <span class="c-dilation-tab__dilated-time-income">+1e308/s</span>
+      </span>
+      <span>
+        Next free galaxy at
+        <span class="c-dilation-tab__galaxy-threshold">1e308</span>
+        Dilated Time, gained total of
+        <span class="c-dilation-tab__galaxies">10</span>
+        galaxies
+      </span>
+      <button class="o-dilation-btn">Dilate Time.</button>
+      <div class="l-component-row">
+        <button class="o-dilation-upgrade o-dilation-upgrade--available">
+          Available Dilation Upgrade
+          <br>
+          Currently: 1e308x
+          <br>
+          Cost: 308 Dilated Time
+        </button>
+        <button class="o-dilation-upgrade o-dilation-upgrade--bought">
+          Bought Dilation Upgrade
+          <br>
+          Currently: 1e308x
+          <br>
+          Cost: 308 Dilated Time
+        </button>
+        <button class="o-dilation-upgrade o-dilation-upgrade--unavailable">
+          Unavailable Dilation Upgrade
+          <br>
+          Currently: 1e308x
+          <br>
+          Cost: 308 Dilated Time
+        </button>
+        <button class="o-dilation-upgrade o-dilation-upgrade--available o-dilation-upgrade--rebuyable">
+          Available Dilation Upgrade (rebuyable)
+          <br>
+          Currently: 1e308x
+          <br>
+          Cost: 308 Dilated Time
+        </button>
+        <button class="o-dilation-upgrade o-dilation-upgrade--unavailable o-dilation-upgrade--rebuyable">
+          Unavailable Dilation Upgrade (rebuyable)
+          <br>
+          Currently: 1e308x
+          <br>
+          Cost: 308 Dilated Time
+        </button>
+        <div style="display: flex; flex-direction: column">
+          <svg class="c-tachyon-container" style="width: 150px; height: 75px">
+            <circle r="2" cx="45" cy="60" class="o-tachyon-particle"></circle>
+            <circle r="2" cx="100" cy="60" class="o-tachyon-particle"></circle>
+            <circle r="2" cx="80" cy="10" class="o-tachyon-particle"></circle>
+          </svg>
+          <span>Tachyons</span>
+        </div>
+      </div>
+    </div>
+
+
     <span>Texts</span>
     <div class="c-component-block" style="flex-direction: column; flex-wrap: nowrap">
-      <p>You have <span class="c-game-header__antimatter">1e308</span> antimatter.</p>
-      <p class="c-replicanti-description">
+      <span>You have <span class="c-game-header__antimatter">1e308</span> antimatter.</span>
+      <span class="c-replicanti-description">
         You have <span class="c-replicanti-description__accent">1e308</span> replicanti.
         Translated to <span class="c-replicanti-description__accent">1e308</span>x multiplier on all infinity dimensions
-      </p>
+      </span>
     </div>
 
 

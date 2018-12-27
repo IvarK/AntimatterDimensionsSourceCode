@@ -135,7 +135,7 @@ class TimeDimensionInfo {
     let mult = this.power.pow(2);
 
     if (tier === 1) {
-      mult = mult.dividedByEffectOf(TimeStudy(11));
+      mult = mult.timesEffectOf(TimeStudy(11));
     }
     if (isAchEnabled("r105")) {
       mult = mult.div(player.tickspeed.div(1000).pow(0.000005));

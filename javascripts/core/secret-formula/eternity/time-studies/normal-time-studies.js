@@ -130,7 +130,6 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 5,
     description: "Infinity dimensions gain a multiplier based on fastest eternity time",
     effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
-    cap: Decimal.pow(2, 30),
     formatEffect: value => formatX(value, 2, 1)
   },
   {
@@ -297,7 +296,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 212,
     cost: 150,
     description: "Galaxies are more effective based on your time shards",
-    effect: () => Math.min(Math.pow(player.timeShards.clampMin(2).log2(), 0.005), 1.1),
+    effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
     cap: 1.1,
     formatEffect: value => "+" + formatPercents(value - 1, 4)
   },

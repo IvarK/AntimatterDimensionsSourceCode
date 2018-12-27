@@ -38,7 +38,7 @@ Vue.component("tt-shop", {
     },
     containerStyle: function() {
       return {
-        transform: this.minimized ? "translateY(73px)" : "",
+        //transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
       };
     }

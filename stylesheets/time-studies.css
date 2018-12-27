@@ -2,10 +2,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .l-time-studies-tab__tree {
   margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.l-time-studies-tab__tt-shop {
+  margin-bottom: -1rem;
 }
 
 .l-time-study-options {

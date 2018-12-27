@@ -10,6 +10,7 @@ class Tab {
   show() {
     hideLegacyTabs();
     ui.view.tabs.current = this._component;
+    GameUI.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -30,6 +31,7 @@ class Subtab {
   show() {
     this._view.subtab = this._id;
     this._parent.show();
+    GameUI.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -46,6 +48,7 @@ Tab.challenges.infinity = new Subtab("Infinity Challenges", Tab.challenges, ui.v
 Tab.challenges.eternity = new Subtab("Eternity Challenges", Tab.challenges, ui.view.tabs.challenges);
 Tab.infinity = new Tab("infinity-tab");
 Tab.eternity = new Tab("eternity-tab");
+Tab.eternity.timeStudies = new Subtab("Time studies", Tab.eternity, ui.view.tabs.eternity, true);
 Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
@@ -83,5 +86,6 @@ function tryShowtab(tab) {
     return true;
   }
   ui.view.tabs.current = undefined;
+  GameUI.dispatch(GameEvent.TAB_CHANGED);
   return false;
 }

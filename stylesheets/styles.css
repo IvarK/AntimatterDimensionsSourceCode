@@ -135,10 +135,9 @@ button {
 /*#region TT shop*/
 
 #TTbuttons {
-  position: fixed;
+  position: sticky;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  overflow: hidden;
   font-family: Typewriter, serif;
   display: flex;
   align-items: flex-end;
@@ -235,7 +234,6 @@ button {
 .ttshop-container {
   padding: 0 10px 5px 10px;
   width: 555px;
-  height: 105px;
   display: flex;
   flex-direction: column;
   transition: all 0.25s ease-out;

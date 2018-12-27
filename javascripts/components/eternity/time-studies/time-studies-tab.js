@@ -17,7 +17,7 @@ Vue.component("time-studies-tab", {
     treeStyleObject() {
       return {
         width: this.rem(this.layout.width),
-        height: this.rem(this.layout.height + 10)
+        height: this.rem(this.layout.height)
       };
     },
     respecClassObject() {
@@ -72,8 +72,8 @@ Vue.component("time-studies-tab", {
           />
           <secret-time-study-connection :setup="layout.secretStudyConnection" />
         </svg>
-        <tt-shop />
       </div>
+      <tt-shop class="l-time-studies-tab__tt-shop" />
     </div>`
 });
 

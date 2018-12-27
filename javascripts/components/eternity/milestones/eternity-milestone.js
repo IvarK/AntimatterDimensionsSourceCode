@@ -17,14 +17,15 @@ Vue.component("eternity-milestone", {
     eternities() {
       return this.config.eternities;
     },
-    description() {
-      return this.config.description;
+    reward() {
+      return this.config.reward;
     },
-    descriptionClassObject() {
+    rewardClassObject() {
       return {
-        "o-eternity-milestone__description": true,
-        "o-eternity-milestone__description--reached": this.isReached,
-        "o-eternity-milestone__description--small-font": this.description.length > 80
+        "o-eternity-milestone__reward": true,
+        "o-eternity-milestone__reward--locked": !this.isReached,
+        "o-eternity-milestone__reward--reached": this.isReached,
+        "o-eternity-milestone__reward--small-font": this.reward.length > 80
       };
     }
   },
@@ -36,6 +37,6 @@ Vue.component("eternity-milestone", {
   template:
     `<div class="l-eternity-milestone">
       <span class="o-eternity-milestone__goal">{{eternities}} {{"Eternity" | pluralize(eternities, "Eternities")}}:</span>
-      <button :class="descriptionClassObject">{{description}}</button>
+      <button :class="rewardClassObject">{{reward}}</button>
     </div>`
 });

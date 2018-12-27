@@ -299,7 +299,7 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "Galaxies are more effective based on your time shards",
     effect: () => Math.min(Math.pow(player.timeShards.clampMin(2).log2(), 0.005), 1.1),
     cap: 1.1,
-    formatEffect: value => formatPercents(value - 1, 4)
+    formatEffect: value => "+" + formatPercents(value - 1, 4)
   },
   {
     id: 213,

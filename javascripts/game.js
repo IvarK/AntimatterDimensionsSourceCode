@@ -1938,4 +1938,25 @@ setInterval( function() {
     } else {
         ec10bonus = new Decimal(1)
     }
-}, 100)
+}, 100);
+
+let tweenTime = 0;
+(function() {
+    let lastFrame;
+    function animateTweens(time) {
+        requestAnimationFrame(animateTweens);
+        if (time === undefined || lastFrame === undefined) {
+            lastFrame = time;
+            return;
+        }
+        let delta = time - lastFrame;
+        lastFrame = time;
+        if (player.dilation.active) {
+            delta /= 10;
+        }
+        tweenTime += delta;
+        TWEEN.update(tweenTime);
+    }
+
+    animateTweens();
+}());

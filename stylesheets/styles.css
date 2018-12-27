@@ -4514,6 +4514,25 @@ screen and (max-width: 480px) {
 
 /*#endregion o-dilation-upgrade*/
 
+.c-tachyon-particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.o-tachyon-particle {
+  fill: black;
+}
+
+.t-dark .o-tachyon-particle,
+.t-dark-metro .o-tachyon-particle,
+.t-s6 .o-tachyon-particle {
+  fill: white;
+}
+
 /*#endregion Dilation*/
 
 /*#region Modals*/

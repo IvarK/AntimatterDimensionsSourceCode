@@ -89,5 +89,6 @@ Vue.component("time-dilation-tab", {
           />
         </div>
       </div>
+      <tachyon-particles />
     </div>`
 });

@@ -1,22 +1,23 @@
 Vue.component("time-studies-tab", {
   mixins: [remMixin],
-  data: function() {
-    const layout = TimeStudyTreeLayout.instance;
+  data() {
     return {
-      width: this.rem(layout.width),
-      height: this.rem(layout.height + 10),
-      studies: layout.studies,
-      secretStudySetup: layout.secretStudy,
-      connections: layout.connections,
-      secretConnectionSetup: layout.secretStudyConnection,
       respec: player.respec
     };
   },
+  watch: {
+    respec(newValue) {
+      player.respec = newValue;
+    }
+  },
   computed: {
+    layout() {
+      return TimeStudyTreeLayout.instance;
+    },
     treeStyleObject() {
       return {
-        width: this.width,
-        height: this.height
+        width: this.rem(this.layout.width),
+        height: this.rem(this.layout.height + 10)
       };
     },
     respecClassObject() {
@@ -37,10 +38,6 @@ Vue.component("time-studies-tab", {
         case TimeStudyType.DILATION: return "dilation-time-study";
       }
       throw "Unknown study type";
-    },
-    toggleRespec() {
-      player.respec = !player.respec;
-      this.update();
     }
   },
   template:
@@ -52,7 +49,7 @@ Vue.component("time-studies-tab", {
         >Export tree</primary-button>
         <primary-button
           :class="respecClassObject"
-          @click="toggleRespec"
+          @click="respec = !respec"
         >Respec time studies on next Eternity</primary-button>
         <primary-button
           class="o-primary-btn--time-study-options"
@@ -61,19 +58,19 @@ Vue.component("time-studies-tab", {
       </div>
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component
-          v-for="(setup, index) in studies"
+          v-for="(setup, index) in layout.studies"
           :key="'study' + index"
           :setup="setup"
           :is="studyComponent(setup.study)"
         />
-        <secret-time-study :setup="secretStudySetup" />
+        <secret-time-study :setup="layout.secretStudy" />
         <svg :style="treeStyleObject" class="l-time-study-connection">
           <time-study-connection
-            v-for="(setup, index) in connections"
+            v-for="(setup, index) in layout.connections"
             :key="'connection' + index"
             :setup="setup"
           />
-          <secret-time-study-connection :setup="secretConnectionSetup" />
+          <secret-time-study-connection :setup="layout.secretStudyConnection" />
         </svg>
         <tt-shop />
       </div>

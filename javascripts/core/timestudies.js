@@ -497,26 +497,14 @@ const TimeStudyPath = {
   DARK: 8
 };
 
-class TimeStudyInfo {
-  constructor(data, type) {
-    this._getData = () => data;
+class TimeStudyState extends GameMechanicState {
+  constructor(config, type) {
+    super(config);
     this.type = type;
     /**
      * @type {TimeStudyConnection[]}
      */
     this.incomingConnections = [];
-  }
-
-  get data() {
-    return this._getData();
-  }
-
-  get id() {
-    return this.data.id;
-  }
-
-  get cost() {
-    return this.data.cost;
   }
 
   refund() {
@@ -532,9 +520,9 @@ class TimeStudyInfo {
   }
 }
 
-class NormalTimeStudyInfo extends TimeStudyInfo {
-  constructor(data) {
-    super(data, TimeStudyType.NORMAL);
+class NormalTimeStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.NORMAL);
   }
 
   get isBought() {
@@ -545,44 +533,22 @@ class NormalTimeStudyInfo extends TimeStudyInfo {
     return canBuyStudy(this.id);
   }
 
+  get canBeApplied() {
+    return this.isBought;
+  }
+
   purchase() {
     if (!this.canBeBought && !this.isAffordable) return;
     buyTimeStudy(this.id, this.cost);
   }
 
-  get effectValue() {
-    return this.data.effect();
-  }
-
-  applyEffect(applyFn) {
-    if (this.isBought) {
-      applyFn(this.effectValue);
-    }
-  }
-
   get path() {
-    const path = NormalTimeStudyInfo.paths.find(p => p.studies.includes(this.id));
+    const path = NormalTimeStudyState.paths.find(p => p.studies.includes(this.id));
     return path !== undefined ? path.path : TimeStudyPath.NONE;
-  }
-
-  get hasDynamicDescription() {
-    return typeof this.data.description === "function";
-  }
-
-  get description() {
-    return this.hasDynamicDescription ? this.data.description() : this.data.description;
-  }
-
-  get hasDynamicEffect() {
-    return this.data.formatEffect !== undefined;
-  }
-
-  formatEffect(value) {
-    return this.data.formatEffect(value);
   }
 }
 
-NormalTimeStudyInfo.paths = [
+NormalTimeStudyState.paths = [
   { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
   { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
   { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
@@ -593,28 +559,28 @@ NormalTimeStudyInfo.paths = [
   { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
 ];
 
-NormalTimeStudyInfo.studies = mapGameData(
+NormalTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.normal,
-  data => new NormalTimeStudyInfo(data)
+  config => new NormalTimeStudyState(config)
 );
 
 /**
- * @returns {NormalTimeStudyInfo}
+ * @returns {NormalTimeStudyState}
  */
 function TimeStudy(id) {
-  return NormalTimeStudyInfo.studies[id];
+  return NormalTimeStudyState.studies[id];
 }
 
 /**
- * @returns {NormalTimeStudyInfo[]}
+ * @returns {NormalTimeStudyState[]}
  */
 TimeStudy.boughtNormalTS = function() {
   return player.timestudy.studies.map(id => TimeStudy(id));
 };
 
-class ECTimeStudyInfo extends TimeStudyInfo {
-  constructor(data) {
-    super(data, TimeStudyType.ETERNITY_CHALLENGE);
+class ECTimeStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.ETERNITY_CHALLENGE);
   }
 
   get isBought() {
@@ -655,11 +621,11 @@ class ECTimeStudyInfo extends TimeStudyInfo {
   }
 
   get requirementTotal() {
-    return this.data.requirement.required(this.challenge.completions);
+    return this.config.requirement.required(this.challenge.completions);
   }
 
   get requirementCurrent() {
-    return this.data.requirement.current();
+    return this.config.requirement.current();
   }
 
   get isSecondaryRequirementMet() {
@@ -675,21 +641,21 @@ class ECTimeStudyInfo extends TimeStudyInfo {
   }
 }
 
-ECTimeStudyInfo.studies = mapGameData(
+ECTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.ec,
-  data => new ECTimeStudyInfo(data)
+  config => new ECTimeStudyState(config)
 );
 
 /**
  * @param {number} id
- * @returns {ECTimeStudyInfo}
+ * @returns {ECTimeStudyState}
  */
 TimeStudy.eternityChallenge = function(id) {
-  return ECTimeStudyInfo.studies[id];
+  return ECTimeStudyState.studies[id];
 };
 
 /**
- * @returns {ECTimeStudyInfo|undefined}
+ * @returns {ECTimeStudyState|undefined}
  */
 TimeStudy.eternityChallenge.current = function() {
   return player.eternityChallUnlocked !== 0 ?
@@ -697,9 +663,9 @@ TimeStudy.eternityChallenge.current = function() {
     undefined;
 };
 
-class DilationTimeStudyInfo extends TimeStudyInfo {
-  constructor(data) {
-    super(data, TimeStudyType.DILATION);
+class DilationTimeStudyState extends TimeStudyState {
+  constructor(config) {
+    super(config, TimeStudyType.DILATION);
   }
 
   get isBought() {
@@ -711,32 +677,32 @@ class DilationTimeStudyInfo extends TimeStudyInfo {
   }
 
   get description() {
-    return this.data.description;
+    return this.config.description;
   }
 }
 
-DilationTimeStudyInfo.studies = mapGameData(
+DilationTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.dilation,
-  data => new DilationTimeStudyInfo(data)
+  config => new DilationTimeStudyState(config)
 );
 
 /**
- * @type {DilationTimeStudyInfo}
+ * @type {DilationTimeStudyState}
  */
-TimeStudy.dilation = DilationTimeStudyInfo.studies[1];
+TimeStudy.dilation = DilationTimeStudyState.studies[1];
 
 /**
  * @param {number} tier
- * @returns {DilationTimeStudyInfo}
+ * @returns {DilationTimeStudyState}
  */
 TimeStudy.timeDimension = function(tier) {
-  return DilationTimeStudyInfo.studies[tier - 3];
+  return DilationTimeStudyState.studies[tier - 3];
 };
 
 /**
- * @type {DilationTimeStudyInfo}
+ * @type {DilationTimeStudyState}
  */
-TimeStudy.reality = DilationTimeStudyInfo.studies[6];
+TimeStudy.reality = DilationTimeStudyState.studies[6];
 
 class TimeStudyConnection {
   constructor(from, to, override) {
@@ -784,7 +750,7 @@ TimeStudy.allConnections = function() {
     [TS(42), EC(5)],
 
     [TS(51), TS(61)],
-    [EC(5), TS(62), () => player.reality.perks.includes(71)],
+    [EC(5), TS(62), () => Perk(71).isBought],
 
     [TS(61), TS(71)],
     [TS(61), TS(72)],
@@ -839,9 +805,9 @@ TimeStudy.allConnections = function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [EC(1), TS(181), () => player.reality.perks.includes(4)],
-    [EC(2), TS(181), () => player.reality.perks.includes(74)],
-    [EC(3), TS(181), () => player.reality.perks.includes(75)],
+    [EC(1), TS(181), () => Perk(4).isBought],
+    [EC(2), TS(181), () => Perk(74).isBought],
+    [EC(3), TS(181), () => Perk(75).isBought],
 
     [TS(181), EC(10)],
 

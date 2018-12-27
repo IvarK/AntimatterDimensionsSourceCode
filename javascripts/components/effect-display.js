@@ -12,9 +12,16 @@ Vue.component("effect-display", {
   computed: {
     effectDisplay() {
       return this.formatEffect(this.effectValue);
+    },
+    cap() {
+      return this.config.cap;
+    },
+    hasCap() {
+      return this.cap !== undefined;
     }
   },
   created() {
+    if (this.config === undefined) return;
     const config = this.config;
     const effect = config.effect;
     const formatEffect = config.formatEffect;
@@ -27,6 +34,15 @@ Vue.component("effect-display", {
       () => this.effectValue = effect() :
       () => this.effectValue.copyFrom(effect());
     this.on$(GameEvent.UPDATE, update);
+    if (this.hasCap) {
+      this.reachedCap = typeof effectValue === "number" ?
+        () => this.effectValue >= this.cap :
+        () => this.effectValue.gte(this.cap);
+    }
   },
-  template: `<span v-if="isVisible"><br v-if="br">Currently: {{effectDisplay}}</span>`
+  template:
+    `<span v-if="isVisible">
+      <br v-if="br">
+      {{hasCap && reachedCap() ? "Capped" : "Currently"}}: {{formatEffect(hasCap && reachedCap() ? cap : effectValue)}}
+    </span>`
 });

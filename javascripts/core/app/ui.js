@@ -10,7 +10,8 @@ Vue.mixin({
         shortenDimensions: this.shortenDimensions,
         shortenMoney: this.shortenMoney,
         shortenGlyphEffect: this.shortenGlyphEffect,
-        shortenMultiplier: this.shortenMultiplier
+        shortenMultiplier: this.shortenMultiplier,
+        shortenRateOfChange: this.shortenRateOfChange
       };
     }
   },
@@ -27,8 +28,8 @@ Vue.mixin({
     on$: function(event, fn) {
       EventHub.global.on(event, fn, this);
     },
-    shorten: function(value) {
-      return shorten(value);
+    shorten: function(value, places, placesUnder1000) {
+      return shorten(value, places, placesUnder1000);
     },
     shortenRateOfChange: function(value) {
       return shortenRateOfChange(value);

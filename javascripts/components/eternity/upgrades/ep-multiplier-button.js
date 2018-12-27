@@ -41,9 +41,9 @@ Vue.component("ep-multiplier-button", {
       <button :class="classObject" @click="upgrade.purchase()">
         You gain 5 times more EP
         <br>
-        Currently: {{shortenDimensions(multiplier)}}x
+        Currently: {{shorten(multiplier, 2, 0)}}x
         <br>
-        Cost: {{shortenDimensions(cost)}} EP
+        Cost: {{shorten(cost, 2, 0)}} EP
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"

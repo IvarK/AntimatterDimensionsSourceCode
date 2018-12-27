@@ -28,6 +28,9 @@ Vue.component("time-study", {
         "o-time-study--small": this.setup.isSmall,
         "l-time-study": true
       };
+    },
+    config() {
+      return this.setup.study.config;
     }
   },
   methods: {
@@ -45,23 +48,20 @@ Vue.component("time-study", {
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick">
       <slot />
-      <template v-if="showCost">
-        <br>
-        Cost: {{setup.study.cost}} {{ "Time Theorem" | pluralize(setup.study.cost) }}
-      </template>
+      <cost-display br
+        v-if="showCost"
+        :config="config"
+        singular="Time Theorem"
+        plural="Time Theorems"
+      />
     </button>`
 });
 
 class TimeStudySetup {
   constructor(props) {
-    this._getStudy = () => props.study;
+    this.study = props.study;
     this.row = props.row;
     this.column = props.column;
-  }
-
-  // To prevent Vue reactification of study
-  get study() {
-    return this._getStudy();
   }
 
   get isSmall() {

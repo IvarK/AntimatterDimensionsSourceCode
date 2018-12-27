@@ -7,9 +7,10 @@ GameDatabase.eternity.timeStudies.normal = [
       const tickspeed = player.tickspeed.dividedBy(1000);
       const firstPart = tickspeed.pow(0.005).times(0.95);
       const secondPart = tickspeed.pow(0.0003).times(0.05);
-      return firstPart.plus(secondPart).clampMin(Decimal.fromMantissaExponent(1, -2500));
+      return firstPart.plus(secondPart).reciprocate();
     },
-    formatEffect: value => `${shortenMoney(new Decimal(1).dividedBy(value))}x`
+    cap: new Decimal("1e2500"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 21,
@@ -26,7 +27,7 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 31,
     cost: 3,
-    description: "Powers up bonuses that are based on your infinitied stat (to the power of 4)",
+    description: "Powers up bonuses that are based on your infinitied stat (infinitied^4)",
     effect: () => 4
   },
   {
@@ -45,7 +46,7 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 4,
     description: "Each galaxy gives a 1.2x multiplier on IP gained.",
     effect: () => Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 42,
@@ -56,7 +57,7 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 51,
     cost: 3,
-    description: () => `You gain ${shortenCosts(1e15)}x more IP`,
+    description: () => `You gain ${shorten(1e15, 0, 0)}x more IP`,
     effect: () => 1e15
   },
   {
@@ -75,22 +76,25 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 71,
     cost: 4,
     description: "Sacrifice affects all other normal dimensions with reduced effect",
-    effect: () => Sacrifice.totalBoost.pow(0.25).clamp(1, "1e210000"),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Sacrifice.totalBoost.pow(0.25).clampMin(1),
+    cap: new Decimal("1e210000"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 72,
     cost: 6,
     description: "Sacrifice affects 4th Infinity Dimension with greatly reduced effect",
-    effect: () => Sacrifice.totalBoost.pow(0.04).clamp(1, "1e30000"),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Sacrifice.totalBoost.pow(0.04).clampMin(1),
+    cap: new Decimal("1e30000"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 73,
     cost: 5,
     description: "Sacrifice affects 3rd Time Dimension with greatly reduced effect",
-    effect: () => Sacrifice.totalBoost.pow(0.005).clamp(1, "1e1300"),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Sacrifice.totalBoost.pow(0.005).clampMin(1),
+    cap: new Decimal("1e1300"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 81,
@@ -103,56 +107,59 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 6,
     description: "Dimension Boosts affect Infinity Dimensions",
     effect: () => Decimal.pow(1.0000109, Math.pow(player.resets, 2)),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 83,
     cost: 5,
     description: "Dimension Boosts gain a multiplier based on tick upgrades gained from TDs",
-    effect: () => Decimal.pow(1.0004, player.totalTickGained).clampMax(1e30),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Decimal.pow(1.0004, player.totalTickGained),
+    cap: 1e30,
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 91,
     cost: 4,
     description: "Normal dimensions gain a multiplier based on time spent this eternity",
-    effect: () => Decimal.pow(10, Math.min(player.thisEternity / 100, 18000) / 60),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Decimal.pow(10, Math.min(Time.thisEternity.totalMinutes, 30) * 10),
+    cap: new Decimal("1e300"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 92,
     cost: 5,
     description: "Infinity dimensions gain a multiplier based on fastest eternity time",
-    effect: () => Decimal.pow(2, 600 / Math.max(player.bestEternity / 100, 20)),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Decimal.pow(2, 60 / Math.max(Time.bestEternity.totalSeconds, 2)),
+    cap: Decimal.pow(2, 30),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 93,
     cost: 7,
     description: "Time dimensions gain a multiplier based on tick upgrades gained",
     effect: () => Decimal.pow(player.totalTickGained, 0.25).clampMin(1),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 101,
     cost: 4,
     description: "Replicanti give a multiplier to normal dims equal to their amount.",
     effect: () => Decimal.max(player.replicanti.amount, 1),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 102,
     cost: 6,
     description: "Replicanti galaxies boost replicanti multiplier",
     effect: () => Decimal.pow(5, player.replicanti.galaxies),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 103,
     cost: 6,
     description: "Time dimensions gain a multiplier equal to replicanti galaxy amount",
     effect: () => Math.max(player.replicanti.galaxies, 1),
-    formatEffect: value => `${value.toNumber()}x`
+    formatEffect: value => formatX(value, 0, 0)
   },
   {
     id: 111,
@@ -167,7 +174,7 @@ GameDatabase.eternity.timeStudies.normal = [
       "You gain 50x more EP" :
       "The worse your average EP/min is, the more EP you get",
     effect: () => (253 - averageEp.dividedBy(player.epmult.times(10)).clamp(3, 248)) / 5,
-    formatEffect: value => Perk(72).isBought ? undefined : `${value.toNumber()}x`
+    formatEffect: value => Perk(72).isBought ? undefined : formatX(value, 0, 0)
   },
   {
     id: 122,
@@ -184,7 +191,7 @@ GameDatabase.eternity.timeStudies.normal = [
       Perk(73).applyEffect(effect => thisEternity = thisEternity.add(effect));
       return Math.sqrt(1.39 * thisEternity.totalSeconds);
     },
-    formatEffect: value => `${value.toFixed(1)}x`
+    formatEffect: value => formatX(value, 1, 1)
   },
   {
     id: 131,
@@ -209,12 +216,12 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 4,
     description: "Multiplier to IP, which decays over this Infinity",
     effect: () => Decimal.divide(1e45, _TS_thisInfinityMult()).clampMin(1),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 142,
     cost: 4,
-    description: () => `You gain ${shortenCosts(1e25)}x more IP`,
+    description: () => `You gain ${shorten(1e25, 0, 0)}x more IP`,
     effect: () => 1e25
   },
   {
@@ -222,24 +229,24 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 4,
     description: "Multiplier to IP, which increases over this Infinity",
     effect: () => _TS_thisInfinityMult(),
-    formatEffect: value => `${shortenMoney(value)}x`
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 151,
     cost: 8,
-    description: () => `${shortenCosts(1e4)}x multiplier on all Time Dimensions`,
+    description: () => `${shorten(1e4, 0, 0)}x multiplier on all Time Dimensions`,
     effect: () => 1e4
   },
   {
     id: 161,
     cost: 7,
-    description: () => `${shortenCosts(new Decimal("1e616"))}x multiplier on all Normal Dimensions`,
+    description: () => `${shorten(new Decimal("1e616"), 0, 0)}x multiplier on all Normal Dimensions`,
     effect: () => new Decimal("1e616")
   },
   {
     id: 162,
     cost: 7,
-    description: () => `${shortenCosts(1e11)}x multiplier on all Infinity Dimensions`,
+    description: () => `${shorten(1e11, 0, 0)}x multiplier on all Infinity Dimensions`,
     effect: () => 1e11
   },
   {
@@ -264,15 +271,16 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 192,
     cost: 730,
     description: () =>
-      `You can get beyond ${shortenMoney(Number.MAX_VALUE)} ` +
+      `You can get beyond ${shorten(Number.MAX_VALUE, 2, 1)} ` +
       "Replicanti, but the interval is increased the more you have"
   },
   {
     id: 193,
     cost: 300,
     description: "Normal Dimension boost based on Eternities",
-    effect: () => Decimal.pow(1.03, player.eternities).clampMax("1e13000"),
-    formatEffect: value => `${shortenMoney(value)}x`
+    effect: () => Decimal.pow(1.03, player.eternities),
+    cap: new Decimal("1e13000"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 201,
@@ -289,7 +297,9 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 212,
     cost: 150,
     description: "Galaxies are more effective based on your time shards",
-    effect: () => Math.min(Math.pow(player.timeShards.clampMin(2).log2(), 0.005), 1.1)
+    effect: () => Math.min(Math.pow(player.timeShards.clampMin(2).log2(), 0.005), 1.1),
+    cap: 1.1,
+    formatEffect: value => formatPercents(value - 1, 4)
   },
   {
     id: 213,
@@ -307,13 +317,15 @@ GameDatabase.eternity.timeStudies.normal = [
       const secondPart = totalBoost.pow(1.1).clampMax("1e125000");
       return firstPart.times(secondPart);
     },
-    formatEffect: value => `${shortenMoney(value)}x`
+    cap: new Decimal("1e171000"),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 221,
     cost: 900,
     description: "Time Dimensions gain a multiplier based on Dimension Boosts",
-    effect: () => Decimal.pow(1.0025, player.resets)
+    effect: () => Decimal.pow(1.0025, player.resets),
+    formatEffect: value => formatX(value, 2, 1)
   },
   {
     id: 222,
@@ -330,7 +342,11 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 224,
     cost: 900,
-    description: "Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts",
+    description: function() {
+      const effect = TimeStudy(224).effectValue;
+      const noun = effect === 1 ? "galaxy" : "galaxies";
+      return `Galaxy cost scaling starts ${effect} ${noun} later (1 for every 2000 DimBoosts)`;
+    },
     effect: () => Math.floor(player.resets / 2000)
   },
   {
@@ -381,7 +397,8 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 234,
     cost: 500,
     description: "Sacrifice boosts First Dimension",
-    effect: () => Sacrifice.totalBoost
+    effect: () => Sacrifice.totalBoost,
+    formatEffect: value => formatX(value, 2, 1)
   },
 ];
 

@@ -21,7 +21,13 @@ class GameMechanicState {
 
   applyEffect(applyFn) {
     if (this.canBeApplied) {
-      applyFn(this.effectValue);
+      let effectValue = this.effectValue;
+      if (this.config.cap !== undefined) {
+        effectValue = typeof effectValue === "number" ?
+          Math.min(effectValue, this.config.cap) :
+          Decimal.min(effectValue, this.config.cap);
+      }
+      applyFn(effectValue);
     }
   }
 }
@@ -39,7 +45,8 @@ class PurchasableMechanicState extends GameMechanicState {
   }
 
   get isAffordable() {
-    return this._currency.value.gte(this.cost);
+    const currency = this._currency.value;
+    return typeof currency === "number" ? currency >= (this.cost) : currency.gte(this.cost);
   }
 
   get isBought() {
@@ -49,7 +56,12 @@ class PurchasableMechanicState extends GameMechanicState {
   purchase() {
     if (this.isBought || !this.isAffordable) return false;
     this.collection.push(this.id);
-    this._currency.value = this._currency.value.minus(this.cost);
+    const currency = this._currency.value;
+    if (typeof currency === "number") {
+      this._currency.value = currency - this.cost;
+    } else {
+      this._currency.value = currency.minus(this.cost);
+    }
     return true;
   }
 

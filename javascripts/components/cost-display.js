@@ -17,6 +17,7 @@ Vue.component("cost-display", {
     }
   },
   created() {
+    if (this.config === undefined) return;
     const cost = this.config.cost;
     if (cost === undefined) return;
     this.isVisible = true;

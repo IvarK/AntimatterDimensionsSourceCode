@@ -22,6 +22,7 @@ Vue.component("description-display", {
     }
   },
   created() {
+    if (this.config === undefined) return;
     const description = this.config.description;
     if (description === undefined) return;
     if (typeof description !== "function") {

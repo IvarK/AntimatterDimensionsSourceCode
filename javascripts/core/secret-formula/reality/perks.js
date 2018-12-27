@@ -1,4 +1,8 @@
+// WIP
 GameDatabase.reality.perks = [
+  {
+    id: 4
+  },
   {
     id: 5
   },
@@ -17,10 +21,19 @@ GameDatabase.reality.perks = [
     effect: () => 1e130
   },
   {
+    id: 71
+  },
+  {
     id: 72
   },
   {
     id: 73,
     effect: () => TimeSpan.fromMinutes(15)
+  },
+  {
+    id: 74
+  },
+  {
+    id: 75
   }
 ];

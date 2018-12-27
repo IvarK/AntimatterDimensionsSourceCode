@@ -2,21 +2,9 @@ Vue.component("normal-time-study", {
   props: {
     setup: Object
   },
-  data() {
-    return {
-      description: String.empty,
-      effectValue: new Decimal(0)
-    };
-  },
   computed: {
     study() {
       return this.setup.study;
-    },
-    hasEffectDisplay() {
-      return this.study.hasDynamicEffect;
-    },
-    effectDisplay() {
-      return this.study.formatEffect(this.effectValue);
     },
     classObject() {
       const classObject = {
@@ -53,28 +41,10 @@ Vue.component("normal-time-study", {
       return id;
     }
   },
-  created() {
-    const study = this.study;
-    this.description = study.description;
-    if (study.hasDynamicDescription) {
-      this.on$(GameEvent.UPDATE, () => this.description = study.description);
-    }
-    if (this.hasEffectDisplay) {
-      this.on$(GameEvent.UPDATE, () => this.effectValue.copyFrom(new Decimal(study.effectValue)));
-    }
-  },
-  methods: {
-    purchase() {
-      this.study.purchase();
-    }
-  },
   template:
-    `<time-study :setup="setup" :class="classObject" @purchase="purchase">
+    `<time-study :setup="setup" :class="classObject" @purchase="study.purchase()">
       <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
-      {{description}}
-      <template v-if="hasEffectDisplay">
-        <br>
-        <span>Currently: {{effectDisplay}}</span>
-      </template>
+      <description-display :config="study.config" />
+      <effect-display br :config="study.config" />
     </time-study>`
 });

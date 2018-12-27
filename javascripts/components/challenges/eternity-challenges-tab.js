@@ -48,7 +48,7 @@ Vue.component("eternity-challenges-tab", {
             const nextRewardValue = formatReward(this.nextRewardValue, shortenMoney);
             parts.push(`Next: ${template.replace("{0}", nextRewardValue)}`);
           }
-          return parts.join(" => ");
+          return parts.join(" 🡆 ");
         },
         name: function() {
           return `EC${this.challengeId}`;

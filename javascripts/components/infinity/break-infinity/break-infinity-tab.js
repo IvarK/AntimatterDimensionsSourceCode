@@ -116,7 +116,7 @@ const breakInfinityUpgradeGridSetup = () => [
         if (current === 0) {
           return `${current + 1}x`;
         }
-        return `${current}x => ${current + 1}x`;
+        return `${current}x 🡆 ${current + 1}x`;
       }
     }),
     new BreakInfinityUpgradeSetup({
@@ -131,7 +131,7 @@ const breakInfinityUpgradeGridSetup = () => [
         if (current === 0) {
           return `${current + 1}x`;
         }
-        return `${current}x => ${current + 1}x`;
+        return `${current}x 🡆 ${current + 1}x`;
       }
     }),
     new BreakInfinityUpgradeSetup({

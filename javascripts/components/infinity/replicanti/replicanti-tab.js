@@ -28,7 +28,7 @@ Vue.component("replicanti-tab", {
       }
       return new ReplicantiUpgradeButtonSetup(1, upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `-> ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `🡆 ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
       );
     },
     maxGalaxySetup: function() {

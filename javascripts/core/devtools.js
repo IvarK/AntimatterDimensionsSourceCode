@@ -315,7 +315,6 @@ dev.updateTestSave = function() {
       if (!player.reality.automatorCommands.includes(25)) player.reality.automatorCommands.push(25);
       if (!player.reality.automatorCommands.includes(12)) player.reality.automatorCommands.push(12);
       player.reality.realityMachines = new Decimal(player.reality.realityMachines);
-      updateAutomatorTree();
       player.options.testVersion = 14;
   }
 

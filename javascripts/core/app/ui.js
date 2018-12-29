@@ -75,6 +75,7 @@ Vue.filter('pluralize', function (value, amount) {
 });
 
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
+VTooltip.VTooltip.options.popover.defaultBaseClass = 'general-tooltip';
 VTooltip.VTooltip.options.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
 
 let uiInitialized = false;

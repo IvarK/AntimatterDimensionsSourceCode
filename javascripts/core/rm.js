@@ -830,7 +830,9 @@ function getGlyphLevelInputs() {
   // Scaling does allow the user to produce results less than 1
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
-  const preScale = 100;
+  // 100 proved to be far too big of a nerf -- the most I could do was get level 1220
+  // glyphs to 1340
+  const preScale = 10;
   let weights =  player.celestials.teresa.glyphWeights;
   var adjustFactor = (input, weight) => Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale;
   let perkFactor = 0;

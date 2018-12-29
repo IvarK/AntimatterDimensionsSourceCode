@@ -834,12 +834,13 @@ function getGlyphLevelInputs() {
   // Scaling does allow the user to produce results less than 1
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.  
-  const preScale = 100;
-  var scaleHelper = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
-  var epEffect = scaleHelper(epBase, player.celestials.teresa.glyphWeights.ep / 100);
-  var replEffect = scaleHelper(replBase, player.celestials.teresa.glyphWeights.repl / 100);
-  var dtEffect = scaleHelper(dtBase, player.celestials.teresa.glyphWeights.dt / 100);
-  var eterEffect = scaleHelper(eterBase, player.celestials.teresa.glyphWeights.eternities / 100);
+  const preScale = 5;
+  let weights =  player.celestials.teresa.glyphWeights;
+  var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
+  var epEffect = adjustFactor(epBase, weights.ep / 100);
+  var replEffect = adjustFactor(replBase, weights.repl / 100);
+  var dtEffect = adjustFactor(dtBase, weights.dt / 100);
+  var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const glyphScaleBegin = 1000;
   const glyphScaleRate = 500;
@@ -854,7 +855,7 @@ function getGlyphLevelInputs() {
   let perkFactor = 0;
   if (player.reality.perks.includes(21)) perkFactor++;
   if (player.reality.perks.includes(24)) perkFactor++;
- return {
+  return {
     epEffect: epEffect,
     replEffect: replEffect,
     dtEffect: dtEffect,

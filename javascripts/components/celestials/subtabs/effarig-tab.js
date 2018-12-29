@@ -35,7 +35,7 @@ Vue.component('effarig-tab', {
       this.rmMult = Effarig.rmMultiplier
       this.quote = Effarig.quote
       this.quoteIdx = player.celestials.effarig.quoteIdx
-      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(id => Effarig.has(id)).filter((x) => x)
+      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(info => Effarig.has(info.id)).filter((x) => x)
       this.runReward = Effarig.runRewardMultiplier,
       this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )
       this.glyphUpg.mult = player.celestials.effarig.glyphLevelMult
@@ -56,7 +56,7 @@ Vue.component('effarig-tab', {
       Effarig.buyGlyphLevelPower()
     },
     unlockDescriptionStyle: function(unlockInfo) {
-      let maxPrice = Effarig.unlockInfo[Effarig.unlockInfo.LAST_UNLOCK].price;
+      let maxPrice = Effarig.unlockInfo[Effarig.lastUnlock].price;
       let pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
       return {
          bottom: pos.toFixed(2) + "%",

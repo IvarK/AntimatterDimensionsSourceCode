@@ -11,39 +11,32 @@ var effarigQuotes = [
 ]
 
 const EFFARIG_UNLOCKS = {
-  RUN: 0,
-  EPGEN: 1,
-  TERESA: 2,
-  SHOP: 3,
-}
-
-const _EFFARIG_UNLOCK_INFO = {
-  run: {
-    id: EFFARIG_UNLOCKS.RUN,
+  RUN: {
+    id: 0,
     price: 5e12,
     description: "unlock Effarig's reality.",
   },
-  epgen: {
-    id: EFFARIG_UNLOCKS.EPGEN,
+  EPGEN: {
+    id: 1,
     price: 1e18,
     description: "unlock Effarig's EP generation.",
   },
-  teresa: {
-    id: EFFARIG_UNLOCKS.TERESA,
+  TERESA: {
+    id: 2,
     price: 5e21,
     description: "unlock Teresa, Celestial of Ancient Relics.",
   },
-  shop: {
-    id: EFFARIG_UNLOCKS.SHOP,
+  SHOP: {
+    id: 3,
     price: 1e24,
     description: "unlock Perk Point Shop.",
   },
-  LAST_UNLOCK: "shop",
 }
 
 var Effarig = {
   timePoured: 0,
-  unlockInfo: _EFFARIG_UNLOCK_INFO,
+  unlockInfo: EFFARIG_UNLOCKS,
+  lastUnlock: "SHOP",
   pourRM(diff) {
     this.timePoured += diff
     let rm = player.reality.realityMachines

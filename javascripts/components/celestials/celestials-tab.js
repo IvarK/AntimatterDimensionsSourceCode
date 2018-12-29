@@ -68,7 +68,7 @@ Vue.component('celestials-tab', {
   },
   methods: {
     update() {
-      this.teresaUnlocked = Effarig.has(EFFARIG_UNLOCKS.TERESA)
+      this.teresaUnlocked = Effarig.has(EFFARIG_UNLOCKS.TERESA.id)
     }
   },
   template:

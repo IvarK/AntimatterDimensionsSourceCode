@@ -76,7 +76,7 @@ function reality(force, reset, auto) {
     if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
     if (player.thisReality < 15 * 60 * 1000 && !reset) unlockRealityUpgrade(23)
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
-    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
+    if (Effarig.has(EFFARIG_UNLOCKS.TERESA.id)) player.celestials.teresa.relicShards += Teresa.shardsGained
     if (player.reality.respec) {
         respecGlyphs();
     }

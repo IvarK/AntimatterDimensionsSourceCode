@@ -41,9 +41,6 @@ Vue.component("ec-time-study", {
         requirement.current = Math.min(study.requirementCurrent, requirement.total);
       }
     },
-    purchase() {
-      this.study.purchase();
-    },
     formatNumber(value) {
       return value.toString();
     },
@@ -58,7 +55,7 @@ Vue.component("ec-time-study", {
     }
   },
   template:
-    `<time-study :setup="setup" class="o-time-study--eternity-challenge" @purchase="purchase">
+    `<time-study :setup="setup" class="o-time-study--eternity-challenge">
       Eternity Challenge {{id}}
       <template v-if="hasRequirement">
         <br>

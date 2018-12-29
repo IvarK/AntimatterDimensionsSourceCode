@@ -679,6 +679,12 @@ class DilationTimeStudyState extends TimeStudyState {
   get description() {
     return this.config.description;
   }
+
+  purchase() {
+    if (!this.canBeBought) return false;
+    buyDilationStudy(this.id, this.cost);
+    return true;
+  }
 }
 
 DilationTimeStudyState.studies = mapGameData(

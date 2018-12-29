@@ -45,11 +45,28 @@
     @keyframes a-tachyon-container {
       100% { transform: rotateZ(360deg) }
     }
+
+    .l-time-study-connection-grid {
+      display: grid;
+      grid-template-columns: [type] auto [not-bought] auto [bought] auto;
+      grid-template-rows: repeat(10, auto);
+    }
+
+    .l-time-study-connection-grid > * {
+      margin: 6px;
+    }
+
+    .c-time-study-connection-svg {
+      height: 20px;
+      width: 100px;
+    }
   </style>
 </head>
 <body>
-<div id="themes" style="position: sticky; top: 5px; z-index: 100; background-color: whitesmoke">
-  <span>Theme: </span>
+<div style="position: sticky; top: 5px; z-index: 100; background-color: whitesmoke">
+  <span>Theme: <span id="current-theme">Normal</span></span>
+  <div id="themes" style="display: inline-block;"></div>
+  <span>[Shift+]~ to cycle</span>
 </div>
 
 <div style="height: 10px"></div>
@@ -246,15 +263,336 @@
     </div>
 
 
+    <span>Time Studies</span>
+    <div class="c-component-block">
+      <button class="o-time-study o-time-study--normal">
+        Available Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--normal o-time-study--bought">
+        Bought Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--normal o-time-study--unavailable">
+        Unavailable Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--normal-dim">
+        Available Normal Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--normal-dim o-time-study--bought">
+        Bought Normal Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--normal-dim o-time-study--unavailable">
+        Unavailable Normal Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--infinity-dim">
+        Available Infinity Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--infinity-dim o-time-study--bought">
+        Bought Infinity Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--infinity-dim o-time-study--unavailable">
+        Unavailable Infinity Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--time-dim">
+        Available Time Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--time-dim o-time-study--bought">
+        Bought Time Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--time-dim o-time-study--unavailable">
+        Unavailable Time Dimension Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--active">
+        Available Active Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--active o-time-study--bought">
+        Bought Active Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--active o-time-study--unavailable">
+        Unavailable Active Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--passive">
+        Available Passive Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--passive o-time-study--bought">
+        Bought Passive Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--passive o-time-study--unavailable">
+        Unavailable Passive Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--idle">
+        Available Idle Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--idle o-time-study--bought">
+        Bought Idle Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--idle o-time-study--unavailable">
+        Unavailable Idle Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--eternity-challenge">
+        Available EC Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--eternity-challenge o-time-study--bought">
+        Bought EC Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--eternity-challenge o-time-study--unavailable">
+        Unavailable EC Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dilation">
+        Available Dilation Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dilation o-time-study--bought">
+        Bought Dilation Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dilation o-time-study--unavailable">
+        Unavailable Dilation Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--reality">
+        Available Reality Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--reality o-time-study--bought">
+        Bought Reality Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--reality o-time-study--unavailable">
+        Unavailable Reality Study
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--light o-time-study--small">
+        Available Light Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--light o-time-study--bought o-time-study--small">
+        Bought Light Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--light o-time-study--unavailable o-time-study--small">
+        Unavailable Light Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dark o-time-study--small">
+        Available Dark Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dark o-time-study--bought o-time-study--small">
+        Bought Dark Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+      <button class="o-time-study o-time-study--dark o-time-study--unavailable o-time-study--small">
+        Unavailable Dark Study
+        <br>
+        Currently: 1e308
+        <br>
+        Cost: 308 Time Theorems
+      </button>
+    </div>
+
+
+    <span>Time Study Connections</span>
+    <div class="c-component-block" style="justify-content: center">
+      <div class="l-time-study-connection-grid" style="text-align: right;">
+        <span style="text-align: center;">Type</span>
+        <span style="text-align: center;">Not Bought</span>
+        <span style="text-align: center;">Bought</span>
+
+        <span>Normal</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought"></line>
+        </svg>
+
+        <span>Normal Dim</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--normal-dim"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--normal-dim"></line>
+        </svg>
+
+        <span>Infinity Dim</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--infinity-dim"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--infinity-dim"></line>
+        </svg>
+
+        <span>Time Dim</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--time-dim"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--time-dim"></line>
+        </svg>
+
+        <span>Active</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--active"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--active"></line>
+        </svg>
+
+        <span>Passive</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--passive"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--passive"></line>
+        </svg>
+
+        <span>Idle</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--idle"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--idle"></line>
+        </svg>
+
+        <span>EC</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--eternity-challenge"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--eternity-challenge"></line>
+        </svg>
+
+        <span>Dilation</span>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--dilation"></line>
+        </svg>
+        <svg class="c-time-study-connection-svg">
+          <line x1="0" y1="10" x2="100" y2="10" class="o-time-study-connection o-time-study-connection--bought o-time-study-connection--dilation"></line>
+        </svg>
+      </div>
+    </div>
+
+
     <span>Eternity</span>
     <div class="c-component-block">
       <div style="display: flex; flex-direction: column">
         <span class="o-eternity-milestone__goal">1 Eternity:</span>
-        <button class="o-eternity-milestone__reward o-eternity-milestone__reward--reached">Unlock IP multiplier autobuyer</button>
+        <button class="o-eternity-milestone__reward o-eternity-milestone__reward--reached">Unlock IP multiplier autobuyer (Reached)</button>
       </div>
       <div style="display: flex; flex-direction: column">
         <span class="o-eternity-milestone__goal">100 Eternities:</span>
-        <button class="o-eternity-milestone__reward o-eternity-milestone__reward--locked">Unlock autobuyer for Eternities</button>
+        <button class="o-eternity-milestone__reward o-eternity-milestone__reward--locked">Unlock autobuyer for Eternities (Not Reached)</button>
       </div>
       <button class="o-eternity-upgrade o-eternity-upgrade--available">
         Available Eternity Upgrade
@@ -417,6 +755,7 @@
       document.getElementById(current).disabled = true;
     }
     current = theme;
+    document.getElementById("current-theme").textContent = current;
     localStorage.setItem("theme", theme);
     if (theme === "Normal") {
       return;

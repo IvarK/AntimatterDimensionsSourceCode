@@ -7,10 +7,8 @@ Vue.component("normal-time-study", {
       return this.setup.study;
     },
     classObject() {
-      const classObject = {
-        "o-time-study--normal": true
-      };
-      let pathClass;
+      const classObject = {};
+      let pathClass = "o-time-study--normal";
       switch (this.setup.path) {
         case TimeStudyPath.NORMAL_DIM: pathClass = "o-time-study--normal-dim"; break;
         case TimeStudyPath.INFINITY_DIM: pathClass = "o-time-study--infinity-dim"; break;
@@ -21,9 +19,7 @@ Vue.component("normal-time-study", {
         case TimeStudyPath.LIGHT: pathClass = "o-time-study--light"; break;
         case TimeStudyPath.DARK: pathClass = "o-time-study--dark"; break;
       }
-      if (pathClass !== undefined) {
-        classObject[pathClass] = true;
-      }
+      classObject[pathClass] = true;
       return classObject;
     },
     hintText() {
@@ -42,7 +38,7 @@ Vue.component("normal-time-study", {
     }
   },
   template:
-    `<time-study :setup="setup" :class="classObject" @purchase="study.purchase()">
+    `<time-study :setup="setup" :class="classObject"">
       <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
       <description-display :config="study.config" />
       <effect-display br :config="study.config" />

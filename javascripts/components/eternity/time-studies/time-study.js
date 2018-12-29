@@ -1,6 +1,6 @@
 Vue.component("time-study", {
   mixins: [remMixin],
-  data: function() {
+  data() {
     return {
       isBought: false,
       isAvailable: false
@@ -14,13 +14,16 @@ Vue.component("time-study", {
     }
   },
   computed: {
-    styleObject: function() {
+    study() {
+      return this.setup.study;
+    },
+    styleObject() {
       return {
         top: this.rem(this.setup.top),
         left: this.rem(this.setup.left)
       };
     },
-    classObject: function() {
+    classObject() {
       return {
         "o-time-study": true,
         "o-time-study--unavailable": !this.isAvailable && !this.isBought,
@@ -30,19 +33,19 @@ Vue.component("time-study", {
       };
     },
     config() {
-      return this.setup.study.config;
+      return this.study.config;
     }
   },
   methods: {
     update() {
-      const study = this.setup.study;
+      const study = this.study;
       this.isBought = study.isBought;
       if (!this.isBought) {
         this.isAvailable = study.canBeBought && study.isAffordable;
       }
     },
     handleClick() {
-      this.$emit("purchase");
+      this.study.purchase();
     }
   },
   template:

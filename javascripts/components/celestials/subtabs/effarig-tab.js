@@ -19,6 +19,9 @@ Vue.component('effarig-tab', {
       pp: 0
     };
   },
+  computed: {
+    UnlockInfo: () => Effarig.UnlockInfo,
+  },
   methods: {
     update() {
       let now = new Date().getTime()
@@ -51,7 +54,11 @@ Vue.component('effarig-tab', {
     },
     buyGlyphMult() {
       Effarig.buyGlyphLevelPower()
-    }
+    },
+    unlockPosition: function(price) {
+      let maxPrice = Effarig.UnlockInfo[EFFARIG_UNLOCKS.LAST_UNLOCK].price;
+      return (Math.log1p(price) / Math.log1p(maxPrice) * 100).toFixed(2) + '%';
+    },
   },
   template:
     `<div class="l-effarig-celestial-tab">
@@ -80,10 +87,8 @@ Vue.component('effarig-tab', {
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e24) }}</div>
             </div>
-            <div class="c-effarig-unlock-description" id="effarig-run-description">{{ shorten(5e12) }}: unlock Effarig's reality.</div>
-            <div class="c-effarig-unlock-description" id="effarig-epgen-description">{{ shorten(1e18) }}: unlock Effarig's EP generation.</div>
-            <div class="c-effarig-unlock-description" id="effarig-teresa-description">{{ shorten(5e21) }}: unlock Teresa, Celestial of Ancient Relics.</div>
-            <div class="c-effarig-unlock-description" id="effarig-shop-description">{{ shorten(1e24) }}: unlock Perk Point Shop.</div>
+            <div v-for="(unlockInfo, unlockId) in UnlockInfo" class="c-effarig-unlock-description" :style="{ bottom: unlockPosition(unlockInfo.price) }" :id="unlockId">
+              {{ shorten(unlockInfo.price) }}: {{ unlockInfo.description }} </div>
           </div>
         </div>
 

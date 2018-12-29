@@ -14,11 +14,32 @@ const EFFARIG_UNLOCKS = {
   RUN: 0,
   EPGEN: 1,
   TERESA: 2,
-  SHOP: 3
+  SHOP: 3,
+  LAST_UNLOCK: 3,
+}
+
+const _EFFARIG_UNLOCK_INFO = {
+  [EFFARIG_UNLOCKS.RUN]: {
+    price: 5e12,
+    description: "unlock Effarig's reality.",
+  },
+  [EFFARIG_UNLOCKS.EPGEN]: {
+    price: 1e18,
+    description: "unlock Effarig's EP generation.",
+  },
+  [EFFARIG_UNLOCKS.TERESA]: {
+    price: 5e21,
+    description: "unlock Teresa, Celestial of Ancient Relics.",
+  },
+  [EFFARIG_UNLOCKS.SHOP]: {
+    price: 1e24,
+    description: "unlock Perk Point Shop.",
+  },
 }
 
 var Effarig = {
   timePoured: 0,
+  UnlockInfo: _EFFARIG_UNLOCK_INFO,
   pourRM(diff) {
     this.timePoured += diff
     let rm = player.reality.realityMachines
@@ -28,10 +49,11 @@ var Effarig = {
     this.checkForUnlocks()
   },
   checkForUnlocks() {
-    if (!this.has(EFFARIG_UNLOCKS.RUN) && this.rmStore > 5e12) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.RUN)
-    else if (!this.has(EFFARIG_UNLOCKS.EPGEN) && this.rmStore > 1e18) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.EPGEN)
-    else if (!this.has(EFFARIG_UNLOCKS.TERESA) && this.rmStore > 5e21) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.TERESA)
-    else if (!this.has(EFFARIG_UNLOCKS.SHOP) && this.rmStore > 1e24) player.celestials.effarig.unlocks.push(EFFARIG_UNLOCKS.SHOP)
+    Object.entries(Effarig.UnlockInfo).map(([id, info]) => {
+      if (!this.has(id) && this.rmStore >= info.price) {
+        player.celestials.effarig.unlocks.push(id);
+      }
+    });
   },
   has(id) {
     return player.celestials.effarig.unlocks.includes(id)
@@ -65,7 +87,7 @@ var Effarig = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, 1+Math.pow(Math.log10(player.realities), 1.5)), 1)
+    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, 1 + Math.pow(Math.log10(player.realities), 1.5)), 1)
   },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]

@@ -15,31 +15,35 @@ const EFFARIG_UNLOCKS = {
   EPGEN: 1,
   TERESA: 2,
   SHOP: 3,
-  LAST_UNLOCK: 3,
 }
 
 const _EFFARIG_UNLOCK_INFO = {
-  [EFFARIG_UNLOCKS.RUN]: {
+  run: {
+    id: EFFARIG_UNLOCKS.RUN,
     price: 5e12,
     description: "unlock Effarig's reality.",
   },
-  [EFFARIG_UNLOCKS.EPGEN]: {
+  epgen: {
+    id: EFFARIG_UNLOCKS.EPGEN,
     price: 1e18,
     description: "unlock Effarig's EP generation.",
   },
-  [EFFARIG_UNLOCKS.TERESA]: {
+  teresa: {
+    id: EFFARIG_UNLOCKS.TERESA,
     price: 5e21,
     description: "unlock Teresa, Celestial of Ancient Relics.",
   },
-  [EFFARIG_UNLOCKS.SHOP]: {
+  shop: {
+    id: EFFARIG_UNLOCKS.SHOP,
     price: 1e24,
     description: "unlock Perk Point Shop.",
   },
+  LAST_UNLOCK: "shop",
 }
 
 var Effarig = {
   timePoured: 0,
-  UnlockInfo: _EFFARIG_UNLOCK_INFO,
+  unlockInfo: _EFFARIG_UNLOCK_INFO,
   pourRM(diff) {
     this.timePoured += diff
     let rm = player.reality.realityMachines
@@ -49,9 +53,9 @@ var Effarig = {
     this.checkForUnlocks()
   },
   checkForUnlocks() {
-    Object.entries(Effarig.UnlockInfo).map(([id, info]) => {
-      if (!this.has(id) && this.rmStore >= info.price) {
-        player.celestials.effarig.unlocks.push(id);
+    Object.values(Effarig.unlockInfo).map((info) => {
+      if (!this.has(info.id) && this.rmStore >= info.price) {
+        player.celestials.effarig.unlocks.push(info.id);
       }
     });
   },

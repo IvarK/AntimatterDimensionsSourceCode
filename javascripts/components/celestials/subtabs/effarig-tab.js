@@ -20,7 +20,7 @@ Vue.component('effarig-tab', {
     };
   },
   computed: {
-    UnlockInfo: () => Effarig.UnlockInfo,
+    unlockInfo: () => Effarig.unlockInfo,
   },
   methods: {
     update() {
@@ -56,7 +56,7 @@ Vue.component('effarig-tab', {
       Effarig.buyGlyphLevelPower()
     },
     unlockPosition: function(price) {
-      let maxPrice = Effarig.UnlockInfo[EFFARIG_UNLOCKS.LAST_UNLOCK].price;
+      let maxPrice = Effarig.unlockInfo[Effarig.unlockInfo.LAST_UNLOCK].price;
       return (Math.log1p(price) / Math.log1p(maxPrice) * 100).toFixed(2) + '%';
     },
   },
@@ -87,7 +87,7 @@ Vue.component('effarig-tab', {
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e24) }}</div>
             </div>
-            <div v-for="(unlockInfo, unlockId) in UnlockInfo" class="c-effarig-unlock-description" :style="{ bottom: unlockPosition(unlockInfo.price) }" :id="unlockId">
+            <div v-for="unlockInfo in unlockInfo" class="c-effarig-unlock-description" :style="{ bottom: unlockPosition(unlockInfo.price) }" :id="unlockInfo.id">
               {{ shorten(unlockInfo.price) }}: {{ unlockInfo.description }} </div>
           </div>
         </div>

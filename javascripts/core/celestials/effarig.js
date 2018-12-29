@@ -47,13 +47,14 @@ var Effarig = {
   },
   checkForUnlocks() {
     Object.values(Effarig.unlockInfo).map((info) => {
-      if (!this.has(info.id) && this.rmStore >= info.price) {
+      if (!this.has(info) && this.rmStore >= info.price) {
         player.celestials.effarig.unlocks.push(info.id);
       }
     });
   },
-  has(id) {
-    return player.celestials.effarig.unlocks.includes(id)
+  has(info) {
+    if (!info.hasOwnProperty("id")) throw("Pass in the whole EFFARIG UNLOCK object")
+    return player.celestials.effarig.unlocks.includes(info.id)
   },
   startRun() {
     startRealityOver()

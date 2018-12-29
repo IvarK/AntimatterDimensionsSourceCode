@@ -1226,7 +1226,7 @@ setInterval(function() {
     }
 
     EternityChallenge.autoCompleteTick()
-    if (!Effarig.has(EFFARIG_UNLOCKS.TERESA.id)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
+    if (!Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
 }, 1000)
 
 function getECGoalIP(challNum, timesCompleted) {
@@ -1356,7 +1356,7 @@ function gameLoop(diff) {
         }
     }
 
-    if (Effarig.has(EFFARIG_UNLOCKS.EPGEN.id)) { // Effarig EP gen.
+    if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.
       let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))

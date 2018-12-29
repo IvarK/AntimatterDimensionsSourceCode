@@ -35,7 +35,7 @@ Vue.component('effarig-tab', {
       this.rmMult = Effarig.rmMultiplier
       this.quote = Effarig.quote
       this.quoteIdx = player.celestials.effarig.quoteIdx
-      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(info => Effarig.has(info.id)).filter((x) => x)
+      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(info => Effarig.has(info)).filter((x) => x)
       this.runReward = Effarig.runRewardMultiplier,
       this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )
       this.glyphUpg.mult = player.celestials.effarig.glyphLevelMult

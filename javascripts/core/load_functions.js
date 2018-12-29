@@ -82,49 +82,10 @@ function onLoad() {
   }
 
   transformSaveToDecimal();
-  respecToggle()
-  respecToggle()
   updateLastTenRuns()
   updateLastTenEternities()
   updateLastTenRealities()
-
-  updateInfCosts()
-
-  if (player.replicanti.galaxybuyer !== undefined) {
-    replicantiGalaxyAutoToggle()
-    replicantiGalaxyAutoToggle()
-  }
-
-  if (player.reality.epmultbuyer !== undefined) {
-    eterMultAutoToggle()
-    eterMultAutoToggle()
-  }
-  
   clearOldAchieves()
-
-  updateEpMultButton();
-
-  for (var i=0; i<player.timestudy.studies.length; i++) {
-      if (player.timestudy.studies[i] == 71 || player.timestudy.studies[i] == 81 || player.timestudy.studies[i] == 91 || player.timestudy.studies[i] == 101) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought normaldimstudy"
-      } else if (player.timestudy.studies[i] == 72 || player.timestudy.studies[i] == 82 || player.timestudy.studies[i] == 92 || player.timestudy.studies[i] == 102) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought infdimstudy"
-      } else if (player.timestudy.studies[i] == 73 || player.timestudy.studies[i] == 83 || player.timestudy.studies[i] == 93 || player.timestudy.studies[i] == 103) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought timedimstudy"
-      } else if (player.timestudy.studies[i] == 121 || player.timestudy.studies[i] == 131 || player.timestudy.studies[i] == 141) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought activestudy"
-      } else if (player.timestudy.studies[i] == 122 || player.timestudy.studies[i] == 132 || player.timestudy.studies[i] == 142) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought passivestudy"
-      } else if (player.timestudy.studies[i] == 123 || player.timestudy.studies[i] == 133 || player.timestudy.studies[i] == 143) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought idlestudy"
-      } else if (player.timestudy.studies[i] == 221 || player.timestudy.studies[i] == 224 || player.timestudy.studies[i] == 225 || player.timestudy.studies[i] == 228 || player.timestudy.studies[i] == 231 || player.timestudy.studies[i] == 234) {
-          document.getElementById(player.timestudy.studies[i]).className = "timestudybought darkstudy"
-      } else if (player.timestudy.studies[i] == 222 || player.timestudy.studies[i] == 223 || player.timestudy.studies[i] == 226 || player.timestudy.studies[i] == 227 || player.timestudy.studies[i] == 232 || player.timestudy.studies[i] == 233) {
-          document.getElementById(player.timestudy.studies[i]).className = "timestudybought lightstudy"
-      } else {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought"
-      }
-  }
 
   if (player.version < 9 ) {
       player.version = 9
@@ -234,16 +195,12 @@ function onLoad() {
 
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
-  updateTimeStudyButtons();
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
   updateChallengeTimes();
-  updateMilestones();
-  updateEternityUpgrades();
   resizeCanvas();
   checkForEndMe();
-  updateDilationUpgradeCosts();
   generateGlyphTable();
   updateRealityUpgrades();
   updateWormholeUpgrades()
@@ -351,9 +308,7 @@ function save_game(changed, silent) {
 function change_save(saveId) {
   // Save previous save to make sure no changes are lost
   save_game(false, true);
-
   currentSave = saveId;
-
   saved = 0;
   infDimPow = 1
   postc8Mult = new Decimal(0)
@@ -366,7 +321,6 @@ function change_save(saveId) {
   load_game();
   transformSaveToDecimal()
   Tab.dimensions.normal.show();
-  showEternityTab('timestudies', true)
   Modal.hide();
 }
 

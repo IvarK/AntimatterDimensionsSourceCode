@@ -138,7 +138,6 @@ function eternity(force, auto) {
     if (player.eternities >= 100) giveAchievement("This mile took an Eternity");
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
-    document.getElementById("respec").className = "storebtn";
 
     if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
       player.challenges.push("challenge1");
@@ -151,7 +150,6 @@ function eternity(force, auto) {
     updateLastTenEternities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    updateMilestones();
     resetTimeDimensions();
     try {
         kong.submitStats('Eternities', player.eternities);
@@ -159,7 +157,6 @@ function eternity(force, auto) {
         console.log("Couldn't load Kongregate API")
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    updateEternityUpgrades();
     resetTickspeed();
     playerInfinityUpgradesOnEternity();
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {

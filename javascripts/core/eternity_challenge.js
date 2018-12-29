@@ -62,12 +62,10 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     updateLastTenEternities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    updateMilestones();
     resetTimeDimensions();
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    updateEternityUpgrades();
     resetTickspeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();

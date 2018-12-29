@@ -85,34 +85,6 @@ input {
     border-radius: 3px !important;
 }
 
-.eternityupbtn {
-    color: #639565 !important;
-    background-color: black !important;
-    border-color: #639565 !important;
-}
-
-.eternityupbtn:hover {
-    color: black !important;
-    background-color: #639565 !important;
-    border-color: black !important;
-}
-
-.eternityupbtnbought {
-    color: black !important;
-    background-color: #639565 !important;
-    border-color: black !important;
-}
-
-.eternityupbtnlocked {
-    color: black !important;
-    background: #4A4A4A !important;
-    border-color: #639565 !important;
-}
-
-.eternityupbtnlocked:hover {
-    background: #636363 !important;
-}
-
 .timetheorembtn {
     color: #639565 !important;
     border-color: #639565 !important;
@@ -136,162 +108,6 @@ input {
     background: #dbd242 !important;
 }
 
-.timestudy {
-    color: #639565 !important;
-    border: 1px solid #639565 !important;
-    animation: christmasStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.normaldimstudy {
-    animation: normalDimStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.infdimstudy {
-    animation: infDimStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.timedimstudy {
-    animation: timeDimStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.activestudy {
-    animation: activeStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.passivestudy {
-    animation: passiveStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.idlestudy {
-    animation: idleStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.darkstudy {
-    animation: darkStudyGlowIn 7s infinite !important;
-}
-
-.timestudy.lightstudy {
-    animation: lightStudyGlowIn 7s infinite !important;
-}
-
-.timestudy:hover {
-    color: #EEEEEE !important;
-    background: #639565 !important;
-}
-
-.timestudy.normaldimstudy:hover {
-    color: #EEEEEE !important;
-    background: #22aa48 !important;
-}
-
-.timestudy.infdimstudy:hover {
-    color: #EEEEEE !important;
-    background: #B67F33 !important;
-}
-
-.timestudy.timedimstudy:hover {
-    color: #EEEEEE !important;
-    background: #B241E3 !important;
-}
-
-.timestudy.activestudy:hover {
-    color: #EEEEEE !important;
-    background: #FF0100 !important;
-}
-
-.timestudy.idlestudy:hover {
-    color: #EEEEEE !important;
-    background: #0080ff !important;
-}
-
-.timestudybought {
-    color: black !important;
-    background: #639565 !important;
-    border: 1px solid black !important;
-}
-
-.timestudybought.normaldimstudy {
-    background: #22aa48 !important;
-}
-
-.timestudybought.infdimstudy {
-    background: #B67F33 !important;
-}
-
-.timestudybought.timedimstudy {
-    background: #B241E3 !important;
-}
-
-.timestudybought.activestudy {
-    background: #FF0100 !important;
-}
-
-.timestudybought.passivestudy {
-    background: #5E33B6 !important;
-}
-
-.timestudybought.idlestudy {
-    background: #0080ff !important;
-}
-
-.timestudybought.darkstudy {
-    color: black !important;
-    background-color: white !important;
-    border-color: black !important;
-}
-
-.timestudybought.lightstudy {
-    color: white !important;
-    background-color: black !important;
-    border-color: white !important;
-}
-
-.timestudylocked, .eternitychallengestudylocked {
-    color: black !important;
-    background: #9E9E9E !important;
-    box-shadow: 1px 1px 1px 0px #000;
-    border: none !important;
-}
-
-.timestudylocked.normaldimstudylocked {
-    background: #94a89a !important;
-}
-
-.timestudylocked.infdimstudylocked {
-    background: #a8a094 !important;
-}
-
-.timestudylocked.timedimstudylocked {
-    background: #a294a8 !important;
-}
-
-.timestudylocked.activestudylocked {
-    background: #a89494 !important;
-}
-
-.timestudylocked.passivestudylocked {
-    background: #9b94a8 !important;
-}
-
-.timestudylocked.idlestudylocked {
-    background: #949ea8 !important;
-}
-
-.timestudylocked:hover, .eternitychallengestudylocked:hover {
-    background: #d72621 !important;
-}
-
-.milestonereward {
-    background: #639565 !important;
-    border-color: #507751 !important;
-}
-
-.milestonerewardlocked {
-    background: #9E9E9E !important;
-    box-shadow: 1px 1px 1px 0px #000;
-    border: none !important;
-}
-
 .greedbtn {
     color: black !important;
     background: #dbd242 !important;
@@ -301,21 +117,6 @@ input {
 .greedbtn:hover {
     color: #dbd242 !important;
     background: black !important;
-}
-
-.dilationbtn {
-    border-width: 1px !important;
-}
-
-.dilationupglocked, .dilationupgrebuyablelocked {
-    color: black !important;
-    background: #9E9E9E !important;
-    box-shadow: 1px 1px 1px 0px #000;
-    border: none !important;
-}
-
-.dilationupglocked:hover, .dilationupgrebuyablelocked:hover {
-    background: #d72621 !important;
 }
 
 #snow {
@@ -342,10 +143,4 @@ input {
     0% {opacity: 0;}
     50% {opacity: 1;}
     100% {opacity: 0;}
-}
-
-@keyframes christmasStudyGlowIn {
-    0%  {box-shadow: inset 0px 0px 3px 0px #639565;}
-    50% {box-shadow: inset 0px 0px 20px 0px #639565;}
-    100%  {box-shadow: inset 0px 0px 3px 0px #639565;}
 }

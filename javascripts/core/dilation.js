@@ -84,43 +84,7 @@ function buyDilationUpgrade(id) {
       }
     }
   }
-  updateDilationUpgradeCosts()
-  updateDilationUpgradeButtons()
-  updateTimeStudyButtons()
   return true
-}
-
-function updateDilationUpgradeButtons() {
-  for (var i = 1; i <= 10; i++) {
-      if (i <= 3) {
-          document.getElementById("dil"+i).className = ( new Decimal(DIL_UPG_COSTS[i][0]).times(Decimal.pow(DIL_UPG_COSTS[i][1],(player.dilation.rebuyables[i]))).gt(player.dilation.dilatedTime) ) ? "dilationupgrebuyablelocked" : "dilationupgrebuyable";
-      } else if (player.dilation.upgrades.includes(i)) {
-          document.getElementById("dil"+i).className = "dilationupgbought"
-      } else {
-          document.getElementById("dil"+i).className = ( DIL_UPG_COSTS[i] > player.dilation.dilatedTime ) ? "dilationupglocked" : "dilationupg";
-      }
-  }
-  document.getElementById("dil7desc").textContent = "Currently: "+shortenMoney(player.dilation.dilatedTime.pow(1000).max(1))+"x"
-  document.getElementById("dil10desc").textContent = "Currently: "+shortenMoney(Math.floor(player.dilation.tachyonParticles.div(20000).max(1)))+"/s"
-}
-
-function updateDilationUpgradeCosts() {
-  document.getElementById("dil1cost").textContent = "Cost: " + shortenCosts( new Decimal(DIL_UPG_COSTS[1][0]).times(Decimal.pow(DIL_UPG_COSTS[1][1],(player.dilation.rebuyables[1]))) ) + " Dilated Time"
-  document.getElementById("dil2cost").textContent = "Cost: " + shortenCosts( new Decimal(DIL_UPG_COSTS[2][0]).times(Decimal.pow(DIL_UPG_COSTS[2][1],(player.dilation.rebuyables[2]))) ) + " Dilated Time"
-  document.getElementById("dil3cost").textContent = "Cost: " + shortenMultiplier(new Decimal(DIL_UPG_COSTS[3][0]).times(Decimal.pow(DIL_UPG_COSTS[3][1], (player.dilation.rebuyables[3])))) + " Dilated Time"
-  document.getElementById("dil4cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[4]) + " Dilated Time"
-  document.getElementById("dil5cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[5]) + " Dilated Time"
-  document.getElementById("dil6cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[6]) + " Dilated Time"
-  document.getElementById("dil7cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[7]) + " Dilated Time"
-  document.getElementById("dil8cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[8]) + " Dilated Time"
-  document.getElementById("dil9cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[9]) + " Dilated Time"
-  document.getElementById("dil10cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[10]) + " Dilated Time"
-  if (player.reality.perks.includes(11))
-    document.getElementById("dil2").innerHTML = document.getElementById("dil2").innerHTML.replace(" and Dilated Time", "");
-  
-  document.getElementById("dil1mult").textContent = "Currently: " + shortenDimensions(new Decimal(2).pow(player.dilation.rebuyables[1])) + "x";
-  document.getElementById("dil2mult").textContent = "Currently: " + getFreeGalaxyMult().toFixed(4) + "x";
-  document.getElementById("dil3mult").textContent = "Currently: " + shortenDimensions(new Decimal(3).pow(player.dilation.rebuyables[3])) + "x";
 }
 
 function getFreeGalaxyMult() {
@@ -165,17 +129,6 @@ function getTachyonReq() {
   
   let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
   return req
-}
-
-
-function updateDilation() {
-  if (document.getElementById("dilation").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
-      document.getElementById("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
-      document.getElementById("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
-      document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilationGainPerSecond()) + "/s"
-      document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
-      document.getElementById("dilatedGalaxies").textContent = player.dilation.freeGalaxies
-  }
 }
 
 function dilatedValueOf(value) {

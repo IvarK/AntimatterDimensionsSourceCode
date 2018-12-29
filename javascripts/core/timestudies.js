@@ -5,7 +5,6 @@ function buyWithAntimatter() {
       player.money = player.money.minus(player.timestudy.amcost)
       player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
       player.timestudy.theorem += 1
-      updateTimeStudyButtons()
       return true
   } else return false
 }
@@ -15,7 +14,6 @@ function buyWithIP() {
       player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
       player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
       player.timestudy.theorem += 1
-      updateTimeStudyButtons()
       return true
   } else return false
 }
@@ -29,8 +27,6 @@ function buyWithEP() {
       player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost)
       player.timestudy.epcost = player.timestudy.epcost.times(2)
       player.timestudy.theorem += 1
-      updateTimeStudyButtons()
-      updateEternityUpgrades()
       return true
   } else return false
 }
@@ -57,9 +53,6 @@ function maxTheorems() {
     player.timestudy.theorem += Math.round(player.timestudy.epcost.log2()) - EPowned
     buyWithEP();  // The above code block will sometimes buy one too few TT, but it never over-buys
   }
-  
-  updateTimeStudyButtons()
-  updateEternityUpgrades()
 }
 
 function calculateTimeStudiesCost() {
@@ -76,27 +69,6 @@ function buyTimeStudy(name, cost, check) {
   if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
       player.timestudy.theorem -= cost
-      if (name == 71 || name == 81 || name == 91 || name == 101) {
-          document.getElementById(""+name).className = "timestudybought normaldimstudy"
-      } else if (name == 72 || name == 82 || name == 92 || name == 102) {
-          document.getElementById(""+name).className = "timestudybought infdimstudy"
-      } else if (name == 73 || name == 83 || name == 93 || name == 103) {
-          document.getElementById(""+name).className = "timestudybought timedimstudy"
-      } else if (name == 121 || name == 131 || name == 141) {
-          document.getElementById(""+name).className = "timestudybought activestudy"
-      } else if (name == 122 || name == 132 || name == 142) {
-          document.getElementById(""+name).className = "timestudybought passivestudy"
-      } else if (name == 123 || name == 133 || name == 143) {
-          document.getElementById(""+name).className = "timestudybought idlestudy"
-      } else if (name == 221 || name == 224 || name == 225 || name == 228 || name == 231 || name == 234) {
-          document.getElementById(name).className = "timestudybought darkstudy"
-      } else if (name == 222 || name == 223 || name == 226 || name == 227 || name == 232 || name == 233) {
-          document.getElementById(name).className = "timestudybought lightstudy"
-      } else {
-          document.getElementById(""+name).className = "timestudybought"
-      }
-      updateTimeStudyButtons()
-      drawStudyTree()
       return true
   } else return false
 }
@@ -104,7 +76,7 @@ function buyTimeStudy(name, cost, check) {
 function buyDilationStudy(name, cost) {
     if ((player.timestudy.theorem >= cost || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
         if (name === 1) {
-            showEternityTab("dilation")
+            Tab.eternity.dilation.show();
             if (player.reality.perks.includes(14)) player.dilation.upgrades.push(4, 5, 6);
             if (player.reality.perks.includes(15)) player.dilation.upgrades.push(7, 8, 9);
             if (player.reality.perks.includes(33)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
@@ -116,9 +88,6 @@ function buyDilationStudy(name, cost) {
         player.dilation.studies.push(name)
         if (name !== 6) player.timestudy.theorem -= cost
         else if (player.realities === 0 && name === 6) player.timestudy.theorem -= cost
-        document.getElementById("dilstudy"+name).className = "dilationupgbought"
-        updateTimeStudyButtons()
-        drawStudyTree()
         return true
     } return false
   }
@@ -214,67 +183,14 @@ function canBuyDilationStudy(name) {
         if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true;
         else return false
     }
-    if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= parseInt(document.getElementById("dilstudy"+name).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""))) return true
+    // TODO
+    const config = Object.values(GameDatabase.eternity.dilation).find(config => config.id === name);
+    if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= config.cost) return true
     else return false
 }
 
 var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
 var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
-function updateTimeStudyButtons() {
-  for (var i=0; i<all.length; i++) {
-      if (!player.timestudy.studies.includes(all[i])) {
-          if (canBuyStudy(all[i]) && studyCosts[i]<=player.timestudy.theorem) {
-              if (all[i] == 71 || all[i] == 81 || all[i] == 91 || all[i] == 101) {
-                  document.getElementById(all[i]).className = "timestudy normaldimstudy"
-              } else if (all[i] == 72 || all[i] == 82 || all[i] == 92 || all[i] == 102) {
-                  document.getElementById(all[i]).className = "timestudy infdimstudy"
-              } else if (all[i] == 73 || all[i] == 83 || all[i] == 93 || all[i] == 103) {
-                  document.getElementById(all[i]).className = "timestudy timedimstudy"
-              } else if (all[i] == 121 || all[i] == 131 || all[i] == 141) {
-                  document.getElementById(all[i]).className = "timestudy activestudy"
-              } else if (all[i] == 122 || all[i] == 132 || all[i] == 142) {
-                  document.getElementById(all[i]).className = "timestudy passivestudy"
-              } else if (all[i] == 123 || all[i] == 133 || all[i] == 143) {
-                  document.getElementById(all[i]).className = "timestudy idlestudy"
-              } else if (all[i] == 221 || all[i] == 224 || all[i] == 225 || all[i] == 228 || all[i] == 231 || all[i] == 234) {
-                  document.getElementById(all[i]).className = "timestudy darkstudy"
-              } else if (all[i] == 222 || all[i] == 223 || all[i] == 226 || all[i] == 227 || all[i] == 232 || all[i] == 233) {
-                  document.getElementById(all[i]).className = "timestudy lightstudy"
-              } else {
-                  document.getElementById(all[i]).className = "timestudy"
-              }
-          }
-          else {
-              if (all[i] == 71 || all[i] == 81 || all[i] == 91 || all[i] == 101) {
-                  document.getElementById(all[i]).className = "timestudylocked normaldimstudylocked"
-              } else if (all[i] == 72 || all[i] == 82 || all[i] == 92 || all[i] == 102) {
-                  document.getElementById(all[i]).className = "timestudylocked infdimstudylocked"
-              } else if (all[i] == 73 || all[i] == 83 || all[i] == 93 || all[i] == 103) {
-                  document.getElementById(all[i]).className = "timestudylocked timedimstudylocked"
-              } else if (all[i] == 121 || all[i] == 131 || all[i] == 141) {
-                  document.getElementById(all[i]).className = "timestudylocked activestudylocked"
-              } else if (all[i] == 122 || all[i] == 132 || all[i] == 142) {
-                  document.getElementById(all[i]).className = "timestudylocked passivestudylocked"
-              } else if (all[i] == 123 || all[i] == 133 || all[i] == 143) {
-                  document.getElementById(all[i]).className = "timestudylocked idlestudylocked"
-              } else {
-                  document.getElementById(all[i]).className = "timestudylocked"
-              }
-          }
-      }
-  }
-
-  for (i=1; i<7; i++) {
-    if (player.dilation.studies.includes(i)) document.getElementById("dilstudy"+i).className = "dilationupgbought"
-    else if (canBuyDilationStudy(i)) document.getElementById("dilstudy"+i).className = "dilationupg"
-    else document.getElementById("dilstudy"+i).className = "timestudylocked"
-  }
-
-  if (player.dilation.studies.includes(6) && player.realities === 0) document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Cost: 5,000,000,000 Time Theorems"
-  else if (player.realities === 0) document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP<span>Cost: 5,000,000,000 Time Theorems"
-  else if (player.dilation.studies.includes(6)) document.getElementById("dilstudy6").innerHTML = "Unlock reality"
-  else document.getElementById("dilstudy6").innerHTML = "Unlock reality<span>Requirement: 1e4000 EP"
-}
 
 function studiesUntil(id) {
     let col = id % 10;
@@ -422,8 +338,6 @@ function respecTimeStudies() {
     ecStudy.refund();
     player.eternityChallUnlocked = 0;
   }
-  updateTimeStudyButtons()
-  drawStudyTree()
 }
 
 function exportStudyTree() {
@@ -440,7 +354,7 @@ function importStudyTree(input) {
   }
   if (parseInt(input.split("|")[1]) !== 0) {
       justImported = true;
-      document.getElementById("ec"+parseInt(input.split("|")[1])+"unl").click();
+      TimeStudy.eternityChallenge(parseInt(input.split("|")[1])).purchase();
       setTimeout(function(){ justImported = false; }, 100);
   }
 };
@@ -459,25 +373,6 @@ function toggleTTAutomation() {
   player.ttbuyer = !player.ttbuyer
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
 }
-
-// Add long-press to all studies as shift click alternative
-$(document).ready(function() {
-  all.forEach(function(id) {
-    obj = document.getElementById(id);
-    if (obj.onclick) {
-      var savedHandler = obj.onclick;
-      LongPress.addTo(obj, 750, {
-        longPress : function(e) {
-          var savedShiftDown = shiftDown;
-          shiftDown = true;
-          savedHandler();
-          shiftDown = savedShiftDown;
-        },
-        click : savedHandler
-      })
-    }
-  });
-});
 
 const TimeStudyType = {
   NORMAL: 0,

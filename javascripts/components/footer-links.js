@@ -1,5 +1,4 @@
 Vue.component('footer-links', {
-  props: ['sticky'],
   data() {
     return {
       isVisible: true
@@ -9,7 +8,7 @@ Vue.component('footer-links', {
     this.on$(GameEvent.TAB_CHANGED, () => this.isVisible = !Tab.eternity.timeStudies.isOpen);
   },
   template:
-    `<div v-if="isVisible" :class="['o-footer', sticky ? 'o-footer--sticky' : '']">
+    `<div v-if="isVisible" class="o-footer">
       <a href="howto.html" target="_newtab">How to play</a> |
       <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
       <a href="changelog.html" target="_newtab">Changelog</a> |

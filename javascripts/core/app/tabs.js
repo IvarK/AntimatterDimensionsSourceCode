@@ -49,6 +49,7 @@ Tab.challenges.eternity = new Subtab("Eternity Challenges", Tab.challenges, ui.v
 Tab.infinity = new Tab("infinity-tab");
 Tab.eternity = new Tab("eternity-tab");
 Tab.eternity.timeStudies = new Subtab("Time studies", Tab.eternity, ui.view.tabs.eternity, true);
+Tab.eternity.dilation = new Subtab("Time dilation", Tab.eternity, ui.view.tabs.eternity);
 Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
@@ -77,7 +78,7 @@ function tryShowtab(tab) {
     Tab.infinity.show();
     return true;
   }
-  if (tab === 'eternitystorevue') {
+  if (tab === 'eternitystore') {
     Tab.eternity.show();
     return true;
   }

@@ -93,7 +93,6 @@ dev.refundTimeDims = function() {
 dev.refundEPMult = function() {
     player.epmult = new Decimal(1)
     player.epmultCost = new Decimal(500)
-    updateEpMultButton();
 }
 
 dev.refundDilStudies = function() {

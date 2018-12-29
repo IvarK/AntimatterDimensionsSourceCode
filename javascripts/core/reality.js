@@ -203,24 +203,19 @@ function reality(force, reset, auto) {
     updateLastTenRealities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    updateMilestones();
     resetTimeDimensions();
-    showEternityTab('timestudies', true)
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    updateEternityUpgrades();
     resetTickspeed();
     playerInfinityUpgradesOnEternity();
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
     }
     Marathon2 = 0;
-    updateTimeStudyButtons();
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();
     drawPerkNetwork();
-    updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")

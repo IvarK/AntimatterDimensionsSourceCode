@@ -31,7 +31,6 @@ function buyTimeDimension(tier, upd, threshold) {
   }
   if (tier == 8) dim.power = dim.power.times(2 * getGlyphSacEffect("time"))
   else dim.power = dim.power.times(2)
-  if (upd) updateEternityUpgrades()
   return true
 }
 
@@ -52,7 +51,6 @@ function toggleAllTimeDims() {
 
 function buyMaxTimeDims(tier) {
   while(buyTimeDimension(tier, false)) continue
-  updateEternityUpgrades()
 }
 
 function buyMaxTimeDimensions(threshold) {
@@ -80,7 +78,6 @@ function buyMaxTimeDimensions(threshold) {
         break;
     }
   }
-  updateEternityUpgrades()
 }
 
 class TimeDimensionInfo {

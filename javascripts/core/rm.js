@@ -238,9 +238,9 @@ function getAdjustedGlyphEffect(effectKey) {
   let value = getTotalEffect(effectKey);
   if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
     const softcap = glyphEffectSoftcaps[effectKey];
-    return softcap(value);
+    return softcap(value.effect);
   }
-  return value;
+  return value.effect;
 }
 
 // Combines all specified glyph effects (without softcaps), reduces some boilerplate
@@ -250,10 +250,12 @@ function getTotalEffect(effectKey) {
   let effect = separated[1];
   
   let totalEffect = 0;
+  let glyphCount = 0;
   let activeGlyphs = player.reality.glyphs.active;
   for (let i = 0; i < activeGlyphs.length; i++) {
     let currGlyph = activeGlyphs[i];
     if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
+      ++glyphCount;
       if (totalEffect == 0) {
         totalEffect = currGlyph.effects[effect];
       } else {  // Combine the effects appropriately (some are additive)
@@ -271,10 +273,13 @@ function getTotalEffect(effectKey) {
   }
   
   if (effectKey === "powermult" && totalEffect == 0) {
-    return new Decimal(0)
-  }
-  else {
-    return totalEffect
+    return { effect: new Decimal(0), count: glyphCount, capped: true };
+  } else if (effectKey === "replicationglyphlevel" && glyphCount > 2) {
+    // past two glyphs, stacking offers diminishing returns; this makes 4 glyphs
+    // look like 3:
+    return { effect: totalEffect * 6 / (glyphCount + 4), count: glyphCount, capped:true };
+  } else {
+    return { effect: totalEffect, count: glyphCount, capped: false };
   }
 }
 
@@ -332,17 +337,16 @@ function getDesc(effectKey, x, inTooltip) {
   let spanPrefix = ""
   let spanSuffix = "</span>"
   if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+    spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
+  } else {
+    let total = getTotalEffect(effectKey);
+    if (total.capped || (effectKey === "powermult" && !x.equals(total.effect)) || (effectKey !== "powermult" && x != total.effect)) {
+      spanPrefix = "<span style='color:" + CAPPED_EFFECT_COLOR + "'>"
+      isGlyphSoftcapActive = true;
+    } else {
+      spanPrefix = "<span>"
+    }
   }
-  else if ((effectKey === "powermult" && !x.equals(getTotalEffect(effectKey))) || (effectKey !== "powermult" && x != getTotalEffect(effectKey))) {
-    spanPrefix = "<span style='color:"+CAPPED_EFFECT_COLOR+"'>"
-    isGlyphSoftcapActive = true;
-  }
-  else {
-    spanPrefix = "<span>"
-  }
-  
-  
   const EFFECT_DESCRIPTIONS = {
     timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
@@ -790,4 +794,75 @@ function updateTooltips() {
     mouseOn.appendTo($(this))
     mouseOn = $("document")
   })
+}
+
+function getGlyphLevelInputs() {
+  // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
+  // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
+  // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
+  let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
+  var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
+  // factors assigned to repl and dt can be arbitrarily tuned
+  let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
+  let dtBase = player.dilation.dilatedTime.exponent ?
+    Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
+  let eterBase = player.reality.upg.includes(18) ?
+    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45,1) : 1;
+  // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
+  // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
+  // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
+  // largest term -- so probably replicants, So, instead of using the weights directly, a
+  // function of the weights is used: n_i = (4 w_i)^blendExp; put differently, the exponents
+  // don't add up to 4, but their powers do (for blendExp = 1/3, the cubes of the exponents sum to
+  // 4.
+  // The optimal weights, given a blendExp, are proportional to log(x)^(1/(1- blendExp))
+  const blendExp = 1/3;
+  // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
+  // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
+  // Then, we can divide the result by s⁴; this does nothing for even weights
+  // This can reduce the effect that Teresa can have; consider the following examples:
+  // Inputs : 100, 1, 1, 1. Nominal result : 100
+  // blendExp = 1/3; optimal weights: 1, 0, 0, 0; result = 1493
+  // Scaling by 100: 10000, 100, 100, 100
+  //                 optimal weights: 0.485, 0.17, 0.17, 0.17; result = 191.5
+  // The degree of this effect depends on the scale of the inputs:
+  // Inputs: 1000, 1, 1, 1. Nominal result: 1000
+  //                 optimal weights: 1, 0, 0, 0; result = 57836
+  // Scaling by 100: 100000, 100, 100, 100
+  //                 optimal weights: 0.57, 0.14, 0.14, 0.14; result = 3675
+  // Scaling does allow the user to produce results less than 1
+  // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
+  // For display purposes, each term is divided independently by s.  
+  const preScale = 5;
+  let weights =  player.celestials.teresa.glyphWeights;
+  var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
+  var epEffect = adjustFactor(epBase, weights.ep / 100);
+  var replEffect = adjustFactor(replBase, weights.repl / 100);
+  var dtEffect = adjustFactor(dtBase, weights.dt / 100);
+  var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
+  // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
+  const glyphScaleBegin = 1000;
+  const glyphScaleRate = 500;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect;
+  var glyphScalePenalty = 1;
+  var glyphScaledLevel = glyphBaseLevel;
+  if (glyphBaseLevel > glyphScaleBegin) {
+    var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
+    glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
+    glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
+  }
+  let perkFactor = 0;
+  if (player.reality.perks.includes(21)) perkFactor++;
+  if (player.reality.perks.includes(24)) perkFactor++;
+  return {
+    epEffect: epEffect,
+    replEffect: replEffect,
+    dtEffect: dtEffect,
+    eterEffect: eterEffect,
+    scalePenalty: glyphScalePenalty,
+    perkShop: player.celestials.effarig.glyphLevelMult,
+    perkFactor: perkFactor,
+    finalLevel: glyphScaledLevel * player.celestials.effarig.glyphLevelMult + perkFactor,
+  };
 }

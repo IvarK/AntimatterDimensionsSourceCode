@@ -117,9 +117,9 @@ const infinityChallengeDetails = [
     reward: "Tickspeed affects Infinity Dimensions with reduced effect"
   },
   {
-    description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x -> 10x",
+    description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x 🡆 10x",
     goal: new Decimal('1e10000'),
-    reward: "Dimension Boost multiplier 2.5x -> 4x"
+    reward: "Dimension Boost multiplier 2.5x 🡆 4x"
   },
   {
     description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",

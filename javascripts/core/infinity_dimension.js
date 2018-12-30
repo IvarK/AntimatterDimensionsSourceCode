@@ -135,7 +135,7 @@ function toggleAllInfDims() {
 var infDimPow = 1
 
 
-class InfinityDimensionInfo {
+class InfinityDimensionState {
   constructor(tier) {
     this._props = player[`infinityDimension${tier}`];
     this._tier = tier;
@@ -186,7 +186,7 @@ class InfinityDimensionInfo {
   }
 
   get requirement() {
-    return InfinityDimensionInfo.requirements[this._tier];
+    return InfinityDimensionState.requirements[this._tier];
   }
 
   get isAutobuyerUnlocked() {
@@ -202,14 +202,14 @@ class InfinityDimensionInfo {
   }
 
   get hasRateOfChange() {
-    return this._tier < 8 || ECTimesCompleted("eterc7") > 0;
+    return this._tier < 8 || EternityChallenge(7).completions > 0;
   }
 
   get rateOfChange() {
     const tier = this._tier;
     let toGain = new Decimal(0);
     if (tier === 8) {
-      EternityChallenge(7).applyReward(value => toGain = value);
+      EternityChallenge(7).reward.applyEffect(v => toGain = v);
     }
     else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
@@ -245,52 +245,29 @@ class InfinityDimensionInfo {
     if (EternityChallenge(11).isRunning) {
       return new Decimal(1);
     }
-    let mult = this.power;
-    mult = mult.times(infDimPow);
-    mult = mult.times(kongAllDimMult);
-
-    if (isAchEnabled("r94") && tier === 1) mult = mult.times(2);
-    if (isAchEnabled("r75")) mult = mult.times(player.achPow);
+    let mult = this.power
+      .times(infDimPow)
+      .times(kongAllDimMult)
+      .timesEffectsOf(
+        tier === 1 ? Achievement(94) : null,
+        Achievement(75),
+        tier === 4 ? TimeStudy(72) : null,
+        TimeStudy(82),
+        TimeStudy(92),
+        TimeStudy(162),
+        tier === 1 ? EternityChallenge(2).reward : null,
+        EternityChallenge(4).reward,
+        EternityChallenge(9).reward,
+        EternityUpgrade.idMultEP,
+        EternityUpgrade.idMultEternities,
+        EternityUpgrade.idMultICRecords
+      );
 
     if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
       mult = mult.times(replicantiMult());
     }
 
-    if (player.timestudy.studies.includes(72) && tier === 4) {
-      mult = mult.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
-    }
-
-    if (player.timestudy.studies.includes(82)) {
-      mult = mult.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
-    }
-
-    if (player.eternityUpgrades.includes(1)) {
-      mult = mult.times(player.eternityPoints.max(1))
-    }
-
-    if (player.eternityUpgrades.includes(2)) {
-      mult = mult.times(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))
-    }
-
-    if (player.eternityUpgrades.includes(3)) {
-      mult = mult.times(Decimal.pow(2,30000/Math.max(infchallengeTimes, isAchEnabled("r112") ? 610 : 750)))
-    }
-
-    if (player.timestudy.studies.includes(92)) {
-      mult = mult.times(Decimal.pow(2, 600/Math.max(player.bestEternity/100, 20)))
-    }
-    if (player.timestudy.studies.includes(162)) {
-      mult = mult.times(1e11)
-    }
-
-    if (tier === 1) {
-      EternityChallenge(2).applyReward(value => mult = mult.times(value));
-    }
-
-    EternityChallenge(4).applyReward(value => mult = mult.times(value));
-    EternityChallenge(9).applyReward(value => mult = mult.times(value));
-
-    mult = mult.max(0);
+    mult = mult.clampMin(0);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -303,7 +280,7 @@ class InfinityDimensionInfo {
 
   get costMultiplier() {
     let costMult = infCostMults[this._tier];
-    EternityChallenge(12).applyReward(value => costMult = Math.pow(costMult, value));
+    EternityChallenge(12).reward.applyEffect(v => costMult = Math.pow(costMult, v));
     return costMult;
   }
 
@@ -317,7 +294,7 @@ class InfinityDimensionInfo {
   }
 }
 
-InfinityDimensionInfo.requirements = [
+InfinityDimensionState.requirements = [
   null,
   new Decimal("1e1100"),
   new Decimal("1e1900"),
@@ -330,7 +307,7 @@ InfinityDimensionInfo.requirements = [
 ];
 
 function InfinityDimension(tier) {
-  return new InfinityDimensionInfo(tier);
+  return new InfinityDimensionState(tier);
 }
 
 InfinityDimension.nextRequirement = function() {

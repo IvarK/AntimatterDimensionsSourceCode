@@ -12,21 +12,25 @@ class DimBoostRequirement {
 class DimBoost {
   static get power() {
     if (player.currentChallenge === "challenge11" || player.currentChallenge === "postc1") {
-      return Decimal.fromNumber(1);
+      return new Decimal(1);
     }
 
-    let power = 2;
-    InfinityUpgrade.dimboostMult.apply(value => power = value);
-    if (player.challenges.includes("postc7")) power = 4;
-    if (player.currentChallenge === "postc7" || player.timestudy.studies.includes(81)) power = 10;
-
-    if (isAchEnabled("r101")) power *= 1.01;
-    if (isAchEnabled("r142")) power *= 1.5;
-    power *= Math.max(1, getAdjustedGlyphEffect("powerdimboost"));
-    if (player.timestudy.studies.includes(83)) power = Decimal.pow(1.0004, player.totalTickGained).min("1e30").times(power);
-    if (player.timestudy.studies.includes(231)) power = Decimal.pow(player.resets, 0.3).max(1).times(power);
-
-    return Decimal.fromValue(power);
+    return Effects
+      .max(
+        2,
+        InfinityUpgrade.dimboostMult,
+        InfinityChallenge(7),
+        InfinityChallenge(7).reward,
+        TimeStudy(81)
+      )
+      .toDecimal()
+      .timesEffectsOf(
+        TimeStudy(83),
+        TimeStudy(231),
+        Achievement(101),
+        Achievement(142),
+        GlyphEffect.dimBoostPower
+      );
   }
 
   static get maxShiftTier() {
@@ -47,21 +51,22 @@ class DimBoost {
     let targetResets = player.resets + bulk;
     let tier = Math.min(targetResets + 4, this.maxShiftTier);
     let amount = 20;
-    let mult = 15;
-    if (player.timestudy.studies.includes(211)) mult -= 5;
-    if (player.timestudy.studies.includes(222)) mult -= 2;
 
     if (tier === 6 && player.currentChallenge === "challenge4") {
       amount += Math.ceil((targetResets - 2) * 20);
     }
     else if (tier === 8) {
+      const mult = 15 - Effects.sum(
+        TimeStudy(211),
+        TimeStudy(222)
+      );
       amount += Math.ceil((targetResets - 4) * mult);
     }
-    if (player.currentEternityChall === "eterc5") {
+    if (EternityChallenge(5).isRunning) {
       amount += Math.pow(targetResets, 3) + targetResets;
     }
 
-    InfinityUpgrade.resetBoost.apply(value => amount -= value);
+    amount -= Effects.sum(InfinityUpgrade.resetBoost);
     if (player.challenges.includes("postc5")) amount -= 1;
 
     return new DimBoostRequirement(tier, amount);
@@ -93,7 +98,7 @@ function softReset(bulk) {
     resetTickspeed();
     let currentMoney = player.money;
     resetMoney();
-    if (isAchEnabled("r111")) {
+    if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
     }
     if (player.resets >= 10) {

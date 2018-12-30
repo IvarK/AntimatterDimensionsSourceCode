@@ -15,7 +15,7 @@ Vue.component('normal-dim-tab', {
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
         const c2Power = `${(player.chall2Pow * 100).toFixed(2)}%`;
-        const c3Power = `${this.shorten(player.chall3Pow * 100)}%`;
+        const c3Power = `${this.shortenRateOfChange(player.chall3Pow * 100)}%`;
         if (isIC1Running) {
           this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
         }

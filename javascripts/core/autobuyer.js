@@ -13,7 +13,7 @@ Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
 
-class AutobuyerInfo {
+class AutobuyerState {
   constructor(getAutobuyer) {
     this._getAutobuyer = getAutobuyer;
   }
@@ -183,7 +183,7 @@ class AutobuyerInfo {
   }
 }
 
-class DimensionAutobuyerInfo extends AutobuyerInfo {
+class DimensionAutobuyerState extends AutobuyerState {
   constructor(tier) {
     super(() => player.autobuyers[tier - 1]);
     this._tier = tier;
@@ -269,11 +269,11 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.dim = tier => new DimensionAutobuyerInfo(tier);
+Autobuyer.dim = tier => new DimensionAutobuyerState(tier);
 
 Autobuyer.allDims = Array.dimensionTiers.map(Autobuyer.dim);
 
-class TickspeedAutobuyerInfo extends AutobuyerInfo {
+class TickspeedAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[8]);
   }
@@ -317,7 +317,7 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.tickspeed = new TickspeedAutobuyerInfo();
+Autobuyer.tickspeed = new TickspeedAutobuyerState();
 
 Autobuyer.priorityQueue = function() {
   const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
@@ -327,7 +327,7 @@ Autobuyer.priorityQueue = function() {
     .sort((a, b) => a.priority - b.priority);
 };
 
-class DimboostAutobuyerInfo extends AutobuyerInfo {
+class DimboostAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[9]);
   }
@@ -365,7 +365,7 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities >= 10;
+    return EternityMilestone.autobuyMaxDimboosts.isReached;
   }
 
   /**
@@ -421,9 +421,9 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.dimboost = new DimboostAutobuyerInfo();
+Autobuyer.dimboost = new DimboostAutobuyerState();
 
-class GalaxyAutobuyerInfo extends AutobuyerInfo {
+class GalaxyAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[10]);
   }
@@ -454,7 +454,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities > 8;
+    return EternityMilestone.autobuyMaxGalaxies.isReached;
   }
 
   /**
@@ -475,7 +475,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
     if (!this.canTick()) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
-    if (player.eternities >= 9 && this.buyMaxInterval > 0) {
+    if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
       this.buyMax();
     }
     else {
@@ -497,9 +497,9 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.galaxy = new GalaxyAutobuyerInfo();
+Autobuyer.galaxy = new GalaxyAutobuyerState();
 
-class SacrificeAutobuyerInfo extends AutobuyerInfo {
+class SacrificeAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autoSacrifice);
   }
@@ -535,9 +535,9 @@ class SacrificeAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.sacrifice = new SacrificeAutobuyerInfo();
+Autobuyer.sacrifice = new SacrificeAutobuyerState();
 
-class InfinityAutobuyerInfo extends AutobuyerInfo {
+class InfinityAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[11]);
   }
@@ -569,7 +569,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get hasAdditionalModes() {
-    return player.eternities > 4;
+    return EternityMilestone.bigCrunchModes.isReached;
   }
 
   /**
@@ -621,10 +621,10 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.infinity = new InfinityAutobuyerInfo();
+Autobuyer.infinity = new InfinityAutobuyerState();
 
 /**
- * @type {AutobuyerInfo[]}
+ * @type {AutobuyerState[]}
  */
 Autobuyer.unlockables = Autobuyer.allDims
   .concat([
@@ -651,7 +651,7 @@ Autobuyer.eternity = {
    * @returns {boolean}
    */
   get isUnlocked() {
-    return player.eternities >= 100;
+    return EternityMilestone.autobuyerEternity.isReached;
   },
   /**
    * @returns {boolean}

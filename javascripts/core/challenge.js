@@ -47,10 +47,10 @@ function isQuickResettable(challenge) {
   return resettableChallenges.includes(challenge);
 }
 
-class InfinityChallengeInfo {
+class ChallengeState {
   constructor(id) {
     this._id = id;
-    this._fullId = `postc${id}`;
+    this._fullId = `challenge${id}`;
   }
 
   get isRunning() {
@@ -62,12 +62,55 @@ class InfinityChallengeInfo {
   }
 }
 
+class InfinityChallengeState {
+  constructor(props) {
+    this._id = props.id;
+    this._fullId = `postc${this._id}`;
+    this._effect = props.effect;
+    this._reward = props.reward;
+  }
+
+  get isRunning() {
+    return player.currentChallenge === this._fullId;
+  }
+
+  get isCompleted() {
+    return player.challenges.includes(this._fullId);
+  }
+
+  applyEffect(applyFn) {
+    if (this.isRunning) {
+      applyFn(this._effect());
+    }
+  }
+
+  get reward() {
+    const ic = this;
+    return {
+      applyEffect(applyFn) {
+        if (ic.isCompleted) {
+          applyFn(ic._reward());
+        }
+      }
+    };
+  }
+}
+
+InfinityChallengeState.allChallenges = mapGameData(
+  GameDatabase.challenges.infinity,
+  data => new InfinityChallengeState(data)
+);
+
+/**
+ * @param {number} id
+ * @return {InfinityChallengeState}
+ */
 function InfinityChallenge(id) {
-  return new InfinityChallengeInfo(id);
+  return InfinityChallengeState.allChallenges[id];
 }
 
 /**
- * @returns {InfinityChallengeInfo}
+ * @returns {InfinityChallengeState}
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;

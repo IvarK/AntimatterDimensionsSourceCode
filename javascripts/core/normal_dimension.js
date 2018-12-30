@@ -22,56 +22,58 @@ function getDimensionFinalMultiplier(tier) {
   if (player.currentEternityChall === "eterc9") multiplier = multiplier;
   else multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
 
-  let infinityUpgrades = [
+  multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
     BreakInfinityUpgrade.currentAMMult,
     BreakInfinityUpgrade.achievementMult,
     BreakInfinityUpgrade.slowestChallengeMult
-  ];
-  for (let upgrade of infinityUpgrades) {
-    upgrade.apply(value => multiplier = multiplier.times(value));
-  }
+  );
 
-  let infinitiedMult = new Decimal(1);
-  dim.infinityUpgrade.apply(value => infinitiedMult = infinitiedMult.times(value));
-  BreakInfinityUpgrade.infinitiedMult.apply(value => infinitiedMult = infinitiedMult.times(value));
-  if (player.timestudy.studies.includes(31)) {
-    infinitiedMult = infinitiedMult.pow(4);
-  }
+  let infinitiedMult = new Decimal(1).timesEffectsOf(
+    dim.infinityUpgrade,
+    BreakInfinityUpgrade.infinitiedMult
+  );
+  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
   multiplier = multiplier.times(infinitiedMult);
   if (tier === 1) {
-    InfinityUpgrade.unspentIPMult.apply(value => multiplier = multiplier.times(value));
-    if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
-    if (isAchEnabled("r31")) multiplier = multiplier.times(1.05);
-    if (isAchEnabled("r71")) multiplier = multiplier.times(3);
-    if (isAchEnabled("r68")) multiplier = multiplier.times(1.5);
+    multiplier = multiplier
+      .timesEffectsOf(
+        InfinityUpgrade.unspentIPMult,
+        Achievement(28),
+        Achievement(31),
+        Achievement(68),
+        Achievement(71)
+      );
   }
 
-  multiplier = multiplier.times(timeMult());
-  if (tier === 8 && isAchEnabled("r23")) multiplier = multiplier.times(1.1);
-  else if (isAchEnabled("r34")) multiplier = multiplier.times(1.02);
-  if (tier <= 4 && isAchEnabled("r43")) multiplier = multiplier.times(1.25);
-  if (isAchEnabled("r48")) multiplier = multiplier.times(1.1);
-  if (isAchEnabled("r72")) multiplier = multiplier.times(1.1); // tbd
-  if (isAchEnabled("r74") && player.currentChallenge !== "") multiplier = multiplier.times(1.4);
-  if (isAchEnabled("r77")) multiplier = multiplier.times(1 + tier / 100);
+  multiplier = multiplier.timesEffectsOf(
+    InfinityUpgrade.totalTimeMult,
+    InfinityUpgrade.thisInfinityTimeMult,
+    tier === 8 ? Achievement(23) : null,
+    tier !== 8 ? Achievement(34) : null,
+    tier <= 4 ? Achievement(43) : null,
+    Achievement(48),
+    Achievement(56),
+    Achievement(65),
+    Achievement(72),
+    Achievement(73),
+    Achievement(74),
+    Achievement(76),
+    Achievement(78),
+    Achievement(84),
+    Achievement(91),
+    Achievement(92),
+    tier !== 8 ? TimeStudy(71) : null,
+    tier === 1 ? TimeStudy(234) : null,
+    TimeStudy(91),
+    TimeStudy(101),
+    TimeStudy(161)
+  );
 
-  const thisInfinityTime = player.thisInfinityTime;
-  if (isAchEnabled("r56") && thisInfinityTime < 180000) multiplier = multiplier.times(360000 / (thisInfinityTime + 180000));
-  if (isAchEnabled("r78") && thisInfinityTime < 300) multiplier = multiplier.times(330 / (thisInfinityTime + 30));
-  if (isAchEnabled("r65") && player.currentChallenge !== "" && thisInfinityTime < 180000) multiplier = multiplier.times(Math.max(240000 / (thisInfinityTime + 60000), 1));
-  if (isAchEnabled("r91") && thisInfinityTime < 5000) multiplier = multiplier.times(Math.max(301 - thisInfinityTime / 100 * 6, 1));
-  if (isAchEnabled("r92") && thisInfinityTime < 60000) multiplier = multiplier.times(Math.max(101 - thisInfinityTime / 100 / 6, 1));
-  if (isAchEnabled("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
-  else if (isAchEnabled("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
-
-
-  let timeStudies = player.timestudy.studies;
-  if (timeStudies.includes(71) && tier !== 8) multiplier = multiplier.times(Sacrifice.totalBoost.pow(0.25).min("1e210000"));
-  if (timeStudies.includes(91)) multiplier = multiplier.times(Decimal.pow(10, Math.min(player.thisEternity / 100, 18000) / 60));
-  if (timeStudies.includes(101)) multiplier = multiplier.times(Decimal.max(player.replicanti.amount, 1));
-  if (timeStudies.includes(161)) multiplier = multiplier.times(new Decimal("1e616"));
-  if (timeStudies.includes(234) && tier === 1) multiplier = multiplier.times(Sacrifice.totalBoost);
+  if (Achievement(77).isEnabled) {
+    // Welp, this effect is too complex for Effects system
+    multiplier = multiplier.times(1 + tier / 100);
+  }
 
   multiplier = multiplier.times(player.postC3Reward);
   if (player.challenges.includes("postc8") && tier < 8 && tier > 1) multiplier = multiplier.times(mult18);
@@ -82,18 +84,19 @@ function getDimensionFinalMultiplier(tier) {
   if (player.currentChallenge === "postc4" && player.postC4Tier !== tier) multiplier = multiplier.pow(0.25);
   if (player.challenges.includes("postc4")) multiplier = multiplier.pow(1.05);
   if (player.currentEternityChall === "eterc10") multiplier = multiplier.times(ec10bonus);
-  if (timeStudies.includes(193)) multiplier = multiplier.times(Decimal.pow(1.03, player.eternities).min("1e13000"));
-  if (tier === 8 && timeStudies.includes(214)) multiplier = multiplier.times((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1).min(new Decimal("1e125000"))));
-  if (multiplier.lt(1)) multiplier = new Decimal(1);
-
+  multiplier = multiplier
+    .timesEffectsOf(
+      TimeStudy(193),
+      tier === 8 ? TimeStudy(214) : null
+    );
+  multiplier = multiplier.clampMin(1);
   multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   }
 
-  if (player.dilation.upgrades.includes(6)) multiplier = multiplier.times(player.dilation.dilatedTime.pow(308).max(1));
-
+  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   return multiplier;
 }
@@ -145,14 +148,14 @@ function canBuyDimension(tier) {
 function getDimensionPowerMultiplier(tier) {
   let dimMult = 2;
 
-
   if (player.currentChallenge === "challenge9" || player.currentChallenge === "postc1") dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
 
-  if (isAchEnabled("r141")) dimMult += 0.1;
-
-  InfinityUpgrade.buy10Mult.apply(value => dimMult *= value);
-  if (isAchEnabled("r58")) dimMult *= 1.01;
-  EternityChallenge(3).applyReward(value => dimMult += value);
+  dimMult+= Effects.sum(Achievement(141).secondaryEffect);
+  dimMult *= Effects.product(
+    InfinityUpgrade.buy10Mult,
+    Achievement(58)
+  );
+  dimMult += Effects.sum(EternityChallenge(3).reward);
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
@@ -509,14 +512,6 @@ function resetMatterOnBuy(tier) {
   }
 }
 
-function timeMult() {
-  let mult = new Decimal(1);
-  InfinityUpgrade.totalTimeMult.apply(value => mult = mult.times(value));
-  InfinityUpgrade.thisInfinityTimeMult.apply(value => mult = mult.times(value));
-  if (isAchEnabled("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (60000 * 60 * 48), 0.05));
-  return mult;
-}
-
 function getDimensionProductionPerSecond(tier) {
   const multiplier = getDimensionFinalMultiplier(tier);
   const dimension = NormalDimension(tier);
@@ -537,9 +532,9 @@ function getDimensionProductionPerSecond(tier) {
   return production;
 }
 
-class NormalDimensionInfo {
+class NormalDimensionState {
   constructor(tier) {
-    const tierProps = NormalDimensionInfo.tierProps;
+    const tierProps = NormalDimensionState.tierProps;
     let props = tierProps[tier];
     if (props === undefined) {
       const name = TIER_NAMES[tier];
@@ -706,8 +701,8 @@ class NormalDimensionInfo {
   }
 }
 
-NormalDimensionInfo.tierProps = [];
+NormalDimensionState.tierProps = [];
 
 function NormalDimension(tier) {
-  return new NormalDimensionInfo(tier);
+  return new NormalDimensionState(tier);
 }

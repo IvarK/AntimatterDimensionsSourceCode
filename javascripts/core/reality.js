@@ -1,5 +1,5 @@
 function reality(force, reset, auto) {
-    if (!((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
+    if (!((player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
         return;
     }
     if (!glyphSelected && player.reality.perks.includes(0) && !auto) {
@@ -175,6 +175,11 @@ function reality(force, reset, auto) {
         2: 0,
         3: 0
     };
+    player.money = Effects.max(
+      10,
+      Perk(51),
+      Perk(52)
+    ).toDecimal();
 
     fullResetInfDimensions();
     fullResetTimeDimensions();
@@ -198,25 +203,19 @@ function reality(force, reset, auto) {
     updateLastTenRealities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    updateMilestones();
     resetTimeDimensions();
-    showEternityTab('timestudies', true)
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    updateEternityUpgrades();
     resetTickspeed();
-    resetMoney();
     playerInfinityUpgradesOnEternity();
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
     }
     Marathon2 = 0;
-    updateTimeStudyButtons();
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();
     drawPerkNetwork();
-    updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")

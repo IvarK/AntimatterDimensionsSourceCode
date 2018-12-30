@@ -41,7 +41,7 @@ Vue.component("autobuyer-box", {
       return this.setup.autobuyer;
     },
     hasInterval: function() {
-      return (this.autobuyer instanceof AutobuyerInfo);
+      return (this.autobuyer instanceof AutobuyerState);
     }
   },
   methods: {
@@ -76,7 +76,7 @@ Vue.component("autobuyer-box", {
 class AutobuyerBoxSetup {
   /**
    * @param {string} name
-   * @param {AutobuyerInfo|Autobuyer.eternity|Autobuyer.reality} autobuyer
+   * @param {AutobuyerState|Autobuyer.eternity|Autobuyer.reality} autobuyer
    */
   constructor(name, autobuyer) {
     this.name = name;

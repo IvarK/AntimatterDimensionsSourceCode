@@ -139,3 +139,49 @@ Array.prototype.last = function(predicate) {
  * @type {number[]}
  */
 Array.dimensionTiers = Array.range(1, 8);
+
+/**
+ * @returns {number}
+ */
+Array.prototype.sum = function() {
+  if (this.length === 0) return 0;
+  return this.reduce(Number.sumReducer);
+};
+
+/**
+ * @returns {number}
+ */
+Array.prototype.max = function() {
+  if (this.length === 0) return 0;
+  return this.reduce((a, b) => Math.max(a, b));
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clamp = function(min, max) {
+  return this.max(min).min(max);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clampMin = function(min) {
+  return this.max(min);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clampMax = function(max) {
+  return this.min(max);
+};
+
+/**
+ * @return {Decimal}
+ */
+Number.prototype.toDecimal = function() {
+  return new Decimal(this.valueOf());
+};
+
+Math.log4 = Math.log(4);

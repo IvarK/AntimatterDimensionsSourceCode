@@ -24,16 +24,12 @@ Vue.component("break-infinity-button", {
     update() {
       this.isBroken = player.break;
       this.isUnlocked = Autobuyer.infinity.isUnlocked && Autobuyer.infinity.hasMaxedInterval;
-    },
-    breakInfinity: function() {
-      breakInfinity();
-      this.update();
     }
   },
   template:
     `<button
       v-tooltip="tooltip"
       :class="classObject"
-      @click="breakInfinity"
+      onclick="breakInfinity()"
     >{{isBroken ? "FIX INFINITY" : "BREAK INFINITY"}}</button>`
 });

@@ -6,7 +6,7 @@ Vue.component("break-infinity-tab", {
   },
   computed: {
     grid: function() {
-      return breakInfinityUpgradeViewModels();
+      return breakInfinityUpgradeGridSetup();
     }
   },
   methods: {
@@ -37,7 +37,7 @@ Vue.component("break-infinity-tab", {
     </div>`
 });
 
-class BreakInfinityUpgradeViewModel extends InfinityUpgradeViewModel {
+class BreakInfinityUpgradeSetup extends InfinityUpgradeSetup {
   constructor(props) {
     super(props);
   }
@@ -48,42 +48,42 @@ class BreakInfinityUpgradeViewModel extends InfinityUpgradeViewModel {
 }
 
 // [ [row], [row], [row], [row] ]
-const breakInfinityUpgradeViewModels = () => [
+const breakInfinityUpgradeGridSetup = () => [
   [
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.totalAMMult,
       description: "Normal dimensions gain a multiplier based on total antimatter produced",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.currentAMMult,
       description: "Normal dimensions gain a multiplier based on current antimatter",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.galaxyBoost,
       description: "Galaxies are 50% stronger"
     })
   ],
   [
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.infinitiedMult,
       description: "Normal dimensions gain a multiplier based on amount infinitied",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.achievementMult,
       description: "Normal dimensions gain a multiplier based on achievements completed",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.slowestChallengeMult,
       description: "Normal dimensions gain a multiplier based on slowest challenge run",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     })
   ],
   [
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.infinitiedGen,
       description: "You passively generate Infinitied stat based on your fastest infinity",
       formatComplexEffect: function() {
@@ -93,17 +93,17 @@ const breakInfinityUpgradeViewModels = () => [
         return `Currently: 1 Infinity every ${period}`;
       }
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.bulkDimBoost,
       description: "Option to bulk buy Dimension Boosts"
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.autobuyerSpeed,
       description: "Autobuyers work twice as fast"
     })
   ],
   [
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.tickspeedCostMult,
       description: "Decrease Tickspeed cost multiplier growth by",
       formatComplexEffect: function() {
@@ -116,10 +116,10 @@ const breakInfinityUpgradeViewModels = () => [
         if (current === 0) {
           return `${current + 1}x`;
         }
-        return `${current}x => ${current + 1}x`;
+        return `${current}x 🡆 ${current + 1}x`;
       }
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.dimCostMult,
       description: "Decrease Dimension cost multiplier growth by",
       formatComplexEffect: function() {
@@ -131,10 +131,10 @@ const breakInfinityUpgradeViewModels = () => [
         if (current === 0) {
           return `${current + 1}x`;
         }
-        return `${current}x => ${current + 1}x`;
+        return `${current}x 🡆 ${current + 1}x`;
       }
     }),
-    new BreakInfinityUpgradeViewModel({
+    new BreakInfinityUpgradeSetup({
       upgrade: BreakInfinityUpgrade.ipGen,
       description: function() {
         let generation = `Generate ${player.offlineProd}%`;

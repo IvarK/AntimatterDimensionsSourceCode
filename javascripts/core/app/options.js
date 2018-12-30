@@ -165,5 +165,4 @@ function hardReset() {
   save_game();
   load_game();
   Tab.dimensions.normal.show();
-  updateDimensions();
 }

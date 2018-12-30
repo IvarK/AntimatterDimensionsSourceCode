@@ -844,7 +844,7 @@ function getGlyphLevelInputs() {
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const glyphScaleBegin = 1000;
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {
@@ -860,9 +860,9 @@ function getGlyphLevelInputs() {
     replEffect: replEffect,
     dtEffect: dtEffect,
     eterEffect: eterEffect,
-    scalePenalty: glyphScalePenalty,
     perkShop: player.celestials.effarig.glyphLevelMult,
+    scalePenalty: glyphScalePenalty,
     perkFactor: perkFactor,
-    finalLevel: glyphScaledLevel * player.celestials.effarig.glyphLevelMult + perkFactor,
+    finalLevel: glyphScaledLevel + perkFactor,
   };
 }

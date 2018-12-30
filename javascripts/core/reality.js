@@ -195,7 +195,10 @@ function reality(force, reset, auto) {
     resetChallengeStuff();
     resetDimensions();
     secondSoftReset();
-    if (player.reality.upg.includes(10)) player.eternities = 100;
+    if (player.reality.upg.includes(10)) {
+      player.eternities = 100;
+      player.infDimensionsUnlocked = [true, true, true, true, true, true, true, true];
+    }
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
     if (player.infinitied > 0 && !Challenge(1).isCompleted) {

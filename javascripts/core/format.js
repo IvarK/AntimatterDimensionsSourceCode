@@ -44,6 +44,7 @@ var formatPostBreak = false;
 
 const inflog = Math.log10(Number.MAX_VALUE)
 function formatValue(notation, value, places, placesUnder1000) {
+    if (!Number.isFinite(value)) return "Infinite";
     if ((value <= Number.MAX_VALUE || formatPostBreak || (player.break && (player.currentChallenge == "" || !new Decimal(Number.MAX_VALUE).equals(player.challengeTarget)) )) && (value >= 1000)) {
       let power, mantissa;
       if (value instanceof Decimal) {
@@ -77,6 +78,7 @@ function formatValue(notation, value, places, placesUnder1000) {
         }
         if (notation !== undefined && (notation.includes("engineering") || notation.includes("Engineering"))) pow = power - (power % 3)
         else pow = power
+
         if (power > 100000  && !commas) pow = formatValue(notation, pow, 3, 3)
         if (power > 100000  && commas) pow = formatWithCommas(pow);
 

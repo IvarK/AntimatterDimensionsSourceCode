@@ -245,31 +245,29 @@ class InfinityDimensionState {
     if (EternityChallenge(11).isRunning) {
       return new Decimal(1);
     }
-    let mult = this.power;
-    mult = mult.times(infDimPow);
-    mult = mult.times(kongAllDimMult);
-
-    if (isAchEnabled("r94") && tier === 1) mult = mult.times(2);
-    if (isAchEnabled("r75")) mult = mult.times(player.achPow);
+    let mult = this.power
+      .times(infDimPow)
+      .times(kongAllDimMult)
+      .timesEffectsOf(
+        tier === 1 ? Achievement(94) : null,
+        Achievement(75),
+        tier === 4 ? TimeStudy(72) : null,
+        TimeStudy(82),
+        TimeStudy(92),
+        TimeStudy(162),
+        tier === 1 ? EternityChallenge(2).reward : null,
+        EternityChallenge(4).reward,
+        EternityChallenge(9).reward,
+        EternityUpgrade.idMultEP,
+        EternityUpgrade.idMultEternities,
+        EternityUpgrade.idMultICRecords
+      );
 
     if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
       mult = mult.times(replicantiMult());
     }
 
-    mult = mult.timesEffectsOf(
-      tier === 4 ? TimeStudy(72) : null,
-      TimeStudy(82),
-      TimeStudy(92),
-      TimeStudy(162),
-      tier === 1 ? EternityChallenge(2).reward : null,
-      EternityChallenge(4).reward,
-      EternityChallenge(9).reward,
-      EternityUpgrade.idMultEP,
-      EternityUpgrade.idMultEternities,
-      EternityUpgrade.idMultICRecords
-    );
-
-    mult = mult.max(0);
+    mult = mult.clampMin(0);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);

@@ -301,7 +301,7 @@ function resetMoney() {
       Achievement(37),
       Achievement(54),
       Achievement(55),
-      Achievement(78),
+      Achievement(78).secondaryEffect,
       Perk(52)
     ).toDecimal();
 }
@@ -1067,13 +1067,13 @@ function gameLoop(diff) {
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
 
-    if (!Achievement(44).isEnabled && getDimensionProductionPerSecond(1).gt(player.money)) {
+    if (!Achievement(44).isUnlocked && getDimensionProductionPerSecond(1).gt(player.money)) {
         Marathon+=player.options.updateRate/1000;
         if (Marathon >= 30) giveAchievement("Over in 30 seconds");
     } else {
         Marathon = 0;
     }
-    if (!Achievement(113).isEnabled && !EternityChallenge(7).isRunning && InfinityDimension(1).productionPerSecond.gt(player.infinityPower)) {
+    if (!Achievement(113).isUnlocked && !EternityChallenge(7).isRunning && InfinityDimension(1).productionPerSecond.gt(player.infinityPower)) {
         Marathon2+=player.options.updateRate/1000;
         if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
     } else {

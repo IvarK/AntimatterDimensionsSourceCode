@@ -98,7 +98,7 @@ function softReset(bulk) {
     resetTickspeed();
     let currentMoney = player.money;
     resetMoney();
-    if (isAchEnabled("r111")) {
+    if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
     }
     if (player.resets >= 10) {

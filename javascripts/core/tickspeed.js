@@ -20,22 +20,22 @@ function getTickSpeedMultiplier() {
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
-        TimeStudy(212)
+        TimeStudy(212),
+        Achievement(86)
       );
       if (player.challenges.includes("postc5")) perGalaxy *= 1.1;
-      if (isAchEnabled("r86")) perGalaxy *= 1.01;
       return new Decimal(Math.max(0.01, baseMultiplier-(galaxies*perGalaxy)));
   } else {
       let baseMultiplier = 0.8
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
       let perGalaxy = new Decimal(0.965)
       if (player.challenges.includes("postc5")) galaxies *= 1.1;
-      if (isAchEnabled("r86")) galaxies *= 1.01
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
-        TimeStudy(232)
+        TimeStudy(232),
+        Achievement(86)
       );
       return perGalaxy.pow(galaxies-2).times(baseMultiplier);
   }
@@ -144,11 +144,13 @@ function buyMaxTickSpeed() {
 function resetTickspeed() {
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
-    let tickspeed = new Decimal(1000);
-    if (isAchEnabled("r36")) tickspeed = tickspeed.times(0.98);
-    if (isAchEnabled("r45")) tickspeed = tickspeed.times(0.98);
-    if (isAchEnabled("r66")) tickspeed = tickspeed.times(0.98);
-    if (isAchEnabled("r83")) tickspeed = tickspeed.times(Decimal.pow(0.95, player.galaxies));
+    let tickspeed = new Decimal(1000)
+      .timesEffectsOf(
+        Achievement(36),
+        Achievement(45),
+        Achievement(66),
+        Achievement(83)
+      );
     tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
     player.tickspeed = tickspeed;
 }

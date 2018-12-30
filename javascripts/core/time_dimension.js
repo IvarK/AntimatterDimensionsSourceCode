@@ -129,18 +129,13 @@ class TimeDimensionState {
   get multiplier() {
     const tier = this._tier;
     if (player.currentEternityChall === "eterc11") return new Decimal(1);
-    let mult = this.power.pow(2);
-
-    if (tier === 1) {
-      mult = mult.timesEffectOf(TimeStudy(11));
-    }
-    if (isAchEnabled("r105")) {
-      mult = mult.div(player.tickspeed.div(1000).pow(0.000005));
-    }
-
-    mult = mult
+    let mult = this.power
+      .pow(2)
       .times(kongAllDimMult)
       .timesEffectsOf(
+        Achievement(105),
+        Achievement(128),
+        tier === 1 ? TimeStudy(11) : null,
         tier === 3 ? TimeStudy(73) : null,
         TimeStudy(93),
         TimeStudy(103),
@@ -156,10 +151,6 @@ class TimeDimensionState {
       );
     if (player.currentEternityChall === "eterc9") {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
-    }
-
-    if (isAchEnabled("r128")) {
-      mult = mult.times(Math.max(player.timestudy.studies.length, 1));
     }
 
     if (player.reality.upg.includes(22)) {

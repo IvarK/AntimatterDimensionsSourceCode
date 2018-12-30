@@ -63,8 +63,10 @@ function eternity(force, auto) {
     for (let i = 0; i < player.challenges.length; i++) {
         if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
     }
-    player.infinitiedBank += Effects.sum(TimeStudy(191));
-    if (isAchEnabled("r131")) player.infinitiedBank += Math.floor(player.infinitied * 0.05);
+    player.infinitiedBank += Effects.sum(
+      Achievement(131),
+      TimeStudy(191)
+    );
     if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
     if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {
       unlockRealityUpgrade(6);
@@ -81,7 +83,7 @@ function eternity(force, auto) {
         player.eternities += tempEterGain
     }
     player.sacrificed = new Decimal(0);
-    player.challenges= (player.eternities >= 2 && isAchEnabled("r133")) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities >= 2) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges= (player.eternities >= 2 && Achievement(133).isEnabled) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities >= 2) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
     player.currentChallenge = "";
     player.infinitied = 0;
     player.bestInfinityTime = 999999999999;
@@ -103,7 +105,7 @@ function eternity(force, auto) {
     player.tickSpeedMultDecreaseCost= player.eternities >= 20 ? player.tickSpeedMultDecreaseCost : 3e6;
     player.dimensionMultDecrease= player.eternities >= 20 ? player.dimensionMultDecrease : 10;
     player.dimensionMultDecreaseCost= player.eternities >= 20 ? player.dimensionMultDecreaseCost : 1e8;
-    player.postChallUnlocked = (isAchEnabled("r133")) ? 8 : 0;
+    player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
     player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
     player.infinityPower = new Decimal(1);
     player.timeShards = new Decimal(0);
@@ -114,7 +116,7 @@ function eternity(force, auto) {
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
     player.challengeTarget = 0;
-    if (player.eternities < 7 && !isAchEnabled("r133")) {
+    if (player.eternities < 7 && !Achievement(133).isEnabled) {
         player.autoSacrifice = 1;
     }
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
@@ -236,9 +238,7 @@ function askEternityConfirmation() {
 
 function resetInfinityPointsOnEternity() {
   resetInfinityPoints();
-  if (isAchEnabled("r104")) {
-    player.infinityPoints = player.infinityPoints.max(2e25);
-  }
+  Achievement(104).applyEffect(v => player.infinityPoints = player.infinityPoints.max(v));
 }
 
 function resetInfinityPoints() {

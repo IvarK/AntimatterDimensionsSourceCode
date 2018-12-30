@@ -150,7 +150,7 @@ function checkBigCrunchAchievements() {
         if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
         if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
     }
-    if (!player.achievements.includes("r111") && player.lastTenRuns[9][1] !== 1) {
+    if (!Achievement(111).isUnlocked && player.lastTenRuns[9][1] !== 1) {
         var n = 0;
         for (i = 0; i < 9; i++) {
             if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i + 1][1].times(Number.MAX_VALUE))) n++;

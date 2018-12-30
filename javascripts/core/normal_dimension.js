@@ -36,43 +36,44 @@ function getDimensionFinalMultiplier(tier) {
   infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
   multiplier = multiplier.times(infinitiedMult);
   if (tier === 1) {
-    multiplier = multiplier.timesEffectOf(InfinityUpgrade.unspentIPMult);
-    if (isAchEnabled("r28")) multiplier = multiplier.times(1.1);
-    if (isAchEnabled("r31")) multiplier = multiplier.times(1.05);
-    if (isAchEnabled("r71")) multiplier = multiplier.times(3);
-    if (isAchEnabled("r68")) multiplier = multiplier.times(1.5);
+    multiplier = multiplier
+      .timesEffectsOf(
+        InfinityUpgrade.unspentIPMult,
+        Achievement(28),
+        Achievement(31),
+        Achievement(68),
+        Achievement(71)
+      );
   }
 
   multiplier = multiplier.timesEffectsOf(
     InfinityUpgrade.totalTimeMult,
-    InfinityUpgrade.thisInfinityTimeMult
-  );
-  if (isAchEnabled("r76")) multiplier = multiplier.times(Math.pow(player.totalTimePlayed / (60000 * 60 * 48), 0.05));
-
-  if (tier === 8 && isAchEnabled("r23")) multiplier = multiplier.times(1.1);
-  else if (isAchEnabled("r34")) multiplier = multiplier.times(1.02);
-  if (tier <= 4 && isAchEnabled("r43")) multiplier = multiplier.times(1.25);
-  if (isAchEnabled("r48")) multiplier = multiplier.times(1.1);
-  if (isAchEnabled("r72")) multiplier = multiplier.times(1.1); // tbd
-  if (isAchEnabled("r74") && player.currentChallenge !== "") multiplier = multiplier.times(1.4);
-  if (isAchEnabled("r77")) multiplier = multiplier.times(1 + tier / 100);
-
-  const thisInfinityTime = player.thisInfinityTime;
-  if (isAchEnabled("r56") && thisInfinityTime < 180000) multiplier = multiplier.times(360000 / (thisInfinityTime + 180000));
-  if (isAchEnabled("r78") && thisInfinityTime < 300) multiplier = multiplier.times(330 / (thisInfinityTime + 30));
-  if (isAchEnabled("r65") && player.currentChallenge !== "" && thisInfinityTime < 180000) multiplier = multiplier.times(Math.max(240000 / (thisInfinityTime + 60000), 1));
-  if (isAchEnabled("r91") && thisInfinityTime < 5000) multiplier = multiplier.times(Math.max(301 - thisInfinityTime / 100 * 6, 1));
-  if (isAchEnabled("r92") && thisInfinityTime < 60000) multiplier = multiplier.times(Math.max(101 - thisInfinityTime / 100 / 6, 1));
-  if (isAchEnabled("r84")) multiplier = multiplier.times(player.money.pow(0.00004).plus(1));
-  else if (isAchEnabled("r73")) multiplier = multiplier.times(player.money.pow(0.00002).plus(1));
-
-  multiplier = multiplier.timesEffectsOf(
-    tier < 8 ? TimeStudy(71) : null,
+    InfinityUpgrade.thisInfinityTimeMult,
+    tier === 8 ? Achievement(23) : null,
+    tier !== 8 ? Achievement(34) : null,
+    tier <= 4 ? Achievement(43) : null,
+    Achievement(48),
+    Achievement(56),
+    Achievement(65),
+    Achievement(72),
+    Achievement(73),
+    Achievement(74),
+    Achievement(76),
+    Achievement(78),
+    Achievement(84),
+    Achievement(91),
+    Achievement(92),
+    tier !== 8 ? TimeStudy(71) : null,
+    tier === 1 ? TimeStudy(234) : null,
     TimeStudy(91),
     TimeStudy(101),
-    TimeStudy(161),
-    tier === 1 ? TimeStudy(234) : null
+    TimeStudy(161)
   );
+
+  if (Achievement(77).isEnabled) {
+    // Welp, this effect is too complex for Effects system
+    multiplier = multiplier.times(1 + tier / 100);
+  }
 
   multiplier = multiplier.times(player.postC3Reward);
   if (player.challenges.includes("postc8") && tier < 8 && tier > 1) multiplier = multiplier.times(mult18);
@@ -147,13 +148,13 @@ function canBuyDimension(tier) {
 function getDimensionPowerMultiplier(tier) {
   let dimMult = 2;
 
-
   if (player.currentChallenge === "challenge9" || player.currentChallenge === "postc1") dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
 
-  if (isAchEnabled("r141")) dimMult += 0.1;
-
-  dimMult *= Effects.product(InfinityUpgrade.buy10Mult);
-  if (isAchEnabled("r58")) dimMult *= 1.01;
+  dimMult+= Effects.sum(Achievement(141).secondaryEffect);
+  dimMult *= Effects.product(
+    InfinityUpgrade.buy10Mult,
+    Achievement(58)
+  );
   dimMult += Effects.sum(EternityChallenge(3).reward);
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))

@@ -51,7 +51,7 @@ function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
   var galaxyGain = 1
-  if (isAchEnabled("r126")) {
+  if (Achievement(126).isEnabled) {
     if (player.replicanti.amount.e >= 616) {
       const maxGal = Replicanti.galaxies.max;
       galaxyGain = Math.min(Math.floor(player.replicanti.amount.e / 308), maxGal - player.replicanti.galaxies)
@@ -80,7 +80,7 @@ function getReplicantiInterval(noMod, interval) {
     );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
-    if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && isAchEnabled("r134")) interval /= 2
+    if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE) && !noMod) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
     if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
     return interval;
@@ -101,7 +101,7 @@ function replicantiLoop(diff) {
 
     var current = player.replicanti.amount.ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
-    if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
+    if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 
     const isTS192Bought = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isTS192Bought)) {
@@ -141,7 +141,7 @@ function replicantiLoop(diff) {
     if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
-    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!TimeStudy(131).isBought || isAchEnabled("r138"))) {
+    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) {
         replicantiGalaxy();
     }
     PerformanceStats.end();
@@ -331,7 +331,7 @@ const Replicanti = {
         this.isOn = !this.isOn;
       },
       get isEnabled() {
-        return !TimeStudy(131).isBought || isAchEnabled("r138");
+        return !TimeStudy(131).isBought || Achievement(138).isEnabled;
       }
     }
   },

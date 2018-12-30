@@ -344,34 +344,41 @@ function updateRealityAchievementModifiers() {
   };
 }
 
-class AchievementState {
-  constructor(props) {
-    this._id = props.id;
-    this._fullId = "r" + this._id;
-    this._effect = props.effect;
-    this._effectCondition = props.effectCondition;
+class AchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = "r" + this.id;
+    if (config.secondaryEffect) {
+      const secondaryConfig = {
+        id: config.id,
+        effect: config.secondaryEffect
+      };
+      this._secondaryState = new AchievementState(secondaryConfig);
+    }
+  }
+
+  get isUnlocked() {
+    return player.achievements.includes(this._fullId);
   }
 
   get isEnabled() {
     return isAchEnabled(this._fullId, this._id);
   }
 
-  get effectValue() {
-    return this._effect();
-  }
-
   get isEffectConditionSatisfied() {
-    return this._effectCondition === undefined || this._effectCondition();
+    return this.config.effectCondition === undefined || this.config.effectCondition();
   }
 
-  applyEffect(applyFn) {
-    if (this.isEnabled && this.isEffectConditionSatisfied) {
-      applyFn(this.effectValue);
-    }
+  get canBeApplied() {
+    return this.isEnabled && this.isEffectConditionSatisfied;
+  }
+
+  get secondaryEffect() {
+    return this._secondaryState;
   }
 }
 
-AchievementState.allAchievements = mapGameData(
+AchievementState.all = mapGameData(
   GameDatabase.achievements,
   data => new AchievementState(data)
 );
@@ -381,6 +388,5 @@ AchievementState.allAchievements = mapGameData(
  * @returns {AchievementState}
  */
 function Achievement(id) {
-  const achievement = AchievementState.allAchievements[id];
-  return achievement !== undefined ? achievement : new AchievementState({id: id});
+  return AchievementState.all[id];
 }

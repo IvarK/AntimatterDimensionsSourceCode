@@ -10,6 +10,9 @@ GameDatabase.reality.perks = [
     id: 11
   },
   {
+    id: 13
+  },
+  {
     id: 31
   },
   {

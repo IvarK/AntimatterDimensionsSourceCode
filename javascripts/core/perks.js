@@ -91,10 +91,10 @@ function buyPerk(id, cost) {
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 }
 
-class PerkInfo {
-  constructor(props) {
-    this._id = props.id;
-    this._effect = props.effect;
+class PerkState {
+  constructor(config) {
+    this._id = config.id;
+    this._effect = config.effect;
   }
 
   get isBought() {
@@ -112,17 +112,17 @@ class PerkInfo {
   }
 }
 
-PerkInfo.allPerks = mapGameData(
+PerkState.allPerks = mapGameData(
   GameDatabase.reality.perks,
-  data => new PerkInfo(data)
+  config => new PerkState(config)
 );
 
 /**
  * @param {number} id
- * @returns {PerkInfo}
+ * @returns {PerkState}
  */
 function Perk(id) {
-  return PerkInfo.allPerks[id];
+  return PerkState.allPerks[id];
 }
 
 class Perks {

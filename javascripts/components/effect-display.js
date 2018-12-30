@@ -1,7 +1,11 @@
 Vue.component("effect-display", {
   props: {
     config: Object,
-    br: Boolean
+    br: Boolean,
+    title: {
+      type: String,
+      default: "Currently"
+    }
   },
   data() {
     return {
@@ -43,6 +47,6 @@ Vue.component("effect-display", {
   template:
     `<span v-if="isVisible">
       <br v-if="br">
-      {{hasCap && reachedCap() ? "Capped" : "Currently"}}: {{formatEffect(hasCap && reachedCap() ? cap : effectValue)}}
+      {{hasCap && reachedCap() ? "Capped" : title}}: {{formatEffect(hasCap && reachedCap() ? cap : effectValue)}}
     </span>`
 });

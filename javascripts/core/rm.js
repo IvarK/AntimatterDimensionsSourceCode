@@ -867,7 +867,7 @@ function getGlyphLevelInputs() {
   };
 }
 
-class GlyphEffectInfo {
+class GlyphEffectState {
   constructor(id, props) {
     this._id = id;
     this._adjustApply = props.adjustApply;
@@ -883,10 +883,10 @@ class GlyphEffectInfo {
 }
 
 const GlyphEffect = {
-  dimBoostPower: new GlyphEffectInfo("powerdimboost", {
+  dimBoostPower: new GlyphEffectState("powerdimboost", {
     adjustApply: value => Math.max(1, value)
   }),
-  ipMult: new GlyphEffectInfo("infinityipgain", {
+  ipMult: new GlyphEffectState("infinityipgain", {
     adjustApply: value => Decimal.max(1, value)
   })
 };

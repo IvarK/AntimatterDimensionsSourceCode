@@ -1,4 +1,4 @@
-const DeltaTimeInfo = {
+const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),
   update(deltaTime, scale) {
@@ -29,7 +29,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get deltaTimeFull() {
-    return DeltaTimeInfo.deltaTime;
+    return DeltaTimeState.deltaTime;
   },
   /**
    * Frame delta time in seconds
@@ -50,7 +50,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get unscaledDeltaTime() {
-    return DeltaTimeInfo.unscaledDeltaTime;
+    return DeltaTimeState.unscaledDeltaTime;
   },
 
   /**

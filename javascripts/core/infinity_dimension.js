@@ -135,7 +135,7 @@ function toggleAllInfDims() {
 var infDimPow = 1
 
 
-class InfinityDimensionInfo {
+class InfinityDimensionState {
   constructor(tier) {
     this._props = player[`infinityDimension${tier}`];
     this._tier = tier;
@@ -186,7 +186,7 @@ class InfinityDimensionInfo {
   }
 
   get requirement() {
-    return InfinityDimensionInfo.requirements[this._tier];
+    return InfinityDimensionState.requirements[this._tier];
   }
 
   get isAutobuyerUnlocked() {
@@ -202,14 +202,14 @@ class InfinityDimensionInfo {
   }
 
   get hasRateOfChange() {
-    return this._tier < 8 || ECTimesCompleted("eterc7") > 0;
+    return this._tier < 8 || EternityChallenge(7).completions > 0;
   }
 
   get rateOfChange() {
     const tier = this._tier;
     let toGain = new Decimal(0);
     if (tier === 8) {
-      EternityChallenge(7).applyReward(value => toGain = value);
+      EternityChallenge(7).reward.applyEffect(v => toGain = v);
     }
     else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
@@ -282,7 +282,7 @@ class InfinityDimensionInfo {
 
   get costMultiplier() {
     let costMult = infCostMults[this._tier];
-    EternityChallenge(12).applyReward(value => costMult = Math.pow(costMult, value));
+    EternityChallenge(12).reward.applyEffect(v => costMult = Math.pow(costMult, v));
     return costMult;
   }
 
@@ -296,7 +296,7 @@ class InfinityDimensionInfo {
   }
 }
 
-InfinityDimensionInfo.requirements = [
+InfinityDimensionState.requirements = [
   null,
   new Decimal("1e1100"),
   new Decimal("1e1900"),
@@ -309,7 +309,7 @@ InfinityDimensionInfo.requirements = [
 ];
 
 function InfinityDimension(tier) {
-  return new InfinityDimensionInfo(tier);
+  return new InfinityDimensionState(tier);
 }
 
 InfinityDimension.nextRequirement = function() {

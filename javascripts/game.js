@@ -246,8 +246,8 @@ function percentToNextRealityMachine() {
 
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
-    let glyphInfo = getGlyphLevelInputs();
-    var ret = glyphInfo.finalLevel;
+    let glyphState = getGlyphLevelInputs();
+    var ret = glyphState.finalLevel;
     if (round) ret = Math.round(ret)
     if (ret == Infinity || isNaN(ret)) return 0
     return ret
@@ -863,7 +863,7 @@ function gameLoop(diff) {
     }
 
     const speedFactor = getGameSpeedupFactor();
-    DeltaTimeInfo.update(diff, speedFactor);
+    DeltaTimeState.update(diff, speedFactor);
     diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity

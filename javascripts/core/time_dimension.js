@@ -80,7 +80,7 @@ function buyMaxTimeDimensions(threshold) {
   }
 }
 
-class TimeDimensionInfo {
+class TimeDimensionState {
   constructor(tier) {
     this._props = player[`timeDimension${tier}`];
     this._tier = tier;
@@ -148,24 +148,18 @@ class TimeDimensionInfo {
         TimeStudy(221),
         tier === 4 ? TimeStudy(227) : null,
         EternityChallenge(1).reward,
+        EternityChallenge(10).reward,
         EternityUpgrade.tdMultAchs,
         EternityUpgrade.tdMultTheorems,
-        EternityUpgrade.tdMultRealTime
+        EternityUpgrade.tdMultRealTime,
+        player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null
       );
     if (player.currentEternityChall === "eterc9") {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
     }
 
-    let ec10bonus = new Decimal(1);
-    EternityChallenge(10).applyReward(value => ec10bonus = value);
-    ec10bonus = ec10bonus.pow(Effects.product(TimeStudy(31)));
-    mult = mult.times(ec10bonus);
     if (isAchEnabled("r128")) {
       mult = mult.times(Math.max(player.timestudy.studies.length, 1));
-    }
-
-    if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
-      mult = mult.timesEffectOf(DilationUpgrade.tdMultReplicanti);
     }
 
     if (player.reality.upg.includes(22)) {
@@ -173,8 +167,7 @@ class TimeDimensionInfo {
       mult = mult.times(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(days + 1), 1.6)));
     }
 
-    mult = mult.max(0);
-    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")));
+    mult = mult.clampMin(0).pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")));
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -209,5 +202,5 @@ class TimeDimensionInfo {
 }
 
 function TimeDimension(tier) {
-  return new TimeDimensionInfo(tier);
+  return new TimeDimensionState(tier);
 }

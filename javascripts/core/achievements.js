@@ -344,7 +344,7 @@ function updateRealityAchievementModifiers() {
   };
 }
 
-class AchievementInfo {
+class AchievementState {
   constructor(props) {
     this._id = props.id;
     this._fullId = "r" + this._id;
@@ -371,16 +371,16 @@ class AchievementInfo {
   }
 }
 
-AchievementInfo.allAchievements = mapGameData(
+AchievementState.allAchievements = mapGameData(
   GameDatabase.achievements,
-  data => new AchievementInfo(data)
+  data => new AchievementState(data)
 );
 
 /**
  * @param {number} id
- * @returns {AchievementInfo}
+ * @returns {AchievementState}
  */
 function Achievement(id) {
-  const achievement = AchievementInfo.allAchievements[id];
-  return achievement !== undefined ? achievement : new AchievementInfo({id: id});
+  const achievement = AchievementState.allAchievements[id];
+  return achievement !== undefined ? achievement : new AchievementState({id: id});
 }

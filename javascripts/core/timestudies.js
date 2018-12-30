@@ -499,7 +499,7 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   /**
-   * @returns {EternityChallengeInfo}
+   * @returns {EternityChallengeState}
    */
   get challenge() {
     return EternityChallenge(this.id);

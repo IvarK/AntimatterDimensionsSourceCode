@@ -49,13 +49,11 @@ class Galaxy {
   }
 
   static get costScalingStart() {
-    let amount = 100;
-    EternityChallenge(5).applyReward(value => amount += value);
-    amount += Effects.sum(
+    return 100 + Effects.sum(
       TimeStudy(223),
-      TimeStudy(224)
+      TimeStudy(224),
+      EternityChallenge(5).reward
     );
-    return amount;
   }
 
   static get type() {

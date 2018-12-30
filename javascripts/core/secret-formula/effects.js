@@ -64,7 +64,7 @@ const Effects = {
  */
 Decimal.prototype.plusEffectOf = function(effectSource) {
   let result = this;
-  effectSource.applyEffect(value => result = result.plus(value));
+  effectSource.applyEffect(v => result = result.plus(v));
   return result;
 };
 
@@ -73,7 +73,7 @@ Decimal.prototype.plusEffectOf = function(effectSource) {
  */
 Decimal.prototype.plusEffectsOf = function(...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, value => result = result.plus(value));
+  applyEffectsOf(effectSources, v => result = result.plus(v));
   return result;
 };
 
@@ -82,7 +82,7 @@ Decimal.prototype.plusEffectsOf = function(...effectSources) {
  */
 Decimal.prototype.timesEffectOf = function(effectSource) {
   let result = this;
-  effectSource.applyEffect(value => result = result.times(value));
+  effectSource.applyEffect(v => result = result.times(v));
   return result;
 };
 
@@ -91,7 +91,7 @@ Decimal.prototype.timesEffectOf = function(effectSource) {
  */
 Decimal.prototype.timesEffectsOf = function(...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, value => result = result.times(value));
+  applyEffectsOf(effectSources, v => result = result.times(v));
   return result;
 };
 
@@ -100,7 +100,7 @@ Decimal.prototype.timesEffectsOf = function(...effectSources) {
  */
 Decimal.prototype.dividedByEffectOf = function(effectSource) {
   let result = this;
-  effectSource.applyEffect(value => result = result.dividedBy(value));
+  effectSource.applyEffect(v => result = result.dividedBy(v));
   return result;
 };
 
@@ -109,7 +109,7 @@ Decimal.prototype.dividedByEffectOf = function(effectSource) {
  */
 Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
   let result = this;
-  applyEffectsOf(effectSources, value => result = result.dividedBy(value));
+  applyEffectsOf(effectSources, v => result = result.dividedBy(v));
   return result;
 };
 

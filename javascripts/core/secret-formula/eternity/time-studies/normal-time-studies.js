@@ -187,7 +187,7 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "You gain more EP based on time spent this Eternity",
     effect: () => {
       let thisEternity = Time.thisEternity;
-      Perk(73).applyEffect(effect => thisEternity = thisEternity.add(effect));
+      Perk(73).applyEffect(v => thisEternity = thisEternity.add(v));
       return Math.sqrt(1.39 * thisEternity.totalSeconds);
     },
     formatEffect: value => formatX(value, 1, 1)

@@ -154,7 +154,7 @@ function getDimensionPowerMultiplier(tier) {
 
   dimMult *= Effects.product(InfinityUpgrade.buy10Mult);
   if (isAchEnabled("r58")) dimMult *= 1.01;
-  EternityChallenge(3).applyReward(value => dimMult += value);
+  dimMult += Effects.sum(EternityChallenge(3).reward);
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
@@ -531,9 +531,9 @@ function getDimensionProductionPerSecond(tier) {
   return production;
 }
 
-class NormalDimensionInfo {
+class NormalDimensionState {
   constructor(tier) {
-    const tierProps = NormalDimensionInfo.tierProps;
+    const tierProps = NormalDimensionState.tierProps;
     let props = tierProps[tier];
     if (props === undefined) {
       const name = TIER_NAMES[tier];
@@ -700,8 +700,8 @@ class NormalDimensionInfo {
   }
 }
 
-NormalDimensionInfo.tierProps = [];
+NormalDimensionState.tierProps = [];
 
 function NormalDimension(tier) {
-  return new NormalDimensionInfo(tier);
+  return new NormalDimensionState(tier);
 }

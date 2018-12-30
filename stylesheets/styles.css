@@ -2868,6 +2868,10 @@ screen and (max-width: 480px) {
   height: 2.6rem;
 }
 
+.c-challenge-box__reward-description--small-text {
+  font-size: .85rem;
+}
+
 /*#region themes*/
 
 /*#region t-dark*/
@@ -4803,4 +4807,5 @@ screen and (max-width: 480px) {
   border: .1rem solid black;
   text-align: left;
   background-color: whitesmoke;
+  z-index: 999;
 }

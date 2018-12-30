@@ -10,10 +10,9 @@ function getTickSpeedMultiplier() {
     TimeStudy(132),
     TimeStudy(133),
     TimeStudy(225),
-    TimeStudy(226)
+    TimeStudy(226),
+    EternityChallenge(8).reward
   );
-  let replicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
-  EternityChallenge(8).applyReward(value => galaxies += replicantiGalaxies * value);
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89

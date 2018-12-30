@@ -304,7 +304,7 @@ function fixGlyph(glyph) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 3.5) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
+  if (x >= 3.5) return { name: "Celestial", color: "#5151ec" } // ~0.0005%
   if (x >= 3.25) return { name: "Transcendent", color: "#03FFEC" } // ~0.0005%
   if (x >= 3) return { name: "Mythical", color: "#D50000" } // ~0.01%
   if (x >= 2.75) return { name: "Legendary", color:  "#FF9800" } // ~0.1%

@@ -50,7 +50,12 @@ Vue.component("tachyon-particle", {
     };
   },
   created() {
-    this.fly();
+    if (uiInitialized) {
+      this.fly();
+    }
+    else {
+      Vue.nextTick(() => this.fly());
+    }
   },
   methods: {
     fly() {

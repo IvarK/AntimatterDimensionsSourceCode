@@ -184,7 +184,7 @@ function canBuyDilationStudy(name) {
         else return false
     }
     // TODO
-    const config = Object.values(GameDatabase.eternity.dilation).find(config => config.id === name);
+    const config = Object.values(GameDatabase.eternity.timeStudies.dilation).find(config => config.id === name);
     if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= config.cost) return true
     else return false
 }

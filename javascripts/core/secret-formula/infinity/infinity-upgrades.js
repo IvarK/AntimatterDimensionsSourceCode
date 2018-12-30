@@ -1,3 +1,4 @@
+// WIP
 GameDatabase.infinity.upgrades = {
   totalTimeMult: {
     id: "timeMult",

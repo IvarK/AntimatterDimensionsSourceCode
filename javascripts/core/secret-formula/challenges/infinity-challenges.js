@@ -1,3 +1,4 @@
+// WIP
 GameDatabase.challenges.infinity = [
   {
     id: 1,

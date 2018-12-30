@@ -156,13 +156,6 @@ function maxAll() {
     }
 }
 
-function buyEternityUpgrade(name, cost) {
-    if (player.eternityPoints.gte(cost) && !player.eternityUpgrades.includes(name)) {
-        player.eternityUpgrades.push(name)
-        player.eternityPoints = player.eternityPoints.minus(cost)
-    }
-}
-
 function buyEPMult(upd, threshold) {
     if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
     if (threshold == undefined) threshold = 1
@@ -190,10 +183,6 @@ function playerInfinityUpgradesOnEternity() {
     if (player.eternities < 4) player.infinityUpgrades = []
     else if (player.eternities < 20) player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]
     else player.infinityUpgrades = player.infinityUpgrades
-}
-
-function eterMultAutoToggle() {
-    player.reality.epmultbuyer = !player.reality.epmultbuyer;
 }
 
 function breakInfinity() {
@@ -514,10 +503,6 @@ function failChallenge() {
     giveAchievement("You're a mistake");
     failureCount++;
     if (failureCount > 9) giveAchievement("You're a failure");
-}
-
-function respecToggle() {
-    player.respec = !player.respec;
 }
 
 function selectGlyph(idx) {

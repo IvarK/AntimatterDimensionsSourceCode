@@ -1633,6 +1633,10 @@ screen and (max-width: 480px) {
   background-color: #b84b5f !important;
 }
 
+.t-dark .o-primary-btn--respec-active {
+  background-color: #1b5e20 !important;
+}
+
 /*#endregion t-dark*/
 
 /*#region t-dark-metro*/
@@ -1746,6 +1750,10 @@ screen and (max-width: 480px) {
 .t-s6 .o-primary-btn--disabled:hover {
   color: black !important;
   background: #b84b5f !important;
+}
+
+.t-s6 .o-primary-btn--respec-active {
+  background-color: #1b5e20 !important;
 }
 
 /*#endregion t-s6*/

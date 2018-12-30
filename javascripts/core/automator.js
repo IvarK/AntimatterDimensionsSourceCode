@@ -242,7 +242,7 @@ function unlock(current) {
       if (!player.reality.automatorCommands.includes(64)) return false
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
       justImported = true;
-      if ( document.getElementById("ec" + current.id + "unl").click() ) {
+      if (TimeStudy.eternityChallenge(current.id).purchase()) {
         justImported = false;
         return true;
       }

@@ -52,6 +52,7 @@ Vue.component("game-header", {
       if (inNormalChallenge)  displayValue += " + Challenge " + actualChallengeIds[parseInt(player.currentChallenge.substring(9))];
       
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
+      else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
       else  this.challengeDisplay = "";
     }
   },

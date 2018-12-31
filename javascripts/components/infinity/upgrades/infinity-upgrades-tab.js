@@ -59,7 +59,7 @@ const infinityUpgradeGridSetup = () => [
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.buy10Mult,
       description: "Increase the multiplier for buying 10 Dimensions",
-      staticEffect: "2x 🡆 2.2x"
+      staticEffect: "2x ➜ 2.2x"
     }),
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dim27mult,
@@ -90,7 +90,7 @@ const infinityUpgradeGridSetup = () => [
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dimboostMult,
       description: "Increase Dimension Boost multiplier",
-      staticEffect: "2x 🡆 2.5x"
+      staticEffect: "2x ➜ 2.5x"
     }),
     new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.ipGen,

@@ -73,7 +73,7 @@ var edges = []
 var nodeContainer = $(".vis-network")[0];
 var nodeData = {}
 var nodeOptions = {}
-var network;
+var network = null;
 
 
 function getNodeColor(id, cost) {
@@ -108,6 +108,10 @@ function showPerkLabels() {
 //20: glyphs
 //30: ecs
 function drawPerkNetwork() {
+    if (network) {
+      updatePerkColors();
+      return;
+    }
     nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on Reality."}, //DONE
     {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."}, //DONE
     {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."}, //DONE

@@ -24,6 +24,7 @@ GameDatabase.eternity.upgrades = {
   },
   idMultICRecords: {
     id: 3,
+    cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
     effect: function() {
       const sumOfRecords = Math.max(infchallengeTimes, Effects.min(750, Achievement(112)));
@@ -33,18 +34,21 @@ GameDatabase.eternity.upgrades = {
   },
   tdMultAchs: {
     id: 4,
+    cost: 1e16,
     description: "Your achievement bonus affects Time Dimensions",
     effect: () => player.achPow,
     formatEffect: value => `${shortenMoney(value)}x`
   },
   tdMultTheorems: {
     id: 5,
+    cost: 1e40,
     description: "Time Dimensions are multiplied by your unspent Time Theorems",
     effect: () => Math.max(player.timestudy.theorem, 1),
     formatEffect: value => `${shortenMoney(value)}x`
   },
   tdMultRealTime: {
     id: 6,
+    cost: 1e50,
     description: "Time Dimensions are multiplied by days played",
     effect: () => Time.totalTimePlayed.totalDays,
     formatEffect: value => `${shortenMoney(value)}x`

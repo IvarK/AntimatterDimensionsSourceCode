@@ -57,8 +57,7 @@ var Effarig = {
     return player.celestials.effarig.unlocks.includes(info.id)
   },
   startRun() {
-    startRealityOver()
-    player.celestials.effarig.run = true
+    player.celestials.effarig.run = startRealityOver();
   },
   buyGlyphLevelPower() {
     let cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )

@@ -62,7 +62,7 @@ Vue.component('infinity-dim-tab', {
       <div
         v-if="isEC8Running"
         class="l-infinity-dim-tab__ec8-purchases"
-      >You have {{EC8PurchasesLeft}} purchases left.</div>
+      >You have {{EC8PurchasesLeft}} {{"purchases" | pluralize(EC8PurchasesLeft)}} left.</div>
       <primary-button
         v-if="isAnyAutobuyerUnlocked && !isEC8Running"
         class="o-primary-btn--id-all-autobuyers l-infinity-dim-tab__all-autobuyers"

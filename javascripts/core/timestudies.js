@@ -652,6 +652,8 @@ TimeStudy.allConnections = function() {
     [TS(42), TS(51)],
     [TS(42), EC(5)],
 
+    [TS(42), TS(62), () => !Perk(71).isBought],
+
     [TS(51), TS(61)],
     [EC(5), TS(62), () => Perk(71).isBought],
 
@@ -707,6 +709,8 @@ TimeStudy.allConnections = function() {
     [TS(171), EC(1)],
     [TS(171), EC(2)],
     [TS(171), EC(3)],
+
+    [TS(171), TS(181), () => !Perk(4).isBought || !Perk(74).isBought || !Perk(75).isBought],
 
     [EC(1), TS(181), () => Perk(4).isBought],
     [EC(2), TS(181), () => Perk(74).isBought],

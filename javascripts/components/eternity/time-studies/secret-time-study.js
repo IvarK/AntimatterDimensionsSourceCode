@@ -43,7 +43,6 @@ Vue.component("secret-time-study", {
 });
 
 Vue.component("secret-time-study-connection", {
-  mixins: [remMixin],
   props: {
     setup: Object
   },
@@ -67,12 +66,17 @@ Vue.component("secret-time-study-connection", {
       this.isUnlocked = player.achievements.includes("s21");
     });
   },
+  methods: {
+    percents(value) {
+      return value * 100 + "%";
+    }
+  },
   template:
     `<line
-      :x1="rem(setup.x1)"
-      :y1="rem(setup.y1)"
-      :x2="rem(setup.x2)"
-      :y2="rem(setup.y2)"
+      :x1="percents(setup.x1)"
+      :y1="percents(setup.y1)"
+      :x2="percents(setup.x2)"
+      :y2="percents(setup.y2)"
       :class="classObject"
     />`
 });

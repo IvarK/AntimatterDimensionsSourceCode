@@ -615,7 +615,8 @@
 /*#endregion o-time-study*/
 
 .o-time-study-connection {
-  stroke-width: 1.2rem;
+  /* This one should be px, because it rem svg behaves weirdly under scale */
+  stroke-width: 16px;
   stroke: #444444;
   transition: stroke 0.3s;
 }

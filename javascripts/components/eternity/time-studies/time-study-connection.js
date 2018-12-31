@@ -1,5 +1,4 @@
 Vue.component("time-study-connection", {
-  mixins: [remMixin],
   data: function() {
     return {
       isOverridden: false,
@@ -52,15 +51,18 @@ Vue.component("time-study-connection", {
     update() {
       this.isOverridden = this.setup.connection.isOverridden;
       this.isBought = this.setup.isBought;
+    },
+    percents(value) {
+      return value * 100 + "%";
     }
   },
   template:
     `<line
       v-if="!isOverridden"
-      :x1="rem(setup.x1)"
-      :y1="rem(setup.y1)"
-      :x2="rem(setup.x2)"
-      :y2="rem(setup.y2)"
+      :x1="percents(setup.x1)"
+      :y1="percents(setup.y1)"
+      :x2="percents(setup.x2)"
+      :y2="percents(setup.y2)"
       :class="classObject"
     />`
 });
@@ -81,13 +83,13 @@ class TimeStudyConnectionSetup {
   /**
    * @param {TimeStudySetup[]} studies
    */
-  setPosition(studies) {
+  setPosition(studies, width, height) {
     const from = studies.find(study => study.study === this.from);
     const to = studies.find(study => study.study === this.to);
-    this.x1 = from.left + from.width / 2;
-    this.y1 = from.top + from.height / 2;
-    this.x2 = to.left + to.width / 2;
-    this.y2 = to.top + to.height / 2;
+    this.x1 = (from.left + from.width / 2) / width;
+    this.y1 = (from.top + from.height / 2) / height;
+    this.x2 = (to.left + to.width / 2) / width;
+    this.y2 = (to.top + to.height / 2) / height;
   }
 
   get isBought() {

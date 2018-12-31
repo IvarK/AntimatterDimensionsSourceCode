@@ -73,10 +73,12 @@ function buyTimeStudy(name, cost, check) {
   } else return false
 }
 
-function buyDilationStudy(name, cost) {
+function buyDilationStudy(name, cost, quiet) {
     if ((player.timestudy.theorem >= cost || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
         if (name === 1) {
-            Tab.eternity.dilation.show();
+            if (!quiet) {
+              Tab.eternity.dilation.show();
+            }
             if (player.reality.perks.includes(14)) player.dilation.upgrades.push(4, 5, 6);
             if (player.reality.perks.includes(15)) player.dilation.upgrades.push(7, 8, 9);
             if (player.reality.perks.includes(33)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)

@@ -250,7 +250,7 @@ function unlock(current) {
       break;
     case "dilation":
       if (!player.reality.automatorCommands.includes(63)) return false
-      if (buyDilationStudy(1, 5000)) return true
+      if (buyDilationStudy(1, 5000, true)) return true
       else return false
       break;
   }

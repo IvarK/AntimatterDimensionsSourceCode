@@ -56,7 +56,9 @@ function maxTheorems() {
 }
 
 function calculateTimeStudiesCost() {
-  let totalCost = TimeStudy.boughtNormalTS().reduce(Number.sumReducer, 0);
+  let totalCost = TimeStudy.boughtNormalTS()
+    .map(ts => ts.cost)
+    .reduce(Number.sumReducer, 0);
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     totalCost += ecStudy.cost;

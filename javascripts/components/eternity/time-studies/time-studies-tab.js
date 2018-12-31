@@ -167,19 +167,19 @@ class TimeStudyTreeLayout {
 
     if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
       this.rows.push(
-        normalRow(                         null, TS(171), EC(2)                         ),
-        normalRow(                         EC(1), null,  EC(3)                          )
+        normalRow(                         null, TS(171),  EC(2)                        ),
+        normalRow(                        EC(1), TS(181),  EC(3)                        )
       );
     }
     else {
       this.rows.push(
         normalRow(                               TS(171)                                ),
-        normalRow(                         EC(1), EC(2), EC(3)                          )
+        normalRow(                         EC(1), EC(2), EC(3)                          ),
+        normalRow(                               TS(181)                                )
       );
     }
 
     this.rows.push(
-      normalRow(                               TS(181)                                ),
       normalRow(                               EC(10)                                 ),
       normalRow(             TS(191),          TS(192),          TS(193)              ),
       normalRow(                               TS(201)                                ),

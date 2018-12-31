@@ -5,7 +5,8 @@ Vue.component("time-dilation-tab", {
       dilatedTime: new Decimal(0),
       dilatedTimeIncome: new Decimal(0),
       galaxyThreshold: new Decimal(0),
-      galaxies: 0
+      galaxies: 0,
+      animateTachyons: true,
     };
   },
   computed: {
@@ -41,6 +42,7 @@ Vue.component("time-dilation-tab", {
       this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond());
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.freeGalaxies;
+      this.animateTachyons = player.options.animations.tachyonParticles;
     }
   },
   template:
@@ -89,6 +91,6 @@ Vue.component("time-dilation-tab", {
           />
         </div>
       </div>
-      <tachyon-particles />
+      <tachyon-particles v-if="animateTachyons" />
     </div>`
 });

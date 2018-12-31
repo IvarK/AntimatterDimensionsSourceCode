@@ -80,9 +80,10 @@ Vue.component("time-studies-tab", {
 });
 
 class TimeStudyRow {
-  constructor(layout, items) {
+  constructor(layout, items, isWide) {
     this.layout = layout;
     this.items = items;
+    this.isWide = isWide;
   }
 
   get width() {
@@ -123,7 +124,7 @@ class TimeStudyTreeLayout {
       spacing: 0.6
     });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
-    const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items);
+    const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
@@ -202,11 +203,15 @@ class TimeStudyTreeLayout {
       for (let columnIndex = 0; columnIndex < row.items.length; columnIndex++) {
         const study = row.items[columnIndex];
         if (study === null) continue;
-        this.studies.push(new TimeStudySetup({
+        const setup = new TimeStudySetup({
           study: study,
           row: rowIndex,
           column: columnIndex
-        }));
+        });
+        if (row.isWide) {
+          setup.isSmall = true;
+        }
+        this.studies.push(setup);
       }
     }
     const secretStudy = {};

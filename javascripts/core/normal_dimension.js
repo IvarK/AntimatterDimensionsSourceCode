@@ -102,6 +102,10 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
+  if (player.celestials.teresa.run) {
+    multiplier = teresaMultiplier(multiplier);
+  }
+  
   return multiplier;
 }
 
@@ -518,8 +522,7 @@ function getDimensionProductionPerSecond(tier) {
     if (tier === 2) amount = amount.pow(1.5);
     if (tier === 4) amount = amount.pow(1.3);
   }
-  const tickspeed = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
-  let production = amount.times(multiplier).dividedBy(tickspeed.dividedBy(1000));
+  let production = amount.times(multiplier).dividedBy(Tickspeed.current.dividedBy(1000));
   if (Challenge(2).isRunning) {
     production = production.times(player.chall2Pow);
   }

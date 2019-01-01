@@ -31,7 +31,7 @@ Vue.component("autobuyer-input", {
     },
     fetchActualValue() {
       const actualValue = this.getValue();
-      if (!this.areEqual(this.actualValue, actualValue)) {
+      if (!this.areEqual(this.current, actualValue)) {
         this.actualValue = actualValue;
         this.displayValue = this.formatActualValue();
       }
@@ -69,7 +69,7 @@ Vue.component("autobuyer-input", {
         giveAchievement("Nice.");
       }
       if (this.isValid) {
-        this.setValue(this.actualValue);
+        this.setValue(this.current);
       }
       else {
         this.fetchActualValue();

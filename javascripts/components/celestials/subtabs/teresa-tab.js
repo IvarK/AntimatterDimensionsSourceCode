@@ -15,6 +15,9 @@ Vue.component('teresa-tab', {
       this.unlocks = Object.values(TERESA_UNLOCKS).map(id => Teresa.has(id))
       this.typePriorities = player.celestials.teresa.typePriorityOrder
     },
+    startRun() {
+      Teresa.startRun()
+    },
     adjustWeights(name) {
       let tempTotalWeight = 0
       for (i in this.weights) {
@@ -99,6 +102,10 @@ Vue.component('teresa-tab', {
         </div>
         <div v-if="unlocks[2]">Glyph effect weight settings here</div>
       </div>
-      <div v-if="unlocks[3]"><button class="o-teresa-shop-button teresa-run-button">Start a new reality, antimatter production is severely lowered and you can only use one glyph, infinity and time dimensions reduce the production penalty. You will gain unlocks at Infinity, Eternity and Reality.</button></div>
+      <div v-if="unlocks[3]"><button class="o-teresa-shop-button teresa-run-button" @click="startRun()">Start a new reality, all production is severely lowered and you can only use one glyph, infinity and time dimensions reduce the production penalty. IP multipliers are disabled. You will gain unlocks at Infinity, Eternity and Reality.</button>
+        <div v-if="unlocks[4]">Infinity: IP multipliers are no longer disabled in Teresa Reality, (something outside)</div>
+        <div v-if="unlocks[5]">Eternity: Gamespeed is normal in Teresa Reality, (something outside)</div>
+        <div v-if="unlocks[6]">Reality: (something outside)</div>
+      </div>
     </div>`
 });

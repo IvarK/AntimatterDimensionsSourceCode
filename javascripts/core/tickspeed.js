@@ -160,10 +160,18 @@ function resetTickspeed() {
 }
 
 const Tickspeed = {
+
   get isUnlocked() {
     return player.secondAmount.gt(0) || player.eternities >= 30;
   },
+
   get multiplier() {
     return getTickSpeedMultiplier();
+  },
+
+  get current() {
+    if (player.dilation.active) return dilatedTickspeed();
+    if (Teresa.isRunning) return teresaTickspeed();
+    return player.tickspeed;
   }
 };

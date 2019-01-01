@@ -30,8 +30,8 @@ Vue.component("game-header", {
       this.updateChallengeDisplay();
     },
     updateCelestial: function() {
-      if (player.celestials.effarig.run)  this.currCelestial = "Effarig";
-      else if (player.celestials.teresa.run)  this.currCelestial = "Teresa";
+      if (Effarig.isRunning)  this.currCelestial = "Effarig";
+      else if (Teresa.isRunning)  this.currCelestial = "Teresa";
       else  this.currCelestial = "";
     },
     updateChallengeDisplay: function() {

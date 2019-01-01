@@ -224,7 +224,7 @@ class InfinityDimensionState {
       return production;
     }
     if (EternityChallenge(7).isRunning) {
-      production = production.dividedBy(player.tickspeed.dividedBy(1000));
+      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
     return production
       .timesEffectOf(InfinityChallenge(6).reward)
@@ -269,6 +269,10 @@ class InfinityDimensionState {
 
     mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
 
+    if (player.celestials.teresa.run) {
+      mult = teresaMultiplier(mult);
+    }
+    
     return mult;
   }
 

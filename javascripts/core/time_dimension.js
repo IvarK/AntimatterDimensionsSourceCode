@@ -163,6 +163,10 @@ class TimeDimensionState {
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }
+    
+    if (player.celestials.teresa.run) {
+      mult = teresaMultiplier(mult);
+    }
 
     return mult;
   }
@@ -175,8 +179,8 @@ class TimeDimensionState {
       return this.amount;
     }
     let production = this.amount.times(this.multiplier);
-    if (player.currentEternityChall === "eterc7") {
-      production = production.dividedBy(player.tickspeed.dividedBy(1000));
+    if (EternityChallenge(7).isRunning) {
+      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
     return production;
   }

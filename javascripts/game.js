@@ -203,6 +203,9 @@ function gainedInfinityPoints() {
     let ip = player.break ?
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+      return ip.floor();
+    }
     ip = ip.times(totalIPMult());
     if (Effarig.isRunning) {
         ip = ip.pow(0.6);
@@ -850,6 +853,10 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
+  if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5)) {
+    factor = teresaMultiplier(new Decimal(factor)).toNumber();
+  }
+    
   return factor;
 }
 
@@ -921,8 +928,9 @@ function gameLoop(diff, wormholeSpeedup) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (!player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
-        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        else if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(4)) player.infinityPoints = player.infinityPoints; // idk pls don't hurt me Razen
+        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
     }

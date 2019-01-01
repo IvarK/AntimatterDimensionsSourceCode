@@ -99,6 +99,10 @@ function bigCrunchReset() {
     if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
+  
+    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(4)) {
+      player.celestials.teresa.unlocks.push(4);
+    }
 }
 
 function secondSoftReset() {

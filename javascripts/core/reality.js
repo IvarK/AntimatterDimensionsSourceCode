@@ -256,6 +256,10 @@ function reality(force, reset, auto) {
             }
         }
     }
+    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(6)) {
+      player.celestials.teresa.unlocks.push(6);
+    }
+
     GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
 }
@@ -264,6 +268,9 @@ function handleCelestialRuns() {
   if (player.celestials.effarig.run) {
     player.celestials.effarig.run = false
     if (player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+  }
+  if (player.celestials.teresa.run) {
+    player.celestials.teresa.run = false
   }
 }
 

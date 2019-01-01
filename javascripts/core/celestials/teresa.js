@@ -7,7 +7,26 @@ const TERESA_UNLOCKS = {
   ADJUSTER: 0,
   AUTOSACRIFICE: 1,
   AUTOPICKER: 2,
-  RUN: 3
+  RUN: 3,
+  INFINITY_COMPLETE: 4,
+  ETERNITY_COMPLETE: 5,
+  REALITY_COMPLETE: 6
+}
+
+function teresaNerfFactor(power) {
+  let x = power.log10();
+  if (x < 1 || isNaN(x)) {
+    x = 1;
+  }
+  return Math.min(1 + 1.5*Math.log10(x), 10);
+}
+
+function teresaTickspeed() {
+  return new Decimal(1000 * Math.pow(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10()), teresaNerfFactor(player.timeShards))).min(1000);
+}
+
+function teresaMultiplier(multiplier) {
+  return new Decimal(Math.pow((multiplier.plus(new Decimal(10))).log10(), teresaNerfFactor(player.infinityPower)));
 }
 
 var Teresa = {
@@ -23,6 +42,15 @@ var Teresa = {
   },
   has(id) {
     return player.celestials.teresa.unlocks.includes(id)
+  },
+  startRun() {
+    respecGlyphs()
+    startRealityOver()
+    player.celestials.teresa.run = true
+    player.celestials.teresa.glyphEquipped = false
+  },
+  get isRunning() {
+    return player.celestials.teresa.run;
   },
   get glyphEffectAmount() {
     let counted = []

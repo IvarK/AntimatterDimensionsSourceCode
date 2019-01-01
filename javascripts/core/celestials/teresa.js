@@ -14,15 +14,12 @@ const TERESA_UNLOCKS = {
 }
 
 function teresaNerfFactor(power) {
-  let x = power.log10();
-  if (x < 1 || isNaN(x)) {
-    x = 1;
-  }
-  return Math.min(1 + 1.5*Math.log10(x), 10);
+  let x = (power.max(10)).log10();
+  return Math.min(1 + 0.7*Math.log10(x), 10);
 }
 
 function teresaTickspeed() {
-  return new Decimal(1000 * Math.pow(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10()), teresaNerfFactor(player.timeShards))).min(1000);
+  return new Decimal(1000 * Math.pow(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10()), 5*teresaNerfFactor(player.timeShards))).min(1000);
 }
 
 function teresaMultiplier(multiplier) {

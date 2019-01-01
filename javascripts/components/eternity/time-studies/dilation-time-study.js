@@ -4,6 +4,7 @@ Vue.component("dilation-time-study", {
   },
   data() {
     return {
+      showCost: true,
       showRequirement: false,
       requirement: String.empty
     };
@@ -14,9 +15,6 @@ Vue.component("dilation-time-study", {
     },
     id() {
       return this.study.id;
-    },
-    cost() {
-      return this.id === 1 ? this.study.cost : formatWithCommas(this.study.cost);
     },
     classObject() {
       return {
@@ -35,22 +33,22 @@ Vue.component("dilation-time-study", {
   },
   methods: {
     update() {
-      if (this.id === 1) {
+      const id = this.id;
+      this.showCost = id === 6 && player.realities === 0;
+      if (id === 1) {
         this.showRequirement = !this.study.isBought && !Perk(13).isBought;
       }
-      if (this.id === 6) {
+      if (id === 6) {
         this.showRequirement = player.realities === 0;
       }
     }
   },
   template:
-    `<time-study :setup="setup" :showCost="false" :class="classObject">
-      {{study.description}}
+    `<time-study :setup="setup" :showCost="showCost" :class="classObject">
+      <description-display :config="study.config" />
       <template v-if="showRequirement">
         <br>
         <span>{{requirement}}</span>
       </template>
-      <br>
-      Cost: {{cost}} Time Theorems
     </time-study>`
 });

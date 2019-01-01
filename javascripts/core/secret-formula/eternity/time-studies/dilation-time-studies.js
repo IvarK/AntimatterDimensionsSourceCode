@@ -1,32 +1,38 @@
 GameDatabase.eternity.timeStudies.dilation = [
   {
     id: 1,
+    description: "Unlock time dilation",
     cost: 5000,
-    description: "Unlock time dilation"
+    formatCost: value => value.toString()
   },
   {
     id: 2,
+    description: "Unlock the 5th Time Dimension",
     cost: 1000000,
-    description: "Unlock the 5th Time Dimension"
+    formatCost: formatWithCommas
   },
   {
     id: 3,
+    description: "Unlock the 6th Time Dimension",
     cost: 10000000,
-    description: "Unlock the 6th Time Dimension"
+    formatCost: formatWithCommas
   },
   {
     id: 4,
+    description: "Unlock the 7th Time Dimension",
     cost: 100000000,
-    description: "Unlock the 7th Time Dimension"
+    formatCost: formatWithCommas
   },
   {
     id: 5,
+    description: "Unlock the 8th Time Dimension",
     cost: 1000000000,
-    description: "Unlock the 8th Time Dimension"
+    formatCost: formatWithCommas
   },
   {
     id: 6,
+    description: "Unlock reality",
     cost: 5000000000,
-    description: "Unlock reality"
+    formatCost: formatWithCommas
   }
 ];

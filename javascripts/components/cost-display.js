@@ -13,7 +13,7 @@ Vue.component("cost-display", {
   },
   computed: {
     costDisplay() {
-      return this.formatCost ? this.formatCost(this.cost) : this.shortenCosts(this.cost);
+      return this.formatCost ? this.formatCost(this.cost) : this.shorten(this.cost, 0, 0);
     }
   },
   created() {

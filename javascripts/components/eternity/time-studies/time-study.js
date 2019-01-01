@@ -67,10 +67,6 @@ class TimeStudySetup {
     this.column = props.column;
   }
 
-  get isSmall() {
-    return this.row === 23;
-  }
-
   setPosition(layout) {
     this.top = layout.itemPosition(this.row);
     const row = layout.rows[this.row];

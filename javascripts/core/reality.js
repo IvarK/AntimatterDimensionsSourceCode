@@ -280,8 +280,10 @@ function startRealityOver() {
     if(confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
         glyphSelected = true
         realizationCheck = 1
-        reality(true, true)
+        reality(true, true);
+        return true;
     }
+    return false;
 }
 
 function autoSacrificeGlyph() {

@@ -88,11 +88,10 @@ function buyDilationUpgrade(id) {
 }
 
 function getFreeGalaxyMult() {
-  let thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue;
-  let glyphReduction = getAdjustedGlyphEffect("dilationgalaxyThreshold") == 0 ? 1 : getAdjustedGlyphEffect("dilationgalaxyThreshold");
-  thresholdMult *= glyphReduction;
-  thresholdMult += 1.3 + 0.05 * glyphReduction;
-  return thresholdMult;
+  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.05;
+  const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
+  const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
+  return thresholdMult * glyphReduction + 1.3;
 }
 
 function getDilationGainPerSecond() {

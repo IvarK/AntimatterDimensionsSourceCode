@@ -15,13 +15,13 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 21,
     cost: 3,
-    description: "Replicanti multiplier formula is better (log2(x)^2) → (x^0.032)",
+    description: "Replicanti multiplier formula is better (log2(x)^2) ➜ (x^0.032)",
     effect: () => Decimal.pow(player.replicanti.amount, 0.032)
   },
   {
     id: 22,
     cost: 2,
-    description: "Replicanti interval limit 50ms → 1ms",
+    description: "Replicanti interval limit 50ms ➜ 1ms",
     effect: () => 1
   },
   {

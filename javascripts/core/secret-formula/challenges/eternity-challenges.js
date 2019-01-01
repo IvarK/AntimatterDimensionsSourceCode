@@ -135,7 +135,7 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
-      formatEffect: value => `x - ${value.toFixed(1)}`
+      formatEffect: value => `x - ${value.toFixed(2)}`
     }
   },
   {

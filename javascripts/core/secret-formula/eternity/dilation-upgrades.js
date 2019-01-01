@@ -28,10 +28,10 @@ GameDatabase.eternity.dilation = (function() {
       increment: 100,
       description: () =>
         Perk(11).isBought ?
-        "Free galaxy threshold is lowered, but reset them." :
-        "Free galaxy threshold is lowered, but reset them and Dilated Time.",
+        "Reset Dilated Galaxies, but lower their threshold" :
+        "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
       effect: bought => Math.pow(0.8, bought),
-      formatEffect: value => formatPercents(value, 2),
+      formatEffect: value => Math.log10(value) > -2 ? formatPercents(value, 2) : `1/${shorten(1/value, 2, 2)}`,
       formatCost: value => shorten(value, 1, 1)
     }),
     tachyonGain: rebuyable({

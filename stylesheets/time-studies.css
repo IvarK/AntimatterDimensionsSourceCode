@@ -152,13 +152,13 @@
 }
 
 .o-time-study--active {
-  color: #ff0100;
+  color: #e60000;
   border-color: #cc0000;
 }
 
 .o-time-study--active:hover {
   color: #eeeeee;
-  background-color: #ff0100;
+  background-color: #e60000;
 }
 
 .o-time-study--passive {
@@ -285,7 +285,7 @@
 
 .t-dark .o-time-study--active:hover,
 .t-s6 .o-time-study--active:hover {
-  background-color: #ff0100 !important;
+  background-color: #e60000 !important;
 }
 
 .t-dark .o-time-study--passive:hover,
@@ -421,6 +421,13 @@
 .t-dark .o-time-study--unavailable,
 .t-s6 .o-time-study--unavailable {
   background-color: #23292a !important;
+}
+
+.t-dark .o-time-study--unavailable  {
+  color: black !important;
+}
+
+.t-s6 .o-time-study--unavailable {
   color: #808080 !important;
 }
 
@@ -488,7 +495,7 @@
 }
 
 .o-time-study--bought.o-time-study--active {
-  background-color: #ff0100 !important;
+  background-color: #e60000 !important;
 }
 
 .o-time-study--bought.o-time-study--passive {
@@ -557,7 +564,7 @@
 
 .t-dark .o-time-study--bought.o-time-study--active,
 .t-s6 .o-time-study--bought.o-time-study--active {
-  background-color: #ff0100 !important;
+  background-color: #e60000 !important;
   border-color: #cc0000 !important;
 }
 
@@ -615,7 +622,8 @@
 /*#endregion o-time-study*/
 
 .o-time-study-connection {
-  stroke-width: 1.2rem;
+  /* This one should be px, because it rem svg behaves weirdly under scale */
+  stroke-width: 16px;
   stroke: #444444;
   transition: stroke 0.3s;
 }

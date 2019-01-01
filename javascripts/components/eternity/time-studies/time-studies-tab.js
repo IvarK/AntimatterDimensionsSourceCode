@@ -2,7 +2,8 @@ Vue.component("time-studies-tab", {
   mixins: [remMixin],
   data() {
     return {
-      respec: player.respec
+      respec: player.respec,
+      layoutType: StudyTreeLayoutType.NORMAL
     };
   },
   watch: {
@@ -12,7 +13,7 @@ Vue.component("time-studies-tab", {
   },
   computed: {
     layout() {
-      return TimeStudyTreeLayout.instance;
+      return TimeStudyTreeLayout.create(this.layoutType);
     },
     treeStyleObject() {
       return {
@@ -30,6 +31,7 @@ Vue.component("time-studies-tab", {
   methods: {
     update() {
       this.respec = player.respec;
+      this.layoutType = StudyTreeLayoutType.current;
     },
     studyComponent(study) {
       switch (study.type) {
@@ -59,7 +61,7 @@ Vue.component("time-studies-tab", {
       <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
         <component
           v-for="(setup, index) in layout.studies"
-          :key="'study' + index"
+          :key="setup.study.type.toString() + setup.study.id.toString()"
           :setup="setup"
           :is="studyComponent(setup.study)"
         />
@@ -78,9 +80,10 @@ Vue.component("time-studies-tab", {
 });
 
 class TimeStudyRow {
-  constructor(layout, items) {
+  constructor(layout, items, isWide) {
     this.layout = layout;
     this.items = items;
+    this.isWide = isWide;
   }
 
   get width() {
@@ -106,7 +109,7 @@ class TimeStudyRowLayout {
 }
 
 class TimeStudyTreeLayout {
-  constructor() {
+  constructor(type) {
     this.spacing = 4;
 
     const normalRowLayout = new TimeStudyRowLayout({
@@ -121,7 +124,7 @@ class TimeStudyTreeLayout {
       spacing: 0.6
     });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
-    const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items);
+    const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
     const TS = id => TimeStudy(id);
     const EC = id => TimeStudy.eternityChallenge(id);
@@ -132,10 +135,25 @@ class TimeStudyTreeLayout {
     this.rows = [
       normalRow(                       null,   TS(11),   null                         ),
       normalRow(                           TS(21), TS(22)                             ),
-      normalRow(                   TS(33), TS(31), TS(32), null                       ),
-      normalRow(                           TS(41), TS(42)                             ),
-      normalRow(                       null,   TS(51),  EC(5)                         ),
-      normalRow(                       null,   TS(61),  TS(62)                        ),
+      normalRow(                   TS(33), TS(31), TS(32), null                       )
+    ];
+
+    if (type === StudyTreeLayoutType.ALTERNATIVE_62 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+      this.rows.push(
+        normalRow(                     null, TS(41), TS(42), EC(5)                      ),
+        normalRow(                       null,   TS(51),  TS(62)                        ),
+        normalRow(                               TS(61)                                 )
+      );
+    }
+    else {
+      this.rows.push(
+        normalRow(                           TS(41), TS(42)                             ),
+        normalRow(                       null,   TS(51),  EC(5)                         ),
+        normalRow(                       null,   TS(61),  TS(62)                        )
+      );
+    }
+
+    this.rows.push(
       normalRow(                      TS(71),  TS(72),  TS(73)                        ),
       normalRow(                      TS(81),  TS(82),  TS(83)                        ),
       normalRow(                      TS(91),  TS(92),  TS(93)                        ),
@@ -145,10 +163,24 @@ class TimeStudyTreeLayout {
       normalRow(               EC(6), TS(131), TS(132), TS(133), EC(8)                ),
       normalRow(                      TS(141), TS(142), TS(143)                       ),
       normalRow(               null,   EC(9), TS(151),   null,   EC(4)                ),
-      normalRow(                          TS(161), TS(162)                            ),
-      normalRow(                               TS(171)                                ),
-      normalRow(                         EC(1), EC(2), EC(3)                          ),
-      normalRow(                               TS(181)                                ),
+      normalRow(                          TS(161), TS(162)                            )
+    );
+
+    if (type === StudyTreeLayoutType.ALTERNATIVE_181 || type === StudyTreeLayoutType.ALTERNATIVE_62_181) {
+      this.rows.push(
+        normalRow(                         null, TS(171),  EC(2)                        ),
+        normalRow(                        EC(1), TS(181),  EC(3)                        )
+      );
+    }
+    else {
+      this.rows.push(
+        normalRow(                               TS(171)                                ),
+        normalRow(                         EC(1), EC(2), EC(3)                          ),
+        normalRow(                               TS(181)                                )
+      );
+    }
+
+    this.rows.push(
       normalRow(                               EC(10)                                 ),
       normalRow(             TS(191),          TS(192),          TS(193)              ),
       normalRow(                               TS(201)                                ),
@@ -159,8 +191,8 @@ class TimeStudyTreeLayout {
       normalRow(                          TimeStudy.dilation                          ),
       normalRow(          TimeStudy.timeDimension(5), TimeStudy.timeDimension(6)      ),
       normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
-      normalRow(                          TimeStudy.reality                           ),
-    ];
+      normalRow(                          TimeStudy.reality                           )
+    );
 
     /**
      * @type {TimeStudySetup[]}
@@ -171,11 +203,15 @@ class TimeStudyTreeLayout {
       for (let columnIndex = 0; columnIndex < row.items.length; columnIndex++) {
         const study = row.items[columnIndex];
         if (study === null) continue;
-        this.studies.push(new TimeStudySetup({
+        const setup = new TimeStudySetup({
           study: study,
           row: rowIndex,
           column: columnIndex
-        }));
+        });
+        if (row.isWide) {
+          setup.isSmall = true;
+        }
+        this.studies.push(setup);
       }
     }
     const secretStudy = {};
@@ -204,9 +240,9 @@ class TimeStudyTreeLayout {
     this.secretStudy.setPosition(this);
 
     for (let connection of this.connections) {
-      connection.setPosition(this.studies);
+      connection.setPosition(this.studies, this.width, this.height);
     }
-    this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy));
+    this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy), this.width, this.height);
   }
 
   itemPosition(row) {
@@ -215,10 +251,30 @@ class TimeStudyTreeLayout {
     return heightNoSpacing + rows.length * this.spacing;
   }
 
-  static get instance() {
-    if (this._instance === undefined) {
-      this._instance = new TimeStudyTreeLayout();
+  static create(type) {
+    if (this._instances === undefined) {
+      this._instances = [];
     }
-    return this._instance;
+    let layout = this._instances[type];
+    if (layout === undefined) {
+      layout = new TimeStudyTreeLayout(type);
+      this._instances[type] = layout;
+    }
+    return layout;
   }
 }
+
+const StudyTreeLayoutType = {
+  NORMAL: 0,
+  ALTERNATIVE_62: 1,
+  ALTERNATIVE_181: 2,
+  ALTERNATIVE_62_181: 3,
+  get current() {
+    const alt62 = Perk(71).isBought;
+    const alt181 = Perk(4).isBought && Perk(74).isBought && Perk(75).isBought;
+    if (alt62 && alt181) return this.ALTERNATIVE_62_181;
+    if (alt62) return this.ALTERNATIVE_62;
+    if (alt181) return this.ALTERNATIVE_181;
+    return this.NORMAL;
+  }
+};

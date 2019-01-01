@@ -1604,7 +1604,13 @@ screen and (max-width: 480px) {
 }
 
 .o-primary-btn--respec-active {
-  background-color: #0bd251;
+  background-color: #5ac467;
+}
+
+.o-primary-btn--respec-active:hover {
+  background-color: #5ac467;
+  color: black;
+  cursor: default;
 }
 
 /*#endregion modifiers*/
@@ -1754,6 +1760,26 @@ screen and (max-width: 480px) {
 
 .t-s6 .o-primary-btn--respec-active {
   background-color: #1b5e20 !important;
+}
+
+/* FFS */
+.t-metro .o-primary-btn--respec-active,
+.t-dark .o-primary-btn--respec-active,
+.t-dark-metro .o-primary-btn--respec-active,
+.t-s1 .o-primary-btn--respec-active,
+.t-s6 .o-primary-btn--respec-active,
+.t-s8 .o-primary-btn--respec-active {
+  background-color: #673ab7 !important;
+}
+
+.t-metro .o-primary-btn--respec-active:hover,
+.t-dark .o-primary-btn--respec-active:hover,
+.t-dark-metro .o-primary-btn--respec-active:hover,
+.t-s1 .o-primary-btn--respec-active:hover,
+.t-s6 .o-primary-btn--respec-active:hover,
+.t-s8 .o-primary-btn--respec-active:hover {
+  background-color: #673ab7 !important;
+  color: black !important;
 }
 
 /*#endregion t-s6*/

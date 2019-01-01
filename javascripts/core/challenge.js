@@ -62,41 +62,53 @@ class ChallengeState {
   }
 }
 
-class InfinityChallengeState {
-  constructor(props) {
-    this._id = props.id;
-    this._fullId = `postc${this._id}`;
-    this._effect = props.effect;
-    this._reward = props.reward;
+class InfinityChallengeRewardState extends GameMechanicState {
+  constructor(config, challenge) {
+    super(config);
+    this._challenge = challenge;
+  }
+
+  get canBeApplied() {
+    return this._challenge.isCompleted;
+  }
+}
+
+class InfinityChallengeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = `postc${this.id}`;
+    this._reward = new InfinityChallengeRewardState(config.reward, this);
+  }
+
+  get isUnlocked() {
+    return player.postChallUnlocked >= this.id;
   }
 
   get isRunning() {
     return player.currentChallenge === this._fullId;
   }
 
+  start() {
+    startChallenge(this._fullId, this.config.goal);
+  }
+
   get isCompleted() {
     return player.challenges.includes(this._fullId);
   }
 
-  applyEffect(applyFn) {
-    if (this.isRunning) {
-      applyFn(this._effect());
-    }
+  get canBeApplied() {
+    return this.isRunning;
   }
 
+  /**
+   * @return {InfinityChallengeRewardState}
+   */
   get reward() {
-    const ic = this;
-    return {
-      applyEffect(applyFn) {
-        if (ic.isCompleted) {
-          applyFn(ic._reward());
-        }
-      }
-    };
+    return this._reward;
   }
 }
 
-InfinityChallengeState.allChallenges = mapGameData(
+InfinityChallengeState.all = mapGameData(
   GameDatabase.challenges.infinity,
   data => new InfinityChallengeState(data)
 );
@@ -106,7 +118,7 @@ InfinityChallengeState.allChallenges = mapGameData(
  * @return {InfinityChallengeState}
  */
 function InfinityChallenge(id) {
-  return InfinityChallengeState.allChallenges[id];
+  return InfinityChallengeState.all[id];
 }
 
 /**
@@ -114,12 +126,23 @@ function InfinityChallenge(id) {
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  if (challenge === String.empty) return undefined;
-  if (!challenge.includes("postc")) return undefined;
-  const id = parseInt(challenge.split("postc")[1]);
-  return InfinityChallenge(id);
+  return challenge.startsWith("postc") ?
+    InfinityChallenge(parseInt(challenge.substr(5))) :
+    undefined;
 };
 
+/**
+ * @return {boolean}
+ */
 InfinityChallenge.isRunning = function() {
   return InfinityChallenge.current() !== undefined;
+};
+
+/**
+ * @return {InfinityChallengeState[]}
+ */
+InfinityChallenge.completed = function() {
+  return Array.range(1, 8)
+    .map(InfinityChallenge)
+    .filter(ic => ic.isCompleted);
 };

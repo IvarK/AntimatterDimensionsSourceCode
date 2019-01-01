@@ -75,10 +75,26 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
 
 const TIERS_PER_EC = 5;
 
+class EternityChallengeRewardState extends GameMechanicState {
+  constructor(config, challenge) {
+    super(config);
+    this._challenge = challenge;
+  }
+
+  get effectValue() {
+    return this.config.effect(this._challenge.completions);
+  }
+
+  get canBeApplied() {
+    return this._challenge.completions > 0;
+  }
+}
+
 class EternityChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
     this._fullId = `eterc${this.id}`;
+    this._reward = new EternityChallengeRewardState(config.reward, this);
   }
 
   get fullId() {
@@ -94,10 +110,12 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get completions() {
-    if (player.eternityChalls[this.fullId] === undefined) {
-      return 0;
-    }
-    return player.eternityChalls[this.fullId];
+    const completions = player.eternityChalls[this.fullId];
+    return completions === undefined ? 0 : completions;
+  }
+
+  set completions(value) {
+    player.eternityChalls[this.fullId] = value;
   }
 
   get isFullyCompleted() {
@@ -122,30 +140,10 @@ class EternityChallengeState extends GameMechanicState {
       this.initialGoal;
   }
 
-  get rewardValue() {
-    const completions = this.completions;
-    if (completions === 0) {
-      throw `EC${this.id} has 0 completions - there's no effect yet`;
-    }
-    return this.rewardValueAtCompletions(completions);
-  }
-
-  get nextRewardValue() {
-    const completions = this.completions;
-    if (completions === TIERS_PER_EC) {
-      throw `EC${this.id} has max completions - there's no effect value of next tier`;
-    }
-    return this.rewardValueAtCompletions(completions + 1);
-  }
-
-  rewardValueAtCompletions(completions) {
-    return this.config.reward.effect(completions);
-  }
-
   addCompletion() {
-    player.eternityChalls[this.fullId] = this.completions + 1
-    if (this._id === 6) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1));
-    if (this._id === 11) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2));
+    this.completions++;
+    if (this.id === 6) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1));
+    if (this.id === 11) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2));
   }
 
   start() {
@@ -156,20 +154,7 @@ class EternityChallengeState extends GameMechanicState {
    * @return {EternityChallengeRewardState}
    */
   get reward() {
-    const ec = this;
-    return new class EternityChallengeRewardState extends GameMechanicState {
-      constructor(config) {
-        super(config);
-      }
-
-      get effectValue() {
-        return this.config.effect(ec.completions);
-      }
-
-      get canBeApplied() {
-        return ec.completions > 0;
-      }
-    }(this.config.reward);
+    return this._reward;
   }
 }
 

@@ -19,8 +19,8 @@ class DimBoost {
       .max(
         2,
         InfinityUpgrade.dimboostMult,
-        InfinityChallenge(7),
         InfinityChallenge(7).reward,
+        InfinityChallenge(7),
         TimeStudy(81)
       )
       .toDecimal()
@@ -67,7 +67,7 @@ class DimBoost {
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
-    if (player.challenges.includes("postc5")) amount -= 1;
+    if (InfinityChallenge(5).isCompleted) amount -= 1;
 
     return new DimBoostRequirement(tier, amount);
   }

@@ -701,16 +701,6 @@ setInterval(function() {
         getDimensionFinalMultiplier(6).lt(getDimensionFinalMultiplier(7)) &&
         getDimensionFinalMultiplier(7).lt(getDimensionFinalMultiplier(8))) giveAchievement("How the antitables have turned")
 
-    if (player.challenges.includes("postc1")) {
-        let temp = 1
-        for (var i=0; i < player.challenges.length; i++) {
-            if (player.challenges[i].includes("post")) {
-                temp *= 1.3
-            }
-        }
-        infDimPow = temp
-    }
-
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
     document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
@@ -881,7 +871,7 @@ function gameLoop(diff) {
 
     if (player.currentChallenge == "challenge3" || player.matter.gte(1)) player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff/100));
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
-    if (player.currentChallenge === "postc2") {
+    if (InfinityChallenge(2).isRunning) {
         if (postC2Count >= 8 || diff > 8000) {
             if (player.eightAmount > 0) {
                 sacrificeReset();

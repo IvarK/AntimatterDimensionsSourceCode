@@ -139,7 +139,7 @@ function checkBigCrunchAchievements() {
     if (player.currentChallenge === "challenge5" && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
     if (player.currentChallenge === "challenge3" && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
     if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && player.currentChallenge === "challenge12") giveAchievement("ERROR 909: Dimension not found");
-    if (player.currentChallenge === "postc5" && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
+    if (InfinityChallenge(5).isRunning && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
     if (player.challenges.length >= 2) giveAchievement("Daredevil");
     if (player.challenges.length === 12) giveAchievement("AntiChallenged");
     if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");

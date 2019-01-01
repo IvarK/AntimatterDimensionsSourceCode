@@ -1,10 +1,9 @@
 function canBuyTickSpeed() {
-  if (player.currentEternityChall == "eterc9") return false
-  return canBuyDimension(3);
+  return canBuyDimension(3) && !EternityChallenge(9).isRunning;
 }
 
 function getTickSpeedMultiplier() {
-  if (player.currentChallenge == "postc3") return new Decimal(1);
+  if (InfinityChallenge(3).isRunning) return new Decimal(1);
   let galaxies = player.galaxies+player.replicanti.galaxies+player.dilation.freeGalaxies
   galaxies += Effects.sum(
     TimeStudy(132),
@@ -21,22 +20,22 @@ function getTickSpeedMultiplier() {
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
-        Achievement(86)
+        Achievement(86),
+        InfinityChallenge(5).reward
       );
-      if (player.challenges.includes("postc5")) perGalaxy *= 1.1;
-      return new Decimal(Math.max(0.01, baseMultiplier-(galaxies*perGalaxy)));
+      return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   } else {
       let baseMultiplier = 0.8
       if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
-      let perGalaxy = new Decimal(0.965)
-      if (player.challenges.includes("postc5")) galaxies *= 1.1;
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
         TimeStudy(232),
-        Achievement(86)
+        Achievement(86),
+        InfinityChallenge(5).reward
       );
+      let perGalaxy = new Decimal(0.965)
       return perGalaxy.pow(galaxies-2).times(baseMultiplier);
   }
 }
@@ -56,7 +55,7 @@ function buyTickSpeed() {
   if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease);
   if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc1") player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
-  if (player.challenges.includes("postc3") || player.currentChallenge == "postc3") player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
+  if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
   player.secretUnlocks.why++
   GameUI.update();
@@ -82,7 +81,7 @@ function buyMaxTickSpeed() {
   }
 
   const currentChallenge = player.currentChallenge;
-  const underPostC3Effect = player.challenges.includes("postc3") || currentChallenge === "postc3";
+  const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
   if (currentChallenge === "challenge2" || currentChallenge === "postc1") {
     player.chall2Pow = 0;
   }
@@ -97,7 +96,7 @@ function buyMaxTickSpeed() {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
       tickspeed = tickspeed.times(mult);
-      if (underPostC3Effect) {
+      if (underIC3Effect) {
         postC3Reward = postC3Reward.times(1.05 + (player.galaxies * 0.005));
       }
       postc8Mult = new Decimal(1);
@@ -118,7 +117,7 @@ function buyMaxTickSpeed() {
       return false;
     }
     tickspeed = tickspeed.times(Decimal.pow(mult, buying));
-    if (underPostC3Effect) {
+    if (underIC3Effect) {
       postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying))
     }
     increaseTickSpeedCost(buying - 1);

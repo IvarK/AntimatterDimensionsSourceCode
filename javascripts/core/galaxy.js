@@ -43,7 +43,7 @@ class Galaxy {
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
-    if (player.challenges.includes("postc5")) amount -= 1;
+    if (InfinityChallenge(5).isCompleted) amount -= 1;
     const tier = player.currentChallenge === "challenge4" ? 6 : 8;
     return new GalaxyRequirement(tier, amount);
   }

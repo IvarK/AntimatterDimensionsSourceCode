@@ -67,7 +67,11 @@ function getDimensionFinalMultiplier(tier) {
     tier === 1 ? TimeStudy(234) : null,
     TimeStudy(91),
     TimeStudy(101),
-    TimeStudy(161)
+    TimeStudy(161),
+    InfinityChallenge(3),
+    InfinityChallenge(3).reward,
+    InfinityChallenge(8),
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
 
   if (Achievement(77).isEnabled) {
@@ -75,14 +79,15 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.times(1 + tier / 100);
   }
 
-  multiplier = multiplier.times(player.postC3Reward);
-  if (player.challenges.includes("postc8") && tier < 8 && tier > 1) multiplier = multiplier.times(mult18);
+  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
 
-  if (player.currentChallenge === "postc6") multiplier = multiplier.dividedBy(player.matter.max(1));
-  if (player.currentChallenge === "postc8") multiplier = multiplier.times(postc8Mult);
+  if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
+    multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
+  }
+  if (InfinityChallenge(4).isCompleted) {
+    multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
+  }
 
-  if (player.currentChallenge === "postc4" && player.postC4Tier !== tier) multiplier = multiplier.pow(0.25);
-  if (player.challenges.includes("postc4")) multiplier = multiplier.pow(1.05);
   if (player.currentEternityChall === "eterc10") multiplier = multiplier.times(ec10bonus);
   multiplier = multiplier
     .timesEffectsOf(

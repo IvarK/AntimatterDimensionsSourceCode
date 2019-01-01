@@ -4,7 +4,7 @@ Vue.component("infinity-challenges-tab", {
       props: {
         challengeId: Number
       },
-      data: function() {
+      data() {
         return {
           isUnlocked: false,
           isRunning: false,
@@ -12,25 +12,22 @@ Vue.component("infinity-challenges-tab", {
         };
       },
       computed: {
-        fullId: function() {
-          return `postc${this.challengeId}`;
+        challenge() {
+          return InfinityChallenge(this.challengeId);
         },
-        details: function() {
-          return infinityChallengeDetails[this.challengeId];
+        config() {
+          return this.challenge.config;
         },
-        name: function() {
+        name() {
           return `IC${this.challengeId}`;
         }
       },
       methods: {
         update() {
-          const id = this.fullId;
-          this.isUnlocked = player.postChallUnlocked >= this.challengeId;
-          this.isRunning = player.currentChallenge === id;
-          this.isCompleted = player.challenges.includes(id);
-        },
-        start() {
-          startChallenge(this.fullId, this.details.goal);
+          const challenge = this.challenge;
+          this.isUnlocked = challenge.isUnlocked;
+          this.isRunning = challenge.isRunning;
+          this.isCompleted = challenge.isCompleted;
         }
       },
       template:
@@ -40,38 +37,38 @@ Vue.component("infinity-challenges-tab", {
           :isRunning="isRunning"
           :isCompleted="isCompleted"
           class="c-challenge-box--infinity"
-          @start="start"
+          @start="challenge.start()"
         >
-          <span slot="top">{{details.description}}</span>
-          <template slot="bottom">
-            <span>Goal: {{shortenCosts(details.goal)}}</span>
-            <span>Reward: {{details.reward}}</span>
+          <template slot="top">
+            <description-display :config="config" />
+            <effect-display v-if="isRunning" :config="config" />
           </template>
+          <div slot="bottom" class="l-challenge-box__bottom--infinity">
+            <span>Goal: {{shorten(config.goal, 0, 0)}} antimatter</span>
+            <span>Reward: <description-display :config="config.reward" /></span>
+            <effect-display v-if="isCompleted" :config="config.reward" />
+          </div>
         </challenge-box>`
     }
   },
-  data: function(){
+  data() {
     return {
-      hasChallengesToUnlock: false,
-      nextAt: new Decimal(0)
+      postChallUnlocked: 0
     };
   },
   computed: {
-    nextAtDisplay: function() {
-      return this.hasChallengesToUnlock ?
-        `Next challenge unlocks at ${this.shortenCosts(this.nextAt)} antimatter.` :
+    nextAtDisplay() {
+      const next = nextAt[this.postChallUnlocked];
+      return next !== undefined ?
+        `Next challenge unlocks at ${this.shorten(next, 0, 0)} antimatter.` :
         "All Infinity Challenges unlocked";
     }
   },
   methods: {
     update() {
-      const hasChallengesToUnlock = nextAt[player.postChallUnlocked] !== undefined;
-      this.hasChallengesToUnlock = hasChallengesToUnlock;
-      if (hasChallengesToUnlock) {
-        this.nextAt.copyFrom(nextAt[player.postChallUnlocked]);
-      }
+      this.postChallUnlocked = player.postChallUnlocked;
     },
-    isChallengeVisible: function(id) {
+    isChallengeVisible(id) {
       return player.postChallUnlocked >= id;
     }
   },
@@ -83,47 +80,3 @@ Vue.component("infinity-challenges-tab", {
       </challenge-grid>
     </div>`
 });
-
-const infinityChallengeDetails = [
-  null,
-  {
-    description: "All previous challenges (except tickspeed challenge and automatic big crunch challenge) at once.",
-    goal: new Decimal('1e850'),
-    reward: "1.3x on all Infinity Dimensions for each Infinity Challenge completed"
-  },
-  {
-    description: "Automatically sacrifice every 8 ticks once you have an 8th Dimension.",
-    goal: new Decimal('1e10500'),
-    reward: "Sacrifice autobuyer and more powerful sacrifice"
-  },
-  {
-    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
-    goal: new Decimal('1e5000'),
-    reward: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies"
-  },
-  {
-    description: "Only latest bought dimension production is normal, all other dimensions produce less.",
-    goal: new Decimal('1e13000'),
-    reward: "All normal dimension multipliers become multiplier^1.05"
-  },
-  {
-    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. When buying dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.",
-    goal: new Decimal('1e11111'),
-    reward: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1"
-  },
-  {
-    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
-    goal: new Decimal('2e22222'),
-    reward: "Tickspeed affects Infinity Dimensions with reduced effect"
-  },
-  {
-    description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x 🡆 10x",
-    goal: new Decimal('1e10000'),
-    reward: "Dimension Boost multiplier 2.5x 🡆 4x"
-  },
-  {
-    description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",
-    goal: new Decimal('1e27000'),
-    reward: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers."
-  },
-];

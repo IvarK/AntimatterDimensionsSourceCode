@@ -132,9 +132,6 @@ function toggleAllInfDims() {
   }
 }
 
-var infDimPow = 1
-
-
 class InfinityDimensionState {
   constructor(tier) {
     this._props = player[`infinityDimension${tier}`];
@@ -229,12 +226,9 @@ class InfinityDimensionState {
     if (EternityChallenge(7).isRunning) {
       production = production.dividedBy(player.tickspeed.dividedBy(1000));
     }
-    if (InfinityChallenge(6).isCompleted) {
-      let tick = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
-      tick = new Decimal(1).dividedBy(tick);
-      production = production.times(tick.times(1000).pow(0.0005))
-    }
-    return production.times(this.multiplier)
+    return production
+      .timesEffectOf(InfinityChallenge(6).reward)
+      .times(this.multiplier);
   }
 
   get multiplier() {
@@ -246,7 +240,6 @@ class InfinityDimensionState {
       return new Decimal(1);
     }
     let mult = this.power
-      .times(infDimPow)
       .times(kongAllDimMult)
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
@@ -255,6 +248,7 @@ class InfinityDimensionState {
         TimeStudy(82),
         TimeStudy(92),
         TimeStudy(162),
+        InfinityChallenge(1),
         tier === 1 ? EternityChallenge(2).reward : null,
         EternityChallenge(4).reward,
         EternityChallenge(9).reward,

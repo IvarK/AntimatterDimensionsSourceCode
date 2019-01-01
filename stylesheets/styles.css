@@ -2998,6 +2998,14 @@ screen and (max-width: 480px) {
   flex-grow: 1;
 }
 
+.l-challenge-box__bottom--infinity {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 5.5rem;
+}
+
 /*#endregion l-challenge-box*/
 
 /*#region o-challenge-btn*/

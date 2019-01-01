@@ -97,7 +97,6 @@ function importSave(save_data) {
     }
     hardReset();
     saved = 0;
-    infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
     ec10bonus = new Decimal(1);
@@ -161,7 +160,6 @@ function hardReset() {
   if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
   else set_save('dimensionSave', currentSave, defaultStart);
   player = defaultStart;
-  infDimPow = 1;
   save_game();
   load_game();
   Tab.dimensions.normal.show();

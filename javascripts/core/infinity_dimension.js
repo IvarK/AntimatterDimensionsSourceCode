@@ -248,7 +248,7 @@ class InfinityDimensionState {
         TimeStudy(82),
         TimeStudy(92),
         TimeStudy(162),
-        InfinityChallenge(1),
+        InfinityChallenge(1).reward,
         tier === 1 ? EternityChallenge(2).reward : null,
         EternityChallenge(4).reward,
         EternityChallenge(9).reward,

@@ -647,6 +647,7 @@ setInterval(function() {
 
 // TODO: remove before release
 (function() {
+  if (isDevEnvironment()) return;
   let commit;
   setInterval(() => {
     let url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";

@@ -662,7 +662,29 @@ setInterval(function() {
             //like forced news bar with message running over and over
         }
     })
-}, 60000)
+}, 60000);
+
+// TODO: remove before release
+(function() {
+  let commit;
+  setInterval(() => {
+    let url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
+    let headers = new Headers();
+    // Yes, this is my GitHub API key for reading private repo details
+    headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);
+
+    fetch(url, { method: "GET", headers: headers })
+      .then(response => response.json())
+      .then(json => {
+        if (commit === undefined) {
+          commit = json.sha;
+          return;
+        }
+        if (commit === json.sha) return;
+        Modal.message.show("Refresh the page pls, I've added new bugs");
+      });
+  }, 60000);
+}());
 
 setInterval(function() {
     kong.submitStats('Log10 of total antimatter', player.totalmoney.e);

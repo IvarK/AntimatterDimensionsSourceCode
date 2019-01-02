@@ -638,7 +638,7 @@ setInterval(function() {
         //like this:
         if (data.version > player.version) {
             player.version = data.version
-            Modal.message.show(data.message);
+            Modal.message.show(data.message, () => location.reload());
             //or some more resilient method
             //like forced news bar with message running over and over
         }
@@ -663,7 +663,7 @@ setInterval(function() {
           return;
         }
         if (commit === json.sha) return;
-        Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`);
+        Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`, () => location.reload());
       });
   }, 60000);
 }());

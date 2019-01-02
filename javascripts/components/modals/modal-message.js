@@ -1,4 +1,10 @@
 Vue.component('modal-message', {
+  methods: {
+    handleClick() {
+      safeCall(this.$viewModel.modal.callback);
+      this.emitClose();
+    }
+  },
   template:
     `<div class="c-modal-message l-modal-content--centered">
       <div
@@ -7,7 +13,7 @@ Vue.component('modal-message', {
       />
       <primary-button
         class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="emitClose"
+        @click="handleClick"
       >Okay</primary-button>
     </div>`
 });

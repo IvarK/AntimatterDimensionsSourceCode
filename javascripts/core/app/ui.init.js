@@ -3,7 +3,8 @@ let ui = {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: String.empty
+      message: String.empty,
+      callback: undefined
     },
     tabs: {
       current: undefined,

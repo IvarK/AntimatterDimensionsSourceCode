@@ -638,7 +638,7 @@ setInterval(function() {
         //like this:
         if (data.version > player.version) {
             player.version = data.version
-            Modal.message.show(data.message, () => location.reload());
+            Modal.message.show(data.message, updateRefresh);
             //or some more resilient method
             //like forced news bar with message running over and over
         }
@@ -663,10 +663,18 @@ setInterval(function() {
           return;
         }
         if (commit === json.sha) return;
-        Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`, () => location.reload());
+        // setTimeout so GH Pages get rebuilt
+        setTimeout(() => {
+          Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`, updateRefresh);
+        }, 30000)
       });
   }, 60000);
 }());
+
+function updateRefresh() {
+  save_game(false, true);
+  location.reload(true);
+}
 
 setInterval(function() {
     kong.submitStats('Log10 of total antimatter', player.totalmoney.e);

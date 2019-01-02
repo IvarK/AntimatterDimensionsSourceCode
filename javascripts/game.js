@@ -647,7 +647,7 @@ setInterval(function() {
 
 // TODO: remove before release
 (function() {
-  if (isDevEnvironment()) return;
+  if (isLocalEnvironment()) return;
   let commit;
   setInterval(() => {
     let url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
@@ -663,7 +663,7 @@ setInterval(function() {
           return;
         }
         if (commit === json.sha) return;
-        Modal.message.show("Refresh the page pls, I've added new bugs");
+        Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`);
       });
   }, 60000);
 }());

@@ -333,6 +333,7 @@
 }
 
 .o-time-study--unavailable:hover {
+  animation: none;
   color: #1d1d1d;
   background: #660000;
 }

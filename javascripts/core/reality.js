@@ -106,8 +106,6 @@ function reality(force, reset, auto) {
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break = player.reality.upg.includes(10) ? player.break : false;
-    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
-    player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
@@ -180,6 +178,8 @@ function reality(force, reset, auto) {
       Perk(52)
     ).toDecimal();
 
+    resetInfinityRuns();
+    resetEternityRuns();
     fullResetInfDimensions();
     fullResetTimeDimensions();
     resetReplicanti();
@@ -196,9 +196,6 @@ function reality(force, reset, auto) {
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     resetInfDimensions();
-    updateLastTenRuns();
-    updateLastTenEternities();
-    updateLastTenRealities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
     resetTimeDimensions();

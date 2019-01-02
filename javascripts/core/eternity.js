@@ -98,7 +98,6 @@ function eternity(force, auto) {
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break= player.eternities >= 2 ? player.break : false;
-    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease= player.eternities >= 20 ? player.tickSpeedMultDecrease : 10;
@@ -130,6 +129,7 @@ function eternity(force, auto) {
 
     player.dilation.active = false;
 
+    resetInfinityRuns();
     fullResetInfDimensions();
     eternityResetReplicanti();
     resetChallengeStuff();
@@ -147,8 +147,6 @@ function eternity(force, auto) {
     }
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateLastTenRuns();
-    updateLastTenEternities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
     resetTimeDimensions();

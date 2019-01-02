@@ -82,9 +82,6 @@ function onLoad() {
   }
 
   transformSaveToDecimal();
-  updateLastTenRuns()
-  updateLastTenEternities()
-  updateLastTenRealities()
   clearOldAchieves()
 
   if (player.version < 9 ) {
@@ -179,9 +176,6 @@ function onLoad() {
         for (var i=0; i<8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
-        updateLastTenRuns();
-        updateLastTenEternities();
-        updateLastTenRealities();
         convertAutobuyerMode();
     }
 

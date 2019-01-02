@@ -18,7 +18,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.partInfinitied = 0;
     player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
     player.tickspeedMultiplier = new Decimal(10);
-    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease = player.eternities >= 20 ? player.tickSpeedMultDecrease : 10;
@@ -49,6 +48,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.dead = true;
 
     player.dilation.active = false;
+    resetInfinityRuns();
     fullResetInfDimensions();
     eternityResetReplicanti();
     resetChallengeStuff();
@@ -57,8 +57,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.replicanti.galaxies = 0;
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateLastTenRuns();
-    updateLastTenEternities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
     resetTimeDimensions();

@@ -17,6 +17,24 @@ class Lazy {
 
 const GameCache = {
   worstChallengeTime: new Lazy(() => Math.max(player.challengeTimes.max(), 100)),
+
+  bestRunIPPM: new Lazy(() => {
+    const bestRunIppm = player.lastTenRuns
+      .map(run => ratePerMinute(run[1], run[0]))
+      .reduce(Decimal.maxReducer);
+
+    if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
+    if (bestRunIppm.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
+    return bestRunIppm;
+  }),
+
+  averageEPPerRun: new Lazy(() => {
+    return player.lastTenEternities
+      .map(run => run[1])
+      .reduce(Decimal.sumReducer)
+      .dividedBy(player.lastTenEternities.length);
+  }),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

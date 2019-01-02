@@ -378,30 +378,16 @@ function fromValue(value) {
   return Decimal.fromString(value)
 }
 
-var bestRunIppm = new Decimal(0)
-function updateLastTenRuns() {
-  bestRunIppm = player.lastTenRuns
-    .map(function(run) { return runRatePerMinute(run) })
-    .reduce(Decimal.maxReducer);
-
-  if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
-  if (bestRunIppm.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
-}
-
-function runRatePerMinute(run) {
-    return ratePerMinute(run[1], run[0]);
-}
-
 function ratePerMinute(amount, time) {
     return Decimal.divide(amount, time / (60 * 1000));
 }
 
 function averageRun(runs) {
     let totalTime = runs
-        .map(function(run) { return run[0] })
+        .map(run => run[0])
         .reduce(Number.sumReducer);
     let totalAmount = runs
-        .map(function(run) { return run[1] })
+        .map(run => run[1])
         .reduce(Decimal.sumReducer);
     return [
         totalTime / runs.length,
@@ -409,36 +395,31 @@ function averageRun(runs) {
     ];
 }
 
-var averageEp = new Decimal(0)
-function updateLastTenEternities() {
-    averageEp = player.lastTenEternities
-      .map(function(run) { return run[1] })
-      .reduce(Decimal.sumReducer)
-      .dividedBy(player.lastTenEternities.length);
+function addInfinityTime(time, realTime, ip) {
+  player.lastTenRuns.pop();
+  player.lastTenRuns.unshift([time, ip, realTime]);
+  GameCache.bestRunIPPM.invalidate();
+}
+
+function resetInfinityRuns() {
+  player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  GameCache.bestRunIPPM.invalidate();
 }
 
 function addEternityTime(time, realTime, ep) {
-    player.lastTenEternities.pop();
-    player.lastTenEternities.unshift([time, ep, realTime]);
+  player.lastTenEternities.pop();
+  player.lastTenEternities.unshift([time, ep, realTime]);
+  GameCache.averageEPPerRun.invalidate();
 }
 
-var averageRm = new Decimal(0)
-function updateLastTenRealities() {
-  averageRm = player.lastTenRealities
-    .map(function(run) { return run[1] })
-    .reduce(Decimal.sumReducer)
-    .dividedBy(player.lastTenRealities.length);
+function resetEternityRuns() {
+  player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  GameCache.averageEPPerRun.invalidate();
 }
 
 function addRealityTime(time, realTime, rm, level) {
-    player.lastTenRealities.pop();
-    player.lastTenRealities.unshift([time, rm, level, realTime]);
-}
-
-
-function addTime(time, realTime, ip) {
-    player.lastTenRuns.pop();
-    player.lastTenRuns.unshift([time, ip, realTime]);
+  player.lastTenRealities.pop();
+  player.lastTenRealities.unshift([time, rm, level, realTime]);
 }
 
 var infchallengeTimes = 999999999
@@ -940,7 +921,7 @@ function gameLoop(diff) {
       }
     }
 
-    player.infinityPoints = player.infinityPoints.plus(bestRunIppm.times(player.offlineProd/100).times(diff/60000))
+    player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 

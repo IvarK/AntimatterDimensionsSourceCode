@@ -213,9 +213,6 @@ dev.updateTestSave = function() {
         for (var i=0; i<8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
-        updateLastTenRuns();
-        updateLastTenEternities();
-        updateLastTenRealities();
     }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;

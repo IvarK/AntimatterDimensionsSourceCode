@@ -36,7 +36,7 @@ function bigCrunchReset() {
     }
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-    addTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
+    addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
     if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
@@ -99,8 +99,6 @@ function bigCrunchReset() {
     if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
-
-    updateLastTenRuns();
 }
 
 function secondSoftReset() {

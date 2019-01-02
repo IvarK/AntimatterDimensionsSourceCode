@@ -144,7 +144,7 @@ const breakInfinityUpgradeGridSetup = () => [
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
       formatComplexEffect: function(formatter) {
-        return `Currently: ${formatter.shortenMoney(bestRunIppm.times(player.offlineProd / 100))} IP/min`;
+        return `Currently: ${formatter.shortenMoney(Player.bestRunIPPM.times(player.offlineProd / 100))} IP/min`;
       }
     })
   ]

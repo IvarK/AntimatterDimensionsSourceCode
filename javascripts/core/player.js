@@ -446,5 +446,11 @@ const Player = {
       default:
         return basePerSecond;
     }
+  },
+  get bestRunIPPM() {
+    return GameCache.bestRunIPPM.value;
+  },
+  get averageEPPerRun() {
+    return GameCache.averageEPPerRun.value;
   }
 };

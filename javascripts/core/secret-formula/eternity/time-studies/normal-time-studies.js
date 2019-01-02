@@ -302,7 +302,7 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "Galaxies are more effective based on your time shards",
     effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
     cap: 1.1,
-    formatEffect: value => "+" + formatPercents(value - 1, 4)
+    formatEffect: value => "+" + formatPercents(value - 1, 3)
   },
   {
     id: 213,
@@ -382,14 +382,15 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 231,
     cost: 500,
     description: "Dimension Boosts are more effective based on their amount",
-    effect: () => Decimal.pow(player.resets, 0.3).clampMin(1)
+    effect: () => Decimal.pow(player.resets, 0.3).clampMin(1),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 232,
     cost: 500,
     description: "Galaxies are more effective based on Antimatter Galaxies",
     effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
-    formatEffect: value => "+" + formatPercents(value - 1, 4)
+    formatEffect: value => "+" + formatPercents(value - 1, 3)
   },
   {
     id: 233,

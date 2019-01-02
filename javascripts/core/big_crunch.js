@@ -100,7 +100,6 @@ function bigCrunchReset() {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
 
-    updateChallengeTimes();
     updateLastTenRuns();
 }
 

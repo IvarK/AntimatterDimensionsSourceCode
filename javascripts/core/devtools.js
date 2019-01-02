@@ -216,7 +216,6 @@ dev.updateTestSave = function() {
         updateLastTenRuns();
         updateLastTenEternities();
         updateLastTenRealities();
-        updateChallengeTimes();
     }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;

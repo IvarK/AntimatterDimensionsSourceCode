@@ -28,7 +28,7 @@ GameDatabase.infinity.breakUpgrades = {
   slowestChallengeMult: {
     id: "challengeMult",
     cost: 1e7,
-    effect: () => Decimal.max(10 * 3000 / worstChallengeTime, 1)
+    effect: () => Decimal.max(50 / Time.worstChallenge.totalMinutes, 1)
   },
   infinitiedGen: {
     id: "infinitiedGeneration",

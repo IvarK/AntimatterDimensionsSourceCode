@@ -196,7 +196,6 @@ function reality(force, reset, auto) {
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     resetInfDimensions();
-    updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
     updateLastTenRealities();

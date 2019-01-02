@@ -27,15 +27,6 @@ function hideLegacyTabs(tabName) {
   }
 }
 
-var worstChallengeTime = 1
-
-function updateWorstChallengeTime() {
-    worstChallengeTime = 1
-    for (var i=0; i<10; i++) {
-        if (player.challengeTimes[i]/100 > worstChallengeTime) worstChallengeTime = player.challengeTimes[i]/100
-    }
-}
-
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
@@ -385,10 +376,6 @@ function fromValue(value) {
   value = value.replace(',','')
   if (value.split("e")[0] === "") return Decimal.fromMantissaExponent(Math.pow(10,parseFloat(value.split("e")[1])%1), parseInt(value.split("e")[1]))
   return Decimal.fromString(value)
-}
-
-function updateChallengeTimes() {
-    updateWorstChallengeTime();
 }
 
 var bestRunIppm = new Decimal(0)
@@ -1452,7 +1439,6 @@ function init() {
     };
     Tab.dimensions.normal.show();
     load_game();
-    updateChallengeTimes()
     kong.init();
     TLN.append_line_numbers("automator") // Automator line numbers
 

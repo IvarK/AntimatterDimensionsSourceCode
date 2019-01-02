@@ -147,7 +147,6 @@ function eternity(force, auto) {
     }
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
     IPminpeak = new Decimal(0);

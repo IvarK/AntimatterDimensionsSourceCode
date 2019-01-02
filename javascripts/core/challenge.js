@@ -26,6 +26,7 @@ function askChallengeConfirmation(challenge) {
 function setChallengeTime(id, time) {
     // Use splice so Vue could track changes
     player.challengeTimes.splice(id, 1, time);
+    GameCache.worstChallengeTime.invalidate();
 }
 
 function setInfChallengeTime(id, time) {

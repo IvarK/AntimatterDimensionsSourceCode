@@ -212,7 +212,7 @@ const newsArray = [
   ["Keep up the quick pace!", "c9", () => Marathon > 1200],
   ["One day you will stop your incessant grind.", "c10", () => player.eternities > 50000],
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
-  ["Are you serious?", "c12", () => worstChallengeTime <= 10],
+  ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],
   ["The amazing speedster", "c13", () => infchallengeTimes <= 80],
 //luck
   ["This news message is 1000x rarer than all the others.", "l1", () => Math.random() < 0.001],

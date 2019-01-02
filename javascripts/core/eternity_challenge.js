@@ -57,7 +57,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.replicanti.galaxies = 0;
     resetInfinityPointsOnEternity();
     resetInfDimensions();
-    updateChallengeTimes();
     updateLastTenRuns();
     updateLastTenEternities();
     IPminpeak = new Decimal(0);

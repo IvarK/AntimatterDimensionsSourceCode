@@ -182,7 +182,6 @@ function onLoad() {
         updateLastTenRuns();
         updateLastTenEternities();
         updateLastTenRealities();
-        updateChallengeTimes();
         convertAutobuyerMode();
     }
 
@@ -198,7 +197,6 @@ function onLoad() {
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
-  updateChallengeTimes();
   resizeCanvas();
   checkForEndMe();
   generateGlyphTable();
@@ -207,6 +205,7 @@ function onLoad() {
   updateAutomatorRows()
   drawPerkNetwork()
   Notation.set(player.options.notation);
+  GameCache.invalidate();
 
   $(".wormhole-upgrades").hide()
   if (player.wormhole[0].unlocked) {

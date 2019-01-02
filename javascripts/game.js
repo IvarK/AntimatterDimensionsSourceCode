@@ -203,33 +203,36 @@ function gainedInfinityPoints() {
       Achievement(103),
       TimeStudy(111)
     );
-    let ret = player.break ? Decimal.pow(10, player.money.e / div - 0.75) : new Decimal(308 / div);
-    if (player.celestials.effarig.run) return ret.times(totalIPMult()).pow(0.6).floor()
-    return ret.times(totalIPMult()).floor()
+    let ip = player.break ?
+      Decimal.pow(10, player.money.e / div - 0.75) :
+      new Decimal(308 / div);
+    ip = ip.times(totalIPMult());
+    if (Effarig.isRunning) {
+        ip = ip.pow(0.6);
+    }
+    return ip.floor();
 }
 
 function gainedEternityPoints() {
-  var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+  const ip = player.infinityPoints.plus(gainedInfinityPoints());
+  let ep = Decimal.pow(5, ip.e / 308 - 0.7)
+    .times(player.epmult)
+    .times(kongEPMult)
+    .timesEffectsOf(
+      TimeStudy(61),
+      TimeStudy(122),
+      TimeStudy(121),
+      TimeStudy(123),
+      GlyphEffect.epMult
+    );
 
-  const hasPerk72 = player.reality.perks.includes(72);
-  const hasPerk73 = player.reality.perks.includes(73);
-  ret = ret.timesEffectsOf(
-    TimeStudy(61),
-    TimeStudy(122),
-    hasPerk72 ? null : TimeStudy(121),
-    hasPerk73 ? null : TimeStudy(123)
-  );
-  if (hasPerk72) {
-    ret = ret.times(50);
+  if (player.reality.upg.includes(12)) {
+      ep = ep.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
   }
-  if (hasPerk73) {
-    ret = ret.times(Math.sqrt(1.39 * (player.thisEternity + 15 * 60 * 1000) / 1000));
+  if (Effarig.isRunning) {
+    ep = ep.pow(0.6);
   }
-  ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("timeeternity")));
-
-  if (player.reality.upg.includes(12)) ret = ret.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
-  if (player.celestials.effarig.run) return ret.pow(0.6).floor()
-  return ret.floor()
+  return ep.floor();
 }
 
 function gainedRealityMachines() {

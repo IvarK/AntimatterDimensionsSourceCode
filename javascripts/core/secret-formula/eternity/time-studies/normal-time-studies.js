@@ -172,8 +172,12 @@ GameDatabase.eternity.timeStudies.normal = [
     description: () => Perk(72).isBought ?
       "You gain 50x more EP" :
       "The worse your average EP/min is, the more EP you get",
-    effect: () => (253 - averageEp.dividedBy(player.epmult.times(10)).clamp(3, 248)) / 5,
-    formatEffect: value => Perk(72).isBought ? undefined : formatX(value, 0, 0)
+    effect: () => Perk(72).isBought ?
+      50 :
+      (253 - averageEp.dividedBy(player.epmult.times(10)).clamp(3, 248)) / 5,
+    formatEffect: value => Perk(72).isBought ?
+      undefined :
+      formatX(value, 0, 0)
   },
   {
     id: 122,

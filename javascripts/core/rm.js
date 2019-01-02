@@ -888,5 +888,8 @@ const GlyphEffect = {
   }),
   ipMult: new GlyphEffectState("infinityipgain", {
     adjustApply: value => Decimal.max(1, value)
+  }),
+  epMult: new GlyphEffectState("timeeternity", {
+    adjustApply: value => Decimal.max(1, value)
   })
 };

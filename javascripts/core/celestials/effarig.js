@@ -91,5 +91,8 @@ var Effarig = {
   },
   nextQuote() {
     if (player.celestials.effarig.quoteIdx < 4 + player.celestials.effarig.unlocks.length) player.celestials.effarig.quoteIdx++
+  },
+  get isRunning() {
+    return player.celestials.effarig.run;
   }
-}
+};

@@ -388,7 +388,8 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 232,
     cost: 500,
     description: "Galaxies are more effective based on Antimatter Galaxies",
-    effect: () => Math.pow(1 + player.galaxies / 1000, 0.2)
+    effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
+    formatEffect: value => "+" + formatPercents(value - 1, 4)
   },
   {
     id: 233,

@@ -78,7 +78,7 @@ var Effarig = {
     player.celestials.effarig.rmStore = amount
   },
   get fill() {
-    return Math.log10(this.rmStore) / 24
+    return Math.min(Math.log10(this.rmStore) / 24, 1)
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)

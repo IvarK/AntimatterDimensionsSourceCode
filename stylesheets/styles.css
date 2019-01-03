@@ -4416,6 +4416,12 @@ screen and (max-width: 480px) {
   right: .5rem;
 }
 
+.c-modal__close-btn--tiny {
+  transform: scale(0.5);
+  top: -.5rem;
+  right: -.5rem;
+}
+
 /*#region themes*/
 
 /*#region t-dark t-dark-metro*/

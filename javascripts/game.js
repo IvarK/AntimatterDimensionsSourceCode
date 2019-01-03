@@ -665,7 +665,7 @@ setInterval(function() {
         if (commit === json.sha) return;
         // setTimeout so GH Pages get rebuilt
         setTimeout(() => {
-          Modal.message.show(`Refresh the page pls, there's some new stuff: ${json.commit.message}`, updateRefresh);
+          Modal.message.show(`Refresh the page (game will be saved), there's some new stuff: ${json.commit.message}`, updateRefresh, true);
         }, 30000)
       });
   }, 60000);

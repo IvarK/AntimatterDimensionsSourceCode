@@ -4,7 +4,8 @@ let ui = {
       current: undefined,
       cloudConflicts: [],
       message: String.empty,
-      callback: undefined
+      callback: undefined,
+      closeButton: false
     },
     tabs: {
       current: undefined,

@@ -29,6 +29,7 @@ Vue.component("dilation-time-study", {
     }
     if (this.id === 6) {
       this.requirement = "Requirement: 1e4000 EP";
+      this.showRequirement = true;
     }
   },
   methods: {
@@ -37,9 +38,6 @@ Vue.component("dilation-time-study", {
       this.showCost = id !== 6 || player.realities === 0;
       if (id === 1) {
         this.showRequirement = !this.study.isBought && !Perk(13).isBought;
-      }
-      if (id === 6) {
-        this.showRequirement = player.realities === 0;
       }
     }
   },

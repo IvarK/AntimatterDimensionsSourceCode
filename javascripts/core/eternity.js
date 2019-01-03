@@ -204,7 +204,7 @@ function eternity(force, auto) {
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
     }
 
-    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5)) {
+    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5) && player.infinityPoints.gt(Number.MAX_VALUE)) {
       player.celestials.teresa.unlocks.push(5);
     }
   

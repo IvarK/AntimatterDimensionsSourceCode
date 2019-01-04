@@ -121,7 +121,7 @@ Array.prototype.first = function(predicate) {
 };
 
 /**
- * @param {function} predicate
+ * @param {function?} predicate
  */
 Array.prototype.last = function(predicate) {
   if (predicate === undefined) {

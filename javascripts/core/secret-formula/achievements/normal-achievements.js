@@ -1,4 +1,4 @@
-GameDatabase.achievements = [
+GameDatabase.achievements.normal = [
   {
     id: 11,
     name: "You gotta start somewhere",

@@ -379,7 +379,7 @@ class AchievementState extends GameMechanicState {
 }
 
 AchievementState.all = mapGameData(
-  GameDatabase.achievements,
+  GameDatabase.achievements.normal,
   data => new AchievementState(data)
 );
 
@@ -389,4 +389,28 @@ AchievementState.all = mapGameData(
  */
 function Achievement(id) {
   return AchievementState.all[id];
+}
+
+class SecretAchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = "s" + this.id;
+  }
+
+  get isUnlocked() {
+    return player.achievements.includes(this._fullId);
+  }
+}
+
+SecretAchievementState.all = mapGameData(
+  GameDatabase.achievements.secret,
+  data => new SecretAchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementState}
+ */
+function SecretAchievement(id) {
+  return SecretAchievementState.all[id];
 }

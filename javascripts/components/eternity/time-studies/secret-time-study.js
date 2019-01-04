@@ -5,7 +5,7 @@ Vue.component("secret-time-study", {
   },
   data: function() {
     return {
-      isUnlocked: player.achievements.includes("s21")
+      isUnlocked: SecretAchievement(21).isUnlocked
     };
   },
   computed: {
@@ -48,7 +48,7 @@ Vue.component("secret-time-study-connection", {
   },
   data: function() {
     return {
-      isUnlocked: player.achievements.includes("s21")
+      isUnlocked: SecretAchievement(21).isUnlocked
     };
   },
   computed: {
@@ -63,7 +63,7 @@ Vue.component("secret-time-study-connection", {
   },
   created() {
     this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, () => {
-      this.isUnlocked = player.achievements.includes("s21");
+      this.isUnlocked = SecretAchievement(21).isUnlocked;
     });
   },
   methods: {

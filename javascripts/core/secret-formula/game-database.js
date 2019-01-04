@@ -1,4 +1,5 @@
 const GameDatabase = {
+  achievements: {},
   challenges: {},
   infinity: {},
   eternity: {

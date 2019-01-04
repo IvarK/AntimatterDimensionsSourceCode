@@ -853,7 +853,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5)) {
+  if (player.celestials.teresa.run) {
     factor = teresaMultiplier(new Decimal(factor)).toNumber();
   }
     
@@ -929,7 +929,7 @@ function gameLoop(diff, wormholeSpeedup) {
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
         if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
-        else if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(4)) player.infinityPoints = player.infinityPoints; // idk pls don't hurt me Razen
+        else if (player.celestials.teresa.run && !Teresa.has(4)) player.infinityPoints = player.infinityPoints; // idk pls don't hurt me Razen
         else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }

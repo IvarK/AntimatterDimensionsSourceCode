@@ -594,9 +594,11 @@ function drop(ev) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
     
-    // Force a maximum of one glyph in Teresa Reality
-    if (player.celestials.teresa.run) player.celestials.teresa.glyphEquipped = true
-    generateGlyphTable();
+    // Force a maximum of one glyph in Teresa Reality before Eternity
+    if (player.celestials.teresa.run && !Teresa.has(5)) {
+      player.celestials.teresa.glyphEquipped = true
+    }
+    generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
   } else if (!ev.target.className.includes("glyphactive")) {
     var glyph = player.reality.glyphs.active.find(function(glyph) {
       return glyph.id == data

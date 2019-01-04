@@ -28,6 +28,7 @@ function upgradeReplicantiGalaxy() {
 
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
+    maxGal += Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);   // Teresa Infinity bonus RG, is 0 with default cap
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
@@ -73,17 +74,24 @@ function getReplicantiInterval(noMod, interval) {
     if (!interval) {
       interval = player.replicanti.interval;
     }
-    if (TimeStudy(133).isBought || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
+    if (TimeStudy(133).isBought || (player.replicanti.amount.gt(replicantiCap()) || noMod)) interval *= 10
     interval /= Effects.product(
       TimeStudy(62),
       TimeStudy(213)
     );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
-    if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && Achievement(134).isEnabled) interval /= 2
-    if (player.replicanti.amount.gt(Number.MAX_VALUE) && !noMod) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
+    if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
+    if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
     if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
     return interval;
+}
+
+// Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10 OoM past the cap (default is 308, 1.2, Number.MAX_VALUE)
+let scaleLog10 = 308;
+let scaleFactor = 1.2;
+function replicantiCap() {
+  return Teresa.has(4) ? new Decimal(player.infinitied + player.infinitiedBank).pow(100).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {
@@ -105,11 +113,10 @@ function replicantiLoop(diff) {
 
     const isTS192Bought = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isTS192Bought)) {
-        var gained = Decimal.pow(Math.E, current +(diff/100*est/10))
-        if (isTS192Bought) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
-        player.replicanti.amount = Decimal.min(Number.MAX_VALUE, gained)
-        if (isTS192Bought) player.replicanti.amount = gained
-        replicantiTicks = 0
+      let postScale = Math.log10(scaleFactor)/scaleLog10;
+      if (isTS192Bought) player.replicanti.amount = Decimal.pow(Math.E, current +Math.log((diff/100*est/10)*postScale + 1) / postScale)
+      else  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(Math.E, current +(diff/100*est/10)))
+      replicantiTicks = 0
     } else {
         if (interval <= replicantiTicks && player.replicanti.unl) {
             if (player.replicanti.amount.lte(100)) {

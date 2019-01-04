@@ -13,10 +13,11 @@ Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
 Modal.import = new Modal("modal-import");
 Modal.message = new Modal("modal-message");
-Modal.message.show = function(text, callback) {
+Modal.message.show = function(text, callback, closeButton = false) {
     if (!uiInitialized) return;
     ui.view.modal.message = text;
     ui.view.modal.callback = callback;
+    ui.view.modal.closeButton = closeButton;
     ui.view.modal.current = "modal-message";
 };
 

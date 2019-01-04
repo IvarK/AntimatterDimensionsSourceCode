@@ -11,7 +11,7 @@ class DimBoostRequirement {
 
 class DimBoost {
   static get power() {
-    if (player.currentChallenge === "challenge11" || player.currentChallenge === "postc1") {
+    if (Challenge(8).isRunning) {
       return new Decimal(1);
     }
 
@@ -34,7 +34,7 @@ class DimBoost {
   }
 
   static get maxShiftTier() {
-    return player.currentChallenge === "challenge4" ? 6 : 8;
+    return Challenge(10).isRunning ? 6 : 8;
   }
 
   static get isShift() {
@@ -52,7 +52,7 @@ class DimBoost {
     let tier = Math.min(targetResets + 4, this.maxShiftTier);
     let amount = 20;
 
-    if (tier === 6 && player.currentChallenge === "challenge4") {
+    if (tier === 6 && Challenge(10).isRunning) {
       amount += Math.ceil((targetResets - 2) * 20);
     }
     else if (tier === 8) {
@@ -107,7 +107,7 @@ function softReset(bulk) {
 }
 
 function applyChallengeModifiers() {
-    if (player.currentChallenge === "challenge10" || player.currentChallenge === "postc1") {
+    if (Challenge(6).isRunning) {
         player.thirdCost = new Decimal(100);
         player.fourthCost = new Decimal(500);
         player.fifthCost = new Decimal(2500);

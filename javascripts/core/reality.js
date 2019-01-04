@@ -88,7 +88,7 @@ function reality(force, reset, auto) {
     ec10bonus = new Decimal(1);
 
     player.sacrificed = new Decimal(0);
-    player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges = player.reality.upg.includes(10) ? Challenge.allIds : [];
     player.currentChallenge = "";
     player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
     player.infinitied = 0;
@@ -189,8 +189,8 @@ function reality(force, reset, auto) {
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
-        player.challenges.push("challenge1");
+    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+        Challenge(1).complete();
     }
     Autobuyer.tryUnlockAny()
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];

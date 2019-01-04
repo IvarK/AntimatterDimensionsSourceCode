@@ -83,7 +83,10 @@ function eternity(force, auto) {
         player.eternities += tempEterGain
     }
     player.sacrificed = new Decimal(0);
-    player.challenges= (player.eternities >= 2 && Achievement(133).isEnabled) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities >= 2) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges = player.eternities >= 2 ? Challenge.allIds : [];
+    if (Achievement(133).isEnabled) {
+      player.challenges.push(...InfinityChallenge.allIds);
+    }
     player.currentChallenge = "";
     player.infinitied = 0;
     player.bestInfinityTime = 999999999999;
@@ -141,8 +144,8 @@ function eternity(force, auto) {
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
 
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
-      player.challenges.push("challenge1");
+    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+      Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
     resetInfinityPointsOnEternity();

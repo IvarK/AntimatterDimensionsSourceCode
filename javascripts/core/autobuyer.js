@@ -35,13 +35,13 @@ class AutobuyerState {
   }
 
   tryUnlock() {
-    if (this.isUnlocked) return;
-    if (!player.challenges.includes(this.challenge)) return;
-    this.initialize();
+    if (!this.isUnlocked && this.challenge.isCompleted) {
+      this.initialize();
+    }
   }
 
   /**
-   * @returns {string}
+   * @returns {ChallengeState|InfinityChallengeState}
    */
   get challenge() {
     throw "This method should be overridden in inheriting class";
@@ -205,18 +205,7 @@ class DimensionAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    const challenges = [
-      null,
-      "challenge1",
-      "challenge2",
-      "challenge3",
-      "challenge8",
-      "challenge6",
-      "challenge10",
-      "challenge9",
-      "challenge11"
-    ];
-    return challenges[this._tier];
+    return Challenge(this._tier);
   }
 
   /**
@@ -283,7 +272,7 @@ class TickspeedAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return "challenge5";
+    return Challenge(9);
   }
 
   /**
@@ -337,7 +326,7 @@ class DimboostAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return "challenge4";
+    return Challenge(10);
   }
 
   /**
@@ -433,7 +422,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return "challenge12";
+    return Challenge(11);
   }
 
   /**
@@ -510,7 +499,7 @@ class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return "postc2";
+    return InfinityChallenge(2);
   }
 
   /**
@@ -548,7 +537,7 @@ class InfinityAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return "challenge7";
+    return Challenge(12);
   }
 
   /**

@@ -425,27 +425,27 @@ const Player = {
   get totalInfinitied() {
     return Math.max(player.infinitied + player.infinitiedBank, 0);
   },
+  get isInMatterChallenge() {
+    return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
+  },
   get effectiveMatterAmount() {
-    switch (player.currentChallenge) {
-      case "challenge12":
-      case "postc1":
-        return player.matter;
-      case "postc6":
-        return Decimal.pow(player.matter, 20);
+    if (Challenge(11).isRunning) {
+      return player.matter;
+    }
+    if (InfinityChallenge(6).isRunning) {
+      return Decimal.pow(player.matter, 20);
     }
     return new Decimal(0);
   },
   get antimatterPerSecond() {
     const basePerSecond = getDimensionProductionPerSecond(1);
-    switch (player.currentChallenge) {
-      case "challenge3":
-      case "postc1":
-        return basePerSecond.times(player.chall3Pow);
-      case "challenge7":
-        return basePerSecond.plus(getDimensionProductionPerSecond(2));
-      default:
-        return basePerSecond;
+    if (Challenge(3).isRunning) {
+      return basePerSecond.times(player.chall3Pow);
     }
+    if (Challenge(12).isRunning) {
+      return basePerSecond.plus(getDimensionProductionPerSecond(2));
+    }
+    return basePerSecond;
   },
   get bestRunIPPM() {
     return GameCache.bestRunIPPM.value;

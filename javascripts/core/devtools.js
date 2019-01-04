@@ -416,6 +416,11 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 25;
   }
+
+  if (player.options.testVersion === 25) {
+    unfuckChallengeIds();
+    player.options.testVersion = 26;
+  }
 }
 
 // Still WIP

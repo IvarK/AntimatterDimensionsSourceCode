@@ -23,8 +23,8 @@ function onLoad() {
     player.thisEternity = player.totalTimePlayed;
   }
   player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
-  if (player.infinitied > 0 && !player.challenges.includes("challenge1")) {
-    player.challenges.push("challenge1");
+  if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+    Challenge(1).complete();
   }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   Theme.set(player.options.theme);
@@ -177,6 +177,7 @@ function onLoad() {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
         convertAutobuyerMode();
+        unfuckChallengeIds();
     }
 
   if (player.options.newsHidden) {
@@ -249,6 +250,18 @@ function convertAutobuyerMode() {
       tickspeedAutobuyer.mode = AutobuyerMode.BUY_MAX;
     }
   }
+}
+
+function unfuckChallengeIds() {
+  function unfuckChallengeId(id) {
+    if (!id.startsWith("challenge")) return id;
+    const legacyId = parseInt(id.substr(9));
+    const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
+    return Challenge(config.id).fullId;
+  }
+
+  player.currentChallenge = unfuckChallengeId(player.currentChallenge);
+  player.challenges = player.challenges.map(unfuckChallengeId);
 }
 
 function load_cloud_save(saveId, cloudPlayer) {

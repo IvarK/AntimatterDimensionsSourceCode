@@ -3,15 +3,15 @@ function sacrificeReset(auto) {
   if (player.resets < 5) return false;
   if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE)) return false;
   const totalBoost = Sacrifice.totalBoost;
-  if (player.currentChallenge === "challenge11" && (totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))) return false;
+  if (Challenge(8).isRunning && (totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))) return false;
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, "x" + shortenMoney(nextBoost));
   if (nextBoost.gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference");
   player.eightPow = player.eightPow.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(player.firstAmount);
   const isAch118Enabled = Achievement(118).isEnabled;
-  if (player.currentChallenge !== "challenge11") {
-    if (player.currentChallenge === "challenge7" && !isAch118Enabled) clearDimensions(6);
+  if (!Challenge(8).isRunning) {
+    if (Challenge(12).isRunning && !isAch118Enabled) clearDimensions(6);
     else if (!isAch118Enabled) clearDimensions(7);
   } else {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
@@ -55,7 +55,7 @@ class Sacrifice {
       return player.firstAmount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
     }
 
-    if (player.currentChallenge !== "challenge11") {
+    if (!Challenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)
@@ -78,7 +78,7 @@ class Sacrifice {
       return player.sacrificed.pow(scale).clampMin(1);
     }
 
-    if (player.currentChallenge !== "challenge11") {
+    if (!Challenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)

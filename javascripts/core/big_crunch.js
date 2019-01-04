@@ -31,7 +31,7 @@ function bigCrunchReset() {
         setInfChallengeTime(challNumber - 1, player.thisInfinityTime);
     }
     if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
-    if (player.currentChallenge === "challenge5") {
+    if (Challenge(9).isRunning) {
         kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
     }
     let infinityPoints = gainedInfinityPoints();
@@ -120,8 +120,8 @@ function secondSoftReset() {
 function checkBigCrunchAchievements() {
     giveAchievement("To infinity!");
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
-      player.challenges.push("challenge1");
+    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+      Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
     if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
@@ -131,11 +131,11 @@ function checkBigCrunchAchievements() {
     if (player.eightAmount === 0) giveAchievement("You didn't need it anyway");
     if (player.galaxies === 1) giveAchievement("Claustrophobic");
     if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
-    if (player.currentChallenge === "challenge2" && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
-    if (player.currentChallenge === "challenge11" && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
-    if (player.currentChallenge === "challenge5" && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
-    if (player.currentChallenge === "challenge3" && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
-    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && player.currentChallenge === "challenge12") giveAchievement("ERROR 909: Dimension not found");
+    if (Challenge(2).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
+    if (Challenge(8).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
+    if (Challenge(9).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
+    if (Challenge(3).isRunning && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
+    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
     if (InfinityChallenge(5).isRunning && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
     if (player.challenges.length >= 2) giveAchievement("Daredevil");
     if (player.challenges.length === 12) giveAchievement("AntiChallenged");

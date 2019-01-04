@@ -8,25 +8,27 @@ Vue.component('normal-dim-tab', {
   },
   methods: {
     update() {
-      const isC2Running = player.currentChallenge === "challenge2";
-      const isC3Running = player.currentChallenge === "challenge3";
-      const isIC1Running = player.currentChallenge === "postc1";
-      const isChallengePowerVisible = isC2Running || isC3Running || isIC1Running;
+      const isC2Running = Challenge(2).isRunning;
+      const isC3Running = Challenge(3).isRunning;
+      const isChallengePowerVisible = isC2Running || isC3Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
         const c2Power = `${(player.chall2Pow * 100).toFixed(2)}%`;
         const c3Power = `${this.shortenRateOfChange(player.chall3Pow * 100)}%`;
-        if (isIC1Running) {
+        if (isC2Running && isC3Running) {
           this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
         }
-        if (isC2Running) {
+        else if (isC2Running) {
           this.challengePower = `Production: ${c2Power}`;
         }
-        if (isC3Running) {
+        else if (isC3Running) {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      this.isQuickResetAvailable = isQuickResettable(player.currentChallenge);
+      const challenge = Challenge.current();
+      const infinityChallenge = InfinityChallenge.current();
+      this.isQuickResetAvailable = challenge !== undefined && challenge.isQuickResettable ||
+        infinityChallenge !== undefined && infinityChallenge.isQuickResettable;
     },
     quickReset: function() {
       quickReset();

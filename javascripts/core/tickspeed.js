@@ -15,7 +15,7 @@ function getTickSpeedMultiplier() {
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89
-      if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.93;
+      if (Challenge(5).isRunning) baseMultiplier = 0.93;
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
@@ -26,7 +26,7 @@ function getTickSpeedMultiplier() {
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   } else {
       let baseMultiplier = 0.8
-      if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
+      if (Challenge(5).isRunning) baseMultiplier = 0.83
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
@@ -50,10 +50,10 @@ function buyTickSpeed() {
   }
 
   player.money = player.money.minus(player.tickSpeedCost);
-  if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
+  if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
   if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease);
-  if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc1") player.chall2Pow = 0
+  if (Challenge(2).isRunning) player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
@@ -82,13 +82,13 @@ function buyMaxTickSpeed() {
 
   const currentChallenge = player.currentChallenge;
   const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
-  if (currentChallenge === "challenge2" || currentChallenge === "postc1") {
+  if (Challenge(2).isRunning) {
     player.chall2Pow = 0;
   }
-  if (currentChallenge === "challenge5" || currentChallenge === "postc5" || tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2) {
-    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2 || currentChallenge === "postc5")) {
+  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2) {
+    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2 || InfinityChallenge(5).isRunning)) {
       money = money.minus(tickSpeedCost);
-      if (currentChallenge === "challenge5" || currentChallenge === "postc5") {
+      if (Challenge(9).isRunning || InfinityChallenge(5).isRunning) {
         multiplySameCosts(tickSpeedCost);
       }
       tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);

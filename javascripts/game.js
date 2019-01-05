@@ -811,7 +811,10 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
-// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
+// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
+// factorsToConsider is a list of the types of things we want to take into account
+// (for example, the wormhole ignores itself). knownFactors is an object that
+// will override the effect of time glyphs or of the wormhole if it has appropriate values.
 function getGameSpeedupFactor(factorsToConsider, knownFactors) {
   if (factorsToConsider === undefined) {
     factorsToConsider = ['EC12', 'time glyphs', 'wormhole']
@@ -820,8 +823,9 @@ function getGameSpeedupFactor(factorsToConsider, knownFactors) {
     knownFactors = {};
   }
   let factor = 1;
-  // Always consider EC12. Always.
+  // Don't always consider EC12 (the wormhole ignores it, for example).
   if (player.currentEternityChall === "eterc12" && factorsToConsider.includes('EC12')) {
+    // I don't see any reason why we'd want to override EC12, but maybe I should add something here anyway.
     return 1/1000;
   }
   if (factorsToConsider.includes('time glyphs')) {
@@ -1234,8 +1238,7 @@ function simulateTime(seconds, real, fast) {
     //calling it with fast will only simulate it with a max of 50 ticks
     var ticks = seconds * 20;
     var bonusDiff = 0;
-    var playerStart = Object.assign({}, player);
-    let wormholeActivations = 0;
+    var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
     
     // Simulation code with wormhole (should be at most 600 ticks)
@@ -1270,7 +1273,9 @@ function simulateTime(seconds, real, fast) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
-    if (wormholeActivations != 0)  popupString+= " <br>The wormhole activated  "+ wormholeActivations + (wormholeActivations == 1 ? " time." : " times.")
+    for (let i = 0; i < player.wormhole.length; i++) {
+      if (player.wormhole[i].activations > playerStart.wormhole[i].activations)  popupString+= " <br>Wormhole "+(i+1)+" activated  "+ (player.wormhole[i].activations-playerStart.wormhole[i].activations) + (player.wormhole[i].activations-playerStart.wormhole[i].activations == 1 ? " time." : " times.")
+    }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")

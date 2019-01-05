@@ -5,6 +5,18 @@
  * 
  */
 
+ /*
+ How the wormholes work:
+ player.wormholes is a list (currently of length 3), each entry containing info about a wormhole.
+ player.wormholes[i].duration is the amount of time the wormhole is active for.
+ player.wormholes[i].power is the multiplier to time the wormhole gives when active.
+ player.wormholes[i].speed is the amount of time the wormhole is inactive for between activations.
+ player.wormholes[i].phase is the amount of time the wormhole has spent since last state transition,
+ so if it's active, it's the amount of time it's been active for, and if it's inactive,
+ it's the amount of time it's been inactive for.
+player.wormholes[i].activations is the total number of times the wormhole has become active (including offline)
+ */
+
 function updateWormholeUpgrades() {
   for (let i = 0; i < 3; i++) {
     $("#wormholeinterval" + (i+1)).html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[i].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(i))+" RM")
@@ -96,21 +108,22 @@ function updateWormholePhases(wormholeDiff) {
     // This used to always use the period of wormhole[0], now it doesn't,
     // will this cause other bugs?
     player.wormhole[i].phase += incPhases[i];
-    if (player.wormhole[i].phase > player.wormhole[i].speed + player.wormhole[i].duration) {
+    if (player.wormhole[i].phase >= player.wormhole[i].speed + player.wormhole[i].duration) {
+      // One activation for each full cycle.
+      player.wormhole[i].activations += Math.floor(player.wormhole[i].phase / (player.wormhole[i].speed + player.wormhole[i].duration));
       player.wormhole[i].phase %= player.wormhole[i].speed + player.wormhole[i].duration;
     }
     if (player.wormhole[i].active) {
       if (player.wormhole[i].phase >= player.wormhole[i].duration) {
         player.wormhole[i].phase -= player.wormhole[i].duration
         player.wormhole[i].active = false
-        incPhase = 0
         ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
       }
     } else {
       if (player.wormhole[i].phase >= player.wormhole[i].speed) {
         player.wormhole[i].phase -= player.wormhole[i].speed
+        player.wormhole[i].activations++;
         player.wormhole[i].active = true
-        incPhase = 0
         ui.notify.success("Wormhole "+ (i + 1) +" is active!");
       }
     }

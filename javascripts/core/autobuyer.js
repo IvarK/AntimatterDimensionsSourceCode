@@ -585,9 +585,11 @@ class InfinityAutobuyerState extends AutobuyerState {
     this.mode = Object.values(AutoCrunchMode).nextSibling(this.mode);
   }
 
-  tick() {
-    if (!this.canTick()) return;
-    if (!player.money.gte(Number.MAX_VALUE)) return;
+  canActivate() {
+    // These two lines are here so that this function is accurate, and in tick()
+    // so that tick() can return early if needed.
+    if (!this.canTick()) return false;
+    if (!player.money.gte(Number.MAX_VALUE)) return false;
     let proc = !player.break || player.currentChallenge !== "";
     if (!proc) {
       switch (this.mode) {
@@ -602,7 +604,13 @@ class InfinityAutobuyerState extends AutobuyerState {
           break;
       }
     }
-    if (proc) {
+    return proc;
+  }
+
+  tick() {
+    if (!this.canTick()) return;
+    if (!player.money.gte(Number.MAX_VALUE)) return;
+    if (this.canActivate()) {
       autoS = false;
       bigCrunchReset();
     }
@@ -701,8 +709,8 @@ Autobuyer.eternity = {
   toggleMode() {
     this.mode = Object.values(AutoEternityMode).nextSibling(this.mode);
   },
-  tick() {
-    if (!this.isActive) return;
+  canActivate() {
+    if (!this.isActive) return false;
     let proc = false;
     switch (this.mode) {
       case AutoEternityMode.AMOUNT:
@@ -715,7 +723,10 @@ Autobuyer.eternity = {
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));
         break;
     }
-    if (proc) eternity(false, true);
+    return proc;
+  },
+  tick() {
+    if (this.canActivate()) eternity(false, true);
   }
 };
 
@@ -786,8 +797,8 @@ Autobuyer.reality = {
   toggleMode() {
     this.mode = Object.values(AutoRealityMode).nextSibling(this.mode);
   },
-  tick() {
-    if (!this.isActive) return;
+  canActivate() {
+    if (!this.isActive) return false;
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);
     const glyphProc = gainedGlyphLevel() >= this.glyph;
@@ -805,7 +816,10 @@ Autobuyer.reality = {
         proc = rmProc && glyphProc;
         break;
     }
-    if (proc) reality(false, false, true);
+    return proc;
+  },
+  tick() {
+    if (this.canActivate()) reality(false, false, true);
   }
 };
 

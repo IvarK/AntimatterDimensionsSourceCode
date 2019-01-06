@@ -41,7 +41,8 @@ Vue.component('normal-achievement', {
     lockedTooltip() {
       const remainingTime = this.remainingTime;
       if (remainingTime < 60) {
-        return "(Locked: " + remainingTime.toFixed(0) + " seconds)";
+        const floored = Math.floor(remainingTime);
+        return `(Locked: ${floored} ${floored === 1 ? "second" : "seconds"})`;
       }
       else if (remainingTime < 3600) {
         return "(Locked: " + (remainingTime / 60).toFixed(1) + " minutes)";

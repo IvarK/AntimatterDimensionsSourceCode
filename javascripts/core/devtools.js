@@ -51,7 +51,6 @@ dev.fixSave = function() {
     }
 
     saved = 0;
-    infDimPow = 1
     postc8Mult = new Decimal(0)
     mult18 = new Decimal(1)
     ec10bonus = new Decimal(1)
@@ -93,7 +92,6 @@ dev.refundTimeDims = function() {
 dev.refundEPMult = function() {
     player.epmult = new Decimal(1)
     player.epmultCost = new Decimal(500)
-    updateEpMultButton();
 }
 
 dev.refundDilStudies = function() {
@@ -186,7 +184,12 @@ dev.respecPerks = function() {
 
 function isDevEnvironment() {
   const href = window.location.href;
-  return href.split("//")[1].length > 20 || href.includes("127.0.0.1") || href.includes("localhost");
+  return href.split("//")[1].length > 20 || isLocalEnvironment();
+}
+
+function isLocalEnvironment() {
+  const href = window.location.href;
+  return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
 dev.updateTestSave = function() {
@@ -215,10 +218,6 @@ dev.updateTestSave = function() {
         for (var i=0; i<8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
-        updateLastTenRuns();
-        updateLastTenEternities();
-        updateLastTenRealities();
-        updateChallengeTimes();
     }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;
@@ -417,6 +416,11 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 25;
   }
+
+  if (player.options.testVersion === 25) {
+    unfuckChallengeIds();
+    player.options.testVersion = 26;
+  }
 }
 
 // Still WIP
@@ -436,11 +440,13 @@ dev.showProductionBreakdown = function() {
   // Assumes >= 3 galaxies
   let effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
   let AGCount = player.galaxies
-  let RGCount = player.replicanti.galaxies
-  if (player.timestudy.studies.includes(133)) RGCount += player.replicanti.galaxies/2
-  if (player.timestudy.studies.includes(132)) RGCount += player.replicanti.galaxies*0.4
-  if (player.timestudy.studies.includes(225)) RGCount += Math.floor(player.replicanti.amount.e / 1000)
-  if (player.timestudy.studies.includes(226)) RGCount += Math.floor(player.replicanti.gal / 15)
+  let RGCount = player.replicanti.galaxies;
+  RGCount += Effects.sum(
+    TimeStudy(133),
+    TimeStudy(132),
+    TimeStudy(225),
+    TimeStudy(226)
+  );
   RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0)
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;

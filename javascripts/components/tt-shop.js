@@ -38,7 +38,7 @@ Vue.component("tt-shop", {
     },
     containerStyle: function() {
       return {
-        transform: this.minimized ? "translateY(73px)" : "",
+        //transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
       };
     }
@@ -68,8 +68,8 @@ Vue.component("tt-shop", {
     update() {
       this.theoremAmount = player.timestudy.theorem;
       this.shopMinimized = player.timestudy.shopMinimized;
-      this.minimizeAvailable = player.dilation.upgrades.includes(10);
-      this.hasTTAutobuyer = player.reality.perks.includes(5);
+      this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
+      this.hasTTAutobuyer = Perk(5).isBought;
       const budget = this.budget;
       budget.am.copyFrom(player.money);
       budget.ip.copyFrom(player.infinityPoints);
@@ -81,7 +81,7 @@ Vue.component("tt-shop", {
     }
   },
   template:
-    `<div id="TTbuttons" v-if="$viewModel.ttshop">
+    `<div id="TTbuttons">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <button class="timetheorembtn" style="width:130px; white-space:nowrap;" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>

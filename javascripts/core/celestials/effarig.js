@@ -57,8 +57,7 @@ var Effarig = {
     return player.celestials.effarig.unlocks.includes(info.id)
   },
   startRun() {
-    startRealityOver()
-    player.celestials.effarig.run = true
+    player.celestials.effarig.run = startRealityOver();
   },
   buyGlyphLevelPower() {
     let cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )
@@ -79,7 +78,7 @@ var Effarig = {
     player.celestials.effarig.rmStore = amount
   },
   get fill() {
-    return Math.log10(this.rmStore) / 24
+    return Math.min(Math.log10(this.rmStore) / 24, 1)
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
@@ -92,5 +91,8 @@ var Effarig = {
   },
   nextQuote() {
     if (player.celestials.effarig.quoteIdx < 4 + player.celestials.effarig.unlocks.length) player.celestials.effarig.quoteIdx++
+  },
+  get isRunning() {
+    return player.celestials.effarig.run;
   }
-}
+};

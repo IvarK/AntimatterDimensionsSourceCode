@@ -10,6 +10,7 @@ class Tab {
   show() {
     hideLegacyTabs();
     ui.view.tabs.current = this._component;
+    GameUI.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -30,6 +31,7 @@ class Subtab {
   show() {
     this._view.subtab = this._id;
     this._parent.show();
+    GameUI.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -45,6 +47,9 @@ Tab.challenges.normal = new Subtab("Challenges", Tab.challenges, ui.view.tabs.ch
 Tab.challenges.infinity = new Subtab("Infinity Challenges", Tab.challenges, ui.view.tabs.challenges);
 Tab.challenges.eternity = new Subtab("Eternity Challenges", Tab.challenges, ui.view.tabs.challenges);
 Tab.infinity = new Tab("infinity-tab");
+Tab.eternity = new Tab("eternity-tab");
+Tab.eternity.timeStudies = new Subtab("Time studies", Tab.eternity, ui.view.tabs.eternity, true);
+Tab.eternity.dilation = new Subtab("Time dilation", Tab.eternity, ui.view.tabs.eternity);
 Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
@@ -73,10 +78,15 @@ function tryShowtab(tab) {
     Tab.infinity.show();
     return true;
   }
+  if (tab === 'eternitystore') {
+    Tab.eternity.show();
+    return true;
+  }
   if (tab === 'celestials') {
     Tab.celestials.show();
     return true;
   }
   ui.view.tabs.current = undefined;
+  GameUI.dispatch(GameEvent.TAB_CHANGED);
   return false;
 }

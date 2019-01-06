@@ -31,9 +31,4 @@ Notation.set = function (name) {
     if (name === "Cancer") {
         ui.notify.success("😂😂😂");
     }
-    updateLastTenRuns();
-    updateLastTenEternities();
-    updateLastTenRealities();
-    updateDilationUpgradeCosts();
-    updateEpMultButton();
 };

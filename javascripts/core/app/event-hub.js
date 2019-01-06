@@ -32,6 +32,7 @@ EventHub.global = new EventHub();
 
 const GameEvent = {
   UPDATE: "UPDATE",
+  TAB_CHANGED: "TAB_CHANGED",
   ACHIEVEMENT_UNLOCKED: "ACHIEVEMENT_UNLOCKED",
   REALITY: "REALITY"
 };

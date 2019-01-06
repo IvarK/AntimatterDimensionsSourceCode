@@ -19,8 +19,12 @@ Vue.component('game-tab-with-subtabs', {
     }
   },
   methods: {
-    isUnlocked: function(tab) {
+    isUnlocked(tab) {
       return tab !== undefined && (tab.condition === undefined || tab.condition());
+    },
+    handleTabClick(tab) {
+      this.emitInput(tab.id);
+      GameUI.dispatch(GameEvent.TAB_CHANGED);
     }
   },
   template:
@@ -31,7 +35,7 @@ Vue.component('game-tab-with-subtabs', {
           v-for="tab in visibleTabs"
           :key="tab.name"
           class="l-game-tab-with-subtabs__tab-button"
-          @click="emitInput(tab.id)"
+          @click="handleTabClick(tab)"
         >{{ tab.name }}</secondary-tab-button>
       </div>
       <slot name="before-content"/>

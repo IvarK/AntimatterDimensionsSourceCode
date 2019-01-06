@@ -5,5 +5,5 @@ Vue.component("hint-text", {
     }
   },
   template:
-    `<div v-if="isVisible" class="o-hint-text l-hint-text"><slot /></div>`
+    `<div v-show="isVisible" class="o-hint-text l-hint-text"><slot /></div>`
 });

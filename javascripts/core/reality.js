@@ -1,5 +1,5 @@
 function reality(force, reset, auto) {
-    if (!((player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(6) && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
+    if (!((player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
         return;
     }
     if (!glyphSelected && player.reality.perks.includes(0) && !auto) {
@@ -83,13 +83,12 @@ function reality(force, reset, auto) {
     handleCelestialRuns()
 
     //reset global values to avoid a tick of unupdated production
-    infDimPow = 1;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
     ec10bonus = new Decimal(1);
 
     player.sacrificed = new Decimal(0);
-    player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges = player.reality.upg.includes(10) ? Challenge.allIds : [];
     player.currentChallenge = "";
     player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
     player.infinitied = 0;
@@ -107,8 +106,6 @@ function reality(force, reset, auto) {
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
     player.break = player.reality.upg.includes(10) ? player.break : false;
-    player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
-    player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
@@ -175,7 +172,14 @@ function reality(force, reset, auto) {
         2: 0,
         3: 0
     };
+    player.money = Effects.max(
+      10,
+      Perk(51),
+      Perk(52)
+    ).toDecimal();
 
+    resetInfinityRuns();
+    resetEternityRuns();
     fullResetInfDimensions();
     fullResetTimeDimensions();
     resetReplicanti();
@@ -185,38 +189,28 @@ function reality(force, reset, auto) {
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
-        player.challenges.push("challenge1");
+    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+        Challenge(1).complete();
     }
     Autobuyer.tryUnlockAny()
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
     player.reality.upgReqChecks = [true];
     resetInfDimensions();
-    updateChallengeTimes();
-    updateLastTenRuns();
-    updateLastTenEternities();
-    updateLastTenRealities();
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    updateMilestones();
     resetTimeDimensions();
-    showEternityTab('timestudies', true)
     kong.submitStats('Eternities', player.eternities);
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    updateEternityUpgrades();
     resetTickspeed();
-    resetMoney();
     playerInfinityUpgradesOnEternity();
     if (player.eternities <= 1) {
         Tab.dimensions.normal.show();
     }
     Marathon2 = 0;
-    updateTimeStudyButtons();
     generateGlyphTable();
     updateWormholeUpgrades();
     updateAutomatorRows();
     drawPerkNetwork();
-    updateEpMultButton();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
     if (player.realities >= 4) giveAchievement("How does this work?")
@@ -281,8 +275,10 @@ function startRealityOver() {
     if(confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
         glyphSelected = true
         realizationCheck = 1
-        reality(true, true)
+        reality(true, true);
+        return true;
     }
+    return false;
 }
 
 function autoSacrificeGlyph() {

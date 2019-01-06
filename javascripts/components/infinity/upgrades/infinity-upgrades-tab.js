@@ -1,7 +1,7 @@
 Vue.component("infinity-upgrades-tab", {
   computed: {
     grid: function() {
-      return infinityUpgradeGridViewModels();
+      return infinityUpgradeGridSetup();
     }
   },
   methods: {
@@ -33,66 +33,66 @@ Vue.component("infinity-upgrades-tab", {
 });
 
 // [ [column], [column], [column], [column] ]
-const infinityUpgradeGridViewModels = () => [
+const infinityUpgradeGridSetup = () => [
   [
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.totalTimeMult,
       description: "Normal Dimensions gain a multiplier based on time played",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dim18mult,
       description: "First and Eighth Dimensions gain a multiplier based on infinitied stat",
-      formatCurrentEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dim36mult,
       description: "Third and Sixth Dimensions gain a multiplier based on infinitied stat",
-      formatCurrentEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.resetBoost,
       description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9"
     }),
   ],
   [
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.buy10Mult,
       description: "Increase the multiplier for buying 10 Dimensions",
-      staticEffect: "2x => 2.2x"
+      staticEffect: "2x ➜ 2.2x"
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dim27mult,
       description: "Second and Seventh Dimensions gain a multiplier based on infinitied stat",
-      formatCurrentEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dim45mult,
       description: "Fourth and Fifth Dimensions gain a multiplier based on infinitied stat",
-      formatCurrentEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenMultiplier(value)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.galaxyBoost,
       description: "Galaxies are twice as effective"
     }),
   ],
   [
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.thisInfinityTimeMult,
       description: "Normal Dimensions gain a multiplier based on time spent in current Infinity",
-      formatCurrentEffect: value => `${value.toFixed(2)}x`
+      formatEffect: value => `${value.toFixed(2)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.unspentIPMult,
       description: "Multiplier for unspent Infinity Points on 1st Dimension",
-      formatCurrentEffect: (value, formatter) => `${formatter.shorten(value)}x`
+      formatEffect: (value, formatter) => `${formatter.shortenRateOfChange(value)}x`
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.dimboostMult,
       description: "Increase Dimension Boost multiplier",
-      staticEffect: "2x => 2.5x"
+      staticEffect: "2x ➜ 2.5x"
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.ipGen,
       description: "Infinity Point generation based on fastest Infinity",
       formatComplexEffect: function(formatter) {
@@ -105,19 +105,19 @@ const infinityUpgradeGridViewModels = () => [
     }),
   ],
   [
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.skipReset1,
       description: "You start with the 5th Dimension unlocked"
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.skipReset2,
       description: "You start with the 6th Dimension unlocked"
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.skipReset3,
       description: "You start with the 7th Dimension unlocked"
     }),
-    new InfinityUpgradeViewModel({
+    new InfinityUpgradeSetup({
       upgrade: InfinityUpgrade.skipResetGalaxy,
       description: "You start with the 8th Dimension unlocked, and an Antimatter Galaxy"
     }),

@@ -10,7 +10,8 @@ Vue.mixin({
         shortenDimensions: this.shortenDimensions,
         shortenMoney: this.shortenMoney,
         shortenGlyphEffect: this.shortenGlyphEffect,
-        shortenMultiplier: this.shortenMultiplier
+        shortenMultiplier: this.shortenMultiplier,
+        shortenRateOfChange: this.shortenRateOfChange
       };
     }
   },
@@ -27,8 +28,11 @@ Vue.mixin({
     on$: function(event, fn) {
       EventHub.global.on(event, fn, this);
     },
-    shorten: function(value) {
-      return shorten(value);
+    shorten: function(value, places, placesUnder1000) {
+      return shorten(value, places, placesUnder1000);
+    },
+    shortenRateOfChange: function(value) {
+      return shortenRateOfChange(value);
     },
     shortenCosts: function(value) {
       return shortenCosts(value);
@@ -59,7 +63,7 @@ Vue.mixin({
   }
 });
 
-Vue.filter('pluralize', function (value, amount) {
+Vue.filter("pluralize", function (value, amount, plural) {
   if (value === undefined || amount === undefined)
     throw "Arguments must be defined";
   let isSingular = true;
@@ -71,7 +75,7 @@ Vue.filter('pluralize', function (value, amount) {
   }
   else
     throw "Amount must be either a number or Decimal";
-  return isSingular ? value : value + "s";
+  return isSingular ? value : (plural !== undefined ? plural : value + "s");
 });
 
 VTooltip.VTooltip.options.defaultClass = 'general-tooltip';

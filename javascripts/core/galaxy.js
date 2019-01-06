@@ -18,9 +18,16 @@ class GalaxyRequirement {
 class Galaxy {
   static get requirement() {
     const galaxies = player.galaxies;
-    let amount = 80 + (galaxies * 60);
-    if (player.timestudy.studies.includes(42)) amount = 80 + ((galaxies) * 52);
-    if (player.currentChallenge === "challenge4") amount = 99 + ((galaxies) * 90);
+    let costBase = 80;
+    let costMult = Effects.min(
+      60,
+      TimeStudy(42)
+    );
+    if (Challenge(10).isRunning) {
+      costBase = 99;
+      costMult = 90;
+    }
+    let amount = costBase + (galaxies * costMult);
 
     let type = this.type;
 
@@ -35,19 +42,18 @@ class Galaxy {
       amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + getGlyphSacEffect("power")))));
     }
 
-    InfinityUpgrade.resetBoost.apply(value => amount -= value);
-    if (player.challenges.includes("postc5")) amount -= 1;
-    const tier = player.currentChallenge === "challenge4" ? 6 : 8;
+    amount -= Effects.sum(InfinityUpgrade.resetBoost);
+    if (InfinityChallenge(5).isCompleted) amount -= 1;
+    const tier = Challenge(10).isRunning ? 6 : 8;
     return new GalaxyRequirement(tier, amount);
   }
 
   static get costScalingStart() {
-    let amount = 100;
-    EternityChallenge(5).applyReward(value => amount += value);
-    const studies = player.timestudy.studies;
-    if (studies.includes(223)) amount += 7;
-    if (studies.includes(224)) amount += Math.floor(player.resets / 2000);
-    return amount;
+    return 100 + Effects.sum(
+      TimeStudy(223),
+      TimeStudy(224),
+      EternityChallenge(5).reward
+    );
   }
 
   static get type() {
@@ -86,7 +92,7 @@ function galaxyResetBtnClick() {
   if (player.currentEternityChall === "eterc6") {
     return;
   }
-  const canDoReset = player.currentChallenge !== "challenge11" && player.currentChallenge !== "postc1" && player.currentChallenge !== "postc7" && (player.break || player.money.lte(Number.MAX_VALUE));
+  const canDoReset = !Challenge(8).isRunning && player.currentChallenge !== "postc7" && (player.break || player.money.lte(Number.MAX_VALUE));
   if (!canDoReset) {
     return;
   }
@@ -98,7 +104,7 @@ function galaxyResetBtnClick() {
 }
 
 function maxBuyGalaxies(manual) {
-  if (player.currentEternityChall === "eterc6" || player.currentChallenge === "challenge11" || player.currentChallenge === "postc1" || player.currentChallenge === "postc7") return
+  if (player.currentEternityChall === "eterc6" || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
     while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
       if (Notation.current().isCancer()) player.spreadingCancer += 1;

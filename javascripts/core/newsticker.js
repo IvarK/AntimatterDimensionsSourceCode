@@ -224,14 +224,14 @@ const newsArray = [
   ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],  //might not be poss?
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
   ["Achievement Unlocked!", "c4", () => player.achievements.length === 88],
-  ["Did you use an autoclicker for that?", "c5", () => player.timestudy.studies.includes(131) && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
+  ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
-  ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !player.timestudy.studies.includes(32) && player.infinitied > 72000 * 168],
+  ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied > 72000 * 168],
   ["The achievement is for two million, not two billion...", "c8", () => player.infinitied > 2e9],
   ["Keep up the quick pace!", "c9", () => Marathon > 1200],
   ["One day you will stop your incessant grind.", "c10", () => player.eternities > 50000],
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
-  ["Are you serious?", "c12", () => worstChallengeTime <= 10],
+  ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],
   ["The amazing speedster", "c13", () => infchallengeTimes <= 80],
 //luck
   ["This news message is 1000x rarer than all the others.", "l1", () => Math.random() < 0.001],

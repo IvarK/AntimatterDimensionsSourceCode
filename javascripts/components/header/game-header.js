@@ -19,8 +19,8 @@ Vue.component("game-header", {
   },
   methods: {
     update() {
-      this.isInAnyChallenge = this.challengeDisplay.length != 0;
-      this.isInMatterChallenge = ["challenge12", "postc1", "postc6"].includes(player.currentChallenge);
+      this.isInAnyChallenge = this.challengeDisplay.length !== 0;
+      this.isInMatterChallenge = Player.isInMatterChallenge;
       if (this.isInMatterChallenge) {
         this.matter.copyFrom(Player.effectiveMatterAmount);
       }
@@ -35,13 +35,11 @@ Vue.component("game-header", {
       else  this.currCelestial = "";
     },
     updateChallengeDisplay: function() {
-      // 10/10 quality code
-      const actualChallengeIds = [ null, 1, 2, 3, 10, 9, 5, 12, 4, 7, 6, 8, 11 ];
-      let inNormalChallenge = player.currentChallenge.startsWith("challenge");
+      const challenge = Challenge.current();
       let inInfinityChallenge = player.currentChallenge.startsWith("postc");
       let inEternityChallenge = player.currentEternityChall.startsWith("eterc");
       let inDilation = player.dilation.active;
-      let inCelestialReality = this.currCelestial.length != 0;
+      let inCelestialReality = this.currCelestial.length !== 0;
       
       // Pls don't hate me Razen
       let displayValue = "";
@@ -49,9 +47,10 @@ Vue.component("game-header", {
       if (inDilation) displayValue += " + Time Dilation";
       if (inEternityChallenge)  displayValue += " + Eternity Challenge " + player.currentEternityChall.substring(5);
       if (inInfinityChallenge)  displayValue += " + Infinity Challenge " + player.currentChallenge.substring(5);
-      if (inNormalChallenge)  displayValue += " + Challenge " + actualChallengeIds[parseInt(player.currentChallenge.substring(9))];
+      if (challenge !== undefined) displayValue += ` + ${challenge.config.reward} Challenge `;
       
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
+      else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
       else  this.challengeDisplay = "";
     }
   },

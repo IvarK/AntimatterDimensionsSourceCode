@@ -9,7 +9,7 @@ Vue.component('normal-dim-tab-header', {
   },
   computed: {
     sacrificeBoostDisplay: function() {
-      return this.shorten(this.sacrificeBoost);
+      return this.shortenRateOfChange(this.sacrificeBoost);
     },
     sacrificeTooltip: function() {
       return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;

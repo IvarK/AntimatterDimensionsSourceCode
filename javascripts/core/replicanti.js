@@ -29,7 +29,7 @@ function upgradeReplicantiGalaxy() {
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
-    if (player.timestudy.studies.includes(131)) maxGal = Math.floor(player.replicanti.gal * 1.5);
+    maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
     let gainGal = 0;
     if (curGal < maxGal) { 
@@ -51,7 +51,7 @@ function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
   player.reality.upgReqChecks[0] = false;
   var galaxyGain = 1
-  if (isAchEnabled("r126")) {
+  if (Achievement(126).isEnabled) {
     if (player.replicanti.amount.e >= 616) {
       const maxGal = Replicanti.galaxies.max;
       galaxyGain = Math.min(Math.floor(player.replicanti.amount.e / 308), maxGal - player.replicanti.galaxies)
@@ -73,12 +73,14 @@ function getReplicantiInterval(noMod, interval) {
     if (!interval) {
       interval = player.replicanti.interval;
     }
-    if (player.timestudy.studies.includes(62)) interval = interval/3
-    if (player.timestudy.studies.includes(133) || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
-    if (player.timestudy.studies.includes(213)) interval /= 20
+    if (TimeStudy(133).isBought || (player.replicanti.amount.gt(Number.MAX_VALUE) || noMod)) interval *= 10
+    interval /= Effects.product(
+      TimeStudy(62),
+      TimeStudy(213)
+    );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
-    if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && isAchEnabled("r134")) interval /= 2
+    if ((player.replicanti.amount.lt(Number.MAX_VALUE) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(Number.MAX_VALUE) && !noMod) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
     if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
     return interval;
@@ -99,13 +101,14 @@ function replicantiLoop(diff) {
 
     var current = player.replicanti.amount.ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
-    if (speedCheck && player.replicanti.galaxybuyer && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) diff = maxReplicantiGalaxy(diff);
+    if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 
-    if (player.replicanti.unl && (diff > 500 || interval < 50 || player.timestudy.studies.includes(192))) {
+    const isTS192Bought = TimeStudy(192).isBought;
+    if (player.replicanti.unl && (diff > 500 || interval < 50 || isTS192Bought)) {
         var gained = Decimal.pow(Math.E, current +(diff/100*est/10))
-        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
+        if (isTS192Bought) gained = Decimal.pow(Math.E, current +Math.log((diff/100*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
         player.replicanti.amount = Decimal.min(Number.MAX_VALUE, gained)
-        if (player.timestudy.studies.includes(192)) player.replicanti.amount = gained
+        if (isTS192Bought) player.replicanti.amount = gained
         replicantiTicks = 0
     } else {
         if (interval <= replicantiTicks && player.replicanti.unl) {
@@ -124,9 +127,9 @@ function replicantiLoop(diff) {
                         }
                     }
                     player.replicanti.amount = Decimal.min(Number.MAX_VALUE, temp.times(counter).plus(player.replicanti.amount))
-                    if (player.timestudy.studies.includes(192)) player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
+                    if (isTS192Bought) player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
                 } else {
-                    if (player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.times(2)
+                    if (isTS192Bought) player.replicanti.amount = player.replicanti.amount.times(2)
                     else player.replicanti.amount = Decimal.min(Number.MAX_VALUE, player.replicanti.amount.times(2))
                 }
             }
@@ -138,18 +141,17 @@ function replicantiLoop(diff) {
     if (current == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
     if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
 
-    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.timestudy.studies.includes(131) || isAchEnabled("r138"))) {
+    if (player.replicanti.galaxybuyer && player.replicanti.amount.gte(Number.MAX_VALUE) && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) {
         replicantiGalaxy();
     }
     PerformanceStats.end();
 }
 
 function replicantiMult() {
-  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2);
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032));
-  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies));
-  replmult = replmult.pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
-  return replmult;
+  return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
+    .plusEffectOf(TimeStudy(21))
+    .timesEffectOf(TimeStudy(102))
+    .pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
 }
 
 const ReplicantiUpgrade = {
@@ -182,7 +184,7 @@ const ReplicantiUpgrade = {
       return nearestPercent(this.current) >= this.cap;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 40;
+      return EternityMilestone.autobuyerReplicantiChance.isReached;
     }
   },
   interval: {
@@ -208,13 +210,16 @@ const ReplicantiUpgrade = {
       return Math.max(this.current * 0.9, this.cap);
     },
     get cap() {
-      return player.timestudy.studies.includes(22) ? 1 : 50;
+      return Effects.min(
+        50,
+        TimeStudy(22)
+      );
     },
     get isCapped() {
       return this.current <= this.cap;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 60;
+      return EternityMilestone.autobuyerReplicantiInterval.isReached;
     },
     applyModifiers(value) {
       return getReplicantiInterval(false, value);
@@ -231,11 +236,7 @@ const ReplicantiUpgrade = {
       return player.replicanti.galCost;
     },
     get cost() {
-      let cost = this.baseCost;
-      if (player.timestudy.studies.includes(233)) {
-        return cost.dividedBy(Replicanti.amount.pow(0.3));
-      }
-      return cost;
+      return this.baseCost.dividedByEffectOf(TimeStudy(233));
     },
     set cost(value) {
       player.replicanti.galCost = value;
@@ -257,10 +258,13 @@ const ReplicantiUpgrade = {
       return false;
     },
     get isAutobuyerUnlocked() {
-      return player.eternities >= 80;
+      return EternityMilestone.autobuyerReplicantiMaxGalaxies.isReached;
     },
     get extra() {
-      return player.timestudy.studies.includes(131) ? Math.floor(this.current / 2) : 0;
+      return Effects.max(
+        0,
+        TimeStudy(131)
+      );
     }
   },
   isAvailable(upgrade) {
@@ -297,14 +301,10 @@ const Replicanti = {
       return player.replicanti.galaxies;
     },
     get extra() {
-      let bonusGalaxies = 0;
-      if (player.timestudy.studies.includes(225)) {
-        bonusGalaxies += Math.floor(Replicanti.amount.e / 1000);
-      }
-      if (player.timestudy.studies.includes(226)) {
-        bonusGalaxies += Math.floor(ReplicantiUpgrade.galaxies.current / 15);
-      }
-      return bonusGalaxies;
+      return Effects.sum(
+        TimeStudy(225),
+        TimeStudy(226)
+      );
     },
     get total() {
       return this.bought + this.extra;
@@ -331,7 +331,7 @@ const Replicanti = {
         this.isOn = !this.isOn;
       },
       get isEnabled() {
-        return !player.timestudy.studies.includes(131) || isAchEnabled("r138");
+        return !TimeStudy(131).isBought || Achievement(138).isEnabled;
       }
     }
   },

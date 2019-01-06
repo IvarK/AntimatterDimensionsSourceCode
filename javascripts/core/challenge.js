@@ -1,15 +1,9 @@
 function startChallenge(name, target) {
-    if (name === "challenge1") return;
-    if (!askChallengeConfirmation(name)) {
-        return;
-    }
+    if (!askChallengeConfirmation(name)) return;
     player.currentChallenge = name;
     player.challengeTarget = target;
     secondSoftReset();
-    if (player.currentChallenge.includes("post")) player.break = true;
     Tab.dimensions.normal.show();
-    if (player.currentChallenge.includes("post") && player.currentEternityChall !== "")
-        giveAchievement("I wish I had gotten 7 eternities");
 }
 
 function askChallengeConfirmation(challenge) {
@@ -26,6 +20,7 @@ function askChallengeConfirmation(challenge) {
 function setChallengeTime(id, time) {
     // Use splice so Vue could track changes
     player.challengeTimes.splice(id, 1, time);
+    GameCache.worstChallengeTime.invalidate();
 }
 
 function setInfChallengeTime(id, time) {
@@ -33,50 +28,178 @@ function setInfChallengeTime(id, time) {
     player.infchallengeTimes.splice(id, 1, time);
 }
 
-function isQuickResettable(challenge) {
-  const resettableChallenges = [
-    "challenge12",
-    "challenge9",
-    "challenge5",
-    "postc1",
-    "postc4",
-    "postc5",
-    "postc6",
-    "postc8"
-  ];
-  return resettableChallenges.includes(challenge);
+class ChallengeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = `challenge${this.id}`;
+  }
+
+  get fullId() {
+    return this._fullId;
+  }
+
+  get isQuickResettable() {
+    return this.config.isQuickResettable;
+  }
+
+  get isRunning() {
+    const isPartOfIC1 = this.id !== 9 && this.id !== 12;
+    return player.currentChallenge === this._fullId || (isPartOfIC1 && InfinityChallenge(1).isRunning);
+  }
+
+  start() {
+    if (this.id === 1) return;
+    startChallenge(this._fullId, Number.MAX_VALUE);
+  }
+
+  get isCompleted() {
+    return player.challenges.includes(this._fullId);
+  }
+
+  complete() {
+    player.challenges.push(this._fullId);
+  }
 }
 
-class InfinityChallengeInfo {
-  constructor(id) {
-    this._id = id;
-    this._fullId = `postc${id}`;
+ChallengeState.all = mapGameData(
+  GameDatabase.challenges.normal,
+  data => new ChallengeState(data)
+);
+
+/**
+ * @param {number} id
+ * @return {ChallengeState}
+ */
+function Challenge(id) {
+  return ChallengeState.all[id];
+}
+
+/**
+ * @returns {ChallengeState}
+ */
+Challenge.current = function() {
+  const challenge = player.currentChallenge;
+  if (!challenge.startsWith("challenge")) {
+    return undefined;
+  }
+  return Challenge(parseInt(challenge.substr(9)));
+};
+
+/**
+ * @type {ChallengeState[]}
+ */
+Challenge.all = Array.range(1, 12).map(Challenge);
+
+/**
+ * @type {string[]}
+ */
+Challenge.allIds = Challenge.all.map(c => c.fullId);
+
+class InfinityChallengeRewardState extends GameMechanicState {
+  constructor(config, challenge) {
+    super(config);
+    this._challenge = challenge;
+  }
+
+  get canBeApplied() {
+    return this._challenge.isCompleted;
+  }
+}
+
+class InfinityChallengeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = `postc${this.id}`;
+    this._reward = new InfinityChallengeRewardState(config.reward, this);
+  }
+
+  get fullId() {
+    return this._fullId;
+  }
+
+  get isUnlocked() {
+    return player.postChallUnlocked >= this.id;
   }
 
   get isRunning() {
     return player.currentChallenge === this._fullId;
   }
 
+  start() {
+    startChallenge(this._fullId, this.config.goal);
+    player.break = true;
+    if (EternityChallenge.isRunning())
+      giveAchievement("I wish I had gotten 7 eternities");
+  }
+
   get isCompleted() {
     return player.challenges.includes(this._fullId);
   }
+
+  complete() {
+    player.challenges.push(this._fullId);
+  }
+
+  get canBeApplied() {
+    return this.isRunning;
+  }
+
+  /**
+   * @return {InfinityChallengeRewardState}
+   */
+  get reward() {
+    return this._reward;
+  }
+
+  get isQuickResettable() {
+    return this.config.isQuickResettable;
+  }
 }
 
+InfinityChallengeState.all = mapGameData(
+  GameDatabase.challenges.infinity,
+  data => new InfinityChallengeState(data)
+);
+
+/**
+ * @param {number} id
+ * @return {InfinityChallengeState}
+ */
 function InfinityChallenge(id) {
-  return new InfinityChallengeInfo(id);
+  return InfinityChallengeState.all[id];
 }
 
 /**
- * @returns {InfinityChallengeInfo}
+ * @returns {InfinityChallengeState}
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  if (challenge === String.empty) return undefined;
-  if (!challenge.includes("postc")) return undefined;
-  const id = parseInt(challenge.split("postc")[1]);
-  return InfinityChallenge(id);
+  return challenge.startsWith("postc") ?
+    InfinityChallenge(parseInt(challenge.substr(5))) :
+    undefined;
 };
 
+/**
+ * @return {boolean}
+ */
 InfinityChallenge.isRunning = function() {
   return InfinityChallenge.current() !== undefined;
+};
+
+/**
+ * @type {InfinityChallengeState[]}
+ */
+InfinityChallenge.all = Array.range(1, 8).map(InfinityChallenge);
+
+/**
+ * @type {string[]}
+ */
+InfinityChallenge.allIds = InfinityChallenge.all.map(c => c.fullId);
+
+/**
+ * @return {InfinityChallengeState[]}
+ */
+InfinityChallenge.completed = function() {
+  return InfinityChallenge.all
+    .filter(ic => ic.isCompleted);
 };

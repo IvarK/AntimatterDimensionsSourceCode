@@ -11,20 +11,20 @@ Vue.component("ip-multiplier-button", {
     }
   },
   computed: {
-    viewModel: function() {
-      return infinityMultViewModel();
+    setup: function() {
+      return infinityMultSetup();
     }
   },
   methods: {
     update() {
-      this.isAutoUnlocked = player.eternities > 0;
+      this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
       this.isAutobuyerOn = player.infMultBuyer;
     }
   },
   template:
     `<div class="l-spoon-btn-group">
       <infinity-upgrade-button
-        :upgrade="viewModel"
+        :upgrade="setup"
         class="o-infinity-upgrade-btn--multiplier"
       />
       <primary-button-on-off
@@ -36,7 +36,7 @@ Vue.component("ip-multiplier-button", {
     </div>`
 });
 
-class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
+class InfinityMultiplierSetup extends InfinityUpgradeSetup {
   constructor(props) {
     super(props);
   }
@@ -53,7 +53,7 @@ class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
     return formatter.shortenCosts(this._upgrade.cost);
   }
 
-  get hasDynamicEffectDisplay() {
+  get hasDynamicEffect() {
     return true;
   }
 
@@ -66,8 +66,8 @@ class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
   }
 }
 
-const infinityMultViewModel = () => new InfinityMultiplierViewModel({
+const infinityMultSetup = () => new InfinityMultiplierSetup({
   upgrade: InfinityUpgrade.ipMult,
   description: "Multiply Infinity Points from all sources by 2",
-  formatCurrentEffect: (value, formatter) => `${formatter.shorten(value)}x`,
+  formatEffect: (value, formatter) => `${formatter.shortenRateOfChange(value)}x`,
 });

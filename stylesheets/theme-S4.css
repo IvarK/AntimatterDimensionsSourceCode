@@ -34,7 +34,6 @@ body {
     cursor: url(cursor2.cur),  auto !important;
 }
 
-
 .tabbtn, .secondarytabbtn {
     background-color: #1b00ff !important;
     cursor: url(cursor2.cur), auto !important;
@@ -42,64 +41,4 @@ body {
 
 * {
 	box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.dilationbtn {
-    animation: dilationBtnGlowCancer 10s infinite !important;
-}
-
-.dilationupg {
-    animation: dilationBtnGlowCancer 10s infinite !important;
-}
-
-.dilationupgrebuyable {
-    animation: dilationBtnGlowCancer2 10s infinite !important;
-}
-
-@keyframes dilationBtnGlowCancer {
-    0%  {box-shadow: inset 5px -5px 20px #64DD17;}
-    10% {box-shadow: inset -5px 5px 20px #64DD17;}
-    20% {box-shadow: inset 5px -5px 20px #64DD17;}
-    22% {box-shadow: inset -5px 5px 20px #64DD17;}
-    25% {box-shadow: inset 5px -5px 20px #64DD17;}
-    29% {box-shadow: inset -5px 5px 20px #64DD17;}
-    39% {box-shadow: inset 5px -5px 20px #64DD17;}
-    44% {box-shadow: inset -5px 5px 20px #64DD17;}
-    53% {box-shadow: inset 5px -5px 20px #64DD17;}
-    57% {box-shadow: inset -5px 5px 20px #64DD17;}
-    63% {box-shadow: inset 5px -5px 20px #64DD17;}
-    69% {box-shadow: inset -5px 5px 20px #64DD17;}
-    71% {box-shadow: inset 5px -5px 20px #64DD17;}
-    74% {box-shadow: inset -5px 5px 20px #64DD17;}
-    75% {box-shadow: inset 5px -5px 20px #64DD17;}
-    84% {box-shadow: inset -5px 5px 20px #64DD17;}
-    88% {box-shadow: inset 5px -5px 20px #64DD17;}
-    92% {box-shadow: inset -5px 5px 20px #64DD17;}
-    93% {box-shadow: inset 5px -5px 20px #64DD17;}
-    95% {box-shadow: inset -5px 5px 20px #64DD17;}
-    100% {box-shadow: inset 5px -5px 20px #64DD17;}
-}
-
-@keyframes dilationBtnGlowCancer2 {
-    0%  {box-shadow: inset 5px -5px 20px #64ddad;}
-    10% {box-shadow: inset -5px 5px 20px #64ddad;}
-    20% {box-shadow: inset 5px -5px 20px #64ddad;}
-    22% {box-shadow: inset -5px 5px 20px #64ddad;}
-    25% {box-shadow: inset 5px -5px 20px #64ddad;}
-    29% {box-shadow: inset -5px 5px 20px #64ddad;}
-    39% {box-shadow: inset 5px -5px 20px #64ddad;}
-    44% {box-shadow: inset -5px 5px 20px #64ddad;}
-    53% {box-shadow: inset 5px -5px 20px #64ddad;}
-    57% {box-shadow: inset -5px 5px 20px #64ddad;}
-    63% {box-shadow: inset 5px -5px 20px #64ddad;}
-    69% {box-shadow: inset -5px 5px 20px #64ddad;}
-    71% {box-shadow: inset 5px -5px 20px #64ddad;}
-    74% {box-shadow: inset -5px 5px 20px #64ddad;}
-    75% {box-shadow: inset 5px -5px 20px #64ddad;}
-    84% {box-shadow: inset -5px 5px 20px #64ddad;}
-    88% {box-shadow: inset 5px -5px 20px #64ddad;}
-    92% {box-shadow: inset -5px 5px 20px #64ddad;}
-    93% {box-shadow: inset 5px -5px 20px #64ddad;}
-    95% {box-shadow: inset -5px 5px 20px #64ddad;}
-    100% {box-shadow: inset 5px -5px 20px #64ddad;}
 }

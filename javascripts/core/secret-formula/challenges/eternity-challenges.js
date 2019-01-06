@@ -1,0 +1,155 @@
+GameDatabase.challenges.eternity = [
+  {
+    id: 1,
+    description: "Time Dimensions are disabled.",
+    goal: new Decimal("1e1800"),
+    goalIncrease: new Decimal("1e200"),
+    reward: {
+      description: "Time Dimension multiplier based on time spent this Eternity",
+      effect: completions => Math.pow(Math.max(player.thisEternity * 10, 0.9), 0.3 + (completions * 0.05)),
+      formatEffect: value => formatX(value, 2, 1)
+    }
+  },
+  {
+    id: 2,
+    description: "Infinity Dimensions are disabled.",
+    goal: new Decimal("1e975"),
+    goalIncrease: new Decimal("1e175"),
+    reward: {
+      description: "1st Infinity Dimension multiplier based on Infinity Power",
+      effect: completions => player.infinityPower.pow(1.5 / (700 - completions * 100)).clampMin(1),
+      cap: new Decimal("1e100"),
+      formatEffect: value => formatX(value, 2, 1)
+    }
+  },
+  {
+    id: 3,
+    description: "Dimensions 5-8 don't produce anything. Dimensional sacrifice is disabled.",
+    goal: new Decimal("1e600"),
+    goalIncrease: new Decimal("1e75"),
+    reward: {
+      description: "Increase the multiplier for buying 10 dimensions",
+      effect: completions => completions * 0.8,
+      formatEffect: value => formatX(value, 2, 2)
+    }
+  },
+  {
+    id: 4,
+    description: "All infinitied stat multipliers and generators are disabled.",
+    goal: new Decimal("1e2750"),
+    goalIncrease: new Decimal("1e550"),
+    additionalRequirement: completions => `in ${Math.max((16 - 4 * completions), 0)} infinities or less`,
+    reward: {
+      description: "Infinity Dimension multiplier based on unspent IP",
+      effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
+      cap: new Decimal("1e200"),
+      formatEffect: value => formatX(value, 2, 1)
+    }
+  },
+  {
+    id: 5,
+    description: "Galaxy cost increase scaling starts instantly (normally at 100 galaxies). Dimension Boost costs scaling is massively increased.",
+    goal: new Decimal("1e750"),
+    goalIncrease: new Decimal("1e400"),
+    reward: {
+      description: "Galaxy cost scaling starts later",
+      effect: completions => completions * 5,
+      formatEffect: value => `${value} galaxies later`
+    }
+  },
+  {
+    id: 6,
+    description: "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti galaxies is massively reduced.",
+    goal: new Decimal("1e850"),
+    goalIncrease: new Decimal("1e250"),
+    reward: {
+      description: "Reduce the dimension cost multiplier growth",
+      effect: completions => completions * 0.2,
+      formatEffect: value => `x - ${value.toFixed(1)}`
+    }
+  },
+  {
+    id: 7,
+    description: "1st Time Dimension produces 8th Infinity Dimension, and 1st Infinity Dimension produces 7th Dimensions. Tickspeed affects all dimensions normally.",
+    goal: new Decimal("1e2000"),
+    goalIncrease: new Decimal("1e530"),
+    reward: {
+      description: "1st Time Dimension produces 8th Infinity Dimensions",
+      effect: completions => TimeDimension(1).productionPerSecond.pow(completions * 0.2).minus(1).clampMin(0),
+      formatEffect: value => `${shorten(value, 2, 1)} per second`
+    }
+  },
+  {
+    id: 8,
+    description: "You can only upgrade Infinity Dimensions 50 times and Replicanti upgrades 40 times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.",
+    goal: new Decimal("1e1300"),
+    goalIncrease: new Decimal("1e900"),
+    reward: {
+      description: "Infinity Power powers up Replicanti galaxies",
+      effect: (completions) => {
+        const replicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
+        const mult = Math.max(Math.pow(Math.log10(player.infinityPower.clampMin(1).log10() + 1), 0.03 * completions) - 1, 0);
+        return replicantiGalaxies * mult;
+      },
+      formatEffect: value => formatPercents(value, 2)
+    }
+  },
+  {
+    id: 9,
+    description: "You can't buy tickspeed upgrades. Infinity power instead multiplies time dimensions with greatly reduced effect.",
+    goal: new Decimal("1e1750"),
+    goalIncrease: new Decimal("1e250"),
+    reward: {
+      description: "Infinity Dimension multiplier based on time shards",
+      effect: completions => player.timeShards.pow(completions * 0.1).clampMin(1),
+      cap: new Decimal("1e400"),
+      formatEffect: value => formatX(value, 2, 1)
+    }
+  },
+  {
+    id: 10,
+    description: () => {
+      let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000).";
+      if (EternityChallenge(10).isRunning) {
+        description += `, Currently: ${shorten(ec10bonus, 2, 1)}x`;
+      }
+      return description;
+    },
+    goal: new Decimal("1e3000"),
+    goalIncrease: new Decimal("1e300"),
+    reward: {
+      description: "Time Dimension multiplier based on infinitied stat",
+      effect: completions => {
+        let mult = Math.max(Math.pow(Player.totalInfinitied, 0.9) * completions * 0.000002 + 1, 1).toDecimal();
+        TimeStudy(31).applyEffect(v => mult = mult.pow(v));
+        return mult;
+      },
+      formatEffect: value => formatX(value, 2, 1)
+    }
+  },
+  {
+    id: 11,
+    description: "All dimension multipliers are disabled except for the multipliers from Infinity Power and Dimension Boosts (to normal dimensions).",
+    goal: new Decimal("1e500"),
+    goalIncrease: new Decimal("1e200"),
+    reward: {
+      description: "Reduce Tickspeed cost multiplier growth",
+      effect: completions => completions * 0.07,
+      formatEffect: value => `x - ${value.toFixed(2)}`
+    }
+  },
+  {
+    id: 12,
+    description: () => player.realities > 0 ?
+      "The game runs 1000x slower; wormholes and time glyph effects are disabled." :
+      "The game runs 1000x slower.",
+    goal: new Decimal("1e110000"),
+    goalIncrease: new Decimal("1e12000"),
+    additionalRequirement: completions => `in ${Math.max(10 - 2 * completions, 1) / 10} ${completions === 0 ? "second" : "seconds"} or less.`,
+    reward: {
+      description: "Infinity Dimension cost multipliers are reduced",
+      effect: completions => 1 - completions * 0.008,
+      formatEffect: value => `x^${value}`
+    }
+  }
+];

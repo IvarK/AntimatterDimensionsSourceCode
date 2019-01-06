@@ -25,7 +25,7 @@ Vue.component('normal-dim-row', {
     },
     rateOfChangeDisplay: function() {
       return this.tier < 8 ?
-        ` (+${this.shorten(this.rateOfChange)}%/s)` :
+        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
         String.empty;
     }
   },

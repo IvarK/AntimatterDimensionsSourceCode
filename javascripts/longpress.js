@@ -2,11 +2,16 @@
 
 // There's a vue directive, long-press, defined at the bottom, which may be
 // what you want to use.
+//
+// Because it's related, we also define another directive, repeating-click, which
+// sends repeated click events if the mouse is held down.
 
 // LongPress produces 3 possible events:
 // 1) a long press (longPress property in handlers)
 // 2) a long press cancellation (early release, cancel property)
 // 3) a click (a short click, click property)
+// handlers can also have a "repeat" property, which is a number in ms. If defined,
+// the long press event will be fired repeatedly if the press continues, at that frequency
 //
 // Don't add your own click handlers to the object; get your clicks through
 // LongPress
@@ -31,7 +36,7 @@ class LongPress {
       throw "Need to specify a longPress handler"
     }
     var begin = (e) => {
-      return LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, e)
+      return LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, handlers.repeat, e)
     }
     $(obj).on("mousedown touchstart", begin)
     $(obj).on("mouseout touchcancel", LongPress._cancelCurrentPress)
@@ -64,7 +69,7 @@ class LongPress {
     LongPress._currentTarget = null;
   }
 
-  static _pressBegin(timeout, handler, cancel_handler, e) {
+  static _pressBegin(timeout, handler, cancel_handler, repeat, e) {
     // If there's a timer already running, that means that something wasn't cancelled
     // properly (a press shouldn't begin if it hasn't ended). Clear out any existing presses:
     LongPress._cancelCurrentPress(e);
@@ -79,10 +84,21 @@ class LongPress {
     LongPress._pressTimer = setTimeout(() => {
       LongPress._wasLongPress = true;
       handler(e);
-      LongPress._pressTimer = null;
-      LongPress._currentCancelHandler = null;
+      if (repeat) {
+        LongPress._beginRepeat(repeat, handler, e);
+      } else {
+        LongPress._pressTimer = null;
+        LongPress._currentCancelHandler = null;
+      }
     }, timeout);
     return false;
+  }
+
+  static _beginRepeat(timeout, handler, e) {
+    LongPress._pressTimer = setTimeout(() => {
+      handler(e);
+      LongPress._beginRepeat(timeout, handler, e);
+    }, timeout);
   }
 
   static _handleClick(e, handler) {
@@ -123,6 +139,23 @@ Vue.directive("long-press", {
       longPress: () => emit("longpress"),
       cancel: () => emit("longpresscancel"),
       click: () => emit("longpressclick"),
+    });
+  }
+});
+
+Vue.directive("repeating-click", {
+  bind: function (el, binding, vnode) {
+    // This seems to be the only way to get events to our component
+    var emit = (name, data) => {
+      var handlers = (vnode.data && vnode.data.on);
+      if (handlers && handlers[name]) {
+        handlers[name].fns(data)
+      }
+    }
+    LongPress.addTo(el, binding.value.delay, {
+      longPress: () => emit("click"),
+      click: () => emit("click"),
+      repeat: 250
     });
   }
 });

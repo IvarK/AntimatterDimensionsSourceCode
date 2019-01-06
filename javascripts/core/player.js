@@ -86,7 +86,8 @@ var player = {
     why: 0,
     fixed: "notyetfixed",
     dragging: 0,
-    themes: []
+    themes: [],
+    secretTS: 0,    // incremented every time secret time study toggles
   },
   challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
   infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],

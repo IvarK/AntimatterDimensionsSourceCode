@@ -182,7 +182,7 @@ function onLoad() {
   if (player.version === 13) dev.updateTestSave()
 
   if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
+    document.getElementById("game").style.display = "none";
   }
 
 	initializeWormhole();

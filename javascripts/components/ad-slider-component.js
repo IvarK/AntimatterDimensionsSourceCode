@@ -362,12 +362,12 @@ Vue.component("ad-slider-component", {
     limit() {
       if (this.isRange) {
         if (this.isFixed) {
-          return [[this.dotAxialSizePx/2, this.dotAxialSizePx/2+(this.total - this.fixedValue) * this.gap], [this.fixedValue * this.gap + this.dotAxialSizePx/2, this.size-this.dotAxialSizePx/2]] 
+          return [[this.dotAxialSizePx / 2, this.dotAxialSizePx / 2 + (this.total - this.fixedValue) * this.gap], [this.fixedValue * this.gap + this.dotAxialSizePx / 2, this.size - this.dotAxialSizePx / 2]]
         } else {
-          return [[this.dotAxialSizePx/2, this.position[1]], [this.position[0], this.size-this.dotAxialSizePx/2]];
+          return [[this.dotAxialSizePx / 2, this.position[1]], [this.position[0], this.size - this.dotAxialSizePx / 2]];
         }
       } else {
-        return [this.dotAxialSizePx/2, this.size - this.dotAxialSizePx/2];
+        return [this.dotAxialSizePx / 2, this.size - this.dotAxialSizePx / 2];
       }
     },
     valueLimit() {
@@ -380,8 +380,8 @@ Vue.component("ad-slider-component", {
       let ret = this.direction === 'vertical' ? {
         height: this.height,
       } : {
-        width: this.width,
-      }
+          width: this.width,
+        }
       if (this.plusMinusButtons) {
         ret[this.direction === "vertical" ? "padding-top" : "padding-right"] = "0.5rem";
         ret[this.direction === "vertical" ? "padding-bottom" : "padding-left"] = "0.5rem";
@@ -734,7 +734,7 @@ Vue.component("ad-slider-component", {
     setValueOnPos(pos, isDrag) {
       const range = this.isRange ? this.limit[this.currentSlider] : this.limit
       const valueRange = this.isRange ? this.valueLimit[this.currentSlider] : this.valueLimit
-      const index = Math.round((pos - this.dotAxialSizePx/2) / this.gap)
+      const index = Math.round((pos - this.dotAxialSizePx / 2) / this.gap)
       if (pos >= range[0] && pos <= range[1]) {
         const v = this.getValueByIndex(index)
         this.setTransform(pos)
@@ -824,11 +824,9 @@ Vue.component("ad-slider-component", {
       }
     },
     increment(dir) {
-      console.log("increment " + dir)
       this.setValue(this.getValue() + dir * this.interval);
     },
     setValue(val, noCb, speed) {
-      console.log("setValue(" + val + ")")
       if (this.isDiff(this.val, val)) {
         const resetVal = this.limitValue(val)
         this.val = this.isRange ? resetVal.concat() : resetVal
@@ -845,7 +843,6 @@ Vue.component("ad-slider-component", {
       this.fixedValue = Math.max(this.fixed ? this.currentIndex[1] - this.currentIndex[0] : 0, this.minRange || 0)
     },
     setPosition(speed) {
-      //console.log("setPosition("+speed+") : this.position = " + this.position)
       this.flag || this.setTransitionTime(speed === undefined ? this.speed : speed)
       if (this.isRange) {
         this.setTransform(this.position[0], this.currentSlider === 1)
@@ -856,18 +853,16 @@ Vue.component("ad-slider-component", {
       this.flag || this.setTransitionTime(0)
     },
     setTransform(val, isIdleSlider) {
-      //console.log("setTransform(" + val + ")")
       const slider = isIdleSlider ? this.idleSlider : this.currentSlider
       const value = roundToDPR((this.direction === 'vertical' ? ((this.dotAxialSizePx / 2) - val) : (val - (this.dotAxialSizePx / 2))) * (this.reverse ? -1 : 1))
-      //console.log("value = " + value)
       const translateValue = this.direction === 'vertical' ? `translate(-50%, ${value}px)` : `translate(${value}px, -50%)`
       const processSize = this.fixed ? `${this.fixedValue * this.gap}px` : `${slider === 0 ? this.position[1] - val : val - this.position[0]}px`
       const processPos = this.fixed ? `${slider === 0 ? val : (val - this.fixedValue * this.gap)}px` : `${slider === 0 ? val : this.position[0]}px`
       this.slider[slider].style.transform = translateValue
       this.slider[slider].style.WebkitTransform = translateValue
       this.slider[slider].style.msTransform = translateValue
-    if (this.isRange) {
-        if (this.direction === 'vertical') { 
+      if (this.isRange) {
+        if (this.direction === 'vertical') {
           this.$refs.process.style.height = processSize
           this.$refs.process.style[this.reverse ? 'top' : 'bottom'] = processPos
         } else {
@@ -900,7 +895,6 @@ Vue.component("ad-slider-component", {
       }
     },
     limitValue(val) {
-      //console.log("limitValue("+val+")")
       if (this.data) {
         return val
       }
@@ -924,7 +918,6 @@ Vue.component("ad-slider-component", {
       return index >= this.indexRange[0] && index <= this.indexRange[1]
     },
     syncValue(noCb) {
-      //console.log("syncValue : val = " + this.val)
       let val = this.isRange ? this.val.concat() : this.val
       this.$emit('input', val)
       this.keydownFlag && this.$emit('on-keypress', val)
@@ -940,7 +933,6 @@ Vue.component("ad-slider-component", {
       if (this.$refs.elem) {
         this.size = this.direction === 'vertical' ? this.$refs.elem.offsetHeight : this.$refs.elem.offsetWidth
         this.dotAxialSizePx = this.direction === 'vertical' ? this.$refs.dot0.clientWidth : this.$refs.dot0.clientHeight;
-        console.log("static data: size = " + this.size + " dotAxialSizePx = " + this.dotAxialSizePx);
       }
     },
     refresh() {

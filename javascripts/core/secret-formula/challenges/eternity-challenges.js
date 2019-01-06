@@ -65,7 +65,11 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Reduce the dimension cost multiplier growth",
       effect: completions => completions * 0.2,
-      formatEffect: value => `x - ${value.toFixed(1)}`
+      formatEffect: value => {
+        const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
+        const applied = base - value;
+        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(1)}x`;
+      }
     }
   },
   {
@@ -135,7 +139,11 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
-      formatEffect: value => `x - ${value.toFixed(2)}`
+      formatEffect: value => {
+        const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
+        const applied = base - value;
+        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(2)}x`;
+      }
     }
   },
   {

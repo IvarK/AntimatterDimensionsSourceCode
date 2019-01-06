@@ -4,7 +4,7 @@
 // what you want to use.
 //
 // Because it's related, we also define another directive, repeating-click, which
-// sends repeated click events if the mouse is held down.
+// sends repeated events if the mouse is held down. (It sends firstclick and repeatclick)
 
 // LongPress produces 3 possible events:
 // 1) a long press (longPress property in handlers)
@@ -48,11 +48,10 @@ class LongPress {
       }
     });
     if (handlers.click) {
-      $(obj).on("click touchend", (e) => {
-        return LongPress._handleClick(e, handlers.click)
-      });
+      $(obj).on("click", (e) => LongPress._handleClick(e, handlers.click));
+      $(obj).on("touchend", (e) => LongPress._handleTouchEnd(e, handlers.click));
     } else {
-      $(obj).on("touchend", LongPress._cancelCurrentPress)
+      $(obj).on("click touchend", LongPress._cancelCurrentPress)
     }
   }
 
@@ -153,8 +152,8 @@ Vue.directive("repeating-click", {
       }
     }
     LongPress.addTo(el, binding.value.delay, {
-      longPress: () => emit("click"),
-      click: () => emit("click"),
+      longPress: () => emit("repeatclick"),
+      click: () => emit("firstclick"),
       repeat: 250
     });
   }

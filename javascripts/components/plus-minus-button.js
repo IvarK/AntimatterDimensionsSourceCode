@@ -55,7 +55,7 @@ Vue.component("plus-minus-button", {
     },
   },
   template:
-`<div :style="outerStyle" v-repeating-click="{ delay: 500 }" @click="$emit('click')">
+`<div :style="outerStyle" v-repeating-click="{ delay: 500 }" @firstclick="$emit('click')" @repeatclick="$emit('click')">
   <div :style="horizStyle"></div>
   <div v-if="type=='plus'" :style="vertStyle"></div>
  </div>`,

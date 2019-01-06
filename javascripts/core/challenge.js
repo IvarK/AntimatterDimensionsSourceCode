@@ -57,6 +57,7 @@ class ChallengeState extends GameMechanicState {
   }
 
   complete() {
+    if (this.isCompleted) return;
     player.challenges.push(this._fullId);
   }
 }
@@ -89,11 +90,6 @@ Challenge.current = function() {
  * @type {ChallengeState[]}
  */
 Challenge.all = Array.range(1, 12).map(Challenge);
-
-/**
- * @type {string[]}
- */
-Challenge.allIds = Challenge.all.map(c => c.fullId);
 
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
@@ -137,6 +133,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   complete() {
+    if (this.isCompleted) return;
     player.challenges.push(this._fullId);
   }
 
@@ -190,11 +187,6 @@ InfinityChallenge.isRunning = function() {
  * @type {InfinityChallengeState[]}
  */
 InfinityChallenge.all = Array.range(1, 8).map(InfinityChallenge);
-
-/**
- * @type {string[]}
- */
-InfinityChallenge.allIds = InfinityChallenge.all.map(c => c.fullId);
 
 /**
  * @return {InfinityChallengeState[]}

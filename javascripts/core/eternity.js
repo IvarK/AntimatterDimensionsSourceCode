@@ -22,7 +22,6 @@ function eternity(force, auto) {
     if (player.dead && !force) giveAchievement("You're already dead.");
     if (player.infinitied <= 1 && !force) giveAchievement("Do I really need to infinity");
     if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!");
-    let temp = [];
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
@@ -64,9 +63,6 @@ function eternity(force, auto) {
         }
 
     }
-    for (let i = 0; i < player.challenges.length; i++) {
-        if (!player.challenges[i].includes("post") && player.eternities > 1) temp.push(player.challenges[i])
-    }
     player.infinitiedBank += Effects.sum(
       Achievement(131),
       TimeStudy(191)
@@ -80,16 +76,22 @@ function eternity(force, auto) {
         player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
     }
     if (player.realities > 0 && player.eternities === 0 && player.infinityPoints.gte(new Decimal("1e400"))) unlockRealityUpgrade(10);
-    player.challenges = temp;
     if (!force) {
         var tempEterGain = 1;
         if (player.reality.rebuyables[3] > 0) tempEterGain *= Math.pow(3, player.reality.rebuyables[3]);
         player.eternities += tempEterGain
     }
     player.sacrificed = new Decimal(0);
-    player.challenges = player.eternities >= 2 ? Challenge.allIds : [];
+    player.challenges = [];
+    if (EternityMilestone.keepAutobuyers.isReached) {
+      for (let challenge of Challenge.all) {
+        challenge.complete();
+      }
+    }
     if (Achievement(133).isEnabled) {
-      player.challenges.push(...InfinityChallenge.allIds);
+      for (let challenge of InfinityChallenge.all) {
+        challenge.complete();
+      }
     }
     player.currentChallenge = "";
     player.infinitied = 0;

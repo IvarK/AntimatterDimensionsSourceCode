@@ -88,7 +88,13 @@ function reality(force, reset, auto) {
     ec10bonus = new Decimal(1);
 
     player.sacrificed = new Decimal(0);
-    player.challenges = player.reality.upg.includes(10) ? Challenge.allIds : [];
+
+    player.challenges = [];
+    if (player.reality.upg.includes(10)) {
+        for (let challenge of Challenge.all) {
+            challenge.complete();
+        }
+    }
     player.currentChallenge = "";
     player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
     player.infinitied = 0;

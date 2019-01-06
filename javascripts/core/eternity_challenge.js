@@ -5,9 +5,16 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     }
 
     player.sacrificed = new Decimal(0);
-    player.challenges = player.eternities >= 2 ? Challenge.allIds : [];
+    player.challenges = [];
+    if (EternityMilestone.keepAutobuyers.isReached) {
+      for (let challenge of Challenge.all) {
+        challenge.complete();
+      }
+    }
     if (Achievement(133).isEnabled) {
-      player.challenges.push(...InfinityChallenge.allIds);
+      for (let challenge of InfinityChallenge.all) {
+        challenge.complete();
+      }
     }
     player.currentChallenge = "";
     player.infinitied = 0;

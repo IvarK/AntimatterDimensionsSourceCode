@@ -56,20 +56,22 @@ Decimal.prototype.copyFrom = function(decimal) {
   this.exponent = decimal.exponent;
 };
 
-function copyToClipboard(str) {
+const copyToClipboard = (function() {
+  let el = document.createElement('textarea');
+  document.body.appendChild(el);
+  el.style.position = "absolute";
+  el.style.left = '-9999999px';
+  return function(str) {
     try {
-        let el = document.createElement('textarea');
-        el.value = str;
-        document.body.appendChild(el);
-        el.select();
-        let result = document.execCommand('copy');
-        document.body.removeChild(el);
-        return result;
+      el.value = str;
+      el.select();
+      return document.execCommand('copy');
     } catch(ex) {
-        console.log(ex);
-        return false;
+      console.log(ex);
+      return false;
     }
-}
+  };
+}());
 
 function copyToClipboardAndNotify(str) {
     if (copyToClipboard(str)) {

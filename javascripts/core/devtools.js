@@ -21,13 +21,13 @@ dev.doubleEverything = function() {
 }
 
 dev.spin3d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin3d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.spin4d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin4d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.cancerize = function() {
@@ -61,8 +61,8 @@ dev.fixSave = function() {
 }
 
 dev.implode = function() {
-    document.getElementById("body").style.animation = "implode 2s 1";
-    setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
+    document.body.style.animation = "implode 2s 1";
+    setTimeout(function(){ document.body.style.animation = ""; }, 2000)
 }
 
 dev.updateTDCosts = function() {
@@ -457,7 +457,7 @@ dev.showProductionBreakdown = function() {
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   
-  IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
+  IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
   let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);

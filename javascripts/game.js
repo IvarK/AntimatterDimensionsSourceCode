@@ -1039,7 +1039,7 @@ function gameLoop(diff) {
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
 
-    while (player.money.gte(nextAt[player.postChallUnlocked]) && player.challenges.includes("postc8") === false && player.postChallUnlocked != 8) {
+    while (player.money.gte(nextAt[player.postChallUnlocked]) && !InfinityChallenge(8).isCompleted && !InfinityChallenge(8).isUnlocked) {
         if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
         if (player.eternities > 6) {
           player.challenges.push("postc"+player.postChallUnlocked)

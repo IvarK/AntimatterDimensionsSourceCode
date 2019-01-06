@@ -284,10 +284,15 @@ function getTotalEffect(effectKey) {
 }
 
 function recalculateAllGlyphs() {
-  for (let i = 0; i < player.reality.glyphs.active.length; i++)
+  for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     fixGlyph(player.reality.glyphs.active[i]);
-  for (let i = 0; i < player.reality.glyphs.inventory.length; i++)
+  }
+  // delete any glyphs that are in overflow spots:
+  player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
+    glyph => glyph.idx < player.reality.glyphs.inventorySize);
+  for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     fixGlyph(player.reality.glyphs.inventory[i]);
+  }
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly

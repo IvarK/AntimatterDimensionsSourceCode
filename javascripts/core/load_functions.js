@@ -181,8 +181,11 @@ function onLoad() {
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
   if (player.version === 13) dev.updateTestSave()
 
+  if (SecretAchievement(21).isUnlocked && player.secretUnlocks.secretTS == 0) {
+    player.secretUnlocks.secretTS = 1;
+  }
   if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
+    document.getElementById("game").style.display = "none";
   }
 
 	initializeWormhole();

@@ -153,6 +153,25 @@ const newsArray = [
   ["This message will never appear on the news ticker, isn't that cool?", "a150"],
   ["The first dimension produces antimatter, the second dimension produces the first dimension, the third dimension produces the second dimension, the fourth dimension produces the third dimension. Nobody has ever unlocked the 5th, because that would take more than a minute of gameplay.", "a151"],
   ["My AD-blocker won't let me play.", "a152"],
+  ["You lost the game.", "a153"],
+  ["Did you know that 75% of all statistics are made up on the spot?", "a154"],
+  ["If you're using so many logs in a notation name, why not just call it tree notation? They're literally made of logs!", "a155"],
+  [".tuo ti gnitset fo ssecorp eht ni yltnerruc m'I dna ,rettamitna otni rettam trevnoc ot yaw a tuo derugif evah stsitneicS", "a156"],
+  ["If Gaben can't count to three, and Hevipelle can't count to nine, will there be some other game developer in the future that can't count to 27?", "a157"],
+  ["What does it mean when you \"bank\" Infinities? Is there a bank somewhere that you just deposit these infinities? Does having a lot of banked Infinities improve your credit score? Do you get a credit card?", "a158"],
+  ["Turns out all our news is being stolen and broadcast to a game called \"Antimatter Dimensions\", damn Fins.", "a159"],
+  ["mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Oh sorry, wrong text field.", "a160"],
+  ["\"Python's not the best language, Finnish is.\" - Hevipelle", "a161"],
+  ["Some say that most of these news are bad memes. Some say that they're good memes. This one? Well it's just meta news.", "a162"],
+  ["Look mom, I'm on the news!", "a163"],
+  ["<span style='font-size: 0.2rem'>Shush, I'm trying to be sneaky here.</span>", "a164"],
+  ["<span style='animation: a-game-header__antimatter--glow 2s infinite'>PLEASE HELP, I'VE CONSUMED TWICE MY DAILY DOSE OF ANTIMATTER!</span>", "a165"],
+  ["Oh, I appear to have run out of <span style='animation: existenceGlow 3s infinite; font-size: 1.8rem; color: white; text-shadow: 1px 1px 4px black;'>Existence</span>.", "a166"],
+  ["I mean, we may never run out of news articles, but we sure will run out of good ones. Oh wait, we already did.", "a167"],
+  ["If each Trimp was a plank volume, and each piece of resource was a plank volume, how many universes would you fill up before you realized you were playing the wrong game?", "a168"],
+  ["TODO: John, please remove this newsticker message before we release the Reality update to the public.", "a169"],
+  ["<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This is not a rick roll.</a>", "a170"],
+  ["<a href='https://www.youtube.com/watch?v=eRr1gJ65chM' target='_blank'>This is not a rick roll.</a>", "a171"],
 
 //basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],
@@ -256,7 +275,7 @@ function scrollNextMessage() {
   scrollTimeouts = [];
 
   //set the text
-  s.textContent = newsArray[nextMsgIndex][0];
+  s.innerHTML = newsArray[nextMsgIndex][0];
 
   //get the parent width so we can start the message beyond it
   let parentWidth = s.parentElement.clientWidth;

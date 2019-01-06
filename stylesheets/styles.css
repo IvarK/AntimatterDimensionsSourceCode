@@ -54,6 +54,7 @@ button {
     border-radius: 4px;
     padding: 2px;
     width: 75%;
+    height: 22px;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
@@ -1018,6 +1019,12 @@ button {
 @keyframes glow {
     20% { text-shadow: 0 0 10px green; }
     100% { text-shadow: 0 0 10px white; }
+}
+
+@keyframes existenceGlow {
+  0% { text-shadow: 1px 1px 2px black; }
+  50% { text-shadow: 1px 1px 8px black; }
+  100% { text-shadow: 1px 1px 2px black; }
 }
 
 .tooltip {

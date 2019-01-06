@@ -52,7 +52,7 @@ function buyTickSpeed() {
   player.money = player.money.minus(player.tickSpeedCost);
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
-  if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease);
+  if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
@@ -68,7 +68,7 @@ function buyMaxTickSpeed() {
   if (money.eq(0)) return false;
   const mult = getTickSpeedMultiplier();
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
-  let tickSpeedMultDecrease = player.tickSpeedMultDecrease;
+  let tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let tickspeed = new Decimal(player.tickspeed);
   let postC3Reward = new Decimal(player.postC3Reward);
@@ -80,13 +80,12 @@ function buyMaxTickSpeed() {
     player.postC3Reward.fromDecimal(postC3Reward);
   }
 
-  const currentChallenge = player.currentChallenge;
   const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
   if (Challenge(2).isRunning) {
     player.chall2Pow = 0;
   }
-  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2) {
-    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2 || InfinityChallenge(5).isRunning)) {
+  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
+    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed || InfinityChallenge(5).isRunning)) {
       money = money.minus(tickSpeedCost);
       if (Challenge(9).isRunning || InfinityChallenge(5).isRunning) {
         multiplySameCosts(tickSpeedCost);

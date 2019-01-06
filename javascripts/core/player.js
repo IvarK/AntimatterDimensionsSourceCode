@@ -51,6 +51,7 @@ var player = {
   sacrificed: new Decimal(0),
   achievements: [],
   infinityUpgrades: [],
+  infinityRebuyables: [0, 0],
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
@@ -94,10 +95,6 @@ var player = {
   lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
-  tickSpeedMultDecrease: 10,
-  tickSpeedMultDecreaseCost: 3e6,
-  dimensionMultDecrease: 10,
-  dimensionMultDecreaseCost: 1e8,
   overXGalaxies: 10,
   version: 10,
   infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
@@ -422,12 +419,15 @@ var player = {
 
 
 const Player = {
+
   get totalInfinitied() {
     return Math.max(player.infinitied + player.infinitiedBank, 0);
   },
+
   get isInMatterChallenge() {
     return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
   },
+
   get effectiveMatterAmount() {
     if (Challenge(11).isRunning) {
       return player.matter;
@@ -437,6 +437,7 @@ const Player = {
     }
     return new Decimal(0);
   },
+
   get antimatterPerSecond() {
     const basePerSecond = getDimensionProductionPerSecond(1);
     if (Challenge(3).isRunning) {
@@ -447,10 +448,20 @@ const Player = {
     }
     return basePerSecond;
   },
+
   get bestRunIPPM() {
     return GameCache.bestRunIPPM.value;
   },
+
   get averageEPPerRun() {
     return GameCache.averageEPPerRun.value;
+  },
+
+  get tickSpeedMultDecrease() {
+    return GameCache.tickSpeedMultDecrease.value;
+  },
+
+  get dimensionMultDecrease() {
+    return GameCache.dimensionMultDecrease.value;
   }
 };

@@ -49,12 +49,20 @@ class PurchasableMechanicState extends GameMechanicState {
     return typeof currency === "number" ? currency >= (this.cost) : currency.gte(this.cost);
   }
 
+  get isAvailable() {
+    return true;
+  }
+
   get isBought() {
     return this.collection.includes(this.id);
   }
 
+  get canBeBought() {
+    return this.isAffordable && this.isAvailable;
+  }
+
   purchase() {
-    if (this.isBought || !this.isAffordable) return false;
+    if (this.isBought || !this.canBeBought) return false;
     this.collection.push(this.id);
     const currency = this._currency.value;
     if (typeof currency === "number") {
@@ -62,6 +70,7 @@ class PurchasableMechanicState extends GameMechanicState {
     } else {
       this._currency.value = currency.minus(this.cost);
     }
+    GameUI.update();
     return true;
   }
 
@@ -84,6 +93,11 @@ class Currency {
     this._set(value);
   }
 }
+
+Currency.infinityPoints = new Currency(
+  () => player.infinityPoints,
+  ep => player.infinityPoints = ep
+);
 
 Currency.eternityPoints = new Currency(
   () => player.eternityPoints,

@@ -108,10 +108,11 @@ function reality(force, reset, auto) {
     player.break = player.reality.upg.includes(10) ? player.break : false;
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
-    player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
-    player.tickSpeedMultDecreaseCost = player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6;
-    player.dimensionMultDecrease = player.reality.upg.includes(10) ? Math.max(player.dimensionMultDecrease, 3) : 10;
-    player.dimensionMultDecreaseCost = player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8;
+    if (!player.reality.upg.includes(10)) {
+        player.infinityRebuyables = [0, 0];
+        GameCache.tickSpeedMultDecrease.invalidate();
+        GameCache.dimensionMultDecrease.invalidate();
+    }
     player.postChallUnlocked = 0;
     player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
     player.infinityPower = new Decimal(1);

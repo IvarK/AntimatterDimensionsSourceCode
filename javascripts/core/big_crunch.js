@@ -178,51 +178,20 @@ function totalIPMult() {
     );
 }
 
-class InfinityUpgrade {
-  constructor(props, requirement) {
-    this._id = props.id;
-    this._cost = props.cost;
-    this._effect = props.effect;
+class InfinityUpgrade extends PurchasableMechanicState {
+  constructor(config, requirement) {
+    super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
   }
 
-  get cost() {
-    return this._cost;
-  }
-  
-  get isBought() {
-    return player.infinityUpgrades.includes(this._id);
-  }
-
   get isAvailable() {
-    return this.isRequirementSatisfied && player.infinityPoints.gte(this.cost) && !this.isBought;
-  }
-
-  get isRequirementSatisfied() {
     return this._requirement === undefined || this._requirement.isBought;
-  }
-  
-  purchase() {
-    if (!this.isAvailable) return;
-    player.infinityUpgrades.push(this._id);
-    player.infinityPoints = player.infinityPoints.minus(this._cost);
-    GameUI.update();
-  }
-
-  get effectValue() {
-    return this._effect();
-  }
-
-  applyEffect(applyFn) {
-    if (this.isBought) {
-      applyFn(this.effectValue);
-    }
   }
 }
 
 (function() {
   const db = GameDatabase.infinity.upgrades;
-  const upgrade = (props, requirement) => new InfinityUpgrade(props, requirement);
+  const upgrade = (config, requirement) => new InfinityUpgrade(config, requirement);
   InfinityUpgrade.totalTimeMult = upgrade(db.totalTimeMult);
   InfinityUpgrade.dim18mult = upgrade(db.dim18mult, InfinityUpgrade.totalTimeMult);
   InfinityUpgrade.dim36mult = upgrade(db.dim36mult, InfinityUpgrade.dim18mult);
@@ -244,36 +213,42 @@ class InfinityUpgrade {
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
 })();
 
-InfinityUpgrade.ipMult = {
-  capValue: new Decimal("1e6000000"),
-  costIncreaseThreshold: new Decimal("1e3000000"),
+class InfinityIPMultUpgrade extends GameMechanicState {
+  constructor(config) {
+    super(config);
+  }
+
   get cost() {
-    return player.infMultCost;
-  },
-  set cost(value) {
-    player.infMultCost = value;
-  },
+    return this.config.cost();
+  }
+
   get hasIncreasedCost() {
-    return this.cost.gte(this.costIncreaseThreshold);
-  },
+    return this.cost.gte(this.config.costIncreaseThreshold);
+  }
+
   get costIncrease() {
     return this.hasIncreasedCost ? 1e10 : 10;
-  },
+  }
+
   get isCapped() {
-    return this.cost.gte(this.capValue);
-  },
+    return this.cost.gte(this.config.costCap);
+  }
+
+  get isBought() {
+    return this.isCapped;
+  }
+
   get isRequirementSatisfied() {
     return InfinityUpgrade.resetBoost.isBought &&
       InfinityUpgrade.galaxyBoost.isBought &&
       InfinityUpgrade.ipGen.isBought &&
       InfinityUpgrade.skipResetGalaxy.isBought;
-  },
-  get effectValue() {
-    return player.infMult;
-  },
+  }
+
   get isAvailable() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
-  },
+  }
+
   purchase(amount = 1) {
     if (!this.isAvailable) return;
     const costIncrease = this.costIncrease;
@@ -281,14 +256,25 @@ InfinityUpgrade.ipMult = {
     player.infMult = player.infMult.times(mult);
     player.autoIP = player.autoIP.times(mult);
     Autobuyer.infinity.bumpLimit(mult);
-    this.cost = this.cost.times(Decimal.pow(costIncrease, amount));
+    player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
+    this.adjustToCap();
     GameUI.update();
-  },
+  }
+
+  adjustToCap() {
+    if (this.isCapped) {
+      const capOffset = this.config.cap.dividedBy(player.infMult);
+      player.autoIP = player.autoIP.times(capOffset);
+      player.infMult.copyFrom(this.config.cap);
+      player.infMultCost.copyFrom(this.config.costCap);
+    }
+  }
+
   autobuyerTick() {
     if (!this.isAvailable) return;
     if (!this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.costIncreaseThreshold.exponent);
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
       const purchases = buyUntil - this.cost.exponent + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
@@ -296,17 +282,19 @@ InfinityUpgrade.ipMult = {
     // do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
     // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
     if (this.hasIncreasedCost) {
-      const buyUntil = Math.min(player.infinityPoints.exponent, this.capValue.exponent);
+      const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
       const purchases = Math.floor((buyUntil - player.infMultCost.exponent) / 10) + 1;
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
   }
-};
+}
 
-class BreakInfinityUpgrade extends InfinityUpgrade {
-  constructor(props) {
-    super(props);
+InfinityUpgrade.ipMult = new InfinityIPMultUpgrade(GameDatabase.infinity.upgrades.ipMult);
+
+class BreakInfinityUpgrade extends PurchasableMechanicState {
+  constructor(config) {
+    super(config, Currency.infinityPoints, () => player.infinityUpgrades);
   }
 }
 
@@ -326,74 +314,72 @@ class BreakInfinityUpgrade extends InfinityUpgrade {
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 })();
 
-class BreakInfinityMultiplierCostUpgrade extends BreakInfinityUpgrade {
-  constructor(props) {
-    super(props);
-    this._getCost = props.getCost;
-    this._setCost = props.setCost;
-    this._costIncrease = props.costIncrease;
-    this._getValue = props.getValue;
-    this._setValue = props.setValue;
-    this._maxValue = props.maxValue;
-    this._minValue = props.minValue;
+class BreakInfinityMultiplierCostUpgrade extends GameMechanicState {
+  constructor(config) {
+    super(config);
   }
 
   get cost() {
-    return this._getCost();
+    return this.config.cost();
   }
 
-  get isBought() {
-    return this.effectValue <= this._minValue;
+  get canBeApplied() {
+    return this.boughtAmount > 0;
+  }
+
+  get boughtAmount() {
+    return this.effectValue;
+  }
+
+  get isMaxed() {
+    return this.boughtAmount === this.config.maxUpgrades;
+  }
+
+  get isAffordable() {
+    return player.infinityPoints.gte(this.cost);
+  }
+
+  get isAvailable() {
+    return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
     if (!this.isAvailable) return;
-    this._setValue(this.effectValue - 1);
-    const cost = this.cost;
-    player.infinityPoints = player.infinityPoints.minus(cost);
-    this._setCost(cost * this._costIncrease);
+    player.infinityPoints = player.infinityPoints.minus(this.cost);
+    player.infinityRebuyables[this.config.id]++;
+    GameCache.dimensionMultDecrease.invalidate();
+    GameCache.tickSpeedMultDecrease.invalidate();
     GameUI.update();
-  }
-
-  get effectValue() {
-    return this._getValue();
-  }
-
-  get maxValue() {
-    return this._maxValue;
   }
 }
 
-BreakInfinityUpgrade.tickspeedCostMult = new BreakInfinityMultiplierCostUpgrade({
-  getCost: () => player.tickSpeedMultDecreaseCost,
-  setCost: value => player.tickSpeedMultDecreaseCost = value,
-  costIncrease: 5,
-  getValue: () => player.tickSpeedMultDecrease,
-  setValue: value => player.tickSpeedMultDecrease = value,
-  maxValue: 10,
-  minValue: 2
-});
-BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade({
-  getCost: () => player.dimensionMultDecreaseCost,
-  setCost: value => player.dimensionMultDecreaseCost = value,
-  costIncrease: 5000,
-  getValue: () => player.dimensionMultDecrease,
-  setValue: value => player.dimensionMultDecrease = value,
-  maxValue: 10,
-  minValue: 3
-});
+BreakInfinityUpgrade.tickspeedCostMult = new BreakInfinityMultiplierCostUpgrade(
+  GameDatabase.infinity.breakUpgrades.tickspeedCostMult
+);
 
-class BreakInfinityIPGenUpgrade extends BreakInfinityUpgrade {
-  constructor() {
-    super({});
+BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
+  GameDatabase.infinity.breakUpgrades.dimCostMult
+);
+
+class BreakInfinityIPGenUpgrade extends GameMechanicState {
+  constructor(config) {
+    super(config);
   }
 
   get cost() {
-    return player.offlineProdCost;
+    return this.config.cost();
   }
 
-  get isBought() {
+  get isMaxed() {
     return player.offlineProd === 50;
+  }
+
+  get isAffordable() {
+    return player.infinityPoints.gte(this.cost);
+  }
+
+  get isAvailable() {
+    return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
@@ -403,10 +389,6 @@ class BreakInfinityIPGenUpgrade extends BreakInfinityUpgrade {
     player.offlineProd += 5;
     GameUI.update();
   }
-
-  get effectValue() {
-    return player.offlineProd;
-  }
 }
 
-BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade();
+BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);

@@ -642,7 +642,7 @@ function buyRealityUpg(id) {
   return true
 }
 
-function updateRealityUpgrades() {
+  function updateRealityUpgrades() {
   for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
     else $("#rupg"+i).removeClass("rUpgUn")

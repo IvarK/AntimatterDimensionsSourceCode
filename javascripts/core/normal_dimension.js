@@ -270,7 +270,7 @@ function buyOneDimension(tier) {
     if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + 'Cost'] = player[name + 'Cost'].times(getDimensionCostMultiplier(tier));
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier);
     else multiplySameCosts(cost);
-    if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
+    if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
     floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
   }
 
@@ -325,7 +325,7 @@ function buyManyDimension(tier) {
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + 'Cost'] = player[name + 'Cost'].times((getDimensionCostMultiplier(tier)));
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier);
   else multiplySameCosts(player[name + 'Cost']);
-  if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(player.dimensionMultDecrease);
+  if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
   floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
@@ -348,7 +348,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const costMultiplier = player.costMultipliers[tier - 1];
   const dimensionPowerMultiplier = getDimensionPowerMultiplier(tier);
   const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
-  const dimensionMultDecrease = player.dimensionMultDecrease;
+  const dimensionMultDecrease = Player.dimensionMultDecrease;
   const costUntil10 = dimension.cost.times(remainingUntil10);
 
   if (tier >= 3 && Challenge(6).isRunning) {
@@ -384,7 +384,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (player.money.lt(dimension.cost.times(10))) return false;
   let x = bulk;
 
-  if ((dimensionMultDecrease > 3 || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
+  if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
     while (player.money.gte(dimension.cost.times(10)) && x > 0) {
       player.money = player.money.minus(dimension.cost.times(10));
       if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);

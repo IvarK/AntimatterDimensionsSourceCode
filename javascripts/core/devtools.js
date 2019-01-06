@@ -421,6 +421,12 @@ dev.updateTestSave = function() {
     unfuckChallengeIds();
     player.options.testVersion = 26;
   }
+
+  if (player.options.testVersion === 26) {
+    InfinityUpgrade.ipMult.adjustToCap();
+    unfuckMultCosts();
+    player.options.testVersion = 27;
+  }
 }
 
 // Still WIP

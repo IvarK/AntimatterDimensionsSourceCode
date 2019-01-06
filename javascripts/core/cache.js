@@ -35,6 +35,20 @@ const GameCache = {
       .dividedBy(player.lastTenEternities.length);
   }),
 
+  tickSpeedMultDecrease: new Lazy(() => {
+    return 10 - Effects.sum(
+      BreakInfinityUpgrade.tickspeedCostMult,
+      EternityChallenge(11).reward
+    );
+  }),
+
+  dimensionMultDecrease: new Lazy(() => {
+    return 10 - Effects.sum(
+      BreakInfinityUpgrade.dimCostMult,
+      EternityChallenge(6).reward
+    );
+  }),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

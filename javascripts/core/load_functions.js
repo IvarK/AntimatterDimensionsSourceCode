@@ -140,13 +140,10 @@ function onLoad() {
     }
   }
 
-    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-    if (player.version === 13) dev.updateTestSave()
-
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 22;
+        if (isDevEnvironment()) player.options.testVersion = 27;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -178,7 +175,11 @@ function onLoad() {
         }
         convertAutobuyerMode();
         unfuckChallengeIds();
+        unfuckMultCosts();
     }
+
+  //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+  if (player.version === 13) dev.updateTestSave()
 
   if (player.options.newsHidden) {
       document.getElementById("game").style.display = "none";
@@ -264,10 +265,19 @@ function unfuckChallengeIds() {
   player.challenges = player.challenges.map(unfuckChallengeId);
 }
 
+function unfuckMultCosts() {
+  player.infinityRebuyables[0] = Math.round(Math.log(player.tickSpeedMultDecreaseCost / 3e6) / Math.log(5));
+  player.infinityRebuyables[1] = Math.round(Math.log(player.dimensionMultDecreaseCost / 1e8) / Math.log(5e3));
+  delete player.tickSpeedMultDecrease;
+  delete player.tickSpeedMultDecreaseCost;
+  delete player.dimensionMultDecrease;
+  delete player.dimensionMultDecreaseCost;
+}
+
 function load_cloud_save(saveId, cloudPlayer) {
   saves[saveId] = cloudPlayer;
 
-  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', saveId, cloudPlayer);
+  if (isDevEnvironment()) set_save('dimensionTestSave', saveId, cloudPlayer);
   else set_save('dimensionSave', saveId, cloudPlayer);
 
   if (currentSave == saveId) {
@@ -278,7 +288,7 @@ function load_cloud_save(saveId, cloudPlayer) {
 
 function load_game(root) {
   if (!root) {
-    if (window.location.href.split("//")[1].length > 20) var root = get_save('dimensionTestSave');
+    if (isDevEnvironment()) var root = get_save('dimensionTestSave');
     else var root = get_save('dimensionSave');
   }
 
@@ -306,7 +316,7 @@ function load_game(root) {
 
 function save_game(changed, silent) {
   if ( possibleGlyphs.length > 0 ) return
-  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, player);
+  if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
   if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
 }

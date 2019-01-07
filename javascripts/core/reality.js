@@ -116,8 +116,6 @@ function reality(force, reset, auto) {
     player.infMultCost = new Decimal(10);
     if (!player.reality.upg.includes(10)) {
         player.infinityRebuyables = [0, 0];
-        GameCache.tickSpeedMultDecrease.invalidate();
-        GameCache.dimensionMultDecrease.invalidate();
     }
     player.postChallUnlocked = 0;
     player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
@@ -251,6 +249,7 @@ function reality(force, reset, auto) {
             }
         }
     }
+    GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
 }
 

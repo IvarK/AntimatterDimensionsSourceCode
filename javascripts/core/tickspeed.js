@@ -4,14 +4,17 @@ function canBuyTickSpeed() {
 
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  let galaxies = player.galaxies+player.replicanti.galaxies+player.dilation.freeGalaxies
-  galaxies += Effects.sum(
+  let replicantiGalaxies = player.replicanti.galaxies;
+  replicantiGalaxies *= Effects.product(
     TimeStudy(132),
     TimeStudy(133),
-    TimeStudy(225),
-    TimeStudy(226),
     EternityChallenge(8).reward
   );
+  replicantiGalaxies += Effects.sum(
+    TimeStudy(225),
+    TimeStudy(226)
+  );
+  let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89

@@ -109,6 +109,13 @@
                     <br>Glyph level: 1</button>
                   <br>
                   <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
+                  <expanding-control-box v-if="view.tabs.reality.subtab == 'glyphstab'"
+                                         label="Glyph level factors"
+                                         container-class="glyph-level-factors-dropdown-header">
+                    <template slot="dropdown">
+                      <glyph-levels-and-weights></glyph-levels-and-weights>
+                    </template>
+                  </expanding-control-box>
                   <br>
                   <br>
                   <button class="realityUpgrade" onclick="toggleGlyphRespec()" id="glyphRespec" style="width:150px; height: 40px; margin: auto">Clear glyph slots on Reality</button>
@@ -605,6 +612,8 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-button.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-upgrade.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
+
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>

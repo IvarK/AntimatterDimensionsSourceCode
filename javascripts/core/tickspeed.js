@@ -5,15 +5,18 @@ function canBuyTickSpeed() {
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
   let replicantiGalaxies = player.replicanti.galaxies;
-  replicantiGalaxies *= Effects.product(
+  replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),
-    TimeStudy(133),
-    EternityChallenge(8).reward
-  );
+    TimeStudy(133)
+  ));
   replicantiGalaxies += Effects.sum(
     TimeStudy(225),
     TimeStudy(226)
   );
+  let nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
+  // Effects.sum is intentional here - if EC8 is not completed,
+  // this value should not be contributed to total replicanti galaxies
+  replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
   if (galaxies < 3) {
       let baseMultiplier = 0.9;

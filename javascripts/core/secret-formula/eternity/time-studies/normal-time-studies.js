@@ -206,13 +206,13 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 132,
     cost: 5,
     description: "Replicanti galaxies are 40% more effective",
-    effect: () => 1.4
+    effect: () => 0.4
   },
   {
     id: 133,
     cost: 5,
     description: "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger",
-    effect: () => 1.5
+    effect: () => 0.5
   },
   {
     id: 141,

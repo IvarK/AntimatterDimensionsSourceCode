@@ -92,9 +92,9 @@ GameDatabase.challenges.eternity = [
       description: "Infinity Power powers up Replicanti galaxies",
       effect: completions => {
         const infinityPower = Math.log10(player.infinityPower.clampMin(1).log10() + 1);
-        return Math.max(1, Math.pow(infinityPower, 0.03 * completions));
+        return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
       },
-      formatEffect: value => formatPercents(value - 1, 2)
+      formatEffect: value => formatPercents(value, 2)
     }
   },
   {

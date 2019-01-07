@@ -811,7 +811,7 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
-var GameSpeedEffectsEnum = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
+const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
 // Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
 // factorsToConsider is a list of the types of things we want to take into account
@@ -819,28 +819,28 @@ var GameSpeedEffectsEnum = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 // will override the effect of time glyphs or of the wormhole if it has appropriate values.
 function getGameSpeedupFactor(factorsToConsider, knownFactors) {
   if (factorsToConsider === undefined) {
-    factorsToConsider = [GameSpeedEffectsEnum.EC12, GameSpeedEffectsEnum.TIMEGLYPH, GameSpeedEffectsEnum.WORMHOLE];
+    factorsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   if (knownFactors === undefined) {
     knownFactors = {};
   }
   let factor = 1;
   // Don't always consider EC12 (the wormhole ignores it, for example).
-  if (player.currentEternityChall === "eterc12" && factorsToConsider.includes(GameSpeedEffectsEnum.EC12)) {
+  if (player.currentEternityChall === "eterc12" && factorsToConsider.includes(GameSpeedEffect.EC12)) {
     // I don't see any reason why we'd want to override EC12, but maybe I should add something here anyway.
     return 1/1000;
   }
-  if (factorsToConsider.includes(GameSpeedEffectsEnum.TIMEGLYPH)) {
-    if (GameSpeedEffectsEnum.TIMEGLYPH in knownFactors) {
-      factor *= knownFactors[GameSpeedEffectsEnum.TIMEGLYPH];
+  if (factorsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
+    if (GameSpeedEffect.TIMEGLYPH in knownFactors) {
+      factor *= knownFactors[GameSpeedEffect.TIMEGLYPH];
     } else {
       factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
     }
   }
   
-  if (player.wormhole[0] !== undefined && factorsToConsider.includes(GameSpeedEffectsEnum.WORMHOLE)) {
-    if (GameSpeedEffectsEnum.WORMHOLE in knownFactors) {
-      factor *= knownFactors[GameSpeedEffectsEnum.WORMHOLE];
+  if (player.wormhole[0] !== undefined && factorsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
+    if (GameSpeedEffect.WORMHOLE in knownFactors) {
+      factor *= knownFactors[GameSpeedEffect.WORMHOLE];
     } else {
       if (!player.wormholePause) {
         for (let wormhole of player.wormhole) {
@@ -888,10 +888,10 @@ function gameLoop(diff, wormholeSpeedup) {
       speedFactor = getGameSpeedupFactor();
     } else {
       // If we're in EC12, time shouldn't speed up at all.
-      speedFactor = getGameSpeedupFactor([GameSpeedEffectsEnum.EC12, GameSpeedEffectsEnum.TIMEGLYPH, GameSpeedEffectsEnum.WORMHOLE], {[GameSpeedEffectsEnum.WORMHOLE]: wormholeSpeedup});
+      speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], {[GameSpeedEffect.WORMHOLE]: wormholeSpeedup});
     }
     // Wormhole is affected only by time glyphs.
-    let wormholeDiff = diff * getGameSpeedupFactor([GameSpeedEffectsEnum.TIMEGLYPH]);
+    let wormholeDiff = diff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
     DeltaTimeState.update(diff, speedFactor);
     diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
@@ -1253,7 +1253,7 @@ function simulateTime(seconds, real, fast) {
     if (player.wormhole[0].unlocked && !player.wormholePause) {
       let remainingSeconds = seconds;
       for (let numberOfTicks = 600; numberOfTicks > 0; numberOfTicks--) {
-        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffectsEnum.TIMEGLYPH]);
+        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
         // If this conditional triggers, our time glyphs will become inactive before anything happens.
         if (Autobuyer.reality.canActivate() && player.reality.respec) timeGlyphSpeedup = 1;
         [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicks, 0.0001, timeGlyphSpeedup);

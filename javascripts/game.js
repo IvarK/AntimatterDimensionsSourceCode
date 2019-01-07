@@ -25,6 +25,10 @@ function hideLegacyTabs(tabName) {
       tab.style.display = 'none';
     }
   }
+  // workaround for Vue mounted issues until reality tab is vue'd
+  if (tabName === "reality" && !ui.view.tabs.reality.subtab) {
+    ui.view.tabs.reality.subtab = "glyphstab";
+  }
 }
 
 function floatText(tier, text) {
@@ -1398,6 +1402,7 @@ setInterval(function() {
 scrollNextMessage();
 
 function showRealityTab(tabName) {
+  ui.view.tabs.reality.subtab = tabName;
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('realitytab');
     var tab;

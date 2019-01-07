@@ -96,7 +96,14 @@ class AutobuyerState {
   /**
    * @returns {boolean}
    */
-  canTick() {
+  canTick(incrementTicks) {
+    // We might want to know whether an autobuyer can tick
+    // without actually incrementing its ticks
+    // (thus bringing it closer to ticking if not).
+    // If incrementTicks is false, this function is side-effect free.
+    if (incrementTicks === undefined) {
+      incrementTicks = true;
+    }
     if (!this.isUnlocked) return false;
     if (this.ticks * 100 < this.interval) {
       this.ticks++;
@@ -588,7 +595,11 @@ class InfinityAutobuyerState extends AutobuyerState {
   canActivate() {
     // These two lines are here so that this function is accurate, and in tick()
     // so that tick() can return early if needed.
-    if (!this.canTick()) return false;
+    // This incrementTicks=false means that we're not changing the autobuyer state
+    // (so calling this function should always be safe and have no side effects).
+    // Techinically I'm not sure this ever matters based on where we currently call canActivate,
+    // but we do it just to be safe.
+    if (!this.canTick(incrementTicks=false)) return false;
     if (!player.money.gte(Number.MAX_VALUE)) return false;
     let proc = !player.break || player.currentChallenge !== "";
     if (!proc) {

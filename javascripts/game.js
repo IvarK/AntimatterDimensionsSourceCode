@@ -811,38 +811,46 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
+var GameSpeedEffectsEnum = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
+
 // Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
 // factorsToConsider is a list of the types of things we want to take into account
 // (for example, the wormhole ignores itself). knownFactors is an object that
 // will override the effect of time glyphs or of the wormhole if it has appropriate values.
 function getGameSpeedupFactor(factorsToConsider, knownFactors) {
   if (factorsToConsider === undefined) {
-    factorsToConsider = ['EC12', 'time glyphs', 'wormhole']
+    factorsToConsider = [GameSpeedEffectsEnum.EC12, GameSpeedEffectsEnum.TIMEGLYPH, GameSpeedEffectsEnum.WORMHOLE];
   }
   if (knownFactors === undefined) {
     knownFactors = {};
   }
   let factor = 1;
   // Don't always consider EC12 (the wormhole ignores it, for example).
-  if (player.currentEternityChall === "eterc12" && factorsToConsider.includes('EC12')) {
+  if (player.currentEternityChall === "eterc12" && factorsToConsider.includes(GameSpeedEffectsEnum.EC12)) {
     // I don't see any reason why we'd want to override EC12, but maybe I should add something here anyway.
     return 1/1000;
   }
-  if (factorsToConsider.includes('time glyphs')) {
-    if ('time glyphs' in knownFactors) {
-      factor *= knownFactors['time glyphs'];
+  if (factorsToConsider.includes(GameSpeedEffectsEnum.TIMEGLYPH)) {
+    if (GameSpeedEffectsEnum.TIMEGLYPH in knownFactors) {
+      factor *= knownFactors[GameSpeedEffectsEnum.TIMEGLYPH];
     } else {
       factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
     }
   }
   
-  if (player.wormhole[0] !== undefined && factorsToConsider.includes('wormhole')) {
-    if ('wormhole' in knownFactors) {
-      factor *= knownFactors.wormhole;
+  if (player.wormhole[0] !== undefined && factorsToConsider.includes(GameSpeedEffectsEnum.WORMHOLE)) {
+    if (GameSpeedEffectsEnum.WORMHOLE in knownFactors) {
+      factor *= knownFactors[GameSpeedEffectsEnum.WORMHOLE];
     } else {
-      if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
-      if (player.wormhole[0].active && player.wormhole[1].active && !player.wormholePause) factor *= player.wormhole[1].power
-      if (player.wormhole[0].active && player.wormhole[1].active && player.wormhole[2].active && !player.wormholePause) factor *= player.wormhole[2].power
+      if (!player.wormholePause) {
+        for (let wormhole of player.wormhole) {
+          if (wormhole.active) {
+            factor *= wormhole.power
+          } else {
+            break;
+          }
+        }
+      }
     }
   }
   
@@ -880,10 +888,10 @@ function gameLoop(diff, wormholeSpeedup) {
       speedFactor = getGameSpeedupFactor();
     } else {
       // If we're in EC12, time shouldn't speed up at all.
-      speedFactor = getGameSpeedupFactor(['EC12', 'time glyphs', 'wormhole'], {wormhole: wormholeSpeedup});
+      speedFactor = getGameSpeedupFactor([GameSpeedEffectsEnum.EC12, GameSpeedEffectsEnum.TIMEGLYPH, GameSpeedEffectsEnum.WORMHOLE], {[GameSpeedEffectsEnum.WORMHOLE]: wormholeSpeedup});
     }
     // Wormhole is affected only by time glyphs.
-    let wormholeDiff = diff * getGameSpeedupFactor(['time glyphs']);
+    let wormholeDiff = diff * getGameSpeedupFactor([GameSpeedEffectsEnum.TIMEGLYPH]);
     DeltaTimeState.update(diff, speedFactor);
     diff *= speedFactor;
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
@@ -1245,8 +1253,8 @@ function simulateTime(seconds, real, fast) {
     if (player.wormhole[0].unlocked && !player.wormholePause) {
       let remainingSeconds = seconds;
       for (let numberOfTicks = 600; numberOfTicks > 0; numberOfTicks--) {
-        let timeGlyphSpeedup = getGameSpeedupFactor(['time glyphs']);
-        // Our time glyphs will become inactive before anything happens.
+        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffectsEnum.TIMEGLYPH]);
+        // If this conditional triggers, our time glyphs will become inactive before anything happens.
         if (Autobuyer.reality.canActivate() && player.reality.respec) timeGlyphSpeedup = 1;
         [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicks, 0.0001, timeGlyphSpeedup);
         remainingSeconds -= realTickTime;
@@ -1274,7 +1282,10 @@ function simulateTime(seconds, real, fast) {
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
     for (let i = 0; i < player.wormhole.length; i++) {
-      if (player.wormhole[i].activations > playerStart.wormhole[i].activations)  popupString+= " <br>Wormhole "+(i+1)+" activated  "+ (player.wormhole[i].activations-playerStart.wormhole[i].activations) + (player.wormhole[i].activations-playerStart.wormhole[i].activations == 1 ? " time." : " times.")
+      let currentActivations = player.wormhole[i].activations;
+      let oldActivations = playerStart.wormhole[i].activations;
+      let activationsDiff = currentActivations - oldActivations;
+      if (activationsDiff > 0)  popupString += " <br>Wormhole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
     }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."

@@ -102,28 +102,29 @@ function updateWormholePhases(wormholeDiff) {
   // How long is spent with each wormhole active?
   let incPhases = getRealTimesWithWormholeActive(wormholeDiff);
   for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
+    let wormhole = player.wormhole[i];
     // Prevents a flickering wormhole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
     // should work even with very large incPhase. To check:
     // This used to always use the period of wormhole[0], now it doesn't,
     // will this cause other bugs?
-    player.wormhole[i].phase += incPhases[i];
-    if (player.wormhole[i].phase >= player.wormhole[i].speed + player.wormhole[i].duration) {
+    wormhole.phase += incPhases[i];
+    if (wormhole.phase >= wormhole.speed + wormhole.duration) {
       // One activation for each full cycle.
-      player.wormhole[i].activations += Math.floor(player.wormhole[i].phase / (player.wormhole[i].speed + player.wormhole[i].duration));
-      player.wormhole[i].phase %= player.wormhole[i].speed + player.wormhole[i].duration;
+      wormhole.activations += Math.floor(wormhole.phase / (wormhole.speed + wormhole.duration));
+      wormhole.phase %= wormhole.speed + wormhole.duration;
     }
-    if (player.wormhole[i].active) {
-      if (player.wormhole[i].phase >= player.wormhole[i].duration) {
-        player.wormhole[i].phase -= player.wormhole[i].duration
-        player.wormhole[i].active = false
+    if (wormhole.active) {
+      if (wormhole.phase >= wormhole.duration) {
+        wormhole.phase -= wormhole.duration
+        wormhole.active = false
         ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
       }
     } else {
-      if (player.wormhole[i].phase >= player.wormhole[i].speed) {
-        player.wormhole[i].phase -= player.wormhole[i].speed
-        player.wormhole[i].activations++;
-        player.wormhole[i].active = true
+      if (wormhole.phase >= wormhole.speed) {
+        wormhole.phase -= wormhole.speed
+        wormhole.activations++;
+        wormhole.active = true
         ui.notify.success("Wormhole "+ (i + 1) +" is active!");
       }
     }
@@ -132,14 +133,15 @@ function updateWormholePhases(wormholeDiff) {
 function wormHoleLoop(i) {
   // Change wormhole state
   if (player.wormholePause) return
-  if (!player.wormhole[i].unlocked) return
+  let wormhole = player.wormhole[i];
+  if (!wormhole.unlocked) return
 
-  if (player.wormhole[i].active && (i == 0 || player.wormhole[i-1].active))
-    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
-  else if (player.wormhole[i].active)
-    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, player.wormhole[i].duration - player.wormhole[i].phase)).toFixed(1) + " sec)";
+  if (wormhole.active && (i == 0 || player.wormhole[i-1].active))
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (wormhole.duration - wormhole.phase).toFixed(1) + " more seconds.";
+  else if (wormhole.active)
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, wormhole.duration - wormhole.phase)).toFixed(1) + " sec)";
   else
-    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (wormhole.speed - wormhole.phase).toFixed(1) + " seconds.";
   
   if (i == 0) totalPhase = getTotalPhase();
     
@@ -434,7 +436,7 @@ function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance, t
 // The only unusual thing is tolerance, which is a bound on
 // Math.abs(evaluationFunction(result) - target).
 function binarySearch (start, end, evaluationFunction, target, tolerance) {
-  for (let numIters = 0; numIters < 100; numIters++) {
+  while (true) {
     let median = (start + end) / 2;
     let error = evaluationFunction(median) - target;
     if (Math.abs(error) < tolerance) {
@@ -446,7 +448,6 @@ function binarySearch (start, end, evaluationFunction, target, tolerance) {
       end = median;
     }
   }
-  1 + 1;
 }
 
 // This returns a list of length (number of unlocked wormholes + 1),
@@ -512,19 +513,19 @@ function getRealTimesWithWormholeActive (realTime) {
   // For each wormhole...
   for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
     // See the comment for getRealTimeWithWormholeActive.
-    timeWithWormholeActive.push(getRealTimeWithWormholeActive(i, timeWithWormholeActive[timeWithWormholeActive.length - 1]));
+    timeWithWormholeActive.push(getRealTimeWithWormholeActive(player.wormhole[i], timeWithWormholeActive[timeWithWormholeActive.length - 1]));
   }
   return timeWithWormholeActive;
 }
 
-// Given the index of a wormhole and the time for which the previous wormhole (player.wormhole[index - 1]) is active,
-// this function returns the time for which the wormhole player.wormhole[index] is active.
-function getRealTimeWithWormholeActive (index, time) {
+// Given a wormhole and the time for which the previous wormhole is active,
+// this function returns the time for which the given wormhole is active.
+function getRealTimeWithWormholeActive (wormhole, time) {
   // See the comment for nextWormholeDurationEnd.
-  let y = nextWormholeDurationEnd(index);
+  let y = nextWormholeDurationEnd(wormhole);
   // Abbrevations since we'll be using these variables a lot.
-  let s = player.wormhole[index].speed;
-  let d = player.wormhole[index].duration;
+  let s = wormhole.speed;
+  let d = wormhole.duration;
   // Math.min(y, d): time player.wormhole[index] is active from now until when player.wormhole[index] next becomes inactive
   // d * Math.floor((time - y) / (s + d)): time it's active until the last time it becomes inactive
   // (Math.floor((time - y) / (s + d)) is the number of full cycles from the first time it becomes inactive
@@ -535,20 +536,17 @@ function getRealTimeWithWormholeActive (index, time) {
   return Math.min(y, d) + d * Math.floor((time - y) / (s + d)) + Math.max((time - y + s + d) % (s + d) - s, 0);
 }
 
-// This function gets the time for which player.wormhole[index - 1] must be active until
-// player.wormhole[index] next becomes inactive (that is, its duration ends).
-function nextWormholeDurationEnd (index) {
-  if (player.wormhole[index].active) {
-    // player.wormhole[index].phase is the time for which it's been active, so
-    // player.wormhole[index].duration - player.wormhole[index].phase is the
+// This function gets the time for which the previous wormhole must be active until
+// wormhole next becomes inactive (that is, its duration ends).
+function nextWormholeDurationEnd (wormhole) {
+  if (wormhole.active) {
+    // wormhole.phase is the time for which it's been active, so wormhole.duration - wormhole.phase is the
     // time until the duration ends and it becomes inactive.
-    return player.wormhole[index].duration - player.wormhole[index].phase;
+    return wormhole.duration - wormhole.phase;
   } else {
-    // player.wormhole[index].phase is the time for which it's been inactive,
-    // so player.wormhole[index].speed - player.wormhole[index].phase is the
-    // time until it becomes active again, and player.wormhole[index].duration
-    // is the time from when it becomes active again to when the duration
-    // ends and it becomes inactive.
-    return player.wormhole[index].duration + player.wormhole[index].speed - player.wormhole[index].phase;
+    // wormhole.phase is the time for which it's been inactive, so wormhole.speed - wormhole.phase is the
+    // time until it becomes active again, and wormhole.duration is the time from when it becomes active again
+    // to when the duration ends and it becomes inactive.
+    return wormhole.duration + wormhole.speed - wormhole.phase;
   }
 }

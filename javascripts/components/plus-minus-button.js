@@ -62,6 +62,5 @@ Vue.component("plus-minus-button", {
   mounted() {
     this.color = getComputedStyle(this.$el).color;
     this.computedSize = this.$el.offsetWidth;
-    console.log(this.computedSize)
   }
 });

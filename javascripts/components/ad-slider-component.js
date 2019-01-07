@@ -1181,7 +1181,6 @@ Vue.component("ad-slider-component", {
           </slot>
       </div>
     </div>
-    <input v-if="!isRange && !data" class="ad-slider-sr-only" type="range" v-model="val" :min="min" :max="max" />
     </div>
   </div>
   <plus-minus-button v-if="plusMinusButtons" type="plus" size="1.6rem" class="derp" @click="increment(1)"/>

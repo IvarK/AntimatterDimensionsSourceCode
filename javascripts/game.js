@@ -815,46 +815,38 @@ const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
 // Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
 // factorsToConsider is a list of the types of things we want to take into account
-// (for example, the wormhole ignores itself). knownFactors is an object that
-// will override the effect of time glyphs or of the wormhole if it has appropriate values.
-function getGameSpeedupFactor(factorsToConsider, knownFactors) {
+// (for example, the wormhole ignores itself). wormholeOverride will override
+// the effect of the wormhole if it is set.
+function getGameSpeedupFactor(factorsToConsider, wormholeOverride) {
   if (factorsToConsider === undefined) {
     factorsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
-  if (knownFactors === undefined) {
-    knownFactors = {};
-  }
   let factor = 1;
-  // Don't always consider EC12 (the wormhole ignores it, for example).
   if (player.currentEternityChall === "eterc12" && factorsToConsider.includes(GameSpeedEffect.EC12)) {
-    // I don't see any reason why we'd want to override EC12, but maybe I should add something here anyway.
+    // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
+    // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
   }
   if (factorsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
-    if (GameSpeedEffect.TIMEGLYPH in knownFactors) {
-      factor *= knownFactors[GameSpeedEffect.TIMEGLYPH];
-    } else {
-      factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
-    }
+    factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   }
   
   if (player.wormhole[0] !== undefined && factorsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
-    if (GameSpeedEffect.WORMHOLE in knownFactors) {
-      factor *= knownFactors[GameSpeedEffect.WORMHOLE];
-    } else {
-      if (!player.wormholePause) {
-        for (let wormhole of player.wormhole) {
-          if (wormhole.active) {
-            factor *= wormhole.power
-          } else {
-            break;
-          }
+    if (wormholeOverride !== undefined) {
+      factor *= wormholeOverride;
+    } else if (!player.wormholePause) {
+      for (let wormhole of player.wormhole) {
+        if (wormhole.active) {
+          factor *= wormhole.power;
+        } else {
+          // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
+          // they aren't currently active (instead they will activate as soon as the previous wormhole is active).
+          // Thus, as soon as we reach an inactive wormhole, we stop increasing the speedup factor.
+          break;
         }
       }
     }
   }
-  
-  if (player.wormhole[0] === undefined) {dev.updateTestSave()} // TODO, REMOVE
   
   return factor;
 }

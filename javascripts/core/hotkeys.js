@@ -29,8 +29,10 @@ Keyboard.bindHotkey("w", () => pauseWormhole());
 Keyboard.bind("shift", () => setShiftKey(true), "keydown");
 Keyboard.bind("shift", () => setShiftKey(false), "keyup");
 
-Keyboard.bind("command", () => setControlKey(true), "keydown");
-Keyboard.bind("command", () => setControlKey(false), "keyup");
+Keyboard.bind(["ctrl","command"], () => setControlKey(true), "keydown");
+Keyboard.bind(["ctrl", "command"], () => setControlKey(false), "keyup");
+
+Keyboard.bind(["ctrl+shift", "command+shift"], () => setControlShiftKey(true), "keydown");
 
 Keyboard.bind("9", () => giveAchievement("That dimension doesn’t exist"));
 

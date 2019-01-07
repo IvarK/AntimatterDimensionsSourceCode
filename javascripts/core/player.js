@@ -5,6 +5,7 @@ var auto = false;
 var autoS = true;
 var shiftDown = false;
 var controlDown = false;
+var controlShiftDown = false;
 var justImported = false;
 var saved = 0;
 var failureCount = 0;

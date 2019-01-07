@@ -880,7 +880,7 @@ function gameLoop(diff, wormholeSpeedup) {
       speedFactor = getGameSpeedupFactor();
     } else {
       // If we're in EC12, time shouldn't speed up at all.
-      speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], {[GameSpeedEffect.WORMHOLE]: wormholeSpeedup});
+      speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], wormholeSpeedup);
     }
     // Wormhole is affected only by time glyphs.
     let wormholeDiff = diff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);

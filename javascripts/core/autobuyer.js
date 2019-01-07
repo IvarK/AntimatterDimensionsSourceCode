@@ -96,14 +96,7 @@ class AutobuyerState {
   /**
    * @returns {boolean}
    */
-  canTick(incrementTicks) {
-    // We might want to know whether an autobuyer can tick
-    // without actually incrementing its ticks
-    // (thus bringing it closer to ticking if not).
-    // If incrementTicks is false, this function is side-effect free.
-    if (incrementTicks === undefined) {
-      incrementTicks = true;
-    }
+  canTick() {
     if (!this.isUnlocked) return false;
     if (this.ticks * 100 < this.interval) {
       this.ticks++;
@@ -592,15 +585,9 @@ class InfinityAutobuyerState extends AutobuyerState {
     this.mode = Object.values(AutoCrunchMode).nextSibling(this.mode);
   }
 
-  canActivate() {
-    // These two lines are here so that this function is accurate, and in tick()
-    // so that tick() can return early if needed.
-    // This incrementTicks=false means that we're not changing the autobuyer state
-    // (so calling this function should always be safe and have no side effects).
-    // Techinically I'm not sure this ever matters based on where we currently call canActivate,
-    // but we do it just to be safe.
-    if (!this.canTick(incrementTicks=false)) return false;
-    if (!player.money.gte(Number.MAX_VALUE)) return false;
+  tick() {
+    if (!this.canTick()) return;
+    if (!player.money.gte(Number.MAX_VALUE)) return;
     let proc = !player.break || player.currentChallenge !== "";
     if (!proc) {
       switch (this.mode) {
@@ -615,13 +602,7 @@ class InfinityAutobuyerState extends AutobuyerState {
           break;
       }
     }
-    return proc;
-  }
-
-  tick() {
-    if (!this.canTick()) return;
-    if (!player.money.gte(Number.MAX_VALUE)) return;
-    if (this.canActivate()) {
+    if (proc) {
       autoS = false;
       bigCrunchReset();
     }
@@ -720,7 +701,7 @@ Autobuyer.eternity = {
   toggleMode() {
     this.mode = Object.values(AutoEternityMode).nextSibling(this.mode);
   },
-  canActivate() {
+  tick() {
     if (!this.isActive) return false;
     let proc = false;
     switch (this.mode) {
@@ -734,10 +715,7 @@ Autobuyer.eternity = {
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));
         break;
     }
-    return proc;
-  },
-  tick() {
-    if (this.canActivate()) eternity(false, true);
+    if (proc) eternity(false, true);
   }
 };
 

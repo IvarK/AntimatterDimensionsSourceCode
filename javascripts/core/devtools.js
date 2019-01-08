@@ -21,13 +21,13 @@ dev.doubleEverything = function() {
 }
 
 dev.spin3d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin3d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.spin4d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin4d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.cancerize = function() {
@@ -51,7 +51,6 @@ dev.fixSave = function() {
     }
 
     saved = 0;
-    infDimPow = 1
     postc8Mult = new Decimal(0)
     mult18 = new Decimal(1)
     ec10bonus = new Decimal(1)
@@ -62,8 +61,8 @@ dev.fixSave = function() {
 }
 
 dev.implode = function() {
-    document.getElementById("body").style.animation = "implode 2s 1";
-    setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
+    document.body.style.animation = "implode 2s 1";
+    setTimeout(function(){ document.body.style.animation = ""; }, 2000)
 }
 
 dev.updateTDCosts = function() {
@@ -93,7 +92,6 @@ dev.refundTimeDims = function() {
 dev.refundEPMult = function() {
     player.epmult = new Decimal(1)
     player.epmultCost = new Decimal(500)
-    updateEpMultButton();
 }
 
 dev.refundDilStudies = function() {
@@ -186,7 +184,12 @@ dev.respecPerks = function() {
 
 function isDevEnvironment() {
   const href = window.location.href;
-  return href.split("//")[1].length > 20 || href.includes("127.0.0.1") || href.includes("localhost");
+  return href.split("//")[1].length > 20 || isLocalEnvironment();
+}
+
+function isLocalEnvironment() {
+  const href = window.location.href;
+  return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
 dev.updateTestSave = function() {
@@ -215,10 +218,6 @@ dev.updateTestSave = function() {
         for (var i=0; i<8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
-        updateLastTenRuns();
-        updateLastTenEternities();
-        updateLastTenRealities();
-        updateChallengeTimes();
     }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;
@@ -315,7 +314,6 @@ dev.updateTestSave = function() {
       if (!player.reality.automatorCommands.includes(25)) player.reality.automatorCommands.push(25);
       if (!player.reality.automatorCommands.includes(12)) player.reality.automatorCommands.push(12);
       player.reality.realityMachines = new Decimal(player.reality.realityMachines);
-      updateAutomatorTree();
       player.options.testVersion = 14;
   }
 
@@ -389,6 +387,46 @@ dev.updateTestSave = function() {
     convertAutobuyerMode();
     player.options.testVersion = 22;
   }
+
+  if (player.options.testVersion === 22) {
+      for (i in player.celestials.teresa.glyphWeights) {
+          player.celestials.teresa.glyphWeights[i] *= 100
+      }
+    player.options.testVersion = 23;
+  }
+
+  //the above line of code didn't work if loading a test save before celestials were added, whoops
+  if (player.options.testVersion === 23) {
+    for (i in player.celestials.teresa.glyphWeights) {
+        player.celestials.teresa.glyphWeights[i] = 25
+    }
+    player.options.testVersion = 24;
+  }
+
+  if (player.options.testVersion === 24) {
+    // following logic from autobuyers (before the addition of wall clock time stats)
+    var speedup = getGameSpeedupFactor(false);
+    player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
+    player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
+    player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
+    for (var i=0; i<10; i++) {
+      player.lastTenRuns[i][2] = undefined;
+      player.lastTenEternities[i][2] = undefined;
+      player.lastTenRealities[i][3] = undefined;
+    }
+    player.options.testVersion = 25;
+  }
+
+  if (player.options.testVersion === 25) {
+    unfuckChallengeIds();
+    player.options.testVersion = 26;
+  }
+
+  if (player.options.testVersion === 26) {
+    InfinityUpgrade.ipMult.adjustToCap();
+    unfuckMultCosts();
+    player.options.testVersion = 27;
+  }
 }
 
 // Still WIP
@@ -408,16 +446,18 @@ dev.showProductionBreakdown = function() {
   // Assumes >= 3 galaxies
   let effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
   let AGCount = player.galaxies
-  let RGCount = player.replicanti.galaxies
-  if (player.timestudy.studies.includes(133)) RGCount += player.replicanti.galaxies/2
-  if (player.timestudy.studies.includes(132)) RGCount += player.replicanti.galaxies*0.4
-  if (player.timestudy.studies.includes(225)) RGCount += Math.floor(player.replicanti.amount.e / 1000)
-  if (player.timestudy.studies.includes(226)) RGCount += Math.floor(player.replicanti.gal / 15)
+  let RGCount = player.replicanti.galaxies;
+  RGCount += Effects.sum(
+    TimeStudy(133),
+    TimeStudy(132),
+    TimeStudy(225),
+    TimeStudy(226)
+  );
   RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0)
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   
-  IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
+  IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
   let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);

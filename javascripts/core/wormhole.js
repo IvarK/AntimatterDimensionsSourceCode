@@ -89,7 +89,7 @@ function wormHoleLoop(diff, i) {
   if (player.wormhole[i].active && (i == 0 || player.wormhole[i-1].active))
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";
   else if (player.wormhole[i].active)
-    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " sec)";
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, player.wormhole[i].duration - player.wormhole[i].phase)).toFixed(1) + " sec)";
   else
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (player.wormhole[i].speed - player.wormhole[i].phase).toFixed(1) + " seconds.";
 

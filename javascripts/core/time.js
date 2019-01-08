@@ -1,4 +1,4 @@
-const DeltaTimeInfo = {
+const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),
   update(deltaTime, scale) {
@@ -12,7 +12,7 @@ const Time = {
    * @param {Function} getValue
    * @returns {TimeSpan}
    */
-  formMilliseconds(getValue) {
+  fromMilliseconds(getValue) {
     return TimeSpan.fromMilliseconds(getValue());
   },
   /**
@@ -29,7 +29,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get deltaTimeFull() {
-    return DeltaTimeInfo.deltaTime;
+    return DeltaTimeState.deltaTime;
   },
   /**
    * Frame delta time in seconds
@@ -50,14 +50,14 @@ const Time = {
    * @returns {TimeSpan}
    */
   get unscaledDeltaTime() {
-    return DeltaTimeInfo.unscaledDeltaTime;
+    return DeltaTimeState.unscaledDeltaTime;
   },
 
   /**
    * @returns {TimeSpan}
    */
   get totalTimePlayed() {
-    return this.formMilliseconds(() => player.totalTimePlayed);
+    return this.fromMilliseconds(() => player.totalTimePlayed);
   },
   /**
    * @param {TimeSpan} timespan
@@ -70,7 +70,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get realTimePlayed() {
-    return this.formMilliseconds(() => player.realTimePlayed);
+    return this.fromMilliseconds(() => player.realTimePlayed);
   },
   /**
    * @param {TimeSpan} timespan
@@ -83,7 +83,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get thisInfinity() {
-    return this.formMilliseconds(() => player.thisInfinityTime);
+    return this.fromMilliseconds(() => player.thisInfinityTime);
   },
   /**
    * @param {TimeSpan} timespan
@@ -95,8 +95,21 @@ const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get thisInfinityRealTime() {
+    return this.fromMilliseconds(() => player.thisInfinityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisInfinityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisInfinityRealTime = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get bestInfinity() {
-    return this.formMilliseconds(() => player.bestInfinityTime);
+    return this.fromMilliseconds(() => player.bestInfinityTime);
   },
   /**
    * @param {TimeSpan} timespan
@@ -109,7 +122,7 @@ const Time = {
    * @returns {TimeSpan}
    */
   get thisEternity() {
-    return this.formMilliseconds(() => player.thisEternity);
+    return this.fromMilliseconds(() => player.thisEternity);
   },
   /**
    * @param {TimeSpan} timespan
@@ -121,8 +134,21 @@ const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get thisEternityRealTime() {
+    return this.fromMilliseconds(() => player.thisEternityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisEternityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisEternityRealTime = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get bestEternity() {
-    return this.formMilliseconds(() => player.bestEternity);
+    return this.fromMilliseconds(() => player.bestEternity);
   },
   /**
    * @param {TimeSpan} timespan
@@ -130,4 +156,37 @@ const Time = {
   set bestEternity(timespan) {
     this.toMilliseconds(timespan, value => player.bestEternity = value);
   },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisReality() {
+    return this.fromMilliseconds(() => player.thisReality);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisReality(timespan) {
+    this.toMilliseconds(timespan, value => player.thisReality = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisRealityRealTime() {
+    return this.fromMilliseconds(() => player.thisRealityRealTime);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisRealityRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.thisRealityRealTime = value);
+  },
+
+  /**
+   * @return {TimeSpan}
+   */
+  get worstChallenge() {
+    return this.fromMilliseconds(() => GameCache.worstChallengeTime.value);
+  }
 };

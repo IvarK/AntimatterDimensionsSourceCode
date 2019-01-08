@@ -30,7 +30,6 @@
  * LOAD SCRIPT 2: loads the second script
  */
 
-
  /**
   * 
   * The player can use rows equal to Math.ceil(realities^0.5)
@@ -165,13 +164,13 @@ function buy(current) {
   switch(current.target) {
     case "study":
       id = parseInt(current.id)
-      if (player.timestudy.studies.includes(id)) return true
+      if (TimeStudy(id).isBought) return true
       else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
       else return false
       break;
       case "studyuntil":
           id = parseInt(current.id);
-          if (!player.timestudy.studies.includes(id)) {
+          if (!TimeStudy(id).isBought) {
               studiesUntil(id);//passes arguments into the studies until function.
         return true
       } else return false
@@ -242,12 +241,16 @@ function unlock(current) {
     case "ec":
       if (!player.reality.automatorCommands.includes(64)) return false
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
-      if ( document.getElementById("ec" + current.id + "unl").click() ) return true
+      justImported = true;
+      if (TimeStudy.eternityChallenge(current.id).purchase()) {
+        justImported = false;
+        return true;
+      }
       else return false
       break;
     case "dilation":
       if (!player.reality.automatorCommands.includes(63)) return false
-      if (buyDilationStudy(1, 5000)) return true
+      if (buyDilationStudy(1, 5000, true)) return true
       else return false
       break;
   }
@@ -282,7 +285,7 @@ function wait(current) {
       if (!player.reality.automatorCommands.includes(42)) return false
       if (current.id == "max") {
         if (!player.reality.automatorCommands.includes(51)) return false
-        if ((!player.timestudy.studies.includes(131) ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
+        if ((!TimeStudy(131).isBought ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
         else return false
       }
       if (id.gt(player.replicanti.galaxies)) return false
@@ -312,11 +315,10 @@ function start(current) {
   if (!player.reality.automatorCommands.includes(73)) return false
   switch(current.target) {
     case "ec":
-      if (!player.reality.automatorCommands.includes(84)) return false
-      if (player.currentEternityChall == "eterc" + current.id) return true
-      if (startEternityChallenge("eterc" + current.id, ETERNITY_CHALLS["ec"+current.id].start, ETERNITY_CHALLS["ec"+current.id].inc)) return true
-      else return false
-      break;
+      if (!player.reality.automatorCommands.includes(84)) return false;
+      const ec = EternityChallenge(current.id);
+      if (ec.isRunning) return true;
+      return ec.start();
     case "dilation":
       if (!player.reality.automatorCommands.includes(83)) return false
       if (startDilatedEternity()) return true
@@ -362,8 +364,8 @@ function toggle(current) {
 }
 
 
-function automatorSaveButton(num) {
-  if (shiftDown) {
+function automatorSaveButton(num, forceSave) {
+  if (shiftDown || forceSave) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
       ui.notify.info(`Automator script ${num} saved`);
   } else {
@@ -379,77 +381,18 @@ function loadScript(num) {
   }
 }
 
-function buyAutomatorInstruction(id, cost) {
+function buyAutomatorInstruction(id) {
   if (!canBuyAutomatorInstruction(id)) return false
-  if (player.reality.realityMachines.lt(cost)) return false
   if (player.reality.automatorCommands.includes(id)) return false
-  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price)
   player.reality.automatorCommands.push(id)
-  if (id == 11 || id == 12) {
-      document.getElementById("automator"+id).className = "automatorinstructionbought command"
-  } else {
-      document.getElementById("automator"+id).className = "automatorinstructionbought target"
-  }
-  updateAutomatorTree()
   return true
 }
 
-// child: parent
-var automatorparents = {
-  21: 11,
-  22: 11,
-  23: 11,
-  31: 21,
-  32: 11,
-  33: 11,
-  36: 26,
-  41: 11,
-  42: 11,
-  51: 41,
-  52: 42,
-  53: 43,
-  54: 44,
-  61: 51,
-  62: 52,
-  63: 54,
-  64: 54,
-  71: 61,
-  72: 62,
-  73: 64,
-  81: 71,
-  82: 71,
-  83: 73,
-  84: 73,
-}
-
 function canBuyAutomatorInstruction(id) {
-  if (player.reality.realityMachines.lt(instructionCosts[allInstructions.indexOf(id)])) return false
-  var parent = automatorparents[id]
-  if (parent === undefined || player.reality.automatorCommands.includes(parent)) return true
-  return false
-}
-
-var allInstructions = [11, 12, 21, 22, 23, 24, 25, 26, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 51, 52, 53, 54, 61, 62, 63, 64, 71, 72, 73, 81, 82, 83, 84]
-var instructionCosts = [1, 0, 1, 3,  2,  0,  0, 50, 1, 3,  2,  3,  2,  3,  2, 500,  3,  20, 30, 10, 30, 30, 30, 10, 30, 30, 30, 30, 30, 30, 30, 30, 30]
-var automatorCommands = [11, 12, 21, 31, 51, 53, 54, 61, 62, 71, 72, 73]
-function updateAutomatorTree() {
-  for (var i=0; i<allInstructions.length; i++) {
-    if (!player.reality.automatorCommands.includes(allInstructions[i])) {
-      if (canBuyAutomatorInstruction(allInstructions[i]) && player.reality.realityMachines.gte(instructionCosts[i])) {
-        if (automatorCommands.includes(allInstructions[i])) {
-          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction command"
-        } else {
-          document.getElementById("automator"+allInstructions[i]).className = "automatorinstruction target"
-        }
-      } else {
-          if (automatorCommands.includes(allInstructions[i])) {
-            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked command"
-          } else {
-            document.getElementById("automator"+allInstructions[i]).className = "automatorinstructionlocked target"
-          }
-        }
-    }
-  }
+  var info = Automator.InstructionsById[id];
+  if (player.reality.realityMachines.lt(info.price)) return false;
+  return info.parent === undefined || player.reality.automatorCommands.includes(info.parent);
 }
 
 function updateAutomatorRows() {

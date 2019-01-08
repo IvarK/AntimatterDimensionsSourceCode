@@ -5,6 +5,7 @@ var auto = false;
 var autoS = true;
 var shiftDown = false;
 var controlDown = false;
+var controlShiftDown = false;
 var justImported = false;
 var saved = 0;
 var failureCount = 0;
@@ -51,6 +52,7 @@ var player = {
   sacrificed: new Decimal(0),
   achievements: [],
   infinityUpgrades: [],
+  infinityRebuyables: [0, 0],
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
@@ -60,6 +62,7 @@ var player = {
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
   thisInfinityTime: 0,
+  thisInfinityRealTime: 0,
   resets: 0,
   galaxies: 0,
   tickDecrease: 0.9,
@@ -84,19 +87,16 @@ var player = {
     why: 0,
     fixed: "notyetfixed",
     dragging: 0,
-    themes: []
+    themes: [],
+    secretTS: 0,    // incremented every time secret time study toggles
   },
   challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
   infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
-  lastTenRuns: [[defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)]],
-  lastTenEternities: [[defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)], [defaultMaxTime, new Decimal(1)]],
-  lastTenRealities: [[defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0], [defaultMaxTime, new Decimal(1), 0]],
+  lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
-  tickSpeedMultDecrease: 10,
-  tickSpeedMultDecreaseCost: 3e6,
-  dimensionMultDecrease: 10,
-  dimensionMultDecreaseCost: 1e8,
   overXGalaxies: 10,
   version: 10,
   infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
@@ -108,6 +108,7 @@ var player = {
   eternityPoints: new Decimal(0),
   eternities: 0,
   thisEternity: 0,
+  thisEternityRealTime: 0,
   bestEternity: 999999999999,
   eternityUpgrades: [],
   epmult: new Decimal(1),
@@ -282,6 +283,7 @@ var player = {
   why: 0,
   realities: 0,
   thisReality: 0,
+  thisRealityRealTime: 0,
   bestReality: 999999999999,
   realityBuyer: {
     rm: new Decimal(0),
@@ -293,6 +295,7 @@ var player = {
     glyphs: {
       active: [],
       inventory: [],
+      inventorySize: 100,
       slots: 3,
       last: "",
       sac: {
@@ -328,6 +331,7 @@ var player = {
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
     pp: 0,
+    autoEC: true,
     lastAutoEC: 0
   },
   wormhole: [{
@@ -371,10 +375,10 @@ var player = {
       unlocks: [],
       run: false,
       glyphWeights: {
-        ep: 0.25,
-        repl: 0.25,
-        dt: 0.25,
-        eternities: 0.25
+        ep: 25,
+        repl: 25,
+        dt: 25,
+        eternities: 25
       },
       typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
     }
@@ -418,29 +422,49 @@ var player = {
 
 
 const Player = {
+
   get totalInfinitied() {
     return Math.max(player.infinitied + player.infinitiedBank, 0);
   },
+
+  get isInMatterChallenge() {
+    return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
+  },
+
   get effectiveMatterAmount() {
-    switch (player.currentChallenge) {
-      case "challenge12":
-      case "postc1":
-        return player.matter;
-      case "postc6":
-        return Decimal.pow(player.matter, 20);
+    if (Challenge(11).isRunning) {
+      return player.matter;
+    }
+    if (InfinityChallenge(6).isRunning) {
+      return Decimal.pow(player.matter, 20);
     }
     return new Decimal(0);
   },
+
   get antimatterPerSecond() {
     const basePerSecond = getDimensionProductionPerSecond(1);
-    switch (player.currentChallenge) {
-      case "challenge3":
-      case "postc1":
-        return basePerSecond.times(player.chall3Pow);
-      case "challenge7":
-        return basePerSecond.plus(getDimensionProductionPerSecond(2));
-      default:
-        return basePerSecond;
+    if (Challenge(3).isRunning) {
+      return basePerSecond.times(player.chall3Pow);
     }
+    if (Challenge(12).isRunning) {
+      return basePerSecond.plus(getDimensionProductionPerSecond(2));
+    }
+    return basePerSecond;
+  },
+
+  get bestRunIPPM() {
+    return GameCache.bestRunIPPM.value;
+  },
+
+  get averageEPPerRun() {
+    return GameCache.averageEPPerRun.value;
+  },
+
+  get tickSpeedMultDecrease() {
+    return GameCache.tickSpeedMultDecrease.value;
+  },
+
+  get dimensionMultDecrease() {
+    return GameCache.dimensionMultDecrease.value;
   }
 };

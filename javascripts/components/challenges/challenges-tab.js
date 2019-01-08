@@ -5,6 +5,8 @@ Vue.component('challenges-tab', {
       isECTabUnlocked: false,
       isInChallenge: false,
       isShowAllVisible: false,
+      isAutoECVisible: false,
+      reality: player.reality,
       options: player.options,
       tabs: [
         {
@@ -35,6 +37,7 @@ Vue.component('challenges-tab', {
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
+      this.isAutoECVisible = player.reality.perks.includes(91);
     }
   },
   template:
@@ -50,12 +53,20 @@ Vue.component('challenges-tab', {
           onclick="exitChallenge()"
         >Exit Challenge</primary-button>
         <template v-if="isShowAllVisible">
+          <b>Show all:</b>
           <input
             v-model="options.showAllChallenges"
             type="checkbox"
             class="o-big-checkbox"
           />
-          <b>Show all</b>
+        </template>
+        <template v-if="isAutoECVisible">
+          <b>Auto EC completion:</b>
+          <input
+            v-model="reality.autoEC"
+            type="checkbox"
+            class="o-big-checkbox"
+          />
         </template>
       </div>
     </game-tab-with-subtabs>`

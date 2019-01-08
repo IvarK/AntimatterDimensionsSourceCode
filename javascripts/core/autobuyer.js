@@ -13,7 +13,7 @@ Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
 
-class AutobuyerInfo {
+class AutobuyerState {
   constructor(getAutobuyer) {
     this._getAutobuyer = getAutobuyer;
   }
@@ -35,13 +35,13 @@ class AutobuyerInfo {
   }
 
   tryUnlock() {
-    if (this.isUnlocked) return;
-    if (!player.challenges.includes(this.challenge)) return;
-    this.initialize();
+    if (!this.isUnlocked && this.challenge.isCompleted) {
+      this.initialize();
+    }
   }
 
   /**
-   * @returns {string}
+   * @returns {ChallengeState|InfinityChallengeState}
    */
   get challenge() {
     throw "This method should be overridden in inheriting class";
@@ -183,7 +183,7 @@ class AutobuyerInfo {
   }
 }
 
-class DimensionAutobuyerInfo extends AutobuyerInfo {
+class DimensionAutobuyerState extends AutobuyerState {
   constructor(tier) {
     super(() => player.autobuyers[tier - 1]);
     this._tier = tier;
@@ -205,18 +205,7 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    const challenges = [
-      null,
-      "challenge1",
-      "challenge2",
-      "challenge3",
-      "challenge8",
-      "challenge6",
-      "challenge10",
-      "challenge9",
-      "challenge11"
-    ];
-    return challenges[this._tier];
+    return Challenge(this._tier);
   }
 
   /**
@@ -269,11 +258,11 @@ class DimensionAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.dim = tier => new DimensionAutobuyerInfo(tier);
+Autobuyer.dim = tier => new DimensionAutobuyerState(tier);
 
 Autobuyer.allDims = Array.dimensionTiers.map(Autobuyer.dim);
 
-class TickspeedAutobuyerInfo extends AutobuyerInfo {
+class TickspeedAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[8]);
   }
@@ -283,7 +272,7 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    return "challenge5";
+    return Challenge(9);
   }
 
   /**
@@ -317,7 +306,7 @@ class TickspeedAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.tickspeed = new TickspeedAutobuyerInfo();
+Autobuyer.tickspeed = new TickspeedAutobuyerState();
 
 Autobuyer.priorityQueue = function() {
   const autobuyers = Array.range(1, 8).map(tier => Autobuyer.dim(tier));
@@ -327,7 +316,7 @@ Autobuyer.priorityQueue = function() {
     .sort((a, b) => a.priority - b.priority);
 };
 
-class DimboostAutobuyerInfo extends AutobuyerInfo {
+class DimboostAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[9]);
   }
@@ -337,7 +326,7 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    return "challenge4";
+    return Challenge(10);
   }
 
   /**
@@ -365,7 +354,7 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities >= 10;
+    return EternityMilestone.autobuyMaxDimboosts.isReached;
   }
 
   /**
@@ -408,9 +397,10 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
     if (this.maxDimBoosts <= player.resets && this.galaxies > player.galaxies) {
       return;
     }
-    if (this.isBulkBuyUnlocked) {
-      if (!DimBoost.bulkRequirement(this.bulk).isSatisfied) return;
-      softReset(this.bulk);
+    if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
+      var bulk = Math.max(this.bulk, 1);
+      if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
+      softReset(bulk);
     }
     else {
       if (!DimBoost.requirement.isSatisfied) return;
@@ -420,9 +410,9 @@ class DimboostAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.dimboost = new DimboostAutobuyerInfo();
+Autobuyer.dimboost = new DimboostAutobuyerState();
 
-class GalaxyAutobuyerInfo extends AutobuyerInfo {
+class GalaxyAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[10]);
   }
@@ -432,7 +422,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    return "challenge12";
+    return Challenge(11);
   }
 
   /**
@@ -453,7 +443,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get isBuyMaxUnlocked() {
-    return player.eternities > 8;
+    return EternityMilestone.autobuyMaxGalaxies.isReached;
   }
 
   /**
@@ -474,7 +464,7 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
     if (!this.canTick()) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
-    if (player.eternities >= 9 && this.buyMaxInterval > 0) {
+    if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
       this.buyMax();
     }
     else {
@@ -496,9 +486,9 @@ class GalaxyAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.galaxy = new GalaxyAutobuyerInfo();
+Autobuyer.galaxy = new GalaxyAutobuyerState();
 
-class SacrificeAutobuyerInfo extends AutobuyerInfo {
+class SacrificeAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autoSacrifice);
   }
@@ -509,7 +499,7 @@ class SacrificeAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    return "postc2";
+    return InfinityChallenge(2);
   }
 
   /**
@@ -534,9 +524,9 @@ class SacrificeAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.sacrifice = new SacrificeAutobuyerInfo();
+Autobuyer.sacrifice = new SacrificeAutobuyerState();
 
-class InfinityAutobuyerInfo extends AutobuyerInfo {
+class InfinityAutobuyerState extends AutobuyerState {
   constructor() {
     super(() => player.autobuyers[11]);
   }
@@ -547,7 +537,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 
   get challenge() {
-    return "challenge7";
+    return Challenge(12);
   }
 
   /**
@@ -568,7 +558,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
    * @returns {boolean}
    */
   get hasAdditionalModes() {
-    return player.eternities > 4;
+    return EternityMilestone.bigCrunchModes.isReached;
   }
 
   /**
@@ -605,7 +595,7 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
           proc = gainedInfinityPoints().gte(this.limit);
           break;
         case AutoCrunchMode.TIME:
-          proc = Decimal.gt(Time.thisInfinity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
+          proc = Decimal.gt(Time.thisInfinityRealTime.totalSeconds, this.limit);
           break;
         case AutoCrunchMode.RELATIVE:
           proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.limit));
@@ -620,10 +610,10 @@ class InfinityAutobuyerInfo extends AutobuyerInfo {
   }
 }
 
-Autobuyer.infinity = new InfinityAutobuyerInfo();
+Autobuyer.infinity = new InfinityAutobuyerState();
 
 /**
- * @type {AutobuyerInfo[]}
+ * @type {AutobuyerState[]}
  */
 Autobuyer.unlockables = Autobuyer.allDims
   .concat([
@@ -650,7 +640,7 @@ Autobuyer.eternity = {
    * @returns {boolean}
    */
   get isUnlocked() {
-    return player.eternities >= 100;
+    return EternityMilestone.autobuyerEternity.isReached;
   },
   /**
    * @returns {boolean}
@@ -719,7 +709,7 @@ Autobuyer.eternity = {
         proc = player.currentEternityChall !== "" || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
-        proc = Decimal.gt(Time.thisEternity.totalSeconds, this.limit.times(getGameSpeedupFactor(false)));
+        proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)
         break;
       case AutoEternityMode.RELATIVE:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));

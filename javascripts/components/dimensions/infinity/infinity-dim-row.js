@@ -25,7 +25,7 @@ Vue.component('infinity-dim-row', {
     },
     rateOfChangeDisplay: function() {
       return this.hasRateOfChange ?
-        ` (+${this.shorten(this.rateOfChange)}%/s)` :
+        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
         String.empty;
     },
     costDisplay: function() {

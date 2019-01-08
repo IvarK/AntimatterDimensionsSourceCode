@@ -23,8 +23,8 @@ function onLoad() {
     player.thisEternity = player.totalTimePlayed;
   }
   player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
-  if (player.infinitied > 0 && !player.challenges.includes("challenge1")) {
-    player.challenges.push("challenge1");
+  if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+    Challenge(1).complete();
   }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   Theme.set(player.options.theme);
@@ -82,57 +82,7 @@ function onLoad() {
   }
 
   transformSaveToDecimal();
-  respecToggle()
-  respecToggle()
-  updateLastTenRuns()
-  updateLastTenEternities()
-  updateLastTenRealities()
-
-  updateInfCosts()
-
-  if (player.replicanti.galaxybuyer !== undefined) {
-    replicantiGalaxyAutoToggle()
-    replicantiGalaxyAutoToggle()
-  }
-
-  if (player.reality.epmultbuyer !== undefined) {
-    eterMultAutoToggle()
-    eterMultAutoToggle()
-  }
-  
   clearOldAchieves()
-
-  updateEpMultButton();
-
-  for (var i=0; i<player.timestudy.studies.length; i++) {
-      if (player.timestudy.studies[i] == 71 || player.timestudy.studies[i] == 81 || player.timestudy.studies[i] == 91 || player.timestudy.studies[i] == 101) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought normaldimstudy"
-      } else if (player.timestudy.studies[i] == 72 || player.timestudy.studies[i] == 82 || player.timestudy.studies[i] == 92 || player.timestudy.studies[i] == 102) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought infdimstudy"
-      } else if (player.timestudy.studies[i] == 73 || player.timestudy.studies[i] == 83 || player.timestudy.studies[i] == 93 || player.timestudy.studies[i] == 103) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought timedimstudy"
-      } else if (player.timestudy.studies[i] == 121 || player.timestudy.studies[i] == 131 || player.timestudy.studies[i] == 141) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought activestudy"
-      } else if (player.timestudy.studies[i] == 122 || player.timestudy.studies[i] == 132 || player.timestudy.studies[i] == 142) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought passivestudy"
-      } else if (player.timestudy.studies[i] == 123 || player.timestudy.studies[i] == 133 || player.timestudy.studies[i] == 143) {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought idlestudy"
-      } else if (player.timestudy.studies[i] == 221 || player.timestudy.studies[i] == 224 || player.timestudy.studies[i] == 225 || player.timestudy.studies[i] == 228 || player.timestudy.studies[i] == 231 || player.timestudy.studies[i] == 234) {
-          document.getElementById(player.timestudy.studies[i]).className = "timestudybought darkstudy"
-      } else if (player.timestudy.studies[i] == 222 || player.timestudy.studies[i] == 223 || player.timestudy.studies[i] == 226 || player.timestudy.studies[i] == 227 || player.timestudy.studies[i] == 232 || player.timestudy.studies[i] == 233) {
-          document.getElementById(player.timestudy.studies[i]).className = "timestudybought lightstudy"
-      } else {
-          document.getElementById(""+player.timestudy.studies[i]).className = "timestudybought"
-      }
-  }
-
-  for (var i=0; i<player.reality.automatorCommands.length; i++) {
-    if (player.reality.automatorCommands[i] == 11 || player.reality.automatorCommands[i] == 12) {
-        document.getElementById("automator"+player.reality.automatorCommands[i]).className = "automatorinstructionbought command"
-    } else {
-        document.getElementById("automator"+player.reality.automatorCommands[i]).className = "automatorinstructionbought target"
-    }
-  }
 
   if (player.version < 9 ) {
       player.version = 9
@@ -190,13 +140,10 @@ function onLoad() {
     }
   }
 
-    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-    if (player.version === 13) dev.updateTestSave()
-
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (window.location.href.split("//")[1].length > 20) player.options.testVersion = 22;
+        if (isDevEnvironment()) player.options.testVersion = 27;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -207,6 +154,9 @@ function onLoad() {
         player.thisInfinityTime*= 100;
         player.thisEternity *= 100;
         player.thisReality *= 100;
+        player.thisInfinityRealTime = player.thisInfinity;
+        player.thisEternityRealTime = player.thisEternity;
+        player.thisRealityRealTime = player.thisReality;
         if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
         else player.bestInfinityTime *= 100;
         if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
@@ -214,6 +164,8 @@ function onLoad() {
         for (var i=0; i<10; i++) {
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
+            player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
+            player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
         }
         for (var i=0; i<11; i++) {
             setChallengeTime(i, player.challengeTimes[i] * 100);
@@ -221,15 +173,16 @@ function onLoad() {
         for (var i=0; i<8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
-        updateLastTenRuns();
-        updateLastTenEternities();
-        updateLastTenRealities();
-        updateChallengeTimes();
         convertAutobuyerMode();
+        unfuckChallengeIds();
+        unfuckMultCosts();
     }
 
+  //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+  if (player.version === 13) dev.updateTestSave()
+
   if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
+    document.getElementById("game").style.display = "none";
   }
 
 	initializeWormhole();
@@ -237,23 +190,18 @@ function onLoad() {
 
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
-  updateTimeStudyButtons();
   Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
-  updateChallengeTimes();
-  updateMilestones();
-  updateEternityUpgrades();
   resizeCanvas();
   checkForEndMe();
-  updateDilationUpgradeCosts();
   generateGlyphTable();
   updateRealityUpgrades();
-  updateAutomatorTree();
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()
   Notation.set(player.options.notation);
+  GameCache.invalidate();
 
   $(".wormhole-upgrades").hide()
   if (player.wormhole[0].unlocked) {
@@ -305,10 +253,31 @@ function convertAutobuyerMode() {
   }
 }
 
+function unfuckChallengeIds() {
+  function unfuckChallengeId(id) {
+    if (!id.startsWith("challenge")) return id;
+    const legacyId = parseInt(id.substr(9));
+    const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
+    return Challenge(config.id).fullId;
+  }
+
+  player.currentChallenge = unfuckChallengeId(player.currentChallenge);
+  player.challenges = player.challenges.map(unfuckChallengeId);
+}
+
+function unfuckMultCosts() {
+  player.infinityRebuyables[0] = Math.round(Math.log(player.tickSpeedMultDecreaseCost / 3e6) / Math.log(5));
+  player.infinityRebuyables[1] = Math.round(Math.log(player.dimensionMultDecreaseCost / 1e8) / Math.log(5e3));
+  delete player.tickSpeedMultDecrease;
+  delete player.tickSpeedMultDecreaseCost;
+  delete player.dimensionMultDecrease;
+  delete player.dimensionMultDecreaseCost;
+}
+
 function load_cloud_save(saveId, cloudPlayer) {
   saves[saveId] = cloudPlayer;
 
-  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', saveId, cloudPlayer);
+  if (isDevEnvironment()) set_save('dimensionTestSave', saveId, cloudPlayer);
   else set_save('dimensionSave', saveId, cloudPlayer);
 
   if (currentSave == saveId) {
@@ -319,7 +288,7 @@ function load_cloud_save(saveId, cloudPlayer) {
 
 function load_game(root) {
   if (!root) {
-    if (window.location.href.split("//")[1].length > 20) var root = get_save('dimensionTestSave');
+    if (isDevEnvironment()) var root = get_save('dimensionTestSave');
     else var root = get_save('dimensionSave');
   }
 
@@ -347,7 +316,7 @@ function load_game(root) {
 
 function save_game(changed, silent) {
   if ( possibleGlyphs.length > 0 ) return
-  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, player);
+  if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
   if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
 }
@@ -355,11 +324,8 @@ function save_game(changed, silent) {
 function change_save(saveId) {
   // Save previous save to make sure no changes are lost
   save_game(false, true);
-
   currentSave = saveId;
-
   saved = 0;
-  infDimPow = 1
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
   ec10bonus = new Decimal(1)
@@ -370,7 +336,6 @@ function change_save(saveId) {
   load_game();
   transformSaveToDecimal()
   Tab.dimensions.normal.show();
-  showEternityTab('timestudies', true)
   Modal.hide();
 }
 

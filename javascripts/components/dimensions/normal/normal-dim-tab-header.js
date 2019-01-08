@@ -9,7 +9,7 @@ Vue.component('normal-dim-tab-header', {
   },
   computed: {
     sacrificeBoostDisplay: function() {
-      return this.shorten(this.sacrificeBoost);
+      return this.shortenRateOfChange(this.sacrificeBoost);
     },
     sacrificeTooltip: function() {
       return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
@@ -17,7 +17,7 @@ Vue.component('normal-dim-tab-header', {
   },
   methods: {
     update() {
-      const isSacrificeUnlocked = Sacrifice.isUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.isAffordable;

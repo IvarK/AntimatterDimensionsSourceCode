@@ -3,6 +3,7 @@ Vue.component("ip-multiplier-button", {
     return {
       isAutobuyerOn: false,
       isAutoUnlocked: false,
+      isCapped: false
     };
   },
   watch: {
@@ -11,22 +12,28 @@ Vue.component("ip-multiplier-button", {
     }
   },
   computed: {
-    viewModel: function() {
-      return infinityMultViewModel();
+    upgrade: function() {
+      return InfinityUpgrade.ipMult;
     }
   },
   methods: {
     update() {
-      this.isAutoUnlocked = player.eternities > 0;
+      this.isAutoUnlocked = EternityMilestone.autobuyerIPMult.isReached;
       this.isAutobuyerOn = player.infMultBuyer;
+      this.isCapped = this.upgrade.isCapped;
     }
   },
   template:
     `<div class="l-spoon-btn-group">
       <infinity-upgrade-button
-        :upgrade="viewModel"
+        :upgrade="upgrade"
         class="o-infinity-upgrade-btn--multiplier"
-      />
+      >
+        <template v-if="isCapped">
+          <br>
+          <span>(Capped at {{shorten(upgrade.config.costCap, 0, 0)}} IP)</span>
+        </template>
+      </infinity-upgrade-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"
         v-model="isAutobuyerOn"
@@ -34,40 +41,4 @@ Vue.component("ip-multiplier-button", {
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
       />
     </div>`
-});
-
-class InfinityMultiplierViewModel extends InfinityUpgradeViewModel {
-  constructor(props) {
-    super(props);
-  }
-
-  get isCapped() {
-    return this._upgrade.isCapped;
-  }
-
-  formatCapValue(formatter) {
-    return `(Capped at ${formatter.shortenCosts(this._upgrade.capValue)} IP)`;
-  }
-
-  formatCost(formatter) {
-    return formatter.shortenCosts(this._upgrade.cost);
-  }
-
-  get hasDynamicEffectDisplay() {
-    return true;
-  }
-
-  get isBought() {
-    return this.isCapped;
-  }
-
-  get isAvailable() {
-    return super.isAvailable && !player.infMultBuyer;
-  }
-}
-
-const infinityMultViewModel = () => new InfinityMultiplierViewModel({
-  upgrade: InfinityUpgrade.ipMult,
-  description: "Multiply Infinity Points from all sources by 2",
-  formatCurrentEffect: (value, formatter) => `${formatter.shorten(value)}x`,
 });

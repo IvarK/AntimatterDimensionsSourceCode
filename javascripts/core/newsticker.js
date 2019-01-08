@@ -153,6 +153,25 @@ const newsArray = [
   ["This message will never appear on the news ticker, isn't that cool?", "a150"],
   ["The first dimension produces antimatter, the second dimension produces the first dimension, the third dimension produces the second dimension, the fourth dimension produces the third dimension. Nobody has ever unlocked the 5th, because that would take more than a minute of gameplay.", "a151"],
   ["My AD-blocker won't let me play.", "a152"],
+  ["You lost the game.", "a153"],
+  ["Did you know that 75% of all statistics are made up on the spot?", "a154"],
+  ["If you're using so many logs in a notation name, why not just call it tree notation? They're literally made of logs!", "a155"],
+  [".tuo ti gnitset fo ssecorp eht ni yltnerruc m'I dna ,rettamitna otni rettam trevnoc ot yaw a tuo derugif evah stsitneicS", "a156"],
+  ["If Gaben can't count to three, and Hevipelle can't count to nine, will there be some other game developer in the future that can't count to 27?", "a157"],
+  ["What does it mean when you \"bank\" Infinities? Is there a bank somewhere that you just deposit these infinities? Does having a lot of banked Infinities improve your credit score? Do you get a credit card?", "a158"],
+  ["Turns out all our news is being stolen and broadcast to a game called \"Antimatter Dimensions\", damn Fins.", "a159"],
+  ["mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Oh sorry, wrong text field.", "a160"],
+  ["\"Python's not the best language, Finnish is.\" - Hevipelle", "a161"],
+  ["Some say that most of these news are bad memes. Some say that they're good memes. This one? Well it's just meta news.", "a162"],
+  ["Look mom, I'm on the news!", "a163"],
+  ["<span style='font-size: 0.2rem'>Shush, I'm trying to be sneaky here.</span>", "a164"],
+  ["<span style='animation: a-game-header__antimatter--glow 2s infinite'>PLEASE HELP, I'VE CONSUMED TWICE MY DAILY DOSE OF ANTIMATTER!</span>", "a165"],
+  ["Oh, I appear to have run out of <span style='animation: existenceGlow 3s infinite; font-size: 1.8rem; color: white; text-shadow: 1px 1px 4px black;'>Existence</span>.", "a166"],
+  ["I mean, we may never run out of news articles, but we sure will run out of good ones. Oh wait, we already did.", "a167"],
+  ["If each Trimp was a plank volume, and each piece of resource was a plank volume, how many universes would you fill up before you realized you were playing the wrong game?", "a168"],
+  ["TODO: John, please remove this newsticker message before we release the Reality update to the public.", "a169"],
+  ["<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This is not a rick roll.</a>", "a170"],
+  ["<a href='https://www.youtube.com/watch?v=eRr1gJ65chM' target='_blank'>This is not a rick roll.</a>", "a171"],
 
 //basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],
@@ -205,14 +224,14 @@ const newsArray = [
   ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],  //might not be poss?
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
   ["Achievement Unlocked!", "c4", () => player.achievements.length === 88],
-  ["Did you use an autoclicker for that?", "c5", () => player.timestudy.studies.includes(131) && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
+  ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
-  ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !player.timestudy.studies.includes(32) && player.infinitied > 72000 * 168],
+  ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied > 72000 * 168],
   ["The achievement is for two million, not two billion...", "c8", () => player.infinitied > 2e9],
   ["Keep up the quick pace!", "c9", () => Marathon > 1200],
   ["One day you will stop your incessant grind.", "c10", () => player.eternities > 50000],
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
-  ["Are you serious?", "c12", () => worstChallengeTime <= 10],
+  ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],
   ["The amazing speedster", "c13", () => infchallengeTimes <= 80],
 //luck
   ["This news message is 1000x rarer than all the others.", "l1", () => Math.random() < 0.001],
@@ -256,7 +275,7 @@ function scrollNextMessage() {
   scrollTimeouts = [];
 
   //set the text
-  s.textContent = newsArray[nextMsgIndex][0];
+  s.innerHTML = newsArray[nextMsgIndex][0];
 
   //get the parent width so we can start the message beyond it
   let parentWidth = s.parentElement.clientWidth;

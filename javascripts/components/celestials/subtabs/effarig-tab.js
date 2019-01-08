@@ -19,6 +19,9 @@ Vue.component('effarig-tab', {
       pp: 0
     };
   },
+  computed: {
+    unlockInfo: () => Effarig.unlockInfo,
+  },
   methods: {
     update() {
       let now = new Date().getTime()
@@ -32,7 +35,7 @@ Vue.component('effarig-tab', {
       this.rmMult = Effarig.rmMultiplier
       this.quote = Effarig.quote
       this.quoteIdx = player.celestials.effarig.quoteIdx
-      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(id => Effarig.has(id)).filter((x) => x)
+      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(info => Effarig.has(info)).filter((x) => x)
       this.runReward = Effarig.runRewardMultiplier,
       this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.effarig.glyphLevelMult) / Math.log(1.05) )
       this.glyphUpg.mult = player.celestials.effarig.glyphLevelMult
@@ -51,37 +54,45 @@ Vue.component('effarig-tab', {
     },
     buyGlyphMult() {
       Effarig.buyGlyphLevelPower()
-    }
+    },
+    unlockDescriptionStyle: function(unlockInfo) {
+      let maxPrice = Effarig.unlockInfo[Effarig.lastUnlock].price;
+      let pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
+      return {
+         bottom: pos.toFixed(2) + "%",
+      };
+    },
   },
   template:
     `<div class="l-effarig-celestial-tab">
       <div class="o-effarig-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
-      <div>You have {{shorten(rm)}} Reality Machines.</div>
+      <div>You have {{shortenRateOfChange(rm)}} Reality Machines.</div>
       <div class="l-mechanics-container">
         <div class="l-effarig-unlocks l-effarig-mechanic-container">
-          <div class="c-effarig-unlock c-effarig-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shorten(runReward) }}x, based on realities.</div>
+          <div class="c-effarig-unlock c-effarig-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x, based on realities.</div>
           <div class="c-effarig-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-effarig-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-effarig-shop" v-if="unlocks[3]">
             <span class="o-effarig-pp"> You have {{ pp }} Perk Points.</span>
-            <button class="o-effarig-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shorten(glyphUpg.mult )}}x, Costs: {{ shortenCosts(glyphUpg.cost) }} PP</button>
-            <button class="o-effarig-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shorten(rmUpg ) }}x, Costs: {{ shortenCosts(rmUpg) }} PP</button>
+            <button class="o-effarig-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shortenCosts(glyphUpg.cost) }} PP</button>
+            <button class="o-effarig-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shortenCosts(rmUpg) }} PP</button>
           </div>
         </div>
         <div class="l-rm-container l-effarig-mechanic-container">
           <button class="o-primary-btn c-effarig-pour" 
             @mousedown="pour = true"
+            @touchstart="pour = true"
             @mouseup="pour = false"
+            @touchend="pour = false"
             @mouseleave="pour = false"
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ shorten(rmMult) }}x RM gain<br>{{ shorten(rmStore) }}/{{ shorten(1e24) }}</div>
+              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(1e24) }}</div>
             </div>
-            <div class="c-effarig-unlock-description" id="effarig-run-description">{{ shorten(5e12) }}: unlock Effarig's reality.</div>
-            <div class="c-effarig-unlock-description" id="effarig-epgen-description">{{ shorten(1e15) }}: unlock Effarig's EP generation.</div>
-            <div class="c-effarig-unlock-description" id="effarig-teresa-description">{{ shorten(5e16) }}: unlock Teresa, Celestial of Ancient Relics.</div>
-            <div class="c-effarig-unlock-description" id="effarig-shop-description">{{ shorten(1e24) }}: unlock Perk Point Shop.</div>
+            <div v-for="unlockInfo in unlockInfo" class="c-effarig-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
+              {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}
+            </div>
           </div>
         </div>
 

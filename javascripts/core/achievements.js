@@ -221,10 +221,10 @@ function getSecretAchAmount() {
     return n
 }
 
-function isAchEnabled(name) {
+function isAchEnabled(name, id) {
   if (!player.achievements.includes(name)) return false;
   if (player.realities === 0) return true;
-  const achId = parseInt(name.split("r")[1]);
+  const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
   if (row <= Perks.achSkipCount) return true;
@@ -342,4 +342,75 @@ function updateRealityAchievementModifiers() {
     rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
     secondsForAllAchs: secondsForAllAchs
   };
+}
+
+class AchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = "r" + this.id;
+    if (config.secondaryEffect) {
+      const secondaryConfig = {
+        id: config.id,
+        effect: config.secondaryEffect
+      };
+      this._secondaryState = new AchievementState(secondaryConfig);
+    }
+  }
+
+  get isUnlocked() {
+    return player.achievements.includes(this._fullId);
+  }
+
+  get isEnabled() {
+    return isAchEnabled(this._fullId, this._id);
+  }
+
+  get isEffectConditionSatisfied() {
+    return this.config.effectCondition === undefined || this.config.effectCondition();
+  }
+
+  get canBeApplied() {
+    return this.isEnabled && this.isEffectConditionSatisfied;
+  }
+
+  get secondaryEffect() {
+    return this._secondaryState;
+  }
+}
+
+AchievementState.all = mapGameData(
+  GameDatabase.achievements.normal,
+  data => new AchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementState}
+ */
+function Achievement(id) {
+  return AchievementState.all[id];
+}
+
+class SecretAchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = "s" + this.id;
+  }
+
+  get isUnlocked() {
+    return player.achievements.includes(this._fullId);
+  }
+}
+
+SecretAchievementState.all = mapGameData(
+  GameDatabase.achievements.secret,
+  data => new SecretAchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementState}
+ */
+function SecretAchievement(id) {
+  return SecretAchievementState.all[id];
 }

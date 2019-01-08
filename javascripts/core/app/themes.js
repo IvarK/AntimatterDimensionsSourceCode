@@ -1,6 +1,5 @@
 var Theme = function Theme(name, colors) {
     this.name = name;
-    this.colors = colors;
 
     this.isDefault = function () {
         return name === undefined;
@@ -93,25 +92,19 @@ Theme.tryUnlock = function(name) {
     return true;
 };
 
-Theme.light = function(name, overrideColors) {
+Theme.light = function(name) {
     let colors = {
         chartFont: '#000',
-        chartBorder: '#000',
-        tachyons: "#000",
-        studyTreePath: "#000"
+        chartBorder: '#000'
     };
-    colors = Object.assign(colors, overrideColors);
     return new Theme(name, colors)
 };
 
-Theme.dark = function(name, overrideColors) {
+Theme.dark = function(name) {
     let colors = {
         chartFont: '#888',
-        chartBorder: '#888',
-        tachyons: "#FFF",
-        studyTreePath: "#000"
+        chartBorder: '#888'
     };
-    colors = Object.assign(colors, overrideColors);
     return new Theme(name, colors)
 };
 
@@ -128,7 +121,7 @@ var Themes = {
         Theme.light("S3"),
         Theme.light("S4"),
         Theme.light("S5"),
-        Theme.dark("S6", { studyTreePath: "#DDD" }),
+        Theme.dark("S6"),
         Theme.light("S7"),
         Theme.light("S8")
     ],

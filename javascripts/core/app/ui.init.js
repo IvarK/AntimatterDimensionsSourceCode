@@ -3,7 +3,9 @@ let ui = {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: String.empty
+      message: String.empty,
+      callback: undefined,
+      closeButton: false
     },
     tabs: {
       current: undefined,
@@ -25,13 +27,15 @@ let ui = {
       infinity: {
         subtab: String.empty
       },
+      eternity: {
+        subtab: String.empty
+      },
       celestials: {
         subtab: String.empty
       }
     },
     shiftDown: false,
     theme: undefined,
-    ttshop: false,
     bigCrunch: false
   }
 };

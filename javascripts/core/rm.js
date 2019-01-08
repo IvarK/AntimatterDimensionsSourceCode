@@ -224,6 +224,13 @@ const glyphEffectSoftcaps = {
   timefreeTickMult(value) { // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
     return value != 0 ? Math.max(1e-5, value) : 0;
   }
+  /*, I'm leaving this as as template for other caps; this provides a smooth transition,
+  unlike, say, the dilationpow cap above
+  replicationpow(value) {
+    const T = 8;
+    const S = 1; // softness; 1: 12->10, 20->12, 32->14
+    return value < T ? value : T - S + Math.sqrt(2*S*(value-T-S/2));
+  }*/
 };
 
 // Used for applying glyph effect softcaps if applicable
@@ -231,9 +238,9 @@ function getAdjustedGlyphEffect(effectKey) {
   let value = getTotalEffect(effectKey);
   if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
     const softcap = glyphEffectSoftcaps[effectKey];
-    return softcap(value);
+    return softcap(value.effect);
   }
-  return value;
+  return value.effect;
 }
 
 // Combines all specified glyph effects (without softcaps), reduces some boilerplate
@@ -243,21 +250,22 @@ function getTotalEffect(effectKey) {
   let effect = separated[1];
   
   let totalEffect = 0;
+  let glyphCount = 0;
   let activeGlyphs = player.reality.glyphs.active;
   for (let i = 0; i < activeGlyphs.length; i++) {
     let currGlyph = activeGlyphs[i];
     if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
+      ++glyphCount;
       if (totalEffect == 0) {
         totalEffect = currGlyph.effects[effect];
-      }
-      else {  // Combine the effects appropriately (some are additive)
+      } else {  // Combine the effects appropriately (some are additive)
         if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
           totalEffect += currGlyph.effects[effect];
-        }
-        else if (effectKey === "powermult") { // This is a Decimal
+        } else if (effectKey == "replicationpow") {
+          totalEffect = currGlyph.effects[effect] + totalEffect - 1;
+        } else if (effectKey === "powermult") { // This is a Decimal
           totalEffect = totalEffect.times(currGlyph.effects[effect]);
-        }
-        else {
+        } else {
           totalEffect *= currGlyph.effects[effect];
         }
       }
@@ -265,18 +273,26 @@ function getTotalEffect(effectKey) {
   }
   
   if (effectKey === "powermult" && totalEffect == 0) {
-    return new Decimal(0)
-  }
-  else {
-    return totalEffect
+    return { effect: new Decimal(0), count: glyphCount, capped: true };
+  } else if (effectKey === "replicationglyphlevel" && glyphCount > 2) {
+    // past two glyphs, stacking offers diminishing returns; this makes 4 glyphs
+    // look like 3:
+    return { effect: totalEffect * 6 / (glyphCount + 4), count: glyphCount, capped:true };
+  } else {
+    return { effect: totalEffect, count: glyphCount, capped: false };
   }
 }
 
 function recalculateAllGlyphs() {
-  for (let i = 0; i < player.reality.glyphs.active.length; i++)
+  for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     fixGlyph(player.reality.glyphs.active[i]);
-  for (let i = 0; i < player.reality.glyphs.inventory.length; i++)
+  }
+  // delete any glyphs that are in overflow spots:
+  player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
+    glyph => glyph.idx < player.reality.glyphs.inventorySize);
+  for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     fixGlyph(player.reality.glyphs.inventory[i]);
+  }
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
@@ -293,7 +309,7 @@ function fixGlyph(glyph) {
 
 function getRarity(x) {
   var name, color;
-  if (x >= 3.5) return { name: "Perfect", color: "#FFE57F" } // ~0.0005%
+  if (x >= 3.5) return { name: "Celestial", color: "#5151ec" } // ~0.0005%
   if (x >= 3.25) return { name: "Transcendent", color: "#03FFEC" } // ~0.0005%
   if (x >= 3) return { name: "Mythical", color: "#D50000" } // ~0.01%
   if (x >= 2.75) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
@@ -326,17 +342,16 @@ function getDesc(effectKey, x, inTooltip) {
   let spanPrefix = ""
   let spanSuffix = "</span>"
   if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    spanPrefix = "<span style='color:"+NUMBERCOLOR+"'>"
+    spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
+  } else {
+    let total = getTotalEffect(effectKey);
+    if (total.capped || (effectKey === "powermult" && !x.equals(total.effect)) || (effectKey !== "powermult" && x != total.effect)) {
+      spanPrefix = "<span style='color:" + CAPPED_EFFECT_COLOR + "'>"
+      isGlyphSoftcapActive = true;
+    } else {
+      spanPrefix = "<span>"
+    }
   }
-  else if ((effectKey === "powermult" && !x.equals(getTotalEffect(effectKey))) || (effectKey !== "powermult" && x != getTotalEffect(effectKey))) {
-    spanPrefix = "<span style='color:"+CAPPED_EFFECT_COLOR+"'>"
-    isGlyphSoftcapActive = true;
-  }
-  else {
-    spanPrefix = "<span>"
-  }
-  
-  
   const EFFECT_DESCRIPTIONS = {
     timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
     timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
@@ -405,7 +420,7 @@ function getGlyphTooltip(glyph) {
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength).toFixed(2) + " power</span>";
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength * Effarig.runRewardMultiplier).toFixed(2) + " power</span>";
   }
   tooltipText += "</div></span>"
   return tooltipText;
@@ -503,20 +518,20 @@ function deleteGlyph(id) {
     var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
     tempAudio.play();
   }
-  if (!shiftDown) return false;
+  if (!shiftDown  && !controlShiftDown) return false;
 
   if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
   if (player.reality.upg.includes(21)) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
 
-  if (controlDown || confirm("Do you really want to delete this glyph?")) {
+  if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
       return glyph.id == id
@@ -627,11 +642,12 @@ function buyRealityUpg(id) {
     $("#whupg2").show()
   }
   updateRealityUpgrades()
+  if (id == 19 || id == 21) generateGlyphTable();   // Add sacrifice value to tooltips
   updateWormholeUpgrades()
   return true
 }
 
-function updateRealityUpgrades() {
+  function updateRealityUpgrades() {
   for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
     else $("#rupg"+i).removeClass("rUpgUn")
@@ -661,9 +677,9 @@ function updateRealityUpgrades() {
   $("#rupg3").html("You gain 3 times more Eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
   $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: "+ row1Mults[4] +"x<br>Cost: "+row1Costs[4]+" RM")
   $("#rupg5").html("You gain 5 times more Infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shorten(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
-  $("#rupg15").html("<b>Requires: Reach 1e10 EP without EP multipliers (test)</b><br>Multiply TP gain based on EP mult, Currently "+shorten(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shorten(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shortenRateOfChange(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
+  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently "+shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shortenRateOfChange(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
 }
 
 function toggleGlyphRespec() {
@@ -722,12 +738,12 @@ function getGlyphSacEffect(type) {
 
 function getGlyphSacDescription(type) {
   let amount = getGlyphSacEffect(type)
-  let total = shorten(player.reality.glyphs.sac[type])
+  let total = shortenRateOfChange(player.reality.glyphs.sac[type])
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power":
     let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy) + ")<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
 
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
@@ -739,7 +755,7 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
     case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
   }
 }
 
@@ -760,7 +776,7 @@ function sacrificeGlyph(glyph, force = false) {
 }
 
 function updateGlyphDescriptions() {
-  let html = ""
+  let html = "Glyph Sacrifice Effects:<br><br>"
   for (let i in player.reality.glyphs.sac) {
     html += getGlyphSacDescription(i)
   }
@@ -784,3 +800,101 @@ function updateTooltips() {
     mouseOn = $("document")
   })
 }
+
+function getGlyphLevelInputs() {
+  // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
+  // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
+  // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
+  let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
+  var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
+  // factors assigned to repl and dt can be arbitrarily tuned
+  let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
+  let dtBase = player.dilation.dilatedTime.exponent ?
+    Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
+  let eterBase = player.reality.upg.includes(18) ?
+    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45,1) : 1;
+  // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
+  // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
+  // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
+  // largest term -- so probably replicants, So, instead of using the weights directly, a
+  // function of the weights is used: n_i = (4 w_i)^blendExp; put differently, the exponents
+  // don't add up to 4, but their powers do (for blendExp = 1/3, the cubes of the exponents sum to
+  // 4.
+  // The optimal weights, given a blendExp, are proportional to log(x)^(1/(1- blendExp))
+  const blendExp = 1/3;
+  // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
+  // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
+  // Then, we can divide the result by s⁴; this does nothing for even weights
+  // This can reduce the effect that Teresa can have; consider the following examples:
+  // Inputs : 100, 1, 1, 1. Nominal result : 100
+  // blendExp = 1/3; optimal weights: 1, 0, 0, 0; result = 1493
+  // Scaling by 100: 10000, 100, 100, 100
+  //                 optimal weights: 0.485, 0.17, 0.17, 0.17; result = 191.5
+  // The degree of this effect depends on the scale of the inputs:
+  // Inputs: 1000, 1, 1, 1. Nominal result: 1000
+  //                 optimal weights: 1, 0, 0, 0; result = 57836
+  // Scaling by 100: 100000, 100, 100, 100
+  //                 optimal weights: 0.57, 0.14, 0.14, 0.14; result = 3675
+  // Scaling does allow the user to produce results less than 1
+  // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
+  // For display purposes, each term is divided independently by s.  
+  const preScale = 5;
+  let weights =  player.celestials.teresa.glyphWeights;
+  var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
+  var epEffect = adjustFactor(epBase, weights.ep / 100);
+  var replEffect = adjustFactor(replBase, weights.repl / 100);
+  var dtEffect = adjustFactor(dtBase, weights.dt / 100);
+  var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
+  // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
+  const glyphScaleBegin = 1000;
+  const glyphScaleRate = 500;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
+  var glyphScalePenalty = 1;
+  var glyphScaledLevel = glyphBaseLevel;
+  if (glyphBaseLevel > glyphScaleBegin) {
+    var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
+    glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
+    glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
+  }
+  let perkFactor = 0;
+  if (player.reality.perks.includes(21)) perkFactor++;
+  if (player.reality.perks.includes(24)) perkFactor++;
+  return {
+    epEffect: epEffect,
+    replEffect: replEffect,
+    dtEffect: dtEffect,
+    eterEffect: eterEffect,
+    perkShop: player.celestials.effarig.glyphLevelMult,
+    scalePenalty: glyphScalePenalty,
+    perkFactor: perkFactor,
+    finalLevel: glyphScaledLevel + perkFactor,
+  };
+}
+
+class GlyphEffectState {
+  constructor(id, props) {
+    this._id = id;
+    this._adjustApply = props.adjustApply;
+  }
+
+  applyEffect(applyFn) {
+    let effectValue = getAdjustedGlyphEffect(this._id);
+    if (this._adjustApply !== undefined) {
+      effectValue = this._adjustApply(effectValue);
+    }
+    applyFn(effectValue);
+  }
+}
+
+const GlyphEffect = {
+  dimBoostPower: new GlyphEffectState("powerdimboost", {
+    adjustApply: value => Math.max(1, value)
+  }),
+  ipMult: new GlyphEffectState("infinityipgain", {
+    adjustApply: value => Decimal.max(1, value)
+  }),
+  epMult: new GlyphEffectState("timeeternity", {
+    adjustApply: value => Decimal.max(1, value)
+  })
+};

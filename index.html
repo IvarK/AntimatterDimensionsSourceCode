@@ -82,7 +82,7 @@
                 <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
             </div>
         </div>
-        <game-tab v-show="view.tabs.current" style="flex: 1 0">
+        <game-tab v-show="view.tabs.current && view.tabs.current != 'reality-tab'" style="flex: 1 0">
             <component :is="view.tabs.current"></component>
         </game-tab>
         <div id="reality" class="tab" align="center" style="margin-top: 10px;">

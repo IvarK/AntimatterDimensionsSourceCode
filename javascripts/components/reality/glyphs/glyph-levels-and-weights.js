@@ -94,7 +94,6 @@ Vue.component("glyph-levels-and-weights", {
         this.rows = 6;
       }
       this.factors = glyphFactors;
-      //["ep", "repl", "dt", "eternities"].map((x) => this.weights[x] = player.celestials.teresa.glyphWeights[x]);
     },
     formatFactor(x) { // not applied to + perks since it's always whole
       return x.toFixed(3);
@@ -195,6 +194,11 @@ Vue.component("glyph-levels-and-weights", {
     </div>
   `,
   mounted() {
+    // Teresa unlock sets a flag to open this dropdown
+    if (this.$viewModel.tabs.reality.openGlyphWeights) {
+      this.$viewModel.tabs.reality.openGlyphWeights = false;
+      this.$parent.$emit("openrequest");
+    }
   }
 });
 

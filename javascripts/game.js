@@ -1403,7 +1403,10 @@ setInterval(function() {
 scrollNextMessage();
 
 function showRealityTab(tabName) {
-  ui.view.tabs.current = "reality-tab";
+  if (ui.view.tabs.current != "reality-tab") {
+    showTab("reality")
+    ui.view.tabs.current = "reality-tab";
+  }
   ui.view.tabs.reality.subtab = tabName;
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('realitytab');

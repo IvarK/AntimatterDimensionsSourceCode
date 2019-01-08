@@ -31,7 +31,8 @@ let ui = {
         subtab: String.empty
       },
       reality: {
-        subtab: String.empty
+        subtab: String.empty,
+        openGlyphWeights: false,
       },
       celestials: {
         subtab: String.empty

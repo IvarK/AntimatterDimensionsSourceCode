@@ -1,7 +1,9 @@
 "use strict";
 
 /* This wraps a control box of some sort (like glyph weight adjust) in
-a dropdown menu like container */
+a dropdown menu like container.
+  You can force it to open programatically by sending it an openrequest event
+*/
 
 Vue.component("expanding-control-box", {
   props: {
@@ -80,7 +82,6 @@ Vue.component("expanding-control-box", {
     updateBaseWidth() {
       this.$refs.container.style.width = this.$refs.dropdown.offsetWidth + "px";
       this.$refs.root.style.width = this.$refs.dropdown.offsetWidth + "px";
-      console.log("width update : " + this.$refs.dropdown.offsetWidth + "px")
     }
   },
   mounted() {
@@ -90,5 +91,8 @@ Vue.component("expanding-control-box", {
     this.$refs.container.style.maxHeight = this.closedHeight;
     this.$refs.root.style.height = this.closedHeight;
     this.updateBaseWidth();
+  },
+  created() {
+    this.$on("openrequest", () => this.isOpen = true);
   }
 });

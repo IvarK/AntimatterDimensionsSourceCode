@@ -1494,8 +1494,8 @@ window.onblur = function() {
 };
 
 function setShiftKey(isDown) {
-    shiftDown = isDown;
-    if (!isDown) controlShiftDown = isDown;
+  shiftDown = isDown;
+  if (!isDown) controlShiftDown = isDown;
   ui.view.shiftDown = isDown;
   document.getElementById("automatorloadsavetext").textContent = isDown ? "save:" : "load:";
   if (isDown) showPerkLabels()
@@ -1503,12 +1503,12 @@ function setShiftKey(isDown) {
 }
 
 function setControlKey(isDown) {
-    controlDown = isDown;
-    if (!isDown) controlShiftDown = isDown;
+  controlDown = isDown;
+  if (!isDown) controlShiftDown = isDown;
 }
 
 function setControlShiftKey(isDown) {
-    controlShiftDown = isDown;
+  controlShiftDown = isDown;
 }
 
 var postc8Mult = new Decimal(0)

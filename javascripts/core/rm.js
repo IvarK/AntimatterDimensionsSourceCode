@@ -526,12 +526,12 @@ function deleteGlyph(id) {
   }
 
   if (player.reality.upg.includes(21)) {
-      sacrificeGlyph(n, controlShiftDown)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
 
-    if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
+  if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
       return glyph.id == id

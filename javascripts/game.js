@@ -1205,11 +1205,12 @@ function gameLoop(diff, wormholeSpeedup) {
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
-  if (player.wormhole[0].unlocked) {
+  if (player.wormhole[0].unlocked && !player.wormholePause) {
     updateWormholePhases(wormholeDiff);
-    wormHoleLoop(0)
-    wormHoleLoop(1)
-    wormHoleLoop(2)
+    for (let i = 0; i < player.wormhole.length; i++) {
+      updateWormholeStatusText(i);
+    }
+    updateWormholeGraphics();
   }
   
   // Reality unlock and TTgen perk autobuy
@@ -1240,29 +1241,36 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
+
+    // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
+    if (ticks > 1000 && !real && !fast) {
+      bonusDiff = (ticks - 1000) / 20;
+      ticks = 1000;
+    } else if (ticks > 50 && fast) {
+      bonusDiff = (ticks - 50);
+      ticks = 50;
+    }
     
-    // Simulation code with wormhole (should be at most 600 ticks)
+    // Simulation code with wormhole
     if (player.wormhole[0].unlocked && !player.wormholePause) {
       let remainingSeconds = seconds;
-      for (let numberOfTicks = 600; numberOfTicks > 0; numberOfTicks--) {
-        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+      // 
+      for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
+        let timeGlyphSpeedup;
         // If this conditional triggers, our time glyphs will become inactive before anything happens.
-        if (Autobuyer.reality.canActivate() && player.reality.respec) timeGlyphSpeedup = 1;
-        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicks, 0.0001, timeGlyphSpeedup);
+        if (Autobuyer.reality.canActivate() && player.reality.respec) {
+          timeGlyphSpeedup = 1;
+        } else {
+          timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+        }
+        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicksRemaining, 0.0001, timeGlyphSpeedup);
         remainingSeconds -= realTickTime;
         gameLoop(1000 * realTickTime, wormholeSpeedup);
       }
     }
       
     // This is pretty much the older simulation code
-    else {  
-      if (ticks > 1000 && !real && !fast) {
-          bonusDiff = (ticks - 1000) / 20;
-          ticks = 1000;
-      } else if (ticks > 50 && fast) {
-          bonusDiff = (ticks - 50);
-          ticks = 50;
-      }
+    else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
     var popupString = "While you were away"

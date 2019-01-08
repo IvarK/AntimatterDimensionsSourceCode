@@ -8,13 +8,13 @@
  /*
  How the wormholes work:
  player.wormholes is a list (currently of length 3), each entry containing info about a wormhole.
- player.wormholes[i].duration is the amount of time the wormhole is active for.
- player.wormholes[i].power is the multiplier to time the wormhole gives when active.
- player.wormholes[i].speed is the amount of time the wormhole is inactive for between activations.
- player.wormholes[i].phase is the amount of time the wormhole has spent since last state transition,
+ wormhole.duration is the amount of time the wormhole is active for.
+ wormhole.power is the multiplier to time the wormhole gives when active.
+ wormhole.speed is the amount of time the wormhole is inactive for between activations.
+ wormhole.phase is the amount of time the wormhole has spent since last state transition,
  so if it's active, it's the amount of time it's been active for, and if it's inactive,
  it's the amount of time it's been inactive for.
-player.wormholes[i].activations is the total number of times the wormhole has become active (including offline)
+ wormhole.activations is the total number of times the wormhole has become active (including offline)
  */
 
 function updateWormholeUpgrades() {
@@ -97,10 +97,9 @@ let totalPhase;
 function updateWormholePhases(wormholeDiff) {
   // This code is intended to successfully update the wormhole phases
   // even for very large values of wormholeDiff.
-  if (player.wormholePause) return;
   wormholeDiff /= 1000;
   // How long is spent with each wormhole active?
-  let incPhases = getRealTimesWithWormholeActive(wormholeDiff);
+  let incPhases = getRealTimePeriodsWithWormholeActive(wormholeDiff);
   for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
     let wormhole = player.wormhole[i];
     // Prevents a flickering wormhole if phase gets set too high
@@ -130,9 +129,7 @@ function updateWormholePhases(wormholeDiff) {
     }
   }
 }
-function wormHoleLoop(i) {
-  // Change wormhole state
-  if (player.wormholePause) return
+function updateWormholeStatusText(i) {
   let wormhole = player.wormhole[i];
   if (!wormhole.unlocked) return
 
@@ -142,27 +139,27 @@ function wormHoleLoop(i) {
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, wormhole.duration - wormhole.phase)).toFixed(1) + " sec)";
   else
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (wormhole.speed - wormhole.phase).toFixed(1) + " seconds.";
-  
-  if (i == 0) totalPhase = getTotalPhase();
-    
-	if (i == 0) {
-    // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
-    E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
-    r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
-    theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
-    if (Math.tan(E0/2) < 0) theta *= -1;
-    planet.radius = r;
-    planet.angle = theta / (2*Math.PI);
+}
 
-    // Time dilation factor (Realistic formula, but only actually used for particle speed)
-    delta = 1 / Math.sqrt(1 - bhSize/r);
-          
-    // Move+draw everything
-    document.getElementById("wormholeImage").getContext('2d').clearRect(0, 0, 400, 400);
-    for (let i = 0; i < particleList.length; i++) {
-      particleList[i].update();
-      particleList[i].draw();
-    }
+function updateWormholeGraphics() {
+  totalPhase = getTotalPhase();
+
+  // Update orbital position parameters (polar coordinates centered on hole, theta goes 0 to 1 because I'm apparently stupid)
+  E0 = E(eccentricity, 2 * Math.PI * totalPhase / period);    // "eccentric anomaly"
+  r = semimajorAxis*(1 - eccentricity*Math.cos(E0));
+  theta = 2 * Math.atan(Math.sqrt((1+eccentricity)/(1-eccentricity) * Math.pow(Math.tan(E0/2), 2)));
+  if (Math.tan(E0/2) < 0) theta *= -1;
+  planet.radius = r;
+  planet.angle = theta / (2*Math.PI);
+
+  // Time dilation factor (Realistic formula, but only actually used for particle speed)
+  delta = 1 / Math.sqrt(1 - bhSize/r);
+        
+  // Move+draw everything
+  document.getElementById("wormholeImage").getContext('2d').clearRect(0, 0, 400, 400);
+  for (let i = 0; i < particleList.length; i++) {
+    particleList[i].update();
+    particleList[i].draw();
   }
 }
 
@@ -435,7 +432,7 @@ function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance, t
 // Standard implementation of binary search for a monotone increasing function.
 // The only unusual thing is tolerance, which is a bound on
 // Math.abs(evaluationFunction(result) - target).
-function binarySearch (start, end, evaluationFunction, target, tolerance) {
+function binarySearch(start, end, evaluationFunction, target, tolerance) {
   while (true) {
     let median = (start + end) / 2;
     let error = evaluationFunction(median) - target;
@@ -456,10 +453,10 @@ function binarySearch (start, end, evaluationFunction, target, tolerance) {
 // starting from wormhole 1 and wormhole 0 being normal game.
 // speedups[0] is thus 1, and speedups[i + 1] is speedups[i] * player.wormhole[i].power
 // (player.wormhole[i].power being the speedup from player.wormhole[i]).
-function calculateWormholeSpeedups () {
+function calculateWormholeSpeedups() {
   let speedups = [1];
-  for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
-    speedups.push(speedups[speedups.length - 1] * player.wormhole[i].power);
+  for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
+    speedups.push(speedups.last() * wormhole.power);
   }
   return speedups;
 }
@@ -469,17 +466,16 @@ function calculateWormholeSpeedups () {
 // after realTime. It does this by making an array of the amount of real time spent
 // where each wormhole is the highest-index active wormhole,
 // multiplying by the speedup of each wormhole, and summing.
-function getGameTimeFromRealTime (realTime, speedups) {
+function getGameTimeFromRealTime(realTime, speedups) {
   // wormholeTimes is an array containing the amount of real time spent in each wormhole.
-  let timeWithWormholeHighestActive = getRealTimesWithWormholeHighestActive(realTime, speedups);
+  let highestActivePeriods = getRealTimePeriodsWithWormholeHighestActive(realTime, speedups);
   let gameTime = 0;
-  // For each wormhole...
-  for (let i = 0; i < timeWithWormholeHighestActive.length; i++) {
-    // Add the real time spent where that wormhole is the highest-index
+  for (let i = 0; i < highestActivePeriods.length; i++) {
+    // For each wormhole, add the real time spent where that wormhole is the highest-index
     // active wormhole times the total speedup during that time
     // (which is the game time spent where that wormhole is the highest-index
     // active wormhole) to the overall game time spent.
-    gameTime += timeWithWormholeHighestActive[i] * speedups[i];
+    gameTime += highestActivePeriods[i] * speedups[i];
   }
   return gameTime;
 }
@@ -491,62 +487,54 @@ function getGameTimeFromRealTime (realTime, speedups) {
 // Then it takes differences: the time spent with wormhole i active minus
 // the time spent with wormhole (i + 1) active is the time spent
 // with wormhole i being the highest-index active wormhole.
-function getRealTimesWithWormholeHighestActive (realTime) {
-  let timeWithWormholeActive = getRealTimesWithWormholeActive(realTime);
-  // This 0 avoids an issue where we run into an undefined when taking differences.
-  timeWithWormholeActive.push(0);
-  let timeWithWormholeHighestActive = [];
-  // Take differences as described in the comment above this function.
-  // Yes, the `i < timeWithWormholeActive.length - 1` is OK (remember that we pushed an extra 0).
-  for (let i = 0; i < timeWithWormholeActive.length - 1; i++) {
-    timeWithWormholeHighestActive.push(timeWithWormholeActive[i] - timeWithWormholeActive[i + 1]);
+function getRealTimePeriodsWithWormholeHighestActive(realTime) {
+  let activePeriods = getRealTimePeriodsWithWormholeActive(realTime);
+  let highestActivePeriods = [];
+  for (let i = 0; i < activePeriods.length - 1; i++) {
+    highestActivePeriods.push(activePeriods[i] - activePeriods[i + 1]);
   }
-  return timeWithWormholeHighestActive;
+  highestActivePeriods.push(activePeriods.last());
+  return highestActivePeriods;
 }
 
-function getRealTimesWithWormholeActive (realTime) {
-  // As stated above, this is an array with an entry for each wormhole of
+function getRealTimePeriodsWithWormholeActive(realTime) {
+  // This is an array with an entry for each wormhole of
   // real time spent with that wormhole active. The first entry represents
-  // the "null wormhole" that is normal game, so that entry is realTime
-  // (the null wormhole is always active).
-  let timeWithWormholeActive = [realTime];
-  // For each wormhole...
-  for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
-    // See the comment for getRealTimeWithWormholeActive.
-    timeWithWormholeActive.push(getRealTimeWithWormholeActive(player.wormhole[i], timeWithWormholeActive[timeWithWormholeActive.length - 1]));
+  // the "no wormhole" state that is normal game.
+  let activePeriods = [realTime];
+  for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
+    const realTime = getRealTimeWithWormholeActive(wormhole, activePeriods.last())
+    activePeriods.push(realTime);
   }
-  return timeWithWormholeActive;
+  return activePeriods;
 }
 
 // Given a wormhole and the time for which the previous wormhole is active,
 // this function returns the time for which the given wormhole is active.
-function getRealTimeWithWormholeActive (wormhole, time) {
-  // See the comment for nextWormholeDurationEnd.
-  let y = nextWormholeDurationEnd(wormhole);
+function getRealTimeWithWormholeActive(wormhole, time) {
+  let y = nextWormholeDeactivation(wormhole);
   // Abbrevations since we'll be using these variables a lot.
   let s = wormhole.speed;
   let d = wormhole.duration;
-  // Math.min(y, d): time player.wormhole[index] is active from now until when player.wormhole[index] next becomes inactive
-  // d * Math.floor((time - y) / (s + d)): time it's active until the last time it becomes inactive
-  // (Math.floor((time - y) / (s + d)) is the number of full cycles from the first time it becomes inactive
-  // to the last time it becomes inactive)
-  // Math.max((time - y + s + d) % (s + d) - s, 0): time it's active after the last time it becomes inactive
-  // ((time - y + s + d) % (s + d) is the amount of time left after the last time it becomes inactive, if this is more than s
-  // then it becomes active again at the end)
-  return Math.min(y, d) + d * Math.floor((time - y) / (s + d)) + Math.max((time - y + s + d) % (s + d) - s, 0);
+  // time the wormhole is active from now until when the wormhole next becomes inactive
+  const currentActivationTime = Math.min(y, d);
+  // the number of full cycles from the first time the wormhole becomes inactive
+  // to the last time the wormhole becomes inactive)
+  const activeCyclesUntilLastDeactivation = Math.floor((time - y) / (s + d));
+  // time the wormhole is active until the last time it becomes inactive
+  const activeTimeUntilLastDeactivation = d * activeCyclesUntilLastDeactivation;
+  // time the wormhole is active after the last time it becomes inactive (if non-negative)
+  const timeLeftAfterLastDeactivation = (time - y + s + d) % (s + d);
+  const lastActivationTime = Math.max(timeLeftAfterLastDeactivation - s, 0);
+  return currentActivationTime + activeTimeUntilLastDeactivation + lastActivationTime;
 }
 
-// This function gets the time for which the previous wormhole must be active until
-// wormhole next becomes inactive (that is, its duration ends).
-function nextWormholeDurationEnd (wormhole) {
+// Returns the time that the previous wormhole must run until the next change
+// from the active state to the inactive state.
+function nextWormholeDeactivation(wormhole) {
   if (wormhole.active) {
-    // wormhole.phase is the time for which it's been active, so wormhole.duration - wormhole.phase is the
-    // time until the duration ends and it becomes inactive.
     return wormhole.duration - wormhole.phase;
   } else {
-    // wormhole.phase is the time for which it's been inactive, so wormhole.speed - wormhole.phase is the
-    // time until it becomes active again, and wormhole.duration is the time from when it becomes active again
-    // to when the duration ends and it becomes inactive.
     return wormhole.duration + wormhole.speed - wormhole.phase;
   }
 }

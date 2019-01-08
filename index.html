@@ -8,6 +8,7 @@
     <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
     <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
     <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
@@ -82,7 +83,7 @@
                 <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
             </div>
         </div>
-        <game-tab v-show="view.tabs.current && view.tabs.current != 'reality-tab'" style="flex: 1 0">
+        <game-tab v-show="view.tabs.current && view.tabs.current !== 'reality-tab'" style="flex: 1 0">
             <component :is="view.tabs.current"></component>
         </game-tab>
         <div id="reality" class="tab" align="center" style="margin-top: 10px;">
@@ -109,12 +110,10 @@
                     <br>Glyph level: 1</button>
                   <br>
                   <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
-                  <expanding-control-box v-if="view.tabs.current == 'reality-tab' && view.tabs.reality.subtab == 'glyphstab'"
+                  <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'"
                                          label="Glyph level factors"
-                                         container-class="glyph-level-factors-dropdown-header">
-                    <template slot="dropdown">
-                      <glyph-levels-and-weights></glyph-levels-and-weights>
-                    </template>
+                                         container-class="c-glyph-level-factors-dropdown-header">
+                    <glyph-levels-and-weights slot="dropdown"/>
                   </expanding-control-box>
                   <br>
                   <br>

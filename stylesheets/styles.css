@@ -4861,28 +4861,32 @@ screen and (max-width: 480px) {
   z-index: 999;
 }
 
-.glyph-level-factors-dropdown-header {
+.c-glyph-level-factors-dropdown-header {
   color: #d5ffd7;
   width: auto;
   font-weight: bold;
   text-align: center;
   background: black;
-  border: 2px solid #0b600e;
-  border-radius: 5px;
+  border: 0.2rem solid #0b600e;
+  border-radius: 0.5rem !important;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 }
 
-.glyph-level-info-grid {
+.l-glyph-levels-and-weights {
   display: -ms-grid;
   display: grid;
+  width: 100%;
   /*border: 1px solid red !important;*/
   padding-top: 1rem;
-  width:100%;
+}
+
+.c-glyph-levels-and-weights {
+  font-weight: bold;
   background: black;
 }
 
-.glyph-level-info-grid .glyph-level-weight-adjust-label {
+.l-glyph-levels-and-weights__adjust-label {
   grid-column: 4;
   -ms-grid-column: 4;
   grid-row: 1 / 5;
@@ -4898,7 +4902,7 @@ screen and (max-width: 480px) {
   padding: 0.25em 0 .25em 1em;
 }
 
-.glyph-level-info-grid .glyph-level-weight-adjust-outline {
+.l-glyph-levels-and-weights__adjust-outline {
   grid-column: 4 / 6;
   -ms-grid-column: 4;
   -ms-grid-column-span: 2;
@@ -4910,10 +4914,10 @@ screen and (max-width: 480px) {
   position:relative;
 }
 
-.glyph-level-info-grid .glyph-level-weight-adjust-outline::after {
+.l-glyph-levels-and-weights__adjust-outline::after {
   content: '';
   position: absolute;
-  border: 2px solid #d5ffd7 !important;
+  border: 0.2rem solid #d5ffd7 !important;
   border-radius: 0.5em;
   top: -0.5em;
   bottom: -0.5em;
@@ -4921,10 +4925,9 @@ screen and (max-width: 480px) {
   right: -0.5em;
 }
 
-.glyph-level-info-grid .glyph-level-factor {
+.l-glyph-levels-and-weights__factor {
   grid-column: 1;
   -ms-grid-column: 1;
-  font-weight: bold;
   text-align: left;
   padding-left: 1em;
   padding-top: 0.3em;
@@ -4933,19 +4936,17 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
-.glyph-level-info-grid .glyph-level-operator {
+.l-glyph-levels-and-weights__operator {
   grid-column: 2;
   -ms-grid-column: 2;
-  font-weight: bold;
   display:flex;
   align-items: center;
   padding-left: 1em;
 }
 
-.glyph-level-info-grid .glyph-level-factor-val {
+.l-glyph-levels-and-weights__factor-val {
   grid-column: 3;
   -ms-grid-column: 3;
-  font-weight: bold;
   text-align: right;
   padding-left: 1em;
   display: flex;
@@ -4954,7 +4955,7 @@ screen and (max-width: 480px) {
   padding-right: 2em;
 }
 
-.glyph-level-info-grid .glyph-level-weight-slider {
+.l-glyph-levels-and-weights__slider {
   grid-column: 5;
   -ms-grid-column: 5;
   display: flex;
@@ -4963,37 +4964,22 @@ screen and (max-width: 480px) {
   margin-bottom: 0.4rem;
 }
 
-.glyph-level-info-grid .glyph-level-weight-slider-process {
+.c-glyph-levels-and-weights__slider-process {
   background-color: #d5ffd7;
 }
 
-.glyph-level-info-grid .glyph-level-weight-slider-bg {
+.c-glyph-levels-and-weights__slider-bg {
   background-color: #0b600e;
 }
 
-.glyph-level-info-grid .glyph-level-result {
-  grid-column: 2/4;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 2;
-  grid-row: 7;
-  -ms-grid-row: 7;
-  font-weight: bold;
-  text-align: center !important;
-  justify-content: flex-end;
-  display:flex;
-  align-items: center;
-  padding-right: 2em;
-  border-top: 2px solid white !important;
-}
-
-.glyph-level-info-grid .ad-slider-dot .glyph-level-weight-slider-handle {
+.c-glyph-levels-and-weights__slider-handle {
   color: #d5ffd7;
   background-color: black !important;
-  box-shadow: 0 0 0 1px #d5ffd7 !important;
+  box-shadow: 0 0 0 0.1rem #d5ffd7 !important;
   border-radius: 0.8rem !important;
 }
 
-.glyph-level-info-grid .glyph-level-weight-reset-btn-outer {
+.l-glyph-levels-and-weights__reset-btn-outer {
   grid-column: 5;
   -ms-grid-column: 5;
   grid-row: 5;
@@ -5004,16 +4990,19 @@ screen and (max-width: 480px) {
   justify-content: center;
 }
 
-.glyph-level-info-grid .glyph-level-weight-reset-btn {
-  color: #d5ffd7;
-  background-color: black !important;
-  border-radius: 0.5rem;
-  border: 1px solid #d5ffd7;
+.l-glyph-levels-and-weights__reset-btn {
   display: inline-block;
   padding: 0.2rem 0.5rem 0.2rem 0.5rem;
 }
 
-.glyph-level-info-grid .glyph-level-weight-reset-btn:hover {
+.c-glyph-levels-and-weights__reset-btn {
+  color: #d5ffd7;
+  background-color: black !important;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #d5ffd7;
+}
+
+.c-glyph-levels-and-weights__reset-btn:hover {
   color: black;
   background-color: #d5ffd7 !important;
 }

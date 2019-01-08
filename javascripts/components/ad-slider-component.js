@@ -234,7 +234,7 @@ Vue.component("ad-slider-component", {
       return this.dotHeight || this.dotSize;
     },
     flowDirection() {
-      return `ad-slider-${this.direction + (this.reverse ? '-reverse' : '')}`
+      return `l-ad-slider--${this.direction + (this.reverse ? '-reverse' : '')}`
     },
     tooltipMergedPosition() {
       if (!this.isMounted) return {}
@@ -270,7 +270,7 @@ Vue.component("ad-slider-component", {
       return this.eventType === 'none' ? true : this.boolDisabled
     },
     disabledClass() {
-      return this.boolDisabled ? 'ad-slider-disabled' : ''
+      return this.boolDisabled ? 'l-ad-slider--disabled' : ''
     },
     stateClass() {
       return {
@@ -383,8 +383,8 @@ Vue.component("ad-slider-component", {
           width: this.width,
         }
       if (this.plusMinusButtons) {
-        ret[this.direction === "vertical" ? "padding-top" : "padding-right"] = "0.5rem";
-        ret[this.direction === "vertical" ? "padding-bottom" : "padding-left"] = "0.5rem";
+        ret[this.direction === "vertical" ? "margin-top" : "margin-right"] = "0.5rem";
+        ret[this.direction === "vertical" ? "margin-bottom" : "margin-left"] = "0.5rem";
       }
       return ret;
     },
@@ -478,10 +478,10 @@ Vue.component("ad-slider-component", {
       let arr = []
       for (let i = 0; i <= this.total; i++) {
         const style = this.direction === 'vertical' ? {
-          bottom: `${this.gap * i - this.width / 2}px`,
+          bottom: `${this.gap * i - this.usableSize / 2 }px`,
           left: 0
         } : {
-            left: `${this.gap * i - this.height / 2}px`,
+            left: `${this.gap * i - this.usableSize / 2 }px`,
             top: 0
           }
         const index = this.reverse ? (this.total - i) : i
@@ -932,7 +932,7 @@ Vue.component("ad-slider-component", {
     getStaticData() {
       if (this.$refs.elem) {
         this.size = this.direction === 'vertical' ? this.$refs.elem.offsetHeight : this.$refs.elem.offsetWidth
-        this.dotAxialSizePx = this.direction === 'vertical' ? this.$refs.dot0.clientWidth : this.$refs.dot0.clientHeight;
+        this.dotAxialSizePx = this.direction === 'vertical' ? this.$refs.dot0.clientHeight : this.$refs.dot0.clientWidth;
       }
     },
     refresh() {
@@ -1009,25 +1009,23 @@ Vue.component("ad-slider-component", {
     this.unbindEvents()
   },
   template: `
-  <div :class="['ad-slider-wrapper', flowDirection]"
+  <div :class="['l-ad-slider', flowDirection, disabledClass, { 'l-ad-slider--has-label': piecewiseLabel }]"
        v-show="show">
        <plus-minus-button v-if="plusMinusButtons" type="minus" size="1.6rem" class="derp" @click="increment(-1)"/>
-       <div ref="wrap"
-      :class="['ad-slider-component', flowDirection, disabledClass, stateClass, { 'ad-slider-has-label': piecewiseLabel }]"
+    <div ref="wrap"
+      :class="['l-ad-slider__wrap', stateClass]"
       :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
       @click="wrapClick">
-    <div ref="elem" aria-hidden="true" :class="['ad-slider', bgClass]" :style="[elemStyles, bgStyle]">
+    <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]" :style="[elemStyles, bgStyle]">
       <template v-if="isRange">
         <div
           ref="dot0"
           key="dot0"
-          :class="[
-            tooltipStatus,
-            'ad-slider-dot',
+          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
-              'ad-slider-dot-focus': focusFlag && focusSlider === 0,
-              'ad-slider-dot-dragging': flag && currentSlider === 0,
-              'ad-slider-dot-disabled': !boolDisabled && disabledArray[0]
+              'l-ad-slider__dot--focus': focusFlag && focusSlider === 0,
+              'l-ad-slider__dot--dragging': flag && currentSlider === 0,
+              'l-ad-slider__dot--disabled': !boolDisabled && disabledArray[0]
             }
           ]"
           :style="dotStyles"
@@ -1036,8 +1034,8 @@ Vue.component("ad-slider-component", {
         >
           <slot name="dot" :value="val[0]" :index="0" :disabled="disabledArray[0]">
             <div
-              class="ad-slider-dot-handle"
-              :style="[
+            :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+            :style="[
                 (!boolDisabled && disabledArray[0])
                 ? disabledDotStyles[0]
                 : null,
@@ -1055,13 +1053,11 @@ Vue.component("ad-slider-component", {
         <div
           ref="dot1"
           key="dot1"
-          :class="[
-            tooltipStatus,
-            'ad-slider-dot',
+          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
-              'ad-slider-dot-focus': focusFlag && focusSlider === 1,
-              'ad-slider-dot-dragging': flag && currentSlider === 1,
-              'ad-slider-dot-disabled': !boolDisabled && disabledArray[1]
+              'l-ad-slider__dot--focus': focusFlag && focusSlider === 1,
+              'l-ad-slider__dot--dragging': flag && currentSlider === 1,
+              'l-ad-slider__dot--disabled': !boolDisabled && disabledArray[1]
             }
           ]"
           :style="dotStyles"
@@ -1070,8 +1066,8 @@ Vue.component("ad-slider-component", {
         >
           <slot name="dot" :value="val[1]" :index="1" :disabled="disabledArray[1]">
             <div
-              class="ad-slider-dot-handle"
-              :style="[
+            :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+            :style="[
                 (!boolDisabled && disabledArray[1])
                 ? disabledDotStyles[1]
                 : null,
@@ -1091,12 +1087,10 @@ Vue.component("ad-slider-component", {
         <div
           ref="dot0"
           key="dot0"
-          :class="[
-            tooltipStatus,
-            'ad-slider-dot',
+          :class="[tooltipStatus, 'l-ad-slider__dot', 'c-ad-slider__dot',
             {
-              'ad-slider-dot-focus': focusFlag && focusSlider === 0,
-              'ad-slider-dot-dragging': flag && currentSlider === 0
+              'l-ad-slider__dot--focus': focusFlag && focusSlider === 0,
+              'l-ad-slider__dot--dragging': flag && currentSlider === 0
             }
           ]"
           :style="dotStyles"
@@ -1105,7 +1099,7 @@ Vue.component("ad-slider-component", {
         >
           <slot name="dot" :value="val" :disabled="boolDisabled">
             <div
-              :class="['ad-slider-dot-handle', dotClass]"
+              :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
               :style="[
                 sliderStyles,
                 focusFlag && focusSlider === 0 ? focusStyles : null
@@ -1163,7 +1157,7 @@ Vue.component("ad-slider-component", {
       </ul>
       <div
         ref="process"
-        :class="['ad-slider-process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
+        :class="['l-ad-slider__process', 'c-ad-slider__process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
         :style="processStyle"
         @click="processClick"
         @mousedown="moveStart($event, 0, true)"

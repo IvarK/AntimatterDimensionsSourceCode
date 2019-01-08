@@ -1403,7 +1403,7 @@ setInterval(function() {
 scrollNextMessage();
 
 function showRealityTab(tabName) {
-  if (ui.view.tabs.current != "reality-tab") {
+  if (ui.view.tabs.current !== "reality-tab") {
     showTab("reality")
     ui.view.tabs.current = "reality-tab";
   }

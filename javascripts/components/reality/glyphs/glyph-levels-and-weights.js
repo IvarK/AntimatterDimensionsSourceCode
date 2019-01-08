@@ -90,6 +90,9 @@ Vue.component("glyph-levels-and-weights", {
         if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
       this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.perkVisible + this.penaltyVisible;
+      if (this.adjustVisible && this.rows < 6) { // Keep UI from getting crammed
+        this.rows = 6;
+      }
       this.factors = glyphFactors;
       //["ep", "repl", "dt", "eternities"].map((x) => this.weights[x] = player.celestials.teresa.glyphWeights[x]);
     },
@@ -149,6 +152,8 @@ Vue.component("glyph-levels-and-weights", {
   },
   template: `
     <div ref="grid" :style="gridStyle" class="glyph-level-info-grid">
+      <!-- Put down a placeholder div to keep the adjuster from getting cramped -->
+      <div v-if="adjustVisible" :style="makeRowStyle(6)"></div>
       <div :style="rowStyleEP" class="glyph-level-factor">EP</div>
       <div :style="rowStyleEP" class="glyph-level-factor-val">{{formatFactor(factors.epEffect)}}</div>
       <div :style="rowStyleReplicanti" class="glyph-level-factor">Replicanti</div>

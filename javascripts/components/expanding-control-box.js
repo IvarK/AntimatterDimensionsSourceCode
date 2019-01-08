@@ -49,6 +49,7 @@ Vue.component("expanding-control-box", {
     isOpen(newOpen) {
       this.$nextTick(() => {
         this.$refs.container.style.maxHeight = newOpen ? this.openHeight : this.closedHeight;
+        this.updateBaseWidth();
       });
       if (newOpen) {
         this.$refs.dropdown.visibility = "visible";
@@ -75,13 +76,19 @@ Vue.component("expanding-control-box", {
     </div>
   </div>
   `,
+  methods: {
+    updateBaseWidth() {
+      this.$refs.container.style.width = this.$refs.dropdown.offsetWidth + "px";
+      this.$refs.root.style.width = this.$refs.dropdown.offsetWidth + "px";
+      console.log("width update : " + this.$refs.dropdown.offsetWidth + "px")
+    }
+  },
   mounted() {
     // set the root and container elements to match the height of the button
     this.closedHeight = this.$refs.expandButton.offsetHeight + "px"
     this.openHeight = (this.$refs.expandButton.offsetHeight + this.$refs.dropdown.offsetHeight) + "px"
     this.$refs.container.style.maxHeight = this.closedHeight;
-    this.$refs.container.style.width = this.$refs.expandButton.offsetWidth + "px";
     this.$refs.root.style.height = this.closedHeight;
-    this.$refs.root.style.width = this.$refs.expandButton.offsetWidth + "px";
+    this.updateBaseWidth();
   }
 });

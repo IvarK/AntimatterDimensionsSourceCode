@@ -109,7 +109,7 @@
                     <br>Glyph level: 1</button>
                   <br>
                   <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
-                  <expanding-control-box v-if="view.tabs.reality.subtab == 'glyphstab'"
+                  <expanding-control-box v-if="view.tabs.current == 'reality-tab' && view.tabs.reality.subtab == 'glyphstab'"
                                          label="Glyph level factors"
                                          container-class="glyph-level-factors-dropdown-header">
                     <template slot="dropdown">
@@ -613,6 +613,7 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-upgrade.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
 
+<script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>

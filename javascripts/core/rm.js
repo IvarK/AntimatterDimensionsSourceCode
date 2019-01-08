@@ -518,20 +518,20 @@ function deleteGlyph(id) {
     var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
     tempAudio.play();
   }
-  if (!shiftDown) return false;
+  if (!shiftDown  && !controlShiftDown) return false;
 
   if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
   if (player.reality.upg.includes(21)) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
 
-  if (controlDown || confirm("Do you really want to delete this glyph?")) {
+  if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
       return glyph.id == id

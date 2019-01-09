@@ -511,6 +511,15 @@ function getRealTimePeriodsWithWormholeActive(realTime) {
 
 // Given a wormhole and the time for which the previous wormhole is active,
 // this function returns the time for which the given wormhole is active.
+// For example, if wormhole = player.wormhole[1], this function, given
+// the time for which player.wormhole[0] is active, will return the time for which
+// player.wormhole[1] is active. This is useful since player.wormhole[1]'s phase
+// only increases (that is, its state only changes) while player.wormhole[0] is active,
+// and it also only activates while player.wormhole[0] is active (even if player.wormhole[1].active is true).
+// In general, a wormhole only changes state or is active while the previous wormhole is active.
+// So figuring out how long a wormhole would be active after some amount of real time
+// (as we do) is best done iteratively via figuring out how long a wormhole would be active
+// after a given amount of time of the previous wormhole being active.
 function getRealTimeWithWormholeActive(wormhole, time) {
   let y = nextWormholeDeactivation(wormhole);
   // Abbrevations since we'll be using these variables a lot.
@@ -529,8 +538,18 @@ function getRealTimeWithWormholeActive(wormhole, time) {
   return currentActivationTime + activeTimeUntilLastDeactivation + lastActivationTime;
 }
 
-// Returns the time that the previous wormhole must run until the next change
-// from the active state to the inactive state.
+// Returns the time that the previous wormhole must be active until the next change
+// from the active state to the inactive state. For example, if wormhole = player.wormhole[1],
+// this function will return the time player.wormhole[0] must be active for player.wormhole[1]
+// to transition to the inactive state. This is useful since player.wormhole[1]'s phase
+// only increases (that is, its state only changes) while player.wormhole[0] is active.
+// In general, a wormhole only changes state while the previous wormhole is active.
+// So figuring out how long a wormhole would be active after some amount of real time
+// (as we do) is best done iteratively via figuring out how long a wormhole would be active
+// after a given amount of time of the previous wormhole being active. So trying to figure out
+// how long in real time it would take for a given wormhole to deactivate would be a mess,
+// but it's easy to figure out how long the previous wormhole needs to be active for
+// until a womrhole deactivates.
 function nextWormholeDeactivation(wormhole) {
   if (wormhole.active) {
     return wormhole.duration - wormhole.phase;

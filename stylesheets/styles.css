@@ -279,6 +279,10 @@ button {
     font-weight: bold
 }
 
+#news a {
+  text-decoration: underline;
+}
+
 .tabbtn {
     background: #E0E0E0;
     font-weight: bold;

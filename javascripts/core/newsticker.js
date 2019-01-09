@@ -170,8 +170,8 @@ const newsArray = [
   ["I mean, we may never run out of news articles, but we sure will run out of good ones. Oh wait, we already did.", "a167"],
   ["If each Trimp was a plank volume, and each piece of resource was a plank volume, how many universes would you fill up before you realized you were playing the wrong game?", "a168"],
   ["TODO: John, please remove this newsticker message before we release the Reality update to the public.", "a169"],
-  ["<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This is not a rick roll.</a>", "a170"],
-  ["<a href='https://www.youtube.com/watch?v=eRr1gJ65chM' target='_blank'>This is not a rick roll.</a>", "a171"],
+  ["<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This link is not a rick roll.</a>", "a170"],
+  ["<a href='https://www.youtube.com/watch?v=eRr1gJ65chM' target='_blank'>This link is not a rick roll.</a>", "a171"],
 
 //basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],

@@ -355,7 +355,7 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 2, 0)} multiplier in a single sacrifice. Reward: Sacrifices are stronger.`,
+    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice. Reward: Sacrifices are stronger.`,
     effect: () => 0.011
   },
   {
@@ -451,7 +451,7 @@ GameDatabase.achievements.normal = [
   {
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
-    tooltip: () => `Have all your Infinities in your past 10 Infinities be at least ${shorten(Number.MAX_VALUE, 0, 0)} times higher IP than the previous one. Reward: Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy.`
+    tooltip: () => `Have all your Infinities in your past 10 Infinities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one. Reward: Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy.`
   },
   {
     id: 112,
@@ -523,12 +523,12 @@ GameDatabase.achievements.normal = [
   {
     id: 126,
     name: "Popular music",
-    tooltip: () => `Have 180 times more Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti galaxies divide your Replicanti by ${shorten(Number.MAX_VALUE, 0, 0)} instead of resetting them to 1.`
+    tooltip: () => `Have 180 times more Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti galaxies divide your Replicanti by ${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 0, 0)} EP.`
+    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 1, 0)} EP.`
   },
   {
     id: 128,
@@ -556,7 +556,7 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${shorten(new Decimal("1e20000"), 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 0, 0)} Replicanti.`
+    tooltip: () => `Reach ${shorten(new Decimal("1e20000"), 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
@@ -594,7 +594,7 @@ GameDatabase.achievements.normal = [
   {
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
-    tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shorten(Number.MAX_VALUE, 0, 0)} times higher EP than the previous one. Reward: nothing right now.`
+    tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one. Reward: nothing right now.`
   },
   {
     id: 144,

@@ -757,11 +757,11 @@ function getGlyphSacDescription(type) {
 
     case "time":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-GLYPH_TYPES
-    case "replication":GLYPH_TYPES
+    
+    case "replication":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
-GLYPH_TYPES
-    case "dilation":GLYPH_TYPES
+
+    case "dilation":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
   }
 }

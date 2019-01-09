@@ -28,6 +28,7 @@ function unlockWormhole() {
     if (player.wormhole[0].unlocked) return false
     player.wormhole[0].unlocked = true
     player.reality.realityMachines = player.reality.realityMachines.minus(50)
+    giveAchievement("Is this an Interstellar reference?")
     $("#wormholecontainer").show()
     $("#whupg1").show()
     $("#wormholeunlock").hide()
@@ -50,29 +51,31 @@ function getWormholeDurationCost(i) {
 
 function upgradeWormholeInterval(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholeIntervalCost(i)
-    if (player.reality.realityMachines.lt(cost)) return false
-    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole[i].speed *= 0.8
-    updateWormholeUpgrades()
+  var cost = getWormholeIntervalCost(i)
+  if (player.reality.realityMachines.lt(cost)) return false
+  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.wormhole[i].speed *= 0.8
+  updateWormholeUpgrades()
+  if (player.wormhole[i].speed <  player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
 }
 
 function upgradeWormholePower(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholePowerCost(i)
-    if (player.reality.realityMachines.lt(cost)) return false
-    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole[i].power *= 1.35
-    updateWormholeUpgrades()
+  var cost = getWormholePowerCost(i)
+  if (player.reality.realityMachines.lt(cost)) return false
+  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.wormhole[i].power *= 1.35
+  updateWormholeUpgrades()
 }
 
 function upgradeWormholeDuration(i) {
 	totalPhase = getTotalPhase();
-    var cost = getWormholeDurationCost(i)
-    if (player.reality.realityMachines.lt(cost)) return false
-    player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-    player.wormhole[i].duration *= 1.3
-    updateWormholeUpgrades()
+  var cost = getWormholeDurationCost(i)
+  if (player.reality.realityMachines.lt(cost)) return false
+  player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.wormhole[i].duration *= 1.3
+  updateWormholeUpgrades()
+  if (player.wormhole[i].speed <  player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
 }
 
 function setWormhole(state, i) {
@@ -137,6 +140,8 @@ function wormHoleLoop(diff, i) {
       particleList[i].draw();
     }
   }
+
+  if (player.wormhole[i].phase >= 60 * 60 * 24) giveAchievement("Bruh, are you like, inside the hole?")
 }
 
 // Drawing code that runs for each particle

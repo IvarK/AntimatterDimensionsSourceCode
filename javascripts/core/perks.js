@@ -103,6 +103,7 @@ function buyPerk(id, cost) {
   updateAutomatorRows();
   player.reality.pp -= cost
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
+  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
 }
 
 class PerkState {

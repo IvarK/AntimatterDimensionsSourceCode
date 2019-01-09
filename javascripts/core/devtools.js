@@ -427,6 +427,10 @@ dev.updateTestSave = function() {
     unfuckMultCosts();
     player.options.testVersion = 27;
   }
+
+  if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
+  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
+  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
 }
 
 // Still WIP

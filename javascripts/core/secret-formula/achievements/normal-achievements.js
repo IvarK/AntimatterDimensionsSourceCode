@@ -598,27 +598,67 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 144,
-    name: "r144",
-    tooltip: "I appreciate your curiosity :)"
+    name: "Is this an Interstellar reference?",
+    tooltip: "Unlock the Wormhole"
   },
   {
     id: 145,
-    name: "r145",
-    tooltip: "nothing to see here"
+    name: "Are you sure these are the right way around?",
+    tooltip: "Have Wormhole interval smaller than the duration"
   },
   {
     id: 146,
-    name: "r146",
-    tooltip: "thanks"
+    name: "Perks of living",
+    tooltip: "Have all perks bought"
   },
   {
     id: 147,
-    name: "r147",
-    tooltip: "todo: make this achievement a thing"
+    name: "Master of Reality",
+    tooltip: "Have all Reality upgrades bought"
   },
   {
     id: 148,
-    name: "r148",
-    tooltip: "if you read this, ping me (or don't)"
+    name: "Royal Flush",
+    tooltip: "Reality with one of each glyph type"
+  },
+  {
+    id: 151,
+    name: "Transcension sucked anyway",
+    tooltip: "Sacrifice a Transcendent glyph",
+  },
+  {
+    id: 152,
+    name: "Personal Space",
+    tooltip: "Have 100 glyphs in your inventory",
+  },
+  {
+    id: 153,
+    name: "Do I really have to do this?",
+    tooltip: "Have 0 glyphs in your inventory and 100 or more realities"
+  },
+  {
+    id: 154,
+    name: "I didn't even realize how fast you are",
+    tooltip: "Reality in under 3 seconds"
+  },
+  {
+    id: 155,
+    name: "Why did you have to add RNG to the game?",
+    tooltip: "Get a Celestial glyph"
+  },
+  {
+    id: 156,
+    name: "True Sacrifice",
+    tooltip: "Sacrifice a Celestial glyph"
+  },
+  {
+    id: 157,
+    name: "I'm up all night to get lucky",
+    tooltip: "Have 100 rare or better glyphs"
+  },
+  {
+    id: 158,
+    name: "Bruh, are you like, inside the hole?",
+    tooltip: "Spend 24 hours with wormhole active in a row"
   },
 ];

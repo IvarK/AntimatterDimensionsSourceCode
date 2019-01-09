@@ -495,6 +495,11 @@ function generateGlyphTable() {
   $("#activeGlyphs").html(activeEffectText)
   updateTooltips();
   updateGlyphDescriptions()
+
+  if (glyphs.length == 100) giveAchievement("Personal Space")
+  if (glyphs.length == 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
+  if (glyphs.some((g) => g.strength >= 3.5)) giveAchievement("Why did you have to add RNG to the game?")
+  if (glyphs.every((g) => g.strength >= 2) && glyphs.length == 100) giveAchievement("I'm up all night to get lucky")
 }
 
 function getActiveGlyphEffects() {
@@ -641,6 +646,8 @@ function buyRealityUpg(id) {
     player.wormhole[1].unlocked = true
     $("#whupg2").show()
   }
+
+  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   if (id == 19 || id == 21) generateGlyphTable();   // Add sacrifice value to tooltips
   updateWormholeUpgrades()
@@ -749,13 +756,13 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
 
     case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-
-    case "replication":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
-
-    case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecGLYPH_TYPESision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
+GLYPH_TYPES
+    case "replication":GLYPH_TYPES
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum RepGLYPH_TYPESlicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
+GLYPH_TYPES
+    case "dilation":GLYPH_TYPES
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon GLYPH_TYPESParticle gain by " + shortenRateOfChange(amount) + "x<br><br>"
   }
 }
 
@@ -773,6 +780,9 @@ function sacrificeGlyph(glyph, force = false) {
   mouseOn.remove()
   mouseOn = $("document")
   generateGlyphTable();
+
+  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
+  if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
 }
 
 function updateGlyphDescriptions() {

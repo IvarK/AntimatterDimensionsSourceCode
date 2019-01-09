@@ -1,5 +1,4 @@
 const DIMENSION_COUNT = 8;
-const TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"];
 const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
 
 const AutobuyerMode = {

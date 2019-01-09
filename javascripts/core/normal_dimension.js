@@ -1,9 +1,8 @@
 function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
-  const name = TIER_NAMES[tier];
-  const dim = NormalDimension(tier);
+  const dimension = NormalDimension(tier);
 
-  let multiplier = new Decimal(player[name + 'Pow']);
+  let multiplier = new Decimal(dimension.pow);
 
   if (player.currentEternityChall === "eterc11") return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
   if (Challenge(12).isRunning) {
@@ -30,7 +29,7 @@ function getDimensionFinalMultiplier(tier) {
   );
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
-    dim.infinityUpgrade,
+    dimension.infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
   infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
@@ -110,7 +109,8 @@ function multiplySameCosts(cost) {
   const tierCosts = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
 
   for (let i = 1; i <= 8; ++i) {
-    if (player[TIER_NAMES[i] + "Cost"].e === cost.e) player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(tierCosts[i])
+    const dimension = NormalDimension(i);
+    if (dimension.cost.e === cost.e) dimension.cost = dimension.cost.times(tierCosts[i])
 
   }
   if (player.tickSpeedCost.e === cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
@@ -120,16 +120,18 @@ function multiplySameCosts(cost) {
 function multiplyPC5Costs(cost, tier) {
   if (tier < 5) {
     for (let i = 1; i < 9; i++) {
-      if (player[TIER_NAMES[i] + "Cost"].e <= cost.e) {
-        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      const dimension = NormalDimension(i);
+      if (dimension.cost.e <= cost.e) {
+        dimension.cost = dimension.cost.times(player.costMultipliers[i - 1]);
+        if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   } else {
     for (let i = 1; i < 9; i++) {
-      if (player[TIER_NAMES[i] + "Cost"].e >= cost.e) {
-        player[TIER_NAMES[i] + "Cost"] = player[TIER_NAMES[i] + "Cost"].times(player.costMultipliers[i - 1]);
-        if (player[TIER_NAMES[i] + "Cost"].gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+      const dimension = NormalDimension(i);
+      if (dimension.cost.e >= cost.e) {
+        dimension.cost = dimension.cost.times(player.costMultipliers[i - 1]);
+        if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
       }
     }
   }
@@ -224,13 +226,9 @@ function onBuyDimension(tier) {
 
 }
 
-function dimBought(tier) {
-  return player[TIER_NAMES[tier] + "Bought"] % 10;
-}
-
 function buyOneDimension(tier) {
-  const name = TIER_NAMES[tier];
-  const cost = player[name + 'Cost'];
+  const dimension = NormalDimension(tier);
+  const cost = dimension.cost;
   auto = false;
 
   if (!Challenge(6).isRunning) {
@@ -239,7 +237,7 @@ function buyOneDimension(tier) {
     }
   } else {
     if (tier >= 3) {
-      if (player[TIER_NAMES[tier - 2] + 'Amount'].lt(cost)) return false
+      if (NormalDimension(tier - 2).amount.lt(cost)) return false
     }
     else if (!canBuyDimension(tier)) {
       return false;
@@ -259,18 +257,18 @@ function buyOneDimension(tier) {
   if (tier < 3 || !Challenge(6).isRunning) {
     player.money = player.money.minus(cost);
   } else {
-    player[TIER_NAMES[tier - 2] + 'Amount'] = player[TIER_NAMES[tier - 2] + 'Amount'].minus(cost)
+    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
   }
 
-  player[name + 'Amount'] = player[name + 'Amount'].plus(1);
-  player[name + 'Bought']++;
+  dimension.amount = dimension.amount.plus(1);
+  dimension.bought++;
 
-  if (dimBought(tier) === 0) {
-    player[name + 'Pow'] = player[name + 'Pow'].times(getDimensionPowerMultiplier(tier));
-    if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + 'Cost'] = player[name + 'Cost'].times(getDimensionCostMultiplier(tier));
-    else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier);
+  if (dimension.boughtBefore10 === 0) {
+    dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+    if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
+    else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
-    if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
     floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
   }
 
@@ -284,8 +282,8 @@ function buyOneDimension(tier) {
 }
 
 function buyManyDimension(tier) {
-  const name = TIER_NAMES[tier];
-  const cost = player[name + 'Cost'].times(10 - dimBought(tier));
+  const dimension = NormalDimension(tier);
+  const cost = dimension.cost.times(dimension.remainingUntil10);
 
   auto = false;
 
@@ -297,7 +295,7 @@ function buyManyDimension(tier) {
   } else {
     if (tier >= 3) {
       if (!canBuyDimension(tier)) return false;
-      if (player[TIER_NAMES[tier - 2] + 'Amount'].lt(cost)) return false
+      if (NormalDimension(tier - 2).amount.lt(cost)) return false
     }
     else if (!canBuyDimension(tier)) {
       return false;
@@ -316,16 +314,16 @@ function buyManyDimension(tier) {
   if (tier < 3 || !Challenge(6).isRunning) {
     player.money = player.money.minus(cost);
   } else {
-    player[TIER_NAMES[tier - 2] + 'Amount'] = player[TIER_NAMES[tier - 2] + 'Amount'].minus(cost)
+    NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
   }
 
-  player[name + 'Amount'] = player[name + 'Amount'].plus(10 - dimBought(tier));
-  player[name + 'Bought'] = player[name + 'Bought'] + (10 - dimBought(tier));
-  player[name + 'Pow'] = player[name + 'Pow'].times(getDimensionPowerMultiplier(tier));
-  if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + 'Cost'] = player[name + 'Cost'].times((getDimensionCostMultiplier(tier)));
-  else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier);
-  else multiplySameCosts(player[name + 'Cost']);
-  if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+  dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
+  dimension.bought += dimension.remainingUntil10;
+  dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+  if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
+  else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
+  else multiplySameCosts(dimension.cost);
+  if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
   floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
@@ -533,66 +531,51 @@ function getDimensionProductionPerSecond(tier) {
 }
 
 class NormalDimensionState {
-  constructor(tier) {
-    const tierProps = NormalDimensionState.tierProps;
-    let props = tierProps[tier];
-    if (props === undefined) {
-      const name = TIER_NAMES[tier];
-      props = {
-        cost: name + "Cost",
-        amount: name + "Amount",
-        bought: name + "Bought",
-        pow: name + "Pow",
-      };
-      tierProps[tier] = props;
-    }
+  constructor(tier, props) {
     this._tier = tier;
     this._props = props;
-    this._player = player;
   }
-
 
   /**
    * @returns {Decimal}
    */
   get cost() {
-    return this._player[this._props.cost];
+    return player[this._props.cost];
   }
-
 
   /**
    * @param {Decimal} value
    */
   set cost(value) {
-    this._player[this._props.cost] = value;
+    player[this._props.cost] = value;
   }
 
   /**
    * @returns {Decimal}
    */
   get amount() {
-    return this._player[this._props.amount];
+    return player[this._props.amount];
   }
 
   /**
    * @param {Decimal} value
    */
   set amount(value) {
-    this._player[this._props.amount] = value;
+    player[this._props.amount] = value;
   }
 
   /**
    * @returns {number}
    */
   get bought() {
-    return this._player[this._props.bought];
+    return player[this._props.bought];
   }
 
   /**
    * @param {number} value
    */
   set bought(value) {
-    this._player[this._props.bought] = value;
+    player[this._props.bought] = value;
   }
 
   /**
@@ -620,14 +603,14 @@ class NormalDimensionState {
    * @returns {Decimal}
    */
   get pow() {
-    return this._player[this._props.pow];
+    return player[this._props.pow];
   }
 
   /**
    * @param {Decimal} value
    */
   set pow(value) {
-    this._player[this._props.pow] = value;
+    player[this._props.pow] = value;
   }
 
   /**
@@ -656,13 +639,13 @@ class NormalDimensionState {
   get rateOfChange() {
     const tier = this._tier;
     if (tier === 8 ||
-      (tier > 4 && player.currentEternityChall === "eterc3") ||
+      (tier > 4 && EternityChallenge(3).isRunning) ||
       (tier > 6 && Challenge(12).isRunning)) {
       return new Decimal(0);
     }
 
     let toGain;
-    if (tier === 7 && player.currentEternityChall === "eterc7") {
+    if (tier === 7 && EternityChallenge(7).isRunning) {
       toGain = InfinityDimension(1).productionPerSecond.times(10);
     }
     else if (Challenge(12).isRunning) {
@@ -697,8 +680,27 @@ class NormalDimensionState {
   }
 }
 
-NormalDimensionState.tierProps = [];
+NormalDimensionState.all = Array.dimensionTiers
+  .map(tier => {
+    const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
+    const props = {
+      cost: name + "Cost",
+      amount: name + "Amount",
+      bought: name + "Bought",
+      pow: name + "Pow",
+    };
+    return new NormalDimensionState(tier, props);
+  });
 
+/**
+ * @param {number} tier
+ * @return {NormalDimensionState}
+ */
 function NormalDimension(tier) {
-  return new NormalDimensionState(tier);
+  return NormalDimensionState.all[tier - 1];
 }
+
+/**
+ * @type {NormalDimensionState[]}
+ */
+NormalDimension.all = NormalDimensionState.all;

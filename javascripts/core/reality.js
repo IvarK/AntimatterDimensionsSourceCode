@@ -78,7 +78,7 @@ function reality(force, reset, auto) {
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.forEach((type) => player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+    if (GLYPH_TYPES.every((type) => player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
 
     if (player.reality.respec) {
         respecGlyphs();

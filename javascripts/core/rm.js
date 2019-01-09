@@ -756,13 +756,13 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
 
     case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecGLYPH_TYPESision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
 GLYPH_TYPES
     case "replication":GLYPH_TYPES
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum RepGLYPH_TYPESlicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 GLYPH_TYPES
     case "dilation":GLYPH_TYPES
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon GLYPH_TYPESParticle gain by " + shortenRateOfChange(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
   }
 }
 

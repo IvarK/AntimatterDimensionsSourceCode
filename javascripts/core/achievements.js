@@ -142,7 +142,7 @@ const allAchievements = {
   s35 : "Should we tell them about buy max...",
   s36 : "While you were away... Nothing happened.",
   s37 : "You followed the instructions",
-  s38 : "Professional boallAchievementsdybuilder",
+  s38 : "Professional bodybuilder",
   s41 : "That dimension doesn’t exist",
   s42 : "Was it even broken?",
   s43 : "Time fixes everything",

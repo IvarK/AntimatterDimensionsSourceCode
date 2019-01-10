@@ -814,24 +814,22 @@ var eternitiesGain = 0
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
 // Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
-// factorsToConsider is a list of the types of things we want to take into account
-// (for example, the wormhole ignores itself). wormholeOverride will override
-// the effect of the wormhole if it is set.
-function getGameSpeedupFactor(factorsToConsider, wormholeOverride) {
-  if (factorsToConsider === undefined) {
-    factorsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
+// wormholeOverride is a number that will override the gamespeed effect of the wormhole if it is set.
+function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
+  if (effectsToConsider === undefined) {
+    effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   let factor = 1;
-  if (player.currentEternityChall === "eterc12" && factorsToConsider.includes(GameSpeedEffect.EC12)) {
+  if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
   }
-  if (factorsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
+  if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
     factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   }
   
-  if (player.wormhole[0] !== undefined && factorsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
+  if (player.wormhole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
     if (wormholeOverride !== undefined) {
       factor *= wormholeOverride;
     } else if (!player.wormholePause) {
@@ -1254,18 +1252,14 @@ function simulateTime(seconds, real, fast) {
     // Simulation code with wormhole
     if (player.wormhole[0].unlocked && !player.wormholePause) {
       let remainingSeconds = seconds;
-      // 
       for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
-        let timeGlyphSpeedup;
-        // If this conditional triggers, our time glyphs will become inactive before anything happens.
-        if (Autobuyer.reality.canActivate() && player.reality.respec) {
-          timeGlyphSpeedup = 1;
-        } else {
-          timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
-        }
+        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
         [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicksRemaining, 0.0001, timeGlyphSpeedup);
         remainingSeconds -= realTickTime;
+        // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
+        // (it doesn't run in gameLoop).
         gameLoop(1000 * realTickTime, wormholeSpeedup);
+        autoBuyerTick();
       }
     }
       

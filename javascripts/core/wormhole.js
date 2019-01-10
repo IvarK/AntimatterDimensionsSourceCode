@@ -461,46 +461,42 @@ function calculateWormholeSpeedups() {
   return speedups;
 }
 
-// This function, given an amount realTime of real time and a list of
-// total speedups in each wormhole, computes the total game time spent
-// after realTime. It does this by making an array of the amount of real time spent
-// where each wormhole is the highest-index active wormhole,
-// multiplying by the speedup of each wormhole, and summing.
 function getGameTimeFromRealTime(realTime, speedups) {
-  // wormholeTimes is an array containing the amount of real time spent in each wormhole.
-  let highestActivePeriods = getRealTimePeriodsWithWormholeHighestActive(realTime, speedups);
+  let effectivePeriods = getRealTimePeriodsWithWormholeEffective(realTime, speedups);
   let gameTime = 0;
-  for (let i = 0; i < highestActivePeriods.length; i++) {
-    // For each wormhole, add the real time spent where that wormhole is the highest-index
-    // active wormhole times the total speedup during that time
-    // (which is the game time spent where that wormhole is the highest-index
-    // active wormhole) to the overall game time spent.
-    gameTime += highestActivePeriods[i] * speedups[i];
+  for (let i = 0; i < effectivePeriods.length; i++) {
+    // For each wormhole, add the real time spent where that wormhole is the
+    // effective wormhole times the total speedup during that time
+    // (which is the game time spent where that wormhole is
+    // the effective wormhole) to the overall game time spent.
+    // Even though more than one wormhole can be active
+    // (and thus effective) at once, this code first calculates the total speedups
+    // while each wormhole is highest-index wormhole that's active and then acts
+    // as if only the highest-index wormhole that's active is effective.
+    gameTime += effectivePeriods[i] * speedups[i];
   }
   return gameTime;
 }
 
-// This function gets the amount of real time spent with each unlocked wormhole
-// being the highest-index active wormhole given the total real time spent
-// (and the wormhole states, which are in player).
-// It does this by first getting time spent with each wormhole active.
+// Returns the amount of real time spent with each unlocked wormhole
+// being the current "effective" wormhole, that is, the active wormhole
+// with the highest index.  It does this by first getting time spent with each wormhole active.
 // Then it takes differences: the time spent with wormhole i active minus
 // the time spent with wormhole (i + 1) active is the time spent
-// with wormhole i being the highest-index active wormhole.
-function getRealTimePeriodsWithWormholeHighestActive(realTime) {
+// with wormhole i being the current effective wormhole.
+function getRealTimePeriodsWithWormholeEffective(realTime) {
   let activePeriods = getRealTimePeriodsWithWormholeActive(realTime);
-  let highestActivePeriods = [];
+  let effectivePeriods = [];
   for (let i = 0; i < activePeriods.length - 1; i++) {
-    highestActivePeriods.push(activePeriods[i] - activePeriods[i + 1]);
+    effectivePeriods.push(activePeriods[i] - activePeriods[i + 1]);
   }
-  highestActivePeriods.push(activePeriods.last());
-  return highestActivePeriods;
+  effectivePeriods.push(activePeriods.last());
+  return effectivePeriods;
 }
 
+// Returns an array of real time periods spent in each wormhole
+// with first element being the "no wormhole" state that is normal game.
 function getRealTimePeriodsWithWormholeActive(realTime) {
-  // This is an array with an entry for each wormhole of
-  // real time spent with that wormhole active. The first entry represents
-  // the "no wormhole" state that is normal game.
   let activePeriods = [realTime];
   for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
     const realTime = getRealTimeWithWormholeActive(wormhole, activePeriods.last())
@@ -513,29 +509,24 @@ function getRealTimePeriodsWithWormholeActive(realTime) {
 // this function returns the time for which the given wormhole is active.
 // For example, if wormhole = player.wormhole[1], this function, given
 // the time for which player.wormhole[0] is active, will return the time for which
-// player.wormhole[1] is active. This is useful since player.wormhole[1]'s phase
-// only increases (that is, its state only changes) while player.wormhole[0] is active,
-// and it also only activates while player.wormhole[0] is active (even if player.wormhole[1].active is true).
-// In general, a wormhole only changes state or is active while the previous wormhole is active.
-// So figuring out how long a wormhole would be active after some amount of real time
-// (as we do) is best done iteratively via figuring out how long a wormhole would be active
-// after a given amount of time of the previous wormhole being active.
+// player.wormhole[1] is active.
 function getRealTimeWithWormholeActive(wormhole, time) {
-  let y = nextWormholeDeactivation(wormhole);
+  let nextDeactivation = timeUntilNextDeactivation(wormhole);
   // Abbrevations since we'll be using these variables a lot.
-  let s = wormhole.speed;
-  let d = wormhole.duration;
+  let cooldown = wormhole.speed;
+  let duration = wormhole.duration;
+  let fullCycle = cooldown + duration;
   // time the wormhole is active from now until when the wormhole next becomes inactive
-  const currentActivationTime = Math.min(y, d);
+  const currentActivationDuration = Math.min(nextDeactivation, duration);
   // the number of full cycles from the first time the wormhole becomes inactive
-  // to the last time the wormhole becomes inactive)
-  const activeCyclesUntilLastDeactivation = Math.floor((time - y) / (s + d));
+  // to the last time the wormhole becomes inactive
+  const activeCyclesUntilLastDeactivation = Math.floor((time - nextDeactivation) / fullCycle);
   // time the wormhole is active until the last time it becomes inactive
-  const activeTimeUntilLastDeactivation = d * activeCyclesUntilLastDeactivation;
+  const activeTimeUntilLastDeactivation = duration * activeCyclesUntilLastDeactivation;
   // time the wormhole is active after the last time it becomes inactive (if non-negative)
-  const timeLeftAfterLastDeactivation = (time - y + s + d) % (s + d);
-  const lastActivationTime = Math.max(timeLeftAfterLastDeactivation - s, 0);
-  return currentActivationTime + activeTimeUntilLastDeactivation + lastActivationTime;
+  const timeLeftAfterLastDeactivation = (time - nextDeactivation + fullCycle) % fullCycle;
+  const lastActivationDuration = Math.max(timeLeftAfterLastDeactivation - cooldown, 0);
+  return currentActivationDuration + activeTimeUntilLastDeactivation + lastActivationDuration;
 }
 
 // Returns the time that the previous wormhole must be active until the next change
@@ -549,8 +540,8 @@ function getRealTimeWithWormholeActive(wormhole, time) {
 // after a given amount of time of the previous wormhole being active. So trying to figure out
 // how long in real time it would take for a given wormhole to deactivate would be a mess,
 // but it's easy to figure out how long the previous wormhole needs to be active for
-// until a womrhole deactivates.
-function nextWormholeDeactivation(wormhole) {
+// until a wormhole deactivates.
+function timeUntilNextDeactivation(wormhole) {
   if (wormhole.active) {
     return wormhole.duration - wormhole.phase;
   } else {

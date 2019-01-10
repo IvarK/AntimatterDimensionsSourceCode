@@ -30,12 +30,16 @@ let ui = {
       eternity: {
         subtab: String.empty
       },
+      reality: {
+        subtab: String.empty,
+        openGlyphWeights: false,
+      },
       celestials: {
         subtab: String.empty
       }
     },
     shiftDown: false,
     theme: undefined,
-    bigCrunch: false
+    bigCrunch: false,
   }
 };

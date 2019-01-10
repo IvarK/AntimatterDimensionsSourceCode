@@ -702,7 +702,7 @@ Autobuyer.eternity = {
     this.mode = Object.values(AutoEternityMode).nextSibling(this.mode);
   },
   tick() {
-    if (!this.isActive) return false;
+    if (!this.isActive) return;
     let proc = false;
     switch (this.mode) {
       case AutoEternityMode.AMOUNT:
@@ -786,8 +786,8 @@ Autobuyer.reality = {
   toggleMode() {
     this.mode = Object.values(AutoRealityMode).nextSibling(this.mode);
   },
-  canActivate() {
-    if (!this.isActive) return false;
+  tick() {
+    if (!this.isActive) return;
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);
     const glyphProc = gainedGlyphLevel() >= this.glyph;
@@ -805,10 +805,7 @@ Autobuyer.reality = {
         proc = rmProc && glyphProc;
         break;
     }
-    return proc;
-  },
-  tick() {
-    if (this.canActivate()) reality(false, false, true);
+    if (proc) reality(false, false, true);
   }
 };
 

@@ -172,6 +172,10 @@ const newsArray = [
   ["TODO: John, please remove this newsticker message before we release the Reality update to the public.", "a169"],
   ["<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This link is not a rick roll.</a>", "a170"],
   ["<a href='https://www.youtube.com/watch?v=eRr1gJ65chM' target='_blank'>This link is not a rick roll.</a>", "a171"],
+  ["If you notice any issues with a news ticker message, please report them on the <a href='https://discord.gg/Z628PkM' target='_blank'>Discord</a> by clicking that link right there.", "a172"],
+
+// Patreon ones
+  ["Is this a jojo reference?", true, "pat1"],
 
 //basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],

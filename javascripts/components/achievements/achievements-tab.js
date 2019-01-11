@@ -7,6 +7,11 @@ Vue.component('achievements-tab', {
           id: "Achievements",
           component: "normal-achievements-tab"
         },
+        /*{
+          name: "Reality Achievements",
+          id: "Reality Achievements",
+          component: "reality-achievements-tab"
+        },*/
         {
           name: "Secret Achievements",
           id: "Secret Achievements",

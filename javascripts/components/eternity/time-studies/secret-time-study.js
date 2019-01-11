@@ -5,7 +5,8 @@ Vue.component("secret-time-study", {
   },
   data: function() {
     return {
-      isUnlocked: player.achievements.includes("s21")
+      isVisible: player.secretUnlocks.secretTS % 2 == 1,
+      lastClick: 0,
     };
   },
   computed: {
@@ -21,22 +22,39 @@ Vue.component("secret-time-study", {
         "o-time-study": true,
         "o-time-study--bought": true,
         "o-time-study--secret": true,
-        "o-time-study--secret-unlocked": this.isUnlocked
+        "o-time-study--secret-unlocked": this.isVisible
       };
     }
   },
   methods: {
+    update() {
+      this.isVisible = player.secretUnlocks.secretTS % 2 == 1;
+    },
     handleClick() {
-      if (this.isUnlocked) return;
-      this.isUnlocked = true;
-      this.$refs.study.addEventListener("transitionend", () => {
-        giveAchievement("Go study in real life instead");
-      });
-    }
+      if (!this.isVisible) {
+        this.lastClick = 0; // if a click made the study visible, it's not part of the double click to hide
+        if (++player.secretUnlocks.secretTS == 1) {
+          this.$refs.study.addEventListener("transitionend", function achGiver(e) {
+            giveAchievement("Go study in real life instead");
+            e.target.removeEventListener(e.type, achGiver);
+          });
+        }
+      } else {
+        let clickTime = Date.now();
+        if (clickTime - this.lastClick < 750) {
+          this.lastClick = 0;
+          ++player.secretUnlocks.secretTS;
+        } else {
+          this.lastClick = clickTime;
+        }
+      }
+    },
   },
   template:
     `<button :class="classObject" :style="styleObject" @click="handleClick" ref="study">
       Unlock a secret achievement
+      <br>
+      (Double click to hide)
       <br>
       Cost: 0 Time Theorems
     </button>`
@@ -48,7 +66,7 @@ Vue.component("secret-time-study-connection", {
   },
   data: function() {
     return {
-      isUnlocked: player.achievements.includes("s21")
+      isVisible: player.secretUnlocks.secretTS % 2 == 1,
     };
   },
   computed: {
@@ -57,16 +75,14 @@ Vue.component("secret-time-study-connection", {
         "o-time-study-connection": true,
         "o-time-study-connection--bought": true,
         "o-time-study-connection--secret": true,
-        "o-time-study-connection--secret-unlocked": this.isUnlocked
+        "o-time-study-connection--secret-unlocked": this.isVisible
       };
     }
   },
-  created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, () => {
-      this.isUnlocked = player.achievements.includes("s21");
-    });
-  },
   methods: {
+    update() {
+      this.isVisible = player.secretUnlocks.secretTS % 2 == 1;
+    },
     percents(value) {
       return value * 100 + "%";
     }

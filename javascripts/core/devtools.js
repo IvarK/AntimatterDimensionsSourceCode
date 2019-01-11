@@ -21,13 +21,13 @@ dev.doubleEverything = function() {
 }
 
 dev.spin3d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin3d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.spin4d = function() {
-    if (document.getElementById("body").style.animation === "") document.getElementById("body").style.animation = "spin4d 3s infinite"
-    else document.getElementById("body").style.animation = ""
+    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite"
+    else document.body.style.animation = ""
 }
 
 dev.cancerize = function() {
@@ -61,8 +61,8 @@ dev.fixSave = function() {
 }
 
 dev.implode = function() {
-    document.getElementById("body").style.animation = "implode 2s 1";
-    setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
+    document.body.style.animation = "implode 2s 1";
+    setTimeout(function(){ document.body.style.animation = ""; }, 2000)
 }
 
 dev.updateTDCosts = function() {
@@ -416,6 +416,21 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 25;
   }
+
+  if (player.options.testVersion === 25) {
+    unfuckChallengeIds();
+    player.options.testVersion = 26;
+  }
+
+  if (player.options.testVersion === 26) {
+    InfinityUpgrade.ipMult.adjustToCap();
+    unfuckMultCosts();
+    player.options.testVersion = 27;
+  }
+
+  if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
+  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
+  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
 }
 
 // Still WIP
@@ -446,12 +461,12 @@ dev.showProductionBreakdown = function() {
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   
-  IC4pow = player.challenges.includes("postc4") ? 1.05 : 1;
+  IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
   let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(player[TIER_NAMES[i] + 'Bought'] / 10));
+    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);

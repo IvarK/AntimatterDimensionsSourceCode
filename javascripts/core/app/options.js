@@ -157,7 +157,7 @@ function verify_save(obj) {
 }
 
 function hardReset() {
-  if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
+  if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, defaultStart);
   else set_save('dimensionSave', currentSave, defaultStart);
   player = defaultStart;
   save_game();

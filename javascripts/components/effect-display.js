@@ -14,6 +14,10 @@ Vue.component("effect-display", {
     };
   },
   computed: {
+    titleDisplay() {
+      if (this.config.staticEffect) return undefined;
+      return (this.hasCap && this.reachedCap() ? "Capped" : this.title) + ": ";
+    },
     effectDisplay() {
       return this.formatEffect(this.hasCap && this.reachedCap() ? this.cap : this.effectValue);
     },
@@ -47,6 +51,6 @@ Vue.component("effect-display", {
   template:
     `<span v-if="isVisible && effectDisplay !== undefined">
       <br v-if="br">
-      {{hasCap && reachedCap() ? "Capped" : title}}: {{effectDisplay}}
+      {{titleDisplay}}{{effectDisplay}}
     </span>`
 });

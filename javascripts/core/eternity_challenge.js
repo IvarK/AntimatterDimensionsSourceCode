@@ -5,7 +5,17 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     }
 
     player.sacrificed = new Decimal(0);
-    player.challenges = (player.eternities >= 2 && Achievement(133).isEnabled) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12", "postc1", "postc2", "postc3", "postc4", "postc5", "postc6", "postc7", "postc8"] : (player.eternities >= 2) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+    player.challenges = [];
+    if (EternityMilestone.keepAutobuyers.isReached) {
+      for (let challenge of Challenge.all) {
+        challenge.complete();
+      }
+    }
+    if (Achievement(133).isEnabled) {
+      for (let challenge of InfinityChallenge.all) {
+        challenge.complete();
+      }
+    }
     player.currentChallenge = "";
     player.infinitied = 0;
     player.bestInfinityTime = 9999999999;
@@ -20,10 +30,11 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.tickspeedMultiplier = new Decimal(10);
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
-    player.tickSpeedMultDecrease = player.eternities >= 20 ? player.tickSpeedMultDecrease : 10;
-    player.tickSpeedMultDecreaseCost = player.eternities >= 20 ? player.tickSpeedMultDecreaseCost :3e6;
-    player.dimensionMultDecrease = player.eternities >= 20 ? player.dimensionMultDecrease : 10;
-    player.dimensionMultDecreaseCost = player.eternities >= 20 ? player.dimensionMultDecreaseCost : 1e8;
+    if (player.eternities < 20) {
+      player.infinityRebuyables = [0, 0];
+      GameCache.tickSpeedMultDecrease.invalidate();
+      GameCache.dimensionMultDecrease.invalidate();
+    }
     player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
     player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
     player.infinityPower = new Decimal(1);
@@ -139,8 +150,12 @@ class EternityChallengeState extends GameMechanicState {
 
   addCompletion() {
     this.completions++;
-    if (this.id === 6) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1));
-    if (this.id === 11) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2));
+    if (this.id === 6) {
+      GameCache.dimensionMultDecrease.invalidate();
+    }
+    if (this.id === 11) {
+      GameCache.tickSpeedMultDecrease.invalidate();
+    }
   }
 
   start() {
@@ -175,6 +190,10 @@ EternityChallenge.current = function() {
   if (player.currentEternityChall === String.empty) return undefined;
   const id = parseInt(player.currentEternityChall.split("eterc")[1]);
   return EternityChallenge(id);
+};
+
+EternityChallenge.isRunning = function() {
+  return player.currentEternityChall !== String.empty;
 };
 
 EternityChallenge.currentAutoCompleteThreshold = function() {

@@ -65,7 +65,11 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Reduce the dimension cost multiplier growth",
       effect: completions => completions * 0.2,
-      formatEffect: value => `x - ${value.toFixed(1)}`
+      formatEffect: value => {
+        const base = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward));
+        const applied = base - value;
+        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(1)}x`;
+      }
     }
   },
   {
@@ -86,10 +90,9 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e900"),
     reward: {
       description: "Infinity Power powers up Replicanti galaxies",
-      effect: (completions) => {
-        const replicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
-        const mult = Math.max(Math.pow(Math.log10(player.infinityPower.clampMin(1).log10() + 1), 0.03 * completions) - 1, 0);
-        return replicantiGalaxies * mult;
+      effect: completions => {
+        const infinityPower = Math.log10(player.infinityPower.clampMin(1).log10() + 1);
+        return Math.max(0, Math.pow(infinityPower, 0.03 * completions) - 1);
       },
       formatEffect: value => formatPercents(value, 2)
     }
@@ -135,7 +138,11 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Reduce Tickspeed cost multiplier growth",
       effect: completions => completions * 0.07,
-      formatEffect: value => `x - ${value.toFixed(2)}`
+      formatEffect: value => {
+        const base = Math.round(Player.tickSpeedMultDecrease + Effects.sum(EternityChallenge(11).reward));
+        const applied = base - value;
+        return `${base}x ➜ ${Number.isInteger(applied) ? applied : applied.toFixed(2)}x`;
+      }
     }
   },
   {

@@ -93,7 +93,7 @@ Vue.component("eternity-challenges-tab", {
             </span>
             <span>
               <effect-display v-if="completions > 0" :config="currentRewardConfig" />
-              <span v-if="completions > 0 && completions < 5">➜</span>
+              <span v-if="completions > 0 && completions < 5">|</span>
               <effect-display v-if="completions < 5" :config="nextRewardConfig" title="Next" />
             </span>
           </template>

@@ -284,10 +284,15 @@ function getTotalEffect(effectKey) {
 }
 
 function recalculateAllGlyphs() {
-  for (let i = 0; i < player.reality.glyphs.active.length; i++)
+  for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     fixGlyph(player.reality.glyphs.active[i]);
-  for (let i = 0; i < player.reality.glyphs.inventory.length; i++)
+  }
+  // delete any glyphs that are in overflow spots:
+  player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
+    glyph => glyph.idx < player.reality.glyphs.inventorySize);
+  for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     fixGlyph(player.reality.glyphs.inventory[i]);
+  }
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
@@ -490,6 +495,11 @@ function generateGlyphTable() {
   $("#activeGlyphs").html(activeEffectText)
   updateTooltips();
   updateGlyphDescriptions()
+
+  if (glyphs.length == 100) giveAchievement("Personal Space")
+  if (glyphs.length == 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
+  if (glyphs.some((g) => g.strength >= 3.5)) giveAchievement("Why did you have to add RNG to the game?")
+  if (glyphs.every((g) => g.strength >= 2) && glyphs.length == 100) giveAchievement("I'm up all night to get lucky")
 }
 
 function getActiveGlyphEffects() {
@@ -513,20 +523,20 @@ function deleteGlyph(id) {
     var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
     tempAudio.play();
   }
-  if (!shiftDown) return false;
+  if (!shiftDown  && !controlShiftDown) return false;
 
   if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
   if (player.reality.upg.includes(21)) {
-    sacrificeGlyph(n)
+    sacrificeGlyph(n, controlShiftDown)
     return;
   }
 
 
-  if (controlDown || confirm("Do you really want to delete this glyph?")) {
+  if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
     var inv = player.reality.glyphs.inventory
     var g = inv.find(function(glyph) {
       return glyph.id == id
@@ -636,13 +646,15 @@ function buyRealityUpg(id) {
     player.wormhole[1].unlocked = true
     $("#whupg2").show()
   }
+
+  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   if (id == 19 || id == 21) generateGlyphTable();   // Add sacrifice value to tooltips
   updateWormholeUpgrades()
   return true
 }
 
-function updateRealityUpgrades() {
+  function updateRealityUpgrades() {
   for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
     else $("#rupg"+i).removeClass("rUpgUn")
@@ -745,7 +757,7 @@ function getGlyphSacDescription(type) {
 
     case "time":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-
+    
     case "replication":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
@@ -768,6 +780,9 @@ function sacrificeGlyph(glyph, force = false) {
   mouseOn.remove()
   mouseOn = $("document")
   generateGlyphTable();
+
+  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
+  if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
 }
 
 function updateGlyphDescriptions() {

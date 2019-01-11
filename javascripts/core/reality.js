@@ -77,6 +77,9 @@ function reality(force, reset, auto) {
     if (player.thisReality < 15 * 60 * 1000 && !reset) unlockRealityUpgrade(23)
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
+    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
+    if (GLYPH_TYPES.every((type) => player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+
     if (player.reality.respec) {
         respecGlyphs();
     }
@@ -88,7 +91,13 @@ function reality(force, reset, auto) {
     ec10bonus = new Decimal(1);
 
     player.sacrificed = new Decimal(0);
-    player.challenges = player.reality.upg.includes(10) ? ["challenge1", "challenge2", "challenge3", "challenge4", "challenge5", "challenge6", "challenge7", "challenge8", "challenge9", "challenge10", "challenge11", "challenge12"] : [];
+
+    player.challenges = [];
+    if (player.reality.upg.includes(10)) {
+        for (let challenge of Challenge.all) {
+            challenge.complete();
+        }
+    }
     player.currentChallenge = "";
     player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
     player.infinitied = 0;
@@ -108,10 +117,9 @@ function reality(force, reset, auto) {
     player.break = player.reality.upg.includes(10) ? player.break : false;
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
-    player.tickSpeedMultDecrease = player.reality.upg.includes(10) ? Math.max(player.tickSpeedMultDecrease, 2) : 10;
-    player.tickSpeedMultDecreaseCost = player.reality.upg.includes(10) ? player.tickSpeedMultDecreaseCost : 3e6;
-    player.dimensionMultDecrease = player.reality.upg.includes(10) ? Math.max(player.dimensionMultDecrease, 3) : 10;
-    player.dimensionMultDecreaseCost = player.reality.upg.includes(10) ? player.dimensionMultDecreaseCost : 1e8;
+    if (!player.reality.upg.includes(10)) {
+        player.infinityRebuyables = [0, 0];
+    }
     player.postChallUnlocked = 0;
     player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
     player.infinityPower = new Decimal(1);
@@ -189,8 +197,8 @@ function reality(force, reset, auto) {
     if (player.reality.upg.includes(10)) player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-    if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) {
-        player.challenges.push("challenge1");
+    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+        Challenge(1).complete();
     }
     Autobuyer.tryUnlockAny()
     if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
@@ -244,6 +252,7 @@ function reality(force, reset, auto) {
             }
         }
     }
+    GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
 }
 

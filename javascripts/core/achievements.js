@@ -106,11 +106,19 @@ const allAchievements = {
   r141 : "Snap back to reality",
   r142 : "How does this work?",
   r143 : "Yo dawg, I heard you liked reskins...",
-  r144 : "r144",
-  r145 : "r145",
-  r146 : "r146",
-  r147 : "r147",
-  r148 : "r148",
+  r144 : "Is this an Interstellar reference?",
+  r145 : "Are you sure these are the right way around?",
+  r146 : "Perks of living",
+  r147 : "Master of Reality",
+  r148 : "Royal Flush",
+  r151 : "Transcension sucked anyway",
+  r152 : "Personal Space",
+  r153 : "Do I really have to do this?",
+  r154 : "I didn't even realize how fast you are",
+  r155 : "Why did you have to add RNG to the game?",
+  r156 : "True Sacrifice",
+  r157 : "I'm up all night to get lucky",
+  r158 : "Bruh, are you like, inside the hole?",
   s11 : "The first one's always free",
   s12 : "Just in case",
   s13 : "It pays to have respect",
@@ -379,7 +387,7 @@ class AchievementState extends GameMechanicState {
 }
 
 AchievementState.all = mapGameData(
-  GameDatabase.achievements,
+  GameDatabase.achievements.normal,
   data => new AchievementState(data)
 );
 
@@ -389,4 +397,28 @@ AchievementState.all = mapGameData(
  */
 function Achievement(id) {
   return AchievementState.all[id];
+}
+
+class SecretAchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    this._fullId = "s" + this.id;
+  }
+
+  get isUnlocked() {
+    return player.achievements.includes(this._fullId);
+  }
+}
+
+SecretAchievementState.all = mapGameData(
+  GameDatabase.achievements.secret,
+  data => new SecretAchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementState}
+ */
+function SecretAchievement(id) {
+  return SecretAchievementState.all[id];
 }

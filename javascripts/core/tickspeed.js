@@ -4,18 +4,24 @@ function canBuyTickSpeed() {
 
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  let galaxies = player.galaxies+player.replicanti.galaxies+player.dilation.freeGalaxies
-  galaxies += Effects.sum(
+  let replicantiGalaxies = player.replicanti.galaxies;
+  replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),
-    TimeStudy(133),
+    TimeStudy(133)
+  ));
+  replicantiGalaxies += Effects.sum(
     TimeStudy(225),
-    TimeStudy(226),
-    EternityChallenge(8).reward
+    TimeStudy(226)
   );
+  let nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
+  // Effects.sum is intentional here - if EC8 is not completed,
+  // this value should not be contributed to total replicanti galaxies
+  replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
+  let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89
-      if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.93;
+      if (Challenge(5).isRunning) baseMultiplier = 0.93;
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
@@ -26,7 +32,7 @@ function getTickSpeedMultiplier() {
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   } else {
       let baseMultiplier = 0.8
-      if (player.currentChallenge == "challenge6" || player.currentChallenge == "postc1") baseMultiplier = 0.83
+      if (Challenge(5).isRunning) baseMultiplier = 0.83
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
         BreakInfinityUpgrade.galaxyBoost,
@@ -50,10 +56,10 @@ function buyTickSpeed() {
   }
 
   player.money = player.money.minus(player.tickSpeedCost);
-  if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
+  if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
-  if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(player.tickSpeedMultDecrease);
-  if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc1") player.chall2Pow = 0
+  if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
+  if (Challenge(2).isRunning) player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
@@ -68,7 +74,7 @@ function buyMaxTickSpeed() {
   if (money.eq(0)) return false;
   const mult = getTickSpeedMultiplier();
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
-  let tickSpeedMultDecrease = player.tickSpeedMultDecrease;
+  let tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let tickspeed = new Decimal(player.tickspeed);
   let postC3Reward = new Decimal(player.postC3Reward);
@@ -80,15 +86,14 @@ function buyMaxTickSpeed() {
     player.postC3Reward.fromDecimal(postC3Reward);
   }
 
-  const currentChallenge = player.currentChallenge;
   const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
-  if (currentChallenge === "challenge2" || currentChallenge === "postc1") {
+  if (Challenge(2).isRunning) {
     player.chall2Pow = 0;
   }
-  if (currentChallenge === "challenge5" || currentChallenge === "postc5" || tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2) {
-    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || tickSpeedMultDecrease > 2 || currentChallenge === "postc5")) {
+  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
+    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed || InfinityChallenge(5).isRunning)) {
       money = money.minus(tickSpeedCost);
-      if (currentChallenge === "challenge5" || currentChallenge === "postc5") {
+      if (Challenge(9).isRunning || InfinityChallenge(5).isRunning) {
         multiplySameCosts(tickSpeedCost);
       }
       tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);

@@ -16,6 +16,10 @@ var Teresa = {
     if (this.has(id)) return
     player.celestials.teresa.unlocks.push(id)
     player.celestials.teresa.relicShards -= cost
+    if (id === TERESA_UNLOCKS.ADJUSTER) {
+      ui.view.tabs.reality.openGlyphWeights = true;
+      showRealityTab("glyphstab");
+    };
   },
   has(id) {
     return player.celestials.teresa.unlocks.includes(id)

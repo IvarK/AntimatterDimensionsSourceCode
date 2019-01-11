@@ -610,13 +610,14 @@
 }
 
 .o-time-study--secret {
-  transition: opacity 2s;
-  cursor: pointer;
   opacity: 0;
+  transition: opacity 2s 0.5s;
+  cursor: pointer;
 }
 
 .o-time-study--secret-unlocked {
   opacity: 1;
+  transition-delay: 0s;
   cursor: default;
 }
 
@@ -709,5 +710,6 @@
 }
 
 .o-time-study-connection--secret-unlocked {
+  transition-delay: 1.5s;
   opacity: 1;
 }

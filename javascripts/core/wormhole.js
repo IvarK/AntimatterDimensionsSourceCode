@@ -36,16 +36,19 @@ function unlockWormhole() {
 
 function getWormholeIntervalCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
+    if (i == 2) amountOfPurchases += 33
     return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
 }
 
 function getWormholePowerCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
+    if (i == 2) amountOfPurchases += 58
     return Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
 }
 
 function getWormholeDurationCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].duration / (10 - i*3)) / Math.log(1.3))
+    if (i == 2) amountOfPurchases += 30
     return Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
 }
 
@@ -87,7 +90,12 @@ let totalPhase;
 function wormHoleLoop(diff, i) {
   // Change wormhole state
   if (player.wormholePause) return
-  if (!player.wormhole[i].unlocked) return
+  if (!player.wormhole[i].unlocked && (!player.celestials.enslaved.run)) {
+    $("#whupg" + (i + 1)).hide(); 
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = ""
+    return
+  }
+  $("#whupg" + (i + 1)).show()
 
   if (player.wormhole[i].active && (i == 0 || player.wormhole[i-1].active))
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (player.wormhole[i].duration - player.wormhole[i].phase).toFixed(1) + " more seconds.";

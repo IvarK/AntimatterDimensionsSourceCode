@@ -82,6 +82,8 @@ class GameOptions {
     }
     clearInterval(gameLoopIntervalId);
     gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+    Enslaved.infinityTracking = []
+    Enslaved.totalInfinities = 0
   }
 }
 

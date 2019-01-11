@@ -34,11 +34,10 @@ Enslaved = {
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
     this.infinityTracking.push(Math.floor(infinities))
-    if (this.infinityTracking.length - 1 <= ticksNeeded) {
-      this.totalInfinities += Math.floor(infinities)
-    } else {
-      this.totalInfinities += Math.floor(infinities) - this.infinityTracking.shift()
-    }
+    this.totalInfinities += Math.floor(infinities)
+    if (this.infinityTracking.length - 1 > ticksNeeded) {
+      this.totalInfinities -= this.infinityTracking.shift()
+    } 
   },
 
 }

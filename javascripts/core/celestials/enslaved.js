@@ -19,7 +19,7 @@ Enslaved = {
     player.celestials.enslaved.stored = 0
   },
   has(info) {
-    player.celestials.enslaved.unlocks.includes(info.id)
+    return player.celestials.enslaved.unlocks.includes(info.id)
   },
   buyUnlock(info) {
     if (player.celestials.enslaved.stored < info.price) return false

@@ -15,11 +15,12 @@ const TERESA_UNLOCKS = {
 
 function teresaNerfFactor(power) {
   let x = (power.max(10)).log10();
-  return Math.min(1 + 0.7*Math.log10(x), 10);
+  if (!Teresa.has(5)) return Math.min(1 + 0.5*Math.log10(x), 10);
+  else  return Math.min(1 + 2.5*Math.log10(x), 20);
 }
 
 function teresaTickspeed() {
-  return new Decimal(1000 * Math.pow(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10()), 5*teresaNerfFactor(player.timeShards))).min(1000);
+  return new Decimal(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10())).pow(6.5*teresaNerfFactor(player.timeShards)).min(1).times(1000);
 }
 
 function teresaMultiplier(multiplier) {

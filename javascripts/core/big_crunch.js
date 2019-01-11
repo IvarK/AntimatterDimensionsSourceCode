@@ -164,7 +164,7 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  return player.infMult
+  let defaultIPMult = player.infMult
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -180,6 +180,12 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
+  if (player.celestials.teresa.run) {
+    if (!Teresa.has(4)) return new Decimal(1);
+    else if (!Teresa.has(5))  return defaultIPMult.pow(0.9);
+    else  return defaultIPMult;
+  }
+  return defaultIPMult
 }
 
 class InfinityUpgrade extends PurchasableMechanicState {

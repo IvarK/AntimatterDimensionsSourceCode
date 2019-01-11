@@ -155,6 +155,12 @@ function eternity(force, auto) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
+    
+    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5) && player.infinityPoints.gt(Number.MAX_VALUE)) {
+      player.celestials.teresa.unlocks.push(5);
+      player.celestials.teresa.glyphEquipped = false;
+    }
+    
     resetInfinityPointsOnEternity();
     resetInfDimensions();
     IPminpeak = new Decimal(0);
@@ -202,10 +208,6 @@ function eternity(force, auto) {
             if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
         }
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
-    }
-
-    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5) && player.infinityPoints.gt(Number.MAX_VALUE)) {
-      player.celestials.teresa.unlocks.push(5);
     }
   
     resetMoney();

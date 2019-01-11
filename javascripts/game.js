@@ -203,9 +203,6 @@ function gainedInfinityPoints() {
     let ip = player.break ?
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
-      return ip.floor();
-    }
     ip = ip.times(totalIPMult());
     if (Effarig.isRunning) {
         ip = ip.pow(0.6);
@@ -853,7 +850,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (player.celestials.teresa.run) {
+  if (player.celestials.teresa.run && !Teresa.has(5)) {
     factor = teresaMultiplier(new Decimal(factor)).toNumber();
   }
     
@@ -929,7 +926,6 @@ function gameLoop(diff, wormholeSpeedup) {
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
         if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
-        else if (player.celestials.teresa.run && !Teresa.has(4)) player.infinityPoints = player.infinityPoints; // idk pls don't hurt me Razen
         else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
@@ -948,6 +944,9 @@ function gameLoop(diff, wormholeSpeedup) {
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
         player.infinitied ++;
+    }
+    if (Teresa.has(5) && player.currentEternityChall !== "eterc4") {
+      player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
 
     if (player.reality.upg.includes(14)) {
@@ -1182,7 +1181,7 @@ function gameLoop(diff, wormholeSpeedup) {
     player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
 
   // Adjust the text on the reality button in order to minimize text overflowing
-  let glyphLevelText = "<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)";
+  let glyphLevelText = "<br>Glyph level: "+gainedGlyphLevel().toFixed(0)+" ("+percentToNextGlyphLevel()+"%)";
   if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
     document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to Reality again!"
 	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely

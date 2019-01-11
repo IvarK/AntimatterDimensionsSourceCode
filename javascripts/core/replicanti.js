@@ -28,7 +28,7 @@ function upgradeReplicantiGalaxy() {
 
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
-    maxGal += Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);   // Teresa Infinity bonus RG, is 0 with default cap
+    maxGal += Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);   // Teresa Infinity RG, is 0 with default cap
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
@@ -91,7 +91,7 @@ function getReplicantiInterval(noMod, interval) {
 let scaleLog10 = 308;
 let scaleFactor = 1.2;
 function replicantiCap() {
-  return Teresa.has(4) ? new Decimal(player.infinitied + player.infinitiedBank).pow(100).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
+  return Teresa.has(4) ? new Decimal(player.infinitied + player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {

@@ -137,7 +137,7 @@ function dilatedValueOf(value) {
 }
 
 function dilatedTickspeed() {
-  return dilatedValueOf(player.tickspeed);
+  return dilatedValueOf(player.celestials.teresa.run ? teresaTickspeed() : player.tickspeed);
 }
 
 class DilationUpgradeState extends PurchasableMechanicState {

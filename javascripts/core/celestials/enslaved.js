@@ -9,6 +9,8 @@ const ENSLAVED_UNLOCKS = {
 }
 
 Enslaved = {
+  infinityTracking: [],
+  totalInfinities: 0,
   toggleStore() {
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring
   },
@@ -29,4 +31,14 @@ Enslaved = {
   startRun() {
     player.celestials.enslaved.run = startRealityOver();
   },
+  trackInfinityGeneration(infinities) {
+    let ticksNeeded = 10 * 1000 / player.options.updateRate
+    this.infinityTracking.push(Math.floor(infinities))
+    if (this.infinityTracking.length - 1 <= ticksNeeded) {
+      this.totalInfinities += Math.floor(infinities)
+    } else {
+      this.totalInfinities += Math.floor(infinities) - this.infinityTracking.shift()
+    }
+  },
+
 }

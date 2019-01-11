@@ -2,13 +2,15 @@ Vue.component('enslaved-tab', {
   data: function() {
     return {
       isStoring: false,
-      stored: 0
+      stored: 0,
+      enslavedInfinities: 0
     };
   },
   methods: {
     update() {
       this.isStoring = player.celestials.enslaved.isStoring
       this.stored = player.celestials.enslaved.stored
+      this.enslavedInfinities = Enslaved.totalInfinities
     },
     toggleStore() {
       Enslaved.toggleStore()
@@ -50,6 +52,7 @@ Vue.component('enslaved-tab', {
           Start Enslaved One's Reality<br>IDs and TDs are disabled, but you gain a 3rd wormhole. You also gain some bonus based on
           infinities gained in the last 10 seconds (real time). (I haven't decided what yet lol xd lmao)
         </button>
+        <div>You have gained {{ shorten(enslavedInfinities) }} infinities in the last 10 seconds.</div>
       </div>
     </div>`
 });

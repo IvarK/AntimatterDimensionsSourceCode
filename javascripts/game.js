@@ -918,7 +918,10 @@ function gameLoop(diff, enslavedTick = false) {
 
     if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
         if (player.reality.upg.includes(11)) {
-            player.infinitied += Math.floor(gainedInfinities() * 0.1) * diff/1000
+          let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
+          player.infinitied += gained
+          Enslaved.trackInfinityGeneration(gained)
+
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {

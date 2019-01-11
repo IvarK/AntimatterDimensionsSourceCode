@@ -383,8 +383,10 @@ var player = {
       typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
     },
     enslaved: {
-      store: false,
-      stored: 0
+      isStoring: false,
+      stored: 0,
+      unlocks: [],
+      run: false
     }
   },
   autoEcIsOn: true,

@@ -216,7 +216,7 @@ class InfinityDimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning) {
+    if (EternityChallenge(10).isRunning || player.celestials.enslaved.run) {
       return new Decimal(0);
     }
     let production = this.amount;

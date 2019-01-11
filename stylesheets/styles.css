@@ -4861,9 +4861,10 @@ screen and (max-width: 480px) {
   margin: 10px;
   cursor: pointer;
   transition-duration: 0.12s;
+  max-width: 350px;
 }
 
-.o-enslaved-shop-button.storeing {
+.o-enslaved-shop-button.storing {
   background-color: rebeccapurple;
 }
 

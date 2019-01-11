@@ -861,14 +861,20 @@ function gameLoop(diff, enslavedTick = false) {
     }
 
     const speedFactor = getGameSpeedupFactor();
-    if (!player.celestials.enslaved.store && !enslavedTick) {
+    if (!player.celestials.enslaved.isStoring && !enslavedTick) {
       DeltaTimeState.update(diff, speedFactor);
       diff *= speedFactor;
     } else {
       const wormHoleSpeedFactor = getGameSpeedupFactor(false);
       const glyphSpeedFactor = speedFactor / wormHoleSpeedFactor;
-      DeltaTimeState.update(diff, glyphSpeedFactor);
-      if (!enslavedTick) player.celestials.enslaved.stored += diff * (wormHoleSpeedFactor - 1)
+      if (player.currentEternityChall == "eterc12") {
+        DeltaTimeState.update(diff, 1/1000);
+        diff /= 1000;
+      }
+      else {
+        DeltaTimeState.update(diff, glyphSpeedFactor);
+        if (!enslavedTick) player.celestials.enslaved.stored += diff * (wormHoleSpeedFactor - 1)
+      }
     }
     
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
@@ -1188,7 +1194,7 @@ function gameLoop(diff, enslavedTick = false) {
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
   if (player.wormhole[0].unlocked && !enslavedTick) {
-    if (!player.celestials.enslaved.store) {
+    if (!player.celestials.enslaved.isStoring) {
       wormHoleLoop(diff, 0)
       wormHoleLoop(diff, 1)
       wormHoleLoop(diff, 2)

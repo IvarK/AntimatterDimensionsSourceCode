@@ -98,8 +98,7 @@ function updateWormholePhases(wormholeDiff) {
   // This code is intended to successfully update the wormhole phases
   // even for very large values of wormholeDiff.
   wormholeDiff /= 1000;
-  // How long is spent with each wormhole active?
-  let incPhases = getRealTimePeriodsWithWormholeActive(wormholeDiff);
+  let activePeriods = getRealTimePeriodsWithWormholeActive(wormholeDiff);
   for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
     let wormhole = player.wormhole[i];
     // Prevents a flickering wormhole if phase gets set too high
@@ -107,7 +106,7 @@ function updateWormholePhases(wormholeDiff) {
     // should work even with very large incPhase. To check:
     // This used to always use the period of wormhole[0], now it doesn't,
     // will this cause other bugs?
-    wormhole.phase += incPhases[i];
+    wormhole.phase += activePeriods[i];
     if (wormhole.phase >= wormhole.speed + wormhole.duration) {
       // One activation for each full cycle.
       wormhole.activations += Math.floor(wormhole.phase / (wormhole.speed + wormhole.duration));
@@ -354,12 +353,11 @@ function pauseWormhole() {
 
 // This function takes the total real time spent offline,
 // a number of ticks to simulate, a tolerance for how far ticks can be
-// from average (explained later), and the speedup from time glyphs
-// that should apply next tick, and returns a single realTickTime and
+// from average (explained later), and returns a single realTickTime and
 // wormholeSpeed representing the real time taken up by the first simulated tick
 // and the game speed due to wormholes during it.
 
-// This code tries to make sure that the following conditions are satisfied:
+// This code makes sure that the following conditions are satisfied:
 // 1: realTickTime * wormholeSpeed is exactly (up to some small
 // multiple of floating-point precision) the game time which would be spent
 // after realTickTime real time, accounting for wormholes
@@ -377,7 +375,7 @@ function pauseWormhole() {
 // of an issue).
 
 // The way this code does this is by heavy use of getGameTimeFromRealTime,
-// which can calculate the real time spent up to a certain game time.
+// which can calculate the game time spent up to a certain real time.
 // First we get the total game time spent. Now that we know
 // the total game time (totalGameTime) and the total real time (totalRealTime)
 // that we're trying to simulate, we can, for any real time t,
@@ -385,26 +383,9 @@ function pauseWormhole() {
 // g / totalGameTime. We use binary search to find a real time t for which
 // the game time g spent after t real time divided by the total game time
 // is approximately 1 / numberOfTicks.
-function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance, timeGlyphSpeedup) {
-  // We handle time glyphs by multiplying real time by their effect initially and at the end dividing
-  // the returned real-time tick length by their effect.
-  totalRealTime *= timeGlyphSpeedup;
-  // This returns a list of length (number of unlocked wormholes + 1),
-  // where each element is the *total* speedup while that wormhole is
-  // the highest-index wormhole active,
-  // the wormholes being numbered starting from wormhole 1 and
-  // wormhole 0 being normal game.
-  // (So speedups[2] is the speedup from the first and second wormhole
-  // combined, that is, the product of their powers.)
-
-  // We only use this result in getting game time from real time
-  // (we could recalculate it every time we call getGameTimeFromRealTime,
-  // but that might be inefficient).
+function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance) {
+  // Cache speedups, so getGameTimeFromRealTime doesn't recalculate them every time.
   let speedups = calculateWormholeSpeedups();
-  // Call to getGameTimeFromRealTime, which is further explained later but
-  // does more or less what it sounds like. Here, since the first argument
-  // is totalRealTime, the result is the game time spent after totalRealTime,
-  // which is by definition the total game time spent.
   let totalGameTime = getGameTimeFromRealTime(totalRealTime, speedups);
   // We have this special case just in case some floating-point mess prevents binarySearch from working in the numberOfTicks = 1 case.
   // I doubt that's possible but it seems worth handling just in case.
@@ -418,14 +399,13 @@ function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance, t
   let gameTickTimes = [0];
   // We want getGameTimeFromRealTime(realTickTimes[i], speedups) * numberOfTicks / totalGameTime to be roughly i
   // (recall that gameTickTimes[i] should be equal to getGameTimeFromRealTime(realTickTimes[i], speedups)).
-  // We use binary search because I think it has somewhat better worst-case behavior than linear interpolation search here
+  // We use binary search because it has somewhat better worst-case behavior than linear interpolation search here.
   // Suppose you have 3000 seconds without a wormhole and then 100 seconds of a wormhole with 3000x power, and you want to find
   // when 4000 seconds of game time have elapsed. With binary search it will take only 20 steps or so to get reasonable accuracy,
-  // but with linear interpolation I think it will take about 100 steps.
+  // but with linear interpolation it will take about 100 steps.
   // These extra steps might always average out with cases where linear interpolation is quicker though.
-  let realTickTime = binarySearch(0, totalRealTime, function (x) {return getGameTimeFromRealTime(x, speedups) * numberOfTicks / totalGameTime}, 1, tolerance);
+  let realTickTime = binarySearch(0, totalRealTime, (x) => getGameTimeFromRealTime(x, speedups) * numberOfTicks / totalGameTime, 1, tolerance);
   let wormholeSpeedup = getGameTimeFromRealTime(realTickTime, speedups) / realTickTime;
-  realTickTime /= timeGlyphSpeedup;
   return [realTickTime, wormholeSpeedup];
 }
 
@@ -447,7 +427,7 @@ function binarySearch(start, end, evaluationFunction, target, tolerance) {
   }
 }
 
-// This returns a list of length (number of unlocked wormholes + 1),
+// Returns a list of length (number of unlocked wormholes + 1),
 // where each element is the *total* speedup while that wormhole
 // is the highest-numbered wormhole active, the wormholes being numbered
 // starting from wormhole 1 and wormhole 0 being normal game.
@@ -465,14 +445,6 @@ function getGameTimeFromRealTime(realTime, speedups) {
   let effectivePeriods = getRealTimePeriodsWithWormholeEffective(realTime, speedups);
   let gameTime = 0;
   for (let i = 0; i < effectivePeriods.length; i++) {
-    // For each wormhole, add the real time spent where that wormhole is the
-    // effective wormhole times the total speedup during that time
-    // (which is the game time spent where that wormhole is
-    // the effective wormhole) to the overall game time spent.
-    // Even though more than one wormhole can be active
-    // (and thus effective) at once, this code first calculates the total speedups
-    // while each wormhole is highest-index wormhole that's active and then acts
-    // as if only the highest-index wormhole that's active is effective.
     gameTime += effectivePeriods[i] * speedups[i];
   }
   return gameTime;
@@ -480,10 +452,17 @@ function getGameTimeFromRealTime(realTime, speedups) {
 
 // Returns the amount of real time spent with each unlocked wormhole
 // being the current "effective" wormhole, that is, the active wormhole
-// with the highest index.  It does this by first getting time spent with each wormhole active.
-// Then it takes differences: the time spent with wormhole i active minus
-// the time spent with wormhole (i + 1) active is the time spent
-// with wormhole i being the current effective wormhole.
+// with the highest index.
+// For example:
+// active periods = [100, 20, 5] (100ms of real time, 20ms of wormhole 1, 5ms of wormhole 2)
+// effective periods = [80, 15, 5]
+// 80ms of effective real time, because wormhole 1 will be running in total 20ms => 100 - 20
+// 15ms of effective wormhole 1 time, because wormhole 2 will be running in total 5ms => 20 - 5
+// 5ms of effective wormhole 2 time, because no higher wormhole overlaps it, so it is effective for the whole active period
+// Note: even though more than one wormhole can be active
+// (and thus effective) at once, the calling function first calculates the total speedups
+// while each wormhole is the highest-index wormhole that's active and then acts
+// as if only the highest-index wormhole that's active is effective.
 function getRealTimePeriodsWithWormholeEffective(realTime) {
   let activePeriods = getRealTimePeriodsWithWormholeActive(realTime);
   let effectivePeriods = [];
@@ -499,8 +478,8 @@ function getRealTimePeriodsWithWormholeEffective(realTime) {
 function getRealTimePeriodsWithWormholeActive(realTime) {
   let activePeriods = [realTime];
   for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
-    const realTime = getRealTimeWithWormholeActive(wormhole, activePeriods.last())
-    activePeriods.push(realTime);
+    const activeTime = getRealTimeWithWormholeActive(wormhole, activePeriods.last())
+    activePeriods.push(activeTime);
   }
   return activePeriods;
 }
@@ -512,18 +491,12 @@ function getRealTimePeriodsWithWormholeActive(realTime) {
 // player.wormhole[1] is active.
 function getRealTimeWithWormholeActive(wormhole, time) {
   let nextDeactivation = timeUntilNextDeactivation(wormhole);
-  // Abbrevations since we'll be using these variables a lot.
   let cooldown = wormhole.speed;
   let duration = wormhole.duration;
   let fullCycle = cooldown + duration;
-  // time the wormhole is active from now until when the wormhole next becomes inactive
   const currentActivationDuration = Math.min(nextDeactivation, duration);
-  // the number of full cycles from the first time the wormhole becomes inactive
-  // to the last time the wormhole becomes inactive
   const activeCyclesUntilLastDeactivation = Math.floor((time - nextDeactivation) / fullCycle);
-  // time the wormhole is active until the last time it becomes inactive
   const activeTimeUntilLastDeactivation = duration * activeCyclesUntilLastDeactivation;
-  // time the wormhole is active after the last time it becomes inactive (if non-negative)
   const timeLeftAfterLastDeactivation = (time - nextDeactivation + fullCycle) % fullCycle;
   const lastActivationDuration = Math.max(timeLeftAfterLastDeactivation - cooldown, 0);
   return currentActivationDuration + activeTimeUntilLastDeactivation + lastActivationDuration;
@@ -537,10 +510,7 @@ function getRealTimeWithWormholeActive(wormhole, time) {
 // In general, a wormhole only changes state while the previous wormhole is active.
 // So figuring out how long a wormhole would be active after some amount of real time
 // (as we do) is best done iteratively via figuring out how long a wormhole would be active
-// after a given amount of time of the previous wormhole being active. So trying to figure out
-// how long in real time it would take for a given wormhole to deactivate would be a mess,
-// but it's easy to figure out how long the previous wormhole needs to be active for
-// until a wormhole deactivates.
+// after a given amount of time of the previous wormhole being active.
 function timeUntilNextDeactivation(wormhole) {
   if (wormhole.active) {
     return wormhole.duration - wormhole.phase;

@@ -813,8 +813,6 @@ var eternitiesGain = 0
 
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
-// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole).
-// wormholeOverride is a number that will override the gamespeed effect of the wormhole if it is set.
 function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   if (effectsToConsider === undefined) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
@@ -1251,10 +1249,13 @@ function simulateTime(seconds, real, fast) {
     
     // Simulation code with wormhole
     if (player.wormhole[0].unlocked && !player.wormholePause) {
-      let remainingSeconds = seconds;
+      let remainingRealSeconds = seconds;
       for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
         let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
-        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingSeconds, numberOfTicksRemaining, 0.0001, timeGlyphSpeedup);
+        // The wormhole is affected by time glyphs, but nothing else.
+        let remainingWormholeSeconds = remainingRealSeconds * timeGlyphSpeedup;
+        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingWormholeSeconds, numberOfTicksRemaining, 0.0001);
+        realTickTime /= timeGlyphSpeedup;
         remainingSeconds -= realTickTime;
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).

@@ -838,7 +838,7 @@ function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
 
 let autobuyerOnGameLoop = true;
 
-function gameLoop(diff) {
+function gameLoop(diff, enslavedTick = false) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     var thisUpdate = new Date().getTime();
@@ -861,8 +861,16 @@ function gameLoop(diff) {
     }
 
     const speedFactor = getGameSpeedupFactor();
-    DeltaTimeState.update(diff, speedFactor);
-    diff *= speedFactor;
+    if (!player.celestials.enslaved.store && !enslavedTick) {
+      DeltaTimeState.update(diff, speedFactor);
+      diff *= speedFactor;
+    } else {
+      const wormHoleSpeedFactor = getGameSpeedupFactor(false);
+      const glyphSpeedFactor = speedFactor / wormHoleSpeedFactor;
+      DeltaTimeState.update(diff, glyphSpeedFactor);
+      if (!enslavedTick) player.celestials.enslaved.stored += diff * (wormHoleSpeedFactor - 1)
+    }
+    
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
@@ -1179,10 +1187,16 @@ function gameLoop(diff) {
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
-  if (player.wormhole[0].unlocked) {
-    wormHoleLoop(diff, 0)
-    wormHoleLoop(diff, 1)
-    wormHoleLoop(diff, 2)
+  if (player.wormhole[0].unlocked && !enslavedTick) {
+    if (!player.celestials.enslaved.store) {
+      wormHoleLoop(diff, 0)
+      wormHoleLoop(diff, 1)
+      wormHoleLoop(diff, 2)
+    } else {
+      wormHoleLoop(diff * speedFactor, 0)
+      wormHoleLoop(diff * speedFactor, 1)
+      wormHoleLoop(diff * speedFactor, 2)
+    }
   }
   
   // Reality unlock and TTgen perk autobuy

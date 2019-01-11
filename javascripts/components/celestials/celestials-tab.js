@@ -15,15 +15,15 @@ Vue.component('celestials-tab', {
           condition: function() { return this.teresaUnlocked }.bind(this)
         },
         {
-          name: "V",
-          id: "V",
-          component: "v-tab",
-          condition: function() { return false }
-        },
-        {
           name: "The Enslaved Ones",
           id: "Enslaved",
           component: "enslaved-tab",
+          condition: function() { return true }
+        },
+        {
+          name: "V",
+          id: "V",
+          component: "v-tab",
           condition: function() { return false }
         },
         {

@@ -673,7 +673,6 @@ button {
 
 [ach-tooltip] {
     position: relative;
-    z-index: 2;
 }
 
 [ach-tooltip]:before,
@@ -704,6 +703,7 @@ button {
     font-size: 14px;
     line-height: 1.2;
     transition-duration: .5s;
+    z-index: 2;
 }
 
 [ach-tooltip]:after {

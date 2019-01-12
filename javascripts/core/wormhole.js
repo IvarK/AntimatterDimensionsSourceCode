@@ -103,7 +103,7 @@ function updateWormholePhases(wormholeDiff) {
     let wormhole = player.wormhole[i];
     // Prevents a flickering wormhole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
-    // should work even with very large incPhase. To check:
+    // should work even if activePeriods[i] is very large. To check:
     // This used to always use the period of wormhole[0], now it doesn't,
     // will this cause other bugs?
     wormhole.phase += activePeriods[i];
@@ -373,16 +373,6 @@ function pauseWormhole() {
 // then you should expect technically correct but somewhat annoying behavior)
 // and auto EC completion (but auto EC completion shouldn't be that much
 // of an issue).
-
-// The way this code does this is by heavy use of getGameTimeFromRealTime,
-// which can calculate the game time spent up to a certain real time.
-// First we get the total game time spent. Now that we know
-// the total game time (totalGameTime) and the total real time (totalRealTime)
-// that we're trying to simulate, we can, for any real time t,
-// calculate the game time g spent after t real time and compute
-// g / totalGameTime. We use binary search to find a real time t for which
-// the game time g spent after t real time divided by the total game time
-// is approximately 1 / numberOfTicks.
 function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance) {
   // Cache speedups, so getGameTimeFromRealTime doesn't recalculate them every time.
   let speedups = calculateWormholeSpeedups();
@@ -392,19 +382,14 @@ function calculateWormholeOfflineTick(totalRealTime, numberOfTicks, tolerance) {
   if (numberOfTicks === 1) {
     return [totalRealTime, totalGameTime / totalRealTime];
   }
-  // realTickTimes[0] and gameTickTimes[0] are both 0 since this automatically
-  // satisfies the required properties (the game time spent after 0 real time is
-  // 0 game time, and (0 / totalRealTime + 0 / totalGameTime) / 2 = 0.
-  let realTickTimes = [0];
-  let gameTickTimes = [0];
-  // We want getGameTimeFromRealTime(realTickTimes[i], speedups) * numberOfTicks / totalGameTime to be roughly i
-  // (recall that gameTickTimes[i] should be equal to getGameTimeFromRealTime(realTickTimes[i], speedups)).
+  // We want getGameTimeFromRealTime(realTickTime, speedups) * numberOfTicks / totalGameTime to be roughly 1
+  // (that is, the tick taking realTickTime real time has roughly average length in terms of game time).
   // We use binary search because it has somewhat better worst-case behavior than linear interpolation search here.
   // Suppose you have 3000 seconds without a wormhole and then 100 seconds of a wormhole with 3000x power, and you want to find
   // when 4000 seconds of game time have elapsed. With binary search it will take only 20 steps or so to get reasonable accuracy,
   // but with linear interpolation it will take about 100 steps.
   // These extra steps might always average out with cases where linear interpolation is quicker though.
-  let realTickTime = binarySearch(0, totalRealTime, (x) => getGameTimeFromRealTime(x, speedups) * numberOfTicks / totalGameTime, 1, tolerance);
+  let realTickTime = binarySearch(0, totalRealTime, x => getGameTimeFromRealTime(x, speedups) * numberOfTicks / totalGameTime, 1, tolerance);
   let wormholeSpeedup = getGameTimeFromRealTime(realTickTime, speedups) / realTickTime;
   return [realTickTime, wormholeSpeedup];
 }
@@ -443,11 +428,9 @@ function calculateWormholeSpeedups() {
 
 function getGameTimeFromRealTime(realTime, speedups) {
   let effectivePeriods = getRealTimePeriodsWithWormholeEffective(realTime, speedups);
-  let gameTime = 0;
-  for (let i = 0; i < effectivePeriods.length; i++) {
-    gameTime += effectivePeriods[i] * speedups[i];
-  }
-  return gameTime;
+  return effectivePeriods
+  .map((period, i) => period * speedups[i])
+  .sum();
 }
 
 // Returns the amount of real time spent with each unlocked wormhole

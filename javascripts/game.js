@@ -1256,7 +1256,7 @@ function simulateTime(seconds, real, fast) {
         let remainingWormholeSeconds = remainingRealSeconds * timeGlyphSpeedup;
         [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingWormholeSeconds, numberOfTicksRemaining, 0.0001);
         realTickTime /= timeGlyphSpeedup;
-        remainingSeconds -= realTickTime;
+        remainingRealSeconds -= realTickTime;
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).
         gameLoop(1000 * realTickTime, wormholeSpeedup);

@@ -23,7 +23,14 @@ for (let i = 1; i < 9; i++) {
 }
 
 Keyboard.bindHotkey("a", () => toggleAutobuyers());
-Keyboard.bindHotkey("esc", () => Modal.hide());
+Keyboard.bindHotkey("esc", () => {
+  if (Modal.isOpen()) {
+    Modal.hide();
+  }
+  else {
+    Tab.options.show();
+  }
+});
 Keyboard.bindHotkey("w", () => pauseWormhole());
 
 Keyboard.bind("shift", () => setShiftKey(true), "keydown");

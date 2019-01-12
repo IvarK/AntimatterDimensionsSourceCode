@@ -105,11 +105,9 @@
                   here will be a description of current glyph effects or smthing
                 </div>
                 <div> <!-- middle -->
-                  <button id="realitymachine" onclick="reality()">Make a new reality
-                    <br>Machines gained: 1
-                    <br>Glyph level: 1</button>
                   <br>
-                  <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
+                  <new-reality-button></new-reality-button>
+                  <br>
                   <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'"
                                          label="Glyph level factors"
                                          container-class="c-glyph-level-factors-dropdown-header">
@@ -619,6 +617,7 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
 
 <script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/new-reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>

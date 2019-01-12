@@ -183,8 +183,8 @@ input {
     background: white !important;
 }
 
-#realitymachine:hover {
-    background: #0b600e !important;
+#realitymachine:hover, #realitymachine.force-hover {
+  background: #0b600e !important;
 }
 
 .realityUpgrade:hover {

@@ -158,8 +158,8 @@ input {
     border: 2px solid #0b600e !important;
 }
 
-#realitymachine:hover {
-    color: white !important;
+#realitymachine:hover, #realitymachine.force-hover {
+  color: white !important;
     background: #0b600e !important;
 }
 

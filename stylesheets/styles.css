@@ -451,8 +451,8 @@ button {
     font-weight: bold;
 }
 
-#realitymachine:hover {
-    color: white;
+#realitymachine:hover, #realitymachine.force-hover {
+  color: white;
     background: #0b600e;
 }
 

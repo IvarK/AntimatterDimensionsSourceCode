@@ -440,26 +440,6 @@ button {
   display: block;
 }
 
-#realitymachine {
-  border-radius: 4px;
-  transition-duration: 0.2s;
-  cursor: pointer;
-  width: 210px;
-  height: 70px;
-  font-family: Typewriter;
-  color: #0b600e;
-  background: white;
-  border: 2px solid #0b600e;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-#realitymachine:hover, #realitymachine.force-hover {
-  color: white;
-    background: #0b600e;
-}
-
 .l-new-reality-button__contents {
   display: flex;
   flex-direction: column;

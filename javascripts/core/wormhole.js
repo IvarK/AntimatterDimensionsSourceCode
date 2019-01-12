@@ -471,7 +471,7 @@ function getRealTimePeriodsWithWormholeActive(realTime) {
 // this function returns the time for which the given wormhole is active.
 // For example, if wormhole = player.wormhole[1], this function, given
 // the time for which player.wormhole[0] is active, will return the time for which
-// player.wormhole[1] is active.
+// player.wormhole[1] is active during that time.
 function getRealTimeWithWormholeActive(wormhole, time) {
   let nextDeactivation = timeUntilNextDeactivation(wormhole);
   let cooldown = wormhole.speed;

@@ -429,8 +429,8 @@ function calculateWormholeSpeedups() {
 function getGameTimeFromRealTime(realTime, speedups) {
   let effectivePeriods = getRealTimePeriodsWithWormholeEffective(realTime, speedups);
   return effectivePeriods
-  .map((period, i) => period * speedups[i])
-  .sum();
+    .map((period, i) => period * speedups[i])
+    .sum();
 }
 
 // Returns the amount of real time spent with each unlocked wormhole

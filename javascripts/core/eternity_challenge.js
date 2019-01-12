@@ -220,6 +220,14 @@ EternityChallenge.autoCompleteTick  = function() {
   let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
   if (!isPostEc || !player.autoEcIsOn) return
   let threshold = this.currentAutoCompleteThreshold()
+  //TODO: REMOVE this code, because it's not really needed, and is just to prevent infinite loading times when encountering the offline wormhole time played bug
+  let eterchallscompletedtotal = 0;
+  for (let i = 1; i < Object.keys(player.eternityChalls).length + 1; i++) {
+      eterchallscompletedtotal += player.eternityChalls["eterc" + i]
+  }
+  if (eterchallscompletedtotal === 60) {
+    return
+  }
   while (player.reality.lastAutoEC - threshold > 0) {
     this.autoCompleteNext()
     player.reality.lastAutoEC -= threshold

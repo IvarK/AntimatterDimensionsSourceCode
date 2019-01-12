@@ -1,7 +1,5 @@
 
 // TODO, add more types
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"]
-const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", power:"Ω"}
 
 /**
  * pow is for exponent on time dim multiplier (^1.02) or something like that
@@ -9,7 +7,7 @@ const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞
  * freeTickMult reduces the threshold between free tickspeed upgrades (Math.pow(multiplier, 1/x))
  * eternity is a static multiplier on EP gain NOT SURE IF THIS IS GOOD
  */
-const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
+// const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
 
 /**
  * dilationMult multiplies dilation gain
@@ -20,7 +18,7 @@ const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
  * 
  * pow: normal dim multipliers ^ x while dilated
  */
-const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
+// const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 
 /**
  * 
@@ -32,7 +30,7 @@ const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
  * 
  * glyphlevel increases glyph level scaling from replicanti
  */
-const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
+// const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 
 /**
  * pow: inf dim mult ^ x
@@ -41,7 +39,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
  * infMult: multiplier to infinitied stat gain
  * 
  */
-const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
+// const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 
 /**
  * pow: dim mult ^ x
@@ -49,7 +47,7 @@ const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
  * dimboost: multiply dim boost effect
  * autochall: do challenges automatically.
  */
-const powerEffects= ["pow", "mult", "dimboost", "buy10"]
+// const powerEffects= ["pow", "mult", "dimboost", "buy10"]
 
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -356,58 +354,12 @@ function getDesc(effectKey, x, inTooltip) {
       spanPrefix = "<span>"
     }
   }
-  const EFFECT_DESCRIPTIONS = {
-    timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    timespeed: "Multiply game speed by " + spanPrefix + x.toFixed(3) + spanSuffix,
-    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
-    timeeternity: "Multiply EP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    dilationdilationMult: "Multiply Dilated Time gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
-    dilationTTgen: "Generates " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
-    dilationpow: "Normal Dimension multipliers <br>^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
-    replicationspeed: "Multiply replication speed by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    replicationdtgain: "Multiply DT gain by <br>log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
-    replicationglyphlevel: "Replicanti scaling for next glyph level: <br>^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
-    infinitypow: "Infinity Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    infinityrate: "Infinity power conversion rate: <br>^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
-    infinityipgain: "Multiply IP gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    infinityinfmult: "Multiply infinitied stat gain by " + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    powermult: "Normal Dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerdimboost: "Dimension Boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
-    powerbuy10: "Multiplies the bonus gained from buying 10 Dimensions by " + spanPrefix + x.toFixed(2) + spanSuffix
-  }
-  
-  // Used for total glyph effects, slightly reworded/shortened
-  const EFFECT_DESCRIPTIONS_SHORT = {
-    timepow: "Time Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    timespeed: "Game runs x" + spanPrefix + x.toFixed(3) + spanSuffix + " faster",
-    timefreeTickMult: "Free tickspeed threshold multiplier x" + spanPrefix + (1-(1-x)/5).toFixed(3) + spanSuffix,
-    timeeternity: "EP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    dilationdilationMult: "DT gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    dilationgalaxyThreshold: "Free galaxy threshold multiplier x" + spanPrefix + x.toFixed(3) + spanSuffix,
-    dilationTTgen: "Generating " + spanPrefix + (3600*x).toFixed(2) + spanSuffix + " TT per hour",
-    dilationpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix + " while dilated",
-    replicationspeed: "Replication speed x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    replicationpow: "Replicanti multiplier ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    replicationdtgain: "DT gain from log10(replicanti) x" + spanPrefix + x.toFixed(5) + spanSuffix,
-    replicationglyphlevel: "Replicanti scaling for next glyph level: ^0.4 -> ^(0.4 + " + spanPrefix + x.toFixed(3) + spanSuffix + ")",
-    infinitypow: "Infinity Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    infinityrate: "Infinity power conversion rate ^7 -> ^(7 + " + spanPrefix + x.toFixed(2) + spanSuffix + ")",
-    infinityipgain: "IP gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    infinityinfmult: "Infinity stat gain x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerpow: "Normal Dimension multipliers ^" + spanPrefix + x.toFixed(3) + spanSuffix,
-    powermult: "Normal Dimension multipliers x" + spanPrefix + shortenDimensions(x) + spanSuffix,
-    powerdimboost: "Dimension Boost multiplier x" + spanPrefix + x.toFixed(2) + spanSuffix,
-    powerbuy10: "Multiplier from \"Buy 10\" x" + spanPrefix + x.toFixed(2) + spanSuffix
-  }
-
+  effect = GlyphEffects[effectKey];
   if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    return EFFECT_DESCRIPTIONS[effectKey]
+    return effect.singleDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.singleDescSplit[1];
   }
   else {
-    return EFFECT_DESCRIPTIONS_SHORT[effectKey]
+    return effect.totalDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.totalDescSplit[1];
   }
 }
 

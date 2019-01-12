@@ -1072,13 +1072,17 @@ function gameLoop(diff, options = {}) {
       1.33,
       TimeStudy(171)
     );
-    if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
-      tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
-    }
-    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs
-    let freeTickSoftcap = 300000;
+    // FIXME: the glyph effect should not return 0.
+    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult") != 0 ? getAdjustedGlyphEffect("timefreeTickMult") : 1;
+    tickmult = 1 + (tickmult - 1) * multFromGlyph;
+
     if (player.timeShards.gt(0)) {
-      let softcapAddition = getAdjustedGlyphEffect("timefreeTickMult") == 0 ? 1 : 0.8 + 0.2*getAdjustedGlyphEffect("timefreeTickMult");
+      // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
+      // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
+      // reports continue to be accurate.
+      const freeTickSoftcap = 300000;
+      const fixedIncrease = 1 / TS171_MULTIPLIER;
+      let softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
       let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
       let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(softcapAddition+tickmult))) : uncapped;
       let gain = Math.max(0, softcapped - player.totalTickGained);

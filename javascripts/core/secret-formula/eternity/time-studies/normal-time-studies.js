@@ -256,7 +256,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 171,
     cost: 15,
     description: "Time shard requirement for the next tickspeed upgrade goes up slower",
-    effect: () => 1.25
+    effect: () => TS171_MULTIPLIER
   },
   {
     id: 181,

@@ -68,7 +68,7 @@ function upgradeWormholeInterval(i) {
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
   player.wormhole[i].speed *= 0.8
   updateWormholeUpgrades()
-  if (player.wormhole[i].speed <  player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
+  if (player.wormhole[i].speed < player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
 }
 
 function upgradeWormholePower(i) {
@@ -87,7 +87,7 @@ function upgradeWormholeDuration(i) {
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
   player.wormhole[i].duration *= 1.3
   updateWormholeUpgrades()
-  if (player.wormhole[i].speed <  player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
+  if (player.wormhole[i].speed < player.wormhole[i].duration) giveAchievement("Are you sure these are the right way around?")
 }
 
 function setWormhole(state, i) {
@@ -130,12 +130,13 @@ function updateWormholePhases(wormholeDiff) {
       }
     }
   }
+  if (player.wormhole[0].phase >= 60 * 60 * 24) giveAchievement("Bruh, are you like, inside the hole?")
 }
 function updateWormholeStatusText(i) {
   let wormhole = player.wormhole[i];
   if (!wormhole.unlocked) return
 
-  if (wormhole.active && (i == 0 || player.wormhole[i-1].active))
+  if (wormhole.active && (i === 0 || player.wormhole[i-1].active))
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (wormhole.duration - wormhole.phase).toFixed(1) + " more seconds.";
   else if (wormhole.active)
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, wormhole.duration - wormhole.phase)).toFixed(1) + " sec)";
@@ -163,8 +164,6 @@ function updateWormholeGraphics() {
     particleList[i].update();
     particleList[i].draw();
   }
-
-  if (player.wormhole[i].phase >= 60 * 60 * 24) giveAchievement("Bruh, are you like, inside the hole?")
 }
 
 // Drawing code that runs for each particle

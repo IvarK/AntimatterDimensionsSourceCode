@@ -405,7 +405,7 @@ dev.updateTestSave = function() {
 
   if (player.options.testVersion === 24) {
     // following logic from autobuyers (before the addition of wall clock time stats)
-    var speedup = getGameSpeedupFactor(false);
+    var speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;

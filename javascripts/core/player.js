@@ -341,6 +341,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   },
   {
     speed: 60 * 6,
@@ -349,6 +350,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   },
   {
     speed: 6 * 6,
@@ -357,6 +359,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   }],
   wormholePause: false,
   ttbuyer: false,

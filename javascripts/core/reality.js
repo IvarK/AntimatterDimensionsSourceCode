@@ -143,6 +143,7 @@ function reality(force, reset, auto) {
     }
     player.eternityChalls = {};
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+    player.reality.lastAutoEC = 0;
     player.currentEternityChall = "";
     player.eternityChallUnlocked = 0;
     player.etercreq = 0;

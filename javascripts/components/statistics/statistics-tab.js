@@ -30,7 +30,7 @@ Vue.component('statistics-tab', {
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
       },
-      infoScale: String.empty,
+      matterScale: [],
     };
   },
   methods: {
@@ -72,7 +72,7 @@ Vue.component('statistics-tab', {
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
       }
-      this.infoScale = MatterScale.estimate(player.money);
+      this.matterScale = MatterScale.estimate(player.money);
     },
     formatAmount: function(value) { 
       return value > 1e18 ? shorten(value, 6, 0) : formatWithCommas(value);
@@ -90,7 +90,10 @@ Vue.component('statistics-tab', {
         <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
         <div>You have played for {{ realTimePlayed.toString() }}.</div>
         <div v-if="reality.isUnlocked">Your existence has spanned {{ reality.totalTimePlayed.toString() }} of time.</div>
-        <div v-html="infoScale"/>
+        <div>
+          <br>
+          <div v-for="line in matterScale">{{line}}</div>
+        </div>
         <br>
         <div v-if="infinity.isUnlocked">
             <h3>Infinity</h3>
@@ -133,23 +136,25 @@ const MatterScale = {
   proton: 2.82e-45,
 
   estimate(matter) {
-    if (!matter) return "There is no antimatter yet.";
+    if (!matter) return ["There is no antimatter yet."];
     if (matter.gt(Decimal.fromMantissaExponent(1, 100000))) {
-      return "<br>If you wrote 3 numbers a second, it would take you " +
-        "<br>" + TimeSpan.fromSeconds(matter.log10() / 3).toString() +
-        "<br> to write down your antimatter amount.";
+      return [
+        "If you wrote 3 numbers a second, it would take you",
+        TimeSpan.fromSeconds(matter.log10() / 3).toString(),
+        "to write down your antimatter amount."
+      ];
     }
     const planck = 4.22419e-105;
     let planckedMatter = matter.times(planck);
     if (planckedMatter.gt(this.proton)) {
       let scale = this.macroScale(planckedMatter);
       let amount = shortenMoney(planckedMatter.dividedBy(scale.amount));
-      return "If every antimatter were a planck volume, " +
-        "you would have enough to " + scale.verb + " " + amount + " " + scale.name;
+      return ["If every antimatter were a planck volume, " +
+        "you would have enough to " + scale.verb + " " + amount + " " + scale.name];
     }
     let scale = this.microScale(matter);
-    return "If every antimatter were " + shortenMoney(this.proton / scale.amount / matter) + " " +
-      scale.name + ", you would have enough to make a proton.";
+    return ["If every antimatter were " + shortenMoney(this.proton / scale.amount / matter) + " " +
+      scale.name + ", you would have enough to make a proton."];
   },
 
   microScale(matter) {

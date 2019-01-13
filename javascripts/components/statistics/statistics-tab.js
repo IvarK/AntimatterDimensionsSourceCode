@@ -86,8 +86,8 @@ Vue.component('statistics-tab', {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have done {{ resets }} Dimension Boosts/Shifts.</div>
-        <div>You have {{ galaxies }} Antimatter Galaxies.</div>
+        <div>You have done {{ resets }} Dimension {{"Boost/Shift" | pluralize(resets, "Boosts/Shifts")}}.</div>
+        <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
         <div>You have played for {{ realTimePlayed.toString() }}.</div>
         <div v-if="reality.isUnlocked">Your existence has spanned {{ reality.totalTimePlayed.toString() }} of time.</div>
         <div v-html="infoScale"/>

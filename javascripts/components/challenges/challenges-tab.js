@@ -6,8 +6,11 @@ Vue.component('challenges-tab', {
       isInChallenge: false,
       isShowAllVisible: false,
       isAutoECVisible: false,
-      reality: player.reality,
-      options: player.options,
+      showAllChallenges: false,
+      autoEC: false,
+      remainingECTiers: 0,
+      untilNextEC: TimeSpan.zero,
+      untilAllEC: TimeSpan.zero,
       tabs: [
         {
           name: "Challenges",
@@ -29,8 +32,17 @@ Vue.component('challenges-tab', {
       ]
     };
   },
+  watch: {
+    autoEC(newValue) {
+      player.reality.autoEC = newValue;
+    },
+    showAllChallenges(newValue) {
+      player.options.showAllChallenges = newValue;
+    }
+  },
   methods: {
     update() {
+      this.showAllChallenges = player.options.showAllChallenges;
       const isECTabUnlocked = player.eternityChallUnlocked !== 0 || Object.keys(player.eternityChalls).length > 0;
       this.isECTabUnlocked = isECTabUnlocked;
       const isICTabUnlocked = isECTabUnlocked || player.money.gte(new Decimal("1e2000")) || player.postChallUnlocked > 0;
@@ -38,6 +50,15 @@ Vue.component('challenges-tab', {
       this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
       this.isAutoECVisible = player.reality.perks.includes(91);
+      this.autoEC = player.reality.autoEC;
+      const remainingTiers = EternityChallenge.remainingTiers();
+      this.remainingECTiers = remainingTiers;
+      if (remainingTiers !== 0) {
+        const autoECPeriod = EternityChallenge.currentAutoCompleteThreshold();
+        const untilNextEC = autoECPeriod - player.reality.lastAutoEC;
+        this.untilNextEC.setFrom(untilNextEC);
+        this.untilAllEC.setFrom(untilNextEC + (autoECPeriod * remainingTiers - 1));
+      }
     }
   },
   template:
@@ -55,7 +76,7 @@ Vue.component('challenges-tab', {
         <template v-if="isShowAllVisible">
           <b>Show all:</b>
           <input
-            v-model="options.showAllChallenges"
+            v-model="showAllChallenges"
             type="checkbox"
             class="o-big-checkbox"
           />
@@ -63,11 +84,21 @@ Vue.component('challenges-tab', {
         <template v-if="isAutoECVisible">
           <b>Auto EC completion:</b>
           <input
-            v-model="reality.autoEC"
+            v-model="autoEC"
             type="checkbox"
             class="o-big-checkbox"
-          />
+          >
         </template>
+        <div
+          v-if="autoEC && remainingECTiers > 0"
+          class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
+        >
+          <span>Until</span>
+          <div class="l-challenges-tab__auto-ec-timers">
+            <span v-if="remainingECTiers > 1">next: {{untilNextEC.toString()}}</span>
+            <span>all: {{untilAllEC.toString()}}</span>
+          </div>
+        </div>
       </div>
     </game-tab-with-subtabs>`
 });

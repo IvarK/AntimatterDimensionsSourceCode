@@ -184,17 +184,30 @@ function EternityChallenge(id) {
 }
 
 /**
+ * @type {EternityChallengeState[]}
+ */
+EternityChallenge.all = EternityChallengeState.all;
+
+/**
  * @returns {EternityChallengeState}
  */
-EternityChallenge.current = function() {
+EternityChallenge.current = () => {
   if (player.currentEternityChall === String.empty) return undefined;
   const id = parseInt(player.currentEternityChall.split("eterc")[1]);
   return EternityChallenge(id);
 };
 
-EternityChallenge.isRunning = function() {
-  return player.currentEternityChall !== String.empty;
+EternityChallenge.isRunning = () => player.currentEternityChall !== String.empty;
+
+EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
+
+EternityChallenge.completedTiers = () => {
+  return EternityChallenge.all
+    .map(ec => ec.completions)
+    .sum();
 };
+
+EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
   if (player.reality.perks.includes(95)) return TimeSpan.fromHours(0.5).totalMilliseconds

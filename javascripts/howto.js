@@ -93,6 +93,9 @@ function updateSpoilers() {
 			if (i === 19 && player.dilation.studies.length === 5) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
+			if (i === 20 && player.realities >= 1) {
+				(displayed === 0) ? displayed = 1 : displayed = 0;
+			}
 			if (i < 5 || i === 7) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}

@@ -100,7 +100,7 @@ function bigCrunchReset() {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
   
-    if (player.celestials.teresa.run && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
       Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
     }
 }
@@ -164,7 +164,10 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  let defaultIPMult = player.infMult
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+    return new Decimal(1);
+  }
+  let ipMult = player.infMult
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -180,12 +183,10 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (player.celestials.teresa.run) {
-    if (!Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) return new Decimal(1);
-    else if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE))  return defaultIPMult.pow(0.9);
-    else  return defaultIPMult;
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+    ipMult = ipMult.pow(0.9);
   }
-  return defaultIPMult
+  return ipMult;
 }
 
 class InfinityUpgrade extends PurchasableMechanicState {

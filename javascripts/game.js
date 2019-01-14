@@ -850,7 +850,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (player.celestials.teresa.run && !Teresa.has(5)) {
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
     factor = teresaMultiplier(new Decimal(factor)).toNumber();
   }
     
@@ -945,7 +945,7 @@ function gameLoop(diff, wormholeSpeedup) {
         player.partInfinitied -= 5;
         player.infinitied ++;
     }
-    if (Teresa.has(5) && player.currentEternityChall !== "eterc4") {
+    if (Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
       player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
 

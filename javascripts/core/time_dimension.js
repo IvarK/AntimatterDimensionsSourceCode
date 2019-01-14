@@ -164,7 +164,7 @@ class TimeDimensionState {
       mult = dilatedValueOf(mult);
     }
     
-    if (player.celestials.teresa.run) {
+    if (Teresa.isRunning) {
       mult = teresaMultiplier(mult);
     }
 

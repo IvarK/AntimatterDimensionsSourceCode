@@ -256,8 +256,8 @@ function reality(force, reset, auto) {
             }
         }
     }
-    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(6)) {
-      player.celestials.teresa.unlocks.push(6);
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) {
+      Teresa.unlock(TERESA_UNLOCKS.REALITY_COMPLETE);
     }
 
     GameCache.invalidate();

@@ -91,7 +91,7 @@ function getReplicantiInterval(noMod, interval) {
 let scaleLog10 = 308;
 let scaleFactor = 1.2;
 function replicantiCap() {
-  return Teresa.has(4) ? new Decimal(player.infinitied + player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
+  return Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE) ? new Decimal(player.infinitied + player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {

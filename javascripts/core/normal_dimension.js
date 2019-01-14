@@ -102,7 +102,7 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
-  if (player.celestials.teresa.run) {
+  if (Teresa.isRunning) {
     multiplier = teresaMultiplier(multiplier);
   }
   

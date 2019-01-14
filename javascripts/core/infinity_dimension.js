@@ -269,7 +269,7 @@ class InfinityDimensionState {
 
     mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
 
-    if (player.celestials.teresa.run) {
+    if (Teresa.isRunning) {
       mult = teresaMultiplier(mult);
     }
     

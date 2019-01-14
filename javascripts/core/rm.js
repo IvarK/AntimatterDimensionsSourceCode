@@ -578,7 +578,7 @@ function drop(ev) {
     return false
   }
 
-  let canAddGlyph = !player.celestials.teresa.run || !player.celestials.teresa.glyphEquipped;
+  let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
   if (ev.target.className.includes("glyphactive") && canAddGlyph) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {
       return glyph.id == data
@@ -595,7 +595,7 @@ function drop(ev) {
     }
     
     // Force a maximum of one glyph in Teresa Reality before Eternity
-    if (player.celestials.teresa.run && !Teresa.has(5)) {
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
       player.celestials.teresa.glyphEquipped = true
     }
     generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess

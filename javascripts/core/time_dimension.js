@@ -168,7 +168,7 @@ class TimeDimensionState {
   }
 
   get productionPerSecond() {
-    if (player.currentEternityChall === "eterc1" || player.currentEternityChall === "eterc10" || player.celestials.enslaved.run) {
+    if (player.currentEternityChall === "eterc1" || player.currentEternityChall === "eterc10" || Enslaved.isRunning) {
       return new Decimal(0);
     }
     if (player.currentEternityChall === "eterc11") {

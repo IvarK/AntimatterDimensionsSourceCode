@@ -36,6 +36,9 @@ Enslaved = {
   startRun() {
     player.celestials.enslaved.run = startRealityOver();
   },
+  get isRunning() {
+    return player.celestials.enslaved.run;
+  },
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
     this.infinityTracking.push(Math.floor(infinities))

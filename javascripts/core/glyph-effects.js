@@ -278,11 +278,45 @@ const GlyphEffects = Object.freeze(GlyphEffectList.reduce((out, eff) => {
 }, {}))
 
 function findGlyphTypeEffects(glyphType) {
-  return GlyphEffectList.filter(e => e.glyphTypes.includes(glyphType)).map(e => e.name);
+  return GlyphEffectList.filter(e => e.glyphTypes.includes(glyphType));
 }
 
+// These names are short; that's how we current store effect inside player
+// The name is concatenated with the glyph type to make the full effect name
 const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
 const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects= ["pow", "mult", "dimboost", "buy10"]
+
+/**
+ * @typedef {Object} GlyphTypeInfo
+ * @property {string} name
+ * @property {string} symbol
+ * @property {GlyphEffectInfo[]} effects
+ * @constant
+ * @type {GlyphTypeInfo[]}
+ */
+const GlyphTypeList = [
+  {
+    name: "time",
+    symbol: GLYPH_SYMBOLS.time,
+    effects: findGlyphTypeEffects("time"),
+  }, {
+    name: "dilation",
+    symbol: GLYPH_SYMBOLS.dilation,
+    effects: findGlyphTypeEffects("dilation"),
+  }, {
+    name: "replication",
+    symbol: GLYPH_SYMBOLS.replication,
+    effects: findGlyphTypeEffects("replication"),
+  }, {
+    name: "infinity",
+    symbol: GLYPH_SYMBOLS.infinity,
+    effects: findGlyphTypeEffects("infinity"),
+  }, {
+    name: "power",
+    symbol: GLYPH_SYMBOLS.power,
+    effects: findGlyphTypeEffects("power"),
+  }
+];

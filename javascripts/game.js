@@ -817,33 +817,50 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
-// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
-function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
+const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
+
+function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
+  if (effectsToConsider === undefined) {
+    effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
+  }
   let factor = 1;
-  if (player.currentEternityChall === "eterc12") {
+  if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
+    // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
+    // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
   }
-  if (takeGlyphsIntoAccount) {
+  if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
     factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   }
   
-  if (player.wormhole[0] !== undefined) {
-    if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
-    if (player.wormhole[0].active && player.wormhole[1].active && !player.wormholePause) factor *= player.wormhole[1].power
-    if (player.wormhole[0].active && player.wormhole[1].active && player.wormhole[2].active && !player.wormholePause) factor *= player.wormhole[2].power
-  } else dev.updateTestSave() // TODO, REMOVE
+  if (player.wormhole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
+    if (wormholeOverride !== undefined) {
+      factor *= wormholeOverride;
+    } else if (!player.wormholePause) {
+      for (let wormhole of player.wormhole) {
+        if (wormhole.active) {
+          factor *= wormhole.power;
+        } else {
+          // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
+          // they aren't currently active (instead they will activate as soon as the previous wormhole is active).
+          // Thus, as soon as we reach an inactive wormhole, we stop increasing the speedup factor.
+          break;
+        }
+      }
+    }
+  }
   
   return factor;
 }
 
 let autobuyerOnGameLoop = true;
 
-function gameLoop(diff, enslavedTick = false) {
+function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
-    if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
+    if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
 
     if (autobuyerOnGameLoop) {
@@ -860,23 +877,34 @@ function gameLoop(diff, enslavedTick = false) {
       }
     }
 
-    const speedFactor = getGameSpeedupFactor();
-    if (!player.celestials.enslaved.isStoring && !enslavedTick) {
-      DeltaTimeState.update(diff, speedFactor);
+    const realDiff = diff;
+
+    if (options.gameDiff === undefined) {
+      let speedFactor;
+      if (options.wormholeSpeedup === undefined) {
+        speedFactor = getGameSpeedupFactor();
+      } else {
+        // If we're in EC12, time shouldn't speed up at all.
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], options.wormholeSpeedup);
+      }
+      if (player.celestials.enslaved.isStoring) {
+        const speedFactorWithoutWormhole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
+        // Note that if gameDiff is specified, we don't store enslaved time.
+        // Currently this only happens in a tick where we're using all the enslaved time,
+        // but if it starts happening in other cases this will have to be reconsidered.
+        player.celestials.enslaved.stored += diff/1000 * (speedFactor - speedFactorWithoutWormhole);
+        speedFactor = speedFactorWithoutWormhole;
+      }
       diff *= speedFactor;
     } else {
-      const wormHoleSpeedFactor = getGameSpeedupFactor(false);
-      const glyphSpeedFactor = speedFactor / wormHoleSpeedFactor;
-      if (player.currentEternityChall == "eterc12") {
-        DeltaTimeState.update(diff, 1/1000);
-        diff /= 1000;
-      }
-      else {
-        DeltaTimeState.update(diff, glyphSpeedFactor);
-        if (!enslavedTick) player.celestials.enslaved.stored += diff/1000 * (wormHoleSpeedFactor - 1)
-      }
+      diff = options.gameDiff;
     }
-    
+
+    DeltaTimeState.update(realDiff, diff);
+
+    // Wormhole is affected only by time glyphs.
+    let wormholeDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
@@ -987,15 +1015,15 @@ function gameLoop(diff, enslavedTick = false) {
         }
     }
 
-    player.realTimePlayed += diff / speedFactor
-    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += diff / speedFactor
+    player.realTimePlayed += realDiff;
+    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
-    player.thisInfinityRealTime += diff / speedFactor
+    player.thisInfinityRealTime += realDiff;
     player.thisEternity += diff
-    player.thisEternityRealTime += diff / speedFactor
+    player.thisEternityRealTime += realDiff;
     player.thisReality += diff
-    player.thisRealityRealTime += diff / speedFactor
+    player.thisRealityRealTime += realDiff;
 
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
@@ -1196,16 +1224,13 @@ function gameLoop(diff, enslavedTick = false) {
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
-  if (player.wormhole[0].unlocked && !enslavedTick) {
-    if (!player.celestials.enslaved.isStoring) {
-      wormHoleLoop(diff, 0)
-      wormHoleLoop(diff, 1)
-      wormHoleLoop(diff, 2)
-    } else {
-      wormHoleLoop(diff * speedFactor, 0)
-      wormHoleLoop(diff * speedFactor, 1)
-      wormHoleLoop(diff * speedFactor, 2)
+  if (player.wormhole[0].unlocked && !player.wormholePause) {
+    updateWormholePhases(wormholeDiff);
+    for (let i = 0; i < player.wormhole.length; i++) {
+      updateWormholeStatusText(i);
+      updateWormholeupgradeDisplay(i);
     }
+    updateWormholeGraphics();
   }
   
   // Reality unlock and TTgen perk autobuy
@@ -1234,77 +1259,37 @@ function simulateTime(seconds, real, fast) {
     //calling it with fast will only simulate it with a max of 50 ticks
     var ticks = seconds * 20;
     var bonusDiff = 0;
-    var playerStart = Object.assign({}, player);
-    let wormholeActivations = 0;
+    var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
+
+    // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
+    if (ticks > 1000 && !real && !fast) {
+      bonusDiff = (ticks - 1000) / 20;
+      ticks = 1000;
+    } else if (ticks > 50 && fast) {
+      bonusDiff = (ticks - 50);
+      ticks = 50;
+    }
     
-    // Simulation code with wormhole (should be at most 600 ticks)
-    if (player.wormhole[0].unlocked) {
-      let wormholeCycleTime = player.wormhole[0].duration + player.wormhole[0].speed;
-      wormholeActivations = Math.floor(seconds / wormholeCycleTime);
-      
-      if (wormholeActivations < 2)  // Should be fine to just simulate the ticks
-        gameLoopWithAutobuyers(seconds / 600, 600, real)
-      else {
-        // Simulate until the start of the idle cycle (50 ticks each part) for code consistency
-        let simulatedAtStart = 0;
-        if (!player.wormhole[0].active) {
-          let simulatedIdleTime = player.wormhole[0].speed - player.wormhole[0].phase;
-          gameLoopWithAutobuyers(simulatedIdleTime / 50, 50, real);
-          setWormhole(true, 0);
-          simulatedAtStart += simulatedIdleTime;
-        }
-        let simulatedActiveTime = player.wormhole[0].duration - player.wormhole[0].phase;
-        gameLoopWithAutobuyers(simulatedActiveTime / 50, 50, real);
-        setWormhole(false, 0);
-        simulatedAtStart += simulatedActiveTime;
-        
-        // Calculate how much time to simulate after cycles, "borrowing" time from one activation if needed
-        let afterCycleTime = seconds - wormholeActivations * wormholeCycleTime - simulatedAtStart;
-        if (afterCycleTime < 0) {
-          afterCycleTime += wormholeCycleTime;
-          wormholeActivations--;
-        }
-        
-        // Simulate repeated wormhole activations
-        if (wormholeActivations < 100) { // Run X ticks per activation, half on and half off, maximum 400
-          let ticksPerActivation = Math.floor(400 / wormholeActivations);
-          for (let act = 0; act < wormholeActivations; act++) {
-            gameLoopWithAutobuyers(player.wormhole[0].speed / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(true, 0);
-            gameLoopWithAutobuyers(player.wormhole[0].duration / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(false, 0);
-          }
-        }
-        else {  // Calculates an average speedup and just does 400 ticks at that rate with the wormhole explicitly disabled after each tick
-          let avgSpeed = (player.wormhole[0].speed + player.wormhole[0].power * player.wormhole[0].duration) / wormholeCycleTime;
-          oldTotalTime = player.totalTimePlayed;
-          oldRealTime = player.realTimePlayed;
-          for (let ticksDone = 0; ticksDone < 400; ticksDone++) {
-            gameLoop(avgSpeed * seconds);
-            setWormhole(false, 0);
-            autoBuyerTick();
-          if (real)
-            console.log(ticksDone)
-          }
-          player.totalTimePlayed = oldTotalTime + 1000*seconds * avgSpeed;
-          player.realTimePlayed = oldRealTime + 1000*seconds;
-        }
-      
-        // Simulates another 100 ticks after the wormhole stuff to get the right phase
-        gameLoopWithAutobuyers(afterCycleTime / 100, 100, real);
+    // Simulation code with wormhole
+    if (player.wormhole[0].unlocked && !player.wormholePause) {
+      let remainingRealSeconds = seconds;
+      for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
+        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+        // The wormhole is affected by time glyphs, but nothing else.
+        let remainingWormholeSeconds = remainingRealSeconds * timeGlyphSpeedup;
+        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingWormholeSeconds, numberOfTicksRemaining, 0.0001);
+        realTickTime /= timeGlyphSpeedup;
+        remainingRealSeconds -= realTickTime;
+        // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
+        // (it doesn't run in gameLoop).
+        gameLoop(1000 * realTickTime, {wormholeSpeedup: wormholeSpeedup});
+        autoBuyerTick();
       }
     }
       
     // This is pretty much the older simulation code
-    else {  
-      if (ticks > 1000 && !real && !fast) {
-          bonusDiff = (ticks - 1000) / 20;
-          ticks = 1000;
-      } else if (ticks > 50 && fast) {
-          bonusDiff = (ticks - 50);
-          ticks = 50;
-      }
+    else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
     var popupString = "While you were away"
@@ -1315,7 +1300,12 @@ function simulateTime(seconds, real, fast) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
-    if (wormholeActivations != 0)  popupString+= " <br>The wormhole activated  "+ wormholeActivations + (wormholeActivations == 1 ? " time." : " times.")
+    for (let i = 0; i < player.wormhole.length; i++) {
+      let currentActivations = player.wormhole[i].activations;
+      let oldActivations = playerStart.wormhole[i].activations;
+      let activationsDiff = currentActivations - oldActivations;
+      if (activationsDiff > 0)  popupString += " <br>Wormhole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
+    }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")

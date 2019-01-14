@@ -229,6 +229,12 @@ function onLoad() {
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
   }
+
+  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the wormhole in the correct phase.
+  for (let i = 0; i < player.wormhole.length; i++) {
+    updateWormholeStatusText(i);
+  }
+  updateWormholeGraphics();
 }
 
 function convertAutobuyerMode() {

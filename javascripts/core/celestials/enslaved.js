@@ -20,7 +20,7 @@ Enslaved = {
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring
   },
   useStoredTime() {
-    gameLoop(player.celestials.enslaved.stored, true)
+    gameLoop(0, {gameDiff: player.celestials.enslaved.stored});
     player.celestials.enslaved.stored = 0
   },
   has(info) {

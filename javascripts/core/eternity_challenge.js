@@ -78,7 +78,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     resetMoney();
     playerInfinityUpgradesOnEternity();
     Marathon2 = 0;
-    player.infDimensionsUnlocked = [true, true, true, true, true, true, true, true]
     return true;
 }
 

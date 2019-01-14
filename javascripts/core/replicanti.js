@@ -105,17 +105,16 @@ function replicantiLoop(diff) {
     PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 
-    var est = Math.log(player.replicanti.chance+1) * 1000 / interval
-
     var current = player.replicanti.amount.ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 
     const isTS192Bought = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isTS192Bought)) {
-      let postScale = Math.log10(scaleFactor)/scaleLog10;
-      if (isTS192Bought) player.replicanti.amount = Decimal.pow(Math.E, current +Math.log((diff/100*est/10)*postScale + 1) / postScale)
-      else  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(Math.E, current +(diff/100*est/10)))
+      let postScale = Math.log10(scaleFactor) / scaleLog10;
+      let gainPerTick = diff / 1000 * (Math.log(player.replicanti.chance + 1) * 1000 / interval);
+      if (isTS192Bought) player.replicanti.amount = Decimal.pow(Math.E, current + Math.log(gainPerTick * postScale + 1) / postScale)
+      else  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(Math.E, current + gainPerTick))
       replicantiTicks = 0
     } else {
         if (interval <= replicantiTicks && player.replicanti.unl) {

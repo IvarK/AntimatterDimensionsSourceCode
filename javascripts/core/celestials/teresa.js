@@ -14,17 +14,17 @@ const TERESA_UNLOCKS = {
 }
 
 function teresaNerfFactor(power) {
-  let x = (power.max(10)).log10();
+  let x = Decimal.max(power, 10).log10();
   if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) return Math.min(1 + 0.5 * Math.log10(x), 10);
-  else  return Math.min(1 + 2.5*Math.log10(x), 20);
+  else  return Math.min(1 + 2.5 * Math.log10(x), 20);
 }
 
 function teresaTickspeed() {
-  return new Decimal(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10())).pow(6.5*teresaNerfFactor(player.timeShards)).min(1).times(1000);
+  return new Decimal(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10())).pow(6.5 * teresaNerfFactor(player.timeShards)).min(1).times(1000);
 }
 
 function teresaMultiplier(multiplier) {
-  return new Decimal(Math.pow((multiplier.plus(new Decimal(10))).log10(), teresaNerfFactor(player.infinityPower)));
+  return new Decimal(Math.pow(Decimal.plus(multiplier, new Decimal(10)).log10(), teresaNerfFactor(player.infinityPower)));
 }
 
 var Teresa = {

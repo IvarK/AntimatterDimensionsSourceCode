@@ -851,7 +851,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   }
   
   if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
-    factor = teresaMultiplier(new Decimal(factor)).toNumber();
+    factor = teresaMultiplier(factor).toNumber();
   }
     
   return factor;

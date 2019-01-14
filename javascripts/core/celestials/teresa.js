@@ -41,6 +41,9 @@ var Teresa = {
   has(id) {
     return player.celestials.teresa.unlocks.includes(id)
   },
+  unlock(id) {
+    player.celestials.teresa.unlocks.push(id);
+  },
   startRun() {
     respecGlyphs()
     startRealityOver()

@@ -100,8 +100,8 @@ function bigCrunchReset() {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
   
-    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(4)) {
-      player.celestials.teresa.unlocks.push(4);
+    if (player.celestials.teresa.run && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+      Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
     }
 }
 
@@ -181,8 +181,8 @@ function totalIPMult() {
       GlyphEffect.ipMult
     );
   if (player.celestials.teresa.run) {
-    if (!Teresa.has(4)) return new Decimal(1);
-    else if (!Teresa.has(5))  return defaultIPMult.pow(0.9);
+    if (!Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) return new Decimal(1);
+    else if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE))  return defaultIPMult.pow(0.9);
     else  return defaultIPMult;
   }
   return defaultIPMult

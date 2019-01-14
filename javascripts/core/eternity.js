@@ -156,8 +156,8 @@ function eternity(force, auto) {
       Autobuyer.tryUnlockAny();
     }
     
-    if (player.celestials.teresa.run && !player.celestials.teresa.unlocks.includes(5) && player.infinityPoints.gt(Number.MAX_VALUE)) {
-      player.celestials.teresa.unlocks.push(5);
+    if (player.celestials.teresa.run && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && player.infinityPoints.gt(Number.MAX_VALUE)) {
+      Teresa.unlock(TERESA_UNLOCKS.ETERNITY_COMPLETE);
       player.celestials.teresa.glyphEquipped = false;
     }
     

@@ -78,11 +78,11 @@ Vue.component('teresa-tab', {
       <div class="c-teresa-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
       <div class="c-teresa-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-teresa-shop">
-        <button class="o-teresa-shop-button" @click="buyUnlock(0, 50000)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.ADJUSTER) }">Unlock glyph level adjustment.<br>Cost: 50,000 Relic Shards</button>
-        <button class="o-teresa-shop-button" @click="buyUnlock(1, 2e6)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE) }">Unlock automatic glyph sacrifice.<br>Cost: 2,000,000 Relic Shards</button>
-        <button class="o-teresa-shop-button" @click="buyUnlock(2, 5e6)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.AUTOPICKER) }">Unlock automatic glyph picker.<br>Cost: 5,000,000 Relic Shards</button>
+        <button class="o-teresa-shop-button" @click="buyUnlock(0, 5e6)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.ADJUSTER) }">Unlock glyph level adjustment.<br>Cost: 5,000,000 Relic Shards</button>
+        <button class="o-teresa-shop-button" @click="buyUnlock(1, 2e8)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE) }">Unlock automatic glyph sacrifice.<br>Cost: 200,000,000 Relic Shards</button>
+        <button class="o-teresa-shop-button" @click="buyUnlock(2, 5e8)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.AUTOPICKER) }">Unlock automatic glyph picker.<br>Cost: 500,000,000 Relic Shards</button>
       </div>
-      <button class="o-teresa-shop-button" @click="buyUnlock(3, 1e7)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.RUN) }">Unlock Teresa's reality.<br>Cost: 10,000,000 Relic Shards</button>
+      <button class="o-teresa-shop-button" @click="buyUnlock(3, 1e9)" :class="{ 'teresa-unlock-bought': Teresa.has(TERESA_UNLOCKS.RUN) }">Unlock Teresa's reality.<br>Cost: 1,000,000,000 Relic Shards</button>
       <div class="l-teresa-glyph-settings">
         <div v-if="Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)">
           Highest type will be picked, lowest sacrificed.

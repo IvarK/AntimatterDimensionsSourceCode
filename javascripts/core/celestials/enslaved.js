@@ -7,7 +7,7 @@ const ENSLAVED_UNLOCKS = {
   },
   TIME_EFFECT_MULT: {
     id: 1,
-    price: 1000 * 60 * 60 * 24 * 365 * 1e24,
+    price: TimeSpan.fromYears(1e24).totalMilliseconds,
     description: "Infinities gained in the last 10 seconds multiplies time speed glyph effect"
   }
 

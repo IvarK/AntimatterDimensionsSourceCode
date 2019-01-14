@@ -889,10 +889,12 @@ function gameLoop(diff, options = {}) {
       }
       if (player.celestials.enslaved.isStoring) {
         const speedFactorWithoutWormhole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
+        // Note that in EC12, this is 0, so it's not an issue there.
+        const timeStoredFactor = speedFactor / speedFactorWithoutWormhole - 1;
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently this only happens in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
-        player.celestials.enslaved.stored += diff/1000 * (speedFactor - speedFactorWithoutWormhole);
+        player.celestials.enslaved.stored += diff/1000 * timeStoredFactor;
         speedFactor = speedFactorWithoutWormhole;
       }
       diff *= speedFactor;

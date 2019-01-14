@@ -139,31 +139,31 @@ function formatValue(notation, value, places, placesUnder1000) {
     }
 }
 
-shortenRateOfChange = function (money) {
+function shortenRateOfChange(money) {
   return shorten(money, 2, 2);
 };
 
-shortenCosts = function (money) {
+function shortenCosts(money) {
   return shorten(money, 0, 0);
 };
 
-shortenDimensions = function (money) {
+function shortenDimensions(money) {
   return shorten(money, 2, 0);
 };
 
-shortenMoney = function (money) {
+function shortenMoney(money) {
   return shorten(money, 2, 1);
 };
 
-shortenGlyphEffect = function (money) {
+function shortenGlyphEffect(money) {
   return shorten(money, 2, 3);
 };
 
-shortenMultiplier = function (money) {
+function shortenMultiplier(money) {
   return shorten(money, 1, 1);
 };
 
-shortenAutobuyerInput = function (money) {
+function shortenAutobuyerInput(money) {
   return formatValue("Scientific", money, 2, 0);
 };
 

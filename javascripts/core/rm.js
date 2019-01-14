@@ -11,23 +11,23 @@
 
 /**
  * dilationMult multiplies dilation gain
- * 
+ *
  * galaxy threshold reduce free galaxy threshold multiplier
- * 
+ *
  * TTgen generates slowly TT, amount is per second.
- * 
+ *
  * pow: normal dim multipliers ^ x while dilated
  */
 // const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 
 /**
- * 
+ *
  * replSpeed increases replication speed
- * 
+ *
  * pow raises repl mult to a power
- * 
+ *
  * replgain multiplies DT gain by replicanti amount ^ something
- * 
+ *
  * glyphlevel increases glyph level scaling from replicanti
  */
 // const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
@@ -37,7 +37,7 @@
  * rate: inf power conversion rate, ^(7+x)
  * ipgain: ip gain ^ x
  * infMult: multiplier to infinitied stat gain
- * 
+ *
  */
 // const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 
@@ -53,19 +53,23 @@
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow", "powermult", "powerdimboost", "powerbuy10", "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity", "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed", "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
 
-
-function estimate_curve(iterations, moreThan) {
-  min = 2
-  max = 0
-  over = 0
-  for (var i=0; i< iterations; i++) {
-    var x = gaussian_bell_curve()
+/**
+ *
+ * @param {number} iterations
+ * @param {number} moreThan
+ */
+function estimate_curve(iterations, moreThan) {  // eslint-disable-line no-unused-vars
+  let min = 2;
+  let max = 0;
+  let over = 0;
+  for (let i=0; i< iterations; i++) {
+    let x = gaussian_bell_curve()
     if (min > x) min = x
     if (max < x) max = x
     if (x > moreThan) over++
   }
   console.log("Maximum value of: " + max)
-  console.log("Over" + moreThan +" percentage: "+(over / i * 100)+"%")
+  console.log("Over" + moreThan +" percentage: "+(over / iterations * 100)+"%")
 }
 
 /**
@@ -75,17 +79,17 @@ function estimate_curve(iterations, moreThan) {
  * More than 1.5 approx 38.43%
  */
 function random() {
-  var x = Math.sin(player.reality.seed++) * 10000;
+  let x = Math.sin(player.reality.seed++) * 10000;
   return x - Math.floor(x);
 }
 
 function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
-  var u = 0, v = 0;
-  var minimumValue = 1
-  var ret = 1
+  let u = 0, v = 0;
+  let minimumValue = 1
+  let ret = 1
   if (player.reality.perks.includes(23)) minimumValue = 1.1
   while (ret <= minimumValue || u == 0 || v == 0) {
-    u = random(); 
+    u = random();
     v = random();
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
   }
@@ -93,26 +97,29 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
+/**
+ * @param {number} level
+ */
 function generateRandomGlyph(level) {
-  var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-  for (var i=0; player.reality.glyphs.last === type; i++) {
+  let type;
+  do {
     type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-  }
+  } while (player.reality.glyphs.last === type);
   player.reality.glyphs.last = type;
-  var strength = gaussian_bell_curve()
+  let strength = gaussian_bell_curve()
   if (player.reality.upg.includes(16)) strength *= 1.3
-  var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
+  let effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
   if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
     type = "power"
     effectAmount = 1
     player.reality.glyphs.last = "power"
   }
-  var idx = 0
-  var hasglyph = true
+  let idx = 0
+  let hasglyph = true
   while (hasglyph) {
     console.log(idx)
-    var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
+    let slot = player.reality.glyphs.inventory.find(g => g.idx === idx )
     if (slot !== undefined) idx++;
     else hasglyph = false
   }
@@ -128,9 +135,9 @@ function generateRandomGlyph(level) {
 }
 
 function newGlyph(glyph, type, effectAmount) {
-  var effects = []
+  let effects = []
   while (effects.length < effectAmount) {
-    var toAdd;
+    let toAdd;
     switch (type) {
       case "time":
         toAdd = timeEffects[Math.floor(random() * timeEffects.length)];
@@ -151,12 +158,9 @@ function newGlyph(glyph, type, effectAmount) {
     }
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
-
-  for (i in effects) {
-    var effect = effects[i]
-    if (effects.hasOwnProperty(i))
-      glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
-  }
+  effects.forEach(effect => {
+    glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
+  });
   return glyph
 }
 
@@ -303,7 +307,7 @@ function fixGlyph(glyph) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.strength == 1)
       glyph.strength = gaussian_bell_curve()
-    for (effect in glyph.effects)
+    for (var effect in glyph.effects)
       if (glyph.effects.hasOwnProperty(effect))
         glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
   }
@@ -376,7 +380,8 @@ function getGlyphTooltip(glyph) {
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + (glyph.level * glyph.strength * Effarig.runRewardMultiplier).toFixed(2) + " power</span>";
+    let reward = glyph.level * glyph.strength * Effarig.runRewardMultiplier;
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + reward.toFixed(2) + " power</span>";
   }
   tooltipText += "</div></span>"
   return tooltipText;
@@ -386,7 +391,7 @@ var mouseOn = $("document")
 function generateGlyphTable() {
   var table = document.getElementById("glyphs")
   var html = ""
-  
+
   var glyphs = player.reality.glyphs.inventory
   for (var row=1; row<=10; row++) {
     html += "<tr>"
@@ -411,7 +416,7 @@ function generateGlyphTable() {
       idx++;
       html += "</td>"
     }
-    
+
     html += "</tr>"
   }
 
@@ -433,9 +438,9 @@ function generateGlyphTable() {
     }
   }
   table.innerHTML = html
-  
+
   // Update total effect box (order is specified for consistency
-  isGlyphSoftcapActive = false;
+  let isGlyphSoftcapActive = false;
   let allActiveEffects = getActiveGlyphEffects();
   let activeEffectText = "";
   for (let i = 0; i < orderedEffectList.length; i++) {
@@ -618,25 +623,25 @@ function buyRealityUpg(id) {
 }
 
   function updateRealityUpgrades() {
-  for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
+  for (let i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
     else $("#rupg"+i).removeClass("rUpgUn")
   }
 
-  for (i in player.reality.upgReqs) {
-    if (i == 0) continue
-    var check = player.reality.upgReqs[i]
-    if (check) $("#rupg"+i).removeClass("rUpgReqNotMet")
-    else $("#rupg"+i).addClass("rUpgReqNotMet")
-  }
+  player.reality.upgReqs.forEach((check, idx) => {
+    if (idx > 0) {
+      if (check) $("#rupg"+i).removeClass("rUpgReqNotMet")
+      else $("#rupg"+i).addClass("rUpgReqNotMet")
+    }
+  });
 
-  for (var i = 1; i <= $(".realityUpgrade").length-5; i++) {
+  for (let i = 1; i <= $(".realityUpgrade").length-5; i++) {
     if (player.reality.upg.includes(i)) $("#rupg"+i).addClass("rUpgBought")
     else $("#rupg"+i).removeClass("rUpgBought")
   }
-  
-  row1Mults = [null, 3, 3, 3, 3, 5];
-  row1Costs = [null];
+
+  let row1Mults = [null, 3, 3, 3, 3, 5];
+  let row1Costs = [null];
   for (var i = 1; i <= 5; i++) {
 	  row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
 	  row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
@@ -691,7 +696,7 @@ function getGlyphSacEffect(type) {
   switch(type) {
     case "power":
     return Math.floor(Math.sqrt(player.reality.glyphs.sac[type]) / 2)
-    
+
     case "infinity":
     return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
 
@@ -720,7 +725,7 @@ function getGlyphSacDescription(type) {
 
     case "time":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-    
+
     case "replication":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
@@ -811,7 +816,7 @@ function getGlyphLevelInputs() {
   //                 optimal weights: 0.57, 0.14, 0.14, 0.14; result = 3675
   // Scaling does allow the user to produce results less than 1
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
-  // For display purposes, each term is divided independently by s.  
+  // For display purposes, each term is divided independently by s.
   const preScale = 5;
   let weights =  player.celestials.teresa.glyphWeights;
   var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;

@@ -894,7 +894,7 @@ function gameLoop(diff, options = {}) {
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently this only happens in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
-        player.celestials.enslaved.stored += diff/1000 * timeStoredFactor;
+        player.celestials.enslaved.stored += diff * timeStoredFactor;
         speedFactor = speedFactorWithoutWormhole;
       }
       diff *= speedFactor;
@@ -1230,7 +1230,7 @@ function gameLoop(diff, options = {}) {
     updateWormholePhases(wormholeDiff);
     for (let i = 0; i < player.wormhole.length; i++) {
       updateWormholeStatusText(i);
-      updateWormholeupgradeDisplay(i);
+      updateWormholeUpgradeDisplay(i);
     }
     updateWormholeGraphics();
   }

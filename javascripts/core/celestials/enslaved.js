@@ -2,12 +2,12 @@
 const ENSLAVED_UNLOCKS = {
   RUN: {
     id: 0,
-    price: TimeSpan.fromYears(1e20).totalMilliseconds,
+    price: TimeSpan.fromYears(1e24).totalMilliseconds,
     description: "Unlock The Enslaved One's reality.",
   },
   TIME_EFFECT_MULT: {
     id: 1,
-    price: TimeSpan.fromYears(1e24).totalMilliseconds,
+    price: TimeSpan.fromYears(1e28).totalMilliseconds,
     description: "Infinities gained in the last 10 seconds multiplies time speed glyph effect"
   }
 

@@ -2,7 +2,7 @@
 const ENSLAVED_UNLOCKS = {
   RUN: {
     id: 0,
-    price: 1000 * 60 * 60 * 24 * 365 * 1e20, // 1e24 years
+    price: TimeSpan.fromYears(1e20).totalMilliseconds,
     description: "Unlock The Enslaved One's reality.",
   },
   TIME_EFFECT_MULT: {

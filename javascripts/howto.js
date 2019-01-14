@@ -102,7 +102,7 @@ function updateSpoilers() {
 			if (i === 22 && player.realities >= 4) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 23 && player.reality.realityMachines >= 50 || player.reality.wormhole[0].unl) {
+			if (i === 23 && player.reality.realityMachines >= 50 || player.reality.wormhole[0].unlocked) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i === 24 && player.reality.upg.length === 20) {

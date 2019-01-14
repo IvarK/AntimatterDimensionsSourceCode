@@ -15,7 +15,7 @@ const TERESA_UNLOCKS = {
 
 function teresaNerfFactor(power) {
   let x = (power.max(10)).log10();
-  if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) return Math.min(1 + 0.5*Math.log10(x), 10);
+  if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) return Math.min(1 + 0.5 * Math.log10(x), 10);
   else  return Math.min(1 + 2.5*Math.log10(x), 20);
 }
 

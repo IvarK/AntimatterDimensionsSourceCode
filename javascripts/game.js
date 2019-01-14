@@ -873,7 +873,7 @@ function gameLoop(diff, enslavedTick = false) {
       }
       else {
         DeltaTimeState.update(diff, glyphSpeedFactor);
-        if (!enslavedTick) player.celestials.enslaved.stored += diff * (wormHoleSpeedFactor - 1)
+        if (!enslavedTick) player.celestials.enslaved.stored += diff/1000 * (wormHoleSpeedFactor - 1)
       }
     }
     

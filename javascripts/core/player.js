@@ -12,6 +12,7 @@ var implosionCheck = 0;
 var realizationCheck = 0;
 var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
+
 var player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),

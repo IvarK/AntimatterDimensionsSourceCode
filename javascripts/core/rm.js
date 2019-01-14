@@ -1,3 +1,6 @@
+// @ts-check
+
+"use strict";
 
 // TODO, add more types
 
@@ -239,54 +242,40 @@ const glyphEffectSoftcaps = {
   }*/
 };
 
-// Used for applying glyph effect softcaps if applicable
+/**
+ * getTotalEffect outputs the softcap status as well; this is just shorthand
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
 function getAdjustedGlyphEffect(effectKey) {
-  let value = getTotalEffect(effectKey);
-  if (glyphEffectSoftcaps.hasOwnProperty(effectKey)) {
-    const softcap = glyphEffectSoftcaps[effectKey];
-    return softcap(value.effect);
-  }
-  return value.effect;
+  return getTotalEffect(effectKey).value;
 }
 
-// Combines all specified glyph effects (without softcaps), reduces some boilerplate
-function getTotalEffect(effectKey) {
+/**
+ * Finds all equipped glyphs with the specified effect and returns an array of effect values.
+ * @param {string} effectKey
+ * @returns {number[]}
+ */
+function getGlyphEffectValues(effectKey) {
   let separated = separateEffectKey(effectKey);
   let type = separated[0];
   let effect = separated[1];
-  
-  let totalEffect = 0;
-  let glyphCount = 0;
-  let activeGlyphs = player.reality.glyphs.active;
-  for (let i = 0; i < activeGlyphs.length; i++) {
-    let currGlyph = activeGlyphs[i];
-    if (currGlyph.type === type && currGlyph.effects[effect] !== undefined) {
-      ++glyphCount;
-      if (totalEffect == 0) {
-        totalEffect = currGlyph.effects[effect];
-      } else {  // Combine the effects appropriately (some are additive)
-        if (effectKey === "replicationglyphlevel" || effectKey === "dilationTTgen" || effectKey === "infinityrate" || effectKey === "replicationdtgain") {
-          totalEffect += currGlyph.effects[effect];
-        } else if (effectKey == "replicationpow") {
-          totalEffect = currGlyph.effects[effect] + totalEffect - 1;
-        } else if (effectKey === "powermult") { // This is a Decimal
-          totalEffect = totalEffect.times(currGlyph.effects[effect]);
-        } else {
-          totalEffect *= currGlyph.effects[effect];
-        }
-      }
+  let info = GlyphEffects[effectKey];
+  if (info === undefined) {
+    console.error("Unknown glyph effect requested + '" + effectKey + "'")
+    return [];
+  }
+  return player.reality.glyphs.active.reduce((prev, glyph) => {
+    if (glyph.type === type && glyph.effects[effect] !== undefined) {
+      prev.push(glyph.effects[effect]);
     }
-  }
-  
-  if (effectKey === "powermult" && totalEffect == 0) {
-    return { effect: new Decimal(0), count: glyphCount, capped: true };
-  } else if (effectKey === "replicationglyphlevel" && glyphCount > 2) {
-    // past two glyphs, stacking offers diminishing returns; this makes 4 glyphs
-    // look like 3:
-    return { effect: totalEffect * 6 / (glyphCount + 4), count: glyphCount, capped:true };
-  } else {
-    return { effect: totalEffect, count: glyphCount, capped: false };
-  }
+    return prev;
+  }, []);
+}
+
+// Combines all specified glyph effects, reduces some boilerplate
+function getTotalEffect(effectKey) {
+  return GlyphEffects[effectKey].combine(getGlyphEffectValues(effectKey));
 }
 
 function recalculateAllGlyphs() {
@@ -343,28 +332,22 @@ function separateEffectKey(effectKey) {
 
 const NUMBERCOLOR = "#85ff85"
 const CAPPED_EFFECT_COLOR = "#ff8000"
-let isGlyphSoftcapActive;
-function getDesc(effectKey, x, inTooltip) {
-  let spanPrefix = ""
+function getGlyphTooltipDesc(effectKey, x) {
+  let spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
   let spanSuffix = "</span>"
-  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
-  } else {
-    let total = getTotalEffect(effectKey);
-    if (total.capped || (effectKey === "powermult" && !x.equals(total.effect)) || (effectKey !== "powermult" && x != total.effect)) {
-      spanPrefix = "<span style='color:" + CAPPED_EFFECT_COLOR + "'>"
-      isGlyphSoftcapActive = true;
-    } else {
-      spanPrefix = "<span>"
-    }
-  }
-  effect = GlyphEffects[effectKey];
-  if (inTooltip) { // Always color tooltips NUMBERCOLOR, only color total effects if capped
-    return effect.singleDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.singleDescSplit[1];
-  }
-  else {
-    return effect.totalDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.totalDescSplit[1];
-  }
+  let effect = GlyphEffects[effectKey];
+  return effect.singleDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.singleDescSplit[1];
+}
+
+/**
+ * @param {string} effectKey
+ * @param {GlyphEffectInfo__combine_result} effectStatus
+ */
+function getGlyphTableDesc(effectKey, effectStatus) {
+  let spanPrefix = effectStatus.capped ? "<span style='color:" + CAPPED_EFFECT_COLOR + "'>" : "<span>"
+  let spanSuffix = "</span>"
+  let info = GlyphEffects[effectKey];
+  return info.totalDescSplit[0] + spanPrefix + info.format(effectStatus.value) + spanSuffix + info.totalDescSplit[1];
 }
 
 function getGlyphTooltip(glyph) {
@@ -376,7 +359,7 @@ function getGlyphTooltip(glyph) {
     let type = separated[0];
     let effect = separated[1];
     if (glyph.type == type && glyph.effects["" + effect] !== undefined) {
-      tooltipText += getDesc(orderedEffectList[i], glyph.effects[effect], true) + "<br><br>"
+      tooltipText += getGlyphTooltipDesc(orderedEffectList[i], glyph.effects[effect]) + "<br><br>"
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
@@ -443,12 +426,10 @@ function generateGlyphTable() {
   let isGlyphSoftcapActive = false;
   let allActiveEffects = getActiveGlyphEffects();
   let activeEffectText = "";
-  for (let i = 0; i < orderedEffectList.length; i++) {
-    let currEffect = orderedEffectList[i];
-    if (allActiveEffects[currEffect] != undefined) {
-      activeEffectText += "<br>" + getDesc(currEffect, allActiveEffects[currEffect], false);
-    }
-  }
+  Object.keys(allActiveEffects).forEach(effect => {
+    isGlyphSoftcapActive = isGlyphSoftcapActive || allActiveEffects[effect].capped;
+    activeEffectText += "<br>" + getGlyphTableDesc(effect, allActiveEffects[effect]);
+  });
   if (isGlyphSoftcapActive) {
     activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
   }
@@ -463,15 +444,16 @@ function generateGlyphTable() {
   if (glyphs.every((g) => g.strength >= 2) && glyphs.length == 100) giveAchievement("I'm up all night to get lucky")
 }
 
+// returns both effect value and softcap status
 function getActiveGlyphEffects() {
-  allEffects = {};
-  for (let i = 0; i < orderedEffectList.length; i++) {
-    let effect = orderedEffectList[i]
-    let effectTotal = getAdjustedGlyphEffect(effect);
-    if ((effect === "powermult" && !effectTotal.equals(new Decimal(0))) || (effect !== "powermult" && effectTotal != 0)) {
-      allEffects[effect] = getAdjustedGlyphEffect(effect)
+  /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
+  let allEffects = {};
+  orderedEffectList.forEach(effect => {
+    let values = getGlyphEffectValues(effect);
+    if (values.length > 0) {
+      allEffects[effect] = GlyphEffects[effect].combine(values);
     }
-  }
+  });
   return allEffects;
 }
 
@@ -622,62 +604,62 @@ function buyRealityUpg(id) {
   return true
 }
 
-  function updateRealityUpgrades() {
-  for (let i = 1; i <= $(".realityUpgrade").length-5; i++) {
-    if (!canBuyRealityUpg(i)) $("#rupg"+i).addClass("rUpgUn")
-    else $("#rupg"+i).removeClass("rUpgUn")
+function updateRealityUpgrades() {
+  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+    if (!canBuyRealityUpg(i)) $("#rupg" + i).addClass("rUpgUn")
+    else $("#rupg" + i).removeClass("rUpgUn")
   }
 
   player.reality.upgReqs.forEach((check, idx) => {
     if (idx > 0) {
-      if (check) $("#rupg"+i).removeClass("rUpgReqNotMet")
-      else $("#rupg"+i).addClass("rUpgReqNotMet")
+      if (check) $("#rupg" + i).removeClass("rUpgReqNotMet")
+      else $("#rupg" + i).addClass("rUpgReqNotMet")
     }
   });
 
-  for (let i = 1; i <= $(".realityUpgrade").length-5; i++) {
-    if (player.reality.upg.includes(i)) $("#rupg"+i).addClass("rUpgBought")
-    else $("#rupg"+i).removeClass("rUpgBought")
+  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+    if (player.reality.upg.includes(i)) $("#rupg" + i).addClass("rUpgBought")
+    else $("#rupg" + i).removeClass("rUpgBought")
   }
 
   let row1Mults = [null, 3, 3, 3, 3, 5];
   let row1Costs = [null];
   for (var i = 1; i <= 5; i++) {
-	  row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-	  row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
+    row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
+    row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
   }
 
-  $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: "+ row1Mults[1] +"x<br>Cost: "+row1Costs[1]+" RM")
-  $("#rupg2").html("You gain Replicanti 3 times faster<br>Currently: "+ row1Mults[2] +"x<br>Cost: "+row1Costs[2]+" RM")
-  $("#rupg3").html("You gain 3 times more Eternities<br>Currently: "+ row1Mults[3] +"x<br>Cost: "+row1Costs[3]+" RM")
-  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: "+ row1Mults[4] +"x<br>Cost: "+row1Costs[4]+" RM")
-  $("#rupg5").html("You gain 5 times more Infinities<br>Currently: "+ row1Mults[5] +"x<br>Cost: "+row1Costs[5]+" RM")
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently "+shortenRateOfChange(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))+"x<br>Cost: 50 RM")
-  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently "+shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))+"x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently "+shortenRateOfChange(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6)))+"x<br>Cost: 100,000 RM")
+  $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")
+  $("#rupg2").html("You gain Replicanti 3 times faster<br>Currently: " + row1Mults[2] + "x<br>Cost: " + row1Costs[2] + " RM")
+  $("#rupg3").html("You gain 3 times more Eternities<br>Currently: " + row1Mults[3] + "x<br>Cost: " + row1Costs[3] + " RM")
+  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: " + row1Mults[4] + "x<br>Cost: " + row1Costs[4] + " RM")
+  $("#rupg5").html("You gain 5 times more Infinities<br>Currently: " + row1Mults[5] + "x<br>Cost: " + row1Costs[5] + " RM")
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + shortenRateOfChange(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1)) + "x<br>Cost: 50 RM")
+  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
+  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
 }
 
 function toggleGlyphRespec() {
   player.reality.respec = !player.reality.respec
   if (player.reality.respec) {
-	  $("#glyphRespec").addClass("rUpgBought")
-	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
+    $("#glyphRespec").addClass("rUpgBought")
+    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
   }
   else {
-	  $("#glyphRespec").removeClass("rUpgBought")
-	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
+    $("#glyphRespec").removeClass("rUpgBought")
+    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Your currently-equipped glyphs will stay equipped on reality.");
   }
 }
 
 function respecGlyphs() {
-  var idx = 0
-  var filledslots = []
-  for (var i=0; i<player.reality.glyphs.inventory.length; i++) {
+  let idx = 0
+  let filledslots = []
+  for (let i=0; i<player.reality.glyphs.inventory.length; i++) {
     filledslots[i] = player.reality.glyphs.inventory[i].idx
   }
-  for (var i=0; i<player.reality.glyphs.active.length; i++) {
-    var glyph = player.reality.glyphs.active[i]
-    for (var l=0; l<=100; l++) {
+  for (let i=0; i<player.reality.glyphs.active.length; i++) {
+    let glyph = player.reality.glyphs.active[i]
+    for (let l=0; l<=100; l++) {
       if (!filledslots.includes(l)) {
         filledslots[filledslots.length] = l;
         idx = l;
@@ -716,10 +698,10 @@ function getGlyphSacDescription(type) {
   let total = shortenRateOfChange(player.reality.glyphs.sac[type])
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
-    case "power":
-    let nextDistantGalaxy = Math.pow(2*(amount + 1), 2);
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
-
+    case "power": {
+      let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
+      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
+    }
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
 
@@ -784,6 +766,7 @@ function getGlyphLevelInputs() {
   // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
   // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
   let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
+  // @ts-ignore
   var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
   // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
   // factors assigned to repl and dt can be arbitrarily tuned

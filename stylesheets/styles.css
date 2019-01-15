@@ -4892,7 +4892,7 @@ screen and (max-width: 480px) {
   max-width: 35rem;
 }
 
-.o-enslaved-shop-button.o-enslaved-storing {
+.o-enslaved-shop-button--storing-time {
   background-color: rebeccapurple;
 }
 

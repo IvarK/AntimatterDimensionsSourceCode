@@ -54,7 +54,7 @@ Vue.component('enslaved-tab', {
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <button class="o-enslaved-shop-button" @click="startRun">
-          Start Enslaved One's Reality<br>IDs and TDs are disabled, but you gain a 3rd wormhole. You also gain some bonus based on
+          Start Enslaved One's Reality<br>IDs, TDs and replicanti are disabled, but you gain a 3rd wormhole. You also gain some bonus based on
           infinities gained in the last 10 seconds (real time). (I haven't decided what yet lol xd lmao)
         </button>
         <div>You have gained {{ shorten(enslavedInfinities) }} infinities in the last 10 seconds.</div>

@@ -102,6 +102,7 @@ function replicantiLoop(diff) {
         repMs -= diff;
         return;
     }
+    if (Enslaved.isRunning) return
     PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 

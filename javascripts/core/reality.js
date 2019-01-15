@@ -34,7 +34,8 @@ function reality(force, reset, auto) {
             document.getElementById("realityanimbg").style.animation = "";
             document.getElementById("realityanimbg").style.display = "none";
         }, 10000);
-        if (force === true) setTimeout(reality(true), 3000);
+        // I'm fairly sure this first case is currently impossible but I'm keeping it just in case.
+        if (force === true) setTimeout(function () {reality(true)}, 3000);
         else setTimeout(reality, 3000);
         return
     }
@@ -83,7 +84,7 @@ function reality(force, reset, auto) {
     if (player.reality.respec) {
         respecGlyphs();
     }
-    handleCelestialRuns()
+    handleCelestialRuns(force)
 
     //reset global values to avoid a tick of unupdated production
     postc8Mult = new Decimal(0);
@@ -261,13 +262,16 @@ function reality(force, reset, auto) {
     GameUI.dispatch(GameEvent.REALITY);
 }
 
-function handleCelestialRuns() {
+function handleCelestialRuns(force) {
   if (player.celestials.effarig.run) {
     player.celestials.effarig.run = false
-    if (player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+    if (!force && player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
   }
   if (player.celestials.teresa.run) {
     player.celestials.teresa.run = false
+  }
+  if (player.celestials.enslaved.run) {
+    player.celestials.enslaved.run = false
   }
 }
 

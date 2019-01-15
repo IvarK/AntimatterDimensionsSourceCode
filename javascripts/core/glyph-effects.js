@@ -4,281 +4,293 @@
 // There is a little too much stuff about glyph effects to put in constants.
 
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"]
-const GLYPH_SYMBOLS = {time:"Δ", dilation:"Ψ", replication:"Ξ", infinity:"∞", power:"Ω"}
+const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω" }
+
+const GlyphCombiner = Object.freeze({
+  add: x => x.reduce(Number.sumReducer, 0),
+  multiply: x => x.reduce(Number.prodReducer, 1),
+});
 
 /**
  * Multiple glyph effects are combined into a summary object of this type.
- * @typedef {Object} GlyphEffectInfo__combine_result
+ * @typedef {Object} GlyphEffectConfig__combine_result
  * @property {number | Decimal} value The final effect value (boost to whatever)
  * @property {boolean} capped whether or not a cap or limit was applied (softcaps, etc)
  *
- * @typedef {Object} GlyphEffectInfo
- * @property {function(number[]): GlyphEffectInfo__combine_result} combine
- * @property {string} name unique key for the effect -- powerpow, etc
- * @property {string[]} glyphTypes the types of glyphs this effect can occur on
- * @property {NumericToString<number | Decimal>} format formatting function for the effect (just the number
- *  conversion). Combined with the below to make descriptions
- * @property {string[]} singleDescSplit two element array, prefix and suffix for formatted description of a
- *  single glyph's effect (the value goes in between)
- * @property {string[]} totalDescSplit like singleDescSplit, but for description of the total effect across
- *  multiple glyphs
- * @property {string} genericDesc description of the effect without a specific value
- *
  * @class
- * @name GlyphEffectInfo
- * @constructor
- * @param {Object} setup The fields here mostly match the properties of GlyphEffectInfo
- * @param {string} setup.name powerpow, etc
- * @param {string[]} setup.glyphTypes
- * @param {string} setup.singleDesc Specify how to show a single glyph's effect. Use a string with {format}
- *  somewhere in it; that will be replaced with a number.
- * @param {string} [setup.totalDesc] (Defaults to singleDesc) specify how to show the combined effect of many
- *  glyphs.
- * @param {string} [setup.genericDesc] (Defaults to singleDesc with {format} replaced with "x") Generic
- *  description of the glyph's effect
- * @param {NumericToString<number | Decimal>} [setup.format] Format the effect's value into a string. Defaults
- *  to toFixed(3)
- * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
- *  effects are combined.
- * @param {((function(number[]): GlyphEffectInfo__combine_result) | string)} setup.combine Specification of how
- *  multiple glyphs combine. Can be "add" or "multiply" for most glyphs. Otherwise, should be a function that
- *  takes a potentially empty array of numbers (each glyph's effect value) and returns an object with the combined
- *  effect amd a capped indicator.
- *
- */
-function GlyphEffectInfo(setup) {
-  const KNOWN_KEYS = ["name", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "format", "combine", "softcap"]
-  const KNOWN_COMBINERS = {
-    add: x => x.reduce(Number.sumReducer, 0),
-    multiply: x => x.reduce(Number.prodReducer, 1),
-  };
-  Object.keys(setup).forEach(k => {
-    if (!KNOWN_KEYS.includes(k)) {
-      console.error("Glyph effect " + setup.name + " includes unrecognized field '" + k + "'");
+ * @name GlyphEffectConfig
+*/
+class GlyphEffectConfig {
+  /**
+  * @param {Object} setup The fields here mostly match the properties of GlyphEffectConfig
+  * @param {string} setup.id powerpow, etc
+  * @param {string[]} setup.glyphTypes
+  * @param {string} setup.singleDesc Specify how to show a single glyph's effect. Use a string with {value}
+  *  somewhere in it; that will be replaced with a number.
+  * @param {string} [setup.totalDesc] (Defaults to singleDesc) specify how to show the combined effect of many
+  *  glyphs.
+  * @param {string} [setup.genericDesc] (Defaults to singleDesc with {value} replaced with "x") Generic
+  *  description of the glyph's effect
+  * @param {NumericToString<number | Decimal>} [setup.formatEffect] Format the effect's value into a string. Defaults
+  *  to toFixed(3)
+  * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
+  *  effects are combined.
+  * @param {((function(number[]): GlyphEffectConfig__combine_result) | function(number[]): number)} setup.combine
+  *  Specification of how ultiple glyphs combine. Can be GlyphCombiner.add or GlyphCombiner.multiply for most glyphs.
+  *  Otherwise, should be a function that takes a potentially empty array of numbers (each glyph's effect value)
+  *  and returns a combined effect or an object with the combined effect amd a capped indicator.
+  *
+  */
+  constructor(setup) {
+    GlyphEffectConfig.checkInputs(setup);
+    /** @member{string}   unique key for the effect -- powerpow, etc */
+    this.id = setup.id;
+    /** @member{string[]} the types of glyphs this effect can occur on */
+    this.glyphTypes = setup.glyphTypes;
+    /** @member{string} See info about setup, above*/
+    this.singleDesc = setup.singleDesc;
+    /** @member{string} See info about setup, above*/
+    this.totalDesc = setup.totalDesc || setup.singleDesc;
+    /** @member {string} genericDesc description of the effect without a specific value  */
+    this.genericDesc = setup.genericDesc || setup.singleDesc.replace("{value}", "x");
+    /** @member {NumericToString<number | Decimal>} formatEffect formatting function for the effect
+    *  (just the number conversion). Combined with the description strings to make descriptions */
+    this.formatEffect = setup.formatEffect || (x => x.toFixed(3));
+    /** @member {function(number[]): GlyphEffectConfig__combine_result} combine Function that combines
+    * multiple glyph effects into one value (adds up, applies softcaps, etc)
+    */
+    this.combine = GlyphEffectConfig.setupCombine(setup);
+    /** @member {string[]} Split up single effect description (prefix and suffix to formatted value)*/
+    this.singleDescSplit = GlyphEffectConfig.splitOnFormat(this.singleDesc);
+    /** @member {string[]} Split up total effect description (prefix and suffix to formatted value)*/
+    this.totalDescSplit = GlyphEffectConfig.splitOnFormat(this.totalDesc);
+  }
+
+  /** @private */
+  static checkInputs(setup) {
+    const KNOWN_KEYS = ["id", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "formatEffect", "combine", "softcap"]
+    Object.keys(setup).forEach(k => {
+      if (!KNOWN_KEYS.includes(k)) {
+        console.error(`Glyph effect "${setup.id}" includes unrecognized field "${k}"`);
+      }
+    });
+    setup.glyphTypes.forEach(e => {
+      if (!GLYPH_TYPES.includes(e)) {
+        console.error(`Glyph effect "${setup.id}" references unknown glyphType "${e}"`);
+      }
+    });
+    let nullValue = setup.combine([]);
+    if (typeof (nullValue) != "number") {
+      if (nullValue.value === undefined || nullValue.capped === undefined) {
+        console.error(`combine function for glyph effect "${setup.id}" has invalid return type`)
+      }
     }
-  });
-  setup.glyphTypes.forEach(e => {
-    if (!GLYPH_TYPES.includes(e)) {
-      console.error("Glyph effect " + setup.name + " references unknown glyphType '" + e + "'");
-    }
-  });
-  /** @param {string} str
-   * @returns {string[]} */
-  var splitOnFormat = str => {
-    if (str.indexOf("{format}") == -1) {
-      console.error("Glyph description '" + str + "' does not include {format}")
+  }
+
+  /**
+   * @param {string} str
+   * @returns {string[]}
+   * @private
+   */
+  static splitOnFormat(str) {
+    if (str.indexOf("{value}") == -1) {
+      console.error(`Glyph description "${str}" does not include {value}`)
       return [str, ""];
     } else {
-      return str.split("{format}");
+      return str.split("{value}");
     }
   }
-  this.name = setup.name;
-  this.glyphTypes = setup.glyphTypes;
-  this.singleDesc = setup.singleDesc;
-  this.totalDesc = setup.totalDesc || setup.singleDesc;
-  this.genericDesc = setup.genericDesc || setup.singleDesc.replace("{format}", "x");
-  this.format = setup.format || (x => x.toFixed(3));
-  if (typeof(setup.combine) === "string") {
-    let combiner = KNOWN_COMBINERS[setup.combine];
-    if (combiner === undefined) {
-      console.error("Unrecognized combine value '" + setup.combine + "'");
-    } else if (setup.softcap === undefined) {
-      this.combine = effects => ({value: combiner(effects), capped: false});
-    } else {
-      let softcap = setup.softcap;
-      delete setup.softcap;
-      this.combine = effects => {
-        let rawValue = combiner(effects);
-        let cappedValue = softcap(rawValue);
-        return {value: cappedValue, capped: rawValue !== cappedValue};
-      }
-    }
-  } else {
-    let nullValue = setup.combine([]);
-    if (nullValue.value === undefined || nullValue.capped === undefined) {
-      console.error("combine function for glyph effect '" + setup.name + "' has invalid return type")
-    }
-    if (setup.softcap !== undefined) {
-      let neqTest = nullValue.value instanceof Decimal ? (a,b) => a.neq(b) : (a,b) => a !== b;
-      let combiner = setup.combine;
-      let softcap = setup.softcap;
-      this.combine = effects => {
-        let rawValue = combiner(effects);
-        let cappedValue = softcap(rawValue.value);
-        return {value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value !== cappedValue)};
+
+  /**
+   * @private
+   */
+  static setupCombine(setup) {
+    let combine = setup.combine;
+    let softcap = setup.softcap;
+    let nullValue = combine([]);
+    if (typeof (nullValue) === "number") {   // no supplied capped indicator
+      if (softcap === undefined) {
+        return effects => ({ value: combine(effects), capped: false });
+      } else {
+        return effects => {
+          let rawValue = combine(effects);
+          let cappedValue = softcap(rawValue);
+          return { value: cappedValue, capped: rawValue !== cappedValue };
+        }
       }
     } else {
-      this.combine = setup.combine;
+      if (softcap !== undefined) {
+        let neqTest = nullValue.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
+        return combine = effects => {
+          let rawValue = combine(effects);
+          let cappedValue = softcap(rawValue.value);
+          return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
+        }
+      } else {
+        return combine;
+      }
     }
   }
-  this.singleDescSplit = splitOnFormat(this.singleDesc);
-  this.totalDescSplit = splitOnFormat(this.totalDesc);
 }
 
-/**
- * See GlyphEffectInfo documentation above
-  @constant
-  @type {GlyphEffectInfo[]}
- */
-const GlyphEffectList = [
-  new GlyphEffectInfo({
-    name: "timepow",
+GameDatabase.reality.glyphEffects = [
+  {
+    id: "timepow",
     glyphTypes: ["time"],
-    singleDesc: "Time Dimension multipliers ^{format}",
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "timespeed",
+    singleDesc: "Time Dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "timespeed",
     glyphTypes: ["time"],
-    singleDesc: "Multiply game speed by {format}",
-    totalDesc: "Game runs × {format} faster ",
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "timefreeTickMult",
+    singleDesc: "Multiply game speed by {value}",
+    totalDesc: "Game runs × {value} faster ",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "timefreeTickMult",
     glyphTypes: ["time"],
-    singleDesc: "Free tickspeed threshold multiplier ×{format}",
+    singleDesc: "Free tickspeed threshold multiplier ×{value}",
     // accurately represent what the multiplier actually does in code, assuming TS171
+    // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
+    // than the description implies.
     /** @type{function(number): string} */
-    format: x => (x + (1-x)/TS171_MULTIPLIER).toFixed(3),
-    combine: "multiply",
+    formatEffect: x => (x + (1 - x) / TS171_MULTIPLIER).toFixed(3),
+    combine: GlyphCombiner.multiply,
     /** @type{function(number): number} */
     softcap: value => Math.max(1e-5, value), // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
-  }), new GlyphEffectInfo({
-    name: "timeeternity",
+  }, {
+    id: "timeeternity",
     glyphTypes: ["time"],
-    singleDesc: "Multiply EP gain by {format}",
-    totalDesc: "EP gain ×{format}",
-    format: shortenDimensions,
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "dilationdilationMult",
+    singleDesc: "Multiply EP gain by {value}",
+    totalDesc: "EP gain ×{value}",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "dilationdilationMult",
     glyphTypes: ["dilation"],
-    singleDesc: "Multiply Dilated Time gain by {format}",
-    totalDesc: "DT gain ×{format}",
-    format: shortenDimensions,
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "dilationgalaxyThreshold",
+    singleDesc: "Multiply Dilated Time gain by {value}",
+    totalDesc: "DT gain ×{value}",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "dilationgalaxyThreshold",
     glyphTypes: ["dilation"],
-    singleDesc: "Free galaxy threshold multiplier ×{format}",
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "dilationTTgen",
+    singleDesc: "Free galaxy threshold multiplier ×{value}",
+    combine: GlyphCombiner.multiply,
+  }, {  // TTgen generates slowly TT, value amount is per second, displayed per hour
+    id: "dilationTTgen",
     glyphTypes: ["dilation"],
-    singleDesc: "Generates {format} TT per hour",
-    totalDesc: "Generating {format} TT per hour",
+    singleDesc: "Generates {value} TT per hour",
+    totalDesc: "Generating {value} TT per hour",
     /** @type {function(number): string} */
-    format: x => (3600 * x).toFixed(2),
-    combine: "add",
-  }), new GlyphEffectInfo({
-    name: "dilationpow",
+    formatEffect: x => (3600 * x).toFixed(2),
+    combine: GlyphCombiner.add,
+  }, {
+    id: "dilationpow",
     glyphTypes: ["dilation"],
     // FIXME, <br> is a little weird to have here
-    singleDesc: "Normal Dimension multipliers <br>^{format} while dilated",
-    totalDesc:  "Normal Dimension multipliers ^{format} while dilated",
-    combine: "multiply",
+    singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
+    totalDesc: "Normal Dimension multipliers ^{value} while dilated",
+    combine: GlyphCombiner.multiply,
     /** @type {function(number): number} */
     softcap: value => value > 10 ? 10 + Math.pow(value - 10, 0.5) : value,
-  }), new GlyphEffectInfo({
-    name: "replicationspeed",
+  }, {
+    id: "replicationspeed",
     glyphTypes: ["replication"],
-    singleDesc: "Multiply replication speed by {format}",
-    totalDesc: "Replication speed ×{format}",
-    format: shortenDimensions,
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "replicationpow",
+    singleDesc: "Multiply replication speed by {value}",
+    totalDesc: "Replication speed ×{value}",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "replicationpow",
     glyphTypes: ["replication"],
-    singleDesc: "Replicanti multiplier ^{format}",
+    singleDesc: "Replicanti multiplier ^{value}",
     combine: effects => {
       // Combines things additively, while keeping a null value of 1.
-      return {value: effects.reduce(Number.sumReducer, 1 - effects.length), capped: false};
+      return { value: effects.reduce(Number.sumReducer, 1 - effects.length), capped: false };
     }
-  }), new GlyphEffectInfo({
-    name: "replicationdtgain",
+  }, {
+    id: "replicationdtgain",
     glyphTypes: ["replication"],
-    singleDesc: "Multiply DT gain by <br>log₁₀(replicanti)×{format}",
-    totalDesc: "DT gain from log₁₀(replicanti)×{format}",
-    format: x => x.toFixed(5),
-    combine: "add",
-  }), new GlyphEffectInfo({
-    name: "replicationglyphlevel",
+    singleDesc: "Multiply DT gain by <br>log₁₀(replicanti)×{value}",
+    totalDesc: "DT gain from log₁₀(replicanti)×{value}",
+    formatEffect: x => x.toFixed(5),
+    combine: GlyphCombiner.add,
+  }, {
+    id: "replicationglyphlevel",
     glyphTypes: ["replication"],
-    singleDesc: "Replicanti scaling for next glyph level: <br>^0.4 ➜ ^(0.4 + {format})",
-    totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {format})",
+    singleDesc: "Replicanti scaling for next glyph level: <br>^0.4 ➜ ^(0.4 + {value})",
+    totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
     combine: effects => {
       let sum = effects.reduce(Number.sumReducer, 0);
       if (effects.length > 2) sum *= 6 / (effects.length + 4);
-      return sum > 0.1 ? {value: 0.1 + 0.2*(sum - 0.1), capped: true} : {value: sum, capped: effects.length > 2};
+      return sum > 0.1
+        ? { value: 0.1 + 0.2 * (sum - 0.1), capped: true }
+        : { value: sum, capped: effects.length > 2 };
     }
-  }), new GlyphEffectInfo({
-    name: "infinitypow",
+  }, {
+    id: "infinitypow",
     glyphTypes: ["infinity"],
-    singleDesc: "Infinity Dimension multipliers ^{format}",
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "infinityrate",
+    singleDesc: "Infinity Dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "infinityrate",
     glyphTypes: ["infinity"],
-    singleDesc: "Infinity power conversion rate: <br>^7 -> ^(7 + {format})",
-    totalDesc: "Infinity power conversion rate: ^7 -> ^(7 + {format})",
-    format: x => x.toFixed(2),
-    combine: "add",
+    singleDesc: "Infinity power conversion rate: <br>^7 -> ^(7 + {value})",
+    totalDesc: "Infinity power conversion rate: ^7 -> ^(7 + {value})",
+    formatEffect: x => x.toFixed(2),
+    combine: GlyphCombiner.add,
     /** @type {function(number):number} */
-    softcap: value => value > 0.7 ? 0.7 + 0.2*(value - 0.7) : value,
-  }), new GlyphEffectInfo({
-    name: "infinityipgain",
+    softcap: value => value > 0.7 ? 0.7 + 0.2 * (value - 0.7) : value,
+  }, {
+    id: "infinityipgain",
     glyphTypes: ["infinity"],
-    singleDesc: "Multiply IP gain by {format}",
-    totalDesc: "IP gain ×{format}",
+    singleDesc: "Multiply IP gain by {value}",
+    totalDesc: "IP gain ×{value}",
     genericDesc: "Multiply IP gain",
-    format: shortenDimensions,
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "infinityinfmult",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "infinityinfmult",
     glyphTypes: ["infinity"],
-    singleDesc: "Multiply infinitied stat gain by {format}",
-    totalDesc: "Infinitied stat gain ×{format}",
+    singleDesc: "Multiply infinitied stat gain by {value}",
+    totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Multiply infinitied stat gain",
-    format: shortenDimensions,
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "powerpow",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: GlyphCombiner.multiply,
+  }, {  //  * pow is for exponent on time dim multiplier (^1.02) or something like that
+    id: "powerpow",
     glyphTypes: ["power"],
-    singleDesc: "Normal Dimension multipliers ^{format}",
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "powermult",
+    singleDesc: "Normal Dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "powermult",
     glyphTypes: ["power"],
-    singleDesc: "Normal Dimension multipliers ×{format}",
-    format: shortenDimensions,
-    combine: effects => ({value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false}),
-  }), new GlyphEffectInfo({
-    name: "powerdimboost",
+    singleDesc: "Normal Dimension multipliers ×{value}",
+    formatEffect: x => shorten(x, 2, 0),
+    combine: effects => ({ value: effects.reduce(Decimal.prodReducer, new Decimal(1)), capped: false }),
+  }, {
+    id: "powerdimboost",
     glyphTypes: ["power"],
-    singleDesc: "Dimension Boost multiplier ×{format}",
+    singleDesc: "Dimension Boost multiplier ×{value}",
     genericDesc: "Dimension Boost multiplier",
-    format: x => x.toFixed(2),
-    combine: "multiply",
-  }), new GlyphEffectInfo({
-    name: "powerbuy10",
+    formatEffect: x => x.toFixed(2),
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "powerbuy10",
     glyphTypes: ["power"],
-    singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {format}",
-    totalDesc: "Multiplier from \"Buy 10\" ×{format}",
+    singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {value}",
+    totalDesc: "Multiplier from \"Buy 10\" ×{value}",
     genericDesc: "Multiply the bonus gained from buying 10 Dimensions",
-    format: x => x.toFixed(2),
-    combine: "multiply",
-  })
-];
-
-/**
- * @type {Object.<string, GlyphEffectInfo>}
- */
-const GlyphEffects = Object.freeze(GlyphEffectList.reduce((out, eff) => {
-  out[eff.name] = eff;
-  return out;
-}, {}))
+    formatEffect: x => x.toFixed(2),
+    combine: GlyphCombiner.multiply,
+  }
+].reduce((prev, effect) => {
+  prev[effect.id] = new GlyphEffectConfig(effect);
+  return prev;
+}, {});
 
 function findGlyphTypeEffects(glyphType) {
-  return GlyphEffectList.filter(e => e.glyphTypes.includes(glyphType));
+  return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
 // These names are short; that's how we current store effect inside player
@@ -287,13 +299,13 @@ const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
 const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
-const powerEffects= ["pow", "mult", "dimboost", "buy10"]
+const powerEffects = ["pow", "mult", "dimboost", "buy10"]
 
 /**
  * @typedef {Object} GlyphTypeInfo
  * @property {string} name
  * @property {string} symbol
- * @property {GlyphEffectInfo[]} effects
+ * @property {GlyphEffectConfig[]} effects
  * @constant
  * @type {GlyphTypeInfo[]}
  */

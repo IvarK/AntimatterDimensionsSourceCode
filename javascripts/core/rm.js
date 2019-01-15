@@ -3,77 +3,14 @@
 "use strict";
 
 // TODO, add more types
-
-/**
- * pow is for exponent on time dim multiplier (^1.02) or something like that
- * speed is for multiplied game speed
- * freeTickMult reduces the threshold between free tickspeed upgrades (Math.pow(multiplier, 1/x))
- * eternity is a static multiplier on EP gain NOT SURE IF THIS IS GOOD
- */
-// const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
-
-/**
- * dilationMult multiplies dilation gain
- *
- * galaxy threshold reduce free galaxy threshold multiplier
- *
- * TTgen generates slowly TT, amount is per second.
- *
- * pow: normal dim multipliers ^ x while dilated
- */
-// const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
-
-/**
- *
- * replSpeed increases replication speed
- *
- * pow raises repl mult to a power
- *
- * replgain multiplies DT gain by replicanti amount ^ something
- *
- * glyphlevel increases glyph level scaling from replicanti
- */
-// const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
-
-/**
- * pow: inf dim mult ^ x
- * rate: inf power conversion rate, ^(7+x)
- * ipgain: ip gain ^ x
- * infMult: multiplier to infinitied stat gain
- *
- */
-// const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
-
-/**
- * pow: dim mult ^ x
- * mult: normal dim mult
- * dimboost: multiply dim boost effect
- * autochall: do challenges automatically.
- */
-// const powerEffects= ["pow", "mult", "dimboost", "buy10"]
-
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
-const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow", "dilationpow", "powermult", "powerdimboost", "powerbuy10", "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity", "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed", "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
+const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
+                           "dilationpow", "powermult", "powerdimboost", "powerbuy10",
+                           "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
+                           "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
+                           "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
 
-/**
- *
- * @param {number} iterations
- * @param {number} moreThan
- */
-function estimate_curve(iterations, moreThan) {  // eslint-disable-line no-unused-vars
-  let min = 2;
-  let max = 0;
-  let over = 0;
-  for (let i=0; i< iterations; i++) {
-    let x = gaussian_bell_curve()
-    if (min > x) min = x
-    if (max < x) max = x
-    if (x > moreThan) over++
-  }
-  console.log("Maximum value of: " + max)
-  console.log("Over" + moreThan +" percentage: "+(over / iterations * 100)+"%")
-}
 
 /**
  * More than 3 approx 0.001%
@@ -161,9 +98,9 @@ function newGlyph(glyph, type, effectAmount) {
     }
     if (!effects.includes(toAdd)) effects.push(toAdd)
   }
-  effects.forEach(effect => {
+  for (let effect of effects) {
     glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
-  });
+  };
   return glyph
 }
 
@@ -220,28 +157,6 @@ function getGlyphEffectStrength(effectKey, level, strength) {
   }
 }
 
-const glyphEffectSoftcaps = {
-  infinityrate(value) {
-    return value > 0.7 ? 0.7 + 0.2*(value - 0.7) : value;
-  },
-  dilationpow(value) {
-    return value > 10 ? 10 + Math.pow(value - 10, 0.5) : value;
-  },
-  replicationglyphlevel(value) {
-    return value > 0.1 ? 0.1 + 0.2*(value - 0.1) : value;
-  },
-  timefreeTickMult(value) { // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
-    return value != 0 ? Math.max(1e-5, value) : 0;
-  }
-  /*, I'm leaving this as as template for other caps; this provides a smooth transition,
-  unlike, say, the dilationpow cap above
-  replicationpow(value) {
-    const T = 8;
-    const S = 1; // softness; 1: 12->10, 20->12, 32->14
-    return value < T ? value : T - S + Math.sqrt(2*S*(value-T-S/2));
-  }*/
-};
-
 /**
  * getTotalEffect outputs the softcap status as well; this is just shorthand
  * @param {string} effectKey
@@ -260,22 +175,19 @@ function getGlyphEffectValues(effectKey) {
   let separated = separateEffectKey(effectKey);
   let type = separated[0];
   let effect = separated[1];
-  let info = GlyphEffects[effectKey];
-  if (info === undefined) {
-    console.error("Unknown glyph effect requested + '" + effectKey + "'")
+  let effectDef = GameDatabase.reality.glyphEffects[effectKey];
+  if (effectDef === undefined) {
+    console.error(`Unknown glyph effect requested "${effectKey}"'`)
     return [];
   }
-  return player.reality.glyphs.active.reduce((prev, glyph) => {
-    if (glyph.type === type && glyph.effects[effect] !== undefined) {
-      prev.push(glyph.effects[effect]);
-    }
-    return prev;
-  }, []);
+  return player.reality.glyphs.active
+    .filter(glyph => glyph.type === type && glyph.effects[effect] !== undefined)
+    .map(glyph => glyph.effects[effect]);
 }
 
 // Combines all specified glyph effects, reduces some boilerplate
 function getTotalEffect(effectKey) {
-  return GlyphEffects[effectKey].combine(getGlyphEffectValues(effectKey));
+  return GameDatabase.reality.glyphEffects[effectKey].combine(getGlyphEffectValues(effectKey));
 }
 
 function recalculateAllGlyphs() {
@@ -296,7 +208,7 @@ function fixGlyph(glyph) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.strength == 1)
       glyph.strength = gaussian_bell_curve()
-    for (var effect in glyph.effects)
+    for (let effect in glyph.effects)
       if (glyph.effects.hasOwnProperty(effect))
         glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
   }
@@ -335,8 +247,8 @@ const CAPPED_EFFECT_COLOR = "#ff8000"
 function getGlyphTooltipDesc(effectKey, x) {
   let spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
   let spanSuffix = "</span>"
-  let effect = GlyphEffects[effectKey];
-  return effect.singleDescSplit[0] + spanPrefix + effect.format(x) + spanSuffix + effect.singleDescSplit[1];
+  let effect = GameDatabase.reality.glyphEffects[effectKey];
+  return effect.singleDescSplit[0] + spanPrefix + effect.formatEffect(x) + spanSuffix + effect.singleDescSplit[1];
 }
 
 /**
@@ -346,8 +258,9 @@ function getGlyphTooltipDesc(effectKey, x) {
 function getGlyphTableDesc(effectKey, effectStatus) {
   let spanPrefix = effectStatus.capped ? "<span style='color:" + CAPPED_EFFECT_COLOR + "'>" : "<span>"
   let spanSuffix = "</span>"
-  let info = GlyphEffects[effectKey];
-  return info.totalDescSplit[0] + spanPrefix + info.format(effectStatus.value) + spanSuffix + info.totalDescSplit[1];
+  let effect = GameDatabase.reality.glyphEffects[effectKey];
+  return effect.totalDescSplit[0] + spanPrefix + effect.formatEffect(effectStatus.value) +
+         spanSuffix + effect.totalDescSplit[1];
 }
 
 function getGlyphTooltip(glyph) {
@@ -426,10 +339,10 @@ function generateGlyphTable() {
   let isGlyphSoftcapActive = false;
   let allActiveEffects = getActiveGlyphEffects();
   let activeEffectText = "";
-  Object.keys(allActiveEffects).forEach(effect => {
+  for (let effect of Object.keys(allActiveEffects)) {
     isGlyphSoftcapActive = isGlyphSoftcapActive || allActiveEffects[effect].capped;
     activeEffectText += "<br>" + getGlyphTableDesc(effect, allActiveEffects[effect]);
-  });
+  };
   if (isGlyphSoftcapActive) {
     activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
   }
@@ -448,12 +361,12 @@ function generateGlyphTable() {
 function getActiveGlyphEffects() {
   /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
   let allEffects = {};
-  orderedEffectList.forEach(effect => {
+  for (let effect of orderedEffectList) {
     let values = getGlyphEffectValues(effect);
     if (values.length > 0) {
-      allEffects[effect] = GlyphEffects[effect].combine(values);
+      allEffects[effect] = GameDatabase.reality.glyphEffects[effect].combine(values);
     }
-  });
+  };
   return allEffects;
 }
 

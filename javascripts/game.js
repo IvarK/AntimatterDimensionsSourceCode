@@ -1072,8 +1072,8 @@ function gameLoop(diff, options = {}) {
       1.33,
       TimeStudy(171)
     );
-    // FIXME: the glyph effect should not return 0.
-    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult") != 0 ? getAdjustedGlyphEffect("timefreeTickMult") : 1;
+
+    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
     tickmult = 1 + (tickmult - 1) * multFromGlyph;
 
     if (player.timeShards.gt(0)) {

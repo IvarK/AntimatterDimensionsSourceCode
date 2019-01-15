@@ -1,4 +1,3 @@
-var gameLoopIntervalId;
 var Marathon = 0;
 var Marathon2 = 0;
 var auto = false;
@@ -477,3 +476,59 @@ const Player = {
     return GameCache.dimensionMultDecrease.value;
   }
 };
+
+function guardFromNaNValues(obj) {
+  function isObject (obj) {
+    return obj !== null && typeof obj === "object" && !(obj instanceof Decimal);
+  }
+
+  for (let key in obj) {
+    if (!obj.hasOwnProperty(key)) continue;
+
+    let value = obj[key];
+    if (isObject(value)) {
+      guardFromNaNValues(value);
+      continue;
+    }
+
+    if (typeof value === "number") {
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: () => value,
+        set: function guardedSetter(newValue) {
+          if (newValue === null || newValue === undefined) {
+            crash("null/undefined player property assignment");
+          }
+          if (typeof newValue !== "number") {
+            crash("Non-Number assignment to Number player property");
+          }
+          if (!isFinite(newValue)) {
+            crash("NaN player property assignment");
+          }
+          value = newValue;
+        }
+      });
+    }
+
+    if (value instanceof Decimal) {
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: () => value,
+        set: function guardedSetter(newValue) {
+          if (newValue === null || newValue === undefined) {
+            crash("null/undefined player property assignment");
+          }
+          if (!(newValue instanceof Decimal)) {
+            crash("Non-Decimal assignment to Decimal player property");
+          }
+          if (!isFinite(newValue.mantissa) || !isFinite(newValue.exponent)) {
+            crash("NaN player property assignment");
+          }
+          value = newValue;
+        }
+      });
+    }
+  }
+}

@@ -23,6 +23,9 @@ function onLoad() {
     player.thisEternity = player.totalTimePlayed;
   }
   player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
+  if (isDevEnvironment()) {
+    guardFromNaNValues(player);
+  }
   if (player.infinitied > 0 && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }

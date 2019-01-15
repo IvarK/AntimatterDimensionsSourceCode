@@ -877,7 +877,7 @@ function gameLoop(diff, options = {}) {
         if (Autobuyer.tickTimer > autobuyerInterval) {
           Autobuyer.tickTimer = autobuyerInterval;
         }
-        autoBuyerTick();
+        Autobuyer.tick();
       }
     }
 
@@ -1255,7 +1255,7 @@ function gameLoop(diff, options = {}) {
 function gameLoopWithAutobuyers(seconds, ticks, real) {
   for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
     gameLoop(1000 * seconds)
-    autoBuyerTick();
+    Autobuyer.tick();
     if (real)
       console.log(ticksDone)
   }
@@ -1293,7 +1293,7 @@ function simulateTime(seconds, real, fast) {
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).
         gameLoop(1000 * realTickTime, {wormholeSpeedup: wormholeSpeedup});
-        autoBuyerTick();
+        Autobuyer.tick();
       }
     }
       
@@ -1324,10 +1324,6 @@ function simulateTime(seconds, real, fast) {
     autobuyerOnGameLoop = true;
 }
 
-function startInterval() {
-    gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
-}
-
 function updateChart(first) {
     if (first !== true && (player.infinitied >= 1 || player.eternities >= 1) && player.options.chart.on === true) {
         if (Challenge(3).isRunning) {
@@ -1343,10 +1339,6 @@ function updateChart(first) {
     }
 }
 updateChart(true);
-
-function autoBuyerTick() {
-  Autobuyer.tick();
-}
 
 function autoBuyDilationUpgrades() {
   if (player.reality.perks.includes(12)) {
@@ -1488,17 +1480,13 @@ function init() {
 }
 
 setInterval(function () {
-    save_game()
-}, 30000);
-
-setInterval(function () {
     if (playFabId != -1 && player.options.cloud) playFabSaveCheck();
 }, 1000*60*5)
 document.getElementById("hiddenheader").style.display = "none";
 
 
 window.onload = function() {
-    startInterval()
+    GameIntervals.start();
     setTimeout(function() {
         if (kong.enabled) {
             playFabLogin();
@@ -1575,3 +1563,16 @@ let tweenTime = 0;
 
     animateTweens();
 }());
+
+function crash(message) {
+  Keyboard.stopSpins();
+  GameIntervals.stop();
+  // TODO: remove after consolidation of all intervals.
+  const id = setInterval(() => {}, 9999); // Get a reference to the last
+  // interval +1
+  for (let i = 1; i < id; i++) {
+    clearInterval(i);
+  }
+  Modal.message.show(`Fatal error:<br>${message}<br>Check the console for more details`);
+  console.error(message);
+}

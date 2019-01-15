@@ -13,7 +13,7 @@ const ENSLAVED_UNLOCKS = {
 
 }
 
-Enslaved = {
+const Enslaved = {
   infinityTracking: [],
   totalInfinities: 0,
   toggleStore() {

@@ -4852,19 +4852,19 @@ screen and (max-width: 480px) {
 /* #startregion enslaved tab */
 
 .o-enslaved-shop-button {
-  padding: 17px;
+  padding: 1.7rem;
   font-size: 2rem;
   background-color: #5151ec;
   color: white;
   border: none;
-  border-radius: 5px;
-  margin: 10px;
+  border-radius: .5rem;
+  margin: 1rem;
   cursor: pointer;
   transition-duration: 0.12s;
-  max-width: 350px;
+  max-width: 35rem;
 }
 
-.o-enslaved-shop-button.storing {
+.o-enslaved-shop-button.o-enslaved-storing {
   background-color: rebeccapurple;
 }
 

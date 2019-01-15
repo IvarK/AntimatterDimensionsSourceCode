@@ -618,7 +618,7 @@ function getNewInfReq() {
 
 
 function newDimension() {
-    if (player.money.gte(getNewInfReq())) {
+    if (player.reality.perks.includes(67) || (player.money.gte(getNewInfReq()))) {
         if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
         else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
         else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
@@ -850,12 +850,16 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+    factor = teresaMultiplier(factor).toNumber();
+  }
+    
   return factor;
 }
 
 let autobuyerOnGameLoop = true;
 
-function gameLoop(diff, wormholeSpeedup) {
+function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     var thisUpdate = new Date().getTime();
@@ -877,17 +881,36 @@ function gameLoop(diff, wormholeSpeedup) {
       }
     }
 
-    let speedFactor;
-    if (wormholeSpeedup === undefined) {
-      speedFactor = getGameSpeedupFactor();
+    const realDiff = diff;
+
+    if (options.gameDiff === undefined) {
+      let speedFactor;
+      if (options.wormholeSpeedup === undefined) {
+        speedFactor = getGameSpeedupFactor();
+      } else {
+        // If we're in EC12, time shouldn't speed up at all.
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], options.wormholeSpeedup);
+      }
+      if (player.celestials.enslaved.isStoring) {
+        const speedFactorWithoutWormhole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
+        // Note that in EC12, this is 0, so it's not an issue there.
+        const timeStoredFactor = speedFactor / speedFactorWithoutWormhole - 1;
+        // Note that if gameDiff is specified, we don't store enslaved time.
+        // Currently this only happens in a tick where we're using all the enslaved time,
+        // but if it starts happening in other cases this will have to be reconsidered.
+        player.celestials.enslaved.stored += diff * timeStoredFactor;
+        speedFactor = speedFactorWithoutWormhole;
+      }
+      diff *= speedFactor;
     } else {
-      // If we're in EC12, time shouldn't speed up at all.
-      speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], wormholeSpeedup);
+      diff = options.gameDiff;
     }
+
+    DeltaTimeState.update(realDiff, diff);
+
     // Wormhole is affected only by time glyphs.
-    let wormholeDiff = diff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
-    DeltaTimeState.update(diff, speedFactor);
-    diff *= speedFactor;
+    let wormholeDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
@@ -921,15 +944,18 @@ function gameLoop(diff, wormholeSpeedup) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (!player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
-        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
     }
 
     if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
         if (player.reality.upg.includes(11)) {
-            player.infinitied += Math.floor(gainedInfinities() * 0.1) * diff/1000
+          let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
+          player.infinitied += gained
+          Enslaved.trackInfinityGeneration(gained)
+
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {
@@ -940,6 +966,9 @@ function gameLoop(diff, wormholeSpeedup) {
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
         player.infinitied ++;
+    }
+    if (Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
+      player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
 
     if (player.reality.upg.includes(14)) {
@@ -995,15 +1024,15 @@ function gameLoop(diff, wormholeSpeedup) {
         }
     }
 
-    player.realTimePlayed += diff / speedFactor
-    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += diff / speedFactor
+    player.realTimePlayed += realDiff;
+    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
-    player.thisInfinityRealTime += diff / speedFactor
+    player.thisInfinityRealTime += realDiff;
     player.thisEternity += diff
-    player.thisEternityRealTime += diff / speedFactor
+    player.thisEternityRealTime += realDiff;
     player.thisReality += diff
-    player.thisRealityRealTime += diff / speedFactor
+    player.thisRealityRealTime += realDiff;
 
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
@@ -1160,7 +1189,7 @@ function gameLoop(diff, wormholeSpeedup) {
     }
 
     var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && getNewInfReq().lt(player.money) && player.infDimensionsUnlocked[7] === false) {
+    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || player.reality.perks.includes(67)) && player.infDimensionsUnlocked[7] === false) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
@@ -1174,7 +1203,7 @@ function gameLoop(diff, wormholeSpeedup) {
     player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
 
   // Adjust the text on the reality button in order to minimize text overflowing
-  let glyphLevelText = "<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)";
+  let glyphLevelText = "<br>Glyph level: "+gainedGlyphLevel().toFixed(0)+" ("+percentToNextGlyphLevel()+"%)";
   if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
     document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to Reality again!"
 	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely
@@ -1208,6 +1237,7 @@ function gameLoop(diff, wormholeSpeedup) {
     updateWormholePhases(wormholeDiff);
     for (let i = 0; i < player.wormhole.length; i++) {
       updateWormholeStatusText(i);
+      updateWormholeUpgradeDisplay(i);
     }
     updateWormholeGraphics();
   }
@@ -1262,7 +1292,7 @@ function simulateTime(seconds, real, fast) {
         remainingRealSeconds -= realTickTime;
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).
-        gameLoop(1000 * realTickTime, wormholeSpeedup);
+        gameLoop(1000 * realTickTime, {wormholeSpeedup: wormholeSpeedup});
         autoBuyerTick();
       }
     }

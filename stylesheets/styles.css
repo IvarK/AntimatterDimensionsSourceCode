@@ -4877,6 +4877,27 @@ screen and (max-width: 480px) {
 
 /* #endregion teresa tab*/
 
+/* #startregion enslaved tab */
+
+.o-enslaved-shop-button {
+  padding: 1.7rem;
+  font-size: 2rem;
+  background-color: #5151ec;
+  color: white;
+  border: none;
+  border-radius: .5rem;
+  margin: 1rem;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  max-width: 35rem;
+}
+
+.o-enslaved-shop-button--storing-time {
+  background-color: rebeccapurple;
+}
+
+/* #endregion enslaved tab*/
+
 .c-performance-stats {
   width: 25rem;
   padding: .3rem;

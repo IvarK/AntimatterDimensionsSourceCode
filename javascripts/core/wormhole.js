@@ -48,16 +48,19 @@ function unlockWormhole() {
 
 function getWormholeIntervalCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
+    if (i == 2) amountOfPurchases += 33
     return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
 }
 
 function getWormholePowerCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
+    if (i == 2) amountOfPurchases += 58
     return Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
 }
 
 function getWormholeDurationCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.wormhole[i].duration / (10 - i*3)) / Math.log(1.3))
+    if (i == 2) amountOfPurchases += 30
     return Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
 }
 
@@ -95,14 +98,12 @@ function setWormhole(state, i) {
   player.wormhole[i].phase = 0;
 }
 
-let totalPhase;
-
 function updateWormholePhases(wormholeDiff) {
   // This code is intended to successfully update the wormhole phases
   // even for very large values of wormholeDiff.
   wormholeDiff /= 1000;
   let activePeriods = getRealTimePeriodsWithWormholeActive(wormholeDiff);
-  for (let i = 0; i < player.wormhole.length && player.wormhole[i].unlocked; i++) {
+  for (let i = 0; i < player.wormhole.length && wormholeIsUnlocked(player.wormhole[i]); i++) {
     let wormhole = player.wormhole[i];
     // Prevents a flickering wormhole if phase gets set too high
     // (shouldn't ever happen in practice). Also, more importantly,
@@ -132,16 +133,31 @@ function updateWormholePhases(wormholeDiff) {
   }
   if (player.wormhole[0].phase >= 60 * 60 * 24) giveAchievement("Bruh, are you like, inside the hole?")
 }
+
+// All the wormholes act unlocked while Enslaved is running.
+function wormholeIsUnlocked (wormhole) {
+  return wormhole.unlocked || Enslaved.isRunning;
+}
+
+function updateWormholeUpgradeDisplay (i) {
+  if (wormholeIsUnlocked(player.wormhole[i])) {
+    $("#whupg" + (i + 1)).show();
+  } else {
+    $("#whupg" + (i + 1)).hide();
+  }
+}
+
 function updateWormholeStatusText(i) {
   let wormhole = player.wormhole[i];
-  if (!wormhole.unlocked) return
-
-  if (wormhole.active && (i === 0 || player.wormhole[i-1].active))
+  if (!wormholeIsUnlocked(wormhole)) {
+    document.getElementById("wormholeStatus" + (i + 1)).textContent = "";
+  } else if (wormhole.active && (i === 0 || player.wormhole[i-1].active)) {
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" is active for " + (wormhole.duration - wormhole.phase).toFixed(1) + " more seconds.";
-  else if (wormhole.active)
+  } else if (wormhole.active) {
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate with wormhole " + i + " (for " + (Math.max(0, wormhole.duration - wormhole.phase)).toFixed(1) + " sec)";
-  else
+  } else {
     document.getElementById("wormholeStatus" + (i + 1)).textContent = "Wormhole "+ ( i + 1 ) +" will activate in " + (wormhole.speed - wormhole.phase).toFixed(1) + " seconds.";
+  }
 }
 
 function updateWormholeGraphics() {
@@ -424,7 +440,7 @@ function binarySearch(start, end, evaluationFunction, target, tolerance) {
 // (player.wormhole[i].power being the speedup from player.wormhole[i]).
 function calculateWormholeSpeedups() {
   let speedups = [1];
-  for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
+  for (let wormhole of player.wormhole.filter(wormholeIsUnlocked)) {
     speedups.push(speedups.last() * wormhole.power);
   }
   return speedups;
@@ -464,7 +480,7 @@ function getRealTimePeriodsWithWormholeEffective(realTime) {
 // with first element being the "no wormhole" state that is normal game.
 function getRealTimePeriodsWithWormholeActive(realTime) {
   let activePeriods = [realTime];
-  for (let wormhole of player.wormhole.filter(wh => wh.unlocked)) {
+  for (let wormhole of player.wormhole.filter(wormholeIsUnlocked)) {
     const activeTime = getRealTimeWithWormholeActive(wormhole, activePeriods.last())
     activePeriods.push(activeTime);
   }

@@ -195,7 +195,7 @@ function reality(force, reset, auto) {
     resetChallengeStuff();
     resetDimensions();
     secondSoftReset();
-    if (player.reality.upg.includes(10)) player.eternities = 100;
+    if (player.reality.upg.includes(10))    player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
     if (player.infinitied > 0 && !Challenge(1).isCompleted) {
@@ -253,6 +253,10 @@ function reality(force, reset, auto) {
             }
         }
     }
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) {
+      Teresa.unlock(TERESA_UNLOCKS.REALITY_COMPLETE);
+    }
+
     GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
 }
@@ -261,6 +265,9 @@ function handleCelestialRuns() {
   if (player.celestials.effarig.run) {
     player.celestials.effarig.run = false
     if (player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+  }
+  if (player.celestials.teresa.run) {
+    player.celestials.teresa.run = false
   }
 }
 

@@ -99,6 +99,10 @@ function bigCrunchReset() {
     if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
+  
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+      Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
+    }
 }
 
 function secondSoftReset() {
@@ -160,7 +164,10 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  return player.infMult
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+    return new Decimal(1);
+  }
+  let ipMult = player.infMult
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -176,6 +183,10 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+    ipMult = ipMult.pow(0.9);
+  }
+  return ipMult;
 }
 
 class InfinityUpgrade extends PurchasableMechanicState {

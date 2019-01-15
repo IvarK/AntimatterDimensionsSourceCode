@@ -201,7 +201,11 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timepow":
       return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45)/75
     case "timespeed":
-      return 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
+      let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
+      if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
+        return ret * Math.max(Math.sqrt(Math.log10(Enslaved.totalInfinities)), 1)
+      }
+      else return ret
     case "timefreeTickMult":
       return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
     case "timeeternity":
@@ -578,7 +582,8 @@ function drop(ev) {
     return false
   }
 
-  if (ev.target.className.includes("glyphactive")) {
+  let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
+  if (ev.target.className.includes("glyphactive") && canAddGlyph) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {
       return glyph.id == data
     })
@@ -592,7 +597,13 @@ function drop(ev) {
       })
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
-  } else {
+    
+    // Force a maximum of one glyph in Teresa Reality before Eternity
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+      player.celestials.teresa.glyphEquipped = true
+    }
+    generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
+  } else if (!ev.target.className.includes("glyphactive")) {
     var glyph = player.reality.glyphs.active.find(function(glyph) {
       return glyph.id == data
     })

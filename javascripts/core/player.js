@@ -384,6 +384,12 @@ var player = {
         eternities: 25
       },
       typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+    },
+    enslaved: {
+      isStoring: false,
+      stored: 0,
+      unlocks: [],
+      run: false
     }
   },
   autoEcIsOn: true,

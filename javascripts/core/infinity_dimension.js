@@ -179,7 +179,7 @@ class InfinityDimensionState {
   }
 
   get isUnlocked() {
-    return player.infDimensionsUnlocked[this._tier - 1] || player.eternities >= 25;
+    return player.infDimensionsUnlocked[this._tier - 1];
   }
 
   get requirement() {

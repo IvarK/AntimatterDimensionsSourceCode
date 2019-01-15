@@ -618,7 +618,7 @@ function getNewInfReq() {
 
 
 function newDimension() {
-    if (player.money.gte(getNewInfReq())) {
+    if (player.reality.perks.includes(67) || (player.money.gte(getNewInfReq()))) {
         if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
         else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
         else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
@@ -1167,7 +1167,7 @@ function gameLoop(diff, wormholeSpeedup) {
     }
 
     var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && getNewInfReq().lt(player.money) && player.infDimensionsUnlocked[7] === false) {
+    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || player.reality.perks.includes(67)) && player.infDimensionsUnlocked[7] === false) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }

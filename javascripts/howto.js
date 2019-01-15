@@ -121,7 +121,7 @@ function updateSpoilers() {
 			}
 		}
 	} else {
-		for (i=1; i<18; i++) {
+		for (i=1; i<24; i++) {
 			document.getElementById("div"+i+"btn").style.display = "block";
 			document.getElementById("div"+i+"hr").style.display = "block";
 		}

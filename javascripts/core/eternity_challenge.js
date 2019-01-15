@@ -184,17 +184,30 @@ function EternityChallenge(id) {
 }
 
 /**
+ * @type {EternityChallengeState[]}
+ */
+EternityChallenge.all = EternityChallengeState.all;
+
+/**
  * @returns {EternityChallengeState}
  */
-EternityChallenge.current = function() {
+EternityChallenge.current = () => {
   if (player.currentEternityChall === String.empty) return undefined;
   const id = parseInt(player.currentEternityChall.split("eterc")[1]);
   return EternityChallenge(id);
 };
 
-EternityChallenge.isRunning = function() {
-  return player.currentEternityChall !== String.empty;
+EternityChallenge.isRunning = () => player.currentEternityChall !== String.empty;
+
+EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
+
+EternityChallenge.completedTiers = () => {
+  return EternityChallenge.all
+    .map(ec => ec.completions)
+    .sum();
 };
+
+EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
   if (player.reality.perks.includes(95)) return TimeSpan.fromHours(0.5).totalMilliseconds
@@ -223,14 +236,5 @@ EternityChallenge.autoCompleteTick  = function() {
   while (player.reality.lastAutoEC - threshold > 0) {
     this.autoCompleteNext()
     player.reality.lastAutoEC -= threshold
-    //TODO: REMOVE this code, because it's not really needed, and is just to prevent infinite loading times when encountering the offline wormhole time played bug
-    //extra failsafe
-    let eterchallscompletedtotal = 0;
-    for (let i = 1; i < Object.keys(player.eternityChalls).length + 1; i++) {
-        eterchallscompletedtotal += player.eternityChalls["eterc" + i]
-    }
-    if (eterchallscompletedtotal === 60) {
-      return
-    }
   }
 }

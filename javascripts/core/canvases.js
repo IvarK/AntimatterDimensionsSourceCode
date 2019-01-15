@@ -163,6 +163,7 @@ function drawPerkNetwork() {
     {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time Dimension 5-8 unlocks."}, //DONE
     {id: 65, label: "65", color: getNodeColor(65, 1), title: "Automatically unlock TT generation when you have 1e15 DT."}, //DONE
     {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock Reality at e4000 EP."}, //DONE
+    {id: 67, label: "67", color: getNodeColor(67, 1), title: "Infinity Dimensions no longer have antimatter requirements."}, //DONE
     {id: 71, label: "71", color: getNodeColor(71, 1), title: "Remove the EC5 requirement from study 62."}, //DONE
     {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
     {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this Eternity." }, //DONE

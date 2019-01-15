@@ -136,10 +136,6 @@ function dilatedValueOf(value) {
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 
-function dilatedTickspeed() {
-  return dilatedValueOf(player.tickspeed);
-}
-
 class DilationUpgradeState extends PurchasableMechanicState {
   constructor(config) {
     super(config, Currency.dilatedTime, () => player.dilation.upgrades);

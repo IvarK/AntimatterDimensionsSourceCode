@@ -42,7 +42,7 @@ Vue.component('enslaved-tab', {
     `<div class="l-enslaved-celestial-tab">
       <div class="l-enslaved-top-container">
         <div class="o-enslaved-stored-time"> You have {{ timeDisplayShort(stored) }} stored</div>
-        <button class="o-enslaved-shop-button" :class="{o-enslaved-storing: isStoring}" @click="toggleStore">{{ isStoring ? "Storing wormhole time": "Store wormhole time" }}</button>
+        <button class="o-enslaved-shop-button" :class="{'o-enslaved-storing': isStoring}" @click="toggleStore">{{ isStoring ? "Storing wormhole time": "Store wormhole time" }}</button>
         <button class="o-enslaved-shop-button" @click="useStored">Use all stored time in a single tick</button>
       </div>
       <div class="l-enslaved-shop-container">

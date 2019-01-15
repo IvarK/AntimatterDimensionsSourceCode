@@ -175,7 +175,7 @@ const newsArray = [
   ["If you notice any issues with a news ticker message, please report them on the <a href='https://discord.gg/Z628PkM' target='_blank'>Discord</a> by clicking that link right there.", "a172"],
 
 // Patreon ones
-  ["Is this a jojo reference?", "pat1"],
+  ["Is this a jojo reference?", "pat1", () => true],
 
 //basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],

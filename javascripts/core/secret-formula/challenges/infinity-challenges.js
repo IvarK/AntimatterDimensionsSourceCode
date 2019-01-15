@@ -62,10 +62,7 @@ GameDatabase.challenges.infinity = [
     formatEffect: value => formatX(value, 1, 2),
     reward: {
       description: "Tickspeed affects Infinity Dimensions with reduced effect",
-      effect: () => {
-        const tickspeed = player.dilation.active ? dilatedTickspeed() : player.tickspeed;
-        return new Decimal(1000).dividedBy(tickspeed).pow(0.0005);
-      },
+      effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     }
   },

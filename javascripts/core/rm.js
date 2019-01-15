@@ -582,7 +582,8 @@ function drop(ev) {
     return false
   }
 
-  if (ev.target.className.includes("glyphactive")) {
+  let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
+  if (ev.target.className.includes("glyphactive") && canAddGlyph) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {
       return glyph.id == data
     })
@@ -596,7 +597,13 @@ function drop(ev) {
       })
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
-  } else {
+    
+    // Force a maximum of one glyph in Teresa Reality before Eternity
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+      player.celestials.teresa.glyphEquipped = true
+    }
+    generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
+  } else if (!ev.target.className.includes("glyphactive")) {
     var glyph = player.reality.glyphs.active.find(function(glyph) {
       return glyph.id == data
     })

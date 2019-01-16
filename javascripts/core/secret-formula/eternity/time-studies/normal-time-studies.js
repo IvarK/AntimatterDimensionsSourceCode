@@ -274,8 +274,8 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 192,
     cost: 730,
     description: () =>
-      `You can get beyond ${shorten(Number.MAX_VALUE, 2, 1)} ` +
-      "Replicanti, but the interval is increased the more you have"
+      `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
+      "but growth slows down at higher replicanti amounts."
   },
   {
     id: 193,

@@ -26,6 +26,9 @@ const AutoRealityMode = {
   BOTH: "both"
 };
 
+// Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
+const TS171_MULTIPLIER = 1.25;
+
 // Use through Automator.Instructions; here to support
 // creation of index by ID
 const _AutomatorInstructions = Object.freeze({

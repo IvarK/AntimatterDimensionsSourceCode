@@ -26,9 +26,9 @@ class KeySpin {
   }
 }
 
-class Keyboard {
+class GameKeyboard {
   static stopSpins() {
-    for (const spin of Keyboard.spins) {
+    for (const spin of GameKeyboard.spins) {
       spin.stop();
     }
   }
@@ -50,16 +50,21 @@ class Keyboard {
   }
 
   static _bindSpin(key, spin) {
-    if (Keyboard.spins.find(spin => spin.key === key)) {
+    if (GameKeyboard.spins.find(spin => spin.key === key)) {
       throw `Duplicate spin binding for ${key}`;
     }
-    Keyboard.spins.push(spin);
+    GameKeyboard.spins.push(spin);
     Mousetrap.bind(key, () => spin.start(), "keydown");
     Mousetrap.bind(key, () => spin.stop(), "keyup");
   }
+
+  static disable() {
+    this.stopSpins();
+    Mousetrap.reset();
+  }
 }
 
-Keyboard.spins = [];
+GameKeyboard.spins = [];
 
 function executeHotkey(action) {
   if (!player.options.hotkeys || controlDown ||

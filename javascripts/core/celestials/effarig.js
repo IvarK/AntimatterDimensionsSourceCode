@@ -84,7 +84,7 @@ var Effarig = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, 1 + Math.pow(Math.log10(player.realities), 1.5)), 1)
+    return Decimal.max(Decimal.pow(player.celestials.effarig.bestRunAM.e / 5e8, 1 + Math.pow(Math.log10(player.realities), 1.5)), 1).toNumber()
   },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]

@@ -5,7 +5,9 @@ const GameDatabase = {
   eternity: {
     timeStudies: {}
   },
-  reality: {}
+  reality: {
+    glyphEffects: {}
+  }
 };
 
 function mapGameData(gameData, mapFn) {

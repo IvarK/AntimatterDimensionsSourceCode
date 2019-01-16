@@ -10,7 +10,7 @@ Vue.component('effarig-tab', {
       quote: "",
       quoteIdx: 0,
       unlocks: [],
-      runReward: new Decimal(0),
+      runReward: 0,
       glyphUpg: {
         cost: 1,
         mult: 1

@@ -499,13 +499,13 @@ function guardFromNaNValues(obj) {
         get: () => value,
         set: function guardedSetter(newValue) {
           if (newValue === null || newValue === undefined) {
-            crash("null/undefined player property assignment");
+            throw crash("null/undefined player property assignment");
           }
           if (typeof newValue !== "number") {
-            crash("Non-Number assignment to Number player property");
+            throw crash("Non-Number assignment to Number player property");
           }
           if (!isFinite(newValue)) {
-            crash("NaN player property assignment");
+            throw crash("NaN player property assignment");
           }
           value = newValue;
         }
@@ -519,13 +519,13 @@ function guardFromNaNValues(obj) {
         get: () => value,
         set: function guardedSetter(newValue) {
           if (newValue === null || newValue === undefined) {
-            crash("null/undefined player property assignment");
+            throw crash("null/undefined player property assignment");
           }
           if (!(newValue instanceof Decimal)) {
-            crash("Non-Decimal assignment to Decimal player property");
+            throw crash("Non-Decimal assignment to Decimal player property");
           }
           if (!isFinite(newValue.mantissa) || !isFinite(newValue.exponent)) {
-            crash("NaN player property assignment");
+            throw crash("NaN player property assignment");
           }
           value = newValue;
         }

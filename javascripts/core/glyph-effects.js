@@ -66,20 +66,20 @@ class GlyphEffectConfig {
   /** @private */
   static checkInputs(setup) {
     const KNOWN_KEYS = ["id", "glyphTypes", "singleDesc", "totalDesc", "genericDesc", "formatEffect", "combine", "softcap"]
-    Object.keys(setup).forEach(k => {
-      if (!KNOWN_KEYS.includes(k)) {
-        console.error(`Glyph effect "${setup.id}" includes unrecognized field "${k}"`);
-      }
-    });
-    setup.glyphTypes.forEach(e => {
-      if (!GLYPH_TYPES.includes(e)) {
-        console.error(`Glyph effect "${setup.id}" references unknown glyphType "${e}"`);
-      }
-    });
+    const unknownField = Object.keys(setup).find(k => !KNOWN_KEYS.includes(k));
+    if (unknownField !== undefined) {
+      throw crash(`Glyph effect "${setup.id}" includes unrecognized field "${unknownField}"`);
+    }
+
+    const unknownGlyphType = setup.glyphTypes.find(e => !GLYPH_TYPES.includes(e));
+    if (unknownGlyphType !== undefined) {
+      throw crash(`Glyph effect "${setup.id}" references unknown glyphType "${unknownGlyphType}"`);
+    }
+
     let emptyCombine = setup.combine([]);
-    if (typeof (emptyCombine) != "number") {
+    if (typeof emptyCombine !== "number") {
       if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
-        console.error(`combine function for glyph effect "${setup.id}" has invalid return type`)
+        throw crash(`combine function for glyph effect "${setup.id}" has invalid return type`);
       }
     }
   }

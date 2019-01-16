@@ -177,8 +177,7 @@ function getGlyphEffectValues(effectKey) {
   let effect = separated[1];
   let effectDef = GameDatabase.reality.glyphEffects[effectKey];
   if (effectDef === undefined) {
-    crash(`Unknown glyph effect requested "${effectKey}"'`)
-    return [];
+    throw crash(`Unknown glyph effect requested "${effectKey}"'`)
   }
   return player.reality.glyphs.active
     .filter(glyph => glyph.type === type && glyph.effects[effect] !== undefined)

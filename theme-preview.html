@@ -786,8 +786,8 @@
     return this[this.previousSiblingIndex(current)];
   };
 
-  Keyboard.bind("`", () => setTheme(themes.nextSibling(current)));
-  Keyboard.bind("shift+`", () => setTheme(themes.previousSibling(current)));
+  GameKeyboard.bind("`", () => setTheme(themes.nextSibling(current)));
+  GameKeyboard.bind("shift+`", () => setTheme(themes.previousSibling(current)));
 </script>
 </body>
 </html>

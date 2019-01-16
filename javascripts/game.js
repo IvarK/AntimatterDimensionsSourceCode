@@ -1,3 +1,7 @@
+if (crashed) {
+  throw "Initialization failed";
+}
+
 var defaultStart = deepmerge.all([{}, player]);
 
 let kongIPMult = 1
@@ -1512,7 +1516,7 @@ window.onfocus = function() {
 };
 
 window.onblur = function() {
-  Keyboard.stopSpins();
+  GameKeyboard.stopSpins();
 };
 
 function setShiftKey(isDown) {
@@ -1567,16 +1571,3 @@ let tweenTime = 0;
 
     animateTweens();
 }());
-
-function crash(message) {
-  Keyboard.stopSpins();
-  GameIntervals.stop();
-  // TODO: remove after consolidation of all intervals.
-  const id = setInterval(() => {}, 9999); // Get a reference to the last
-  // interval +1
-  for (let i = 1; i < id; i++) {
-    clearInterval(i);
-  }
-  Modal.message.show(`Fatal error:<br>${message}<br>Check the console for more details`);
-  console.error(message);
-}

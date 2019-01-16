@@ -141,31 +141,31 @@ function formatValue(notation, value, places, placesUnder1000) {
 
 function shortenRateOfChange(money) {
   return shorten(money, 2, 2);
-};
+}
 
 function shortenCosts(money) {
   return shorten(money, 0, 0);
-};
+}
 
 function shortenDimensions(money) {
   return shorten(money, 2, 0);
-};
+}
 
 function shortenMoney(money) {
   return shorten(money, 2, 1);
-};
+}
 
 function shortenGlyphEffect(money) {
   return shorten(money, 2, 3);
-};
+}
 
 function shortenMultiplier(money) {
   return shorten(money, 1, 1);
-};
+}
 
 function shortenAutobuyerInput(money) {
   return formatValue("Scientific", money, 2, 0);
-};
+}
 
 function shorten(value, places, placesUnder1000) {
     return formatValue(Notation.current().name, value, places, placesUnder1000);

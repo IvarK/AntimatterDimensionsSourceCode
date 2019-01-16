@@ -16,9 +16,6 @@ const GlyphCombiner = Object.freeze({
  * @typedef {Object} GlyphEffectConfig__combine_result
  * @property {number | Decimal} value The final effect value (boost to whatever)
  * @property {boolean} capped whether or not a cap or limit was applied (softcaps, etc)
- *
- * @class
- * @name GlyphEffectConfig
 */
 class GlyphEffectConfig {
   /**
@@ -36,7 +33,7 @@ class GlyphEffectConfig {
   * @param {NumericFunction<number | Decimal>} [setup.softcap] An optional softcap to be applied after glyph
   *  effects are combined.
   * @param {((function(number[]): GlyphEffectConfig__combine_result) | function(number[]): number)} setup.combine
-  *  Specification of how ultiple glyphs combine. Can be GlyphCombiner.add or GlyphCombiner.multiply for most glyphs.
+  *  Specification of how multiple glyphs combine. Can be GlyphCombiner.add or GlyphCombiner.multiply for most glyphs.
   *  Otherwise, should be a function that takes a potentially empty array of numbers (each glyph's effect value)
   *  and returns a combined effect or an object with the combined effect amd a capped indicator.
   *
@@ -79,9 +76,9 @@ class GlyphEffectConfig {
         console.error(`Glyph effect "${setup.id}" references unknown glyphType "${e}"`);
       }
     });
-    let nullValue = setup.combine([]);
-    if (typeof (nullValue) != "number") {
-      if (nullValue.value === undefined || nullValue.capped === undefined) {
+    let emptyCombine = setup.combine([]);
+    if (typeof (emptyCombine) != "number") {
+      if (emptyCombine.value === undefined || emptyCombine.capped === undefined) {
         console.error(`combine function for glyph effect "${setup.id}" has invalid return type`)
       }
     }
@@ -107,8 +104,8 @@ class GlyphEffectConfig {
   static setupCombine(setup) {
     let combine = setup.combine;
     let softcap = setup.softcap;
-    let nullValue = combine([]);
-    if (typeof (nullValue) === "number") {   // no supplied capped indicator
+    let emptyCombine = combine([]);
+    if (typeof (emptyCombine) === "number") {   // no supplied capped indicator
       if (softcap === undefined) {
         return effects => ({ value: combine(effects), capped: false });
       } else {
@@ -120,7 +117,7 @@ class GlyphEffectConfig {
       }
     } else {
       if (softcap !== undefined) {
-        let neqTest = nullValue.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
+        let neqTest = emptyCombine.value instanceof Decimal ? (a, b) => a.neq(b) : (a, b) => a !== b;
         return combine = effects => {
           let rawValue = combine(effects);
           let cappedValue = softcap(rawValue.value);

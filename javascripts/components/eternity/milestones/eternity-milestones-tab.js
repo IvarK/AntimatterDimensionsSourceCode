@@ -1,4 +1,9 @@
 Vue.component("eternity-milestones-tab", {
+  data: function() {
+    return {
+      eternityCount: 0,
+    };
+  },
   computed: {
     milestones() {
       return Object.values(GameDatabase.eternity.milestones)
@@ -7,15 +12,22 @@ Vue.component("eternity-milestones-tab", {
     },
     rows() {
       return this.milestones.length / 3;
+    },
+    eternitiedText() {
+      return shorten(this.eternityCount, 6) + (this.eternityCount == 1 ? " time" : " times");
     }
   },
   methods: {
+    update() {
+      this.eternityCount = player.eternities;
+    },
     getMilestone(row, column) {
       return () => this.milestones[(row - 1) * 3 + column - 1];
     }
   },
   template:
     `<div class="l-eternity-milestone-grid">
+      <div>You have eternitied {{eternitiedText}}.</div>
       <div v-for="row in rows" class="l-eternity-milestone-grid__row">
         <eternity-milestone
           v-for="column in 3"

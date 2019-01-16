@@ -236,6 +236,7 @@ function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     ret = ret.times(Effarig.rmMultiplier)
     ret = ret.times(player.celestials.effarig.rmMult)
+    if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     return Decimal.floor(ret)
 }
 

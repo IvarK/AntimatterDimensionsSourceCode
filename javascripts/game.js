@@ -1575,4 +1575,5 @@ function crash(message) {
   }
   Modal.message.show(`Fatal error:<br>${message}<br>Check the console for more details`);
   console.error(message);
+  debugger;
 }

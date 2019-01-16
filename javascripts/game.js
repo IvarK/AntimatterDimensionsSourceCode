@@ -1567,12 +1567,15 @@ let tweenTime = 0;
 function crash(message) {
   Keyboard.stopSpins();
   GameIntervals.stop();
-  // TODO: remove after consolidation of all intervals.
-  const id = setInterval(() => {}, 9999); // Get a reference to the last
-  // interval +1
-  for (let i = 1; i < id; i++) {
-    clearInterval(i);
+  function clearHandles(set, clear) {
+    let id = set(() => {}, 9999);
+    while (id--) {
+      clear(id);
+    }
   }
+  clearHandles(setInterval, clearInterval);
+  clearHandles(setTimeout, clearTimeout);
+  clearHandles(requestAnimationFrame, cancelAnimationFrame);
   Modal.message.show(`Fatal error:<br>${message}<br>Check the console for more details`);
   console.error(message);
   debugger;

@@ -197,6 +197,7 @@ function clearOldAchieves() {
   for (var i = 0; i < toRemove.length; i++) {
     player.achievements.splice(toRemove[i], 1);
   }
+  GameCache.achievementCount.invalidate();
 }
 
 function giveAchievement(name) {
@@ -207,26 +208,13 @@ function giveAchievement(name) {
 
     ui.notify.success(name);
     player.achievements.push(allAchievementNums[name]);
+    GameCache.achievementCount.invalidate();
     kong.submitStats('Achievements', player.achievements.length);
     if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
       Autobuyer.infinity.bumpLimit(4);
     }
     updateAchievementPower();
     GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-}
-
-function getSecretAchAmount() {
-    var n = 0
-    for (var i=1; i<5; i++) {
-        var achNum = i * 10
-        for (var l=0; l<8; l++) {
-            achNum += 1;
-            if (player.achievements.includes("s"+achNum)) {
-                n++
-            }
-        }
-    }
-    return n
 }
 
 function isAchEnabled(name, id) {

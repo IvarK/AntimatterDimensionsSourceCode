@@ -87,11 +87,11 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  if (player.currentEternityChall === "eterc10") multiplier = multiplier.times(ec10bonus);
   multiplier = multiplier
     .timesEffectsOf(
       TimeStudy(193),
-      tier === 8 ? TimeStudy(214) : null
+      tier === 8 ? TimeStudy(214) : null,
+      EternityChallenge(10)
     );
   multiplier = multiplier.clampMin(1);
   multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier);

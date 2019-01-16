@@ -89,7 +89,6 @@ function reality(force, reset, auto) {
     //reset global values to avoid a tick of unupdated production
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
-    ec10bonus = new Decimal(1);
 
     player.sacrificed = new Decimal(0);
 

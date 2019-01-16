@@ -402,7 +402,7 @@ var player = {
     cloud: true,
     hotkeys: true,
     theme: undefined,
-    secretThemeKey: 0,
+    secretThemeKey: "",
     commas: true,
     updateRate: 50,
     chart: {

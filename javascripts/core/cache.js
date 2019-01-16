@@ -49,6 +49,11 @@ const GameCache = {
     );
   }),
 
+  timeStudies: new Lazy(() => {
+    return NormalTimeStudyState.studies
+      .map(s => player.timestudy.studies.includes(s.id));
+  }),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

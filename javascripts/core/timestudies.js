@@ -71,6 +71,7 @@ function buyTimeStudy(name, cost, check) {
   if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
       player.timestudy.theorem -= cost
+      GameCache.timeStudies.invalidate();
       return true
   } else return false
 }
@@ -336,6 +337,7 @@ function respecTimeStudies() {
     giveAchievement("You do know how these work, right?")
   }
   player.timestudy.studies = [];
+  GameCache.timeStudies.invalidate();
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -424,7 +426,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get isBought() {
-    return player.timestudy.studies.includes(this.id);
+    return GameCache.timeStudies.value[this.id];
   }
 
   get canBeBought() {

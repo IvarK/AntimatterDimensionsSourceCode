@@ -524,8 +524,8 @@ function updateRealityUpgrades() {
 
   player.reality.upgReqs.forEach((check, idx) => {
     if (idx > 0) {
-      if (check) $("#rupg" + i).removeClass("rUpgReqNotMet")
-      else $("#rupg" + i).addClass("rUpgReqNotMet")
+      if (check) $("#rupg" + idx).removeClass("rUpgReqNotMet")
+      else $("#rupg" + idx).addClass("rUpgReqNotMet")
     }
   });
 

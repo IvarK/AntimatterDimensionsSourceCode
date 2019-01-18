@@ -88,11 +88,10 @@ function getNodeColor(id, cost) {
 }
 
 function updatePerkColors() {
-    nodes.update([{id:0, color: getNodeColor(0, 1) }]);
-    for (var i=0; i<nodes.length-1; i++) {
-        var id = parseInt(Object.keys(CONNECTED_PERKS)[i])
-        nodes.update([{id:id, color: getNodeColor(id, 1) }]);
-    }
+  for (let id of Object.keys(CONNECTED_PERKS)) {
+    id = parseInt(id);
+    nodes.update([{id:id, color: getNodeColor(id, 1) }]);
+  }
 }
 
 function hidePerkLabels() {

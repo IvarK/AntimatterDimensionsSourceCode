@@ -67,8 +67,10 @@ var Teresa = {
     return counter
   },
   get shardsGained() {
-    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
-    else  return 0
+    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) {
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+    }
+    return 0
   },
   get shardAmount() {
     return player.celestials.teresa.relicShards

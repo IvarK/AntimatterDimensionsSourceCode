@@ -12,9 +12,6 @@ Vue.component("eternity-milestones-tab", {
     },
     rows() {
       return this.milestones.length / 3;
-    },
-    eternitiedText() {
-      return shorten(this.eternityCount, 6) + (this.eternityCount == 1 ? " time" : " times");
     }
   },
   methods: {
@@ -27,7 +24,7 @@ Vue.component("eternity-milestones-tab", {
   },
   template:
     `<div class="l-eternity-milestone-grid">
-      <div>You have eternitied {{eternitiedText}}.</div>
+      <div>You have eternitied {{shorten(eternityCount, 6)}} {{"time" | pluralize(eternityCount)}}.</div>
       <div v-for="row in rows" class="l-eternity-milestone-grid__row">
         <eternity-milestone
           v-for="column in 3"

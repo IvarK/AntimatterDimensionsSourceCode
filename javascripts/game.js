@@ -1212,28 +1212,7 @@ function gameLoop(diff, options = {}) {
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
 
-  // Adjust the text on the reality button in order to minimize text overflowing
-  let glyphLevelText = "<br>Glyph level: "+gainedGlyphLevel().toFixed(0)+" ("+percentToNextGlyphLevel()+"%)";
-  if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
-    document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to Reality again!"
-	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely
-		document.getElementById("realitymachine").innerHTML = "Make a new Reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+glyphLevelText;
-  else if (player.eternityPoints.exponent > 4986)  // At more than (4986 EP, 5.48 RM) each +1 EP exponent always adds at least one more RM percent, so drop the decimal points
-		document.getElementById("realitymachine").innerHTML = "Make a new Reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+Math.floor(percentToNextRealityMachine()).toFixed(0)+"%)"+glyphLevelText;
-	else 
-		document.getElementById("realitymachine").innerHTML = "Make a new Reality<br>Machines gained: "+shortenDimensions(gainedRealityMachines())+" ("+percentToNextRealityMachine()+"%)"+glyphLevelText
-  document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">"+shortenDimensions(player.reality.realityMachines)+"</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
-  
-  // Tooltip for reality button stating more detailed RM and other resources gained
-  let nextRMText = gainedRealityMachines() < 100 ? "Next RM gained at " + shortenDimensions(new Decimal("1e" + Math.ceil(4000*(1 + Math.log(parseInt(gainedRealityMachines().toFixed()) + 1)/Math.log(1000))))) + "<br><br>" : "";
-  let otherResourceText = "Other resources gained:<br><br>1 Perk Point";
-  if (Teresa.shardsGained != 0) {
-    otherResourceText += "<br>" + shorten(Teresa.shardsGained, 2) + " Relic Shards (Teresa)"
-  }
-  let tooltipText = nextRMText + otherResourceText
-  document.getElementById("realitymachine").className = "infotooltip";
-  $("#realitymachine").append('<span class="infotooltiptext">' + tooltipText + "</span>");
-  
+  document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
   if (player.wormhole[0].unlocked && !player.wormholePause) {
     updateWormholePhases(wormholeDiff);
     for (let i = 0; i < player.wormhole.length; i++) {
@@ -1242,7 +1221,7 @@ function gameLoop(diff, options = {}) {
     }
     updateWormholeGraphics();
   }
-  
+
   // Reality unlock and TTgen perk autobuy
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);

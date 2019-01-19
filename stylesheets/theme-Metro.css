@@ -126,10 +126,6 @@ input, select {
     color: white;
 }
 
-#realitymachine {
-    border: 1px solid #0b600e !important;
-}
-
 @keyframes metroStudyGlowIn {
     0%  {box-shadow: inset 0px 0px 3px 0px #673AB7;}
     50% {box-shadow: inset 0px 0px 20px 0px #673AB7;}

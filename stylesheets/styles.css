@@ -436,24 +436,82 @@ button {
     margin-left: -525px;
 }
 
-#realitymachine {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    color: #0b600e;
-    background: white;
-    border: 2px solid #0b600e;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
+.l-reality-button {
+  display: block;
+  margin-bottom: 2rem;
 }
 
-#realitymachine:hover {
-    color: white;
-    background: #0b600e;
+.l-reality-button__contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-reality-button__header {
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.c-reality-button {
+  font-family: Typewriter;
+  border-radius: 0.4rem !important;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  width: 21rem;
+  height: 8rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: white;
+  border-width: 0.2rem;
+  border-style: solid;
+}
+
+.t-inverted-metro .c-reality-button, .t-metro .c-reality-button, .t-s8 .c-reality-button {
+  border-width: 0.1rem;
+}
+
+.c-reality-button--good {
+  color: #0b600e;
+  border-color: #0b600e;
+}
+
+.c-reality-button--bad {
+  color: #B84B5F;
+  border-color: #B84B5F;
+}
+
+.t-dark .c-reality-button--good {
+  color: white;
+}
+
+.t-dark .c-reality-button--bad {
+  color: white;
+}
+
+.c-reality-button--good:hover, .c-reality-button--good.force-hover {
+  color: white;
+  background: #0b600e;
+}
+
+.t-dark .c-reality-button--good:hover, .t-dark .c-reality-button--good.force-hover {
+  background: #0b600e !important;
+}
+
+.t-s6 .c-reality-button--good:hover, .t-s6 .c-reality-button--good.force-hover {
+  background: #0b600e !important;
+}
+
+.c-reality-button--bad:hover, .c-reality-button--bad.force-hover {
+  color: white;
+  background: #642a2c;
+}
+
+.t-dark .c-reality-button--bad:hover, .t-dark .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
+}
+
+.t-s6 .c-reality-button--bad:hover, .t-s6 .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
 }
 
 [draggable] {

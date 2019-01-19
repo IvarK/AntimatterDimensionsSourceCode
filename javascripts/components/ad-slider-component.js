@@ -1101,7 +1101,7 @@ Vue.component("ad-slider-component", {
             <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
                  :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
               {{dotContents(0)}}
-              <slot name="in-dot"></slot>
+              <slot name="in-dot"/>
             </div>
           </slot>
           <div :class="['ad-slider-tooltip-' + tooltipDirection, 'ad-slider-tooltip-wrap']">

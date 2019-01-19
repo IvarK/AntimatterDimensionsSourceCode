@@ -436,23 +436,23 @@ button {
     margin-left: -525px;
 }
 
-.l-new-reality-button {
+.l-reality-button {
   display: block;
   margin-bottom: 2rem;
 }
 
-.l-new-reality-button__contents {
+.l-reality-button__contents {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.c-new-reality-button__header {
+.c-reality-button__header {
   font-size: 1.4rem;
   line-height: 1.6;
 }
 
-.c-new-reality-button {
+.c-reality-button {
   font-family: Typewriter;
   border-radius: 0.4rem !important;
   transition-duration: 0.2s;
@@ -466,52 +466,52 @@ button {
   border-style: solid;
 }
 
-.t-inverted-metro .c-new-reality-button, .t-metro .c-new-reality-button, .t-s8 .c-new-reality-button {
+.t-inverted-metro .c-reality-button, .t-metro .c-reality-button, .t-s8 .c-reality-button {
   border-width: 0.1rem;
 }
 
-.c-new-reality-button--good {
+.c-reality-button--good {
   color: #0b600e;
   border-color: #0b600e;
 }
 
-.c-new-reality-button--bad {
-  color: #B84B5F;/* #642a2c; */
+.c-reality-button--bad {
+  color: #B84B5F;
   border-color: #B84B5F;
 }
 
-.t-dark .c-new-reality-button--good {
+.t-dark .c-reality-button--good {
   color: white;
 }
 
-.t-dark .c-new-reality-button--bad {
+.t-dark .c-reality-button--bad {
   color: white;
 }
 
-.c-new-reality-button--good:hover, .c-new-reality-button--good.force-hover {
+.c-reality-button--good:hover, .c-reality-button--good.force-hover {
   color: white;
   background: #0b600e;
 }
 
-.t-dark .c-new-reality-button--good:hover, .t-dark .c-new-reality-button--good.force-hover {
-  background: #0b600e !important;  /* FIXME stupid important alert */
+.t-dark .c-reality-button--good:hover, .t-dark .c-reality-button--good.force-hover {
+  background: #0b600e !important;
 }
 
-.t-s6 .c-new-reality-button--good:hover, .t-s6 .c-new-reality-button--good.force-hover {
-  background: #0b600e !important;  /* FIXME stupid important alert */
+.t-s6 .c-reality-button--good:hover, .t-s6 .c-reality-button--good.force-hover {
+  background: #0b600e !important;
 }
 
-.c-new-reality-button--bad:hover, .c-new-reality-button--bad.force-hover {
+.c-reality-button--bad:hover, .c-reality-button--bad.force-hover {
   color: white;
   background: #642a2c;
 }
 
-.t-dark .c-new-reality-button--bad:hover, .t-dark .c-new-reality-button--bad.force-hover {
-  background: #642a2c !important;  /* FIXME stupid important alert */
+.t-dark .c-reality-button--bad:hover, .t-dark .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
 }
 
-.t-s6 .c-new-reality-button--bad:hover, .t-s6 .c-new-reality-button--bad.force-hover {
-  background: #642a2c !important;  /* FIXME stupid important alert */
+.t-s6 .c-reality-button--bad:hover, .t-s6 .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
 }
 
 [draggable] {

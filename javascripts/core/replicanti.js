@@ -28,7 +28,7 @@ function upgradeReplicantiGalaxy() {
 
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
-    maxGal += Teresa.bonusRG();
+    maxGal += Teresa.bonusRG;
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;

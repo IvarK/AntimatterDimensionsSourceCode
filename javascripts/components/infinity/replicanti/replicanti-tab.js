@@ -64,7 +64,7 @@ Vue.component("replicanti-tab", {
       this.mult.copyFrom(replicantiMult());
       this.hasRaisedCap = Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE);
       this.replicantiCap.copyFrom(replicantiCap());
-      this.teresaInfinityBonusRG = Teresa.bonusRG();
+      this.teresaInfinityBonusRG = Teresa.bonusRG;
     }
   },
   template:

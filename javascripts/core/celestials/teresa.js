@@ -68,13 +68,13 @@ var Teresa = {
     }
     return Math.min(1 + 2.5 * Math.log10(x), 20);
   },
-  tickspeed() {
+  get tickspeed() {
     return new Decimal(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10())).pow(6.5 * this.nerfFactor(player.timeShards)).min(1).times(1000);
   },
   multiplier(mult) {
     return new Decimal(Math.pow(Decimal.plus(mult, new Decimal(10)).log10(), this.nerfFactor(player.infinityPower)));
   },
-  bonusRG() { // Will return 0 if Teresa Infinity is uncompleted
+  get bonusRG() { // Will return 0 if Teresa Infinity is uncompleted
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
   }
 };

@@ -1,4 +1,3 @@
-var gameLoopIntervalId;
 var Marathon = 0;
 var Marathon2 = 0;
 var auto = false;
@@ -13,6 +12,7 @@ var implosionCheck = 0;
 var realizationCheck = 0;
 var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
+
 var player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
@@ -341,6 +341,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   },
   {
     speed: 60 * 6,
@@ -349,6 +350,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   },
   {
     speed: 6 * 6,
@@ -357,6 +359,7 @@ var player = {
     phase: 0,
     active: false,
     unlocked: false,
+    activations: 0
   }],
   wormholePause: false,
   ttbuyer: false,
@@ -381,6 +384,12 @@ var player = {
         eternities: 25
       },
       typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+    },
+    enslaved: {
+      isStoring: false,
+      stored: 0,
+      unlocks: [],
+      run: false
     }
   },
   autoEcIsOn: true,
@@ -394,7 +403,7 @@ var player = {
     cloud: true,
     hotkeys: true,
     theme: undefined,
-    secretThemeKey: 0,
+    secretThemeKey: "",
     commas: true,
     updateRate: 50,
     chart: {
@@ -468,3 +477,59 @@ const Player = {
     return GameCache.dimensionMultDecrease.value;
   }
 };
+
+function guardFromNaNValues(obj) {
+  function isObject (obj) {
+    return obj !== null && typeof obj === "object" && !(obj instanceof Decimal);
+  }
+
+  for (let key in obj) {
+    if (!obj.hasOwnProperty(key)) continue;
+
+    let value = obj[key];
+    if (isObject(value)) {
+      guardFromNaNValues(value);
+      continue;
+    }
+
+    if (typeof value === "number") {
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: () => value,
+        set: function guardedSetter(newValue) {
+          if (newValue === null || newValue === undefined) {
+            throw crash("null/undefined player property assignment");
+          }
+          if (typeof newValue !== "number") {
+            throw crash("Non-Number assignment to Number player property");
+          }
+          if (!isFinite(newValue)) {
+            throw crash("NaN player property assignment");
+          }
+          value = newValue;
+        }
+      });
+    }
+
+    if (value instanceof Decimal) {
+      Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: () => value,
+        set: function guardedSetter(newValue) {
+          if (newValue === null || newValue === undefined) {
+            throw crash("null/undefined player property assignment");
+          }
+          if (!(newValue instanceof Decimal)) {
+            throw crash("Non-Decimal assignment to Decimal player property");
+          }
+          if (!isFinite(newValue.mantissa) || !isFinite(newValue.exponent)) {
+            throw crash("NaN player property assignment");
+          }
+          value = newValue;
+        }
+      });
+    }
+  }
+}

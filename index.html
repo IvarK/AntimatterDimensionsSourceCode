@@ -8,6 +8,8 @@
     <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
     <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
     <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
@@ -81,7 +83,7 @@
                 <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
             </div>
         </div>
-        <game-tab v-show="view.tabs.current" style="flex: 1 0">
+        <game-tab v-show="view.tabs.current && view.tabs.current !== 'reality-tab'" style="flex: 1 0">
             <component :is="view.tabs.current"></component>
         </game-tab>
         <div id="reality" class="tab" align="center" style="margin-top: 10px;">
@@ -108,6 +110,11 @@
                     <br>Glyph level: 1</button>
                   <br>
                   <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
+                  <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'"
+                                         label="Glyph level factors"
+                                         container-class="c-glyph-level-factors-dropdown-header">
+                    <glyph-levels-and-weights slot="dropdown"/>
+                  </expanding-control-box>
                   <br>
                   <br>
                   <button class="realityUpgrade" onclick="toggleGlyphRespec()" id="glyphRespec" style="width:150px; height: 40px; margin: auto">Clear glyph slots on Reality</button>
@@ -466,6 +473,10 @@
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanic.js"></script>
 <script type="text/javascript" src="javascripts/core/cache.js"></script>
+<script type="text/javascript" src="javascripts/core/intervals.js"></script>
+<script type="text/javascript" src="javascripts/core/keyboard.js"></script>
+<script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
+<script type="text/javascript" src="javascripts/core/crash.js"></script>
 
 
 <script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
@@ -484,6 +495,7 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/eternity-milestones.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/dilation-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/perks.js"></script>
+<script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
 
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
@@ -497,6 +509,9 @@
 <script type="text/javascript" src="javascripts/components/footer-links.js"></script>
 <script type="text/javascript" src="javascripts/components/tt-shop.js"></script>
 <script type="text/javascript" src="javascripts/components/automator-buttons.js"></script>
+<script type="text/javascript" src="javascripts/components/plus-minus-button.js"></script>
+<script type="text/javascript" src="javascripts/components/ad-slider-component.js"></script>
+<script type="text/javascript" src="javascripts/components/expanding-control-box.js"></script>
 
 <script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>
@@ -550,6 +565,7 @@
 
 <script type="text/javascript" src="javascripts/core/celestials/effarig.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/teresa.js"></script>
+<script type="text/javascript" src="javascripts/core/celestials/enslaved.js"></script>
 
 <script type="text/javascript" src="javascripts/components/challenges/challenges-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/challenge-box.js"></script>
@@ -602,6 +618,9 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/dilation-upgrade.js"></script>
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
 
+<script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
+
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-import.js"></script>
@@ -653,7 +672,5 @@
 <script type="text/javascript" src="javascripts/core/newsticker.js"></script>
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>
-<script type="text/javascript" src="javascripts/core/keyboard.js"></script>
-<script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 <script type="text/javascript" src="javascripts/game.js?85"></script>
 </html>

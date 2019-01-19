@@ -1,3 +1,7 @@
+if (crashed) {
+  throw "Initialization failed";
+}
+
 var defaultStart = deepmerge.all([{}, player]);
 
 let kongIPMult = 1
@@ -25,6 +29,11 @@ function hideLegacyTabs(tabName) {
       tab.style.display = 'none';
     }
   }
+  // workaround for Vue mounted issues until reality tab is vue'd
+  if (tabName === "reality") {
+    if (!ui.view.tabs.reality.subtab) ui.view.tabs.reality.subtab = "glyphstab";
+    ui.view.tabs.current = "reality-tab";
+  }
 }
 
 function floatText(tier, text) {
@@ -41,110 +50,111 @@ document.getElementById("news").onclick = function () {
 };
 
 function maxAll() {
-    if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
-    buyMaxTickSpeed();
+  if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
+  buyMaxTickSpeed();
 
-    for (var tier=1; tier<9;tier++) {
-        var name = TIER_NAMES[tier];
-        var cost = player[name + 'Cost'].times(10 - dimBought(tier))
-        var multBefore = player[name + 'Pow']
-        if (tier >= 3 && Challenge(6).isRunning) {
-            if (!canBuyDimension(tier)) continue
-            if (player[TIER_NAMES[tier-2] + 'Amount'].lt(cost)) continue
-                if (canBuyDimension(tier)) {
-                    if (cost.lt(player[TIER_NAMES[tier-2]+"Amount"]) && dimBought(tier) != 0) {
-                        player[TIER_NAMES[tier-2]+"Amount"] = player[TIER_NAMES[tier-2]+"Amount"].minus(cost)
-                        player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10 - dimBought(tier)))
-                        player[name + 'Bought'] += (10 - dimBought(tier));
-                        player[name + 'Pow']  = player[name + 'Pow'].times(getDimensionPowerMultiplier(tier))
-                        player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                    }
-                    while (player[TIER_NAMES[tier-2]+"Amount"].gt(player[name + "Cost"].times(10))) {
-                        player[TIER_NAMES[tier-2]+"Amount"] = player[TIER_NAMES[tier-2]+"Amount"].minus(player[name + "Cost"].times(10))
-                        player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                        player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10))
-                        player[name + 'Bought'] += 10
-                        player[name + "Pow"] = player[name + "Pow"].times(getDimensionPowerMultiplier(tier))
-                        if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier-1] = player.costMultipliers[tier-1].times(Player.dimensionMultDecrease)
-                    }
-
-
-                    onBuyDimension(tier);
-                }
-        } else {
-        if (!canBuyDimension(tier)) continue
-            if (cost.lt(player.money) && dimBought(tier) != 0) {
-                player.money = player.money.minus(cost)
-                player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10 - dimBought(tier)))
-                player[name + 'Bought'] += (10 - dimBought(tier));
-                player[name + 'Pow']  = player[name + 'Pow'].times(getDimensionPowerMultiplier(tier))
-                player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-            }
-            if (player.money.lt(player[name + "Cost"].times(10))) continue
-
-            if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
-                while ((player.money.gte(player[name + "Cost"].times(10)) && player.money.lte(Number.MAX_VALUE)) || (player.money.gte(player[name + "Cost"].times(10)) && !Challenge(9).isRunning)) {
-                        player.money = player.money.minus(player[name + "Cost"].times(10))
-                        if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                        else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier)
-                        else multiplySameCosts(player[name + 'Cost'])
-                        player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10))
-                        player[name + 'Bought'] += 10
-                        player[name + "Pow"] = player[name + "Pow"].times(getDimensionPowerMultiplier(tier))
-                        if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier-1] = player.costMultipliers[tier-1].times(Player.dimensionMultDecrease)
-                        if (Challenge(4).isRunning) clearDimensions(tier-1)
-                }
-            } else {
-                if (player[name + "Cost"].lt(Number.MAX_VALUE)) {
-                    while (player.money.gte(player[name + "Cost"].times(10)) && player[name + "Cost"].lte(Number.MAX_VALUE)) {
-                        player.money = player.money.minus(player[name + "Cost"].times(10))
-                        if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                        else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(player[name + 'Cost'], tier)
-                        else multiplySameCosts(player[name + 'Cost'])
-                        player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10))
-                        player[name + 'Bought'] += 10
-                        player[name + "Pow"] = player[name + "Pow"].times(getDimensionPowerMultiplier(tier))
-                        if (player[name + 'Cost'].gte(Number.MAX_VALUE)) player.costMultipliers[tier-1] = player.costMultipliers[tier-1].times(Player.dimensionMultDecrease)
-                        if (Challenge(4).isRunning) clearDimensions(tier-1)
-                }
-                }
-
-                if (player[name + "Cost"].gte(Number.MAX_VALUE)) {
-                    var a = Math.log10(Math.sqrt(Player.dimensionMultDecrease))
-                    var b = player.costMultipliers[tier-1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10()
-                    var c = player[name + "Cost"].dividedBy(player.money).log10()
-                    var discriminant = Math.pow(b, 2) - (c *a* 4)
-                    if (discriminant < 0) continue
-                    var buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c *a *4))-b)/(2 * a))+1
-                    if (buying <= 0) return false
-                    player[name+"Amount"] = Decimal.round(player[name+"Amount"].plus(10*buying))
-                    preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10())
-                    postInfBuy = player[name + 'Bought']/10+buying - preInfBuy - 1
-                    postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy))
-                    player[name + 'Bought'] += 10*buying
-                    player[name + "Pow"] = player[name + "Pow"].times(Decimal.pow(getDimensionPowerMultiplier(tier), buying))
-
-                    newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy+1)/2))
-                    newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy+1))
-                    //if (buying > 0 )player[name + "Cost"] = player.costMultipliers[tier-1].times(Decimal.pow(player.dimensionMultDecrease, (buying * buying - buying)/2)).times(player[name + "Cost"])
-
-                    player[name + "Cost"] = newCost
-                    player.costMultipliers[tier-1] = newMult
-                    if (player.money.gte(player[name + "Cost"]))player.money = player.money.minus(player[name + "Cost"])
-                    player[name + "Cost"] = player[name + "Cost"].times(player.costMultipliers[tier-1])
-                    player.costMultipliers[tier-1] = player.costMultipliers[tier-1].times(Player.dimensionMultDecrease)
-                }
-
-
+  for (var tier = 1; tier < 9; tier++) {
+    const dimension = NormalDimension(tier);
+    var cost = dimension.cost.times(dimension.remainingUntil10)
+    var multBefore = dimension.pow
+    if (tier >= 3 && Challenge(6).isRunning) {
+      const lowerTier = NormalDimension(tier - 2);
+      if (!canBuyDimension(tier)) continue
+      if (lowerTier.amount.lt(cost)) continue
+      if (canBuyDimension(tier)) {
+        if (cost.lt(lowerTier.amount) && dimension.boughtBefore10 !== 0) {
+          lowerTier.amount = lowerTier.amount.minus(cost)
+          dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
+          dimension.bought += dimension.remainingUntil10;
+          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
         }
+        while (lowerTier.amount.gt(dimension.cost.times(10))) {
+          lowerTier.amount = lowerTier.amount.minus(dimension.cost.times(10))
+          dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+          dimension.amount = Decimal.round(dimension.amount.plus(10))
+          dimension.bought += 10
+          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
-        if ((Challenge(11).isRunning || player.currentChallenge == "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
-        if (Challenge(2).isRunning) player.chall2Pow = 0;
-        if (player.currentChallenge == "postc1") clearDimensions(tier-1);
-        player.postC4Tier = tier;
-        onBuyDimension(tier)
-        floatText(tier, "x" + shortenMoney(player[name + "Pow"].dividedBy(multBefore)))
+
+
+        onBuyDimension(tier);
+      }
+    } else {
+      if (!canBuyDimension(tier)) continue
+      if (cost.lt(player.money) && dimension.boughtBefore10 !== 0) {
+        player.money = player.money.minus(cost)
+        dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
+        dimension.bought += dimension.remainingUntil10;
+        dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+        dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+      }
+      if (player.money.lt(dimension.cost.times(10))) continue
+
+      if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
+        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Number.MAX_VALUE)) || (player.money.gte(dimension.cost.times(10)) && !Challenge(9).isRunning)) {
+          player.money = player.money.minus(dimension.cost.times(10))
+          if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+          else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
+          else multiplySameCosts(dimension.cost)
+          dimension.amount = Decimal.round(dimension.amount.plus(10))
+          dimension.bought += 10
+          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+          if (Challenge(4).isRunning) clearDimensions(tier - 1)
+        }
+      } else {
+        if (dimension.cost.lt(Number.MAX_VALUE)) {
+          while (player.money.gte(dimension.cost.times(10)) && dimension.cost.lte(Number.MAX_VALUE)) {
+            player.money = player.money.minus(dimension.cost.times(10))
+            if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+            else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
+            else multiplySameCosts(dimension.cost)
+            dimension.amount = Decimal.round(dimension.amount.plus(10))
+            dimension.bought += 10
+            dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+            if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+            if (Challenge(4).isRunning) clearDimensions(tier - 1)
+          }
+        }
+
+        if (dimension.cost.gte(Number.MAX_VALUE)) {
+          var a = Math.log10(Math.sqrt(Player.dimensionMultDecrease))
+          var b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10()
+          var c = dimension.cost.dividedBy(player.money).log10()
+          var discriminant = Math.pow(b, 2) - (c * a * 4)
+          if (discriminant < 0) continue
+          var buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1
+          if (buying <= 0) return false
+          dimension.amount = Decimal.round(dimension.amount.plus(10 * buying))
+          preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10())
+          postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1
+          postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy))
+          dimension.bought += 10 * buying
+          dimension.pow = dimension.pow.times(Decimal.pow(getDimensionPowerMultiplier(tier), buying))
+
+          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2))
+          newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1))
+          //if (buying > 0 )dimension.cost = player.costMultipliers[tier-1].times(Decimal.pow(player.dimensionMultDecrease, (buying * buying - buying)/2)).times(dimension.cost)
+
+          dimension.cost = newCost
+          player.costMultipliers[tier - 1] = newMult
+          if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost)
+          dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1])
+          player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+        }
+
+
+      }
     }
+    if ((Challenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
+    if (Challenge(2).isRunning) player.chall2Pow = 0;
+    if (player.currentChallenge == "postc1") clearDimensions(tier - 1);
+    player.postC4Tier = tier;
+    onBuyDimension(tier)
+    floatText(tier, "x" + shortenMoney(dimension.pow.dividedBy(multBefore)))
+  }
 }
 
 function buyEPMult(upd, threshold) {
@@ -230,6 +240,7 @@ function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     ret = ret.times(Effarig.rmMultiplier)
     ret = ret.times(player.celestials.effarig.rmMult)
+    if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     return Decimal.floor(ret)
 }
 
@@ -261,21 +272,21 @@ function percentToNextGlyphLevel() {
 }
 
 function resetDimensions() {
-    for (var i = 1; i <= 8; i++) {
-        player[TIER_NAMES[i] + "Amount"] = new Decimal(0)
-        player[TIER_NAMES[i] + "Pow"] = new Decimal(1)
-        player[TIER_NAMES[i] + "Bought"] = 0
-    }
-    player.firstCost = new Decimal(10)
-    player.secondCost = new Decimal(100)
-    player.thirdCost = new Decimal(10000)
-    player.fourthCost = new Decimal(1e6)
-    player.fifthCost = new Decimal(1e9)
-    player.sixthCost = new Decimal(1e13)
-    player.seventhCost = new Decimal(1e18)
-    player.eightCost = new Decimal(1e24)
-    player.eightPow = new Decimal(player.chall11Pow)
-    player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+  for (let dimension of NormalDimension.all) {
+    dimension.amount = new Decimal(0)
+    dimension.pow = new Decimal(1)
+    dimension.bought = 0
+  }
+  player.firstCost = new Decimal(10)
+  player.secondCost = new Decimal(100)
+  player.thirdCost = new Decimal(10000)
+  player.fourthCost = new Decimal(1e6)
+  player.fifthCost = new Decimal(1e9)
+  player.sixthCost = new Decimal(1e13)
+  player.seventhCost = new Decimal(1e18)
+  player.eightCost = new Decimal(1e24)
+  player.eightPow = new Decimal(player.chall11Pow)
+  player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
 }
 
 function resetChallengeStuff() {
@@ -612,7 +623,7 @@ function getNewInfReq() {
 
 
 function newDimension() {
-    if (player.money.gte(getNewInfReq())) {
+    if (player.reality.perks.includes(67) || (player.money.gte(getNewInfReq()))) {
         if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
         else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
         else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
@@ -811,33 +822,54 @@ var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 var eternitiesGain = 0
 
-// Consolidates all checks for game speed changes (EC12, time glyphs, wormhole)
-function getGameSpeedupFactor(takeGlyphsIntoAccount = true) {
+const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
+
+function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
+  if (effectsToConsider === undefined) {
+    effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
+  }
   let factor = 1;
-  if (player.currentEternityChall === "eterc12") {
+  if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
+    // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
+    // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
   }
-  if (takeGlyphsIntoAccount) {
+  if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
     factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   }
   
-  if (player.wormhole[0] !== undefined) {
-    if (player.wormhole[0].active && !player.wormholePause) factor *= player.wormhole[0].power
-    if (player.wormhole[0].active && player.wormhole[1].active && !player.wormholePause) factor *= player.wormhole[1].power
-    if (player.wormhole[0].active && player.wormhole[1].active && player.wormhole[2].active && !player.wormholePause) factor *= player.wormhole[2].power
-  } else dev.updateTestSave() // TODO, REMOVE
+  if (player.wormhole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
+    if (wormholeOverride !== undefined) {
+      factor *= wormholeOverride;
+    } else if (!player.wormholePause) {
+      for (let wormhole of player.wormhole) {
+        if (wormhole.active) {
+          factor *= wormhole.power;
+        } else {
+          // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
+          // they aren't currently active (instead they will activate as soon as the previous wormhole is active).
+          // Thus, as soon as we reach an inactive wormhole, we stop increasing the speedup factor.
+          break;
+        }
+      }
+    }
+  }
   
+  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+    factor = teresaMultiplier(factor).toNumber();
+  }
+    
   return factor;
 }
 
 let autobuyerOnGameLoop = true;
 
-function gameLoop(diff) {
+function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     var thisUpdate = new Date().getTime();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
-    if (typeof diff === 'undefined') var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
+    if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
 
     if (autobuyerOnGameLoop) {
@@ -850,13 +882,40 @@ function gameLoop(diff) {
         if (Autobuyer.tickTimer > autobuyerInterval) {
           Autobuyer.tickTimer = autobuyerInterval;
         }
-        autoBuyerTick();
+        Autobuyer.tick();
       }
     }
 
-    const speedFactor = getGameSpeedupFactor();
-    DeltaTimeState.update(diff, speedFactor);
-    diff *= speedFactor;
+    const realDiff = diff;
+
+    if (options.gameDiff === undefined) {
+      let speedFactor;
+      if (options.wormholeSpeedup === undefined) {
+        speedFactor = getGameSpeedupFactor();
+      } else {
+        // If we're in EC12, time shouldn't speed up at all.
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], options.wormholeSpeedup);
+      }
+      if (player.celestials.enslaved.isStoring) {
+        const speedFactorWithoutWormhole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
+        // Note that in EC12, this is 0, so it's not an issue there.
+        const timeStoredFactor = speedFactor / speedFactorWithoutWormhole - 1;
+        // Note that if gameDiff is specified, we don't store enslaved time.
+        // Currently this only happens in a tick where we're using all the enslaved time,
+        // but if it starts happening in other cases this will have to be reconsidered.
+        player.celestials.enslaved.stored += diff * timeStoredFactor;
+        speedFactor = speedFactorWithoutWormhole;
+      }
+      diff *= speedFactor;
+    } else {
+      diff = options.gameDiff;
+    }
+
+    DeltaTimeState.update(realDiff, diff);
+
+    // Wormhole is affected only by time glyphs.
+    let wormholeDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
@@ -890,15 +949,18 @@ function gameLoop(diff) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (!player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
-        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
     }
 
     if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
         if (player.reality.upg.includes(11)) {
-            player.infinitied += Math.floor(gainedInfinities() * 0.1) * diff/1000
+          let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
+          player.infinitied += gained
+          Enslaved.trackInfinityGeneration(gained)
+
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {
@@ -910,13 +972,16 @@ function gameLoop(diff) {
         player.partInfinitied -= 5;
         player.infinitied ++;
     }
+    if (Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
+      player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
+    }
 
     if (player.reality.upg.includes(14)) {
         eternitiesGain += diff * player.realities / 1000
         if (player.reality.upg.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
         if (eternitiesGain < 2) {
             player.eternities += 1
-            player.eternitiesGain -= 1
+            eternitiesGain -= 1
         } else {
             player.eternities += Math.floor(eternitiesGain)
             eternitiesGain -= Math.floor(eternitiesGain)
@@ -934,23 +999,20 @@ function gameLoop(diff) {
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
-        if (!Challenge(12).isRunning && player.currentEternityChall != "eterc3") {
+        if (!Challenge(12).isRunning && !EternityChallenge(3).isRunning) {
             for (let tier = 7; tier >= 1; --tier) {
-                var name = TIER_NAMES[tier];
-
-                player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
+              const dimension = NormalDimension(tier);
+              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
             }
-        } else if (player.currentEternityChall != "eterc3") {
+        } else if (EternityChallenge(3).isRunning) {
             for (let tier = 6; tier >= 1; --tier) {
-                var name = TIER_NAMES[tier];
-
-                player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
+              const dimension = NormalDimension(tier);
+              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
             }
         } else {
             for (let tier = 3; tier >= 1; --tier) {
-                var name = TIER_NAMES[tier];
-
-                player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
+              const dimension = NormalDimension(tier);
+              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
             }
         }
 
@@ -967,15 +1029,15 @@ function gameLoop(diff) {
         }
     }
 
-    player.realTimePlayed += diff / speedFactor
-    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += diff / speedFactor
+    player.realTimePlayed += realDiff;
+    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
-    player.thisInfinityRealTime += diff / speedFactor
+    player.thisInfinityRealTime += realDiff;
     player.thisEternity += diff
-    player.thisEternityRealTime += diff / speedFactor
+    player.thisEternityRealTime += realDiff;
     player.thisReality += diff
-    player.thisRealityRealTime += diff / speedFactor
+    player.thisRealityRealTime += realDiff;
 
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
@@ -1015,13 +1077,17 @@ function gameLoop(diff) {
       1.33,
       TimeStudy(171)
     );
-    if (getAdjustedGlyphEffect("timefreeTickMult") != 0) {
-      tickmult = 1+(tickmult-1)*getAdjustedGlyphEffect("timefreeTickMult");
-    }
-    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs
-    let freeTickSoftcap = 300000;
+
+    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
+    tickmult = 1 + (tickmult - 1) * multFromGlyph;
+
     if (player.timeShards.gt(0)) {
-      let softcapAddition = getAdjustedGlyphEffect("timefreeTickMult") == 0 ? 1 : 0.8 + 0.2*getAdjustedGlyphEffect("timefreeTickMult");
+      // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
+      // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
+      // reports continue to be accurate.
+      const freeTickSoftcap = 300000;
+      const fixedIncrease = 1 / TS171_MULTIPLIER;
+      let softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
       let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
       let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(softcapAddition+tickmult))) : uncapped;
       let gain = Math.max(0, softcapped - player.totalTickGained);
@@ -1132,7 +1198,7 @@ function gameLoop(diff) {
     }
 
     var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && getNewInfReq().lt(player.money) && player.infDimensionsUnlocked[7] === false) {
+    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || player.reality.perks.includes(67)) && player.infDimensionsUnlocked[7] === false) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
@@ -1146,7 +1212,7 @@ function gameLoop(diff) {
     player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
 
   // Adjust the text on the reality button in order to minimize text overflowing
-  let glyphLevelText = "<br>Glyph level: "+shortenDimensions(gainedGlyphLevel())+" ("+percentToNextGlyphLevel()+"%)";
+  let glyphLevelText = "<br>Glyph level: "+gainedGlyphLevel().toFixed(0)+" ("+percentToNextGlyphLevel()+"%)";
   if (player.dilation.studies.length < 6) // Make sure reality has been unlocked again
     document.getElementById("realitymachine").innerHTML = "You need to purchase the study at the bottom of the tree to Reality again!"
 	else if (gainedRealityMachines() > 554)  // At more than (e7659 EP, 554 RM) each +1 EP exponent always adds at least one more RM, so drop the percentage entirely
@@ -1176,10 +1242,13 @@ function gameLoop(diff) {
   document.getElementById("realitymachine").className = "infotooltip"
   $("#realitymachine").append('<span class="infotooltiptext">' + nextRMText + glyphLevelFactorText + "</span>");
   
-  if (player.wormhole[0].unlocked) {
-    wormHoleLoop(diff, 0)
-    wormHoleLoop(diff, 1)
-    wormHoleLoop(diff, 2)
+  if (player.wormhole[0].unlocked && !player.wormholePause) {
+    updateWormholePhases(wormholeDiff);
+    for (let i = 0; i < player.wormhole.length; i++) {
+      updateWormholeStatusText(i);
+      updateWormholeUpgradeDisplay(i);
+    }
+    updateWormholeGraphics();
   }
   
   // Reality unlock and TTgen perk autobuy
@@ -1195,7 +1264,7 @@ function gameLoop(diff) {
 function gameLoopWithAutobuyers(seconds, ticks, real) {
   for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
     gameLoop(1000 * seconds)
-    autoBuyerTick();
+    Autobuyer.tick();
     if (real)
       console.log(ticksDone)
   }
@@ -1208,77 +1277,37 @@ function simulateTime(seconds, real, fast) {
     //calling it with fast will only simulate it with a max of 50 ticks
     var ticks = seconds * 20;
     var bonusDiff = 0;
-    var playerStart = Object.assign({}, player);
-    let wormholeActivations = 0;
+    var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
+
+    // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
+    if (ticks > 1000 && !real && !fast) {
+      bonusDiff = (ticks - 1000) / 20;
+      ticks = 1000;
+    } else if (ticks > 50 && fast) {
+      bonusDiff = (ticks - 50);
+      ticks = 50;
+    }
     
-    // Simulation code with wormhole (should be at most 600 ticks)
-    if (player.wormhole[0].unlocked) {
-      let wormholeCycleTime = player.wormhole[0].duration + player.wormhole[0].speed;
-      wormholeActivations = Math.floor(seconds / wormholeCycleTime);
-      
-      if (wormholeActivations < 2)  // Should be fine to just simulate the ticks
-        gameLoopWithAutobuyers(seconds / 600, 600, real)
-      else {
-        // Simulate until the start of the idle cycle (50 ticks each part) for code consistency
-        let simulatedAtStart = 0;
-        if (!player.wormhole[0].active) {
-          let simulatedIdleTime = player.wormhole[0].speed - player.wormhole[0].phase;
-          gameLoopWithAutobuyers(simulatedIdleTime / 50, 50, real);
-          setWormhole(true, 0);
-          simulatedAtStart += simulatedIdleTime;
-        }
-        let simulatedActiveTime = player.wormhole[0].duration - player.wormhole[0].phase;
-        gameLoopWithAutobuyers(simulatedActiveTime / 50, 50, real);
-        setWormhole(false, 0);
-        simulatedAtStart += simulatedActiveTime;
-        
-        // Calculate how much time to simulate after cycles, "borrowing" time from one activation if needed
-        let afterCycleTime = seconds - wormholeActivations * wormholeCycleTime - simulatedAtStart;
-        if (afterCycleTime < 0) {
-          afterCycleTime += wormholeCycleTime;
-          wormholeActivations--;
-        }
-        
-        // Simulate repeated wormhole activations
-        if (wormholeActivations < 100) { // Run X ticks per activation, half on and half off, maximum 400
-          let ticksPerActivation = Math.floor(400 / wormholeActivations);
-          for (let act = 0; act < wormholeActivations; act++) {
-            gameLoopWithAutobuyers(player.wormhole[0].speed / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(true, 0);
-            gameLoopWithAutobuyers(player.wormhole[0].duration / ticksPerActivation, ticksPerActivation, real)
-            setWormhole(false, 0);
-          }
-        }
-        else {  // Calculates an average speedup and just does 400 ticks at that rate with the wormhole explicitly disabled after each tick
-          let avgSpeed = (player.wormhole[0].speed + player.wormhole[0].power * player.wormhole[0].duration) / wormholeCycleTime;
-          oldTotalTime = player.totalTimePlayed;
-          oldRealTime = player.realTimePlayed;
-          for (let ticksDone = 0; ticksDone < 400; ticksDone++) {
-            gameLoop(avgSpeed * seconds);
-            setWormhole(false, 0);
-            autoBuyerTick();
-          if (real)
-            console.log(ticksDone)
-          }
-          player.totalTimePlayed = oldTotalTime + 1000*seconds * avgSpeed;
-          player.realTimePlayed = oldRealTime + 1000*seconds;
-        }
-      
-        // Simulates another 100 ticks after the wormhole stuff to get the right phase
-        gameLoopWithAutobuyers(afterCycleTime / 100, 100, real);
+    // Simulation code with wormhole
+    if (player.wormhole[0].unlocked && !player.wormholePause) {
+      let remainingRealSeconds = seconds;
+      for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
+        let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+        // The wormhole is affected by time glyphs, but nothing else.
+        let remainingWormholeSeconds = remainingRealSeconds * timeGlyphSpeedup;
+        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingWormholeSeconds, numberOfTicksRemaining, 0.0001);
+        realTickTime /= timeGlyphSpeedup;
+        remainingRealSeconds -= realTickTime;
+        // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
+        // (it doesn't run in gameLoop).
+        gameLoop(1000 * realTickTime, {wormholeSpeedup: wormholeSpeedup});
+        Autobuyer.tick();
       }
     }
       
     // This is pretty much the older simulation code
-    else {  
-      if (ticks > 1000 && !real && !fast) {
-          bonusDiff = (ticks - 1000) / 20;
-          ticks = 1000;
-      } else if (ticks > 50 && fast) {
-          bonusDiff = (ticks - 50);
-          ticks = 50;
-      }
+    else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
     var popupString = "While you were away"
@@ -1289,7 +1318,12 @@ function simulateTime(seconds, real, fast) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
-    if (wormholeActivations != 0)  popupString+= " <br>The wormhole activated  "+ wormholeActivations + (wormholeActivations == 1 ? " time." : " times.")
+    for (let i = 0; i < player.wormhole.length; i++) {
+      let currentActivations = player.wormhole[i].activations;
+      let oldActivations = playerStart.wormhole[i].activations;
+      let activationsDiff = currentActivations - oldActivations;
+      if (activationsDiff > 0)  popupString += " <br>Wormhole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
+    }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         giveAchievement("While you were away... Nothing happened.")
@@ -1297,10 +1331,6 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-}
-
-function startInterval() {
-    gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
 }
 
 function updateChart(first) {
@@ -1318,10 +1348,6 @@ function updateChart(first) {
     }
 }
 updateChart(true);
-
-function autoBuyerTick() {
-  Autobuyer.tick();
-}
 
 function autoBuyDilationUpgrades() {
   if (player.reality.perks.includes(12)) {
@@ -1400,6 +1426,11 @@ setInterval(function() {
 scrollNextMessage();
 
 function showRealityTab(tabName) {
+  if (ui.view.tabs.current !== "reality-tab") {
+    showTab("reality")
+    ui.view.tabs.current = "reality-tab";
+  }
+  ui.view.tabs.reality.subtab = tabName;
     //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
     var tabs = document.getElementsByClassName('realitytab');
     var tab;
@@ -1458,17 +1489,13 @@ function init() {
 }
 
 setInterval(function () {
-    save_game()
-}, 30000);
-
-setInterval(function () {
     if (playFabId != -1 && player.options.cloud) playFabSaveCheck();
 }, 1000*60*5)
 document.getElementById("hiddenheader").style.display = "none";
 
 
 window.onload = function() {
-    startInterval()
+    GameIntervals.start();
     setTimeout(function() {
         if (kong.enabled) {
             playFabLogin();
@@ -1490,7 +1517,7 @@ window.onfocus = function() {
 };
 
 window.onblur = function() {
-  Keyboard.stopSpins();
+  GameKeyboard.stopSpins();
 };
 
 function setShiftKey(isDown) {

@@ -1,9 +1,9 @@
 const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),
-  update(deltaTime, scale) {
+  update(deltaTime, gameDeltaTime) {
     this.unscaledDeltaTime = TimeSpan.fromMilliseconds(deltaTime);
-    this.deltaTime = TimeSpan.fromMilliseconds(deltaTime * scale);
+    this.deltaTime = TimeSpan.fromMilliseconds(gameDeltaTime);
   }
 };
 

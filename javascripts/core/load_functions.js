@@ -23,6 +23,9 @@ function onLoad() {
     player.thisEternity = player.totalTimePlayed;
   }
   player = deepmerge.all([defaultStart, player]); // This adds all the undefined properties to the save which are in player.js
+  if (isDevEnvironment()) {
+    guardFromNaNValues(player);
+  }
   if (player.infinitied > 0 && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
@@ -154,7 +157,7 @@ function onLoad() {
         player.thisInfinityTime*= 100;
         player.thisEternity *= 100;
         player.thisReality *= 100;
-        player.thisInfinityRealTime = player.thisInfinity;
+        player.thisInfinityRealTime = player.thisInfinityTime;
         player.thisEternityRealTime = player.thisEternity;
         player.thisRealityRealTime = player.thisReality;
         if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
@@ -229,6 +232,12 @@ function onLoad() {
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
   }
+
+  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the wormhole in the correct phase.
+  for (let i = 0; i < player.wormhole.length; i++) {
+    updateWormholeStatusText(i);
+  }
+  updateWormholeGraphics();
 }
 
 function convertAutobuyerMode() {
@@ -266,8 +275,12 @@ function unfuckChallengeIds() {
 }
 
 function unfuckMultCosts() {
-  player.infinityRebuyables[0] = Math.round(Math.log(player.tickSpeedMultDecreaseCost / 3e6) / Math.log(5));
-  player.infinityRebuyables[1] = Math.round(Math.log(player.dimensionMultDecreaseCost / 1e8) / Math.log(5e3));
+  if (player.tickSpeedMultDecreaseCost !== undefined) {
+    player.infinityRebuyables[0] = Math.round(Math.log(player.tickSpeedMultDecreaseCost / 3e6) / Math.log(5));
+  }
+  if (player.dimensionMultDecreaseCost !== undefined) {
+    player.infinityRebuyables[1] = Math.round(Math.log(player.dimensionMultDecreaseCost / 1e8) / Math.log(5e3));
+  }
   delete player.tickSpeedMultDecrease;
   delete player.tickSpeedMultDecreaseCost;
   delete player.dimensionMultDecrease;

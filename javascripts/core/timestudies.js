@@ -86,7 +86,6 @@ function buyDilationStudy(name, cost, quiet) {
             if (player.reality.perks.includes(33)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
         }
         if (name === 6 && !player.reality.perks.includes(66)) {
-            showTab("reality")
             showRealityTab("glyphstab");
         }
         player.dilation.studies.push(name)

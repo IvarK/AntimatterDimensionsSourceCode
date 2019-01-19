@@ -355,7 +355,7 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 2, 0)} multiplier in a single sacrifice. Reward: Sacrifices are stronger.`,
+    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice. Reward: Sacrifices are stronger.`,
     effect: () => 0.011
   },
   {
@@ -451,7 +451,7 @@ GameDatabase.achievements.normal = [
   {
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
-    tooltip: () => `Have all your Infinities in your past 10 Infinities be at least ${shorten(Number.MAX_VALUE, 0, 0)} times higher IP than the previous one. Reward: Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy.`
+    tooltip: () => `Have all your Infinities in your past 10 Infinities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one. Reward: Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy.`
   },
   {
     id: 112,
@@ -523,12 +523,12 @@ GameDatabase.achievements.normal = [
   {
     id: 126,
     name: "Popular music",
-    tooltip: () => `Have 180 times more Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti galaxies divide your Replicanti by ${shorten(Number.MAX_VALUE, 0, 0)} instead of resetting them to 1.`
+    tooltip: () => `Have 180 times more Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti galaxies divide your Replicanti by ${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 0, 0)} EP.`
+    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 1, 0)} EP.`
   },
   {
     id: 128,
@@ -556,7 +556,7 @@ GameDatabase.achievements.normal = [
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${shorten(new Decimal("1e20000"), 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 0, 0)} Replicanti.`
+    tooltip: () => `Reach ${shorten(new Decimal("1e20000"), 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
@@ -594,31 +594,71 @@ GameDatabase.achievements.normal = [
   {
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
-    tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shorten(Number.MAX_VALUE, 0, 0)} times higher EP than the previous one. Reward: nothing right now.`
+    tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one. Reward: nothing right now.`
   },
   {
     id: 144,
-    name: "r144",
-    tooltip: "I appreciate your curiosity :)"
+    name: "Is this an Interstellar reference?",
+    tooltip: "Unlock the Wormhole"
   },
   {
     id: 145,
-    name: "r145",
-    tooltip: "nothing to see here"
+    name: "Are you sure these are the right way around?",
+    tooltip: "Have Wormhole interval smaller than the duration"
   },
   {
     id: 146,
-    name: "r146",
-    tooltip: "thanks"
+    name: "Perks of living",
+    tooltip: "Have all perks bought"
   },
   {
     id: 147,
-    name: "r147",
-    tooltip: "todo: make this achievement a thing"
+    name: "Master of Reality",
+    tooltip: "Have all Reality upgrades bought"
   },
   {
     id: 148,
-    name: "r148",
-    tooltip: "if you read this, ping me (or don't)"
+    name: "Royal Flush",
+    tooltip: "Reality with one of each glyph type"
+  },
+  {
+    id: 151,
+    name: "Transcension sucked anyway",
+    tooltip: "Sacrifice a Transcendent glyph",
+  },
+  {
+    id: 152,
+    name: "Personal Space",
+    tooltip: "Have 100 glyphs in your inventory",
+  },
+  {
+    id: 153,
+    name: "Do I really have to do this?",
+    tooltip: "Have 0 glyphs in your inventory and 100 or more realities"
+  },
+  {
+    id: 154,
+    name: "I didn't even realize how fast you are",
+    tooltip: "Reality in under 3 seconds"
+  },
+  {
+    id: 155,
+    name: "Why did you have to add RNG to the game?",
+    tooltip: "Get a Celestial glyph"
+  },
+  {
+    id: 156,
+    name: "True Sacrifice",
+    tooltip: "Sacrifice a Celestial glyph"
+  },
+  {
+    id: 157,
+    name: "I'm up all night to get lucky",
+    tooltip: "Have 100 rare or better glyphs"
+  },
+  {
+    id: 158,
+    name: "Bruh, are you like, inside the hole?",
+    tooltip: "Spend 24 hours with wormhole active in a row"
   },
 ];

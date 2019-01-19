@@ -143,7 +143,7 @@ function mainIteration() {
         toggle(current)
         automatorIdx+=1
         break;
-        case "goto":
+      case "goto":
         if (!player.reality.automatorCommands.includes(31)) return false
         automatorIdx = parseInt(current.target)-1
         break;
@@ -191,7 +191,7 @@ function buy(current) {
       return true
       break;
     case "ttip":
-      if (!player.reality.automatorCommands.includes(34)) return false
+      if (!player.reality.automatorCommands.includes(35)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -204,7 +204,7 @@ function buy(current) {
       else return false
       break;
     case "ttep":
-      if (!player.reality.automatorCommands.includes(33)) return false
+      if (!player.reality.automatorCommands.includes(34)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -262,22 +262,22 @@ function wait(current) {
   if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
-      if (!player.reality.automatorCommands.includes(22)) return false
+      if (!player.reality.automatorCommands.includes(23)) return false
       if (id.gt(player.eternityPoints)) return false
       else return true
       break;
     case "ip":
-      if (!player.reality.automatorCommands.includes(31)) return false
+      if (!player.reality.automatorCommands.includes(32)) return false
       if (id.gt(player.infinityPoints)) return false
       else return true
       break;
     case "antimatter":
-      if (!player.reality.automatorCommands.includes(21)) return false
+      if (!player.reality.automatorCommands.includes(22)) return false
       if (id.gt(player.money)) return false
       else return true
       break;
     case "replicanti":
-      if (!player.reality.automatorCommands.includes(32)) return false
+      if (!player.reality.automatorCommands.includes(33)) return false
       if (id.gt(player.replicanti.amount)) return false
       else return true
       break;

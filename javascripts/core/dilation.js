@@ -1,16 +1,16 @@
 function startDilatedEternity() {
   if (!TimeStudy.dilation.isBought) return false
-  clearInterval(gameLoopIntervalId);
+  GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
       eternity(true)
       setTimeout(function() {
-          gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+        GameIntervals.gameLoop.start();
       }, 250)
       return false
   }
   if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
       setTimeout(function() {
-          gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+        GameIntervals.gameLoop.start();
       }, 250)
       return false
   }
@@ -21,7 +21,7 @@ function startDilatedEternity() {
   mult18 = new Decimal(1)
   ec10bonus = new Decimal(1)
   setTimeout(function() {
-      gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+    GameIntervals.gameLoop.start();
   }, 250)
   return true
 }
@@ -134,10 +134,6 @@ function dilatedValueOf(value) {
   const log10 = value.log10();
   const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
-}
-
-function dilatedTickspeed() {
-  return dilatedValueOf(player.tickspeed);
 }
 
 class DilationUpgradeState extends PurchasableMechanicState {

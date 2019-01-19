@@ -2,6 +2,7 @@ Vue.component('celestials-tab', {
   data: function() {
     return {
       teresaUnlocked: false,
+      enslavedUnlocked: false,
       tabs: [
         {
           name: "Effarig",
@@ -15,15 +16,15 @@ Vue.component('celestials-tab', {
           condition: function() { return this.teresaUnlocked }.bind(this)
         },
         {
-          name: "V",
-          id: "V",
-          component: "v-tab",
-          condition: function() { return false }
-        },
-        {
           name: "The Enslaved Ones",
           id: "Enslaved",
           component: "enslaved-tab",
+          condition: function() { return this.enslavedUnlocked }.bind(this)
+        },
+        {
+          name: "V",
+          id: "V",
+          component: "v-tab",
           condition: function() { return false }
         },
         {
@@ -69,6 +70,7 @@ Vue.component('celestials-tab', {
   methods: {
     update() {
       this.teresaUnlocked = Effarig.has(EFFARIG_UNLOCKS.TERESA)
+      this.enslavedUnlocked = Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)
     }
   },
   template:

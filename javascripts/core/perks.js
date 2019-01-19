@@ -46,12 +46,13 @@ const CONNECTED_PERKS = {
   55: [53, 56],
   56: [55, 57],
   57: [56],
-  61: [12, 62, 63],
+  61: [12, 62, 63, 67],
   62: [61],
   63: [61, 64],
   64: [63, 65, 66],
   65: [64],
   66: [64],
+  67: [61],
   71: [11, 72, 73, 74, 75],
   72: [71, 13],
   73: [71, 23],
@@ -103,6 +104,7 @@ function buyPerk(id, cost) {
   updateAutomatorRows();
   player.reality.pp -= cost
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
+  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
 }
 
 class PerkState {

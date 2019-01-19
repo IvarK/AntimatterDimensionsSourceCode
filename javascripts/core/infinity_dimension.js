@@ -179,7 +179,7 @@ class InfinityDimensionState {
   }
 
   get isUnlocked() {
-    return player.infDimensionsUnlocked[this._tier - 1] || player.eternities >= 25;
+    return player.infDimensionsUnlocked[this._tier - 1];
   }
 
   get requirement() {
@@ -216,7 +216,7 @@ class InfinityDimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning) {
+    if (EternityChallenge(10).isRunning || Enslaved.isRunning) {
       return new Decimal(0);
     }
     let production = this.amount;
@@ -224,7 +224,7 @@ class InfinityDimensionState {
       return production;
     }
     if (EternityChallenge(7).isRunning) {
-      production = production.dividedBy(player.tickspeed.dividedBy(1000));
+      production = production.dividedBy(Tickspeed.current.dividedBy(1000));
     }
     return production
       .timesEffectOf(InfinityChallenge(6).reward)
@@ -269,6 +269,10 @@ class InfinityDimensionState {
 
     mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
 
+    if (Teresa.isRunning) {
+      mult = teresaMultiplier(mult);
+    }
+    
     return mult;
   }
 

@@ -405,7 +405,7 @@ dev.updateTestSave = function() {
 
   if (player.options.testVersion === 24) {
     // following logic from autobuyers (before the addition of wall clock time stats)
-    var speedup = getGameSpeedupFactor(false);
+    var speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
@@ -427,6 +427,10 @@ dev.updateTestSave = function() {
     unfuckMultCosts();
     player.options.testVersion = 27;
   }
+
+  if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
+  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
+  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
 }
 
 // Still WIP
@@ -462,7 +466,7 @@ dev.showProductionBreakdown = function() {
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(player[TIER_NAMES[i] + 'Bought'] / 10));
+    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);

@@ -80,8 +80,9 @@ class GameOptions {
     if (player.options.updateRate === 200) {
       giveAchievement("You should download some more RAM");
     }
-    clearInterval(gameLoopIntervalId);
-    gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
+    GameIntervals.gameLoop.restart();
+    Enslaved.infinityTracking = []
+    Enslaved.totalInfinities = 0
   }
 }
 

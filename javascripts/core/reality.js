@@ -34,7 +34,8 @@ function reality(force, reset, auto) {
             document.getElementById("realityanimbg").style.animation = "";
             document.getElementById("realityanimbg").style.display = "none";
         }, 10000);
-        if (force === true) setTimeout(reality(true), 3000);
+        // I'm fairly sure this first case is currently impossible but I'm keeping it just in case.
+        if (force === true) setTimeout(function () {reality(true)}, 3000);
         else setTimeout(reality, 3000);
         return
     }
@@ -77,10 +78,13 @@ function reality(force, reset, auto) {
     if (player.thisReality < 15 * 60 * 1000 && !reset) unlockRealityUpgrade(23)
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
+    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
+    if (GLYPH_TYPES.every((type) => player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+
     if (player.reality.respec) {
         respecGlyphs();
     }
-    handleCelestialRuns()
+    handleCelestialRuns(force)
 
     //reset global values to avoid a tick of unupdated production
     postc8Mult = new Decimal(0);
@@ -140,6 +144,7 @@ function reality(force, reset, auto) {
     }
     player.eternityChalls = {};
     player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+    player.reality.lastAutoEC = 0;
     player.currentEternityChall = "";
     player.eternityChallUnlocked = 0;
     player.etercreq = 0;
@@ -191,7 +196,7 @@ function reality(force, reset, auto) {
     resetChallengeStuff();
     resetDimensions();
     secondSoftReset();
-    if (player.reality.upg.includes(10)) player.eternities = 100;
+    if (player.reality.upg.includes(10))    player.eternities = 100;
     if (!reset) player.reality.pp++;
     $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
     if (player.infinitied > 0 && !Challenge(1).isCompleted) {
@@ -249,14 +254,24 @@ function reality(force, reset, auto) {
             }
         }
     }
+    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) {
+      Teresa.unlock(TERESA_UNLOCKS.REALITY_COMPLETE);
+    }
+
     GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
 }
 
-function handleCelestialRuns() {
+function handleCelestialRuns(force) {
   if (player.celestials.effarig.run) {
     player.celestials.effarig.run = false
-    if (player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+    if (!force && player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
+  }
+  if (player.celestials.teresa.run) {
+    player.celestials.teresa.run = false
+  }
+  if (player.celestials.enslaved.run) {
+    player.celestials.enslaved.run = false
   }
 }
 

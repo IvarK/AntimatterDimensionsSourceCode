@@ -5,6 +5,8 @@
 
 * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 *:focus {
@@ -16,7 +18,7 @@
   --color-medium: #AEAEAE;
   --color-dark: #1d1b22;
   --color-accent-1: #E64C66;
-  --color-accent-2: #1BBC9B;
+  --color-accent-2: rgb(223, 80, 80);
   --color-good: #1bbb36;
   --color-good-dark: #138626;
 }
@@ -37,12 +39,12 @@
 }
 
 .resource {
-  height: 57px;
+  height: 58px;
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
-  border: 1px solid var(--color-accent-2);
-  margin-bottom: -2px;
+  border-right: 1px solid var(--color-accent-2);
+  border-bottom: 1px solid var(--color-accent-2);
 }
 
 .resource img {
@@ -83,12 +85,12 @@
 }
 
 .tab-button {
-  height: 55px;
+  height: 52px;
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
-  border: 1px solid var(--color-accent-2);
-  margin-bottom: -2px;
+  border-right: 1px solid var(--color-accent-2);
+  border-bottom: 1px solid var(--color-accent-2);
   justify-content: center;
   align-items: center;
   color: white;
@@ -125,14 +127,14 @@
 
 .subtabs {
   position: absolute;
-  top: 0;
-  right: -55px;
+  top: -1;
+  right: -52px;
   margin-right: 1px;
 }
 
 .subtab {
-  height: 55px;
-  width: 55px;
+  height: 52px;
+  width: 52px;
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
@@ -143,12 +145,21 @@
   font-size: 1.6em;
 }
 
+.subtab:not(:first-child) {
+  border-top: none;
+}
+
+.subtab:first-child {
+  height: 53px
+}
+
 .active {
   background-color: #2c2933;
 }
 
 .dimensions-container {
-  padding: 20px 70px;
+  padding: 20px 50px;
+  padding-left: 90px;
 }
 
 .dimension-row {
@@ -157,6 +168,12 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.dimension-row:nth-child(even) {
+  background-color: rgba(223, 80, 80, 0.3);
 }
 
 .dimension-row h3 {
@@ -226,7 +243,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 0 70px;
+  padding: 0 50px;
 }
 
 .resets-container {

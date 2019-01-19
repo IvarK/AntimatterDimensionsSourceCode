@@ -517,7 +517,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${shorten(1e100, 0, 0)} IP without any Infinities or 1st Dimensions. Reward: IP multiplier based on time spent this Infinity.`,
     effect: function() {
       const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-      return Decimal.pow(2, Math.log(thisInfinity) * Math.pow(thisInfinity, 0.11));
+      return Decimal.pow(2, Math.log(thisInfinity) * Math.min(Math.pow(thisInfinity, 0.11), 500));
     }
   },
   {

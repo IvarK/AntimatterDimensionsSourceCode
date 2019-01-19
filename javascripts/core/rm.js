@@ -22,15 +22,16 @@ function random() {
 
 function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
   let u = 0, v = 0;
-  let minimumValue = 1
-  let ret = 1
-  if (player.reality.perks.includes(23)) minimumValue = 1.1
+  let minimumValue = 1;
+  let ret = 1;
+  if (player.reality.perks.includes(23)) minimumValue += 0.125;
   while (ret <= minimumValue || u == 0 || v == 0) {
     u = random();
     v = random();
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
   }
-  return ret;
+  // Each rarity% is 0.025 strength.
+  return ret + getGlyphSacEffect("teresa") / 40;
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
@@ -45,7 +46,7 @@ function generateRandomGlyph(level) {
     type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
   } while (player.reality.glyphs.last === type);
   player.reality.glyphs.last = type;
-  let strength = gaussian_bell_curve()
+  let strength = gaussian_bell_curve();
   if (player.reality.upg.includes(16)) strength *= 1.3
   let effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
@@ -159,7 +160,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "teresarm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
     case "teresaglyph":
-      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)/2
+      return Math.floor(level * strength / 10);
     case "teresaachievement":
       return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
     case "teresaforgotten":
@@ -291,8 +292,8 @@ function getGlyphTooltip(glyph) {
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    let reward = glyph.level * glyph.strength * Effarig.runRewardMultiplier;
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + reward.toFixed(2) + " power</span>";
+    let gain = glyphSacrificeGain(glyph);
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + shorten(gain, 2, 2) + " power</span>";
   }
   tooltipText += "</div></span>"
   return tooltipText;
@@ -619,17 +620,20 @@ function getGlyphSacEffect(type) {
 
     case "dilation":
     return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
+
+    case "teresa":
+    return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e5 + 1)
   }
 }
 
 function getGlyphSacDescription(type) {
   let amount = getGlyphSacEffect(type)
-  let total = shortenRateOfChange(player.reality.glyphs.sac[type])
+  let total = shorten(player.reality.glyphs.sac[type], 2, 2)
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power": {
       let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
-      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
+      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy, 2, 2) + ")<br><br>"
     }
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
@@ -641,12 +645,25 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
     case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount, 2, 2) + "x<br><br>"
+
+    case "teresa":
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
   }
 }
 
+function glyphSacrificeGain(glyph) {
+  let gain = glyph.level * glyph.strength;
+  if (glyph.type === 'teresa') {
+    gain *= Math.pow(Effarig.runRewardMultiplier, 0.2);
+  } else {
+    gain *= Effarig.runRewardMultiplier;
+  }
+  return gain;
+}
+
 function sacrificeGlyph(glyph, force = false) {
-  let toGain = glyph.level * glyph.strength * Effarig.runRewardMultiplier;
+  let toGain = glyphSacrificeGain(glyph);
   if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
@@ -737,9 +754,9 @@ function getGlyphLevelInputs() {
   var dtEffect = adjustFactor(dtBase, weights.dt / 100);
   var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphScaleBegin = 1000;
+  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("teresaglyph");
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult * getAdjustedGlyphEffect("teresaglyph");
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {

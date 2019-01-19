@@ -245,12 +245,6 @@ function gainedRealityMachines() {
     return Decimal.floor(ret)
 }
 
-function logEPforRM(rm) {
-  rm = Decimal.divide(rm, Effarig.rmMultiplier * player.celestials.effarig.rmMult);
-  if (rm.lte(1)) return 4000;
-  return Math.ceil(4000*(rm.log10()/3+1));
-}
-
 function percentToNextRealityMachine() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     return Math.min(((ret - Math.floor(ret)) * 100), 99.9).toFixed(1);

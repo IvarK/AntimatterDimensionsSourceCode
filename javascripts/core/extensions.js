@@ -147,6 +147,21 @@ Array.prototype.last = function(predicate) {
 };
 
 /**
+ * @param {function?} keyFun
+ * @param {function?} valueFun
+ * @returns {object}
+ */
+Array.prototype.mapToObject = function(keyFun, valueFun) {
+  if (typeof keyFun !== "function" || typeof valueFun !== "function")
+    throw "keyFun and valueFun must be functions";
+  let out = {}
+  for (let elem of this) {
+    out[keyFun(elem)] = valueFun(elem);
+  }
+  return out;
+}
+
+/**
  * @type {number[]}
  */
 Array.dimensionTiers = Array.range(1, 8);

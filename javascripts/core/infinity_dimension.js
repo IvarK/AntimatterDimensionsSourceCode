@@ -270,7 +270,7 @@ class InfinityDimensionState {
     mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
 
     if (Teresa.isRunning) {
-      mult = teresaMultiplier(mult);
+      mult = Teresa.multiplier(mult);
     }
     
     return mult;

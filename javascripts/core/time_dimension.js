@@ -165,7 +165,7 @@ class TimeDimensionState {
     }
     
     if (Teresa.isRunning) {
-      mult = teresaMultiplier(mult);
+      mult = Teresa.multiplier(mult);
     }
 
     return mult;

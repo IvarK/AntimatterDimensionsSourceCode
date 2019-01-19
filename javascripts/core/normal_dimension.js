@@ -103,7 +103,7 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   if (Teresa.isRunning) {
-    multiplier = teresaMultiplier(multiplier);
+    multiplier = Teresa.multiplier(multiplier);
   }
   
   return multiplier;

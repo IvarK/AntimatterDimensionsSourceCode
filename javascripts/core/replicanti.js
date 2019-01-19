@@ -26,14 +26,9 @@ function upgradeReplicantiGalaxy() {
   return true;
 }
 
-// Will return 0 if Teresa Infinity is uncompleted
-function teresaInfinityBonusRG() {
-  return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
-}
-
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
-    maxGal += teresaInfinityBonusRG();
+    maxGal += Teresa.bonusRG();
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;

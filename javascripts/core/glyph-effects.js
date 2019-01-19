@@ -1,10 +1,9 @@
-// @ts-check
 
-"use strict";
 // There is a little too much stuff about glyph effects to put in constants.
 
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"]
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω" }
+// The last glyph type you can only get if you got teresa reality
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "teresa"]
+const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", teresa: "Ϙ" }
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -280,6 +279,41 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Multiply the bonus gained from buying 10 Dimensions",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresawormhole",
+    glyphTypes: ["teresa"],
+    singleDesc: "Time modifier raised to the power of ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresarm",
+    glyphTypes: ["teresa"],
+    singleDesc: "Reality Machine multiplier x{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresaglyph",
+    glyphTypes: ["teresa"],
+    singleDesc: "Glyph level multiplier x{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresaachievement",
+    glyphTypes: ["teresa"],
+    singleDesc: "Raise all achievement related effects to a power of ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresaforgotten",
+    glyphTypes: ["teresa"],
+    singleDesc: "Forgotten effect {value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresaunknown",
+    glyphTypes: ["teresa"],
+    singleDesc: "Unkown celestial effect {value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "teresaantimatter",
+    glyphTypes: ["teresa"],
+    singleDesc: "Antimatter effect {value}",
+    combine: GlyphCombiner.multiply,
   }
 ].reduce((prev, effect) => {
   prev[effect.id] = new GlyphEffectConfig(effect);
@@ -297,6 +331,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
+const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "unknown", "antimatter"]
 
 /**
  * @typedef {Object} GlyphTypeInfo
@@ -327,5 +362,9 @@ const GlyphTypeList = [
     name: "power",
     symbol: GLYPH_SYMBOLS.power,
     effects: findGlyphTypeEffects("power"),
+  }, {
+    name: "teresa",
+    symbol: GLYPH_SYMBOLS.teresa,
+    effects: findGlyphTypeEffects("teresa")
   }
 ];

@@ -1,7 +1,3 @@
-// @ts-check
-
-"use strict";
-
 // TODO, add more types
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -9,7 +5,8 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
                            "dilationpow", "powermult", "powerdimboost", "powerbuy10",
                            "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
                            "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
-                           "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel"];
+                           "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+                           "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresaunknown", "teresaantimatter"];
 
 
 /**
@@ -42,8 +39,10 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
  */
 function generateRandomGlyph(level) {
   let type;
+  let glyphTypesLength = GLYPH_TYPES.length - 1
+  if (Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) glyphTypesLength++
   do {
-    type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
+    type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
   } while (player.reality.glyphs.last === type);
   player.reality.glyphs.last = type;
   let strength = gaussian_bell_curve()
@@ -94,6 +93,9 @@ function newGlyph(glyph, type, effectAmount) {
       case "power":
         toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
         if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) toAdd = "pow"
+        break;
+      case "teresa":
+        toAdd = teresaEffects[Math.floor(random() * teresaEffects.length)];
         break;
     }
     if (!effects.includes(toAdd)) effects.push(toAdd)
@@ -152,6 +154,20 @@ function getGlyphEffectStrength(effectKey, level, strength) {
       return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
+    case "teresawormhole":
+      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5)/75
+    case "teresarm":
+      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
+    case "teresaglyph":
+      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)/2
+    case "teresaachievement":
+      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
+    case "teresaforgotten":
+      return 1
+    case "teresaunknown":
+      return 1
+    case "teresaantimatter":
+      return 1
     default:
       return 0;
   }
@@ -438,6 +454,7 @@ function drop(ev) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {
       return glyph.id == data
     })
+    if (glyph.type == "teresa" && player.reality.glyphs.active.some((g) => g.type == "teresa")) return
     if (glyph !== undefined && glyph !== null) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
       player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
@@ -722,7 +739,7 @@ function getGlyphLevelInputs() {
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const glyphScaleBegin = 1000;
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult * getAdjustedGlyphEffect("teresaglyph");
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {

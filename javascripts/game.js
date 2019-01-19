@@ -240,6 +240,7 @@ function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
     ret = ret.times(Effarig.rmMultiplier)
     ret = ret.times(player.celestials.effarig.rmMult)
+    ret = ret.times(getAdjustedGlyphEffect("teresarm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     return Decimal.floor(ret)
 }
@@ -858,7 +859,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
     factor = Teresa.multiplier(factor).toNumber();
   }
-    
+  factor = Math.pow(factor, getAdjustedGlyphEffect("teresawormhole"))
   return factor;
 }
 

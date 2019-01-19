@@ -535,33 +535,39 @@ button {
 }
 
 .glyph.powerglyph {
-    border: 1px solid #22aa48;
-    box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #22aa48;
+  box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .infinityglyph {
-    border: 1px solid #B67F33;
-    box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #B67F33;
+  box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .timeglyph {
-    border: 1px solid #B241E3;
-    box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #B241E3;
+  box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .replicationglyph {
-    border: 1px solid #03A9F4;
-    box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #03A9F4;
+  box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .dilationglyph {
-    border: 1px solid #64DD17;
-    box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #64DD17;
+  box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
+  background: black !important;
+}
+
+.teresaglyph {
+  border: 1px solid #e21717;
+  box-shadow: inset #e21717 0px 0px 10px 2px, #e21717 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .glyphactive .glyph {

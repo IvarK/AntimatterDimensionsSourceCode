@@ -303,7 +303,8 @@ var player = {
         infinity: 0,
         time: 0,
         replication: 0,
-        dilation: 0
+        dilation: 0,
+        teresa: 0
       },
     },
     seed: Math.floor(Date.now() * Math.random() + 1),

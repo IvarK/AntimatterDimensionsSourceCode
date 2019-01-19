@@ -292,8 +292,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "teresaglyph",
     glyphTypes: ["teresa"],
-    singleDesc: "Glyph level multiplier x{value}",
-    combine: GlyphCombiner.multiply,
+    singleDesc: "Instability starting glyph level +{value}",
+    combine: GlyphCombiner.add,
   }, {
     id: "teresaachievement",
     glyphTypes: ["teresa"],

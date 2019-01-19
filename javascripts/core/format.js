@@ -54,7 +54,7 @@ function formatValue(notation, value, places, placesUnder1000) {
           mantissa = value / Math.pow(10, Math.floor(Math.log10(value)));
           power = Math.floor(Math.log10(value));
       }
-      if (power >= 1000000000) {
+      if (power >= 1000000000 && notation !== "Infinity") {
         var commas = false
       } else {
         var commas = player.options.commas;

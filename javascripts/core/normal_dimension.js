@@ -103,7 +103,7 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   if (Teresa.isRunning) {
-    multiplier = teresaMultiplier(multiplier);
+    multiplier = Teresa.multiplier(multiplier);
   }
   
   return multiplier;
@@ -657,7 +657,7 @@ class NormalDimensionState {
     else {
       toGain = getDimensionProductionPerSecond(tier + 1);
     }
-    return toGain.times(10).dividedBy(this.amount.max(1));
+    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupFactor());
   }
 
   /**

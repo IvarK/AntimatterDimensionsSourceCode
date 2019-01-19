@@ -13,20 +13,6 @@ const TERESA_UNLOCKS = {
   REALITY_COMPLETE: 6
 }
 
-function teresaNerfFactor(power) {
-  let x = Decimal.max(power, 10).log10();
-  if (!Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) return Math.min(1 + 0.5 * Math.log10(x), 10);
-  else  return Math.min(1 + 2.5 * Math.log10(x), 20);
-}
-
-function teresaTickspeed() {
-  return new Decimal(1 / (3 + (player.tickspeed.reciprocal().plus(new Decimal(10))).log10())).pow(6.5 * teresaNerfFactor(player.timeShards)).min(1).times(1000);
-}
-
-function teresaMultiplier(multiplier) {
-  return new Decimal(Math.pow(Decimal.plus(multiplier, new Decimal(10)).log10(), teresaNerfFactor(player.infinityPower)));
-}
-
 var Teresa = {
   buyUnlock(id, cost) {
     if (this.shardAmount < cost) return
@@ -67,9 +53,32 @@ var Teresa = {
     return counter
   },
   get shardsGained() {
-    return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) {
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+    }
+    return 0
   },
   get shardAmount() {
     return player.celestials.teresa.relicShards
+  },
+  nerfFactor(power) {
+    let x = Decimal.max(power, 10).log10();
+    if (!this.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+      return Math.min(1 + 0.5 * Math.log10(x), 10);
+    }
+    return Math.min(1 + 2.5 * Math.log10(x), 20);
+  },
+  get tickspeed() {
+    const base = 3 + player.tickspeed.reciprocal().clampMin(10).log10();
+    const pow = -6.5 * this.nerfFactor(player.timeShards);
+    return new Decimal(base).pow(pow).clampMax(1).times(1000);
+  },
+  multiplier(mult) {
+    const base = new Decimal(mult).clampMin(10).log10();
+    const pow = this.nerfFactor(player.infinityPower);
+    return new Decimal(Math.pow(base, pow));
+  },
+  get bonusRG() { // Will return 0 if Teresa Infinity is uncompleted
+    return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
   }
-}
+};

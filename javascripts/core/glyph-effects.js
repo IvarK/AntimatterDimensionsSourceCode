@@ -140,11 +140,13 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["time"],
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs × {value} faster ",
+    genericDesc: "Game speed multiplier",
     combine: GlyphCombiner.multiply,
   }, {
     id: "timefreeTickMult",
     glyphTypes: ["time"],
     singleDesc: "Free tickspeed threshold multiplier ×{value}",
+    genericDesc: "Free tickspeed cost multiplier",
     // accurately represent what the multiplier actually does in code, assuming TS171
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.
@@ -158,6 +160,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["time"],
     singleDesc: "Multiply EP gain by {value}",
     totalDesc: "EP gain ×{value}",
+    genericDesc: "EP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
   }, {
@@ -171,12 +174,14 @@ GameDatabase.reality.glyphEffects = [
     id: "dilationgalaxyThreshold",
     glyphTypes: ["dilation"],
     singleDesc: "Free galaxy threshold multiplier ×{value}",
+    genericDesc: "Free galaxy cost multiplier",
     combine: GlyphCombiner.multiply,
   }, {  // TTgen generates slowly TT, value amount is per second, displayed per hour
     id: "dilationTTgen",
     glyphTypes: ["dilation"],
     singleDesc: "Generates {value} TT per hour",
     totalDesc: "Generating {value} TT per hour",
+    genericDesc: "TT generation",
     /** @type {function(number): string} */
     formatEffect: x => (3600 * x).toFixed(2),
     combine: GlyphCombiner.add,
@@ -186,6 +191,7 @@ GameDatabase.reality.glyphEffects = [
     // FIXME, <br> is a little weird to have here
     singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
+    genericDesc: "Normal Dimensions ^x while dilated",
     combine: GlyphCombiner.multiply,
     /** @type {function(number): number} */
     softcap: value => value > 10 ? 10 + Math.pow(value - 10, 0.5) : value,
@@ -194,6 +200,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["replication"],
     singleDesc: "Multiply replication speed by {value}",
     totalDesc: "Replication speed ×{value}",
+    genericDesc: "Replication speed multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
   }, {
@@ -209,6 +216,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["replication"],
     singleDesc: "Multiply DT gain by <br>log₁₀(replicanti)×{value}",
     totalDesc: "DT gain from log₁₀(replicanti)×{value}",
+    genericDesc: "DT gain multiplier (log₁₀(replicanti))",
     formatEffect: x => x.toFixed(5),
     combine: GlyphCombiner.add,
   }, {
@@ -216,6 +224,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["replication"],
     singleDesc: "Replicanti scaling for next glyph level: <br>^0.4 ➜ ^(0.4 + {value})",
     totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
+    genericDesc: "Replicanti scaling for glyph level",
     combine: effects => {
       let sum = effects.reduce(Number.sumReducer, 0);
       if (effects.length > 2) sum *= 6 / (effects.length + 4);
@@ -231,8 +240,10 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityrate",
     glyphTypes: ["infinity"],
+
     singleDesc: "Infinity power conversion rate: <br>^7 ➜ ^(7 + {value})",
     totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
+    genericDesc: "Infinity power conversion rate",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.add,
     /** @type {function(number):number} */
@@ -242,7 +253,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["infinity"],
     singleDesc: "Multiply IP gain by {value}",
     totalDesc: "IP gain ×{value}",
-    genericDesc: "Multiply IP gain",
+    genericDesc: "IP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
   }, {
@@ -250,7 +261,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["infinity"],
     singleDesc: "Multiply infinitied stat gain by {value}",
     totalDesc: "Infinitied stat gain ×{value}",
-    genericDesc: "Multiply infinitied stat gain",
+    genericDesc: "Infinitied stat gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
   }, {  //  * pow is for exponent on time dim multiplier (^1.02) or something like that
@@ -276,7 +287,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["power"],
     singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {value}",
     totalDesc: "Multiplier from \"Buy 10\" ×{value}",
-    genericDesc: "Multiply the bonus gained from buying 10 Dimensions",
+    genericDesc: "\"Buy 10\" bonus multiplier",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.multiply,
   }, {
@@ -338,6 +349,7 @@ const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "u
  * @property {string} name
  * @property {string} symbol
  * @property {GlyphEffectConfig[]} effects
+ * @property {string} color Used for glyph borders
  * @constant
  * @type {GlyphTypeInfo[]}
  */
@@ -346,25 +358,39 @@ const GlyphTypeList = [
     name: "time",
     symbol: GLYPH_SYMBOLS.time,
     effects: findGlyphTypeEffects("time"),
+    color: "#B241E3",
   }, {
     name: "dilation",
     symbol: GLYPH_SYMBOLS.dilation,
     effects: findGlyphTypeEffects("dilation"),
+    color: "#64DD17",
   }, {
     name: "replication",
     symbol: GLYPH_SYMBOLS.replication,
     effects: findGlyphTypeEffects("replication"),
+    color: "#03A9F4",
   }, {
     name: "infinity",
     symbol: GLYPH_SYMBOLS.infinity,
     effects: findGlyphTypeEffects("infinity"),
+    color: "#B67F33",
   }, {
     name: "power",
     symbol: GLYPH_SYMBOLS.power,
     effects: findGlyphTypeEffects("power"),
+    color: "#22aa48",
   }, {
     name: "teresa",
     symbol: GLYPH_SYMBOLS.teresa,
-    effects: findGlyphTypeEffects("teresa")
+    effects: findGlyphTypeEffects("teresa"),
+    color: "#e21717"
   }
 ];
+
+/**
+ * @type {Object.<string, GlyphTypeInfo>}
+ */
+const GlyphTypes = Object.freeze(GlyphTypeList.reduce((out, eff) => {
+  out[eff.name] = eff;
+  return out;
+}, {}))

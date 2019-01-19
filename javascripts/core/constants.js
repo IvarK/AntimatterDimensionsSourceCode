@@ -29,6 +29,43 @@ const AutoRealityMode = {
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 const TS171_MULTIPLIER = 1.25;
 
+// These need to be in descending order for searching over them to work trivially
+const GlyphRarities = [
+  {
+    minStrength: 3.5,
+    name: "Celestial",
+    color: "#5151ec"
+  }, {
+    minStrength: 3.25,
+    name: "Transcendent",
+    color: "#03FFEC"
+  }, {
+    minStrength: 3,
+    name: "Mythical",
+    color: "#D50000"
+  }, {
+    minStrength: 2.75,
+    name: "Legendary",
+    color: "#FF9800"
+  }, {
+    minStrength: 2.5,
+    name: "Epic",
+    color: "#9C27B0"
+  }, {
+    minStrength: 2,
+    name: "Rare",
+    color: "#2196F3"
+  }, {
+    minStrength: 1.5,
+    name: "Uncommon",
+    color: "#43A047"
+  }, {
+    minStrength: 1,
+    name: "Common",
+    color: "white"
+  },
+];
+
 // Use through Automator.Instructions; here to support
 // creation of index by ID
 const _AutomatorInstructions = Object.freeze({

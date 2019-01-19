@@ -231,15 +231,7 @@ function fixGlyph(glyph) {
 }
 
 function getRarity(x) {
-  var name, color;
-  if (x >= 3.5) return { name: "Celestial", color: "#5151ec" } // ~0.0005%
-  if (x >= 3.25) return { name: "Transcendent", color: "#03FFEC" } // ~0.0005%
-  if (x >= 3) return { name: "Mythical", color: "#D50000" } // ~0.01%
-  if (x >= 2.75) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
-  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
-  if (x >= 2) return { name:  "Rare", color:  "#2196F3" } // ~2.84%
-  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }  // ~19%
-  if (x >= 1) return { name:  "Common", color:  "white" } // 100%
+  return GlyphRarities.find(e => x >= e.minStrength);
 }
 
 /**

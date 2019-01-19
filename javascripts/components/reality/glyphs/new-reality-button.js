@@ -27,22 +27,15 @@ Vue.component("new-reality-button", {
     formatGlyphLevel() {
       return "Glyph level: " + this.glyphLevel + " (" + this.nextGlyphPercent + "%)"
     },
-    tooltipText() {
-      if (!this.canReality) {
-        return "No rewards";
-      } else {
-        let otherResourceText = "Other resources gained:<br><br>1 Perk Point";
-        if (this.shardsGained != 0) {
-          otherResourceText += "<br>" + shorten(this.shardsGained, 2) + " Relic Shards (Teresa)"
-        }
-        return otherResourceText
-      }
+    shardsGainedText() {
+        return this.shorten(this.shardsGained, 2) + " Relic Shards (Teresa)"
     }
   },
   methods: {
     update() {
       if (player.dilation.studies.length < 6) {
         this.canReality = false;
+        this.shardsGained = 0;
       } else {
         this.canReality = true;
         this.machinesGained = gainedRealityMachines();
@@ -75,7 +68,14 @@ Vue.component("new-reality-button", {
         <div>Purchase the study in the eternity tab to unlock a new reality</div>
       </template>
       <div class="infotooltiptext">
-        {{tooltipText}}
+        <template v-if="canReality">
+        <div>Other resources gained:</div>
+        <div>1 Perk Point</div>
+        <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
+        </template>
+        <template v-else>
+        No resources gained
+        </template>
       </div>
     </div>
   </button>

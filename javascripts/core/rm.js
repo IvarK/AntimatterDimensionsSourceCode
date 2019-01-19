@@ -22,8 +22,7 @@ function random() {
 
 function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
   let u = 0, v = 0;
-  // Each rarity% is 0.025 strength.
-  let minimumValue = 1 + getGlyphSacEffect("teresa") / 40;
+  let minimumValue = 1;
   let ret = 1;
   if (player.reality.perks.includes(23)) minimumValue += 0.125;
   while (ret <= minimumValue || u == 0 || v == 0) {
@@ -31,7 +30,8 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
     v = random();
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
   }
-  return ret;
+  // Each rarity% is 0.025 strength.
+  return ret + getGlyphSacEffect("teresa") / 40;
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
@@ -46,7 +46,7 @@ function generateRandomGlyph(level) {
     type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
   } while (player.reality.glyphs.last === type);
   player.reality.glyphs.last = type;
-  let strength = gaussian_bell_curve()
+  let strength = gaussian_bell_curve();
   if (player.reality.upg.includes(16)) strength *= 1.3
   let effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
   if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
@@ -648,7 +648,7 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
 
     case "teresa":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% minimum glyph rarity<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
   }
 }
 

@@ -1218,6 +1218,7 @@ function gameLoop(diff, options = {}) {
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
 
+  document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
   if (player.wormhole[0].unlocked && !player.wormholePause) {
     updateWormholePhases(wormholeDiff);
     for (let i = 0; i < player.wormhole.length; i++) {

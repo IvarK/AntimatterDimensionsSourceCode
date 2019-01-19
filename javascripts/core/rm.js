@@ -292,7 +292,7 @@ function getGlyphTooltip(glyph) {
     }
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    let gain = getGlyphSacGain(glyph);
+    let gain = glyphSacrificeGain(glyph);
     tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + gain.toFixed(2) + " power</span>";
   }
   tooltipText += "</div></span>"
@@ -652,7 +652,7 @@ function getGlyphSacDescription(type) {
   }
 }
 
-function getGlyphSacGain(glyph) {
+function glyphSacrificeGain(glyph) {
   let gain = glyph.level * glyph.strength;
   if (glyph.type !== 'teresa') {
     gain *= Effarig.runRewardMultiplier;
@@ -661,7 +661,7 @@ function getGlyphSacGain(glyph) {
 }
 
 function sacrificeGlyph(glyph, force = false) {
-  let toGain = getGlyphSacGain(glyph);
+  let toGain = glyphSacrificeGain(glyph);
   if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)

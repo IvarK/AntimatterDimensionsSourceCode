@@ -293,7 +293,7 @@ function getGlyphTooltip(glyph) {
   }
   if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
     let gain = glyphSacrificeGain(glyph);
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + gain.toFixed(2) + " power</span>";
+    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + shorten(gain, 2, 2) + " power</span>";
   }
   tooltipText += "</div></span>"
   return tooltipText;
@@ -622,18 +622,18 @@ function getGlyphSacEffect(type) {
     return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
 
     case "teresa":
-    return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e4 + 1)
+    return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e5 + 1)
   }
 }
 
 function getGlyphSacDescription(type) {
   let amount = getGlyphSacEffect(type)
-  let total = shortenRateOfChange(player.reality.glyphs.sac[type])
+  let total = shorten(player.reality.glyphs.sac[type], 2, 2)
   if (player.reality.glyphs.sac[type] == 0) return ""
   switch(type) {
     case "power": {
       let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
-      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shortenRateOfChange(nextDistantGalaxy) + ")<br><br>"
+      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy, 2, 2) + ")<br><br>"
     }
     case "infinity":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
@@ -645,7 +645,7 @@ function getGlyphSacDescription(type) {
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
 
     case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shortenRateOfChange(amount) + "x<br><br>"
+    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount, 2, 2) + "x<br><br>"
 
     case "teresa":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
@@ -654,7 +654,9 @@ function getGlyphSacDescription(type) {
 
 function glyphSacrificeGain(glyph) {
   let gain = glyph.level * glyph.strength;
-  if (glyph.type !== 'teresa') {
+  if (glyph.type === 'teresa') {
+    gain *= Math.pow(Effarig.runRewardMultiplier, 0.2);
+  } else {
     gain *= Effarig.runRewardMultiplier;
   }
   return gain;

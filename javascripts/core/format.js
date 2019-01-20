@@ -68,7 +68,16 @@ function formatValue(notation, value, places, placesUnder1000) {
     return formatValue(notation, power, 3, 3);
   }
 
+  function isOverflowing(mantissa, threshold) {
+    const pow10 = Math.pow(10, places);
+    return Math.round(mantissa * pow10) >= threshold * pow10;
+  }
+
   if (notation === "Scientific" || (notation === "Mixed scientific" && power >= 33)) {
+    if (isOverflowing(mantissa, 10)) {
+      mantissa = 1;
+      power++;
+    }
     return `${mantissa.toFixed(places)}e${formatPower(power)}`;
   }
 
@@ -122,6 +131,10 @@ function formatValue(notation, value, places, placesUnder1000) {
 
   const powerOffset = power % 3;
   mantissa *= Math.pow(10, powerOffset);
+  if (isOverflowing(mantissa, 1000)) {
+    mantissa = 1;
+    power += 3;
+  }
   function concatResult(powerFormat) {
     return mantissa.toFixed(places) + powerFormat;
   }

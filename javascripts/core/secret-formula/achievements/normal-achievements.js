@@ -330,7 +330,7 @@ GameDatabase.achievements.normal = [
   {
     id: 84,
     name: "I got a few to spare",
-    tooltip: () => `Reach ${shorten(new Decimal("1e35000"), 0, 0)} antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.`,
+    tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.`,
     effect: () => player.money.pow(0.00004).clampMin(1)
   },
   {
@@ -489,12 +489,12 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    tooltip: () => `Get a total sacrifice multiplier of ${shorten(new Decimal("1e9000"), 0, 0)}. Reward: Sacrifice doesn't reset your Dimensions.`
+    tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}. Reward: Sacrifice doesn't reset your Dimensions.`
   },
   {
     id: 121,
     name: "Can you get infinite IP?",
-    tooltip: () => `Reach ${shorten(new Decimal("1e30008"), 0, 0)} IP.`
+    tooltip: () => `Reach ${shorten("1e30008", 0, 0)} IP.`
   },
   {
     id: 122,
@@ -533,7 +533,7 @@ GameDatabase.achievements.normal = [
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    tooltip: () => `Reach ${shorten(new Decimal("1e22000"), 0, 0)} IP without any time studies. Reward: Time Dimensions are multiplied by the number of studies you have.`,
+    tooltip: () => `Reach ${shorten("1e22000", 0, 0)} IP without any time studies. Reward: Time Dimensions are multiplied by the number of studies you have.`,
     effect: () => Math.max(player.timestudy.studies.length, 1)
   },
   {
@@ -551,17 +551,17 @@ GameDatabase.achievements.normal = [
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${shorten(new Decimal("1e200000"), 0, 0)} IP without buying IDs or IP multipliers. Reward: You start Eternities with all Infinity Challenges unlocked and completed.`
+    tooltip: () => `Reach ${shorten("1e200000", 0, 0)} IP without buying IDs or IP multipliers. Reward: You start Eternities with all Infinity Challenges unlocked and completed.`
   },
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${shorten(new Decimal("1e20000"), 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
+    tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
     name: "Faster than a potato^286078",
-    tooltip: () => `Get more than ${shorten(new Decimal("1e8296262"), 0, 0)} ticks per second.`
+    tooltip: () => `Get more than ${shorten("1e8296262", 0, 0)} ticks per second.`
   },
   {
     id: 136,
@@ -571,12 +571,12 @@ GameDatabase.achievements.normal = [
   {
     id: 137,
     name: "Now you're thinking with dilation!",
-    tooltip: () => `Eternity for ${shorten(new Decimal("1e600"), 0, 0)} EP in 1 minute or less while Dilated.`
+    tooltip: () => `Eternity for ${shorten("1e600", 0, 0)} EP in 1 minute or less while Dilated.`
   },
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${shorten(new Decimal('1e28000'), 0, 0)} IP without any time studies while Dilated. Reward: The active time study path doesn't disable your Replicanti autobuyer.`
+    tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated. Reward: The active time study path doesn't disable your Replicanti autobuyer.`
   },
   {
     id: 141,

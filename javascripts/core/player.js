@@ -459,7 +459,7 @@ const Player = {
     if (Challenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond;
+    return basePerSecond.times(getGameSpeedupFactor());
   },
 
   get bestRunIPPM() {

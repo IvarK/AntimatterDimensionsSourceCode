@@ -540,6 +540,11 @@ dev.showProductionBreakdown = function() {
   console.log(productionText);
 }
 
+let tempSpeedupToggle = false;
+dev.goFast = function() {   // Speeds up game 500x, intentionally doesn't persist between refreshes
+  tempSpeedupToggle = !tempSpeedupToggle;
+}
+
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
 };

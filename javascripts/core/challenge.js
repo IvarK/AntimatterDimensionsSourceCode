@@ -86,6 +86,8 @@ Challenge.current = function() {
   return Challenge(parseInt(challenge.substr(9)));
 };
 
+Challenge.isRunning = () => Challenge.current() !== undefined;
+
 /**
  * @type {ChallengeState[]}
  */

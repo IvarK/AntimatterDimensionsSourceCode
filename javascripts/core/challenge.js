@@ -49,7 +49,7 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    startChallenge(this._fullId, Number.MAX_VALUE);
+    startChallenge(this._fullId, new Decimal(Number.MAX_VALUE));
   }
 
   get isCompleted() {

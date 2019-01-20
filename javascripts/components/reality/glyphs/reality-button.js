@@ -16,7 +16,7 @@ Vue.component("reality-button", {
       return this.canReality ? "Make a new reality" : "Start reality over";
     },
     formatEPRequirement() {
-      return shorten(new Decimal('1e4000'), 0, 0);
+      return this.shorten("1e4000", 0, 0);
     },
     formatMachinesGained() {
       return `Machines gained: ${this.shorten(this.machinesGained, 2, 0)}`;
@@ -37,9 +37,9 @@ Vue.component("reality-button", {
   },
   methods: {
     update() {
-      if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
+      this.hasRealityStudy = TimeStudy.reality.isBought;
+      if (!this.hasRealityStudy || player.eternityPoints.lt("1e4000")) {
         this.canReality = false;
-        this.hasRealityStudy = TimeStudy.reality.isBought;
         this.shardsGained = 0;
         return;
       }

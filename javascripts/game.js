@@ -830,6 +830,9 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   let factor = 1;
+  if (tempSpeedupToggle) {
+    factor *= 500;
+  }
   if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
@@ -1000,21 +1003,23 @@ function gameLoop(diff, options = {}) {
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
-        if (!Challenge(12).isRunning && !EternityChallenge(3).isRunning) {
-            for (let tier = 7; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-            }
-        } else if (EternityChallenge(3).isRunning) {
-            for (let tier = 6; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
-            }
+        let maxTierProduced = 7;
+        if (Challenge(12).isRunning) {
+          maxTierProduced = Math.min(maxTierProduced, 6);
+        }
+        if (EternityChallenge(3).isRunning) {
+          maxTierProduced = Math.min(maxTierProduced, 3);
+        }
+        if (Challenge(12).isRunning) {
+          for (let tier = maxTierProduced; tier >= 1; --tier) {
+            const dimension = NormalDimension(tier);
+            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
+          }
         } else {
-            for (let tier = 3; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-            }
+          for (let tier = maxTierProduced; tier >= 1; --tier) {
+            const dimension = NormalDimension(tier);
+            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
+          }
         }
 
         if (Challenge(3).isRunning) {

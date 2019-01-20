@@ -20,9 +20,9 @@ Vue.component('modal-load-game', {
           change_save(this.saveId);
         },
         formatMoney: function(money) {
-          formatPostBreak = true;
-          let formatted = this.shortenMoney(money);
-          formatPostBreak = false;
+          forcePostBreakFormat = true;
+          let formatted = this.shorten(money, 2, 1);
+          forcePostBreakFormat = false;
           return formatted;
         },
         update() {

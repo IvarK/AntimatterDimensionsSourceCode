@@ -821,7 +821,6 @@ var postC2Count = 0;
 var IPminpeak = new Decimal(0)
 var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
-var eternitiesGain = 0
 
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
@@ -981,15 +980,11 @@ function gameLoop(diff, options = {}) {
     }
 
     if (player.reality.upg.includes(14)) {
-        eternitiesGain += diff * player.realities / 1000
+        let eternitiesGain = diff * player.realities / 1000
         if (player.reality.upg.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
-        if (eternitiesGain < 2) {
-            player.eternities += 1
-            eternitiesGain -= 1
-        } else {
-            player.eternities += Math.floor(eternitiesGain)
-            eternitiesGain -= Math.floor(eternitiesGain)
-        }
+        player.reality.partEternitied += eternitiesGain;
+        player.eternities += Math.floor(player.reality.partEternitied)
+        player.reality.partEternitied -= Math.floor(player.reality.partEternitied)
     }
 
     if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.

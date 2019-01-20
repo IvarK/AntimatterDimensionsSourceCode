@@ -333,7 +333,8 @@ var player = {
     epmultbuyer: false,
     pp: 0,
     autoEC: true,
-    lastAutoEC: 0
+    lastAutoEC: 0,
+    partEternitied: 0
   },
   wormhole: [{
     speed: 60 * 60, // Seconds to fill

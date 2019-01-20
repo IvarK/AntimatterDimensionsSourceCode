@@ -830,7 +830,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   let factor = 1;
-  if (typeof tempSpeedupToggle !== 'undefined' && tempSpeedupToggle) {
+  if (tempSpeedupToggle) {
     factor *= 500;
   }
   if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {

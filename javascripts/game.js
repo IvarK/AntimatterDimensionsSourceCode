@@ -867,7 +867,6 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
 }
 
 let autobuyerOnGameLoop = true;
-let isOnline = true;
 
 function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
@@ -1256,7 +1255,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    isOnline = false;
+    ui.notify.wormhole = false;
 
     // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1309,7 +1308,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    isOnline = true;
+    ui.notify.wormhole = true;
 }
 
 function updateChart(first) {

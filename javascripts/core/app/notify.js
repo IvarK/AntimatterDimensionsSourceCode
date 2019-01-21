@@ -33,3 +33,5 @@ ui.notify = function() {
     info: (text) => showNotification(text, "o-notification--info")
   };
 }();
+
+ui.notify.wormhole = true;

@@ -120,7 +120,7 @@ function updateWormholePhases(wormholeDiff) {
       if (wormhole.phase >= wormhole.duration) {
         wormhole.phase -= wormhole.duration
         wormhole.active = false
-        if (isOnline) {
+        if (ui.notify.wormhole) {
           ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
         }
       }
@@ -129,7 +129,7 @@ function updateWormholePhases(wormholeDiff) {
         wormhole.phase -= wormhole.speed
         wormhole.activations++;
         wormhole.active = true
-        if (isOnline) {
+        if (ui.notify.wormhole) {
           ui.notify.success("Wormhole "+ (i + 1) +" is active!");
         }
       }

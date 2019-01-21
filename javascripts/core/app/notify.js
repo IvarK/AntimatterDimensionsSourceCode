@@ -30,8 +30,7 @@ ui.notify = function() {
   return {
     success: (text) => showNotification(text, "o-notification--success"),
     error: (text) => showNotification(text, "o-notification--error"),
-    info: (text) => showNotification(text, "o-notification--info")
+    info: (text) => showNotification(text, "o-notification--info"),
+    wormholes: true
   };
 }();
-
-ui.notify.wormhole = true;

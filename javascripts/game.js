@@ -1255,7 +1255,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    ui.notify.wormhole = false;
+    ui.notify.wormholes = false;
 
     // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1308,7 +1308,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    ui.notify.wormhole = true;
+    ui.notify.wormholes = true;
 }
 
 function updateChart(first) {

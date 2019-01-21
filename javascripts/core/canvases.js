@@ -102,10 +102,6 @@ function showPerkLabels() {
     network.setOptions({nodes: {font: {size: 20}}});
 }
 
-//0: automator
-//10: dilation
-//20: glyphs
-//30: ecs
 function drawPerkNetwork() {
     if (network) {
       updatePerkColors();

@@ -111,7 +111,7 @@ function constructEdgeList() {
   CONNECTED_PERKS[PERKS.RETROACTIVE_TP2] = [PERKS.RETROACTIVE_TP3];
   CONNECTED_PERKS[PERKS.RETROACTIVE_TP3] = [PERKS.RETROACTIVE_TP4];
   CONNECTED_PERKS[PERKS.RETROACTIVE_TP4] = [];
-  CONNECTED_PERKS[PERKS.AUTOBUYER_DILATION] = [PERKS.AUTOUNLOCK_EU1, PERKS.AUTOUNLOCK_DILATION1, PERKS.BYPASS_EC_DILATION, PERKS.BYPASS_DG_RESET];
+  CONNECTED_PERKS[PERKS.AUTOBUYER_DILATION] = [PERKS.AUTOUNLOCK_EU2, PERKS.AUTOUNLOCK_DILATION1, PERKS.BYPASS_EC_DILATION, PERKS.BYPASS_DG_RESET];
   CONNECTED_PERKS[PERKS.AUTOBUYER_FASTER_ID] = [PERKS.AUTOBUYER_FASTER_REPLICANTI];
   CONNECTED_PERKS[PERKS.AUTOBUYER_FASTER_REPLICANTI] = [];
   CONNECTED_PERKS[PERKS.AUTOBUYER_FASTER_DILATION] = [];
@@ -137,14 +137,13 @@ constructEdgeList();
 
 // Reset perks if the current list is invalid, notify player too (should automatically "fix" older saves)
 function checkForValidPerkList() {
-  let perkIterator = player.reality.perks.keys();
+  let perkIterator = player.reality.perks.values();
   let isDone = false;
   let isValid = true;
   while (!isDone) {
     let nextPerk = perkIterator.next();
-    console.log(nextPerk);
     isDone = nextPerk.done;
-    isValid = isValid && (CONNECTED_PERKS[nextPerk.value] !== undefined);
+    isValid = isDone ? isValid : isValid && (CONNECTED_PERKS[nextPerk.value] !== undefined);
   }
   if (!isValid) {
     resetPerks();
@@ -152,35 +151,43 @@ function checkForValidPerkList() {
   }
 }
 
-// Not sure if this should be accessible in-game or not
 function resetPerks() {
   player.reality.pp += player.reality.perks.length;
   player.reality.perks = [];
 }
 
-function hasConnectedPerk(id) {
-  if (id == 0) return true
-  return CONNECTED_PERKS[id].some(hasPerk)
+BUYABLE_PERKS = [];
+function getBuyablePerks() {
+  if (player.reality.perks.length == 0) {
+    return [0];
+  }
+  let buyablePerks = [];
+  for (perk in player.reality.perks) {
+    if (player.reality.perks.hasOwnProperty(perk)) {
+      let adjacentPerks = CONNECTED_PERKS[player.reality.perks[perk]];
+      for (adjPerk in adjacentPerks) {
+        let perkNum = adjacentPerks[adjPerk];
+        if (adjacentPerks.hasOwnProperty(adjPerk) && !player.reality.perks.includes(perkNum) && !buyablePerks.includes(perkNum)) {
+          buyablePerks.push(perkNum);
+        }
+      }
+    }
+  }
+  return buyablePerks;
 }
-
-function hasPerk(id) {
-  return player.reality.perks.includes(id)
-}
+BUYABLE_PERKS = getBuyablePerks();
 
 function canBuyPerk(id, cost) {
-  if (cost > player.reality.pp) return false
-  if (hasPerk(id) || !hasConnectedPerk(id)) return false
-  return true
+  return player.reality.pp >= cost && BUYABLE_PERKS.includes(id)
 }
 
 function buyPerk(id, cost) {
-  if (cost > player.reality.pp) return false
-  if (hasPerk(id) || !hasConnectedPerk(id)) return false
-
+  if (!canBuyPerk(id, cost)) return false
   player.reality.perks.push(id);
   Perks.updateAchSkipCount();
   updateAutomatorRows();
   player.reality.pp -= cost
+  BUYABLE_PERKS = getBuyablePerks();
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
   if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
 }

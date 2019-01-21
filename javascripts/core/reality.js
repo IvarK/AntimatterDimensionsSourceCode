@@ -40,46 +40,48 @@ function reality(force, reset, auto) {
         return
     }
     realizationCheck = 0;
-    if (player.reality.glyphs.inventory.length >= 100 && Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
-    if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
-    if (player.thisReality < player.bestReality && !force) {
-        player.bestEternity = player.thisEternity
+    if (!reset) {
+      if (player.reality.glyphs.inventory.length >= 100 && Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
+      if (!player.reality.perks.includes(0) || auto) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
+      if (player.thisReality < player.bestReality) {
+          player.bestReality = player.thisReality
+      }
+      giveAchievement("Snap back to reality");
+      player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
+      addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
+      if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
+      if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
+          var tempBool = true;
+          for (let i = 0; i < player.reality.glyphs.active.length; i++) {
+              if (player.reality.glyphs.active[i].strength < 1.5) tempBool = false
+          }
+          if (tempBool) unlockRealityUpgrade(16)
+      }
+      if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4) {
+          var tempBool = true;
+          for (let i = 0; i < player.reality.glyphs.active.length; i++) {
+              let count = 0;
+              for (let y in player.reality.glyphs.active[i].effects) {
+                  count++
+              }
+              if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
+          }
+          if (tempBool) unlockRealityUpgrade(17)
+      }
+      if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4) {
+          var tempBool = true;
+          for (let i = 0; i < player.reality.glyphs.active.length; i++) {
+              if (player.reality.glyphs.active[i].level < 10) tempBool = false
+          }
+          if (tempBool) unlockRealityUpgrade(18)
+      }
+      if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
+      if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
+      if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
+      if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
+      if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
+      if (GLYPH_TYPES.every((type) => type === 'teresa' || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     }
-    giveAchievement("Snap back to reality");
-    if (!reset) player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    if (!reset) addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3 && !reset ) unlockRealityUpgrade(9);
-    if(!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
-        var tempBool = true;
-        for (let i in player.reality.glyphs.active) {
-            if (player.reality.glyphs.active[i].rarity < 1.5) tempBool = false
-        }
-        if (tempBool) unlockRealityUpgrade(16)
-    }
-    if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4 && !reset ) {
-        var tempBool = true;
-        for (let i in player.reality.glyphs.active) {
-            let count = 0;
-            for (let y in player.reality.glyphs.active[i].effects) {
-                count++
-            }
-            if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
-        }
-        if (tempBool) unlockRealityUpgrade(17)
-    }
-    if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4 && !reset) {
-        var tempBool = true;
-        for (let i in player.reality.glyphs.active) {
-            if (player.reality.glyphs.active[i].level < 10) tempBool = false
-        }
-        if (tempBool) unlockRealityUpgrade(18)
-    }
-    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
-    if (player.thisReality < 15 * 60 * 1000 && !reset) unlockRealityUpgrade(23)
-    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
-    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
-    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.every((type) => player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
 
     if (player.reality.respec) {
         respecGlyphs();

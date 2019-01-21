@@ -329,7 +329,7 @@ function fromValue(value) {
     let m,k,l;
     if (value.split(" ")[1].length < 5) {
         for (l=101;l>0;l--) {
-            if (value.includes(FormatList[l])) {
+            if (value.includes(Notation.standard.abbreviations[l])) {
                 e += l*3
                 console.log("caught!"+l)
 
@@ -1138,7 +1138,7 @@ function gameLoop(diff, options = {}) {
     } else {
         Marathon2 = 0;
     }
-    if (player.eternities >= 1 && Notation.current().isPain()) {
+    if (player.eternities >= 1 && Notation.current.isPainful) {
         player.secretUnlocks.painTimer += player.options.updateRate/1000;
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }

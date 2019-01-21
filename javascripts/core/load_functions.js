@@ -203,8 +203,20 @@ function onLoad() {
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()
-  Notation.set(player.options.notation);
-  GameCache.invalidate();
+
+  const notation = player.options.notation;
+  if (notation === undefined) {
+    player.options.notation = "Standard";
+  }
+  const notationMigration = {
+    "Mixed": "Mixed scientific",
+    "Default": "Brackets",
+    "Emojis": "Cancer"
+  };
+  if (notationMigration[notation] !== undefined) {
+    player.options.notation = notationMigration[notation];
+  }
+  Notation.find(player.options.notation).setCurrent();
 
   $(".wormhole-upgrades").hide()
   if (player.wormhole[0].unlocked) {
@@ -227,6 +239,8 @@ function onLoad() {
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true
   automatorIdx = player.reality.automatorCurrentRow;
+
+  GameCache.invalidate();
 
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {

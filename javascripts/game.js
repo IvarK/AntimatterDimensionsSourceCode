@@ -523,7 +523,7 @@ var glyphSelected = false
 
 function exitChallenge() {
     if (player.currentChallenge !== "") {
-        startChallenge("");
+        startChallenge("", new Decimal(0));
     } else if (player.currentEternityChall !== "") {
         player.currentEternityChall = ""
         player.eternityChallGoal = new Decimal(Number.MAX_VALUE)

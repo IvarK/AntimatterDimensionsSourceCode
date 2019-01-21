@@ -140,7 +140,7 @@ function reality(force, reset, auto) {
     player.totalTickGained = 0;
     player.offlineProd = player.reality.upg.includes(10) ? player.offlineProd : 0;
     player.offlineProdCost = player.reality.upg.includes(10) ? player.offlineProdCost : 1e7;
-    player.challengeTarget = 0;
+    player.challengeTarget = new Decimal(0);
     if (!player.reality.upg.includes(10)) {
         player.autoSacrifice = 1;
     }

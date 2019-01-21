@@ -203,6 +203,7 @@ function onLoad() {
   updateWormholeUpgrades()
   updateAutomatorRows()
   drawPerkNetwork()
+  checkForValidPerkList()
   Notation.set(player.options.notation);
   GameCache.invalidate();
 

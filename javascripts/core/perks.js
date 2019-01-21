@@ -135,6 +135,29 @@ function constructEdgeList() {
 }
 constructEdgeList();
 
+// Reset perks if the current list is invalid, notify player too (should automatically "fix" older saves)
+function checkForValidPerkList() {
+  let perkIterator = player.reality.perks.keys();
+  let isDone = false;
+  let isValid = true;
+  while (!isDone) {
+    let nextPerk = perkIterator.next();
+    console.log(nextPerk);
+    isDone = nextPerk.done;
+    isValid = isValid && (CONNECTED_PERKS[nextPerk.value] !== undefined);
+  }
+  if (!isValid) {
+    resetPerks();
+    Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+  }
+}
+
+// Not sure if this should be accessible in-game or not
+function resetPerks() {
+  player.reality.pp += player.reality.perks.length;
+  player.reality.perks = [];
+}
+
 function hasConnectedPerk(id) {
   if (id == 0) return true
   return CONNECTED_PERKS[id].some(hasPerk)

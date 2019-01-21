@@ -111,70 +111,71 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
-    nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on Reality."}, //DONE
-    {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."}, //DONE
-    {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."}, //DONE
-    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Improve the Automator row per Reality scaling."}, //DONE
-    {id: 4, label: "4", color: getNodeColor(4, 1), title: "Remove the EC1 requirement from study 181."}, //DONE
-    {id: 5, label: "5", color: getNodeColor(5, 1), title: "Every 10 seconds automatically buy max TT."}, //DONE
-    {id: 6, label: "6", color: getNodeColor(6, 1), title: "Every 5 seconds automatically buy max TT."}, //DONE
-    {id: 7, label: "7", color: getNodeColor(7, 1), title: "Every 3 seconds automatically buy max TT."}, //DONE
-    {id: 8, label: "8", color: getNodeColor(8, 1), title: "Every second automatically buy max TT."}, //DONE
-    {id: 11, label: "11", color: getNodeColor(11, 1), title: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time."}, //DONE
-    {id: 12, label: "12", color: getNodeColor(12, 1), title: "Rebuyable Dilation upgrade autobuyers."}, //DONE
-    {id: 13, label: "13", color: getNodeColor(13, 1), title: "Remove the unlock requirement for Time Dilation."}, //DONE
-    {id: 14, label: "14", color: getNodeColor(14, 1), title: "Gain the second row of Dilation upgrades on Dilation unlock."}, //DONE
-    {id: 15, label: "15", color: getNodeColor(15, 1), title: "Gain the third row of Dilation upgrades on Dilation unlock."}, //DONE
-    {id: 21, label: "21", color: getNodeColor(21, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on Reality."}, //DONE
-    {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."}, //DONE
-    {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking Eternity Challenges."}, //DONE
-    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge."}, //DONE
-    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking Dilation."}, //DONE
-    {id: 34, label: "34", color: getNodeColor(34, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 1.5."}, //DONE
-    {id: 35, label: "35", color: getNodeColor(35, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2."}, //DONE
-    {id: 36, label: "36", color: getNodeColor(36, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2.5."}, //DONE
-    {id: 37, label: "37", color: getNodeColor(37, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 3."}, //DONE
-    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after Reality."}, //DONE
-    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after Reality."}, //DONE
-    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after Reality."}, //DONE
-    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with the 4th achievement row after Reality."}, //DONE
-    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with the 5th achievement row after Reality."}, //DONE
-    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with the 6th achievement row after Reality."}, //DONE
-    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with the 7th achievement row after Reality."}, //DONE
-    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with the 8th achievement row after Reality."}, //DONE
-    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with the 9th achievement row after Reality."}, //DONE
-    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with the 10th achievement row after Reality."}, //DONE
-    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with the 11th achievement row after Reality."}, //DONE
-    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with the 12th achievement row after Reality."},//DONE
-    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with the 13th achievement row after Reality."},//DONE
-    {id: 51, label: "51", color: getNodeColor(51, 1), title: "Start with 100 antimatter after every reset"}, //DONE
-    {id: 52, label: "52", color: getNodeColor(52, 1), title: "Start with 1e130 antimatter after every reset"}, //DONE
-    {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 2e15 IP after every Eternity and Reality"}, //DONE
-    {id: 54, label: "54", color: getNodeColor(54, 1), title: "Start with 2e130 IP after every Eternity and Reality"}, //DONE
-    {id: 55, label: "55", color: getNodeColor(55, 1), title: "Start with 10 EP after every Reality"}, //DONE
-    {id: 56, label: "56", color: getNodeColor(56, 1), title: "Start with 2,000 EP after every Reality"}, //DONE
-    {id: 57, label: "57", color: getNodeColor(57, 1), title: "Start with 1e9 EP after every Reality"}, //DONE
-    {id: 61, label: "61", color: getNodeColor(61, 1), title: "Infinity dimension autobuyers work 3 times faster."}, //DONE
-    {id: 62, label: "62", color: getNodeColor(62, 1), title: "Replicanti autobuyers work 3 times faster."}, //DONE
-    {id: 63, label: "63", color: getNodeColor(63, 1), title: "Dilation autobuyers work 3 times faster."}, //DONE
-    {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time Dimension 5-8 unlocks."}, //DONE
-    {id: 65, label: "65", color: getNodeColor(65, 1), title: "Automatically unlock TT generation when you have 1e15 DT."}, //DONE
-    {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock Reality at e4000 EP."}, //DONE
-    {id: 67, label: "67", color: getNodeColor(67, 1), title: "Infinity Dimensions no longer have antimatter requirements."}, //DONE
-    {id: 71, label: "71", color: getNodeColor(71, 1), title: "Remove the EC5 requirement from study 62."}, //DONE
-    {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
-    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this Eternity." }, //DONE
-    {id: 74, label: "74", color: getNodeColor(74, 1), title: "Remove the EC2 requirement from study 181." }, //DONE
-    {id: 75, label: "75", color: getNodeColor(75, 1), title: "Remove the EC3 requirement from study 181." }, //DONE
-    {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of Eternity upgrades after first Eternity of a Reality."}, //DONE
-    {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of Eternity upgrades after first Eternity of a Reality."}, //DONE
-    {id: 91, label: "91", color: getNodeColor(91, 1), title: "Automatically complete one EC every 6 hours."}, //DONE
-    {id: 92, label: "92", color: getNodeColor(92, 1), title: "Automatically complete one EC every 4 hours."}, //DONE
-    {id: 93, label: "93", color: getNodeColor(93, 1), title: "Automatically complete one EC every 2 hours."}, //DONE
-    {id: 94, label: "94", color: getNodeColor(94, 1), title: "Automatically complete one EC every 1 hour."}, //DONE
-    {id: 95, label: "95", color: getNodeColor(95, 1), title: "Automatically complete one EC every 30 minutes."}, //DONE
+    nodesArray = [
+        {id: PERKS.GLYPH_CHOOSE3, label: "G0", title: "You can now choose from 3 different glyphs on Reality."},
+        {id: PERKS.START_AM1, label: "S1", title: "Start with 100 antimatter after every reset"},
+        {id: PERKS.START_AM2, label: "S2", title: "Start with 1e130 antimatter after every reset"},
+        {id: PERKS.START_IP1, label: "S3", title: "Start with 2e15 IP after every Eternity and Reality"},
+        {id: PERKS.START_IP2, label: "S4", title: "Start with 2e130 IP after every Eternity and Reality"},
+        {id: PERKS.START_EP1, label: "S5", title: "Start with 10 EP after every Reality"},
+        {id: PERKS.START_EP2, label: "S6", title: "Start with 2000 EP after every Reality"},
+        {id: PERKS.START_EP3, label: "S7", title: "Start with 1e9 EP after every Reality"},
+        {id: PERKS.START_TP, label: "S8", title: "Start with 10 TP after unlocking Dilation"},
+        {id: PERKS.GLYPH_LEVEL_INC1, label: "G1", title: "+1 to base glyph level"},
+        {id: PERKS.GLYPH_LEVEL_INC2, label: "G2", title: "+1 to base glyph level"},
+        {id: PERKS.GLYPH_CHOOSE4, label: "G3", title: "+1 glyph choice on Reality"},
+        {id: PERKS.GLYPH_RARITY_INC, label: "G4", title: "+5% minimum glyph rarity"},
+        {id: PERKS.AUTOMATION_ROW_INC1, label: "AR1", title: "+5 base automator rows"},
+        {id: PERKS.AUTOMATION_ROW_INC2, label: "AR2", title: "+10 base automator rows"},
+        {id: PERKS.AUTOMATION_ROW_SCALING, label: "AR3", title: "Improve the Automator row per Reality scaling"},
+        {id: PERKS.AUTOUNLOCK_EU1, label: "AU1", title: "Auto-unlock the first row of Eternity upgrades after first Eternity of a Reality"},
+        {id: PERKS.AUTOUNLOCK_EU2, label: "AU2", title: "Auto-unlock the second row of Eternity upgrades after first Eternity of a Reality"},
+        {id: PERKS.AUTOUNLOCK_DILATION1, label: "AU3", title: "Auto-unlock the second row of Dilation upgrades on Dilation unlock"},
+        {id: PERKS.AUTOUNLOCK_DILATION2, label: "AU4", title: "Auto-unlock the third row of Dilation upgrades on Dilation unlock"},
+        {id: PERKS.AUTOUNLOCK_DILATION3, label: "AU5", title: "Auto-unlock Dilation TT generation when you have 1e15 DT"},
+        {id: PERKS.AUTOUNLOCK_TD, label: "AU6", title: "Auto-unlock Time Dimensions 5-8 when you have enough TT"},
+        {id: PERKS.AUTOUNLOCK_REALITY, label: "AU7", title: "Auto-unlock Reality at e4000 EP"},
+        {id: PERKS.BYPASS_ID_AM, label: "B1", title: "Infinity Dimensions no longer have antimatter requirements"},
+        {id: PERKS.BYPASS_DG_RESET, label: "B2", title: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time"},
+        {id: PERKS.BYPASS_EC_DILATION, label: "B3", title: "Remove the EC11/EC12 requirement for Time Dilation"},
+        {id: PERKS.BYPASS_EC1_LOCK, label: "B4", title: "Remove the EC1 requirement from study 181"},
+        {id: PERKS.BYPASS_EC2_LOCK, label: "B5", title: "Remove the EC2 requirement from study 181"},
+        {id: PERKS.BYPASS_EC3_LOCK, label: "B6", title: "Remove the EC3 requirement from study 181"},
+        {id: PERKS.BYPASS_EC5_LOCK, label: "B7", title: "Remove the EC5 requirement from study 62"},
+        {id: PERKS.AUTOCOMPLETE_EC1, label: "AE1", title: "Auto-complete one EC every 6 hours"},
+        {id: PERKS.AUTOCOMPLETE_EC2, label: "AE2", title: "Auto-complete one EC every 4 hours"},
+        {id: PERKS.AUTOCOMPLETE_EC3, label: "AE3", title: "Auto-complete one EC every 2 hours"},
+        {id: PERKS.AUTOCOMPLETE_EC4, label: "AE4", title: "Auto-complete one EC every 1 hour"},
+        {id: PERKS.AUTOCOMPLETE_EC5, label: "AE5", title: "Auto-complete one EC every 30 minutes"},
+        {id: PERKS.TS_ACTIVE_EP, label: "TS1", title: "Active path EP is always 50x"},
+        {id: PERKS.TS_IDLE_EP, label: "TS2", title: "Idle path EP starts as if you have spent 15 minutes in this Eternity"},
+        {id: PERKS.TS_EC_REQ, label: "TS3", title: "Remove non-TT requirements for unlocking Eternity Challenges"},
+        {id: PERKS.TS_EC_BULK, label: "TS4", title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge"},
+        {id: PERKS.RETROACTIVE_TP1, label: "TP1", title: "When buying the 3xTP gain upgrade, multiply your TP by 1.5"},
+        {id: PERKS.RETROACTIVE_TP2, label: "TP2", title: "When buying the 3xTP gain upgrade, multiply your TP by 2"},
+        {id: PERKS.RETROACTIVE_TP3, label: "TP3", title: "When buying the 3xTP gain upgrade, multiply your TP by 2.5"},
+        {id: PERKS.RETROACTIVE_TP4, label: "TP4", title: "When buying the 3xTP gain upgrade, multiply your TP by 3"},
+        {id: PERKS.AUTOBUYER_DILATION, label: "AB1", title: "Unlock autobuyers for repeatable dilation upgrades"},
+        {id: PERKS.AUTOBUYER_FASTER_ID, label: "AB2", title: "Infinity Dimension autobuyers work 3 times faster"},
+        {id: PERKS.AUTOBUYER_FASTER_REPLICANTI, label: "AB3", title: "Replicanti autobuyers work 3 times faster"},
+        {id: PERKS.AUTOBUYER_FASTER_DILATION, label: "AB4", title: "Dilation autobuyers work 3 times faster"},
+        {id: PERKS.AUTOBUYER_TT1, label: "AB5", title: "Autobuy max TT every 10 seconds"},
+        {id: PERKS.AUTOBUYER_TT2, label: "AB6", title: "Autobuy max TT every 5 seconds"},
+        {id: PERKS.AUTOBUYER_TT3, label: "AB7", title: "Autobuy max TT every 3 seconds"},
+        {id: PERKS.AUTOBUYER_TT4, label: "AB8", title: "Autobuy max TT every second"},
+        {id: PERKS.ACHIEVEMENT_ROW1, label: "ACH1", title: "Start with the 1st achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW2, label: "ACH2", title: "Start with the 2nd achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW3, label: "ACH3", title: "Start with the 3rd achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW4, label: "ACH4", title: "Start with the 4th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW5, label: "ACH5", title: "Start with the 5th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW6, label: "ACH6", title: "Start with the 6th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW7, label: "ACH7", title: "Start with the 7th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW8, label: "ACH8", title: "Start with the 8th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW9, label: "ACH9", title: "Start with the 9th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW10, label: "ACH10", title: "Start with the 10th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW11, label: "ACH11", title: "Start with the 11th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW12, label: "ACH12", title: "Start with the 12th achievement row after Reality"},
+        {id: PERKS.ACHIEVEMENT_ROW13, label: "ACH13", title: "Start with the 13th achievement row after Reality"},
     ]; 
     nodes = new vis.DataSet(nodesArray);
 

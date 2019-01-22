@@ -20,6 +20,9 @@ Vue.mixin({
     shorten: function(value, places, placesUnder1000) {
       return shorten(value, places, placesUnder1000);
     },
+    shortenPostBreak: function(value, places, placesUnder1000) {
+      return shortenPostBreak(value, places, placesUnder1000);
+    },
     shortenRateOfChange: function(value) {
       return shortenRateOfChange(value);
     },

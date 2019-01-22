@@ -32,7 +32,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    Notation.set("Cancer");
+    Notation.cancer.setCurrent();
 };
 
 dev.fixSave = function() {

@@ -7,21 +7,10 @@ class GameOptions {
   }
 
   static changeNotation() {
-    const notations = [
-      "Scientific",
-      "Engineering",
-      "Letters",
-      "Standard",
-      "Cancer",
-      "Mixed scientific",
-      "Mixed engineering",
-      "Logarithm",
-      "Brackets",
-      "Infinity"
-    ];
+    const notations = Notation.all.map(n => n.name);
     const current = player.options.notation;
     const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
-    Notation.set(next);
+    Notation.find(next).setCurrent();
   }
 
   static toggleNews() {

@@ -28,7 +28,7 @@ function eternity(force, auto) {
     if (player.currentEternityChall !== "") {
         var challNum = parseInt(player.currentEternityChall.split("eterc")[1]);
         var completitions = 1;
-        if (player.reality.perks.includes(32)) {
+        if (Perks.has(PERKS.TS_EC_BULK)) {
             var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
             var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
             while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
@@ -194,11 +194,11 @@ function eternity(force, auto) {
         }
     }
 
-    if (player.eternityUpgrades.length < 3 && player.reality.perks.includes(81)) {
+    if (player.eternityUpgrades.length < 3 && Perks.has(PERKS.AUTOUNLOCK_EU1)) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(1).add(2).add(3)];
     }
 
-    if (player.eternityUpgrades.length < 6 && player.reality.perks.includes(82)) {
+    if (player.eternityUpgrades.length < 6 && Perks.has(PERKS.AUTOUNLOCK_EU2)) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
     }
 
@@ -256,8 +256,8 @@ function resetInfinityPointsOnEternity() {
 
 function resetInfinityPoints() {
   let ip = 0;
-  if (player.reality.perks.includes(54)) ip = 2e130;
-  else if (player.reality.perks.includes(53)) ip = 2e15;
+  if (Perks.has(PERKS.START_IP2)) ip = 2e130;
+  else if (Perks.has(PERKS.START_IP1)) ip = 2e15;
   player.infinityPoints = new Decimal(ip);
 }
 

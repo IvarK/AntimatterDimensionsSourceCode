@@ -44,9 +44,9 @@ function updateState() {
 
 function getAutomatorRows() {
   var ret = 6 + Math.ceil(Math.pow(player.realities, 0.7) )
-  if (player.reality.perks.includes(3)) ret = 6 + Math.ceil(Math.pow(player.realities, 0.85) )
-  if (player.reality.perks.includes(1)) ret += 5
-  if (player.reality.perks.includes(2)) ret += 10
+  if (Perks.has(PERKS.AUTOMATION_ROW_SCALING)) ret = 6 + Math.ceil(Math.pow(player.realities, 0.85) )
+  if (Perks.has(PERKS.AUTOMATION_ROW_INC1)) ret += 5
+  if (Perks.has(PERKS.AUTOMATION_ROW_INC2)) ret += 10
   return ret
 }
 
@@ -397,7 +397,7 @@ function canBuyAutomatorInstruction(id) {
 
 function updateAutomatorRows() {
   var pow = 0.7
-  if (player.reality.perks.includes(3)) pow = 0.85
+  if (Perks.has(PERKS.AUTOMATION_ROW_SCALING)) pow = 0.85
   var rows = 6 + Math.ceil(Math.pow(player.realities, pow))
   var next = Math.ceil( Math.pow(rows - 6, 1 / pow) )
   $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows; next row at " + next + " realities.")

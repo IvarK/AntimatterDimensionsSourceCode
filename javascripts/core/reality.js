@@ -2,13 +2,13 @@ function reality(force, reset, auto) {
     if (!((player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
         return;
     }
-    if (!glyphSelected && player.reality.perks.includes(0) && !auto) {
+    if (!glyphSelected && Perks.has(PERKS.GLYPH_CHOOSE3) && !auto) {
         possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()));
         setTimeout(function() {
             possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
         }, 50);
         setTimeout(function() {
-            if (player.reality.perks.includes(22)) {
+            if (Perks.has(PERKS.GLYPH_CHOOSE4)) {
                 setTimeout(function() {
                     possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()));
                     generateGlyphSelection(4)
@@ -41,7 +41,7 @@ function reality(force, reset, auto) {
     }
     realizationCheck = 0;
     if (player.reality.glyphs.inventory.length >= 100 && Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
-    if ((!player.reality.perks.includes(0) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
+    if ((!Perks.has(PERKS.GLYPH_CHOOSE3) || auto) && !reset) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality && !force) {
         player.bestEternity = player.thisEternity
     }
@@ -182,11 +182,10 @@ function reality(force, reset, auto) {
         2: 0,
         3: 0
     };
-    player.money = Effects.max(
-      10,
-      Perk(51),
-      Perk(52)
-    ).toDecimal();
+    player.money = new Decimal(10);
+    if (Perks.has(PERKS.START_AM1)) player.money = new Decimal(100);
+    if (Perks.has(PERKS.START_AM2)) player.money = new Decimal(1e130);
+    console.log(player.money)
 
     resetInfinityRuns();
     resetEternityRuns();
@@ -227,9 +226,9 @@ function reality(force, reset, auto) {
 
     resetInfinityPoints();
 
-    if (player.reality.perks.includes(55)) player.eternityPoints = new Decimal(10);
-    if (player.reality.perks.includes(56)) player.eternityPoints = new Decimal(2000);
-    if (player.reality.perks.includes(57)) player.eternityPoints = new Decimal(1e9);
+    if (Perks.has(PERKS.START_EP1)) player.eternityPoints = new Decimal(10);
+    if (Perks.has(PERKS.START_EP2)) player.eternityPoints = new Decimal(2000);
+    if (Perks.has(PERKS.START_EP3)) player.eternityPoints = new Decimal(1e9);
 
     function resetReplicanti() {
         player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);

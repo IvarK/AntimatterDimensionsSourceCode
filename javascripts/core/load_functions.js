@@ -202,8 +202,10 @@ function onLoad() {
   updateRealityUpgrades();
   updateWormholeUpgrades()
   updateAutomatorRows()
-  drawPerkNetwork()
   checkForValidPerkList()
+  updateBuyablePerks();
+  drawPerkNetwork();
+  updatePerkColors()
   Notation.set(player.options.notation);
   GameCache.invalidate();
 

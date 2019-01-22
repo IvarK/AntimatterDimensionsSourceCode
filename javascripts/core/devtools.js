@@ -180,6 +180,7 @@ dev.respecPerks = function() {
     Perks.updateAchSkipCount();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
     drawPerkNetwork()
+    updateBuyablePerks()
 }
 
 function isDevEnvironment() {

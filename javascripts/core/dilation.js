@@ -60,28 +60,19 @@ function buyDilationUpgrade(id) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
     player.dilation.rebuyables[id] += 1
     if (id == 2) {
-        if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
+        if (!Perks.has(PERKS.BYPASS_DG_RESET)) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
         player.dilation.freeGalaxies = 0
     }
 
     if (id == 3) {
-      if (player.reality.perks.includes(37)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(3)
-      }
-      else if (player.reality.perks.includes(36)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2.5)
-      }
-      else if (player.reality.perks.includes(35)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2)
-      }
-      else if (player.reality.perks.includes(34)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(1.5)
-      }
+      let retroactiveTPFactor = 1;
+      if (Perks.has(PERKS.RETROACTIVE_TP4)) retroactiveTPFactor = 3;
+      else if (Perks.has(PERKS.RETROACTIVE_TP3)) retroactiveTPFactor = 2.5;
+      else if (Perks.has(PERKS.RETROACTIVE_TP2)) retroactiveTPFactor = 2;
+      else if (Perks.has(PERKS.RETROACTIVE_TP1)) retroactiveTPFactor = 1.5;
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(retroactiveTPFactor)
+      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(retroactiveTPFactor)
     }
   }
   return true

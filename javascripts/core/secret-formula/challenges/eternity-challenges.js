@@ -113,13 +113,12 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000).";
-      if (EternityChallenge(10).isRunning) {
-        description += `, Currently: ${shorten(ec10bonus, 2, 1)}x`;
-      }
+      EternityChallenge(10).applyEffect(v => description += ` Currently: ${shorten(v, 2, 1)}x`);
       return description;
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
+    effect: () => Decimal.pow(Player.totalInfinitied, 1000).clampMin(1).pow(Effects.product(TimeStudy(31))),
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {

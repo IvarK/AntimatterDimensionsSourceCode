@@ -49,6 +49,15 @@ const GameCache = {
     );
   }),
 
+  timeStudies: new Lazy(() => {
+    return NormalTimeStudyState.studies
+      .map(s => player.timestudy.studies.includes(s.id));
+  }),
+
+  achievementCount: new Lazy(() => {
+    return player.achievements.filter(a => !a.startsWith("s")).length;
+  }),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

@@ -1148,6 +1148,8 @@ function gameLoop(diff, options = {}) {
         if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }
 
+    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
+
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
     if (TimeStudy.dilation.isBought) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
@@ -1513,17 +1515,8 @@ function setControlShiftKey(isDown) {
 
 var postc8Mult = new Decimal(0)
 var mult18 = 1
-var ec10bonus = new Decimal(1)
 
 init();
-setInterval( function() {
-    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-    if (EternityChallenge(10).isRunning) {
-        ec10bonus = Decimal.pow(Player.totalInfinitied, 1000).max(1).pow(Effects.product(TimeStudy(31)));
-    } else {
-        ec10bonus = new Decimal(1)
-    }
-}, 100);
 
 let tweenTime = 0;
 (function() {

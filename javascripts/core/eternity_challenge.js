@@ -117,6 +117,10 @@ class EternityChallengeState extends GameMechanicState {
     return player.currentEternityChall === this.fullId;
   }
 
+  get canBeApplied() {
+    return this.isRunning;
+  }
+
   get completions() {
     const completions = player.eternityChalls[this.fullId];
     return completions === undefined ? 0 : completions;

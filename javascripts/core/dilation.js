@@ -62,6 +62,7 @@ function buyDilationUpgrade(id) {
     if (id == 2) {
         if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
+        player.dilation.baseFreeGalaxies = 0
         player.dilation.freeGalaxies = 0
     }
 

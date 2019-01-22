@@ -178,6 +178,7 @@ function reality(force, reset, auto) {
     player.dilation.totalTachyonParticles = new Decimal(0);
     player.dilation.nextThreshold = new Decimal(1000);
     player.dilation.baseFreeGalaxies = 0;
+    player.dilation.freeGalaxies = 0;
     player.dilation.upgrades = [];
     player.dilation.rebuyables = {
         1: 0,

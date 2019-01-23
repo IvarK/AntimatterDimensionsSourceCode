@@ -51,8 +51,17 @@ GameDatabase.eternity.dilation = (function() {
     tdMultReplicanti: {
       id: 5,
       cost: 1e9,
-      description: "Time Dimensions are affected by Replicanti multiplier ^0.1.",
-      effect: () => replicantiMult().pow(0.1),
+      description: () => {
+        let mult = replicantiMult().log10();
+        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.log10() / mult;
+        let out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
+        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`
+      },
+      effect: () => {
+        let rep10 = replicantiMult().log10() * 0.1;
+        rep10 = rep10 > 9000 ? 9000 + 0.5 * (rep10 - 9000) : rep10;
+        return Decimal.pow(10, rep10);
+      },
       formatEffect: value => formatX(value, 2, 1)
     },
     ndMultDT: {

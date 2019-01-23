@@ -302,6 +302,9 @@ class Perks {
   }
 
   static has(id) {
+    if (id === undefined) {
+      throw crash("Unrecognized perk");
+    }
     return player.reality.perks.includes(id);
   }
 }

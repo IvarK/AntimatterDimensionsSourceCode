@@ -245,11 +245,6 @@ function gainedRealityMachines() {
     return Decimal.floor(ret)
 }
 
-function percentToNextRealityMachine() {
-    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    return Math.min(((ret - Math.floor(ret)) * 100), 99.9).toFixed(1);
-}
-
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
     let glyphState = getGlyphLevelInputs();
@@ -541,70 +536,6 @@ function unlockEChall(idx) {
     }
 }
 
-function ECTimesCompleted(name) {
-    if (player.eternityChalls[name] === undefined) return 0
-    else return player.eternityChalls[name]
-}
-
-function canUnlockEC(idx, cost, study, study2) {
-    study2 = (study2 !== undefined) ? study2 : 0;
-    if (player.eternityChallUnlocked !== 0) return false
-    if (!player.timestudy.studies.includes(study) && (player.study2 == 0 || !player.timestudy.studies.includes(study2))) return false
-    if (player.timestudy.theorem < cost) return false
-    if (player.etercreq == idx && idx !== 11 && idx !== 12) return true
-    if (player.reality.perks.includes(31)) return true
-
-    switch(idx) {
-        case 1:
-        if (player.eternities >= 20000+(ECTimesCompleted("eterc1")*20000)) return true
-        break;
-
-        case 2:
-        if (player.totalTickGained >= 1300+(ECTimesCompleted("eterc2")*150)) return true
-        break;
-
-        case 3:
-        if (player.eightAmount.gte(17300+(ECTimesCompleted("eterc3")*1250))) return true
-        break;
-
-        case 4:
-        if (1e8 + (ECTimesCompleted("eterc4")*5e7) <= Player.totalInfinitied) return true
-        break;
-
-        case 5:
-        if (160 + (ECTimesCompleted("eterc5")*14) <= player.galaxies) return true
-        break;
-
-        case 6:
-        if (40 + (ECTimesCompleted("eterc6")*5) <= player.replicanti.galaxies) return true
-        break;
-
-        case 7:
-        if (player.money.gte(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))) return true
-        break;
-
-        case 8:
-        if (player.infinityPoints.gte(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))) return true
-        break;
-
-        case 9:
-        if (player.infinityPower.gte(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))) return true
-        break;
-
-        case 10:
-        if (player.eternityPoints.gte(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))) return true
-        break;
-
-        case 11:
-        if (player.timestudy.studies.includes(71) && !player.timestudy.studies.includes(72) && !player.timestudy.studies.includes(73)) return true
-        break;
-
-        case 12:
-        if (player.timestudy.studies.includes(73) && !player.timestudy.studies.includes(71) && !player.timestudy.studies.includes(72)) return true
-        break;
-    }
-}
-
 function quickReset() {
     if (player.resets == 0) player.resets--;
     else player.resets -= 2;
@@ -725,7 +656,7 @@ setInterval(function() {
 
     if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
 
-    if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
+    if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
     }
 
@@ -807,15 +738,6 @@ setInterval(function() {
     EternityChallenge.autoCompleteTick()
     if (!Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
 }, 1000)
-
-function getECGoalIP(challNum, timesCompleted) {
-	var ECBaseIPGoal = [0, 1800, 975, 600, 2750, 750, 850, 2000, 1300, 1750, 3000, 500, 110000];
-	var ECPerComp = [0, 200, 175, 75, 550, 400, 250, 530, 900, 250, 300, 200, 12000]
-	
-	var baseDecimal = new Decimal("1e" + ECBaseIPGoal[challNum]);
-	var perCompDecimal = new Decimal("1e" + ECPerComp[challNum]);
-	return baseDecimal.times(perCompDecimal.pow(timesCompleted)).max(baseDecimal);
-}
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)
@@ -1041,7 +963,7 @@ function gameLoop(diff, options = {}) {
     player.thisRealityRealTime += realDiff;
 
     for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
+      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);
         dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
@@ -1070,8 +992,8 @@ function gameLoop(diff, options = {}) {
       player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
     }
 
-    if (TD1Production.gt(0) && ECTimesCompleted("eterc7") > 0) {
-      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    if (TD1Production.gt(0) && EternityChallenge(7).completions > 0) {
+      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(EternityChallenge(7).completions * 0.2).minus(1).times(diff/10))
     }
 
     let tickmult = Effects.min(

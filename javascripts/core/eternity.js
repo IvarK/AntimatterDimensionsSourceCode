@@ -5,7 +5,7 @@ function eternity(force, auto) {
     if (!force && !auto && !askEternityConfirmation()) {
         return false;
     }
-    if (player.currentEternityChall === "eterc4" && player.infinitied > Math.max(16 - (ECTimesCompleted("eterc4") * 4), 0)) {
+    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
         return false;
     }
     if (force) player.currentEternityChall = "";
@@ -27,20 +27,21 @@ function eternity(force, auto) {
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.currentEternityChall !== "") {
-        var challNum = parseInt(player.currentEternityChall.split("eterc")[1]);
-        var completitions = 1;
+    if (EternityChallenge.isRunning()) {
+        const challenge = EternityChallenge.current();
+        let newCompletions = 1;
         if (player.reality.perks.includes(32)) {
-            var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
-            var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
-            while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
-            player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1;
-            var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions;
+            const maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
+            const maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
+            const currentCompletions = challenge.completions;
+            while (newCompletions < 5 - currentCompletions &&
+              player.infinityPoints.gte(challenge.goalAtCompletions(currentCompletions + newCompletions))) newCompletions++;
+            const totalCompletions = currentCompletions + newCompletions;
 
-            if (player.currentEternityChall === "eterc4" && totalCompletions >= maxEC4Valid)
-                completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall);
-            if (player.currentEternityChall === "eterc12" && totalCompletions >= maxEC12Valid)
-                completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
+            if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid)
+                newCompletions = Math.min(totalCompletions, maxEC4Valid) - currentCompletions;
+            if (EternityChallenge(12).isRunning && totalCompletions >= maxEC12Valid)
+                newCompletions = Math.min(totalCompletions, maxEC12Valid) - currentCompletions
 
         }
         if (EternityChallenge(6).isRunning) {
@@ -50,8 +51,8 @@ function eternity(force, auto) {
           GameCache.tickSpeedMultDecrease.invalidate();
         }
         if (player.eternityChalls[player.currentEternityChall] === undefined) {
-            player.eternityChalls[player.currentEternityChall] = completitions
-        } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += completitions;
+            player.eternityChalls[player.currentEternityChall] = newCompletions
+        } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += newCompletions;
         player.etercreq = 0;
         respecTimeStudies();
         if (Object.keys(player.eternityChalls).length >= 10) {
@@ -181,7 +182,7 @@ function eternity(force, auto) {
     }
     Marathon2 = 0;
     if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);
-    if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") === 0) unlockRealityUpgrade(12);
+    if (player.eternityPoints.gte(1e70) && EternityChallenge(1).completions === 0) unlockRealityUpgrade(12);
     if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
     if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);

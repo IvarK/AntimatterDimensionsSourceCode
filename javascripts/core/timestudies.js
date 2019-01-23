@@ -182,7 +182,7 @@ function canBuyStudy(name) {
 }
 
 function canBuyDilationStudy(name) {
-    if ((name == 1 && ((ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.theorem + calculateTimeStudiesCost() >= 13000) || player.reality.perks.includes(13)) && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
+    if ((name == 1 && ((EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted && player.timestudy.theorem + calculateTimeStudiesCost() >= 13000) || player.reality.perks.includes(13)) && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
     if (name == 6) {
         if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true;
         else return false
@@ -495,12 +495,25 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    function studyOf(connection) {
-      return connection === undefined ? undefined : connection.from.id;
+    if (!this.isAffordable) {
+      return false;
     }
-    const study1 = studyOf(this.incomingConnections[0]);
-    const study2 = studyOf(this.incomingConnections[1]);
-    return canUnlockEC(this.id, this.cost, study1, study2);
+    if (player.eternityChallUnlocked !== 0) {
+      return false;
+    }
+    const isConnectionSatisfied = Array.range(0, 2)
+      .map(i => this.incomingConnections[i])
+      .some(connection => connection !== undefined && connection.isSatisfied);
+    if (!isConnectionSatisfied) {
+      return false;
+    }
+    if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
+      return true;
+    }
+    if (!player.reality.perks.includes(31)) {
+      return this.isSecondaryRequirementMet;
+    }
+    return true;
   }
 
   /**
@@ -529,10 +542,10 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get isSecondaryRequirementMet() {
-    if (this._id === 11) {
+    if (this.id === 11) {
       return !TimeStudy(72).isBought && !TimeStudy(73).isBought;
     }
-    if (this._id === 12) {
+    if (this.id === 12) {
       return !TimeStudy(71).isBought && !TimeStudy(72).isBought;
     }
     const current = this.requirementCurrent;

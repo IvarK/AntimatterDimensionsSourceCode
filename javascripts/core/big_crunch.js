@@ -40,7 +40,8 @@ function bigCrunchReset() {
     if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
-    if (player.currentEternityChall === "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4") * 4)) {
+
+    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
         failChallenge();
     }
 

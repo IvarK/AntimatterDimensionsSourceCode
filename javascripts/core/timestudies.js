@@ -82,11 +82,11 @@ function buyDilationStudy(name, cost, quiet) {
             if (!quiet) {
               Tab.eternity.dilation.show();
             }
-            if (Perks.has(PERKS.AUTOUNLOCK_DILATION1)) player.dilation.upgrades.push(4, 5, 6);
-            if (Perks.has(PERKS.AUTOUNLOCK_DILATION2)) player.dilation.upgrades.push(7, 8, 9);
-            if (Perks.has(PERKS.START_TP)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
+            if (Perk.autounlockDilation1.isBought) player.dilation.upgrades.push(4, 5, 6);
+            if (Perk.autounlockDilation2.isBought) player.dilation.upgrades.push(7, 8, 9);
+            if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
         }
-        if (name === 6 && !Perks.has(PERKS.AUTOUNLOCK_REALITY)) {
+        if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");
         }
         player.dilation.studies.push(name)
@@ -109,21 +109,21 @@ function canBuyStudy(name) {
       if (player.timestudy.studies.includes(21)) return true; else return false
   }
   if (name == 62) {
-    return (Perks.has(PERKS.BYPASS_EC5_LOCK) || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
+    return (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
   }
 
-    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !Perks.has(PERKS.TS_EC_REQ)) {
+    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
-  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !Perks.has(PERKS.TS_EC_REQ)) {
+  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
   if (name == 181) {
-      if ((player.eternityChalls.eterc1 !== undefined || Perks.has(PERKS.BYPASS_EC1_LOCK))
-          && (player.eternityChalls.eterc2 !== undefined || Perks.has(PERKS.BYPASS_EC2_LOCK))
-          && (player.eternityChalls.eterc3 !== undefined || Perks.has(PERKS.BYPASS_EC3_LOCK))
+      if ((player.eternityChalls.eterc1 !== undefined || Perk.bypassEC1Lock.isBought)
+          && (player.eternityChalls.eterc2 !== undefined || Perk.bypassEC2Lock.isBought)
+          && (player.eternityChalls.eterc3 !== undefined || Perk.bypassEC3Lock.isBought)
           && player.timestudy.studies.includes(171)) {
         return true
       }
@@ -190,7 +190,7 @@ function canBuyStudy(name) {
 }
 
 function canBuyDilationStudy(name) {
-    if ((name == 1 && ((ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.theorem + calculateTimeStudiesCost() >= 13000) || Perks.has(PERKS.BYPASS_EC_DILATION)) && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
+    if ((name == 1 && ((ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.theorem + calculateTimeStudiesCost() >= 13000) || Perk.bypassECDilation.isBought) && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
     if (name == 6) {
         if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true;
         else return false
@@ -520,7 +520,7 @@ class ECTimeStudyState extends TimeStudyState {
 
   get isAvailable() {
     const tsRequirement = this.areRequiredTSBought;
-    const secondaryRequirement = Perks.has(PERKS.TS_EC_REQ) || this.isSecondaryRequirementMet;
+    const secondaryRequirement = Perk.studyECRequirement.isBought || this.isSecondaryRequirementMet;
     return tsRequirement && secondaryRequirement;
   }
 
@@ -663,10 +663,10 @@ TimeStudy.allConnections = function() {
     [TS(42), TS(51)],
     [TS(42), EC(5)],
 
-    [TS(42), TS(62), () => !Perks.has(PERKS.BYPASS_EC5_LOCK)],
+    [TS(42), TS(62), () => !Perk.bypassEC5Lock.isBought],
 
     [TS(51), TS(61)],
-    [EC(5), TS(62), () => Perks.has(PERKS.BYPASS_EC5_LOCK)],
+    [EC(5), TS(62), () => Perk.bypassEC5Lock.isBought],
 
     [TS(61), TS(71)],
     [TS(61), TS(72)],
@@ -721,11 +721,11 @@ TimeStudy.allConnections = function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [TS(171), TS(181), () => !Perks.has(PERKS.BYPASS_EC1_LOCK) || !Perks.has(PERKS.BYPASS_EC2_LOCK) || !Perks.has(PERKS.BYPASS_EC3_LOCK)],
+    [TS(171), TS(181), () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
 
-    [EC(1), TS(181), () => Perks.has(PERKS.BYPASS_EC1_LOCK)],
-    [EC(2), TS(181), () => Perks.has(PERKS.BYPASS_EC2_LOCK)],
-    [EC(3), TS(181), () => Perks.has(PERKS.BYPASS_EC3_LOCK)],
+    [EC(1), TS(181), () => Perk.bypassEC1Lock.isBought],
+    [EC(2), TS(181), () => Perk.bypassEC2Lock.isBought],
+    [EC(3), TS(181), () => Perk.bypassEC3Lock.isBought],
 
     [TS(181), EC(10)],
 

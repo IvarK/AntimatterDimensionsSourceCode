@@ -76,22 +76,41 @@ var nodeOptions = {}
 var network = null;
 
 
-function getNodeColor(id, cost) {
-  if (canBuyPerk(id, cost)) var tempColor = "#000000"
-  else if (Perks.has(id)) var tempColor = "#0b600e"
-  else var tempColor = "#656565"
-  if (canBuyPerk(id, cost) || Perks.has(id)) var tempHoverColor = "#0b600e"
-  else var tempHoverColor = "#656565"
-  if (Perks.has(id)) var tempBorderColor = "#094E0B"
-  else var tempBorderColor = "#0b600e"
-  return {background: tempColor, border: tempBorderColor, hover: {background: tempHoverColor, border: tempBorderColor}, highlight: {background: tempColor, border: tempBorderColor}}
+function getNodeColor(perk) {
+  const canBeBought = perk.canBeBought;
+  const isBought = perk.isBought;
+
+  let background;
+  if (canBeBought) background = "#000000";
+  else if (isBought) background = "#0b600e";
+  else background = "#656565";
+
+  let hoverColor = canBeBought || isBought ? "#0b600e" : "#656565";
+  let borderColor = isBought ? "#094E0B" : "#0b600e";
+
+  return {
+    background: background,
+    border: borderColor,
+    hover: {
+      background: hoverColor,
+      border: borderColor
+    },
+    highlight: {
+      background: background,
+      border: borderColor
+    }
+  };
 }
 
 function updatePerkColors() {
-  for (let id of Object.keys(CONNECTED_PERKS)) {
-    id = parseInt(id);
-    nodes.update([{id:id, color: getNodeColor(id, 1) }]);
-  }
+  const data = Perk.all
+    .map(perk => {
+      return {
+        id: perk.id,
+        color: getNodeColor(perk)
+      };
+    });
+  nodes.update(data);
 }
 
 function hidePerkLabels() {
@@ -107,16 +126,23 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
-    nodes = new vis.DataSet(PERK_NODES);
+    nodes = Perk.all.map(perk => {
+      return {
+        id: perk.id,
+        label: perk.config.label,
+        title: perk.config.description
+      };
+    });
+    nodes = new vis.DataSet(nodes);
 
-    // This creates the edges based on CONNECTED_PERKS in perks.js
-    edges = []
-    for (key in CONNECTED_PERKS) {
-      CONNECTED_PERKS[key].map(function(id) {
-        if (!edges.some(function(edge) {
-          return edge.from == id && edge.to == parseInt(key) // Check if edges has the edge other way around
-        })) edges.push({from: parseInt(key), to: id})
-      })
+    edges = [];
+    for (let perk of Perk.all) {
+      for (let connectedPerk of perk.connectedPerks) {
+        const from = Math.min(perk.id, connectedPerk.id);
+        const to = Math.max(perk.id, connectedPerk.id);
+        if (edges.find(edge => edge.from === from && edge.to === to)) continue;
+        edges.push({ from: from, to: to });
+      }
     }
 
     nodeData = {
@@ -148,11 +174,10 @@ function drawPerkNetwork() {
 
     //buying perks TODO: lower the cost.
     network.on("click", function(params) {
-        var id = params.nodes[0]
-        if (isFinite(id)) {
-            buyPerk(id, 1);
-            updatePerkColors()
-        }
+      const id = params.nodes[0];
+      if (!isFinite(id)) return;
+      Perk.find(id).purchase();
+      updatePerkColors()
     });
     //hide tooltips on drag
     network.on("dragStart", function(params) {

@@ -28,7 +28,7 @@ Vue.component("ec-time-study", {
   methods: {
     update() {
       const id = this.id;
-      this.hasRequirement = !Perks.has(PERKS.TS_EC_REQ) && player.etercreq !== id;
+      this.hasRequirement = !Perk.studyECRequirement.isBought && player.etercreq !== id;
       if (!this.hasRequirement || id > 10) return;
       const requirement = this.requirement;
       const study = this.study;

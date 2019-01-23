@@ -29,7 +29,7 @@ Vue.component("game-header-eternity-button", {
       }
 
       if (EternityChallenge.current() !== undefined) {
-        if (!Perks.has(PERKS.TS_EC_BULK)) {
+        if (!Perk.studyECBulk.isBought) {
           this.type = EPButtonDisplayType.CHALLENGE;
           return;
         }

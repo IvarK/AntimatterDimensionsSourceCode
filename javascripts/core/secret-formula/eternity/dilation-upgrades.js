@@ -27,7 +27,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        Perks.has(PERKS.BYPASS_DG_RESET) ?
+        Perk.bypassDGReset.isBought ?
         "Reset Dilated Galaxies, but lower their threshold" :
         "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
       effect: bought => Math.pow(0.8, bought),

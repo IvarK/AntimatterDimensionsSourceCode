@@ -214,12 +214,15 @@ EternityChallenge.completedTiers = () => {
 EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
-  if (Perks.has(PERKS.AUTOCOMPLETE_EC5)) return TimeSpan.fromHours(0.5).totalMilliseconds
-  if (Perks.has(PERKS.AUTOCOMPLETE_EC4)) return TimeSpan.fromHours(1).totalMilliseconds
-  if (Perks.has(PERKS.AUTOCOMPLETE_EC3)) return TimeSpan.fromHours(2).totalMilliseconds
-  if (Perks.has(PERKS.AUTOCOMPLETE_EC2)) return TimeSpan.fromHours(4).totalMilliseconds
-  if (Perks.has(PERKS.AUTOCOMPLETE_EC1)) return TimeSpan.fromHours(6).totalMilliseconds
-  else return Infinity
+  const hours = Effects.max(
+    0,
+    Perk.autocompleteEC1,
+    Perk.autocompleteEC2,
+    Perk.autocompleteEC3,
+    Perk.autocompleteEC4,
+    Perk.autocompleteEC5
+  );
+  return hours === 0 ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
 }
 
 EternityChallenge.autoCompleteNext = function() {

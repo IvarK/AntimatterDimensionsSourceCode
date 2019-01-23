@@ -59,18 +59,20 @@ function buyDilationUpgrade(id) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
     player.dilation.rebuyables[id] += 1
     if (id == 2) {
-        if (!Perks.has(PERKS.BYPASS_DG_RESET)) player.dilation.dilatedTime = new Decimal(0)
+        if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
         player.dilation.baseFreeGalaxies = 0
         player.dilation.freeGalaxies = 0
     }
 
     if (id == 3) {
-      let retroactiveTPFactor = 1;
-      if (Perks.has(PERKS.RETROACTIVE_TP4)) retroactiveTPFactor = 3;
-      else if (Perks.has(PERKS.RETROACTIVE_TP3)) retroactiveTPFactor = 2.5;
-      else if (Perks.has(PERKS.RETROACTIVE_TP2)) retroactiveTPFactor = 2;
-      else if (Perks.has(PERKS.RETROACTIVE_TP1)) retroactiveTPFactor = 1.5;
+      const retroactiveTPFactor = Effects.max(
+        1,
+        Perk.retroactiveTP1,
+        Perk.retroactiveTP2,
+        Perk.retroactiveTP3,
+        Perk.retroactiveTP4
+      );
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(retroactiveTPFactor)
       player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(retroactiveTPFactor)
     }

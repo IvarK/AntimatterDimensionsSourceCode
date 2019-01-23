@@ -37,7 +37,7 @@ Vue.component("dilation-time-study", {
       const id = this.id;
       this.showCost = id !== 6 || player.realities === 0;
       if (id === 1) {
-        this.showRequirement = !this.study.isBought && !Perks.has(PERKS.BYPASS_EC_DILATION);
+        this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.isBought;
       }
     }
   },

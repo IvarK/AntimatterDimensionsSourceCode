@@ -501,16 +501,15 @@ class ECTimeStudyState extends TimeStudyState {
     if (player.eternityChallUnlocked !== 0) {
       return false;
     }
-    const isConnectionSatisfied = Array.range(0, 2)
-      .map(i => this.incomingConnections[i])
-      .some(connection => connection !== undefined && connection.isSatisfied);
+    const isConnectionSatisfied = this.incomingConnections
+      .some(connection => connection.isSatisfied);
     if (!isConnectionSatisfied) {
       return false;
     }
     if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
       return true;
     }
-    if (!player.reality.perks.includes(31)) {
+    if (!Perk(31).isBought) {
       return this.isSecondaryRequirementMet;
     }
     return true;
@@ -521,16 +520,6 @@ class ECTimeStudyState extends TimeStudyState {
    */
   get challenge() {
     return EternityChallenge(this.id);
-  }
-
-  get isAvailable() {
-    const tsRequirement = this.areRequiredTSBought;
-    const secondaryRequirement = Perk(31).isBought || this.isSecondaryRequirementMet;
-    return tsRequirement && secondaryRequirement;
-  }
-
-  get areRequiredTSBought() {
-    return this.incomingConnections.every(c => c.from.isBought);
   }
 
   get requirementTotal() {

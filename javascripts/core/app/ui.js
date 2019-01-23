@@ -80,8 +80,11 @@ ui = new Vue({
   el: '#ui',
   data: ui,
   computed: {
-    themeCss: function() {
+    themeCss() {
       return "stylesheets/theme-" + this.view.theme + ".css";
+    },
+    notation() {
+      return Notation.find(this.notationName);
     }
   }
 });

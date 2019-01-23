@@ -85,7 +85,7 @@ class Notation {
 
   setCurrent() {
     player.options.notation = this.name;
-    Notation.current = this;
+    ui.notationName = this.name;
   }
 
   /**
@@ -95,6 +95,10 @@ class Notation {
   static find(name) {
     const notation = Notation.all.find(n => n.name === name);
     return notation === undefined ? Notation.mixedScientific : notation;
+  }
+
+  static get current() {
+    return uiInitialized ? ui.notation : Notation.mixedScientific;
   }
 }
 
@@ -403,5 +407,3 @@ Notation.all = [
   Notation.infinity,
   Notation.roman
 ];
-
-Notation.current = Notation.mixedScientific;

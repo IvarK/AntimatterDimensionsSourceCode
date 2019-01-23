@@ -27,8 +27,6 @@ function shortenAutobuyerInput(value) {
 }
 
 function shorten(value, places, placesUnder1000) {
-  // TODO: this is needed for Vue reactivity to work
-  const notation = player.options.notation;
   return Notation.current.format(value, places, placesUnder1000);
 }
 

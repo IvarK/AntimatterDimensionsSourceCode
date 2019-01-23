@@ -270,8 +270,8 @@ const StudyTreeLayoutType = {
   ALTERNATIVE_181: 2,
   ALTERNATIVE_62_181: 3,
   get current() {
-    const alt62 = Perk(71).isBought;
-    const alt181 = Perk(4).isBought && Perk(74).isBought && Perk(75).isBought;
+    const alt62 = Perk.bypassEC5Lock.isBought;
+    const alt181 = Perk.bypassEC1Lock.isBought && Perk.bypassEC2Lock.isBought && Perk.bypassEC3Lock.isBought;
     if (alt62 && alt181) return this.ALTERNATIVE_62_181;
     if (alt62) return this.ALTERNATIVE_62;
     if (alt181) return this.ALTERNATIVE_181;

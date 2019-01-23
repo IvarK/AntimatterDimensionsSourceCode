@@ -24,7 +24,7 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
   let u = 0, v = 0;
   let minimumValue = 1;
   let ret = 1;
-  if (player.reality.perks.includes(23)) minimumValue += 0.125;
+  if (Perk.glyphRarityIncrease.isBought) minimumValue += 0.125;
   while (ret <= minimumValue || u == 0 || v == 0) {
     u = random();
     v = random();
@@ -764,9 +764,10 @@ function getGlyphLevelInputs() {
     glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
     glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
   }
-  let perkFactor = 0;
-  if (player.reality.perks.includes(21)) perkFactor++;
-  if (player.reality.perks.includes(24)) perkFactor++;
+  let perkFactor = Effects.sum(
+    Perk.glyphLevelIncrease1,
+    Perk.glyphLevelIncrease2
+  );
   return {
     epEffect: epEffect,
     replEffect: replEffect,

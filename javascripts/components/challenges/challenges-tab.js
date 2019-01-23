@@ -49,7 +49,7 @@ Vue.component('challenges-tab', {
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = Challenge.isRunning() || InfinityChallenge.isRunning() || EternityChallenge.isRunning();
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
-      this.isAutoECVisible = player.reality.perks.includes(91);
+      this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
       const remainingTiers = EternityChallenge.remainingTiers();
       this.remainingECTiers = remainingTiers;

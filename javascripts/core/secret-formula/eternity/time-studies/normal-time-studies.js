@@ -169,13 +169,13 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 121,
     cost: 9,
-    description: () => Perk(72).isBought ?
+    description: () => Perk.studyActiveEP.isBought ?
       "You gain 50x more EP" :
       "The worse your average EP/min is, the more EP you get",
-    effect: () => Perk(72).isBought ?
+    effect: () => Perk.studyActiveEP.isBought ?
       50 :
       (253 - Player.averageEPPerRun.dividedBy(player.epmult.times(10)).clamp(3, 248)) / 5,
-    formatEffect: value => Perk(72).isBought ?
+    formatEffect: value => Perk.studyActiveEP.isBought ?
       undefined :
       formatX(value, 0, 0)
   },
@@ -191,7 +191,7 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "You gain more EP based on time spent this Eternity",
     effect: () => {
       let thisEternity = Time.thisEternity;
-      Perk(73).applyEffect(v => thisEternity = thisEternity.add(v));
+      Perk.studyIdleEP.applyEffect(v => thisEternity = thisEternity.add(v));
       return Math.sqrt(1.39 * thisEternity.totalSeconds);
     },
     formatEffect: value => formatX(value, 1, 1)

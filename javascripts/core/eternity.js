@@ -30,7 +30,7 @@ function eternity(force, auto) {
     if (EternityChallenge.isRunning()) {
         const challenge = EternityChallenge.current();
         let newCompletions = 1;
-        if (player.reality.perks.includes(32)) {
+        if (Perk.studyECBulk.isBought) {
             const maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
             const maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
             const currentCompletions = challenge.completions;
@@ -197,11 +197,11 @@ function eternity(force, auto) {
         }
     }
 
-    if (player.eternityUpgrades.length < 3 && player.reality.perks.includes(81)) {
+    if (player.eternityUpgrades.length < 3 && Perk.autounlockEU1.isBought) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(1).add(2).add(3)];
     }
 
-    if (player.eternityUpgrades.length < 6 && player.reality.perks.includes(82)) {
+    if (player.eternityUpgrades.length < 6 && Perk.autounlockEU2.isBought) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
     }
 
@@ -258,10 +258,11 @@ function resetInfinityPointsOnEternity() {
 }
 
 function resetInfinityPoints() {
-  let ip = 0;
-  if (player.reality.perks.includes(54)) ip = 2e130;
-  else if (player.reality.perks.includes(53)) ip = 2e15;
-  player.infinityPoints = new Decimal(ip);
+  player.infinityPoints = Effects.max(
+    0,
+    Perk.startIP1,
+    Perk.startIP2
+  ).toDecimal();
 }
 
 class EternityMilestoneState {

@@ -36,20 +36,24 @@ Vue.component("game-header", {
       else this.currCelestial = String.empty;
     },
     updateChallengeDisplay: function() {
-      const challenge = Challenge.current();
-      let inInfinityChallenge = player.currentChallenge.startsWith("postc");
-      let inEternityChallenge = player.currentEternityChall.startsWith("eterc");
-      let inDilation = player.dilation.active;
-      let inCelestialReality = this.currCelestial.length !== 0;
-      
       // Pls don't hate me Razen
       let displayValue = "";
+
+      let inCelestialReality = this.currCelestial.length !== 0;
       if (inCelestialReality) displayValue += " + " + this.currCelestial + " Reality";
+
+      let inDilation = player.dilation.active;
       if (inDilation) displayValue += " + Time Dilation";
-      if (inEternityChallenge)  displayValue += " + Eternity Challenge " + player.currentEternityChall.substring(5);
-      if (inInfinityChallenge)  displayValue += " + Infinity Challenge " + player.currentChallenge.substring(5);
+
+      const challenge = Challenge.current();
       if (challenge !== undefined) displayValue += ` + ${challenge.config.reward} Challenge `;
-      
+
+      const infinityChallenge = InfinityChallenge.current();
+      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${challenge.id}`;
+
+      const eternityChallenge = EternityChallenge.current();
+      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${challenge.id}`;
+
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
       else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
       else  this.challengeDisplay = "";

@@ -84,7 +84,7 @@ function buyManyInfinityDimension(tier) {
   else dim.power = dim.power.times(infPowerMults[tier])
   dim.baseAmount += IDPurchasesToIDAmount(1)
 
-  if (player.currentEternityChall == "eterc8") {
+  if (EternityChallenge(8).isRunning) {
     player.eterc8ids -= 1;
   }
   return true

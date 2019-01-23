@@ -9,7 +9,7 @@ function eternity(force, auto) {
         return false;
     }
     if (force) player.currentEternityChall = "";
-    if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false;
+    if (EternityChallenge.isRunning() && player.infinityPoints.lt(player.eternityChallGoal)) return false;
     if (!force) {
       if (player.thisEternity < player.bestEternity) {
         player.bestEternity = player.thisEternity;

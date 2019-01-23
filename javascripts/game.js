@@ -754,7 +754,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   if (tempSpeedupToggle) {
     factor *= 500;
   }
-  if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
+  if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
@@ -880,7 +880,7 @@ function gameLoop(diff, options = {}) {
       }
     }
 
-    if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
+    if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
         if (player.reality.upg.includes(11)) {
           let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
           player.infinitied += gained
@@ -985,7 +985,7 @@ function gameLoop(diff, options = {}) {
 
     const TD1Production = TimeDimension(1).productionPerSecond;
     const TD1ProductionThisTick = TD1Production.times(diff/1000);
-    if (player.currentEternityChall === "eterc7") {
+    if (EternityChallenge(7).isRunning) {
       player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
     }
     else {
@@ -1128,7 +1128,7 @@ function gameLoop(diff, options = {}) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
         newDimension()
-        if (player.infDimBuyers[i-1] && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc10") buyMaxInfDims(infdimpurchasewhileloop)
+        if (player.infDimBuyers[i-1] && !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
         infdimpurchasewhileloop = 1;
     }
 
@@ -1255,23 +1255,24 @@ function autoBuyDilationUpgrades() {
 }
 
 function autoBuyReplicantiUpgrades() {
-  if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance())
+  if (EternityChallenge(8).isRunning) return;
+  if (player.eternities >= 40 && player.replicanti.auto[0]) {
+    while (player.infinityPoints.gte(player.replicanti.chanceCost) && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance())
       if (!upgradeReplicantiChance())
         break;
   }
 
-  if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
+  if (player.eternities >= 60 && player.replicanti.auto[1]) {
+    while (player.infinityPoints.gte(player.replicanti.intervalCost) && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
   }
 
-  if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
+  if (player.eternities >= 80 && player.replicanti.auto[2]) {
     while (upgradeReplicantiGalaxy()) continue
   }
 }
 
 function autoBuyInfDims() {
-  if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
+  if (player.eternities > 10 && !EternityChallenge(8).isRunning) {
     for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)

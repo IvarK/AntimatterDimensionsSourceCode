@@ -80,7 +80,7 @@ function bigCrunchReset() {
         player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
     }
 
-    if (player.eternities > 10 && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc10") {
+    if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
         for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
             if (player.infDimBuyers[i - 1]) {
                 buyMaxInfDims(i);
@@ -89,15 +89,15 @@ function bigCrunchReset() {
         }
     }
 
-    if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
+    if (player.eternities >= 40 && player.replicanti.auto[0] && !EternityChallenge(8).isRunning) {
+        while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) upgradeReplicantiChance()
     }
 
-    if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
+    if (player.eternities >= 60 && player.replicanti.auto[1] && !EternityChallenge(8).isRunning) {
+        while (player.infinityPoints.gte(player.replicanti.intervalCost) && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
     }
 
-    if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
+    if (player.eternities >= 80 && player.replicanti.auto[2] && !EternityChallenge(8).isRunning) {
         while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
     }
   

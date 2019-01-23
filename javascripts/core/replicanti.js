@@ -250,7 +250,7 @@ const ReplicantiUpgrade = {
     },
     get costIncrease() {
       const galaxies = this.current;
-      let increase = player.currentEternityChall === "eterc6" ?
+      let increase = EternityChallenge(6).isRunning ?
         Decimal.pow(1e2, galaxies).times(1e2) :
         Decimal.pow(1e5, galaxies).times(1e25);
       if (galaxies >= 100) {

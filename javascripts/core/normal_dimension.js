@@ -4,7 +4,7 @@ function getDimensionFinalMultiplier(tier) {
 
   let multiplier = new Decimal(dimension.pow);
 
-  if (player.currentEternityChall === "eterc11") return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
+  if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
   if (Challenge(12).isRunning) {
     if (tier === 4) multiplier = multiplier.pow(1.4);
     if (tier === 2) multiplier = multiplier.pow(1.7)
@@ -18,7 +18,7 @@ function getDimensionFinalMultiplier(tier) {
   let glyphPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powerpow"));
   let glyphDilationPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("dilationpow"));
 
-  if (player.currentEternityChall === "eterc9") multiplier = multiplier;
+  if (EternityChallenge(9).isRunning) multiplier = multiplier;
   else multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
 
   multiplier = multiplier.timesEffectsOf(

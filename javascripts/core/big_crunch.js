@@ -256,12 +256,12 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       InfinityUpgrade.skipResetGalaxy.isBought;
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   purchase(amount = 1) {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
@@ -283,7 +283,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   autobuyerTick() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
       const purchases = buyUntil - this.cost.exponent + 1;
@@ -350,12 +350,12 @@ class BreakInfinityMultiplierCostUpgrade extends GameMechanicState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     player.infinityPoints = player.infinityPoints.minus(this.cost);
     player.infinityRebuyables[this.config.id]++;
     GameCache.dimensionMultDecrease.invalidate();
@@ -389,12 +389,12 @@ class BreakInfinityIPGenUpgrade extends GameMechanicState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
     player.offlineProdCost *= 10;
     player.offlineProd += 5;

@@ -2476,7 +2476,52 @@ screen and (max-width: 480px) {
   visibility: hidden;
 }
 
+.l-options-grid__notations-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-options-grid__notations {
+  user-select: none;
+}
+
+/** replicate box-shadow behavior */
+.t-dark .c-options-grid__notations {
+  box-shadow: 0 0 .7rem .2rem #111111 !important;
+}
+
+.t-dark-metro .c-options-grid__notations {
+  box-shadow: .1rem .1rem .1rem 0 black !important;
+}
+
+.t-metro .c-options-grid__notations,
+.t-inverted-metro .c-options-grid__notations {
+  box-shadow: .1rem .1rem .1rem 0 #9e9e9e !important;
+}
+
+.t-s6 .c-options-grid__notations {
+  box-shadow: 0 0 .7rem .2rem #111111;
+}
+
 /*#endregion l-options-grid*/
+
+.l-select-notation {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.l-select-notation__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.o-primary-btn.c-select-notation__item {
+  box-shadow: none !important;
+}
+
 
 /*#endregion Options*/
 

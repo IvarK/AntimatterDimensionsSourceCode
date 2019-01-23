@@ -13,6 +13,10 @@ class GameOptions {
     Notation.find(next).setCurrent();
   }
 
+  static setNotation(name) {
+    Notation.find(name).setCurrent();
+  }
+
   static toggleNews() {
     if (!player.options.newsHidden) {
       document.getElementById("game").style.display = "none";

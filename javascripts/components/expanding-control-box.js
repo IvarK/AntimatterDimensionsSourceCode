@@ -6,9 +6,14 @@
 
 Vue.component("expanding-control-box", {
   props: {
-    // Class assigned to visible container; specify border and background here
-    containerClass: String,
+    containerClass: [String, Array], // class assigned to visible container; specify border and background here
     label: String,
+    widthSource: {
+      // content sizes the width based on what's in the dropdown.
+      // header sizes based on the menu header (container ref)
+      type: String,
+      default: "content",
+    },
   },
   data() {
     return {
@@ -40,23 +45,29 @@ Vue.component("expanding-control-box", {
       click to show hide is at the top of the container element. -->
   <div ref="root" class="l-expanding-control-box">
     <div ref="container" :class="['l-expanding-control-box__container', containerClass]">
-      <div ref="expandButton" class="l-expanding-control-box__button" @click="isOpen=!isOpen">
-         {{label}} ▼
+      <div v-if="!$slots.header" ref="expandButton" class="l-expanding-control-box__button" @click="isOpen=!isOpen">
+        {{label}} ▼
       </div>
+      <div v-else ref="expandButton" @click="isOpen=!isOpen"><slot name="header"/></div>
       <div ref="dropdown"><slot name="dropdown"/></div>
     </div>
   </div>
   `,
   methods: {
     updateBaseWidth() {
-      this.$refs.container.style.width = this.$refs.dropdown.offsetWidth + "px";
-      this.$refs.root.style.width = this.$refs.dropdown.offsetWidth + "px";
+      if (this.widthSource === "content") {
+        this.$refs.container.style.width = this.$refs.dropdown.offsetWidth + "px";
+        this.$refs.root.style.width = this.$refs.dropdown.offsetWidth + "px";
+      } else if (this.widthSource === "header") {
+        this.$refs.root.style.width = this.$refs.container.offsetWidth + "px";
+      }
     }
   },
   mounted() {
     // Set the root and container elements to match the height of the button
-    this.closedHeight = this.$refs.expandButton.offsetHeight + "px";
-    this.openHeight = (this.$refs.expandButton.offsetHeight + this.$refs.dropdown.offsetHeight) + "px";
+    const headerHeight = this.$refs.expandButton.offsetHeight;
+    this.closedHeight = headerHeight + "px"
+    this.openHeight = (headerHeight + this.$refs.dropdown.offsetHeight) + "px"
     this.$refs.container.style.maxHeight = this.closedHeight;
     this.$refs.root.style.height = this.closedHeight;
     this.updateBaseWidth();

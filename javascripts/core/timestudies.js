@@ -367,10 +367,10 @@ function importStudyTree(input) {
 function studyTreeSaveButton(num, forceSave) {
     if (shiftDown || forceSave) {
         localStorage.setItem("studyTree"+num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
-        ui.notify.info("Study tree "+num+" saved")
+        GameUI.notify.info("Study tree "+num+" saved")
     } else if (localStorage.getItem("studyTree"+num) !== null && localStorage.getItem("studyTree"+num) !== "|0") {
         importStudyTree(localStorage.getItem("studyTree"+num));
-        ui.notify.info("Study tree "+num+" loaded")
+        GameUI.notify.info("Study tree "+num+" loaded")
     }
 }
 

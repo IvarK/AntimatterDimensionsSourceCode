@@ -120,8 +120,8 @@ function updateWormholePhases(wormholeDiff) {
       if (wormhole.phase >= wormhole.duration) {
         wormhole.phase -= wormhole.duration
         wormhole.active = false
-        if (ui.notify.wormholes) {
-          ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
+        if (GameUI.notify.wormholes) {
+          GameUI.notify.success("Wormhole "+ (i + 1) +" duration ended.");
         }
       }
     } else {
@@ -129,8 +129,8 @@ function updateWormholePhases(wormholeDiff) {
         wormhole.phase -= wormhole.speed
         wormhole.activations++;
         wormhole.active = true
-        if (ui.notify.wormholes) {
-          ui.notify.success("Wormhole "+ (i + 1) +" is active!");
+        if (GameUI.notify.wormholes) {
+          GameUI.notify.success("Wormhole "+ (i + 1) +" is active!");
         }
       }
     }

@@ -98,7 +98,7 @@ class Notation {
   }
 
   static get current() {
-    return uiInitialized ? ui.notation : Notation.mixedScientific;
+    return GameUI.initialized ? ui.notation : Notation.mixedScientific;
   }
 }
 
@@ -326,7 +326,7 @@ Notation.cancer = new class CancerNotation extends LettersNotation{
 
   setCurrent() {
     super.setCurrent();
-    ui.notify.success("😂😂😂");
+    GameUI.notify.success("😂😂😂");
   }
 }("Cancer", ['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡']);
 

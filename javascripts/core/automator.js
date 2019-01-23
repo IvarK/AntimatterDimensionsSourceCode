@@ -367,7 +367,7 @@ function toggle(current) {
 function automatorSaveButton(num, forceSave) {
   if (shiftDown || forceSave) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
-      ui.notify.info(`Automator script ${num} saved`);
+      GameUI.notify.info(`Automator script ${num} saved`);
   } else {
     loadScript(num)
   }
@@ -377,7 +377,7 @@ function loadScript(num) {
   if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
     importAutomatorScript(localStorage.getItem("automatorScript"+num));
     automatorIdx = 0
-    ui.notify.info(`Automator script ${num} loaded`);
+    GameUI.notify.info(`Automator script ${num} loaded`);
   }
 }
 

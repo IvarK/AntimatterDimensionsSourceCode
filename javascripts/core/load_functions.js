@@ -345,7 +345,7 @@ function save_game(changed, silent) {
   if ( possibleGlyphs.length > 0 ) return
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
-  if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
+  if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");
 }
 
 function change_save(saveId) {

@@ -84,7 +84,7 @@ const copyToClipboard = (function() {
 
 function copyToClipboardAndNotify(str) {
     if (copyToClipboard(str)) {
-        ui.notify.info("Exported to clipboard");
+        GameUI.notify.info("Exported to clipboard");
     }
 }
 

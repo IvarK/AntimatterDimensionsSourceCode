@@ -206,7 +206,7 @@ function giveAchievement(name) {
 
     if (player.achievements.includes(allAchievementNums[name])) return false
 
-    ui.notify.success(name);
+    GameUI.notify.success(name);
     player.achievements.push(allAchievementNums[name]);
     GameCache.achievementCount.invalidate();
     kong.submitStats('Achievements', player.achievements.length);

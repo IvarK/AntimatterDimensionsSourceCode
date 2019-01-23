@@ -291,7 +291,7 @@ function fullResetTimeDimensions() {
 function unlockRealityUpgrade(id) {
   if (player.reality.upgReqs[id]) return
   player.reality.upgReqs[id] = true
-  ui.notify.success("You've unlocked a Reality upgrade!");
+  GameUI.notify.success("You've unlocked a Reality upgrade!");
 }
 
 function startRealityOver() {

@@ -209,6 +209,20 @@ function onLoad() {
   Notation.set(player.options.notation);
   GameCache.invalidate();
 
+  const notation = player.options.notation;
+  if (notation === undefined) {
+    player.options.notation = "Standard";
+  }
+  const notationMigration = {
+    "Mixed": "Mixed scientific",
+    "Default": "Brackets",
+    "Emojis": "Cancer"
+  };
+  if (notationMigration[notation] !== undefined) {
+    player.options.notation = notationMigration[notation];
+  }
+  Notation.find(player.options.notation).setCurrent();
+
   $(".wormhole-upgrades").hide()
   if (player.wormhole[0].unlocked) {
     $("#wormholeunlock").hide()
@@ -230,6 +244,8 @@ function onLoad() {
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true
   automatorIdx = player.reality.automatorCurrentRow;
+
+  GameCache.invalidate();
 
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {
@@ -334,7 +350,7 @@ function save_game(changed, silent) {
   if ( possibleGlyphs.length > 0 ) return
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
-  if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
+  if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");
 }
 
 function change_save(saveId) {
@@ -344,7 +360,6 @@ function change_save(saveId) {
   saved = 0;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
-  ec10bonus = new Decimal(1)
   IPminpeak = new Decimal(0)
   EPminpeak = new Decimal(0)
   player = saves[saveId] || defaultStart;

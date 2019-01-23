@@ -55,6 +55,6 @@ GameKeyboard.bind("up up down down left right left right b a", () => {
 });
 
 GameKeyboard.bindRepeatable("f", () => {
-  ui.notify.info("Paying respects");
+  GameUI.notify.info("Paying respects");
   giveAchievement("It pays to have respect");
 });

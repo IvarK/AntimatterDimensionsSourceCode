@@ -19,7 +19,6 @@ function startDilatedEternity() {
   player.dilation.active = true;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
-  ec10bonus = new Decimal(1)
   setTimeout(function() {
     GameIntervals.gameLoop.start();
   }, 250)
@@ -62,6 +61,7 @@ function buyDilationUpgrade(id) {
     if (id == 2) {
         if (!Perks.has(PERKS.BYPASS_DG_RESET)) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
+        player.dilation.baseFreeGalaxies = 0
         player.dilation.freeGalaxies = 0
     }
 

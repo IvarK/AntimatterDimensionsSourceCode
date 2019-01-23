@@ -45,7 +45,7 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = 0;
+    player.challengeTarget = new Decimal(0);
     if (player.eternities < 7) {
       player.autoSacrifice = 1;
     }
@@ -115,6 +115,10 @@ class EternityChallengeState extends GameMechanicState {
 
   get isRunning() {
     return player.currentEternityChall === this.fullId;
+  }
+
+  get canBeApplied() {
+    return this.isRunning;
   }
 
   get completions() {

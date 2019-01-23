@@ -231,8 +231,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityrate",
     glyphTypes: ["infinity"],
-    singleDesc: "Infinity power conversion rate: <br>^7 -> ^(7 + {value})",
-    totalDesc: "Infinity power conversion rate: ^7 -> ^(7 + {value})",
+    singleDesc: "Infinity power conversion rate: <br>^7 ➜ ^(7 + {value})",
+    totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.add,
     /** @type {function(number):number} */

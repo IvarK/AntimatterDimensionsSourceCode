@@ -38,7 +38,7 @@ var playFabId = -1
 function playFabLoginCallback(data, error) {
   if (error) {
     console.log(error.errorMessage);
-    ui.notify.error("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.");
+    GameUI.notify.error("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.");
     document.getElementById("cloudOptions").style.display = "none"
     document.getElementById("cloud").style.display = "none"
     return;
@@ -46,7 +46,7 @@ function playFabLoginCallback(data, error) {
   if (data) {
     //NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
     playFabId = data.data.PlayFabId;
-    ui.notify.info("Logged in to PlayFab Cloud");
+    GameUI.notify.info("Logged in to PlayFab Cloud");
 
     if (player.options.cloud) playFabLoadCheck()
     console.log("Logged in to playFab")
@@ -59,7 +59,7 @@ function saveToPlayFab(root) {
   // Cut compressed root object into strings of 10,000 bytes for PlayFab
   var chunks = LZString.compressToEncodedURIComponent(JSON.stringify(root)).match(/.{1,10000}/g);
   if (chunks.length > 10) {
-    ui.notify.error("Error saving to cloud: size limit exceeded");
+    GameUI.notify.error("Error saving to cloud: size limit exceeded");
   }
 
   var requestData = {
@@ -83,7 +83,7 @@ function saveToPlayFabCallback(data, error) {
   }
   if (data) {
     console.log("Game Saved!");
-    ui.notify.info("Game saved to cloud");
+    GameUI.notify.info("Game saved to cloud");
     save_game()
     return true;
   }
@@ -192,7 +192,7 @@ function newestSave(first, second) {
 
 function playFabLoadCheck() {
   loadFromPlayFab(function(cloudRoot) {
-    ui.notify.info("Loaded from cloud");
+    GameUI.notify.info("Loaded from cloud");
 
     for (var i = 0; i < 3; i++) {
       let saveId = i;
@@ -203,7 +203,7 @@ function playFabLoadCheck() {
           load_cloud_save(saveId, cloudSave);
       }
       if (newestSave === localSave) {
-          ui.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
+          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
           Modal.cloudLoadConflict.show();
       } else {
           overwriteLocalSave();
@@ -228,7 +228,7 @@ function playFabSaveCheck() {
       }
       if (newestSave === cloudSave) {
           isConflicted = true;
-          ui.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
+          Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteCloudSave, sendCloudSave);
           Modal.cloudSaveConflict.show();
       } else {
           overwriteCloudSave();

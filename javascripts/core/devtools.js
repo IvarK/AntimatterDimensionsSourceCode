@@ -32,7 +32,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    Notation.set("Cancer");
+    Notation.cancer.setCurrent();
 };
 
 dev.fixSave = function() {
@@ -53,7 +53,6 @@ dev.fixSave = function() {
     saved = 0;
     postc8Mult = new Decimal(0)
     mult18 = new Decimal(1)
-    ec10bonus = new Decimal(1)
     player = save_data;
     save_game();
     load_game();
@@ -153,11 +152,13 @@ dev.giveGlyph = function() {
 
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
+    GameCache.achievementCount.invalidate();
     GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function(name) {
     player.achievements.splice(player.achievements.indexOf(name), 1);
+    GameCache.achievementCount.invalidate();
 }
 
 dev.realize = function() {

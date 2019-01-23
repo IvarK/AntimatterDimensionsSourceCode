@@ -223,7 +223,7 @@ var player = {
   },
   offlineProd: 0,
   offlineProdCost: 1e7,
-  challengeTarget: 0,
+  challengeTarget: new Decimal(0),
   autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
@@ -333,7 +333,8 @@ var player = {
     epmultbuyer: false,
     pp: 0,
     autoEC: true,
-    lastAutoEC: 0
+    lastAutoEC: 0,
+    partEternitied: 0
   },
   wormhole: [{
     speed: 60 * 60, // Seconds to fill

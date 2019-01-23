@@ -84,7 +84,7 @@ function galaxyReset() {
   player.tickDecrease -= 0.03;
   player.resets = 0;
   softReset(0);
-  if (Notation.current().isCancer()) player.spreadingCancer += 1;
+  if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
   Galaxy.checkAchievements();
 }
 
@@ -107,7 +107,7 @@ function maxBuyGalaxies(manual) {
   if (player.currentEternityChall === "eterc6" || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
     while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
-      if (Notation.current().isCancer()) player.spreadingCancer += 1;
+      if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
       player.galaxies++;
     }
     player.galaxies--;

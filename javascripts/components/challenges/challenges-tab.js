@@ -90,13 +90,13 @@ Vue.component('challenges-tab', {
           >
         </template>
         <div
-          v-if="autoEC && remainingECTiers > 0"
+          v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
           class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
         >
           <span>Until</span>
           <div class="l-challenges-tab__auto-ec-timers">
-            <span v-if="remainingECTiers > 1">next: {{untilNextEC.toString()}}</span>
-            <span>all: {{untilAllEC.toString()}}</span>
+            <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC.toString()}}</span>
+            <span>all auto EC completions: {{untilAllEC.toString()}}</span>
           </div>
         </div>
       </div>

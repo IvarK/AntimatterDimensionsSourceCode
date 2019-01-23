@@ -329,7 +329,7 @@ function fromValue(value) {
     let m,k,l;
     if (value.split(" ")[1].length < 5) {
         for (l=101;l>0;l--) {
-            if (value.includes(FormatList[l])) {
+            if (value.includes(Notation.standard.abbreviations[l])) {
                 e += l*3
                 console.log("caught!"+l)
 
@@ -523,7 +523,7 @@ var glyphSelected = false
 
 function exitChallenge() {
     if (player.currentChallenge !== "") {
-        startChallenge("");
+        startChallenge("", new Decimal(0));
     } else if (player.currentEternityChall !== "") {
         player.currentEternityChall = ""
         player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
@@ -821,7 +821,6 @@ var postC2Count = 0;
 var IPminpeak = new Decimal(0)
 var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
-var eternitiesGain = 0
 
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
 
@@ -981,15 +980,11 @@ function gameLoop(diff, options = {}) {
     }
 
     if (player.reality.upg.includes(14)) {
-        eternitiesGain += diff * player.realities / 1000
+        let eternitiesGain = diff * player.realities / 1000
         if (player.reality.upg.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
-        if (eternitiesGain < 2) {
-            player.eternities += 1
-            eternitiesGain -= 1
-        } else {
-            player.eternities += Math.floor(eternitiesGain)
-            eternitiesGain -= Math.floor(eternitiesGain)
-        }
+        player.reality.partEternitied += eternitiesGain;
+        player.eternities += Math.floor(player.reality.partEternitied)
+        player.reality.partEternitied -= Math.floor(player.reality.partEternitied)
     }
 
     if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.
@@ -1003,21 +998,23 @@ function gameLoop(diff, options = {}) {
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
-        if (!Challenge(12).isRunning && !EternityChallenge(3).isRunning) {
-            for (let tier = 7; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-            }
-        } else if (EternityChallenge(3).isRunning) {
-            for (let tier = 6; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
-            }
+        let maxTierProduced = 7;
+        if (Challenge(12).isRunning) {
+          maxTierProduced = Math.min(maxTierProduced, 6);
+        }
+        if (EternityChallenge(3).isRunning) {
+          maxTierProduced = Math.min(maxTierProduced, 3);
+        }
+        if (Challenge(12).isRunning) {
+          for (let tier = maxTierProduced; tier >= 1; --tier) {
+            const dimension = NormalDimension(tier);
+            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
+          }
         } else {
-            for (let tier = 3; tier >= 1; --tier) {
-              const dimension = NormalDimension(tier);
-              dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
-            }
+          for (let tier = maxTierProduced; tier >= 1; --tier) {
+            const dimension = NormalDimension(tier);
+            dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 1).times(diff / 10000));
+          }
         }
 
         if (Challenge(3).isRunning) {
@@ -1141,7 +1138,7 @@ function gameLoop(diff, options = {}) {
     } else {
         Marathon2 = 0;
     }
-    if (player.eternities >= 1 && Notation.current().isPain()) {
+    if (player.eternities >= 1 && Notation.current.isPainful) {
         player.secretUnlocks.painTimer += player.options.updateRate/1000;
         if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
     }
@@ -1150,6 +1147,8 @@ function gameLoop(diff, options = {}) {
         statsTimer += player.options.updateRate/1000;
         if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
     }
+
+    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
@@ -1253,6 +1252,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
+    GameUI.notify.wormholes = false;
 
     // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1305,6 +1305,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
+    GameUI.notify.wormholes = true;
 }
 
 function updateChart(first) {
@@ -1514,17 +1515,8 @@ function setControlShiftKey(isDown) {
 
 var postc8Mult = new Decimal(0)
 var mult18 = 1
-var ec10bonus = new Decimal(1)
 
 init();
-setInterval( function() {
-    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-    if (EternityChallenge(10).isRunning) {
-        ec10bonus = Decimal.pow(Player.totalInfinitied, 1000).max(1).pow(Effects.product(TimeStudy(31)));
-    } else {
-        ec10bonus = new Decimal(1)
-    }
-}, 100);
 
 let tweenTime = 0;
 (function() {

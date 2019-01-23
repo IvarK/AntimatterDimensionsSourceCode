@@ -55,10 +55,7 @@ Vue.component('modal-import', {
   },
   methods: {
     formatMoney: function(money) {
-      formatPostBreak = true;
-      let formatted = this.shortenMoney(new Decimal(money));
-      formatPostBreak = false;
-      return formatted;
+      return this.shortenPostBreak(money, 2, 1);
     },
     importSave: function() {
       if (!this.inputIsValid) return;

@@ -2,6 +2,7 @@ Vue.component("reality-button", {
   data: function () {
     return {
       canReality: false,
+      hasRealityStudy: false,
       machinesGained: 0,
       realityTime: 0,
       glyphLevel: 0,
@@ -13,6 +14,9 @@ Vue.component("reality-button", {
   computed: {
     buttonHeader() {
       return this.canReality ? "Make a new reality" : "Start reality over";
+    },
+    formatEPRequirement() {
+      return this.shorten("1e4000", 0, 0);
     },
     formatMachinesGained() {
       return `Machines gained: ${this.shorten(this.machinesGained, 2, 0)}`;
@@ -33,7 +37,8 @@ Vue.component("reality-button", {
   },
   methods: {
     update() {
-      if (player.dilation.studies.length < 6) {
+      this.hasRealityStudy = TimeStudy.reality.isBought;
+      if (!this.hasRealityStudy || player.eternityPoints.lt("1e4000")) {
         this.canReality = false;
         this.shardsGained = 0;
         return;
@@ -52,7 +57,7 @@ Vue.component("reality-button", {
       this.shardsGained = Teresa.shardsGained;
     },
     handleClick() {
-      if (player.dilation.studies.length < 6) {
+      if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
         startRealityOver();
       } else {
         reality();
@@ -69,6 +74,9 @@ Vue.component("reality-button", {
         <div>{{formatMachinesGained}}</div>
         <div>{{formatMachineStats}}</div>
         <div>{{formatGlyphLevel}}</div>
+      </template>
+      <template v-else-if="hasRealityStudy">
+        <div>Get {{formatEPRequirement}} EP to unlock a new reality</div>
       </template>
       <template v-else>
         <div>Purchase the study in the eternity tab to unlock a new reality</div>

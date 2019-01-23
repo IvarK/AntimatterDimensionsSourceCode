@@ -245,7 +245,7 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 161,
     cost: 7,
-    description: () => `${shorten(new Decimal("1e616"), 0, 0)}x multiplier on all Normal Dimensions`,
+    description: () => `${shorten("1e616", 0, 0)}x multiplier on all Normal Dimensions`,
     effect: () => new Decimal("1e616")
   },
   {

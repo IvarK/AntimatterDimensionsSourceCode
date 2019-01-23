@@ -50,7 +50,7 @@ Vue.component("tachyon-particle", {
     };
   },
   created() {
-    if (uiInitialized) {
+    if (GameUI.initialized) {
       this.fly();
     }
     else {

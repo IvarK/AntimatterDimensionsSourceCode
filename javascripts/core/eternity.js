@@ -10,18 +10,20 @@ function eternity(force, auto) {
     }
     if (force) player.currentEternityChall = "";
     if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false;
-    if (player.thisEternity < player.bestEternity && !force) {
+    if (!force) {
+      if (player.thisEternity < player.bestEternity) {
         player.bestEternity = player.thisEternity;
-        if (player.bestEternity < 30000) giveAchievement("That wasn't an eternity");
-        if (player.bestEternity <= 1) giveAchievement("Less than or equal to 0.001");
+      }
+      if (player.thisEternity < 30000) giveAchievement("That wasn't an eternity");
+      if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity");
+      if (player.thisEternity <= 1) giveAchievement("Less than or equal to 0.001");
+      if (player.infinitied < 10) giveAchievement("Do you really need a guide for this?");
+      if (Decimal.round(player.replicanti.amount).eq(9)) giveAchievement("We could afford 9");
+      if (player.dimlife) giveAchievement("8 nobody got time for that");
+      if (player.dead) giveAchievement("You're already dead.");
+      if (player.infinitied <= 1) giveAchievement("Do I really need to infinity");
+      if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) giveAchievement("Now you're thinking with dilation!");
     }
-    if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity");
-    if (player.infinitied < 10 && !force) giveAchievement("Do you really need a guide for this?");
-    if (Decimal.round(player.replicanti.amount).eq(9)) giveAchievement("We could afford 9");
-    if (player.dimlife && !force) giveAchievement("8 nobody got time for that");
-    if (player.dead && !force) giveAchievement("You're already dead.");
-    if (player.infinitied <= 1 && !force) giveAchievement("Do I really need to infinity");
-    if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active && !force) giveAchievement("Now you're thinking with dilation!");
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
@@ -124,7 +126,7 @@ function eternity(force, auto) {
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = 0;
+    player.challengeTarget = new Decimal(0);
     if (player.eternities < 7 && !Achievement(133).isEnabled) {
         player.autoSacrifice = 1;
     }

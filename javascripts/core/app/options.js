@@ -7,21 +7,10 @@ class GameOptions {
   }
 
   static changeNotation() {
-    const notations = [
-      "Scientific",
-      "Engineering",
-      "Letters",
-      "Standard",
-      "Cancer",
-      "Mixed scientific",
-      "Mixed engineering",
-      "Logarithm",
-      "Brackets",
-      "Infinity"
-    ];
+    const notations = Notation.all.map(n => n.name);
     const current = player.options.notation;
     const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
-    Notation.set(next);
+    Notation.find(next).setCurrent();
   }
 
   static toggleNews() {
@@ -100,7 +89,6 @@ function importSave(save_data) {
     saved = 0;
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
-    ec10bonus = new Decimal(1);
     player = parsedSave;
     console.log(player);
     save_game(false, true);

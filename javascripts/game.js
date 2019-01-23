@@ -302,13 +302,13 @@ function resetChallengeStuff() {
 function resetMoney() {
     player.money = Effects.max(
       10,
-      Perk(51),
+      Perk.startAM1,
       Achievement(21),
       Achievement(37),
       Achievement(54),
       Achievement(55),
       Achievement(78).secondaryEffect,
-      Perk(52)
+      Perk.startAM2
     ).toDecimal();
 }
 
@@ -552,7 +552,7 @@ function canUnlockEC(idx, cost, study, study2) {
     if (!player.timestudy.studies.includes(study) && (player.study2 == 0 || !player.timestudy.studies.includes(study2))) return false
     if (player.timestudy.theorem < cost) return false
     if (player.etercreq == idx && idx !== 11 && idx !== 12) return true
-    if (player.reality.perks.includes(31)) return true
+    if (Perk.studyECRequirement.isBought) return true
 
     switch(idx) {
         case 1:
@@ -624,7 +624,7 @@ function getNewInfReq() {
 
 
 function newDimension() {
-    if (player.reality.perks.includes(67) || (player.money.gte(getNewInfReq()))) {
+    if (Perk.bypassIDAntimatter.isBought || (player.money.gte(getNewInfReq()))) {
         if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
         else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
         else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
@@ -790,16 +790,16 @@ setInterval(function() {
     if (player.replicanti.amount.gte(new Decimal("1e70000"))) unlockRealityUpgrade(21)
     if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
     ttMaxTimer++;
-    if (player.reality.perks.includes(8)) maxTheorems()
-    else if (player.reality.perks.includes(7) && ttMaxTimer >= 3) {
+    if (Perk.autobuyerTT4.isBought) maxTheorems()
+    else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
-    else if (player.reality.perks.includes(6) && ttMaxTimer >= 5) {
+    else if (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
-    else if (player.reality.perks.includes(5) && ttMaxTimer >= 10) {
+    else if (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
@@ -1031,7 +1031,7 @@ function gameLoop(diff, options = {}) {
     }
 
     player.realTimePlayed += realDiff;
-    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+    if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisInfinityRealTime += realDiff;
@@ -1201,7 +1201,7 @@ function gameLoop(diff, options = {}) {
     }
 
     var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || player.reality.perks.includes(67)) && player.infDimensionsUnlocked[7] === false) {
+    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || Perk.bypassIDAntimatter.isBought) && player.infDimensionsUnlocked[7] === false) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
@@ -1225,8 +1225,8 @@ function gameLoop(diff, options = {}) {
   }
 
   // Reality unlock and TTgen perk autobuy
-	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
-  if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
+  if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
 
     GameUI.update();
     player.lastUpdate = thisUpdate;
@@ -1325,7 +1325,7 @@ function updateChart(first) {
 updateChart(true);
 
 function autoBuyDilationUpgrades() {
-  if (player.reality.perks.includes(12)) {
+  if (Perk.autobuyerDilation.isBought) {
     buyDilationUpgrade(1)
     buyDilationUpgrade(2)
     buyDilationUpgrade(3)
@@ -1370,7 +1370,7 @@ function autoBuyTimeDims() {
 }
 
 function autoBuyExtraTimeDims() {
-  if (player.timeDimension8.bought == 0 && player.reality.perks.includes(64)) {
+  if (player.timeDimension8.bought == 0 && Perk.autounlockTD.isBought) {
     buyDilationStudy(2, 1000000)
     buyDilationStudy(3, 1e7)
     buyDilationStudy(4, 1e8)
@@ -1381,15 +1381,15 @@ function autoBuyExtraTimeDims() {
 var slowerAutobuyerTimer = 0
 setInterval(function() {
   slowerAutobuyerTimer += 1/3
-  if (player.reality.perks.includes(61)) autoBuyInfDims()
-  if (player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
-  if (player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+  if (Perk.autobuyerFasterID.isBought) autoBuyInfDims()
+  if (Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
+  if (Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
 
   if (slowerAutobuyerTimer > 1) {
     slowerAutobuyerTimer -= 1
-    if (!player.reality.perks.includes(61)) autoBuyInfDims()
-    if (!player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
-    if (!player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+    if (!Perk.autobuyerFasterID.isBought) autoBuyInfDims()
+    if (!Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
+    if (!Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
     autoBuyTimeDims()
 
     autoBuyExtraTimeDims()

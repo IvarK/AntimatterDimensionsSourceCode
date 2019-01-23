@@ -193,7 +193,6 @@ function onLoad() {
 
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
-  Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
   resizeCanvas();
@@ -202,7 +201,10 @@ function onLoad() {
   updateRealityUpgrades();
   updateWormholeUpgrades()
   updateAutomatorRows()
-  drawPerkNetwork()
+  checkPerkValidity()
+  GameCache.buyablePerks.invalidate();
+  drawPerkNetwork();
+  updatePerkColors()
 
   const notation = player.options.notation;
   if (notation === undefined) {
@@ -299,6 +301,12 @@ function unfuckMultCosts() {
   delete player.tickSpeedMultDecreaseCost;
   delete player.dimensionMultDecrease;
   delete player.dimensionMultDecreaseCost;
+}
+
+function checkPerkValidity() {
+  if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
+  dev.respecPerks();
+  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
 }
 
 function load_cloud_save(saveId, cloudPlayer) {

@@ -992,8 +992,9 @@ function gameLoop(diff, options = {}) {
       player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
     }
 
-    if (TD1Production.gt(0) && EternityChallenge(7).completions > 0) {
-      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(EternityChallenge(7).completions * 0.2).minus(1).times(diff/10))
+    if (TD1Production.gt(0)) {
+      const id8 = InfinityDimension(8);
+      EternityChallenge(7).reward.applyEffect(v => id8.amount = id8.amount.plus(v.times(diff/10)));
     }
 
     let tickmult = Effects.min(

@@ -18,8 +18,9 @@ function getDimensionFinalMultiplier(tier) {
   let glyphPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powerpow"));
   let glyphDilationPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("dilationpow"));
 
-  if (EternityChallenge(9).isRunning) multiplier = multiplier;
-  else multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
+  if (!EternityChallenge(9).isRunning) {
+    multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
+  }
 
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,

@@ -8,24 +8,6 @@ function nearestPercent(x) {
   return Math.round(100 * x) / 100;
 }
 
-function upgradeReplicantiChance() {
-  const upgrade = ReplicantiUpgrade.chance;
-  if (!ReplicantiUpgrade.isAvailable(upgrade)) return false;
-  ReplicantiUpgrade.purchase(upgrade);
-  return true;
-}
-
-function upgradeReplicantiInterval() {
-  ReplicantiUpgrade.purchase(ReplicantiUpgrade.interval);
-}
-
-function upgradeReplicantiGalaxy() {
-  const upgrade = ReplicantiUpgrade.galaxies;
-  if (!ReplicantiUpgrade.isAvailable(upgrade)) return false;
-  ReplicantiUpgrade.purchase(upgrade);
-  return true;
-}
-
 function maxReplicantiGalaxy(diff) {
     var maxGal = player.replicanti.gal;
     maxGal += Teresa.bonusRG;
@@ -161,130 +143,160 @@ function replicantiMult() {
     .pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
 }
 
+function autoBuyReplicantiUpgrades() {
+  if (EternityChallenge(8).isRunning) return;
+  ReplicantiUpgrade.chance.autobuyerTick();
+  ReplicantiUpgrade.interval.autobuyerTick();
+  ReplicantiUpgrade.galaxies.autobuyerTick();
+}
+
+/** @abstract */
+class ReplicantiUpgradeState {
+  /** @abstract */
+  get value() { }
+  /** @abstract */
+  set value(value) { }
+
+  /** @abstract */
+  get nextValue() { }
+
+  /** @abstract */
+  get cost() { }
+  /** @abstract */
+  set cost(value) { }
+
+  /** @abstract */
+  get costIncrease() { }
+
+  get baseCost() { return this.cost; }
+
+  get cap() { return undefined; }
+  get isCapped() { return false; }
+
+  /** @abstract */
+  get autobuyerMilestone() { }
+  /** @abstract */
+  get autobuyerId() { }
+
+  get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
+
+  get isAutobuyerOn() { return player.replicanti.auto[this.autobuyerId]; }
+  set isAutobuyerOn(value) { player.replicanti.auto[this.autobuyerId] = value; }
+
+  get canBeBought() {
+    return !this.isCapped && player.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
+  }
+
+  purchase() {
+    if (!this.canBeBought) return;
+    player.infinityPoints = player.infinityPoints.minus(this.cost);
+    this.cost = Decimal.times(this.baseCost, this.costIncrease);
+    this.value = this.nextValue;
+    if (EternityChallenge(8).isRunning) player.eterc8repl--;
+    GameUI.update();
+  }
+
+  autobuyerTick() {
+    if (!this.isAutobuyerUnlocked || !this.isAutobuyerOn) return;
+    while (this.canBeBought) {
+      this.purchase();
+    }
+  }
+}
+
 const ReplicantiUpgrade = {
-  chance: {
-    get current() {
-      return player.replicanti.chance;
-    },
-    set current(value) {
-      player.replicanti.chance = value;
-    },
-    get baseCost() {
-      return this.cost;
-    },
-    get cost() {
-      return player.replicanti.chanceCost;
-    },
-    set cost(value) {
-      player.replicanti.chanceCost = value;
-    },
-    get costIncrease() {
-      return 1e15;
-    },
-    get next() {
-      return nearestPercent(this.current + 0.01);
-    },
+  chance: new class ReplicantiChanceUpgrade extends ReplicantiUpgradeState {
+    get value() { return player.replicanti.chance; }
+    set value(value) { player.replicanti.chance = value; }
+
+    get nextValue() {
+      return nearestPercent(this.value + 0.01);
+    }
+
+    get cost() { return player.replicanti.chanceCost; }
+    set cost(value) { player.replicanti.chanceCost = value; }
+
+    get costIncrease() { return 1e15; }
+
     get cap() {
       return getMaxReplicantiChance();
-    },
-    get isCapped() {
-      return nearestPercent(this.current) >= this.cap;
-    },
-    get isAutobuyerUnlocked() {
-      return EternityMilestone.autobuyerReplicantiChance.isReached;
     }
-  },
-  interval: {
-    get current() {
-      return player.replicanti.interval;
-    },
-    set current(value) {
-      player.replicanti.interval = value;
-    },
-    get baseCost() {
-      return this.cost;
-    },
-    get cost() {
-      return player.replicanti.intervalCost;
-    },
-    set cost(value) {
-      player.replicanti.intervalCost = value;
-    },
-    get costIncrease() {
-      return 1e10;
-    },
-    get next() {
-      return Math.max(this.current * 0.9, this.cap);
-    },
-    get cap() {
-      return Effects.min(
-        50,
-        TimeStudy(22)
-      );
-    },
+
     get isCapped() {
-      return this.current <= this.cap;
-    },
-    get isAutobuyerUnlocked() {
-      return EternityMilestone.autobuyerReplicantiInterval.isReached;
-    },
+      return nearestPercent(this.value) >= this.cap;
+    }
+
+    get autobuyerMilestone() {
+      return EternityMilestone.autobuyerReplicantiChance;
+    }
+
+    get autobuyerId() { return 0; }
+  }(),
+  interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {
+    get value() { return player.replicanti.interval; }
+    set value(value) { player.replicanti.interval = value; }
+
+    get nextValue() {
+      return Math.max(this.value * 0.9, this.cap);
+    }
+
+    get cost() { return player.replicanti.intervalCost; }
+    set cost(value) { player.replicanti.intervalCost = value; }
+
+    get costIncrease() { return 1e10; }
+
+    get cap() {
+      return Effects.min(50, TimeStudy(22));
+    }
+
+    get isCapped() {
+      return this.value <= this.cap;
+    }
+
+    get autobuyerMilestone() {
+      return EternityMilestone.autobuyerReplicantiInterval;
+    }
+
+    get autobuyerId() { return 1; }
+
     applyModifiers(value) {
       return getReplicantiInterval(false, value);
     }
-  },
-  galaxies: {
-    get current() {
-      return player.replicanti.gal;
-    },
-    set current(value) {
-      player.replicanti.gal = value;
-    },
-    get baseCost() {
-      return player.replicanti.galCost;
-    },
-    get cost() {
-      return this.baseCost.dividedByEffectOf(TimeStudy(233));
-    },
-    set cost(value) {
-      player.replicanti.galCost = value;
-    },
+  }(),
+  galaxies: new class ReplicantiGalaxiesUpgrade extends ReplicantiUpgradeState {
+    get value() { return player.replicanti.gal; }
+    set value(value) { player.replicanti.gal = value; }
+
+    get nextValue() {
+      return this.value + 1;
+    }
+
+    get cost() { return this.baseCost.dividedByEffectOf(TimeStudy(233)); }
+    set cost(value) { player.replicanti.galCost = value; }
+
+    get baseCost() { return player.replicanti.galCost; }
+
     get costIncrease() {
-      const galaxies = this.current;
+      const galaxies = this.value;
       let increase = EternityChallenge(6).isRunning ?
         Decimal.pow(1e2, galaxies).times(1e2) :
         Decimal.pow(1e5, galaxies).times(1e25);
       if (galaxies >= 100) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - 95))
+        increase = increase.times(Decimal.pow(1e50, galaxies - 95));
       }
       return increase;
-    },
-    get next() {
-      return this.current + 1;
-    },
-    get isCapped() {
-      return false;
-    },
-    get isAutobuyerUnlocked() {
-      return EternityMilestone.autobuyerReplicantiMaxGalaxies.isReached;
-    },
-    get extra() {
-      return Effects.max(
-        0,
-        TimeStudy(131)
-      );
     }
-  },
-  isAvailable(upgrade) {
-    return player.infinityPoints.gte(upgrade.cost) && !upgrade.isCapped && player.eterc8repl !== 0;
-  },
-  purchase(upgrade) {
-    if (!this.isAvailable(upgrade)) return;
-    player.infinityPoints = player.infinityPoints.minus(upgrade.cost);
-    upgrade.cost = Decimal.times(upgrade.baseCost, upgrade.costIncrease);
-    upgrade.current = upgrade.next;
-    if (EternityChallenge(8).isRunning) player.eterc8repl--;
-    GameUI.update();
-  }
+
+    get autobuyerMilestone() {
+      return EternityMilestone.autobuyerReplicantiMaxGalaxies;
+    }
+
+    get autobuyerId() { return 2; }
+
+    get extra() {
+      return Effects.max(0, TimeStudy(131));
+    }
+  }(),
 };
 
 const Replicanti = {
@@ -301,7 +313,7 @@ const Replicanti = {
     return player.replicanti.amount;
   },
   get chance() {
-    return ReplicantiUpgrade.chance.current;
+    return ReplicantiUpgrade.chance.value;
   },
   galaxies: {
     get bought() {
@@ -317,7 +329,7 @@ const Replicanti = {
       return this.bought + this.extra;
     },
     get max() {
-      return ReplicantiUpgrade.galaxies.current + ReplicantiUpgrade.galaxies.extra;
+      return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
       if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;

@@ -1254,23 +1254,6 @@ function autoBuyDilationUpgrades() {
   }
 }
 
-function autoBuyReplicantiUpgrades() {
-  if (EternityChallenge(8).isRunning) return;
-  if (player.eternities >= 40 && player.replicanti.auto[0]) {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance())
-      if (!upgradeReplicantiChance())
-        break;
-  }
-
-  if (player.eternities >= 60 && player.replicanti.auto[1]) {
-    while (player.infinityPoints.gte(player.replicanti.intervalCost) && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
-  }
-
-  if (player.eternities >= 80 && player.replicanti.auto[2]) {
-    while (upgradeReplicantiGalaxy()) continue
-  }
-}
-
 function autoBuyInfDims() {
   if (player.eternities > 10 && !EternityChallenge(8).isRunning) {
     for (var i = 1; i < player.eternities - 9 && i < 9; i++) {

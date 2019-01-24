@@ -89,18 +89,8 @@ function bigCrunchReset() {
         }
     }
 
-    if (player.eternities >= 40 && player.replicanti.auto[0] && !EternityChallenge(8).isRunning) {
-        while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.replicanti.chance < 1) upgradeReplicantiChance()
-    }
+    autoBuyReplicantiUpgrades();
 
-    if (player.eternities >= 60 && player.replicanti.auto[1] && !EternityChallenge(8).isRunning) {
-        while (player.infinityPoints.gte(player.replicanti.intervalCost) && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
-    }
-
-    if (player.eternities >= 80 && player.replicanti.auto[2] && !EternityChallenge(8).isRunning) {
-        while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
-    }
-  
     if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
       Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
     }

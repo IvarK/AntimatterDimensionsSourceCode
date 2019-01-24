@@ -49,10 +49,10 @@ Vue.component("game-header", {
       if (challenge !== undefined) displayValue += ` + ${challenge.config.reward} Challenge `;
 
       const infinityChallenge = InfinityChallenge.current();
-      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${challenge.id}`;
+      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
 
       const eternityChallenge = EternityChallenge.current();
-      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${challenge.id}`;
+      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
 
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
       else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";

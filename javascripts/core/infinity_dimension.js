@@ -3,7 +3,7 @@ function resetInfDimensions() {
   if (player.infDimensionsUnlocked[0]) {
       player.infinityPower = new Decimal(0)
   }
-  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount != 0 && ECTimesCompleted("eterc7") > 0){
+  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount !== 0 && EternityChallenge(7).completions > 0){
       player.infinityDimension8.amount = new Decimal(player.infinityDimension8.baseAmount)
       player.infinityDimension7.amount = new Decimal(player.infinityDimension7.baseAmount)
       player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount)
@@ -84,7 +84,7 @@ function buyManyInfinityDimension(tier) {
   else dim.power = dim.power.times(infPowerMults[tier])
   dim.baseAmount += IDPurchasesToIDAmount(1)
 
-  if (player.currentEternityChall == "eterc8") {
+  if (EternityChallenge(8).isRunning) {
     player.eterc8ids -= 1;
   }
   return true

@@ -459,7 +459,7 @@ dev.showProductionBreakdown = function() {
     TimeStudy(225),
     TimeStudy(226)
   );
-  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0)
+  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 * EternityChallenge(8).completions) - 1, 0);
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   

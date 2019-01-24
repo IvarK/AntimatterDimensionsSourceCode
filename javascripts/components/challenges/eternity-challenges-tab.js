@@ -26,8 +26,8 @@ Vue.component("eternity-challenges-tab", {
           const config = this.config;
           const ip = this.shorten(this.challenge.goalAtCompletions(this.completions), 2, 1);
           let goal = `Goal: ${ip} IP`;
-          if (config.additionalRequirement) {
-            goal += ` ${config.additionalRequirement(this.completions)}`;
+          if (config.restriction) {
+            goal += ` ${config.formatRestriction(config.restriction(this.completions))}`;
           }
           return goal;
         },

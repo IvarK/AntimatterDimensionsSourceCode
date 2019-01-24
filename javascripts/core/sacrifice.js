@@ -40,7 +40,7 @@ class Sacrifice {
   }
 
   static get isAffordable() {
-    return player.eightAmount > 0 && player.currentEternityChall !== "eterc3";
+    return player.eightAmount > 0 && !EternityChallenge(3).isRunning;
   }
 
   static get nextBoost() {

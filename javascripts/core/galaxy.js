@@ -31,7 +31,7 @@ class Galaxy {
 
     let type = this.type;
 
-    if (type === GalaxyType.DISTANT && player.currentEternityChall === "eterc5") {
+    if (type === GalaxyType.DISTANT && EternityChallenge(5).isRunning) {
       amount += Math.pow(galaxies, 2) + galaxies;
     } else if (type === GalaxyType.DISTANT || type === GalaxyType.REMOTE) {
       const galaxyCostScalingStart = this.costScalingStart;
@@ -60,7 +60,7 @@ class Galaxy {
     if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
       return GalaxyType.REMOTE;
     }
-    if (player.currentEternityChall === "eterc5" || player.galaxies >= this.costScalingStart) {
+    if (EternityChallenge(5).isRunning || player.galaxies >= this.costScalingStart) {
       return GalaxyType.DISTANT;
     }
     return GalaxyType.NORMAL;
@@ -89,7 +89,7 @@ function galaxyReset() {
 }
 
 function galaxyResetBtnClick() {
-  if (player.currentEternityChall === "eterc6") {
+  if (EternityChallenge(6).isRunning) {
     return;
   }
   const canDoReset = !Challenge(8).isRunning && player.currentChallenge !== "postc7" && (player.break || player.money.lte(Number.MAX_VALUE));
@@ -104,7 +104,7 @@ function galaxyResetBtnClick() {
 }
 
 function maxBuyGalaxies(manual) {
-  if (player.currentEternityChall === "eterc6" || Challenge(8).isRunning || player.currentChallenge === "postc7") return
+  if (EternityChallenge(6).isRunning || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
     while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
       if (Notation.current === Notation.cancer) player.spreadingCancer += 1;

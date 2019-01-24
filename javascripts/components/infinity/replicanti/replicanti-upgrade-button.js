@@ -5,13 +5,19 @@ Vue.component("replicanti-upgrade-button", {
   data: function() {
     return {
       description: String.empty,
-      isAvailable: false,
+      canBeBought: false,
       costDescription: String.empty,
       isCapped: false,
       isAutoUnlocked: false,
+      isAutobuyerOn: false,
       auto: player.replicanti.auto,
       isEC8Running: false
     };
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      this.upgrade.isAutobuyerOn = newValue;
+    }
   },
   computed: {
     upgrade: function() {
@@ -22,26 +28,23 @@ Vue.component("replicanti-upgrade-button", {
     update() {
       const setup = this.setup;
       const upgrade = setup.upgrade;
-      this.description = setup.formatDescription(upgrade.current);
-      this.isAvailable = ReplicantiUpgrade.isAvailable(upgrade);
+      this.description = setup.formatDescription(upgrade.value);
+      this.canBeBought = upgrade.canBeBought;
       this.isCapped = upgrade.isCapped;
       if (!this.isCapped) {
         this.costDescription = setup.formatCost(upgrade.cost);
       }
       this.isAutoUnlocked = upgrade.isAutobuyerUnlocked;
-      this.auto = player.replicanti.auto;
+      this.isAutobuyerOn = upgrade.isAutobuyerOn;
       this.isEC8Running = EternityChallenge(8).isRunning;
-    },
-    purchase() {
-      ReplicantiUpgrade.purchase(this.upgrade);
     }
   },
   template:
     `<div class="l-spoon-btn-group">
       <primary-button
-        :enabled="isAvailable"
+        :enabled="canBeBought"
         class="o-primary-btn--replicanti-upgrade"
-        @click="purchase"
+        @click="upgrade.purchase()"
       >
         <span>{{description}}</span>
         <template v-if="!isCapped">
@@ -51,7 +54,7 @@ Vue.component("replicanti-upgrade-button", {
       </primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked && !isEC8Running"
-        v-model="auto[setup.index]"
+        v-model="isAutobuyerOn"
         text="Auto:"
         class="l--spoon-btn-group__little-spoon o-primary-btn--replicanti-upgrade-toggle"
       />
@@ -59,8 +62,7 @@ Vue.component("replicanti-upgrade-button", {
 });
 
 class ReplicantiUpgradeButtonSetup {
-  constructor(index, upgrade, formatDescription, formatCost) {
-    this.index = index;
+  constructor(upgrade, formatDescription, formatCost) {
     this.upgrade = upgrade;
     this.formatDescription = formatDescription;
     this.formatCost = formatCost;

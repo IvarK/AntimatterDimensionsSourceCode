@@ -1,9 +1,4 @@
-function startEternityChallenge(name, startgoal, goalIncrease) {
-    if (player.eternityChallUnlocked === 0 || parseInt(name.split("c")[1]) !== player.eternityChallUnlocked) return false;
-    if (!((!player.options.confirmations.challenges) || name === "" ? true : (confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP with special conditions.")))) {
-        return false
-    }
-
+function startEternityChallenge() {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
@@ -49,8 +44,6 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     if (player.eternities < 7) {
       player.autoSacrifice = 1;
     }
-    player.eternityChallGoal = startgoal.times(goalIncrease.pow(ECTimesCompleted(name))).max(startgoal);
-    player.currentEternityChall = name;
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.eterc8ids = 50;
@@ -127,7 +120,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   set completions(value) {
-    player.eternityChalls[this.fullId] = value;
+    player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
   }
 
   get isFullyCompleted() {
@@ -144,6 +137,14 @@ class EternityChallengeState extends GameMechanicState {
 
   get currentGoal() {
     return this.goalAtCompletions(this.completions);
+  }
+
+  get isGoalReached() {
+    return player.infinityPoints.gte(this.currentGoal);
+  }
+
+  get canBeCompleted() {
+    return this.isGoalReached && this.isWithinRestriction;
   }
 
   goalAtCompletions(completions) {
@@ -163,7 +164,17 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   start() {
-    return startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
+    if (!this.isUnlocked) return false;
+    if (player.options.confirmations.challenges) {
+      const confirmation =
+        "You will start over with just your time studies, " +
+        "eternity upgrades and achievements. " +
+        "You need to reach a set IP with special conditions.";
+      if (!confirm(confirmation)) return false;
+    }
+    player.eternityChallGoal = this.currentGoal;
+    player.currentEternityChall = this.fullId;
+    return startEternityChallenge();
   }
 
   /**
@@ -171,6 +182,11 @@ class EternityChallengeState extends GameMechanicState {
    */
   get reward() {
     return this._reward;
+  }
+
+  get isWithinRestriction() {
+    return this.config.restriction === undefined ||
+      this.config.checkRestriction(this.config.restriction());
   }
 }
 

@@ -14,7 +14,7 @@ Vue.component("replicanti-tab", {
   },
   computed: {
     replicantiChanceSetup: function() {
-      return new ReplicantiUpgradeButtonSetup(0, ReplicantiUpgrade.chance,
+      return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
         value => `Replicate chance: ${Math.round(value * 100)}%`,
         cost => `+1% Costs: ${this.shortenCosts(cost)} IP`
       );
@@ -29,15 +29,15 @@ Vue.component("replicanti-tab", {
             TimeSpan.fromMilliseconds(actualInterval).toString():
             `${Math.floor(actualInterval)}ms`;
       }
-      return new ReplicantiUpgradeButtonSetup(1, upgrade,
+      return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
         cost => `➜ ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
       );
     },
     maxGalaxySetup: function() {
       const upgrade = ReplicantiUpgrade.galaxies;
-      return new ReplicantiUpgradeButtonSetup(2, upgrade,
-        function(value) {
+      return new ReplicantiUpgradeButtonSetup(upgrade,
+        value => {
           let description =`Max Replicanti galaxies: ${value}`;
           const extra = upgrade.extra;
           if (extra > 0) {

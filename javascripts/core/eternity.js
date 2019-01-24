@@ -1,16 +1,12 @@
 function eternity(force, auto) {
-    if (!force && player.infinityPoints.lt(player.eternityChallGoal)) {
-        return false;
+    if (force) {
+      player.currentEternityChall = String.empty;
     }
-    if (!force && !auto && !askEternityConfirmation()) {
-        return false;
-    }
-    if (player.currentEternityChall === "eterc4" && player.infinitied > Math.max(16 - (ECTimesCompleted("eterc4") * 4), 0)) {
-        return false;
-    }
-    if (force) player.currentEternityChall = "";
-    if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false;
-    if (!force) {
+    else {
+      const challenge = EternityChallenge.current();
+      if (challenge === undefined && player.infinityPoints.lt(Number.MAX_VALUE)) return false;
+      if (challenge !== undefined && !challenge.canBeCompleted) return false;
+      if (!auto && !askEternityConfirmation()) return false;
       if (player.thisEternity < player.bestEternity) {
         player.bestEternity = player.thisEternity;
       }
@@ -22,49 +18,28 @@ function eternity(force, auto) {
       if (player.dimlife) giveAchievement("8 nobody got time for that");
       if (player.dead) giveAchievement("You're already dead.");
       if (player.infinitied <= 1) giveAchievement("Do I really need to infinity");
-      if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) giveAchievement("Now you're thinking with dilation!");
+      if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) {
+        giveAchievement("Now you're thinking with dilation!");
+      }
     }
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (player.currentEternityChall !== "") {
-        var challNum = parseInt(player.currentEternityChall.split("eterc")[1]);
-        var completitions = 1;
-        if (Perk.studyECBulk.isBought) {
-            var maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
-            var maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
-            while (completitions < 5 - ECTimesCompleted(player.currentEternityChall) &&
-            player.infinityPoints.gte(getECGoalIP(challNum, ECTimesCompleted(player.currentEternityChall) + completitions))) completitions += 1;
-            var totalCompletions = ECTimesCompleted(player.currentEternityChall) + completitions;
-
-            if (player.currentEternityChall === "eterc4" && totalCompletions >= maxEC4Valid)
-                completitions = Math.min(totalCompletions, maxEC4Valid) - ECTimesCompleted(player.currentEternityChall);
-            if (player.currentEternityChall === "eterc12" && totalCompletions >= maxEC12Valid)
-                completitions = Math.min(totalCompletions, maxEC12Valid) - ECTimesCompleted(player.currentEternityChall)
-
+    if (EternityChallenge.isRunning()) {
+      const challenge = EternityChallenge.current();
+      challenge.addCompletion();
+      if (Perk.studyECBulk.isBought) {
+        while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
+          challenge.addCompletion();
         }
-        if (EternityChallenge(6).isRunning) {
-          GameCache.dimensionMultDecrease.invalidate();
-        }
-        if (EternityChallenge(11).isRunning) {
-          GameCache.tickSpeedMultDecrease.invalidate();
-        }
-        if (player.eternityChalls[player.currentEternityChall] === undefined) {
-            player.eternityChalls[player.currentEternityChall] = completitions
-        } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += completitions;
-        player.etercreq = 0;
-        respecTimeStudies();
-        if (Object.keys(player.eternityChalls).length >= 10) {
-            var eterchallscompletedtotal = 0;
-            for (let i = 1; i < Object.keys(player.eternityChalls).length + 1; i++) {
-                eterchallscompletedtotal += player.eternityChalls["eterc" + i]
-            }
-            if (eterchallscompletedtotal >= 50) {
-                giveAchievement("5 more eternities until the update");
-            }
-        }
-
+      }
+      player.etercreq = 0;
+      respecTimeStudies();
+      if (EternityChallenge.completedTiers() >= 50) {
+        giveAchievement("5 more eternities until the update");
+      }
     }
+
     player.infinitiedBank += Effects.sum(
       Achievement(131),
       TimeStudy(191)
@@ -181,7 +156,7 @@ function eternity(force, auto) {
     }
     Marathon2 = 0;
     if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);
-    if (player.eternityPoints.gte(1e70) && ECTimesCompleted("eterc1") === 0) unlockRealityUpgrade(12);
+    if (player.eternityPoints.gte(1e70) && EternityChallenge(1).completions === 0) unlockRealityUpgrade(12);
     if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
     if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);

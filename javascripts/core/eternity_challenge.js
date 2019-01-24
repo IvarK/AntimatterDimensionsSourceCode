@@ -120,7 +120,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   set completions(value) {
-    player.eternityChalls[this.fullId] = value;
+    player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
   }
 
   get isFullyCompleted() {
@@ -137,6 +137,14 @@ class EternityChallengeState extends GameMechanicState {
 
   get currentGoal() {
     return this.goalAtCompletions(this.completions);
+  }
+
+  get isGoalReached() {
+    return player.infinityPoints.gte(this.currentGoal);
+  }
+
+  get canBeCompleted() {
+    return this.isGoalReached && this.isWithinRestriction;
   }
 
   goalAtCompletions(completions) {
@@ -177,7 +185,8 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isWithinRestriction() {
-    return this.config.checkRestriction(this.config.restriction());
+    return this.config.restriction === undefined ||
+      this.config.checkRestriction(this.config.restriction());
   }
 }
 

@@ -39,7 +39,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => player.infinitied < restriction,
+    checkRestriction: restriction => player.infinitied <= restriction,
     formatRestriction: restriction => `in ${restriction} infinities or less`,
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",

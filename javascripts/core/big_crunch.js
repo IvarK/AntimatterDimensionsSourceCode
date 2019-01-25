@@ -41,10 +41,6 @@ function bigCrunchReset() {
       unlockRealityUpgrade(7);
     }
 
-    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
-        failChallenge();
-    }
-
     if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied === 0) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
@@ -59,6 +55,10 @@ function bigCrunchReset() {
     autoS = true;
     player.infinitied = player.infinitied + Math.round(gainedInfinities());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+
+    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
+      failChallenge();
+    }
 
     checkBigCrunchAchievements();
     if (!player.options.retryChallenge)

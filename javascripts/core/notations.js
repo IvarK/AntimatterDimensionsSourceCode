@@ -389,6 +389,33 @@ Notation.roman = new class RomanNotation extends Notation {
   formatDecimal(value, places) {}
 }("Roman");
 
+Notation.zalgo = new class ZalgoNotation extends Notation {
+  get isPainful() {
+    return true;
+  }
+
+  format(value, places, placesUnder1000) {
+    // Eternity seems to happen around e66666 antimatter, who would've thought?  Scaled down to 1000.
+    let scaledNum = new Decimal(value).clampMin(1).log10() / 66666 * 1000;
+    let displayPart = scaledNum.toFixed(2);
+    let zalgoPart = Math.floor(Math.abs(Math.pow(2, 30) * (scaledNum - displayPart)));
+    
+    let zalgoConsts = ['\u030D', '\u0336', '\u0353', '\u033F', '\u0489', '\u0330', '\u031A', '\u0338', '\u035A', '\u0337'];
+    let displayChars = Array.from(formatWithCommas(displayPart));
+    let zalgoChars = Array.from("" + zalgoPart + scaledNum.toFixed(0));
+
+    for (let i = 0; i < zalgoChars.length; i++) {
+      let currZalgo = parseInt(zalgoChars[i]);
+      let indexToAddChar = 7 * i % displayChars.length;
+      displayChars[indexToAddChar] += zalgoConsts[currZalgo]
+    }
+
+    return displayChars.reduce((num, char) => num + char, "");
+  }
+
+  formatDecimal(value, places) {}
+}("Zalgo");
+
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
  * (Object.values doesn't guarantee any order)
@@ -405,5 +432,6 @@ Notation.all = [
   Notation.logarithm,
   Notation.brackets,
   Notation.infinity,
-  Notation.roman
+  Notation.roman,
+  Notation.zalgo
 ];

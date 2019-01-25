@@ -186,7 +186,7 @@ class EternityChallengeState extends GameMechanicState {
 
   get isWithinRestriction() {
     return this.config.restriction === undefined ||
-      this.config.checkRestriction(this.config.restriction());
+      this.config.checkRestriction(this.config.restriction(this.completions));
   }
 }
 

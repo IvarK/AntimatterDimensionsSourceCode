@@ -38,8 +38,8 @@ GameDatabase.challenges.eternity = [
     description: "All infinitied stat multipliers and generators are disabled.",
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
-    restriction: completions => Math.max((16 - 4 * completions), 0),
-    checkRestriction: restriction => player.infinitied >= restriction,
+    restriction: completions => Math.max(16 - 4 * completions, 0),
+    checkRestriction: restriction => player.infinitied < restriction,
     formatRestriction: restriction => `in ${restriction} infinities or less`,
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",
@@ -154,7 +154,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
-    checkRestriction: restriction => Time.thisEternity.totalSeconds >= restriction,
+    checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
     formatRestriction: restriction => `in ${restriction} ${restriction === 1 ? "second" : "seconds"} or less.`,
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",

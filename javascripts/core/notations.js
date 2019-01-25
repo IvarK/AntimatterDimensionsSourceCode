@@ -389,6 +389,44 @@ Notation.roman = new class RomanNotation extends Notation {
   formatDecimal(value, places) {}
 }("Roman");
 
+
+const DOT_DIGITS =
+  "⠀⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿" +
+  "⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿" +
+  "⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿" +
+  "⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿";
+
+Notation.dots = new class DotsNotation extends Notation {
+  formatSmall(value, pad) {
+    value = Math.round(value);
+    if (!pad && value < 254) return DOT_DIGITS[value + 1];
+    if (value < 64516) return DOT_DIGITS[Math.floor(value / 254) + 1] + DOT_DIGITS[value % 254 + 1];
+    return this.formatSmall(Math.floor(value / 64516)) + this.formatSmall(value % 64516, true);
+  }
+  /**
+   * @param {Decimal | number | string | undefined | null} value
+   * @param {number} places
+   * @param {number} placesUnder1000
+   * @return {string}
+   */
+  format(value, places, placesUnder1000) {
+    let log;
+    if (typeof value === "number") {
+      if (value < 16387063.9980315) return this.formatSmall(value * 254);
+      if (!Number.isFinite(value)) return "⣿⠀⣿";
+      log = Math.log(value) / Math.log(254);
+    } else {
+      value = new Decimal(value);
+      if (value.lt(16387063.9980315)) return this.formatSmall(value.toNumber() * 254);
+      if (this.isInfinite(value)) return "⣿⠀⣿";
+      log = value.log(254);
+    }
+    const exponent = Math.floor(log - 2);
+    const mantissa = Math.pow(254, log - exponent);
+    return this.formatSmall(exponent) + "⣿" + this.formatSmall(mantissa * 254);
+  }
+}("Dots");
+
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
  * (Object.values doesn't guarantee any order)
@@ -405,5 +443,6 @@ Notation.all = [
   Notation.logarithm,
   Notation.brackets,
   Notation.infinity,
-  Notation.roman
+  Notation.roman,
+  Notation.dots,
 ];

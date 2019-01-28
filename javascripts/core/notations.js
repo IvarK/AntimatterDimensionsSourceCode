@@ -15,17 +15,35 @@ class Notation {
    * @return {string}
    */
   format(value, places, placesUnder1000) {
+    if (typeof value === "number" && !Number.isFinite(value)) {
+      return this.formatInfinite();
+    }
+
     const decimal = new Decimal(value);
 
     if (decimal.exponent < 3) {
-      return decimal.toNumber().toFixed(placesUnder1000);
+      return this.formatUnder1000(decimal.toNumber(), placesUnder1000);
     }
 
-    if (typeof value === "number" && !Number.isFinite(value) || this.isInfinite(decimal)) {
-      return "Infinite";
+    if (this.isInfinite(decimal)) {
+      return this.formatInfinite();
     }
 
     return this.formatDecimal(decimal, places);
+  }
+
+  /**
+   * @param {number} value
+   * @param {number} places
+   * @returns {string}
+   * @protected
+   */
+  formatUnder1000(value, places) {
+    return value.toFixed(places);
+  }
+
+  formatInfinite() {
+    return "Infinite";
   }
 
   /**
@@ -344,54 +362,79 @@ Notation.roman = new class RomanNotation extends Notation {
     return true;
   }
 
-  // We need to format all values (even below 1000), so override format instead of formatDecimal
-  format(value, places, placesUnder1000) {
-    const decimal = new Decimal(value);
+  formatInfinite() {
+    return "Infinitus";
+  }
 
-    if (typeof value === "number" && !Number.isFinite(value) || this.isInfinite(decimal)) {
-      return "Infinitus";
+  formatUnder1000(value, places) {
+    return this.romanize(value);
+  }
+
+  formatDecimal(value, places) {
+    if (value.lt(this.maximum)) {
+      return this.romanize(value.toNumber());
     }
+    const log10 = value.log10();
+    const maximums = log10 / this._maxLog10;
+    const current = Math.pow(this.maximum, maximums - Math.floor(maximums));
+    return `${this.romanize(current)}↑${this.formatDecimal(maximums.toDecimal())}`;
+  }
 
+  /**
+   * @param {number} value
+   * @return {string}
+   * @private
+   */
+  romanize(value) {
     const decimalValue = this._decimalValue;
     const romanNumeral = this._romanNumeral;
     const romanFractions = this._romanFractions;
-
-    function romanize(value) {
-      let roman = String.empty;
-      for (let i = 0; i < decimalValue.length; i++) {
-        while (decimalValue[i] <= value) {
-          roman += romanNumeral[i];
-          value -= decimalValue[i];
-        }
+    let roman = String.empty;
+    for (let i = 0; i < decimalValue.length; i++) {
+      while (decimalValue[i] <= value) {
+        roman += romanNumeral[i];
+        value -= decimalValue[i];
       }
-      let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
-      if (duodecimal === 0) {
-        return roman === String.empty ? "nulla" : roman;
-      }
-      if (duodecimal > 5) {
-        duodecimal -= 6;
-        roman += "Ｓ";
-      }
-      roman += romanFractions[duodecimal];
-      return roman;
     }
-
-    if (decimal.lt(this.maximum)) {
-      return romanize(decimal.toNumber());
+    let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
+    if (duodecimal === 0) {
+      return roman === String.empty ? "nulla" : roman;
     }
-
-    const log10 = decimal.log10();
-    const maximums = log10 / this._maxLog10;
-    const current = Math.pow(this.maximum, maximums - Math.floor(maximums));
-    return `${romanize(current)}↑${this.format(maximums)}`;
+    if (duodecimal > 5) {
+      duodecimal -= 6;
+      roman += "Ｓ";
+    }
+    roman += romanFractions[duodecimal];
+    return roman;
   }
-
-  formatDecimal(value, places) {}
 }("Roman");
 
 
 Notation.dots = new class DotsNotation extends Notation {
-  formatSmall(value, pad) {
+  formatUnder1000(value, places) {
+    return this.dotify(value * 254);
+  }
+
+  formatInfinite() {
+    return "⣿⠀⣿";
+  }
+
+  formatDecimal(value, places) {
+    if (value.lt(16387063.9980315)) {
+      return this.dotify(value.toNumber() * 254);
+    }
+    const log = value.log(254);
+    const exponent = Math.floor(log - 2);
+    const mantissa = Math.pow(254, log - exponent);
+    return this.dotify(exponent) + "⣿" + this.dotify(mantissa * 254);
+  }
+
+  /**
+   * @param {number} value
+   * @param {boolean?} pad
+   * @return {string}
+   */
+  dotify(value, pad) {
     const DOT_DIGITS =
       "⠀⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿" +
       "⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿" +
@@ -401,29 +444,7 @@ Notation.dots = new class DotsNotation extends Notation {
     value = Math.round(value);
     if (!pad && value < 254) return DOT_DIGITS[value + 1];
     if (value < 64516) return DOT_DIGITS[Math.floor(value / 254) + 1] + DOT_DIGITS[value % 254 + 1];
-    return this.formatSmall(Math.floor(value / 64516)) + this.formatSmall(value % 64516, true);
-  }
-  /**
-   * @param {Decimal | number | string | undefined | null} value
-   * @param {number} places
-   * @param {number} placesUnder1000
-   * @return {string}
-   */
-  format(value, places, placesUnder1000) {
-    let log;
-    if (typeof value === "number") {
-      if (value < 16387063.9980315) return this.formatSmall(value * 254);
-      if (!Number.isFinite(value)) return "⣿⠀⣿";
-      log = Math.log(value) / Math.log(254);
-    } else {
-      value = new Decimal(value);
-      if (value.lt(16387063.9980315)) return this.formatSmall(value.toNumber() * 254);
-      if (this.isInfinite(value)) return "⣿⠀⣿";
-      log = value.log(254);
-    }
-    const exponent = Math.floor(log - 2);
-    const mantissa = Math.pow(254, log - exponent);
-    return this.formatSmall(exponent) + "⣿" + this.formatSmall(mantissa * 254);
+    return this.dotify(Math.floor(value / 64516)) + this.dotify(value % 64516, true);
   }
 }("Dots");
 

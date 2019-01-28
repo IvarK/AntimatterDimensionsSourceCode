@@ -742,7 +742,7 @@ Notation.clock = new class ClockNotation extends Notation {
     const log = value.log(12);
     const exponent = Math.floor(log);
     const mantissa = Math.pow(12, log - exponent);
-    return this.clockwise((exponent - 1).toDecimal()) + "" + this.hour(Math.max(mantissa - 1, 0));
+    return this.clockwise((exponent - 1).toDecimal()) + this.hour(Math.max(mantissa - 1, 0));
   }
 
   /**

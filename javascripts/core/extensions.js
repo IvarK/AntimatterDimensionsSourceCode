@@ -196,3 +196,7 @@ Number.prototype.toDecimal = function() {
 };
 
 Math.log4 = Math.log(4);
+
+Array.prototype.randomElement = function() {
+  return this[Math.floor(Math.random() * this.length)];
+};

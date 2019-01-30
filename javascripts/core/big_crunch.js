@@ -177,6 +177,7 @@ function totalIPMult() {
   if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
     ipMult = ipMult.pow(0.9);
   }
+  if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
 }
 

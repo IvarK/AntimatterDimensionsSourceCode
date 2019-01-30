@@ -233,6 +233,7 @@ function gainedEternityPoints() {
   if (Effarig.isRunning) {
     ep = ep.pow(0.6);
   }
+  if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
   return ep.floor();
 }
 

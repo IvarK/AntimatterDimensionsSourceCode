@@ -23,6 +23,7 @@ Vue.component("game-header-tickspeed-row", {
       }
       else {
         let places = tickmult >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / tickmult)));
+        if (player.galaxies == 1) places = 1
         return `Reduce the tick interval by ${((1 - tickmult) * 100).toFixed(places)}%.`;
       }
     },

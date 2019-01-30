@@ -6,7 +6,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
                            "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
                            "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
                            "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-                           "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresaunknown", "teresaantimatter"];
+                           "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresadimensions", "teresaantimatter"];
 
 
 /**
@@ -164,11 +164,11 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "teresaachievement":
       return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
     case "teresaforgotten":
-      return 1
-    case "teresaunknown":
-      return 1
+      return 1 + Math.sqrt(level * strength) / 1000
+    case "teresadimensions":
+      return level * strength
     case "teresaantimatter":
-      return 1
+      return 1 + Math.sqrt(level * strength) / 10000
     default:
       return 0;
   }

@@ -302,17 +302,17 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "teresaforgotten",
     glyphTypes: ["teresa"],
-    singleDesc: "Forgotten effect {value}",
+    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresaunknown",
+    id: "teresadimensions",
     glyphTypes: ["teresa"],
-    singleDesc: "Unkown celestial effect {value}",
-    combine: GlyphCombiner.multiply,
+    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
+    combine: GlyphCombiner.add,
   }, {
     id: "teresaantimatter",
     glyphTypes: ["teresa"],
-    singleDesc: "Antimatter effect {value}",
+    singleDesc: "Power to antimatter production exponent of ^{value}",
     combine: GlyphCombiner.multiply,
   }
 ].reduce((prev, effect) => {
@@ -331,7 +331,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
-const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "unknown", "antimatter"]
+const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
 
 /**
  * @typedef {Object} GlyphTypeInfo

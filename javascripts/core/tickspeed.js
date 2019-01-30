@@ -21,6 +21,7 @@ function getTickSpeedMultiplier() {
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89
+      if (player.galaxies == 1) baseMultiplier = 0.895
       if (Challenge(5).isRunning) baseMultiplier = 0.93;
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,

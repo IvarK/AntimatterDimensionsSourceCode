@@ -60,11 +60,11 @@ Vue.component("reality-button", {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
         startRealityOver();
       } else {
-        reality();
+        requestManualReality();
       }
     },
   },
-  template: `
+  template: /*html*/`
   <button :class="['l-reality-button', 'c-reality-button', 'infotooltip',
                    canReality ? 'c-reality-button--good' : 'c-reality-button--bad']"
           @click="handleClick">

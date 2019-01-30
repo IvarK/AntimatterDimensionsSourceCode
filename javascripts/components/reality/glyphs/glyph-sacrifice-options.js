@@ -185,7 +185,7 @@ Vue.component("glyph-sacrifice-options", {
     ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="mode == 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">
-      <div v-for="type in glyphTypes" :id="type" class="l-glyph-sacrifice-options__rarity-slider-div">
+      <div v-for="type in glyphTypes" :key="type.id" class="l-glyph-sacrifice-options__rarity-slider-div">
         <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps">
         </glyph-component>
         <ad-slider-component v-bind="raritySliderProps" :value="rarityThresholds[type.id]"
@@ -193,12 +193,12 @@ Vue.component("glyph-sacrifice-options", {
       </div>
     </div>
     <div v-if="mode == 3" class="l-glyph-sacrifice-options__advanced c-glyph-sacrifice-options__advanced">
-      <span v-for="type in glyphTypes" :id="type"
+      <span v-for="type in glyphTypes" :key="type.id"
             class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
             :style="advancedTypeSelectStyle(type)" @click="advancedType=type.id">
         {{type.symbol}}
       </span>
-      <template v-for="type in glyphTypes" :id="type">
+      <template v-for="type in glyphTypes">
         <auto-sac-type-tab v-show="type.id === advancedType" :glyph-type="type.id"></auto-sac-type-tab>
       </template>
     </div>

@@ -23,10 +23,8 @@ Vue.component("modal-glyph-selection", {
   template: /*html*/`
   <div class="l-modal-overlay c-modal-overlay">
     <div class="l-modal-glyph-selection c-modal">
-      <glyph-component v-for="(glyph, index) in glyphs" :key="index" :glyph=glyph
+      <glyph-component v-for="(glyph, index) in glyphs" :key="index" :glyph="glyph"
         @click.native="select(index)" class="l-modal-glyph-selection__glyph"/>
     </div>
   </div>`,
-  computed: {
-  },
 });

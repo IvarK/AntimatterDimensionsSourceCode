@@ -96,13 +96,14 @@ function getDilationGainPerSecond() {
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
   return ret
 }
 
 function getTachyonGain() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
-  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(player.achPow))
+  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("teresaachievement"))))
   if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
   let sacEffect = getGlyphSacEffect("dilation")
   if (sacEffect > 1) mult *= sacEffect
@@ -114,7 +115,7 @@ function getTachyonGain() {
 function getTachyonReq() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
-  if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+  if (player.reality.upg.includes(8)) mult *= Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("teresaachievement")))
   if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
   let sacEffect = getGlyphSacEffect("dilation")
   if (sacEffect > 1) mult *= sacEffect

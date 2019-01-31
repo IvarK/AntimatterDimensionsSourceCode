@@ -392,6 +392,10 @@ var player = {
       stored: 0,
       unlocks: [],
       run: false
+    },
+    v: {
+      unlocks: [],
+      run: false,
     }
   },
   autoEcIsOn: true,

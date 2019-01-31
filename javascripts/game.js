@@ -1152,6 +1152,8 @@ function gameLoop(diff, options = {}) {
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
 
+  V.checkForUnlocks()
+
     GameUI.update();
     player.lastUpdate = thisUpdate;
     PerformanceStats.end("Game Update");

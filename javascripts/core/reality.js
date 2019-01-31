@@ -41,7 +41,7 @@ function reality(force, reset, auto) {
     }
     realizationCheck = 0;
     if (!reset) {
-      if (player.reality.glyphs.inventory.length >= 100 && Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
+      if (player.reality.glyphs.inventory.length >= 100 && Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
       if (!Perk.glyphChoice3.isBought || auto) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
       if (player.thisReality < player.bestReality) {
           player.bestReality = player.thisReality
@@ -78,9 +78,9 @@ function reality(force, reset, auto) {
       if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
       if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
       if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
-      if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.teresa.relicShards += Teresa.shardsGained
+      if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
       if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-      if (GLYPH_TYPES.every((type) => type === 'teresa' || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+      if (GLYPH_TYPES.every((type) => type === 'effarig' || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     }
 
     if (player.reality.respec) {
@@ -259,8 +259,8 @@ function reality(force, reset, auto) {
             }
         }
     }
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) {
-      Teresa.unlock(TERESA_UNLOCKS.REALITY_COMPLETE);
+    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) {
+      Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
     }
 
     GameCache.invalidate();
@@ -268,12 +268,12 @@ function reality(force, reset, auto) {
 }
 
 function handleCelestialRuns(force) {
-  if (player.celestials.effarig.run) {
-    player.celestials.effarig.run = false
-    if (!force && player.celestials.effarig.bestRunAM.lt(player.money)) player.celestials.effarig.bestRunAM = player.money
-  }
   if (player.celestials.teresa.run) {
     player.celestials.teresa.run = false
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
+  }
+  if (player.celestials.effarig.run) {
+    player.celestials.effarig.run = false
   }
   if (player.celestials.enslaved.run) {
     player.celestials.enslaved.run = false
@@ -309,9 +309,9 @@ function startRealityOver() {
 
 function autoSacrificeGlyph() {
   let list = []
-  let x = player.celestials.teresa.typePriorityOrder.length - 1
+  let x = player.celestials.effarig.typePriorityOrder.length - 1
   while(list.length == 0){
-    list = player.reality.glyphs.inventory.filter((g) => g.type == player.celestials.teresa.typePriorityOrder[x].toLowerCase())
+    list = player.reality.glyphs.inventory.filter((g) => g.type == player.celestials.effarig.typePriorityOrder[x].toLowerCase())
     x--
   }
   let toSacrifice = list.sort((a, b) => {

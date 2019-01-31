@@ -164,8 +164,8 @@ class TimeDimensionState {
       mult = dilatedValueOf(mult);
     }
     
-    if (Teresa.isRunning) {
-      mult = Teresa.multiplier(mult);
+    if (Effarig.isRunning) {
+      mult = Effarig.multiplier(mult);
     }
 
     return mult;

@@ -391,16 +391,16 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 22) {
-      for (i in player.celestials.teresa.glyphWeights) {
-          player.celestials.teresa.glyphWeights[i] *= 100
+      for (i in player.celestials.effarig.glyphWeights) {
+          player.celestials.effarig.glyphWeights[i] *= 100
       }
     player.options.testVersion = 23;
   }
 
   //the above line of code didn't work if loading a test save before celestials were added, whoops
   if (player.options.testVersion === 23) {
-    for (i in player.celestials.teresa.glyphWeights) {
-        player.celestials.teresa.glyphWeights[i] = 25
+    for (i in player.celestials.effarig.glyphWeights) {
+        player.celestials.effarig.glyphWeights[i] = 25
     }
     player.options.testVersion = 24;
   }

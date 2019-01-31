@@ -91,8 +91,8 @@ function bigCrunchReset() {
 
     autoBuyReplicantiUpgrades();
 
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
-      Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
+    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+      Effarig.unlock(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
     }
 }
 
@@ -155,7 +155,7 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
     return new Decimal(1);
   }
   let ipMult = player.infMult
@@ -174,7 +174,7 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
     ipMult = ipMult.pow(0.9);
   }
   if (Enslaved.isRunning) return player.infMult.times(kongIPMult)

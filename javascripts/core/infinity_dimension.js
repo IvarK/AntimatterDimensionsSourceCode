@@ -269,8 +269,8 @@ class InfinityDimensionState {
 
     mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
 
-    if (Teresa.isRunning) {
-      mult = Teresa.multiplier(mult);
+    if (Effarig.isRunning) {
+      mult = Effarig.multiplier(mult);
     }
     
     return mult;

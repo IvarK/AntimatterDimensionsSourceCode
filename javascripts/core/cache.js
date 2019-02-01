@@ -59,7 +59,15 @@ const GameCache = {
   }),
 
   achSkipPerkCount: new Lazy(() => {
-    return player.reality.perks.filter(id => id >= 201 && id <= 213).length;
+    return Effects.max(
+      0,
+      Perk.achievementRowGroup1,
+      Perk.achievementRowGroup2,
+      Perk.achievementRowGroup3,
+      Perk.achievementRowGroup4,
+      Perk.achievementRowGroup5,
+      Perk.achievementRowGroup6
+    );
   }),
 
   buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),

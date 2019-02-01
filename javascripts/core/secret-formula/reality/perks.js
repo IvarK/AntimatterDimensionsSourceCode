@@ -7,8 +7,8 @@ GameDatabase.reality.perks = {
   startAM1: {
     id: 10,
     label: "S1",
-    description: "Start with 100 antimatter after every reset",
-    effect: () => 100
+    description: "Start with 1e15 antimatter after every reset",
+    effect: () => 1e15
   },
   startAM2: {
     id: 11,
@@ -72,6 +72,16 @@ GameDatabase.reality.perks = {
     id: 23,
     label: "G4",
     description: "+5% minimum glyph rarity"
+  },
+  glyphUncommonGuarantee: {
+    id: 24,
+    label: "G5",
+    description: "One glyph choice is guaranteed to be uncommon or better"
+  },
+  realityMachineGain: {
+    id: 25,
+    label: "R1",
+    description: "Gain additional RM equal to twice your current reality count"
   },
   automatorRowIncrease1: {
     id: 30,
@@ -276,70 +286,41 @@ GameDatabase.reality.perks = {
     label: "AB8",
     description: "Autobuy max TT every second"
   },
-  achievementRow1: {
+  achievementRowGroup1: {
     id: 201,
     label: "ACH1",
-    description: "Start with the 1st achievement row after Reality"
+    description: "Start with the first 3 achievement rows after Reality",
+    effect: () => 3
   },
-  achievementRow2: {
+  achievementRowGroup2: {
     id: 202,
     label: "ACH2",
-    description: "Start with the 2nd achievement row after Reality"
+    description: "Start with the first 6 achievement rows after Reality",
+    effect: () => 6
   },
-  achievementRow3: {
+  achievementRowGroup3: {
     id: 203,
     label: "ACH3",
-    description: "Start with the 3rd achievement row after Reality"
+    description: "Start with the first 8 achievement rows after Reality",
+    effect: () => 8
   },
-  achievementRow4: {
+  achievementRowGroup4: {
     id: 204,
     label: "ACH4",
-    description: "Start with the 4th achievement row after Reality"
+    description: "Start with the first 10 achievement rows after Reality",
+    effect: () => 10
   },
-  achievementRow5: {
+  achievementRowGroup5: {
     id: 205,
     label: "ACH5",
-    description: "Start with the 5th achievement row after Reality"
+    description: "Start with the first 12 achievement rows after Reality",
+    effect: () => 12
   },
-  achievementRow6: {
+  achievementRowGroup6: {
     id: 206,
     label: "ACH6",
-    description: "Start with the 6th achievement row after Reality"
-  },
-  achievementRow7: {
-    id: 207,
-    label: "ACH7",
-    description: "Start with the 7th achievement row after Reality"
-  },
-  achievementRow8: {
-    id: 208,
-    label: "ACH8",
-    description: "Start with the 8th achievement row after Reality"
-  },
-  achievementRow9: {
-    id: 209,
-    label: "ACH9",
-    description: "Start with the 9th achievement row after Reality"
-  },
-  achievementRow10: {
-    id: 210,
-    label: "ACH10",
-    description: "Start with the 10th achievement row after Reality"
-  },
-  achievementRow11: {
-    id: 211,
-    label: "ACH11",
-    description: "Start with the 11th achievement row after Reality"
-  },
-  achievementRow12: {
-    id: 212,
-    label: "ACH12",
-    description: "Start with the 12th achievement row after Reality"
-  },
-  achievementRow13: {
-    id: 213,
-    label: "ACH13",
-    description: "Start with the 13th achievement row after Reality"
+    description: "Start with the first 13 achievement rows after Reality",
+    effect: () => 13
   }
 };
 
@@ -348,7 +329,7 @@ GameDatabase.reality.perkConnections = (function() {
   // First item is the start, other items are the ends
   const groups = [
     [p.glyphChoice3,
-      p.achievementRow1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
+      p.achievementRowGroup1, p.startAM1, p.glyphLevelIncrease1, p.glyphLevelIncrease2,
       p.automatorRowIncrease1, p.autounlockEU1, p.bypassEC5Lock
     ],
     [p.startAM1, p.startAM2, p.startIP1],
@@ -361,11 +342,13 @@ GameDatabase.reality.perkConnections = (function() {
     [p.startTP, p.startEP1, p.retroactiveTP1],
     [p.glyphLevelIncrease1, p.glyphChoice4],
     [p.glyphLevelIncrease2, p.glyphRarityIncrease],
-    [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphRarityIncrease],
-    [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphChoice4],
+    [p.glyphChoice4, p.glyphLevelIncrease1, p.glyphUncommonGuarantee],
+    [p.glyphRarityIncrease, p.glyphLevelIncrease2, p.glyphUncommonGuarantee],
+    [p.glyphUncommonGuarantee, p.glyphRarityIncrease, p.glyphChoice4, p.realityMachineGain],
+    [p.realityMachineGain],
     [p.automatorRowIncrease1, p.automatorRowIncrease2, p.autobuyerFasterID],
-    [p.automatorRowIncrease2, p.automatorRowScaling],
-    [p.automatorRowScaling],
+    [p.automatorRowIncrease2, p.automatorRowIncrease1, p.automatorRowScaling],
+    [p.automatorRowScaling, p.autobuyerTT1],
     [p.autounlockEU1, p.autounlockEU2],
     [p.autounlockEU2, p.autounlockEU1, p.autobuyerDilation],
     [p.autounlockDilation1, p.autounlockDilation2],
@@ -399,23 +382,16 @@ GameDatabase.reality.perkConnections = (function() {
     [p.autobuyerFasterID, p.autobuyerFasterReplicanti],
     [p.autobuyerFasterReplicanti],
     [p.bypassECDilation],
-    [p.autobuyerTT1, p.autobuyerTT2],
+    [p.autobuyerTT1, p.autobuyerTT2, p.automatorRowScaling],
     [p.autobuyerTT2, p.autobuyerTT3],
     [p.autobuyerTT3, p.autobuyerTT4],
     [p.autobuyerTT4],
-    [p.achievementRow1, p.achievementRow2],
-    [p.achievementRow2, p.achievementRow3],
-    [p.achievementRow3, p.achievementRow4],
-    [p.achievementRow4, p.achievementRow5],
-    [p.achievementRow5, p.achievementRow6],
-    [p.achievementRow6, p.achievementRow7],
-    [p.achievementRow7, p.achievementRow8],
-    [p.achievementRow8, p.achievementRow9],
-    [p.achievementRow9, p.achievementRow10],
-    [p.achievementRow10, p.achievementRow11],
-    [p.achievementRow11, p.achievementRow12],
-    [p.achievementRow12, p.achievementRow13],
-    [p.achievementRow13]
+    [p.achievementRowGroup1, p.achievementRowGroup2],
+    [p.achievementRowGroup2, p.achievementRowGroup3],
+    [p.achievementRowGroup3, p.achievementRowGroup4],
+    [p.achievementRowGroup4, p.achievementRowGroup5],
+    [p.achievementRowGroup5, p.achievementRowGroup6],
+    [p.achievementRowGroup6]
   ];
   const connections = {};
   for (let group of groups) {

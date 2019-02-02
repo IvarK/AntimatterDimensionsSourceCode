@@ -10,7 +10,7 @@ Vue.component("dilation-button", {
     update() {
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
-      this.hasGain = getTachyonGain() > 0;
+      this.hasGain = getTachyonGain().gt(0);
       if (this.hasGain) return;
       this.requiredForGain.copyFrom(getTachyonReq());
     }

@@ -33,8 +33,8 @@ Vue.component('past-runs-tab', {
     averageGain: function(time, amount) {
       let rpm = ratePerMinute(amount, time);
       let tempstring = shortenRateOfChange(rpm) + " " + this.points + "/min";
-      if (rpm < 1) {
-        tempstring = shortenRateOfChange(rpm * 60) + " " + this.points + "/hour";
+      if (Decimal.lt(rpm, 1)) {
+        tempstring = shortenRateOfChange(Decimal.mul(rpm, 60)) + " " + this.points + "/hour";
       }
       return tempstring;
     },

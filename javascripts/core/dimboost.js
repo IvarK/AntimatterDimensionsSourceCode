@@ -168,7 +168,7 @@ function maxBuyDimBoosts(manual) {
 
   let increase = secondBoost.amount - firstBoost.amount;
   let minBoosts = bulk;
-  let maxBoosts = bulk + Math.floor((player.eightAmount - secondBoost.amount) / increase);
+  let maxBoosts = bulk + Math.floor((player.eightAmount.toNumber() - secondBoost.amount) / increase);
   maxBoosts = Math.min(maxBoosts, availableBoosts);
 
   // Usually enough, as boost scaling is linear most of the time

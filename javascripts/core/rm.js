@@ -148,7 +148,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
-        return ret * Math.max(Math.sqrt(Math.log10(Enslaved.totalInfinities)), 1)
+        return ret * Math.max(Math.sqrt(Math.log10(Math.max(Enslaved.totalInfinities, 1))), 1)
       }
       else return ret
     case "timefreeTickMult":
@@ -225,8 +225,9 @@ function fixGlyph(glyph) {
     if (glyph.strength == 1)
       glyph.strength = gaussian_bell_curve()
     for (let effect in glyph.effects)
-      if (glyph.effects.hasOwnProperty(effect))
+      if (glyph.effects.hasOwnProperty(effect)) {
         glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+      }
   }
 }
 

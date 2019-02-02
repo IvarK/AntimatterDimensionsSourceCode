@@ -430,6 +430,28 @@ dev.updateTestSave = function() {
     player.options.testVersion = 27;
   }
 
+  if (player.options.testVersion === 27) {
+    let temp = player.celestials.effarig
+    player.celestials.effarig = player.celestials.teresa
+    player.celestials.teresa = temp
+    
+    for (i in player.reality.glyphs.active) {
+      let g = player.reality.glyphs.active[i]
+      if (g.type == 'teresa') {
+        g.type = 'effarig'
+      }
+    }
+
+    for (i in player.reality.glyphs.inventory) {
+      let g = player.reality.glyphs.inventory[i]
+      if (g.type == 'teresa') {
+        g.type = 'effarig'
+      }
+    }
+  
+    player.options.testVersion = 28;
+  }
+
   if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6

@@ -881,26 +881,29 @@ function gameLoop(diff, options = {}) {
       }
     }
 
+    let infGen = 0
     if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
         if (player.reality.upg.includes(11)) {
           let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
-          player.infinitied += gained
-          Enslaved.trackInfinityGeneration(gained)
+          infGen += gained
 
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {
-        player.infinitied += Math.floor(player.partInfinitied/5)
+        infGen += Math.floor(player.partInfinitied/5)
         player.partInfinitied = 0;
     }
 
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
-        player.infinitied ++;
+        infGen++;
     }
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
-      player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
+      infGen += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
+
+    player.infinitied += infGen
+    Enslaved.trackInfinityGeneration(infGen)
 
     if (player.reality.upg.includes(14)) {
         let eternitiesGain = diff * player.realities / 1000

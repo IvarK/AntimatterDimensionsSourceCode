@@ -1079,8 +1079,9 @@ function gameLoop(diff, options = {}) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    if (TimeStudy.dilation.isBought) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
-
+    if (TimeStudy.dilation.isBought) {
+      player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
+    }
     // Free galaxies (2x doesn't apply past 1000)
     let freeGalaxyMult = Effects.max(
       1,

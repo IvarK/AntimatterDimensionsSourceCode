@@ -622,7 +622,7 @@ button {
   background: black !important;
 }
 
-.teresaglyph {
+.effarigglyph {
   border: 1px solid #e21717;
   box-shadow: inset #e21717 0px 0px 10px 2px, #e21717 0px 0px 10px 2px;
   background: black !important;
@@ -4751,13 +4751,13 @@ screen and (max-width: 480px) {
 /*#region component*/
 /*#endregion component*/
 
-/*#region Effarig tab*/
+/*#region Teresa tab*/
 .l-mechanics-container {
   display: flex;
   justify-content: center;
 }
 
-.l-effarig-mechanic-container {
+.l-teresa-mechanic-container {
   min-width: 40rem;
 }
 
@@ -4790,7 +4790,7 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
-.c-effarig-pour {
+.c-teresa-pour {
   width: 13rem;
   height: 4rem;
   border: .2rem solid #8c1f1f;
@@ -4799,7 +4799,7 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem
 }
 
-.c-effarig-unlock-description {
+.c-teresa-unlock-description {
   position: absolute;
   left: 13.1rem;
   width: 20rem;
@@ -4807,7 +4807,7 @@ screen and (max-width: 480px) {
   margin-bottom: -0.1rem
 }
 
-.o-effarig-quotes {
+.o-teresa-quotes {
   display: inline-block;
   margin: 1.5rem 1.5rem;
   font-size: 1.9rem;
@@ -4823,7 +4823,7 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-.c-effarig-unlock {
+.c-teresa-unlock {
   width: 20rem;
   border-radius: .5rem;
   padding: 1rem;
@@ -4836,27 +4836,27 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem;
 }
 
-.c-effarig-run-button {
+.c-teresa-run-button {
   cursor: pointer;
   background-color: #5151ec;
   border: 1px solid white;
   color: white;
 }
 
-.c-effarig-run-button:hover {
+.c-teresa-run-button:hover {
   background-color: #d0d0d0;
   border: 1px solid #d0d0d0;
   color: #5151ec;
 }
 
-.c-effarig-shop {
+.c-teresa-shop {
   display: flex;
   flex-direction: column;
   width: 20rem;
   margin: 4rem auto;
 }
 
-.o-effarig-shop-button {
+.o-teresa-shop-button {
   background-color: #5151ec;
   color: white;
   padding: 1rem;
@@ -4869,21 +4869,21 @@ screen and (max-width: 480px) {
   transition-duration: 0.12s;
 }
 
-.o-effarig-shop-button:hover {
+.o-teresa-shop-button:hover {
   background-color: #d0d0d0;
   color: #5151ec;
 }
 
-.c-teresa-relics {
+.c-effarig-relics {
   padding: 20px;
   font-size: 1.5em;
 }
 
-/*#endregion Effarig tab*/
+/*#endregion Teresa tab*/
 
-/* #region teresa tab */
+/* #region effarig tab */
 
-.o-teresa-shop-button {
+.o-effarig-shop-button {
   padding: 17px;
   font-size: 2rem;
   background-color: #5151ec;
@@ -4895,22 +4895,22 @@ screen and (max-width: 480px) {
   transition-duration: 0.12s;
 }
 
-.o-teresa-shop-button:hover {
+.o-effarig-shop-button:hover {
   background-color: #d0d0d0;
   color: #5151ec;
 }
 
-.teresa-unlock-bought {
+.effarig-unlock-bought {
   background-color: #d0d0d0;
   color: #5151ec;
   cursor: default;
 }
 
-.teresa-run-button {
+.effarig-run-button {
   width: 300px;
 }
 
-.o-teresa-slider {
+.o-effarig-slider {
   font-size: 1.2rem;
   background-color: #5151ec;
   color: white;
@@ -4922,12 +4922,12 @@ screen and (max-width: 480px) {
   padding: 0.5rem;
 }
 
-.l-teresa-glyph-settings {
+.l-effarig-glyph-settings {
   display: flex;
   justify-content: space-around;
 }
 
-.o-teresa-glyph-type {
+.o-effarig-glyph-type {
   padding: 12px;
   background-color: #5151ec;
   color: white;
@@ -4940,7 +4940,7 @@ screen and (max-width: 480px) {
   cursor: grabbing;
 }
 
-/* #endregion teresa tab*/
+/* #endregion effarig tab*/
 
 /* #startregion enslaved tab */
 

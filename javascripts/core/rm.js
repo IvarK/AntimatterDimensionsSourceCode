@@ -6,7 +6,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
                            "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
                            "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
                            "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-                           "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresadimensions", "teresaantimatter"];
+                           "effarigwormhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
 
 /**
@@ -31,7 +31,7 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
   }
   // Each rarity% is 0.025 strength.
-  return ret + getGlyphSacEffect("teresa") / 40;
+  return ret + getGlyphSacEffect("effarig") / 40;
 }
 
 // Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
@@ -41,7 +41,7 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
 function generateRandomGlyph(level) {
   let type;
   let glyphTypesLength = GLYPH_TYPES.length - 1
-  if (Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) glyphTypesLength++
+  if (Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) glyphTypesLength++
   do {
     type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
   } while (player.reality.glyphs.last === type);
@@ -95,8 +95,8 @@ function newGlyph(glyph, type, effectAmount) {
         toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
         if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) toAdd = "pow"
         break;
-      case "teresa":
-        toAdd = teresaEffects[Math.floor(random() * teresaEffects.length)];
+      case "effarig":
+        toAdd = effarigEffects[Math.floor(random() * effarigEffects.length)];
         break;
     }
     if (!effects.includes(toAdd)) effects.push(toAdd)
@@ -155,19 +155,19 @@ function getGlyphEffectStrength(effectKey, level, strength) {
       return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
-    case "teresawormhole":
+    case "effarigwormhole":
       return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5)/75
-    case "teresarm":
+    case "effarigrm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
-    case "teresaglyph":
+    case "effarigglyph":
       return Math.floor(level * strength / 10);
-    case "teresaachievement":
+    case "effarigachievement":
       return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
-    case "teresaforgotten":
+    case "effarigforgotten":
       return 1 + Math.sqrt(level * strength) / 1000
-    case "teresadimensions":
+    case "effarigdimensions":
       return level * strength
-    case "teresaantimatter":
+    case "effarigantimatter":
       return 1 + Math.sqrt(level * strength) / 10000
     default:
       return 0;
@@ -450,12 +450,12 @@ function drop(ev) {
     return false
   }
 
-  let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
+  let canAddGlyph = !Effarig.isRunning || !player.celestials.effarig.glyphEquipped;
   if (ev.target.className.includes("glyphactive") && canAddGlyph) {
     var glyph = player.reality.glyphs.inventory.find(function(glyph) {
       return glyph.id == data
     })
-    if (glyph.type == "teresa" && player.reality.glyphs.active.some((g) => g.type == "teresa")) return
+    if (glyph.type == "effarig" && player.reality.glyphs.active.some((g) => g.type == "effarig")) return
     if (glyph !== undefined && glyph !== null) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
       player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
@@ -467,9 +467,9 @@ function drop(ev) {
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
     
-    // Force a maximum of one glyph in Teresa Reality before Eternity
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
-      player.celestials.teresa.glyphEquipped = true
+    // Force a maximum of one glyph in Effarig Reality before Eternity
+    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      player.celestials.effarig.glyphEquipped = true
     }
     generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
   } else if (!ev.target.className.includes("glyphactive")) {
@@ -621,7 +621,7 @@ function getGlyphSacEffect(type) {
     case "dilation":
     return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
 
-    case "teresa":
+    case "effarig":
     return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e5 + 1)
   }
 }
@@ -647,17 +647,17 @@ function getGlyphSacDescription(type) {
     case "dilation":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount, 2, 2) + "x<br><br>"
 
-    case "teresa":
+    case "effarig":
     return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
   }
 }
 
 function glyphSacrificeGain(glyph) {
   let gain = glyph.level * glyph.strength;
-  if (glyph.type === 'teresa') {
-    gain *= Math.pow(Effarig.runRewardMultiplier, 0.2);
+  if (glyph.type === 'effarig') {
+    gain *= Math.pow(Teresa.runRewardMultiplier, 0.2);
   } else {
-    gain *= Effarig.runRewardMultiplier;
+    gain *= Teresa.runRewardMultiplier;
   }
   return gain;
 }
@@ -709,8 +709,8 @@ function updateTooltips() {
 
 function getGlyphLevelInputs() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
-  // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
-  // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
+  // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
+  // below. These *Base values are the nominal inputs, as they would be multiplied without Effarig
   let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
   // @ts-ignore
   var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
@@ -733,7 +733,7 @@ function getGlyphLevelInputs() {
   // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
   // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
   // Then, we can divide the result by s⁴; this does nothing for even weights
-  // This can reduce the effect that Teresa can have; consider the following examples:
+  // This can reduce the effect that Effarig can have; consider the following examples:
   // Inputs : 100, 1, 1, 1. Nominal result : 100
   // blendExp = 1/3; optimal weights: 1, 0, 0, 0; result = 1493
   // Scaling by 100: 10000, 100, 100, 100
@@ -747,16 +747,16 @@ function getGlyphLevelInputs() {
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
-  let weights =  player.celestials.teresa.glyphWeights;
+  let weights =  player.celestials.effarig.glyphWeights;
   var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
   var epEffect = adjustFactor(epBase, weights.ep / 100);
   var replEffect = adjustFactor(replBase, weights.repl / 100);
   var dtEffect = adjustFactor(dtBase, weights.dt / 100);
   var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("teresaglyph");
+  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {
@@ -773,7 +773,7 @@ function getGlyphLevelInputs() {
     replEffect: replEffect,
     dtEffect: dtEffect,
     eterEffect: eterEffect,
-    perkShop: player.celestials.effarig.glyphLevelMult,
+    perkShop: player.celestials.teresa.glyphLevelMult,
     scalePenalty: glyphScalePenalty,
     perkFactor: perkFactor,
     finalLevel: glyphScaledLevel + perkFactor,

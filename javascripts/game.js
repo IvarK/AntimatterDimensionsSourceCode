@@ -208,7 +208,7 @@ function gainedInfinityPoints() {
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
     ip = ip.times(totalIPMult());
-    if (Effarig.isRunning) {
+    if (Teresa.isRunning) {
         ip = ip.pow(0.6);
     }
     return ip.floor();
@@ -230,7 +230,7 @@ function gainedEternityPoints() {
   if (player.reality.upg.includes(12)) {
       ep = ep.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
   }
-  if (Effarig.isRunning) {
+  if (Teresa.isRunning) {
     ep = ep.pow(0.6);
   }
   if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
@@ -239,9 +239,9 @@ function gainedEternityPoints() {
 
 function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    ret = ret.times(Effarig.rmMultiplier)
-    ret = ret.times(player.celestials.effarig.rmMult)
-    ret = ret.times(getAdjustedGlyphEffect("teresarm"))
+    ret = ret.times(Teresa.rmMultiplier)
+    ret = ret.times(player.celestials.teresa.rmMult)
+    ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     return Decimal.floor(ret)
 }
@@ -737,7 +737,7 @@ setInterval(function() {
     }
 
     EternityChallenge.autoCompleteTick()
-    if (!Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
+    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
 }, 1000)
 
 var postC2Count = 0;
@@ -781,10 +781,10 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
-    factor = Teresa.multiplier(factor).toNumber();
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+    factor = Effarig.multiplier(factor).toNumber();
   }
-  factor = Math.pow(factor, getAdjustedGlyphEffect("teresawormhole"))
+  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))
   return factor;
 }
 
@@ -875,7 +875,7 @@ function gameLoop(diff, options = {}) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (player.celestials.teresa.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
         else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
@@ -898,7 +898,7 @@ function gameLoop(diff, options = {}) {
         player.partInfinitied -= 5;
         player.infinitied ++;
     }
-    if (Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
+    if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
       player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
 
@@ -910,7 +910,7 @@ function gameLoop(diff, options = {}) {
         player.reality.partEternitied -= Math.floor(player.reality.partEternitied)
     }
 
-    if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.
+    if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
       let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
@@ -1090,7 +1090,7 @@ function gameLoop(diff, options = {}) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    if (!player.celestials.effarig.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
+    if (!player.celestials.teresa.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
 
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";

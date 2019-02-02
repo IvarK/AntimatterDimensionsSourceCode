@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  if (isAchEnabled("r11")) multiplier = multiplier.times(Math.pow(player.achPow, getAdjustedGlyphEffect("teresaachievement")));
+  if (isAchEnabled("r11")) multiplier = multiplier.times(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")));
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
   let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
@@ -103,8 +103,8 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
-  if (Teresa.isRunning) {
-    multiplier = Teresa.multiplier(multiplier);
+  if (Effarig.isRunning) {
+    multiplier = Effarig.multiplier(multiplier);
   }
   
   return multiplier;
@@ -171,7 +171,7 @@ function getDimensionPowerMultiplier(tier) {
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
-  dimMult = Decimal.pow(getAdjustedGlyphEffect("teresaforgotten"), NormalDimension(tier).bought/10).times(dimMult)
+  dimMult = Decimal.pow(getAdjustedGlyphEffect("effarigforgotten"), NormalDimension(tier).bought/10).times(dimMult)
 
   return dimMult;
 }
@@ -234,7 +234,7 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  return new Decimal(Number.MAX_VALUE).times(Decimal.pow(10, getAdjustedGlyphEffect("teresadimensions")))
+  return new Decimal(Number.MAX_VALUE).times(Decimal.pow(10, getAdjustedGlyphEffect("effarigdimensions")))
 }
 
 function buyOneDimension(tier) {
@@ -538,7 +538,7 @@ function getDimensionProductionPerSecond(tier) {
     production = production.min("1e315");
   }
   if (tier === 1) {
-    production.e = Math.floor(Math.pow(production.e, getAdjustedGlyphEffect("teresaantimatter")))
+    production.e = Math.floor(Math.pow(production.e, getAdjustedGlyphEffect("effarigantimatter")))
   }
   return production;
 }

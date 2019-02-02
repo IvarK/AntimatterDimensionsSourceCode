@@ -171,7 +171,7 @@ const Tickspeed = {
   },
 
   get current() {
-    const tickspeed = Teresa.isRunning ? Teresa.tickspeed : player.tickspeed;
+    const tickspeed = Effarig.isRunning ? Effarig.tickspeed : player.tickspeed;
     return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
   }
 };

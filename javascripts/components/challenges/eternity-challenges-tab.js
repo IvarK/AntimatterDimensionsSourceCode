@@ -9,7 +9,8 @@ Vue.component("eternity-challenges-tab", {
           isUnlocked: false,
           isRunning: false,
           isCompleted: false,
-          completions: 0
+          completions: 0,
+          showGoalSpan: false,
         };
       },
       computed: {
@@ -24,12 +25,17 @@ Vue.component("eternity-challenges-tab", {
         },
         goalDisplay() {
           const config = this.config;
-          const ip = this.shorten(this.challenge.goalAtCompletions(this.completions), 2, 1);
-          let goal = `Goal: ${ip} IP`;
+          let goal = `Goal: ${this.goalAtCompletions(this.completions)} IP`;
           if (config.restriction) {
             goal += ` ${config.formatRestriction(config.restriction(this.completions))}`;
           }
           return goal;
+        },
+        firstGoal() {
+          return this.goalAtCompletions(0);
+        },
+        lastGoal() {
+          return this.goalAtCompletions(TIERS_PER_EC);
         },
         currentRewardConfig() {
           const challenge = this.challenge;
@@ -60,9 +66,13 @@ Vue.component("eternity-challenges-tab", {
           this.isRunning = challenge.isRunning;
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
+          this.showGoalSpan = player.realities > 0;
         },
         start() {
           this.challenge.start();
+        },
+        goalAtCompletions(completions) {
+          return shorten(this.challenge.goalAtCompletions(completions), 2, 1);
         }
       },
       template:
@@ -76,13 +86,12 @@ Vue.component("eternity-challenges-tab", {
         >
           <description-display :config="config" slot="top" />
           <template slot="bottom">
-            <div class="c-challenge-box__spacer">
-              <template v-if="completions < 5">
-                <span>Completed {{completions}} {{"time" | pluralize(completions)}}</span>
-                <br>
-                <span>{{goalDisplay}}</span>
-              </template>
+            <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
+              <span>Completed {{completions}} {{"time" | pluralize(completions)}}</span>
+              <br>
+              <span>{{goalDisplay}}</span>
             </div>
+            <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
             <span>
               Reward: 
               <description-display

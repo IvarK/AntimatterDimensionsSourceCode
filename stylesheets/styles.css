@@ -2994,10 +2994,6 @@ screen and (max-width: 480px) {
   border-radius: 1rem;
 }
 
-.c-challenge-box__spacer {
-  height: 2.6rem;
-}
-
 .c-challenge-box__reward-description--small-text {
   font-size: .85rem;
 }

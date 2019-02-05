@@ -4993,7 +4993,6 @@ screen and (max-width: 480px) {
   display: -ms-grid;
   display: grid;
   width: 100%;
-  /*border: 1px solid red !important;*/
   padding-top: 1rem;
 }
 
@@ -5009,12 +5008,7 @@ screen and (max-width: 480px) {
   grid-row: 5;
   -ms-grid-row: 5;
   white-space: nowrap;
-  /*outline: 2px solid purple !important;*/
-/*  writing-mode: vertical-lr;
-  -ms-writing-mode: tb-lr;*/
   font-weight: bold;
-  /*-webkit-transform: rotate(180deg);
-  transform: rotate(180deg);*/
   padding: 0.25em 0 .25em 1em;
   z-index: 2;
 }
@@ -5026,8 +5020,6 @@ screen and (max-width: 480px) {
   grid-row: 1 / 6;
   -ms-grid-row: 1;
   -ms-grid-row-span: 5;
-  /*outline: 2px solid white !important;
-  outline-offset: 0.5em;*/
   position:relative;
 }
 

@@ -153,11 +153,11 @@ input {
     color: #757575 !important;
 }
 
-.realityUpgrade {
+.c-reality-upgrade {
     background-color: black !important;
 }
 
-.realityUpgrade:hover {
+.c-reality-upgrade:hover {
     color: black !important;
     background-color: #d5ffd7 !important;
 }

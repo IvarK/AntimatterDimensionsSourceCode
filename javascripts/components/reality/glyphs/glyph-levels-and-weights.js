@@ -22,7 +22,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      let columns = this.adjustVisible ? "8em 2em 7em 3em 20rem 1rem" : "auto 1em 6em";
+      let columns = this.adjustVisible ? "7.5em 1em 7em 20rem 1rem" : "auto 1em 6em";
       return {
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
@@ -147,7 +147,7 @@ Vue.component("glyph-levels-and-weights", {
       this.lastAdjusted = null;
     },
   },
-  template: `
+  template: /*html*/`
     <div ref="grid" :style="gridStyle" class="l-glyph-levels-and-weights c-glyph-levels-and-weights">
       <!-- Put down a placeholder div to keep the adjuster from getting cramped -->
       <div v-if="adjustVisible" :style="makeRowStyle(6)"></div>
@@ -180,8 +180,13 @@ Vue.component("glyph-levels-and-weights", {
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">{{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;</div>
       </template>
       <template v-if="adjustVisible">
-        <div class="l-glyph-levels-and-weights__adjust-label">Adjust weights</div>
         <div class="l-glyph-levels-and-weights__adjust-outline"></div>
+        <div class="l-glyph-levels-and-weights__adjust-label">
+          Adjust weights
+          <div class="l-glyph-levels-and-weights__reset-btn-outer">
+            <div class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn" @click="resetWeights">Reset</div>
+          </div>
+        </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEP">
           <ad-slider-component v-bind="sliderProps" :value="weights.ep" @input="adjustSlider('ep', $event)" ></ad-slider-component>
         </div>
@@ -193,9 +198,6 @@ Vue.component("glyph-levels-and-weights", {
         </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEternities">
           <ad-slider-component v-bind="sliderProps" :value="weights.eternities" @input="adjustSlider('eternities', $event)"></ad-slider-component>
-        </div>
-        <div class="l-glyph-levels-and-weights__reset-btn-outer">
-          <div class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn" @click="resetWeights">Reset</div>
         </div>
       </template>
     </div>

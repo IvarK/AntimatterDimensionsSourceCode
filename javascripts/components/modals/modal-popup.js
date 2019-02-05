@@ -5,7 +5,7 @@ Vue.component('modal-popup', {
     }
   },
   template:
-    `<div class="c-modal">
+    `<div class="c-modal l-modal">
       <component :is="$viewModel.modal.current" @close="hide" />
     </div>`
 });

@@ -20,7 +20,7 @@ function sacrificeReset(auto) {
 
   }
   if (totalBoost.gte(600)) giveAchievement("The Gods are pleased");
-  if (totalBoost.gte(Decimal.pow(10, 9000))) giveAchievement("IT'S OVER 9000");
+  if (totalBoost.gte("1e9000")) giveAchievement("IT'S OVER 9000");
 }
 
 function sacrificeBtnClick() {

@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  if (isAchEnabled("r11")) multiplier = multiplier.times(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")));
+  if (isAchEnabled("r11")) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
   let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");

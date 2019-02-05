@@ -752,9 +752,6 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   let factor = 1;
-  if (tempSpeedupToggle) {
-    factor *= 500;
-  }
   if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
@@ -785,6 +782,9 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     factor = Effarig.multiplier(factor).toNumber();
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))
+  if (tempSpeedupToggle) {
+    factor *= 500;
+  }
   return factor;
 }
 

@@ -252,7 +252,7 @@
   width: 274px;
   padding: 5px 0;
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   pointer-events: none;
   transform: translate(-50%, calc(-100% - 1rem));
 }

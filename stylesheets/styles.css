@@ -691,7 +691,7 @@ button {
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     left: 50%;
     transition: opacity 0.3s;
     font-size: 1.4rem;
@@ -4486,7 +4486,7 @@ screen and (max-width: 480px) {
   top: 0vw;
   width: 100vw;
   height: 100vh;
-  z-index: 3;
+  z-index: 4;
   animation-name: modal-overlay-fadein;
   animation-duration: 2s;
   animation-fill-mode: forwards;
@@ -4497,7 +4497,7 @@ screen and (max-width: 480px) {
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
-  z-index: 3;
+  z-index: 4;
   display: inline-block;
 }
 

@@ -106,7 +106,7 @@ function galaxyResetBtnClick() {
 function maxBuyGalaxies(manual) {
   if (EternityChallenge(6).isRunning || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
-    while (player.eightAmount.gt(Galaxy.requirement.amount) && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
+    while (player.eightAmount.gte(Galaxy.requirement.amount) && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
       if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
       player.galaxies++;
     }

@@ -5005,23 +5005,24 @@ screen and (max-width: 480px) {
 .l-glyph-levels-and-weights__adjust-label {
   grid-column: 4;
   -ms-grid-column: 4;
-  grid-row: 1 / 5;
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 4;
+  -ms-grid-column-span: 2;
+  grid-row: 5;
+  -ms-grid-row: 5;
   white-space: nowrap;
   /*outline: 2px solid purple !important;*/
-  writing-mode: vertical-lr;
-  -ms-writing-mode: tb-lr;
+/*  writing-mode: vertical-lr;
+  -ms-writing-mode: tb-lr;*/
   font-weight: bold;
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
+  /*-webkit-transform: rotate(180deg);
+  transform: rotate(180deg);*/
   padding: 0.25em 0 .25em 1em;
+  z-index: 2;
 }
 
 .l-glyph-levels-and-weights__adjust-outline {
-  grid-column: 4 / 6;
+  grid-column: 4 / 5;
   -ms-grid-column: 4;
-  -ms-grid-column-span: 2;
+  -ms-grid-column-span: 1;
   grid-row: 1 / 6;
   -ms-grid-row: 1;
   -ms-grid-row-span: 5;
@@ -5072,8 +5073,8 @@ screen and (max-width: 480px) {
 }
 
 .l-glyph-levels-and-weights__slider {
-  grid-column: 5;
-  -ms-grid-column: 5;
+  grid-column: 4;
+  -ms-grid-column: 4;
   display: flex;
   align-items: center;
   margin-top: 0.4rem;
@@ -5096,12 +5097,8 @@ screen and (max-width: 480px) {
 }
 
 .l-glyph-levels-and-weights__reset-btn-outer {
-  grid-column: 5;
-  -ms-grid-column: 5;
-  grid-row: 5;
-  -ms-grid-row: 5;
   z-index:2;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }

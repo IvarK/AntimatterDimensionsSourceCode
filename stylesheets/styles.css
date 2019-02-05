@@ -999,26 +999,29 @@ br {
     margin: 0;
     pointer-events:none;
 }
-  
-.realityUpgrade {
-    background-color: black;
-    border: 2px solid #0b600e;
-    border-radius: 5px;
-    padding: 12px;
-    margin-bottom: 12px;
-    color: #d5ffd7;
-    cursor: pointer;
-    transition-duration: 0.12s;
-    height: 100px;
-    padding: 0px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+
+.l-reality-upgrade {
+  padding: 12px;
+  margin-bottom: 12px;
+  height: 100px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.realityUpgrade:hover {
+.c-reality-upgrade {
+  background-color: black;
+  border: 2px solid #0b600e;
+  border-radius: 5px;
+  color: #d5ffd7;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  text-align: center;
+}
+
+.c-reality-upgrade:hover {
     color: black;
     background-color: #d5ffd7;
 }
@@ -1026,7 +1029,7 @@ br {
 /*
 reality upgrade unavailable
 */
-.rUpgUn { 
+.rUpgUn {
     background-color: #656565;
     cursor: default;
 }
@@ -4490,23 +4493,26 @@ screen and (max-width: 480px) {
 
 /*#region Modals*/
 
-/*#region c-modal*/
-
-.c-modal {
+.l-modal {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+  z-index: 3;
+  display: inline-block;
+}
+
+/*#region c-modal*/
+
+.c-modal {
   border: .3rem solid black;
   background-color: #e0e0e0;
   border-radius: .6rem;
   text-align: center;
-  z-index: 2;
   color: black;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  padding: 1rem 1rem 1.5rem;
-  display: inline-block;
+  padding: 1rem 1rem 1rem;
   transition-duration: 0.2s;
 }
 

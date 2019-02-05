@@ -23,7 +23,7 @@ function updateWormholeUpgrades() {
     if (player.reality.realityMachines < getWormholeIntervalCost(i)) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#wormholeinterval" + (i+1)).removeClass("rUpgUn")
 
-    $("#wormholepower" + (i+1)).html("Make the wormhole 35% more powerful<br>Current power: "+(player.wormhole[i].power).toFixed(1)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(i))+" RM")
+    $("#wormholepower" + (i+1)).html("Make the wormhole 35% more powerful<br>Current power: "+shorten(player.wormhole[i].power)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(i))+" RM")
     if (player.reality.realityMachines < getWormholePowerCost(i)) $("#wormholepower" + (i+1)).addClass("rUpgUn")
     else $("#wormholepower" + (i+1)).removeClass("rUpgUn")
 
@@ -120,14 +120,18 @@ function updateWormholePhases(wormholeDiff) {
       if (wormhole.phase >= wormhole.duration) {
         wormhole.phase -= wormhole.duration
         wormhole.active = false
-        ui.notify.success("Wormhole "+ (i + 1) +" duration ended.");
+        if (GameUI.notify.wormholes) {
+          GameUI.notify.success("Wormhole "+ (i + 1) +" duration ended.");
+        }
       }
     } else {
       if (wormhole.phase >= wormhole.speed) {
         wormhole.phase -= wormhole.speed
         wormhole.activations++;
         wormhole.active = true
-        ui.notify.success("Wormhole "+ (i + 1) +" is active!");
+        if (GameUI.notify.wormholes) {
+          GameUI.notify.success("Wormhole "+ (i + 1) +" is active!");
+        }
       }
     }
   }

@@ -48,6 +48,9 @@ const Enslaved = {
   get isRunning() {
     return player.celestials.enslaved.run;
   },
+  get adjustedDilationMultiplier() {
+    return this.totalInfinities / 1e100
+  },
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
     this.infinityTracking.push(Math.floor(infinities))

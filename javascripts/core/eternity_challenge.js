@@ -1,9 +1,4 @@
-function startEternityChallenge(name, startgoal, goalIncrease) {
-    if (player.eternityChallUnlocked === 0 || parseInt(name.split("c")[1]) !== player.eternityChallUnlocked) return false;
-    if (!((!player.options.confirmations.challenges) || name === "" ? true : (confirm("You will start over with just your time studies, eternity upgrades and achievements. You need to reach a set IP with special conditions.")))) {
-        return false
-    }
-
+function startEternityChallenge() {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
@@ -45,12 +40,10 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = 0;
+    player.challengeTarget = new Decimal(0);
     if (player.eternities < 7) {
       player.autoSacrifice = 1;
     }
-    player.eternityChallGoal = startgoal.times(goalIncrease.pow(ECTimesCompleted(name))).max(startgoal);
-    player.currentEternityChall = name;
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.eterc8ids = 50;
@@ -117,13 +110,17 @@ class EternityChallengeState extends GameMechanicState {
     return player.currentEternityChall === this.fullId;
   }
 
+  get canBeApplied() {
+    return this.isRunning;
+  }
+
   get completions() {
     const completions = player.eternityChalls[this.fullId];
     return completions === undefined ? 0 : completions;
   }
 
   set completions(value) {
-    player.eternityChalls[this.fullId] = value;
+    player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
   }
 
   get isFullyCompleted() {
@@ -140,6 +137,14 @@ class EternityChallengeState extends GameMechanicState {
 
   get currentGoal() {
     return this.goalAtCompletions(this.completions);
+  }
+
+  get isGoalReached() {
+    return player.infinityPoints.gte(this.currentGoal);
+  }
+
+  get canBeCompleted() {
+    return this.isGoalReached && this.isWithinRestriction;
   }
 
   goalAtCompletions(completions) {
@@ -159,7 +164,17 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   start() {
-    return startEternityChallenge(this.fullId, this.initialGoal, this.goalIncrease);
+    if (!this.isUnlocked) return false;
+    if (player.options.confirmations.challenges) {
+      const confirmation =
+        "You will start over with just your time studies, " +
+        "eternity upgrades and achievements. " +
+        "You need to reach a set IP with special conditions.";
+      if (!confirm(confirmation)) return false;
+    }
+    player.eternityChallGoal = this.currentGoal;
+    player.currentEternityChall = this.fullId;
+    return startEternityChallenge();
   }
 
   /**
@@ -167,6 +182,11 @@ class EternityChallengeState extends GameMechanicState {
    */
   get reward() {
     return this._reward;
+  }
+
+  get isWithinRestriction() {
+    return this.config.restriction === undefined ||
+      this.config.checkRestriction(this.config.restriction(this.completions));
   }
 }
 
@@ -210,12 +230,15 @@ EternityChallenge.completedTiers = () => {
 EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
-  if (player.reality.perks.includes(95)) return TimeSpan.fromHours(0.5).totalMilliseconds
-  if (player.reality.perks.includes(94)) return TimeSpan.fromHours(1).totalMilliseconds
-  if (player.reality.perks.includes(93)) return TimeSpan.fromHours(2).totalMilliseconds
-  if (player.reality.perks.includes(92)) return TimeSpan.fromHours(4).totalMilliseconds
-  if (player.reality.perks.includes(91)) return TimeSpan.fromHours(6).totalMilliseconds
-  else return Infinity
+  const hours = Effects.min(
+    Number.MAX_VALUE,
+    Perk.autocompleteEC1,
+    Perk.autocompleteEC2,
+    Perk.autocompleteEC3,
+    Perk.autocompleteEC4,
+    Perk.autocompleteEC5
+  );
+  return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
 }
 
 EternityChallenge.autoCompleteNext = function() {

@@ -194,7 +194,7 @@ Vue.component("ad-slider-component", {
     disabledDotStyle: [Array, Object, Function],
     labelStyle: Object,
     labelActiveStyle: Object,
-    dotClass: String,
+    dotClass: [String, Array]
   },
   data() {
     return {
@@ -1098,13 +1098,11 @@ Vue.component("ad-slider-component", {
           @touchstart="moveStart"
         >
           <slot name="dot" :value="val" :disabled="boolDisabled">
-            <div
-              :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
-              :style="[
-                sliderStyles,
-                focusFlag && focusSlider === 0 ? focusStyles : null
-              ]"
-            >{{dotContents(0)}}</div>
+            <div :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
+                 :style="[sliderStyles, focusFlag && focusSlider === 0 ? focusStyles : null]">
+              {{dotContents(0)}}
+              <slot name="in-dot"/>
+            </div>
           </slot>
           <div :class="['ad-slider-tooltip-' + tooltipDirection, 'ad-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">

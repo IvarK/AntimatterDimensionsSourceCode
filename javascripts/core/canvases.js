@@ -76,22 +76,41 @@ var nodeOptions = {}
 var network = null;
 
 
-function getNodeColor(id, cost) {
-  if (canBuyPerk(id, cost)) var tempColor = "#000000"
-  else if (player.reality.perks.includes(id)) var tempColor = "#0b600e"
-  else var tempColor = "#656565"
-  if (canBuyPerk(id, cost) || player.reality.perks.includes(id)) var tempHoverColor = "#0b600e"
-  else var tempHoverColor = "#656565"
-  if (player.reality.perks.includes(id)) var tempBorderColor = "#094E0B"
-  else var tempBorderColor = "#0b600e"
-  return {background: tempColor, border: tempBorderColor, hover: {background: tempHoverColor, border: tempBorderColor}, highlight: {background: tempColor, border: tempBorderColor}}
+function getNodeColor(perk) {
+  const canBeBought = perk.canBeBought;
+  const isBought = perk.isBought;
+
+  let background;
+  if (canBeBought) background = "#000000";
+  else if (isBought) background = "#0b600e";
+  else background = "#656565";
+
+  let hoverColor = canBeBought || isBought ? "#0b600e" : "#656565";
+  let borderColor = isBought ? "#094E0B" : "#0b600e";
+
+  return {
+    background: background,
+    border: borderColor,
+    hover: {
+      background: hoverColor,
+      border: borderColor
+    },
+    highlight: {
+      background: background,
+      border: borderColor
+    }
+  };
 }
 
 function updatePerkColors() {
-  for (let id of Object.keys(CONNECTED_PERKS)) {
-    id = parseInt(id);
-    nodes.update([{id:id, color: getNodeColor(id, 1) }]);
-  }
+  const data = Perk.all
+    .map(perk => {
+      return {
+        id: perk.id,
+        color: getNodeColor(perk)
+      };
+    });
+  nodes.update(data);
 }
 
 function hidePerkLabels() {
@@ -102,90 +121,28 @@ function showPerkLabels() {
     network.setOptions({nodes: {font: {size: 20}}});
 }
 
-//0: automator
-//10: dilation
-//20: glyphs
-//30: ecs
 function drawPerkNetwork() {
     if (network) {
       updatePerkColors();
       return;
     }
-    nodesArray = [{id: 0, label: "0", color: getNodeColor(0, 1), title: "You can now choose from 3 different glyphs on Reality."}, //DONE
-    {id: 1, label: "1", color: getNodeColor(1, 1), title: "+5 base Automator rows."}, //DONE
-    {id: 2, label: "2", color: getNodeColor(2, 1), title: "+10 base Automator rows."}, //DONE
-    {id: 3, label: "3", color: getNodeColor(3, 1), title: "Improve the Automator row per Reality scaling."}, //DONE
-    {id: 4, label: "4", color: getNodeColor(4, 1), title: "Remove the EC1 requirement from study 181."}, //DONE
-    {id: 5, label: "5", color: getNodeColor(5, 1), title: "Every 10 seconds automatically buy max TT."}, //DONE
-    {id: 6, label: "6", color: getNodeColor(6, 1), title: "Every 5 seconds automatically buy max TT."}, //DONE
-    {id: 7, label: "7", color: getNodeColor(7, 1), title: "Every 3 seconds automatically buy max TT."}, //DONE
-    {id: 8, label: "8", color: getNodeColor(8, 1), title: "Every second automatically buy max TT."}, //DONE
-    {id: 11, label: "11", color: getNodeColor(11, 1), title: "The 2nd rebuyable Dilation upgrade no longer resets your Dilated Time."}, //DONE
-    {id: 12, label: "12", color: getNodeColor(12, 1), title: "Rebuyable Dilation upgrade autobuyers."}, //DONE
-    {id: 13, label: "13", color: getNodeColor(13, 1), title: "Remove the unlock requirement for Time Dilation."}, //DONE
-    {id: 14, label: "14", color: getNodeColor(14, 1), title: "Gain the second row of Dilation upgrades on Dilation unlock."}, //DONE
-    {id: 15, label: "15", color: getNodeColor(15, 1), title: "Gain the third row of Dilation upgrades on Dilation unlock."}, //DONE
-    {id: 21, label: "21", color: getNodeColor(21, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 22, label: "22", color: getNodeColor(22, 1), title: "+1 glyph choice on Reality."}, //DONE
-    {id: 23, label: "23", color: getNodeColor(23, 1), title: "+5% minimum glyph rarity."}, //DONE
-    {id: 24, label: "24", color: getNodeColor(24, 1), title: "+1 to base glyph level."}, //DONE
-    {id: 31, label: "31", color: getNodeColor(31, 1), title: "Remove the secondary requirements for unlocking Eternity Challenges."}, //DONE
-    {id: 32, label: "32", color: getNodeColor(32, 1), title: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge."}, //DONE
-    {id: 33, label: "33", color: getNodeColor(33, 1), title: "You start with 10 Tachyon Particles after unlocking Dilation."}, //DONE
-    {id: 34, label: "34", color: getNodeColor(34, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 1.5."}, //DONE
-    {id: 35, label: "35", color: getNodeColor(35, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2."}, //DONE
-    {id: 36, label: "36", color: getNodeColor(36, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 2.5."}, //DONE
-    {id: 37, label: "37", color: getNodeColor(37, 1), title: "When buying the 3 times more TP gain upgrade, multiply your TP by 3."}, //DONE
-    {id: 41, label: "41", color: getNodeColor(41, 1), title: "Start with the 1st achievement row after Reality."}, //DONE
-    {id: 42, label: "42", color: getNodeColor(42, 1), title: "Start with the 2nd achievement row after Reality."}, //DONE
-    {id: 43, label: "43", color: getNodeColor(43, 1), title: "Start with the 3rd achievement row after Reality."}, //DONE
-    {id: 44, label: "44", color: getNodeColor(44, 1), title: "Start with the 4th achievement row after Reality."}, //DONE
-    {id: 45, label: "45", color: getNodeColor(45, 1), title: "Start with the 5th achievement row after Reality."}, //DONE
-    {id: 46, label: "46", color: getNodeColor(46, 1), title: "Start with the 6th achievement row after Reality."}, //DONE
-    {id: 47, label: "47", color: getNodeColor(47, 1), title: "Start with the 7th achievement row after Reality."}, //DONE
-    {id: 48, label: "48", color: getNodeColor(48, 1), title: "Start with the 8th achievement row after Reality."}, //DONE
-    {id: 49, label: "49", color: getNodeColor(49, 1), title: "Start with the 9th achievement row after Reality."}, //DONE
-    {id: 410, label: "410", color: getNodeColor(410, 1), title: "Start with the 10th achievement row after Reality."}, //DONE
-    {id: 411, label: "411", color: getNodeColor(411, 1), title: "Start with the 11th achievement row after Reality."}, //DONE
-    {id: 412, label: "412", color: getNodeColor(412, 1), title: "Start with the 12th achievement row after Reality."},//DONE
-    {id: 413, label: "413", color: getNodeColor(413, 1), title: "Start with the 13th achievement row after Reality."},//DONE
-    {id: 51, label: "51", color: getNodeColor(51, 1), title: "Start with 100 antimatter after every reset"}, //DONE
-    {id: 52, label: "52", color: getNodeColor(52, 1), title: "Start with 1e130 antimatter after every reset"}, //DONE
-    {id: 53, label: "53", color: getNodeColor(53, 1), title: "Start with 2e15 IP after every Eternity and Reality"}, //DONE
-    {id: 54, label: "54", color: getNodeColor(54, 1), title: "Start with 2e130 IP after every Eternity and Reality"}, //DONE
-    {id: 55, label: "55", color: getNodeColor(55, 1), title: "Start with 10 EP after every Reality"}, //DONE
-    {id: 56, label: "56", color: getNodeColor(56, 1), title: "Start with 2,000 EP after every Reality"}, //DONE
-    {id: 57, label: "57", color: getNodeColor(57, 1), title: "Start with 1e9 EP after every Reality"}, //DONE
-    {id: 61, label: "61", color: getNodeColor(61, 1), title: "Infinity dimension autobuyers work 3 times faster."}, //DONE
-    {id: 62, label: "62", color: getNodeColor(62, 1), title: "Replicanti autobuyers work 3 times faster."}, //DONE
-    {id: 63, label: "63", color: getNodeColor(63, 1), title: "Dilation autobuyers work 3 times faster."}, //DONE
-    {id: 64, label: "64", color: getNodeColor(64, 1), title: "Autobuyer for Time Dimension 5-8 unlocks."}, //DONE
-    {id: 65, label: "65", color: getNodeColor(65, 1), title: "Automatically unlock TT generation when you have 1e15 DT."}, //DONE
-    {id: 66, label: "66", color: getNodeColor(66, 1), title: "Automatically unlock Reality at e4000 EP."}, //DONE
-    {id: 67, label: "67", color: getNodeColor(67, 1), title: "Infinity Dimensions no longer have antimatter requirements."}, //DONE
-    {id: 71, label: "71", color: getNodeColor(71, 1), title: "Remove the EC5 requirement from study 62."}, //DONE
-    {id: 72, label: "72", color: getNodeColor(72, 1), title: "Active path EP mult is always at 50x."}, //DONE
-    {id: 73, label: "73", color: getNodeColor(73, 1), title: "Idle path EP mult starts as if you have spent 15 minutes in this Eternity." }, //DONE
-    {id: 74, label: "74", color: getNodeColor(74, 1), title: "Remove the EC2 requirement from study 181." }, //DONE
-    {id: 75, label: "75", color: getNodeColor(75, 1), title: "Remove the EC3 requirement from study 181." }, //DONE
-    {id: 81, label: "81", color: getNodeColor(81, 1), title: "Get the first row of Eternity upgrades after first Eternity of a Reality."}, //DONE
-    {id: 82, label: "82", color: getNodeColor(82, 1), title: "Get the second row of Eternity upgrades after first Eternity of a Reality."}, //DONE
-    {id: 91, label: "91", color: getNodeColor(91, 1), title: "Automatically complete one EC every 6 hours."}, //DONE
-    {id: 92, label: "92", color: getNodeColor(92, 1), title: "Automatically complete one EC every 4 hours."}, //DONE
-    {id: 93, label: "93", color: getNodeColor(93, 1), title: "Automatically complete one EC every 2 hours."}, //DONE
-    {id: 94, label: "94", color: getNodeColor(94, 1), title: "Automatically complete one EC every 1 hour."}, //DONE
-    {id: 95, label: "95", color: getNodeColor(95, 1), title: "Automatically complete one EC every 30 minutes."}, //DONE
-    ]; 
-    nodes = new vis.DataSet(nodesArray);
+    nodes = Perk.all.map(perk => {
+      return {
+        id: perk.id,
+        label: perk.config.label,
+        title: perk.config.description
+      };
+    });
+    nodes = new vis.DataSet(nodes);
 
-    // This creates the edges based on CONNECTED_PERKS in perks.js
-    edges = []
-    for (key in CONNECTED_PERKS) {
-      CONNECTED_PERKS[key].map(function(id) {
-        if (!edges.some(function(edge) {
-          return edge.from == id && edge.to == parseInt(key) // Check if edges has the edge other way around
-        })) edges.push({from: parseInt(key), to: id})
-      })
+    edges = [];
+    for (let perk of Perk.all) {
+      for (let connectedPerk of perk.connectedPerks) {
+        const from = Math.min(perk.id, connectedPerk.id);
+        const to = Math.max(perk.id, connectedPerk.id);
+        if (edges.find(edge => edge.from === from && edge.to === to)) continue;
+        edges.push({ from: from, to: to });
+      }
     }
 
     nodeData = {
@@ -217,11 +174,10 @@ function drawPerkNetwork() {
 
     //buying perks TODO: lower the cost.
     network.on("click", function(params) {
-        var id = params.nodes[0]
-        if (isFinite(id)) {
-            buyPerk(id, 1);
-            updatePerkColors()
-        }
+      const id = params.nodes[0];
+      if (!isFinite(id)) return;
+      Perk.find(id).purchase();
+      updatePerkColors()
     });
     //hide tooltips on drag
     network.on("dragStart", function(params) {

@@ -47,9 +47,9 @@ Vue.component('challenges-tab', {
       this.isECTabUnlocked = isECTabUnlocked;
       const isICTabUnlocked = isECTabUnlocked || player.money.gte(new Decimal("1e2000")) || player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
-      this.isInChallenge = player.currentChallenge !== "" || player.currentEternityChall !== "";
+      this.isInChallenge = Challenge.isRunning() || InfinityChallenge.isRunning() || EternityChallenge.isRunning();
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
-      this.isAutoECVisible = player.reality.perks.includes(91);
+      this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
       const remainingTiers = EternityChallenge.remainingTiers();
       this.remainingECTiers = remainingTiers;
@@ -90,13 +90,13 @@ Vue.component('challenges-tab', {
           >
         </template>
         <div
-          v-if="autoEC && remainingECTiers > 0"
+          v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
           class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
         >
           <span>Until</span>
           <div class="l-challenges-tab__auto-ec-timers">
-            <span v-if="remainingECTiers > 1">next: {{untilNextEC.toString()}}</span>
-            <span>all: {{untilAllEC.toString()}}</span>
+            <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC.toString()}}</span>
+            <span>all auto EC completions: {{untilAllEC.toString()}}</span>
           </div>
         </div>
       </div>

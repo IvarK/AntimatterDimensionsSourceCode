@@ -436,24 +436,82 @@ button {
     margin-left: -525px;
 }
 
-#realitymachine {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    color: #0b600e;
-    background: white;
-    border: 2px solid #0b600e;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
+.l-reality-button {
+  display: block;
+  margin-bottom: 2rem;
 }
 
-#realitymachine:hover {
-    color: white;
-    background: #0b600e;
+.l-reality-button__contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-reality-button__header {
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.c-reality-button {
+  font-family: Typewriter;
+  border-radius: 0.4rem !important;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  width: 21rem;
+  height: 8rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: white;
+  border-width: 0.2rem;
+  border-style: solid;
+}
+
+.t-inverted-metro .c-reality-button, .t-metro .c-reality-button, .t-s8 .c-reality-button {
+  border-width: 0.1rem;
+}
+
+.c-reality-button--good {
+  color: #0b600e;
+  border-color: #0b600e;
+}
+
+.c-reality-button--bad {
+  color: #B84B5F;
+  border-color: #B84B5F;
+}
+
+.t-dark .c-reality-button--good {
+  color: white;
+}
+
+.t-dark .c-reality-button--bad {
+  color: white;
+}
+
+.c-reality-button--good:hover, .c-reality-button--good.force-hover {
+  color: white;
+  background: #0b600e;
+}
+
+.t-dark .c-reality-button--good:hover, .t-dark .c-reality-button--good.force-hover {
+  background: #0b600e !important;
+}
+
+.t-s6 .c-reality-button--good:hover, .t-s6 .c-reality-button--good.force-hover {
+  background: #0b600e !important;
+}
+
+.c-reality-button--bad:hover, .c-reality-button--bad.force-hover {
+  color: white;
+  background: #642a2c;
+}
+
+.t-dark .c-reality-button--bad:hover, .t-dark .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
+}
+
+.t-s6 .c-reality-button--bad:hover, .t-s6 .c-reality-button--bad.force-hover {
+  background: #642a2c !important;
 }
 
 [draggable] {
@@ -535,33 +593,39 @@ button {
 }
 
 .glyph.powerglyph {
-    border: 1px solid #22aa48;
-    box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #22aa48;
+  box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .infinityglyph {
-    border: 1px solid #B67F33;
-    box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #B67F33;
+  box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .timeglyph {
-    border: 1px solid #B241E3;
-    box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #B241E3;
+  box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .replicationglyph {
-    border: 1px solid #03A9F4;
-    box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #03A9F4;
+  box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .dilationglyph {
-    border: 1px solid #64DD17;
-    box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
-    background: black !important;
+  border: 1px solid #64DD17;
+  box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
+  background: black !important;
+}
+
+.effarigglyph {
+  border: 1px solid #e21717;
+  box-shadow: inset #e21717 0px 0px 10px 2px, #e21717 0px 0px 10px 2px;
+  background: black !important;
 }
 
 .glyphactive .glyph {
@@ -1281,6 +1345,7 @@ screen and (max-width: 480px) {
     border-radius: 5px;
     position: absolute;
     z-index: 1;
+    white-space: nowrap;
     left: 105%
 }
 
@@ -2927,10 +2992,6 @@ screen and (max-width: 480px) {
   background-color: black;
   border: .3rem solid #b341e0;
   border-radius: 1rem;
-}
-
-.c-challenge-box__spacer {
-  height: 2.6rem;
 }
 
 .c-challenge-box__reward-description--small-text {
@@ -4686,13 +4747,13 @@ screen and (max-width: 480px) {
 /*#region component*/
 /*#endregion component*/
 
-/*#region Effarig tab*/
+/*#region Teresa tab*/
 .l-mechanics-container {
   display: flex;
   justify-content: center;
 }
 
-.l-effarig-mechanic-container {
+.l-teresa-mechanic-container {
   min-width: 40rem;
 }
 
@@ -4725,7 +4786,7 @@ screen and (max-width: 480px) {
   font-weight: bold;
 }
 
-.c-effarig-pour {
+.c-teresa-pour {
   width: 13rem;
   height: 4rem;
   border: .2rem solid #8c1f1f;
@@ -4734,7 +4795,7 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem
 }
 
-.c-effarig-unlock-description {
+.c-teresa-unlock-description {
   position: absolute;
   left: 13.1rem;
   width: 20rem;
@@ -4742,7 +4803,7 @@ screen and (max-width: 480px) {
   margin-bottom: -0.1rem
 }
 
-.o-effarig-quotes {
+.o-teresa-quotes {
   display: inline-block;
   margin: 1.5rem 1.5rem;
   font-size: 1.9rem;
@@ -4758,7 +4819,7 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
-.c-effarig-unlock {
+.c-teresa-unlock {
   width: 20rem;
   border-radius: .5rem;
   padding: 1rem;
@@ -4771,27 +4832,27 @@ screen and (max-width: 480px) {
   margin-bottom: 1rem;
 }
 
-.c-effarig-run-button {
+.c-teresa-run-button {
   cursor: pointer;
   background-color: #5151ec;
   border: 1px solid white;
   color: white;
 }
 
-.c-effarig-run-button:hover {
+.c-teresa-run-button:hover {
   background-color: #d0d0d0;
   border: 1px solid #d0d0d0;
   color: #5151ec;
 }
 
-.c-effarig-shop {
+.c-teresa-shop {
   display: flex;
   flex-direction: column;
   width: 20rem;
   margin: 4rem auto;
 }
 
-.o-effarig-shop-button {
+.o-teresa-shop-button {
   background-color: #5151ec;
   color: white;
   padding: 1rem;
@@ -4804,21 +4865,21 @@ screen and (max-width: 480px) {
   transition-duration: 0.12s;
 }
 
-.o-effarig-shop-button:hover {
+.o-teresa-shop-button:hover {
   background-color: #d0d0d0;
   color: #5151ec;
 }
 
-.c-teresa-relics {
+.c-effarig-relics {
   padding: 20px;
   font-size: 1.5em;
 }
 
-/*#endregion Effarig tab*/
+/*#endregion Teresa tab*/
 
-/* #region teresa tab */
+/* #region effarig tab */
 
-.o-teresa-shop-button {
+.o-effarig-shop-button {
   padding: 17px;
   font-size: 2rem;
   background-color: #5151ec;
@@ -4830,22 +4891,22 @@ screen and (max-width: 480px) {
   transition-duration: 0.12s;
 }
 
-.o-teresa-shop-button:hover {
+.o-effarig-shop-button:hover {
   background-color: #d0d0d0;
   color: #5151ec;
 }
 
-.teresa-unlock-bought {
+.effarig-unlock-bought {
   background-color: #d0d0d0;
   color: #5151ec;
   cursor: default;
 }
 
-.teresa-run-button {
+.effarig-run-button {
   width: 300px;
 }
 
-.o-teresa-slider {
+.o-effarig-slider {
   font-size: 1.2rem;
   background-color: #5151ec;
   color: white;
@@ -4857,12 +4918,12 @@ screen and (max-width: 480px) {
   padding: 0.5rem;
 }
 
-.l-teresa-glyph-settings {
+.l-effarig-glyph-settings {
   display: flex;
   justify-content: space-around;
 }
 
-.o-teresa-glyph-type {
+.o-effarig-glyph-type {
   padding: 12px;
   background-color: #5151ec;
   color: white;
@@ -4875,7 +4936,7 @@ screen and (max-width: 480px) {
   cursor: grabbing;
 }
 
-/* #endregion teresa tab*/
+/* #endregion effarig tab*/
 
 /* #startregion enslaved tab */
 

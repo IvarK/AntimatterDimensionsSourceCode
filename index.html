@@ -105,11 +105,9 @@
                   here will be a description of current glyph effects or smthing
                 </div>
                 <div> <!-- middle -->
-                  <button id="realitymachine" onclick="reality()">Make a new reality
-                    <br>Machines gained: 1
-                    <br>Glyph level: 1</button>
                   <br>
-                  <button class="realityUpgrade" style="height: 40px; width: 210px; margin-left: -7px;" onclick="startRealityOver()">Start Reality over (without gaining anything)</button>
+                  <reality-button></reality-button>
+                  <br>
                   <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'"
                                          label="Glyph level factors"
                                          container-class="c-glyph-level-factors-dropdown-header">
@@ -451,12 +449,12 @@
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/breakinfinity.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/chart.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/lz-string.js"></script>
+<script type="text/javascript" src="javascripts/lib/lz-string.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/vis.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/sha512.js"></script>
+<script type="text/javascript" src="javascripts/lib/sha512.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/deepmerge.js"></script>
-<script type="text/javascript" src="javascripts/lib/Sortable.js"></script>
-<script type="text/javascript" src="javascripts/lib/vuedraggable.js"></script>
+<script type="text/javascript" src="javascripts/lib/Sortable.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/vuedraggable.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/Tween.min.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
@@ -477,6 +475,7 @@
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 <script type="text/javascript" src="javascripts/core/crash.js"></script>
+<script type="text/javascript" src="javascripts/core/notations.js"></script>
 
 
 <script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
@@ -554,8 +553,8 @@
 <script type="text/javascript" src="javascripts/components/achievements/secret/secret-achievement-row.js"></script>
 
 <script type="text/javascript" src="javascripts/components/celestials/celestials-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/celestials/subtabs/effarig-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/teresa-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/effarig-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/v-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/enslaved-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/ra-tab.js"></script>
@@ -563,9 +562,10 @@
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/pelle-tab.js"></script>
 
 
-<script type="text/javascript" src="javascripts/core/celestials/effarig.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/teresa.js"></script>
+<script type="text/javascript" src="javascripts/core/celestials/effarig.js"></script>
 <script type="text/javascript" src="javascripts/core/celestials/enslaved.js"></script>
+<script type="text/javascript" src="javascripts/core/celestials/V.js"></script>
 
 <script type="text/javascript" src="javascripts/components/challenges/challenges-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/challenges/challenge-box.js"></script>
@@ -619,6 +619,7 @@
 <script type="text/javascript" src="javascripts/components/eternity/dilation/tachyon-particles.js"></script>
 
 <script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
@@ -637,7 +638,6 @@
 <script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
 <script type="text/javascript" src="javascripts/core/app/modal.js"></script>
 <script type="text/javascript" src="javascripts/core/app/themes.js"></script>
-<script type="text/javascript" src="javascripts/core/app/notations.js"></script>
 <script type="text/javascript" src="javascripts/core/app/options.js"></script>
 <script type="text/javascript" src="javascripts/core/app/event-hub.js"></script>
 <script type="text/javascript" src="javascripts/core/app/ui.js"></script>

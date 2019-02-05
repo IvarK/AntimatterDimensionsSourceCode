@@ -48,7 +48,7 @@ Vue.component('normal-dim-galaxy-row', {
       galaxyResetBtnClick();
     },
     updateCostScaling: function() {
-      let distantStart = player.currentEternityChall === "eterc5" ? 0 : Galaxy.costScalingStart;
+      let distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.hasIncreasedScaling = player.galaxies > distantStart;
       if (Galaxy.type.startsWith("Distant")) this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
       else if (Galaxy.type.startsWith("Remote")) this.costScalingText = "Increased galaxy cost scaling: Quadratic past " + distantStart + " (distant), exponential past " + (799 + getGlyphSacEffect("power")) + " (remote)";

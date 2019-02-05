@@ -23,6 +23,7 @@ Vue.component("game-header-tickspeed-row", {
       }
       else {
         let places = tickmult >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / tickmult)));
+        if (player.galaxies == 1) places = 1
         return `Reduce the tick interval by ${((1 - tickmult) * 100).toFixed(places)}%.`;
       }
     },
@@ -56,6 +57,9 @@ Vue.component("game-header-tickspeed-row", {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
       return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
+    },
+    showCostTitle: function() {
+      return this.cost.exponent < 1000000;
     }
   },
   methods: {
@@ -78,7 +82,7 @@ Vue.component("game-header-tickspeed-row", {
           :enabled="isAffordable"
           class="o-primary-btn--tickspeed"
           onclick="buyTickSpeed()"
-        >Cost: {{shortenCosts(cost)}}</primary-button>
+        ><span v-if="showCostTitle">Cost: </span>{{shortenCosts(cost)}}</primary-button>
         <primary-button
           :enabled="isAffordable"
           class="o-primary-btn--buy-max"

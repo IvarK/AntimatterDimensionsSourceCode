@@ -71,6 +71,7 @@ function buyTimeStudy(name, cost, check) {
   if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
       player.timestudy.theorem -= cost
+      GameCache.timeStudies.invalidate();
       return true
   } else return false
 }
@@ -81,11 +82,11 @@ function buyDilationStudy(name, cost, quiet) {
             if (!quiet) {
               Tab.eternity.dilation.show();
             }
-            if (player.reality.perks.includes(14)) player.dilation.upgrades.push(4, 5, 6);
-            if (player.reality.perks.includes(15)) player.dilation.upgrades.push(7, 8, 9);
-            if (player.reality.perks.includes(33)) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
+            if (Perk.autounlockDilation1.isBought) player.dilation.upgrades.push(4, 5, 6);
+            if (Perk.autounlockDilation2.isBought) player.dilation.upgrades.push(7, 8, 9);
+            if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
         }
-        if (name === 6 && !player.reality.perks.includes(66)) {
+        if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");
         }
         player.dilation.studies.push(name)
@@ -108,19 +109,27 @@ function canBuyStudy(name) {
       if (player.timestudy.studies.includes(21)) return true; else return false
   }
   if (name == 62) {
-    return (player.reality.perks.includes(71) || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
+    return (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
   }
 
-    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !player.reality.perks.includes(31)) {
+    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
-  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !player.reality.perks.includes(31)) {
+  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
   if (name == 181) {
-      if ((player.reality.perks.includes(4) || player.eternityChalls.eterc1 !== undefined) && (player.eternityChalls.eterc2 !== undefined || player.reality.perks.includes(74)) && (player.eternityChalls.eterc3 !== undefined || player.reality.perks.includes(75)) && player.timestudy.studies.includes(171)) return true; else return false;
+      if ((player.eternityChalls.eterc1 !== undefined || Perk.bypassEC1Lock.isBought)
+          && (player.eternityChalls.eterc2 !== undefined || Perk.bypassEC2Lock.isBought)
+          && (player.eternityChalls.eterc3 !== undefined || Perk.bypassEC3Lock.isBought)
+          && player.timestudy.studies.includes(171)) {
+        return true
+      }
+      else {
+        return false;
+      }
   }
   if (name == 201) if(player.timestudy.studies.includes(192) && !DilationUpgrade.timeStudySplit.isBought) return true; else return false
   if (name == 211) if(player.timestudy.studies.includes(191)) return true; else return false
@@ -181,15 +190,22 @@ function canBuyStudy(name) {
 }
 
 function canBuyDilationStudy(name) {
-    if ((name == 1 && ((ECTimesCompleted("eterc11") >= 5 && ECTimesCompleted("eterc12") >= 5 && player.timestudy.theorem + calculateTimeStudiesCost() >= 13000) || player.reality.perks.includes(13)) && player.timestudy.theorem >= 5000) && (player.timestudy.studies.includes(231) || player.timestudy.studies.includes(232) || player.timestudy.studies.includes(233) || player.timestudy.studies.includes(234))) return true
-    if (name == 6) {
-        if (player.eternityPoints.gte("1e4000") && player.dilation.studies.includes(5) && (player.timestudy.theorem >= 5000000000 || player.realities > 0)) return true;
-        else return false
-    }
-    // TODO
-    const config = Object.values(GameDatabase.eternity.timeStudies.dilation).find(config => config.id === name);
-    if (player.dilation.studies.includes(name-1) && player.timestudy.theorem >= config.cost) return true
-    else return false
+  if (name === 1) {
+    const requirementSatisfied = Perk.bypassECDilation.isBought ||
+      EternityChallenge(11).isFullyCompleted &&
+      EternityChallenge(12).isFullyCompleted &&
+      player.timestudy.theorem + calculateTimeStudiesCost() >= 13000;
+    const isAffordable = player.timestudy.theorem >= 5000;
+    const studiesAreBought = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
+    return requirementSatisfied && isAffordable && studiesAreBought;
+  }
+  if (name === 6) {
+    const isAffordable = player.timestudy.theorem >= 5000000000 || player.realities > 0;
+    return player.eternityPoints.gte("1e4000") && TimeStudy.timeDimension(8).isBought && isAffordable;
+  }
+  // TODO
+  const config = Object.values(GameDatabase.eternity.timeStudies.dilation).find(config => config.id === name);
+  return player.dilation.studies.includes(name - 1) && player.timestudy.theorem >= config.cost;
 }
 
 var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
@@ -336,6 +352,7 @@ function respecTimeStudies() {
     giveAchievement("You do know how these work, right?")
   }
   player.timestudy.studies = [];
+  GameCache.timeStudies.invalidate();
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -365,10 +382,10 @@ function importStudyTree(input) {
 function studyTreeSaveButton(num, forceSave) {
     if (shiftDown || forceSave) {
         localStorage.setItem("studyTree"+num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
-        ui.notify.info("Study tree "+num+" saved")
+        GameUI.notify.info("Study tree "+num+" saved")
     } else if (localStorage.getItem("studyTree"+num) !== null && localStorage.getItem("studyTree"+num) !== "|0") {
         importStudyTree(localStorage.getItem("studyTree"+num));
-        ui.notify.info("Study tree "+num+" loaded")
+        GameUI.notify.info("Study tree "+num+" loaded")
     }
 }
 
@@ -424,7 +441,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get isBought() {
-    return player.timestudy.studies.includes(this.id);
+    return GameCache.timeStudies.value[this.id];
   }
 
   get canBeBought() {
@@ -493,12 +510,24 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    function studyOf(connection) {
-      return connection === undefined ? undefined : connection.from.id;
+    if (!this.isAffordable) {
+      return false;
     }
-    const study1 = studyOf(this.incomingConnections[0]);
-    const study2 = studyOf(this.incomingConnections[1]);
-    return canUnlockEC(this.id, this.cost, study1, study2);
+    if (player.eternityChallUnlocked !== 0) {
+      return false;
+    }
+    const isConnectionSatisfied = this.incomingConnections
+      .some(connection => connection.isSatisfied);
+    if (!isConnectionSatisfied) {
+      return false;
+    }
+    if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
+      return true;
+    }
+    if (!Perk.studyECRequirement.isBought) {
+      return this.isSecondaryRequirementMet;
+    }
+    return true;
   }
 
   /**
@@ -506,16 +535,6 @@ class ECTimeStudyState extends TimeStudyState {
    */
   get challenge() {
     return EternityChallenge(this.id);
-  }
-
-  get isAvailable() {
-    const tsRequirement = this.areRequiredTSBought;
-    const secondaryRequirement = Perk(31).isBought || this.isSecondaryRequirementMet;
-    return tsRequirement && secondaryRequirement;
-  }
-
-  get areRequiredTSBought() {
-    return this.incomingConnections.every(c => c.from.isBought);
   }
 
   get requirementTotal() {
@@ -527,10 +546,10 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get isSecondaryRequirementMet() {
-    if (this._id === 11) {
+    if (this.id === 11) {
       return !TimeStudy(72).isBought && !TimeStudy(73).isBought;
     }
-    if (this._id === 12) {
+    if (this.id === 12) {
       return !TimeStudy(71).isBought && !TimeStudy(72).isBought;
     }
     const current = this.requirementCurrent;
@@ -653,10 +672,10 @@ TimeStudy.allConnections = function() {
     [TS(42), TS(51)],
     [TS(42), EC(5)],
 
-    [TS(42), TS(62), () => !Perk(71).isBought],
+    [TS(42), TS(62), () => !Perk.bypassEC5Lock.isBought],
 
     [TS(51), TS(61)],
-    [EC(5), TS(62), () => Perk(71).isBought],
+    [EC(5), TS(62), () => Perk.bypassEC5Lock.isBought],
 
     [TS(61), TS(71)],
     [TS(61), TS(72)],
@@ -711,11 +730,11 @@ TimeStudy.allConnections = function() {
     [TS(171), EC(2)],
     [TS(171), EC(3)],
 
-    [TS(171), TS(181), () => !Perk(4).isBought || !Perk(74).isBought || !Perk(75).isBought],
+    [TS(171), TS(181), () => !Perk.bypassEC1Lock.isBought || !Perk.bypassEC2Lock.isBought || !Perk.bypassEC3Lock.isBought],
 
-    [EC(1), TS(181), () => Perk(4).isBought],
-    [EC(2), TS(181), () => Perk(74).isBought],
-    [EC(3), TS(181), () => Perk(75).isBought],
+    [EC(1), TS(181), () => Perk.bypassEC1Lock.isBought],
+    [EC(2), TS(181), () => Perk.bypassEC2Lock.isBought],
+    [EC(3), TS(181), () => Perk.bypassEC3Lock.isBought],
 
     [TS(181), EC(10)],
 

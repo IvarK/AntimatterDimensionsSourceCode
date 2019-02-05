@@ -49,6 +49,21 @@ const GameCache = {
     );
   }),
 
+  timeStudies: new Lazy(() => {
+    return NormalTimeStudyState.studies
+      .map(s => player.timestudy.studies.includes(s.id));
+  }),
+
+  achievementCount: new Lazy(() => {
+    return player.achievements.filter(a => !a.startsWith("s")).length;
+  }),
+
+  achSkipPerkCount: new Lazy(() => {
+    return player.reality.perks.filter(id => id >= 201 && id <= 213).length;
+  }),
+
+  buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

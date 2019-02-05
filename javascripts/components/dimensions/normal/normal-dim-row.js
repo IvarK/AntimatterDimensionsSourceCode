@@ -53,6 +53,9 @@ Vue.component('normal-dim-row', {
     buyUntil10: function() {
       buyManyDimensionsBtnClick(this.tier);
     },
+    showCostTitle: function(value) {
+      return value.exponent < 1000000;
+    }
   },
   template:
     `<div v-show="isUnlocked" class="c-normal-dim-row">
@@ -66,12 +69,12 @@ Vue.component('normal-dim-row', {
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
         @click="buySingle"
-      >Cost: {{shortenCosts(singleCost)}}</primary-button>
+      ><span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}</primary-button>
       <primary-button
         :enabled="isAffordableUntil10"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
         @click="buyUntil10"
-      >Until 10, Cost: {{shortenCosts(until10Cost)}}</primary-button>
+      >Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}</primary-button>
       <div
         v-for="text in floatingText"
         :key="text.key"

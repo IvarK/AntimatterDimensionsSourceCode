@@ -43,11 +43,13 @@ function updateState() {
 }
 
 function getAutomatorRows() {
-  var ret = 6 + Math.ceil(Math.pow(player.realities, 0.7) )
-  if (player.reality.perks.includes(3)) ret = 6 + Math.ceil(Math.pow(player.realities, 0.85) )
-  if (player.reality.perks.includes(1)) ret += 5
-  if (player.reality.perks.includes(2)) ret += 10
-  return ret
+  const realityFactor = Effects.max(0.7, Perk.automatorRowScaling);
+  const realityRows = Math.ceil(Math.pow(player.realities, realityFactor));
+  const perkRows = Effects.sum(
+    Perk.automatorRowIncrease1,
+    Perk.automatorRowIncrease2
+  );
+  return 6 + realityRows + perkRows;
 }
 
 function automatorOnOff() {
@@ -367,7 +369,7 @@ function toggle(current) {
 function automatorSaveButton(num, forceSave) {
   if (shiftDown || forceSave) {
       localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
-      ui.notify.info(`Automator script ${num} saved`);
+      GameUI.notify.info(`Automator script ${num} saved`);
   } else {
     loadScript(num)
   }
@@ -377,7 +379,7 @@ function loadScript(num) {
   if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
     importAutomatorScript(localStorage.getItem("automatorScript"+num));
     automatorIdx = 0
-    ui.notify.info(`Automator script ${num} loaded`);
+    GameUI.notify.info(`Automator script ${num} loaded`);
   }
 }
 
@@ -396,8 +398,7 @@ function canBuyAutomatorInstruction(id) {
 }
 
 function updateAutomatorRows() {
-  var pow = 0.7
-  if (player.reality.perks.includes(3)) pow = 0.85
+  const pow = Effects.max(0.7, Perk.automatorRowScaling);
   var rows = 6 + Math.ceil(Math.pow(player.realities, pow))
   var next = Math.ceil( Math.pow(rows - 6, 1 / pow) )
   $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows; next row at " + next + " realities.")

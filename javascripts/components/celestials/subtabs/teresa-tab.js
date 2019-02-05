@@ -1,116 +1,102 @@
 Vue.component('teresa-tab', {
   data: function() {
     return {
-      relicShards: 0,
-      shardsGained: 0,
+      pour: false,
+      time: new Date().getTime(),
+      rmStore: 0,
+      rm: new Decimal(0),
+      percentage: "",
+      rmMult: 0,
+      quote: "",
+      quoteIdx: 0,
       unlocks: [],
-      weights: player.celestials.teresa.glyphWeights,
-      typePriorities: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+      runReward: 0,
+      glyphUpg: {
+        cost: 1,
+        mult: 1
+      },
+      rmUpg: 1, // Cost and mult are the same
+      pp: 0
     };
+  },
+  computed: {
+    unlockInfo: () => Teresa.unlockInfo,
   },
   methods: {
     update() {
-      this.relicShards = player.celestials.teresa.relicShards
-      this.shardsGained = Teresa.shardsGained
-      this.unlocks = Object.values(TERESA_UNLOCKS).map(id => Teresa.has(id))
-      this.typePriorities = player.celestials.teresa.typePriorityOrder
+      let now = new Date().getTime()
+      if (this.pour) {
+        let diff = (now - this.time)/1000
+        Teresa.pourRM(diff)
+      }
+      this.time = now
+      this.rmStore = player.celestials.teresa.rmStore
+      this.percentage = (Teresa.fill * 100) + "%"
+      this.rmMult = Teresa.rmMultiplier
+      this.quote = Teresa.quote
+      this.quoteIdx = player.celestials.teresa.quoteIdx
+      this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter((x) => x)
+      this.runReward = Teresa.runRewardMultiplier,
+      this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) )
+      this.glyphUpg.mult = player.celestials.teresa.glyphLevelMult
+      this.rmUpg = player.celestials.teresa.rmMult
+      this.pp = player.reality.pp
+      this.rm = player.reality.realityMachines
+    },
+    nextQuote() {
+      Teresa.nextQuote()
     },
     startRun() {
       Teresa.startRun()
     },
-    adjustWeights(name) {
-      let tempTotalWeight = 0
-      for (i in this.weights) {
-        tempTotalWeight += this.weights[i]
-      }
-      let tempExtra = tempTotalWeight - 100
-      if (this.weights[name] === 100) {
-        for (i in this.weights) {
-          this.weights[i] = 0;
-        }
-        this.weights[name] = 100;
-      } else {
-        while (tempExtra > 0) {
-          for (i in this.weights) {
-            if (tempExtra > 0 && this.weights[i] > 0 && i != name) {
-              this.weights[i]--;
-              tempExtra--;
-            }
-          }
-        }
-      }
+    buyRmMult() {
+      Teresa.buyRmMult()
     },
-    buyUnlock(id, cost) {
-      Teresa.buyUnlock(id, cost)
+    buyGlyphMult() {
+      Teresa.buyGlyphLevelPower()
     },
-    move() {
-      player.celestials.teresa.typePriorityOrder = this.typePriorities
-    }
-  },
-  computed: {
-    teresaUnlocks() {
-      return TERESA_UNLOCKS
-    }
-  },
-  components: {
-    "glyph-weight-sliders": {
-      props: {
-        value: {
-          type: Number,
-          default: 50
-        },
-        name: {
-          type: String
-        }
-      },
-      template:
-        `<div class="o-teresa-slider"> 
-          <b>{{ name }} weight: {{ value/100 }}</b>
-          <input
-            style="margin-left:0rem;"
-            :value="value"
-            class="o-primary-btn--update-rate__slider"
-            type="range"
-            min="0"
-            max="100"
-            @input="emitInput(parseInt($event.target.value))"
-          />
-         </div>`
-    }
+    unlockDescriptionStyle: function(unlockInfo) {
+      let maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
+      let pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
+      return {
+         bottom: pos.toFixed(2) + "%",
+      };
+    },
   },
   template:
     `<div class="l-teresa-celestial-tab">
-      <div class="c-teresa-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
-      <div class="c-teresa-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
-      <div class="l-teresa-shop">
-        <button class="o-teresa-shop-button" @click="buyUnlock(0, 5e6)" :class="{ 'teresa-unlock-bought': unlocks[teresaUnlocks.ADJUSTER] }">Unlock glyph level adjustment.<br>Cost: 5,000,000 Relic Shards</button>
-        <button class="o-teresa-shop-button" @click="buyUnlock(1, 2e8)" :class="{ 'teresa-unlock-bought': unlocks[teresaUnlocks.AUTOSACRIFICE] }">Unlock automatic glyph sacrifice.<br>Cost: 200,000,000 Relic Shards</button>
-        <button class="o-teresa-shop-button" @click="buyUnlock(2, 5e8)" :class="{ 'teresa-unlock-bought': unlocks[teresaUnlocks.AUTOPICKER] }">Unlock automatic glyph picker.<br>Cost: 500,000,000 Relic Shards</button>
-      </div>
-      <button class="o-teresa-shop-button" @click="buyUnlock(3, 1e9)" :class="{ 'teresa-unlock-bought': unlocks[teresaUnlocks.RUN] }">Unlock Teresa's reality.<br>Cost: 1,000,000,000 Relic Shards</button>
-      <div class="l-teresa-glyph-settings">
-        <div v-if="unlocks[teresaUnlocks.AUTOSACRIFICE]">
-          Highest type will be picked, lowest sacrificed.
-          <draggable :list="typePriorities" @end="move()">
-            <div v-for="element in typePriorities" class="o-teresa-glyph-type">{{element}}</div>
-          </draggable>
-        </div>
-        <div v-if="unlocks[teresaUnlocks.ADJUSTER]">
-          <div>
-            <glyph-weight-sliders v-model="weights.ep" name="EP" @input="adjustWeights('ep')"/>
-            <glyph-weight-sliders v-model="weights.repl" name="Replicanti" @input="adjustWeights('repl')"/>
-          </div>
-          <div>
-            <glyph-weight-sliders v-model="weights.dt" name="DT" @input="adjustWeights('dt')"/>
-            <glyph-weight-sliders v-model="weights.eternities" name="Eternities" @input="adjustWeights('eternities')"/>
+      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
+      <div>You have {{shortenRateOfChange(rm)}} Reality Machines.</div>
+      <div class="l-mechanics-container">
+        <div class="l-teresa-unlocks l-teresa-mechanic-container">
+          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x, based on realities.</div>
+          <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
+          <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
+          <div class="c-teresa-shop" v-if="unlocks[3]">
+            <span class="o-teresa-pp"> You have {{ pp }} Perk Points.</span>
+            <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shortenCosts(glyphUpg.cost) }} PP</button>
+            <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shortenCosts(rmUpg) }} PP</button>
           </div>
         </div>
-        <div v-if="unlocks[teresaUnlocks.AUTOPICKER]">Glyph effect weight settings here</div>
-      </div>
-      <div v-if="unlocks[teresaUnlocks.RUN]"><button class="o-teresa-shop-button teresa-run-button" @click="startRun()">Start a new reality, all production and gamespeed is severely lowered and you can only use one glyph, infinity and time dimensions reduce the production penalty. IP multipliers are disabled. You will gain unlocks at Infinity, Eternity and Reality.</button>
-        <div v-if="unlocks[teresaUnlocks.INFINITY_COMPLETE]">Infinity: IP multipliers have partial effectiveness in Teresa Reality, infinitied stat raises the replicanti cap and increases your max RG.</div>
-        <div v-if="unlocks[teresaUnlocks.ETERNITY_COMPLETE]">Eternity: You can now use 5 glyphs and production penalty is reduced in Teresa Reality; eternitied stat generates infinitied stat, unlocks The Enslaved Ones.</div>
-        <div v-if="unlocks[teresaUnlocks.REALITY_COMPLETE]">Reality: (Reward not implemented yet)</div>
+        <div class="l-rm-container l-teresa-mechanic-container">
+          <button class="o-primary-btn c-teresa-pour" 
+            @mousedown="pour = true"
+            @touchstart="pour = true"
+            @mouseup="pour = false"
+            @touchend="pour = false"
+            @mouseleave="pour = false"
+          >Pour RM</button>
+          <div class="c-rm-store">
+            <div class="c-rm-store-inner" :style="{ height: percentage}">
+              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(1e24) }}</div>
+            </div>
+            <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
+              {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}
+            </div>
+          </div>
+        </div>
+
+        <div class="c-unlock-descriptions l-teresa-mechanic-container"></div>
       </div>
     </div>`
 });

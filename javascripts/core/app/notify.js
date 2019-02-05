@@ -1,4 +1,4 @@
-ui.notify = function() {
+GameUI.notify = function() {
   const container = document.getElementById("notification-container");
   const template = document.createElement('div');
   template.classList.add("o-notification");
@@ -30,6 +30,7 @@ ui.notify = function() {
   return {
     success: (text) => showNotification(text, "o-notification--success"),
     error: (text) => showNotification(text, "o-notification--error"),
-    info: (text) => showNotification(text, "o-notification--info")
+    info: (text) => showNotification(text, "o-notification--info"),
+    wormholes: true
   };
 }();

@@ -223,7 +223,7 @@ var player = {
   },
   offlineProd: 0,
   offlineProdCost: 1e7,
-  challengeTarget: 0,
+  challengeTarget: new Decimal(0),
   autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
@@ -303,7 +303,8 @@ var player = {
         infinity: 0,
         time: 0,
         replication: 0,
-        dilation: 0
+        dilation: 0,
+        effarig: 0
       },
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -332,7 +333,8 @@ var player = {
     epmultbuyer: false,
     pp: 0,
     autoEC: true,
-    lastAutoEC: 0
+    lastAutoEC: 0,
+    partEternitied: 0
   },
   wormhole: [{
     speed: 60 * 60, // Seconds to fill
@@ -364,7 +366,7 @@ var player = {
   wormholePause: false,
   ttbuyer: false,
   celestials: {
-    effarig: {
+    teresa: {
       rmStore: 0,
       quoteIdx: 0,
       unlocks: [],
@@ -373,7 +375,7 @@ var player = {
       glyphLevelMult: 1,
       rmMult: 1
     },
-    teresa: {
+    effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
@@ -390,6 +392,10 @@ var player = {
       stored: 0,
       unlocks: [],
       run: false
+    },
+    v: {
+      unlocks: [],
+      run: false,
     }
   },
   autoEcIsOn: true,
@@ -458,7 +464,7 @@ const Player = {
     if (Challenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond;
+    return basePerSecond.times(getGameSpeedupFactor());
   },
 
   get bestRunIPPM() {
@@ -485,6 +491,9 @@ function guardFromNaNValues(obj) {
 
   for (let key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
+
+    //TODO: rework autobuyer saving
+    if (key === "autobuyers") continue;
 
     let value = obj[key];
     if (isObject(value)) {

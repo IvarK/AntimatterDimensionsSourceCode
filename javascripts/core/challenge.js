@@ -49,7 +49,7 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    startChallenge(this._fullId, Number.MAX_VALUE);
+    startChallenge(this._fullId, new Decimal(Number.MAX_VALUE));
   }
 
   get isCompleted() {
@@ -85,6 +85,8 @@ Challenge.current = function() {
   }
   return Challenge(parseInt(challenge.substr(9)));
 };
+
+Challenge.isRunning = () => Challenge.current() !== undefined;
 
 /**
  * @type {ChallengeState[]}

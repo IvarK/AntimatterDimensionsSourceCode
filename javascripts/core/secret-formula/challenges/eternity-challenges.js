@@ -38,7 +38,9 @@ GameDatabase.challenges.eternity = [
     description: "All infinitied stat multipliers and generators are disabled.",
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
-    additionalRequirement: completions => `in ${Math.max((16 - 4 * completions), 0)} infinities or less`,
+    restriction: completions => Math.max(16 - 4 * completions, 0),
+    checkRestriction: restriction => player.infinitied <= restriction,
+    formatRestriction: restriction => `in ${restriction} infinities or less`,
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",
       effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
@@ -113,13 +115,12 @@ GameDatabase.challenges.eternity = [
     id: 10,
     description: () => {
       let description = "Time Dimensions and Infinity Dimensions are disabled. You gain an immense boost from infinitied stat to normal dimensions (infinitied^1000).";
-      if (EternityChallenge(10).isRunning) {
-        description += `, Currently: ${shorten(ec10bonus, 2, 1)}x`;
-      }
+      EternityChallenge(10).applyEffect(v => description += ` Currently: ${shorten(v, 2, 1)}x`);
       return description;
     },
     goal: new Decimal("1e3000"),
     goalIncrease: new Decimal("1e300"),
+    effect: () => Decimal.pow(Player.totalInfinitied, 1000).clampMin(1).pow(Effects.product(TimeStudy(31))),
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {
@@ -152,7 +153,9 @@ GameDatabase.challenges.eternity = [
       "The game runs 1000x slower.",
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
-    additionalRequirement: completions => `in ${Math.max(10 - 2 * completions, 1) / 10} ${completions === 0 ? "second" : "seconds"} or less.`,
+    restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
+    checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
+    formatRestriction: restriction => `in ${restriction} ${restriction === 1 ? "second" : "seconds"} or less.`,
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,

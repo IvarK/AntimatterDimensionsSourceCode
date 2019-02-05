@@ -197,6 +197,7 @@ function clearOldAchieves() {
   for (var i = 0; i < toRemove.length; i++) {
     player.achievements.splice(toRemove[i], 1);
   }
+  GameCache.achievementCount.invalidate();
 }
 
 function giveAchievement(name) {
@@ -205,8 +206,9 @@ function giveAchievement(name) {
 
     if (player.achievements.includes(allAchievementNums[name])) return false
 
-    ui.notify.success(name);
+    GameUI.notify.success(name);
     player.achievements.push(allAchievementNums[name]);
+    GameCache.achievementCount.invalidate();
     kong.submitStats('Achievements', player.achievements.length);
     if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
       Autobuyer.infinity.bumpLimit(4);
@@ -215,36 +217,22 @@ function giveAchievement(name) {
     GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
-function getSecretAchAmount() {
-    var n = 0
-    for (var i=1; i<5; i++) {
-        var achNum = i * 10
-        for (var l=0; l<8; l++) {
-            achNum += 1;
-            if (player.achievements.includes("s"+achNum)) {
-                n++
-            }
-        }
-    }
-    return n
-}
-
 function isAchEnabled(name, id) {
   if (!player.achievements.includes(name)) return false;
   if (player.realities === 0) return true;
   const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
-  if (row <= Perks.achSkipCount) return true;
+  if (row <= GameCache.achSkipPerkCount.value) return true;
   const currentSeconds = player.thisReality / 1000;
   return timeRequiredForAchievement(achId) <= currentSeconds;
 }
 
 function timeForAllAchievements() {
-  if (Perks.achSkipCount === TOTAL_PRE_REALITY_ACH_ROWS) {
+  if (GameCache.achSkipPerkCount.value === TOTAL_PRE_REALITY_ACH_ROWS) {
     return 0;
   }
-  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - Perks.achSkipCount);
+  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - GameCache.achSkipPerkCount.value);
 }
 
 function nextAchIn() {
@@ -283,7 +271,7 @@ function timeUntilAch(name) {
     return NaN;
   }
   const row = Math.floor(achId / 10);
-  if (row <= Perks.achSkipCount) {
+  if (row <= GameCache.achSkipPerkCount.value) {
     return NaN;
   }
   const currentSeconds = player.thisReality / 1000;
@@ -296,7 +284,7 @@ function timeRequiredForAchievement(achId) {
   const rowModifier = realityAchievementModifiers.rowModifier;
 
   const row = Math.floor(achId / 10);
-  const perkAdjustedRow = Math.clamp(row - Perks.achSkipCount, 1, row);
+  const perkAdjustedRow = Math.clamp(row - GameCache.achSkipPerkCount.value, 1, row);
   const previousRowCount = perkAdjustedRow - 1;
   const previousRowsTime = totalAchRowTime(previousRowCount);
   const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;

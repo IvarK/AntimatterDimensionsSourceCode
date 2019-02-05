@@ -1,10 +1,9 @@
-// @ts-check
 
-"use strict";
 // There is a little too much stuff about glyph effects to put in constants.
 
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power"]
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω" }
+// The last glyph type you can only get if you got effarig reality
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"]
+const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", effarig: "Ϙ" }
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -232,8 +231,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "infinityrate",
     glyphTypes: ["infinity"],
-    singleDesc: "Infinity power conversion rate: <br>^7 -> ^(7 + {value})",
-    totalDesc: "Infinity power conversion rate: ^7 -> ^(7 + {value})",
+    singleDesc: "Infinity power conversion rate: <br>^7 ➜ ^(7 + {value})",
+    totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.add,
     /** @type {function(number):number} */
@@ -280,6 +279,41 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "Multiply the bonus gained from buying 10 Dimensions",
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.multiply,
+  }, {
+    id: "effarigwormhole",
+    glyphTypes: ["effarig"],
+    singleDesc: "Time modifier raised to the power of ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "effarigrm",
+    glyphTypes: ["effarig"],
+    singleDesc: "Reality Machine multiplier x{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "effarigglyph",
+    glyphTypes: ["effarig"],
+    singleDesc: "Instability starting glyph level +{value}",
+    combine: GlyphCombiner.add,
+  }, {
+    id: "effarigachievement",
+    glyphTypes: ["effarig"],
+    singleDesc: "Raise all achievement related effects to a power of ^{value}",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "effarigforgotten",
+    glyphTypes: ["effarig"],
+    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
+    combine: GlyphCombiner.multiply,
+  }, {
+    id: "effarigdimensions",
+    glyphTypes: ["effarig"],
+    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
+    combine: GlyphCombiner.add,
+  }, {
+    id: "effarigantimatter",
+    glyphTypes: ["effarig"],
+    singleDesc: "Power to antimatter production exponent of ^{value}",
+    combine: GlyphCombiner.multiply,
   }
 ].reduce((prev, effect) => {
   prev[effect.id] = new GlyphEffectConfig(effect);
@@ -297,6 +331,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
+const effarigEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
 
 /**
  * @typedef {Object} GlyphTypeInfo
@@ -327,5 +362,9 @@ const GlyphTypeList = [
     name: "power",
     symbol: GLYPH_SYMBOLS.power,
     effects: findGlyphTypeEffects("power"),
+  }, {
+    name: "effarig",
+    symbol: GLYPH_SYMBOLS.effarig,
+    effects: findGlyphTypeEffects("effarig")
   }
 ];

@@ -84,7 +84,7 @@ const copyToClipboard = (function() {
 
 function copyToClipboardAndNotify(str) {
     if (copyToClipboard(str)) {
-        ui.notify.info("Exported to clipboard");
+        GameUI.notify.info("Exported to clipboard");
     }
 }
 
@@ -196,3 +196,7 @@ Number.prototype.toDecimal = function() {
 };
 
 Math.log4 = Math.log(4);
+
+Array.prototype.randomElement = function() {
+  return this[Math.floor(Math.random() * this.length)];
+};

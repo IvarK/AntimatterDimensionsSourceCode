@@ -32,7 +32,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    Notation.set("Cancer");
+    Notation.cancer.setCurrent();
 };
 
 dev.fixSave = function() {
@@ -53,7 +53,6 @@ dev.fixSave = function() {
     saved = 0;
     postc8Mult = new Decimal(0)
     mult18 = new Decimal(1)
-    ec10bonus = new Decimal(1)
     player = save_data;
     save_game();
     load_game();
@@ -153,11 +152,13 @@ dev.giveGlyph = function() {
 
 dev.decriminalize = function() {
     player.achievements.splice(player.achievements.indexOf("s23"), 1);
+    GameCache.achievementCount.invalidate();
     GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function(name) {
     player.achievements.splice(player.achievements.indexOf(name), 1);
+    GameCache.achievementCount.invalidate();
 }
 
 dev.realize = function() {
@@ -177,7 +178,8 @@ dev.realize = function() {
 dev.respecPerks = function() {
     player.reality.pp += player.reality.perks.length
     player.reality.perks = [];
-    Perks.updateAchSkipCount();
+    GameCache.achSkipPerkCount.invalidate();
+    GameCache.buyablePerks.invalidate();
     document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
     drawPerkNetwork()
 }
@@ -389,16 +391,16 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 22) {
-      for (i in player.celestials.teresa.glyphWeights) {
-          player.celestials.teresa.glyphWeights[i] *= 100
+      for (i in player.celestials.effarig.glyphWeights) {
+          player.celestials.effarig.glyphWeights[i] *= 100
       }
     player.options.testVersion = 23;
   }
 
   //the above line of code didn't work if loading a test save before celestials were added, whoops
   if (player.options.testVersion === 23) {
-    for (i in player.celestials.teresa.glyphWeights) {
-        player.celestials.teresa.glyphWeights[i] = 25
+    for (i in player.celestials.effarig.glyphWeights) {
+        player.celestials.effarig.glyphWeights[i] = 25
     }
     player.options.testVersion = 24;
   }
@@ -428,8 +430,30 @@ dev.updateTestSave = function() {
     player.options.testVersion = 27;
   }
 
+  if (player.options.testVersion === 27) {
+    let temp = player.celestials.effarig
+    player.celestials.effarig = player.celestials.teresa
+    player.celestials.teresa = temp
+    
+    for (i in player.reality.glyphs.active) {
+      let g = player.reality.glyphs.active[i]
+      if (g.type == 'teresa') {
+        g.type = 'effarig'
+      }
+    }
+
+    for (i in player.reality.glyphs.inventory) {
+      let g = player.reality.glyphs.inventory[i]
+      if (g.type == 'teresa') {
+        g.type = 'effarig'
+      }
+    }
+  
+    player.options.testVersion = 28;
+  }
+
   if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.length == Object.keys(CONNECTED_PERKS).length) giveAchievement("Perks of living")
+  if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
 }
 
@@ -457,7 +481,7 @@ dev.showProductionBreakdown = function() {
     TimeStudy(225),
     TimeStudy(226)
   );
-  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.03 * ECTimesCompleted("eterc8"))-1, 0)
+  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 * EternityChallenge(8).completions) - 1, 0);
   let FGCount = player.dilation.freeGalaxies;
   let totalCount = AGCount + RGCount + FGCount;
   
@@ -538,6 +562,11 @@ dev.showProductionBreakdown = function() {
   productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
   
   console.log(productionText);
+}
+
+let tempSpeedupToggle = false;
+dev.goFast = function() {   // Speeds up game 500x, intentionally doesn't persist between refreshes
+  tempSpeedupToggle = !tempSpeedupToggle;
 }
 
 dev.togglePerformanceStats = function() {

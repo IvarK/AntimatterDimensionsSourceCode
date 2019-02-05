@@ -210,6 +210,8 @@ function gainedInfinityPoints() {
     ip = ip.times(totalIPMult());
     if (Teresa.isRunning) {
         ip = ip.pow(0.6);
+    } else if (V.isRunning) {
+      ip = ip.pow(0.5);
     }
     return ip.floor();
 }
@@ -232,6 +234,8 @@ function gainedEternityPoints() {
   }
   if (Teresa.isRunning) {
     ep = ep.pow(0.6);
+  } else if (V.isRunning) {
+    ep = ep.pow(0.5)
   }
   if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
   return ep.floor();

@@ -2,7 +2,8 @@ Vue.component('v-tab', {
   data: function() {
     return {
       db: GameDatabase.Celestials.V,
-      mainUnlock: false
+      mainUnlock: false,
+      runUnlocks: VRunUnlockState.all
     };
   },
   methods: {
@@ -20,7 +21,12 @@ Vue.component('v-tab', {
         and {{ shorten(db.mainUnlock.replicanti) }} replicanti to unlock V, The Celestial of Achievements
       </div>
       <div v-else>
-        You have unlocked V lol gj
+        <button>Start V's Reality, All dimension production, EP gain, IP gain, dilated time gain and Replicanti gain are nerfed.</button>
+        <div v-for="unlock in runUnlocks">
+          <h1>{{ unlock.config.name }}</h1>
+          <p>{{ unlock.formattedDescription }}</p>
+          <p>{{ unlock.completions }}/5 done</p>
+        </div>
       </div>
     </div>`
 });

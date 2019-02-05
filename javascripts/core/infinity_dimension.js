@@ -271,6 +271,8 @@ class InfinityDimensionState {
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
+    } else if (V.isRunning) {
+      multiplier = multiplier.pow(0.5)
     }
     
     return mult;

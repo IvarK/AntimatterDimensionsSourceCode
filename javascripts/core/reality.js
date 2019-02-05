@@ -259,9 +259,6 @@ function reality(force, reset, auto) {
             }
         }
     }
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
-    }
 
     GameCache.invalidate();
     GameUI.dispatch(GameEvent.REALITY);
@@ -272,8 +269,11 @@ function handleCelestialRuns(force) {
     player.celestials.teresa.run = false
     if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
   }
-  if (player.celestials.effarig.run) {
+  if (Effarig.isRunning) {
     player.celestials.effarig.run = false
+    if (!force && !Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) {
+      Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
+    }
   }
   if (player.celestials.enslaved.run) {
     player.celestials.enslaved.run = false

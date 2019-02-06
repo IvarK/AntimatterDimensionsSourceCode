@@ -107,9 +107,8 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 35,
-    name: "You didn't need it anyway",
-    tooltip: "Reach Infinite antimatter without having any 8th Dimensions. Reward: Dimensions 1-7 are 2% stronger.",
-    effect: () => 1.02
+    name: "Don't you dare to sleep",
+    tooltip: "Be offline for over 6 hours in a row.",
   },
   {
     id: 36,

@@ -21,7 +21,7 @@ Vue.component('normal-dim-row', {
       return DISPLAY_NAMES[this.tier];
     },
     amountDisplay: function() {
-      return this.tier < 8 ? this.shortenDimensions(this.amount) : Math.round(this.amount).toString();
+      return this.tier < 8 ? this.shortenDimensions(this.amount) : Decimal.round(this.amount).toString();
     },
     rateOfChangeDisplay: function() {
       return this.tier < 8 ?

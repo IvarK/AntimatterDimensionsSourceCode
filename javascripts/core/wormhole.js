@@ -20,15 +20,15 @@
 function updateWormholeUpgrades() {
   for (let i = 0; i < 3; i++) {
     $("#wormholeinterval" + (i+1)).html("Speed up the wormhole up 25%<br>Current interval: "+(player.wormhole[i].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeIntervalCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholeIntervalCost(i)) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getWormholeIntervalCost(i))) $("#wormholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#wormholeinterval" + (i+1)).removeClass("rUpgUn")
 
     $("#wormholepower" + (i+1)).html("Make the wormhole 35% more powerful<br>Current power: "+shorten(player.wormhole[i].power)+"x<br>Cost: "+shortenDimensions(getWormholePowerCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholePowerCost(i)) $("#wormholepower" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getWormholePowerCost(i))) $("#wormholepower" + (i+1)).addClass("rUpgUn")
     else $("#wormholepower" + (i+1)).removeClass("rUpgUn")
 
     $("#wormholeduration" + (i+1)).html("Extend the wormhole duration by 30%<br>Current duration: "+(player.wormhole[i].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getWormholeDurationCost(i))+" RM")
-    if (player.reality.realityMachines < getWormholeDurationCost(i)) $("#wormholeduration" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getWormholeDurationCost(i))) $("#wormholeduration" + (i+1)).addClass("rUpgUn")
     else $("#wormholeduration" + (i+1)).removeClass("rUpgUn")
   }
   if (planet !== undefined) // This function gets called once on-load before the wormhole is initialized

@@ -38,7 +38,7 @@ Vue.component("ec-time-study", {
       }
       else {
         requirement.total = study.requirementTotal;
-        requirement.current = Math.min(study.requirementCurrent, requirement.total);
+        requirement.current = Decimal.min(study.requirementCurrent, requirement.total);
       }
     },
     formatNumber(value) {

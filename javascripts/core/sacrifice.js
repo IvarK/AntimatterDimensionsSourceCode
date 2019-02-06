@@ -19,7 +19,7 @@ function sacrificeReset(auto) {
     player.money = new Decimal(100);
 
   }
-  if (totalBoost >= 600) giveAchievement("The Gods are pleased");
+  if (totalBoost.gte(600)) giveAchievement("The Gods are pleased");
   if (totalBoost.gte("1e9000")) giveAchievement("IT'S OVER 9000");
 }
 
@@ -40,11 +40,11 @@ class Sacrifice {
   }
 
   static get isAffordable() {
-    return player.eightAmount > 0 && !EternityChallenge(3).isRunning;
+    return player.eightAmount.gt(0) && !EternityChallenge(3).isRunning;
   }
 
   static get nextBoost() {
-    if (player.firstAmount === 0) return new Decimal(1);
+    if (player.firstAmount.eq(0)) return new Decimal(1);
 
     if (player.challenges.includes("postc2")) {
       const scale = Effects.max(

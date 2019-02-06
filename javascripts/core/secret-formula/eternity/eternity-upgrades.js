@@ -36,7 +36,7 @@ GameDatabase.eternity.upgrades = {
     id: 4,
     cost: 1e16,
     description: "Your achievement bonus affects Time Dimensions",
-    effect: () => Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")),
     formatEffect: value => `${shortenMoney(value)}x`
   },
   tdMultTheorems: {

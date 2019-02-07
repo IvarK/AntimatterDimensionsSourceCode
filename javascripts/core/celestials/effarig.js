@@ -39,8 +39,8 @@ var Teresa = {
   lastUnlock: "SHOP",
   pourRM(diff) {
     this.timePoured += diff
-    let rm = player.reality.realityMachines
-    let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm)
+    let rm = player.reality.realityMachines;
+    let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber())
     this.rmStore += rmPoured
     player.reality.realityMachines = rm.minus(rmPoured)
     this.checkForUnlocks()

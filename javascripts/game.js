@@ -228,7 +228,7 @@ function gainedEternityPoints() {
     );
 
   if (player.reality.upg.includes(12)) {
-      ep = ep.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
+      ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
   }
   if (Teresa.isRunning) {
     ep = ep.pow(0.6);
@@ -1094,7 +1094,7 @@ function gameLoop(diff, options = {}) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    if (!player.celestials.teresa.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
+    if (!player.celestials.teresa.run) player.timestudy.theorem = player.timestudy.theorem.plus(getAdjustedGlyphEffect("dilationTTgen")*diff/1000)
 
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -1138,9 +1138,10 @@ function gameLoop(diff, options = {}) {
         infdimpurchasewhileloop = 1;
     }
 
-    if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
-    player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
+    DilationUpgrade.ttGenerator.applyEffect(gen =>
+      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime))
+    );
 
   document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
   if (player.wormhole[0].unlocked && !player.wormholePause) {

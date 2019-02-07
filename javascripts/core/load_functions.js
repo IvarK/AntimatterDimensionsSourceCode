@@ -16,7 +16,7 @@ function updateState() {
   }
 
 function onLoad() {
-  if (player.totalmoney === undefined || isNaN(player.totalmoney)) {
+  if (player.totalmoney === undefined || isNaN(player.totalmoney.mantissa) || isNaN(player.totalmoney.e)) {
     player.totalmoney = player.money;
   }
   if (player.thisEternity === undefined) {
@@ -113,7 +113,7 @@ function onLoad() {
 
   if (player.version < 9.5) {
       player.version = 9.5
-      if (player.timestudy.studies.includes(191)) player.timestudy.theorem += 100
+      if (player.timestudy.studies.includes(191)) player.timestudy.theorem = player.timestudy.theorem.plus(100);
   }
 
   if (player.version < 10) {
@@ -394,6 +394,7 @@ function transformSaveToDecimal() {
       glyph.effects.mult = new Decimal(glyph.effects.mult)
     }
   }
+  player.timestudy.theorem = new Decimal(player.timestudy.theorem);
 }
 
 function set_save(name, saveId, value) {

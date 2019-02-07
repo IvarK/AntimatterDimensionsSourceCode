@@ -1,7 +1,7 @@
 Vue.component("tt-shop", {
   data: function() {
     return {
-      theoremAmount: 0,
+      theoremAmount: new Decimal(0),
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
@@ -20,13 +20,13 @@ Vue.component("tt-shop", {
   computed: {
     theoremAmountDisplay: function() {
       let theorems = this.theoremAmount;
-      if (theorems > 99999) {
+      if (theorems.gt(99999)) {
         return this.shortenMoney(theorems);
       }
-      return Math.floor(theorems).toFixed(0);
+      return Math.floor(theorems.toNumber()).toFixed(0);
     },
     theoremNoun: function() {
-      return this.theoremAmount === 1 ? "Theorem" : "Theorems";
+      return this.theoremAmount.eq(1) ? "Theorem" : "Theorems";
     },
     minimized: function() {
       return this.minimizeAvailable && this.shopMinimized;

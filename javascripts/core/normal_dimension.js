@@ -495,7 +495,7 @@ function buyOneDimensionBtnClick(tier) {
   if (tier === 1) {
     if (buyOneDimension(1)) {
       // This achievement is granted only if the buy one button is pressed.
-      if (player.firstAmount >= 1e150) {
+      if (player.firstAmount.gte(1e150)) {
         giveAchievement("There's no point in doing that");
       }
     }

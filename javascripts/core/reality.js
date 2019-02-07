@@ -278,6 +278,10 @@ function handleCelestialRuns(force) {
   if (player.celestials.enslaved.run) {
     player.celestials.enslaved.run = false
   }
+
+  if (player.celestials.v.run) {
+    player.celestials.v.run = false
+  }
 }
 
 function fullResetTimeDimensions() {

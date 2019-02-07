@@ -290,12 +290,9 @@ function unfuckChallengeIds() {
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);
   if (wasFucked) {
-    let newTimes = [];
-    player.challengeTimes.forEach((e, idx) => {
-      const config = GameDatabase.challenges.normal.find(c => c.legacyId === idx + 2);
-      newTimes[config.id - 2] = e;
-    });
-    player.challengeTimes = newTimes;
+    player.challengeTimes = GameDatabase.challenges.normal
+      .slice(1)
+      .map(c => player.challengeTimes[c.legacyId - 2]);
   }
 }
 

@@ -279,15 +279,24 @@ function convertAutobuyerMode() {
 }
 
 function unfuckChallengeIds() {
+  let wasFucked = false;
   function unfuckChallengeId(id) {
     if (!id.startsWith("challenge")) return id;
+    wasFucked = true;
     const legacyId = parseInt(id.substr(9));
     const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
     return Challenge(config.id).fullId;
   }
-
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);
+  if (wasFucked) {
+    let newTimes = [];
+    player.challengeTimes.forEach((e, idx) => {
+      const config = GameDatabase.challenges.normal.find(c => c.legacyId === idx + 2);
+      newTimes[config.id - 2] = e;
+    });
+    player.challengeTimes = newTimes;
+  }
 }
 
 function unfuckMultCosts() {

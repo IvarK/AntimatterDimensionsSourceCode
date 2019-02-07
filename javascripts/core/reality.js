@@ -171,7 +171,7 @@ function reality(force, reset, auto) {
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
-  player.timestudy.theorem = 0;
+  player.timestudy.theorem = new Decimal(0);
   player.timestudy.amcost = new Decimal("1e20000");
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);

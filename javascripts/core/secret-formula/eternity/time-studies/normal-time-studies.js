@@ -327,7 +327,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 221,
     cost: 900,
     description: "Time Dimensions gain a multiplier based on Dimension Boosts",
-    effect: () => Decimal.pow(1.0025, player.resets),
+    effect: () => Decimal.pow(1 + 0.0025, player.resets),
     formatEffect: value => formatX(value, 2, 1)
   },
   {

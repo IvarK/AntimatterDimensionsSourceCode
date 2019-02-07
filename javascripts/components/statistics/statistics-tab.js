@@ -153,7 +153,7 @@ const MatterScale = {
         "you would have enough to " + scale.verb + " " + amount + " " + scale.name];
     }
     let scale = this.microScale(matter);
-    return ["If every antimatter were " + shortenMoney(this.proton / scale.amount / matter) + " " +
+    return ["If every antimatter were " + shortenMoney(this.proton / scale.amount / matter.toNumber()) + " " +
       scale.name + ", you would have enough to make a proton."];
   },
 

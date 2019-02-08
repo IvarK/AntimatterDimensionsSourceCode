@@ -496,6 +496,80 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
   }
 }();
 
+Notation.hex = new class HexNotation extends Notation {
+  formatUnder1000(value, places) {
+    return this.hexNotation(value);
+  }
+
+  formatInfinite() {
+    return "FFFFFFFF";
+  }
+
+  formatDecimal(value, places) {
+    return this.hexNotation(value)
+  }
+
+  modifiedLogarithm(x) {
+    // This function implements a tweak to the usual logarithm.
+    // It has the same value at powers of 2 but is linear between
+    // powers of 2 (so for example, f(3) = 1.5).
+    let floorOfLog = Math.floor(Decimal.log2(x));
+    let previousPowerOfTwo = Decimal.pow(2, floorOfLog);
+    let fractionToNextPowerOfTwo = Decimal.div(x, previousPowerOfTwo).toNumber() - 1;
+    return floorOfLog + fractionToNextPowerOfTwo;
+  }
+
+  rawValue(x, n, extraPrec) {
+    // This is the definition of the notation. It could be a little
+    // simpler but I decided to use a stack rather than recursion.
+    return this.getValueFromSigns(this.getSigns(x, n, extraPrec), n);
+  }
+
+  getSigns(x, n, extraPrec) {
+    // Extra precision is an arbitrary number, it only controls rounding of
+    // the last digit, if it's 0 the last digit will almost always be odd
+    // for non-dyadic x, if it's too high the code might be slower.
+    // 8 (the value used) should be high enough for good results.
+    let signs = [];
+    for (let i = 0; i < n + extraPrec; i++) {
+      // Check for NaN, Infinity, or -Infinity (the only exceptional values)
+      if (isNaN(x) || !Decimal.lt(Decimal.abs(x), Infinity)) {
+        break;
+      } else if (Decimal.lt(x, 0)) {
+        signs.push(Notation.hex.signs.NEGATIVE);
+        x = Decimal.times(x, -1);
+      } else {
+        signs.push(Notation.hex.signs.POSITIVE);
+      }
+      x = this.modifiedLogarithm(x);
+    }
+    return signs;
+  }
+
+  getValueFromSigns(signs, n) {
+    // We need to use 0 as the initial value for result,
+    // rather than, for example, 0.5.
+    let result = 0;
+    for (let i = signs.length - 1; i >= 0; i--) {
+      if (signs[i] === Notation.hex.signs.NEGATIVE) {
+        result = 1 / 2 - result / 2;
+      } else {
+        result = 1 / 2 + result / 2;
+      }
+    }
+    return Math.round(result * Math.pow(2, n));
+  }
+
+  hexNotation(x) {
+    // The `this.rawValue(x, 32, 8)` returns an integer between 0 and 2^32,
+    // the .toString(16).toUpperCase().padStart(8, '0') formats it as
+    // 8 hexadecimal digits.
+    return this.rawValue(x, 32, 8).toString(16).toUpperCase().padStart(8, '0');
+  }
+}("Hex");
+
+Notation.hex.signs = {POSITIVE: 0, NEGATIVE: 1};
+
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
  * (Object.values doesn't guarantee any order)
@@ -515,4 +589,5 @@ Notation.all = [
   Notation.roman,
   Notation.dots,
   Notation.zalgo,
+  Notation.hex,
 ];

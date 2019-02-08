@@ -1,5 +1,5 @@
 var dev = {};
-var specialGlyphSymbols = {
+const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
   key2606: "☆", key2607: "☇", key2608: "☈", key2609: "☉", key260a: "☊", key260b: "☋",
   key260c: "☌", key260d: "☍", key260e: "☎", key260f: "☏", key2610: "☐", key2611: "☑",
@@ -146,51 +146,23 @@ dev.refundDilStudies = function() {
     }
 }
 
-dev.generateSpecialGlyph = function(color, symbol, level) {
-    var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-    for (var i=0; player.reality.glyphs.last === type; i++) {
-      type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-    }
-    player.reality.glyphs.last = type;
-    var strength = gaussian_bell_curve()
-    var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-    if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-      type = "power"
-      effectAmount = 1
-      player.reality.glyphs.last = "power"
-    }
-    var idx = 0
-    var hasglyph = true
-    while (hasglyph) {
-      var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
-      if (slot !== undefined) idx++;
-      else hasglyph = false
-    }
-    var glyph = {
-      id: Date.now(),
-      idx: idx,
-      type: type,
-      strength: strength,
-      level: level,
-      color: color,
-      symbol: symbol,
-      effects: {}
-    }
-    return newGlyph(glyph, type, effectAmount)
-}
-
-dev.giveSpecialGlyph = function(color, symbol, level) {
-    player.reality.glyphs.inventory.push(dev.generateSpecialGlyph(color, symbol, level))
-    generateGlyphTable();
+dev.giveSpecialGlyph = function (color, symbol, level) {
+  symbol = "key" + symbol;
+  if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
+  if (!Glyphs.freeInventorySpace()) return;
+  let glyph = GlyphGenerator.randomGlyph(level, false);
+  glyph.symbol = symbol;
+  glyph.color = color;
+  Glyphs.addToInventory(glyph);
 }
 
 dev.giveMusicGlyph = function() {
-    dev.giveSpecialGlyph("#FF80AB", "266b", 0)
+  dev.giveSpecialGlyph("#FF80AB", "266b", 1)
 }
 
-dev.giveGlyph = function() {
-    player.reality.glyphs.inventory.push(generateRandomGlyph(Math.ceil(Math.random() * 100)))
-    generateGlyphTable();
+dev.giveGlyph = function () {
+  if (!Glyphs.freeInventorySpace()) return;
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
 }
 
 dev.decriminalize = function() {
@@ -343,7 +315,7 @@ dev.updateTestSave = function() {
       }
       player.options.testVersion = 12
     }
-  
+
   if (player.options.testVersion == 12) {
     player.reality.upgReqs.push(false, false, false, false, false)
     player.options.testVersion = 13

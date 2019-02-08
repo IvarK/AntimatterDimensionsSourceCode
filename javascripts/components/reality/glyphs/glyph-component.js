@@ -9,10 +9,10 @@ const GlyphTooltipEffect = {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     prefix() {
-      return this.effectConfig.singleDescSplit[0];
+      return this.effectConfig.singleDescSplit[0].replace("<br>", "\n");
     },
     suffix() {
-      return this.effectConfig.singleDescSplit[1];
+      return this.effectConfig.singleDescSplit[1].replace("<br>", "\n");
     },
     displayValue() {
       let value = this.effectConfig.formatEffect(this.value);
@@ -41,12 +41,16 @@ const GlyphTooltipComponent = {
     strength: Number,
     level: Number,
     effects: Object,
+    id: Number,
     sacrificeReward: {
       type: Number,
       default: 0,
-    },
+    }
   },
   computed: {
+    onTouchDevice() {
+      return GameUI.touchDevice;
+    },
     sortedEffects() {
       return Object.keys(this.effects).map(e => ({
         id: this.type + e,
@@ -71,11 +75,44 @@ const GlyphTooltipComponent = {
       return `Level: ${this.level}`;
     },
     sacrificeText() {
-      return `Can be sacrificed for ${this.sacrificeReward.toFixed(1)} power`;
+      return this.onTouchDevice
+        ? `Sacrifice for ${shorten(this.sacrificeReward, 2, 2)} power`
+        : `Can be sacrificed for ${shorten(this.sacrificeReward, 2, 2)} power`;
+    },
+    eventHandlers() {
+      return GameUI.touchDevice ? {
+        touchstart: this.touchStart,
+        dragstart: this.dragStart,
+        dragEnd: this.dragEnd,
+      } : {};
+    },
+    pointerEventStyle() {
+      // with mice, it's nice to just totally disable mouse events on the tooltip,
+      // which reduces the chances for stupidity
+      return this.onTouchDevice ? {} : { "pointer-events": "none" };
+    }
+  },
+  methods: {
+    touchStart(ev) {
+      // we _don't_ preventDefault here because we want the event to turn into a local
+      // dragstart that we can intercept
+      this.$parent.$emit("tooltip-touched");
+    },
+    dragStart(ev) {
+      // prevent dragging by tooltip on mobile
+      ev.preventDefault();
+      ev.stopPropagation();
+    },
+    dragEnd(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    },
+    sacrificeGlyph() {
+      sacrificeGlyph(Glyphs.inventoryById(this.id), false);
     },
   },
   template: /*html*/`
-  <div class="l-glyph-tooltip c-glyph-tooltip">
+  <div class="l-glyph-tooltip c-glyph-tooltip" v-on="eventHandlers" :style="pointerEventStyle">
     <div class="l-glyph-tooltip__header">
       <span class="c-glyph-tooltip__description" :style="descriptionStyle">{{description}}</span>
       <span class="l-glyph-tooltip__level">{{levelText}}</span>
@@ -83,11 +120,13 @@ const GlyphTooltipComponent = {
     <div class="l-glyph-tooltip__effects">
       <effect-desc v-for="e in sortedEffects" :effect="e.id" :value="e.value" :key="e.id"/>
     </div>
-    <div v-if="sacrificeReward > 0" class="c-glyph-tooltip__sacrifice">
+    <div v-if="sacrificeReward > 0"
+         :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
+         v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
       {{sacrificeText}}
     </div>
   </div>
-  `
+  `,
 };
 
 Vue.component("glyph-component", {
@@ -96,6 +135,10 @@ Vue.component("glyph-component", {
   },
   props: {
     glyph: Object,
+    showSacrifice: {
+      type: Boolean,
+      default: false,
+    },
     size: {
       type: String,
       default: "5rem",
@@ -115,11 +158,20 @@ Vue.component("glyph-component", {
     circular: {
       type: Boolean,
       default: false,
+    },
+    draggable: {
+      type: Boolean,
+      default: false,
     }
   },
   data: function () {
     return {
       componentID: UIID.next(),
+      isDragging: false,
+      // this flag is used to prevent the tooltip from being shown in some touch event sequences
+      suppressTooltip: false,
+      isTouched: false,
+      sacrificeReward: 0,
     }
   },
   computed: {
@@ -130,7 +182,10 @@ Vue.component("glyph-component", {
       return GlyphTypes[this.glyph.type];
     },
     symbol() {
-      return this.glyph.symbol || this.typeConfig.symbol;
+      const symbol = this.glyph.symbol;
+      return symbol
+        ? (symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol)
+        : this.typeConfig.symbol;
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -166,39 +221,136 @@ Vue.component("glyph-component", {
         "border-radius": this.circular ? "50%" : "0%",
       }
     },
+    mouseEventHandlers() {
+      let ret = this.hasTooltip ? {
+        mouseenter: this.mouseEnter,
+        "&mousemove": this.mouseMove,
+        mouseleave: this.mouseLeave,
+        mousedown: this.mouseDown,
+        touchstart: this.touchStart,
+        touchend: this.touchEnd
+      } : {};
+      if (this.hasTooltip || this.draggable) {
+        ret.touchmove = this.touchMove;
+      }
+      return ret;
+    },
+    isCurrentTooltip() {
+      return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
+    },
   },
   methods: {
-    mouseEnter() {
-      this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
+    hideTooltip() {
+      this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
-    mouseLeave() {
-      if (this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID) {
-        this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
+    showTooltip() {
+      this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
+      this.sacrificeReward = glyphSacrificeGain(this.glyph);
+    },
+    moveTooltipTo(x, y) {
+      if (this.$refs.tooltip.$el) {
+        let rect = this.$el.getBoundingClientRect();
+        this.$refs.tooltip.$el.style.left = `${x - rect.left}px`
+        this.$refs.tooltip.$el.style.top = `${y - rect.top}px`
       }
+    },
+    mouseEnter(ev) {
+      if (this.$viewModel.draggingUIID !== -1) return;
+      this.showTooltip();
+    },
+    mouseLeave(ev) {
+      if (this.isCurrentTooltip) {
+        this.hideTooltip();
+      }
+    },
+    mouseDown() {
+      if (this.isTouched) return;
+      this.hideTooltip();
     },
     mouseMove(ev) {
-      let rect = ev.target.getBoundingClientRect();
-      let x = ev.clientX - rect.left; //x position within the element.
-      let y = ev.clientY - rect.top;
-      if (this.$refs.tooltip.$el) {
-        this.$refs.tooltip.$el.style.left = `${x}px`
-        this.$refs.tooltip.$el.style.top = `${y}px`
+      if (this.isTouched) return;
+      this.moveTooltipTo(ev.clientX, ev.clientY);
+    },
+    dragStart(ev) {
+      this.hideTooltip();
+      this.isDragging = true;
+      this.suppressTooltip = true;
+      ev.dataTransfer.setData(GLYPH_MIME_TYPE, this.glyph.id.toString());
+      ev.dataTransfer.dropEffect = "move";
+      this.$viewModel.draggingUIID = this.componentID;
+    },
+    dragEnd(ev) {
+      this.isDragging = false;
+      this.suppressTooltip = false;
+      this.$viewModel.scrollWindow = 0;
+      if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+    },
+    drag(ev) {
+      // It looks like dragging off the bottom of the window sometimes fires these
+      // odd events
+      if (ev.screenX === 0 && ev.screenY === 0) {
+        this.$viewModel.scrollWindow = 0;
+        return;
       }
-    }
+      const boundary = 100;
+      if (ev.clientY < boundary) {
+        this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY/boundary;
+      } else if (ev.clientY > $(window).height() - boundary) {
+        this.$viewModel.scrollWindow = 1 - 0.9 * ($(window).height() - ev.clientY) / boundary;
+      } else {
+        this.$viewModel.scrollWindow = 0;
+      }
+    },
+    touchStart() {
+      this.isTouched = true;
+    },
+    touchEnd(e) {
+      if (this.isCurrentTooltip) {
+        e.preventDefault();
+        this.hideTooltip();
+      } else if (!this.suppressTooltip) {
+        e.preventDefault();
+        this.showTooltip();
+        this.moveTooltipTo(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }
+      this.suppressTooltip = false;
+      this.isTouched = false;
+    },
+    touchMove(e) {
+      const t = e.changedTouches[0];
+      const r = this.$refs.over.getBoundingClientRect();
+      if (t.clientX < r.left || t.clientY < r.top || t.clientX > r.left + r.width || t.clientY > r.top + r.height) {
+        this.suppressTooltip = true;
+      }
+      if (this.isDragging) {
+        // DragDropTouch doesn't seem to send drag events.
+        this.drag(t);
+      }
+    },
   },
   template:  /*html*/`
   <!-- The naive approach with a border and box-shadow seems to have problems with
       weird seams/artifacts at the edges. This makes for a rather complex workaround -->
-    <div :style="outerStyle" :class="['l-glyph-component']"
-      v-on="hasTooltip ? { mouseenter : mouseEnter,
-                           '&mousemove': $event => mouseMove($event),
-                           mouseleave: mouseLeave } : {}">
+    <div :style="outerStyle" :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
+         :draggable="draggable" v-on="draggable ? { dragstart: dragStart,
+                                                    dragend: dragEnd,
+                                                    drag: drag } : {}">
       <div ref="glyph" :style="innerStyle" :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <glyph-tooltip ref="tooltip" v-bind="glyph" v-if="hasTooltip"
-                       v-show="$viewModel.tabs.reality.currentGlyphTooltip === componentID"/>
+        <glyph-tooltip v-if="hasTooltip" ref="tooltip" v-bind="glyph" :sacrificeReward="sacrificeReward"
+                       v-show="isCurrentTooltip" :visible="isCurrentTooltip"/>
       </div>
-      <div :style="overStyle"/>
+      <div ref="over" :style="overStyle" v-on="mouseEventHandlers"
+           @click.shift.exact="$emit('shiftClicked', glyph.id)"
+           @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
+           @click.exact="$emit('clicked', glyph.id)"/>
     </div>
   `,
+  created() {
+    this.$on("tooltip-touched", () => this.hideTooltip() );
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+  }
 });

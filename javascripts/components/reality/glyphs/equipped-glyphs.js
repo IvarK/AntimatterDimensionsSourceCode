@@ -40,15 +40,19 @@ Vue.component("equipped-glyphs", {
         Math.cos(2 * Math.PI * idx / this.numSlots);
     },
     dragover(event, idx) {
+      if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       event.preventDefault();
       this.dragoverIndex = idx;
     },
     dragleave(idx) {
-      if (this.dragoverIndex == idx) this.dragoverIndex = -1;
+      if (this.dragoverIndex === idx) this.dragoverIndex = -1;
     },
-    drop(event) {
+    drop(event, idx) {
       this.dragoverIndex = -1;
-      drop(event);
+      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE));
+      if (!id || isNaN(id)) return;
+      const glyph = Glyphs.inventoryById(id);
+      if (glyph) Glyphs.equip(glyph, idx);
     },
     toggleRespec() {
       player.reality.respec = !player.reality.respec;
@@ -67,8 +71,8 @@ Vue.component("equipped-glyphs", {
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
                     :style=glyphPositionStyle[idx]>
           <!-- the drop zone is a bit larger than the glyph itself. -->
-          <div :id="'active' + idx" class="glyphactive l-equipped-glyphs__dropzone"
-                @dragover="dragover($event, idx)" @dragleave="dragleave(idx)" @drop="drop($event)"/>
+          <div class="glyphactive l-equipped-glyphs__dropzone"
+               @dragover="dragover($event, idx)" @dragleave="dragleave(idx)" @drop="drop($event, idx)"/>
         </div>
       </template>
     </div>

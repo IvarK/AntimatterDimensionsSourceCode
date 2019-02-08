@@ -13,6 +13,10 @@
   padding-bottom: 0.04em;
 }
 
+.c-glyph-component--dragging {
+  opacity: 0.5;
+}
+
 .l-glyph-effect-values__effect {}
 
 .l-glyph-sacrifice-options {
@@ -137,54 +141,6 @@
   flex-direction: column;
 }
 
-.awesomegrad {
-  background: red;
-  background: -webkit-linear-gradient(left, orange, yellow, #0f0, cyan, blue, violet);
-  background: -o-linear-gradient(right, orange, yellow, #0f0, cyan, blue, violet);
-  background: -moz-linear-gradient(right, orange, yellow, #0f0, cyan, blue, violet);
-  background: linear-gradient(to right, orange, yellow, #0f0, cyan, blue, violet);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-}
-
-.spinner {
-  display: inline-block;
-  animation-name: spinspin, depth;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 3s;
-  text-align: center;
-}
-
-@keyframes spinspin {
-  from {
-    transform: rotate3d(0, 1, 0, 0);
-  }
-  to {
-    transform: rotate3d(0, 1, 0, 360deg);
-  }
-}
-
-@keyframes depth {
-  0 {
-    text-shadow: 0 0 #00000000;
-  }
-  25% {
-    text-shadow: 1px 0 #00000000, 2px 0 #00000000, 3px 0 #00000000, 4px 0 #00000000, 5px 0 #00000000;
-  }
-  50% {
-    text-shadow: 0 0 #00000000;
-  }
-  75% {
-    text-shadow: -1px 0 #00000000, -2px 0 #00000000, -3px 0 #00000000, -4px 0 #00000000, -5px 0 #00000000;
-  }
-  100% {
-    text-shadow: 0 0 #00000000;
-  }
-}
-
 .l-auto-sac-type-tab__row-wrapper {
   display: flex;
   flex-direction: row;
@@ -249,11 +205,11 @@
 .l-glyph-tooltip {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 274px;
   padding: 5px 0;
   position: absolute;
   z-index: 4;
-  pointer-events: none;
   transform: translate(-50%, calc(-100% - 1rem));
 }
 
@@ -279,6 +235,7 @@
   border-width: 5px;
   border-style: solid;
   border-color: #4a4a4a transparent transparent transparent;
+  pointer-events: none;
 }
 
 .c-glyph-tooltip__description {
@@ -301,6 +258,13 @@
 
 .c-glyph-tooltip__sacrifice {
   color: #b4b4b4;
+}
+
+.c-glyph-tooltip__sacrifice--touchable {
+  color: #d4d4ff;
+  border: 0.1rem solid #d4d4ff;
+  border-radius: 0.5em;
+  padding: 0.25em 1em 0.25em 1em;
 }
 
 .l-modal-glyph-selection {
@@ -443,4 +407,44 @@
 .c-sacrificed-glyphs__type-amount {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.l-glyph-inventory {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /*height: 59rem;*/
+  height: auto;
+  align-items: center;
+}
+
+.l-glyph-inventory__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /*width: 63.5rem;*/
+  width: auto;
+  align-items: center;
+}
+
+.l-glyph-inventory__slot {
+  width: 5rem;
+  height: 5rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.c-glyph-inventory__slot {
+  background-color: gainsboro;
+}
+
+.t-dark-metro .c--glyph-inventory__slot {
+  background-color: #333;
+}
+
+.t-dark .c-glyph-inventory__slot {
+  background-color: #333;
+}
+
+.t-s6 .c-glyph-inventory__slot {
+  background-color: #333333;
 }

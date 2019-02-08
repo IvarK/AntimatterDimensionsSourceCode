@@ -21,7 +21,6 @@ const GlyphSelection = {
   select(index) {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
-    generateGlyphTable();
     this.glyphs = [];
     manualReality();
   }
@@ -56,7 +55,6 @@ function requestManualReality() {
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   if (!Perk.glyphChoice3.isBought) {
     Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
-    generateGlyphTable();
     return manualReality();
   }
   let numChoices = Perk.glyphChoice4.isBought  ? 4 : 3;
@@ -97,7 +95,6 @@ function autoReality() {
   }
   if (newGlyph && Glyphs.freeInventorySpace()) {
     Glyphs.addToInventory(newGlyph);
-    generateGlyphTable();
   }
   completeReality(false, false);
 }
@@ -287,7 +284,6 @@ function completeReality(force, reset) {
     Tab.dimensions.normal.show();
   }
   Marathon2 = 0;
-  generateGlyphTable();
   updateWormholeUpgrades();
   updateAutomatorRows();
   drawPerkNetwork();

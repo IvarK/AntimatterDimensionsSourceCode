@@ -150,7 +150,7 @@ Vue.component("glyph-sacrifice-options", {
       } : {}
     },
     update() {
-      this.unlocked = Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE);
+      this.unlocked = Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE);
       this.mode = AutoGlyphSacrifice.mode;
       for (type of GLYPH_TYPES) {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;

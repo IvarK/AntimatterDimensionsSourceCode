@@ -29,6 +29,9 @@ const AutoRealityMode = {
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 const TS171_MULTIPLIER = 1.25;
 
+// used as drag and drop data type
+const GLYPH_MIME_TYPE = "text/x-glyph-ivark"
+
 // These need to be in descending order for searching over them to work trivially
 const GlyphRarities = [
   {

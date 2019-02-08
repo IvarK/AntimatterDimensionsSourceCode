@@ -197,7 +197,6 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  generateGlyphTable();
   updateRealityUpgrades();
   updateWormholeUpgrades()
   updateAutomatorRows()

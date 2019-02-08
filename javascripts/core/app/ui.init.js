@@ -43,6 +43,8 @@ let ui = {
     shiftDown: false,
     theme: undefined,
     bigCrunch: false,
+    scrollWindow: 0,
+    draggingUIID: -1,
   },
-  notationName: String.empty
+  notationName: String.empty,
 };

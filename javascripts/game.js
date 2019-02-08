@@ -871,7 +871,9 @@ function gameLoop(diff, options = {}) {
 
     if (player.currentChallenge == "postc8") postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
 
-    if (Challenge(3).isRunning || player.matter.gte(1)) player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff/100));
+    if (Challenge(3).isRunning || player.matter.gte(1)) {
+      player.chall3Pow = Decimal.min(Number.MAX_VALUE, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
+    }
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
     if (InfinityChallenge(2).isRunning) {
         if (postC2Count >= 8 || diff > 8000) {

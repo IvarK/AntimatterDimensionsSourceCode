@@ -243,7 +243,7 @@ function gainedRealityMachines() {
     ret = ret.times(player.celestials.teresa.rmMult)
     ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
-    if (Perk.realityMachineGain.isBought) ret = ret.add(2 * player.realities);
+    ret = ret.plusEffectOf(Perk.realityMachineGain);
     return Decimal.floor(ret)
 }
 

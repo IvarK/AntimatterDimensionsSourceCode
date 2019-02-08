@@ -81,7 +81,8 @@ GameDatabase.reality.perks = {
   realityMachineGain: {
     id: 25,
     label: "R1",
-    description: "Gain additional RM equal to twice your current reality count"
+    description: "Gain additional RM equal to twice your current reality count",
+    effect: () => 2 * player.realities
   },
   automatorRowIncrease1: {
     id: 30,
@@ -174,31 +175,31 @@ GameDatabase.reality.perks = {
   autocompleteEC1: {
     id: 60,
     label: "AE1",
-    description: "Auto-complete one EC every 6 hours",
+    description: "Auto-complete one EC every 6 hours (real-time)",
     effect: () => 6
   },
   autocompleteEC2: {
     id: 61,
     label: "AE2",
-    description: "Auto-complete one EC every 4 hours",
+    description: "Auto-complete one EC every 4 hours (real-time)",
     effect: () => 4
   },
   autocompleteEC3: {
     id: 62,
     label: "AE3",
-    description: "Auto-complete one EC every 2 hours",
+    description: "Auto-complete one EC every 2 hours (real-time)",
     effect: () => 2
   },
   autocompleteEC4: {
     id: 63,
     label: "AE4",
-    description: "Auto-complete one EC every 1 hour",
+    description: "Auto-complete one EC every 1 hour (real-time)",
     effect: () => 1
   },
   autocompleteEC5: {
     id: 64,
     label: "AE5",
-    description: "Auto-complete one EC every 30 minutes",
+    description: "Auto-complete one EC every 30 minutes (real-time)",
     effect: () => 0.5
   },
   studyActiveEP: {

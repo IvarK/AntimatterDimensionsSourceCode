@@ -10,16 +10,16 @@ GameDatabase.Celestials.V = {
   runUnlocks: [
     {
       id: 0,
-      name: "The True Sonic",
+      name: "QuickPlatinum",
       description: "Complete all challenges within {value} seconds from starting reality (real time).",
-      values: [15, 12, 10, 7, 5],
+      values: [18, 15, 12, 10, 7, 5],
       condition: (x) => EternityChallenge.completedTiers() == 60 && player.thisRealityRealTime < x * 1000
     },
     {
       id: 1,
       name: "AntiGalactus",
       description: "Have {value} total galaxies from all types.",
-      values: [2500, 2750, 3000, 3250, 3500],
+      values: [2500, 2750, 3000, 3250, 3500, 3750],
       condition: (x) => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
       format: (x) => x
     },
@@ -27,15 +27,22 @@ GameDatabase.Celestials.V = {
       id: 2,
       name: "Name's Matter, Anti Matter",
       description: "Get {value} IP at Eternity Challenge 7.",
-      values: [new Decimal("1e250000"), new Decimal("1e270000"), new Decimal("1e290000"), new Decimal("1e310000"), new Decimal("1e330000")],
+      values: [new Decimal("1e250000"), new Decimal("1e270000"), new Decimal("1e290000"), new Decimal("1e310000"), new Decimal("1e330000"), new Decimal("1e350000")],
       condition: (x) => player.currentEternityChall == "eterc7" && player.infinityPoints.gte(x)
     },
     {
       id: 3,
       name: "12 Matters",
       description: "Get {value} Antimatter at Eternity Challenge 12.",
-      values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000")],
+      values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000"), new Decimal("1e400000000")],
       condition: (x) => player.currentEternityChall == "eterc12" && player.money.gte(x)
+    },
+    {
+      id: 4,
+      name: "Eternal Sunshine",
+      description: "Get {value} EP.",
+      values: [new Decimal("1e2000"), new Decimal("1e2400"), new Decimal("1e2800"), new Decimal("1e3200"), new Decimal("1e3600"), new Decimal("1e4000")],
+      condition: (x) => player.eternityPoints.gte(x)
     }
   ]
 };

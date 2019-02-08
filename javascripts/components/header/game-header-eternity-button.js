@@ -42,7 +42,7 @@ Vue.component("game-header-eternity-button", {
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = player.realities === 0 &&
         player.eternityPoints.exponent >= 4000 &&
-        player.timestudy.theorem > 5e9 &&
+        player.timestudy.theorem.gt(5e9) &&
         player.replicanti.amount.exponent > 20000;
 
       if (player.dilation.active) {

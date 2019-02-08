@@ -238,7 +238,7 @@ var player = {
     auto: [false, false, false]
   },
   timestudy: {
-    theorem: 0,
+    theorem: new Decimal(0),
     amcost: new Decimal("1e20000"),
     ipcost: new Decimal(1),
     epcost: new Decimal(1),
@@ -493,7 +493,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     //TODO: rework autobuyer saving
-    if (key === "autobuyers") continue;
+    if (key === "autobuyers" || key === "autoSacrifice") continue;
 
     let value = obj[key];
     if (isObject(value)) {

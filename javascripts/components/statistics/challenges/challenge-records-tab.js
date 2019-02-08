@@ -1,29 +1,14 @@
 Vue.component('challenge-records-tab', {
   data: function() {
     return {
-      challengeTimes: player.challengeTimes,
-      infchallengeTimes: player.infchallengeTimes,
+      normalChallenges: player.challengeTimes.slice(0),
+      infinityChallenges: player.infchallengeTimes.slice(0),
     };
   },
-  computed: {
-    normalChallenges: function() {
-      let challenges = this.challengeTimes;
-      return [
-        challenges[0],
-        challenges[1],
-        challenges[6],
-        challenges[4],
-        challenges[8],
-        challenges[7],
-        challenges[9],
-        challenges[3],
-        challenges[2],
-        challenges[10],
-        challenges[5]
-      ];
-    },
-    infinityChallenges: function() {
-      return this.infchallengeTimes;
+  methods: {
+    update() {
+      this.normalChallenges = player.challengeTimes.slice(0);
+      this.infinityChallenges = player.infchallengeTimes.slice(0);
     }
   },
   template:

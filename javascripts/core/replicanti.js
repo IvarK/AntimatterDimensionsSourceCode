@@ -1,6 +1,6 @@
 var repMs = 0;
 function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
-  return nearestPercent(1 + getGlyphSacEffect("replication") / 100);
+  return nearestPercent(1 + Effects.sum(GlyphSacrifice.replication) / 100);
 }
 
 // Rounding errors suck

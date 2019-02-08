@@ -6,7 +6,8 @@ const GameDatabase = {
     timeStudies: {}
   },
   reality: {
-    glyphEffects: {}
+    glyphEffects: {},
+    glyphSacrifice: {},
   }
 };
 

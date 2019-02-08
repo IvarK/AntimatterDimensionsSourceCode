@@ -1,4 +1,4 @@
-Vue.component('modal-import', {
+Vue.component("modal-import", {
   data: function() {
     return {
       input: ""

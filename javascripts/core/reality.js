@@ -1,26 +1,78 @@
-function reality(force, reset, auto) {
-  if (!((player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought && (glyphSelected || realizationCheck === 1 || !player.options.confirmations.reality || confirm("Reality will reset everything except challenge records, and will lock your achievements, which you will regain over the course of 2 days. You will also gain reality machines based on your EP, a glyph with a power level based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of life upgrades, and unlock various upgrades."))) || force)) {
+/**
+ * Object that manages the selection of glyphs offered to the player
+ */
+const GlyphSelection = {
+  glyphs: [],
+  get active() {
+    return ui.view.modal.glyphSelection;
+  },
+  generate(count, level) {
+    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
+    if (Perk.glyphUncommonGuarantee.isBought) {   // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+      const strengthThreshold = 1.5;  // Uncommon
+      if (!this.glyphs.some(e => e.strength >= strengthThreshold)) {
+        let newStrength;
+        do {
+          newStrength = GlyphGenerator.randomStrength(false);
+        } while (newStrength < strengthThreshold);
+        this.glyphs[Math.floor(random() * this.glyphs.length)].strength = newStrength;
+      }
+    }
+    ui.view.modal.glyphSelection = true;
+  },
+  update(level) {
+    this.glyphs.forEach(g => {
+      if (g.level < level) {
+        g.level = level;
+        fixGlyph(g);
+      }
+    })
+  },
+  select(index) {
+    ui.view.modal.glyphSelection = false;
+    Glyphs.addToInventory(this.glyphs[index]);
+    this.glyphs = [];
+    manualReality();
+  }
+}
+
+function confirmReality() {
+  return !player.options.confirmations.reality ||
+    confirm("Reality will reset everything except challenge records, " +
+      "and will lock your achievements, which you will regain over the course of 2 days. " +
+      "You will also gain reality machines based on your EP, a glyph with a power level " +
+      "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
+      "life upgrades, and unlock various upgrades.")
+}
+
+function realityAvailable() {
+  return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
+}
+
+/**
+ * Triggered when the user clicks the reality button. This triggers the glyph selection
+ * process, if applicable. Auto sacrifice is never triggered.
+ */
+function requestManualReality() {
+  if (GlyphSelection.active || !realityAvailable() || !confirmReality()) {
     return;
   }
-  if (!glyphSelected && Perk.glyphChoice3.isBought && !auto) {
-    possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()));
-    setTimeout(function () {
-      possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
-    }, 50);
-    setTimeout(function () {
-      if (Perk.glyphChoice4.isBought) {
-        setTimeout(function () {
-          possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()));
-          generateGlyphSelection(4)
-        }, 50)
-      } else {
-        generateGlyphSelection(3)
-      }
-    }, 100);
-    return
+  if (!Glyphs.freeInventorySpace()) {
+    alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
+    return;
   }
-  if ((player.options.animations.reality) && realizationCheck === 0 && !auto) {
-    realizationCheck = 1;
+  // If there is no glyph selection, proceed with reality immediately. Otherwise,
+  // we generate a glyph selection, and keep the game going while the user dithers over it.
+  if (!Perk.glyphChoice3.isBought) {
+    Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
+    return manualReality();
+  }
+  let numChoices = Perk.glyphChoice4.isBought  ? 4 : 3;
+  GlyphSelection.generate(numChoices, gainedGlyphLevel());
+}
+
+function manualReality() {
+  if (player.options.animations.reality) {
     document.getElementById("container").style.animation = "realize 10s 1";
     document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
     document.getElementById("realityanimbg").style.display = "block";
@@ -34,15 +86,31 @@ function reality(force, reset, auto) {
       document.getElementById("realityanimbg").style.animation = "";
       document.getElementById("realityanimbg").style.display = "none";
     }, 10000);
-    // I'm fairly sure this first case is currently impossible but I'm keeping it just in case.
-    if (force === true) setTimeout(function () { reality(true) }, 3000);
-    else setTimeout(reality, 3000);
-    return
+    setTimeout(() => completeReality(false, false), 3000);
+  } else {
+    completeReality(false, false);
   }
-  realizationCheck = 0;
+}
+
+function autoReality() {
+  if (GlyphSelection.active || !realityAvailable()) return;
+  let newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+  if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
+    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Glyphs.freeInventorySpace()) {
+      console.log("Sacrificing a glyph: ")
+      console.log(newGlyph);
+      sacrificeGlyph(newGlyph, true);
+      newGlyph = null;
+    }
+  }
+  if (newGlyph && Glyphs.freeInventorySpace()) {
+    Glyphs.addToInventory(newGlyph);
+  }
+  completeReality(false, false);
+}
+
+function completeReality(force, reset) {
   if (!reset) {
-    if (player.reality.glyphs.inventory.length >= 100 && Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) autoSacrificeGlyph()
-    if (!Perk.glyphChoice3.isBought || auto) player.reality.glyphs.inventory.push(generateRandomGlyph(gainedGlyphLevel()));
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
     }
@@ -51,14 +119,14 @@ function reality(force, reset, auto) {
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
     if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
     if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
-      var tempBool = true;
+      let tempBool = true;
       for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         if (player.reality.glyphs.active[i].strength < 1.5) tempBool = false
       }
       if (tempBool) unlockRealityUpgrade(16)
     }
     if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4) {
-      var tempBool = true;
+      let tempBool = true;
       for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         let count = 0;
         for (let y in player.reality.glyphs.active[i].effects) {
@@ -69,7 +137,7 @@ function reality(force, reset, auto) {
       if (tempBool) unlockRealityUpgrade(17)
     }
     if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4) {
-      var tempBool = true;
+      let tempBool = true;
       for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         if (player.reality.glyphs.active[i].level < 10) tempBool = false
       }
@@ -80,7 +148,7 @@ function reality(force, reset, auto) {
     if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.every((type) => type === 'effarig' || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+    if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
   }
 
   if (player.reality.respec) {
@@ -226,7 +294,6 @@ function reality(force, reset, auto) {
     Tab.dimensions.normal.show();
   }
   Marathon2 = 0;
-  generateGlyphTable();
   updateWormholeUpgrades();
   updateAutomatorRows();
   drawPerkNetwork();
@@ -235,6 +302,7 @@ function reality(force, reset, auto) {
   if (player.realities >= 4) giveAchievement("How does this work?")
 
   resetInfinityPoints();
+
 
   function resetReplicanti() {
     player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);
@@ -249,8 +317,6 @@ function reality(force, reset, auto) {
     player.replicanti.galaxybuyer = player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined;
     player.replicanti.auto = [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false];
   }
-  possibleGlyphs = []
-  glyphSelected = false
   if (player.reality.upg.includes(13)) {
     if (player.reality.epmultbuyer) buyMaxEPMult();
     for (var i = 1; i < 9; i++) {
@@ -303,25 +369,8 @@ function unlockRealityUpgrade(id) {
 
 function startRealityOver() {
   if (confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
-    glyphSelected = true
-    realizationCheck = 1
-    reality(true, true);
+    completeReality(true, true);
     return true;
   }
   return false;
-}
-
-function autoSacrificeGlyph() {
-  let list = []
-  let x = player.celestials.effarig.typePriorityOrder.length - 1
-  while (list.length == 0) {
-    list = player.reality.glyphs.inventory.filter((g) => g.type == player.celestials.effarig.typePriorityOrder[x].toLowerCase())
-    x--
-  }
-  let toSacrifice = list.sort((a, b) => {
-    if (a.level * a.strength > b.level * b.strength) return 1
-    else return -1
-  })[0]
-  sacrificeGlyph(toSacrifice, true)
-
 }

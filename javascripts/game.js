@@ -489,53 +489,6 @@ function failChallenge() {
     if (failureCount > 9) giveAchievement("You're a failure");
 }
 
-function selectGlyph(idx) {
-    glyphSelected = true
-    $("#glyphSelect").hide()
-    if (player.options.animations.reality) setTimeout(function(){
-        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
-        possibleGlyphs = []
-    }, 3000)
-    else {
-        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
-        possibleGlyphs = []
-    }
-    reality()
-}
-
-function generateGlyphSelection(amount) {
-  possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
-  if (Perk.glyphUncommonGuarantee.isBought) {   // If no choices are rare enough, pick one randomly and reroll its rarity until it is
-    let strengthThreshold = 1.5;  // Uncommon
-    let hasThresholdStrength = false;
-    for (let i = 0; i < possibleGlyphs.length; i++) {
-        hasThresholdStrength = hasThresholdStrength || possibleGlyphs[i].strength >= strengthThreshold;
-    }
-    if (!hasThresholdStrength) {
-        let newStrength = 0;
-        while (newStrength < strengthThreshold) {
-            newStrength = gaussian_bell_curve();
-        }
-        possibleGlyphs[Math.floor(random() * possibleGlyphs.length)].strength = newStrength;
-    }
-  }
-  $("#glyphSelect").show()
-  var html = ""
-  for (let idx = 0; idx< amount; idx++) {
-      var glyph = possibleGlyphs[idx]
-      var rarity = getRarity(glyph.strength)
-      html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'>"
-      html += getGlyphTooltip(glyph)
-      html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
-  }
-  $("#glyphsToSelect").html(html)
-  
-  updateTooltips();
-}
-
-var possibleGlyphs = []
-var glyphSelected = false
-
 function exitChallenge() {
     if (player.currentChallenge !== "") {
         startChallenge("", new Decimal(0));
@@ -1173,10 +1126,11 @@ function gameLoop(diff, options = {}) {
     }
     updateWormholeGraphics();
   }
-
   // Reality unlock and TTgen perk autobuy
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines().gt(0))  buyDilationStudy(6, 5e9);
+
+  if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   V.checkForUnlocks()
 

@@ -9,7 +9,6 @@ var justImported = false;
 var saved = 0;
 var failureCount = 0;
 var implosionCheck = 0;
-var realizationCheck = 0;
 var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
@@ -385,7 +384,15 @@ var player = {
         dt: 25,
         eternities: 25
       },
-      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"],
+      autoGlyphSac: {
+        mode: AutoGlyphSacMode.NONE,
+        types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+        })),
+      },
     },
     enslaved: {
       isStoring: false,

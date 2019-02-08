@@ -42,8 +42,8 @@ Vue.component('enslaved-tab', {
     `<div class="l-enslaved-celestial-tab">
       <div class="l-enslaved-top-container">
         <div class="o-enslaved-stored-time"> You have {{ timeDisplayShort(stored) }} stored</div>
-        <button class="o-enslaved-shop-button" :class="{'o-enslaved-shop-button--storing-time': isStoring}" @click="toggleStore">{{ isStoring ? "Storing wormhole time": "Store wormhole time" }}</button>
-        <button class="o-enslaved-shop-button" @click="useStored">Use all stored time in a single tick</button>
+        <button class="o-enslaved-mechanic-button" :class="{'o-enslaved-mechanic-button--storing-time': isStoring}" @click="toggleStore">{{ isStoring ? "Storing wormhole time": "Store wormhole time" }}</button>
+        <button class="o-enslaved-mechanic-button" @click="useStored">Use all stored time in a single tick</button>
       </div>
       <div class="l-enslaved-shop-container">
         <button 
@@ -53,11 +53,11 @@ Vue.component('enslaved-tab', {
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
-        <button class="o-enslaved-shop-button" @click="startRun">
+        <button class="o-enslaved-run-button" @click="startRun">
           Start Enslaved One's Reality<br>IDs, TDs and replicanti are disabled, but you gain a 3rd wormhole. You also gain some bonus based on
           infinities gained in the last 10 seconds (real time). (I haven't decided what yet lol xd lmao)
         </button>
-        <div>You have gained {{ shorten(enslavedInfinities) }} infinities in the last 10 seconds.</div>
+        <div class="o-enslaved-gained-infinities">You have gained <b>{{ shorten(enslavedInfinities) }}</b> infinities in the last 10 seconds.</div>
       </div>
     </div>`
 });

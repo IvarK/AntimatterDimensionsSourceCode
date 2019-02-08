@@ -4940,9 +4940,35 @@ screen and (max-width: 480px) {
 
 /* #startregion enslaved tab */
 
+.o-enslaved-stored-time, .o-enslaved-gained-infinities {
+  font-size: 1.6rem;
+  margin: 1rem 0;
+}
+
+.o-enslaved-mechanic-button {
+  padding: .5rem;
+  border-radius: .5rem;
+  border: .2rem solid sandybrown;
+  background-color: #fdd3b0;
+  cursor: pointer;
+  margin: 1rem .5rem;
+  font-family: Typewriter;
+}
+
+.o-enslaved-mechanic-button--storing-time {
+  background-color: #ffa337 !important;
+}
+
+.l-enslaved-shop-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 90rem;
+  margin: auto;
+}
+
 .o-enslaved-shop-button {
   padding: 1.7rem;
-  font-size: 2rem;
   background-color: #5151ec;
   color: white;
   border: none;
@@ -4950,11 +4976,21 @@ screen and (max-width: 480px) {
   margin: 1rem;
   cursor: pointer;
   transition-duration: 0.12s;
-  max-width: 35rem;
+  width: 30rem;
+  height: 10rem;
+  font-family: Typewriter;
 }
 
-.o-enslaved-shop-button--storing-time {
-  background-color: rebeccapurple;
+.o-enslaved-run-button {
+  width: 25rem;
+  padding: 2rem;
+  border-radius: .5rem;
+  border: 2px solid #cd945c;
+  background: #ead584;
+  font-family: Typewriter;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
 }
 
 /* #endregion enslaved tab*/

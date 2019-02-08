@@ -2,117 +2,356 @@
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
-                           "dilationpow", "powermult", "powerdimboost", "powerbuy10",
-                           "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
-                           "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
-                           "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-                           "effarigwormhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
+  "dilationpow", "powermult", "powerdimboost", "powerbuy10",
+  "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
+  "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
+  "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "effarigwormhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
+const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
 
-/**
- * More than 3 approx 0.001%
- * More than 2.5 approx 0.2%
- * More than 2 approx 6%
- * More than 1.5 approx 38.43%
- */
-function random() {
-  let x = Math.sin(player.reality.seed++) * 10000;
-  return x - Math.floor(x);
+function rarityToStrength(x) {
+  return x * 2.5 / 100 + 1;
 }
 
-function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
-  let u = 0, v = 0;
-  let minimumValue = 1;
-  let ret = 1;
-  if (Perk.glyphRarityIncrease.isBought) minimumValue += 0.125;
-  while (ret <= minimumValue || u == 0 || v == 0) {
-    u = random();
-    v = random();
-    ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
-  }
-  // Each rarity% is 0.025 strength.
-  return ret + getGlyphSacEffect("effarig") / 40;
+function strengthToRarity(x) {
+  return (x - 1) * 100 / 2.5;
 }
 
-// Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
-/**
- * @param {number} level
- */
-function generateRandomGlyph(level) {
-  let type;
-  let glyphTypesLength = GLYPH_TYPES.length - 1
-  if (Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) glyphTypesLength++
-  do {
-    type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
-  } while (player.reality.glyphs.last === type);
-  player.reality.glyphs.last = type;
-  let strength = gaussian_bell_curve();
-  if (player.reality.upg.includes(16)) strength *= 1.3
-  let effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-  if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
-  if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-    type = "power"
-    effectAmount = 1
-    player.reality.glyphs.last = "power"
-  }
-  let idx = 0
-  let hasglyph = true
-  while (hasglyph) {
-    console.log(idx)
-    let slot = player.reality.glyphs.inventory.find(g => g.idx === idx )
-    if (slot !== undefined) idx++;
-    else hasglyph = false
-  }
-  var glyph = {
-    id: Date.now(),
-    idx: idx,
-    type: type,
-    strength: strength,
-    level: level,
-    effects: {}
-  }
-  return newGlyph(glyph, type, effectAmount)
-}
 
-function newGlyph(glyph, type, effectAmount) {
-  let effects = []
-  while (effects.length < effectAmount) {
-    let toAdd;
-    switch (type) {
-      case "time":
-        toAdd = timeEffects[Math.floor(random() * timeEffects.length)];
-        break;
-      case "dilation":
-        toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)];
-        break;
-      case "replication":
-        toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)];
-        break;
-      case "infinity":
-        toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)];
-        break;
-      case "power":
-        toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
-        if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) toAdd = "pow"
-        break;
-      case "effarig":
-        toAdd = effarigEffects[Math.floor(random() * effarigEffects.length)];
-        break;
+const AutoGlyphSacrifice = {
+  set mode(value) {
+    player.celestials.effarig.autoGlyphSac.mode = value;
+  },
+  get mode() {
+    return player.celestials.effarig.autoGlyphSac.mode;
+  },
+  get types() {
+    return player.celestials.effarig.autoGlyphSac.types;
+  },
+  wouldSacrifice(glyph) {
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.NONE) return false;
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALL) return true;
+    let typeCfg = AutoGlyphSacrifice.types[glyph.type];
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
+      return typeCfg.rarityThreshold > strengthToRarity(glyph.strength);
     }
-    if (!effects.includes(toAdd)) effects.push(toAdd)
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
+      let glyphScore = strengthToRarity(glyph.strength) +
+        Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
+      return typeCfg.scoreThreshold > glyphScore;
+    }
+    throw crash("Unknown auto glyph sacrifice mode");
+  },
+};
+
+const GlyphGenerator = {
+  last_fake: "power",
+
+  startingGlyph(level) {
+    let strength = this.randomStrength(false);
+    player.reality.glyphs.last = "power";
+    return {
+      id: Date.now(),
+      idx: null,
+      type: "power",
+      strength: strength,
+      level: level,
+      effects: {
+        pow: getGlyphEffectStrength("powerpow", level, strength),
+      },
+    }
+  },
+
+  randomGlyph(level, fake) {
+    let strength = this.randomStrength(fake);
+    let type = this.randomType(fake);
+    let numEffects = this.randomNumberOfEffects(strength, level, fake);
+    let effects = this.randomEffects(type, numEffects, fake);
+    // effects come out as powerpow, powerdimboost, etc. Glyphs store them
+    // abbreviated.
+    let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
+    return {
+      id: this.makeId(fake),
+      idx: null,
+      type: type,
+      strength: strength,
+      level: level,
+      effects: effects.mapToObject(e => abbreviateEffect(e),
+        e => getGlyphEffectStrength(e, level, strength)),
+    }
+  },
+
+  makeId(fake) {
+    let rng = this.get_rng(fake);
+    return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
+  },
+
+  randomStrength(fake) {
+    let result;
+    let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
+    do {
+      result = GlyphGenerator.gaussian_bell_curve(this.get_rng(fake));
+    } while (result <= minimumValue);
+    // Each rarity% is 0.025 strength.
+    result += Effects.sum(GlyphSacrifice.effarig) / 40;
+    if (player.reality.upg.includes(16)) result *= 1.3;
+    return result;
+  },
+
+  randomNumberOfEffects(strength, level, fake) {
+    let rng = this.get_rng(fake);
+    let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
+    if (player.reality.upg.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
+    return ret;
+  },
+
+  randomEffects(type, count, fake) {
+    let rng = this.get_rng(fake);
+    let ret = [];
+    for (let i = 0; i < count; ++i) {
+      let effect = GlyphTypes[type].randomEffect(rng, ret);
+      if (!effect) break;
+      ret.push(effect);
+    }
+    return ret;
+  },
+
+  randomType(fake) {
+    let rng = this.get_rng(fake);
+    if (fake) {
+      GlyphGenerator.last_fake = GlyphTypes.random(rng, [GlyphGenerator.last_fake]);
+      return GlyphGenerator.last_fake;
+    } else {
+      player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
+      return player.reality.glyphs.last;
+    }
+  },
+
+  get_rng(fake) {
+    return fake ? Math.random : GlyphGenerator.random;
+  },
+
+  random() {
+    let x = Math.sin(player.reality.seed++) * 10000;
+    return x - Math.floor(x);
+  },
+
+  /**
+   * More than 3 approx 0.001%
+   * More than 2.5 approx 0.2%
+   * More than 2 approx 6%
+   * More than 1.5 approx 38.43%
+   */
+  gaussian_bell_curve(rng) {
+    if (rng === undefined) rng = GlyphGenerator.random;
+    let u = Math.max(rng(), Number.MIN_VALUE);
+    let v = rng();
+    return Math.pow(Math.max(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + 1, 1), 0.65);
+  },
+
+  copy(glyph) {
+    return deepmerge({}, glyph);
+  },
+};
+
+const Glyphs = {
+  inventory: [],
+  // This is a reactified copy:
+  inventoryCopy: [],
+  active: [],
+  // This is a reactified copy:
+  activeCopy: [],
+  // This is reactified as well:
+  activeEffects: [],
+  findFreeIndex() {
+    this.validate();
+    return this.inventory.indexOf(null);
+  },
+  freeInventorySpace() {
+    this.validate();
+    return this.inventory.reduce((n, e) => e === null ? n + 1 : n, 0);
+  },
+  refresh() {
+    this.active = new Array(player.reality.glyphs.slots).fill(null);
+    this.activeCopy.splice(0);
+    for (let idx = 0; idx < player.reality.glyphs.slots; ++idx) {
+      Vue.set(this.activeCopy, idx, null);
+    }
+    player.reality.glyphs.active.forEach((g) => {
+      if (this.active[g.idx]) {
+        throw crash("Stacked active glyphs?")
+      } else {
+        this.active[g.idx] = g;
+        Vue.set(this.activeCopy, g.idx, GlyphGenerator.copy(g));
+      }
+    });
+    this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
+    // glyphs could previously end up occupying the same inventory slot (Stacking)
+    let stacked = [];
+    player.reality.glyphs.inventory.forEach((g) => {
+      if (this.inventory[g.idx]) {
+        stacked.push(g);
+      } else {
+        this.inventory[g.idx] = g;
+      }
+    });
+    // Try to unstack glyphs:
+    while (stacked.length) {
+      let freeIndex = this.findFreeIndex();
+      if (freeIndex >= 0) {
+        let glyph = stacked.shift();
+        this.inventory[freeIndex] = glyph;
+        glyph.idx = freeIndex;
+      } else {
+        break;
+      }
+    }
+    while (stacked.length) {
+      this.removeFromInventory(stacled.pop());
+    }
+    this.inventoryCopy.splice(0);
+    this.inventory.forEach(e => this.inventoryCopy.push(e ? GlyphGenerator.copy(e) : null));
+    this.validate();
+    this.updateActiveEffects();
+    checkGlyphAchievements();
+  },
+  inventoryById(id) {
+    return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
+  },
+  inventoryGlyph(inventoryIndex) {
+    return this.inventory[inventoryIndex];
+  },
+  activeGlyph(activeIndex) {
+    return this.active[activeIndex];
+  },
+  equip(glyphObj, targetSlot) {
+    this.validate();
+    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
+      if (this.active[targetSlot] === null) {
+        this.removeFromInventory(glyphObj);
+        player.reality.glyphs.active.push(glyphObj);
+        glyphObj.idx = targetSlot;
+        this.active[targetSlot] = glyphObj;
+        Vue.set(this.activeCopy, targetSlot, GlyphGenerator.copy(glyphObj));
+      }
+    } else {
+      throw crash("Inconsistent inventory indexing")
+    }
+    this.validate();
+    this.updateActiveEffects();
+  },
+  unequipAll() {
+    while (player.reality.glyphs.active.length) {
+      let freeIndex = this.findFreeIndex();
+      if (freeIndex < 0) break;
+      let glyph = player.reality.glyphs.active.pop();
+      this.active[glyph.idx] = null;
+      Vue.set(this.activeCopy, glyph.idx, null);
+      Glyphs.addToInventory(glyph);
+    }
+    this.updateActiveEffects();
+  },
+  moveToSlot(glyphObj, targetSlot) {
+    if (this.inventory[targetSlot] === null) this.moveToEmpty(glyphObj, targetSlot);
+    else this.swap(glyphObj, this.inventory[targetSlot]);
+  },
+  moveToEmpty(glyphObj, targetSlot) {
+    this.validate();
+    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
+      if (this.inventory[targetSlot] === null) {
+        this.inventory[glyphObj.idx] = null;
+        this.inventory[targetSlot] = glyphObj;
+        let glyphCopy = this.inventoryCopy[glyphObj.idx];
+        Vue.set(this.inventoryCopy, targetSlot, glyphCopy);
+        Vue.set(this.inventoryCopy, glyphObj.idx, null)
+        glyphCopy.idx = targetSlot;
+        glyphObj.idx = targetSlot;
+      } else {
+        console.log("inventory slot full")
+      }
+    } else {
+      throw crash("Inconsistent inventory indexing")
+    }
+    this.validate();
+  },
+  swap(glyphA, glyphB) {
+    this.validate();
+    let aCopy = this.inventoryCopy[glyphA.idx];
+    let bCopy = this.inventoryCopy[glyphB.idx];
+    Vue.set(this.inventoryCopy, aCopy.idx, bCopy);
+    Vue.set(this.inventoryCopy, bCopy.idx, aCopy);
+    aCopy.idx = glyphB.idx;
+    bCopy.idx = glyphA.idx;
+    this.inventory[glyphA.idx] = glyphB;
+    this.inventory[glyphB.idx] = glyphA;
+    glyphA.idx = aCopy.idx;
+    glyphB.idx = bCopy.idx;
+    this.validate();
+  },
+  addToInventory(glyph) {
+    this.validate();
+    let index = this.findFreeIndex();
+    if (index < 0) return;
+    this.inventory[index] = glyph;
+    glyph.idx = index;
+    Vue.set(this.inventoryCopy, index, GlyphGenerator.copy(glyph));
+    player.reality.glyphs.inventory.push(glyph);
+    checkGlyphAchievements();
+    this.validate();
+  },
+  removeFromInventory(glyph) {
+    this.validate();
+    // This can get called on a glyph not in inventory, during auto sacrifice.
+    let index = player.reality.glyphs.inventory.indexOf(glyph);
+    if (index < 0) return;
+    this.inventory[glyph.idx] = null;
+    Vue.set(this.inventoryCopy, glyph.idx, null);
+    player.reality.glyphs.inventory.splice(index, 1);
+    checkGlyphAchievements();
+    this.validate();
+  },
+  validate() {
+    for (glyph of player.reality.glyphs.inventory) {
+      if (this.inventory[glyph.idx] !== glyph) {
+        throw crash("validation error");
+      }
+    }
+    for (let i = 0; i < this.inventory.length; ++i) {
+      if (this.inventory[i] && this.inventory[i].idx !== i) {
+        throw crash("backwards validation error");
+      }
+      if (this.inventoryCopy[i] && (!this.inventory[i] || this.inventoryCopy[i].id != this.inventory[i].id)) {
+        throw crash("inconsistent inventory copy")
+      }
+      if (this.inventory[i] && (!this.inventoryCopy[i] || this.inventoryCopy[i].id != this.inventory[i].id)) {
+        throw crash("inconsistent inventory copy")
+      }
+    }
+  },
+  updateActiveEffects() {
+    this.activeEffects.splice(0);
+    for (ae of getActiveGlyphEffects()) this.activeEffects.push(ae);
+  },
+};
+
+class GlyphSacrificeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
   }
-  for (let effect of effects) {
-    glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
-  };
-  return glyph
+  get canBeApplied() { return true; }
 }
 
+const GlyphSacrifice = (function() {
+  const db = GameDatabase.reality.glyphSacrifice;
+  return GlyphTypes.list.mapToObject(t => t.id, t => new GlyphSacrificeState(db[t.id]));
+})();
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced
 function getGlyphEffectStrength(effectKey, level, strength) {
   switch (effectKey) {
     case "powerpow":
-      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "powermult":
       return Decimal.pow(level * strength * 10, level * strength * 10)
     case "powerdimboost":
@@ -120,7 +359,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerbuy10":
       return 1 + Math.pow(level * strength, 0.8) / 10
     case "infinitypow":
-      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "infinityrate":
       return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
     case "infinityipgain":
@@ -134,17 +373,17 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "replicationdtgain":
       return 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65) // player.replicanti.e * x
     case "replicationglyphlevel":
-      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5)/50
+      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50
     case "dilationdilationMult":
       return Math.pow(level * strength, 1.5) * 2
     case "dilationgalaxyThreshold":
-      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35)/100
+      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100
     case "dilationTTgen":
       return Math.pow(level * strength, 0.5) / 10000 //Per second
     case "dilationpow":
-      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7)/25
+      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25
     case "timepow":
-      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45)/75
+      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45) / 75
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
@@ -152,17 +391,17 @@ function getGlyphEffectStrength(effectKey, level, strength) {
       }
       else return ret
     case "timefreeTickMult":
-      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
+      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
     case "effarigwormhole":
-      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5)/75
+      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
     case "effarigrm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
     case "effarigglyph":
       return Math.floor(level * strength / 10);
     case "effarigachievement":
-      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
+      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
       return 1 + Math.sqrt(level * strength) / 1000
     case "effarigdimensions":
@@ -216,6 +455,7 @@ function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     fixGlyph(player.reality.glyphs.inventory[i]);
   }
+  Glyphs.refresh();
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
@@ -232,15 +472,7 @@ function fixGlyph(glyph) {
 }
 
 function getRarity(x) {
-  var name, color;
-  if (x >= 3.5) return { name: "Celestial", color: "#5151ec" } // ~0.0005%
-  if (x >= 3.25) return { name: "Transcendent", color: "#03FFEC" } // ~0.0005%
-  if (x >= 3) return { name: "Mythical", color: "#D50000" } // ~0.01%
-  if (x >= 2.75) return { name: "Legendary", color:  "#FF9800" } // ~0.1%
-  if (x >= 2.5) return { name:  "Epic", color:  "#9C27B0" } // ~0.654%
-  if (x >= 2) return { name:  "Rare", color:  "#2196F3" } // ~2.84%
-  if (x >= 1.5) return { name:  "Uncommon", color:  "#43A047" }  // ~19%
-  if (x >= 1) return { name:  "Common", color:  "white" } // 100%
+  return GlyphRarities.find(e => x >= e.minStrength);
 }
 
 /**
@@ -259,239 +491,36 @@ function separateEffectKey(effectKey) {
   return [type, effect]
 }
 
-const NUMBERCOLOR = "#85ff85"
-const CAPPED_EFFECT_COLOR = "#ff8000"
-function getGlyphTooltipDesc(effectKey, x) {
-  let spanPrefix = "<span style='color:" + NUMBERCOLOR + "'>"
-  let spanSuffix = "</span>"
-  let effect = GameDatabase.reality.glyphEffects[effectKey];
-  return effect.singleDescSplit[0] + spanPrefix + effect.formatEffect(x) + spanSuffix + effect.singleDescSplit[1];
-}
-
-/**
- * @param {string} effectKey
- * @param {GlyphEffectInfo__combine_result} effectStatus
- */
-function getGlyphTableDesc(effectKey, effectStatus) {
-  let spanPrefix = effectStatus.capped ? "<span style='color:" + CAPPED_EFFECT_COLOR + "'>" : "<span>"
-  let spanSuffix = "</span>"
-  let effect = GameDatabase.reality.glyphEffects[effectKey];
-  return effect.totalDescSplit[0] + spanPrefix + effect.formatEffect(effectStatus.value) +
-    spanSuffix + effect.totalDescSplit[1];
-}
-
-function getGlyphTooltip(glyph) {
-  let tooltipText = "";
-  var rarity = getRarity(glyph.strength)
-  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: " + rarity.color + "; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px " + rarity.color + "; float:left'>" + rarity.name + " glyph of " + glyph.type + " (" + ((glyph.strength - 1) / 2.5 * 100).toFixed(1) + "%)" + "</span> <span style='margin-left: auto'> Level: " + glyph.level + "</span></div><div style='margin-top: 5px'>"
-  for (let i = 0; i < orderedEffectList.length; i++) {
-    let separated = separateEffectKey(orderedEffectList[i]);
-    let type = separated[0];
-    let effect = separated[1];
-    if (glyph.type == type && glyph.effects["" + effect] !== undefined) {
-      tooltipText += getGlyphTooltipDesc(orderedEffectList[i], glyph.effects[effect]) + "<br><br>"
-    }
-  }
-  if ((player.reality.upg.includes(19) && (glyph.type === "power" || glyph.type === "time")) || player.reality.upg.includes(21)) {
-    let gain = glyphSacrificeGain(glyph);
-    tooltipText += "<span style='color:#b4b4b4'>Can be sacrificed for " + shorten(gain, 2, 2) + " power</span>";
-  }
-  tooltipText += "</div></span>"
-  return tooltipText;
-}
-
-var mouseOn = $("document")
-function generateGlyphTable() {
-  var table = document.getElementById("glyphs")
-  var html = ""
-
-  var glyphs = player.reality.glyphs.inventory
-  for (var row = 1; row <= 10; row++) {
-    html += "<tr>"
-    for (var cell = 1; cell <= 10; cell++) {
-      var idx = ((row - 1) * 10 + cell - 1)
-      html += "<td>"
-      var glyph = glyphs.find(function (glyph) { return glyph.idx == idx })
-      if (glyph !== undefined && glyph !== null) {
-        if (glyph.color !== undefined)
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + glyph.color + " !important; border: 1px solid " + glyph.color + " !important; box-shadow: inset " + glyph.color + " 0px 0px 10px 2px, " + glyph.color + " 0px 0px 10px 2px !important; text-shadow: " + glyph.color + " -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
-        else
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + getRarity(glyph.strength).color + "; text-shadow: " + getRarity(glyph.strength).color + " -1px 1px 2px;" + "' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
-        html += getGlyphTooltip(glyph);
-        if (glyph.symbol !== undefined)
-          html += specialGlyphSymbols["key" + glyph.symbol] + "</div></div>"
-        else
-          html += "</span>" + GLYPH_SYMBOLS[glyph.type] + "</div></div>"
-      } else {
-        html += "<div class='glyph empty' id='" + idx + "' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
-      }
-
-      idx++;
-      html += "</td>"
-    }
-
-    html += "</tr>"
-  }
-
-  $("#glyphslots").empty()
-  for (var slot=0; slot<player.reality.glyphs.slots; slot++) {
-    $("#glyphslots").append('<div id="active'+slot+'"class="glyph glyphactive" ondragover="allowDrop(event)" ondrop="drop(event)"></div>')
-    var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
-    if (glyph !== undefined && glyph !== null) {
-      var glyphhtml = ""
-      if (glyph.color !== undefined)
-        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'>"
-      else
-        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"'>"
-      glyphhtml += getGlyphTooltip(glyph);
-      if (glyph.symbol !== undefined)
-        glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
-      else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
-      $("#glyphslots").children()[slot].innerHTML = glyphhtml
-    }
-  }
-  table.innerHTML = html
-
-  // Update total effect box (order is specified for consistency
-  let isGlyphSoftcapActive = false;
-  let allActiveEffects = getActiveGlyphEffects();
-  let activeEffectText = "";
-  for (let effect of Object.keys(allActiveEffects)) {
-    isGlyphSoftcapActive = isGlyphSoftcapActive || allActiveEffects[effect].capped;
-    activeEffectText += "<br>" + getGlyphTableDesc(effect, allActiveEffects[effect]);
-  };
-  if (isGlyphSoftcapActive) {
-    activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
-  }
-  activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
-  $("#activeGlyphs").html(activeEffectText)
-  updateTooltips();
-  updateGlyphDescriptions()
-
-  if (glyphs.length == 100) giveAchievement("Personal Space")
-  if (glyphs.length == 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
+function checkGlyphAchievements() {
+  const glyphs = player.reality.glyphs.inventory;
+  if (glyphs.length === 100) giveAchievement("Personal Space")
+  if (glyphs.length === 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
   if (glyphs.some((g) => g.strength >= 3.5)) giveAchievement("Why did you have to add RNG to the game?")
-  if (glyphs.every((g) => g.strength >= 2) && glyphs.length == 100) giveAchievement("I'm up all night to get lucky")
+  if (glyphs.every((g) => g.strength >= 2) && glyphs.length === 100) giveAchievement("I'm up all night to get lucky")
 }
 
 // returns both effect value and softcap status
 function getActiveGlyphEffects() {
   /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
-  let allEffects = {};
+  let allEffects = [];
   for (let effect of orderedEffectList) {
     let values = getGlyphEffectValues(effect);
     if (values.length > 0) {
-      allEffects[effect] = GameDatabase.reality.glyphEffects[effect].combine(values);
+      allEffects.push({
+        id: effect,
+        value: GameDatabase.reality.glyphEffects[effect].combine(values),
+      });
     }
-  };
+  }
   return allEffects;
 }
 
-function deleteGlyph(id) {
-  var n = player.reality.glyphs.inventory.find(function(glyph) {
-    return glyph.id == id
-  })
-
-  if (n.symbol === "266b") {
-    var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
-    tempAudio.play();
+function deleteGlyph(id, force) {
+  const glyph = Glyphs.inventoryById(id);
+  if (canSacrifice(glyph)) return sacrificeGlyph(glyph, force);
+  if (force || confirm("Do you really want to delete this glyph?")) {
+    Glyphs.removeFromInventory(glyph);
   }
-  if (!shiftDown  && !controlShiftDown) return false;
-
-  if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
-    sacrificeGlyph(n, controlShiftDown)
-    return;
-  }
-
-  if (player.reality.upg.includes(21)) {
-    sacrificeGlyph(n, controlShiftDown)
-    return;
-  }
-
-
-  if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
-    var inv = player.reality.glyphs.inventory
-    var g = inv.find(function(glyph) {
-      return glyph.id == id
-    })
-    player.reality.glyphs.inventory.splice(inv.indexOf(g),1)
-    mouseOn.remove()
-    mouseOn = $("document")
-    // for (i in player.reality.glyphs.inventory) {
-    //   console.log(id + " id "+player.reality.glyphs.inventory[i].id+" inv id" )
-    //   if (id == player.reality.glyphs.inventory[i].id) player.reality.glyphs.inventory.splice(i,1);
-    // }
-    generateGlyphTable();
-  }
-}
-
-function drag(ev) {
-  var rect = ev.target.getBoundingClientRect()
-  ev.dataTransfer.setData("text", ev.target.id);
-  ev.target.style.opacity = 0.5
-  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
-  mouseOn.appendTo($(ev.target))
-  ev.dataTransfer.setDragImage(ev.target, ev.clientX - rect.left, ev.clientY - rect.top)
-  mouseOn = $("document")
-}
-
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function dragover(e) {
-  e.target.style.opacity = 1
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = parseInt(ev.dataTransfer.getData("text"));
-  if (parseInt(ev.target.id) > 1000) {
-    ev.target.style.opacity = 1
-    return false
-  }
-
-  let canAddGlyph = !Effarig.isRunning || !player.celestials.effarig.glyphEquipped;
-  if (ev.target.className.includes("glyphactive") && canAddGlyph) {
-    var glyph = player.reality.glyphs.inventory.find(function(glyph) {
-      return glyph.id == data
-    })
-    if (glyph.type == "effarig" && player.reality.glyphs.active.some((g) => g.type == "effarig")) return
-    if (glyph !== undefined && glyph !== null) {
-      glyph.idx = parseInt(ev.target.id.split("active")[1])
-      player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
-      player.reality.glyphs.active.push(glyph)
-    } else {
-      var glyph = player.reality.glyphs.active.find(function(glyph) {
-        return glyph.id == data
-      })
-      glyph.idx = parseInt(ev.target.id.split("active")[1])
-    }
-
-    // Force a maximum of one glyph in Effarig Reality before Eternity
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      player.celestials.effarig.glyphEquipped = true
-    }
-    generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
-  } else if (!ev.target.className.includes("glyphactive")) {
-    var glyph = player.reality.glyphs.active.find(function(glyph) {
-      return glyph.id == data
-    })
-    if (glyph !== undefined && glyph !== null) {
-      glyph.idx = parseInt(ev.target.id)
-      player.reality.glyphs.active.splice(player.reality.glyphs.active.indexOf(glyph), 1)
-      player.reality.glyphs.inventory.push(glyph)
-    } else {
-      var glyph = player.reality.glyphs.inventory.find(function(glyph) {
-        return glyph.id == data
-      })
-      glyph.idx = parseInt(ev.target.id)
-    }
-  }
-  generateGlyphTable()
-  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
-  mouseOn.appendTo($(ev.target))
-  mouseOn = $("document")
 }
 
 const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500, 1e5, 1e5, 1e5, 1e5, 1e5]
@@ -520,7 +549,6 @@ function buyRealityUpg(id) {
   else player.reality.upg.push(id)
   if (id == 9 || id == 24) {
     player.reality.glyphs.slots++
-    generateGlyphTable()
   }
   if (id == 20) {
     if (!player.wormhole[0].unlocked) return
@@ -530,7 +558,6 @@ function buyRealityUpg(id) {
 
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
-  if (id == 19 || id == 21) generateGlyphTable();   // Add sacrifice value to tooltips
   updateWormholeUpgrades()
   return true
 }
@@ -571,90 +598,19 @@ function updateRealityUpgrades() {
   $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
 }
 
-function toggleGlyphRespec() {
-  player.reality.respec = !player.reality.respec
-  if (player.reality.respec) {
-    $("#glyphRespec").addClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
-  }
-  else {
-    $("#glyphRespec").removeClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Your currently-equipped glyphs will stay equipped on reality.");
-  }
-}
-
 function respecGlyphs() {
-  let idx = 0
-  let filledslots = []
-  for (let i=0; i<player.reality.glyphs.inventory.length; i++) {
-    filledslots[i] = player.reality.glyphs.inventory[i].idx
-  }
-  for (let i=0; i<player.reality.glyphs.active.length; i++) {
-    let glyph = player.reality.glyphs.active[i]
-    for (let l=0; l<=100; l++) {
-      if (!filledslots.includes(l)) {
-        filledslots[filledslots.length] = l;
-        idx = l;
-        break
-      }
-    }
-    glyph.idx = idx
-    player.reality.glyphs.inventory.push(glyph)
-  }
-  player.reality.glyphs.active = []
-  toggleGlyphRespec()
-  generateGlyphTable();
+  Glyphs.unequipAll();
+  player.reality.respec = false;
 }
 
-function getGlyphSacEffect(type) {
-  switch(type) {
-    case "power":
-    return Math.floor(Math.sqrt(player.reality.glyphs.sac[type]) / 2)
-
-    case "infinity":
-    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
-
-    case "time":
-    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
-
-    case "replication":
-    return Math.pow(Math.max(player.reality.glyphs.sac[type], 0), 0.75)
-
-    case "dilation":
-    return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
-
-    case "effarig":
-    return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e5 + 1)
-  }
-}
-
-function getGlyphSacDescription(type) {
-  let amount = getGlyphSacEffect(type)
-  let total = shorten(player.reality.glyphs.sac[type], 2, 2)
-  if (player.reality.glyphs.sac[type] == 0) return ""
-  switch(type) {
-    case "power": {
-      let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
-      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy, 2, 2) + ")<br><br>"
-    }
-    case "infinity":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
-
-    case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-
-    case "replication":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
-
-    case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount, 2, 2) + "x<br><br>"
-
-    case "effarig":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
-  }
+function canSacrifice(glyph) {
+  return (glyph.type === "power" || glyph.type === "time")
+    ? player.reality.upg.includes(19)
+    : player.reality.upg.includes(21);
 }
 
 function glyphSacrificeGain(glyph) {
+  if (!canSacrifice(glyph)) return 0;
   let gain = glyph.level * glyph.strength;
   if (glyph.type === 'effarig') {
     gain *= Math.pow(Teresa.runRewardMultiplier, 0.2);
@@ -668,45 +624,16 @@ function sacrificeGlyph(glyph, force = false) {
   let toGain = glyphSacrificeGain(glyph);
   if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
-  if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
-  if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
-  let inv = player.reality.glyphs.inventory
-  let g = inv.find(function(x) {
-    return x.id == glyph.id
-  })
-  inv.splice(inv.indexOf(g),1)
-  mouseOn.remove()
-  mouseOn = $("document")
-  generateGlyphTable();
+  if (glyph.type === "time") {
+    player.timeDimension8.power = Decimal.pow(2 * Effects.product(GlyphSacrifice.time), player.timeDimension8.bought)
+  }
+  if (glyph.type === "infinity") {
+    player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
+  }
+  Glyphs.removeFromInventory(glyph);
 
   if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
   if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
-}
-
-function updateGlyphDescriptions() {
-  let html = "Glyph Sacrifice Effects:<br><br>"
-  for (let i in player.reality.glyphs.sac) {
-    html += getGlyphSacDescription(i)
-  }
-  $("#sacrificedGlyphs").html(html)
-}
-
-function updateTooltips() {
-  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function (e) {
-    mouseOn.css({ "left": e.pageX - 150 + "px", "top": e.pageY - mouseOn.height() - 35 + "px", "display": "flex" })
-  })
-  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function (e) {
-    e.stopPropagation();
-    mouseOn = $(this).find(".tooltip")
-    mouseOn.appendTo("body")
-  })
-
-  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function (e) {
-    e.stopPropagation();
-    mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
-    mouseOn.appendTo($(this))
-    mouseOn = $("document")
-  })
 }
 
 function getGlyphLevelInputs() {

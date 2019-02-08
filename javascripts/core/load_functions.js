@@ -197,7 +197,6 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  generateGlyphTable();
   updateRealityUpgrades();
   updateWormholeUpgrades()
   updateAutomatorRows()
@@ -228,15 +227,8 @@ function onLoad() {
   }
   if (player.wormhole[1].unlocked) $("#whupg2").show()
   if (player.wormhole[2].unlocked) $("#whupg3").show()
-  
+
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-  if (player.reality.respec) {
-    $("#glyphRespec").addClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
-  }
-  else
-	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
-    
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true
@@ -356,7 +348,7 @@ function load_game(root) {
 
 
 function save_game(changed, silent) {
-  if ( possibleGlyphs.length > 0 ) return
+  if (GlyphSelection.active) return;
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
   if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");

@@ -548,19 +548,6 @@ button {
     user-select: none;
 }
 
-#glyphslots {
-    display: flex;
-    justify-content: center;
-    padding: 36px;
-}
-
-#glyphslots .glyphactive {
-    margin-right: 20px;
-    background: gainsboro;
-}
-
-
-
 #glyphs tr {
     height: 50px;
 }
@@ -592,10 +579,10 @@ button {
     font-size: 1.5rem;
 }
 
-.glyph.powerglyph {
-  border: 1px solid #22aa48;
-  box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
-  background: black !important;
+.powerglyph {
+    border: 1px solid #22aa48;
+    box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
+    background: black !important;
 }
 
 .infinityglyph {
@@ -704,7 +691,7 @@ button {
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     left: 50%;
     transition: opacity 0.3s;
     font-size: 1.4rem;
@@ -1203,11 +1190,6 @@ reality upgrade unavailable
     width: 900px;
     height: 500px;
     border: 1px solid black;
-}
-
-#glyphTabUpper {
-  display: flex;
-  justify-content: space-between
 }
 
 .glyphDescriptions {
@@ -4493,12 +4475,29 @@ screen and (max-width: 480px) {
 
 /*#region Modals*/
 
+@keyframes modal-overlay-fadein {
+  from {background-color: rgba(0,0,0,0); }
+  to {background-color: rgba(60, 60, 100, 0.5);}
+}
+
+.l-modal-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 4;
+  animation-name: modal-overlay-fadein;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
 .l-modal {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
-  z-index: 3;
+  z-index: 4;
   display: inline-block;
 }
 
@@ -5110,4 +5109,36 @@ screen and (max-width: 480px) {
 .c-glyph-levels-and-weights__reset-btn:hover {
   color: black;
   background-color: #d5ffd7 !important;
+}
+
+.o-questionmark {
+  border-radius: 50%;
+  border: 0.1rem solid;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: smaller;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.l-glyphs-tab {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-reality-button-column {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5rem;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.l-player-glyphs-column {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  justify-content: flex-start;
 }

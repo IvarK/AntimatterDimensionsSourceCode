@@ -58,6 +58,12 @@ const GameCache = {
     return player.achievements.filter(a => !a.startsWith("s")).length;
   }),
 
+  achSkipPerkCount: new Lazy(() => {
+    return player.reality.perks.filter(id => id >= 201 && id <= 213).length;
+  }),
+
+  buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

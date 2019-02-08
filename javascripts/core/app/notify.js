@@ -1,4 +1,4 @@
-ui.notify = function() {
+GameUI.notify = function() {
   const container = document.getElementById("notification-container");
   const template = document.createElement('div');
   template.classList.add("o-notification");

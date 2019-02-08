@@ -706,7 +706,7 @@ Autobuyer.eternity = {
     let proc = false;
     switch (this.mode) {
       case AutoEternityMode.AMOUNT:
-        proc = player.currentEternityChall !== "" || gainedEternityPoints().gte(this.limit);
+        proc = EternityChallenge.isRunning() || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
         proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)

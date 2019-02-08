@@ -1,9 +1,9 @@
 
 // There is a little too much stuff about glyph effects to put in constants.
 
-// The last glyph type you can only get if you got teresa reality
-const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "teresa"]
-const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", teresa: "Ϙ" }
+// The last glyph type you can only get if you got effarig reality
+const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"]
+const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", effarig: "Ϙ" }
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
@@ -291,39 +291,40 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresawormhole",
-    glyphTypes: ["teresa"],
+    id: "effarigwormhole",
+    glyphTypes: ["effarig"],
     singleDesc: "Time modifier raised to the power of ^{value}",
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresarm",
-    glyphTypes: ["teresa"],
+    id: "effarigrm",
+    glyphTypes: ["effarig"],
     singleDesc: "Reality Machine multiplier x{value}",
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresaglyph",
-    glyphTypes: ["teresa"],
+    id: "effarigglyph",
+    glyphTypes: ["effarig"],
     singleDesc: "Instability starting glyph level +{value}",
     combine: GlyphCombiner.add,
   }, {
-    id: "teresaachievement",
-    glyphTypes: ["teresa"],
+    id: "effarigachievement",
+    glyphTypes: ["effarig"],
     singleDesc: "Raise all achievement related effects to a power of ^{value}",
+    genericDesc: "Achievement effect increase",
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresaforgotten",
-    glyphTypes: ["teresa"],
-    singleDesc: "Forgotten effect {value}",
+    id: "effarigforgotten",
+    glyphTypes: ["effarig"],
+    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
     combine: GlyphCombiner.multiply,
   }, {
-    id: "teresaunknown",
-    glyphTypes: ["teresa"],
-    singleDesc: "Unkown celestial effect {value}",
-    combine: GlyphCombiner.multiply,
+    id: "effarigdimensions",
+    glyphTypes: ["effarig"],
+    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
+    combine: GlyphCombiner.add,
   }, {
-    id: "teresaantimatter",
-    glyphTypes: ["teresa"],
-    singleDesc: "Antimatter effect {value}",
+    id: "effarigantimatter",
+    glyphTypes: ["effarig"],
+    singleDesc: "Power to antimatter production exponent of ^{value}",
     combine: GlyphCombiner.multiply,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
@@ -339,7 +340,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
-const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "unknown", "antimatter"]
+const effarigEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
 
 class GlyphType {
   /**
@@ -426,12 +427,12 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("power"),
     color: "#22aa48",
   }),
-  teresa: new GlyphType({
-    id: "teresa",
-    symbol: GLYPH_SYMBOLS.teresa,
-    effects: findGlyphTypeEffects("teresa"),
+  effarig: new GlyphType({
+    id: "effarig",
+    symbol: GLYPH_SYMBOLS.effarig,
+    effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
-    unlockedFn: () => Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE),
+    unlockedFn: () => Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE),
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

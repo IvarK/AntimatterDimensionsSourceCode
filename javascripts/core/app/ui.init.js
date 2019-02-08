@@ -43,5 +43,6 @@ let ui = {
     shiftDown: false,
     theme: undefined,
     bigCrunch: false,
-  }
+  },
+  notationName: String.empty
 };

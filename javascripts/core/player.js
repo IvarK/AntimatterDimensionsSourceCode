@@ -303,7 +303,7 @@ var player = {
         time: 0,
         replication: 0,
         dilation: 0,
-        teresa: 0
+        effarig: 0
       },
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -365,7 +365,7 @@ var player = {
   wormholePause: false,
   ttbuyer: false,
   celestials: {
-    effarig: {
+    teresa: {
       rmStore: 0,
       quoteIdx: 0,
       unlocks: [],
@@ -374,7 +374,7 @@ var player = {
       glyphLevelMult: 1,
       rmMult: 1
     },
-    teresa: {
+    effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
@@ -399,6 +399,10 @@ var player = {
       stored: 0,
       unlocks: [],
       run: false
+    },
+    v: {
+      unlocks: [],
+      run: false,
     }
   },
   autoEcIsOn: true,

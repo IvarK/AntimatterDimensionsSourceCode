@@ -208,7 +208,7 @@ function gainedInfinityPoints() {
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
     ip = ip.times(totalIPMult());
-    if (Effarig.isRunning) {
+    if (Teresa.isRunning) {
         ip = ip.pow(0.6);
     }
     return ip.floor();
@@ -230,24 +230,20 @@ function gainedEternityPoints() {
   if (player.reality.upg.includes(12)) {
       ep = ep.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
   }
-  if (Effarig.isRunning) {
+  if (Teresa.isRunning) {
     ep = ep.pow(0.6);
   }
+  if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
   return ep.floor();
 }
 
 function gainedRealityMachines() {
     var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    ret = ret.times(Effarig.rmMultiplier)
-    ret = ret.times(player.celestials.effarig.rmMult)
-    ret = ret.times(getAdjustedGlyphEffect("teresarm"))
+    ret = ret.times(Teresa.rmMultiplier)
+    ret = ret.times(player.celestials.teresa.rmMult)
+    ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     return Decimal.floor(ret)
-}
-
-function percentToNextRealityMachine() {
-    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    return Math.min(((ret - Math.floor(ret)) * 100), 99.9).toFixed(1);
 }
 
 function gainedGlyphLevel(round) {
@@ -302,13 +298,13 @@ function resetChallengeStuff() {
 function resetMoney() {
     player.money = Effects.max(
       10,
-      Perk(51),
+      Perk.startAM1,
       Achievement(21),
       Achievement(37),
       Achievement(54),
       Achievement(55),
       Achievement(78).secondaryEffect,
-      Perk(52)
+      Perk.startAM2
     ).toDecimal();
 }
 
@@ -508,70 +504,6 @@ function unlockEChall(idx) {
     }
 }
 
-function ECTimesCompleted(name) {
-    if (player.eternityChalls[name] === undefined) return 0
-    else return player.eternityChalls[name]
-}
-
-function canUnlockEC(idx, cost, study, study2) {
-    study2 = (study2 !== undefined) ? study2 : 0;
-    if (player.eternityChallUnlocked !== 0) return false
-    if (!player.timestudy.studies.includes(study) && (player.study2 == 0 || !player.timestudy.studies.includes(study2))) return false
-    if (player.timestudy.theorem < cost) return false
-    if (player.etercreq == idx && idx !== 11 && idx !== 12) return true
-    if (player.reality.perks.includes(31)) return true
-
-    switch(idx) {
-        case 1:
-        if (player.eternities >= 20000+(ECTimesCompleted("eterc1")*20000)) return true
-        break;
-
-        case 2:
-        if (player.totalTickGained >= 1300+(ECTimesCompleted("eterc2")*150)) return true
-        break;
-
-        case 3:
-        if (player.eightAmount.gte(17300+(ECTimesCompleted("eterc3")*1250))) return true
-        break;
-
-        case 4:
-        if (1e8 + (ECTimesCompleted("eterc4")*5e7) <= Player.totalInfinitied) return true
-        break;
-
-        case 5:
-        if (160 + (ECTimesCompleted("eterc5")*14) <= player.galaxies) return true
-        break;
-
-        case 6:
-        if (40 + (ECTimesCompleted("eterc6")*5) <= player.replicanti.galaxies) return true
-        break;
-
-        case 7:
-        if (player.money.gte(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))) return true
-        break;
-
-        case 8:
-        if (player.infinityPoints.gte(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))) return true
-        break;
-
-        case 9:
-        if (player.infinityPower.gte(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))) return true
-        break;
-
-        case 10:
-        if (player.eternityPoints.gte(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))) return true
-        break;
-
-        case 11:
-        if (player.timestudy.studies.includes(71) && !player.timestudy.studies.includes(72) && !player.timestudy.studies.includes(73)) return true
-        break;
-
-        case 12:
-        if (player.timestudy.studies.includes(73) && !player.timestudy.studies.includes(71) && !player.timestudy.studies.includes(72)) return true
-        break;
-    }
-}
-
 function quickReset() {
     if (player.resets == 0) player.resets--;
     else player.resets -= 2;
@@ -591,7 +523,7 @@ function getNewInfReq() {
 
 
 function newDimension() {
-    if (player.reality.perks.includes(67) || (player.money.gte(getNewInfReq()))) {
+    if (Perk.bypassIDAntimatter.isBought || (player.money.gte(getNewInfReq()))) {
         if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
         else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
         else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
@@ -692,7 +624,7 @@ setInterval(function() {
 
     if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
 
-    if (player.currentEternityChall == "eterc12" && player.thisEternity >= Math.max(200 * (5 - ECTimesCompleted("eterc12")), 100)) {
+    if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
     }
 
@@ -757,32 +689,23 @@ setInterval(function() {
     if (player.replicanti.amount.gte(new Decimal("1e70000"))) unlockRealityUpgrade(21)
     if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
     ttMaxTimer++;
-    if (player.reality.perks.includes(8)) maxTheorems()
-    else if (player.reality.perks.includes(7) && ttMaxTimer >= 3) {
+    if (Perk.autobuyerTT4.isBought) maxTheorems()
+    else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
-    else if (player.reality.perks.includes(6) && ttMaxTimer >= 5) {
+    else if (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
-    else if (player.reality.perks.includes(5) && ttMaxTimer >= 10) {
+    else if (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10) {
       maxTheorems(); 
       ttMaxTimer = 0;
     }
 
     EternityChallenge.autoCompleteTick()
-    if (!Effarig.has(EFFARIG_UNLOCKS.TERESA)) player.celestials.effarig.rmStore *= Math.pow(0.98, 1/60) // Effarig container leak, 2% every minute, only works online.
+    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
 }, 1000)
-
-function getECGoalIP(challNum, timesCompleted) {
-	var ECBaseIPGoal = [0, 1800, 975, 600, 2750, 750, 850, 2000, 1300, 1750, 3000, 500, 110000];
-	var ECPerComp = [0, 200, 175, 75, 550, 400, 250, 530, 900, 250, 300, 200, 12000]
-	
-	var baseDecimal = new Decimal("1e" + ECBaseIPGoal[challNum]);
-	var perCompDecimal = new Decimal("1e" + ECPerComp[challNum]);
-	return baseDecimal.times(perCompDecimal.pow(timesCompleted)).max(baseDecimal);
-}
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)
@@ -799,7 +722,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   if (tempSpeedupToggle) {
     factor *= 500;
   }
-  if (player.currentEternityChall === "eterc12" && effectsToConsider.includes(GameSpeedEffect.EC12)) {
+  if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
     return 1/1000;
@@ -825,10 +748,10 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
-    factor = Teresa.multiplier(factor).toNumber();
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+    factor = Effarig.multiplier(factor).toNumber();
   }
-  factor = Math.pow(factor, getAdjustedGlyphEffect("teresawormhole"))
+  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))
   return factor;
 }
 
@@ -919,32 +842,35 @@ function gameLoop(diff, options = {}) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (player.celestials.effarig.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (player.celestials.teresa.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
         else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }
     }
 
-    if (BreakInfinityUpgrade.infinitiedGen.isBought && player.currentEternityChall !== "eterc4") {
+    let infGen = 0
+    if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
         if (player.reality.upg.includes(11)) {
           let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
-          player.infinitied += gained
-          Enslaved.trackInfinityGeneration(gained)
+          infGen += gained
 
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {
-        player.infinitied += Math.floor(player.partInfinitied/5)
+        infGen += Math.floor(player.partInfinitied/5)
         player.partInfinitied = 0;
     }
 
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
-        player.infinitied ++;
+        infGen++;
     }
-    if (Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
-      player.infinitied += Math.floor(player.eternities * gainedInfinities()) * diff/1000
+    if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
+      infGen += Math.floor(player.eternities * gainedInfinities()) * diff/1000
     }
+
+    player.infinitied += infGen
+    Enslaved.trackInfinityGeneration(infGen)
 
     if (player.reality.upg.includes(14)) {
         let eternitiesGain = diff * player.realities / 1000
@@ -954,7 +880,7 @@ function gameLoop(diff, options = {}) {
         player.reality.partEternitied -= Math.floor(player.reality.partEternitied)
     }
 
-    if (Effarig.has(EFFARIG_UNLOCKS.EPGEN)) { // Effarig EP gen.
+    if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
       let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
@@ -998,7 +924,7 @@ function gameLoop(diff, options = {}) {
     }
 
     player.realTimePlayed += realDiff;
-    if (player.reality.perks.includes(91) && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+    if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff
     player.thisInfinityTime += diff
     player.thisInfinityRealTime += realDiff;
@@ -1008,7 +934,7 @@ function gameLoop(diff, options = {}) {
     player.thisRealityRealTime += realDiff;
 
     for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || ECTimesCompleted("eterc7") > 0)) {
+      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);
         dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
@@ -1030,15 +956,16 @@ function gameLoop(diff, options = {}) {
 
     const TD1Production = TimeDimension(1).productionPerSecond;
     const TD1ProductionThisTick = TD1Production.times(diff/1000);
-    if (player.currentEternityChall === "eterc7") {
+    if (EternityChallenge(7).isRunning) {
       player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
     }
     else {
       player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
     }
 
-    if (TD1Production.gt(0) && ECTimesCompleted("eterc7") > 0) {
-      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1Production.pow(ECTimesCompleted("eterc7")*0.2).minus(1).times(diff/10))
+    if (TD1Production.gt(0)) {
+      const id8 = InfinityDimension(8);
+      EternityChallenge(7).reward.applyEffect(v => id8.amount = id8.amount.plus(v.times(diff/10)));
     }
 
     let tickmult = Effects.min(
@@ -1119,8 +1046,9 @@ function gameLoop(diff, options = {}) {
 
     if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
-    if (TimeStudy.dilation.isBought) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond()*diff/1000)
-
+    if (TimeStudy.dilation.isBought) {
+      player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
+    }
     // Free galaxies (2x doesn't apply past 1000)
     let freeGalaxyMult = Effects.max(
       1,
@@ -1133,7 +1061,7 @@ function gameLoop(diff, options = {}) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    if (!player.celestials.effarig.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
+    if (!player.celestials.teresa.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
 
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -1168,12 +1096,12 @@ function gameLoop(diff, options = {}) {
     }
 
     var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || player.reality.perks.includes(67)) && player.infDimensionsUnlocked[7] === false) {
+    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || Perk.bypassIDAntimatter.isBought) && player.infDimensionsUnlocked[7] === false) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
         newDimension()
-        if (player.infDimBuyers[i-1] && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc10") buyMaxInfDims(infdimpurchasewhileloop)
+        if (player.infDimBuyers[i-1] && !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
         infdimpurchasewhileloop = 1;
     }
 
@@ -1191,9 +1119,13 @@ function gameLoop(diff, options = {}) {
     updateWormholeGraphics();
   }
   // Reality unlock and TTgen perk autobuy
-	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
-  if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
+  if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
+  if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
+
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
+
+  V.checkForUnlocks()
+
     GameUI.update();
     player.lastUpdate = thisUpdate;
     PerformanceStats.end("Game Update");
@@ -1218,7 +1150,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    ui.notify.wormholes = false;
+    GameUI.notify.wormholes = false;
 
     // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1271,7 +1203,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    ui.notify.wormholes = true;
+    GameUI.notify.wormholes = true;
 }
 
 function updateChart(first) {
@@ -1291,31 +1223,15 @@ function updateChart(first) {
 updateChart(true);
 
 function autoBuyDilationUpgrades() {
-  if (player.reality.perks.includes(12)) {
+  if (Perk.autobuyerDilation.isBought) {
     buyDilationUpgrade(1)
     buyDilationUpgrade(2)
     buyDilationUpgrade(3)
   }
 }
 
-function autoBuyReplicantiUpgrades() {
-  if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && nearestPercent(player.replicanti.chance) < getMaxReplicantiChance())
-      if (!upgradeReplicantiChance())
-        break;
-  }
-
-  if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-    while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
-  }
-
-  if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
-    while (upgradeReplicantiGalaxy()) continue
-  }
-}
-
 function autoBuyInfDims() {
-  if (player.eternities > 10 && player.currentEternityChall !== "eterc8") {
+  if (player.eternities > 10 && !EternityChallenge(8).isRunning) {
     for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)
@@ -1336,7 +1252,7 @@ function autoBuyTimeDims() {
 }
 
 function autoBuyExtraTimeDims() {
-  if (player.timeDimension8.bought == 0 && player.reality.perks.includes(64)) {
+  if (player.timeDimension8.bought == 0 && Perk.autounlockTD.isBought) {
     buyDilationStudy(2, 1000000)
     buyDilationStudy(3, 1e7)
     buyDilationStudy(4, 1e8)
@@ -1347,15 +1263,15 @@ function autoBuyExtraTimeDims() {
 var slowerAutobuyerTimer = 0
 setInterval(function() {
   slowerAutobuyerTimer += 1/3
-  if (player.reality.perks.includes(61)) autoBuyInfDims()
-  if (player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
-  if (player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+  if (Perk.autobuyerFasterID.isBought) autoBuyInfDims()
+  if (Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
+  if (Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
 
   if (slowerAutobuyerTimer > 1) {
     slowerAutobuyerTimer -= 1
-    if (!player.reality.perks.includes(61)) autoBuyInfDims()
-    if (!player.reality.perks.includes(62)) autoBuyReplicantiUpgrades()
-    if (!player.reality.perks.includes(63)) autoBuyDilationUpgrades()
+    if (!Perk.autobuyerFasterID.isBought) autoBuyInfDims()
+    if (!Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
+    if (!Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
     autoBuyTimeDims()
 
     autoBuyExtraTimeDims()

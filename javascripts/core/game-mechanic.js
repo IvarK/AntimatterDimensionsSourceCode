@@ -33,11 +33,10 @@ class GameMechanicState {
 }
 
 class PurchasableMechanicState extends GameMechanicState {
-  constructor(config, currency, getCollection, event) {
+  constructor(config, currency, getCollection) {
     super(config);
     this._currency = currency;
     this._getCollection = getCollection;
-    this._event = event;
   }
 
   get collection() {
@@ -58,11 +57,11 @@ class PurchasableMechanicState extends GameMechanicState {
   }
 
   get canBeBought() {
-    return this.isAffordable && this.isAvailable;
+    return !this.isBought && this.isAffordable && this.isAvailable;
   }
 
   purchase() {
-    if (this.isBought || !this.canBeBought) return false;
+    if (!this.canBeBought) return false;
     this.collection.push(this.id);
     const currency = this._currency.value;
     if (typeof currency === "number") {
@@ -107,4 +106,9 @@ Currency.eternityPoints = new Currency(
 Currency.dilatedTime = new Currency(
   () => player.dilation.dilatedTime,
   dt => player.dilation.dilatedTime = dt
+);
+
+Currency.perkPoints = new Currency(
+  () => player.reality.pp,
+  pp => player.reality.pp = pp
 );

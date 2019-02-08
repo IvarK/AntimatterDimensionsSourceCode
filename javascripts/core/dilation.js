@@ -59,39 +59,32 @@ function buyDilationUpgrade(id) {
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
     player.dilation.rebuyables[id] += 1
     if (id == 2) {
-        if (!player.reality.perks.includes(11)) player.dilation.dilatedTime = new Decimal(0)
+        if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
         player.dilation.baseFreeGalaxies = 0
         player.dilation.freeGalaxies = 0
     }
 
     if (id == 3) {
-      if (player.reality.perks.includes(37)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(3)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(3)
-      }
-      else if (player.reality.perks.includes(36)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2.5)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2.5)
-      }
-      else if (player.reality.perks.includes(35)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(2)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(2)
-      }
-      else if (player.reality.perks.includes(34)) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(1.5)
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(1.5)
-      }
+      const retroactiveTPFactor = Effects.max(
+        1,
+        Perk.retroactiveTP1,
+        Perk.retroactiveTP2,
+        Perk.retroactiveTP3,
+        Perk.retroactiveTP4
+      );
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(retroactiveTPFactor)
+      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(retroactiveTPFactor)
     }
   }
   return true
 }
 
 function getFreeGalaxyMult() {
-  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.05;
+  const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
-  return thresholdMult * glyphReduction + 1.3;
+  return thresholdMult * glyphReduction + 1;
 }
 
 function getDilationGainPerSecond() {
@@ -103,13 +96,14 @@ function getDilationGainPerSecond() {
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
   ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
   return ret
 }
 
 function getTachyonGain() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
-  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(player.achPow))
+  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement"))))
   if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
   mult *= Effects.product(GlyphSacrifice.dilation);
 
@@ -120,7 +114,7 @@ function getTachyonGain() {
 function getTachyonReq() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
-  if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
+  if (player.reality.upg.includes(8)) mult *= Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")))
   if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
   mult *= Effects.product(GlyphSacrifice.dilation);
 

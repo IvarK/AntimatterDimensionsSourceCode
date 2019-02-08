@@ -128,7 +128,7 @@ class TimeDimensionState {
 
   get multiplier() {
     const tier = this._tier;
-    if (player.currentEternityChall === "eterc11") return new Decimal(1);
+    if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = this.power
       .pow(2)
       .times(kongAllDimMult)
@@ -149,7 +149,7 @@ class TimeDimensionState {
         EternityUpgrade.tdMultRealTime,
         player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null
       );
-    if (player.currentEternityChall === "eterc9") {
+    if (EternityChallenge(9).isRunning) {
       mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
     }
 
@@ -164,18 +164,18 @@ class TimeDimensionState {
       mult = dilatedValueOf(mult);
     }
     
-    if (Teresa.isRunning) {
-      mult = Teresa.multiplier(mult);
+    if (Effarig.isRunning) {
+      mult = Effarig.multiplier(mult);
     }
 
     return mult;
   }
 
   get productionPerSecond() {
-    if (player.currentEternityChall === "eterc1" || player.currentEternityChall === "eterc10" || Enslaved.isRunning) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || Enslaved.isRunning) {
       return new Decimal(0);
     }
-    if (player.currentEternityChall === "eterc11") {
+    if (EternityChallenge(11).isRunning) {
       return this.amount;
     }
     let production = this.amount.times(this.multiplier);

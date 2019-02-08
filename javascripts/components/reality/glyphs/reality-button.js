@@ -32,7 +32,7 @@ Vue.component("reality-button", {
       return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`
     },
     shardsGainedText() {
-      return `${this.shorten(this.shardsGained, 2)} Relic Shards (Teresa)`
+      return `${this.shorten(this.shardsGained, 2)} Relic Shards (Effarig)`
     }
   },
   methods: {
@@ -44,7 +44,7 @@ Vue.component("reality-button", {
         return;
       }
       function logEPforRM(rm) {
-        rm = Decimal.divide(rm, Effarig.rmMultiplier * player.celestials.effarig.rmMult);
+        rm = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
         if (rm.lte(1)) return 4000;
         return Math.ceil(4000 * (rm.log10() / 3 + 1));
       }
@@ -54,7 +54,7 @@ Vue.component("reality-button", {
       this.glyphLevel = gainedGlyphLevel();
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = logEPforRM(this.machinesGained.plus(1));
-      this.shardsGained = Teresa.shardsGained;
+      this.shardsGained = Effarig.shardsGained;
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {

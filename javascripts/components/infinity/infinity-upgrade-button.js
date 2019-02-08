@@ -4,7 +4,7 @@ Vue.component("infinity-upgrade-button", {
   },
   data() {
     return {
-      isAvailable: false,
+      canBeBought: false,
       isBought: false,
     };
   },
@@ -16,8 +16,8 @@ Vue.component("infinity-upgrade-button", {
       return {
         "o-infinity-upgrade-btn": true,
         "o-infinity-upgrade-btn--bought": this.isBought,
-        "o-infinity-upgrade-btn--available": !this.isBought && this.isAvailable,
-        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.isAvailable
+        "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
+        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought
       };
     }
   },
@@ -25,7 +25,7 @@ Vue.component("infinity-upgrade-button", {
     update() {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isMaxed;
-      this.isAvailable = upgrade.isAvailable;
+      this.canBeBought = upgrade.canBeBought;
     },
   },
   template:

@@ -1,9 +1,9 @@
 
-var teresaQuotes = [
+var effarigQuotes = [
   
 ]
 
-const TERESA_UNLOCKS = {
+const EFFARIG_UNLOCKS = {
   ADJUSTER: 0,
   AUTOSACRIFICE: 1,
   AUTOPICKER: 2,
@@ -13,31 +13,31 @@ const TERESA_UNLOCKS = {
   REALITY_COMPLETE: 6
 }
 
-var Teresa = {
+var Effarig = {
   buyUnlock(id, cost) {
     if (this.shardAmount < cost) return
     if (this.has(id)) return
-    player.celestials.teresa.unlocks.push(id)
-    player.celestials.teresa.relicShards -= cost
-    if (id === TERESA_UNLOCKS.ADJUSTER) {
+    player.celestials.effarig.unlocks.push(id)
+    player.celestials.effarig.relicShards -= cost
+    if (id === EFFARIG_UNLOCKS.ADJUSTER) {
       ui.view.tabs.reality.openGlyphWeights = true;
       showRealityTab("glyphstab");
     };
   },
   has(id) {
-    return player.celestials.teresa.unlocks.includes(id)
+    return player.celestials.effarig.unlocks.includes(id)
   },
   unlock(id) {
-    player.celestials.teresa.unlocks.push(id);
+    player.celestials.effarig.unlocks.push(id);
   },
   startRun() {
     respecGlyphs()
     startRealityOver()
-    player.celestials.teresa.run = true
-    player.celestials.teresa.glyphEquipped = false
+    player.celestials.effarig.run = true
+    player.celestials.effarig.glyphEquipped = false
   },
   get isRunning() {
-    return player.celestials.teresa.run;
+    return player.celestials.effarig.run;
   },
   get glyphEffectAmount() {
     let counted = []
@@ -53,17 +53,17 @@ var Teresa = {
     return counter
   },
   get shardsGained() {
-    if (Effarig.has(EFFARIG_UNLOCKS.TERESA)) {
+    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
       return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
     }
     return 0
   },
   get shardAmount() {
-    return player.celestials.teresa.relicShards
+    return player.celestials.effarig.relicShards
   },
   nerfFactor(power) {
     let x = Decimal.max(power, 10).log10();
-    if (!this.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+    if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
       return Math.min(1 + 0.5 * Math.log10(x), 10);
     }
     return Math.min(1 + 2.5 * Math.log10(x), 20);
@@ -78,7 +78,7 @@ var Teresa = {
     const pow = this.nerfFactor(player.infinityPower);
     return new Decimal(Math.pow(base, pow));
   },
-  get bonusRG() { // Will return 0 if Teresa Infinity is uncompleted
+  get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
   }
 };

@@ -6,7 +6,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
   "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
   "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-  "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresaunknown", "teresaantimatter"];
+  "effarigwormhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
 
@@ -21,13 +21,13 @@ function strengthToRarity(x) {
 
 const AutoGlyphSacrifice = {
   set mode(value) {
-    player.celestials.teresa.autoGlyphSac.mode = value;
+    player.celestials.effarig.autoGlyphSac.mode = value;
   },
   get mode() {
-    return player.celestials.teresa.autoGlyphSac.mode;
+    return player.celestials.effarig.autoGlyphSac.mode;
   },
   get types() {
-    return player.celestials.teresa.autoGlyphSac.types;
+    return player.celestials.effarig.autoGlyphSac.types;
   },
   wouldSacrifice(glyph) {
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.NONE) return false;
@@ -44,30 +44,6 @@ const AutoGlyphSacrifice = {
     throw crash("Unknown auto glyph sacrifice mode");
   },
 };
-
-/**
- * Makes glyphs (without assigning them inventory slots yet)
- * Functions take a fake parameter, in case a glyph is needed that doesn't alter
- * the random seed stored in the player object.
- */
-function random() {
-  let x = Math.sin(player.reality.seed++) * 10000;
-  return x - Math.floor(x);
-}
-
-function gaussian_bell_curve() { // This function is quite inefficient, don't do it too often
-  let u = 0, v = 0;
-  let minimumValue = 1;
-  let ret = 1;
-  if (player.reality.perks.includes(23)) minimumValue += 0.125;
-  while (ret <= minimumValue || u == 0 || v == 0) {
-    u = random();
-    v = random();
-    ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
-  }
-  // Each rarity% is 0.025 strength.
-  return ret + Effects.sum(GlyphSacrifice.teresa) / 40;
-}
 
 const GlyphGenerator = {
   last_fake: "power",
@@ -117,7 +93,8 @@ const GlyphGenerator = {
     do {
       result = GlyphGenerator.gaussian_bell_curve(this.get_rng(fake));
     } while (result <= minimumValue);
-    result += Effects.sum(GlyphSacrifice.teresa) / 40;
+    // Each rarity% is 0.025 strength.
+    result += Effects.sum(GlyphSacrifice.effarig) / 40;
     if (player.reality.upg.includes(16)) result *= 1.3;
     return result;
   },
@@ -382,27 +359,27 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
-        return ret * Math.max(Math.sqrt(Math.log10(Enslaved.totalInfinities)), 1)
+        return ret * Math.max(Math.sqrt(Math.log10(Math.max(Enslaved.totalInfinities, 1))), 1)
       }
       else return ret
     case "timefreeTickMult":
       return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
-    case "teresawormhole":
+    case "effarigwormhole":
       return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
-    case "teresarm":
+    case "effarigrm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
-    case "teresaglyph":
+    case "effarigglyph":
       return Math.floor(level * strength / 10);
-    case "teresaachievement":
+    case "effarigachievement":
       return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
-    case "teresaforgotten":
-      return 1
-    case "teresaunknown":
-      return 1
-    case "teresaantimatter":
-      return 1
+    case "effarigforgotten":
+      return 1 + Math.sqrt(level * strength) / 1000
+    case "effarigdimensions":
+      return level * strength
+    case "effarigantimatter":
+      return 1 + Math.sqrt(level * strength) / 10000
     default:
       return 0;
   }
@@ -460,8 +437,9 @@ function fixGlyph(glyph) {
     if (glyph.strength == 1)
       glyph.strength = gaussian_bell_curve()
     for (let effect in glyph.effects)
-      if (glyph.effects.hasOwnProperty(effect))
+      if (glyph.effects.hasOwnProperty(effect)) {
         glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+      }
   }
 }
 
@@ -503,13 +481,13 @@ function getGlyphTableDesc(effectKey, effectStatus) {
   let spanSuffix = "</span>"
   let effect = GameDatabase.reality.glyphEffects[effectKey];
   return effect.totalDescSplit[0] + spanPrefix + effect.formatEffect(effectStatus.value) +
-         spanSuffix + effect.totalDescSplit[1];
+    spanSuffix + effect.totalDescSplit[1];
 }
 
 function getGlyphTooltip(glyph) {
   let tooltipText = "";
   var rarity = getRarity(glyph.strength)
-  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: "+rarity.color+"; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2.5 * 100).toFixed(1)+"%)"+"</span> <span style='margin-left: auto'> Level: "+glyph.level+"</span></div><div style='margin-top: 5px'>"
+  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: " + rarity.color + "; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px " + rarity.color + "; float:left'>" + rarity.name + " glyph of " + glyph.type + " (" + ((glyph.strength - 1) / 2.5 * 100).toFixed(1) + "%)" + "</span> <span style='margin-left: auto'> Level: " + glyph.level + "</span></div><div style='margin-top: 5px'>"
   for (let i = 0; i < orderedEffectList.length; i++) {
     let separated = separateEffectKey(orderedEffectList[i]);
     let type = separated[0];
@@ -532,24 +510,24 @@ function generateGlyphTable() {
   var html = ""
 
   var glyphs = player.reality.glyphs.inventory
-  for (var row=1; row<=10; row++) {
+  for (var row = 1; row <= 10; row++) {
     html += "<tr>"
-    for (var cell=1; cell<=10; cell++) {
-      var idx = ((row-1)*10 + cell - 1)
+    for (var cell = 1; cell <= 10; cell++) {
+      var idx = ((row - 1) * 10 + cell - 1)
       html += "<td>"
-      var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
+      var glyph = glyphs.find(function (glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
         if (glyph.color !== undefined)
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + glyph.color + " !important; border: 1px solid " + glyph.color + " !important; box-shadow: inset " + glyph.color + " 0px 0px 10px 2px, " + glyph.color + " 0px 0px 10px 2px !important; text-shadow: " + glyph.color + " -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
         else
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + getRarity(glyph.strength).color + "; text-shadow: " + getRarity(glyph.strength).color + " -1px 1px 2px;" + "' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
         html += getGlyphTooltip(glyph);
         if (glyph.symbol !== undefined)
-          html += specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
+          html += specialGlyphSymbols["key" + glyph.symbol] + "</div></div>"
         else
-          html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
+          html += "</span>" + GLYPH_SYMBOLS[glyph.type] + "</div></div>"
       } else {
-        html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
+        html += "<div class='glyph empty' id='" + idx + "' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
 
       idx++;
@@ -621,9 +599,9 @@ function drag(ev) {
   var rect = ev.target.getBoundingClientRect()
   ev.dataTransfer.setData("text", ev.target.id);
   ev.target.style.opacity = 0.5
-  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
   mouseOn.appendTo($(ev.target))
-  ev.dataTransfer.setDragImage(ev.target, ev.clientX-rect.left, ev.clientY-rect.top)
+  ev.dataTransfer.setDragImage(ev.target, ev.clientX - rect.left, ev.clientY - rect.top)
   mouseOn = $("document")
 }
 
@@ -648,10 +626,10 @@ function drop(ev) {
     return;
   }
 
-  let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
+  let canAddGlyph = !Effarig.isRunning || !player.celestials.effarig.glyphEquipped;
   if (ev.target.className.includes("glyphactive") && canAddGlyph) {
     const targetSlot = parseInt(ev.target.id.split("active")[1]);
-    if (glyph.type == "teresa" && player.reality.glyphs.active.some((g) => g.type == "teresa")) return
+    if (glyph.type == "effarig" && player.reality.glyphs.active.some((g) => g.type == "effarig")) return
     if (glyph !== undefined && glyph !== null) {
       Glyphs.equip(glyph, targetSlot);
     } else {
@@ -661,10 +639,10 @@ function drop(ev) {
       })
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
-    
-    // Force a maximum of one glyph in Teresa Reality before Eternity
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
-      player.celestials.teresa.glyphEquipped = true
+
+    // Force a maximum of one glyph in Effarig Reality before Eternity
+    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      player.celestials.effarig.glyphEquipped = true
     }
     generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
   } else if (!ev.target.className.includes("glyphactive")) {
@@ -684,7 +662,7 @@ function drop(ev) {
     }
   }
   generateGlyphTable()
-  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
   mouseOn.appendTo($(ev.target))
   mouseOn = $("document")
 }
@@ -697,10 +675,10 @@ function canBuyRealityUpg(id) {
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
-  var row = Math.floor( ( id - 1 ) / 5 )
+  var row = Math.floor((id - 1) / 5)
   if (row < 2) return true
   else {
-    for (var i = row*5 - 4; i <=row*5; i++) {
+    for (var i = row * 5 - 4; i <= row * 5; i++) {
       if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row
     }
   }
@@ -731,7 +709,7 @@ function buyRealityUpg(id) {
 }
 
 function updateRealityUpgrades() {
-  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+  for (let i = 1; i <= 25; ++i) {
     if (!canBuyRealityUpg(i)) $("#rupg" + i).addClass("rUpgUn")
     else $("#rupg" + i).removeClass("rUpgUn")
   }
@@ -743,7 +721,7 @@ function updateRealityUpgrades() {
     }
   });
 
-  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+  for (let i = 1; i <= 25; ++i) {
     if (player.reality.upg.includes(i)) $("#rupg" + i).addClass("rUpgBought")
     else $("#rupg" + i).removeClass("rUpgBought")
   }
@@ -773,10 +751,10 @@ function respecGlyphs() {
 
 function glyphSacrificeGain(glyph) {
   let gain = glyph.level * glyph.strength;
-  if (glyph.type === 'teresa') {
-    gain *= Math.pow(Effarig.runRewardMultiplier, 0.2);
+  if (glyph.type === 'effarig') {
+    gain *= Math.pow(Teresa.runRewardMultiplier, 0.2);
   } else {
-    gain *= Effarig.runRewardMultiplier;
+    gain *= Teresa.runRewardMultiplier;
   }
   return gain;
 }
@@ -801,18 +779,18 @@ function sacrificeGlyph(glyph, force = false) {
 }
 
 function updateTooltips() {
-  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function(e) {
-    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "flex"})
+  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function (e) {
+    mouseOn.css({ "left": e.pageX - 150 + "px", "top": e.pageY - mouseOn.height() - 35 + "px", "display": "flex" })
   })
-  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function(e) {
+  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function (e) {
     e.stopPropagation();
     mouseOn = $(this).find(".tooltip")
     mouseOn.appendTo("body")
   })
 
-  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function(e) {
+  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function (e) {
     e.stopPropagation();
-    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+    mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
     mouseOn.appendTo($(this))
     mouseOn = $("document")
   })
@@ -820,8 +798,8 @@ function updateTooltips() {
 
 function getGlyphLevelInputs() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
-  // Once Teresa is unlocked, these contributions can be adjusted; the math is described in detail
-  // below. These *Base values are the nominal inputs, as they would be multiplied without Teresa
+  // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
+  // below. These *Base values are the nominal inputs, as they would be multiplied without Effarig
   let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
   // @ts-ignore
   var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
@@ -831,7 +809,7 @@ function getGlyphLevelInputs() {
   let dtBase = player.dilation.dilatedTime.exponent ?
     Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
   let eterBase = player.reality.upg.includes(18) ?
-    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45,1) : 1;
+    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1) : 1;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -840,11 +818,11 @@ function getGlyphLevelInputs() {
   // don't add up to 4, but their powers do (for blendExp = 1/3, the cubes of the exponents sum to
   // 4.
   // The optimal weights, given a blendExp, are proportional to log(x)^(1/(1- blendExp))
-  const blendExp = 1/3;
+  const blendExp = 1 / 3;
   // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
   // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
   // Then, we can divide the result by s⁴; this does nothing for even weights
-  // This can reduce the effect that Teresa can have; consider the following examples:
+  // This can reduce the effect that Effarig can have; consider the following examples:
   // Inputs : 100, 1, 1, 1. Nominal result : 100
   // blendExp = 1/3; optimal weights: 1, 0, 0, 0; result = 1493
   // Scaling by 100: 10000, 100, 100, 100
@@ -858,32 +836,33 @@ function getGlyphLevelInputs() {
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
-  let weights =  player.celestials.teresa.glyphWeights;
+  let weights = player.celestials.effarig.glyphWeights;
   var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
   var epEffect = adjustFactor(epBase, weights.ep / 100);
   var replEffect = adjustFactor(replBase, weights.repl / 100);
   var dtEffect = adjustFactor(dtBase, weights.dt / 100);
   var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("teresaglyph");
+  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.effarig.glyphLevelMult;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {
     var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
-    glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
+    glyphScaledLevel = glyphScaleBegin + 0.5 * glyphScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
     glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
   }
-  let perkFactor = 0;
-  if (player.reality.perks.includes(21)) perkFactor++;
-  if (player.reality.perks.includes(24)) perkFactor++;
+  let perkFactor = Effects.sum(
+    Perk.glyphLevelIncrease1,
+    Perk.glyphLevelIncrease2
+  );
   return {
     epEffect: epEffect,
     replEffect: replEffect,
     dtEffect: dtEffect,
     eterEffect: eterEffect,
-    perkShop: player.celestials.effarig.glyphLevelMult,
+    perkShop: player.celestials.teresa.glyphLevelMult,
     scalePenalty: glyphScalePenalty,
     perkFactor: perkFactor,
     finalLevel: glyphScaledLevel + perkFactor,

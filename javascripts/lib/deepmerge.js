@@ -1,3 +1,6 @@
+// deepmerge library modified for Antimatter Dimensions usage (mainly Decimal integration)
+// Source: https://github.com/TehShrike/deepmerge
+
 function emptyTarget(val) {
   return Array.isArray(val) ? [] : {};
 }

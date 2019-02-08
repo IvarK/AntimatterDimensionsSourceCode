@@ -3,39 +3,34 @@ const GameIntervals = (function() {
     let id;
     return {
       start() {
-        id = setInterval(handler, timeout);
+        id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
       },
       stop() {
         clearInterval(id);
-      }
-    };
-  };
-  return {
-    start() {
-      for (let prop in this) {
-        if (!this.hasOwnProperty(prop)) continue;
-        safeCall(this[prop].start);
-      }
-    },
-    stop() {
-      for (let prop in this) {
-        if (!this.hasOwnProperty(prop)) continue;
-        safeCall(this[prop].stop);
-      }
-    },
-    gameLoop: {
-      id: undefined,
-      start() {
-        this.id = setInterval(gameLoop, player.options.updateRate);
-      },
-      stop() {
-        clearInterval(this.id);
       },
       restart() {
         this.stop();
         this.start();
       }
+    };
+  };
+  return {
+    // Not a getter because getter will cause stack overflow
+    all() {
+      return Object.values(GameIntervals)
+        .filter(i => i.hasOwnProperty("start") && i.hasOwnProperty("stop"));
     },
+    start() {
+      for (let interval of this.all()) {
+        interval.start();
+      }
+    },
+    stop() {
+      for (let interval of this.all()) {
+        interval.stop();
+      }
+    },
+    gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
     save: interval(() => save_game(), 30000)
   };
 }());

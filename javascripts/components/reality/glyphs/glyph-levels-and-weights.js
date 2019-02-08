@@ -1,6 +1,6 @@
 "use strict";
 
-// The things inside player.celestials.teresa.glyphWeights
+// The things inside player.celestials.effarig.glyphWeights
 const _GLYPH_WEIGHT_FIELDS = ["ep", "repl", "dt", "eternities"];
 
 Vue.component("glyph-levels-and-weights", {
@@ -12,7 +12,7 @@ Vue.component("glyph-levels-and-weights", {
       penaltyVisible: false,
       perkVisible: false,
       factors: getGlyphLevelInputs(),
-      weights: Object.assign({}, player.celestials.teresa.glyphWeights),
+      weights: Object.assign({}, player.celestials.effarig.glyphWeights),
       rows: 3,
     }
   },
@@ -22,7 +22,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   computed: {
     gridStyle() {
-      let columns = this.adjustVisible ? "8em 2em 7em 3em 20rem 1rem" : "auto 1em 6em";
+      let columns = this.adjustVisible ? "7.5em 1em 7em 20rem 1rem" : "auto 1em 6em";
       return {
         "-ms-grid-columns": columns,
         "grid-template-columns": columns,
@@ -78,7 +78,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   methods: {
     update() {
-      this.adjustVisible = Teresa.has(TERESA_UNLOCKS.ADJUSTER);
+      this.adjustVisible = Effarig.has(EFFARIG_UNLOCKS.ADJUSTER);
       this.eternityVisible =  player.reality.upg.includes(18);
       let glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
@@ -94,7 +94,7 @@ Vue.component("glyph-levels-and-weights", {
         this.rows = 6;
       }
       this.factors = glyphFactors;
-      _GLYPH_WEIGHT_FIELDS.forEach( e => this.weights[e] = player.celestials.teresa.glyphWeights[e] );
+      _GLYPH_WEIGHT_FIELDS.forEach( e => this.weights[e] = player.celestials.effarig.glyphWeights[e] );
     },
     formatFactor(x) { // not applied to + perks since it's always whole
       return x.toFixed(3);
@@ -106,7 +106,7 @@ Vue.component("glyph-levels-and-weights", {
       };
     },
     resetWeights() {
-      _GLYPH_WEIGHT_FIELDS.forEach( e => player.celestials.teresa.glyphWeights[e] = 25 );
+      _GLYPH_WEIGHT_FIELDS.forEach( e => player.celestials.effarig.glyphWeights[e] = 25 );
       this.resetSavedWeights();
     },
     adjustSlider(which, value) {
@@ -136,18 +136,18 @@ Vue.component("glyph-levels-and-weights", {
         roundPreservingSum(newWeights)
         _GLYPH_WEIGHT_FIELDS.forEach((x) => {
           if (x !== which) {
-            player.celestials.teresa.glyphWeights[x] = newWeights.shift();
+            player.celestials.effarig.glyphWeights[x] = newWeights.shift();
           }
         });
       }
-      player.celestials.teresa.glyphWeights[which] = value;
+      player.celestials.effarig.glyphWeights[which] = value;
     },
     resetSavedWeights() {
-      this.savedWeights = Object.assign({}, player.celestials.teresa.glyphWeights);
+      this.savedWeights = Object.assign({}, player.celestials.effarig.glyphWeights);
       this.lastAdjusted = null;
     },
   },
-  template: `
+  template: /*html*/`
     <div ref="grid" :style="gridStyle" class="l-glyph-levels-and-weights c-glyph-levels-and-weights">
       <!-- Put down a placeholder div to keep the adjuster from getting cramped -->
       <div v-if="adjustVisible" :style="makeRowStyle(6)"></div>
@@ -180,8 +180,13 @@ Vue.component("glyph-levels-and-weights", {
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">{{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;</div>
       </template>
       <template v-if="adjustVisible">
-        <div class="l-glyph-levels-and-weights__adjust-label">Adjust weights</div>
         <div class="l-glyph-levels-and-weights__adjust-outline"></div>
+        <div class="l-glyph-levels-and-weights__adjust-label">
+          Adjust weights
+          <div class="l-glyph-levels-and-weights__reset-btn-outer">
+            <div class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn" @click="resetWeights">Reset</div>
+          </div>
+        </div>
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEP">
           <ad-slider-component v-bind="sliderProps" :value="weights.ep" @input="adjustSlider('ep', $event)" ></ad-slider-component>
         </div>
@@ -194,14 +199,11 @@ Vue.component("glyph-levels-and-weights", {
         <div class="l-glyph-levels-and-weights__slider" :style="rowStyleEternities">
           <ad-slider-component v-bind="sliderProps" :value="weights.eternities" @input="adjustSlider('eternities', $event)"></ad-slider-component>
         </div>
-        <div class="l-glyph-levels-and-weights__reset-btn-outer">
-          <div class="l-glyph-levels-and-weights__reset-btn c-glyph-levels-and-weights__reset-btn" @click="resetWeights">Reset</div>
-        </div>
       </template>
     </div>
   `,
   mounted() {
-    // Teresa unlock sets a flag to open this dropdown
+    // Effarig unlock sets a flag to open this dropdown
     if (this.$viewModel.tabs.reality.openGlyphWeights) {
       this.$viewModel.tabs.reality.openGlyphWeights = false;
       this.$parent.$emit("openrequest");

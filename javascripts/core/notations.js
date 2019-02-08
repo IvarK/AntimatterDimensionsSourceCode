@@ -15,17 +15,35 @@ class Notation {
    * @return {string}
    */
   format(value, places, placesUnder1000) {
+    if (typeof value === "number" && !Number.isFinite(value)) {
+      return this.formatInfinite();
+    }
+
     const decimal = new Decimal(value);
 
     if (decimal.exponent < 3) {
-      return decimal.toNumber().toFixed(placesUnder1000);
+      return this.formatUnder1000(decimal.toNumber(), placesUnder1000);
     }
 
-    if (typeof value === "number" && !Number.isFinite(value) || this.isInfinite(decimal)) {
-      return "Infinite";
+    if (this.isInfinite(decimal)) {
+      return this.formatInfinite();
     }
 
     return this.formatDecimal(decimal, places);
+  }
+
+  /**
+   * @param {number} value
+   * @param {number} places
+   * @returns {string}
+   * @protected
+   */
+  formatUnder1000(value, places) {
+    return value.toFixed(places);
+  }
+
+  formatInfinite() {
+    return "Infinite";
   }
 
   /**
@@ -85,7 +103,7 @@ class Notation {
 
   setCurrent() {
     player.options.notation = this.name;
-    Notation.current = this;
+    ui.notationName = this.name;
   }
 
   /**
@@ -95,6 +113,10 @@ class Notation {
   static find(name) {
     const notation = Notation.all.find(n => n.name === name);
     return notation === undefined ? Notation.mixedScientific : notation;
+  }
+
+  static get current() {
+    return GameUI.initialized ? ui.notation : Notation.mixedScientific;
   }
 }
 
@@ -322,7 +344,7 @@ Notation.cancer = new class CancerNotation extends LettersNotation{
 
   setCurrent() {
     super.setCurrent();
-    ui.notify.success("😂😂😂");
+    GameUI.notify.success("😂😂😂");
   }
 }("Cancer", ['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡']);
 
@@ -340,50 +362,139 @@ Notation.roman = new class RomanNotation extends Notation {
     return true;
   }
 
-  // We need to format all values (even below 1000), so override format instead of formatDecimal
-  format(value, places, placesUnder1000) {
-    const decimal = new Decimal(value);
+  formatInfinite() {
+    return "Infinitus";
+  }
 
-    if (typeof value === "number" && !Number.isFinite(value) || this.isInfinite(decimal)) {
-      return "Infinitus";
+  formatUnder1000(value, places) {
+    return this.romanize(value);
+  }
+
+  formatDecimal(value, places) {
+    if (value.lt(this.maximum)) {
+      return this.romanize(value.toNumber());
     }
+    const log10 = value.log10();
+    const maximums = log10 / this._maxLog10;
+    const current = Math.pow(this.maximum, maximums - Math.floor(maximums));
+    return `${this.romanize(current)}↑${this.formatDecimal(maximums.toDecimal())}`;
+  }
 
+  /**
+   * @param {number} value
+   * @return {string}
+   * @private
+   */
+  romanize(value) {
     const decimalValue = this._decimalValue;
     const romanNumeral = this._romanNumeral;
     const romanFractions = this._romanFractions;
-
-    function romanize(value) {
-      let roman = String.empty;
-      for (let i = 0; i < decimalValue.length; i++) {
-        while (decimalValue[i] <= value) {
-          roman += romanNumeral[i];
-          value -= decimalValue[i];
-        }
+    let roman = String.empty;
+    for (let i = 0; i < decimalValue.length; i++) {
+      while (decimalValue[i] <= value) {
+        roman += romanNumeral[i];
+        value -= decimalValue[i];
       }
-      let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
-      if (duodecimal === 0) {
-        return roman === String.empty ? "nulla" : roman;
-      }
-      if (duodecimal > 5) {
-        duodecimal -= 6;
-        roman += "Ｓ";
-      }
-      roman += romanFractions[duodecimal];
-      return roman;
     }
-
-    if (decimal.lt(this.maximum)) {
-      return romanize(decimal.toNumber());
+    let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
+    if (duodecimal === 0) {
+      return roman === String.empty ? "nulla" : roman;
     }
+    if (duodecimal > 5) {
+      duodecimal -= 6;
+      roman += "Ｓ";
+    }
+    roman += romanFractions[duodecimal];
+    return roman;
+  }
+}("Roman");
 
-    const log10 = decimal.log10();
-    const maximums = log10 / this._maxLog10;
-    const current = Math.pow(this.maximum, maximums - Math.floor(maximums));
-    return `${romanize(current)}↑${this.format(maximums)}`;
+
+Notation.dots = new class DotsNotation extends Notation {
+  formatUnder1000(value, places) {
+    return this.dotify(value * 254);
   }
 
-  formatDecimal(value, places) {}
-}("Roman");
+  formatInfinite() {
+    return "⣿⠀⣿";
+  }
+
+  formatDecimal(value, places) {
+    if (value.lt(16387063.9980315)) {
+      return this.dotify(value.toNumber() * 254);
+    }
+    const log = value.log(254);
+    const exponent = Math.floor(log - 2);
+    const mantissa = Math.pow(254, log - exponent);
+    return this.dotify(exponent) + "⣿" + this.dotify(mantissa * 254);
+  }
+
+  /**
+   * @param {number} value
+   * @param {boolean?} pad
+   * @return {string}
+   */
+  dotify(value, pad) {
+    const DOT_DIGITS =
+      "⠀⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿" +
+      "⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿" +
+      "⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿" +
+      "⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿";
+
+    value = Math.round(value);
+    if (!pad && value < 254) return DOT_DIGITS[value + 1];
+    if (value < 64516) return DOT_DIGITS[Math.floor(value / 254) + 1] + DOT_DIGITS[value % 254 + 1];
+    return this.dotify(Math.floor(value / 64516)) + this.dotify(value % 64516, true);
+  }
+}("Dots");
+
+Notation.zalgo = new class ZalgoNotation extends Notation {
+  constructor() {
+    super("Zalgo");
+    this._zalgoChars = ['\u030D', '\u0336', '\u0353', '\u033F', '\u0489', '\u0330', '\u031A', '\u0338', '\u035A', '\u0337'];
+    this._heComes = ["H", "E" , " ", "C" , "O" , "M" , "E", "S"];
+  }
+
+  get isPainful() {
+    return true;
+  }
+
+  formatInfinite() {
+    return this._heComes
+      .map(char => char + this._zalgoChars.randomElement())
+      .join("");
+  }
+
+  formatUnder1000(value, places) {
+    return this.heComes(value.toDecimal());
+  }
+
+  formatDecimal(value, places) {
+    return this.heComes(value);
+  }
+
+  /**
+   * @param {Decimal} value
+   * @return {string}
+   */
+  heComes(value) {
+    // Eternity seems to happen around e66666 antimatter, who would've thought? Scaled down to 1000.
+    let scaled = value.clampMin(1).log10() / 66666 * 1000;
+    let displayPart = scaled.toFixed(2);
+    let zalgoPart = Math.floor(Math.abs(Math.pow(2, 30) * (scaled - displayPart)));
+
+    let displayChars = Array.from(formatWithCommas(displayPart));
+    let zalgoIndices = Array.from(zalgoPart.toString() + scaled.toFixed(0));
+
+    for (let i = 0; i < zalgoIndices.length; i++) {
+      let zalgoIndex = parseInt(zalgoIndices[i]);
+      let displayIndex = 7 * i % displayChars.length;
+      displayChars[displayIndex] += this._zalgoChars[zalgoIndex];
+    }
+
+    return displayChars.join("");
+  }
+}();
 
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
@@ -401,7 +512,7 @@ Notation.all = [
   Notation.logarithm,
   Notation.brackets,
   Notation.infinity,
-  Notation.roman
+  Notation.roman,
+  Notation.dots,
+  Notation.zalgo,
 ];
-
-Notation.current = Notation.mixedScientific;

@@ -46,7 +46,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "achievementMult",
       cost: 1e6,
       description: "Normal dimensions gain a multiplier based on achievements completed",
-      effect: () => Math.max(Math.pow((GameCache.achievementCount.value - 30), 3) / 40, 1),
+      effect: () => Math.max(Math.pow(Math.pow((GameCache.achievementCount.value - 30), 3) / 40, getAdjustedGlyphEffect("effarigachievement")), 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     slowestChallengeMult: {

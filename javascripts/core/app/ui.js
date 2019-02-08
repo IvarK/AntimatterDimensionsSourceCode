@@ -45,7 +45,7 @@ Vue.mixin({
   created() {
     if (this.update) {
       this.on$(GameEvent.UPDATE, this.update);
-      if (uiInitialized) {
+      if (GameUI.initialized) {
         this.update();
       }
     }
@@ -70,44 +70,10 @@ Vue.filter("pluralize", function (value, amount, plural) {
   return isSingular ? value : (plural !== undefined ? plural : value + "s");
 });
 
-VTooltip.VTooltip.options.defaultClass = 'general-tooltip';
-VTooltip.VTooltip.options.popover.defaultBaseClass = 'general-tooltip';
-VTooltip.VTooltip.options.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
-
-let uiInitialized = false;
-
-ui = new Vue({
-  el: '#ui',
-  data: ui,
-  computed: {
-    themeCss: function() {
-      return "stylesheets/theme-" + this.view.theme + ".css";
-    }
-  }
-});
-
-uiInitialized = true;
-
-ui.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
-  ui.view.modal.cloudConflicts.push({
-    saveId: saveId,
-    cloud: getSaveInfo(cloudSave),
-    local: getSaveInfo(localSave),
-    onAccept: onAccept,
-    onLastConflict: onLastConflict
-  });
-
-  function getSaveInfo(save) {
-    return {
-      infinities: save ? save.infinitied : 0,
-      eternities: save ? save.eternities : 0
-    };
-  }
-};
-
 const GameUI = {
   events: [],
   flushPromise: undefined,
+  initialized: false,
   dispatch(event) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
@@ -149,3 +115,25 @@ const UIID = function() {
   let id = 0;
   return { next: () => id++ };
 }();
+
+(function() {
+  const vTooltip = VTooltip.VTooltip.options;
+  vTooltip.defaultClass = 'general-tooltip';
+  vTooltip.popover.defaultBaseClass = 'general-tooltip';
+  vTooltip.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+}());
+
+ui = new Vue({
+  el: '#ui',
+  data: ui,
+  computed: {
+    themeCss() {
+      return "stylesheets/theme-" + this.view.theme + ".css";
+    },
+    notation() {
+      return Notation.find(this.notationName);
+    }
+  }
+});
+
+GameUI.initialized = true;

@@ -193,7 +193,6 @@ function onLoad() {
 
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
-  Perks.updateAchSkipCount();
   transformSaveToDecimal();
   updateAchievementPower();
   resizeCanvas();
@@ -202,7 +201,10 @@ function onLoad() {
   updateRealityUpgrades();
   updateWormholeUpgrades()
   updateAutomatorRows()
-  drawPerkNetwork()
+  checkPerkValidity()
+  GameCache.buyablePerks.invalidate();
+  drawPerkNetwork();
+  updatePerkColors()
 
   const notation = player.options.notation;
   if (notation === undefined) {
@@ -294,6 +296,12 @@ function unfuckMultCosts() {
   delete player.dimensionMultDecreaseCost;
 }
 
+function checkPerkValidity() {
+  if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
+  dev.respecPerks();
+  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}
+
 function load_cloud_save(saveId, cloudPlayer) {
   saves[saveId] = cloudPlayer;
 
@@ -338,7 +346,7 @@ function save_game(changed, silent) {
   if (GlyphSelection.active) return;
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
-  if (!silent) ui.notify.info(changed ? "Game loaded" : "Game saved");
+  if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");
 }
 
 function change_save(saveId) {

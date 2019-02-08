@@ -40,9 +40,6 @@ function bigCrunchReset() {
     if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
-    if (player.currentEternityChall === "eterc4" && player.infinitied >= 16 - (ECTimesCompleted("eterc4") * 4)) {
-        failChallenge();
-    }
 
     if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied === 0) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
@@ -58,6 +55,10 @@ function bigCrunchReset() {
     autoS = true;
     player.infinitied = player.infinitied + Math.round(gainedInfinities());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+
+    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
+      failChallenge();
+    }
 
     checkBigCrunchAchievements();
     if (!player.options.retryChallenge)
@@ -79,7 +80,7 @@ function bigCrunchReset() {
         player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
     }
 
-    if (player.eternities > 10 && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc10") {
+    if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
         for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
             if (player.infDimBuyers[i - 1]) {
                 buyMaxInfDims(i);
@@ -88,20 +89,10 @@ function bigCrunchReset() {
         }
     }
 
-    if (player.eternities >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.chanceCost) && player.currentEternityChall !== "eterc8" && player.replicanti.chance < 1) upgradeReplicantiChance()
-    }
+    autoBuyReplicantiUpgrades();
 
-    if (player.eternities >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && (TimeStudy(22).isBought ? player.replicanti.interval > 1 : player.replicanti.interval > 50)) upgradeReplicantiInterval()
-    }
-
-    if (player.eternities >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") {
-        while (player.infinityPoints.gte(player.replicanti.galCost)) upgradeReplicantiGalaxy()
-    }
-  
-    if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
-      Teresa.unlock(TERESA_UNLOCKS.INFINITY_COMPLETE);
+    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+      Effarig.unlock(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
     }
 }
 
@@ -164,7 +155,7 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.INFINITY_COMPLETE)) {
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
     return new Decimal(1);
   }
   let ipMult = player.infMult
@@ -183,9 +174,10 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Teresa.isRunning && !Teresa.has(TERESA_UNLOCKS.ETERNITY_COMPLETE)) {
+  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
     ipMult = ipMult.pow(0.9);
   }
+  if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
 }
 
@@ -256,12 +248,12 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       InfinityUpgrade.skipResetGalaxy.isBought;
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
   purchase(amount = 1) {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
@@ -283,7 +275,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   autobuyerTick() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     if (!this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costIncreaseThreshold.exponent);
       const purchases = buyUntil - this.cost.exponent + 1;
@@ -350,12 +342,12 @@ class BreakInfinityMultiplierCostUpgrade extends GameMechanicState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     player.infinityPoints = player.infinityPoints.minus(this.cost);
     player.infinityRebuyables[this.config.id]++;
     GameCache.dimensionMultDecrease.invalidate();
@@ -389,12 +381,12 @@ class BreakInfinityIPGenUpgrade extends GameMechanicState {
     return player.infinityPoints.gte(this.cost);
   }
 
-  get isAvailable() {
+  get canBeBought() {
     return !this.isMaxed && this.isAffordable;
   }
 
   purchase() {
-    if (!this.isAvailable) return;
+    if (!this.canBeBought) return;
     player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost);
     player.offlineProdCost *= 10;
     player.offlineProd += 5;

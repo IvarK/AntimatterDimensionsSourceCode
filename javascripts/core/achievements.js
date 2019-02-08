@@ -206,7 +206,7 @@ function giveAchievement(name) {
 
     if (player.achievements.includes(allAchievementNums[name])) return false
 
-    ui.notify.success(name);
+    GameUI.notify.success(name);
     player.achievements.push(allAchievementNums[name]);
     GameCache.achievementCount.invalidate();
     kong.submitStats('Achievements', player.achievements.length);
@@ -223,16 +223,16 @@ function isAchEnabled(name, id) {
   const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
-  if (row <= Perks.achSkipCount) return true;
+  if (row <= GameCache.achSkipPerkCount.value) return true;
   const currentSeconds = player.thisReality / 1000;
   return timeRequiredForAchievement(achId) <= currentSeconds;
 }
 
 function timeForAllAchievements() {
-  if (Perks.achSkipCount === TOTAL_PRE_REALITY_ACH_ROWS) {
+  if (GameCache.achSkipPerkCount.value === TOTAL_PRE_REALITY_ACH_ROWS) {
     return 0;
   }
-  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - Perks.achSkipCount);
+  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - GameCache.achSkipPerkCount.value);
 }
 
 function nextAchIn() {
@@ -271,7 +271,7 @@ function timeUntilAch(name) {
     return NaN;
   }
   const row = Math.floor(achId / 10);
-  if (row <= Perks.achSkipCount) {
+  if (row <= GameCache.achSkipPerkCount.value) {
     return NaN;
   }
   const currentSeconds = player.thisReality / 1000;
@@ -284,7 +284,7 @@ function timeRequiredForAchievement(achId) {
   const rowModifier = realityAchievementModifiers.rowModifier;
 
   const row = Math.floor(achId / 10);
-  const perkAdjustedRow = Math.clamp(row - Perks.achSkipCount, 1, row);
+  const perkAdjustedRow = Math.clamp(row - GameCache.achSkipPerkCount.value, 1, row);
   const previousRowCount = perkAdjustedRow - 1;
   const previousRowsTime = totalAchRowTime(previousRowCount);
   const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;

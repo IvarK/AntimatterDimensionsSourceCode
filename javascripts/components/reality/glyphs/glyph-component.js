@@ -93,7 +93,7 @@ const GlyphTooltipComponent = {
     }
   },
   methods: {
-    touchStart(ev) {
+    touchStart() {
       // we _don't_ preventDefault here because we want the event to turn into a local
       // dragstart that we can intercept
       this.$parent.$emit("tooltip-touched");
@@ -254,11 +254,11 @@ Vue.component("glyph-component", {
         this.$refs.tooltip.$el.style.top = `${y - rect.top}px`
       }
     },
-    mouseEnter(ev) {
+    mouseEnter() {
       if (this.$viewModel.draggingUIID !== -1) return;
       this.showTooltip();
     },
-    mouseLeave(ev) {
+    mouseLeave() {
       if (this.isCurrentTooltip) {
         this.hideTooltip();
       }
@@ -279,7 +279,7 @@ Vue.component("glyph-component", {
       ev.dataTransfer.dropEffect = "move";
       this.$viewModel.draggingUIID = this.componentID;
     },
-    dragEnd(ev) {
+    dragEnd() {
       this.isDragging = false;
       this.suppressTooltip = false;
       this.$viewModel.scrollWindow = 0;

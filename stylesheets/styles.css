@@ -4482,8 +4482,8 @@ screen and (max-width: 480px) {
 
 .l-modal-overlay {
   position: fixed;
-  left: 0vw;
-  top: 0vw;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
   z-index: 4;

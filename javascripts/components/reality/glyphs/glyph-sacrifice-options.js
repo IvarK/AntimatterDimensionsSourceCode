@@ -91,7 +91,7 @@ Vue.component("glyph-sacrifice-options", {
       lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
       // Note: there are two units at play: strength is from 1..3.5+; rarity is 0..100
-      rarityThresholds: GLYPH_TYPES.mapToObject(e => e, e => 0),
+      rarityThresholds: GLYPH_TYPES.mapToObject(e => e, () => 0),
     };
   },
   computed: {

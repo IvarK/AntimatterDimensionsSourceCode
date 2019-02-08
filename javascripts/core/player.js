@@ -390,7 +390,7 @@ var player = {
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
           rarityThreshold: 0,
           scoreThreshold: 0,
-          effectScores: t.effects.mapToObject(e => e.id, e => 0),
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
     },

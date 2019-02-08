@@ -107,11 +107,12 @@
 .c-auto-sac-type-tab__input:focus {
   font-weight: bold;
   background-color: #555;
-  box-shadow: 0rem 0rem 0.4rem 0.1rem #d5ffd7;
+  box-shadow: 0 0 0.4rem 0.1rem #d5ffd7;
 }
 
 .c-auto-sac-type-tab__input::-webkit-outer-spin-button, .c-auto-sac-type-tab__input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  -moz-appearance: none;
   margin: 0;
 }
 
@@ -358,10 +359,10 @@
   border: 1px solid rgb(184, 184, 184);
   border-radius: 5px;
   padding: 12px;
-  margin-top: 0rem;
+  margin-top: 0;
   margin-left: 1rem;
   margin-right: 1rem;
-  margin-bottom: 0rem;
+  margin-bottom: 0;
 }
 
 .t-s8 .c-current-glyph-effects {

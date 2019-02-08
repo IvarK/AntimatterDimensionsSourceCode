@@ -4,10 +4,14 @@ Vue.component("sacrificed-glyphs", {
       props: {
         type: String,
         amount: Number,
+        effectValue: Number,
       },
       computed: {
         typeConfig() {
           return GlyphTypes[this.type];
+        },
+        sacConfig() {
+          return GlyphSacrifice[this.type].config;
         },
         symbol() {
           return this.typeConfig.symbol;
@@ -16,7 +20,7 @@ Vue.component("sacrificed-glyphs", {
           return this.shorten(this.amount, 2);
         },
         description() {
-          return GlyphSacrifice[this.type].config.description(GlyphSacrifice[this.type].effectValue);
+          return this.sacConfig.description(this.effectValue);
         },
       },
       template: /*html*/`
@@ -35,7 +39,11 @@ Vue.component("sacrificed-glyphs", {
   },
   data: function () {
     return {
-      sacrificed: GlyphTypes.list.map(t => ({ id: t.id, amount: player.reality.glyphs.sac[t.id] })),
+      sacrificed: GlyphTypes.list.map(t => ({
+        type: t.id,
+        amount: player.reality.glyphs.sac[t.id],
+        effectValue: GlyphSacrifice[t.id].effectValue,
+      })),
     };
   },
   computed: {
@@ -47,6 +55,7 @@ Vue.component("sacrificed-glyphs", {
     update() {
       GlyphTypes.list.forEach((t, idx) => {
         this.sacrificed[idx].amount = player.reality.glyphs.sac[t.id];
+        this.sacrificed[idx].effectValue = GlyphSacrifice[t.id].effectValue;
       });
     }
   },
@@ -54,7 +63,7 @@ Vue.component("sacrificed-glyphs", {
   <div v-show="anySacrifices" class="c-sacrificed-glyphs l-sacrificed-glyphs">
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
     <template v-for="sacInfo in sacrificed">
-      <type-sacrifice v-if="sacInfo.amount > 0" :type="sacInfo.id" :amount="sacInfo.amount"/>
+      <type-sacrifice v-if="sacInfo.amount > 0" v-bind="sacInfo"/>
     </template>
   </div>`,
 })

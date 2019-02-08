@@ -394,7 +394,6 @@ function transformSaveToDecimal() {
       glyph.effects.mult = new Decimal(glyph.effects.mult)
     }
   }
-  player.timestudy.theorem = new Decimal(player.timestudy.theorem);
 }
 
 function set_save(name, saveId, value) {

@@ -43,7 +43,7 @@ GameDatabase.eternity.upgrades = {
     id: 5,
     cost: 1e40,
     description: "Time Dimensions are multiplied by your unspent Time Theorems",
-    effect: () => Math.max(player.timestudy.theorem, 1),
+    effect: () => Decimal.max(player.timestudy.theorem, 1),
     formatEffect: value => `${shortenMoney(value)}x`
   },
   tdMultRealTime: {

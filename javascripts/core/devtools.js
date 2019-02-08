@@ -141,7 +141,8 @@ dev.refundDilStudies = function() {
         if (player.dilation.studies.includes(i+1)) {
             player.dilation.studies.splice(player.dilation.studies.indexOf(i+1), 1);
             console.log(document.getElementById("dilstudy"+(i+1)))
-            player.timestudy.theorem += parseInt(document.getElementById("dilstudy"+(i+1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""))
+            let refund = parseInt(document.getElementById("dilstudy"+(i+1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""));
+            player.timestudy.theorem = player.timestudy.theorem.plus(refund);
         }
     }
 }

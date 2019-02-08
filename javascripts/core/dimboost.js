@@ -44,26 +44,26 @@ class DimBoost {
   }
 
   static get requirement() {
-    return this.bulkRequirement(0);
+    return this.bulkRequirement(1);
   }
 
   static bulkRequirement(bulk) {
     let targetResets = player.resets + bulk;
-    let tier = Math.min(targetResets + 4, this.maxShiftTier);
+    let tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
 
     if (tier === 6 && Challenge(10).isRunning) {
-      amount += Math.ceil((targetResets - 2) * 20);
+      amount += Math.ceil((targetResets - 3) * 20);
     }
     else if (tier === 8) {
       const mult = 15 - Effects.sum(
         TimeStudy(211),
         TimeStudy(222)
       );
-      amount += Math.ceil((targetResets - 4) * mult);
+      amount += Math.ceil((targetResets - 5) * mult);
     }
     if (EternityChallenge(5).isRunning) {
-      amount += Math.pow(targetResets, 3) + targetResets;
+      amount += Math.pow(targetResets - 1, 3) + targetResets;
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -140,70 +140,39 @@ function softResetBtnClick() {
   
   for (let tier = 1; tier<9; tier++) {
     const mult = DimBoost.power.pow(player.resets + 1 - tier);
-    if (mult > 1) floatText(tier, "x" + shortenDimensions(mult));
+    if (mult.gt(1)) floatText(tier, "x" + shortenDimensions(mult));
   }
 }
 
 function maxBuyDimBoosts(manual) {
-  let requirement;
-  let bulk = 0;
-  do {
-    if (!ensureShift(bulk++)) return;
-  } while (requirement.tier < 8);
-
+  // Shifts are bought one at a time, unlocking the next dimension
+  if (DimBoost.isShift) {
+    if (DimBoost.requirement.isSatisfied) softReset(1);
+    return;
+  }
   let availableBoosts = Number.MAX_VALUE;
   if (player.overXGalaxies > player.galaxies && !manual) {
-    availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets - bulk;
+    availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets;
   }
+  if (availableBoosts <= 0) return;
 
-  if (availableBoosts <= 0) {
-    bulk += availableBoosts;
-    tryBoost(bulk);
-    return;
+  const req1 = DimBoost.bulkRequirement(1);
+  if (!req1.isSatisfied) return;
+  const req2 = DimBoost.bulkRequirement(2);
+  if (!req2.isSatisfied) return softReset(1);
+  // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
+  // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
+  const increase = req2.amount - req1.amount;
+  let maxBoosts = Math.min(availableBoosts,
+    1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
+  if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) return softReset(maxBoosts);
+
+  // But in case of EC5 it's not, so do binary search for appropriate boost amount
+  let minBoosts = 2;
+  while (maxBoosts !== minBoosts + 1) {
+    const middle = Math.floor((maxBoosts + minBoosts) / 2);
+    if (DimBoost.bulkRequirement(middle).isSatisfied) minBoosts = middle;
+    else maxBoosts = middle;
   }
-
-  let firstBoost = requirement;
-  let secondBoost = ensureShift(bulk);
-  if (!secondBoost) return;
-
-  let increase = secondBoost.amount - firstBoost.amount;
-  let minBoosts = bulk;
-  let maxBoosts = bulk + Math.floor((player.eightAmount.toNumber() - secondBoost.amount) / increase);
-  maxBoosts = Math.min(maxBoosts, availableBoosts);
-
-  // Usually enough, as boost scaling is linear most of the time
-  if (canBoost(maxBoosts)){
-    tryBoost(maxBoosts);
-    return;
-  }
-
-  // But in case of EC5 it's not, so do binarysearch-like search for appropriate boost amount
-  while (maxBoosts !== (minBoosts + 1)) {
-    let middle = Math.floor((maxBoosts + minBoosts) / 2);
-    if (canBoost(middle)) {
-      minBoosts = middle;
-    }
-    else {
-      maxBoosts = middle;
-    }
-  }
-
-  tryBoost(maxBoosts - 1);
-
-  function ensureShift(bulk) {
-    requirement = DimBoost.bulkRequirement(bulk);
-    if (requirement.isSatisfied) {
-      return requirement;
-    }
-    tryBoost(bulk);
-    return false;
-  }
-  function canBoost(bulk) {
-    return DimBoost.bulkRequirement(bulk).isSatisfied;
-  }
-  function tryBoost(bulk) {
-    if (bulk > 0) {
-      softReset(bulk);
-    }
-  }
+  softReset(minBoosts);
 }

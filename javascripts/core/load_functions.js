@@ -16,7 +16,7 @@ function updateState() {
   }
 
 function onLoad() {
-  if (player.totalmoney === undefined || isNaN(player.totalmoney)) {
+  if (player.totalmoney === undefined || isNaN(player.totalmoney.mantissa) || isNaN(player.totalmoney.e)) {
     player.totalmoney = player.money;
   }
   if (player.thisEternity === undefined) {
@@ -113,7 +113,7 @@ function onLoad() {
 
   if (player.version < 9.5) {
       player.version = 9.5
-      if (player.timestudy.studies.includes(191)) player.timestudy.theorem += 100
+      if (player.timestudy.studies.includes(191)) player.timestudy.theorem = player.timestudy.theorem.plus(100);
   }
 
   if (player.version < 10) {
@@ -271,15 +271,21 @@ function convertAutobuyerMode() {
 }
 
 function unfuckChallengeIds() {
+  let wasFucked = false;
   function unfuckChallengeId(id) {
     if (!id.startsWith("challenge")) return id;
+    wasFucked = true;
     const legacyId = parseInt(id.substr(9));
     const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
     return Challenge(config.id).fullId;
   }
-
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);
+  if (wasFucked) {
+    player.challengeTimes = GameDatabase.challenges.normal
+      .slice(1)
+      .map(c => player.challengeTimes[c.legacyId - 2]);
+  }
 }
 
 function unfuckMultCosts() {

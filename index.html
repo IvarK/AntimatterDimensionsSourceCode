@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
     <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
@@ -100,38 +101,34 @@
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
-              <div id="glyphTabUpper">
-                <div class="glyphDescriptions" id="activeGlyphs"> <!-- left-->
-                  here will be a description of current glyph effects or smthing
+              <div class="l-glyphs-tab">
+                <div class="l-reality-button-column">
+                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
+                    <reality-button></reality-button>
+                    <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'" label="Glyph level factors"
+                        container-class="c-glyph-level-factors-dropdown-header">
+                      <glyph-levels-and-weights slot="dropdown" />
+                    </expanding-control-box>
+                    <glyph-sacrifice-options></glyph-sacrifice-options>
+                    <sacrificed-glyphs></sacrificed-glyphs>
+                  </template>
                 </div>
-                <div> <!-- middle -->
-                  <br>
-                  <reality-button></reality-button>
-                  <br>
-                  <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'"
-                                         label="Glyph level factors"
-                                         container-class="c-glyph-level-factors-dropdown-header">
-                    <glyph-levels-and-weights slot="dropdown"/>
-                  </expanding-control-box>
-                  <br>
-                  <br>
-                  <button class="realityUpgrade" onclick="toggleGlyphRespec()" id="glyphRespec" style="width:150px; height: 40px; margin: auto">Clear glyph slots on Reality</button>
-                  <div id="glyphslots">
-                    <!-- These are generated from JS -->
+                <div class="l-player-glyphs-column">
+                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
+                    <div class="l-equipped-glyphs-wrapper">
+                      <equipped-glyphs></equipped-glyphs>
+                      <current-glyph-effects></current-glyph-effects>
+                    </div>
+                  </template>
+                  <div class="glyphcontainer">
+                    <div>
+                      <h3 style="text-align: center">Inventory</h3>
+                      <table>
+                        <tbody id="glyphs">
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-                <div class="glyphDescriptions" id="sacrificedGlyphs"> <!-- right-->
-
-                </div>
-              </div>
-
-              <div class="glyphcontainer" style="margin: auto;">
-                <div>
-                  <h3 style="text-align: center">Inventory</h3>
-                  <table>
-                    <tbody id="glyphs">
-                    </tbody>
-                  </table>
                 </div>
               </div>
             </div>
@@ -464,9 +461,14 @@
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
+<script type="text/javascript" src="javascripts/core/crash.js"></script>
 <script type="text/javascript" src="javascripts/core/timespan.js"></script>
 <script type="text/javascript" src="javascripts/core/format.js"></script>
 <script type="text/javascript" src="javascripts/core/constants.js"></script>
+
+<script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/game-database.js"></script>
+<script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
@@ -475,11 +477,8 @@
 <script type="text/javascript" src="javascripts/core/intervals.js"></script>
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
-<script type="text/javascript" src="javascripts/core/crash.js"></script>
 
 
-<script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
-<script type="text/javascript" src="javascripts/core/secret-formula/game-database.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/achievements/normal-achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/achievements/secret-achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/challenges/normal-challenges.js"></script>
@@ -494,7 +493,7 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/eternity-milestones.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/dilation-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/perks.js"></script>
-<script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/reality/glyph-sacrifices.js"></script>
 
 
 <script type="text/javascript" src="javascripts/components/primary-button.js"></script>
@@ -620,6 +619,12 @@
 <script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-component.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-sacrifice-options.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-selection.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/equipped-glyphs.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/current-glyph-effects.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/sacrificed-glyphs.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>

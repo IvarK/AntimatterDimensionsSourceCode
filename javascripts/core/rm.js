@@ -2,12 +2,48 @@
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
-                           "dilationpow", "powermult", "powerdimboost", "powerbuy10",
-                           "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
-                           "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
-                           "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-                           "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresaunknown", "teresaantimatter"];
+  "dilationpow", "powermult", "powerdimboost", "powerbuy10",
+  "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
+  "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
+  "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "teresawormhole", "teresarm", "teresaglyph", "teresaachievement", "teresaforgotten", "teresaunknown", "teresaantimatter"];
 
+const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
+
+function rarityToStrength(x) {
+  return x * 2.5 / 100 + 1;
+}
+
+function strengthToRarity(x) {
+  return (x - 1) * 100 / 2.5;
+}
+
+
+const AutoGlyphSacrifice = {
+  set mode(value) {
+    player.celestials.teresa.autoGlyphSac.mode = value;
+  },
+  get mode() {
+    return player.celestials.teresa.autoGlyphSac.mode;
+  },
+  get types() {
+    return player.celestials.teresa.autoGlyphSac.types;
+  },
+  wouldSacrifice(glyph) {
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.NONE) return false;
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALL) return true;
+    let typeCfg = AutoGlyphSacrifice.types[glyph.type];
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
+      return typeCfg.rarityThreshold > strengthToRarity(glyph.strength);
+    }
+    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
+      let glyphScore = strengthToRarity(glyph.strength) +
+        Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
+      return typeCfg.scoreThreshold > glyphScore;
+    }
+    throw crash("Unknown auto glyph sacrifice mode");
+  },
+};
 
 /**
  * Makes glyphs (without assigning them inventory slots yet)
@@ -523,40 +559,9 @@ function generateGlyphTable() {
     html += "</tr>"
   }
 
-  $("#glyphslots").empty()
-  for (var slot=0; slot<player.reality.glyphs.slots; slot++) {
-    $("#glyphslots").append('<div id="active'+slot+'"class="glyph glyphactive" ondragover="allowDrop(event)" ondrop="drop(event)"></div>')
-    var glyph = player.reality.glyphs.active.find(function(glyph) { return glyph.idx == slot })
-    if (glyph !== undefined && glyph !== null) {
-      var glyphhtml = ""
-      if (glyph.color !== undefined)
-        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)'>"
-      else
-        glyphhtml += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"'>"
-      glyphhtml += getGlyphTooltip(glyph);
-      if (glyph.symbol !== undefined)
-        glyphhtml += "</span>"+specialGlyphSymbols["key"+glyph.symbol]+"</div>"
-      else glyphhtml += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
-      $("#glyphslots").children()[slot].innerHTML = glyphhtml
-    }
-  }
   table.innerHTML = html
 
-  // Update total effect box (order is specified for consistency
-  let isGlyphSoftcapActive = false;
-  let allActiveEffects = getActiveGlyphEffects();
-  let activeEffectText = "";
-  for (let effect of Object.keys(allActiveEffects)) {
-    isGlyphSoftcapActive = isGlyphSoftcapActive || allActiveEffects[effect].capped;
-    activeEffectText += "<br>" + getGlyphTableDesc(effect, allActiveEffects[effect]);
-  };
-  if (isGlyphSoftcapActive) {
-    activeEffectText = "(<span style='color:"+CAPPED_EFFECT_COLOR+"'>Colored</span> numbers have a reduced effect)<br>" + activeEffectText;
-  }
-  activeEffectText = "Current Glyph Effects:<br>" + activeEffectText;
-  $("#activeGlyphs").html(activeEffectText)
   updateTooltips();
-  updateGlyphDescriptions()
 
   if (glyphs.length == 100) giveAchievement("Personal Space")
   if (glyphs.length == 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
@@ -567,44 +572,41 @@ function generateGlyphTable() {
 // returns both effect value and softcap status
 function getActiveGlyphEffects() {
   /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
-  let allEffects = {};
+  let allEffects = [];
   for (let effect of orderedEffectList) {
     let values = getGlyphEffectValues(effect);
     if (values.length > 0) {
-      allEffects[effect] = GameDatabase.reality.glyphEffects[effect].combine(values);
+      allEffects.push({
+        id: effect,
+        value: GameDatabase.reality.glyphEffects[effect].combine(values),
+      });
     }
-  };
+  }
   return allEffects;
 }
 
 function deleteGlyph(id) {
-  var n = player.reality.glyphs.inventory.find(function(glyph) {
-    return glyph.id == id
-  })
+  let glyph = Glyphs.inventoryById(id)
 
-  if (n.symbol === "266b") {
-    var tempAudio = new Audio("images/note" + (n.idx % 10 + 1) + ".mp3");
+  if (glyph.symbol === "266b") {
+    var tempAudio = new Audio("images/note" + (glyph.idx % 10 + 1) + ".mp3");
     tempAudio.play();
   }
-  if (!shiftDown  && !controlShiftDown) return false;
+  if (!shiftDown && !controlShiftDown) return false;
 
-  if (player.reality.upg.includes(19) && (n.type == "power" || n.type == "time")) {
-    sacrificeGlyph(n, controlShiftDown)
+  if (player.reality.upg.includes(19) && (glyph.type == "power" || glyph.type == "time")) {
+    sacrificeGlyph(glyph, controlShiftDown)
     return;
   }
 
   if (player.reality.upg.includes(21)) {
-    sacrificeGlyph(n, controlShiftDown)
+    sacrificeGlyph(glyph, controlShiftDown)
     return;
   }
 
 
   if (controlShiftDown || confirm("Do you really want to delete this glyph?")) {
-    var inv = player.reality.glyphs.inventory
-    var g = inv.find(function(glyph) {
-      return glyph.id == id
-    })
-    player.reality.glyphs.inventory.splice(inv.indexOf(g),1)
+    Glyphs.removeFromInventory(glyph);
     mouseOn.remove()
     mouseOn = $("document")
     // for (i in player.reality.glyphs.inventory) {
@@ -635,25 +637,27 @@ function dragover(e) {
 
 function drop(ev) {
   ev.preventDefault();
-  var data = parseInt(ev.dataTransfer.getData("text"));
+  const data = parseInt(ev.dataTransfer.getData("text"));
+  let glyph = Glyphs.inventoryById(data);
   if (parseInt(ev.target.id) > 1000) {
-    ev.target.style.opacity = 1
-    return false
+    // target is another glyph. We can try to swap.
+    let otherGlyph = Glyphs.inventoryById(parseInt(ev.target.id));
+    if (!glyph || !otherGlyph) return false;
+    Glyphs.swap(glyph, otherGlyph);
+    generateGlyphTable()
+    return;
   }
 
   let canAddGlyph = !Teresa.isRunning || !player.celestials.teresa.glyphEquipped;
   if (ev.target.className.includes("glyphactive") && canAddGlyph) {
-    var glyph = player.reality.glyphs.inventory.find(function(glyph) {
-      return glyph.id == data
-    })
+    const targetSlot = parseInt(ev.target.id.split("active")[1]);
     if (glyph.type == "teresa" && player.reality.glyphs.active.some((g) => g.type == "teresa")) return
     if (glyph !== undefined && glyph !== null) {
-      glyph.idx = parseInt(ev.target.id.split("active")[1])
-      player.reality.glyphs.inventory.splice(player.reality.glyphs.inventory.indexOf(glyph), 1)
-      player.reality.glyphs.active.push(glyph)
+      Glyphs.equip(glyph, targetSlot);
     } else {
-      var glyph = player.reality.glyphs.active.find(function(glyph) {
-        return glyph.id == data
+      throw crash("can this even happen")
+      glyph = player.reality.glyphs.active.find(function (glyph) {
+        return glyph.id === data
       })
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
@@ -664,18 +668,19 @@ function drop(ev) {
     }
     generateGlyphTable(); // TODO add some CSS stuff that indicates that other slots are blocked I guess
   } else if (!ev.target.className.includes("glyphactive")) {
-    var glyph = player.reality.glyphs.active.find(function(glyph) {
-      return glyph.id == data
+    let glyph = player.reality.glyphs.active.find(function (glyph) {
+      return glyph.id === data
     })
     if (glyph !== undefined && glyph !== null) {
+      throw crash("can't drag from active")
       glyph.idx = parseInt(ev.target.id)
       player.reality.glyphs.active.splice(player.reality.glyphs.active.indexOf(glyph), 1)
       player.reality.glyphs.inventory.push(glyph)
     } else {
-      var glyph = player.reality.glyphs.inventory.find(function(glyph) {
-        return glyph.id == data
+      glyph = player.reality.glyphs.inventory.find(function (glyph) {
+        return glyph.id === data
       })
-      glyph.idx = parseInt(ev.target.id)
+      Glyphs.move(glyph, parseInt(ev.target.id));
     }
   }
   generateGlyphTable()
@@ -760,38 +765,9 @@ function updateRealityUpgrades() {
   $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
 }
 
-function toggleGlyphRespec() {
-  player.reality.respec = !player.reality.respec
-  if (player.reality.respec) {
-    $("#glyphRespec").addClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
-  }
-  else {
-    $("#glyphRespec").removeClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute("ach-tooltip", "Your currently-equipped glyphs will stay equipped on reality.");
-  }
-}
-
 function respecGlyphs() {
-  let idx = 0
-  let filledslots = []
-  for (let i=0; i<player.reality.glyphs.inventory.length; i++) {
-    filledslots[i] = player.reality.glyphs.inventory[i].idx
-  }
-  for (let i=0; i<player.reality.glyphs.active.length; i++) {
-    let glyph = player.reality.glyphs.active[i]
-    for (let l=0; l<=100; l++) {
-      if (!filledslots.includes(l)) {
-        filledslots[filledslots.length] = l;
-        idx = l;
-        break
-      }
-    }
-    glyph.idx = idx
-    player.reality.glyphs.inventory.push(glyph)
-  }
-  player.reality.glyphs.active = []
-  toggleGlyphRespec()
+  Glyphs.unequipAll();
+  player.reality.respec = false;
   generateGlyphTable();
 }
 

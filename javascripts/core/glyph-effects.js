@@ -214,7 +214,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationdtgain",
     glyphTypes: ["replication"],
-    singleDesc: "Multiply DT gain by <br>log₁₀(replicanti)×{value}",
+    singleDesc: "Multiply DT gain by \nlog₁₀(replicanti)×{value}",
     totalDesc: "DT gain from log₁₀(replicanti)×{value}",
     genericDesc: "DT gain multiplier (log₁₀(replicanti))",
     formatEffect: x => x.toFixed(5),
@@ -326,10 +326,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Antimatter effect {value}",
     combine: GlyphCombiner.multiply,
   }
-].reduce((prev, effect) => {
-  prev[effect.id] = new GlyphEffectConfig(effect);
-  return prev;
-}, {});
+].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));
 
 function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
@@ -444,10 +441,13 @@ const GlyphTypes = {
   random(rng, blacklist) {
     if (blacklist === undefined) blacklist = [];
     let available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].unlocked);
-    if (available.length === 0) return null
+    if (available.length === 0) return null;
     return available[Math.floor(rng() * available.length)];
   },
   get list() {
-    return GLYPH_TYPES.map(e => GlyphTypes[e])
+    return GLYPH_TYPES.map(e => GlyphTypes[e]);
+  },
+  get locked() {
+    return this.list.filter(e => !e.unlocked);
   }
 };

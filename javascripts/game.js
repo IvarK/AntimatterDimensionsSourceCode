@@ -488,39 +488,6 @@ function failChallenge() {
     if (failureCount > 9) giveAchievement("You're a failure");
 }
 
-function selectGlyph(idx) {
-    glyphSelected = true
-    $("#glyphSelect").hide()
-    if (player.options.animations.reality) setTimeout(function(){
-        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
-        possibleGlyphs = []
-    }, 3000)
-    else {
-        player.reality.glyphs.inventory.push(possibleGlyphs[idx])
-        possibleGlyphs = []
-    }
-    reality()
-}
-
-function generateGlyphSelection(amount) {
-  possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
-  $("#glyphSelect").show()
-  var html = ""
-  for (let idx = 0; idx< amount; idx++) {
-      var glyph = possibleGlyphs[idx]
-      var rarity = getRarity(glyph.strength)
-      html += "<div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+rarity.color+" !important; text-shadow: "+rarity.color+" -1px 1px 2px;' onclick='selectGlyph("+idx+")'>"
-      html += getGlyphTooltip(glyph)
-      html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div>"
-  }
-  $("#glyphsToSelect").html(html)
-  
-  updateTooltips();
-}
-
-var possibleGlyphs = []
-var glyphSelected = false
-
 function exitChallenge() {
     if (player.currentChallenge !== "") {
         startChallenge("", new Decimal(0));
@@ -1223,11 +1190,10 @@ function gameLoop(diff, options = {}) {
     }
     updateWormholeGraphics();
   }
-
   // Reality unlock and TTgen perk autobuy
 	if (player.reality.perks.includes(65) && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (player.reality.perks.includes(66) && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
-
+  if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
     GameUI.update();
     player.lastUpdate = thisUpdate;
     PerformanceStats.end("Game Update");

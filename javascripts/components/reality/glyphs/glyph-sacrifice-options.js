@@ -86,7 +86,9 @@ Vue.component("glyph-sacrifice-options", {
   },
   data: function () {
     return {
+      unlocked: false,
       mode: AutoGlyphSacMode.NONE,
+      lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
       // Note: there are two units at play: strength is from 1..3.5+; rarity is 0..100
       rarityThresholds: GLYPH_TYPES.mapToObject(e => e, e => 0),
@@ -97,7 +99,7 @@ Vue.component("glyph-sacrifice-options", {
       return AutoGlyphSacMode;
     },
     glyphTypes() {
-      return GlyphTypes.list;
+      return GlyphTypes.list.filter(e => !this.lockedTypes.includes(e.id));
     },
     raritySliderProps() {
       return {
@@ -148,10 +150,12 @@ Vue.component("glyph-sacrifice-options", {
       } : {}
     },
     update() {
+      this.unlocked = Teresa.has(TERESA_UNLOCKS.AUTOSACRIFICE);
       this.mode = AutoGlyphSacrifice.mode;
       for (type of GLYPH_TYPES) {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;
       }
+      this.lockedTypes = GlyphTypes.locked.map(e => e.id);
     },
     setMode(m) {
       AutoGlyphSacrifice.mode = m;
@@ -161,7 +165,7 @@ Vue.component("glyph-sacrifice-options", {
     }
   },
   template: /*html*/`
-  <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+  <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
     <div :class="optionClass(0)" @click="setMode(modes.NONE)">
       Auto sacrifice disabled
     </div>

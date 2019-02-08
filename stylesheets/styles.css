@@ -4959,6 +4959,52 @@ screen and (max-width: 480px) {
 
 /* #endregion enslaved tab*/
 
+/* #startregion v tab */
+
+.l-v-unlocks-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 110rem;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.c-v-unlock {
+  width: 30rem;
+  border: 0.2rem solid gainsboro;
+  border-radius: .5rem;
+  background: whitesmoke;
+  padding: 1.5rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.c-v-unlock-completed {
+  background: lightgreen;
+}
+
+.o-v-unlock-amount {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.o-v-run-button {
+  width: 25rem;
+  padding: 2rem;
+  border-radius: .5rem;
+  border: 2px solid indianred;
+  background: #f1aa7f;
+  font-family: Typewriter;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* #endregion v tab*/
+
 .c-performance-stats {
   width: 25rem;
   padding: .3rem;

@@ -396,7 +396,8 @@ var player = {
     v: {
       unlocks: [],
       run: false,
-      runUnlocks: {}
+      runUnlocks: {},
+      additionalStudies: 0
     }
   },
   autoEcIsOn: true,

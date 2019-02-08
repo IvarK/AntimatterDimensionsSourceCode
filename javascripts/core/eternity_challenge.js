@@ -51,7 +51,7 @@ function startEternityChallenge() {
     player.dimlife = true;
     player.dead = true;
 
-    player.dilation.active = false;
+    //player.dilation.active = false;
     resetInfinityRuns();
     fullResetInfDimensions();
     eternityResetReplicanti();

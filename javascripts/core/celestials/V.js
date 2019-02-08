@@ -10,14 +10,14 @@ GameDatabase.Celestials.V = {
   runUnlocks: [
     {
       id: 0,
-      name: "QuickPlatinum",
+      name: "Running Man",
       description: "Complete all challenges within {value} seconds from starting reality (real time).",
       values: [18, 15, 12, 10, 7, 5],
       condition: (x) => EternityChallenge.completedTiers() == 60 && player.thisRealityRealTime < x * 1000
     },
     {
       id: 1,
-      name: "AntiGalactus",
+      name: "AntiStellar",
       description: "Have {value} total galaxies from all types.",
       values: [2500, 2750, 3000, 3250, 3500, 3750],
       condition: (x) => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
@@ -25,14 +25,14 @@ GameDatabase.Celestials.V = {
     },
     {
       id: 2,
-      name: "Name's Matter, Anti Matter",
+      name: "Se7en deadly matters",
       description: "Get {value} IP at Eternity Challenge 7.",
       values: [new Decimal("1e250000"), new Decimal("1e270000"), new Decimal("1e290000"), new Decimal("1e310000"), new Decimal("1e330000"), new Decimal("1e350000")],
       condition: (x) => player.currentEternityChall == "eterc7" && player.infinityPoints.gte(x)
     },
     {
       id: 3,
-      name: "12 Matters",
+      name: "Young Boy",
       description: "Get {value} Antimatter at Eternity Challenge 12.",
       values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000"), new Decimal("1e400000000")],
       condition: (x) => player.currentEternityChall == "eterc12" && player.money.gte(x)
@@ -43,6 +43,13 @@ GameDatabase.Celestials.V = {
       description: "Get {value} EP.",
       values: [new Decimal("1e2000"), new Decimal("1e2400"), new Decimal("1e2800"), new Decimal("1e3200"), new Decimal("1e3600"), new Decimal("1e4000")],
       condition: (x) => player.eternityPoints.gte(x)
+    },
+    {
+      id: 5,
+      name: "Matterception",
+      description: "Get {value} Dimensional Boosts while dilating time, inside EC5.",
+      values: [35, 38, 41, 44, 47, 50],
+      condition: (x) => player.dilation.active && player.currentEternityChall == "eterc5" && player.resets >= x
     }
   ]
 };
@@ -73,7 +80,8 @@ class VRunUnlockState extends GameMechanicState {
 
   get formattedDescription() {
     let val = this.conditionValue
-    if (val == 0) this.config.values[this.completions - 1]
+    if (val == undefined) val = this.config.values[this.completions - 1]
+
     if (!this.config.format) val = shorten(val)
     else val = this.config.format(val)
 
@@ -85,9 +93,10 @@ class VRunUnlockState extends GameMechanicState {
   }
   
   tryComplete() {
-    if (this.config.condition(this.config.values[this.completions])) {
+    if (this.config.condition(this.config.values[this.completions]) && this.completions !== 6) {
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+      V.updateTotalRunUnlocks()
     }
   }
 }
@@ -118,6 +127,7 @@ const V_UNLOCKS = {
 };
 
 const V = {
+  totalRunUnlocks: 0,
   mainUnlockBool() {
     const db = GameDatabase.Celestials.V.mainUnlock;
     if (player.realities < db.realities) return false;
@@ -149,7 +159,21 @@ const V = {
   startRun() {
     player.celestials.v.run = startRealityOver();
   },
+  canBuyLockedPath() {
+    return player.celestials.v.additionalStudies < this.totalAdditionalStudies
+  },
+  updateTotalRunUnlocks() {
+    let total = 0
+    for (let i = 0; i < 6; i++) {
+      const run = player.celestials.v.runUnlocks[i]
+      if (run !== undefined) total += run
+    }
+    this.totalRunUnlocks = total
+  },
   get isRunning() {
     return player.celestials.v.run;
+  },
+  get totalAdditionalStudies() {
+    return Math.floor(this.totalRunUnlocks / 3)
   }
 };

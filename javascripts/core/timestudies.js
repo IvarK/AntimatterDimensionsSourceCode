@@ -353,6 +353,7 @@ function respecTimeStudies() {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
+  player.celestials.v.additionalStudies = 0
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();

@@ -26,7 +26,7 @@ Vue.component("time-study", {
     classObject() {
       return {
         "o-time-study": true,
-        "o-time-study--unavailable": !this.isAvailable && !this.isBought,
+        "o-time-study--unavailable": !this.isAvailable && !this.isBought && !V.canBuyLockedPath(),
         "o-time-study--bought": this.isBought,
         "o-time-study--small": this.setup.isSmall,
         "l-time-study": true

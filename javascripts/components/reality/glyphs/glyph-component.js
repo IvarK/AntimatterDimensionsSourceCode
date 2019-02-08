@@ -5,14 +5,17 @@ const GlyphTooltipEffect = {
     boostColor: String,
   },
   computed: {
+    effectConfig() {
+      return GameDatabase.reality.glyphEffects[this.effect];
+    },
     prefix() {
-      return GameDatabase.reality.glyphEffects[this.effect].singleDescSplit[0];
+      return this.effectConfig.singleDescSplit[0];
     },
     suffix() {
-      return GameDatabase.reality.glyphEffects[this.effect].singleDescSplit[1];
+      return this.effectConfig.singleDescSplit[1];
     },
     displayValue() {
-      let value = GameDatabase.reality.glyphEffects[this.effect].formatEffect(this.value);
+      let value = this.effectConfig.formatEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     valueStyle() {
@@ -45,11 +48,10 @@ const GlyphTooltipComponent = {
   },
   computed: {
     sortedEffects() {
-      let unsorted = Object.keys(this.effects).map(e => ({
+      return Object.keys(this.effects).map(e => ({
         id: this.type + e,
         value: this.effects[e],
-      }));
-      return unsorted.sort((a, b) => GlyphEffectOrder[a.id] - GlyphEffectOrder[b.id]);
+      })).sort((a, b) => GlyphEffectOrder[a.id] - GlyphEffectOrder[b.id]);
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -90,8 +92,6 @@ const GlyphTooltipComponent = {
 
 Vue.component("glyph-tooltip", GlyphTooltipComponent);
 
-let glyphComponentID = 0;
-
 Vue.component("glyph-component", {
   props: {
     glyph: Object,
@@ -111,10 +111,14 @@ Vue.component("glyph-component", {
       type: Number,
       default: 0.5
     },
+    circular: {
+      type: Boolean,
+      default: false,
+    }
   },
   data: function () {
     return {
-      componentID: ++glyphComponentID,
+      componentID: UIID(),
     }
   },
   computed: {
@@ -134,6 +138,7 @@ Vue.component("glyph-component", {
         position: "absolute",
         "background-color": "#00000000",
         "box-shadow": `0px 0px ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
+        "border-radius": this.circular ? "50%" : "0%",
       }
     },
     outerStyle() {
@@ -142,6 +147,7 @@ Vue.component("glyph-component", {
         height: this.size,
         "background-color": this.borderColor,
         "box-shadow": `0px 0px ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
+        "border-radius": this.circular ? "50%" : "0%",
       }
     },
     innerStyle() {
@@ -154,6 +160,7 @@ Vue.component("glyph-component", {
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
+        "border-radius": this.circular ? "50%" : "0%",
       }
     },
   },

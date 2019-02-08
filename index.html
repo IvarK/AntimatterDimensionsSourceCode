@@ -428,6 +428,7 @@
         <div id="glyphsToSelect"></div>
     </div>
     <modal-popup v-if="view.modal.current"></modal-popup>
+    <modal-glyph-selection v-if="view.modal.glyphSelection"></modal-glyph-selection>
     <link v-if="view.theme" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
 </body>

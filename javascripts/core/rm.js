@@ -10,10 +10,9 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
 
 
 /**
- * More than 3 approx 0.001%
- * More than 2.5 approx 0.2%
- * More than 2 approx 6%
- * More than 1.5 approx 38.43%
+ * Makes glyphs (without assigning them inventory slots yet)
+ * Functions take a fake parameter, in case a glyph is needed that doesn't alter
+ * the random seed stored in the player object.
  */
 function random() {
   let x = Math.sin(player.reality.seed++) * 10000;
@@ -34,79 +33,257 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
   return ret + getGlyphSacEffect("teresa") / 40;
 }
 
-// Level is a multiplier based on how far you got on the run, strength is a random bell curve modifier, we could add rarities based on that value (bigger than 3 is pretty rare)
-/**
- * @param {number} level
- */
-function generateRandomGlyph(level) {
-  let type;
-  let glyphTypesLength = GLYPH_TYPES.length - 1
-  if (Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE)) glyphTypesLength++
-  do {
-    type = GLYPH_TYPES[Math.floor(random() * glyphTypesLength)]
-  } while (player.reality.glyphs.last === type);
-  player.reality.glyphs.last = type;
-  let strength = gaussian_bell_curve();
-  if (player.reality.upg.includes(16)) strength *= 1.3
-  let effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-  if (player.reality.upg.includes(17) && random() > 0.5) effectAmount = Math.min(effectAmount + 1, 4)
-  if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-    type = "power"
-    effectAmount = 1
-    player.reality.glyphs.last = "power"
-  }
-  let idx = 0
-  let hasglyph = true
-  while (hasglyph) {
-    console.log(idx)
-    let slot = player.reality.glyphs.inventory.find(g => g.idx === idx )
-    if (slot !== undefined) idx++;
-    else hasglyph = false
-  }
-  var glyph = {
-    id: Date.now(),
-    idx: idx,
-    type: type,
-    strength: strength,
-    level: level,
-    effects: {}
-  }
-  return newGlyph(glyph, type, effectAmount)
-}
+const GlyphGenerator = {
+  last_fake: "power",
 
-function newGlyph(glyph, type, effectAmount) {
-  let effects = []
-  while (effects.length < effectAmount) {
-    let toAdd;
-    switch (type) {
-      case "time":
-        toAdd = timeEffects[Math.floor(random() * timeEffects.length)];
-        break;
-      case "dilation":
-        toAdd = dilationEffects[Math.floor(random() * dilationEffects.length)];
-        break;
-      case "replication":
-        toAdd = replicationEffects[Math.floor(random() * replicationEffects.length)];
-        break;
-      case "infinity":
-        toAdd = infinityEffects[Math.floor(random() * infinityEffects.length)];
-        break;
-      case "power":
-        toAdd = powerEffects[Math.floor(random() * powerEffects.length)];
-        if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) toAdd = "pow"
-        break;
-      case "teresa":
-        toAdd = teresaEffects[Math.floor(random() * teresaEffects.length)];
-        break;
+  startingGlyph(level) {
+    let strength = this.randomStrength(false);
+    player.reality.glyphs.last = "power";
+    return {
+      id: Date.now(),
+      idx: null,
+      type: "power",
+      strength: strength,
+      level: level,
+      effects: {
+        pow: getGlyphEffectStrength("powerpow", level, strength),
+      },
     }
-    if (!effects.includes(toAdd)) effects.push(toAdd)
-  }
-  for (let effect of effects) {
-    glyph.effects[effect] = getGlyphEffectStrength(type + effect, glyph.level, glyph.strength)
-  };
-  return glyph
-}
+  },
 
+  randomGlyph(level, fake) {
+    let strength = this.randomStrength(fake);
+    let type = this.randomType(fake);
+    let numEffects = this.randomNumberOfEffects(strength, level, fake);
+    let effects = this.randomEffects(type, numEffects, fake);
+    // effects come out as powerpow, powerdimboost, etc. Glyphs store them
+    // abbreviated.
+    let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
+    return {
+      id: this.makeId(fake),
+      idx: null,
+      type: type,
+      strength: strength,
+      level: level,
+      effects: effects.mapToObject(e => abbreviateEffect(e),
+        e => getGlyphEffectStrength(e, level, strength)),
+    }
+  },
+
+  makeId(fake) {
+    let rng = this.get_rng(fake);
+    return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
+  },
+
+  randomStrength(fake) {
+    let result;
+    let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
+    do {
+      result = GlyphGenerator.gaussian_bell_curve(this.get_rng(fake));
+    } while (result <= minimumValue);
+    result += getGlyphSacEffect("teresa") / 40;
+    if (player.reality.upg.includes(16)) result *= 1.3;
+    return result;
+  },
+
+  randomNumberOfEffects(strength, level, fake) {
+    let rng = this.get_rng(fake);
+    let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
+    if (player.reality.upg.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
+    return ret;
+  },
+
+  randomEffects(type, count, fake) {
+    let rng = this.get_rng(fake);
+    let ret = [];
+    for (let i = 0; i < count; ++i) {
+      let effect = GlyphTypes[type].randomEffect(rng, ret);
+      if (!effect) break;
+      ret.push(effect);
+    }
+    return ret;
+  },
+
+  randomType(fake) {
+    let rng = this.get_rng(fake);
+    if (fake) {
+      GlyphGenerator.last_fake = GlyphTypes.random(rng, [GlyphGenerator.last_fake]);
+      return GlyphGenerator.last_fake;
+    } else {
+      player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
+      return player.reality.glyphs.last;
+    }
+  },
+
+  get_rng(fake) {
+    return fake ? Math.random : GlyphGenerator.random;
+  },
+
+  random() {
+    let x = Math.sin(player.reality.seed++) * 10000;
+    return x - Math.floor(x);
+  },
+
+  /**
+   * More than 3 approx 0.001%
+   * More than 2.5 approx 0.2%
+   * More than 2 approx 6%
+   * More than 1.5 approx 38.43%
+   */
+  gaussian_bell_curve(rng) {
+    if (rng === undefined) rng = GlyphGenerator.random;
+    let u = Math.max(rng(), Number.MIN_VALUE);
+    let v = rng();
+    return Math.pow(Math.max(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + 1, 1), 0.65);
+  },
+
+  copy(glyph) {
+    return deepmerge({}, glyph);
+  },
+};
+
+const Glyphs = {
+  inventory: [],
+  active: [],
+  // This is a reactified copy:
+  activeCopy: [],
+  findFreeIndex() {
+    this.validate();
+    return this.inventory.indexOf(null);
+  },
+  freeInventorySpace() {
+    this.validate();
+    return this.inventory.reduce((n, e) => e === null ? n + 1 : n, 0);
+  },
+  refresh() {
+    this.active = new Array(player.reality.glyphs.slots).fill(null);
+    this.activeCopy.splice(0);
+    for (let idx = 0; idx < player.reality.glyphs.slots; ++idx) {
+      Vue.set(this.activeCopy, idx, null);
+    }
+    player.reality.glyphs.active.forEach((g) => {
+      if (this.active[g.idx]) {
+        throw crash("Stacked active glyphs?")
+      } else {
+        this.active[g.idx] = g;
+        Vue.set(this.activeCopy, g.idx, GlyphGenerator.copy(g));
+      }
+    });
+    this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
+    // glyphs could previously end up occupying the same inventory slot (Stacking)
+    let stacked = [];
+    player.reality.glyphs.inventory.forEach((g) => {
+      if (this.inventory[g.idx]) {
+        stacked.push(g);
+      } else {
+        this.inventory[g.idx] = g;
+      }
+    });
+    // Try to unstack glyphs:
+    while (stacked.length) {
+      let freeIndex = this.findFreeIndex();
+      if (freeIndex >= 0) {
+        let glyph = stacked.shift();
+        this.inventory[freeIndex] = glyph;
+        glyph.idx = freeIndex;
+      } else {
+        break;
+      }
+    }
+    while (stacked.length) {
+      this.removeFromInventory(stacled.pop());
+    }
+    this.validate();
+  },
+  inventoryById(id) {
+    return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
+  },
+  inventoryGlyph(inventoryIndex) {
+    return this.inventory[inventoryIndex];
+  },
+  activeGlyph(activeIndex) {
+    return this.active[activeIndex];
+  },
+  equip(glyphObj, targetSlot) {
+    this.validate();
+    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
+      if (this.active[targetSlot] === null) {
+        this.removeFromInventory(glyphObj);
+        player.reality.glyphs.active.push(glyphObj);
+        glyphObj.idx = targetSlot;
+        this.active[targetSlot] = glyphObj;
+        Vue.set(this.activeCopy, targetSlot, GlyphGenerator.copy(glyphObj));
+      }
+    } else {
+      throw crash("Inconsistent inventory indexing")
+    }
+    this.validate();
+  },
+  unequipAll() {
+    while (player.reality.glyphs.active.length) {
+      let freeIndex = this.findFreeIndex();
+      if (freeIndex < 0) break;
+      let glyph = player.reality.glyphs.active.pop();
+      this.active[glyph.idx] = null;
+      Vue.set(this.activeCopy, glyph.idx, null);
+      Glyphs.addToInventory(glyph);
+    }
+  },
+  move(glyphObj, targetSlot) {
+    this.validate();
+    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
+      if (this.inventory[targetSlot] === null) {
+        this.inventory[glyphObj.idx] = null;
+        this.inventory[targetSlot] = glyphObj;
+        glyphObj.idx = targetSlot;
+      } else {
+        console.log("inventory slot full")
+      }
+    } else {
+      throw crash("Inconsistent inventory indexing")
+    }
+    this.validate();
+  },
+  swap(glyphA, glyphB) {
+    this.validate();
+    this.inventory[glyphA.idx] = glyphB;
+    this.inventory[glyphB.idx] = glyphA;
+    let tmp = glyphA.idx;
+    glyphA.idx = glyphB.idx;
+    glyphB.idx = tmp;
+    this.validate();
+  },
+  addToInventory(glyph) {
+    this.validate();
+    let index = this.findFreeIndex();
+    if (index < 0) return;
+    this.inventory[index] = glyph;
+    glyph.idx = index;
+    player.reality.glyphs.inventory.push(glyph);
+    this.validate();
+  },
+  removeFromInventory(glyph) {
+    this.validate();
+    // This can get called on a glyph not in inventory, during auto sacrifice.
+    let index = player.reality.glyphs.inventory.indexOf(glyph);
+    if (index < 0) return;
+    this.inventory[glyph.idx] = null;
+    player.reality.glyphs.inventory.splice(index, 1);
+    this.validate();
+  },
+  validate() {
+    for (glyph of player.reality.glyphs.inventory) {
+      if (this.inventory[glyph.idx] !== glyph) {
+        throw crash("validation error");
+      }
+    }
+    for (let i = 0; i < this.inventory.length; ++i) {
+      if (this.inventory[i] && this.inventory[i].idx !== i) {
+        throw crash("backwards validation error");
+      }
+    }
+  }
+};
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced
 function getGlyphEffectStrength(effectKey, level, strength) {

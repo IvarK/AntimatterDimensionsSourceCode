@@ -90,9 +90,10 @@ const GlyphTooltipComponent = {
   `
 };
 
-Vue.component("glyph-tooltip", GlyphTooltipComponent);
-
 Vue.component("glyph-component", {
+  components: {
+    "glyph-tooltip": GlyphTooltipComponent,
+  },
   props: {
     glyph: Object,
     size: {
@@ -118,25 +119,28 @@ Vue.component("glyph-component", {
   },
   data: function () {
     return {
-      componentID: UIID(),
+      componentID: UIID.next(),
     }
   },
   computed: {
     hasTooltip() {
       return this.glyph.effects !== undefined;
     },
+    typeConfig() {
+      return GlyphTypes[this.glyph.type];
+    },
     symbol() {
-      return this.glyph.symbol || GlyphTypes[this.glyph.type].symbol;
+      return this.glyph.symbol || this.typeConfig.symbol;
     },
     borderColor() {
-      return this.glyph.color || GlyphTypes[this.glyph.type].color;
+      return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
       return {
         width: this.size,
         height: this.size,
         position: "absolute",
-        "background-color": "#00000000",
+        "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0px 0px ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0%",
       }
@@ -151,7 +155,6 @@ Vue.component("glyph-component", {
       }
     },
     innerStyle() {
-      let color = this.glyph.color || GlyphTypes[this.glyph.type].color;
       let rarityColor = this.glyph.color ||
         GlyphRarities.find(e => this.glyph.strength >= e.minStrength).color;
       return {
@@ -170,7 +173,7 @@ Vue.component("glyph-component", {
     },
     mouseLeave() {
       if (this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID) {
-        this.$viewModel.tabs.reality.currentGlyphTooltip = 0;
+        this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
       }
     },
     mouseMove(ev) {
@@ -195,7 +198,7 @@ Vue.component("glyph-component", {
         <glyph-tooltip ref="tooltip" v-bind="glyph" v-if="hasTooltip"
                        v-show="$viewModel.tabs.reality.currentGlyphTooltip === componentID"/>
       </div>
-      <div :style="overStyle"></div>
+      <div :style="overStyle"/>
     </div>
   `,
 });

@@ -344,53 +344,110 @@ const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
 const teresaEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "unknown", "antimatter"]
 
-/**
- * @typedef {Object} GlyphTypeInfo
- * @property {string} name
- * @property {string} symbol
- * @property {GlyphEffectConfig[]} effects
- * @property {string} color Used for glyph borders
- * @constant
- * @type {GlyphTypeInfo[]}
- */
-const GlyphTypeList = [
-  {
-    name: "time",
+class GlyphType {
+  /**
+   * @param {Object} setup
+   * @param {string} setup.id
+   * @param {string} setup.symbol
+   * @param {string} setup.color
+   * @param {function} [setup.unlockedFn] If this glyph type is not available initially, this specifies
+   * how to check to see if it is available
+   * @param {function(string):boolean} [setup.effectUnlockedFn] If certain effects of this glyph are not
+   * initially available, this is a function of the effect id that returns whether one is
+   */
+  constructor(setup) {
+    /** @member {string} id identifier for this type (time, power, etc)*/
+    this.id = setup.id;
+    /** @member {string} symbol used to display glyphs of this type and as a UI shorthand */
+    this.symbol = setup.symbol;
+    /** @member {GlyphEffectConfig[]} effects list of effects that this glyph can have */
+    this.effects = findGlyphTypeEffects(setup.id);
+  /** @member {string} color used for glyph borders and other places where color coding is needed */
+    this.color = setup.color;
+    /** @private @member {function?} unlockedFn */
+    this.unlockedFn = setup.unlockedFn;
+    /** @private @member {function(string):boolean?} effectUnlockedFn */
+    this.effectUnlockedFn = setup.effectUnlockedFn;
+    if (!GLYPH_TYPES.includes(this.id)) {
+      crash(`Id ${this.id} not found in GLYPH_TYPES`)
+    }
+  }
+  /** @property {boolean} */
+  get unlocked() {
+    return this.unlockedFn !== undefined ? this.unlockedFn() : true;
+  }
+
+  /**
+   * @param {string} id
+   * @returns {boolean}
+   */
+  effectUnlocked(id) {
+    return this.effectUnlockedFn !== undefined ? this.effectUnlockedFn(id) : true;
+  }
+
+  /**
+   * @param {function(): number} rng Random number source (0..1)
+   * @param {string[]} [blacklist] Do not return the specified effects
+   * @returns {string | null}
+   */
+  randomEffect(rng, blacklist) {
+    if (blacklist === undefined) blacklist = [];
+    let available = this.effects.map(e => e.id).filter(id => !blacklist.includes(id) && this.effectUnlocked(id))
+    if (available.length === 0) return null;
+    return available[Math.floor(rng() * available.length)];
+  }
+}
+
+const GlyphTypes = {
+  time: new GlyphType({
+    id: "time",
     symbol: GLYPH_SYMBOLS.time,
     effects: findGlyphTypeEffects("time"),
     color: "#B241E3",
-  }, {
-    name: "dilation",
+  }),
+  dilation: new GlyphType({
+    id: "dilation",
     symbol: GLYPH_SYMBOLS.dilation,
     effects: findGlyphTypeEffects("dilation"),
     color: "#64DD17",
-  }, {
-    name: "replication",
+  }),
+  replication: new GlyphType({
+    id: "replication",
     symbol: GLYPH_SYMBOLS.replication,
     effects: findGlyphTypeEffects("replication"),
     color: "#03A9F4",
-  }, {
-    name: "infinity",
+  }),
+  infinity: new GlyphType({
+    id: "infinity",
     symbol: GLYPH_SYMBOLS.infinity,
     effects: findGlyphTypeEffects("infinity"),
     color: "#B67F33",
-  }, {
-    name: "power",
+  }),
+  power: new GlyphType({
+    id: "power",
     symbol: GLYPH_SYMBOLS.power,
     effects: findGlyphTypeEffects("power"),
     color: "#22aa48",
-  }, {
-    name: "teresa",
+  }),
+  teresa: new GlyphType({
+    id: "teresa",
     symbol: GLYPH_SYMBOLS.teresa,
     effects: findGlyphTypeEffects("teresa"),
-    color: "#e21717"
+    color: "#e21717",
+    unlockedFn: () => Teresa.has(TERESA_UNLOCKS.REALITY_COMPLETE),
+  }),
+  /**
+    * @param {function(): number} rng Random number source (0..1)
+    * @param {string[]} [blacklist] Do not return the specified types
+    * @returns {string | null}
+    */
+  random(rng, blacklist) {
+    if (blacklist === undefined) blacklist = [];
+    let available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].unlocked);
+    if (available.length === 0) return null
+    return available[Math.floor(rng() * available.length)];
+  },
+  get list() {
+    return GLYPH_TYPES.map(e => GlyphTypes[e])
   }
-];
-
-/**
- * @type {Object.<string, GlyphTypeInfo>}
- */
-const GlyphTypes = Object.freeze(GlyphTypeList.reduce((out, eff) => {
-  out[eff.name] = eff;
-  return out;
-}, {}))
+};

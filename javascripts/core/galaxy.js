@@ -39,7 +39,7 @@ class Galaxy {
     }
 
     if (type === GalaxyType.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + getGlyphSacEffect("power")))));
+      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + Effects.sum(GlyphSacrifice.power)))));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -57,7 +57,7 @@ class Galaxy {
   }
 
   static get type() {
-    if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
+    if (player.galaxies >= 800 + Effects.sum(GlyphSacrifice.power)) {
       return GalaxyType.REMOTE;
     }
     if (player.currentEternityChall === "eterc5" || player.galaxies >= this.costScalingStart) {

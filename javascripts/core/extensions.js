@@ -155,8 +155,8 @@ Array.prototype.mapToObject = function(keyFun, valueFun) {
   if (typeof keyFun !== "function" || typeof valueFun !== "function")
     throw "keyFun and valueFun must be functions";
   let out = {}
-  for (let elem of this) {
-    out[keyFun(elem)] = valueFun(elem);
+  for (let idx = 0; idx < this.length; ++idx) {
+    out[keyFun(this[idx], idx)] = valueFun(this[idx], idx);
   }
   return out;
 }

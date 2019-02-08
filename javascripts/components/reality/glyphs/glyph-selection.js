@@ -8,10 +8,12 @@ Vue.component("modal-glyph-selection", {
     update() {
       if (!GlyphSelection.glyphs.length) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
-        if (this.glyphs[i].level != GlyphSelection.glyphs[i].level) {
-          this.glyphs[i].level = GlyphSelection.glyphs[i].level;
-          for (e of Object.keys(this.glyphs[i].effects)) {
-            this.glyphs[i].effects[e] = GlyphSelection.glyphs[i].effects[e];
+        const currentGlyph = this.glyphs[i];
+        const newGlyph = GlyphSelection.glyphs[i];
+        if (currentGlyph.level != newGlyph.level) {
+          currentGlyph.level = newGlyph.level;
+          for (e of Object.keys(currentGlyph.effects)) {
+            currentGlyph.effects[e] = newGlyph.effects[e];
           }
         }
       }

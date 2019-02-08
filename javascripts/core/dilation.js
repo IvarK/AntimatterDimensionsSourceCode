@@ -111,8 +111,7 @@ function getTachyonGain() {
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
   if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(player.achPow))
   if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
-  let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult *= sacEffect
+  mult *= Effects.product(GlyphSacrifice.dilation);
 
   let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
@@ -123,10 +122,9 @@ function getTachyonReq() {
   if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
   if (player.reality.upg.includes(8)) mult *= Math.sqrt(player.achPow)
   if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
-  let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult *= sacEffect
-  
-  let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
+  mult *= Effects.product(GlyphSacrifice.dilation);
+
+  let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2 / 3))
   return req
 }
 

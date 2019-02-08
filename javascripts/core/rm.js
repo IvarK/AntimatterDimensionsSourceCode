@@ -30,7 +30,7 @@ function gaussian_bell_curve() { // This function is quite inefficient, don't do
     ret = Math.pow(Math.max(Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v ) + 1, 1), 0.65)
   }
   // Each rarity% is 0.025 strength.
-  return ret + getGlyphSacEffect("teresa") / 40;
+  return ret + Effects.sum(GlyphSacrifice.teresa) / 40;
 }
 
 const GlyphGenerator = {
@@ -81,7 +81,7 @@ const GlyphGenerator = {
     do {
       result = GlyphGenerator.gaussian_bell_curve(this.get_rng(fake));
     } while (result <= minimumValue);
-    result += getGlyphSacEffect("teresa") / 40;
+    result += Effects.sum(GlyphSacrifice.teresa) / 40;
     if (player.reality.upg.includes(16)) result *= 1.3;
     return result;
   },
@@ -147,6 +147,8 @@ const Glyphs = {
   active: [],
   // This is a reactified copy:
   activeCopy: [],
+  // This is reactified as well:
+  activeEffects: [],
   findFreeIndex() {
     this.validate();
     return this.inventory.indexOf(null);
@@ -194,6 +196,7 @@ const Glyphs = {
       this.removeFromInventory(stacled.pop());
     }
     this.validate();
+    this.updateActiveEffects();
   },
   inventoryById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -218,6 +221,7 @@ const Glyphs = {
       throw crash("Inconsistent inventory indexing")
     }
     this.validate();
+    this.updateActiveEffects();
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -228,6 +232,7 @@ const Glyphs = {
       Vue.set(this.activeCopy, glyph.idx, null);
       Glyphs.addToInventory(glyph);
     }
+    this.updateActiveEffects();
   },
   move(glyphObj, targetSlot) {
     this.validate();
@@ -282,14 +287,30 @@ const Glyphs = {
         throw crash("backwards validation error");
       }
     }
-  }
+  },
+  updateActiveEffects() {
+    this.activeEffects.splice(0);
+    for (ae of getActiveGlyphEffects()) this.activeEffects.push(ae);
+  },
 };
+
+class GlyphSacrificeState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+  }
+  get canBeApplied() { return true; }
+}
+
+const GlyphSacrifice = (function() {
+  const db = GameDatabase.reality.glyphSacrifice;
+  return GlyphTypes.list.mapToObject(t => t.id, t => new GlyphSacrificeState(db[t.id]));
+})();
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced
 function getGlyphEffectStrength(effectKey, level, strength) {
   switch (effectKey) {
     case "powerpow":
-      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "powermult":
       return Decimal.pow(level * strength * 10, level * strength * 10)
     case "powerdimboost":
@@ -297,7 +318,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerbuy10":
       return 1 + Math.pow(level * strength, 0.8) / 10
     case "infinitypow":
-      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4)/75
+      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "infinityrate":
       return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
     case "infinityipgain":
@@ -311,17 +332,17 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "replicationdtgain":
       return 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65) // player.replicanti.e * x
     case "replicationglyphlevel":
-      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5)/50
+      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50
     case "dilationdilationMult":
       return Math.pow(level * strength, 1.5) * 2
     case "dilationgalaxyThreshold":
-      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35)/100
+      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100
     case "dilationTTgen":
       return Math.pow(level * strength, 0.5) / 10000 //Per second
     case "dilationpow":
-      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7)/25
+      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25
     case "timepow":
-      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45)/75
+      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45) / 75
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
@@ -329,17 +350,17 @@ function getGlyphEffectStrength(effectKey, level, strength) {
       }
       else return ret
     case "timefreeTickMult":
-      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35)/100
+      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
     case "teresawormhole":
-      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5)/75
+      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
     case "teresarm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
     case "teresaglyph":
       return Math.floor(level * strength / 10);
     case "teresaachievement":
-      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6)/50
+      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "teresaforgotten":
       return 1
     case "teresaunknown":
@@ -393,6 +414,7 @@ function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     fixGlyph(player.reality.glyphs.inventory[i]);
   }
+  Glyphs.refresh();
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
@@ -773,54 +795,6 @@ function respecGlyphs() {
   generateGlyphTable();
 }
 
-function getGlyphSacEffect(type) {
-  switch(type) {
-    case "power":
-    return Math.floor(Math.sqrt(player.reality.glyphs.sac[type]) / 2)
-
-    case "infinity":
-    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
-
-    case "time":
-    return 1 + Math.sqrt(player.reality.glyphs.sac[type]) / 100
-
-    case "replication":
-    return Math.pow(Math.max(player.reality.glyphs.sac[type], 0), 0.75)
-
-    case "dilation":
-    return Math.pow(Math.max(player.reality.glyphs.sac[type], 1), 0.4)
-
-    case "teresa":
-    return 5 * Math.log10(player.reality.glyphs.sac[type] / 1e5 + 1)
-  }
-}
-
-function getGlyphSacDescription(type) {
-  let amount = getGlyphSacEffect(type)
-  let total = shorten(player.reality.glyphs.sac[type], 2, 2)
-  if (player.reality.glyphs.sac[type] == 0) return ""
-  switch(type) {
-    case "power": {
-      let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
-      return "Total power of " + type + " glyphs sacrificed: " + total + "<br>Remote galaxies start " + amount + " later (next at " + shorten(nextDistantGalaxy, 2, 2) + ")<br><br>"
-    }
-    case "infinity":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Infinity Dimension.<br><br>"
-
-    case "time":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>" + amount.toPrecision(4) + "x bigger multiplier when buying 8th Time Dimension.<br><br>"
-
-    case "replication":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Raise maximum Replicanti chance cap by +" + (100*(getMaxReplicantiChance() - 1)).toFixed(0) + "%<br><br>"
-
-    case "dilation":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>Multiply Tachyon Particle gain by " + shorten(amount, 2, 2) + "x<br><br>"
-
-    case "teresa":
-    return "Total power of "+type+" glyphs sacrificed: " + total + "<br>+" + amount.toFixed(2) + "% additional glyph rarity<br><br>"
-  }
-}
-
 function glyphSacrificeGain(glyph) {
   let gain = glyph.level * glyph.strength;
   if (glyph.type === 'teresa') {
@@ -835,27 +809,19 @@ function sacrificeGlyph(glyph, force = false) {
   let toGain = glyphSacrificeGain(glyph);
   if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
-  if (glyph.type == "time") player.timeDimension8.power = Decimal.pow(2 * getGlyphSacEffect("time"), player.timeDimension8.bought)
-  if (glyph.type == "infinity") player.infinityDimension8.power = Decimal.pow(5 * getGlyphSacEffect("infinity"), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
-  let inv = player.reality.glyphs.inventory
-  let g = inv.find(function(x) {
-    return x.id == glyph.id
-  })
-  inv.splice(inv.indexOf(g),1)
+  if (glyph.type === "time") {
+    player.timeDimension8.power = Decimal.pow(2 * Effects.product(GlyphSacrifice.time), player.timeDimension8.bought)
+  }
+  if (glyph.type === "infinity") {
+    player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
+  }
+  Glyphs.removeFromInventory(glyph);
   mouseOn.remove()
   mouseOn = $("document")
   generateGlyphTable();
 
   if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
   if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
-}
-
-function updateGlyphDescriptions() {
-  let html = "Glyph Sacrifice Effects:<br><br>"
-  for (let i in player.reality.glyphs.sac) {
-    html += getGlyphSacDescription(i)
-  }
-  $("#sacrificedGlyphs").html(html)
 }
 
 function updateTooltips() {

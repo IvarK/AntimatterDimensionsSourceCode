@@ -596,9 +596,32 @@ function deleteGlyph(id) {
 }
 
 function drag(ev) {
-  var rect = ev.target.getBoundingClientRect()
+  let rect = ev.target.getBoundingClientRect()
   ev.dataTransfer.setData("text", ev.target.id);
   ev.target.style.opacity = 0.5
+  var scrolling = false;
+  var scroll = step => {
+    let scrollY = $(window).scrollTop();
+    $(window).scrollTop(scrollY + step);
+    console.log("scrolling at " + step)
+    if (scrolling) setTimeout(() => scroll(step), 20);
+  };
+  $(ev.target).on("drag", function (e) {
+    scrolling = false;
+    console.log("drag at " + e.originalEvent.clientY)
+    console.log(e)
+    // It looks like dragging off the bottom of the window sometimes fires these
+    // odd events
+    if (e.originalEvent.screenX === 0 && e.originalEvent.screenY === 0) return;
+    if (e.originalEvent.clientY < 100) {
+      scrolling = true;
+      scroll(-1);
+    } else if (e.originalEvent.clientY > $(window).height() - 100) {
+      scrolling = true;
+      scroll(1);
+    }
+  });
+  $(ev.target).on("dragend", () => scrolling = false);
   mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
   mouseOn.appendTo($(ev.target))
   ev.dataTransfer.setDragImage(ev.target, ev.clientX - rect.left, ev.clientY - rect.top)

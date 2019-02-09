@@ -198,7 +198,9 @@ const V = {
       const run = player.celestials.v.runUnlocks[i]
       if (run !== undefined) total += run
     }
-    this.totalRunUnlocks = total
+    this.totalRunUnlocks = player.celestials.v.runUnlocks
+      .filter(run => run !== undefined)
+      .sum();
   },
   get isRunning() {
     return player.celestials.v.run;

@@ -21,13 +21,13 @@ GameDatabase.Celestials.V = {
       description: "Have {value} total galaxies from all types.",
       values: [2500, 2750, 3000, 3250, 3500, 3750],
       condition: (x) => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
-      format: (x) => x
+      format: x => x
     },
     {
       id: 2,
       name: "Se7en deadly matters",
       description: "Get {value} IP at Eternity Challenge 7.",
-      values: [new Decimal("1e250000"), new Decimal("1e270000"), new Decimal("1e290000"), new Decimal("1e310000"), new Decimal("1e330000"), new Decimal("1e350000")],
+      values: ["1e250000", "1e270000", "1e290000", "1e310000", "1e330000", "1e350000"].map(v => new Decimal(v)),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x)
     },
     {
@@ -42,14 +42,14 @@ GameDatabase.Celestials.V = {
       name: "Eternal Sunshine",
       description: "Get {value} EP.",
       values: ["1e2000", "1e2400", "1e2800", "1e3200", "1e3600", "1e4000"].map(v => new Decimal(v)),
-      condition: (x) => player.eternityPoints.gte(x)
+      condition: x => player.eternityPoints.gte(x)
     },
     {
       id: 5,
       name: "Matterception",
       description: "Get {value} Dimensional Boosts while dilating time, inside EC5.",
       values: [35, 38, 41, 44, 47, 50],
-      condition: (x) => player.dilation.active && EternityChallenge(5).isRunning && player.resets >= x
+      condition: x => player.dilation.active && EternityChallenge(5).isRunning && player.resets >= x
     }
   ]
 };
@@ -138,16 +138,16 @@ const V_UNLOCKS = {
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
     effect: () => Math.pow(player.achPow.toNumber(), getAdjustedGlyphEffect("effarigachievement")),
-    format: (x) => formatX(x),
+    format: x => formatX(x),
     requirement: () => V.totalRunUnlocks >= 10
     },
     {
     id: 2,
     reward: "Achievement count affects wormhole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 23 V-achievements",
-    requirement: () => V.totalRunUnlocks >= 23,
     effect: () => Math.pow(1.1, Math.pow(GameCache.achievementCount.value, getAdjustedGlyphEffect("effarigachievement"))),
-    format: (x) => formatX(x)
+    format: x => formatX(x),
+    requirement: () => V.totalRunUnlocks >= 23
     },
     {
     id: 3,
@@ -191,11 +191,6 @@ const V = {
     return player.celestials.v.additionalStudies < this.totalAdditionalStudies
   },
   updateTotalRunUnlocks() {
-    let total = 0
-    for (let i = 0; i < 6; i++) {
-      const run = player.celestials.v.runUnlocks[i]
-      if (run !== undefined) total += run
-    }
     this.totalRunUnlocks = player.celestials.v.runUnlocks
       .filter(run => run !== undefined)
       .sum();

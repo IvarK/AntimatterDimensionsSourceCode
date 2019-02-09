@@ -51,7 +51,6 @@ function startEternityChallenge() {
     player.dimlife = true;
     player.dead = true;
 
-    //player.dilation.active = false;
     resetInfinityRuns();
     fullResetInfDimensions();
     eternityResetReplicanti();
@@ -165,7 +164,6 @@ class EternityChallengeState extends GameMechanicState {
 
   start() {
     if (!this.isUnlocked) return false;
-    console.log("start")
     if (player.options.confirmations.challenges) {
       const confirmation =
         "You will start over with just your time studies, " +

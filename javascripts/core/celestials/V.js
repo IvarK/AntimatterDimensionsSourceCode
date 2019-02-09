@@ -129,7 +129,7 @@ const V_UNLOCKS = {
     id: 1,
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
-    effect: () => Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => Math.pow(player.achPow.toNumber(), getAdjustedGlyphEffect("effarigachievement")),
     format: (x) => shorten(x) + "x",
     requirement: () => V.totalRunUnlocks >= 10
     },
@@ -164,7 +164,7 @@ const V = {
   },
   checkForUnlocks() {
 
-    if (V_UNLOCKS.MAIN_UNLOCK.requirement()) {
+    if (V_UNLOCKS.MAIN_UNLOCK.requirement() && !V.has(V_UNLOCKS.MAIN_UNLOCK)) {
       player.celestials.v.unlocks.push(V_UNLOCKS.MAIN_UNLOCK.id);
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }

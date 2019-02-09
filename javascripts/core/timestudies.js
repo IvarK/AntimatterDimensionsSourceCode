@@ -76,7 +76,7 @@ function buyTimeStudy(name, cost, check) {
   } else if (canBuyLocked(name, cost)) {
     player.celestials.v.additionalStudies++
     player.timestudy.studies.push(name)
-    player.timestudy.theorem -= cost
+    player.timestudy.theorem = player.timestudy.theorem.minus(cost)
     GameCache.timeStudies.invalidate();
   }
   else return false
@@ -223,7 +223,7 @@ function studyIsLocked(name) {
 }
 
 function canBuyLocked(name, cost) {
-  if (player.timestudy.theorem < cost) return false
+  if (player.timestudy.theorem.lt(cost)) return false
   if (!studyIsLocked(name)) return false
   if (!V.canBuyLockedPath()) return false
 

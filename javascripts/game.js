@@ -1117,7 +1117,6 @@ function gameLoop(diff, options = {}) {
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
     if (!player.celestials.teresa.run) player.timestudy.theorem = player.timestudy.theorem.plus(getAdjustedGlyphEffect("dilationTTgen")*diff/1000)
-
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
     }

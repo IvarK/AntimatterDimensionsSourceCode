@@ -34,14 +34,14 @@ GameDatabase.Celestials.V = {
       id: 3,
       name: "Young Boy",
       description: "Get {value} Antimatter at Eternity Challenge 12.",
-      values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000"), new Decimal("1e400000000")],
+      values: ["1e275000000", "1e300000000", "1e325000000", "1e350000000", "1e375000000", "1e400000000"].map(v => new Decimal(v)),
       condition: x => EternityChallenge(12).isRunning && player.money.gte(x)
     },
     {
       id: 4,
       name: "Eternal Sunshine",
       description: "Get {value} EP.",
-      values: [new Decimal("1e2000"), new Decimal("1e2400"), new Decimal("1e2800"), new Decimal("1e3200"), new Decimal("1e3600"), new Decimal("1e4000")],
+      values: ["1e2000", "1e2400", "1e2800", "1e3200", "1e3600", "1e4000"].map(v => new Decimal(v)),
       condition: (x) => player.eternityPoints.gte(x)
     },
     {

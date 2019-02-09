@@ -46,7 +46,7 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
 
 function buyDilationUpgrade(id) {
   if (id > 3) { // Not rebuyable
-    if (player.dilation.dilatedTime < DIL_UPG_COSTS[id]) return false // Not enough dilated time
+    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false // Not enough dilated time
     if (player.dilation.upgrades.includes(id)) return false // Has the upgrade
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
     player.dilation.upgrades.push(id)
@@ -104,10 +104,10 @@ function getDilationGainPerSecond() {
 function getTachyonGain() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
-  if (player.reality.upg.includes(8)) mult = mult.times(Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement"))))
+  if (player.reality.upg.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
   if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
   let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult *= sacEffect
+  if (sacEffect > 1) mult = mult.times(sacEffect)
 
   let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
@@ -115,13 +115,13 @@ function getTachyonGain() {
 
 function getTachyonReq() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
-  if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
-  if (player.reality.upg.includes(8)) mult *= Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")))
-  if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
+  if (player.reality.rebuyables[4] > 0) mult = mult.times(Math.pow(3, player.reality.rebuyables[4]))
+  if (player.reality.upg.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
+  if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
   let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult *= sacEffect
+  if (sacEffect > 1) mult = mult.times(sacEffect)
   
-  let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
+  let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
   return req
 }
 

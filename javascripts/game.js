@@ -230,7 +230,7 @@ function gainedEternityPoints() {
     );
 
   if (player.reality.upg.includes(12)) {
-      ep = ep.times(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1))
+      ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
   }
   if (Teresa.isRunning) {
     ep = ep.pow(0.6);
@@ -247,6 +247,7 @@ function gainedRealityMachines() {
     ret = ret.times(player.celestials.teresa.rmMult)
     ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
+    ret = ret.plusEffectOf(Perk.realityMachineGain);
     return Decimal.floor(ret)
 }
 
@@ -504,6 +505,20 @@ function selectGlyph(idx) {
 
 function generateGlyphSelection(amount) {
   possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+  if (Perk.glyphUncommonGuarantee.isBought) {   // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+    let strengthThreshold = 1.5;  // Uncommon
+    let hasThresholdStrength = false;
+    for (let i = 0; i < possibleGlyphs.length; i++) {
+        hasThresholdStrength = hasThresholdStrength || possibleGlyphs[i].strength >= strengthThreshold;
+    }
+    if (!hasThresholdStrength) {
+        let newStrength = 0;
+        while (newStrength < strengthThreshold) {
+            newStrength = gaussian_bell_curve();
+        }
+        possibleGlyphs[Math.floor(random() * possibleGlyphs.length)].strength = newStrength;
+    }
+  }
   $("#glyphSelect").show()
   var html = ""
   for (let idx = 0; idx< amount; idx++) {
@@ -659,7 +674,7 @@ setInterval(function() {
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     else document.getElementById("eternitystorebtn").style.display = "none"
 
-    if (getTickSpeedMultiplier() < 0.001) giveAchievement("Do you even bend time bro?")
+    if (getTickSpeedMultiplier().lt(0.001)) giveAchievement("Do you even bend time bro?")
 
     if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
@@ -679,10 +694,10 @@ setInterval(function() {
     if (player.infinityPower.gt(1e6)) giveAchievement("1 million is a lot"); //TBD
     if (player.infinityPower.gt(1e260)) giveAchievement("4.3333 minutes of Infinity"); //TBD
     if (player.totalTickGained >= 308) giveAchievement("Infinite time");
-    if (player.firstPow >= 10e30) giveAchievement("I forgot to nerf that")
-    if (player.money >= 10e79) giveAchievement("Antimatter Apocalypse")
+    if (player.firstPow.gt(10e30)) giveAchievement("I forgot to nerf that")
+    if (player.money.gt(10e79)) giveAchievement("Antimatter Apocalypse")
     if (player.totalTimePlayed >= 1000 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
-    if (player.seventhAmount > 1e12) giveAchievement("Multidimensional");
+    if (player.seventhAmount.gt(1e12)) giveAchievement("Multidimensional");
     if (player.tickspeed.lt(1e-26)) giveAchievement("Faster than a potato");
     if (player.tickspeed.lt(1e-55)) giveAchievement("Faster than a squared potato");
     if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
@@ -756,9 +771,6 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
   }
   let factor = 1;
-  if (tempSpeedupToggle) {
-    factor *= 500;
-  }
   if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
@@ -790,6 +802,9 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     factor = Effarig.multiplier(factor).toNumber();
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))
+  if (tempSpeedupToggle) {
+    factor *= 500;
+  }
   return factor;
 }
 
@@ -861,11 +876,13 @@ function gameLoop(diff, options = {}) {
 
     if (player.currentChallenge == "postc8") postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
 
-    if (Challenge(3).isRunning || player.matter.gte(1)) player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff/100));
+    if (Challenge(3).isRunning || player.matter.gte(1)) {
+      player.chall3Pow = Decimal.min(Number.MAX_VALUE, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
+    }
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
     if (InfinityChallenge(2).isRunning) {
         if (postC2Count >= 8 || diff > 8000) {
-            if (player.eightAmount > 0) {
+            if (player.eightAmount.gt(0)) {
                 sacrificeReset();
             }
             postC2Count = 0;
@@ -1095,11 +1112,11 @@ function gameLoop(diff, options = {}) {
     if (player.dilation.baseFreeGalaxies == undefined)
       player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
     let thresholdMult = getFreeGalaxyMult();
-    player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), new Decimal(thresholdMult))));
+    player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    if (!player.celestials.teresa.run) player.timestudy.theorem += getAdjustedGlyphEffect("dilationTTgen")*diff/1000
+    if (!player.celestials.teresa.run) player.timestudy.theorem = player.timestudy.theorem.plus(getAdjustedGlyphEffect("dilationTTgen")*diff/1000)
 
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -1143,9 +1160,10 @@ function gameLoop(diff, options = {}) {
         infdimpurchasewhileloop = 1;
     }
 
-    if (isNaN(player.totalmoney)) player.totalmoney = new Decimal(10)
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
-    player.timestudy.theorem += Effects.sum(DilationUpgrade.ttGenerator) * Time.deltaTime;
+    DilationUpgrade.ttGenerator.applyEffect(gen =>
+      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime))
+    );
 
   document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
   if (player.wormhole[0].unlocked && !player.wormholePause) {
@@ -1159,7 +1177,7 @@ function gameLoop(diff, options = {}) {
 
   // Reality unlock and TTgen perk autobuy
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
-  if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines() > 0)  buyDilationStudy(6, 5e9);
+  if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines().gt(0))  buyDilationStudy(6, 5e9);
 
   V.checkForUnlocks()
 

@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  if (isAchEnabled("r11")) multiplier = multiplier.times(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")));
+  if (isAchEnabled("r11")) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
   let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
@@ -497,7 +497,7 @@ function buyOneDimensionBtnClick(tier) {
   if (tier === 1) {
     if (buyOneDimension(1)) {
       // This achievement is granted only if the buy one button is pressed.
-      if (player.firstAmount >= 1e150) {
+      if (player.firstAmount.gte(1e150)) {
         giveAchievement("There's no point in doing that");
       }
     }

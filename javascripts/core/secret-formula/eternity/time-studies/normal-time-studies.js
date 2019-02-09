@@ -16,7 +16,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 21,
     cost: 3,
     description: "Replicanti multiplier formula is better (log2(x)^2) ➜ (x^0.032)",
-    effect: () => Decimal.pow(player.replicanti.amount, 0.032)
+    effect: () => player.replicanti.amount.pow(0.032)
   },
   {
     id: 22,
@@ -174,7 +174,7 @@ GameDatabase.eternity.timeStudies.normal = [
       "The worse your average EP/min is, the more EP you get",
     effect: () => Perk.studyActiveEP.isBought ?
       50 :
-      (253 - Player.averageEPPerRun.dividedBy(player.epmult.times(10)).clamp(3, 248)) / 5,
+      (253 - Player.averageEPPerRun.dividedBy(player.epmult.times(10)).clamp(3, 248).toNumber()) / 5,
     formatEffect: value => Perk.studyActiveEP.isBought ?
       undefined :
       formatX(value, 0, 0)
@@ -327,7 +327,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 221,
     cost: 900,
     description: "Time Dimensions gain a multiplier based on Dimension Boosts",
-    effect: () => Decimal.pow(1.0025, player.resets),
+    effect: () => Decimal.pow(1 + 0.0025, player.resets),
     formatEffect: value => formatX(value, 2, 1)
   },
   {

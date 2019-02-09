@@ -107,9 +107,8 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 35,
-    name: "You didn't need it anyway",
-    tooltip: "Reach Infinite antimatter without having any 8th Dimensions. Reward: Dimensions 1-7 are 2% stronger.",
-    effect: () => 1.02
+    name: "Don't you dare to sleep",
+    tooltip: "Be offline for over 6 hours in a row.",
   },
   {
     id: 36,
@@ -290,7 +289,7 @@ GameDatabase.achievements.normal = [
     id: 75,
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension. Reward: Your achievement bonus affects Infinity Dimensions.",
-    effect: () => Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement"))
+    effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))
   },
   {
     id: 76,

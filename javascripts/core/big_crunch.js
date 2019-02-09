@@ -123,14 +123,14 @@ function checkBigCrunchAchievements() {
     if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
     if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
     if (player.thisInfinityTime <= 200) giveAchievement("Blink of an eye");
-    if (player.eightAmount === 0) giveAchievement("You didn't need it anyway");
+    if (player.eightAmount.eq(0)) giveAchievement("You didn't need it anyway");
     if (player.galaxies === 1) giveAchievement("Claustrophobic");
     if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
     if (Challenge(2).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
     if (Challenge(8).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
     if (Challenge(9).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
     if (Challenge(3).isRunning && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
-    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
+    if (player.firstAmount.eq(1) && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
     if (InfinityChallenge(5).isRunning && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
     if (player.challenges.length >= 2) giveAchievement("Daredevil");
     if (player.challenges.length === 12) giveAchievement("AntiChallenged");

@@ -277,13 +277,13 @@ function getGlyphTableDesc(effectKey, effectStatus) {
   let spanSuffix = "</span>"
   let effect = GameDatabase.reality.glyphEffects[effectKey];
   return effect.totalDescSplit[0] + spanPrefix + effect.formatEffect(effectStatus.value) +
-         spanSuffix + effect.totalDescSplit[1];
+    spanSuffix + effect.totalDescSplit[1];
 }
 
 function getGlyphTooltip(glyph) {
   let tooltipText = "";
   var rarity = getRarity(glyph.strength)
-  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: "+rarity.color+"; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px "+rarity.color+"; float:left'>"+rarity.name+" glyph of "+glyph.type+" ("+((glyph.strength-1) / 2.5 * 100).toFixed(1)+"%)"+"</span> <span style='margin-left: auto'> Level: "+glyph.level+"</span></div><div style='margin-top: 5px'>"
+  tooltipText += "<span class='tooltip' style='flex-direction: column'><div style='display: flex;'><span class='glyphraritytext' style='color: " + rarity.color + "; text-shadow: -1px 1px 1px black, 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px " + rarity.color + "; float:left'>" + rarity.name + " glyph of " + glyph.type + " (" + ((glyph.strength - 1) / 2.5 * 100).toFixed(1) + "%)" + "</span> <span style='margin-left: auto'> Level: " + glyph.level + "</span></div><div style='margin-top: 5px'>"
   for (let i = 0; i < orderedEffectList.length; i++) {
     let separated = separateEffectKey(orderedEffectList[i]);
     let type = separated[0];
@@ -306,24 +306,24 @@ function generateGlyphTable() {
   var html = ""
 
   var glyphs = player.reality.glyphs.inventory
-  for (var row=1; row<=10; row++) {
+  for (var row = 1; row <= 10; row++) {
     html += "<tr>"
-    for (var cell=1; cell<=10; cell++) {
-      var idx = ((row-1)*10 + cell - 1)
+    for (var cell = 1; cell <= 10; cell++) {
+      var idx = ((row - 1) * 10 + cell - 1)
       html += "<td>"
-      var glyph = glyphs.find(function(glyph) { return glyph.idx == idx })
+      var glyph = glyphs.find(function (glyph) { return glyph.idx == idx })
       if (glyph !== undefined && glyph !== null) {
         if (glyph.color !== undefined)
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+glyph.color+" !important; border: 1px solid "+glyph.color+" !important; box-shadow: inset "+glyph.color+" 0px 0px 10px 2px, "+glyph.color+" 0px 0px 10px 2px !important; text-shadow: "+glyph.color+" -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + glyph.color + " !important; border: 1px solid " + glyph.color + " !important; box-shadow: inset " + glyph.color + " 0px 0px 10px 2px, " + glyph.color + " 0px 0px 10px 2px !important; text-shadow: " + glyph.color + " -1px 1px 2px;' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
         else
-          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='"+idx+"'><div id='"+glyph.id+"' class='glyph "+glyph.type+"glyph' style='color: "+getRarity(glyph.strength).color+"; text-shadow: "+getRarity(glyph.strength).color+" -1px 1px 2px;"+"' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph("+glyph.id+")'>"
+          html += "<div class='glyphbg' ondragover='allowDrop(event)' ondrop='drop(event)' id='" + idx + "'><div id='" + glyph.id + "' class='glyph " + glyph.type + "glyph' style='color: " + getRarity(glyph.strength).color + "; text-shadow: " + getRarity(glyph.strength).color + " -1px 1px 2px;" + "' draggable='true' ondragstart='drag(event)' ondragend='dragover(event)' onclick='deleteGlyph(" + glyph.id + ")'>"
         html += getGlyphTooltip(glyph);
         if (glyph.symbol !== undefined)
-          html += specialGlyphSymbols["key"+glyph.symbol]+"</div></div>"
+          html += specialGlyphSymbols["key" + glyph.symbol] + "</div></div>"
         else
-          html += "</span>"+GLYPH_SYMBOLS[glyph.type]+"</div></div>"
+          html += "</span>" + GLYPH_SYMBOLS[glyph.type] + "</div></div>"
       } else {
-        html += "<div class='glyph empty' id='"+idx+"' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
+        html += "<div class='glyph empty' id='" + idx + "' ondragover='allowDrop(event)' ondrop='drop(event)'></div>"
       }
 
       idx++;
@@ -429,9 +429,9 @@ function drag(ev) {
   var rect = ev.target.getBoundingClientRect()
   ev.dataTransfer.setData("text", ev.target.id);
   ev.target.style.opacity = 0.5
-  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
   mouseOn.appendTo($(ev.target))
-  ev.dataTransfer.setDragImage(ev.target, ev.clientX-rect.left, ev.clientY-rect.top)
+  ev.dataTransfer.setDragImage(ev.target, ev.clientX - rect.left, ev.clientY - rect.top)
   mouseOn = $("document")
 }
 
@@ -467,7 +467,7 @@ function drop(ev) {
       })
       glyph.idx = parseInt(ev.target.id.split("active")[1])
     }
-    
+
     // Force a maximum of one glyph in Effarig Reality before Eternity
     if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
       player.celestials.effarig.glyphEquipped = true
@@ -489,7 +489,7 @@ function drop(ev) {
     }
   }
   generateGlyphTable()
-  mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+  mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
   mouseOn.appendTo($(ev.target))
   mouseOn = $("document")
 }
@@ -502,10 +502,10 @@ function canBuyRealityUpg(id) {
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
-  var row = Math.floor( ( id - 1 ) / 5 )
+  var row = Math.floor((id - 1) / 5)
   if (row < 2) return true
   else {
-    for (var i = row*5 - 4; i <=row*5; i++) {
+    for (var i = row * 5 - 4; i <= row * 5; i++) {
       if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row
     }
   }
@@ -536,7 +536,7 @@ function buyRealityUpg(id) {
 }
 
 function updateRealityUpgrades() {
-  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+  for (let i = 1; i <= 25; ++i) {
     if (!canBuyRealityUpg(i)) $("#rupg" + i).addClass("rUpgUn")
     else $("#rupg" + i).removeClass("rUpgUn")
   }
@@ -548,7 +548,7 @@ function updateRealityUpgrades() {
     }
   });
 
-  for (let i = 1; i <= $(".realityUpgrade").length - 5; i++) {
+  for (let i = 1; i <= 25; ++i) {
     if (player.reality.upg.includes(i)) $("#rupg" + i).addClass("rUpgBought")
     else $("#rupg" + i).removeClass("rUpgBought")
   }
@@ -565,7 +565,8 @@ function updateRealityUpgrades() {
   $("#rupg3").html("You gain 3 times more Eternities<br>Currently: " + row1Mults[3] + "x<br>Cost: " + row1Costs[3] + " RM")
   $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: " + row1Mults[4] + "x<br>Cost: " + row1Costs[4] + " RM")
   $("#rupg5").html("You gain 5 times more Infinities<br>Currently: " + row1Mults[5] + "x<br>Cost: " + row1Costs[5] + " RM")
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + shortenRateOfChange(Decimal.max(Decimal.pow(Math.max(player.timestudy.theorem - 1e3, 2), Math.log2(player.realities)), 1)) + "x<br>Cost: 50 RM")
+  const rupg12Value = shortenRateOfChange(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1));
+  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
   $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
 }
@@ -691,18 +692,18 @@ function updateGlyphDescriptions() {
 }
 
 function updateTooltips() {
-  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function(e) {
-    mouseOn.css({"left": e.pageX-150 + "px", "top": e.pageY-mouseOn.height()-35 + "px", "display": "flex"})
+  $(".tooltip").parent(".glyph").off("mousemove").mousemove(function (e) {
+    mouseOn.css({ "left": e.pageX - 150 + "px", "top": e.pageY - mouseOn.height() - 35 + "px", "display": "flex" })
   })
-  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function(e) {
+  $(".tooltip").parent(".glyph").off("mouseenter").mouseenter(function (e) {
     e.stopPropagation();
     mouseOn = $(this).find(".tooltip")
     mouseOn.appendTo("body")
   })
 
-  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function(e) {
+  $(".tooltip").parent(".glyph").off("mouseleave").mouseleave(function (e) {
     e.stopPropagation();
-    mouseOn.css({"left": "0", "top": "0px", "display": "none"})
+    mouseOn.css({ "left": "0", "top": "0px", "display": "none" })
     mouseOn.appendTo($(this))
     mouseOn = $("document")
   })
@@ -721,7 +722,7 @@ function getGlyphLevelInputs() {
   let dtBase = player.dilation.dilatedTime.exponent ?
     Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
   let eterBase = player.reality.upg.includes(18) ?
-    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45,1) : 1;
+    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1) : 1;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -730,7 +731,7 @@ function getGlyphLevelInputs() {
   // don't add up to 4, but their powers do (for blendExp = 1/3, the cubes of the exponents sum to
   // 4.
   // The optimal weights, given a blendExp, are proportional to log(x)^(1/(1- blendExp))
-  const blendExp = 1/3;
+  const blendExp = 1 / 3;
   // Besides adding an exponent to a, b, c, and d, we can also scale them before exponentiation.
   // So, we'd have (s a)ⁿ¹ * (s b)ⁿ² * (s c)ⁿ³ * (s d)ⁿ⁴
   // Then, we can divide the result by s⁴; this does nothing for even weights
@@ -748,7 +749,7 @@ function getGlyphLevelInputs() {
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
-  let weights =  player.celestials.effarig.glyphWeights;
+  let weights = player.celestials.effarig.glyphWeights;
   var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
   var epEffect = adjustFactor(epBase, weights.ep / 100);
   var replEffect = adjustFactor(replBase, weights.repl / 100);
@@ -762,7 +763,7 @@ function getGlyphLevelInputs() {
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {
     var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
-    glyphScaledLevel = glyphScaleBegin + 0.5*glyphScaleRate*(Math.sqrt(1 + 4*excess)-1);
+    glyphScaledLevel = glyphScaleBegin + 0.5 * glyphScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
     glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
   }
   let perkFactor = Effects.sum(

@@ -57,6 +57,8 @@ const Perk = (function() {
     glyphLevelIncrease2: new PerkState(db.glyphLevelIncrease2),
     glyphChoice4: new PerkState(db.glyphChoice4),
     glyphRarityIncrease: new PerkState(db.glyphRarityIncrease),
+    glyphUncommonGuarantee: new PerkState(db.glyphUncommonGuarantee),
+    realityMachineGain: new PerkState(db.realityMachineGain),
     automatorRowIncrease1: new PerkState(db.automatorRowIncrease1),
     automatorRowIncrease2: new PerkState(db.automatorRowIncrease2),
     automatorRowScaling: new PerkState(db.automatorRowScaling),
@@ -95,19 +97,12 @@ const Perk = (function() {
     autobuyerTT2: new PerkState(db.autobuyerTT2),
     autobuyerTT3: new PerkState(db.autobuyerTT3),
     autobuyerTT4: new PerkState(db.autobuyerTT4),
-    achievementRow1: new PerkState(db.achievementRow1),
-    achievementRow2: new PerkState(db.achievementRow2),
-    achievementRow3: new PerkState(db.achievementRow3),
-    achievementRow4: new PerkState(db.achievementRow4),
-    achievementRow5: new PerkState(db.achievementRow5),
-    achievementRow6: new PerkState(db.achievementRow6),
-    achievementRow7: new PerkState(db.achievementRow7),
-    achievementRow8: new PerkState(db.achievementRow8),
-    achievementRow9: new PerkState(db.achievementRow9),
-    achievementRow10: new PerkState(db.achievementRow10),
-    achievementRow11: new PerkState(db.achievementRow11),
-    achievementRow12: new PerkState(db.achievementRow12),
-    achievementRow13: new PerkState(db.achievementRow13)
+    achievementRowGroup1: new PerkState(db.achievementRowGroup1),
+    achievementRowGroup2: new PerkState(db.achievementRowGroup2),
+    achievementRowGroup3: new PerkState(db.achievementRowGroup3),
+    achievementRowGroup4: new PerkState(db.achievementRowGroup4),
+    achievementRowGroup5: new PerkState(db.achievementRowGroup5),
+    achievementRowGroup6: new PerkState(db.achievementRowGroup6)
   };
   /**
    * @type {PerkState[]}

@@ -3,7 +3,7 @@ Vue.component("reality-button", {
     return {
       canReality: false,
       hasRealityStudy: false,
-      machinesGained: 0,
+      machinesGained: new Decimal(0),
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
@@ -22,10 +22,10 @@ Vue.component("reality-button", {
       return `Machines gained: ${this.shorten(this.machinesGained, 2, 0)}`;
     },
     formatMachineStats() {
-      if (this.machinesGained < 100) {
+      if (this.machinesGained.lt(100)) {
         return `Next at 1e${this.nextMachineEP} EP`;
       } else {
-        return `${shorten(this.machinesGained / this.realityTime, 2, 2)} RM/min`
+        return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`
       }
     },
     formatGlyphLevel() {

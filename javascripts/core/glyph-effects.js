@@ -298,6 +298,7 @@ GameDatabase.reality.glyphEffects = [
     id: "effarigachievement",
     glyphTypes: ["effarig"],
     singleDesc: "Raise all achievement related effects to a power of ^{value}",
+    genericDesc: "Achievement effect increase",
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigforgotten",

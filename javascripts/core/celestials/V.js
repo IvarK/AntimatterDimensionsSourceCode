@@ -81,10 +81,7 @@ class VRunUnlockState extends GameMechanicState {
 
   get formattedDescription() {
     let val = this.conditionValue
-    if (val == undefined) val = this.config.values[this.completions - 1]
-
     const formatted = this.config.format ? this.config.format(val) : shorten(val)
-
     return this.config.description.replace('{value}', formatted)
   }
 
@@ -94,10 +91,9 @@ class VRunUnlockState extends GameMechanicState {
   
   tryComplete() {
     if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
-      this.completions++;
-      GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-      V.updateTotalRunUnlocks()
-    }
+    this.completions++;
+    GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
+    V.updateTotalRunUnlocks()
   }
 }
 

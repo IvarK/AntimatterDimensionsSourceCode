@@ -1,7 +1,6 @@
 Vue.component('v-tab', {
   data: function() {
     return {
-      db: GameDatabase.Celestials.V,
       mainUnlock: false,
       totalUnlocks: 0,
       totalAdditionalStudies: 0
@@ -22,7 +21,8 @@ Vue.component('v-tab', {
   },
   computed: {
     runUnlocks: () => VRunUnlockState.all,
-    runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS
+    runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
+    db: () => GameDatabase.Celestials.V,
   },
   template:
     `<div class="l-v-celestial-tab">

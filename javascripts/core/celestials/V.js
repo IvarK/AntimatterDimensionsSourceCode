@@ -164,7 +164,7 @@ const V = {
   },
   checkForUnlocks() {
 
-    if (V_UNLOCKS.MAIN_UNLOCK.requirement() && !V.has(V_UNLOCKS.MAIN_UNLOCK)) {
+    if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
       player.celestials.v.unlocks.push(V_UNLOCKS.MAIN_UNLOCK.id);
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }

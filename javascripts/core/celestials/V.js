@@ -41,7 +41,7 @@ GameDatabase.Celestials.V = {
       id: 4,
       name: "Eternal Sunshine",
       description: "Get {value} EP.",
-      values: [new Decimal("1e2000"), new Decimal("1e2400"), new Decimal("1e2800"), new Decimal("1e3200"), new Decimal("1e3600"), new Decimal("1e4000")],
+      values: ["1e2000", "1e2400", "1e2800", "1e3200", "1e3600", "1e4000"].map(v => new Decimal(v)),
       condition: (x) => player.eternityPoints.gte(x)
     },
     {

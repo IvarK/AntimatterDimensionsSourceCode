@@ -205,6 +205,7 @@ function onLoad() {
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
   updatePerkColors()
+  V.updateTotalRunUnlocks()
 
   const notation = player.options.notation;
   if (notation === undefined) {

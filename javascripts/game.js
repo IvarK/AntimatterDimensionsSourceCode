@@ -210,6 +210,8 @@ function gainedInfinityPoints() {
     ip = ip.times(totalIPMult());
     if (Teresa.isRunning) {
         ip = ip.pow(0.6);
+    } else if (V.isRunning) {
+      ip = ip.pow(0.5);
     }
     return ip.floor();
 }
@@ -232,6 +234,8 @@ function gainedEternityPoints() {
   }
   if (Teresa.isRunning) {
     ep = ep.pow(0.6);
+  } else if (V.isRunning) {
+    ep = ep.pow(0.5)
   }
   if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
   return ep.floor();
@@ -783,6 +787,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
       for (let wormhole of player.wormhole) {
         if (wormhole.active) {
           factor *= wormhole.power;
+          if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
         } else {
           // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
           // they aren't currently active (instead they will activate as soon as the previous wormhole is active).
@@ -1112,7 +1117,6 @@ function gameLoop(diff, options = {}) {
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
     if (!player.celestials.teresa.run) player.timestudy.theorem = player.timestudy.theorem.plus(getAdjustedGlyphEffect("dilationTTgen")*diff/1000)
-
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
     }

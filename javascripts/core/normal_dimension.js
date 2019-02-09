@@ -105,6 +105,8 @@ function getDimensionFinalMultiplier(tier) {
 
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
+  } else if (V.isRunning) {
+    multiplier = multiplier.pow(0.5)
   }
   
   return multiplier;

@@ -49,7 +49,7 @@ GameDatabase.Celestials.V = {
       name: "Matterception",
       description: "Get {value} Dimensional Boosts while dilating time, inside EC5.",
       values: [35, 38, 41, 44, 47, 50],
-      condition: (x) => player.dilation.active && player.currentEternityChall == "eterc5" && player.resets >= x
+      condition: (x) => player.dilation.active && EternityChallenge(5).isRunning && player.resets >= x
     }
   ]
 };
@@ -162,7 +162,7 @@ const V = {
   totalRunUnlocks: 0,
   checkForUnlocks() {
 
-    if (V_UNLOCKS.MAIN_UNLOCK.requirement() && !V.has(V_UNLOCKS.MAIN_UNLOCK)) {
+    if (!V.has(V_UNLOCKS.MAIN_UNLOCK) && V_UNLOCKS.MAIN_UNLOCK.requirement()) {
       player.celestials.v.unlocks.push(V_UNLOCKS.MAIN_UNLOCK.id);
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }
@@ -196,7 +196,9 @@ const V = {
       const run = player.celestials.v.runUnlocks[i]
       if (run !== undefined) total += run
     }
-    this.totalRunUnlocks = total
+    this.totalRunUnlocks = player.celestials.v.runUnlocks
+      .filter(run => run !== undefined)
+      .sum();
   },
   get isRunning() {
     return player.celestials.v.run;

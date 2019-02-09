@@ -93,7 +93,7 @@ class VRunUnlockState extends GameMechanicState {
   }
   
   tryComplete() {
-    if (this.config.condition(this.conditionValue) && this.completions !== 6) {
+    if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks()

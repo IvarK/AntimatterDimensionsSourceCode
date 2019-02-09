@@ -396,7 +396,7 @@ var player = {
     v: {
       unlocks: [],
       run: false,
-      runUnlocks: {},
+      runUnlocks: [0, 0, 0, 0, 0, 0],
       additionalStudies: 0
     }
   },

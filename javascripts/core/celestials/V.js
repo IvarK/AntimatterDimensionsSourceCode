@@ -191,12 +191,7 @@ const V = {
     return player.celestials.v.additionalStudies < this.totalAdditionalStudies
   },
   updateTotalRunUnlocks() {
-    let total = 0;
-    for (let i = 0; i < 6; i++) {
-      const run = player.celestials.v.runUnlocks[i]
-      if (run !== undefined) total += run
-    }
-    this.totalRunUnlocks = total
+    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()
   },
   get isRunning() {
     return player.celestials.v.run;

@@ -75,7 +75,8 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get conditionValue() {
-    return this.config.values[this.completions]
+    const value = this.config.values[this.completions];
+    return value !== undefined ? value : this.config.values[this.completions - 1];
   }
 
   get formattedDescription() {

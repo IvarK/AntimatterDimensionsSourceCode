@@ -525,6 +525,15 @@ Notation.hex = new class HexNotation extends Notation {
     return this.getValueFromSigns(this.getSigns(x, n, extraPrec), n);
   }
 
+  isFinite(x) {
+    // Works for usual numbers and Decimals, needed as a utility function.
+    if (x instanceof Decimal) {
+      return isFinite(x.e) && isFinite(x.mantissa);
+    } else {
+      return isFinite(x);
+    }
+  }
+
   getSigns(x, n, extraPrec) {
     // Extra precision is an arbitrary number, it only controls rounding of
     // the last digit, if it's 0 the last digit will almost always be odd
@@ -533,7 +542,7 @@ Notation.hex = new class HexNotation extends Notation {
     let signs = [];
     for (let i = 0; i < n + extraPrec; i++) {
       // Check for NaN, Infinity, or -Infinity (the only exceptional values)
-      if (isNaN(x) || !Decimal.lt(Decimal.abs(x), Infinity)) {
+      if (!this.isFinite(x)) {
         break;
       } else if (Decimal.lt(x, 0)) {
         signs.push(Notation.hex.signs.NEGATIVE);

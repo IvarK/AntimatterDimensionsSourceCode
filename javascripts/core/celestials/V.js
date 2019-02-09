@@ -34,7 +34,7 @@ GameDatabase.Celestials.V = {
       id: 3,
       name: "Young Boy",
       description: "Get {value} Antimatter at Eternity Challenge 12.",
-      values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000"), new Decimal("1e400000000")],
+      values: ["1e275000000", "1e300000000", "1e325000000", "1e350000000", "1e375000000", "1e400000000"].map(v => new Decimal(v)),
       condition: (x) => player.currentEternityChall == "eterc12" && player.money.gte(x)
     },
     {

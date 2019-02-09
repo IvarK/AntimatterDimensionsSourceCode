@@ -243,6 +243,7 @@ function gainedRealityMachines() {
     ret = ret.times(player.celestials.teresa.rmMult)
     ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
+    ret = ret.plusEffectOf(Perk.realityMachineGain);
     return Decimal.floor(ret)
 }
 
@@ -500,6 +501,20 @@ function selectGlyph(idx) {
 
 function generateGlyphSelection(amount) {
   possibleGlyphs.push(generateRandomGlyph(gainedGlyphLevel()))
+  if (Perk.glyphUncommonGuarantee.isBought) {   // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+    let strengthThreshold = 1.5;  // Uncommon
+    let hasThresholdStrength = false;
+    for (let i = 0; i < possibleGlyphs.length; i++) {
+        hasThresholdStrength = hasThresholdStrength || possibleGlyphs[i].strength >= strengthThreshold;
+    }
+    if (!hasThresholdStrength) {
+        let newStrength = 0;
+        while (newStrength < strengthThreshold) {
+            newStrength = gaussian_bell_curve();
+        }
+        possibleGlyphs[Math.floor(random() * possibleGlyphs.length)].strength = newStrength;
+    }
+  }
   $("#glyphSelect").show()
   var html = ""
   for (let idx = 0; idx< amount; idx++) {

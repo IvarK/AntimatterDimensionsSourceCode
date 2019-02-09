@@ -3,7 +3,7 @@ Vue.component('v-tab', {
     return {
       db: GameDatabase.Celestials.V,
       mainUnlock: false,
-      totalUnlocks: V.totalRunUnlocks,
+      totalUnlocks: 0,
       totalAdditionalStudies: 0
     };
   },

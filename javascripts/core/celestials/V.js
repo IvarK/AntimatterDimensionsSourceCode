@@ -13,7 +13,7 @@ GameDatabase.Celestials.V = {
       name: "Running Man",
       description: "Complete all challenges within {value} seconds from starting reality (real time).",
       values: [18, 15, 12, 10, 7, 5],
-      condition: (x) => EternityChallenge.completedTiers() == 60 && player.thisRealityRealTime < x * 1000
+      condition: x => EternityChallenge.completedTiers() == 60 && Time.thisRealityRealTime.totalSeconds < x
     },
     {
       id: 1,
@@ -28,14 +28,14 @@ GameDatabase.Celestials.V = {
       name: "Se7en deadly matters",
       description: "Get {value} IP at Eternity Challenge 7.",
       values: [new Decimal("1e250000"), new Decimal("1e270000"), new Decimal("1e290000"), new Decimal("1e310000"), new Decimal("1e330000"), new Decimal("1e350000")],
-      condition: (x) => player.currentEternityChall == "eterc7" && player.infinityPoints.gte(x)
+      condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x)
     },
     {
       id: 3,
       name: "Young Boy",
       description: "Get {value} Antimatter at Eternity Challenge 12.",
       values: [new Decimal("1e275000000"), new Decimal("1e300000000"), new Decimal("1e325000000"), new Decimal("1e350000000"), new Decimal("1e375000000"), new Decimal("1e400000000")],
-      condition: (x) => player.currentEternityChall == "eterc12" && player.money.gte(x)
+      condition: x => EternityChallenge(12).isRunning && player.money.gte(x)
     },
     {
       id: 4,
@@ -82,10 +82,9 @@ class VRunUnlockState extends GameMechanicState {
     let val = this.conditionValue
     if (val == undefined) val = this.config.values[this.completions - 1]
 
-    if (!this.config.format) val = shorten(val)
-    else val = this.config.format(val)
+    const formatted = (this.config.format) ? this.config.format(val) : shorten(val)
 
-    return this.config.description.replace('{value}', val)
+    return this.config.description.replace('{value}', formatted)
   }
 
   set completions(value) {
@@ -93,7 +92,7 @@ class VRunUnlockState extends GameMechanicState {
   }
   
   tryComplete() {
-    if (this.config.condition(this.config.values[this.completions]) && this.completions !== 6) {
+    if (this.config.condition(this.conditionValue) && this.completions !== 6) {
       this.completions++;
       GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
       V.updateTotalRunUnlocks()
@@ -122,7 +121,16 @@ const V_UNLOCKS = {
   MAIN_UNLOCK: {
     id: 0,
     description: "Fully unlocks V, The Celestial Of Achievements",
-    requirement: () => V.mainUnlockBool()
+    requirement: () => {
+      const db = GameDatabase.Celestials.V.mainUnlock;
+      if (player.realities < db.realities) return false;
+      if (player.eternities < db.eternities) return false;
+      if (player.infinitied + player.infinitiedBank < db.infinities) return false;
+      if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
+      if (player.replicanti.amount.lt(db.replicanti)) return false;
+  
+      return true;
+    }
   },
   RUN_UNLOCK_THRESHOLDS: [
     {
@@ -130,7 +138,7 @@ const V_UNLOCKS = {
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
     effect: () => Math.pow(player.achPow.toNumber(), getAdjustedGlyphEffect("effarigachievement")),
-    format: (x) => shorten(x) + "x",
+    format: (x) => formatX(x),
     requirement: () => V.totalRunUnlocks >= 10
     },
     {
@@ -139,7 +147,7 @@ const V_UNLOCKS = {
     description: "Have 23 V-achievements",
     requirement: () => V.totalRunUnlocks >= 23,
     effect: () => Math.pow(1.1, Math.pow(GameCache.achievementCount.value, getAdjustedGlyphEffect("effarigachievement"))),
-    format: (x) => shorten(x) + "x"
+    format: (x) => formatX(x)
     },
     {
     id: 3,
@@ -152,16 +160,6 @@ const V_UNLOCKS = {
 
 const V = {
   totalRunUnlocks: 0,
-  mainUnlockBool() {
-    const db = GameDatabase.Celestials.V.mainUnlock;
-    if (player.realities < db.realities) return false;
-    if (player.eternities < db.eternities) return false;
-    if (player.infinitied + player.infinitiedBank < db.infinities) return false;
-    if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
-    if (player.replicanti.amount.lt(db.replicanti)) return false;
-
-    return true;
-  },
   checkForUnlocks() {
 
     if (V_UNLOCKS.MAIN_UNLOCK.requirement() && !V.has(V_UNLOCKS.MAIN_UNLOCK)) {

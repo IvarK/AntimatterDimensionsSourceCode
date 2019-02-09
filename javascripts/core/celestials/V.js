@@ -83,7 +83,7 @@ class VRunUnlockState extends GameMechanicState {
     let val = this.conditionValue
     if (val == undefined) val = this.config.values[this.completions - 1]
 
-    const formatted = (this.config.format) ? this.config.format(val) : shorten(val)
+    const formatted = this.config.format ? this.config.format(val) : shorten(val)
 
     return this.config.description.replace('{value}', formatted)
   }

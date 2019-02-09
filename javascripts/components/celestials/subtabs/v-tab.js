@@ -4,16 +4,22 @@ Vue.component('v-tab', {
       db: GameDatabase.Celestials.V,
       mainUnlock: false,
       runUnlocks: VRunUnlockState.all,
-      totalUnlocks: V.totalRunUnlocks
+      totalUnlocks: V.totalRunUnlocks,
+      runMilestones: V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
+      totalAdditionalStudies: 0
     };
   },
   methods: {
     update() {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK)
       this.totalUnlocks = V.totalRunUnlocks
+      this.totalAdditionalStudies = V.totalAdditionalStudies
     },
     startRun() {
       V.startRun()
+    },
+    has(info) {
+      return V.has(info)
     }
   },
   template:
@@ -34,9 +40,15 @@ Vue.component('v-tab', {
             <p class="o-v-unlock-amount">{{ unlock.completions }}/{{unlock.config.values.length}} done</p>
           </div>
         </div>
-        <div>You have {{ totalUnlocks }} V-achievements done. You can pick {{ Math.floor(totalUnlocks/3) }} studies from locked paths.</div>
+        <div>You have {{ totalUnlocks }} V-achievements done. You can pick {{ totalAdditionalStudies }} studies from locked paths.</div>
         <br>
-        <div>Here be some shop using those V-achievements</div>
+        <div class="l-v-milestones-container">
+          <div class="o-v-milestone" v-for="milestone in runMilestones" :class="{'o-v-milestone-unlocked': has(milestone)}">
+            <p>{{ milestone.description }}</p>
+            <p>Reward: {{ milestone.reward }}</p>
+            <p v-if="milestone.effect">Currently: <b>{{ milestone.format(milestone.effect()) }}</b></p>
+          </div>
+        </div>
       </div>
     </div>`
 });

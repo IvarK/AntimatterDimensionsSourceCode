@@ -775,6 +775,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
       for (let wormhole of player.wormhole) {
         if (wormhole.active) {
           factor *= wormhole.power;
+          if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
         } else {
           // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
           // they aren't currently active (instead they will activate as soon as the previous wormhole is active).

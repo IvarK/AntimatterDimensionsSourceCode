@@ -231,7 +231,7 @@ EternityChallenge.completedTiers = () => {
 EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
-  const hours = Effects.min(
+  let hours = Effects.min(
     Number.MAX_VALUE,
     Perk.autocompleteEC1,
     Perk.autocompleteEC2,
@@ -239,6 +239,7 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
     Perk.autocompleteEC4,
     Perk.autocompleteEC5
   );
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect()
   return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
 }
 

@@ -5039,6 +5039,28 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
+.l-v-milestones-container {
+  display: flex;
+  justify-content: center;
+}
+
+.o-v-milestone {
+  width: 25rem;
+  height: 10rem;
+  padding: 1rem;
+  border: 2px solid gainsboro;
+  margin-right: 10px;
+  border-radius: .5rem;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.o-v-milestone-unlocked {
+  background: lightgreen;
+}
+
 /* #endregion v tab*/
 
 .c-performance-stats {

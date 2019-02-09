@@ -123,7 +123,31 @@ const V_UNLOCKS = {
     id: 0,
     description: "Fully unlocks V, The Celestial Of Achievements",
     requirement: () => V.mainUnlockBool()
-  }
+  },
+  RUN_UNLOCK_THRESHOLDS: [
+    {
+    id: 1,
+    reward: "Achievement multiplier affects auto EC completion time.",
+    description: "Have 10 V-achievements",
+    effect: () => Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")),
+    format: (x) => shorten(x) + "x",
+    requirement: () => V.totalRunUnlocks >= 10
+    },
+    {
+    id: 2,
+    reward: "Achievement count affects wormhole power, Unlock Ra, Celestial of the Forgotten.",
+    description: "Have 23 V-achievements",
+    requirement: () => V.totalRunUnlocks >= 23,
+    effect: () => Math.pow(1.1, Math.pow(GameCache.achievementCount.value, getAdjustedGlyphEffect("effarigachievement"))),
+    format: (x) => shorten(x) + "x"
+    },
+    {
+    id: 3,
+    reward: "Double the amount of locked studies you can buy.",
+    description: "Have 36 V-achievements",
+    requirement: () => V.totalRunUnlocks >= 36
+    }
+  ]
 };
 
 const V = {
@@ -139,8 +163,14 @@ const V = {
     return true;
   },
   checkForUnlocks() {
-    for (i in V_UNLOCKS) {
-      const unl = V_UNLOCKS[i];
+
+    if (V_UNLOCKS.MAIN_UNLOCK.requirement()) {
+      player.celestials.v.unlocks.push(V_UNLOCKS.MAIN_UNLOCK.id);
+      GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
+    }
+
+    for (let i = 0; i<V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
+      const unl = V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[i];
       if (unl.requirement() && !this.has(unl)) {
         player.celestials.v.unlocks.push(unl.id);
         GameUI.notify.success(unl.description);
@@ -174,6 +204,7 @@ const V = {
     return player.celestials.v.run;
   },
   get totalAdditionalStudies() {
-    return Math.floor(this.totalRunUnlocks / 3)
+    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3)
+    else return Math.floor(this.totalRunUnlocks / 6)
   }
 };

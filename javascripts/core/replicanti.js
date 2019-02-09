@@ -67,7 +67,7 @@ function getReplicantiInterval(noMod, interval) {
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
     if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
     if (V.isRunning) {
-      if (interval > 1) {
+      interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
         interval = Math.pow(interval, 2)
       } else {
         interval = Math.sqrt(interval)

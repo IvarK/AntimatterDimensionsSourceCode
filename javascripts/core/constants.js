@@ -29,7 +29,7 @@ const AutoRealityMode = {
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 const TS171_MULTIPLIER = 1.25;
 
-// used as drag and drop data type
+// Used as drag and drop data type
 const GLYPH_MIME_TYPE = "text/x-glyph-ivark"
 
 // These need to be in descending order for searching over them to work trivially
@@ -76,8 +76,7 @@ const AutoGlyphSacMode = {
   ADVANCED: 3,
 }
 
-// Use through Automator.Instructions; here to support
-// creation of index by ID
+// Use through Automator.Instructions; here to support creation of index by ID
 const _AutomatorInstructions = Object.freeze({
   WAIT: {
     id: 11,

@@ -68,7 +68,7 @@ const GlyphGenerator = {
     let type = this.randomType(fake);
     let numEffects = this.randomNumberOfEffects(strength, level, fake);
     let effects = this.randomEffects(type, numEffects, fake);
-    // effects come out as powerpow, powerdimboost, etc. Glyphs store them
+    // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
     let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
     return {
@@ -187,7 +187,7 @@ const Glyphs = {
       }
     });
     this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
-    // glyphs could previously end up occupying the same inventory slot (Stacking)
+    // Glyphs could previously end up occupying the same inventory slot (Stacking)
     let stacked = [];
     player.reality.glyphs.inventory.forEach((g) => {
       if (this.inventory[g.idx]) {
@@ -449,7 +449,7 @@ function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     fixGlyph(player.reality.glyphs.active[i]);
   }
-  // delete any glyphs that are in overflow spots:
+  // Delete any glyphs that are in overflow spots:
   player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
     glyph => glyph.idx < player.reality.glyphs.inventorySize);
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
@@ -499,7 +499,7 @@ function checkGlyphAchievements() {
   if (glyphs.every((g) => g.strength >= 2) && glyphs.length === 100) giveAchievement("I'm up all night to get lucky")
 }
 
-// returns both effect value and softcap status
+// Returns both effect value and softcap status
 function getActiveGlyphEffects() {
   /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
   let allEffects = [];

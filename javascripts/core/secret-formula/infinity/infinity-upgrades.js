@@ -5,7 +5,7 @@ GameDatabase.infinity.upgrades = {
     description: "Normal Dimensions gain a multiplier based on time played",
     charged: {
       description: "Normal Dimensions gain a power effect based on time played and Teresa level",
-      effect: () => 1
+      effect: () => Math.log10(Math.log10(Time.totalTimePlayed.totalMilliseconds)) * player.celestials.ra.level / 150
     },
     effect: () => Math.pow(Time.totalTimePlayed.totalMinutes / 2, 0.15),
     formatEffect: value => formatX(value, 2, 2)
@@ -16,7 +16,7 @@ GameDatabase.infinity.upgrades = {
     description: "First and Eighth Dimensions gain a multiplier based on infinitied stat",
     charged: {
       description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1
+      effect: () => 1 + Math.log10(Math.log10(player.infinitied)) * player.celestials.ra.level / 100
     },
     effect: () => _INFUPG_dimInfinityMult(),
     formatEffect: value => formatX(value, 1, 1)
@@ -27,7 +27,7 @@ GameDatabase.infinity.upgrades = {
     description: "Second and Seventh Dimensions gain a multiplier based on infinitied stat",
     charged: {
       description: "Second and Seventh Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1
+      effect: () => 1 + Math.log10(Math.log10(player.infinitied)) * player.celestials.ra.level / 100
     },
     effect: () => _INFUPG_dimInfinityMult(),
     formatEffect: value => formatX(value, 1, 1)
@@ -38,7 +38,7 @@ GameDatabase.infinity.upgrades = {
     description: "Third and Sixth Dimensions gain a multiplier based on infinitied stat",
     charged: {
       description: "Third and Sixth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1
+      effect: () => 1 + Math.log10(Math.log10(player.infinitied)) * player.celestials.ra.level / 100
     },
     effect: () => _INFUPG_dimInfinityMult(),
     formatEffect: value => formatX(value, 1, 1)
@@ -49,7 +49,7 @@ GameDatabase.infinity.upgrades = {
     description: "Fourth and Fifth Dimensions gain a multiplier based on infinitied stat",
     charged: {
       description: "Fourth and Fifth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1
+      effect: () => 1 + Math.log10(Math.log10(player.infinitied)) * player.celestials.ra.level / 100
     },
     effect: () => _INFUPG_dimInfinityMult(),
     formatEffect: value => formatX(value, 1, 1)
@@ -60,7 +60,7 @@ GameDatabase.infinity.upgrades = {
     description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9",
     charged: {
       description: "Decrease Dimension Boost requirement scaling based on Teresa Effect",
-      effect: () => 1
+      effect: () => Math.floor(1 + player.celestials.ra.level/50)
     },
     effect: () => 9
   },
@@ -70,7 +70,7 @@ GameDatabase.infinity.upgrades = {
     description: "Increase the multiplier for buying 10 Dimensions",
     charged: {
       description: "Multiplier for buying 10 Dimensions gains a power effect based on Teresa level",
-      effect: () => 1
+      effect: () => 1 + Math.sqrt(player.celestials.ra.level)/500
     },
     effect: () => 1.1,
     formatEffect: () => "2x ➜ 2.2x",
@@ -82,7 +82,7 @@ GameDatabase.infinity.upgrades = {
     description: "Galaxies are twice as effective",
     charged: {
       description: "Galaxies are more effective based on Teresa level",
-      effect: () => 1
+      effect: () => 1 + player.celestials.ra.level / 100
     },
     effect: () => 2
   },
@@ -92,7 +92,7 @@ GameDatabase.infinity.upgrades = {
     description: "Normal Dimensions gain a multiplier based on time spent in current Infinity",
     charged: {
       description: "Normal Dimensions gain a power effect based on time spent in current infinity and Teresa level",
-      effect: () => 1
+      effect: () => Math.log10(Math.log10(Time.thisInfinity.totalMilliseconds)) * player.celestials.ra.level / 150
     },
     effect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 4, 0.25), 1),
     formatEffect: value => formatX(value, 2, 2)
@@ -103,7 +103,7 @@ GameDatabase.infinity.upgrades = {
     description: "Multiplier for unspent Infinity Points on 1st Dimension",
     charged: {
       description: "Multiplier for unspent Infinity Points on 1st Dimension, powered by Teresa level",
-      effect: () => 1
+      effect: () => player.infinityPoints.dividedBy(2).pow(player.celestials.ra.level * 1.5 * 1.5)
     },
     effect: () => player.infinityPoints.dividedBy(2).pow(1.5).plus(1),
     formatEffect: value => formatX(value, 2, 2)
@@ -114,7 +114,7 @@ GameDatabase.infinity.upgrades = {
     description: "Increase Dimension Boost multiplier",
     charged: {
       description: "Dimension Boost multiplier power effect",
-      effect: () => 1
+      effect: () => 1 + Math.sqrt(player.celestials.ra.level)/100
     },
     effect: () => 2.5,
     formatEffect: () => "2x ➜ 2.5x",
@@ -126,7 +126,7 @@ GameDatabase.infinity.upgrades = {
     description: "Infinity Point generation based on fastest Infinity",
     charged: {
       description: "RM multiplier based on fastest reality (real time)",
-      effect: () => 1
+      effect: () => Math.max(100 / (player.bestReality / 1000), 1)
     },
     // cutting corners: this is not actual effect (player.infMult is), but
     // it is totalIPMult that is displyed on upgrade

@@ -29,8 +29,9 @@ function buyTimeDimension(tier, upd, threshold) {
       dim.cost = Decimal.pow(timeDimCostMults[tier]*100, dim.bought + Math.pow(dim.bought-timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
     }
   }
-  if (tier == 8) dim.power = dim.power.times(2 * Effects.product(GlyphSacrifice.time))
-  else dim.power = dim.power.times(2)
+  dim.power = dim.power
+    .times(2)
+    .timesEffectsOf(tier === 8 ? GlyphSacrifice.time : null);
   return true
 }
 

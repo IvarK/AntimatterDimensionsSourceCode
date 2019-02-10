@@ -304,10 +304,16 @@ class GlyphSacrificeState extends GameMechanicState {
   }
   get canBeApplied() { return true; }
 }
-
 const GlyphSacrifice = (function() {
   const db = GameDatabase.reality.glyphSacrifice;
-  return GlyphTypes.list.mapToObject(t => t.id, t => new GlyphSacrificeState(db[t.id]));
+  return {
+    time: new GlyphSacrificeState(db.time),
+    dilation: new GlyphSacrificeState(db.dilation),
+    replication: new GlyphSacrificeState(db.replication),
+    infinity: new GlyphSacrificeState(db.infinity),
+    power: new GlyphSacrificeState(db.power),
+    effarig: new GlyphSacrificeState(db.effarig),
+  };
 })();
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced

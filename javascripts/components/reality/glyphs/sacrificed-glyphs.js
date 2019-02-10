@@ -3,8 +3,12 @@ Vue.component("sacrificed-glyphs", {
     "type-sacrifice": {
       props: {
         type: String,
-        amount: Number,
-        effectValue: Number,
+      },
+      data: function () {
+        return {
+          amount: 0,
+          effectValue: 0,
+        };
       },
       computed: {
         typeConfig() {
@@ -23,8 +27,15 @@ Vue.component("sacrificed-glyphs", {
           return this.sacConfig.description(this.effectValue);
         },
       },
+      methods: {
+        update() {
+          this.amount = player.reality.glyphs.sac[this.type];
+          this.effectValue = GlyphSacrifice[this.type].effectValue;
+        }
+      },
       template: /*html*/`
-        <div class="l-sacrificed-glyphs__type">
+        <div v-if="amount > 0"
+             class="l-sacrificed-glyphs__type">
           <div>
             <div class="l-sacrificed-glyphs__type-symbol c-sacrificed-glyphs__type-symbol">
               {{symbol}}
@@ -39,32 +50,23 @@ Vue.component("sacrificed-glyphs", {
   },
   data: function () {
     return {
-      sacrificed: GlyphTypes.list.map(t => ({
-        type: t.id,
-        amount: player.reality.glyphs.sac[t.id],
-        effectValue: GlyphSacrifice[t.id].effectValue,
-      })),
+      anySacrifices: false,
     };
   },
   computed: {
-    anySacrifices() {
-      return this.sacrificed.some(t => t.amount !== 0);
-    }
+    types: () => GLYPH_TYPES,
   },
   methods: {
     update() {
-      GlyphTypes.list.forEach((t, idx) => {
-        this.sacrificed[idx].amount = player.reality.glyphs.sac[t.id];
-        this.sacrificed[idx].effectValue = GlyphSacrifice[t.id].effectValue;
-      });
+      this.anySacrifices = GLYPH_TYPES.some(e => player.reality.glyphs.sac[e] !== 0);
     }
   },
   template: /*html*/`
   <div v-show="anySacrifices"
        class="c-sacrificed-glyphs l-sacrificed-glyphs">
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
-    <template v-for="sacInfo in sacrificed">
-      <type-sacrifice v-if="sacInfo.amount > 0" v-bind="sacInfo"/>
+    <template v-for="type in types">
+      <type-sacrifice :type="type"/>
     </template>
   </div>`,
 })

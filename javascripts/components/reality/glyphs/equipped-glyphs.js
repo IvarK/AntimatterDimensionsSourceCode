@@ -7,15 +7,13 @@ Vue.component("equipped-glyphs", {
     };
   },
   computed: {
-    GLYPH_SIZE() {
-      // Empty slots are bigger due to the enlarged drop zone
-      return 5;
-    },
-    numSlots() {
+    // Empty slots are bigger due to the enlarged drop zone
+    GLYPH_SIZE: () => 5,
+    slotCount() {
       return this.glyphs.length;
     },
     arrangementRadius() {
-      return [0, 0, 0, 4, 5, 6][this.numSlots];
+      return [0, 0, 0, 4, 5, 6][this.slotCount];
     },
     glyphPositionStyle() {
       return this.glyphs.map((g, idx) => ({
@@ -33,11 +31,11 @@ Vue.component("equipped-glyphs", {
   methods: {
     glyphX(idx) {
       return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
-        Math.sin(2 * Math.PI * idx / this.numSlots);
+        Math.sin(2 * Math.PI * idx / this.slotCount);
     },
     glyphY(idx) {
       return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
-        Math.cos(2 * Math.PI * idx / this.numSlots);
+        Math.cos(2 * Math.PI * idx / this.slotCount);
     },
     dragover(event, idx) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -50,8 +48,8 @@ Vue.component("equipped-glyphs", {
     drop(event, idx) {
       this.dragoverIndex = -1;
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE));
-      if (!id || isNaN(id)) return;
-      const glyph = Glyphs.inventoryById(id);
+      if (isNaN(id)) return;
+      const glyph = Glyphs.findById(id);
       if (glyph) Glyphs.equip(glyph, idx);
     },
     toggleRespec() {
@@ -65,19 +63,26 @@ Vue.component("equipped-glyphs", {
   <div class="l-equipped-glyphs">
     <div class="l-equipped-glyphs__slots">
       <template v-for="(glyph, idx) in glyphs">
-        <glyph-component v-if="glyph" :glyph="glyph" :key="idx"
-                         :style="glyphPositionStyle[idx]" :circular="true"/>
-        <div v-else :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
+        <glyph-component v-if="glyph"
+                         :key="idx"
+                         :glyph="glyph"
+                         :style="glyphPositionStyle[idx]"
+                         :circular="true"/>
+        <div v-else
+             :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
-                    :style=glyphPositionStyle[idx]>
+             :style=glyphPositionStyle[idx]>
           <!-- the drop zone is a bit larger than the glyph itself. -->
-          <div class="glyphactive l-equipped-glyphs__dropzone"
-               @dragover="dragover($event, idx)" @dragleave="dragleave(idx)" @drop="drop($event, idx)"/>
+          <div class="l-equipped-glyphs__dropzone"
+               @dragover="dragover($event, idx)"
+               @dragleave="dragleave(idx)"
+               @drop="drop($event, idx)"/>
         </div>
       </template>
     </div>
     <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade', {rUpgBought: respec}]"
-            @click="toggleRespec" :ach-tooltip="respecTooltip">
+            :ach-tooltip="respecTooltip"
+            @click="toggleRespec">
       Clear glyph slots on Reality
     </button>
   </div>

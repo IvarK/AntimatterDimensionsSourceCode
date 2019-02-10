@@ -371,7 +371,7 @@ class GlyphType {
     }
   }
   /** @property {boolean} */
-  get unlocked() {
+  get isUnlocked() {
     return this.unlockedFn !== undefined ? this.unlockedFn() : true;
   }
 
@@ -379,7 +379,7 @@ class GlyphType {
    * @param {string} id
    * @returns {boolean}
    */
-  effectUnlocked(id) {
+  isEffectUnlocked(id) {
     return this.effectUnlockedFn !== undefined ? this.effectUnlockedFn(id) : true;
   }
 
@@ -388,9 +388,10 @@ class GlyphType {
    * @param {string[]} [blacklist] Do not return the specified effects
    * @returns {string | null}
    */
-  randomEffect(rng, blacklist) {
-    if (blacklist === undefined) blacklist = [];
-    let available = this.effects.map(e => e.id).filter(id => !blacklist.includes(id) && this.effectUnlocked(id))
+  randomEffect(rng, blacklist = []) {
+    let available = this.effects
+      .map(e => e.id)
+      .filter(id => !blacklist.includes(id) && this.effectUnlocked(id))
     if (available.length === 0) return null;
     return available[Math.floor(rng() * available.length)];
   }
@@ -439,9 +440,8 @@ const GlyphTypes = {
     * @param {string[]} [blacklist] Do not return the specified types
     * @returns {string | null}
     */
-  random(rng, blacklist) {
-    if (blacklist === undefined) blacklist = [];
-    let available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].unlocked);
+  random(rng, blacklist = []) {
+    let available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].isUnlocked);
     if (available.length === 0) return null;
     return available[Math.floor(rng() * available.length)];
   },
@@ -449,6 +449,6 @@ const GlyphTypes = {
     return GLYPH_TYPES.map(e => GlyphTypes[e]);
   },
   get locked() {
-    return this.list.filter(e => !e.unlocked);
+    return this.list.filter(e => !e.isUnlocked);
   }
 };

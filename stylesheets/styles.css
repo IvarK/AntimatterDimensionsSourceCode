@@ -44,7 +44,7 @@ button {
     vertical-align: bottom;
     top: -2px;
     position: relative;
-    padding: 0px;
+    padding: 0;
     margin: 0;
     margin-top: 5px;
 }
@@ -548,85 +548,6 @@ button {
     user-select: none;
 }
 
-#glyphs tr {
-    height: 50px;
-}
-
-#glyphs td {
-    width: 50px;
-}
-
-#glyphs .glyphbg {
-    background: gainsboro
-}
-
-#glyphs .glyphbg:hover {
-    background: white;
-}
-
-#glyphs .empty {
-    background: gainsboro;
-    cursor: default;
-}
-
-#glyphs .empty:hover {
-    background: gainsboro
-}
-
-.glyphraritytext {
-    width: 190px;
-    min-height: 35px;
-    font-size: 1.5rem;
-}
-
-.powerglyph {
-    border: 1px solid #22aa48;
-    box-shadow: inset #22aa48 0px 0px 10px 2px, #22aa48 0px 0px 10px 2px;
-    background: black !important;
-}
-
-.infinityglyph {
-  border: 1px solid #B67F33;
-  box-shadow: inset #B67F33 0px 0px 10px 2px, #B67F33 0px 0px 10px 2px;
-  background: black !important;
-}
-
-.timeglyph {
-  border: 1px solid #B241E3;
-  box-shadow: inset #B241E3 0px 0px 10px 2px, #B241E3 0px 0px 10px 2px;
-  background: black !important;
-}
-
-.replicationglyph {
-  border: 1px solid #03A9F4;
-  box-shadow: inset #03A9F4 0px 0px 10px 2px, #03A9F4 0px 0px 10px 2px;
-  background: black !important;
-}
-
-.dilationglyph {
-  border: 1px solid #64DD17;
-  box-shadow: inset #64DD17 0px 0px 10px 2px, #64DD17 0px 0px 10px 2px;
-  background: black !important;
-}
-
-.effarigglyph {
-  border: 1px solid #e21717;
-  box-shadow: inset #e21717 0px 0px 10px 2px, #e21717 0px 0px 10px 2px;
-  background: black !important;
-}
-
-.glyphactive .glyph {
-    cursor: default !important;
-}
-
-#glyphsToSelect {
-    display: flex;
-    justify-content:  space-around;
-}
-
-#glyphsToSelect .glyph {
-    cursor: pointer;
-}
 .wormhole-upgrades {
     display: flex;
     justify-content: space-around;
@@ -991,7 +912,7 @@ br {
   padding: 12px;
   margin-bottom: 12px;
   height: 100px;
-  padding: 0px;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -46,7 +46,7 @@ const AutoGlyphSacrifice = {
 };
 
 const GlyphGenerator = {
-  last_fake: "power",
+  lastFake: "power",
 
   startingGlyph(level) {
     let strength = this.randomStrength(false);
@@ -83,7 +83,7 @@ const GlyphGenerator = {
   },
 
   makeId(fake) {
-    let rng = this.get_rng(fake);
+    let rng = this.getRNG(fake);
     return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
   },
 
@@ -91,7 +91,7 @@ const GlyphGenerator = {
     let result;
     let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
     do {
-      result = GlyphGenerator.gaussian_bell_curve(this.get_rng(fake));
+      result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
     // Each rarity% is 0.025 strength.
     result += Effects.sum(GlyphSacrifice.effarig) / 40;
@@ -100,14 +100,14 @@ const GlyphGenerator = {
   },
 
   randomNumberOfEffects(strength, level, fake) {
-    let rng = this.get_rng(fake);
+    let rng = this.getRNG(fake);
     let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
     if (player.reality.upg.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
     return ret;
   },
 
   randomEffects(type, count, fake) {
-    let rng = this.get_rng(fake);
+    let rng = this.getRNG(fake);
     let ret = [];
     for (let i = 0; i < count; ++i) {
       let effect = GlyphTypes[type].randomEffect(rng, ret);
@@ -118,17 +118,16 @@ const GlyphGenerator = {
   },
 
   randomType(fake) {
-    let rng = this.get_rng(fake);
+    let rng = this.getRNG(fake);
     if (fake) {
-      GlyphGenerator.last_fake = GlyphTypes.random(rng, [GlyphGenerator.last_fake]);
-      return GlyphGenerator.last_fake;
-    } else {
-      player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
-      return player.reality.glyphs.last;
+      GlyphGenerator.lastFake = GlyphTypes.random(rng, [GlyphGenerator.lastFake]);
+      return GlyphGenerator.lastFake;
     }
+    player.reality.glyphs.last = GlyphTypes.random(rng, [player.reality.glyphs.last]);
+    return player.reality.glyphs.last;
   },
 
-  get_rng(fake) {
+  getRNG(fake) {
     return fake ? Math.random : GlyphGenerator.random;
   },
 
@@ -143,7 +142,7 @@ const GlyphGenerator = {
    * More than 2 approx 6%
    * More than 1.5 approx 38.43%
    */
-  gaussian_bell_curve(rng) {
+  gaussianBellCurve(rng) {
     if (rng === undefined) rng = GlyphGenerator.random;
     let u = Math.max(rng(), Number.MIN_VALUE);
     let v = rng();
@@ -168,9 +167,9 @@ const Glyphs = {
     this.validate();
     return this.inventory.indexOf(null);
   },
-  freeInventorySpace() {
+  get freeInventorySpace() {
     this.validate();
-    return this.inventory.reduce((n, e) => e === null ? n + 1 : n, 0);
+    return this.inventory.filter(e => e !== null).length;
   },
   refresh() {
     this.active = new Array(player.reality.glyphs.slots).fill(null);
@@ -178,24 +177,23 @@ const Glyphs = {
     for (let idx = 0; idx < player.reality.glyphs.slots; ++idx) {
       Vue.set(this.activeCopy, idx, null);
     }
-    player.reality.glyphs.active.forEach((g) => {
+    for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")
-      } else {
-        this.active[g.idx] = g;
-        Vue.set(this.activeCopy, g.idx, GlyphGenerator.copy(g));
       }
-    });
+      this.active[g.idx] = g;
+      Vue.set(this.activeCopy, g.idx, GlyphGenerator.copy(g));
+    }
     this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
     // Glyphs could previously end up occupying the same inventory slot (Stacking)
     let stacked = [];
-    player.reality.glyphs.inventory.forEach((g) => {
+    for (let g of player.reality.glyphs.inventory) {
       if (this.inventory[g.idx]) {
         stacked.push(g);
       } else {
         this.inventory[g.idx] = g;
       }
-    });
+    }
     // Try to unstack glyphs:
     while (stacked.length) {
       let freeIndex = this.findFreeIndex();
@@ -208,35 +206,34 @@ const Glyphs = {
       }
     }
     while (stacked.length) {
-      this.removeFromInventory(stacled.pop());
+      this.removeFromInventory(stacked.pop());
     }
     this.inventoryCopy.splice(0);
-    this.inventory.forEach(e => this.inventoryCopy.push(e ? GlyphGenerator.copy(e) : null));
+    this.inventoryCopy.push(...this.inventory.map(e => e ? GlyphGenerator.copy(e) : null));
     this.validate();
     this.updateActiveEffects();
     checkGlyphAchievements();
   },
-  inventoryById(id) {
+  findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
   },
-  inventoryGlyph(inventoryIndex) {
+  findByInventoryIndex(inventoryIndex) {
     return this.inventory[inventoryIndex];
   },
   activeGlyph(activeIndex) {
     return this.active[activeIndex];
   },
-  equip(glyphObj, targetSlot) {
+  equip(glyph, targetSlot) {
     this.validate();
-    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
-      if (this.active[targetSlot] === null) {
-        this.removeFromInventory(glyphObj);
-        player.reality.glyphs.active.push(glyphObj);
-        glyphObj.idx = targetSlot;
-        this.active[targetSlot] = glyphObj;
-        Vue.set(this.activeCopy, targetSlot, GlyphGenerator.copy(glyphObj));
-      }
-    } else {
-      throw crash("Inconsistent inventory indexing")
+    if (this.findByInventoryIndex(glyph.idx) !== glyph) {
+      throw crash("Inconsistent inventory indexing");
+    }
+    if (this.active[targetSlot] === null) {
+      this.removeFromInventory(glyph);
+      player.reality.glyphs.active.push(glyph);
+      glyph.idx = targetSlot;
+      this.active[targetSlot] = glyph;
+      Vue.set(this.activeCopy, targetSlot, GlyphGenerator.copy(glyph));
     }
     this.validate();
     this.updateActiveEffects();
@@ -252,26 +249,25 @@ const Glyphs = {
     }
     this.updateActiveEffects();
   },
-  moveToSlot(glyphObj, targetSlot) {
-    if (this.inventory[targetSlot] === null) this.moveToEmpty(glyphObj, targetSlot);
-    else this.swap(glyphObj, this.inventory[targetSlot]);
+  moveToSlot(glyph, targetSlot) {
+    if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
+    else this.swap(glyph, this.inventory[targetSlot]);
   },
-  moveToEmpty(glyphObj, targetSlot) {
+  moveToEmpty(glyph, targetSlot) {
     this.validate();
-    if (this.inventoryGlyph(glyphObj.idx) === glyphObj) {
-      if (this.inventory[targetSlot] === null) {
-        this.inventory[glyphObj.idx] = null;
-        this.inventory[targetSlot] = glyphObj;
-        let glyphCopy = this.inventoryCopy[glyphObj.idx];
-        Vue.set(this.inventoryCopy, targetSlot, glyphCopy);
-        Vue.set(this.inventoryCopy, glyphObj.idx, null)
-        glyphCopy.idx = targetSlot;
-        glyphObj.idx = targetSlot;
-      } else {
-        console.log("inventory slot full")
-      }
+    if (this.findByInventoryIndex(glyph.idx) !== glyph) {
+      throw crash("Inconsistent inventory indexing");
+    }
+    if (this.inventory[targetSlot] === null) {
+      this.inventory[glyph.idx] = null;
+      this.inventory[targetSlot] = glyph;
+      let glyphCopy = this.inventoryCopy[glyph.idx];
+      Vue.set(this.inventoryCopy, targetSlot, glyphCopy);
+      Vue.set(this.inventoryCopy, glyph.idx, null)
+      glyphCopy.idx = targetSlot;
+      glyph.idx = targetSlot;
     } else {
-      throw crash("Inconsistent inventory indexing")
+      console.log("inventory slot full")
     }
     this.validate();
   },
@@ -331,7 +327,7 @@ const Glyphs = {
   },
   updateActiveEffects() {
     this.activeEffects.splice(0);
-    for (ae of getActiveGlyphEffects()) this.activeEffects.push(ae);
+    this.activeEffects.push(...getActiveGlyphEffects());
   },
 };
 
@@ -463,7 +459,7 @@ function fixGlyph(glyph) {
   if (glyph.color == undefined && glyph.symbol == undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.strength == 1)
-      glyph.strength = gaussian_bell_curve()
+      glyph.strength = gaussianBellCurve()
     for (let effect in glyph.effects)
       if (glyph.effects.hasOwnProperty(effect)) {
         glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
@@ -501,22 +497,17 @@ function checkGlyphAchievements() {
 
 // Returns both effect value and softcap status
 function getActiveGlyphEffects() {
-  /** @type{Object.<string, GlyphEffectInfo__combine_result>} */
-  let allEffects = [];
-  for (let effect of orderedEffectList) {
-    let values = getGlyphEffectValues(effect);
-    if (values.length > 0) {
-      allEffects.push({
-        id: effect,
-        value: GameDatabase.reality.glyphEffects[effect].combine(values),
-      });
-    }
-  }
-  return allEffects;
+  return orderedEffectList
+    .map(effect => ({ effect, values: getGlyphEffectValues(effect) }))
+    .filter(ev => ev.values.length > 0)
+    .map(ev => ({
+      id: ev.effect,
+      value: GameDatabase.reality.glyphEffects[ev.effect].combine(ev.values),
+    }));
 }
 
 function deleteGlyph(id, force) {
-  const glyph = Glyphs.inventoryById(id);
+  const glyph = Glyphs.findById(id);
   if (canSacrifice(glyph)) return sacrificeGlyph(glyph, force);
   if (force || confirm("Do you really want to delete this glyph?")) {
     Glyphs.removeFromInventory(glyph);

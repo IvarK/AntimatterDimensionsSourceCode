@@ -30,7 +30,7 @@ const AutoRealityMode = {
 const TS171_MULTIPLIER = 1.25;
 
 // Used as drag and drop data type
-const GLYPH_MIME_TYPE = "text/x-glyph-ivark"
+const GLYPH_MIME_TYPE = "text/x-ivark-glyph";
 
 // These need to be in descending order for searching over them to work trivially
 const GlyphRarities = [

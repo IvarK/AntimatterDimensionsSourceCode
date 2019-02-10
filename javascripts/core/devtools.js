@@ -150,7 +150,7 @@ dev.refundDilStudies = function() {
 dev.giveSpecialGlyph = function (color, symbol, level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
-  if (!Glyphs.freeInventorySpace()) return;
+  if (!Player.hasFreeInventorySpace) return;
   let glyph = GlyphGenerator.randomGlyph(level, false);
   glyph.symbol = symbol;
   glyph.color = color;
@@ -162,7 +162,7 @@ dev.giveMusicGlyph = function() {
 }
 
 dev.giveGlyph = function () {
-  if (!Glyphs.freeInventorySpace()) return;
+  if (!Player.hasFreeInventorySpace) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
 }
 

@@ -116,7 +116,7 @@ Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.powEffectsOf = function(effectSource) {
+Decimal.prototype.powEffectOf = function(effectSource) {
   let result = this;
   effectSource.applyEffect(v => result = result.pow(v));
   return result;

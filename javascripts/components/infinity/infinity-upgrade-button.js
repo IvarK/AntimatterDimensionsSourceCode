@@ -24,7 +24,7 @@ Vue.component("infinity-upgrade-button", {
     },
     chargedDescriptionConfig() {
       return {
-        description: this.upgrade.chargedEffect.description
+        description: this.config.charged.description
       };
     }
   },

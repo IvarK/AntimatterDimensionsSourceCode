@@ -163,7 +163,7 @@ const Glyphs = {
   },
   get freeInventorySpace() {
     this.validate();
-    return this.inventory.filter(e => e !== null).length;
+    return this.inventory.filter(e => e === null).length;
   },
   refresh() {
     this.active = new Array(player.reality.glyphs.slots).fill(null);

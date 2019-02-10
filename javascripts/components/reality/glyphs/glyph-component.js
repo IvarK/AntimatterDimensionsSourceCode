@@ -28,7 +28,11 @@ const GlyphTooltipEffect = {
     }
   },
   template: /*html*/`
-    <div class="c-glyph-tooltip__effect">{{prefix}}<span :style="valueStyle">{{displayValue}}</span>{{suffix}}</div>
+    <div class="c-glyph-tooltip__effect">
+      {{prefix}}
+      <span :style="valueStyle">{{displayValue}}</span>
+      {{suffix}}
+    </div>
   `
 };
 
@@ -64,7 +68,7 @@ const GlyphTooltipComponent = {
       return {
         color: this.rarityInfo.color,
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
-                        -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px ${this.rarityInfo.color}`,
+                        -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
         float: "left"
       }
     },
@@ -87,7 +91,7 @@ const GlyphTooltipComponent = {
       } : {};
     },
     pointerEventStyle() {
-      // With mice, it's nice to just totally disable mouse events on the tooltip,
+      // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
       return this.onTouchDevice ? {} : { "pointer-events": "none" };
     }
@@ -108,17 +112,23 @@ const GlyphTooltipComponent = {
       ev.stopPropagation();
     },
     sacrificeGlyph() {
-      sacrificeGlyph(Glyphs.inventoryById(this.id), false);
+      sacrificeGlyph(Glyphs.findById(this.id), false);
     },
   },
   template: /*html*/`
-  <div class="l-glyph-tooltip c-glyph-tooltip" v-on="eventHandlers" :style="pointerEventStyle">
+  <div class="l-glyph-tooltip c-glyph-tooltip"
+       :style="pointerEventStyle"
+       v-on="eventHandlers">
     <div class="l-glyph-tooltip__header">
-      <span class="c-glyph-tooltip__description" :style="descriptionStyle">{{description}}</span>
+      <span class="c-glyph-tooltip__description"
+            :style="descriptionStyle">{{description}}</span>
       <span class="l-glyph-tooltip__level">{{levelText}}</span>
     </div>
     <div class="l-glyph-tooltip__effects">
-      <effect-desc v-for="e in sortedEffects" :effect="e.id" :value="e.value" :key="e.id"/>
+      <effect-desc v-for="e in sortedEffects"
+                   :key="e.id"
+                   :effect="e.id"
+                   :value="e.value"/>
     </div>
     <div v-if="sacrificeReward > 0"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
@@ -196,8 +206,8 @@ Vue.component("glyph-component", {
         height: this.size,
         position: "absolute",
         "background-color": "rgba(0, 0, 0, 0)",
-        "box-shadow": `0px 0px ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
-        "border-radius": this.circular ? "50%" : "0%",
+        "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
+        "border-radius": this.circular ? "50%" : "0",
       }
     },
     outerStyle() {
@@ -205,12 +215,12 @@ Vue.component("glyph-component", {
         width: this.size,
         height: this.size,
         "background-color": this.borderColor,
-        "box-shadow": `0px 0px ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
-        "border-radius": this.circular ? "50%" : "0%",
+        "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
+        "border-radius": this.circular ? "50%" : "0",
       }
     },
     innerStyle() {
-      let rarityColor = this.glyph.color ||
+      const rarityColor = this.glyph.color ||
         GlyphRarities.find(e => this.glyph.strength >= e.minStrength).color;
       return {
         width: `calc(${this.size} - 0.2rem)`,
@@ -218,7 +228,7 @@ Vue.component("glyph-component", {
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
-        "border-radius": this.circular ? "50%" : "0%",
+        "border-radius": this.circular ? "50%" : "0",
       }
     },
     mouseEventHandlers() {
@@ -239,6 +249,13 @@ Vue.component("glyph-component", {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
   },
+  created() {
+    this.$on("tooltip-touched", () => this.hideTooltip() );
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+  },
   methods: {
     hideTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
@@ -248,10 +265,11 @@ Vue.component("glyph-component", {
       this.sacrificeReward = glyphSacrificeGain(this.glyph);
     },
     moveTooltipTo(x, y) {
-      if (this.$refs.tooltip.$el) {
-        let rect = this.$el.getBoundingClientRect();
-        this.$refs.tooltip.$el.style.left = `${x - rect.left}px`
-        this.$refs.tooltip.$el.style.top = `${y - rect.top}px`
+      const tooltipEl = this.$refs.tooltip.$el;
+      if (tooltipEl) {
+        const rect = this.$el.getBoundingClientRect();
+        tooltipEl.style.left = `${x - rect.left}px`
+        tooltipEl.style.top = `${y - rect.top}px`
       }
     },
     mouseEnter() {
@@ -331,26 +349,29 @@ Vue.component("glyph-component", {
   template:  /*html*/`
   <!-- The naive approach with a border and box-shadow seems to have problems with
       weird seams/artifacts at the edges. This makes for a rather complex workaround -->
-    <div :style="outerStyle" :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
-         :draggable="draggable" v-on="draggable ? { dragstart: dragStart,
-                                                    dragend: dragEnd,
-                                                    drag: drag } : {}">
-      <div ref="glyph" :style="innerStyle" :class="['l-glyph-component', 'c-glyph-component']">
+    <div :style="outerStyle"
+         :class="['l-glyph-component', {'c-glyph-component--dragging': isDragging}]"
+         :draggable="draggable"
+         v-on="draggable ? { dragstart: dragStart,
+                             dragend: dragEnd,
+                             drag: drag } : {}">
+      <div ref="glyph"
+           :style="innerStyle"
+           :class="['l-glyph-component', 'c-glyph-component']">
         {{symbol}}
-        <glyph-tooltip v-if="hasTooltip" ref="tooltip" v-bind="glyph" :sacrificeReward="sacrificeReward"
-                       v-show="isCurrentTooltip" :visible="isCurrentTooltip"/>
+        <glyph-tooltip v-if="hasTooltip"
+                       v-show="isCurrentTooltip"
+                       ref="tooltip"
+                       v-bind="glyph"
+                       :sacrificeReward="sacrificeReward"
+                       :visible="isCurrentTooltip"/>
       </div>
-      <div ref="over" :style="overStyle" v-on="mouseEventHandlers"
+      <div ref="over"
+           :style="overStyle"
+           v-on="mouseEventHandlers"
            @click.shift.exact="$emit('shiftClicked', glyph.id)"
            @click.ctrl.shift.exact="$emit('ctrlShiftClicked', glyph.id)"
            @click.exact="$emit('clicked', glyph.id)"/>
     </div>
   `,
-  created() {
-    this.$on("tooltip-touched", () => this.hideTooltip() );
-  },
-  beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-  }
 });

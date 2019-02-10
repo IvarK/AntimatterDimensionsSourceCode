@@ -488,7 +488,11 @@ const Player = {
 
   get dimensionMultDecrease() {
     return GameCache.dimensionMultDecrease.value;
-  }
+  },
+
+  get hasFreeInventorySpace() {
+    return Glyphs.freeInventorySpace > 0;
+  },
 };
 
 function guardFromNaNValues(obj) {

@@ -8,25 +8,22 @@ const GlyphSelection = {
   },
   generate(count, level) {
     this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
-    if (Perk.glyphUncommonGuarantee.isBought) {   // If no choices are rare enough, pick one randomly and reroll its rarity until it is
-      const strengthThreshold = 1.5;  // Uncommon
-      if (!this.glyphs.some(e => e.strength >= strengthThreshold)) {
-        let newStrength;
-        do {
-          newStrength = GlyphGenerator.randomStrength(false);
-        } while (newStrength < strengthThreshold);
-        this.glyphs[Math.floor(random() * this.glyphs.length)].strength = newStrength;
-      }
-    }
     ui.view.modal.glyphSelection = true;
+    if (!Perk.glyphUncommonGuarantee.isBought) return;
+    // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+    const strengthThreshold = 1.5;  // Uncommon
+    if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
+    let newStrength;
+    do {
+      newStrength = GlyphGenerator.randomStrength(false);
+    } while (newStrength < strengthThreshold);
+    this.glyphs.randomElement().strength = newStrength;
   },
   update(level) {
-    this.glyphs.forEach(g => {
-      if (g.level < level) {
+    for (let g of this.glyphs.filter(g => g.level < level)) {
         g.level = level;
         fixGlyph(g);
-      }
-    })
+    }
   },
   select(index) {
     ui.view.modal.glyphSelection = false;
@@ -45,7 +42,7 @@ function confirmReality() {
       "life upgrades, and unlock various upgrades.")
 }
 
-function realityAvailable() {
+function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
@@ -54,10 +51,10 @@ function realityAvailable() {
  * process, if applicable. Auto sacrifice is never triggered.
  */
 function requestManualReality() {
-  if (GlyphSelection.active || !realityAvailable() || !confirmReality()) {
+  if (GlyphSelection.active || !isRealityAvailable() || !confirmReality()) {
     return;
   }
-  if (!Glyphs.freeInventorySpace()) {
+  if (!Player.hasFreeInventorySpace) {
     alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
@@ -67,8 +64,8 @@ function requestManualReality() {
     Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
     return manualReality();
   }
-  let numChoices = Perk.glyphChoice4.isBought  ? 4 : 3;
-  GlyphSelection.generate(numChoices, gainedGlyphLevel());
+  const choiceCount = Perk.glyphChoice4.isBought  ? 4 : 3;
+  GlyphSelection.generate(choiceCount, gainedGlyphLevel());
 }
 
 function manualReality() {
@@ -93,17 +90,18 @@ function manualReality() {
 }
 
 function autoReality() {
-  if (GlyphSelection.active || !realityAvailable()) return;
+  if (GlyphSelection.active || !isRealityAvailable()) return;
   let newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
-    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Glyphs.freeInventorySpace()) {
+    if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
+      // FIXME: remove console.log after initial rollout to testers
       console.log("Sacrificing a glyph: ")
       console.log(newGlyph);
       sacrificeGlyph(newGlyph, true);
       newGlyph = null;
     }
   }
-  if (newGlyph && Glyphs.freeInventorySpace()) {
+  if (newGlyph && Player.hasFreeInventorySpace) {
     Glyphs.addToInventory(newGlyph);
   }
   completeReality(false, false);

@@ -48,7 +48,7 @@ Vue.component("sacrificed-glyphs", {
   },
   computed: {
     anySacrifices() {
-      return !this.sacrificed.every(t => t.amount == 0);
+      return this.sacrificed.some(t => t.amount !== 0);
     }
   },
   methods: {
@@ -60,7 +60,8 @@ Vue.component("sacrificed-glyphs", {
     }
   },
   template: /*html*/`
-  <div v-show="anySacrifices" class="c-sacrificed-glyphs l-sacrificed-glyphs">
+  <div v-show="anySacrifices"
+       class="c-sacrificed-glyphs l-sacrificed-glyphs">
     <div class="c-sacrificed-glyphs__header">Sacrifices:</div>
     <template v-for="sacInfo in sacrificed">
       <type-sacrifice v-if="sacInfo.amount > 0" v-bind="sacInfo"/>

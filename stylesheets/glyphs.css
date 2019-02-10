@@ -17,8 +17,6 @@
   opacity: 0.5;
 }
 
-.l-glyph-effect-values__effect {}
-
 .l-glyph-sacrifice-options {
   display: inline-flex;
   flex-direction: column;
@@ -207,8 +205,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 274px;
-  padding: 5px 0;
+  width: 27.4rem;
+  padding: 0.5rem 0;
   position: absolute;
   z-index: 4;
   transform: translate(-50%, calc(-100% - 1rem));
@@ -232,8 +230,8 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
+  margin-left: -0.5rem;
+  border-width: 0.5rem;
   border-style: solid;
   border-color: #4a4a4a transparent transparent transparent;
   pointer-events: none;
@@ -356,9 +354,9 @@
 }
 
 .c-current-glyph-effects {
-  border: 1px solid rgb(184, 184, 184);
-  border-radius: 5px;
-  padding: 12px;
+  border: 0.1rem solid rgb(184, 184, 184);
+  border-radius: 0.5rem;
+  padding: 1.2rem;
   margin-top: 0;
   margin-left: 1rem;
   margin-right: 1rem;
@@ -381,8 +379,8 @@
 }
 
 .c-sacrificed-glyphs {
-  border: 1px solid rgb(184, 184, 184);
-  border-radius: 5px;
+  border: 0.1rem solid rgb(184, 184, 184);
+  border-radius: 0.5rem;
   padding-bottom: 1rem;
 }
 

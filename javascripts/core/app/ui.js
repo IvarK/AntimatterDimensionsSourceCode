@@ -148,8 +148,7 @@ ui = new Vue({
     scroll(t) {
       const now = Date.now();
       if (this.view.scrollWindow) {
-        let scrollY = $(window).scrollTop();
-        $(window).scrollTop(scrollY + this.view.scrollWindow * (now - t) / 2);
+        window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
         setTimeout(() => this.scroll(now), 20);
       }
     },

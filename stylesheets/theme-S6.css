@@ -198,18 +198,6 @@ input {
     background-color: #0b600e !important;
 }
 
-#glyphs .glyphbg {
-    background: #333333 !important;
-}
-
-#glyphslots .glyphactive {
-    background: #333333 !important;
-}
-
-#glyphs .empty {
-    background: #333333 !important;
-}
-
 .automatorinstruction.command {
     background-color: black !important;
 }

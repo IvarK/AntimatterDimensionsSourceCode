@@ -25,12 +25,21 @@ Vue.component("current-glyph-effects", {
   },
   data: function () {
     return {
-      effects: Glyphs.activeEffects,
+      effects: [],
     };
   },
   computed: {
     isSoftcapActive() {
       return this.effects.length && !this.effects.every(e => e.value.capped === false);
+    }
+  },
+  created() {
+    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
+  },
+  methods: {
+    glyphsChanged() {
+      this.effects = getActiveGlyphEffects();
     }
   },
   template: /*html*/`

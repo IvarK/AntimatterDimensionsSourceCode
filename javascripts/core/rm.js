@@ -150,19 +150,13 @@ const GlyphGenerator = {
   },
 
   copy(glyph) {
-    return deepmerge({}, glyph);
+    return glyph ? deepmerge({}, glyph) : glyph;
   },
 };
 
 const Glyphs = {
   inventory: [],
-  // This is a reactified copy:
-  inventoryCopy: [],
   active: [],
-  // This is a reactified copy:
-  activeCopy: [],
-  // This is reactified as well:
-  activeEffects: [],
   findFreeIndex() {
     this.validate();
     return this.inventory.indexOf(null);
@@ -173,16 +167,11 @@ const Glyphs = {
   },
   refresh() {
     this.active = new Array(player.reality.glyphs.slots).fill(null);
-    this.activeCopy.splice(0);
-    for (let idx = 0; idx < player.reality.glyphs.slots; ++idx) {
-      Vue.set(this.activeCopy, idx, null);
-    }
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")
       }
       this.active[g.idx] = g;
-      Vue.set(this.activeCopy, g.idx, GlyphGenerator.copy(g));
     }
     this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
     // Glyphs could previously end up occupying the same inventory slot (Stacking)
@@ -208,11 +197,9 @@ const Glyphs = {
     while (stacked.length) {
       this.removeFromInventory(stacked.pop());
     }
-    this.inventoryCopy.splice(0);
-    this.inventoryCopy.push(...this.inventory.map(e => e ? GlyphGenerator.copy(e) : null));
     this.validate();
-    this.updateActiveEffects();
     checkGlyphAchievements();
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -228,15 +215,13 @@ const Glyphs = {
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw crash("Inconsistent inventory indexing");
     }
-    if (this.active[targetSlot] === null) {
-      this.removeFromInventory(glyph);
-      player.reality.glyphs.active.push(glyph);
-      glyph.idx = targetSlot;
-      this.active[targetSlot] = glyph;
-      Vue.set(this.activeCopy, targetSlot, GlyphGenerator.copy(glyph));
-    }
+    if (this.active[targetSlot] !== null) return;
+    this.removeFromInventory(glyph);
+    player.reality.glyphs.active.push(glyph);
+    glyph.idx = targetSlot;
+    this.active[targetSlot] = glyph;
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
-    this.updateActiveEffects();
   },
   unequipAll() {
     while (player.reality.glyphs.active.length) {
@@ -244,10 +229,9 @@ const Glyphs = {
       if (freeIndex < 0) break;
       let glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
-      Vue.set(this.activeCopy, glyph.idx, null);
       Glyphs.addToInventory(glyph);
     }
-    this.updateActiveEffects();
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
@@ -261,11 +245,8 @@ const Glyphs = {
     if (this.inventory[targetSlot] === null) {
       this.inventory[glyph.idx] = null;
       this.inventory[targetSlot] = glyph;
-      let glyphCopy = this.inventoryCopy[glyph.idx];
-      Vue.set(this.inventoryCopy, targetSlot, glyphCopy);
-      Vue.set(this.inventoryCopy, glyph.idx, null)
-      glyphCopy.idx = targetSlot;
       glyph.idx = targetSlot;
+      GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
       console.log("inventory slot full")
     }
@@ -273,17 +254,13 @@ const Glyphs = {
   },
   swap(glyphA, glyphB) {
     this.validate();
-    let aCopy = this.inventoryCopy[glyphA.idx];
-    let bCopy = this.inventoryCopy[glyphB.idx];
-    Vue.set(this.inventoryCopy, aCopy.idx, bCopy);
-    Vue.set(this.inventoryCopy, bCopy.idx, aCopy);
-    aCopy.idx = glyphB.idx;
-    bCopy.idx = glyphA.idx;
     this.inventory[glyphA.idx] = glyphB;
     this.inventory[glyphB.idx] = glyphA;
-    glyphA.idx = aCopy.idx;
-    glyphB.idx = bCopy.idx;
+    const tmp = glyphA.idx;
+    glyphA.idx = glyphB.idx;
+    glyphB.idx = tmp;
     this.validate();
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   addToInventory(glyph) {
     this.validate();
@@ -291,9 +268,9 @@ const Glyphs = {
     if (index < 0) return;
     this.inventory[index] = glyph;
     glyph.idx = index;
-    Vue.set(this.inventoryCopy, index, GlyphGenerator.copy(glyph));
     player.reality.glyphs.inventory.push(glyph);
     checkGlyphAchievements();
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   removeFromInventory(glyph) {
@@ -302,9 +279,9 @@ const Glyphs = {
     let index = player.reality.glyphs.inventory.indexOf(glyph);
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
-    Vue.set(this.inventoryCopy, glyph.idx, null);
     player.reality.glyphs.inventory.splice(index, 1);
     checkGlyphAchievements();
+    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   validate() {
@@ -317,17 +294,7 @@ const Glyphs = {
       if (this.inventory[i] && this.inventory[i].idx !== i) {
         throw crash("backwards validation error");
       }
-      if (this.inventoryCopy[i] && (!this.inventory[i] || this.inventoryCopy[i].id != this.inventory[i].id)) {
-        throw crash("inconsistent inventory copy")
-      }
-      if (this.inventory[i] && (!this.inventoryCopy[i] || this.inventoryCopy[i].id != this.inventory[i].id)) {
-        throw crash("inconsistent inventory copy")
-      }
     }
-  },
-  updateActiveEffects() {
-    this.activeEffects.splice(0);
-    this.activeEffects.push(...getActiveGlyphEffects());
   },
 };
 

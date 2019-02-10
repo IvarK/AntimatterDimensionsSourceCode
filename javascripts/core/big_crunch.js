@@ -188,7 +188,7 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
   }
 
   get canBeApplied() {
-    return this.upgrade.isBought && this.upgrade.isCharged;
+    return this._upgrade.isBought && this._upgrade.isCharged;
   }
 }
 
@@ -196,7 +196,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   constructor(config, requirement) {
     super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
-    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged);
+    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
   }
 
   get isAvailable() {
@@ -213,8 +213,8 @@ class InfinityUpgrade extends PurchasableMechanicState {
 
   purchase() {
     if (!this.canBeBought) {
-      if (this.canCharge) this.charge()
-      else if (this.isCharged) this.disCharge()
+      if (this.canCharge) this.charge();
+      else if (this.isCharged) this.disCharge();
       return false;
     }
     this.collection.push(this.id);
@@ -225,20 +225,20 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   get isCharged() {
-    return player.celestials.ra.charged.includes(this.id)
+    return player.celestials.ra.charged.includes(this.id);
   }
 
   get canCharge() {
-    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0
+    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0;
   }
 
   charge() {
-    player.celestials.ra.charged.push(this.id)
+    player.celestials.ra.charged.push(this.id);
   }
 
   disCharge() {
-    const charged = player.celestials.ra.charged
-    charged.splice(charged.indexOf(this.id), 1)
+    const charged = player.celestials.ra.charged;
+    charged.splice(charged.indexOf(this.id), 1);
   }
 }
 

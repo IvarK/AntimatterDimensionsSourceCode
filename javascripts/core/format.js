@@ -41,6 +41,10 @@ function formatX(value, places, placesUnder1000) {
   return shorten(value, places, placesUnder1000) + "x";
 }
 
+function formatPow(value, places, placesUnder1000) {
+  return "^" + shorten(value, places, placesUnder1000);
+}
+
 function formatPercents(value, places) {
   const placesOOM = Math.pow(10, places);
   return Math.round(value * 100 * placesOOM) / placesOOM + "%";

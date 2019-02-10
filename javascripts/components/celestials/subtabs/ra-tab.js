@@ -4,7 +4,10 @@ Vue.component('ra-tab', {
       fillPercentage: "",
       exp: 0,
       expRequired: 0,
-      level: 0
+      level: 0,
+      totalCharges: 0,
+      unlocks: [],
+      realityReward: 0
     };
   },
   methods: {
@@ -13,7 +16,21 @@ Vue.component('ra-tab', {
       this.exp = player.celestials.ra.exp
       this.expRequired = Ra.requiredExp
       this.level = player.celestials.ra.level
+      this.totalCharges = Ra.superChargedUpgrades
+      this.unlocks = player.celestials.ra.unlocks
+      this.realityReward = Ra.realityReward
     },
+    has(id) {
+      return this.unlocks.includes(id)
+    },
+    startRun() {
+      Ra.startRun()
+    }
+  },
+  computed: {
+    raUnlocks() {
+      return RA_UNLOCKS
+    }
   },
   template:
     `<div class="l-ra-celestial-tab">
@@ -26,5 +43,17 @@ Vue.component('ra-tab', {
           </div>
         </div>
       </div>
+      <div>You can supercharge {{ totalCharges }} Infinity Upgrades.</div>
+      <div class="l-ra-unlocks-container">
+        <div class="c-ra-unlock" v-for="unlock in raUnlocks" :class="{'c-ra-unlock-unlocked': has(unlock.id)}">
+          <b>{{ unlock.description }}</b>
+          <p>Reward: {{ unlock.reward }}</p>
+        </div>
+      </div>
+      <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
+      Start Ra's Reality, you can't dimension boost, galaxy or get replicanti galaxies.
+      <br><br>
+      Multiply Teresa memory gain based on highest EP reached, Currently: {{ shorten(realityReward, 2, 2)}}x
+      </button>
     </div>`
 });

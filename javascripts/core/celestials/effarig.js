@@ -7,7 +7,8 @@ var teresaQuotes = [
   "Prove your worth.",
   "I'll let you inside my Reality, mortal. Don't get crushed by it.",
   "You've proven your worth mortal, if you wish to join us you need to start over...",
-  "Why are you still here... You were supposed to vanish... You are still no match for us though."
+  "Why are you still here... You were supposed to vanish... You are still no match for us.",
+  "I hope the others succeed where I have failed."
 ]
 
 const TERESA_UNLOCKS = {
@@ -38,10 +39,11 @@ var Teresa = {
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
   pourRM(diff) {
+    if (this.rmstore >= 1e24) return
     this.timePoured += diff
     let rm = player.reality.realityMachines;
     let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber())
-    this.rmStore += rmPoured
+    this.rmStore += Math.min(rmPoured, 1e24 - this.rmStore)
     player.reality.realityMachines = rm.minus(rmPoured)
     this.checkForUnlocks()
   },

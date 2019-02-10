@@ -39,6 +39,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier
       .timesEffectsOf(
         InfinityUpgrade.unspentIPMult,
+        InfinityUpgrade.unspentIPMult.chargedEffect,
         Achievement(28),
         Achievement(31),
         Achievement(68),
@@ -103,13 +104,13 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
-  /*multiplier = multiplier
+  multiplier = multiplier
     .powEffectsOf(
       dimension.infinityUpgrade.chargedEffect,
       InfinityUpgrade.totalTimeMult.chargedEffect,
-      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
     )
-*/
+
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
@@ -181,6 +182,8 @@ function getDimensionPowerMultiplier(tier) {
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
   dimMult = Decimal.pow(getAdjustedGlyphEffect("effarigforgotten"), NormalDimension(tier).bought/10).times(dimMult)
+
+  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect)
 
   return dimMult;
 }

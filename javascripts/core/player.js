@@ -379,6 +379,7 @@ var player = {
       relicShards: 0,
       unlocks: [],
       run: false,
+      quoteIdx: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
@@ -389,12 +390,14 @@ var player = {
     },
     enslaved: {
       isStoring: false,
+      quoteIdx: 0,
       stored: 0,
       unlocks: [],
       run: false
     },
     v: {
       unlocks: [],
+      quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
       additionalStudies: 0
@@ -404,7 +407,9 @@ var player = {
       exp: 0,
       unlocks: [],
       run: false,
-      charged: []
+      charged: [],
+      quoteIdx: 0,
+      maxEpGained: new Decimal(0)
     }
   },
   autoEcIsOn: true,

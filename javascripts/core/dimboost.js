@@ -30,7 +30,7 @@ class DimBoost {
         Achievement(101),
         Achievement(142),
         GlyphEffect.dimBoostPower
-      );
+      ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
   }
 
   static get maxShiftTier() {
@@ -134,6 +134,7 @@ function skipResetsIfPossible() {
 
 function softResetBtnClick() {
   if ((!player.break && player.money.gt(Number.MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
+  if (Ra.isRunning) return;
   auto = false;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1)

@@ -9,6 +9,21 @@ Vue.component("description-display", {
       description: String.empty
     };
   },
+  watch: {
+    config: {
+      immediate: true,
+      handler(config) {
+        if (config === undefined) return;
+        const description = config.description;
+        if (description === undefined) return;
+        if (typeof description !== "function") {
+          this.description = description;
+          return;
+        }
+        this.updateFn = () => this.description = description();
+      }
+    }
+  },
   computed: {
     classObject() {
       const name = this.name;
@@ -21,17 +36,10 @@ Vue.component("description-display", {
       return classObject;
     }
   },
-  created() {
-    if (this.config === undefined) return;
-    const description = this.config.description;
-    if (description === undefined) return;
-    if (typeof description !== "function") {
-      this.description = description;
-      return;
+  methods: {
+    update() {
+      if (this.updateFn) this.updateFn();
     }
-    const update = () => this.description = description();
-    this.on$(GameEvent.UPDATE, update);
-    update();
   },
   template: `<span :class="classObject">{{description}}</span>`
 });

@@ -1,6 +1,11 @@
 
 var effarigQuotes = [
-  
+  "Welcome to my humble Abode.",
+  "I am Effarig, the celestial of Glyphs.",
+  "Unlike Teresa, I enforce my will using Shards.",
+  "These will empower you.",
+  "They will also shackle you.",
+  "Welcome to my reign."
 ]
 
 const EFFARIG_UNLOCKS = {
@@ -80,5 +85,11 @@ var Effarig = {
   },
   get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
-  }
+  },
+  get quote() {
+    return effarigQuotes[player.celestials.effarig.quoteIdx]
+  },
+  nextQuote() {
+    if (player.celestials.effarig.quoteIdx < 4 + player.celestials.effarig.unlocks.length) player.celestials.effarig.quoteIdx++
+  },
 };

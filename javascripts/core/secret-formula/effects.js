@@ -113,6 +113,24 @@ Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
   return result;
 };
 
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.powEffectsOf = function(effectSource) {
+  let result = this;
+  effectSource.applyEffect(v => result = result.pow(v));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.powEffectsOf = function(...effectSources) {
+  let result = this;
+  applyEffectsOf(effectSources, v => result = result.pow(v));
+  return result;
+};
+
 function applyEffectsOf(effectSources, applyFn) {
   for (let effectSource of effectSources.filter(s => s !== null && s !== undefined)) {
     effectSource.applyEffect(applyFn);

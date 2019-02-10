@@ -403,7 +403,8 @@ var player = {
       level: 1,
       exp: 0,
       unlocks: [],
-      run: false
+      run: false,
+      charged: []
     }
   },
   autoEcIsOn: true,

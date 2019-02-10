@@ -181,14 +181,64 @@ function totalIPMult() {
   return ipMult;
 }
 
+class ChargedInfinityUpgradeState extends GameMechanicState {
+  constructor(config, upgrade) {
+    super(config);
+    this._upgrade = upgrade;
+  }
+
+  get canBeApplied() {
+    return this.upgrade.isBought && this.upgrade.isCharged;
+  }
+}
+
 class InfinityUpgrade extends PurchasableMechanicState {
   constructor(config, requirement) {
     super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
+    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged);
   }
 
   get isAvailable() {
     return this._requirement === undefined || this._requirement.isBought;
+  }
+
+  get canBeApplied() {
+    return this.isBought && !this.isCharged;
+  }
+  
+  get chargedEffect() {
+    return this._chargedEffect;
+  }
+
+  purchase() {
+    if (!this.canBeBought) {
+      if (this.canCharge) this.charge()
+      else if (this.isCharged) this.disCharge()
+      return false;
+    }
+    this.collection.push(this.id);
+    const currency = this._currency.value;
+    this._currency.value = currency.minus(this.cost);
+    GameUI.update();
+    return true;
+  }
+
+  get isCharged() {
+    return player.celestials.ra.charged.includes(this.id)
+  }
+
+  get canCharge() {
+    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0
+  }
+
+  charge() {
+    player.celestials.ra.charged.push(this.id)
+  }
+
+  disCharge() {
+    const charged = player.celestials.ra.charged
+    charged.splice(charged.indexOf(this.id), 1)
   }
 }
 

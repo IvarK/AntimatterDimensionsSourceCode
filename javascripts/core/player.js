@@ -398,6 +398,12 @@ var player = {
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
       additionalStudies: 0
+    },
+    ra: {
+      level: 1,
+      exp: 0,
+      unlocks: [],
+      run: false
     }
   },
   autoEcIsOn: true,

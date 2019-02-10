@@ -81,6 +81,7 @@ function reality(force, reset, auto) {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === 'effarig' || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) Ra.giveExp(Ra.gainedExp(gainedGlyphLevel()))
   }
 
   if (player.reality.respec) {

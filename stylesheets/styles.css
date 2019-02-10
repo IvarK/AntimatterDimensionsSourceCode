@@ -5069,6 +5069,30 @@ screen and (max-width: 480px) {
 
 /* #endregion v tab*/
 
+/* #startregion ra tab */
+
+.c-ra-teresa-experience {
+  width: 30rem;
+  display: inline-block;
+  height: 1.5rem;
+  border: 2px solid grey;
+  position: relative;
+}
+
+.c-ra-teresa-experience-inner {
+  height: 100%;
+  background-color: #35d035;
+}
+
+.o-ra-exp-display {
+  vertical-align: super;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 16px);
+}
+
+/* #endregion ra tab*/
+
 .c-performance-stats {
   width: 25rem;
   padding: .3rem;

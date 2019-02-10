@@ -161,7 +161,7 @@ dev.giveMusicGlyph = function() {
   dev.giveSpecialGlyph("#FF80AB", "266b", 1)
 }
 
-dev.giveGlyph = function () {
+dev.giveGlyph = function (level) {
   if (!Player.hasFreeInventorySpace) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
 }

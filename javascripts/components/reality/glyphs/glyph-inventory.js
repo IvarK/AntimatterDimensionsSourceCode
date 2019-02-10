@@ -1,12 +1,16 @@
 Vue.component("glyph-inventory", {
   data: function () {
     return {
-      inventory: Glyphs.inventoryCopy,
+      inventory: [],
     };
   },
   computed: {
     rowCount: () => 10,
     colCount: () => 10,
+  },
+  created() {
+    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   methods: {
     toIndex(row, col) {
@@ -32,6 +36,9 @@ Vue.component("glyph-inventory", {
         let tempAudio = new Audio(`images/note${col}.mp3`);
         tempAudio.play();
       }
+    },
+    glyphsChanged() {
+      this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
     },
   },
   template: /*html*/`

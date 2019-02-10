@@ -1,7 +1,7 @@
 Vue.component("equipped-glyphs", {
   data: function () {
     return {
-      glyphs: Glyphs.activeCopy,
+      glyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
     };
@@ -27,6 +27,10 @@ Vue.component("equipped-glyphs", {
         ? "Respec is active and will place your currently - equipped glyphs into your inventory after reality."
         : "Your currently-equipped glyphs will stay equipped on reality.";
     },
+  },
+  created() {
+    this.on$(GameEvent.GLYPHS_CHANGED, this.glyphsChanged);
+    this.glyphsChanged();
   },
   methods: {
     glyphX(idx) {
@@ -57,7 +61,10 @@ Vue.component("equipped-glyphs", {
     },
     update() {
       this.respec = player.reality.respec;
-    }
+    },
+    glyphsChanged() {
+      this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
+    },
   },
   template: /*html*/`
   <div class="l-equipped-glyphs">

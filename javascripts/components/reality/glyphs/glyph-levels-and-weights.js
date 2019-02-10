@@ -16,9 +16,9 @@ Vue.component("glyph-levels-and-weights", {
       rows: 3,
     }
   },
-  created() { // private data to deal with weight allocation
+  created() { // Private data to deal with weight allocation
     this.resetSavedWeights();
-    this.lastInstability = 0; // used to debounce this row disappearing
+    this.lastInstability = 0; // Used to debounce this row disappearing
   },
   computed: {
     gridStyle() {
@@ -42,10 +42,10 @@ Vue.component("glyph-levels-and-weights", {
     rowStyleEternities() {
       return this.makeRowStyle(4);
     },
-    rowStylePerkShop() { // perk shop will only ever show up with eternities unlocked
+    rowStylePerkShop() { // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(5);
     },
-    rowStylePenalty() { // perk shop will only ever show up with eternities unlocked
+    rowStylePenalty() { // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
     },
     rowStylePerk() {

@@ -147,7 +147,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["time"],
     singleDesc: "Free tickspeed threshold multiplier ×{value}",
     genericDesc: "Free tickspeed cost multiplier",
-    // accurately represent what the multiplier actually does in code, assuming TS171
+    // Accurately represent what the multiplier actually does in code, assuming TS171
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.
     /** @type{function(number): string} */

@@ -87,19 +87,19 @@ const GlyphTooltipComponent = {
       } : {};
     },
     pointerEventStyle() {
-      // with mice, it's nice to just totally disable mouse events on the tooltip,
+      // With mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
       return this.onTouchDevice ? {} : { "pointer-events": "none" };
     }
   },
   methods: {
     touchStart() {
-      // we _don't_ preventDefault here because we want the event to turn into a local
+      // We _don't_ preventDefault here because we want the event to turn into a local
       // dragstart that we can intercept
       this.$parent.$emit("tooltip-touched");
     },
     dragStart(ev) {
-      // prevent dragging by tooltip on mobile
+      // Prevent dragging by tooltip on mobile
       ev.preventDefault();
       ev.stopPropagation();
     },
@@ -168,7 +168,7 @@ Vue.component("glyph-component", {
     return {
       componentID: UIID.next(),
       isDragging: false,
-      // this flag is used to prevent the tooltip from being shown in some touch event sequences
+      // This flag is used to prevent the tooltip from being shown in some touch event sequences
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,

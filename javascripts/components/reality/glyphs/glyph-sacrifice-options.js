@@ -24,7 +24,7 @@ const AutoSacTypeTab = {
       };
     },
     minScoreInputStyle() {
-      // override some properties of the number input to match row style:
+      // Override some properties of the number input to match row style:
       return {
         "font-size": "larger",
         "border-width": "0.2rem",

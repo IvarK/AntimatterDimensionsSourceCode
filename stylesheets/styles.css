@@ -5095,6 +5095,15 @@ screen and (max-width: 480px) {
   left: calc(50% - 16px);
 }
 
+.l-ra-teresa-container {
+  border: 2px solid gainsboro;
+  background: whitesmoke;
+  width: 35rem;
+  padding: 1rem;
+  border-radius: .5rem;
+  margin: auto;
+}
+
 /* #endregion ra tab*/
 
 .c-performance-stats {

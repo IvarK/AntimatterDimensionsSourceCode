@@ -103,6 +103,13 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
+  /*multiplier = multiplier
+    .powEffectsOf(
+      dimension.infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
+    )
+*/
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {

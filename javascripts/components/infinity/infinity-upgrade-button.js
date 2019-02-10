@@ -38,7 +38,7 @@ Vue.component("infinity-upgrade-button", {
   },
   template:
     `<button :class="classObject" @click="upgrade.purchase()">
-      <description-display v-if="isCharged" :config="chargedDescriptionConfig"/>
+      <span v-if="isCharged"> {{ chargedDescriptionConfig.description }}</span>
       <description-display v-else :config="config"/>
       <effect-display br :config="config" />
       <cost-display br

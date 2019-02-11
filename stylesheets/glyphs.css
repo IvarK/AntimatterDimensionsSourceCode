@@ -22,10 +22,24 @@
   flex-direction: column;
   padding: 2rem;
   margin-top: 2rem;
+  position: relative;
 }
 
 .c-glyph-sacrifice-options {
   background: black;
+}
+
+.l-glyph-sacrifice-options__help {
+  position: absolute;
+  left: calc(100% - 0.2rem);
+  top: 0.2rem;
+  transform: translateX(-100%);
+  z-index: 3;
+}
+
+.c-glyph-sacrifice-options__help {
+  color: #d5ffd7;
+  font-size: 1.2rem;
 }
 
 .l-glyph-sacrifice-options__option {

@@ -9,10 +9,10 @@ const GlyphTooltipEffect = {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     prefix() {
-      return this.effectConfig.singleDescSplit[0].replace("<br>", "\n");
+      return this.effectConfig.singleDescSplit[0].replace("\n", "<br>");
     },
     suffix() {
-      return this.effectConfig.singleDescSplit[1].replace("<br>", "\n");
+      return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
     },
     displayValue() {
       let value = this.effectConfig.formatEffect(this.value);
@@ -29,11 +29,11 @@ const GlyphTooltipEffect = {
   },
   template: /*html*/`
     <div class="c-glyph-tooltip__effect">
-      {{prefix}}
+      <span v-html="prefix"/>
       <span :style="valueStyle">{{displayValue}}</span>
-      {{suffix}}
+      <span v-html="suffix"/>
     </div>
-  `
+    `
 };
 
 const GlyphTooltipComponent = {
@@ -310,6 +310,8 @@ Vue.component("glyph-component", {
       ev.dataTransfer.setData(GLYPH_MIME_TYPE, this.glyph.id.toString());
       ev.dataTransfer.dropEffect = "move";
       this.$viewModel.draggingUIID = this.componentID;
+      const rect = this.$refs.over.getBoundingClientRect();
+      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX-rect.left, ev.clientY-rect.top);
     },
     dragEnd() {
       this.isDragging = false;

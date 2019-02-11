@@ -222,7 +222,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationglyphlevel",
     glyphTypes: ["replication"],
-    singleDesc: "Replicanti scaling for next glyph level: <br>^0.4 ➜ ^(0.4 + {value})",
+    singleDesc: "Replicanti scaling for next glyph level: \n^0.4 ➜ ^(0.4 + {value})",
     totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
     genericDesc: "Replicanti scaling for glyph level",
     combine: effects => {
@@ -241,7 +241,7 @@ GameDatabase.reality.glyphEffects = [
     id: "infinityrate",
     glyphTypes: ["infinity"],
 
-    singleDesc: "Infinity power conversion rate: <br>^7 ➜ ^(7 + {value})",
+    singleDesc: "Infinity power conversion rate: \n^7 ➜ ^(7 + {value})",
     totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
     genericDesc: "Infinity power conversion rate",
     formatEffect: x => x.toFixed(2),

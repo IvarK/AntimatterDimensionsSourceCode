@@ -384,7 +384,6 @@ var player = {
         dt: 25,
         eternities: 25
       },
-      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"],
       autoGlyphSac: {
         mode: AutoGlyphSacMode.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({

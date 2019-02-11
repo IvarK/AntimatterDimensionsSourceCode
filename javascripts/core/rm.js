@@ -19,17 +19,16 @@ function strengthToRarity(x) {
 }
 
 const AutoGlyphSacrifice = {
-  set mode(value) {
-    player.celestials.effarig.autoGlyphSac.mode = value;
-  },
   get mode() {
     return player.celestials.effarig.autoGlyphSac.mode;
+  },
+  set mode(value) {
+    player.celestials.effarig.autoGlyphSac.mode = value;
   },
   get types() {
     return player.celestials.effarig.autoGlyphSac.types;
   },
   comparedToThreshold(glyph) {
-    console.log(glyph);
     let typeCfg = AutoGlyphSacrifice.types[glyph.type];
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
       return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
@@ -38,49 +37,47 @@ const AutoGlyphSacrifice = {
       let glyphScore = strengthToRarity(glyph.strength) +
         Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
       return glyphScore - typeCfg.scoreThreshold;
-    } else {
-      return strengthToRarity(glyph.strength)
     }
+    return strengthToRarity(glyph.strength)
   },
   wouldSacrifice(glyph) {
-    console.log(glyph);
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.NONE) return false;
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALL) return true;
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLD ||
-      AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) return this.comparedToThreshold(glyph) < 0;
+    switch (AutoGlyphSacrifice.mode) {
+      case AutoGlyphSacMode.NONE: return false;
+      case AutoGlyphSacMode.ALL: return true;
+      case AutoGlyphSacMode.RARITY_THRESHOLD:
+      case AutoGlyphSacMode.ADVANCED:
+        return this.comparedToThreshold(glyph) < 0;
+    }
     throw crash("Unknown auto glyph sacrifice mode");
   },
 };
 
 const AutoGlyphPicker = {
-  set mode(value) {
-    player.celestials.effarig.autoGlyphPick.mode = value;
-  },
   get mode() {
     return player.celestials.effarig.autoGlyphPick.mode;
+  },
+  set mode(value) {
+    player.celestials.effarig.autoGlyphPick.mode = value;
   },
   getPickScore(glyph) {
     // This function is non-deterministic, keep that in mind when calling it
     // (for example, cache the results).
-    if (AutoGlyphPicker.mode === AutoGlyphPickMode.RANDOM) return Math.random();
-    if (AutoGlyphPicker.mode === AutoGlyphPickMode.RARITY) return strengthToRarity(glyph.strength);
-    if (AutoGlyphPicker.mode === AutoGlyphPickMode.ABOVE_SACRIFICE_THRESHOLD) {
-      let comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
-      if (comparedToThreshold < 0) {
-        // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
-        // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
-        return strengthToRarity(glyph.strength) - 1000;
-      } else {
-        return comparedToThreshold;
-      }
-    } else {
-      throw crash("Unknown auto glyph picker mode");
+    switch (AutoGlyphPicker.mode) {
+      case AutoGlyphPickMode.RANDOM: return Math.random();
+      case AutoGlyphPickMode.RARITY: return strengthToRarity(glyph.strength);
+      case AutoGlyphPickMode.ABOVE_SACRIFICE_THRESHOLD:
+        let comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
+        if (comparedToThreshold < 0) {
+          // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
+          // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
+          return strengthToRarity(glyph.strength) - 1000;
+        } else {
+          return comparedToThreshold;
+        }
     }
+    throw crash("Unknown auto glyph picker mode");
   },
   pick(glyphs) {
-    // Remove before accepting PR
-    console.log('Glyphs:', glyphs.map(g => ({glyph: g, score: this.getPickScore(g)})));
-    console.log('Chosen glyph:', glyphs.map(g => ({glyph: g, score: this.getPickScore(g)})).reduce((x, y) => x.score > y.score ? x : y));
     return glyphs.map(g => ({glyph: g, score: this.getPickScore(g)})).reduce((x, y) => x.score > y.score ? x : y).glyph;
   }
 };

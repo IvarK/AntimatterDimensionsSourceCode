@@ -6,6 +6,9 @@ const GlyphSelection = {
   get active() {
     return ui.view.modal.glyphSelection;
   },
+  get choiceCount() {
+    return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
+  },
   generate(count, level) {
     this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
     ui.view.modal.glyphSelection = true;
@@ -46,10 +49,6 @@ function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
-function numberOfGlyphChoices() {
-  return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
-}
-
 /**
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
@@ -64,7 +63,7 @@ function requestManualReality() {
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
-  let choiceCount = numberOfGlyphChoices();
+  let choiceCount = GlyphSelection.choiceCount;
   if (choiceCount === 1) {
     Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
     return manualReality();
@@ -95,12 +94,14 @@ function manualReality() {
 
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
+  let gainedLevel = gainedGlyphLevel();
   let newGlyph;
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
-    let glyphs = [...Array(numberOfGlyphChoices())].map(() => GlyphGenerator.randomGlyph(gainedGlyphLevel()));
+    let glyphs = Array.range(0, GlyphSelection.choiceCount).
+      map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
   }
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {

@@ -71,14 +71,16 @@ const AutoGlyphPicker = {
           // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
           // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
           return strengthToRarity(glyph.strength) - 1000;
-        } else {
-          return comparedToThreshold;
         }
+        return comparedToThreshold;
     }
     throw crash("Unknown auto glyph picker mode");
   },
   pick(glyphs) {
-    return glyphs.map(g => ({glyph: g, score: this.getPickScore(g)})).reduce((x, y) => x.score > y.score ? x : y).glyph;
+    return glyphs
+      .map(g => ({glyph: g, score: this.getPickScore(g)}))
+      .reduce((x, y) => x.score > y.score ? x : y)
+      .glyph;
   }
 };
 

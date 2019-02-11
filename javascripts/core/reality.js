@@ -97,8 +97,8 @@ function autoReality() {
   let gainedLevel = gainedGlyphLevel();
   let newGlyph;
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
-    let glyphs = Array.range(0, GlyphSelection.choiceCount).
-      map(() => GlyphGenerator.randomGlyph(gainedLevel));
+    let glyphs = Array.range(0, GlyphSelection.choiceCount)
+      .map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
     newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);

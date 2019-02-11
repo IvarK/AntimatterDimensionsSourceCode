@@ -28,13 +28,13 @@ Vue.component("glyph-auto-pick-options", {
   },
   template: /*html*/`
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <div :class="optionClass(0)" @click="setMode(modes.RANDOM)">
+    <div :class="optionClass(modes.RANDOM)" @click="setMode(modes.RANDOM)">
       Auto pick random
     </div>
-    <div :class="optionClass(1)" @click="setMode(modes.RARITY)">
+    <div :class="optionClass(modes.RARITY)" @click="setMode(modes.RARITY)">
       Auto pick rarest
     </div>
-    <div :class="optionClass(2)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
+    <div :class="optionClass(modes.ABOVE_SACRIFICE_THRESHOLD)" @click="setMode(modes.ABOVE_SACRIFICE_THRESHOLD)">
       Auto pick farthest above threshold
     </div>
   </div>

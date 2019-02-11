@@ -166,16 +166,16 @@ Vue.component("glyph-sacrifice-options", {
   },
   template: /*html*/`
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <div :class="optionClass(0)" @click="setMode(modes.NONE)">
+    <div :class="optionClass(modes.NONE)" @click="setMode(modes.NONE)">
       Auto sacrifice disabled
     </div>
-    <div :class="optionClass(1)" @click="setMode(modes.ALL)">
+    <div :class="optionClass(modes.ALL)" @click="setMode(modes.ALL)">
       Auto sacrifice all
     </div>
-    <div :class="optionClass(2)" @click="setMode(modes.RARITY_THRESHOLDS)">
+    <div :class="optionClass(modes.RARITY_THRESHOLDS)" @click="setMode(modes.RARITY_THRESHOLDS)">
       Set rarity requirements
     </div>
-    <div :class="optionClass(3)" @click="setMode(modes.ADVANCED)">
+    <div :class="optionClass(modes.ADVANCED)" @click="setMode(modes.ADVANCED)">
     ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="mode === 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">

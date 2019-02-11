@@ -46,6 +46,10 @@ function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
+function numberOfGlyphChoices() {
+  return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
+}
+
 /**
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
@@ -60,11 +64,11 @@ function requestManualReality() {
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
-  if (!Perk.glyphChoice3.isBought) {
+  let choiceCount = numberOfGlyphChoices();
+  if (choiceCount === 1) {
     Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
     return manualReality();
   }
-  const choiceCount = Perk.glyphChoice4.isBought  ? 4 : 3;
   GlyphSelection.generate(choiceCount, gainedGlyphLevel());
 }
 
@@ -91,7 +95,13 @@ function manualReality() {
 
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
-  let newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+  let newGlyph;
+  if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
+    let glyphs = [...Array(numberOfGlyphChoices())].map(() => GlyphGenerator.randomGlyph(gainedGlyphLevel()));
+    newGlyph = AutoGlyphPicker.pick(glyphs);
+  } else {
+    newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+  }
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
       // FIXME: remove console.log after initial rollout to testers

@@ -233,6 +233,20 @@ const ReplicantiUpgrade = {
     }
 
     get autobuyerId() { return 0; }
+
+    autobuyerTick() {
+      if (!this.isAutobuyerUnlocked || !this.isAutobuyerOn) return;
+      // Fixed price increase of 1e15; so total cost for N upgrades is:
+      // cost + cost * 1e15 + cost * 1e30 + ... + cost * 1e15^(N-1) == cost * (1e15^N - 1) / (1e15 - 1)
+      // N = log(IP * (1e15 - 1) / cost + 1) / log(1e15)
+      let N = player.infinityPoints.times(this.costIncrease - 1).dividedBy(this.cost).plus(1).log(this.costIncrease);
+      N = Math.round((Math.min(this.value + 0.01 * Math.floor(N), this.cap) - this.value) * 100);
+      if (N <= 0) return;
+      const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
+      player.infinityPoints = player.infinityPoints.minus(totalCost);
+      this.cost = this.cost.times(Decimal.pow(this.costIncrease, N));
+      this.value = nearestPercent(this.value + 0.01 * N);
+    }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {
     get value() { return player.replicanti.interval; }

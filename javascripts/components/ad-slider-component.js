@@ -181,7 +181,7 @@ Vue.component("ad-slider-component", {
     sliderStyle: [Array, Object, Function],
     focusStyle: [Array, Object, Function],
     tooltipDir: [Array, String],
-    xformatter: [String, Function], // global mixin defines formatter
+    xformatter: [String, Function], // Global mixin defines formatter
     mergeFormatter: [String, Function],
     piecewiseStyle: Object,
     disabledStyle: Object,

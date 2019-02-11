@@ -80,8 +80,8 @@ function buyManyInfinityDimension(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  if (tier == 8) dim.power = dim.power.times(infPowerMults[tier] * getGlyphSacEffect("infinity"))
-  else dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
   dim.baseAmount += IDPurchasesToIDAmount(1)
 
   if (EternityChallenge(8).isRunning) {
@@ -105,8 +105,8 @@ function buyMaxInfDims(tier) {
   dim.cost = dim.cost.times(costMult)
   dim.amount = dim.amount.plus(10*toBuy);
   if (toBuy > 0) {
-    if (tier == 8) dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
-    else dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
+    const base = infPowerMults[tier] * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
+    dim.power = dim.power.times(Decimal.pow(base, toBuy));
   }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
   buyManyInfinityDimension(tier)

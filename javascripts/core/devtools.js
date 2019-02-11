@@ -1,5 +1,5 @@
 var dev = {};
-var specialGlyphSymbols = {
+const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
   key2606: "☆", key2607: "☇", key2608: "☈", key2609: "☉", key260a: "☊", key260b: "☋",
   key260c: "☌", key260d: "☍", key260e: "☎", key260f: "☏", key2610: "☐", key2611: "☑",
@@ -147,51 +147,23 @@ dev.refundDilStudies = function() {
     }
 }
 
-dev.generateSpecialGlyph = function(color, symbol, level) {
-    var type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-    for (var i=0; player.reality.glyphs.last === type; i++) {
-      type = GLYPH_TYPES[Math.floor(random() * GLYPH_TYPES.length)]
-    }
-    player.reality.glyphs.last = type;
-    var strength = gaussian_bell_curve()
-    var effectAmount = Math.min(Math.floor(Math.pow(random(), 1 - (Math.pow(level * strength, 0.5)) / 100)*1.5 + 1), 4)
-    if (player.reality.glyphs.inventory.length + player.reality.glyphs.inventory.length == 0 && player.realities == 0) {
-      type = "power"
-      effectAmount = 1
-      player.reality.glyphs.last = "power"
-    }
-    var idx = 0
-    var hasglyph = true
-    while (hasglyph) {
-      var slot = player.reality.glyphs.inventory.find(function(g) { return g.idx == idx })
-      if (slot !== undefined) idx++;
-      else hasglyph = false
-    }
-    var glyph = {
-      id: Date.now(),
-      idx: idx,
-      type: type,
-      strength: strength,
-      level: level,
-      color: color,
-      symbol: symbol,
-      effects: {}
-    }
-    return newGlyph(glyph, type, effectAmount)
-}
-
-dev.giveSpecialGlyph = function(color, symbol, level) {
-    player.reality.glyphs.inventory.push(dev.generateSpecialGlyph(color, symbol, level))
-    generateGlyphTable();
+dev.giveSpecialGlyph = function (color, symbol, level) {
+  symbol = "key" + symbol;
+  if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
+  if (!Player.hasFreeInventorySpace) return;
+  let glyph = GlyphGenerator.randomGlyph(level, false);
+  glyph.symbol = symbol;
+  glyph.color = color;
+  Glyphs.addToInventory(glyph);
 }
 
 dev.giveMusicGlyph = function() {
-    dev.giveSpecialGlyph("#FF80AB", "266b", 0)
+  dev.giveSpecialGlyph("#FF80AB", "266b", 1)
 }
 
-dev.giveGlyph = function() {
-    player.reality.glyphs.inventory.push(generateRandomGlyph(Math.ceil(Math.random() * 100)))
-    generateGlyphTable();
+dev.giveGlyph = function (level) {
+  if (!Player.hasFreeInventorySpace) return;
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
 }
 
 dev.decriminalize = function() {
@@ -344,7 +316,7 @@ dev.updateTestSave = function() {
       }
       player.options.testVersion = 12
     }
-  
+
   if (player.options.testVersion == 12) {
     player.reality.upgReqs.push(false, false, false, false, false)
     player.options.testVersion = 13
@@ -495,7 +467,50 @@ dev.updateTestSave = function() {
   
     player.options.testVersion = 28;
   }
-
+  // The 27 to 28 version bump messed things up pretty badly. The swap was done
+  // after deepmerge with defaultPlayer, which means that default values got added correctly,
+  // and then swapped into the incorrect place. We can blow away glyph weights and auto sac
+  // settings
+  if (player.options.testVersion === 28) {
+    function movePropIfPossible(celestial1, celestial2, prop, defaultValue, merge=null) {
+      if (player.celestials[celestial1][prop] !== undefined) {
+        if (player.celestials[celestial2][prop] === undefined) {
+          player.celestials[celestial2][prop] = player.celestials[celestial1][prop];
+        } else if (merge) {
+          player.celestials[celestial2][prop] = merge(player.celestials[celestial1][prop],
+            player.celestials[celestial2][prop]);
+        }
+        delete player.celestials[celestial1][prop];
+      } else if (player.celestials[celestial2][prop] === undefined) {
+        // both undefined shouldn't really happen, but might as well be thorough here
+        player.celestials[celestial2][prop] = defaultValue;
+      }
+    }
+    movePropIfPossible("teresa", "effarig", "glyphWeights", {
+      ep: 25,
+      repl: 25,
+      dt: 25,
+      eternities: 25
+    });
+    movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
+      mode: AutoGlyphSacMode.NONE,
+      types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+        rarityThreshold: 0,
+        scoreThreshold: 0,
+        effectScores: t.effects.mapToObject(e => e.id, () => 0),
+      })),
+    });
+    movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
+    movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
+    movePropIfPossible("effarig", "teresa", "bestRunAM", 0, Decimal.max);
+    movePropIfPossible("effarig", "teresa", "rmStore", 0, Math.max);
+    movePropIfPossible("effarig", "teresa", "glyphLevelMult", 1, Math.max);
+    movePropIfPossible("effarig", "teresa", "rmMult", 1, Math.max);
+    // These are unused now
+    delete player.celestials.effarig.typePriorityOrder;
+    delete player.celestials.teresa.typePriorityOrder;
+    player.options.testVersion = 29;
+  }
   if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6

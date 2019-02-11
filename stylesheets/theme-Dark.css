@@ -192,22 +192,6 @@ input {
     background-color: rgb(165, 57, 57) !important;
 }
 
-#glyphslots .glyphactive {
-    background: #333 !important;
-}
-
-#glyphs .empty {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg:hover {
-    background: #333 !important;
-}
-
 .automatorinstruction.command {
     background-color: black !important;
 }

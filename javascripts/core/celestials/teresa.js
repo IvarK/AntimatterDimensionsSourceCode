@@ -34,10 +34,23 @@ var Effarig = {
     respecGlyphs()
     startRealityOver()
     player.celestials.effarig.run = true
-    player.celestials.effarig.glyphEquipped = false
+    recalculateAllGlyphs()
+    showRealityTab("glyphstab");
   },
   get isRunning() {
     return player.celestials.effarig.run;
+  },
+  get glyphLevelCap() {
+    if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      return 1000
+    }
+    else if (Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+      return 500
+    }
+    else {
+      return 100
+    }
+
   },
   get glyphEffectAmount() {
     let counted = []

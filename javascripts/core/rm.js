@@ -416,27 +416,33 @@ function getTotalEffect(effectKey) {
 
 function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-    fixGlyph(player.reality.glyphs.active[i]);
+    calculateGlyph(player.reality.glyphs.active[i]);
   }
   // Delete any glyphs that are in overflow spots:
   player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
     glyph => glyph.idx < player.reality.glyphs.inventorySize);
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
-    fixGlyph(player.reality.glyphs.inventory[i]);
+    calculateGlyph(player.reality.glyphs.inventory[i]);
   }
   Glyphs.refresh();
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
-function fixGlyph(glyph) {
+function calculateGlyph(glyph) {
   if (glyph.color == undefined && glyph.symbol == undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.strength == 1)
       glyph.strength = gaussianBellCurve()
-    for (let effect in glyph.effects)
+    for (let effect in glyph.effects) {
       if (glyph.effects.hasOwnProperty(effect)) {
-        glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+        if (Effarig.isRunning) {
+          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, Math.min(glyph.level, Effarig.glyphLevelCap), glyph.strength);
+        }
+        else {
+          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+        }
       }
+    }
   }
 }
 

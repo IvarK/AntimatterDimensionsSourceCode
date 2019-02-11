@@ -135,7 +135,6 @@ function eternity(force, auto) {
     
     if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && player.infinityPoints.gt(Number.MAX_VALUE)) {
       Effarig.unlock(EFFARIG_UNLOCKS.ETERNITY_COMPLETE);
-      player.celestials.effarig.glyphEquipped = false;
     }
     
     resetInfinityPointsOnEternity();

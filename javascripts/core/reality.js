@@ -22,7 +22,7 @@ const GlyphSelection = {
   update(level) {
     for (let g of this.glyphs.filter(g => g.level < level)) {
         g.level = level;
-        fixGlyph(g);
+        calculateGlyph(g);
     }
   },
   select(index) {
@@ -153,6 +153,7 @@ function completeReality(force, reset) {
     respecGlyphs();
   }
   handleCelestialRuns(force)
+  recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
   postc8Mult = new Decimal(0);

@@ -166,6 +166,9 @@ Vue.component("glyph-sacrifice-options", {
   },
   template: /*html*/`
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
+    <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
+      <div class="o-questionmark" ach-tooltip="When the reality autobuyer triggers, auto sacrifice will automatically sacrifice the glyph if it doesn't meet the specified conditions.">?</div>
+    </div>
     <div :class="optionClass(modes.NONE)" @click="setMode(modes.NONE)">
       Auto sacrifice disabled
     </div>

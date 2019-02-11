@@ -675,7 +675,7 @@ button {
     font-size: 14px;
     line-height: 1.2;
     transition-duration: .5s;
-    z-index: 2;
+    z-index: 3;
 }
 
 [ach-tooltip]:after {

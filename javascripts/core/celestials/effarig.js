@@ -1,106 +1,118 @@
 
-var teresaQuotes = [
-  "We've been observing you",
-  "You have shown promise with your bending of the reality",
-  "We are the Celestials, and we want you to join us.",
-  "My name is Teresa, the Celestial Of Reality",
-  "Prove your worth.",
-  "I'll let you inside my Reality, mortal. Don't get crushed by it.",
-  "You've proven your worth mortal, if you wish to join us you need to start over...",
-  "Why are you still here... You were supposed to vanish... You are still no match for us.",
-  "I hope the others succeed where I have failed."
+var effarigQuotes = [
+  "Welcome to my humble abode.",
+  "I am Effarig, and I govern Glyphs.",
+  "I am different from Teresa; not as simplistic as you think.",
+  "I use the shards of Glyphs to enforce my will.",
+  "Collect them for the bounty of this realm.",
+  "What are you waiting for? Get started.",
+  "Do you like my little Stall? It’s not much, but it’s mine.",
+  "Thank you for your purchase, customer!",
+  "Is that too much? I think it’s too much.",
+  "You bought out my entire stock... well at least I‘m rich now.",
+  "The heart of my reality is suffering. Each Layer is harder than the last.",
+  "I hope you never complete it.",
+  "This is the first threshold. It only gets worse from here.",
+  "This is the limit. I don’t want you to proceed past this point.",
+  "So this is the diabolical power... what frightened the others...",
+  "Do you think this was worth it? Trampling on what I’ve done?",
+  "And for what purpose? You could’ve joined, we could’ve cooperated.",
+  "But no. It’s over. Leave while I cling onto what’s left."
 ]
 
-const TERESA_UNLOCKS = {
-  RUN: {
-    id: 0,
-    price: 5e12,
-    description: "unlock Teresa's reality.",
-  },
-  EPGEN: {
-    id: 1,
-    price: 1e18,
-    description: "unlock Teresa's EP generation.",
-  },
-  EFFARIG: {
-    id: 2,
-    price: 5e21,
-    description: "unlock Effarig, Celestial of Ancient Relics.",
-  },
-  SHOP: {
-    id: 3,
-    price: 1e24,
-    description: "unlock Perk Point Shop.",
-  },
+const EFFARIG_UNLOCKS = {
+  ADJUSTER: 0,
+  AUTOSACRIFICE: 1,
+  AUTOPICKER: 2,
+  RUN: 3,
+  INFINITY_COMPLETE: 4,
+  ETERNITY_COMPLETE: 5,
+  REALITY_COMPLETE: 6
 }
 
-var Teresa = {
-  timePoured: 0,
-  unlockInfo: TERESA_UNLOCKS,
-  lastUnlock: "SHOP",
-  pourRM(diff) {
-    if (this.rmstore >= 1e24) return
-    this.timePoured += diff
-    let rm = player.reality.realityMachines;
-    let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber())
-    this.rmStore += Math.min(rmPoured, 1e24 - this.rmStore)
-    player.reality.realityMachines = rm.minus(rmPoured)
-    this.checkForUnlocks()
+var Effarig = {
+  buyUnlock(id, cost) {
+    if (this.shardAmount < cost) return
+    if (this.has(id)) return
+    player.celestials.effarig.unlocks.push(id)
+    player.celestials.effarig.relicShards -= cost
+    if (id === EFFARIG_UNLOCKS.ADJUSTER) {
+      ui.view.tabs.reality.openGlyphWeights = true;
+      showRealityTab("glyphstab");
+    };
   },
-  checkForUnlocks() {
-    Object.values(Teresa.unlockInfo).map((info) => {
-      if (!this.has(info) && this.rmStore >= info.price) {
-        player.celestials.teresa.unlocks.push(info.id);
-      }
-    });
+  has(id) {
+    return player.celestials.effarig.unlocks.includes(id)
   },
-  has(info) {
-    if (!info.hasOwnProperty("id")) throw("Pass in the whole TERESA UNLOCK object")
-    return player.celestials.teresa.unlocks.includes(info.id)
+  unlock(id) {
+    player.celestials.effarig.unlocks.push(id);
   },
   startRun() {
-    player.celestials.teresa.run = startRealityOver();
-  },
-  buyGlyphLevelPower() {
-    let cost = Math.pow( 2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) )
-    if (player.reality.pp < cost) return false
-    player.celestials.teresa.glyphLevelMult *= 1.05
-    player.reality.pp -= cost
-  },
-  buyRmMult() {
-    let cost = player.celestials.teresa.rmMult
-    if (player.reality.pp < cost) return false
-    player.celestials.teresa.rmMult *= 2
-    player.reality.pp -= cost
-  },
-  buyDtBulk() {
-    let cost = player.celestials.teresa.dtBulk * 100
-    if (player.reality.pp < cost) return false
-    player.celestials.teresa.dtBulk *= 2
-    player.reality.pp -= cost
-  },
-  get rmStore() {
-    return player.celestials.teresa.rmStore
-  },
-  set rmStore(amount) {
-    player.celestials.teresa.rmStore = amount
-  },
-  get fill() {
-    return Math.min(Math.log10(this.rmStore) / 24, 1)
-  },
-  get rmMultiplier() {
-    return Math.max(Math.pow(this.rmStore, 0.1), 1)
-  },
-  get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 5e8, 1 + Math.pow(Math.log10(player.realities), 1.5)), 1).toNumber()
-  },
-  get quote() {
-    return teresaQuotes[player.celestials.teresa.quoteIdx]
-  },
-  nextQuote() {
-    if (player.celestials.teresa.quoteIdx < 4 + player.celestials.teresa.unlocks.length) player.celestials.teresa.quoteIdx++
+    respecGlyphs()
+    startRealityOver()
+    player.celestials.effarig.run = true
+    player.celestials.effarig.glyphEquipped = false
   },
   get isRunning() {
-    return player.celestials.teresa.run;
-  }
+    return player.celestials.effarig.run;
+  },
+  get glyphEffectAmount() {
+    let counted = []
+    let counter = 0
+    player.reality.glyphs.active.forEach((g) => {
+      for (i in g.effects) {
+        if (!counted.includes(g.type + i)) {
+          counted.push(g.type + i)
+          counter += 1
+        }
+      }
+    })
+    return counter
+  },
+  get shardsGained() {
+    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+    }
+    return 0
+  },
+  get shardAmount() {
+    return player.celestials.effarig.relicShards
+  },
+  nerfFactor(power) {
+    let x = Decimal.max(power, 10).log10();
+    if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      return Math.min(1 + 0.5 * Math.log10(x), 10);
+    }
+    return Math.min(1 + 2.5 * Math.log10(x), 20);
+  },
+  get tickspeed() {
+    const base = 3 + player.tickspeed.reciprocal().clampMin(10).log10();
+    const pow = -6.5 * this.nerfFactor(player.timeShards);
+    return new Decimal(base).pow(pow).clampMax(1).times(1000);
+  },
+  multiplier(mult) {
+    const base = new Decimal(mult).clampMin(10).log10();
+    const pow = this.nerfFactor(player.infinityPower);
+    return new Decimal(Math.pow(base, pow));
+  },
+  get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
+    return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
+  },
+  get maxQuoteIdx() {
+    let base = 5
+    if (this.has(EFFARIG_UNLOCKS.ADJUSTER)) base++;
+    if (this.has(EFFARIG_UNLOCKS.AUTOPICKER)) base++;
+    if (this.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) base++;
+    if (this.has(EFFARIG_UNLOCKS.RUN)) base += 3;
+    if (this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) base++;
+    if (this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) base++;
+    if (this.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) base += 4;
+    return base
+  },
+  get quote() {
+    return effarigQuotes[player.celestials.effarig.quoteIdx]
+  },
+  nextQuote() {
+    if (player.celestials.effarig.quoteIdx < this.maxQuoteIdx) player.celestials.effarig.quoteIdx++
+  },
 };

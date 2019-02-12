@@ -174,8 +174,23 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
+  // Cap individual multipliers at e50 for Effarig Eternity, only accounts for ones realistically achievable
   if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-    ipMult = ipMult.pow(0.9);
+    ipMult = player.infMult.clampMax(1e50)
+     .times(kongIPMult)
+      .timesEffectsOf(
+        TimeStudy(41),
+        TimeStudy(51),
+        TimeStudy(141),
+        TimeStudy(142),
+        Achievement(85),
+        Achievement(93),
+        Achievement(141),
+        GlyphEffect.ipMult
+      );
+    //ipMult = ipMult.times(Effects.min(1e50, TimeStudy(143)));
+    //ipMult = ipMult.times(Effects.min(1e50, Achievement(116)));
+    //ipMult = ipMult.times(Effects.min(1e50, Achievement(125)));
   }
   if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;

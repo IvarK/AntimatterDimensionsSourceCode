@@ -42,10 +42,10 @@ var Effarig = {
   },
   get glyphLevelCap() {
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return 1000
+      return 5000
     }
     else if (Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      return 500
+      return 1000
     }
     else {
       return 100
@@ -75,21 +75,24 @@ var Effarig = {
     return player.celestials.effarig.relicShards
   },
   nerfFactor(power) {
-    let x = Decimal.max(power, 10).log10();
-    if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return Math.min(1 + 0.5 * Math.log10(x), 10);
+    let x = Decimal.max(power, 10);
+    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+      return Math.min(x.log10() / 1000, 1);
     }
-    return Math.min(1 + 2.5 * Math.log10(x), 20);
+    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      return Math.min(x.log10() / 120, 1);
+    }
+    return Math.min(x.log10() / 120, 3);
   },
   get tickspeed() {
-    const base = 3 + player.tickspeed.reciprocal().clampMin(10).log10();
-    const pow = -6.5 * this.nerfFactor(player.timeShards);
-    return new Decimal(base).pow(pow).clampMax(1).times(1000);
+    const base = player.tickspeed.reciprocal().log10();
+    const pow = 0.625 + 0.125 * this.nerfFactor(player.timeShards);
+    return new Decimal.pow(10, Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).clampMin(10).log10();
-    const pow = this.nerfFactor(player.infinityPower);
-    return new Decimal(Math.pow(base, pow));
+    const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
+    return new Decimal.pow(10, Math.pow(base, pow));
   },
   get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);

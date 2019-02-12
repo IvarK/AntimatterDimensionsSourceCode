@@ -372,7 +372,8 @@ var player = {
       run: false,
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
-      rmMult: 1
+      rmMult: 1,
+      dtBulk: 1
     },
     effarig: {
       relicShards: 0,

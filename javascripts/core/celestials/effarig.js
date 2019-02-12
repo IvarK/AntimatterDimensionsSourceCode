@@ -73,6 +73,12 @@ var Teresa = {
     player.celestials.teresa.rmMult *= 2
     player.reality.pp -= cost
   },
+  buyDtBulk() {
+    let cost = player.celestials.teresa.dtBulk * 100
+    if (player.reality.pp < cost) return false
+    player.celestials.teresa.dtBulk *= 2
+    player.reality.pp -= cost
+  },
   get rmStore() {
     return player.celestials.teresa.rmStore
   },

@@ -55,7 +55,6 @@ function buyDilationUpgrade(id) {
     let upgAmount = player.dilation.rebuyables[id];
     let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
     if (player.dilation.dilatedTime.lt(realCost)) return false
-
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
     player.dilation.rebuyables[id] += 1
     if (id == 2) {

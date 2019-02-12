@@ -52,7 +52,6 @@ const Ra = {
     if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
       if (player.celestials.ra.activeMode) gain *= 4
       else if (auto) gain *=2
-      else if (player.celestials.ra.activeMode) gain *= 4
     }
     return gain
   },

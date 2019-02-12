@@ -415,7 +415,8 @@ var player = {
       run: false,
       charged: [],
       quoteIdx: 0,
-      maxEpGained: new Decimal(0)
+      maxEpGained: new Decimal(0),
+      activeMode: false, // false if idle, true if active
     }
   },
   autoEcIsOn: true,

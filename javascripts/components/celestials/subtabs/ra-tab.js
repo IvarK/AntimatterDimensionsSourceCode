@@ -7,7 +7,8 @@ Vue.component('ra-tab', {
       level: 0,
       totalCharges: 0,
       unlocks: [],
-      realityReward: 0
+      realityReward: 0,
+      activeMode: false
     };
   },
   methods: {
@@ -19,12 +20,16 @@ Vue.component('ra-tab', {
       this.totalCharges = Ra.superChargedUpgrades
       this.unlocks = player.celestials.ra.unlocks
       this.realityReward = Ra.realityReward
+      this.activeMode = player.celestials.ra.activeMode
     },
     has(id) {
       return this.unlocks.includes(id)
     },
     startRun() {
       Ra.startRun()
+    },
+    toggleMode() {
+      Ra.toggleMode()
     }
   },
   computed: {
@@ -42,6 +47,11 @@ Vue.component('ra-tab', {
             <b class="o-ra-exp-display">{{ shorten(exp, 2) }}/{{ shorten(expRequired, 2) }}</b>
           </div>
         </div>
+        <div class="c-ra-teresa-switch-container" @click="toggleMode()" v-if="has(2)">
+          <div class="o-ra-teresa-switch o-ra-teresa-switch-active" :class="{ 'o-ra-teresa-switch-active-on': activeMode }">Active</div>
+          <div class="o-ra-teresa-switch o-ra-teresa-switch-idle" :class="{ 'o-ra-teresa-switch-idle-on': !activeMode }">Idle</div>
+        </div>
+        <div v-if="has(2)">{{ activeMode ? "You gain 4x memories from manual realities" : "You gain 2x memories from automatic realities"}}</div>
       </div>
       <div>You can supercharge {{ totalCharges }} Infinity Upgrades.</div>
       <div class="l-ra-unlocks-container">

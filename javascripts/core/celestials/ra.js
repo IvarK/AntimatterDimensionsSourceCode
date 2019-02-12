@@ -49,8 +49,13 @@ const Ra = {
 
     if (this.percentageToNextLevel >= 1) this.giveExp(0) // Shouldn't never happen, but if you for some reason level more than one level per levelup it doesn't break
   },
-  gainedExp(level) {
-    return Math.ceil(Math.pow(2, level/1000 - 3))
+  gainedExp(level, auto = false) {
+    let gain = Math.ceil(Math.pow(2, level/1000 - 3))
+      if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
+        if (auto && !player.celestials.ra.activeMode) gain *=2
+        else if (player.celestials.ra.activeMode) gain *= 4
+      }
+    return gain
   },
   checkForUnlocks() {
     for (let i in RA_UNLOCKS) {
@@ -63,6 +68,9 @@ const Ra = {
   },
   startRun() {
     player.celestials.ra.run = startRealityOver();
+  },
+  toggleMode() {
+    player.celestials.ra.activeMode = !player.celestials.ra.activeMode
   },
   get requiredExp() {
     return 50 * Math.pow(1.4, player.celestials.ra.level - 1)
@@ -84,5 +92,8 @@ const Ra = {
   },
   get realityReward() {
     return Math.max(Math.min((player.celestials.ra.maxEpGained.e - 10000)/100, 69), 1)
+  },
+  get glyphMult() {
+    return (player.celestials.ra.level - 47) / 2
   }
 }

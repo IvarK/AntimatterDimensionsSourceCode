@@ -104,10 +104,10 @@ function autoReality() {
   if (newGlyph && Player.hasFreeInventorySpace) {
     Glyphs.addToInventory(newGlyph);
   }
-  completeReality(false, false);
+  completeReality(false, false, true);
 }
 
-function completeReality(force, reset) {
+function completeReality(force, reset, auto = false) {
   if (!reset) {
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
@@ -147,7 +147,9 @@ function completeReality(force, reset) {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
-    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) Ra.giveExp(Ra.gainedExp(gainedGlyphLevel()))
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel(), auto))
+    }
   }
 
   if (player.reality.respec) {

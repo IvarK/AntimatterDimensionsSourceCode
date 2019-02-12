@@ -3532,6 +3532,10 @@ screen and (max-width: 480px) {
 
 /*#endregion o-infinity-upgrade-btn--bought*/
 
+.o-infinity-upgrade-btn--charged {
+  background-color: #25e8e6;
+}
+
 /*#endregion o-infinity-upgrade-btn*/
 
 /*#endregion Infinity Upgrades*/
@@ -4988,6 +4992,104 @@ screen and (max-width: 480px) {
 }
 
 /* #endregion v tab*/
+
+/* #startregion ra tab */
+
+.c-ra-teresa-experience {
+  width: 30rem;
+  display: inline-block;
+  height: 1.5rem;
+  border: .2rem solid grey;
+  position: relative;
+}
+
+.c-ra-teresa-experience-inner {
+  height: 100%;
+  background-color: #35d035;
+}
+
+.o-ra-exp-display {
+  vertical-align: super;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 1.6rem);
+}
+
+.l-ra-teresa-container {
+  border: .2rem solid gainsboro;
+  background: whitesmoke;
+  width: 35rem;
+  padding: 1rem;
+  border-radius: .5rem;
+  margin: 2rem auto;
+}
+
+.l-ra-unlocks-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80rem;
+  margin: auto;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.c-ra-unlock {
+  border: .2rem solid gainsboro;
+  background: whitesmoke;
+  width: 25rem;
+  padding: 1rem;
+  height: 7rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  border-radius: .5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.c-ra-unlock-unlocked {
+  background: lightgreen;
+}
+
+.c-ra-teresa-switch-container {
+  display: flex;
+  width: 10rem;
+  margin: 1rem auto;
+}
+
+.o-ra-teresa-switch {
+  border: .2rem solid #292929;
+  width: 5rem;
+  margin-left: -.2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: black;
+  user-select: none;
+}
+
+.o-ra-teresa-switch-active {
+  background: #d89eb1;
+}
+
+.o-ra-teresa-switch-active-on {
+  background: orangered;
+}
+
+.o-ra-teresa-switch-idle {
+  background: #b7e3ff;
+}
+
+.o-ra-teresa-switch-idle-on {
+  background: #00e6ff
+}
+
+
+/* #endregion ra tab*/
 
 .c-performance-stats {
   width: 25rem;

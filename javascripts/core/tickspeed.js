@@ -4,6 +4,7 @@ function canBuyTickSpeed() {
 
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
+  if (Ra.isRunning) return new Decimal(0.89)
   let replicantiGalaxies = player.replicanti.galaxies;
   replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),
@@ -25,6 +26,7 @@ function getTickSpeedMultiplier() {
       if (Challenge(5).isRunning) baseMultiplier = 0.93;
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
+        InfinityUpgrade.galaxyBoost.chargedEffect,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
         Achievement(86),
@@ -36,6 +38,7 @@ function getTickSpeedMultiplier() {
       if (Challenge(5).isRunning) baseMultiplier = 0.83
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
+        InfinityUpgrade.galaxyBoost.chargedEffect,
         BreakInfinityUpgrade.galaxyBoost,
         TimeStudy(212),
         TimeStudy(232),

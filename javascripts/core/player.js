@@ -372,12 +372,14 @@ var player = {
       run: false,
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
-      rmMult: 1
+      rmMult: 1,
+      dtBulk: 1
     },
     effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
+      quoteIdx: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
@@ -395,15 +397,27 @@ var player = {
     },
     enslaved: {
       isStoring: false,
+      quoteIdx: 0,
       stored: 0,
       unlocks: [],
       run: false
     },
     v: {
       unlocks: [],
+      quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
       additionalStudies: 0
+    },
+    ra: {
+      level: 1,
+      exp: 0,
+      unlocks: [],
+      run: false,
+      charged: [],
+      quoteIdx: 0,
+      maxEpGained: new Decimal(0),
+      activeMode: false, // false if idle, true if active
     }
   },
   autoEcIsOn: true,

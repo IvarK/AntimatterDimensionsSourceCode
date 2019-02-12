@@ -9,6 +9,8 @@ Vue.component("reality-button", {
       nextGlyphPercent: 0,
       nextMachineEP: 0,
       shardsGained: 0,
+      expGained: 0,
+      raUnlocked: false
     };
   },
   computed: {
@@ -55,6 +57,8 @@ Vue.component("reality-button", {
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = logEPforRM(this.machinesGained.plus(1));
       this.shardsGained = Effarig.shardsGained;
+      this.expGained = Ra.gainedExp(this.glyphLevel)
+      this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -86,6 +90,7 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>1 Perk Point</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
+          <div v-if="raUnlocked">{{ expGained }} Teresa memories (Ra)</div>
         </template>
         <template v-else>
           No resources gained

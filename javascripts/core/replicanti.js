@@ -14,6 +14,7 @@ function maxReplicantiGalaxy(diff) {
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
+    if (Ra.isRunning) maxGal = 0
     let gainGal = 0;
     if (curGal < maxGal) { 
         if (diff / infiTime < maxGal - curGal) {
@@ -348,6 +349,7 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
+      if (Ra.isRunning) return false
       if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
       return this.bought < this.max;
     },

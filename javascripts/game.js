@@ -247,7 +247,9 @@ function gainedRealityMachines() {
     ret = ret.times(player.celestials.teresa.rmMult)
     ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
-    ret = ret.plusEffectOf(Perk.realityMachineGain);
+    ret = ret.plusEffectOf(Perk.realityMachineGain)
+      .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
+      .times(Ra.rmMult)
     return Decimal.floor(ret)
 }
 
@@ -710,6 +712,8 @@ setInterval(function() {
 
     EternityChallenge.autoCompleteTick()
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
+
+    if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints
 }, 1000)
 
 var postC2Count = 0;

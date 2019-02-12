@@ -8,7 +8,9 @@ Vue.component('ra-tab', {
       totalCharges: 0,
       unlocks: [],
       realityReward: 0,
-      activeMode: false
+      activeMode: false,
+      glyphMult: 0,
+      rmMult: 0
     };
   },
   methods: {
@@ -21,6 +23,8 @@ Vue.component('ra-tab', {
       this.unlocks = player.celestials.ra.unlocks
       this.realityReward = Ra.realityReward
       this.activeMode = player.celestials.ra.activeMode
+      this.glyphMult = Ra.glyphMult
+      this.rmMult = Ra.rmMult
     },
     has(id) {
       return this.unlocks.includes(id)
@@ -60,6 +64,7 @@ Vue.component('ra-tab', {
           <p>Reward: {{ unlock.reward }}</p>
         </div>
       </div>
+      <div v-if="has(4)">{{ shorten(glyphMult, 2, 2) }}x to glyph level<br>{{ shorten(rmMult, 2, 2) }}x to RM gain</div>
       <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
       Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
       <br><br>

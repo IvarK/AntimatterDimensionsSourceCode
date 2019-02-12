@@ -649,7 +649,7 @@ function getGlyphLevelInputs() {
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
   const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
+  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
   var glyphScalePenalty = 1;
   var glyphScaledLevel = glyphBaseLevel;
   if (glyphBaseLevel > glyphScaleBegin) {

@@ -93,7 +93,12 @@ const Ra = {
   get realityReward() {
     return Math.max(Math.min((player.celestials.ra.maxEpGained.e - 10000)/100, 69), 1)
   },
-  get glyphMult() {
-    return (player.celestials.ra.level - 47) / 2
+  get glyphMult() {  // NOTE: These WILL fuck up if you cheat the unlocks before Teresa is at least level 47
+    if (!this.has(RA_UNLOCKS.RM_GLYPH_BOOST)) return 1
+    return Math.pow((player.celestials.ra.level - 47) / 2, 0.2)
+  },
+  get rmMult() {
+    if (!this.has(RA_UNLOCKS.RM_GLYPH_BOOST)) return 1
+    return Math.pow((player.celestials.ra.level - 47) / 2, 1.5)
   }
 }

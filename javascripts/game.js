@@ -249,6 +249,7 @@ function gainedRealityMachines() {
     if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     ret = ret.plusEffectOf(Perk.realityMachineGain);
     ret = ret.timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
+    ret = ret.times(Ra.rmMult)
     return Decimal.floor(ret)
 }
 

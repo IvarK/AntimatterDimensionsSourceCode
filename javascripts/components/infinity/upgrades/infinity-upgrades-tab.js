@@ -53,7 +53,7 @@ Vue.component("infinity-upgrades-tab", {
   },
   template:
     `<div class="l-infinity-upgrades-tab">
-      <div v-if="chargeUnlocked">You can Supercharge {{ chargesLeft }} upgrade{{ (chargesLeft !== 1) ? "s" : ""}}</div>
+      <div v-if="chargeUnlocked">You can Supercharge {{ chargesLeft }} {{ "upgrade" | pluralize(chargesLeft) }}</div>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button

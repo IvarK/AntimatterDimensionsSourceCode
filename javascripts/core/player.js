@@ -394,6 +394,9 @@ var player = {
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
+      autoGlyphPick: {
+        mode: AutoGlyphPickMode.RANDOM,
+      },
     },
     enslaved: {
       isStoring: false,

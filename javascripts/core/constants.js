@@ -76,6 +76,12 @@ const AutoGlyphSacMode = {
   ADVANCED: 3,
 }
 
+const AutoGlyphPickMode = {
+  RANDOM: 0,
+  RARITY: 1,
+  ABOVE_SACRIFICE_THRESHOLD: 2,
+}
+
 // Use through Automator.Instructions; here to support creation of index by ID
 const _AutomatorInstructions = Object.freeze({
   WAIT: {

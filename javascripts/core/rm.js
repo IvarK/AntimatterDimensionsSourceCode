@@ -18,31 +18,70 @@ function strengthToRarity(x) {
   return (x - 1) * 100 / 2.5;
 }
 
-
 const AutoGlyphSacrifice = {
-  set mode(value) {
-    player.celestials.effarig.autoGlyphSac.mode = value;
-  },
   get mode() {
     return player.celestials.effarig.autoGlyphSac.mode;
+  },
+  set mode(value) {
+    player.celestials.effarig.autoGlyphSac.mode = value;
   },
   get types() {
     return player.celestials.effarig.autoGlyphSac.types;
   },
-  wouldSacrifice(glyph) {
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.NONE) return false;
-    if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALL) return true;
+  comparedToThreshold(glyph) {
     let typeCfg = AutoGlyphSacrifice.types[glyph.type];
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
-      return typeCfg.rarityThreshold > strengthToRarity(glyph.strength);
+      return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     }
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
       let glyphScore = strengthToRarity(glyph.strength) +
         Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
-      return typeCfg.scoreThreshold > glyphScore;
+      return glyphScore - typeCfg.scoreThreshold;
+    }
+    return strengthToRarity(glyph.strength)
+  },
+  wouldSacrifice(glyph) {
+    switch (AutoGlyphSacrifice.mode) {
+      case AutoGlyphSacMode.NONE: return false;
+      case AutoGlyphSacMode.ALL: return true;
+      case AutoGlyphSacMode.RARITY_THRESHOLD:
+      case AutoGlyphSacMode.ADVANCED:
+        return this.comparedToThreshold(glyph) < 0;
     }
     throw crash("Unknown auto glyph sacrifice mode");
   },
+};
+
+const AutoGlyphPicker = {
+  get mode() {
+    return player.celestials.effarig.autoGlyphPick.mode;
+  },
+  set mode(value) {
+    player.celestials.effarig.autoGlyphPick.mode = value;
+  },
+  getPickScore(glyph) {
+    // This function is non-deterministic, keep that in mind when calling it
+    // (for example, cache the results).
+    switch (AutoGlyphPicker.mode) {
+      case AutoGlyphPickMode.RANDOM: return Math.random();
+      case AutoGlyphPickMode.RARITY: return strengthToRarity(glyph.strength);
+      case AutoGlyphPickMode.ABOVE_SACRIFICE_THRESHOLD:
+        let comparedToThreshold = AutoGlyphSacrifice.comparedToThreshold(glyph);
+        if (comparedToThreshold < 0) {
+          // We're going to sacrifice the glyph anyway. Also, if we have 1000% rarity glyphs everything has broken,
+          // so subtracting 1000 should be safe (glyphs we would sacrifice are sorted below all other glyphs).
+          return strengthToRarity(glyph.strength) - 1000;
+        }
+        return comparedToThreshold;
+    }
+    throw crash("Unknown auto glyph picker mode");
+  },
+  pick(glyphs) {
+    return glyphs
+      .map(g => ({glyph: g, score: this.getPickScore(g)}))
+      .reduce((x, y) => x.score > y.score ? x : y)
+      .glyph;
+  }
 };
 
 const GlyphGenerator = {

@@ -400,7 +400,9 @@ var player = {
       quoteIdx: 0,
       stored: 0,
       unlocks: [],
-      run: false
+      run: false,
+      quoteIdx: 0,
+      maxQuotes: 6
     },
     v: {
       unlocks: [],

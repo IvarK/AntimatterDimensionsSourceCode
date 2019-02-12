@@ -6,7 +6,7 @@ GameDatabase.reality.glyphSacrifice = [
       let nextDistantGalaxy = Math.pow(2 * (amount + 1), 2);
       return nextDistantGalaxy > 1e4
         ? `Remote galaxies start ${amount} later`
-        : `Remote galaxies start ${amount} later (next at ${shorten(nextDistantGalaxy, 2, 2)}`;
+        : `Remote galaxies start ${amount} later (next at ${shorten(nextDistantGalaxy, 2, 2)})`;
     }
   }, {
     id: "infinity",

@@ -91,7 +91,7 @@ GameDatabase.infinity.upgrades = {
     charged: {
       description: "Galaxies are more effective based on Teresa level",
       effect: () => 2 + player.celestials.ra.level / 100,
-      formatEffect: value => "+" + ((value-1) * 100) + "%"
+      formatEffect: value => "+" + Math.round((value-1) * 100) + "%"
     }
   },
   thisInfinityTimeMult: {
@@ -128,7 +128,7 @@ GameDatabase.infinity.upgrades = {
     charged: {
       description: "Dimension Boost multiplier power effect",
       effect: () => 1 + Math.sqrt(player.celestials.ra.level) / 100,
-      formatEffect: value => value
+      formatEffect: value => formatX(value, 2, 2)
     }
   },
   ipGen: {

@@ -52,7 +52,8 @@ const Ra = {
   gainedExp(level, auto = false) {
     let gain = Math.ceil(Math.pow(2, level/1000 - 3))
       if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-        if (auto && !player.celestials.ra.activeMode) gain *=2
+        if (player.celestials.ra.activeMode) gain *= 4
+        else if (auto) gain *=2
         else if (player.celestials.ra.activeMode) gain *= 4
       }
     return gain

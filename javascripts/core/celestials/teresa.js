@@ -86,10 +86,13 @@ var Effarig = {
   get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
   },
+  get maxQuoteIdx() {
+    return 4 + player.celestials.effarig.unlocks.length
+  },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]
   },
   nextQuote() {
-    if (player.celestials.effarig.quoteIdx < 4 + player.celestials.effarig.unlocks.length) player.celestials.effarig.quoteIdx++
+    if (player.celestials.effarig.quoteIdx < this.maxQuoteIdx) player.celestials.effarig.quoteIdx++
   },
 };

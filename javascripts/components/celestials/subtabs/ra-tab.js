@@ -19,7 +19,7 @@ Vue.component('ra-tab', {
       this.exp = player.celestials.ra.exp
       this.expRequired = Ra.requiredExp
       this.level = player.celestials.ra.level
-      this.totalCharges = Ra.superChargedUpgrades
+      this.totalCharges = Ra.totalCharges
       this.unlocks = player.celestials.ra.unlocks
       this.realityReward = Ra.realityReward
       this.activeMode = player.celestials.ra.activeMode
@@ -66,9 +66,9 @@ Vue.component('ra-tab', {
       </div>
       <div v-if="has(4)">{{ shorten(glyphMult, 2, 2) }}x to glyph level<br>{{ shorten(rmMult, 2, 2) }}x to RM gain</div>
       <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
-      Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
-      <br><br>
-      Multiply Teresa memory gain based on highest EP reached, Currently: {{ shorten(realityReward, 2, 2)}}x
+        Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
+        <br><br>
+        Multiply Teresa memory gain based on highest EP reached, Currently: {{ shorten(realityReward, 2, 2)}}x
       </button>
     </div>`
 });

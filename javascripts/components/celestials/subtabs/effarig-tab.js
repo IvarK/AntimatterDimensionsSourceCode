@@ -53,6 +53,9 @@ Vue.component('effarig-tab', {
     nextQuote() {
       Effarig.nextQuote()
     },
+    hasNextQuote() {
+      return this.quoteIdx < Effarig.maxQuoteIdx
+    }
   },
   computed: {
     effarigUnlocks() {
@@ -87,7 +90,7 @@ Vue.component('effarig-tab', {
   },
   template:
     `<div class="l-effarig-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
+      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
       <div class="c-effarig-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-effarig-shop">

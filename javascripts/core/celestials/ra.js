@@ -40,22 +40,20 @@ const Ra = {
   },
   giveExp(amount) {
     player.celestials.ra.exp += amount * this.expMultiplier
-    if (this.percentageToNextLevel >= 1) {
+    while (this.percentageToNextLevel >= 1) {
       player.celestials.ra.exp -= this.requiredExp
       player.celestials.ra.level++
       GameUI.notify.success(`Teresa has leveled up to level ${player.celestials.ra.level}!`);
       this.checkForUnlocks()
     }
-
-    if (this.percentageToNextLevel >= 1) this.giveExp(0) // Shouldn't never happen, but if you for some reason level more than one level per levelup it doesn't break
   },
   gainedExp(level, auto = false) {
     let gain = Math.ceil(Math.pow(2, level/1000 - 3))
-      if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-        if (player.celestials.ra.activeMode) gain *= 4
-        else if (auto) gain *=2
-        else if (player.celestials.ra.activeMode) gain *= 4
-      }
+    if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
+      if (player.celestials.ra.activeMode) gain *= 4
+      else if (auto) gain *=2
+      else if (player.celestials.ra.activeMode) gain *= 4
+    }
     return gain
   },
   checkForUnlocks() {
@@ -82,17 +80,17 @@ const Ra = {
   get isRunning() {
     return player.celestials.ra.run;
   },
-  get superChargedUpgrades() {
+  get totalCharges() {
     return Math.floor((player.celestials.ra.level + 1) / 3)
   },
   get chargesLeft() {
-    return this.superChargedUpgrades - player.celestials.ra.charged.length
+    return this.totalCharges - player.celestials.ra.charged.length
   },
   get superChargeUnlocked() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && player.celestials.ra.level > 1
   },
   get realityReward() {
-    return Math.max(Math.min((player.celestials.ra.maxEpGained.e - 10000)/100, 69), 1)
+    return Math.max( Math.min((player.celestials.ra.maxEpGained.e - 10000) / 100, 69), 1)
   },
   get glyphMult() {  // NOTE: These WILL fuck up if you cheat the unlocks before Teresa is at least level 47
     if (!this.has(RA_UNLOCKS.RM_GLYPH_BOOST)) return 1

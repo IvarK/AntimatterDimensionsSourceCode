@@ -33,7 +33,6 @@ return diff;
 
 function replicantiGalaxy() {
   if (!Replicanti.galaxies.canBuyMore) return;
-  console.log(asd)
   player.reality.upgReqChecks[0] = false;
   var galaxyGain = 1
   if (Achievement(126).isEnabled) {

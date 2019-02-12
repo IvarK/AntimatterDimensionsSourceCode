@@ -212,16 +212,16 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   purchase() {
-    if (!this.canBeBought) {
-      if (this.canCharge) this.charge();
-      else if (this.isCharged) this.disCharge();
-      return false;
+    if (super.purchase()) return true;
+    if (this.isCharged) {
+      this.disCharge();
+      return true;
     }
-    this.collection.push(this.id);
-    const currency = this._currency.value;
-    this._currency.value = currency.minus(this.cost);
-    GameUI.update();
-    return true;
+    if (this.canCharge) {
+      this.charge();
+      return true;
+    }
+    return false;
   }
 
   get isCharged() {

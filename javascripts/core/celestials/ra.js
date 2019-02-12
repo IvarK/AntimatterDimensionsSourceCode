@@ -83,7 +83,7 @@ const Ra = {
     return player.celestials.ra.run;
   },
   get superChargedUpgrades() {
-    return Math.floor((player.celestials.ra.level+1)/3)
+    return Math.floor((player.celestials.ra.level + 1) / 3)
   },
   get chargesLeft() {
     return this.superChargedUpgrades - player.celestials.ra.charged.length

@@ -511,11 +511,6 @@ dev.updateTestSave = function() {
     delete player.celestials.teresa.typePriorityOrder;
     player.options.testVersion = 29;
   }
-  if (player.options.testVersion === 29) {
-    player.infinitied = new Decimal(player.infinitied);
-    player.infinitiedBank = new Decimal(player.infinitiedBank);
-    player.options.testVersion = 29;
-  }
   if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6

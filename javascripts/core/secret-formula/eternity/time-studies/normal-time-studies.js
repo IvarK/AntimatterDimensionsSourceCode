@@ -268,7 +268,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 191,
     cost: 400,
     description: "After Eternity you permanently keep 5% of your Infinities",
-    effect: () => Decimal.floor(player.infinitied.mul(0.05))
+    effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 192,

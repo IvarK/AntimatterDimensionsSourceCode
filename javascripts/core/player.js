@@ -463,7 +463,7 @@ var player = {
 const Player = {
 
   get totalInfinitied() {
-    return Decimal.max(player.infinitied.plus(player.infinitiedBank), 0);
+    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
   get isInMatterChallenge() {

@@ -19,7 +19,7 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => formatX(value, 1, 1),
     charged: {
       description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1 + player.infinitied.plus(10).log10().log10().toNumber() * player.celestials.ra.level / 100,
+      effect: () => 1 + Math.log10(player.infinitied.clampMin(10).log10()) * player.celestials.ra.level / 100,
       formatEffect: value => formatPow(value, 2, 2)
     }
   },

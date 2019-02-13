@@ -51,7 +51,7 @@ function updateSpoilers() {
 	if (spoilers === 0) {
 		for (i=1; i<25; i++) {
 			displayed = 0;
-			if (i === 5 && (player.resets >= 4 || player.infinitied.gt(1) || player.eternities >= 1)) {
+			if (i === 5 && (player.resets >= 4 || player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i === 6 && (player.galaxies >= 1 || player.infinitied.gt(1) || player.eternities >= 1)) {

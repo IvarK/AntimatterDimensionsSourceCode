@@ -356,7 +356,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
-        return ret * Math.max(Math.sqrt(Enslaved.totalInfinities.max(1).log10()), 1);
+        return ret * Math.max(Math.sqrt(Enslaved.totalInfinities.clampMin(1).log10()), 1);
       }
       else return ret
     case "timefreeTickMult":

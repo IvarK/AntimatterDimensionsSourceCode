@@ -65,7 +65,7 @@ function bigCrunchReset() {
         player.currentChallenge = "";
 
     checkForEndMe();
-    //Infinitified is now Decimal so decide what happens here!
+    // FIXME: Infinitified is now Decimal so decide what happens here!
     //kong.submitStats('Infinitied', Player.totalInfinitied);
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 

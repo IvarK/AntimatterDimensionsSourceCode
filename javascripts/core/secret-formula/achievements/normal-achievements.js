@@ -478,7 +478,7 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
-    effect: () => Decimal.pow(2, Player.totalInfinitied.plus(1).log10())
+    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10())
   },
   {
     id: 117,
@@ -539,7 +539,7 @@ GameDatabase.achievements.normal = [
     id: 131,
     name: "No ethical consumption",
     tooltip: "Get 5 billion banked Infinities. Reward: After Eternity you permanently keep 5% of your Infinities.",
-    effect: () => Decimal.floor(player.infinitied.mul(0.05))
+    effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 132,

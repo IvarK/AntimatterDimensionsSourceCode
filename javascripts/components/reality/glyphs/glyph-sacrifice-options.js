@@ -63,7 +63,7 @@ const AutoSacTypeTab = {
             rarity % + Σ effects
           </div>
         </div>
-        <input type="number" min="0" max="200" :value="scoreThreshold"
+        <input type="number" min="0" :value="scoreThreshold"
                ref="scoreThreshold" @blur="setScoreThreshold"
                class="c-auto-sac-type-tab__input"
                :style="minScoreInputStyle"/>
@@ -72,7 +72,7 @@ const AutoSacTypeTab = {
         <div class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc" :style="descStyle">
           {{effect.genericDesc}}
         </div>
-        <input type="number" min="0" max="200" :value="effectScores[effect.id]"
+        <input type="number" min="0" :value="effectScores[effect.id]"
                @blur="setEffectScore(effect.id, $event)"
                class="c-auto-sac-type-tab__input"/>
       </div>

@@ -14,6 +14,7 @@ function maxReplicantiGalaxy(diff) {
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
+    if (Ra.isRunning) maxGal = 0
     let gainGal = 0;
     if (curGal < maxGal) { 
         if (diff / infiTime < maxGal - curGal) {
@@ -233,6 +234,20 @@ const ReplicantiUpgrade = {
     }
 
     get autobuyerId() { return 0; }
+
+    autobuyerTick() {
+      if (!this.isAutobuyerUnlocked || !this.isAutobuyerOn) return;
+      // Fixed price increase of 1e15; so total cost for N upgrades is:
+      // cost + cost * 1e15 + cost * 1e30 + ... + cost * 1e15^(N-1) == cost * (1e15^N - 1) / (1e15 - 1)
+      // N = log(IP * (1e15 - 1) / cost + 1) / log(1e15)
+      let N = player.infinityPoints.times(this.costIncrease - 1).dividedBy(this.cost).plus(1).log(this.costIncrease);
+      N = Math.round((Math.min(this.value + 0.01 * Math.floor(N), this.cap) - this.value) * 100);
+      if (N <= 0) return;
+      const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
+      player.infinityPoints = player.infinityPoints.minus(totalCost);
+      this.cost = this.cost.times(Decimal.pow(this.costIncrease, N));
+      this.value = nearestPercent(this.value + 0.01 * N);
+    }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {
     get value() { return player.replicanti.interval; }
@@ -334,6 +349,7 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
+      if (Ra.isRunning) return false
       if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
       return this.bought < this.max;
     },

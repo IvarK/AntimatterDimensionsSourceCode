@@ -386,6 +386,7 @@ class DimboostAutobuyerState extends AutobuyerState {
   }
 
   tick() {
+    if (Ra.isRunning) return;
     if (!this.canTick()) return;
     if (this.isBuyMaxUnlocked) {
       if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
@@ -462,6 +463,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
+    if (Ra.isRunning) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
     if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {

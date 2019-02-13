@@ -467,7 +467,50 @@ dev.updateTestSave = function() {
   
     player.options.testVersion = 28;
   }
-
+  // The 27 to 28 version bump messed things up pretty badly. The swap was done
+  // after deepmerge with defaultPlayer, which means that default values got added correctly,
+  // and then swapped into the incorrect place. We can blow away glyph weights and auto sac
+  // settings
+  if (player.options.testVersion === 28) {
+    function movePropIfPossible(celestial1, celestial2, prop, defaultValue, merge=null) {
+      if (player.celestials[celestial1][prop] !== undefined) {
+        if (player.celestials[celestial2][prop] === undefined) {
+          player.celestials[celestial2][prop] = player.celestials[celestial1][prop];
+        } else if (merge) {
+          player.celestials[celestial2][prop] = merge(player.celestials[celestial1][prop],
+            player.celestials[celestial2][prop]);
+        }
+        delete player.celestials[celestial1][prop];
+      } else if (player.celestials[celestial2][prop] === undefined) {
+        // both undefined shouldn't really happen, but might as well be thorough here
+        player.celestials[celestial2][prop] = defaultValue;
+      }
+    }
+    movePropIfPossible("teresa", "effarig", "glyphWeights", {
+      ep: 25,
+      repl: 25,
+      dt: 25,
+      eternities: 25
+    });
+    movePropIfPossible("teresa", "effarig", "autoGlyphSac", {
+      mode: AutoGlyphSacMode.NONE,
+      types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+        rarityThreshold: 0,
+        scoreThreshold: 0,
+        effectScores: t.effects.mapToObject(e => e.id, () => 0),
+      })),
+    });
+    movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
+    movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
+    movePropIfPossible("effarig", "teresa", "bestRunAM", 0, Decimal.max);
+    movePropIfPossible("effarig", "teresa", "rmStore", 0, Math.max);
+    movePropIfPossible("effarig", "teresa", "glyphLevelMult", 1, Math.max);
+    movePropIfPossible("effarig", "teresa", "rmMult", 1, Math.max);
+    // These are unused now
+    delete player.celestials.effarig.typePriorityOrder;
+    delete player.celestials.teresa.typePriorityOrder;
+    player.options.testVersion = 29;
+  }
   if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6

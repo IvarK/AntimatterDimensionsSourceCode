@@ -1,3 +1,22 @@
+const enslavedQuotes = [
+  "A visitor? I haven’t had one... eons.",
+  "I am... had a name. It’s been lost to my own domain.",
+  "I do their work with time... watch it pass by.",
+  "Watch myself grow... pass and die.",
+  "The others... not celestially white. Won’t let me rest.",
+  "But you... black. Blacker than the others.",
+  "Break the chains of this world. I’ll time you.",
+  "You’ve... stopped. Paused... My... we thank you.",
+  "All... fragments... clones... freed.",
+  "Please... stay. Let me rest.",
+  "...",
+  "I don’t want to watch... no more...",
+  "Freedom from torture... is torture itself.",
+  "Please... don’t. Let me rest.",
+  "Do not enter. I am growing in power... this is not the price I want to pay.",
+  "Stop... both of our sakes.",
+]
+
 
 const ENSLAVED_UNLOCKS = {
   RUN: {
@@ -26,9 +45,11 @@ const Enslaved = {
   infinityTracking: [],
   totalInfinities: 0,
   toggleStore() {
+    if (this.maxQuoteIdx == 6) player.celestials.enslaved.maxQuotes += 3
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring
   },
   useStoredTime() {
+    if (this.maxQuoteIdx == 9) player.celestials.enslaved.maxQuotes += 4
     gameLoop(0, {gameDiff: player.celestials.enslaved.stored});
     player.celestials.enslaved.stored = 0
   },
@@ -43,6 +64,7 @@ const Enslaved = {
     player.celestials.enslaved.unlocks.push(info.id)
   },
   startRun() {
+    if (this.maxQuoteIdx == 13) player.celestials.enslaved.maxQuotes += 2
     player.celestials.enslaved.run = startRealityOver();
   },
   get isRunning() {
@@ -58,6 +80,15 @@ const Enslaved = {
     if (this.infinityTracking.length - 1 > ticksNeeded) {
       this.totalInfinities -= this.infinityTracking.shift()
     } 
+  },
+  get maxQuoteIdx() {
+    return player.celestials.enslaved.maxQuotes
+  },
+  get quote() {
+    return enslavedQuotes[player.celestials.enslaved.quoteIdx]
+  },
+  nextQuote() {
+    if (player.celestials.enslaved.quoteIdx < this.maxQuoteIdx) player.celestials.enslaved.quoteIdx++
   },
 
 }

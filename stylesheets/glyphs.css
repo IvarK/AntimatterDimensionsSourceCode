@@ -195,6 +195,43 @@
   box-shadow: 0 0 0.8rem 0.4rem #131;
 }
 
+.l-glyph-auto-pick-options {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.c-glyph-auto-pick-options {
+  background: black;
+}
+
+.l-glyph-auto-pick-options__option {
+  box-sizing: border-box;
+}
+
+.c-glyph-auto-pick-options__option {
+  font-weight: bold;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-width: 0.1rem 0.2rem 0.1rem 0.2rem;
+  border-style: solid;
+}
+
+.c-glyph-auto-pick-options__option--active {
+  color: #d5ffd7;
+  border-color: #d5ffd7;
+  box-shadow: 0 0 0.1rem 0.1rem #d5ffd7;
+  z-index: 2;
+}
+
+.c-glyph-auto-pick-options__option--inactive {
+  color: #0b600e;
+  border-color: #0b600e;
+}
+
 .c-glyph-tooltip__effect {
   font-weight: normal;
   text-shadow: none;

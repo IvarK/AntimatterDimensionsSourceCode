@@ -41,13 +41,13 @@ const AutoSacTypeTab = {
     setScoreThreshold(event) {
       let inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.scoreThreshold = Math.min(200, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.scoreThreshold = Math.min(999, Math.max(inputValue, 0));
       }
     },
     setEffectScore(id, event) {
       let inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.effectScores[id] = Math.min(200, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.effectScores[id] = Math.min(999, Math.max(inputValue, 0));
       }
     },
   },
@@ -63,7 +63,7 @@ const AutoSacTypeTab = {
             rarity % + Σ effects
           </div>
         </div>
-        <input type="number" min="0" max="200" :value="scoreThreshold"
+        <input type="number" min="0" max="999" :value="scoreThreshold"
                ref="scoreThreshold" @blur="setScoreThreshold"
                class="c-auto-sac-type-tab__input"
                :style="minScoreInputStyle"/>
@@ -72,7 +72,7 @@ const AutoSacTypeTab = {
         <div class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc" :style="descStyle">
           {{effect.genericDesc}}
         </div>
-        <input type="number" min="0" max="200" :value="effectScores[effect.id]"
+        <input type="number" min="0" max="999" :value="effectScores[effect.id]"
                @blur="setEffectScore(effect.id, $event)"
                class="c-auto-sac-type-tab__input"/>
       </div>
@@ -166,16 +166,16 @@ Vue.component("glyph-sacrifice-options", {
   },
   template: /*html*/`
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
-    <div :class="optionClass(0)" @click="setMode(modes.NONE)">
+    <div :class="optionClass(modes.NONE)" @click="setMode(modes.NONE)">
       Auto sacrifice disabled
     </div>
-    <div :class="optionClass(1)" @click="setMode(modes.ALL)">
+    <div :class="optionClass(modes.ALL)" @click="setMode(modes.ALL)">
       Auto sacrifice all
     </div>
-    <div :class="optionClass(2)" @click="setMode(modes.RARITY_THRESHOLDS)">
+    <div :class="optionClass(modes.RARITY_THRESHOLDS)" @click="setMode(modes.RARITY_THRESHOLDS)">
       Set rarity requirements
     </div>
-    <div :class="optionClass(3)" @click="setMode(modes.ADVANCED)">
+    <div :class="optionClass(modes.ADVANCED)" @click="setMode(modes.ADVANCED)">
     ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
     <div v-if="mode === 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">

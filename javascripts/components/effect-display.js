@@ -13,6 +13,30 @@ Vue.component("effect-display", {
       effectValue: 0
     };
   },
+  watch: {
+    config: {
+      immediate: true,
+      handler(config) {
+        this.isVisible = false;
+        if (config === undefined) return;
+        const effect = config.effect;
+        const formatEffect = config.formatEffect;
+        if (effect === undefined || formatEffect === undefined) return;
+        this.isVisible = true;
+        this.formatEffect = formatEffect;
+        const effectValue = effect();
+        this.effectValue = effectValue;
+        this.updateFn = typeof effectValue === "number" ?
+          () => this.effectValue = effect() :
+          () => this.effectValue.copyFrom(effect());
+        if (this.hasCap) {
+          this.reachedCap = typeof effectValue === "number" ?
+            () => this.effectValue >= this.cap :
+            () => this.effectValue.gte(this.cap);
+        }
+      }
+    }
+  },
   computed: {
     titleDisplay() {
       if (this.config.staticEffect) return undefined;
@@ -28,24 +52,9 @@ Vue.component("effect-display", {
       return this.cap !== undefined;
     }
   },
-  created() {
-    if (this.config === undefined) return;
-    const config = this.config;
-    const effect = config.effect;
-    const formatEffect = config.formatEffect;
-    if (effect === undefined || formatEffect === undefined) return;
-    this.isVisible = true;
-    this.formatEffect = formatEffect;
-    const effectValue = effect();
-    this.effectValue = effectValue;
-    const update = typeof effectValue === "number" ?
-      () => this.effectValue = effect() :
-      () => this.effectValue.copyFrom(effect());
-    this.on$(GameEvent.UPDATE, update);
-    if (this.hasCap) {
-      this.reachedCap = typeof effectValue === "number" ?
-        () => this.effectValue >= this.cap :
-        () => this.effectValue.gte(this.cap);
+  methods: {
+    update() {
+      if (this.updateFn) this.updateFn();
     }
   },
   template:

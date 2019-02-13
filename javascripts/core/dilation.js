@@ -56,8 +56,11 @@ function buyDilationUpgrade(id) {
     let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
     if (player.dilation.dilatedTime.lt(realCost)) return false
 
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
-    player.dilation.rebuyables[id] += 1
+    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber()
+    buying = Math.min(buying, player.celestials.teresa.dtBulk)
+    let cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount)
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost)
+    player.dilation.rebuyables[id] += buying
     if (id == 2) {
         if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
@@ -73,8 +76,8 @@ function buyDilationUpgrade(id) {
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
       );
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(retroactiveTPFactor)
-      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(retroactiveTPFactor)
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
+      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
   return true

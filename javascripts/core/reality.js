@@ -6,6 +6,9 @@ const GlyphSelection = {
   get active() {
     return ui.view.modal.glyphSelection;
   },
+  get choiceCount() {
+    return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
+  },
   generate(count, level) {
     this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
     ui.view.modal.glyphSelection = true;
@@ -60,11 +63,11 @@ function requestManualReality() {
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
-  if (!Perk.glyphChoice3.isBought) {
+  let choiceCount = GlyphSelection.choiceCount;
+  if (choiceCount === 1) {
     Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
     return manualReality();
   }
-  const choiceCount = Perk.glyphChoice4.isBought  ? 4 : 3;
   GlyphSelection.generate(choiceCount, gainedGlyphLevel());
 }
 
@@ -91,7 +94,15 @@ function manualReality() {
 
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
-  let newGlyph = GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+  let gainedLevel = gainedGlyphLevel();
+  let newGlyph;
+  if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
+    let glyphs = Array.range(0, GlyphSelection.choiceCount)
+      .map(() => GlyphGenerator.randomGlyph(gainedLevel));
+    newGlyph = AutoGlyphPicker.pick(glyphs);
+  } else {
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
+  }
   if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
       // FIXME: remove console.log after initial rollout to testers
@@ -104,10 +115,10 @@ function autoReality() {
   if (newGlyph && Player.hasFreeInventorySpace) {
     Glyphs.addToInventory(newGlyph);
   }
-  completeReality(false, false);
+  completeReality(false, false, true);
 }
 
-function completeReality(force, reset) {
+function completeReality(force, reset, auto = false) {
   if (!reset) {
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
@@ -147,6 +158,9 @@ function completeReality(force, reset) {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+    if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel(), auto))
+    }
   }
 
   if (player.reality.respec) {
@@ -346,6 +360,10 @@ function handleCelestialRuns(force) {
 
   if (player.celestials.v.run) {
     player.celestials.v.run = false
+  }
+
+  if (player.celestials.ra.run) {
+    player.celestials.ra.run = false
   }
 }
 

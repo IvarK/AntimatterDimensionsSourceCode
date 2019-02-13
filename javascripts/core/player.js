@@ -372,19 +372,20 @@ var player = {
       run: false,
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
-      rmMult: 1
+      rmMult: 1,
+      dtBulk: 1
     },
     effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
+      quoteIdx: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
         dt: 25,
         eternities: 25
       },
-      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"],
       autoGlyphSac: {
         mode: AutoGlyphSacMode.NONE,
         types: GlyphTypes.list.mapToObject(t => t.id, t => ({
@@ -393,18 +394,35 @@ var player = {
           effectScores: t.effects.mapToObject(e => e.id, () => 0),
         })),
       },
+      autoGlyphPick: {
+        mode: AutoGlyphPickMode.RANDOM,
+      },
     },
     enslaved: {
       isStoring: false,
+      quoteIdx: 0,
       stored: 0,
       unlocks: [],
-      run: false
+      run: false,
+      quoteIdx: 0,
+      maxQuotes: 6
     },
     v: {
       unlocks: [],
+      quoteIdx: 0,
       run: false,
       runUnlocks: [0, 0, 0, 0, 0, 0],
       additionalStudies: 0
+    },
+    ra: {
+      level: 1,
+      exp: 0,
+      unlocks: [],
+      run: false,
+      charged: [],
+      quoteIdx: 0,
+      maxEpGained: new Decimal(0),
+      activeMode: false, // false if idle, true if active
     }
   },
   autoEcIsOn: true,

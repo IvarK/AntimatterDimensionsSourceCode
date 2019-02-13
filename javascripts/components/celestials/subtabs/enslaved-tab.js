@@ -4,7 +4,9 @@ Vue.component('enslaved-tab', {
       isStoring: false,
       stored: 0,
       enslavedInfinities: 0,
-      unlocks: []
+      unlocks: [],
+      quote: "",
+      quoteIdx: 0,
     };
   },
   methods: {
@@ -13,6 +15,8 @@ Vue.component('enslaved-tab', {
       this.stored = player.celestials.enslaved.stored
       this.enslavedInfinities = Enslaved.totalInfinities
       this.unlocks = player.celestials.enslaved.unlocks
+      this.quote = Enslaved.quote
+      this.quoteIdx = player.celestials.enslaved.quoteIdx
     },
     toggleStore() {
       Enslaved.toggleStore()
@@ -31,6 +35,12 @@ Vue.component('enslaved-tab', {
     },
     hasUnlock(info) {
       return Enslaved.has(info)
+    },
+    nextQuote() {
+      Enslaved.nextQuote()
+    },
+    hasNextQuote() {
+      return this.quoteIdx < Enslaved.maxQuoteIdx
     }
   },
   computed: {
@@ -40,6 +50,7 @@ Vue.component('enslaved-tab', {
   },
   template:
     `<div class="l-enslaved-celestial-tab">
+      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="l-enslaved-top-container">
         <div class="o-enslaved-stored-time"> You have {{ timeDisplayShort(stored) }} stored</div>
         <button class="o-enslaved-mechanic-button" :class="{'o-enslaved-mechanic-button--storing-time': isStoring}" @click="toggleStore">{{ isStoring ? "Storing wormhole time": "Store wormhole time" }}</button>

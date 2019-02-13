@@ -26,9 +26,11 @@ class GameMechanicState {
         const cap = typeof this.config.cap === "function" ?
          this.config.cap() :
          this.config.cap;
-        effectValue = typeof effectValue === "number" ?
-          Math.min(effectValue, cap) :
-          Decimal.min(effectValue, cap);
+        if (cap !== undefined) {
+          effectValue = typeof effectValue === "number" ?
+            Math.min(effectValue, cap) :
+            Decimal.min(effectValue, cap);
+        }
       }
       applyFn(effectValue);
     }

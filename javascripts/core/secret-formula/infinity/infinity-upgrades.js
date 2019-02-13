@@ -117,7 +117,7 @@ GameDatabase.infinity.upgrades = {
     costIncreaseThreshold: new Decimal("1e3000000"),
     description: "Multiply Infinity Points from all sources by 2",
     effect: () => player.infMult,
-    cap: new Decimal("1e1000000"),
+    cap: () => Effarig.eternityCap !== undefined ? Effarig.eternityCap : new Decimal("1e1000000"),
     formatEffect: value => formatX(value, 2, 2)
   }
 };

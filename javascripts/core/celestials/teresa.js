@@ -36,16 +36,20 @@ var Effarig = {
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
     showRealityTab("glyphstab");
+    Modal.message.show("Your glyph levels have been limited to 100.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.");
   },
   get isRunning() {
     return player.celestials.effarig.run;
   },
+  get eternityCap() {
+    return Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) ? 1e50 : undefined;
+  },
   get glyphLevelCap() {
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return 5000
+      return 10000
     }
     else if (Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      return 1000
+      return 3000
     }
     else {
       return 100
@@ -85,7 +89,7 @@ var Effarig = {
     return Math.min(x.log10() / 120, 3);
   },
   get tickspeed() {
-    const base = player.tickspeed.reciprocal().log10();
+    const base = 3 + player.tickspeed.reciprocal().log10();
     const pow = 0.625 + 0.125 * this.nerfFactor(player.timeShards);
     return new Decimal.pow(10, Math.pow(base, pow)).reciprocal();
   },

@@ -76,9 +76,9 @@ const Enslaved = {
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
     this.infinityTracking.push(Decimal.floor(infinities))
-    this.totalInfinities = this.totalInfinities.plus(Decimal.floor(infinities));
+    this.totalInfinities = this.totalInfinities.plus(infinities.floor());
     if (this.infinityTracking.length - 1 > ticksNeeded) {
-      this.totalInfinities = this.totalInfinities.sub(this.infinityTracking.shift());
+      this.totalInfinities = this.totalInfinities.minus(this.infinityTracking.shift());
     } 
   },
   get maxQuoteIdx() {

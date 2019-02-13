@@ -44,8 +44,8 @@ Vue.component('statistics-tab', {
       const infinity = this.infinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
-        infinity.count = player.infinitied;
-        infinity.banked = player.infinitiedBank;
+        infinity.count.copyFrom(player.infinitied);
+        infinity.banked.copyFrom(player.infinitiedBank);
         infinity.hasBest = player.bestInfinityTime < 999999999999;
         infinity.best.setFrom(player.bestInfinityTime);
         infinity.this.setFrom(player.thisInfinityTime);

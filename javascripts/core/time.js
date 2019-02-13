@@ -46,7 +46,7 @@ const Time = {
     return this.deltaTimeFull.totalMilliseconds;
   },
   /**
-   * Frame delta time, but without EC12 or wormhole effects
+   * Frame delta time, but without EC12 or black hole effects
    * @returns {TimeSpan}
    */
   get unscaledDeltaTime() {

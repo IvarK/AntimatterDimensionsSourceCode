@@ -143,10 +143,10 @@ function onLoad() {
     }
   }
 
-    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
+    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (isDevEnvironment()) player.options.testVersion = 27;
+        if (isDevEnvironment()) player.options.testVersion = 30;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -179,6 +179,8 @@ function onLoad() {
         convertAutobuyerMode();
         unfuckChallengeIds();
         unfuckMultCosts();
+        player.secretUnlocks.why = player.why
+        delete player.why
     }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -188,7 +190,7 @@ function onLoad() {
     document.getElementById("game").style.display = "none";
   }
 
-	initializeWormhole();
+	initializeBlackHole();
   recalculateAllGlyphs();
 
   Autobuyer.tryUnlockAny();
@@ -198,7 +200,7 @@ function onLoad() {
   resizeCanvas();
   checkForEndMe();
   updateRealityUpgrades();
-  updateWormholeUpgrades()
+  updateBlackHoleUpgrades()
   updateAutomatorRows()
   checkPerkValidity()
   GameCache.buyablePerks.invalidate();
@@ -220,14 +222,14 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
-  $(".wormhole-upgrades").hide()
-  if (player.wormhole[0].unlocked) {
-    $("#wormholeunlock").hide()
-    $("#wormholecontainer").show()
-    $("#whupg1").show()
+  $(".blackhole-upgrades").hide()
+  if (player.blackHole[0].unlocked) {
+    $("#blackholeunlock").hide()
+    $("#blackholecontainer").show()
+    $("#bhupg1").show()
   }
-  if (player.wormhole[1].unlocked) $("#whupg2").show()
-  if (player.wormhole[2].unlocked) $("#whupg3").show()
+  if (player.blackHole[1].unlocked) $("#bhupg2").show()
+  if (player.blackHole[2].unlocked) $("#bhupg3").show()
 
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
@@ -242,11 +244,11 @@ function onLoad() {
       simulateTime(diff/1000)
   }
 
-  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the wormhole in the correct phase.
-  for (let i = 0; i < player.wormhole.length; i++) {
-    updateWormholeStatusText(i);
+  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the black hole in the correct phase.
+  for (let i = 0; i < player.blackHole.length; i++) {
+    updateBlackHoleStatusText(i);
   }
-  updateWormholeGraphics();
+  updateBlackHoleGraphics();
 }
 
 function convertAutobuyerMode() {

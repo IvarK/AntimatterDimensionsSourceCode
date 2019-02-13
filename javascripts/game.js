@@ -721,11 +721,11 @@ var IPminpeak = new Decimal(0)
 var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 
-const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, WORMHOLE: 3}
+const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, BLACKHOLE: 3}
 
-function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
+function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
   if (effectsToConsider === undefined) {
-    effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE];
+    effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE];
   }
   let factor = 1;
   if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
@@ -737,18 +737,18 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
   }
   
-  if (player.wormhole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.WORMHOLE)) {
-    if (wormholeOverride !== undefined) {
-      factor *= wormholeOverride;
-    } else if (!player.wormholePause) {
-      for (let wormhole of player.wormhole) {
-        if (wormhole.active) {
-          factor *= wormhole.power;
+  if (player.blackHole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.BLACKHOLE)) {
+    if (blackHoleOverride !== undefined) {
+      factor *= blackHoleOverride;
+    } else if (!player.blackHolePause) {
+      for (let blackHole of player.blackHole) {
+        if (blackHole.active) {
+          factor *= blackHole.power;
           if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
         } else {
-          // If a wormhole is inactive, even if later wormholes have wormhole.active set to true
-          // they aren't currently active (instead they will activate as soon as the previous wormhole is active).
-          // Thus, as soon as we reach an inactive wormhole, we stop increasing the speedup factor.
+          // If a black hole is inactive, even if later black holes have blackHole.active set to true
+          // they aren't currently active (instead they will activate as soon as the previous black hole is active).
+          // Thus, as soon as we reach an inactive black hole, we stop increasing the speedup factor.
           break;
         }
       }
@@ -758,7 +758,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
   if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
     factor = Effarig.multiplier(factor).toNumber();
   }
-  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))
+  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))
   if (tempSpeedupToggle) {
     factor *= 500;
   }
@@ -793,21 +793,21 @@ function gameLoop(diff, options = {}) {
 
     if (options.gameDiff === undefined) {
       let speedFactor;
-      if (options.wormholeSpeedup === undefined) {
+      if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
       } else {
         // If we're in EC12, time shouldn't speed up at all.
-        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.WORMHOLE], options.wormholeSpeedup);
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE], options.blackHoleSpeedup);
       }
       if (player.celestials.enslaved.isStoring) {
-        const speedFactorWithoutWormhole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
+        const speedFactorWithoutBlackHole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
         // Note that in EC12, this is 0, so it's not an issue there.
-        const timeStoredFactor = speedFactor / speedFactorWithoutWormhole - 1;
+        const timeStoredFactor = speedFactor / speedFactorWithoutBlackHole - 1;
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently this only happens in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
         player.celestials.enslaved.stored += diff * timeStoredFactor;
-        speedFactor = speedFactorWithoutWormhole;
+        speedFactor = speedFactorWithoutBlackHole;
       }
       diff *= speedFactor;
     } else {
@@ -816,8 +816,8 @@ function gameLoop(diff, options = {}) {
 
     DeltaTimeState.update(realDiff, diff);
 
-    // Wormhole is affected only by time glyphs.
-    let wormholeDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+    // Black hole is affected only by time glyphs.
+    let blackHoleDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
 
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
@@ -1122,13 +1122,13 @@ function gameLoop(diff, options = {}) {
     );
 
   document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
-  if (player.wormhole[0].unlocked && !player.wormholePause) {
-    updateWormholePhases(wormholeDiff);
-    for (let i = 0; i < player.wormhole.length; i++) {
-      updateWormholeStatusText(i);
-      updateWormholeUpgradeDisplay(i);
+  if (player.blackHole[0].unlocked && !player.blackHolePause) {
+    updateBlackHolePhases(blackHoleDiff);
+    for (let i = 0; i < player.blackHole.length; i++) {
+      updateBlackHoleStatusText(i);
+      updateBlackHoleUpgradeDisplay(i);
     }
-    updateWormholeGraphics();
+    updateBlackHoleGraphics();
   }
   // Reality unlock and TTgen perk autobuy
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
@@ -1162,9 +1162,9 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    GameUI.notify.wormholes = false;
+    GameUI.notify.blackHoles = false;
 
-    // Upper-bound the number of ticks (this also applies if the wormhole is unlocked)
+    // Upper-bound the number of ticks (this also applies if the black hole is unlocked)
     if (ticks > 1000 && !real && !fast) {
       bonusDiff = (ticks - 1000) / 20;
       ticks = 1000;
@@ -1173,19 +1173,19 @@ function simulateTime(seconds, real, fast) {
       ticks = 50;
     }
     
-    // Simulation code with wormhole
-    if (player.wormhole[0].unlocked && !player.wormholePause) {
+    // Simulation code with black hole
+    if (player.blackHole[0].unlocked && !player.blackHolePause) {
       let remainingRealSeconds = seconds;
       for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
         let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
-        // The wormhole is affected by time glyphs, but nothing else.
-        let remainingWormholeSeconds = remainingRealSeconds * timeGlyphSpeedup;
-        [realTickTime, wormholeSpeedup] = calculateWormholeOfflineTick(remainingWormholeSeconds, numberOfTicksRemaining, 0.0001);
+        // The black hole is affected by time glyphs, but nothing else.
+        let remainingblackHoleSeconds = remainingRealSeconds * timeGlyphSpeedup;
+        [realTickTime, blackHoleSpeedup] = calculateBlackHoleOfflineTick(remainingblackHoleSeconds, numberOfTicksRemaining, 0.0001);
         realTickTime /= timeGlyphSpeedup;
         remainingRealSeconds -= realTickTime;
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).
-        gameLoop(1000 * realTickTime, {wormholeSpeedup: wormholeSpeedup});
+        gameLoop(1000 * realTickTime, {blackHoleSpeedup: blackHoleSpeedup});
         Autobuyer.tick();
       }
     }
@@ -1202,11 +1202,11 @@ function simulateTime(seconds, real, fast) {
     else popupString+= "."
     if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
-    for (let i = 0; i < player.wormhole.length; i++) {
-      let currentActivations = player.wormhole[i].activations;
-      let oldActivations = playerStart.wormhole[i].activations;
+    for (let i = 0; i < player.blackHole.length; i++) {
+      let currentActivations = player.blackHole[i].activations;
+      let oldActivations = playerStart.blackHole[i].activations;
       let activationsDiff = currentActivations - oldActivations;
-      if (activationsDiff > 0)  popupString += " <br>Wormhole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
+      if (activationsDiff > 0)  popupString += " <br>Black hole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
     }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
@@ -1215,7 +1215,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    GameUI.notify.wormholes = true;
+    GameUI.notify.blackHoles = true;
 }
 
 function updateChart(first) {

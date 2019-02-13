@@ -377,7 +377,7 @@ dev.updateTestSave = function() {
   if (player.options.testVersion == 17) {
     if (player.reality.upg.includes(20)) {
       player.wormhole[1].unlocked = true
-      $("#whupg2").show()
+      $("#bhupg2").show()
     }
     player.options.testVersion = 18
   }
@@ -511,9 +511,19 @@ dev.updateTestSave = function() {
     delete player.celestials.teresa.typePriorityOrder;
     player.options.testVersion = 29;
   }
-  if (player.wormhole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
+
+  if (player.options.testVersion === 29) {
+    player.blackHole = player.wormhole
+    player.blackHolePause = player.wormholePause
+    delete player.wormhole
+    delete player.wormholePause
+    player.options.testVersion = 30;
+  }
+
+  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+
 }
 
 // Still WIP

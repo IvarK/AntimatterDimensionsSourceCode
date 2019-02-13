@@ -34,10 +34,10 @@ const ENSLAVED_UNLOCKS = {
     price: TimeSpan.fromYears(1e30).totalMilliseconds,
     description: "Multiplier to RM based on current time modifier, unlock V, the Celestial of Achievements"
   },
-  WORMHOLE: {
+  BLACK_HOLE: {
     id: 3,
     price: TimeSpan.fromYears(1e50).totalMilliseconds,
-    description: "Unlock the 3rd Wormhole"
+    description: "Unlock the 3rd Black Hole"
   }
 }
 
@@ -59,7 +59,7 @@ const Enslaved = {
   buyUnlock(info) {
     if (player.celestials.enslaved.stored < info.price) return false
     if (this.has(info)) return false
-    if (info.id == 3) player.wormhole[2].unlocked = true
+    if (info.id == 3) player.blackHole[2].unlocked = true
     player.celestials.enslaved.stored -= info.price
     player.celestials.enslaved.unlocks.push(info.id)
   },

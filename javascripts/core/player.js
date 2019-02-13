@@ -335,9 +335,9 @@ var player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  wormhole: [{
+  blackHole: [{
     speed: 60 * 60, // Seconds to fill
-    power: 180, // Multiplier from the wormhole
+    power: 180, // Multiplier from the black hole
     duration: 10, // How long it lasts.
     phase: 0,
     active: false,
@@ -362,7 +362,7 @@ var player = {
     unlocked: false,
     activations: 0
   }],
-  wormholePause: false,
+  blackHolePause: false,
   ttbuyer: false,
   celestials: {
     teresa: {

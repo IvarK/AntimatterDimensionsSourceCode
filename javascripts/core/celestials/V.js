@@ -122,7 +122,7 @@ const V_UNLOCKS = {
       const db = GameDatabase.Celestials.V.mainUnlock;
       if (player.realities < db.realities) return false;
       if (player.eternities < db.eternities) return false;
-      if (player.infinitied + player.infinitiedBank < db.infinities) return false;
+      if (player.infinitied.plus(player.infinitiedBank).gt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;
   

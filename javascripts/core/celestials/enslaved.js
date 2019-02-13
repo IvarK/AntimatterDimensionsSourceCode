@@ -43,7 +43,7 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   infinityTracking: [],
-  totalInfinities: 0,
+  totalInfinities: new Decimal(0),
   toggleStore() {
     if (this.maxQuoteIdx == 6) player.celestials.enslaved.maxQuotes += 3
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring
@@ -71,14 +71,14 @@ const Enslaved = {
     return player.celestials.enslaved.run;
   },
   get adjustedDilationMultiplier() {
-    return this.totalInfinities / 1e100
+    return this.totalInfinities.div(1e100);
   },
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
-    this.infinityTracking.push(Math.floor(infinities))
-    this.totalInfinities += Math.floor(infinities)
+    this.infinityTracking.push(Decimal.floor(infinities))
+    this.totalInfinities = this.totalInfinities.plus(Decimal.floor(infinities));
     if (this.infinityTracking.length - 1 > ticksNeeded) {
-      this.totalInfinities -= this.infinityTracking.shift()
+      this.totalInfinities = this.totalInfinities.sub(this.infinityTracking.shift());
     } 
   },
   get maxQuoteIdx() {

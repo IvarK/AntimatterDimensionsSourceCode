@@ -37,11 +37,11 @@ function bigCrunchReset() {
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
+    if (player.realities > 0 && Player.totalInfinitied.eq(0) && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
 
-    if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied === 0) {
+    if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
 
@@ -53,7 +53,7 @@ function bigCrunchReset() {
 
     auto = autoS; //only allow autoing if prev crunch was autoed
     autoS = true;
-    player.infinitied = player.infinitied + Math.round(gainedInfinities());
+    player.infinitied = player.infinitied.plus(gainedInfinities().round());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
 
     if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
@@ -65,8 +65,8 @@ function bigCrunchReset() {
         player.currentChallenge = "";
 
     checkForEndMe();
-
-    kong.submitStats('Infinitied', Player.totalInfinitied);
+    //Infinitified is now Decimal so decide what happens here!
+    //kong.submitStats('Infinitied', Player.totalInfinitied);
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 
     let currenReplicanti = player.replicanti.amount;
@@ -114,8 +114,8 @@ function secondSoftReset() {
 
 function checkBigCrunchAchievements() {
     giveAchievement("To infinity!");
-    if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+    if (player.infinitied.gte(10)) giveAchievement("That's a lot of infinites");
+    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }

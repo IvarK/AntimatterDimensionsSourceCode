@@ -26,7 +26,7 @@ function onLoad() {
   if (isDevEnvironment()) {
     guardFromNaNValues(player);
   }
-  if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")

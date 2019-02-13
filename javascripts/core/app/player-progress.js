@@ -12,7 +12,7 @@ class PlayerProgress {
   }
 
   get isInfinityUnlocked() {
-    return this._player.infinitied > 0 || this.isEternityUnlocked;
+    return this._player.infinitied.gt(0) || this.isEternityUnlocked;
   }
 
   static get current() {

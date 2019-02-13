@@ -44,7 +44,7 @@ const AutoGlyphSacrifice = {
     switch (AutoGlyphSacrifice.mode) {
       case AutoGlyphSacMode.NONE: return false;
       case AutoGlyphSacMode.ALL: return true;
-      case AutoGlyphSacMode.RARITY_THRESHOLD:
+      case AutoGlyphSacMode.RARITY_THRESHOLDS:
       case AutoGlyphSacMode.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
     }

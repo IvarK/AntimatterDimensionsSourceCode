@@ -140,7 +140,7 @@ const V_UNLOCKS = {
     },
     {
     id: 2,
-    reward: "Achievement count affects wormhole power, Unlock Ra, Celestial of the Forgotten.",
+    reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 23 V-achievements",
     effect: () => Math.pow(1.1, Math.pow(GameCache.achievementCount.value, getAdjustedGlyphEffect("effarigachievement"))),
     format: x => formatX(x),

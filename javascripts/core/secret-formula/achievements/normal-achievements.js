@@ -598,12 +598,12 @@ GameDatabase.achievements.normal = [
   {
     id: 144,
     name: "Is this an Interstellar reference?",
-    tooltip: "Unlock the Wormhole"
+    tooltip: "Unlock the Black Hole"
   },
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    tooltip: "Have Wormhole interval smaller than the duration"
+    tooltip: "Have the Black Hole interval smaller than the duration"
   },
   {
     id: 146,
@@ -658,6 +658,6 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: "Spend 24 hours with wormhole active in a row"
+    tooltip: "Spend 24 hours with black hole active in a row"
   },
 ];

@@ -306,7 +306,7 @@ function completeReality(force, reset, auto = false) {
     Tab.dimensions.normal.show();
   }
   Marathon2 = 0;
-  updateWormholeUpgrades();
+  updateBlackHoleUpgrades();
   updateAutomatorRows();
   drawPerkNetwork();
   document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")

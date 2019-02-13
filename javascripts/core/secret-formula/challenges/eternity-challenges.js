@@ -149,7 +149,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => player.realities > 0 ?
-      "The game runs 1000x slower; wormholes and time glyph effects are disabled." :
+      "The game runs 1000x slower; black holes and time glyph effects are disabled." :
       "The game runs 1000x slower.",
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),

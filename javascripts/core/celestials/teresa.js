@@ -13,6 +13,13 @@ const EFFARIG_UNLOCKS = {
   REALITY_COMPLETE: 6
 }
 
+const EFFARIG_COSTS = {
+  ADJUSTER: 1e7,
+  AUTOSACRIFICE: 2e8,
+  AUTOPICKER: 3e9,
+  RUN: 4e10,
+}
+
 var Effarig = {
   buyUnlock(id, cost) {
     if (this.shardAmount < cost) return

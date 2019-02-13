@@ -50,7 +50,10 @@ Vue.component('effarig-tab', {
   computed: {
     effarigUnlocks() {
       return EFFARIG_UNLOCKS
-    }
+    },
+    effarigCosts() {
+      return EFFARIG_COSTS
+    },
   },
   components: {
     "glyph-weight-sliders": {
@@ -83,11 +86,11 @@ Vue.component('effarig-tab', {
       <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
       <div class="c-effarig-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-effarig-shop">
-        <button class="o-effarig-shop-button" @click="buyUnlock(0, 5e6)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.ADJUSTER] }">Unlock glyph level adjustment.<br>Cost: 5,000,000 Relic Shards</button>
-        <button class="o-effarig-shop-button" @click="buyUnlock(1, 2e8)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOSACRIFICE] }">Unlock automatic glyph sacrifice.<br>Cost: 200,000,000 Relic Shards</button>
-        <button class="o-effarig-shop-button" @click="buyUnlock(2, 5e8)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOPICKER] }">Unlock automatic glyph picker.<br>Cost: 500,000,000 Relic Shards</button>
+        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.ADJUSTER, effarigCosts.ADJUSTER)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.ADJUSTER] }">Unlock glyph level adjustment.<br>Cost: {{ shorten(effarigCosts.ADJUSTER) }} Relic Shards</button>
+        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.AUTOSACRIFICE, effarigCosts.AUTOSACRIFICE)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOSACRIFICE] }">Unlock automatic glyph sacrifice.<br>Cost: {{ shorten(effarigCosts.AUTOSACRIFICE) }} Relic Shards</button>
+        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.AUTOPICKER, effarigCosts.AUTOPICKER)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOPICKER] }">Unlock automatic glyph picker.<br>Cost: {{ shorten(effarigCosts.AUTOPICKER) }} Relic Shards</button>
       </div>
-      <button class="o-effarig-shop-button" @click="buyUnlock(3, 1e9)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.RUN] }">Unlock Effarig's reality.<br>Cost: 1,000,000,000 Relic Shards</button>
+      <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.RUN, effarigCosts.RUN)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.RUN] }">Unlock Effarig's reality.<br>Cost: {{ shorten(effarigCosts.RUN) }} Relic Shards</button>
       <div class="l-effarig-glyph-settings">
         <div v-if="unlocks[effarigUnlocks.AUTOSACRIFICE]">
           Highest type will be picked, lowest sacrificed.

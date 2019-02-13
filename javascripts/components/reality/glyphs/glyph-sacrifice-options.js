@@ -41,13 +41,13 @@ const AutoSacTypeTab = {
     setScoreThreshold(event) {
       let inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.scoreThreshold = Math.min(200, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.scoreThreshold = Math.min(999, Math.max(inputValue, 0));
       }
     },
     setEffectScore(id, event) {
       let inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.effectScores[id] = Math.min(200, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.effectScores[id] = Math.min(999, Math.max(inputValue, 0));
       }
     },
   },
@@ -63,7 +63,7 @@ const AutoSacTypeTab = {
             rarity % + Σ effects
           </div>
         </div>
-        <input type="number" min="0" :value="scoreThreshold"
+        <input type="number" min="0" max="999" :value="scoreThreshold"
                ref="scoreThreshold" @blur="setScoreThreshold"
                class="c-auto-sac-type-tab__input"
                :style="minScoreInputStyle"/>
@@ -72,7 +72,7 @@ const AutoSacTypeTab = {
         <div class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc" :style="descStyle">
           {{effect.genericDesc}}
         </div>
-        <input type="number" min="0" :value="effectScores[effect.id]"
+        <input type="number" min="0" max="999" :value="effectScores[effect.id]"
                @blur="setEffectScore(effect.id, $event)"
                class="c-auto-sac-type-tab__input"/>
       </div>

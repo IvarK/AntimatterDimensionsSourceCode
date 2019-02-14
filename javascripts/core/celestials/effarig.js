@@ -105,10 +105,11 @@ var Effarig = {
   nerfFactor(power) {
     let x = Decimal.max(power, 10);
     if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      return Math.min(x.log10() / 1000, 1);
+      return Math.min(x.log10() / 1000, 0.1);
     }
     else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return Math.min(x.log10() / 120, 1);
+      let val = x.log10() / 240;
+      return val < 0.75 ? val : 1.92 - 7 / (8 * val);
     }
     return Math.min(x.log10() / 120, 3);
   },

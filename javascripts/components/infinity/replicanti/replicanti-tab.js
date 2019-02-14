@@ -9,7 +9,8 @@ Vue.component("replicanti-tab", {
       mult: new Decimal(0),
       hasRaisedCap: false,
       replicantiCap: new Decimal(Number.MAX_VALUE),
-      effarigInfinityBonusRG: 0
+      effarigInfinityBonusRG: 0,
+      nextEffarigRGThreshold: 0
     };
   },
   computed: {
@@ -65,6 +66,7 @@ Vue.component("replicanti-tab", {
       this.hasRaisedCap = Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
       this.replicantiCap.copyFrom(replicantiCap());
       this.effarigInfinityBonusRG = Effarig.bonusRG;
+      this.nextEffarigRGThreshold = Decimal.pow(Number.MAX_VALUE, Effarig.bonusRG + 2);
     }
   },
   template:
@@ -78,7 +80,7 @@ Vue.component("replicanti-tab", {
       >Unlock Replicanti<br>Cost: {{shortenCosts(1e140)}} IP</primary-button>
       <template v-else>
         <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchases" | pluralize(ec8Purchases)}} left.</div>
-        <div v-if="hasRaisedCap">Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}} and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity.</div>
+        <div v-if="hasRaisedCap">Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}} and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity. (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})</div>
         <p class="c-replicanti-description">
           You have <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
           Translated to <span class="c-replicanti-description__accent">{{shortenRateOfChange(mult)}}</span>x multiplier on all Infinity Dimensions.

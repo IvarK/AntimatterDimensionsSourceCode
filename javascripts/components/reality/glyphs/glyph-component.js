@@ -50,7 +50,7 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
-    cappedLevel: {
+    effectiveLevel: {
       type: Number,
       default: 0,
     }
@@ -80,12 +80,12 @@ const GlyphTooltipComponent = {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
     },
     levelText() {
-      return this.level == this.cappedLevel
+      return this.level == this.effectiveLevel
         ? `Level: ${this.level}`
-        : `Level: ▼${Effarig.glyphLevelCap}▼`;
+        : `Level: ▼${this.effectiveLevel}▼`;
     },
     levelStyle() {
-      return this.level == this.cappedLevel ? {
+      return this.level == this.effectiveLevel ? {
         color: "#FFFFFF",
       } : {
           color: "#FF1111",
@@ -195,7 +195,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
-      cappedLevel: 0,
+      effectiveLevel: 0,
     }
   },
   computed: {
@@ -277,7 +277,7 @@ Vue.component("glyph-component", {
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = glyphSacrificeGain(this.glyph);
-      this.cappedLevel = (Effarig.isRunning && this.glyph.level > Effarig.glyphLevelCap) ? Effarig.glyphLevelCap : this.glyph.level;
+      this.effectiveLevel = (Effarig.isRunning && this.glyph.level > Effarig.glyphLevelCap) ? Effarig.glyphLevelCap : this.glyph.level;
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
@@ -379,7 +379,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
-                       :cappedLevel="cappedLevel"
+                       :effectiveLevel="effectiveLevel"
                        :visible="isCurrentTooltip"/>
       </div>
       <div ref="over"

@@ -104,14 +104,17 @@ var Effarig = {
   },
   nerfFactor(power) {
     let x = Decimal.max(power, 10);
-    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) { // Effarig Infinity: Hardcap at 0.1
       return Math.min(x.log10() / 1000, 0.1);
     }
-    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {  // Effarig Eternity: Softcap at 0.75, approaches 1.92
       let val = x.log10() / 240;
       return val < 0.75 ? val : 1.92 - 7 / (8 * val);
     }
-    return Math.min(x.log10() / 120, 3);
+    else {  // Effarig Reality: Softcap at 2, hardcap at 3
+      let val = x.log10() / 200;
+      return val < 2 ? val : Math.min(2 + 0.2 * Math.log10(val - 1), 3);
+    }
   },
   get tickspeed() {
     const base = 3 + player.tickspeed.reciprocal().log10();

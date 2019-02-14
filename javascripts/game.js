@@ -468,7 +468,7 @@ function checkForRUPG8() {
 
 function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
-        return 1;
+        return new Decimal(1);
     }
     let infGain = Effects.max(
       1,

@@ -91,7 +91,7 @@ function replicantiLoop(diff) {
     PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 
-    var current = player.replicanti.amount.ln();
+    var current = player.replicanti.amount.clampMin(1).ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 

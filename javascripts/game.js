@@ -470,13 +470,11 @@ function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
         return 1;
     }
-    let infGain = new Decimal(Effects.max(
+    let infGain = Effects.max(
       1,
       Achievement(87)
     ).toDecimal();
     infGain = infGain.timesEffectsOf(TimeStudy(32));
-      TimeStudy(32)
-    ));
     if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
     infGain = infGain.times(Math.max(1, getAdjustedGlyphEffect("infinityinfmult")));
     if (player.reality.upg.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));

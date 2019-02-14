@@ -75,7 +75,7 @@ const Enslaved = {
   },
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
-    this.infinityTracking.push(Decimal.floor(infinities))
+    this.infinityTracking.push(infinities.floor())
     this.totalInfinities = this.totalInfinities.plus(infinities.floor());
     if (this.infinityTracking.length - 1 > ticksNeeded) {
       this.totalInfinities = this.totalInfinities.minus(this.infinityTracking.shift());

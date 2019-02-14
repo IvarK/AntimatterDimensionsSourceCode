@@ -878,7 +878,7 @@ function gameLoop(diff, options = {}) {
         infGen = infGen.plus(1);
     }
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
-      infGen = infGen.plus(gainedInfinities().times(player.eternities).floor()).times(diff/1000))
+      infGen = infGen.plus(gainedInfinities().times(player.eternities).floor().times(diff/1000))
     }
 
     player.infinitied = player.infinitied.plus(infGen);

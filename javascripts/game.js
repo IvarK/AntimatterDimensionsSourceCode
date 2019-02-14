@@ -477,9 +477,9 @@ function gainedInfinities() {
     infGain = infGain.timesEffectsOf(TimeStudy(32));
       TimeStudy(32)
     ));
-    if (player.reality.rebuyables[5] > 0) infGain = infGain.mul(Math.pow(5, player.reality.rebuyables[5]));
-    infGain = infGain.mul(Math.max(1, getAdjustedGlyphEffect("infinityinfmult")));
-    if (player.reality.upg.includes(7)) infGain = infGain.mul(1 + (player.galaxies / 30));
+    if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
+    infGain = infGain.times(Math.max(1, getAdjustedGlyphEffect("infinityinfmult")));
+    if (player.reality.upg.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));
     return infGain;
 }
 
@@ -863,7 +863,7 @@ function gameLoop(diff, options = {}) {
   let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
         if (player.reality.upg.includes(11)) {
-          let gained = gainedInfinities().mul(0.1).floor().mul(diff / 1000);
+          let gained = gainedInfinities().times(0.1).floor().times(diff / 1000);
           infGen = infGen.plus(gained);
 
         } else player.partInfinitied += diff / player.bestInfinityTime;
@@ -878,7 +878,7 @@ function gameLoop(diff, options = {}) {
         infGen = infGen.plus(1);
     }
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
-      infGen = infGen.plus(gainedInfinities().mul(player.eternities).floor()).mul(diff/1000))
+      infGen = infGen.plus(gainedInfinities().times(player.eternities).floor()).times(diff/1000))
     }
 
     player.infinitied = player.infinitied.plus(infGen);

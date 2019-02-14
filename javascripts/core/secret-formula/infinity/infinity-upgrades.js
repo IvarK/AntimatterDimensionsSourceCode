@@ -187,5 +187,5 @@ GameDatabase.infinity.upgrades = {
 };
 
 function _INFUPG_dimInfinityMult() {
-  return Player.totalInfinitied.mul(0.2).plus(1);
+  return Player.totalInfinitied.times(0.2).plus(1);
 }

@@ -46,10 +46,8 @@ function getTickSpeedMultiplier() {
         Achievement(86),
         InfinityChallenge(5).reward
       );
-      galaxies -= 2;
-      console.log(galaxies);
       let perGalaxy = new Decimal(0.965)
-      return perGalaxy.pow(galaxies).times(baseMultiplier);
+      return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
   }
 }
 

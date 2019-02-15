@@ -36,6 +36,7 @@ function getTickSpeedMultiplier() {
   } else {
       let baseMultiplier = 0.8
       if (Challenge(5).isRunning) baseMultiplier = 0.83
+      galaxies -= 2;
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
         InfinityUpgrade.galaxyBoost.chargedEffect,
@@ -46,7 +47,7 @@ function getTickSpeedMultiplier() {
         InfinityChallenge(5).reward
       );
       let perGalaxy = new Decimal(0.965)
-      return perGalaxy.pow(galaxies-2).times(baseMultiplier);
+      return perGalaxy.pow(galaxies).times(baseMultiplier);
   }
 }
 

@@ -46,10 +46,10 @@ Vue.component("effect-display", {
       return this.formatEffect(this.hasCap && this.reachedCap() ? this.cap : this.effectValue);
     },
     cap() {
-      return this.config.cap;
+      return typeof this.config.cap === "function" ? this.config.cap() : this.config.cap;
     },
     hasCap() {
-      return this.cap !== undefined;
+      return this.cap !== undefined || (typeof this.cap === "function" && this.cap() !== undefined);
     }
   },
   methods: {

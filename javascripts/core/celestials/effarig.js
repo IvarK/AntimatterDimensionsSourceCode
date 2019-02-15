@@ -77,9 +77,7 @@ var Effarig = {
     }
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === "Eternity"
-      ? 1e50
-      : undefined;
+    return Effarig.isRunning && this.currentStage === "Eternity" ? 1e50 : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {

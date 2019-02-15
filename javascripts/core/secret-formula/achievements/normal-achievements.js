@@ -478,7 +478,7 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
-    effect: () => Decimal.pow(2, Math.log10(Player.totalInfinitied + 1)),
+    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()),
     cap: () => Effarig.eternityCap
   },
   {
@@ -541,7 +541,7 @@ GameDatabase.achievements.normal = [
     id: 131,
     name: "No ethical consumption",
     tooltip: "Get 5 billion banked Infinities. Reward: After Eternity you permanently keep 5% of your Infinities.",
-    effect: () => Math.floor(player.infinitied * 0.05)
+    effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 132,
@@ -600,12 +600,12 @@ GameDatabase.achievements.normal = [
   {
     id: 144,
     name: "Is this an Interstellar reference?",
-    tooltip: "Unlock the Wormhole"
+    tooltip: "Unlock the Black Hole"
   },
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    tooltip: "Have Wormhole interval smaller than the duration"
+    tooltip: "Have the Black Hole interval smaller than the duration"
   },
   {
     id: 146,
@@ -660,6 +660,6 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: "Spend 24 hours with wormhole active in a row"
+    tooltip: "Spend 24 hours with black hole active in a row"
   },
 ];

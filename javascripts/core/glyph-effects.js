@@ -294,7 +294,7 @@ GameDatabase.reality.glyphEffects = [
     formatEffect: x => x.toFixed(2),
     combine: GlyphCombiner.multiply,
   }, {
-    id: "effarigwormhole",
+    id: "effarigblackhole",
     glyphTypes: ["effarig"],
     singleDesc: "Time modifier raised to the power of ^{value}",
     combine: GlyphCombiner.multiply,
@@ -343,7 +343,7 @@ const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
 const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
 const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
 const powerEffects = ["pow", "mult", "dimboost", "buy10"]
-const effarigEffects = ["wormhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
+const effarigEffects = ["blackhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
 
 class GlyphType {
   /**

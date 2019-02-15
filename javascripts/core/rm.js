@@ -6,7 +6,7 @@ const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow
   "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
   "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
   "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-  "effarigwormhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
+  "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
 
@@ -395,14 +395,14 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
-        return ret * Math.max(Math.sqrt(Math.log10(Math.max(Enslaved.totalInfinities, 1))), 1)
+        return ret * Math.max(Math.sqrt(Enslaved.totalInfinities.clampMin(1).log10()), 1);
       }
       else return ret
     case "timefreeTickMult":
       return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
-    case "effarigwormhole":
+    case "effarigblackhole":
       return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
     case "effarigrm":
       return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
@@ -560,14 +560,14 @@ function buyRealityUpg(id) {
     player.reality.glyphs.slots++
   }
   if (id == 20) {
-    if (!player.wormhole[0].unlocked) return
-    player.wormhole[1].unlocked = true
-    $("#whupg2").show()
+    if (!player.blackHole[0].unlocked) return
+    player.blackHole[1].unlocked = true
+    $("#bhupg2").show()
   }
 
   if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
-  updateWormholeUpgrades()
+  updateBlackHoleUpgrades()
   return true
 }
 

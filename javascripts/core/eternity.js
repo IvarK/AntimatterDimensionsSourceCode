@@ -13,11 +13,11 @@ function eternity(force, auto) {
       if (player.thisEternity < 30000) giveAchievement("That wasn't an eternity");
       if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity");
       if (player.thisEternity <= 1) giveAchievement("Less than or equal to 0.001");
-      if (player.infinitied < 10) giveAchievement("Do you really need a guide for this?");
+      if (player.infinitied.lt(10)) giveAchievement("Do you really need a guide for this?");
       if (Decimal.round(player.replicanti.amount).eq(9)) giveAchievement("We could afford 9");
       if (player.dimlife) giveAchievement("8 nobody got time for that");
       if (player.dead) giveAchievement("You're already dead.");
-      if (player.infinitied <= 1) giveAchievement("Do I really need to infinity");
+      if (player.infinitied.lte(1)) giveAchievement("Do I really need to infinity");
       if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) {
         giveAchievement("Now you're thinking with dilation!");
       }
@@ -38,13 +38,13 @@ function eternity(force, auto) {
       if (EternityChallenge.completedTiers() >= 50) {
         giveAchievement("5 more eternities until the update");
       }
-    }
+  }
 
-    player.infinitiedBank += Effects.sum(
+    player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
       Achievement(131),
       TimeStudy(191)
     );
-    if (player.infinitiedBank > 5000000000) giveAchievement("No ethical consumption");
+    if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
     if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {
       unlockRealityUpgrade(6);
     }
@@ -71,7 +71,7 @@ function eternity(force, auto) {
       }
     }
     player.currentChallenge = "";
-    player.infinitied = 0;
+    player.infinitied = new Decimal(0);
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
@@ -128,7 +128,7 @@ function eternity(force, auto) {
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
 
-    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
@@ -155,7 +155,7 @@ function eternity(force, auto) {
         Tab.dimensions.time.show();
     }
     Marathon2 = 0;
-    if (player.realities > 0 && player.infinitiedBank > 1e12) unlockRealityUpgrade(11);
+    if (player.realities > 0 && player.infinitiedBank.gt(1e12)) unlockRealityUpgrade(11);
     if (player.eternityPoints.gte(1e70) && EternityChallenge(1).completions === 0) unlockRealityUpgrade(12);
     if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
     if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);

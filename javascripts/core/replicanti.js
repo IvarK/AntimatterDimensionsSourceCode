@@ -77,7 +77,7 @@ function getReplicantiInterval(noMod, interval) {
 let scaleLog10 = 308;
 let scaleFactor = 1.2;
 function replicantiCap() {
-  return Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE) ? new Decimal(player.infinitied + player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
+  return Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE) ? player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {
@@ -91,7 +91,7 @@ function replicantiLoop(diff) {
     PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 
-    var current = player.replicanti.amount.ln();
+    var current = player.replicanti.amount.clampMin(1).ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 

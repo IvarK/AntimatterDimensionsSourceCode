@@ -36,7 +36,7 @@ function sacrificeBtnClick() {
 
 class Sacrifice {
   static get isUnlocked() {
-    return player.infinitied > 0 || player.resets > 4;
+    return player.infinitied.gt(0) || player.resets > 4;
   }
 
   static get isAffordable() {

@@ -70,8 +70,8 @@ Vue.component("game-header-eternity-button", {
         gainedCompletions++;
       }
       const totalCompletions = currentCompletions + gainedCompletions;
-
-      const maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
+      let maxEC4Valid = 0;
+      if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
       if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {
         this.gainedCompletions = Math.min(totalCompletions, maxEC4Valid) - currentCompletions;
         this.failedCondition = "(Too many infinities for more)";

@@ -34,16 +34,16 @@ const ENSLAVED_UNLOCKS = {
     price: TimeSpan.fromYears(1e30).totalMilliseconds,
     description: "Multiplier to RM based on current time modifier, unlock V, the Celestial of Achievements"
   },
-  WORMHOLE: {
+  BLACK_HOLE: {
     id: 3,
     price: TimeSpan.fromYears(1e50).totalMilliseconds,
-    description: "Unlock the 3rd Wormhole"
+    description: "Unlock the 3rd Black Hole"
   }
 }
 
 const Enslaved = {
   infinityTracking: [],
-  totalInfinities: 0,
+  totalInfinities: new Decimal(0),
   toggleStore() {
     if (this.maxQuoteIdx == 6) player.celestials.enslaved.maxQuotes += 3
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring
@@ -59,7 +59,7 @@ const Enslaved = {
   buyUnlock(info) {
     if (player.celestials.enslaved.stored < info.price) return false
     if (this.has(info)) return false
-    if (info.id == 3) player.wormhole[2].unlocked = true
+    if (info.id == 3) player.blackHole[2].unlocked = true
     player.celestials.enslaved.stored -= info.price
     player.celestials.enslaved.unlocks.push(info.id)
   },
@@ -71,14 +71,14 @@ const Enslaved = {
     return player.celestials.enslaved.run;
   },
   get adjustedDilationMultiplier() {
-    return this.totalInfinities / 1e100
+    return this.totalInfinities.div(1e100);
   },
   trackInfinityGeneration(infinities) {
     let ticksNeeded = 10 * 1000 / player.options.updateRate
-    this.infinityTracking.push(Math.floor(infinities))
-    this.totalInfinities += Math.floor(infinities)
+    this.infinityTracking.push(infinities.floor())
+    this.totalInfinities = this.totalInfinities.plus(infinities.floor());
     if (this.infinityTracking.length - 1 > ticksNeeded) {
-      this.totalInfinities -= this.infinityTracking.shift()
+      this.totalInfinities = this.totalInfinities.minus(this.infinityTracking.shift());
     } 
   },
   get maxQuoteIdx() {

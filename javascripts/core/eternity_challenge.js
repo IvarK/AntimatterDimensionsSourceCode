@@ -12,7 +12,7 @@ function startEternityChallenge() {
       }
     }
     player.currentChallenge = "";
-    player.infinitied = 0;
+    player.infinitied = new Decimal(0);
     player.bestInfinityTime = 9999999999;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;

@@ -156,7 +156,7 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+  if (Effarig.isRunning && Effarig.currentStage === "Infinity") {
     return new Decimal(1);
   }
   let ipMult = InfinityUpgrade.ipMult.effectValue

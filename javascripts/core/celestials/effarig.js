@@ -65,20 +65,31 @@ var Effarig = {
   get isRunning() {
     return player.celestials.effarig.run;
   },
-  get eternityCap() {
-    return Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) ? 1e50 : undefined;
-  },
-  get glyphLevelCap() {
-    if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return 10000
+  get currentStage() {
+    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+      return "Infinity";
     }
-    else if (Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      return 3000
+    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+      return "Eternity";
     }
     else {
-      return 100
+      return "Reality";
     }
-
+  },
+  get eternityCap() {
+    return Effarig.isRunning && this.currentStage === "Eternity"
+      ? 1e50
+      : undefined;
+  },
+  get glyphLevelCap() {
+    switch (this.currentStage) {
+      case "Infinity":
+        return 100;
+      case "Eternity":
+        return 3000;
+      case "Reality":
+        return 10000;
+    }
   },
   get glyphEffectAmount() {
     let counted = []
@@ -104,16 +115,16 @@ var Effarig = {
   },
   nerfFactor(power) {
     let x = Decimal.max(power, 10);
-    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) { // Effarig Infinity: Hardcap at 0.1
-      return Math.min(x.log10() / 1000, 0.1);
-    }
-    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {  // Effarig Eternity: Softcap at 0.75, approaches 1.92
-      let val = x.log10() / 240;
-      return val < 0.75 ? val : 1.92 - 7 / (8 * val);
-    }
-    else {  // Effarig Reality: Softcap at 2, hardcap at 3
-      let val = x.log10() / 200;
-      return val < 2 ? val : Math.min(2 + 0.2 * Math.log10(val - 1), 3);
+    let val;
+    switch (this.currentStage) {
+      case "Infinity":  // Hardcap at 0.1
+        return Math.min(x.log10() / 1000, 0.1);
+      case "Eternity": // Softcap at 0.75, approaches 1.92
+        val = x.log10() / 240;
+        return val < 0.75 ? val : 1.92 - 7 / (8 * val);
+      case "Reality": // Softcap at 2, hardcap at 3
+        val = x.log10() / 200;
+        return val < 2 ? val : Math.min(2 + 0.2 * Math.log10(val - 1), 3);
     }
   },
   get tickspeed() {

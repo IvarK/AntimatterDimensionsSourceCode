@@ -755,7 +755,7 @@ function getGameSpeedupFactor(effectsToConsider, wormholeOverride) {
     }
   }
   
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+  if (Effarig.isRunning && Effarig.currentStage !== "Reality") {
     factor = Effarig.multiplier(factor).toNumber();
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigwormhole"))

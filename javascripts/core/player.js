@@ -55,8 +55,8 @@ var player = {
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
-  infinitied: 0,
-  infinitiedBank: 0,
+  infinitied: new Decimal(0),
+  infinitiedBank: new Decimal(0),
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
@@ -466,7 +466,7 @@ var player = {
 const Player = {
 
   get totalInfinitied() {
-    return Math.max(player.infinitied + player.infinitiedBank, 0);
+    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
   get isInMatterChallenge() {

@@ -468,19 +468,17 @@ function checkForRUPG8() {
 
 function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
-        return 1;
+        return new Decimal(1);
     }
     let infGain = Effects.max(
       1,
       Achievement(87)
-    );
-    infGain *= Effects.product(
-      TimeStudy(32)
-    );
-    if (player.reality.rebuyables[5] > 0) infGain *= Math.pow(5, player.reality.rebuyables[5])
-    infGain *= Math.max(1, getAdjustedGlyphEffect("infinityinfmult"));
-    if (player.reality.upg.includes(7)) infGain *= 1+(player.galaxies/30)
-    return infGain
+    ).toDecimal();
+    infGain = infGain.timesEffectsOf(TimeStudy(32));
+    if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
+    infGain = infGain.times(Math.max(1, getAdjustedGlyphEffect("infinityinfmult")));
+    if (player.reality.upg.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));
+    return infGain;
 }
 
 function failChallenge() {
@@ -639,10 +637,10 @@ setInterval(function() {
     if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
     if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
     if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
-    if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied == 0 && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
+    if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied.eq(0) && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
     if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
     if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
-    if (player.infinitied > 2e6) giveAchievement("2 Million Infinities")
+    if (player.infinitied.gt(2e6)) giveAchievement("2 Million Infinities")
     if (player.money.gte("9.9999e9999")) giveAchievement("This achievement doesn't exist")
     if (player.money.gte("1e35000")) giveAchievement("I got a few to spare")
     if (player.infinityPower.gt(1)) giveAchievement("A new beginning.");
@@ -860,29 +858,29 @@ function gameLoop(diff, options = {}) {
       }
     }
 
-    let infGen = 0
+  let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
         if (player.reality.upg.includes(11)) {
-          let gained = Math.floor(gainedInfinities() * 0.1) * diff/1000
-          infGen += gained
+          let gained = gainedInfinities().times(0.1).floor().times(diff / 1000);
+          infGen = infGen.plus(gained);
 
         } else player.partInfinitied += diff / player.bestInfinityTime;
     }
     if (player.partInfinitied >= 50) {
-        infGen += Math.floor(player.partInfinitied/5)
+        infGen = infGen.plus(Math.floor(player.partInfinitied / 5));
         player.partInfinitied = 0;
     }
 
     if (player.partInfinitied >= 5) {
         player.partInfinitied -= 5;
-        infGen++;
+        infGen = infGen.plus(1);
     }
     if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
-      infGen += Math.floor(player.eternities * gainedInfinities()) * diff/1000
+      infGen = infGen.plus(gainedInfinities().times(player.eternities).floor().times(diff/1000))
     }
 
-    player.infinitied += infGen
-    Enslaved.trackInfinityGeneration(infGen)
+    player.infinitied = player.infinitied.plus(infGen);
+    Enslaved.trackInfinityGeneration(infGen);
 
     if (player.reality.upg.includes(14)) {
         let eternitiesGain = diff * player.realities / 1000
@@ -1095,7 +1093,7 @@ function gameLoop(diff, options = {}) {
         document.getElementById("optionsbtn").style.display = "inline-block";
         document.getElementById("statisticsbtn").style.display = "inline-block";
         document.getElementById("achievementsbtn").style.display = "inline-block";
-        if (player.infinitied > 0) {
+        if (player.infinitied.gt(0)) {
             document.getElementById("infinitybtn").style.display = "inline-block";
             document.getElementById("challengesbtn").style.display = "inline-block";
         }
@@ -1198,9 +1196,9 @@ function simulateTime(seconds, real, fast) {
     if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
     if (player.infinityPower.gt(playerStart.infinityPower)) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
     if (player.timeShards.gt(playerStart.timeShards)) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
-    if (player.infinitied > playerStart.infinitied || player.eternities > playerStart.eternities) popupString+= ","
-    else popupString+= "."
-    if (player.infinitied > playerStart.infinitied) popupString+= "<br>you infinitied "+(player.infinitied-playerStart.infinitied)+((player.infinitied-playerStart.infinitied === 1) ? " time." : " times.")
+    if (player.infinitied.gt(playerStart.infinitied) || player.eternities > playerStart.eternities) popupString+= ","
+  else popupString += "."
+  if (player.infinitied.gt(playerStart.infinitied)) popupString += "<br>you infinitied " + shorten(player.infinitied.sub(playerStart.infinitied), 4) + (player.infinitied.sub(playerStart.infinitied).eq(1)) ? " time." : " times.";
     if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
     for (let i = 0; i < player.blackHole.length; i++) {
       let currentActivations = player.blackHole[i].activations;
@@ -1219,7 +1217,7 @@ function simulateTime(seconds, real, fast) {
 }
 
 function updateChart(first) {
-    if (first !== true && (player.infinitied >= 1 || player.eternities >= 1) && player.options.chart.on === true) {
+    if (first !== true && (player.infinitied.gte(1) || player.eternities >= 1) && player.options.chart.on === true) {
         if (Challenge(3).isRunning) {
             addChartData(getDimensionProductionPerSecond(1).times(player.chall3Pow));
         } else {

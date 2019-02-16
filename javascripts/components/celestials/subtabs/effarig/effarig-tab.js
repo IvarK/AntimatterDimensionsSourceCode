@@ -97,11 +97,11 @@ Vue.component('effarig-tab', {
       <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
       <div class="c-effarig-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-effarig-shop">
-        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.ADJUSTER, effarigCosts.ADJUSTER)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.ADJUSTER] }">Unlock glyph level adjustment.<br>Cost: {{ shorten(effarigCosts.ADJUSTER) }} Relic Shards</button>
-        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.AUTOSACRIFICE, effarigCosts.AUTOSACRIFICE)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOSACRIFICE] }">Unlock automatic glyph sacrifice.<br>Cost: {{ shorten(effarigCosts.AUTOSACRIFICE) }} Relic Shards</button>
-        <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.AUTOPICKER, effarigCosts.AUTOPICKER)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.AUTOPICKER] }">Unlock automatic glyph picker.<br>Cost: {{ shorten(effarigCosts.AUTOPICKER) }} Relic Shards</button>
+        <effarig-unlock-button unlock="ADJUSTER"></effarig-unlock-button>
+        <effarig-unlock-button unlock="AUTOSACRIFICE"></effarig-unlock-button>
+        <effarig-unlock-button unlock="AUTOPICKER"></effarig-unlock-button>
       </div>
-      <button class="o-effarig-shop-button" @click="buyUnlock(effarigUnlocks.RUN, effarigCosts.RUN)" :class="{ 'effarig-unlock-bought': unlocks[effarigUnlocks.RUN] }">Unlock Effarig's reality.<br>Cost: {{ shorten(effarigCosts.RUN) }} Relic Shards</button>
+        <effarig-unlock-button unlock="RUN"></effarig-unlock-button>
       <div class="l-effarig-glyph-settings">
         <div v-if="unlocks[effarigUnlocks.AUTOSACRIFICE]">
           Highest type will be picked, lowest sacrificed.
@@ -124,7 +124,7 @@ Vue.component('effarig-tab', {
       <div v-if="unlocks[effarigUnlocks.RUN]"><button class="o-effarig-shop-button effarig-run-button" @click="startRun()">Start a new reality, all production and gamespeed is severely lowered, infinity and time dimensions reduce the production penalty. Glyph levels are temporarily capped. You will gain unlocks at Infinity, Eternity and Reality.</button>
         <div v-if="unlocks[effarigUnlocks.INFINITY_COMPLETE]">Infinity: IP mults are capped at 1e50 in Effarig Reality; infinitied stat raises the replicanti cap and increases your max RG.</div>
         <div v-if="unlocks[effarigUnlocks.ETERNITY_COMPLETE]">Eternity: IP mults and gamespeed are no longer limited in Effarig Reality; eternitied stat generates infinitied stat, unlocks The Enslaved Ones.</div>
-        <div v-if="unlocks[effarigUnlocks.REALITY_COMPLETE]">Reality: (Reward not implemented yet)</div>
+        <div v-if="unlocks[effarigUnlocks.REALITY_COMPLETE]">Reality: Unlocks Effarig Glyphs</div>
       </div>
     </div>`
 });

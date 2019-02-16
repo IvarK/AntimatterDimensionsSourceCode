@@ -30,11 +30,24 @@ const EFFARIG_UNLOCKS = {
   REALITY_COMPLETE: 6
 }
 
+const EFFARIG_UNLOCK_DESCRIPTIONS = {
+  ADJUSTER: "Unlock glyph level adjustment.",
+  AUTOSACRIFICE: "Unlock automatic glyph sacrifice.",
+  AUTOPICKER: "Unlock automatic glyph picker.",
+  RUN: "Unlock Effarig's reality.",
+}
+
 const EFFARIG_COSTS = {
   ADJUSTER: 1e7,
   AUTOSACRIFICE: 2e8,
   AUTOPICKER: 3e9,
   RUN: 4e10,
+}
+
+const EFFARIG_STAGES = {
+  INFINITY: 1,
+  ETERNITY: 2,
+  REALITY: 3
 }
 
 var Effarig = {
@@ -60,32 +73,32 @@ var Effarig = {
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
     showRealityTab("glyphstab");
-    Modal.message.show("Your glyph levels have been limited to " + Effarig.glyphLevelCap + ".  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.");
+    Modal.message.show("Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.");
   },
   get isRunning() {
     return player.celestials.effarig.run;
   },
   get currentStage() {
     if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      return "Infinity";
+      return EFFARIG_STAGES.INFINITY;
     }
     else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-      return "Eternity";
+      return EFFARIG_STAGES.ETERNITY;
     }
     else {
-      return "Reality";
+      return EFFARIG_STAGES.REALITY;
     }
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === "Eternity" ? 1e50 : undefined;
+    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? 1e50 : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
-      case "Infinity":
+      case EFFARIG_STAGES.INFINITY:
         return 100;
-      case "Eternity":
+      case EFFARIG_STAGES.ETERNITY:
         return 3000;
-      case "Reality":
+      case EFFARIG_STAGES.REALITY:
         return 10000;
     }
   },
@@ -115,12 +128,12 @@ var Effarig = {
     let x = Decimal.max(power, 10);
     let val;
     switch (this.currentStage) {
-      case "Infinity":  // Hardcap at 0.1
+      case EFFARIG_STAGES.INFINITY:  // Hardcap at 0.1
         return Math.min(x.log10() / 1000, 0.1);
-      case "Eternity": // Softcap at 0.75, approaches 1.92
+      case EFFARIG_STAGES.ETERINTY: // Softcap at 0.75, approaches 1.92
         val = x.log10() / 240;
         return val < 0.75 ? val : 1.92 - 7 / (8 * val);
-      case "Reality": // Softcap at 2, hardcap at 3
+      case EFFARIG_STAGES.REALITY: // Softcap at 2, hardcap at 3
         val = x.log10() / 200;
         return val < 2 ? val : Math.min(2 + 0.2 * Math.log10(val - 1), 3);
     }

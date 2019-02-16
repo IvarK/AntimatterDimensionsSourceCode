@@ -79,17 +79,17 @@ const GlyphTooltipComponent = {
     description() {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
     },
-    levelText() {
+    isLevelCapped() {
       return this.level == this.effectiveLevel
+    },
+    levelText() {
+      return this.isLevelCapped
         ? `Level: ${this.level}`
         : `Level: ▼${this.effectiveLevel}▼`;
     },
     levelStyle() {
-      return this.level == this.effectiveLevel ? {
-        color: "#FFFFFF",
-      } : {
-          color: "#FF1111",
-        }
+      const color = this.isLevelCapped ? "#FFFFFF" : "#FF1111"
+      return {  color: color}
     },
     sacrificeText() {
       return this.onTouchDevice

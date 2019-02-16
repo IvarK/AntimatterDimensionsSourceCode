@@ -753,7 +753,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
     }
   }
   
-  if (Effarig.isRunning && Effarig.currentStage !== "Reality") {
+  if (Effarig.isRunning && Effarig.currentStage !== EFFARIG_STAGES.REALITY) {
     factor = Effarig.multiplier(factor).toNumber();
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))

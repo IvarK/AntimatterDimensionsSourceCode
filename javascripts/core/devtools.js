@@ -500,6 +500,9 @@ dev.updateTestSave = function() {
         effectScores: t.effects.mapToObject(e => e.id, () => 0),
       })),
     });
+    movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
+      mode: AutoGlyphPickMode.RANDOM,
+    });
     movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
     movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
     movePropIfPossible("effarig", "teresa", "bestRunAM", 0, Decimal.max);

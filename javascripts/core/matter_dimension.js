@@ -25,12 +25,12 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 6 - this._tier + this.dimension.chanceUpgrades
+    return 5 - this._tier + this.dimension.chanceUpgrades
   }
 
   // In milliseconds
   get interval() {
-    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.power(2, this._tier - 1) * 1000
+    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.pow(2, this._tier) * 1000
   }
 
   get power() {
@@ -38,15 +38,15 @@ class MatterDimensionState {
   }
 
   get chanceCost() {
-    return Math.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier - 1) * CHANCE_START_COST;
+    return Math.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * CHANCE_START_COST;
   }
 
   get intervalCost() {
-    return Math.pow(INTERVAL_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier - 1) * INTERVAL_START_COST;
+    return Math.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * INTERVAL_START_COST;
   }
 
   get powerCost() {
-    return Math.pow(POWER_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier - 1) * POWER_START_COST;
+    return Math.pow(POWER_COST_MULT, this.dimension.powerUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * POWER_START_COST;
   }
 
 
@@ -87,7 +87,7 @@ class MatterDimensionState {
 
 }
 
-MatterDimensionState.all = [1, 2, 3, 4].map(tier => new MatterDimensionState(tier));
+MatterDimensionState.all = [0, 1, 2, 3].map(tier => new MatterDimensionState(tier));
 
 /**
  * @param {number} tier
@@ -111,21 +111,23 @@ function getMatterDimensionProduction(tier, ticks) {
   if (d.amount < 100) {
     let x = 0
     while (x < d.amount) {
-      if (Math.random() > d.chance) prod++;
+      if (Math.random() < d.chance / 100) prod++;
+      x++;
     }
   } else {
     let x = 0
     while (x < 100) {
-      if (Math.random() > d.chance) prod += Math.round(d.amount/100);
+      if (Math.random() < d.chance / 100) prod += Math.round(d.amount/100);
+      x++;
     }
   }
 
-  prod *= this.power * ticks
+  prod *= d.power * ticks
 
   return Math.round(prod)
 }
 
-function matterDimensionLoop(diff) {
+function matterDimensionLoop() {
 
   for (let i = 1; i <= 4; i++) {
     let d = MatterDimension(i)

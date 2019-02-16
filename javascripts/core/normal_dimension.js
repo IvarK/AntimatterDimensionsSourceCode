@@ -2,6 +2,10 @@ function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const dimension = NormalDimension(tier);
 
+  if (Laitela.isRunning && tier > 1) {
+    return new Decimal(0)
+  }
+
   let multiplier = new Decimal(dimension.pow);
 
   if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
@@ -115,6 +119,8 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5)
+  } else if (Laitela.isRunning) {
+    multiplier = multiplier.pow(0.01)
   }
   
   return multiplier;

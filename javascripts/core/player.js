@@ -426,6 +426,8 @@ var player = {
     },
     laitela: {
       matter: 0,
+      run: false,
+      unlocks: [],
       dimensions: [
         {
           amount: 0,

@@ -1135,6 +1135,8 @@ function gameLoop(diff, options = {}) {
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   V.checkForUnlocks()
+  Laitela.handleRunUnlocks()
+  matterDimensionLoop()
 
     GameUI.update();
     player.lastUpdate = thisUpdate;

@@ -353,16 +353,20 @@ function handleCelestialRuns(force) {
       Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
     }
   }
-  if (player.celestials.enslaved.run) {
+  if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false
   }
 
-  if (player.celestials.v.run) {
+  if (V.isRunning) {
     player.celestials.v.run = false
   }
 
-  if (player.celestials.ra.run) {
+  if (Ra.isRunning) {
     player.celestials.ra.run = false
+  }
+
+  if (Laitela.isRunning) {
+    player.celestials.laitela.run = false
   }
 }
 

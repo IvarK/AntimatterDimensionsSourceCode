@@ -978,28 +978,11 @@ function gameLoop(diff, options = {}) {
       EternityChallenge(7).reward.applyEffect(v => id8.amount = id8.amount.plus(v.times(diff/10)));
     }
 
-    let tickmult = Effects.min(
-      1.33,
-      TimeStudy(171)
-    );
-
-    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
-    tickmult = 1 + (tickmult - 1) * multFromGlyph;
-
-    if (player.timeShards.gt(0)) {
-      // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
-      // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
-      // reports continue to be accurate.
-      const freeTickSoftcap = 300000;
-      const fixedIncrease = 1 / TS171_MULTIPLIER;
-      let softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
-      let uncapped = Math.ceil(new Decimal(player.timeShards).log10() / Math.log10(tickmult));
-      let softcapped = uncapped > freeTickSoftcap ? Math.ceil(freeTickSoftcap + (uncapped - freeTickSoftcap) * (Math.log10(tickmult) / Math.log10(softcapAddition+tickmult))) : uncapped;
-      let gain = Math.max(0, softcapped - player.totalTickGained);
-      player.totalTickGained += gain
-      player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
-      player.tickThreshold = player.totalTickGained > freeTickSoftcap ? new Decimal(tickmult).pow(freeTickSoftcap).times(new Decimal(1+tickmult).pow(softcapped-freeTickSoftcap)) : new Decimal(tickmult).pow(player.totalTickGained);
-    }
+  const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
+  let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
+  player.totalTickGained += gain;
+  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
+  player.tickThreshold = freeTickspeed.nextShards;
 
     if (player.money.gte(Number.MAX_VALUE) && (!player.break || (player.currentChallenge != "" && player.money.gte(player.challengeTarget)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';

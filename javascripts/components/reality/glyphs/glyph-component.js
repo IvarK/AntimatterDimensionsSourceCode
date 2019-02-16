@@ -88,8 +88,7 @@ const GlyphTooltipComponent = {
         : `Level: ▼${this.effectiveLevel}▼`;
     },
     levelStyle() {
-      const color = this.isLevelCapped ? "#FFFFFF" : "#FF1111"
-      return {  color: color}
+      return { color: this.isLevelCapped ? "#FFFFFF" : "#FF1111" }
     },
     sacrificeText() {
       return this.onTouchDevice

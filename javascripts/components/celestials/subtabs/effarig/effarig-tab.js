@@ -60,10 +60,7 @@ Vue.component('effarig-tab', {
   computed: {
     effarigUnlocks() {
       return EFFARIG_UNLOCKS
-    },
-    effarigCosts() {
-      return EFFARIG_COSTS
-    },
+    }
   },
   components: {
     "glyph-weight-sliders": {

@@ -123,7 +123,7 @@ Vue.component('effarig-tab', {
       </div>
       <div v-if="unlocks[effarigUnlocks.RUN]"><button class="o-effarig-shop-button effarig-run-button" @click="startRun()">Start a new reality, all production and gamespeed is severely lowered, infinity and time dimensions reduce the production penalty. Glyph levels are temporarily capped. You will gain unlocks at Infinity, Eternity and Reality.</button>
         <div v-if="unlocks[effarigUnlocks.INFINITY_COMPLETE]">Infinity: IP mults are capped at 1e50 in Effarig Reality; infinitied stat raises the replicanti cap and increases your max RG.</div>
-        <div v-if="unlocks[effarigUnlocks.ETERNITY_COMPLETE]">Eternity: IP mults and gamespeed are no longer limited in Effarig Reality; eternitied stat generates infinitied stat, unlocks The Enslaved Ones.</div>
+        <div v-if="unlocks[effarigUnlocks.ETERNITY_COMPLETE]">Eternity: IP mults are no longer limited in Effarig Reality; eternitied stat generates infinitied stat, unlocks The Enslaved Ones.</div>
         <div v-if="unlocks[effarigUnlocks.REALITY_COMPLETE]">Reality: Unlocks Effarig Glyphs</div>
       </div>
     </div>`

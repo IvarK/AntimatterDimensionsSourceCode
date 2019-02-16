@@ -73,7 +73,7 @@ var Effarig = {
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
     showRealityTab("glyphstab");
-    Modal.message.show("Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.");
+    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.`);
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -125,26 +125,28 @@ var Effarig = {
     return player.celestials.effarig.relicShards
   },
   nerfFactor(power) {
-    let x = Decimal.max(power, 10);
-    let val;
+    let x = Decimal.max(power, 1);
+    let c;
     switch (this.currentStage) {
-      case EFFARIG_STAGES.INFINITY:  // Hardcap at 0.1
-        return Math.min(x.log10() / 1000, 0.1);
-      case EFFARIG_STAGES.ETERINTY: // Softcap at 0.75, approaches 1.92
-        val = x.log10() / 240;
-        return val < 0.75 ? val : 1.92 - 7 / (8 * val);
-      case EFFARIG_STAGES.REALITY: // Softcap at 2, hardcap at 3
-        val = x.log10() / 200;
-        return val < 2 ? val : Math.min(2 + 0.2 * Math.log10(val - 1), 3);
+      case EFFARIG_STAGES.INFINITY:
+        c = 1000
+        break
+      case EFFARIG_STAGES.ETERNITY: 
+        c = 35
+        break
+      case EFFARIG_STAGES.REALITY:
+        c = 30
+        break
     }
+    return 3 * (1 - c / (c + Math.sqrt(x.log10())));
   },
   get tickspeed() {
     const base = 3 + player.tickspeed.reciprocal().log10();
-    const pow = 0.625 + 0.125 * this.nerfFactor(player.timeShards);
+    const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
     return new Decimal.pow(10, Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
-    const base = new Decimal(mult).clampMin(10).log10();
+    const base = new Decimal(mult).clampMin(1).log10();
     const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
     return new Decimal.pow(10, Math.pow(base, pow));
   },

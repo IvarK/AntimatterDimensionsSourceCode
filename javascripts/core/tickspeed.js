@@ -188,7 +188,10 @@ const FreeTickspeed = {
     return player.totalTickGained;
   },
   fromShards(shards) {
-    if (!shards.gt(0)) return;
+    if (!shards.gt(0)) return {
+      newAmount: 0,
+      nextShards: new Decimal(1),
+    };
     const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
     const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * multFromGlyph;
     const logTickmult = Math.log(tickmult);

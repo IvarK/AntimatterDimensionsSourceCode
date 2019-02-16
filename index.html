@@ -97,7 +97,7 @@
                     <td><button class="secondarytabbtn" onclick="showRealityTab('upgrades')">Upgrades</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('perks')">Perks</button></td>
                     <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('wormhole')">Wormhole</button></td>
+                    <td><button class="secondarytabbtn" onclick="showRealityTab('blackhole')">Black Hole</button></td>
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
@@ -153,7 +153,7 @@
                         <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(17)" id="rupg17"><b>Requires: Reality with 4 glyphs, with each having 2 effects</b><br>50% chance to get +1 effect on glyphs<br>Cost: 1500 RM</div></td>
                         <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(18)" id="rupg18"><b>Requires: Reality with 4 level 10 or higher glyphs equipped.</b><br>Eternities affect glyph level<br>Cost: 1500 RM</div></td>
                         <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(19)" id="rupg19"><b>Requires: Have a total of 30 glyphs</b><br>You can sacrifice power and time glyphs for permanent bonuses (shift+click)<br>Cost: 1500 RM</div></td>
-                        <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(20)" id="rupg20" style="font-size: 0.85em;"><b>Requires: 2 years total play time</b><br>You can have 2 wormholes<br>Cost: 1500 RM</div></td>
+                        <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(20)" id="rupg20" style="font-size: 0.85em;"><b>Requires: 2 years total play time</b><br>You can have 2 black holes<br>Cost: 1500 RM</div></td>
                     </tr>
                     <tr>
                         <td><div class="l-reality-upgrade c-reality-upgrade" onclick="buyRealityUpg(21)" id="rupg21" style="font-size: 0.85em;"><b>Requires: 1e70,000 Replicanti</b><br>You can sacrifice dilation, replication and infinity glyphs<br>Cost: 100,000 RM</div></td>
@@ -379,29 +379,29 @@
                     </table>
                 </div>
             </div>
-            <div id="wormhole" class="realitytab" style="display: none;">
-                <button id="wormholeunlock" class="l-reality-upgrade c-reality-upgrade" onclick="unlockWormhole()" style="text-shadow: -1px 1px 3px #d5ffd7;" ach-tooltip="The wormhole makes the game run significantly faster for a short period of time. Starts at 180x faster for 10 seconds, once per hour.">Unleash the Wormhole<br>Cost: 50 RM</button>
-                <div id="wormholecontainer" style="display: none">
-					<canvas id="wormholeImage" width="400" height="400" style="border:1px solid #000000;"></canvas>
-          <h3 id="wormholeStatus1"></h3>
-          <h3 id="wormholeStatus2"></h3>
-          <h3 id="wormholeStatus3"></h3>
-                    <div class="wormhole-upgrades" id="whupg1">
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeinterval1" onclick="upgradeWormholeInterval(0)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholepower1" onclick="upgradeWormholePower(0)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeduration1" onclick="upgradeWormholeDuration(0)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+            <div id="blackhole" class="realitytab" style="display: none;">
+                <button id="blackholeunlock" class="l-reality-upgrade c-reality-upgrade" onclick="unlockBlackHole()" style="text-shadow: -1px 1px 3px #d5ffd7;" ach-tooltip="The black hole makes the game run significantly faster for a short period of time. Starts at 180x faster for 10 seconds, once per hour.">Unleash the Black Hole<br>Cost: 50 RM</button>
+                <div id="blackholecontainer" style="display: none">
+					<canvas id="blackHoleImage" width="400" height="400" style="border:1px solid #000000;"></canvas>
+          <h3 id="blackHoleStatus1"></h3>
+          <h3 id="blackHoleStatus2"></h3>
+          <h3 id="blackHoleStatus3"></h3>
+                    <div class="blackhole-upgrades" id="bhupg1">
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeinterval1" onclick="upgradeBlackHoleInterval(0)">Speed up the black hole by 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholepower1" onclick="upgradeBlackHolePower(0)">Make the black hole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeduration1" onclick="upgradeBlackHoleDuration(0)">Extend the black hole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
                     </div>
-                    <div class="wormhole-upgrades" id="whupg2">
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeinterval2" onclick="upgradeWormholeInterval(1)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholepower2" onclick="upgradeWormholePower(1)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeduration2" onclick="upgradeWormholeDuration(1)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+                    <div class="blackhole-upgrades" id="bhupg2">
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeinterval2" onclick="upgradeBlackHoleInterval(1)">Speed up the black hole by 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholepower2" onclick="upgradeBlackHolePower(1)">Make the black hole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeduration2" onclick="upgradeBlackHoleDuration(1)">Extend the black hole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
                     </div>
-                    <div class="wormhole-upgrades" id="whupg3">
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeinterval3" onclick="upgradeWormholeInterval(2)">Speed up the wormhole up 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholepower3" onclick="upgradeWormholePower(2)">Make the wormhole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
-                        <button class="l-reality-upgrade c-reality-upgrade" id="wormholeduration3" onclick="upgradeWormholeDuration(2)">Extend the wormhole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
+                    <div class="blackhole-upgrades" id="bhupg3">
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeinterval3" onclick="upgradeBlackHoleInterval(2)">Speed up the black hole by 25%<br>Current interval: 3600 seconds<br>Cost: 15RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholepower3" onclick="upgradeBlackHolePower(2)">Make the black hole 35% more powerful<br>Current power: 5x <br>Cost: 10RM</button>
+                        <button class="l-reality-upgrade c-reality-upgrade" id="blackholeduration3" onclick="upgradeBlackHoleDuration(2)">Extend the black hole duration by 50%<br>Current duration: 10 seconds<br>Cost: 20RM</button>
                     </div>
-                    <div><button class="l-reality-upgrade c-reality-upgrade" onclick="pauseWormhole()" style="height: auto; padding: 16px" id="pauseButton">Pause</button></div>
+                    <div><button class="l-reality-upgrade c-reality-upgrade" onclick="pauseBlackHole()" style="height: auto; padding: 16px" id="pauseButton">Pause</button></div>
                 </div>
             </div>
             <div id="perks" class="realitytab" style="display: none;">
@@ -664,7 +664,7 @@
 <script type="text/javascript" src="javascripts/core/perks.js"></script>
 <script type="text/javascript" src="javascripts/core/canvases.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
-<script type="text/javascript" src="javascripts/core/wormhole.js"></script>
+<script type="text/javascript" src="javascripts/core/black_hole.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
 <script type="text/javascript" src="javascripts/core/load_functions.js"></script>
 <script type="text/javascript" src="javascripts/core/newsticker.js"></script>

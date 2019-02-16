@@ -122,7 +122,7 @@ const V_UNLOCKS = {
       const db = GameDatabase.Celestials.V.mainUnlock;
       if (player.realities < db.realities) return false;
       if (player.eternities < db.eternities) return false;
-      if (player.infinitied + player.infinitiedBank < db.infinities) return false;
+      if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;
   
@@ -140,7 +140,7 @@ const V_UNLOCKS = {
     },
     {
     id: 2,
-    reward: "Achievement count affects wormhole power, Unlock Ra, Celestial of the Forgotten.",
+    reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 23 V-achievements",
     effect: () => Math.pow(1.1, Math.pow(GameCache.achievementCount.value, getAdjustedGlyphEffect("effarigachievement"))),
     format: x => formatX(x),

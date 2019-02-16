@@ -55,8 +55,8 @@ var player = {
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
-  infinitied: 0,
-  infinitiedBank: 0,
+  infinitied: new Decimal(0),
+  infinitiedBank: new Decimal(0),
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
@@ -335,9 +335,9 @@ var player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  wormhole: [{
+  blackHole: [{
     speed: 60 * 60, // Seconds to fill
-    power: 180, // Multiplier from the wormhole
+    power: 180, // Multiplier from the black hole
     duration: 10, // How long it lasts.
     phase: 0,
     active: false,
@@ -362,7 +362,7 @@ var player = {
     unlocked: false,
     activations: 0
   }],
-  wormholePause: false,
+  blackHolePause: false,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -499,7 +499,7 @@ var player = {
 const Player = {
 
   get totalInfinitied() {
-    return Math.max(player.infinitied + player.infinitiedBank, 0);
+    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
   get isInMatterChallenge() {

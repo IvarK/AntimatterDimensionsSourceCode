@@ -7,8 +7,8 @@ Vue.component('statistics-tab', {
       realTimePlayed: TimeSpan.zero,
       infinity: {
         isUnlocked: false,
-        count: 0,
-        banked: 0,
+        count: new Decimal(0),
+        banked: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -44,8 +44,8 @@ Vue.component('statistics-tab', {
       const infinity = this.infinity;
       infinity.isUnlocked = isInfinityUnlocked;
       if (isInfinityUnlocked) {
-        infinity.count = player.infinitied;
-        infinity.banked = player.infinitiedBank;
+        infinity.count.copyFrom(player.infinitied);
+        infinity.banked.copyFrom(player.infinitiedBank);
         infinity.hasBest = player.bestInfinityTime < 999999999999;
         infinity.best.setFrom(player.bestInfinityTime);
         infinity.this.setFrom(player.thisInfinityTime);
@@ -79,6 +79,12 @@ Vue.component('statistics-tab', {
     },
     formatResetAmount: function(value) {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
+    },
+    formatDecimalAmount: function (value) {
+      return value.gt(1e9) ? shorten(value, 6, 0) : formatWithCommas(value.toNumber());
+    },
+    formatDecimalResetAmount: function (value) {
+      return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");
     }
   },
   template:
@@ -97,9 +103,9 @@ Vue.component('statistics-tab', {
         <br>
         <div v-if="infinity.isUnlocked">
             <h3>Infinity</h3>
-            <div v-if="infinity.count > 0">You have infinitied {{ formatResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
+            <div v-if="infinity.count.gt(0)">You have infinitied {{ formatDecimalResetAmount(infinity.count) }}<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div v-else>You haven't infinitied<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div v-if="infinity.banked > 0">You have {{ formatAmount(infinity.banked) }} banked infinities.</div>
+            <div v-if="infinity.banked.gt(0)">You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.</div>
             <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toString() }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
             <div>You have spent {{ infinity.this.toString() }} in this Infinity.

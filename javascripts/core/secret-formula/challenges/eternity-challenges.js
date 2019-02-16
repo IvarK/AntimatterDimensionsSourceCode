@@ -39,7 +39,7 @@ GameDatabase.challenges.eternity = [
     goal: new Decimal("1e2750"),
     goalIncrease: new Decimal("1e550"),
     restriction: completions => Math.max(16 - 4 * completions, 0),
-    checkRestriction: restriction => player.infinitied <= restriction,
+    checkRestriction: restriction => player.infinitied.lte(restriction),
     formatRestriction: restriction => `in ${restriction} infinities or less`,
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",
@@ -124,9 +124,8 @@ GameDatabase.challenges.eternity = [
     reward: {
       description: "Time Dimension multiplier based on infinitied stat",
       effect: completions => {
-        let mult = Math.max(Math.pow(Player.totalInfinitied, 0.9) * completions * 0.000002 + 1, 1).toDecimal();
-        TimeStudy(31).applyEffect(v => mult = mult.pow(v));
-        return mult;
+        let mult = Player.totalInfinitied.pow(0.9).times(completions * 0.000002).clampMin(1);
+        return mult.powEffectOf(TimeStudy(31));
       },
       formatEffect: value => formatX(value, 2, 1)
     }
@@ -149,7 +148,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => player.realities > 0 ?
-      "The game runs 1000x slower; wormholes and time glyph effects are disabled." :
+      "The game runs 1000x slower; black holes and time glyph effects are disabled." :
       "The game runs 1000x slower.",
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),

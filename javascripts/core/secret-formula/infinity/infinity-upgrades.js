@@ -19,7 +19,7 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => formatX(value, 1, 1),
     charged: {
       description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1 + Math.log10(Math.log10(player.infinitied + 10)) * player.celestials.ra.level / 100,
+      effect: () => 1 + Math.log10(player.infinitied.clampMin(10).log10()) * player.celestials.ra.level / 100,
       formatEffect: value => formatPow(value, 2, 2)
     }
   },
@@ -31,7 +31,7 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => formatX(value, 1, 1),
     charged: {
       description: "Second and Seventh Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1 + Math.log10(Math.log10(player.infinitied + 10)) * player.celestials.ra.level / 100,
+      effect: () => 1 + Math.log10(player.infinitied.clampMin(10).log10()) * player.celestials.ra.level / 100,
       formatEffect: value => formatPow(value, 2, 2)
     }
   },
@@ -43,7 +43,7 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => formatX(value, 1, 1),
     charged: {
       description: "Third and Sixth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1 + Math.log10(Math.log10(player.infinitied + 10)) * player.celestials.ra.level / 100,
+      effect: () => 1 + Math.log10(player.infinitied.clampMin(10).log10()) * player.celestials.ra.level / 100,
       formatEffect: value => formatPow(value, 2, 2)
     }
   },
@@ -55,7 +55,7 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => formatX(value, 1, 1),
     charged: {
       description: "Fourth and Fifth Dimensions gain a power effect based on infinitied stat and Teresa level",
-      effect: () => 1 + Math.log10(Math.log10(player.infinitied + 10)) * player.celestials.ra.level / 100,
+      effect: () => 1 + Math.log10(player.infinitied.clampMin(10).log10()) * player.celestials.ra.level / 100,
       formatEffect: value => formatPow(value, 2, 2)
     }
   },
@@ -187,5 +187,5 @@ GameDatabase.infinity.upgrades = {
 };
 
 function _INFUPG_dimInfinityMult() {
-  return 1 + (Player.totalInfinitied * 0.2);
+  return Player.totalInfinitied.times(0.2).plus(1);
 }

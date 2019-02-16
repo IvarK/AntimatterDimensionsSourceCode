@@ -423,6 +423,39 @@ var player = {
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
       activeMode: false, // false if idle, true if active
+    },
+    laitela: {
+      matter: 0,
+      dimensions: [
+        {
+          amount: 0,
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          lastUpdate: Date.now()
+        },
+        {
+          amount: 0,
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          lastUpdate: Date.now()
+        },
+        {
+          amount: 0,
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          lastUpdate: Date.now()
+        },
+        {
+          amount: 0,
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          lastUpdate: Date.now()
+        }
+      ]
     }
   },
   autoEcIsOn: true,

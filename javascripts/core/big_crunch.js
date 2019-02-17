@@ -159,7 +159,7 @@ function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return new Decimal(1);
   }
-  let ipMult = InfinityUpgrade.ipMult.effectValue
+  let ipMult = new Decimal(1)
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -172,6 +172,7 @@ function totalIPMult() {
       Achievement(116),
       Achievement(125),
       Achievement(141),
+      InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
@@ -298,6 +299,10 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+  }
+
+  get canBeApplied() {
+    return true;
   }
 
   purchase(amount = 1) {

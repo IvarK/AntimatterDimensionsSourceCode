@@ -93,7 +93,7 @@ function bigCrunchReset() {
 
     if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
       EffarigUnlock.infinity.unlock();
-      Modal.message.show("Effarig Infinity reward: Glyph Level cap raised to 3000 and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.");
+      Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
     }
 }
 

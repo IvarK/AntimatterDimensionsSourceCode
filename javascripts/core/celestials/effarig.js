@@ -128,10 +128,10 @@ var Effarig = {
         c = 1000
         break
       case EFFARIG_STAGES.ETERNITY: 
-        c = 35
+        c = 30
         break
       case EFFARIG_STAGES.REALITY:
-        c = 30
+        c = 25
         break
     }
     return 3 * (1 - c / (c + Math.sqrt(x.log10())));

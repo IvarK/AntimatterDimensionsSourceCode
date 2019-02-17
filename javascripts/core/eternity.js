@@ -135,7 +135,7 @@ function eternity(force, auto) {
     
     if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Number.MAX_VALUE)) {
       EffarigUnlock.eternity.unlock();
-      Modal.message.show("Effarig Eternity reward: Glyph Level cap raised to 10000, IP multipliers apply with full effect, and gamespeed is no longer limited; eternity count generates infinities and The Enslaved Ones have been unlocked.");
+      Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply with full effect; eternity count generates infinities and The Enslaved Ones have been unlocked.`);
     }
     
     resetInfinityPointsOnEternity();

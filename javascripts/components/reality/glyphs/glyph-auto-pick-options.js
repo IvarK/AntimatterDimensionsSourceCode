@@ -19,7 +19,7 @@ Vue.component("glyph-auto-pick-options", {
         "l-glyph-auto-pick-options__option"];
     },
     update() {
-      this.unlocked = Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER);
+      this.unlocked = EffarigUnlock.autopicker.isUnlocked;
       this.mode = AutoGlyphPicker.mode;
     },
     setMode(m) {

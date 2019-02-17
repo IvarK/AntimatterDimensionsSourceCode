@@ -150,9 +150,9 @@ Vue.component("glyph-sacrifice-options", {
       } : {}
     },
     update() {
-      this.unlocked = Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE);
+      this.unlocked = EffarigUnlock.autosacrifice.isUnlocked;
       this.mode = AutoGlyphSacrifice.mode;
-      for (type of GLYPH_TYPES) {
+      for (let type of GLYPH_TYPES) {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);

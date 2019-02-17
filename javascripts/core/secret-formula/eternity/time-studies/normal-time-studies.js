@@ -232,7 +232,8 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 4,
     description: "Multiplier to IP, which increases over this Infinity",
     effect: () => _TS_thisInfinityMult(),
-    formatEffect: value => formatX(value, 2, 1)
+    formatEffect: value => formatX(value, 2, 1),
+    cap: () => Effarig.eternityCap
   },
   {
     id: 151,

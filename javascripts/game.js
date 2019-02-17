@@ -753,7 +753,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
     }
   }
   
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+  if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))
@@ -875,7 +875,7 @@ function gameLoop(diff, options = {}) {
         player.partInfinitied -= 5;
         infGen = infGen.plus(1);
     }
-    if (Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && !EternityChallenge(4).isRunning) {
+    if (EffarigUnlock.eternity.isUnlocked && !EternityChallenge(4).isRunning) {
       infGen = infGen.plus(gainedInfinities().times(player.eternities).floor().times(diff/1000))
     }
 

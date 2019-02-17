@@ -478,7 +478,8 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
-    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10())
+    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()),
+    cap: () => Effarig.eternityCap
   },
   {
     id: 117,
@@ -517,7 +518,8 @@ GameDatabase.achievements.normal = [
     effect: function() {
       const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
       return Decimal.pow(2, Math.log(thisInfinity) * Math.min(Math.pow(thisInfinity, 0.11), 500));
-    }
+    },
+    cap: () => Effarig.eternityCap
   },
   {
     id: 126,

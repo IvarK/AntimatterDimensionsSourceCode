@@ -256,6 +256,9 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "IP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
+    softcap: value => (Effarig.eternityCap !== undefined && value > Effarig.eternityCap)
+      ? new Decimal(Effarig.eternityCap)
+      : value,
   }, {
     id: "infinityinfmult",
     glyphTypes: ["infinity"],
@@ -433,7 +436,7 @@ const GlyphTypes = {
     symbol: GLYPH_SYMBOLS.effarig,
     effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
-    unlockedFn: () => Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE),
+    unlockedFn: () => EffarigUnlock.reality.isUnlocked,
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

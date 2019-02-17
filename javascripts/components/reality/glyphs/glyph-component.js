@@ -49,6 +49,10 @@ const GlyphTooltipComponent = {
     sacrificeReward: {
       type: Number,
       default: 0,
+    },
+    effectiveLevel: {
+      type: Number,
+      default: 0,
     }
   },
   computed: {
@@ -75,8 +79,16 @@ const GlyphTooltipComponent = {
     description() {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
     },
+    isLevelCapped() {
+      return this.level == this.effectiveLevel
+    },
     levelText() {
-      return `Level: ${this.level}`;
+      return this.isLevelCapped
+        ? `Level: ${this.level}`
+        : `Level: ▼${this.effectiveLevel}▼`;
+    },
+    levelStyle() {
+      return { color: this.isLevelCapped ? "#FFFFFF" : "#FF1111" }
     },
     sacrificeText() {
       return this.onTouchDevice
@@ -122,7 +134,7 @@ const GlyphTooltipComponent = {
     <div class="l-glyph-tooltip__header">
       <span class="c-glyph-tooltip__description"
             :style="descriptionStyle">{{description}}</span>
-      <span class="l-glyph-tooltip__level">{{levelText}}</span>
+      <span class="l-glyph-tooltip__level" :style="levelStyle">{{levelText}}</span>
     </div>
     <div class="l-glyph-tooltip__effects">
       <effect-desc v-for="e in sortedEffects"
@@ -182,6 +194,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
+      effectiveLevel: 0,
     }
   },
   computed: {
@@ -263,6 +276,7 @@ Vue.component("glyph-component", {
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = glyphSacrificeGain(this.glyph);
+      this.effectiveLevel = (Effarig.isRunning && this.glyph.level > Effarig.glyphLevelCap) ? Effarig.glyphLevelCap : this.glyph.level;
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
@@ -364,6 +378,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
+                       :effectiveLevel="effectiveLevel"
                        :visible="isCurrentTooltip"/>
       </div>
       <div ref="over"

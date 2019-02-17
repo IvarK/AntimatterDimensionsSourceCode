@@ -133,9 +133,9 @@ function eternity(force, auto) {
       Autobuyer.tryUnlockAny();
     }
     
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && player.infinityPoints.gt(Number.MAX_VALUE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.ETERNITY_COMPLETE);
-      player.celestials.effarig.glyphEquipped = false;
+    if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Number.MAX_VALUE)) {
+      EffarigUnlock.eternity.unlock();
+      Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply with full effect; eternity count generates infinities and The Enslaved Ones have been unlocked.`);
     }
     
     resetInfinityPointsOnEternity();

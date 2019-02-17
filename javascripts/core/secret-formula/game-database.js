@@ -8,7 +8,8 @@ const GameDatabase = {
   reality: {
     glyphEffects: {},
     glyphSacrifice: {},
-  }
+  },
+  celestials: {}
 };
 
 function mapGameData(gameData, mapFn) {

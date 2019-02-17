@@ -1,67 +1,4 @@
 Vue.component('effarig-tab', {
-  data: function() {
-    return {
-      relicShards: 0,
-      shardsGained: 0,
-      unlocks: [],
-      weights: player.celestials.effarig.glyphWeights,
-      typePriorities: ["Power", "Time", "Infinity", "Dilation", "Replication"],
-      quote: "",
-      quoteIdx: 0,
-    };
-  },
-  methods: {
-    update() {
-      this.relicShards = player.celestials.effarig.relicShards
-      this.shardsGained = Effarig.shardsGained
-      this.unlocks = Object.values(EFFARIG_UNLOCKS).map(id => Effarig.has(id))
-      this.typePriorities = player.celestials.effarig.typePriorityOrder
-      this.quote = Effarig.quote
-      this.quoteIdx = player.celestials.effarig.quoteIdx
-    },
-    startRun() {
-      Effarig.startRun()
-    },
-    adjustWeights(name) {
-      let tempTotalWeight = 0
-      for (i in this.weights) {
-        tempTotalWeight += this.weights[i]
-      }
-      let tempExtra = tempTotalWeight - 100
-      if (this.weights[name] === 100) {
-        for (i in this.weights) {
-          this.weights[i] = 0;
-        }
-        this.weights[name] = 100;
-      } else {
-        while (tempExtra > 0) {
-          for (i in this.weights) {
-            if (tempExtra > 0 && this.weights[i] > 0 && i != name) {
-              this.weights[i]--;
-              tempExtra--;
-            }
-          }
-        }
-      }
-    },
-    buyUnlock(id, cost) {
-      Effarig.buyUnlock(id, cost)
-    },
-    move() {
-      player.celestials.effarig.typePriorityOrder = this.typePriorities
-    },
-    nextQuote() {
-      Effarig.nextQuote()
-    },
-    hasNextQuote() {
-      return this.quoteIdx < Effarig.maxQuoteIdx
-    }
-  },
-  computed: {
-    effarigUnlocks() {
-      return EFFARIG_UNLOCKS
-    }
-  },
   components: {
     "glyph-weight-sliders": {
       props: {
@@ -86,7 +23,97 @@ Vue.component('effarig-tab', {
             @input="emitInput(parseInt($event.target.value))"
           />
          </div>`
+    },
+    "run-unlock-reward": {
+      props: {
+        unlock: Object
+      },
+      data: function() {
+        return {
+          isUnlocked: false
+        };
+      },
+      methods: {
+        update() {
+          this.isUnlocked = this.unlock.isUnlocked;
+        }
+      },
+      template: `<div v-if="isUnlocked">{{ unlock.config.description }}</div>`
     }
+  },
+  data: function() {
+    return {
+      relicShards: 0,
+      shardsGained: 0,
+      autosacrificeUnlocked: false,
+      adjusterUnlocked: false,
+      autopickerUnlocked: false,
+      runUnlocked: false,
+      weights: player.celestials.effarig.glyphWeights,
+      typePriorities: ["Power", "Time", "Infinity", "Dilation", "Replication"],
+      quote: "",
+      quoteIdx: 0,
+    };
+  },
+  methods: {
+    update() {
+      this.relicShards = player.celestials.effarig.relicShards;
+      this.shardsGained = Effarig.shardsGained;
+      this.typePriorities = player.celestials.effarig.typePriorityOrder;
+      this.quote = Effarig.quote;
+      this.quoteIdx = player.celestials.effarig.quoteIdx;
+      this.runUnlocked = EffarigUnlock.run.isUnlocked;
+      this.autosacrificeUnlocked = EffarigUnlock.autosacrifice.isUnlocked;
+      this.adjusterUnlocked = EffarigUnlock.adjuster.isUnlocked;
+      this.autopickerUnlocked = EffarigUnlock.autopicker.isUnlocked;
+    },
+    startRun() {
+      Effarig.startRun();
+    },
+    adjustWeights(name) {
+      let tempTotalWeight = 0
+      for (let i in this.weights) {
+        tempTotalWeight += this.weights[i]
+      }
+      let tempExtra = tempTotalWeight - 100
+      if (this.weights[name] === 100) {
+        for (let i in this.weights) {
+          this.weights[i] = 0;
+        }
+        this.weights[name] = 100;
+      } else {
+        while (tempExtra > 0) {
+          for (let i in this.weights) {
+            if (tempExtra > 0 && this.weights[i] > 0 && i != name) {
+              this.weights[i]--;
+              tempExtra--;
+            }
+          }
+        }
+      }
+    },
+    move() {
+      player.celestials.effarig.typePriorityOrder = this.typePriorities
+    },
+    nextQuote() {
+      Effarig.nextQuote()
+    },
+    hasNextQuote() {
+      return this.quoteIdx < Effarig.maxQuoteIdx
+    }
+  },
+  computed: {
+    shopUnlocks: () => [
+      EffarigUnlock.adjuster,
+      EffarigUnlock.autosacrifice,
+      EffarigUnlock.autopicker
+    ],
+    runUnlock: () => EffarigUnlock.run,
+    runUnlocks: () => [
+      EffarigUnlock.infinity,
+      EffarigUnlock.eternity,
+      EffarigUnlock.reality
+    ]
   },
   template:
     `<div class="l-effarig-celestial-tab">
@@ -94,19 +121,21 @@ Vue.component('effarig-tab', {
       <div class="c-effarig-relics">You have {{ shortenRateOfChange(relicShards) }} Relic Shards.</div>
       <div class="c-effarig-relic-description">You gain {{ shortenRateOfChange(shardsGained) }} Shards next reality, based on different kinds of glyph effects you have equipped and EP.</div>
       <div class="l-effarig-shop">
-        <effarig-unlock-button unlock="ADJUSTER"></effarig-unlock-button>
-        <effarig-unlock-button unlock="AUTOSACRIFICE"></effarig-unlock-button>
-        <effarig-unlock-button unlock="AUTOPICKER"></effarig-unlock-button>
+        <effarig-unlock-button
+          v-for="(unlock, i) in shopUnlocks"
+          :key="i"
+          :unlock="unlock"
+        />
       </div>
-        <effarig-unlock-button unlock="RUN"></effarig-unlock-button>
+      <effarig-unlock-button :unlock="runUnlock" />
       <div class="l-effarig-glyph-settings">
-        <div v-if="unlocks[effarigUnlocks.AUTOSACRIFICE]">
+        <div v-if="autosacrificeUnlocked">
           Highest type will be picked, lowest sacrificed.
           <draggable :list="typePriorities" @end="move()">
             <div v-for="element in typePriorities" class="o-effarig-glyph-type">{{element}}</div>
           </draggable>
         </div>
-        <div v-if="unlocks[effarigUnlocks.ADJUSTER]">
+        <div v-if="adjusterUnlocked">
           <div>
             <glyph-weight-sliders v-model="weights.ep" name="EP" @input="adjustWeights('ep')"/>
             <glyph-weight-sliders v-model="weights.repl" name="Replicanti" @input="adjustWeights('repl')"/>
@@ -116,12 +145,22 @@ Vue.component('effarig-tab', {
             <glyph-weight-sliders v-model="weights.eternities" name="Eternities" @input="adjustWeights('eternities')"/>
           </div>
         </div>
-        <div v-if="unlocks[effarigUnlocks.AUTOPICKER]">Glyph effect weight settings here</div>
+        <div v-if="autopickerUnlocked">Glyph effect weight settings here</div>
       </div>
-      <div v-if="unlocks[effarigUnlocks.RUN]"><button class="o-effarig-shop-button effarig-run-button" @click="startRun()">Start a new reality, all production and gamespeed is severely lowered, infinity and time dimensions reduce the production penalty. Glyph levels are temporarily capped. You will gain unlocks at Infinity, Eternity and Reality.</button>
-        <div v-if="unlocks[effarigUnlocks.INFINITY_COMPLETE]">Infinity: IP mults are capped at 1e50 in Effarig Reality; infinitied stat raises the replicanti cap and increases your max RG.</div>
-        <div v-if="unlocks[effarigUnlocks.ETERNITY_COMPLETE]">Eternity: IP mults are no longer limited in Effarig Reality; eternitied stat generates infinitied stat, unlocks The Enslaved Ones.</div>
-        <div v-if="unlocks[effarigUnlocks.REALITY_COMPLETE]">Reality: Unlocks Effarig Glyphs</div>
+      <div v-if="runUnlocked">
+        <button
+          class="o-effarig-shop-button effarig-run-button"
+          @click="startRun()"
+        >
+          Start a new reality, all production and gamespeed is severely lowered,
+          infinity and time dimensions reduce the production penalty.
+          Glyph levels are temporarily capped. You will gain unlocks at Infinity, Eternity and Reality.
+        </button>
+        <run-unlock-reward
+          v-for="(unlock, i) in runUnlocks"
+          :key="i"
+          :unlock="unlock"
+        />
       </div>
     </div>`
 });

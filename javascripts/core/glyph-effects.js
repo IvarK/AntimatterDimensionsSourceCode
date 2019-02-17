@@ -436,7 +436,7 @@ const GlyphTypes = {
     symbol: GLYPH_SYMBOLS.effarig,
     effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
-    unlockedFn: () => Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE),
+    unlockedFn: () => EffarigUnlock.reality.isUnlocked,
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

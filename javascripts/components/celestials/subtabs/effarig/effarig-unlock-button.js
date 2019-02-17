@@ -1,6 +1,6 @@
 Vue.component("effarig-unlock-button", {
   props: {
-    unlock: String
+    unlock: Object
   },
   data: function() {
     return {
@@ -9,22 +9,16 @@ Vue.component("effarig-unlock-button", {
   },
   methods: {
     update() {
-      this.isBought = Effarig.has(this.id)
+      this.isBought = this.unlock.isUnlocked;
     },
     purchase() {
-      Effarig.buyUnlock(this.id, this.cost)
+      this.unlock.purchase();
     }
   },
   computed: {
-    id() {
-      return EFFARIG_UNLOCKS[this.unlock]
-    },
-    cost() {
-      return EFFARIG_COSTS[this.unlock]
-    },
-    description() {
-      return EFFARIG_UNLOCK_DESCRIPTIONS[this.unlock]
-    },
+    config() {
+      return this.unlock.config;
+    }
   },
   template: `
     <button
@@ -32,8 +26,11 @@ Vue.component("effarig-unlock-button", {
       :class="{ 'effarig-unlock-bought': isBought }"
       @click="purchase"
     >
-      {{description}}
-      <br>
-      Cost: {{ shorten(cost) }} Relic Shards
+      <description-display :config="config"/>
+      <cost-display br
+        v-if="!isBought"
+        :config="config"
+        singular="Relic Shard"
+      />
     </button>`
 });

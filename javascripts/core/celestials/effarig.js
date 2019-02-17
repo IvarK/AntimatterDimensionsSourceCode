@@ -1,5 +1,4 @@
-
-var effarigQuotes = [
+const effarigQuotes = [
   "Welcome to my humble abode.",
   "I am Effarig, and I govern Glyphs.",
   "I am different from Teresa; not as simplistic as you think.",
@@ -18,31 +17,7 @@ var effarigQuotes = [
   "Do you think this was worth it? Trampling on what I’ve done?",
   "And for what purpose? You could’ve joined, we could’ve cooperated.",
   "But no. It’s over. Leave while I cling onto what’s left."
-]
-
-const EFFARIG_UNLOCKS = {
-  ADJUSTER: 0,
-  AUTOSACRIFICE: 1,
-  AUTOPICKER: 2,
-  RUN: 3,
-  INFINITY_COMPLETE: 4,
-  ETERNITY_COMPLETE: 5,
-  REALITY_COMPLETE: 6
-}
-
-const EFFARIG_UNLOCK_DESCRIPTIONS = {
-  ADJUSTER: "Unlock glyph level adjustment.",
-  AUTOSACRIFICE: "Unlock automatic glyph sacrifice.",
-  AUTOPICKER: "Unlock automatic glyph picker.",
-  RUN: "Unlock Effarig's reality.",
-}
-
-const EFFARIG_COSTS = {
-  ADJUSTER: 1e7,
-  AUTOSACRIFICE: 2e8,
-  AUTOPICKER: 3e9,
-  RUN: 4e10,
-}
+];
 
 const EFFARIG_STAGES = {
   INFINITY: 1,
@@ -50,23 +25,46 @@ const EFFARIG_STAGES = {
   REALITY: 3
 }
 
-var Effarig = {
-  buyUnlock(id, cost) {
-    if (this.shardAmount < cost) return
-    if (this.has(id)) return
-    player.celestials.effarig.unlocks.push(id)
-    player.celestials.effarig.relicShards -= cost
-    if (id === EFFARIG_UNLOCKS.ADJUSTER) {
+class EffarigUnlockState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+  }
+
+  get isUnlocked() {
+    return player.celestials.effarig.unlocks.includes(this.id);
+  }
+
+  unlock() {
+    if (!this.isUnlocked) {
+      player.celestials.effarig.unlocks.push(this.id);
+    }
+  }
+
+  purchase() {
+    if (this.isUnlocked || Effarig.shardAmount < this.cost) return;
+    this.unlock();
+    player.celestials.effarig.relicShards -= this.cost;
+    if (this === EffarigUnlock.adjuster) {
       ui.view.tabs.reality.openGlyphWeights = true;
       showRealityTab("glyphstab");
-    };
-  },
-  has(id) {
-    return player.celestials.effarig.unlocks.includes(id)
-  },
-  unlock(id) {
-    player.celestials.effarig.unlocks.push(id);
-  },
+    }
+  }
+}
+
+const EffarigUnlock = (function() {
+  const db = GameDatabase.celestials.effarig.unlocks;
+  return {
+    adjuster: new EffarigUnlockState(db.adjuster),
+    autosacrifice: new EffarigUnlockState(db.autosacrifice),
+    autopicker: new EffarigUnlockState(db.autopicker),
+    run: new EffarigUnlockState(db.run),
+    infinity: new EffarigUnlockState(db.infinity),
+    eternity: new EffarigUnlockState(db.eternity),
+    reality: new EffarigUnlockState(db.reality),
+  };
+})();
+
+var Effarig = {
   startRun() {
     respecGlyphs()
     startRealityOver()
@@ -79,15 +77,13 @@ var Effarig = {
     return player.celestials.effarig.run;
   },
   get currentStage() {
-    if (!this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+    if (!EffarigUnlock.infinity.isUnlocked) {
       return EFFARIG_STAGES.INFINITY;
     }
-    else if (!this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
+    if (!EffarigUnlock.eternity.isUnlocked) {
       return EFFARIG_STAGES.ETERNITY;
     }
-    else {
-      return EFFARIG_STAGES.REALITY;
-    }
+    return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
     return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? 1e50 : undefined;
@@ -154,15 +150,20 @@ var Effarig = {
     return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
   },
   get maxQuoteIdx() {
-    let base = 5
-    if (this.has(EFFARIG_UNLOCKS.ADJUSTER)) base++;
-    if (this.has(EFFARIG_UNLOCKS.AUTOPICKER)) base++;
-    if (this.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) base++;
-    if (this.has(EFFARIG_UNLOCKS.RUN)) base += 3;
-    if (this.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) base++;
-    if (this.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) base++;
-    if (this.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) base += 4;
-    return base
+    const base = 5;
+    const unlockQuotes = [
+      [EffarigUnlock.adjuster, 1],
+      [EffarigUnlock.autopicker, 1],
+      [EffarigUnlock.autosacrifice, 1],
+      [EffarigUnlock.run, 3],
+      [EffarigUnlock.infinity, 1],
+      [EffarigUnlock.eternity, 1],
+      [EffarigUnlock.reality, 4]
+    ]
+      .filter(pair => pair[0].isUnlocked)
+      .map(pair => pair[1])
+      .sum();
+    return base + unlockQuotes;
   },
   get quote() {
     return effarigQuotes[player.celestials.effarig.quoteIdx]

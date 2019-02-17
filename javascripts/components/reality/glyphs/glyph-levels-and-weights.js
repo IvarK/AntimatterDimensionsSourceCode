@@ -78,7 +78,7 @@ Vue.component("glyph-levels-and-weights", {
   },
   methods: {
     update() {
-      this.adjustVisible = Effarig.has(EFFARIG_UNLOCKS.ADJUSTER);
+      this.adjustVisible = EffarigUnlock.adjuster.isUnlocked;
       this.eternityVisible =  player.reality.upg.includes(18);
       let glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;

@@ -96,14 +96,14 @@ function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   let gainedLevel = gainedGlyphLevel();
   let newGlyph;
-  if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
+  if (EffarigUnlock.autopicker.isUnlocked) {
     let glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
     newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
   }
-  if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
+  if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
       // FIXME: remove console.log after initial rollout to testers
       console.log("Sacrificing a glyph: ")
@@ -350,8 +350,8 @@ function handleCelestialRuns(force) {
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false
-    if (!force && !Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
+    if (!force && !EffarigUnlock.reality.isUnlocked) {
+      EffarigUnlock.reality.unlock();
     }
   }
   if (player.celestials.enslaved.run) {

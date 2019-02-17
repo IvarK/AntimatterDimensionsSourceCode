@@ -63,7 +63,7 @@ Vue.component("replicanti-tab", {
       }
       this.amount.copyFrom(Replicanti.amount);
       this.mult.copyFrom(replicantiMult());
-      this.hasRaisedCap = Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
+      this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
       this.effarigInfinityBonusRG = Effarig.bonusRG;
       this.nextEffarigRGThreshold = Decimal.pow(Number.MAX_VALUE, Effarig.bonusRG + 2);

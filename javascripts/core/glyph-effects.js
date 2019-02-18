@@ -8,6 +8,7 @@ const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity:
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
   multiply: x => x.reduce(Number.prodReducer, 1),
+  addWithNullValueOne: x => x.reduce(Number.sumReducer, 1 - x.length),
 });
 
 /**
@@ -192,9 +193,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
-    combine: GlyphCombiner.multiply,
-    /** @type {function(number): number} */
-    softcap: value => value > 10 ? 10 + Math.pow(value - 10, 0.5) : value,
+    combine: GlyphCombiner.addWithNullValueOne,
   }, {
     id: "replicationspeed",
     glyphTypes: ["replication"],
@@ -207,10 +206,7 @@ GameDatabase.reality.glyphEffects = [
     id: "replicationpow",
     glyphTypes: ["replication"],
     singleDesc: "Replicanti multiplier ^{value}",
-    combine: effects => {
-      // Combines things additively, while keeping a null value of 1.
-      return { value: effects.reduce(Number.sumReducer, 1 - effects.length), capped: false };
-    }
+    combine: GlyphCombiner.addWithNullValueOne,
   }, {
     id: "replicationdtgain",
     glyphTypes: ["replication"],

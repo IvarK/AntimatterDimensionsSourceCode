@@ -39,7 +39,7 @@ class Galaxy {
     }
 
     if (type === GalaxyType.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + getGlyphSacEffect("power")))));
+      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + Effects.sum(GlyphSacrifice.power)))));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -57,7 +57,7 @@ class Galaxy {
   }
 
   static get type() {
-    if (player.galaxies >= 800 + getGlyphSacEffect("power")) {
+    if (player.galaxies >= 800 + Effects.sum(GlyphSacrifice.power)) {
       return GalaxyType.REMOTE;
     }
     if (EternityChallenge(5).isRunning || player.galaxies >= this.costScalingStart) {
@@ -79,7 +79,7 @@ class Galaxy {
 function galaxyReset() {
   if (autoS) auto = false;
   autoS = true;
-  if (player.sacrificed === 0) giveAchievement("I don't believe in Gods");
+  if (player.sacrificed.eq(0)) giveAchievement("I don't believe in Gods");
   player.galaxies++;
   player.tickDecrease -= 0.03;
   player.resets = 0;
@@ -106,7 +106,7 @@ function galaxyResetBtnClick() {
 function maxBuyGalaxies(manual) {
   if (EternityChallenge(6).isRunning || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
-    while (player.eightAmount >= Galaxy.requirement.amount && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
+    while (player.eightAmount.gte(Galaxy.requirement.amount) && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
       if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
       player.galaxies++;
     }

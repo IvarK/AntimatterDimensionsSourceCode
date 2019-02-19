@@ -74,9 +74,9 @@ Vue.component('celestials-tab', {
   methods: {
     update() {
       this.effarigUnlocked = Teresa.has(TERESA_UNLOCKS.EFFARIG)
-      this.enslavedUnlocked = Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)
+      this.enslavedUnlocked = EffarigUnlock.eternity.isUnlocked
       this.vUnlocked = Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)
-      this.raUnlocked = false
+      this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
       this.laitelaUnlocked = false
       this.pelleUnlocked = false
     }

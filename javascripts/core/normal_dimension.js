@@ -10,7 +10,7 @@ function getDimensionFinalMultiplier(tier) {
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  if (isAchEnabled("r11")) multiplier = multiplier.times(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")));
+  if (isAchEnabled("r11")) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
   let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
@@ -39,6 +39,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier
       .timesEffectsOf(
         InfinityUpgrade.unspentIPMult,
+        InfinityUpgrade.unspentIPMult.chargedEffect,
         Achievement(28),
         Achievement(31),
         Achievement(68),
@@ -103,8 +104,17 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
+  multiplier = multiplier
+    .powEffectsOf(
+      dimension.infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
+    )
+
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
+  } else if (V.isRunning) {
+    multiplier = multiplier.pow(0.5)
   }
   
   return multiplier;
@@ -172,6 +182,8 @@ function getDimensionPowerMultiplier(tier) {
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
   dimMult = Decimal.pow(getAdjustedGlyphEffect("effarigforgotten"), NormalDimension(tier).bought/10).times(dimMult)
+
+  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect)
 
   return dimMult;
 }
@@ -495,7 +507,7 @@ function buyOneDimensionBtnClick(tier) {
   if (tier === 1) {
     if (buyOneDimension(1)) {
       // This achievement is granted only if the buy one button is pressed.
-      if (player.firstAmount >= 1e150) {
+      if (player.firstAmount.gte(1e150)) {
         giveAchievement("There's no point in doing that");
       }
     }

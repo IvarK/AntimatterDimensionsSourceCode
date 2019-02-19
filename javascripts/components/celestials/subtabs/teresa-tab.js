@@ -40,6 +40,7 @@ Vue.component('teresa-tab', {
       this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) )
       this.glyphUpg.mult = player.celestials.teresa.glyphLevelMult
       this.rmUpg = player.celestials.teresa.rmMult
+      this.dtBulk = player.celestials.teresa.dtBulk
       this.pp = player.reality.pp
       this.rm = player.reality.realityMachines
     },
@@ -54,6 +55,9 @@ Vue.component('teresa-tab', {
     },
     buyGlyphMult() {
       Teresa.buyGlyphLevelPower()
+    },
+    buyDtBulk() {
+      Teresa.buyDtBulk()
     },
     unlockDescriptionStyle: function(unlockInfo) {
       let maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
@@ -73,9 +77,10 @@ Vue.component('teresa-tab', {
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
-            <span class="o-teresa-pp"> You have {{ pp }} Perk Points.</span>
+            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 2) }} Perk Points.</span>
             <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shortenCosts(glyphUpg.cost) }} PP</button>
             <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shortenCosts(rmUpg) }} PP</button>
+            <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br>Currently {{ shortenRateOfChange(dtBulk ) }}x, Costs: {{ shortenCosts(dtBulk * 100) }} PP</button>
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">

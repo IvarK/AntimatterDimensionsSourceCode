@@ -54,7 +54,7 @@ Vue.component("expanding-control-box", {
     }
   },
   mounted() {
-    // set the root and container elements to match the height of the button
+    // Set the root and container elements to match the height of the button
     this.closedHeight = this.$refs.expandButton.offsetHeight + "px"
     this.openHeight = (this.$refs.expandButton.offsetHeight + this.$refs.dropdown.offsetHeight) + "px"
     this.$refs.container.style.maxHeight = this.closedHeight;

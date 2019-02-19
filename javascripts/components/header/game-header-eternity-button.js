@@ -42,7 +42,7 @@ Vue.component("game-header-eternity-button", {
       this.gainedEP.copyFrom(gainedEP);
       const hasNewContent = player.realities === 0 &&
         player.eternityPoints.exponent >= 4000 &&
-        player.timestudy.theorem > 5e9 &&
+        player.timestudy.theorem.gt(5e9) &&
         player.replicanti.amount.exponent > 20000;
 
       if (player.dilation.active) {
@@ -70,8 +70,8 @@ Vue.component("game-header-eternity-button", {
         gainedCompletions++;
       }
       const totalCompletions = currentCompletions + gainedCompletions;
-
-      const maxEC4Valid = 5 - Math.ceil(player.infinitied / 4);
+      let maxEC4Valid = 0;
+      if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
       if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {
         this.gainedCompletions = Math.min(totalCompletions, maxEC4Valid) - currentCompletions;
         this.failedCondition = "(Too many infinities for more)";
@@ -143,7 +143,7 @@ Vue.component("game-header-eternity-button", {
       <template v-else-if="type === 6">
         Other challenges await...
         <br>
-        {{gainedCompletions}} {{ "completition" | pluralize(gainedCompletions) }} on Eternity
+        {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
         <template v-if="failedCondition">
           <br>
           {{failedCondition}}

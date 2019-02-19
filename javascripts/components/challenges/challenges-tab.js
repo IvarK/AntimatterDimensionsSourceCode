@@ -55,7 +55,7 @@ Vue.component('challenges-tab', {
       this.remainingECTiers = remainingTiers;
       if (remainingTiers !== 0) {
         const autoECPeriod = EternityChallenge.currentAutoCompleteThreshold();
-        const untilNextEC = autoECPeriod - player.reality.lastAutoEC;
+        const untilNextEC = Math.max(autoECPeriod - player.reality.lastAutoEC, 0);
         this.untilNextEC.setFrom(untilNextEC);
         this.untilAllEC.setFrom(untilNextEC + (autoECPeriod * (remainingTiers - 1)));
       }

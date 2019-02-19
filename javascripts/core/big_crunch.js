@@ -37,11 +37,11 @@ function bigCrunchReset() {
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    if (player.realities > 0 && Player.totalInfinitied === 0 && player.eternities === 0 && player.galaxies <= 1) {
+    if (player.realities > 0 && Player.totalInfinitied.eq(0) && player.eternities === 0 && player.galaxies <= 1) {
       unlockRealityUpgrade(7);
     }
 
-    if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied === 0) {
+    if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
 
@@ -53,7 +53,7 @@ function bigCrunchReset() {
 
     auto = autoS; //only allow autoing if prev crunch was autoed
     autoS = true;
-    player.infinitied = player.infinitied + Math.round(gainedInfinities());
+    player.infinitied = player.infinitied.plus(gainedInfinities().round());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
 
     if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
@@ -65,8 +65,8 @@ function bigCrunchReset() {
         player.currentChallenge = "";
 
     checkForEndMe();
-
-    kong.submitStats('Infinitied', Player.totalInfinitied);
+    // FIXME: Infinitified is now Decimal so decide what happens here!
+    //kong.submitStats('Infinitied', Player.totalInfinitied);
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 
     let currenReplicanti = player.replicanti.amount;
@@ -91,8 +91,9 @@ function bigCrunchReset() {
 
     autoBuyReplicantiUpgrades();
 
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
+    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+      EffarigUnlock.infinity.unlock();
+      Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
     }
 }
 
@@ -114,8 +115,8 @@ function secondSoftReset() {
 
 function checkBigCrunchAchievements() {
     giveAchievement("To infinity!");
-    if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-    if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+    if (player.infinitied.gte(10)) giveAchievement("That's a lot of infinites");
+    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
@@ -123,14 +124,14 @@ function checkBigCrunchAchievements() {
     if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
     if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
     if (player.thisInfinityTime <= 200) giveAchievement("Blink of an eye");
-    if (player.eightAmount === 0) giveAchievement("You didn't need it anyway");
+    if (player.eightAmount.eq(0)) giveAchievement("You didn't need it anyway");
     if (player.galaxies === 1) giveAchievement("Claustrophobic");
     if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
     if (Challenge(2).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
     if (Challenge(8).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
     if (Challenge(9).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
     if (Challenge(3).isRunning && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
-    if (player.firstAmount === 1 && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
+    if (player.firstAmount.eq(1) && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
     if (InfinityChallenge(5).isRunning && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
     if (player.challenges.length >= 2) giveAchievement("Daredevil");
     if (player.challenges.length === 12) giveAchievement("AntiChallenged");
@@ -155,10 +156,10 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return new Decimal(1);
   }
-  let ipMult = player.infMult
+  let ipMult = new Decimal(1)
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -171,24 +172,72 @@ function totalIPMult() {
       Achievement(116),
       Achievement(125),
       Achievement(141),
+      InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-    ipMult = ipMult.pow(0.9);
-  }
   if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
+}
+
+class ChargedInfinityUpgradeState extends GameMechanicState {
+  constructor(config, upgrade) {
+    super(config);
+    this._upgrade = upgrade;
+  }
+
+  get canBeApplied() {
+    return this._upgrade.isBought && this._upgrade.isCharged;
+  }
 }
 
 class InfinityUpgrade extends PurchasableMechanicState {
   constructor(config, requirement) {
     super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
+    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
   }
 
   get isAvailable() {
     return this._requirement === undefined || this._requirement.isBought;
+  }
+
+  get canBeApplied() {
+    return this.isBought && !this.isCharged;
+  }
+  
+  get chargedEffect() {
+    return this._chargedEffect;
+  }
+
+  purchase() {
+    if (super.purchase()) return true;
+    if (this.isCharged) {
+      this.disCharge();
+      return true;
+    }
+    if (this.canCharge) {
+      this.charge();
+      return true;
+    }
+    return false;
+  }
+
+  get isCharged() {
+    return player.celestials.ra.charged.includes(this.id);
+  }
+
+  get canCharge() {
+    return this.isBought && !this.isCharged && !this.config.bannedFromCharging && Ra.chargesLeft !== 0;
+  }
+
+  charge() {
+    player.celestials.ra.charged.push(this.id);
+  }
+
+  disCharge() {
+    const charged = player.celestials.ra.charged;
+    charged.splice(charged.indexOf(this.id), 1);
   }
 }
 
@@ -250,6 +299,10 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   get canBeBought() {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
+  }
+
+  get canBeApplied() {
+    return true;
   }
 
   purchase(amount = 1) {

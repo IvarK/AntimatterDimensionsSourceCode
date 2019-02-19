@@ -145,22 +145,6 @@ input {
     color: #757575 !important;
 }
 
-#glyphslots .glyphactive {
-    background: #333 !important;
-}
-
-#glyphs .empty {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg:hover {
-    background: #333 !important;
-}
-
 #realityanimbg {
     filter: invert(1);
 }

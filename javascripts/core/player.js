@@ -9,7 +9,6 @@ var justImported = false;
 var saved = 0;
 var failureCount = 0;
 var implosionCheck = 0;
-var realizationCheck = 0;
 var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
@@ -56,8 +55,8 @@ var player = {
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
-  infinitied: 0,
-  infinitiedBank: 0,
+  infinitied: new Decimal(0),
+  infinitiedBank: new Decimal(0),
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
@@ -238,7 +237,7 @@ var player = {
     auto: [false, false, false]
   },
   timestudy: {
-    theorem: 0,
+    theorem: new Decimal(0),
     amcost: new Decimal("1e20000"),
     ipcost: new Decimal(1),
     epcost: new Decimal(1),
@@ -336,9 +335,9 @@ var player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  wormhole: [{
+  blackHole: [{
     speed: 60 * 60, // Seconds to fill
-    power: 180, // Multiplier from the wormhole
+    power: 180, // Multiplier from the black hole
     duration: 10, // How long it lasts.
     phase: 0,
     active: false,
@@ -363,7 +362,7 @@ var player = {
     unlocked: false,
     activations: 0
   }],
-  wormholePause: false,
+  blackHolePause: false,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -373,29 +372,57 @@ var player = {
       run: false,
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
-      rmMult: 1
+      rmMult: 1,
+      dtBulk: 1
     },
     effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
+      quoteIdx: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
         dt: 25,
         eternities: 25
       },
-      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+      autoGlyphSac: {
+        mode: AutoGlyphSacMode.NONE,
+        types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+        })),
+      },
+      autoGlyphPick: {
+        mode: AutoGlyphPickMode.RANDOM,
+      },
     },
     enslaved: {
       isStoring: false,
+      quoteIdx: 0,
       stored: 0,
       unlocks: [],
-      run: false
+      run: false,
+      quoteIdx: 0,
+      maxQuotes: 6
     },
     v: {
       unlocks: [],
+      quoteIdx: 0,
       run: false,
+      runUnlocks: [0, 0, 0, 0, 0, 0],
+      additionalStudies: 0
+    },
+    ra: {
+      level: 1,
+      exp: 0,
+      unlocks: [],
+      run: false,
+      charged: [],
+      quoteIdx: 0,
+      maxEpGained: new Decimal(0),
+      activeMode: false, // false if idle, true if active
     }
   },
   autoEcIsOn: true,
@@ -439,7 +466,7 @@ var player = {
 const Player = {
 
   get totalInfinitied() {
-    return Math.max(player.infinitied + player.infinitiedBank, 0);
+    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
   get isInMatterChallenge() {
@@ -481,7 +508,11 @@ const Player = {
 
   get dimensionMultDecrease() {
     return GameCache.dimensionMultDecrease.value;
-  }
+  },
+
+  get hasFreeInventorySpace() {
+    return Glyphs.freeInventorySpace > 0;
+  },
 };
 
 function guardFromNaNValues(obj) {
@@ -493,7 +524,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     //TODO: rework autobuyer saving
-    if (key === "autobuyers") continue;
+    if (key === "autobuyers" || key === "autoSacrifice") continue;
 
     let value = obj[key];
     if (isObject(value)) {

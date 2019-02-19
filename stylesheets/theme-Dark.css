@@ -153,11 +153,11 @@ input {
     color: #757575 !important;
 }
 
-.realityUpgrade {
+.c-reality-upgrade {
     background-color: black !important;
 }
 
-.realityUpgrade:hover {
+.c-reality-upgrade:hover {
     color: black !important;
     background-color: #d5ffd7 !important;
 }
@@ -190,22 +190,6 @@ input {
 .rUpgReqNotMet:hover {
     color: #d5ffd7 !important;
     background-color: rgb(165, 57, 57) !important;
-}
-
-#glyphslots .glyphactive {
-    background: #333 !important;
-}
-
-#glyphs .empty {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg {
-    background: #333 !important;
-}
-
-#glyphs .glyphbg:hover {
-    background: #333 !important;
 }
 
 .automatorinstruction.command {

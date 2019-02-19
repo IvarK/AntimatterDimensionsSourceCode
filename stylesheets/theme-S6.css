@@ -179,7 +179,7 @@ input {
     text-shadow: 0px 0px 7px #0b600e;
 }
 
-.realityUpgrade:hover {
+.c-reality-upgrade:hover {
     background-color: #d5ffd7 !important;
 }
 
@@ -196,18 +196,6 @@ input {
 .rUpgBought:hover {
     color: #d5ffd7 !important;
     background-color: #0b600e !important;
-}
-
-#glyphs .glyphbg {
-    background: #333333 !important;
-}
-
-#glyphslots .glyphactive {
-    background: #333333 !important;
-}
-
-#glyphs .empty {
-    background: #333333 !important;
 }
 
 .automatorinstruction.command {

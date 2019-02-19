@@ -4,7 +4,7 @@ function buyWithAntimatter() {
   if (player.money.gte(player.timestudy.amcost)) {
       player.money = player.money.minus(player.timestudy.amcost)
       player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
-      player.timestudy.theorem += 1
+      player.timestudy.theorem = player.timestudy.theorem.plus(1)
       return true
   } else return false
 }
@@ -13,7 +13,7 @@ function buyWithIP() {
   if (player.infinityPoints.gte(player.timestudy.ipcost)) {
       player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
       player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
-      player.timestudy.theorem += 1
+      player.timestudy.theorem = player.timestudy.theorem.plus(1)
       return true
   } else return false
 }
@@ -26,7 +26,7 @@ function buyWithEP() {
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
       player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost)
       player.timestudy.epcost = player.timestudy.epcost.times(2)
-      player.timestudy.theorem += 1
+      player.timestudy.theorem = player.timestudy.theorem.plus(1)
       return true
   } else return false
 }
@@ -35,13 +35,13 @@ function maxTheorems() {
   var AMowned = player.timestudy.amcost.e / 20000 - 1
   if (player.money.gte(player.timestudy.amcost)) {
     player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000
-    player.timestudy.theorem += Math.floor(player.money.e / 20000) - AMowned
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned)
     player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000))
   }
   var IPowned = player.timestudy.ipcost.e / 100
   if (player.infinityPoints.gte(player.timestudy.ipcost)) {
     player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100
-    player.timestudy.theorem += Math.floor(player.infinityPoints.e / 100 + 1) - IPowned
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned)
     player.infinityPoints = player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100))
   }
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
@@ -50,7 +50,7 @@ function maxTheorems() {
     let totalEPCost = finalEPCost.minus(player.timestudy.epcost);
     player.timestudy.epcost = finalEPCost;
     player.eternityPoints = player.eternityPoints.minus(totalEPCost);
-    player.timestudy.theorem += Math.round(player.timestudy.epcost.log2()) - EPowned
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
     buyWithEP();  // The above code block will sometimes buy one too few TT, but it never over-buys
   }
 }
@@ -68,16 +68,22 @@ function calculateTimeStudiesCost() {
 
 function buyTimeStudy(name, cost, check) {
   if (shiftDown && check === undefined) studiesUntil(name);
-  if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
+  if (player.timestudy.theorem.gte(cost) && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
-      player.timestudy.theorem -= cost
+      player.timestudy.theorem = player.timestudy.theorem.minus(cost)
       GameCache.timeStudies.invalidate();
       return true
-  } else return false
+  } else if (canBuyLocked(name, cost)) {
+    player.celestials.v.additionalStudies++
+    player.timestudy.studies.push(name)
+    player.timestudy.theorem = player.timestudy.theorem.minus(cost)
+    GameCache.timeStudies.invalidate();
+  }
+  else return false
 }
 
 function buyDilationStudy(name, cost, quiet) {
-    if ((player.timestudy.theorem >= cost || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
+    if ((player.timestudy.theorem.gte(cost) || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
         if (name === 1) {
             if (!quiet) {
               Tab.eternity.dilation.show();
@@ -90,8 +96,8 @@ function buyDilationStudy(name, cost, quiet) {
             showRealityTab("glyphstab");
         }
         player.dilation.studies.push(name)
-        if (name !== 6) player.timestudy.theorem -= cost
-        else if (player.realities === 0 && name === 6) player.timestudy.theorem -= cost
+        if (name !== 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
+        else if (player.realities === 0 && name === 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
         return true
     } return false
   }
@@ -156,14 +162,17 @@ function canBuyStudy(name) {
       case 8:
       case 9:
       case 10:
-      case 13:
-      case 14:
       if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
       break;
 
       case 12:
       if (hasRow(row-1) && !hasRow(row)) return true; else return false
       break;
+
+      
+      case 13:
+      case 14:
+      return (player.timestudy.studies.includes((row-1)*10 + col) && !hasRow(row))
 
       case 7:
       if (DilationUpgrade.timeStudySplit.isBought) {
@@ -189,23 +198,69 @@ function canBuyStudy(name) {
   }
 }
 
+/**
+ * 
+ * This function is used to check whether you can no longer buy a certain study without a respec
+ * Only works for rows 12-14 and 22-23
+ * Used by V-celestial
+ */
+function studyIsLocked(name) {
+  var row = Math.floor(name/10)
+
+  switch (row) {
+
+    case 22:
+    case 23:
+    return player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)
+
+    case 12:
+    case 13:
+    case 14:
+    return hasRow(row)
+  } 
+  
+  return false
+}
+
+function canBuyLocked(name, cost) {
+  if (player.timestudy.theorem.lt(cost)) return false
+  if (!studyIsLocked(name)) return false
+  if (!V.canBuyLockedPath()) return false
+
+  
+  var row = Math.floor(name/10)
+  var col = name%10
+
+  switch (row) {
+
+    case 12:
+    case 22:
+    case 23:
+    return hasRow(row - 1)
+
+    case 13:
+    case 14:
+    return player.timestudy.studies.includes((row-1) * 10 + col)
+  }
+}
+
 function canBuyDilationStudy(name) {
   if (name === 1) {
     const requirementSatisfied = Perk.bypassECDilation.isBought ||
       EternityChallenge(11).isFullyCompleted &&
       EternityChallenge(12).isFullyCompleted &&
-      player.timestudy.theorem + calculateTimeStudiesCost() >= 13000;
-    const isAffordable = player.timestudy.theorem >= 5000;
+      player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(13000);
+    const isAffordable = player.timestudy.theorem.gte(5000);
     const studiesAreBought = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
     return requirementSatisfied && isAffordable && studiesAreBought;
   }
   if (name === 6) {
-    const isAffordable = player.timestudy.theorem >= 5000000000 || player.realities > 0;
+    const isAffordable = player.timestudy.theorem.gte(5000000000) || player.realities > 0;
     return player.eternityPoints.gte("1e4000") && TimeStudy.timeDimension(8).isBought && isAffordable;
   }
   // TODO
   const config = Object.values(GameDatabase.eternity.timeStudies.dilation).find(config => config.id === name);
-  return player.dilation.studies.includes(name - 1) && player.timestudy.theorem >= config.cost;
+  return player.dilation.studies.includes(name - 1) && player.timestudy.theorem.gte(config.cost);
 }
 
 var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
@@ -353,6 +408,7 @@ function respecTimeStudies() {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
+  player.celestials.v.additionalStudies = 0
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -423,11 +479,11 @@ class TimeStudyState extends GameMechanicState {
   }
 
   refund() {
-    player.timestudy.theorem += this.cost;
+    player.timestudy.theorem = player.timestudy.theorem.plus(this.cost);
   }
 
   get isAffordable() {
-    return player.timestudy.theorem >= this.cost;
+    return player.timestudy.theorem.gte(this.cost);
   }
 
   get canBeBought() {
@@ -445,7 +501,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return canBuyStudy(this.id);
+    return canBuyStudy(this.id) || canBuyLocked(this.id, this.cost);
   }
 
   get canBeApplied() {
@@ -505,7 +561,7 @@ class ECTimeStudyState extends TimeStudyState {
   purchase() {
     if (!this.canBeBought) return false;
     unlockEChall(this.id);
-    player.timestudy.theorem -= this.cost;
+    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;
   }
 

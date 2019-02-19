@@ -1,4 +1,10 @@
 Vue.component("infinity-upgrades-tab", {
+  data: function() {
+    return {
+      chargeUnlocked: false,
+      chargesLeft: 0
+    }
+  },
   computed: {
     grid: function() {
       return [
@@ -30,6 +36,10 @@ Vue.component("infinity-upgrades-tab", {
     }
   },
   methods: {
+    update() {
+      this.chargeUnlocked = Ra.superChargeUnlocked
+      this.chargesLeft = Ra.chargesLeft
+    },
     btnClassObject: function(column) {
       const classObject = {
         "l-infinity-upgrade-grid__cell": true
@@ -43,6 +53,7 @@ Vue.component("infinity-upgrades-tab", {
   },
   template:
     `<div class="l-infinity-upgrades-tab">
+      <div v-if="chargeUnlocked">You can Supercharge {{ chargesLeft }} {{ "upgrade" | pluralize(chargesLeft) }}</div>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button

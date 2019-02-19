@@ -243,7 +243,7 @@ class TimeSpan {
     else if (this.totalDays < 10000) {
       return `${this.totalDays.toFixed(2)} days`;
     }
-    else {
+    else { 
       return `${shorten(this.totalYears, 3, 0)} years`;
     }
     function format(value) {

@@ -107,9 +107,8 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 35,
-    name: "You didn't need it anyway",
-    tooltip: "Reach Infinite antimatter without having any 8th Dimensions. Reward: Dimensions 1-7 are 2% stronger.",
-    effect: () => 1.02
+    name: "Don't you dare to sleep",
+    tooltip: "Be offline for over 6 hours in a row.",
   },
   {
     id: 36,
@@ -290,7 +289,7 @@ GameDatabase.achievements.normal = [
     id: 75,
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension. Reward: Your achievement bonus affects Infinity Dimensions.",
-    effect: () => Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement"))
+    effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))
   },
   {
     id: 76,
@@ -479,7 +478,8 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
-    effect: () => Decimal.pow(2, Math.log10(Player.totalInfinitied + 1))
+    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()),
+    cap: () => Effarig.eternityCap
   },
   {
     id: 117,
@@ -518,7 +518,8 @@ GameDatabase.achievements.normal = [
     effect: function() {
       const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
       return Decimal.pow(2, Math.log(thisInfinity) * Math.min(Math.pow(thisInfinity, 0.11), 500));
-    }
+    },
+    cap: () => Effarig.eternityCap
   },
   {
     id: 126,
@@ -540,7 +541,7 @@ GameDatabase.achievements.normal = [
     id: 131,
     name: "No ethical consumption",
     tooltip: "Get 5 billion banked Infinities. Reward: After Eternity you permanently keep 5% of your Infinities.",
-    effect: () => Math.floor(player.infinitied * 0.05)
+    effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 132,
@@ -599,12 +600,12 @@ GameDatabase.achievements.normal = [
   {
     id: 144,
     name: "Is this an Interstellar reference?",
-    tooltip: "Unlock the Wormhole"
+    tooltip: "Unlock the Black Hole"
   },
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    tooltip: "Have Wormhole interval smaller than the duration"
+    tooltip: "Have the Black Hole interval smaller than the duration"
   },
   {
     id: 146,
@@ -659,6 +660,6 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: "Spend 24 hours with wormhole active in a row"
+    tooltip: "Spend 24 hours with black hole active in a row"
   },
 ];

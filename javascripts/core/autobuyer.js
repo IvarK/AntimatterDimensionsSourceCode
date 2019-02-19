@@ -386,6 +386,7 @@ class DimboostAutobuyerState extends AutobuyerState {
   }
 
   tick() {
+    if (Ra.isRunning) return;
     if (!this.canTick()) return;
     if (this.isBuyMaxUnlocked) {
       if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
@@ -462,6 +463,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
+    if (Ra.isRunning) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
     if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
@@ -787,7 +789,7 @@ Autobuyer.reality = {
     this.mode = Object.values(AutoRealityMode).nextSibling(this.mode);
   },
   tick() {
-    if (!this.isActive) return;
+    if (!this.isActive || GlyphSelection.active) return;
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);
     const glyphProc = gainedGlyphLevel() >= this.glyph;
@@ -805,7 +807,7 @@ Autobuyer.reality = {
         proc = rmProc && glyphProc;
         break;
     }
-    if (proc) reality(false, false, true);
+    if (proc) autoReality();
   }
 };
 

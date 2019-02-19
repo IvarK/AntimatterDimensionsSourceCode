@@ -6,8 +6,10 @@ const GameDatabase = {
     timeStudies: {}
   },
   reality: {
-    glyphEffects: {}
-  }
+    glyphEffects: {},
+    glyphSacrifice: {},
+  },
+  celestials: {}
 };
 
 function mapGameData(gameData, mapFn) {

@@ -74,6 +74,10 @@ const GameUI = {
   events: [],
   flushPromise: undefined,
   initialized: false,
+  globalClickListener: null,
+  touchDevice: ("ontouchstart" in window ||
+    window.navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0 ||
+    (window.DocumentTouch && document instanceof DocumentTouch)),
   dispatch(event) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
@@ -132,8 +136,43 @@ ui = new Vue({
     },
     notation() {
       return Notation.find(this.notationName);
+    },
+    currentGlyphTooltip() {
+      return this.view.tabs.reality.currentGlyphTooltip;
+    },
+    scrollWindow() {
+      return this.view.scrollWindow;
     }
-  }
+  },
+  methods: {
+    scroll(t) {
+      const now = Date.now();
+      if (this.view.scrollWindow) {
+        window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
+        setTimeout(() => this.scroll(now), 20);
+      }
+    },
+  },
+  watch: {
+    currentGlyphTooltip(newVal) {
+      if (newVal !== -1 && !GameUI.globalClickListener) {
+        GameUI.globalClickListener = () => {
+          this.view.tabs.reality.currentGlyphTooltip = -1;
+          document.removeEventListener("click", GameUI.globalClickListener);
+          GameUI.globalClickListener = null;
+        }
+        document.addEventListener("click", GameUI.globalClickListener);
+      } else if (newVal === -1 && GameUI.globalClickListener) {
+        document.removeEventListener("click", GameUI.globalClickListener);
+        GameUI.globalClickListener = null;
+      }
+    },
+    scrollWindow(newVal, oldVal) {
+      if (newVal !== 0 && oldVal === 0) {
+        this.scroll(Date.now());
+      }
+    },
+  },
 });
 
 GameUI.initialized = true;

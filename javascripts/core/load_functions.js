@@ -16,7 +16,7 @@ function updateState() {
   }
 
 function onLoad() {
-  if (player.totalmoney === undefined || isNaN(player.totalmoney)) {
+  if (player.totalmoney === undefined || isNaN(player.totalmoney.mantissa) || isNaN(player.totalmoney.e)) {
     player.totalmoney = player.money;
   }
   if (player.thisEternity === undefined) {
@@ -26,7 +26,7 @@ function onLoad() {
   if (isDevEnvironment()) {
     guardFromNaNValues(player);
   }
-  if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
@@ -113,7 +113,7 @@ function onLoad() {
 
   if (player.version < 9.5) {
       player.version = 9.5
-      if (player.timestudy.studies.includes(191)) player.timestudy.theorem += 100
+      if (player.timestudy.studies.includes(191)) player.timestudy.theorem = player.timestudy.theorem.plus(100);
   }
 
   if (player.version < 10) {
@@ -143,10 +143,10 @@ function onLoad() {
     }
   }
 
-    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
+    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
     if (player.version < 13) {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (isDevEnvironment()) player.options.testVersion = 27;
+        if (isDevEnvironment()) player.options.testVersion = 30;
         player.version = 13
         if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
         if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
@@ -179,6 +179,8 @@ function onLoad() {
         convertAutobuyerMode();
         unfuckChallengeIds();
         unfuckMultCosts();
+        player.secretUnlocks.why = player.why
+        delete player.why
     }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -188,7 +190,7 @@ function onLoad() {
     document.getElementById("game").style.display = "none";
   }
 
-	initializeWormhole();
+	initializeBlackHole();
   recalculateAllGlyphs();
 
   Autobuyer.tryUnlockAny();
@@ -197,14 +199,14 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  generateGlyphTable();
   updateRealityUpgrades();
-  updateWormholeUpgrades()
+  updateBlackHoleUpgrades()
   updateAutomatorRows()
   checkPerkValidity()
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
   updatePerkColors()
+  V.updateTotalRunUnlocks()
 
   const notation = player.options.notation;
   if (notation === undefined) {
@@ -220,23 +222,16 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
-  $(".wormhole-upgrades").hide()
-  if (player.wormhole[0].unlocked) {
-    $("#wormholeunlock").hide()
-    $("#wormholecontainer").show()
-    $("#whupg1").show()
+  $(".blackhole-upgrades").hide()
+  if (player.blackHole[0].unlocked) {
+    $("#blackholeunlock").hide()
+    $("#blackholecontainer").show()
+    $("#bhupg1").show()
   }
-  if (player.wormhole[1].unlocked) $("#whupg2").show()
-  if (player.wormhole[2].unlocked) $("#whupg3").show()
-  
+  if (player.blackHole[1].unlocked) $("#bhupg2").show()
+  if (player.blackHole[2].unlocked) $("#bhupg3").show()
+
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-  if (player.reality.respec) {
-    $("#glyphRespec").addClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
-  }
-  else
-	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
-    
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true
@@ -249,11 +244,11 @@ function onLoad() {
       simulateTime(diff/1000)
   }
 
-  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the wormhole in the correct phase.
-  for (let i = 0; i < player.wormhole.length; i++) {
-    updateWormholeStatusText(i);
+  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the black hole in the correct phase.
+  for (let i = 0; i < player.blackHole.length; i++) {
+    updateBlackHoleStatusText(i);
   }
-  updateWormholeGraphics();
+  updateBlackHoleGraphics();
 }
 
 function convertAutobuyerMode() {
@@ -279,15 +274,21 @@ function convertAutobuyerMode() {
 }
 
 function unfuckChallengeIds() {
+  let wasFucked = false;
   function unfuckChallengeId(id) {
     if (!id.startsWith("challenge")) return id;
+    wasFucked = true;
     const legacyId = parseInt(id.substr(9));
     const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
     return Challenge(config.id).fullId;
   }
-
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);
+  if (wasFucked) {
+    player.challengeTimes = GameDatabase.challenges.normal
+      .slice(1)
+      .map(c => player.challengeTimes[c.legacyId - 2]);
+  }
 }
 
 function unfuckMultCosts() {
@@ -350,7 +351,7 @@ function load_game(root) {
 
 
 function save_game(changed, silent) {
-  if ( possibleGlyphs.length > 0 ) return
+  if (GlyphSelection.active) return;
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
   if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");

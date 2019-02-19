@@ -8,6 +8,11 @@ const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity:
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
   multiply: x => x.reduce(Number.prodReducer, 1),
+  // For exponents, the base value is 1, so when we add two exponents a and b we want to get a + b - 1,
+  // so that if a and b are both close to 1 so is their sum. In general, when we add a list x of exponents,
+  // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
+  // is also close to 1 rather than close to x.length.
+  addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
 });
 
 /**
@@ -192,9 +197,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
-    combine: GlyphCombiner.multiply,
-    /** @type {function(number): number} */
-    softcap: value => value > 10 ? 10 + Math.pow(value - 10, 0.5) : value,
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationspeed",
     glyphTypes: ["replication"],
@@ -207,10 +210,7 @@ GameDatabase.reality.glyphEffects = [
     id: "replicationpow",
     glyphTypes: ["replication"],
     singleDesc: "Replicanti multiplier ^{value}",
-    combine: effects => {
-      // Combines things additively, while keeping a null value of 1.
-      return { value: effects.reduce(Number.sumReducer, 1 - effects.length), capped: false };
-    }
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationdtgain",
     glyphTypes: ["replication"],

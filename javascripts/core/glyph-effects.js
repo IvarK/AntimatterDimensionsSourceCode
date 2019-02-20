@@ -317,7 +317,9 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigforgotten",
     glyphTypes: ["effarig"],
-    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
+    singleDesc: "Raise the bonus gained from buying 10 Dimensions to a power of ^{value}",
+    totalDesc: "Multiplier from \"Buy 10\" ^{value}",
+    genericDesc: "\"Buy 10\" bonus multiplier ^x",
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigdimensions",

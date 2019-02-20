@@ -181,7 +181,7 @@ function getDimensionPowerMultiplier(tier) {
 
   dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
 
-  dimMult = Decimal.pow(getAdjustedGlyphEffect("effarigforgotten"), NormalDimension(tier).bought/10).times(dimMult)
+  dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten")
 
   dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect)
 

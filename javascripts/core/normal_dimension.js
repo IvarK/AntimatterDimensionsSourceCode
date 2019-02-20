@@ -16,6 +16,7 @@ function getDimensionFinalMultiplier(tier) {
   let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
   let glyphMultMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powermult"));
   let glyphPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powerpow"));
+  let glyphEffarigPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions"));
   let glyphDilationPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("dilationpow"));
 
   if (!EternityChallenge(9).isRunning) {
@@ -96,7 +97,7 @@ function getDimensionFinalMultiplier(tier) {
       EternityChallenge(10)
     );
   multiplier = multiplier.clampMin(1);
-  multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier);
+  multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier).pow(glyphEffarigPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
@@ -246,7 +247,7 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  return new Decimal(Number.MAX_VALUE).times(Decimal.pow(10, getAdjustedGlyphEffect("effarigdimensions")))
+  return new Decimal(Number.MAX_VALUE);
 }
 
 function buyOneDimension(tier) {

@@ -411,11 +411,11 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "effarigachievement":
       return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
-      return 10 * Math.sqrt(level * strength)
+      return 1 + Math.sqrt(level * strength);
     case "effarigdimensions":
-      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 200
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 300
     case "effarigantimatter":
-      return 1 + Math.sqrt(level * strength) / 20000
+      return 1 + Math.sqrt(level * strength) / 30000
     default:
       return 0;
   }

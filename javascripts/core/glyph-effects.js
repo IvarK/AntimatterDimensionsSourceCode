@@ -324,8 +324,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigdimensions",
     glyphTypes: ["effarig"],
-    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
-    combine: GlyphCombiner.add,
+    singleDesc: "All dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
   }, {
     id: "effarigantimatter",
     glyphTypes: ["effarig"],

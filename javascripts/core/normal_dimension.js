@@ -551,7 +551,8 @@ function getDimensionProductionPerSecond(tier) {
     production = production.min("1e315");
   }
   if (tier === 1) {
-    production.e = Math.floor(Math.pow(production.e, getAdjustedGlyphEffect("effarigantimatter")))
+    const log10 = production.log10();
+    production = Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), getAdjustedGlyphEffect("effarigantimatter")));
   }
   return production;
 }

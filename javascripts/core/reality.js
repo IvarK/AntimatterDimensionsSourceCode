@@ -65,7 +65,11 @@ function requestManualReality() {
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   let choiceCount = GlyphSelection.choiceCount;
   if (choiceCount === 1) {
-    Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
+    // First reality gets a specially generated glyph:
+    const newGlyph = player.realities === 0
+      ? GlyphGenerator.startingGlyph(gainedGlyphLevel())
+      : GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+    Glyphs.addToInventory(newGlyph);
     return manualReality();
   }
   GlyphSelection.generate(choiceCount, gainedGlyphLevel());

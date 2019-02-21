@@ -320,9 +320,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   adjustToCap() {
     if (this.isCapped) {
-      const capOffset = this.config.cap.dividedBy(player.infMult);
+      const capOffset = this.config.cap().dividedBy(player.infMult);
       player.autoIP = player.autoIP.times(capOffset);
-      player.infMult.copyFrom(this.config.cap);
+      player.infMult.copyFrom(this.config.cap());
       player.infMultCost.copyFrom(this.config.costCap);
     }
   }

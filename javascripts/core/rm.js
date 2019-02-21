@@ -255,6 +255,7 @@ const Glyphs = {
       throw crash("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
+    if (glyph.type === 'effarig' && this.active.any(x => x && x.type === 'effarig')) return;
     this.removeFromInventory(glyph);
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
@@ -411,11 +412,11 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "effarigachievement":
       return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
-      return 1 + Math.sqrt(level * strength);
+      return 1 + Math.sqrt(level * strength) / 5;
     case "effarigdimensions":
-      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 300
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500
     case "effarigantimatter":
-      return 1 + Math.sqrt(level * strength) / 30000
+      return 1 + Math.sqrt(level * strength) / 50000
     default:
       return 0;
   }

@@ -66,7 +66,6 @@ const EffarigUnlock = (function() {
 
 var Effarig = {
   startRun() {
-    respecGlyphs()
     startRealityOver()
     player.celestials.effarig.run = true
     recalculateAllGlyphs()

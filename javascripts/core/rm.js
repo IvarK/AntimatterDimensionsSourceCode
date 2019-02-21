@@ -126,15 +126,25 @@ const GlyphGenerator = {
     return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
   },
 
+  strengthMultiplier() {
+    if (player.reality.upg.includes(16)) {
+      return 1.3;
+    } else {
+      return 1;
+    }
+  },
+
   randomStrength(fake) {
     let result;
-    let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
+    // Divide the extra minimum rarity by the strength multiplier
+    // since we'll multiply by the strength multiplier later.
+    let minimumValue = 1 + (player.reality.perks.includes(23) ? 0.125 / GlyphGenerator.strengthMultiplier() : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
+    result *= GlyphGenerator.strengthMultiplier();
     // Each rarity% is 0.025 strength.
     result += Effects.sum(GlyphSacrifice.effarig) / 40;
-    if (player.reality.upg.includes(16)) result *= 1.3;
     return result;
   },
 

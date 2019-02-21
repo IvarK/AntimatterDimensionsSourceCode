@@ -85,7 +85,7 @@ var Effarig = {
     return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? 1e50 : undefined;
+    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {

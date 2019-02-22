@@ -56,19 +56,15 @@ function getBlackHoleIntervalCost(i) {
 function getBlackHolePowerCost(i) {
   var amountOfPurchases = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
   return getBlackHoleUpgradeCost(amountOfPurchases, i, 20, 2);
-    let cost = Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
-    return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHoleDurationCost(i) {
   var amountOfPurchases = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3))
   return getBlackHoleUpgradeCost(amountOfPurchases, i, 10, 4);
-    let cost = Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
-    return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHoleUpgradeCost(amountOfPurchases, i, initialCost, costMult) {
-  let wormholeCostMultipliers = [1, 1000, 1e40];
+  let wormholeCostMultipliers = [1, 1000, 1e35];
   let costScalingStart = 1e40;
   initialCost *= wormholeCostMultipliers[i];
   let preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));

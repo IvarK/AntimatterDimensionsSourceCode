@@ -740,7 +740,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
       factor *= blackHoleOverride;
     } else if (!player.blackHolePause) {
       for (let blackHole of player.blackHole) {
-        if (blackHole.active) {
+        if (blackHoleIsUnlocked(blackHole) && blackHole.active) {
           factor *= blackHole.power;
           if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
         } else {

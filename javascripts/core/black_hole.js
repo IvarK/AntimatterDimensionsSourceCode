@@ -48,20 +48,31 @@ function unlockBlackHole() {
 
 function getBlackHoleIntervalCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
-    if (i == 2) amountOfPurchases += 33
-    return Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
+    let cost = Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
+    return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHolePowerCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
-    if (i == 2) amountOfPurchases += 58
-    return Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
+    let cost = Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
+    return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHoleDurationCost(i) {
     var amountOfPurchases = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3))
-    if (i == 2) amountOfPurchases += 30
-    return Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
+    let cost = Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
+    return modifyBlackHoleUpgradeCost(cost, i);
+}
+
+function modifyBlackHoleUpgradeCost(cost, i) {
+  if (i === 2) {
+    cost *= 1e40;
+  }
+  if (cost >= 1e40) {
+    let extra = Math.log10(cost) - 40;
+    cost = 1e40 * Math.pow(10, extra * Math.log2(extra / 10 + 2))
+  }
+  return cost;
 }
 
 function upgradeBlackHoleInterval(i) {

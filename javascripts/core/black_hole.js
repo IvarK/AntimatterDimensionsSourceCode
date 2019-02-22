@@ -47,32 +47,35 @@ function unlockBlackHole() {
 }
 
 function getBlackHoleIntervalCost(i) {
-    var amountOfPurchases = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
+  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
+  return getBlackHoleUpgradeCost(amountOfPurchases, i, 15, 3.5);
     let cost = Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
     return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHolePowerCost(i) {
-    var amountOfPurchases = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
+  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
+  return getBlackHoleUpgradeCost(amountOfPurchases, i, 20, 2);
     let cost = Math.ceil(Math.pow(2, amountOfPurchases) * 20 * Math.pow(1000, i))
     return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHoleDurationCost(i) {
-    var amountOfPurchases = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3))
+  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3))
+  return getBlackHoleUpgradeCost(amountOfPurchases, i, 10, 4);
     let cost = Math.ceil(Math.pow(4, amountOfPurchases) * 10 * Math.pow(1000, i))
     return modifyBlackHoleUpgradeCost(cost, i);
 }
 
-function modifyBlackHoleUpgradeCost(cost, i) {
-  if (i === 2) {
-    cost *= 1e40;
-  }
-  if (cost >= 1e40) {
-    let extra = Math.log10(cost) - 40;
-    cost = 1e40 * Math.pow(10, extra * Math.log2(extra / 10 + 2))
-  }
-  return cost;
+function getBlackHoleUpgradeCost(amountOfPurchases, i, initialCost, costMult) {
+  let wormholeCostMultipliers = [1, 1000, 1e40];
+  let costScalingStart = 1e40;
+  initialCost *= wormholeCostMultipliers[i];
+  let preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
+  let preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
+  let scaling = new LinearMultiplierScaling(costMult, 0.2);
+  let postScalingCost = Math.exp(scaling.logTotalMultiplierAfterPurchases(Math.max(0, amountOfPurchases - preScalingPurchases)));
+  return preScalingCost * postScalingCost;
 }
 
 function upgradeBlackHoleInterval(i) {

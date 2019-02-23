@@ -676,7 +676,7 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
-    if ( [20, 21, 22, 23, 24, 25].every(id => { return player.reality.upg.includes(id)}) ) $("#celestialsbtn").show()
+    if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
     else $("#celestialsbtn").hide()
 
     if (player.realities > 3) {

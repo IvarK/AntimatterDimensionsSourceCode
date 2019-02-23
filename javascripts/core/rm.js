@@ -576,7 +576,7 @@ function buyRealityUpg(id) {
     $("#bhupg2").show()
   }
 
-  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   updateBlackHoleUpgrades()
   return true

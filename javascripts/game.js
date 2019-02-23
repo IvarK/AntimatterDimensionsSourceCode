@@ -721,7 +721,7 @@ var replicantiTicks = 0
 
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, BLACKHOLE: 3}
 
-function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
+function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesActiveOverride) {
   if (effectsToConsider === undefined) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE];
   }
@@ -739,16 +739,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
     } else if (!player.blackHolePause) {
-      for (let blackHole of player.blackHole) {
-        if (blackHole.active) {
-          factor *= blackHole.power;
-          if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
-        } else {
-          // If a black hole is inactive, even if later black holes have blackHole.active set to true
-          // they aren't currently active (instead they will activate as soon as the previous black hole is active).
-          // Thus, as soon as we reach an inactive black hole, we stop increasing the speedup factor.
-          break;
-        }
+      for (let i = 0; i < player.blackHole.length && blackHoleIsUnlocked(player.blackHole[i]) &&
+        ((blackHolesActiveOverride !== undefined) ? i <= blackHolesActiveOverride: player.blackHole[i].active); i++) {
+        factor *= blackHole.power;
+        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
       }
     }
   }

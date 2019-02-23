@@ -440,12 +440,11 @@ function binarySearch(start, end, evaluationFunction, target, tolerance) {
 // where each element is the *total* speedup while that black hole
 // is the highest-numbered black hole active, the black holes being numbered
 // starting from black hole 1 and black hole 0 being normal game.
-// speedups[0] is thus 1, and speedups[i + 1] is speedups[i] * player.black hole[i].power
-// (player.black hole[i].power being the speedup from player.black hole[i]).
 function calculateBlackHoleSpeedups() {
+  let speedupWithoutBlackHole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE], 1);
   let speedups = [1];
-  for (let blackHole of player.blackHole.filter(blackHoleIsUnlocked)) {
-    speedups.push(speedups.last() * blackHole.power);
+  for (let i = 0; i < player.blackHole.length && blackHoleIsUnlocked(player.blackHole[i]); i++) {
+    speedups.push(getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE], undefined, i) / speedupWithoutBlackHole);
   }
   return speedups;
 }

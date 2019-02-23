@@ -18,7 +18,7 @@ GameDatabase.celestials.effarig = {
     run: {
       id: 3,
       description: "Unlock Effarig's reality.",
-      cost: 1e11
+      cost: 1e12
     },
     infinity: {
       id: 4,

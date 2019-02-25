@@ -19,15 +19,15 @@
 
 function updateBlackHoleUpgrades() {
   for (let i = 0; i < 3; i++) {
-    $("#blackholeinterval" + (i+1)).html("Speed up the black hole by 25%<br>Current interval: "+(player.blackHole[i].speed).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleIntervalCost(i))+" RM")
+    $("#blackholeinterval" + (i+1)).html("Speed up the black hole by 25%<br>Current interval: "+player.blackHole[i].speed.toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleIntervalCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHoleIntervalCost(i))) $("#blackholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#blackholeinterval" + (i+1)).removeClass("rUpgUn")
 
-    $("#blackholepower" + (i+1)).html("Make the black hole 35% more powerful<br>Current power: "+shorten(player.blackHole[i].power)+"x<br>Cost: "+shortenDimensions(getBlackHolePowerCost(i))+" RM")
+    $("#blackholepower" + (i+1)).html("Make the black hole 35% more powerful<br>Current power: "+player.blackHole[i].power+"x<br>Cost: "+shortenDimensions(getBlackHolePowerCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHolePowerCost(i))) $("#blackholepower" + (i+1)).addClass("rUpgUn")
     else $("#blackholepower" + (i+1)).removeClass("rUpgUn")
 
-    $("#blackholeduration" + (i+1)).html("Extend the black hole duration by 30%<br>Current duration: "+(player.blackHole[i].duration).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleDurationCost(i))+" RM")
+    $("#blackholeduration" + (i+1)).html("Extend the black hole duration by 30%<br>Current duration: "+player.blackHole[i].duration.toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleDurationCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHoleDurationCost(i))) $("#blackholeduration" + (i+1)).addClass("rUpgUn")
     else $("#blackholeduration" + (i+1)).removeClass("rUpgUn")
   }

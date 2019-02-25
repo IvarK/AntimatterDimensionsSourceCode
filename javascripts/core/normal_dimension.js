@@ -168,7 +168,7 @@ function canBuyDimension(tier) {
   return tier < 7 || !Challenge(10).isRunning;
 }
 
-function getDimensionPowerMultiplier() {
+function getBuyTenMuliplier() {
   let dimMult = 2;
 
   if (Challenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
@@ -288,12 +288,12 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+    dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier));
     if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
     if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
-    floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
+    floatText(tier, "x" + shortenMoney(getBuyTenMuliplier(tier)))
   }
 
   if (Challenge(2).isRunning) player.chall2Pow = 0;
@@ -343,14 +343,14 @@ function buyManyDimension(tier) {
 
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
-  dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+  dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier));
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
   if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
-  floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
+  floatText(tier, "x" + shortenMoney(getBuyTenMuliplier(tier)));
   onBuyDimension(tier);
 
   return true;
@@ -368,7 +368,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = player.costMultipliers[tier - 1];
-  const dimensionPowerMultiplier = getDimensionPowerMultiplier(tier);
+  const dimensionPowerMultiplier = getBuyTenMuliplier(tier);
   const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
   const dimensionMultDecrease = Player.dimensionMultDecrease;
   const costUntil10 = dimension.cost.times(remainingUntil10);

@@ -562,7 +562,7 @@ dev.showProductionBreakdown = function() {
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(NormalDimension(i).bought / 10));
+    buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMuliplier(i)).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);

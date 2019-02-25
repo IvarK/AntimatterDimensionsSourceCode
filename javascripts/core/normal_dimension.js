@@ -168,7 +168,7 @@ function canBuyDimension(tier) {
   return tier < 7 || !Challenge(10).isRunning;
 }
 
-function getDimensionPowerMultiplier(tier) {
+function getDimensionPowerMultiplier() {
   let dimMult = 2;
 
   if (Challenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;

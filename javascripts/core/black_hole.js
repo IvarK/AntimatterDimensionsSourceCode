@@ -49,8 +49,6 @@ function unlockBlackHole() {
 function getBlackHoleIntervalCost(i) {
   var amountOfPurchases = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
   return getBlackHoleUpgradeCost(amountOfPurchases, i, 15, 3.5);
-    let cost = Math.ceil(Math.pow(3.5, amountOfPurchases) * 15 * Math.pow(1000, i))
-    return modifyBlackHoleUpgradeCost(cost, i);
 }
 
 function getBlackHolePowerCost(i) {

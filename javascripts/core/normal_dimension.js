@@ -97,7 +97,7 @@ function getDimensionFinalMultiplier(tier) {
       EternityChallenge(10)
     );
   multiplier = multiplier.clampMin(1);
-  multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier).pow(glyphEffarigPowMultiplier);
+  multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier.times(glyphEffarigPowMultiplier));
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
@@ -168,7 +168,7 @@ function canBuyDimension(tier) {
   return tier < 7 || !Challenge(10).isRunning;
 }
 
-function getBuyTenMuliplier() {
+function getBuyTenMultiplier() {
   let dimMult = 2;
 
   if (Challenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
@@ -288,12 +288,12 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier));
+    dimension.pow = dimension.pow.times(getBuyTenMultiplier());
     if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
     if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
-    floatText(tier, "x" + shortenMoney(getBuyTenMuliplier(tier)))
+    floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
   }
 
   if (Challenge(2).isRunning) player.chall2Pow = 0;
@@ -343,14 +343,14 @@ function buyManyDimension(tier) {
 
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
-  dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier));
+  dimension.pow = dimension.pow.times(getBuyTenMultiplier());
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
   if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
-  floatText(tier, "x" + shortenMoney(getBuyTenMuliplier(tier)));
+  floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
   onBuyDimension(tier);
 
   return true;
@@ -368,7 +368,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = player.costMultipliers[tier - 1];
-  const dimensionPowerMultiplier = getBuyTenMuliplier(tier);
+  const buyTenMultiplier = getBuyTenMultiplier();
   const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
   const dimensionMultDecrease = Player.dimensionMultDecrease;
   const costUntil10 = dimension.cost.times(remainingUntil10);
@@ -380,7 +380,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       lowerDimension.amount = lowerDimension.amount.minus(costUntil10);
       dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
       dimension.bought += remainingUntil10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       dimension.cost = dimension.cost.times(dimensionCostMultiplier)
     }
     let x = bulk;
@@ -389,7 +389,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       dimension.cost = dimension.cost.times(dimensionCostMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
       x--;
     }
@@ -400,7 +400,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     player.money = player.money.minus(costUntil10);
     dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
     dimension.bought += remainingUntil10;
-    dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+    dimension.pow = dimension.pow.times(buyTenMultiplier);
     dimension.cost = dimension.cost.times(dimensionCostMultiplier)
   }
   if (player.money.lt(dimension.cost.times(10))) return false;
@@ -414,7 +414,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       else dimension.cost = dimension.cost.times(dimensionCostMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
       if (Challenge(4).isRunning) clearDimensions(tier - 1);
       x--;
@@ -440,7 +440,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
         else cost = cost.times(dimensionCostMultiplier);
         amount = amount.plus(10).round();
         bought += 10;
-        pow.fromDecimal(pow.times(dimensionPowerMultiplier));
+        pow.fromDecimal(pow.times(buyTenMultiplier));
         if (cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
         if (Challenge(4).isRunning) clearDimensions(tier - 1);
         x--;
@@ -467,7 +467,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       let postInfBuy = bought / 10 + buying - preInfBuy - 1;
       let postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
       bought += 10 * buying;
-      pow = pow.times(Decimal.pow(dimensionPowerMultiplier, buying));
+      pow = pow.times(Decimal.pow(buyTenMultiplier, buying));
 
       let newCost = null;
       let postInfBuyOriginal = postInfBuy;

@@ -8,9 +8,11 @@
  /*
  How the black holes work:
  player.blackHole is a list (currently of length 3), each entry containing info about a black hole.
- blackHole.duration is the amount of time the black hole is active for.
- blackHole.power is the multiplier to time the black hole gives when active.
- blackHole.speed is the amount of time the black hole is inactive for between activations.
+ getBlackHoleDuration(blackHole) is the amount of time the black hole is active for.
+ getBlackHolePower(blackHole) is the multiplier to time the black hole gives when active.
+ getBlackHoleInterval(blackHole) is the amount of time the black hole is inactive for between activations.
+ blackHole.durationUpgrades, blackHole.powerUpgrades, and blackHole.intervalUpgrades
+ are the number of times the player has bought the respective upgrades.
  blackHole.phase is the amount of time the black hole has spent since last state transition,
  so if it's active, it's the amount of time it's been active for, and if it's inactive,
  it's the amount of time it's been inactive for.
@@ -19,20 +21,20 @@
 
 function updateBlackHoleUpgrades() {
   for (let i = 0; i < 3; i++) {
-    $("#blackholeinterval" + (i+1)).html("Speed up the black hole by 25%<br>Current interval: "+player.blackHole[i].speed.toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleIntervalCost(i))+" RM")
+    $("#blackholeinterval" + (i+1)).html("Speed up the black hole by 25%<br>Current interval: "+getBlackHoleInterval(player.blackHole[i]).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleIntervalCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHoleIntervalCost(i))) $("#blackholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#blackholeinterval" + (i+1)).removeClass("rUpgUn")
 
-    $("#blackholepower" + (i+1)).html("Make the black hole 35% more powerful<br>Current power: "+player.blackHole[i].power+"x<br>Cost: "+shortenDimensions(getBlackHolePowerCost(i))+" RM")
+    $("#blackholepower" + (i+1)).html("Make the black hole 35% more powerful<br>Current power: "+getBlackHolePower(player.blackHole[i]).toFixed(1)+"x<br>Cost: "+shortenDimensions(getBlackHolePowerCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHolePowerCost(i))) $("#blackholepower" + (i+1)).addClass("rUpgUn")
     else $("#blackholepower" + (i+1)).removeClass("rUpgUn")
 
-    $("#blackholeduration" + (i+1)).html("Extend the black hole duration by 30%<br>Current duration: "+player.blackHole[i].duration.toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleDurationCost(i))+" RM")
+    $("#blackholeduration" + (i+1)).html("Extend the black hole duration by 30%<br>Current duration: "+getBlackHoleDuration(player.blackHole[i]).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleDurationCost(i))+" RM")
     if (player.reality.realityMachines.lt(getBlackHoleDurationCost(i))) $("#blackholeduration" + (i+1)).addClass("rUpgUn")
     else $("#blackholeduration" + (i+1)).removeClass("rUpgUn")
   }
-  if (planet !== undefined) // This function gets called once on-load before the black hole is initialized
-    recalculateOrbit();
+  // This function gets called once on-load before the black hole is initialized
+  if (planet !== undefined) recalculateOrbit();
  }
 
 function unlockBlackHole() {
@@ -46,19 +48,32 @@ function unlockBlackHole() {
     $("#blackholeunlock").hide()
 }
 
+function getBlackHoleInterval(blackHole) {
+  return (3600 / (Math.pow(10, blackhole.id))) / Math.pow(0.8, blackHole.intervalUpgrades);
+}
+
+function getBlackHolePower(blackHole) {
+  return (180 / Math.pow(2, blackHole.id)) / Math.pow(1.35, blackHole.powerUpgrades);
+}
+
+function getBlackHoleDuration(blackHole) {
+  return (10 - i * 3) / Math.pow(1.3, blackHole.durationUpgrades);
+}
+
+function getBlackHoleCycleLength(blackHole) {
+  return getBlackHoleInterval(blackHole) + getBlackHoleDuration(blackHole);
+}
+
 function getBlackHoleIntervalCost(i) {
-  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8))
-  return getBlackHoleUpgradeCost(amountOfPurchases, i, 15, 3.5);
+  return getBlackHoleUpgradeCost(blackHole.intervalUpgrades, i, 15, 3.5);
 }
 
 function getBlackHolePowerCost(i) {
-  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35))
-  return getBlackHoleUpgradeCost(amountOfPurchases, i, 20, 2);
+  return getBlackHoleUpgradeCost(blackHole.powerUpgrades, i, 15, 3.5);
 }
 
 function getBlackHoleDurationCost(i) {
-  var amountOfPurchases = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3))
-  return getBlackHoleUpgradeCost(amountOfPurchases, i, 10, 4);
+  return getBlackHoleUpgradeCost(blackHole.durationUpgrades, i, 15, 3.5);
 }
 
 function getBlackHoleUpgradeCost(amountOfPurchases, i, initialCost, costMult) {
@@ -77,9 +92,8 @@ function upgradeBlackHoleInterval(i) {
   var cost = getBlackHoleIntervalCost(i)
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-  player.blackHole[i].speed *= 0.8
   updateBlackHoleUpgrades()
-  if (player.blackHole[i].speed < player.blackHole[i].duration) giveAchievement("Are you sure these are the right way around?")
+  if (getBlackHoleInterval(player.blackHole[i]) < getBlackHoleDuration(player.blackHole[i])) giveAchievement("Are you sure these are the right way around?")
 }
 
 function upgradeBlackHolePower(i) {
@@ -87,7 +101,6 @@ function upgradeBlackHolePower(i) {
   var cost = getBlackHolePowerCost(i)
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-  player.blackHole[i].power *= 1.35
   updateBlackHoleUpgrades()
 }
 
@@ -96,9 +109,8 @@ function upgradeBlackHoleDuration(i) {
   var cost = getBlackHoleDurationCost(i)
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
-  player.blackHole[i].duration *= 1.3
   updateBlackHoleUpgrades()
-  if (player.blackHole[i].speed < player.blackHole[i].duration) giveAchievement("Are you sure these are the right way around?")
+  if (getBlackHoleInterval(player.blackHole[i]) < getBlackHoleDuration(player.blackHole[i])) giveAchievement("Are you sure these are the right way around?")
 }
 
 function setBlackHole(state, i) {
@@ -119,22 +131,22 @@ function updateBlackHolePhases(blackHoleDiff) {
     // This used to always use the period of blackHole[0], now it doesn't,
     // will this cause other bugs?
     blackHole.phase += activePeriods[i];
-    if (blackHole.phase >= blackHole.speed + blackHole.duration) {
+    if (blackHole.phase >= getBlackHoleCycleLength(blackHole)) {
       // One activation for each full cycle.
-      blackHole.activations += Math.floor(blackHole.phase / (blackHole.speed + blackHole.duration));
-      blackHole.phase %= blackHole.speed + blackHole.duration;
+      blackHole.activations += Math.floor(blackHole.phase / getBlackHoleCycleLength(blackHole));
+      blackHole.phase %= getBlackHoleCycleLength(blackHole);
     }
     if (blackHole.active) {
-      if (blackHole.phase >= blackHole.duration) {
-        blackHole.phase -= blackHole.duration
+      if (blackHole.phase >= getBlackHoleDuration(blackHole)) {
+        blackHole.phase -= getBlackHoleDuration(blackHole)
         blackHole.active = false
         if (GameUI.notify.blackHoles) {
           GameUI.notify.success("Black hole "+ (i + 1) +" duration ended.");
         }
       }
     } else {
-      if (blackHole.phase >= blackHole.speed) {
-        blackHole.phase -= blackHole.speed
+      if (blackHole.phase >= getBlackHoleInterval(blackHole)) {
+        blackHole.phase -= getBlackHoleInterval(blackHole)
         blackHole.activations++;
         blackHole.active = true
         if (GameUI.notify.blackHoles) {
@@ -164,11 +176,11 @@ function updateBlackHoleStatusText(i) {
   if (!blackHoleIsUnlocked(blackHole)) {
     document.getElementById("blackHoleStatus" + (i + 1)).textContent = "";
   } else if (blackHole.active && (i === 0 || player.blackHole[i-1].active)) {
-    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" is active for " + (blackHole.duration - blackHole.phase).toFixed(1) + " more seconds.";
+    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" is active for " + (getBlackHoleDuration(blackHole) - blackHole.phase).toFixed(1) + " more seconds.";
   } else if (blackHole.active) {
-    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" will activate with black hole " + i + " (for " + (Math.max(0, blackHole.duration - blackHole.phase)).toFixed(1) + " sec)";
+    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" will activate with black hole " + i + " (for " + (Math.max(0, getBlackHoleDuration(blackHole) - blackHole.phase)).toFixed(1) + " sec)";
   } else {
-    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" will activate in " + (blackHole.speed - blackHole.phase).toFixed(1) + " seconds.";
+    document.getElementById("blackHoleStatus" + (i + 1)).textContent = "Black hole "+ ( i + 1 ) +" will activate in " + (getBlackHoleInterval(blackHole) - blackHole.phase).toFixed(1) + " seconds.";
   }
 }
 
@@ -291,10 +303,10 @@ function Dot(dotSize, dotType, r, theta) {
 // Example on what this is: if the black hole has intervals of 100+10 then this ranges from 0 to 110 and is active when less than 5 or more than 105
 function getTotalPhase() {
 	if (player.blackHole[0].active) {
-		return (player.blackHole[0].phase - player.blackHole[0].duration/2 + period) % period;
+		return (player.blackHole[0].phase - getBlackHoleDuration(player.blackHole[0]) / 2 + period) % period;
   }
 	else {
-		return player.blackHole[0].phase + player.blackHole[0].duration/2;
+		return player.blackHole[0].phase + getBlackHoleDuration(player.blackHole[0]) / 2;
   }
 }
 
@@ -307,7 +319,7 @@ function initializeBlackHole() {
 			
 	// Orbital size parameters
 	semimajorAxis = 100;   										// Basically orbit size in pixels, can be changed
-	period = player.blackHole[0].speed + player.blackHole[0].duration;	// Time taken for one orbit (in seconds)
+	period = getBlackHoleCycleLength(player.blackHole[0]);	// Time taken for one orbit (in seconds)
 	totalPhase = getTotalPhase();
 			
 	// A fair bit of calculation, should probably only be called on-load and after upgrades
@@ -328,20 +340,17 @@ let eccentricity, semimajorAxis, period, bhSize, planet, hole;
 function recalculateOrbit() {
 	let currOrbitPos = totalPhase / period;
 	
-	period = player.blackHole[0].speed + player.blackHole[0].duration;		// Update orbital period
+	period = getBlackHoleCycleLength(player.blackHole[0]);		// Update orbital period
 	calculateOrbitParams();
 	hole.size = (bhSize - planetSize) / 2;							// Prevent planet+hole overlapping
 	
 	// Do stuff to make sure the relative position of the planet stays about the same
 	totalPhase = currOrbitPos * period;
-	if (player.blackHole[0].active) {
-    
-	}
-	else {
-		player.blackHole[0].phase = totalPhase - player.blackHole[0].duration/2;
+	if (!player.blackHole[0].active) {
+		player.blackHole[0].phase = totalPhase - getBlackHoleDuration(player.blackHole[0]) / 2;
 		if (player.blackHole[0].phase < 0) {
 			player.blackHole[0].active = true;
-			player.blackHole[0].phase += player.blackHole[0].duration/2;
+			player.blackHole[0].phase += getBlackHoleDuration(player.blackHole[0]) / 2;
 		}
 	}
 }
@@ -361,15 +370,15 @@ function E(eccentricity, M) {
 let activeThreshold = 2;
 function calculateOrbitParams() {
   // Fixed-point iteration for eccentricity (I'm really hoping this always converges)
-	y = (1 - Math.pow(activeThreshold, -2)) / (1 - Math.pow(player.blackHole[0].power, -2));
+	y = (1 - Math.pow(activeThreshold, -2)) / (1 - Math.pow(getBlackHolePower(player.blackHole[0]), -2));
 	eccentricity = 0.5;
 	maxIter = 1000;
 	for (let k = 0; k < maxIter; k++) {
-		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * Math.min(0.9, player.blackHole[0].duration / period))) - 1)
+		eccentricity = (y - 1) / (y*Math.cos(E(eccentricity, 2 * Math.PI * Math.min(0.9, getBlackHoleDuration(player.blackHole[0]) / period))) - 1)
   }
 			
 	// Black hole size, calculated from orbit shape in order to give the right max boost
-	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(player.blackHole[0].power, -2));
+	bhSize = semimajorAxis*(1 - eccentricity) * (1 - Math.pow(getBlackHolePower(player.blackHole[0]), -2));
 }
 
 // Used for particle spawning, note that particles can be farther out when active
@@ -505,9 +514,9 @@ function getRealTimePeriodsWithBlackHoleActive(realTime) {
 // player.blackHole[1] is active during that time.
 function getRealTimeWithBlackHoleActive(blackHole, time) {
   let nextDeactivation = timeUntilNextDeactivation(blackHole);
-  let cooldown = blackHole.speed;
-  let duration = blackHole.duration;
-  let fullCycle = cooldown + duration;
+  let cooldown = getBlackHoleInterval(blackHole);
+  let duration = getBlackHoleDuration(blackHole);
+  let fullCycle = getBlackHoleCycleLength(blackHole);
   const currentActivationDuration = Math.min(nextDeactivation, duration);
   const activeCyclesUntilLastDeactivation = Math.floor((time - nextDeactivation) / fullCycle);
   const activeTimeUntilLastDeactivation = duration * activeCyclesUntilLastDeactivation;

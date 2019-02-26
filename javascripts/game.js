@@ -66,7 +66,7 @@ function maxAll() {
           lowerTier.amount = lowerTier.amount.minus(cost)
           dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
           dimension.bought += dimension.remainingUntil10;
-          dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
         }
         while (lowerTier.amount.gt(dimension.cost.times(10))) {
@@ -74,7 +74,7 @@ function maxAll() {
           dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
-          dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
 
@@ -87,7 +87,7 @@ function maxAll() {
         player.money = player.money.minus(cost)
         dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
         dimension.bought += dimension.remainingUntil10;
-        dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier))
+        dimension.pow = dimension.pow.times(getBuyTenMultiplier())
         dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
       }
       if (player.money.lt(dimension.cost.times(10))) continue
@@ -100,7 +100,7 @@ function maxAll() {
           else multiplySameCosts(dimension.cost)
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
-          dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
           if (Challenge(4).isRunning) clearDimensions(tier - 1)
         }
@@ -113,7 +113,7 @@ function maxAll() {
             else multiplySameCosts(dimension.cost)
             dimension.amount = Decimal.round(dimension.amount.plus(10))
             dimension.bought += 10
-            dimension.pow = dimension.pow.times(getBuyTenMuliplier(tier))
+            dimension.pow = dimension.pow.times(getBuyTenMultiplier())
             if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
             if (Challenge(4).isRunning) clearDimensions(tier - 1)
           }
@@ -132,7 +132,7 @@ function maxAll() {
           postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1
           postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy))
           dimension.bought += 10 * buying
-          dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMuliplier(tier), buying))
+          dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying))
 
           newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2))
           newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1))
@@ -740,9 +740,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
       factor *= blackHoleOverride;
     } else if (!player.blackHolePause) {
       for (let i = 0; i < player.blackHole.length && blackHoleIsUnlocked(player.blackHole[i]) &&
-        ((blackHolesActiveOverride !== undefined) ? i <= blackHolesActiveOverride: player.blackHole[i].active); i++) {
+        ((blackHolesActiveOverride !== undefined) ? i <= blackHolesActiveOverride : player.blackHole[i].active); i++) {
         blackHole = player.blackHole[i];
-        factor *= blackHole.power;
+        factor *= getBlackHolePower(blackHole);
         if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
       }
     }

@@ -543,7 +543,7 @@ const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
-  if (id < 6 && player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))) return false // Has enough RM accounting for rebuyables
+  if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
@@ -557,9 +557,14 @@ function canBuyRealityUpg(id) {
   return true
 }
 
+function getRealityRebuyableCost(id) {
+  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e35, REALITY_UPGRADE_COSTS[id],
+    REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
+}
+
 function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
-  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))
+  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
   else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   if (id < 6) player.reality.rebuyables[id]++
   else player.reality.upg.push(id)
@@ -600,7 +605,7 @@ function updateRealityUpgrades() {
   let row1Costs = [null];
   for (var i = 1; i <= 5; i++) {
     row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-    row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
+    row1Costs.push(shortenDimensions(getRealityRebuyableCost(i)));
   }
 
   $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")

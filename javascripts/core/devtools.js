@@ -532,6 +532,7 @@ dev.updateTestSave = function() {
       delete player.blackHole[i].power;
       delete player.blackHole[i].duration;
     }
+    player.options.testVersion = 31;
   }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")

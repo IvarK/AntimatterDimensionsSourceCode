@@ -22,15 +22,15 @@
 function updateBlackHoleUpgrades() {
   for (let i = 0; i < 3; i++) {
     $("#blackholeinterval" + (i+1)).html("Speed up the black hole by 25%<br>Current interval: "+getBlackHoleInterval(player.blackHole[i]).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleIntervalCost(player.blackHole[i]))+" RM")
-    if (player.reality.realityMachines.lt(getBlackHoleIntervalCost(i))) $("#blackholeinterval" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getBlackHoleIntervalCost(player.blackHole[i]))) $("#blackholeinterval" + (i+1)).addClass("rUpgUn")
     else $("#blackholeinterval" + (i+1)).removeClass("rUpgUn")
 
     $("#blackholepower" + (i+1)).html("Make the black hole 35% more powerful<br>Current power: "+getBlackHolePower(player.blackHole[i]).toFixed(1)+"x<br>Cost: "+shortenDimensions(getBlackHolePowerCost(player.blackHole[i]))+" RM")
-    if (player.reality.realityMachines.lt(getBlackHolePowerCost(i))) $("#blackholepower" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getBlackHolePowerCost(player.blackHole[i]))) $("#blackholepower" + (i+1)).addClass("rUpgUn")
     else $("#blackholepower" + (i+1)).removeClass("rUpgUn")
 
     $("#blackholeduration" + (i+1)).html("Extend the black hole duration by 30%<br>Current duration: "+getBlackHoleDuration(player.blackHole[i]).toFixed(1)+" seconds<br>Cost: "+shortenDimensions(getBlackHoleDurationCost(player.blackHole[i]))+" RM")
-    if (player.reality.realityMachines.lt(getBlackHoleDurationCost(i))) $("#blackholeduration" + (i+1)).addClass("rUpgUn")
+    if (player.reality.realityMachines.lt(getBlackHoleDurationCost(player.blackHole[i]))) $("#blackholeduration" + (i+1)).addClass("rUpgUn")
     else $("#blackholeduration" + (i+1)).removeClass("rUpgUn")
   }
   // This function gets called once on-load before the black hole is initialized
@@ -49,15 +49,15 @@ function unlockBlackHole() {
 }
 
 function getBlackHoleInterval(blackHole) {
-  return (3600 / (Math.pow(10, blackHole.id))) / Math.pow(0.8, blackHole.intervalUpgrades);
+  return (3600 / (Math.pow(10, blackHole.id))) * Math.pow(0.8, blackHole.intervalUpgrades);
 }
 
 function getBlackHolePower(blackHole) {
-  return (180 / Math.pow(2, blackHole.id)) / Math.pow(1.35, blackHole.powerUpgrades);
+  return (180 / Math.pow(2, blackHole.id)) * Math.pow(1.35, blackHole.powerUpgrades);
 }
 
 function getBlackHoleDuration(blackHole) {
-  return (10 - blackHole.id * 3) / Math.pow(1.3, blackHole.durationUpgrades);
+  return (10 - blackHole.id * 3) * Math.pow(1.3, blackHole.durationUpgrades);
 }
 
 function getBlackHoleCycleLength(blackHole) {
@@ -69,11 +69,11 @@ function getBlackHoleIntervalCost(blackHole) {
 }
 
 function getBlackHolePowerCost(blackHole) {
-  return getBlackHoleUpgradeCost(blackHole.powerUpgrades, blackHole.id, 15, 3.5);
+  return getBlackHoleUpgradeCost(blackHole.powerUpgrades, blackHole.id, 20, 2);
 }
 
 function getBlackHoleDurationCost(blackHole) {
-  return getBlackHoleUpgradeCost(blackHole.durationUpgrades, blackHole.id, 15, 3.5);
+  return getBlackHoleUpgradeCost(blackHole.durationUpgrades, blackHole.id, 10, 4);
 }
 
 function getBlackHoleUpgradeCost(amountOfPurchases, i, initialCost, costMult) {
@@ -92,6 +92,7 @@ function upgradeBlackHoleInterval(i) {
   var cost = getBlackHoleIntervalCost(player.blackHole[i])
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.blackHole[i].intervalUpgrades++
   updateBlackHoleUpgrades()
   if (getBlackHoleInterval(player.blackHole[i]) < getBlackHoleDuration(player.blackHole[i])) giveAchievement("Are you sure these are the right way around?")
 }
@@ -101,6 +102,7 @@ function upgradeBlackHolePower(i) {
   var cost = getBlackHolePowerCost(player.blackHole[i])
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.blackHole[i].powerUpgrades++
   updateBlackHoleUpgrades()
 }
 
@@ -109,6 +111,7 @@ function upgradeBlackHoleDuration(i) {
   var cost = getBlackHoleDurationCost(player.blackHole[i])
   if (player.reality.realityMachines.lt(cost)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(cost)
+  player.blackHole[i].durationUpgrades++
   updateBlackHoleUpgrades()
   if (getBlackHoleInterval(player.blackHole[i]) < getBlackHoleDuration(player.blackHole[i])) giveAchievement("Are you sure these are the right way around?")
 }
@@ -536,8 +539,8 @@ function getRealTimeWithBlackHoleActive(blackHole, time) {
 // after a given amount of time of the previous black hole being active.
 function timeUntilNextDeactivation(blackHole) {
   if (blackHole.active) {
-    return blackHole.duration - blackHole.phase;
+    return getBlackHoleDuration(blackHole) - blackHole.phase;
   } else {
-    return blackHole.duration + blackHole.speed - blackHole.phase;
+    return getBlackHoleCycleLength(blackHole) - blackHole.phase;
   }
 }

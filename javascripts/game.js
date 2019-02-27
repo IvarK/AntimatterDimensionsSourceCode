@@ -758,7 +758,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
   }
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))
   if (tempSpeedupToggle) {
-    factor *= 500;
+    factor *= tempSpeedupFactor;
   }
   return factor;
 }

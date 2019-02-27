@@ -637,10 +637,28 @@ dev.showProductionBreakdown = function() {
 }
 
 let tempSpeedupToggle = false;
-dev.goFast = function() {   // Speeds up game 500x, intentionally doesn't persist between refreshes
+let tempSpeedupFactor = 500;
+dev.goFast = function() {   // Speeds up game, intentionally doesn't persist between refreshes
   tempSpeedupToggle = !tempSpeedupToggle;
 }
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
+};
+
+// Buys all perks, will end up buying semi-randomly if not enough pp
+dev.buyAllPerks = function() {
+  let numPerks = Perk.all.length
+  let perkNames = Object.keys(Perk).filter(name => name !== "all" && name !== "find")
+  while (player.reality.perks.length < numPerks && player.reality.pp > 0) {
+    for (name in perkNames) {
+      if (typeof perkNames[name] !== "function") {
+        Perk[perkNames[name]].purchase()
+      }
+    }
+  }
+  GameCache.achSkipPerkCount.invalidate();
+  GameCache.buyablePerks.invalidate();
+  document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
+  drawPerkNetwork()
 };

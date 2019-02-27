@@ -21,6 +21,7 @@ Vue.component('teresa-tab', {
   },
   computed: {
     unlockInfo: () => Teresa.unlockInfo,
+    rmStoreMax: () => Teresa.rmStoreMax,
   },
   methods: {
     update() {
@@ -93,7 +94,7 @@ Vue.component('teresa-tab', {
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(1e24) }}</div>
+              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}</div>
             </div>
             <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
               {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}

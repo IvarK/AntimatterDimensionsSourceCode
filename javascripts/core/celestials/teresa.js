@@ -38,12 +38,13 @@ var Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
+  rmStoreMax: 1e24,
   pourRM(diff) {
-    if (this.rmstore >= 1e24) return
+    if (this.rmstore >= Teresa.rmStoreMax) return
     this.timePoured += diff
     let rm = player.reality.realityMachines;
     let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber())
-    this.rmStore += Math.min(rmPoured, 1e24 - this.rmStore)
+    this.rmStore += Math.min(rmPoured, Teresa.rmStoreMax - this.rmStore)
     player.reality.realityMachines = rm.minus(rmPoured)
     this.checkForUnlocks()
   },

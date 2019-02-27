@@ -134,7 +134,7 @@ const GlyphGenerator = {
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.
-    let minimumValue = 1 + (player.reality.perks.includes(23) ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
+    let minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);

@@ -789,8 +789,8 @@ function gameLoop(diff, options = {}) {
       if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
       } else {
-        // If we're in EC12, time shouldn't speed up at all.
-        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE], options.blackHoleSpeedup);
+        // If we're in EC12, time shouldn't speed up at all, but options.blackHoleSpeedup will be 1 so we're fine.
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
       if (player.celestials.enslaved.isStoring) {
         const speedFactorWithoutBlackHole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);

@@ -256,7 +256,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "IP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
-    softcap: value => (Effarig.eternityCap !== undefined) ? Decimal.max(value, Effarig.eternityCap) : value
+    softcap: value => (Effarig.eternityCap !== undefined) ? Decimal.min(value, Effarig.eternityCap) : value
   }, {
     id: "infinityinfmult",
     glyphTypes: ["infinity"],

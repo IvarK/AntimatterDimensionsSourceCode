@@ -92,7 +92,7 @@ var Effarig = {
       case EFFARIG_STAGES.INFINITY:
         return 100;
       case EFFARIG_STAGES.ETERNITY:
-        return 3000;
+        return 1500;
       case EFFARIG_STAGES.REALITY:
         return 10000;
     }

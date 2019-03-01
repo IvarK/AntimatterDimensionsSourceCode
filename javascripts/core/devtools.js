@@ -638,8 +638,14 @@ dev.showProductionBreakdown = function() {
 
 let tempSpeedupToggle = false;
 let tempSpeedupFactor = 500;
-dev.goFast = function() {   // Speeds up game, intentionally doesn't persist between refreshes
-  tempSpeedupToggle = !tempSpeedupToggle;
+dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persist between refreshes
+  if (speed !== undefined && speed > 0) {
+    tempSpeedupToggle = true
+    tempSpeedupFactor = speed
+  }
+  else {  // With no arguments, toggles on/off
+    tempSpeedupToggle = !tempSpeedupToggle;
+  }
 }
 
 dev.togglePerformanceStats = function() {

@@ -412,17 +412,17 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "effarigblackhole":
       return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "effarigrm":
-      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
+      return Math.pow(level, 0.6) * strength;
     case "effarigglyph":
-      return Math.floor(level * strength / 10);
+      return Math.floor(10 * Math.pow(level * strength, 0.5));
     case "effarigachievement":
       return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
-      return 1 + Math.sqrt(level * strength) / 5;
+      return 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4);
     case "effarigdimensions":
       return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500
     case "effarigantimatter":
-      return 1 + Math.sqrt(level * strength) / 50000
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000
     default:
       return 0;
   }

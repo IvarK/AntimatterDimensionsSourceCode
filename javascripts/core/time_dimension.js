@@ -161,6 +161,8 @@ class TimeDimensionState {
 
     mult = mult.clampMin(0).pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")));
 
+    mult = mult.clampMin(0).pow(new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions")))
+
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }

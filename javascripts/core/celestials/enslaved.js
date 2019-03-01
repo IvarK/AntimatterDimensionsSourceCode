@@ -21,22 +21,22 @@ const enslavedQuotes = [
 const ENSLAVED_UNLOCKS = {
   RUN: {
     id: 0,
-    price: TimeSpan.fromYears(1e24).totalMilliseconds,
+    price: TimeSpan.fromYears(1e40).totalMilliseconds,
     description: "Unlock The Enslaved One's reality.",
   },
   TIME_EFFECT_MULT: {
     id: 1,
-    price: TimeSpan.fromYears(1e28).totalMilliseconds,
-    description: "Infinities gained in the last 10 seconds multiplies time speed glyph effect"
+    price: TimeSpan.fromYears(1e45).totalMilliseconds,
+    description: "Multiplier to time speed glyph effect based on infinities"
   },
   RM_MULT: {
     id: 2,
-    price: TimeSpan.fromYears(1e30).totalMilliseconds,
+    price: TimeSpan.fromYears(1e50).totalMilliseconds,
     description: "Multiplier to RM based on current time modifier, unlock V, the Celestial of Achievements"
   },
   BLACK_HOLE: {
     id: 3,
-    price: TimeSpan.fromYears(1e50).totalMilliseconds,
+    price: TimeSpan.fromYears(1e60).totalMilliseconds,
     description: "Unlock the 3rd Black Hole"
   }
 }

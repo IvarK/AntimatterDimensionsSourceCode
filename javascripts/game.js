@@ -66,7 +66,7 @@ function maxAll() {
           lowerTier.amount = lowerTier.amount.minus(cost)
           dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
           dimension.bought += dimension.remainingUntil10;
-          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
         }
         while (lowerTier.amount.gt(dimension.cost.times(10))) {
@@ -74,7 +74,7 @@ function maxAll() {
           dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
-          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
 
@@ -87,7 +87,7 @@ function maxAll() {
         player.money = player.money.minus(cost)
         dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
         dimension.bought += dimension.remainingUntil10;
-        dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+        dimension.pow = dimension.pow.times(getBuyTenMultiplier())
         dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
       }
       if (player.money.lt(dimension.cost.times(10))) continue
@@ -100,7 +100,7 @@ function maxAll() {
           else multiplySameCosts(dimension.cost)
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
-          dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
           if (Challenge(4).isRunning) clearDimensions(tier - 1)
         }
@@ -113,7 +113,7 @@ function maxAll() {
             else multiplySameCosts(dimension.cost)
             dimension.amount = Decimal.round(dimension.amount.plus(10))
             dimension.bought += 10
-            dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier))
+            dimension.pow = dimension.pow.times(getBuyTenMultiplier())
             if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
             if (Challenge(4).isRunning) clearDimensions(tier - 1)
           }
@@ -132,7 +132,7 @@ function maxAll() {
           postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1
           postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy))
           dimension.bought += 10 * buying
-          dimension.pow = dimension.pow.times(Decimal.pow(getDimensionPowerMultiplier(tier), buying))
+          dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying))
 
           newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2))
           newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1))
@@ -676,7 +676,7 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
-    if ( [20, 21, 22, 23, 24, 25].every(id => { return player.reality.upg.includes(id)}) ) $("#celestialsbtn").show()
+    if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
     else $("#celestialsbtn").hide()
 
     if (player.realities > 3) {
@@ -721,7 +721,7 @@ var replicantiTicks = 0
 
 const GameSpeedEffect = {EC12: 1, TIMEGLYPH: 2, BLACKHOLE: 3}
 
-function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
+function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesActiveOverride) {
   if (effectsToConsider === undefined) {
     effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE];
   }
@@ -739,16 +739,11 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
     } else if (!player.blackHolePause) {
-      for (let blackHole of player.blackHole) {
-        if (blackHole.active) {
-          factor *= blackHole.power;
-          if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
-        } else {
-          // If a black hole is inactive, even if later black holes have blackHole.active set to true
-          // they aren't currently active (instead they will activate as soon as the previous black hole is active).
-          // Thus, as soon as we reach an inactive black hole, we stop increasing the speedup factor.
-          break;
-        }
+      for (let i = 0; i < player.blackHole.length && blackHoleIsUnlocked(player.blackHole[i]) &&
+        ((blackHolesActiveOverride !== undefined) ? i <= blackHolesActiveOverride : player.blackHole[i].active); i++) {
+        blackHole = player.blackHole[i];
+        factor *= getBlackHolePower(blackHole);
+        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
       }
     }
   }
@@ -794,8 +789,8 @@ function gameLoop(diff, options = {}) {
       if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
       } else {
-        // If we're in EC12, time shouldn't speed up at all.
-        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE], options.blackHoleSpeedup);
+        // If we're in EC12, time shouldn't speed up at all, but options.blackHoleSpeedup will be 1 so we're fine.
+        speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
       if (player.celestials.enslaved.isStoring) {
         const speedFactorWithoutBlackHole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);

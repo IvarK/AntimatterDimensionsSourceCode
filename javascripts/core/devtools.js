@@ -509,6 +509,7 @@ dev.updateTestSave = function() {
     movePropIfPossible("effarig", "teresa", "rmStore", 0, Math.max);
     movePropIfPossible("effarig", "teresa", "glyphLevelMult", 1, Math.max);
     movePropIfPossible("effarig", "teresa", "rmMult", 1, Math.max);
+    movePropIfPossible("effarig", "teresa", "dtBulk", 1, Math.max);
     // These are unused now
     delete player.celestials.effarig.typePriorityOrder;
     delete player.celestials.teresa.typePriorityOrder;
@@ -522,11 +523,27 @@ dev.updateTestSave = function() {
     delete player.wormholePause
     player.options.testVersion = 30;
   }
+  if (player.options.testVersion === 30) {
+    for (let i = 0; i < player.blackHole.length; i++) {
+      player.blackHole[i].id = i;
+      player.blackHole[i].intervalUpgrades = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8));
+      player.blackHole[i].powerUpgrades = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35));
+      player.blackHole[i].durationUpgrades = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3));
+      delete player.blackHole[i].speed;
+      delete player.blackHole[i].power;
+      delete player.blackHole[i].duration;
+    }
+    player.options.testVersion = 31;
+  }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-
+  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
+    player.reality.realityMachines =
+      player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
+    player.celestials.teresa.rmStore = Teresa.rmStoreMax;
+  }
 }
 
 // Still WIP
@@ -562,7 +579,7 @@ dev.showProductionBreakdown = function() {
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(NormalDimension(i).bought / 10));
+    buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);

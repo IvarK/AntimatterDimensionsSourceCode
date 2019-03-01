@@ -256,9 +256,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "IP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
-    softcap: value => (Effarig.eternityCap !== undefined && value > Effarig.eternityCap)
-      ? new Decimal(Effarig.eternityCap)
-      : value,
+    softcap: value => (Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value
   }, {
     id: "infinityinfmult",
     glyphTypes: ["infinity"],
@@ -317,13 +315,15 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigforgotten",
     glyphTypes: ["effarig"],
-    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
+    singleDesc: "Raise the bonus gained from buying 10 Dimensions to a power of ^{value}",
+    totalDesc: "Multiplier from \"Buy 10\" ^{value}",
+    genericDesc: "\"Buy 10\" bonus multiplier ^x",
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigdimensions",
     glyphTypes: ["effarig"],
-    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
-    combine: GlyphCombiner.add,
+    singleDesc: "All dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
   }, {
     id: "effarigantimatter",
     glyphTypes: ["effarig"],

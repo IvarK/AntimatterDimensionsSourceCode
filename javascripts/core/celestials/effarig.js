@@ -66,7 +66,6 @@ const EffarigUnlock = (function() {
 
 var Effarig = {
   startRun() {
-    respecGlyphs()
     startRealityOver()
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
@@ -86,14 +85,14 @@ var Effarig = {
     return EFFARIG_STAGES.REALITY;
   },
   get eternityCap() {
-    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? 1e50 : undefined;
+    return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
   },
   get glyphLevelCap() {
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
         return 100;
       case EFFARIG_STAGES.ETERNITY:
-        return 3000;
+        return 1500;
       case EFFARIG_STAGES.REALITY:
         return 10000;
     }

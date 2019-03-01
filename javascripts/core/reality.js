@@ -348,7 +348,7 @@ function completeReality(force, reset, auto = false) {
 }
 
 function handleCelestialRuns(force) {
-  if (player.celestials.teresa.run) {
+  if (Teresa.isRunning) {
     player.celestials.teresa.run = false
     if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
   }

@@ -120,3 +120,11 @@ class LinearMultiplierScaling {
     return ret + count * Math.log(this.baseRatio);
   }
 }
+
+function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initialCost, costMult, costMultGrowth) {
+  let preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
+  let preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
+  let scaling = new LinearMultiplierScaling(costMult, costMultGrowth);
+  let postScalingCost = Math.exp(scaling.logTotalMultiplierAfterPurchases(Math.max(0, amountOfPurchases - preScalingPurchases)));
+  return preScalingCost * postScalingCost;
+}

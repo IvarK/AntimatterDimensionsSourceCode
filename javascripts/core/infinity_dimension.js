@@ -267,7 +267,9 @@ class InfinityDimensionState {
       mult = dilatedValueOf(mult);
     }
 
-    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
+    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")))
+    
+    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions")))
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);

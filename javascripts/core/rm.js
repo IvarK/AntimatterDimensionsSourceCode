@@ -126,15 +126,21 @@ const GlyphGenerator = {
     return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
   },
 
+  get strengthMultiplier() {
+    return player.reality.upg.includes(16) ? 1.3 : 1;
+  },
+
   randomStrength(fake) {
     let result;
-    let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
+    // Divide the extra minimum rarity by the strength multiplier
+    // since we'll multiply by the strength multiplier later.
+    let minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
+    result *= GlyphGenerator.strengthMultiplier;
     // Each rarity% is 0.025 strength.
     result += Effects.sum(GlyphSacrifice.effarig) / 40;
-    if (player.reality.upg.includes(16)) result *= 1.3;
     return result;
   },
 
@@ -255,6 +261,7 @@ const Glyphs = {
       throw crash("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
+    if (glyph.type === 'effarig' && this.active.some(x => x && x.type === 'effarig')) return;
     this.removeFromInventory(glyph);
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
@@ -403,19 +410,19 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
     case "effarigblackhole":
-      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "effarigrm":
-      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
+      return Math.pow(level, 0.6) * strength;
     case "effarigglyph":
-      return Math.floor(level * strength / 10);
+      return Math.floor(10 * Math.pow(level * strength, 0.5));
     case "effarigachievement":
-      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
+      return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
-      return 1 + Math.sqrt(level * strength) / 1000
+      return 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4);
     case "effarigdimensions":
-      return level * strength
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500
     case "effarigantimatter":
-      return 1 + Math.sqrt(level * strength) / 10000
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000
     default:
       return 0;
   }
@@ -536,7 +543,7 @@ const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
-  if (id < 6 && player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))) return false // Has enough RM accounting for rebuyables
+  if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (player.reality.upg.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
@@ -550,9 +557,14 @@ function canBuyRealityUpg(id) {
   return true
 }
 
+function getRealityRebuyableCost(id) {
+  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e35, REALITY_UPGRADE_COSTS[id],
+    REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
+}
+
 function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
-  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))
+  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
   else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   if (id < 6) player.reality.rebuyables[id]++
   else player.reality.upg.push(id)
@@ -565,7 +577,7 @@ function buyRealityUpg(id) {
     $("#bhupg2").show()
   }
 
-  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   updateBlackHoleUpgrades()
   return true
@@ -593,7 +605,7 @@ function updateRealityUpgrades() {
   let row1Costs = [null];
   for (var i = 1; i <= 5; i++) {
     row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-    row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
+    row1Costs.push(shortenDimensions(getRealityRebuyableCost(i)));
   }
 
   $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")

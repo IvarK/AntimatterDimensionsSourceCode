@@ -336,27 +336,30 @@ var player = {
     partEternitied: 0
   },
   blackHole: [{
-    speed: 60 * 60, // Seconds to fill
-    power: 180, // Multiplier from the black hole
-    duration: 10, // How long it lasts.
+    id: 0,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,
     activations: 0
   },
   {
-    speed: 60 * 6,
-    power: 90, 
-    duration: 7, 
+    id: 1,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,
     activations: 0
   },
   {
-    speed: 6 * 6,
-    power: 45, 
-    duration: 4, 
+    id: 2,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,

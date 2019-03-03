@@ -719,7 +719,7 @@ function getGlyphLevelInputs() {
   var glyphCorruptionScalePenalty = 1;
   var glyphCorruptionScaledLevel = glyphInstabilityScaledLevel;
   if (glyphInstabilityScaledLevel > glyphCorruptionScaleBegin) {
-    var excess = (glyphBaseLevel - glyphCorruptionScaleBegin) / glyphCorruptionScaleRate;
+    var excess = (glyphInstabilityScaledLevel - glyphCorruptionScaleBegin) / glyphCorruptionScaleRate;
     glyphCorruptionScaledLevel = glyphCorruptionScaleBegin + glyphCorruptionScaleRate * Math.log1p(excess);
     glyphCorruptionScalePenalty = glyphInstabilityScaledLevel / glyphCorruptionScaledLevel;
   }

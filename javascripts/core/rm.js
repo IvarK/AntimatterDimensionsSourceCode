@@ -704,15 +704,24 @@ function getGlyphLevelInputs() {
   var dtEffect = adjustFactor(dtBase, weights.dt / 100);
   var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
-  const glyphScaleRate = 500;
+  const glyphInstabilityScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
+  const glyphInstabilityScaleRate = 500;
   var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
   var glyphScalePenalty = 1;
-  var glyphScaledLevel = glyphBaseLevel;
-  if (glyphBaseLevel > glyphScaleBegin) {
-    var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
-    glyphScaledLevel = glyphScaleBegin + 0.5 * glyphScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-    glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
+  var glyphInstabilityScaledLevel = glyphBaseLevel;
+  if (glyphBaseLevel > glyphInstabilityScaleBegin) {
+    var excess = (glyphBaseLevel - glyphInstabilityScaleBegin) / glyphInstabilityScaleRate;
+    glyphInstabilityScaledLevel = glyphInstabilityScaleBegin + 0.5 * glyphInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
+    glyphInstabilityScalePenalty = glyphBaseLevel / glyphInstabilityScaledLevel;
+  }
+  const glyphCorruptionScaleBegin = 5000;
+  const glyphCorruptionScaleRate = 1000;
+  var glyphCorruptionScalePenalty = 1;
+  var glyphCorruptionScaledLevel = glyphInstabilityScaledLevel;
+  if (glyphInstabilityScaledLevel > glyphCorruptionScaleBegin) {
+    var excess = (glyphBaseLevel - glyphCorruptionScaleBegin) / glyphCorruptionScaleRate;
+    glyphCorruptionScaledLevel = glyphCorruptionScaleBegin + glyphCorruptionScaleRate * Math.log1p(excess);
+    glyphCorruptionScalePenalty = glyphInstabilityScaledLevel / glyphCorruptionScaledLevel;
   }
   let perkFactor = Effects.sum(
     Perk.glyphLevelIncrease1,
@@ -724,9 +733,10 @@ function getGlyphLevelInputs() {
     dtEffect: dtEffect,
     eterEffect: eterEffect,
     perkShop: player.celestials.teresa.glyphLevelMult,
-    scalePenalty: glyphScalePenalty,
+    instabilityScalePenalty: glyphInstabilityScalePenalty,
+    corruptionScalePenalty: glyphCorruptionScalePenalty,
     perkFactor: perkFactor,
-    finalLevel: glyphScaledLevel + perkFactor,
+    finalLevel: glyphCorruptionScaledLevel + perkFactor,
   };
 }
 

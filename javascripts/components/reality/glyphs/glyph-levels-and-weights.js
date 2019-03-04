@@ -9,8 +9,7 @@ Vue.component("glyph-levels-and-weights", {
       adjustVisible: false,
       eternityVisible: false,
       perkShopVisible: false,
-      instabilityPenaltyVisible: false,
-      corruptionPenaltyVisible: false,
+      penaltyVisible: false,
       perkVisible: false,
       factors: getGlyphLevelInputs(),
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
@@ -49,11 +48,8 @@ Vue.component("glyph-levels-and-weights", {
     rowStyleInstabilityPenalty() { // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
     },
-    rowStyleCorruptionPenalty() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.instabilityPenaltyVisible);
-    },
     rowStylePerk() {
-      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.instabilityPenaltyVisible + this.corruptionPenaltyVisible);
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible);
     },
     formatPerkShop() {
       return (100 * (this.factors.perkShop - 1)).toFixed(1) + "%";
@@ -87,17 +83,11 @@ Vue.component("glyph-levels-and-weights", {
       let glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.perkVisible = glyphFactors.perkFactor > 0;
-      if (glyphFactors.instabilityScalePenalty !== 1) {
-        this.instabilityPenaltyVisible = true;
+      if (glyphFactors.scalePenalty !== 1) {
+        this.penaltyVisible = true;
         this.lastInstability = Date.now();
-      } else if (this.instabilityPenaltyVisible) {
-        if (Date.now() - this.lastInstability > 2000) this.instabilityPenaltyVisible = false;
-      }
-      if (glyphFactors.corruptionScalePenalty !== 1) {
-        this.corruptionPenaltyVisible = true;
-        this.lastCorruption = Date.now();
-      } else if (this.corruptionPenaltyVisible) {
-        if (Date.now() - this.lastCorruption > 2000) this.corruptionPenaltyVisible = false;
+      } else if (this.penaltyVisible) {
+        if (Date.now() - this.lastInstability > 2000) this.penaltyVisible = false;
       }
       this.rows = 3 + this.eternityVisible + this.perkShopVisible + this.perkVisible + this.penaltyVisible;
       if (this.adjustVisible && this.rows < 6) { // Keep UI from getting crammed
@@ -179,15 +169,10 @@ Vue.component("glyph-levels-and-weights", {
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__operator">+</div>
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor-val">{{formatPerkShop}}</div>
       </template>
-      <template v-if="instabilityPenaltyVisible">
+      <template v-if="penaltyVisible">
         <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__factor">Instability</div>
         <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__operator">/</div>
-        <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__factor-val">{{formatFactor(factors.instabilityScalePenalty)}}</div>
-      </template>
-      <template v-if="corruptionPenaltyVisible">
-        <div :style="rowStyleCorruptionPenalty" class="l-glyph-levels-and-weights__factor">Corruption</div>
-        <div :style="rowStyleCorruptionPenalty" class="l-glyph-levels-and-weights__operator">/</div>
-        <div :style="rowStyleCorruptionPenalty" class="l-glyph-levels-and-weights__factor-val">{{formatFactor(factors.corruptionScalePenalty)}}</div>
+        <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__factor-val">{{formatFactor(factors.scalePenalty)}}</div>
       </template>
       <template v-if="perkVisible">
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Perks</div>

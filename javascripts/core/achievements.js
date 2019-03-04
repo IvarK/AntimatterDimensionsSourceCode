@@ -159,9 +159,8 @@ function updateAchievementPower() {
   let completedRows = 0
   for (let i = 1; i <= TOTAL_ACH_ROWS; i++) {
     let achUnlocked = 0;
-    for (let j = 1; j <= ACH_PER_ROW; j++ ) {
-      const achId = `r${i}${j}`;
-      if (isAchEnabled(achId)) {
+    for (let j = 1; j <= ACH_PER_ROW; j++) {
+      if (Achievement(i*10 + j).isEnabled) {
         achUnlocked++;
       }
     }

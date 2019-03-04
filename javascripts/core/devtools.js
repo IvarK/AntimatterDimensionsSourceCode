@@ -613,7 +613,7 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     boughtTDComponent = boughtTDComponent.times(player["timeDimension" + i].power);
   }
-  let tickspeedToTDComponent = isAchEnabled("r105") ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
+  let tickspeedToTDComponent = Achievement(105).isEnabled ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);
   if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))
   if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")))

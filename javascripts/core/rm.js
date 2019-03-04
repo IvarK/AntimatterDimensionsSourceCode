@@ -712,7 +712,7 @@ function getGlyphLevelInputs() {
     const excess = (scaledLevel - instabilityScaleBegin) / instabilityScaleRate;
     scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
-  const hyperInstabilityScaleBegin = 5000;
+  const hyperInstabilityScaleBegin = 3000 + getAdjustedGlyphEffect("effarigglyph");
   const hyperInstabilityScaleRate = 1000;
   if (scaledLevel > hyperInstabilityScaleBegin) {
     const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;

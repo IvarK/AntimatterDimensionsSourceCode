@@ -22,7 +22,7 @@ Vue.component('secret-achievement-row', {
   methods: {
     updateState() {
       const unlockState = Array.from({length: 8}, (v, i) => `s${this.row}${i + 1}`)
-        .map(achId => player.achievements.includes(achId));
+        .map(achId => player.achievements.has(achId));
       this.isCompleted = !unlockState.includes(false);
     }
   },

@@ -172,54 +172,38 @@ function updateAchievementPower() {
 }
 
 function clearOldAchieves() {
-  var toRemove = [];
-  var achieveKey;
-  var values = Object.keys(allAchievements).map(function(e) {
-    return allAchievements[e]
-  });
-  for (var i = 0; i < player.achievements.length; i++) {
-    if (values.indexOf(player.achievements[i]) !== -1) {  // does index[i] exist in allAchievements as a value?
-      toRemove.push(i); // mark it for removal
-      achieveKey = Object.keys(allAchievements).find(function(key) {
-        return allAchievements[key] === player.achievements[i];
-      });
-      if (!player.achievements.includes(achieveKey)) { // check if new key already exists as well
-        player.achievements.push(achieveKey); // if not... add it
-      }
-    } else if (allAchievements[player.achievements[i]] === undefined) {
-      toRemove.push(i);
+  for (let achId of player.achievements) {
+    const achieveKey = Object.keys(allAchievements).find(key => allAchievements[key] === achId);
+    if (achieveKey !== undefined) {
+      player.achievements.delete(achId);
+      player.achievements.add(achieveKey);
+    } else if (allAchievements[achId] === undefined) {
+      player.achievements.delete(achId);
     }
-  }
-
-
-  toRemove.reverse();
-  for (var i = 0; i < toRemove.length; i++) {
-    player.achievements.splice(toRemove[i], 1);
   }
   GameCache.achievementCount.invalidate();
 }
 
 function giveAchievement(name) {
 
-    if (player.achievements.includes(name)){ clearOldAchieves(); }
+    if (player.achievements.has(name)){ clearOldAchieves(); }
 
-    if (player.achievements.includes(allAchievementNums[name])) return false
+    if (player.achievements.has(allAchievementNums[name])) return false
 
     GameUI.notify.success(name);
-    player.achievements.push(allAchievementNums[name]);
+    player.achievements.add(allAchievementNums[name]);
     GameCache.achievementCount.invalidate();
-    kong.submitStats('Achievements', player.achievements.length);
-    if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
+    kong.submitStats('Achievements', player.achievements.size);
+    if (name === "All your IP are belong to us" || name === "MAXIMUM OVERDRIVE") {
       Autobuyer.infinity.bumpLimit(4);
     }
     updateAchievementPower();
     GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
-function isAchEnabled(name, id) {
-  if (!player.achievements.includes(name)) return false;
+function isAchEnabled(name, achId) {
+  if (!player.achievements.has(name)) return false;
   if (player.realities === 0) return true;
-  const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
   if (row <= GameCache.achSkipPerkCount.value) return true;
@@ -262,7 +246,7 @@ function nextAchIn() {
 }
 
 function timeUntilAch(name) {
-  if (!player.achievements.includes(name)) {
+  if (!player.achievements.has(name)) {
     return NaN;
   }
   const achId = parseInt(name.split("r")[1]);
@@ -353,7 +337,7 @@ class AchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.achievements.includes(this._fullId);
+    return player.achievements.has(this._fullId);
   }
 
   get isEnabled() {
@@ -393,7 +377,7 @@ class SecretAchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.achievements.includes(this._fullId);
+    return player.achievements.has(this._fullId);
   }
 }
 

@@ -8,7 +8,7 @@ const effarigQuotes = [
   "Do you like my little Stall? It’s not much, but it’s mine.",
   "Thank you for your purchase, customer!",
   "Is that too much? I think it’s too much.",
-  "You bought out my entire stock... well at least I‘m rich now.",
+  "You bought out my entire stock... well, at least I‘m rich now.",
   "The heart of my reality is suffering. Each Layer is harder than the last.",
   "I hope you never complete it.",
   "This is the first threshold. It only gets worse from here.",
@@ -66,7 +66,7 @@ const EffarigUnlock = (function() {
 
 var Effarig = {
   startRun() {
-    startRealityOver()
+    if (!startRealityOver()) return;
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
     showRealityTab("glyphstab");

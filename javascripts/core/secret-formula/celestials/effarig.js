@@ -2,37 +2,43 @@ GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
       id: 0,
-      description: "Unlock glyph level adjustment.",
+      description: "Glyph level adjustment",
       cost: 1e7
     },
     autosacrifice: {
       id: 1,
-      description: "Unlock automatic glyph sacrifice.",
+      description: "Automatic glyph sacrifice",
       cost: 2e8
     },
     autopicker: {
       id: 2,
-      description: "Unlock automatic glyph picker.",
+      description: "Automatic glyph picker",
       cost: 3e9
     },
     run: {
       id: 3,
-      description: "Unlock Effarig's reality.",
+      description: "Effarig's reality",
       cost: 1e12
     },
     infinity: {
       id: 4,
-      description: "Infinity: IP mults are capped at 1e50 in Effarig Reality; " +
-        "infinitied stat raises the replicanti cap and increases your max RG."
+      label: "Infinity",
+      description:
+        "Infinitied stat raises the replicanti cap\n" +
+        "Infinitied stat increases your max RG\n" +
+        "IP mults are capped at 1e50 in Effarig Reality"
     },
     eternity: {
       id: 5,
-      description: "Eternity: IP mults are no longer limited in Effarig Reality; " +
-        "eternitied stat generates infinitied stat, unlocks The Enslaved Ones."
+      label: "Eternity",
+      description: "Eternitied stat generates infinitied stat\n" +
+        "You have unlocked The Enslaved Ones\n" +
+        "IP mults are no longer limited in Effarig Reality"
     },
     reality: {
       id: 6,
-      description: "Reality: Unlocks Effarig Glyphs."
+      label: "Reality",
+      description: "You have unlocked Effarig Glyphs (You may equip at most one)"
     }
   }
 };

@@ -79,7 +79,7 @@ dev.cancerize = function() {
 };
 
 dev.fixSave = function() {
-    var save = JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; })
+  var save = JSON.stringify(player, translatorForJSON);
   
     var fixed = save.replace(/NaN/gi, "10")
     var stillToDo = JSON.parse(fixed)

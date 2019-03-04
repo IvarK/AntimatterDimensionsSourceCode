@@ -391,9 +391,19 @@ function transformSaveToDecimal() {
   }
 }
 
+function translatorForJSON(key, value) {
+  if (value === Infinity) {
+    return "Infinity";
+  }
+  if (value instanceof Set) {
+    return Array.from(value.keys());
+  }
+  return value;
+}
+
 function set_save(name, saveId, value) {
 	saves[saveId] = value;
-    localStorage.setItem(name, btoa(JSON.stringify(getRootSaveObject(), function(k, v) { return (v === Infinity) ? "Infinity" : v; })));
+  localStorage.setItem(name, btoa(JSON.stringify(getRootSaveObject(), translatorForJSON)));
 }
 
 function get_save(name) {

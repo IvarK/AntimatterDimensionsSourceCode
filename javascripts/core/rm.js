@@ -706,17 +706,17 @@ function getGlyphLevelInputs() {
   var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
   var glyphScaledLevel = glyphBaseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphInstabilityScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
-  const glyphInstabilityScaleRate = 500;
-  if (glyphScaledLevel > glyphInstabilityScaleBegin) {
-    var excess = (glyphScaledLevel - glyphInstabilityScaleBegin) / glyphInstabilityScaleRate;
-    glyphScaledLevel = glyphInstabilityScaleBegin + 0.5 * glyphInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
+  const instabilityScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
+  const instabilityScaleRate = 500;
+  if (glyphScaledLevel > instabilityScaleBegin) {
+    const excess = (glyphScaledLevel - instabilityScaleBegin) / instabilityScaleRate;
+    glyphScaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
-  const glyphHyperInstabilityScaleBegin = 5000;
-  const glyphHyperInstabilityScaleRate = 1000;
-  if (glyphScaledLevel > glyphHyperInstabilityScaleBegin) {
-    var excess = (glyphScaledLevel - glyphHyperInstabilityScaleBegin) / glyphHyperInstabilityScaleRate;
-    glyphScaledLevel = glyphHyperInstabilityScaleBegin + 0.5 * glyphHyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
+  const hyperInstabilityScaleBegin = 5000;
+  const hyperInstabilityScaleRate = 1000;
+  if (glyphScaledLevel > hyperInstabilityScaleBegin) {
+    const excess = (glyphScaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
+    glyphScaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
   let glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
   let perkFactor = Effects.sum(

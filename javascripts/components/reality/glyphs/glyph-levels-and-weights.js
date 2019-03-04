@@ -45,7 +45,7 @@ Vue.component("glyph-levels-and-weights", {
     rowStylePerkShop() { // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(5);
     },
-    rowStyleInstabilityPenalty() { // Perk shop will only ever show up with eternities unlocked
+    rowStylePenalty() { // Perk shop will only ever show up with eternities unlocked
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible);
     },
     rowStylePerk() {
@@ -170,9 +170,9 @@ Vue.component("glyph-levels-and-weights", {
         <div :style="rowStylePerkShop" class="l-glyph-levels-and-weights__factor-val">{{formatPerkShop}}</div>
       </template>
       <template v-if="penaltyVisible">
-        <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__factor">Instability</div>
-        <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__operator">/</div>
-        <div :style="rowStyleInstabilityPenalty" class="l-glyph-levels-and-weights__factor-val">{{formatFactor(factors.scalePenalty)}}</div>
+        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__factor">Instability</div>
+        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__operator">/</div>
+        <div :style="rowStylePenalty" class="l-glyph-levels-and-weights__factor-val">{{formatFactor(factors.scalePenalty)}}</div>
       </template>
       <template v-if="perkVisible">
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor">Perks</div>

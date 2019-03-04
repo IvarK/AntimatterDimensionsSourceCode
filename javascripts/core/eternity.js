@@ -179,14 +179,14 @@ function eternity(force, auto) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
     }
 
-    if (!player.achievements.includes("r143") && player.lastTenEternities[9][1] !== 1) {
+    if (!player.achievements.has("r143") && player.lastTenEternities[9][1] !== 1) {
         var n = 0;
         for (i = 0; i < 9; i++) {
             if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
         }
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
     }
-  
+
     resetMoney();
 
     return true;

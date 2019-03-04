@@ -459,7 +459,7 @@ function checkForRUPG8() {
 
     for (var row = 1; row <= 13; row++) {
         for (var col = 1; col <= 8; col++) {
-            if (!player.achievements.includes("r" + (row*10 + col))) return false
+            if (!player.achievements.has("r" + (row*10 + col))) return false
         }
     }
 

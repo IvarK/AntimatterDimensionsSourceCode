@@ -49,7 +49,7 @@ var player = {
   seventhPow: new Decimal(1),
   eightPow: new Decimal(1),
   sacrificed: new Decimal(0),
-  achievements: [],
+  achievements: new Set(),
   infinityUpgrades: [],
   infinityRebuyables: [0, 0],
   challenges: [],

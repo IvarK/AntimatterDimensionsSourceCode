@@ -88,27 +88,14 @@ function onLoad() {
   clearOldAchieves()
 
   if (player.version < 9 ) {
-      player.version = 9
-      let achs = []
-      if (player.achievements.includes("r22")) {
-          achs.push("r35")
-          player.achievements.splice(player.achievements.indexOf("r22"), 1)
-      }
-      if (player.achievements.includes("r35")) {
-          achs.push("r76")
-          player.achievements.splice(player.achievements.indexOf("r35"), 1)
-      }
-      if (player.achievements.includes("r41")) {
-          achs.push("r22")
-          player.achievements.splice(player.achievements.indexOf("r41"), 1)
-      }
-      if (player.achievements.includes("r76")) {
-          achs.push("r41")
-          player.achievements.splice(player.achievements.indexOf("r76"), 1)
-      }
-
-      for (var i=0; i<achs.length;i++) player.achievements.push(achs[i])
-      player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
+    player.version = 9
+    let achs = []
+    if (player.achievements.delete("r22")) achs.push("r35");
+    if (player.achievements.delete("r35")) achs.push("r76");
+    if (player.achievements.delete("r41")) achs.push("r22");
+    if (player.achievements.delete("r76")) achs.push("r41");
+    for (let id of achs) player.achievements.add(id);
+    player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
   }
 
   if (player.version < 9.5) {
@@ -138,9 +125,7 @@ function onLoad() {
   // player.version is currently 12 on live, and will be 13 after the update is released
   if (player.version < 12.1) {
     player.version = 12.1
-    if (player.achievements.includes("s36")) {
-        player.achievements.splice(player.achievements.indexOf("s36"), 1)
-    }
+    player.achievements.delete("s36");
   }
 
     //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
@@ -148,8 +133,8 @@ function onLoad() {
         //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
         if (isDevEnvironment()) player.options.testVersion = 31;
         player.version = 13
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
+        if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
+        if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
         player.realTimePlayed = player.totalTimePlayed;
         player.thisReality = player.totalTimePlayed;
         player.realTimePlayed *= 100;

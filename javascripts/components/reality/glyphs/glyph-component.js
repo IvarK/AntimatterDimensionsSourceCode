@@ -208,7 +208,7 @@ Vue.component("glyph-component", {
       const symbol = this.glyph.symbol;
       return symbol
         ? (symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol)
-        : this.typeConfig.symbol;
+        : this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;

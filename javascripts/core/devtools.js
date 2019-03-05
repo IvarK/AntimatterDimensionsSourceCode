@@ -252,9 +252,9 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
         for (var i=1; i<6; i++) {
-            if (player.reality.upg.includes(i)) {
-                player.reality.rebuyables[i] = 1
-                player.reality.upg.splice(player.reality.upg.indexOf(i), 1)
+            if (RealityUpgrades.includes(i)) {
+              player.reality.rebuyables[i] = 1
+              RealityUpgrades.remove(i);
             }
         }
         player.options.testVersion = 5
@@ -376,7 +376,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion == 17) {
-    if (player.reality.upg.includes(20)) {
+    if (RealityUpgrades.includes(20)) {
       player.wormhole[1].unlocked = true
       $("#bhupg2").show()
     }

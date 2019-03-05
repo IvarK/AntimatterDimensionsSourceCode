@@ -108,7 +108,7 @@ function updateSpoilers() {
 			if (i === 24 && player.reality.realityMachines >= 50 || player.reality.blackHole[0].unlocked) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 25 && player.reality.upg.length === 20) {
+			if (i === 25 && RealityUpgrades.hasAll()) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i < 5 || i === 7) {

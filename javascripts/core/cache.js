@@ -68,6 +68,20 @@ const GameCache = {
 
   buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
 
+  normalDimensionCommonMultiplier: new Lazy(() => {
+    // The effect is defined in normal_dimensions.js because that's where the non-cached
+    // code originally lived.
+    return normalDimensionCommonMultiplier();
+  }),
+
+  infinityDimensionCommonMultiplier: new Lazy(() => {
+    return infinityDimensionCommonMultiplier();
+  }),
+
+  timeDimensionCommonMultiplier: new Lazy(() => {
+    return timeDimensionCommonMultiplier();
+  }),
+
   invalidate() {
     for (let key in this) {
       if (!this.hasOwnProperty(key)) continue;

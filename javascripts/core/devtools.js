@@ -543,17 +543,22 @@ dev.updateTestSave = function() {
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
     player.celestials.teresa.rmStore = Teresa.rmStoreMax;
+  }
+  if (player.reality.upg) {
+    for (let upg of player.reality.upg) RealityUpgrades.add(upg);
+    delete player.reality.upg;
   }
 }
 
 // Still WIP
 dev.showProductionBreakdown = function() {
   let NDComponent = new Decimal(1);
+  GameCache.normalDimensionCommonMultiplier.invalidate();
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }

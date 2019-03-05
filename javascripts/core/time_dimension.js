@@ -151,6 +151,33 @@ function buyMaxTimeDimensions(threshold) {
   }
 }
 
+function timeDimensionCommonMultiplier() {
+  let mult = new Decimal(kongAllDimMult)
+    .timesEffectsOf(
+      Achievement(105),
+      Achievement(128),
+      TimeStudy(93),
+      TimeStudy(103),
+      TimeStudy(151),
+      TimeStudy(221),
+      EternityChallenge(1).reward,
+      EternityChallenge(10).reward,
+      EternityUpgrade.tdMultAchs,
+      EternityUpgrade.tdMultTheorems,
+      EternityUpgrade.tdMultRealTime,
+      player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null
+    );
+  if (EternityChallenge(9).isRunning) {
+    mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
+  }
+
+  if (RealityUpgrades.includes(22)) {
+    let days = player.thisReality / (1000 * 60 * 60 * 24);
+    mult = mult.times(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(days + 1), 1.6)));
+  }
+  return mult;
+}
+
 class TimeDimensionState {
   constructor(tier) {
     this._props = player[`timeDimension${tier}`];
@@ -202,41 +229,21 @@ class TimeDimensionState {
     if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = this.power
       .pow(2)
-      .times(kongAllDimMult)
+      .times(GameCache.timeDimensionCommonMultiplier.value)
       .timesEffectsOf(
-        Achievement(105),
-        Achievement(128),
         tier === 1 ? TimeStudy(11) : null,
         tier === 3 ? TimeStudy(73) : null,
-        TimeStudy(93),
-        TimeStudy(103),
-        TimeStudy(151),
-        TimeStudy(221),
-        tier === 4 ? TimeStudy(227) : null,
-        EternityChallenge(1).reward,
-        EternityChallenge(10).reward,
-        EternityUpgrade.tdMultAchs,
-        EternityUpgrade.tdMultTheorems,
-        EternityUpgrade.tdMultRealTime,
-        player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null
+        tier === 4 ? TimeStudy(227) : null
       );
-    if (EternityChallenge(9).isRunning) {
-      mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
-    }
 
-    if (player.reality.upg.includes(22)) {
-      let days = player.thisReality / (1000 * 60 * 60 * 24);
-      mult = mult.times(Decimal.pow(10,  Math.pow(1 + 2*Math.log10(days + 1), 1.6)));
-    }
+    mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 
-    mult = mult.clampMin(0).pow(new Decimal(1).max(getAdjustedGlyphEffect("timepow")));
-
-    mult = mult.clampMin(0).pow(new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions")))
+    mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
     }
-    
+
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {

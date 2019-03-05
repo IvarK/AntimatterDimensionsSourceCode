@@ -1,3 +1,24 @@
+function infinityDimensionCommonMultiplier() {
+  let mult = new Decimal(kongAllDimMult)
+    .timesEffectsOf(
+      Achievement(75),
+      TimeStudy(82),
+      TimeStudy(92),
+      TimeStudy(162),
+      InfinityChallenge(1).reward,
+      EternityChallenge(4).reward,
+      EternityChallenge(9).reward,
+      EternityUpgrade.idMultEP,
+      EternityUpgrade.idMultEternities,
+      EternityUpgrade.idMultICRecords
+    );
+
+  if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
+    mult = mult.times(replicantiMult());
+  }
+  return mult;
+}
+
 function resetInfDimensions() {
 
   if (player.infDimensionsUnlocked[0]) {
@@ -240,26 +261,12 @@ class InfinityDimensionState {
       return new Decimal(1);
     }
     let mult = this.power
-      .times(kongAllDimMult)
+      .times(GameCache.infinityDimensionCommonMultiplier.value)
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
-        Achievement(75),
         tier === 4 ? TimeStudy(72) : null,
-        TimeStudy(82),
-        TimeStudy(92),
-        TimeStudy(162),
-        InfinityChallenge(1).reward,
-        tier === 1 ? EternityChallenge(2).reward : null,
-        EternityChallenge(4).reward,
-        EternityChallenge(9).reward,
-        EternityUpgrade.idMultEP,
-        EternityUpgrade.idMultEternities,
-        EternityUpgrade.idMultICRecords
+        tier === 1 ? EternityChallenge(2).reward : null
       );
-
-    if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
-      mult = mult.times(replicantiMult());
-    }
 
     mult = mult.clampMin(0);
 
@@ -267,9 +274,9 @@ class InfinityDimensionState {
       mult = dilatedValueOf(mult);
     }
 
-    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")))
-    
-    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions")))
+    mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
+
+    mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);

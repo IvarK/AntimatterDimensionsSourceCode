@@ -763,7 +763,10 @@ let autobuyerOnGameLoop = true;
 function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
-    var thisUpdate = new Date().getTime();
+    GameCache.normalDimensionCommonMultiplier.invalidate();
+    GameCache.infinityDimensionCommonMultiplier.invalidate();
+    GameCache.timeDimensionCommonMultiplier.invalidate();
+    const thisUpdate = Date.now();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;

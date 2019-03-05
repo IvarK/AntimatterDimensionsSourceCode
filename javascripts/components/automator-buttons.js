@@ -92,7 +92,7 @@ Vue.component("automator-shop-button", {
   },
   methods: {
     update: function() {
-      this.purchased = player.reality.automatorCommands.includes(this.instructionID);
+      this.purchased = player.reality.automatorCommands.has(this.instructionID);
       this.available = !this.purchased && canBuyAutomatorInstruction(this.instructionID);
     },
     buy: function() {

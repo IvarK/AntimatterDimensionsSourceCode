@@ -326,7 +326,7 @@ var player = {
     automatorOn: false,
     automatorCurrentRow: 0,
     automatorRows: 0,
-    automatorCommands: [],
+    automatorCommands: new Set(),
     perks: [],
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],

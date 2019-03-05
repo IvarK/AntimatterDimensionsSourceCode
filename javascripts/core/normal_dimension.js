@@ -177,7 +177,7 @@ function getBuyTenMultiplier() {
   );
   dimMult += Effects.sum(EternityChallenge(3).reward);
 
-  dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
+  dimMult *= getAdjustedGlyphEffect("powerbuy10");
 
   dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"))
 

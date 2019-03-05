@@ -732,9 +732,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     return 1/1000;
   }
   if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
-    factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
+    factor *= getAdjustedGlyphEffect("timespeed");
   }
-  
+
   if (player.blackHole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.BLACKHOLE)) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;

@@ -341,7 +341,7 @@ class AchievementState extends GameMechanicState {
   }
 
   get isEnabled() {
-    return isAchEnabled(this._fullId, this._id);
+    return isAchEnabled(this._fullId, this.id);
   }
 
   get isEffectConditionSatisfied() {

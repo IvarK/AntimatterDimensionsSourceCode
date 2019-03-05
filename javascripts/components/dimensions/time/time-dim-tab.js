@@ -29,7 +29,7 @@ Vue.component('time-dim-tab', {
       this.shardsPerSecond.copyFrom(TimeDimension(1).productionPerSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Eighth Infinity Dimensions" : "time shards";
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
-      this.areAutobuyersUnlocked = player.reality.upg.includes(13);
+      this.areAutobuyersUnlocked = RealityUpgrades.includes(13);
     },
     maxAll: function() {
       buyMaxTimeDimensions();

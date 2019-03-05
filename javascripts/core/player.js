@@ -315,7 +315,7 @@ var player = {
       4: 0,
       5: 0,
     },
-    upg: [],
+    upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
               false, false, false, false, false, 
               false, false, false, false, false, 

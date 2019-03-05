@@ -253,7 +253,7 @@ EternityChallenge.autoCompleteNext = function() {
 }
 
 EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
+  let isPostEc = RealityUpgrades.includes(10) ? player.eternities > 100 : player.eternities > 0
   if (!isPostEc || !player.autoEcIsOn) return
   let threshold = this.currentAutoCompleteThreshold()
   while (player.reality.lastAutoEC - threshold > 0) {

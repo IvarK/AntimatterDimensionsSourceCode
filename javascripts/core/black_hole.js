@@ -195,12 +195,13 @@ function updateBlackHoleGraphics() {
 
   // Time dilation factor (Realistic formula, but only actually used for particle speed)
   delta = 1 / Math.sqrt(1 - bhSize/r);
-        
+
   // Move+draw everything
-  document.getElementById("blackHoleImage").getContext('2d').clearRect(0, 0, 400, 400);
-  for (let i = 0; i < particleList.length; i++) {
-    particleList[i].update();
-    particleList[i].draw();
+  particleList.forEach(p => p.update());
+
+  if (ui.view.tabs.current === "reality-tab" && ui.view.tabs.reality.subtab === "blackhole") {
+    document.getElementById("blackHoleImage").getContext('2d').clearRect(0, 0, 400, 400);
+    particleList.forEach(p => p.draw());
   }
 }
 

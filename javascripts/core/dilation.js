@@ -97,7 +97,7 @@ function getDilationGainPerSecond() {
       Achievement(132)
     );
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
-  ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
+  ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
   if (V.isRunning) ret = ret.pow(0.5)

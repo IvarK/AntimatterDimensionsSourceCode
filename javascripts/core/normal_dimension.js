@@ -23,13 +23,6 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
   }
 
-  multiplier = multiplier.timesEffectsOf(
-    BreakInfinityUpgrade.totalAMMult,
-    BreakInfinityUpgrade.currentAMMult,
-    BreakInfinityUpgrade.achievementMult,
-    BreakInfinityUpgrade.slowestChallengeMult
-  );
-
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     dimension.infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
@@ -38,12 +31,16 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = multiplier.times(infinitiedMult);
 
   multiplier = multiplier.timesEffectsOf(
+    BreakInfinityUpgrade.totalAMMult,
+    BreakInfinityUpgrade.currentAMMult,
+    BreakInfinityUpgrade.achievementMult,
+    BreakInfinityUpgrade.slowestChallengeMult,
+
     InfinityUpgrade.unspentIPMult,
     InfinityUpgrade.unspentIPMult.chargedEffect,
     InfinityUpgrade.totalTimeMult,
-    InfinityUpgrade.thisInfinityTimeMult)
+    InfinityUpgrade.thisInfinityTimeMult,
 
-  multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
     tier === 1 ? Achievement(28) : null,
     tier === 1 ? Achievement(31) : null,
@@ -61,21 +58,21 @@ function getDimensionFinalMultiplier(tier) {
     Achievement(78),
     Achievement(84),
     Achievement(91),
-    Achievement(92))
-  if (Achievement(77).isEnabled) {
-    // Welp, this effect is too complex for Effects system
-    multiplier = multiplier.times(1 + tier / 100);
-  }
+    Achievement(92),
 
-  multiplier = multiplier.timesEffectsOf(
     tier !== 8 ? TimeStudy(71) : null,
     TimeStudy(91),
     TimeStudy(101),
     TimeStudy(161),
     TimeStudy(193),
     tier === 8 ? TimeStudy(214) : null,
-    tier === 1 ? TimeStudy(234) : null)
-    multiplier = multiplier.clampMin(1);
+    tier === 1 ? TimeStudy(234) : null
+  );
+  if (Achievement(77).isEnabled) {
+    // Welp, this effect is too complex for Effects system
+    multiplier = multiplier.times(1 + tier / 100);
+  }
+  multiplier = multiplier.clampMin(1);
 
   multiplier = multiplier.timesEffectsOf(
     InfinityChallenge(3),

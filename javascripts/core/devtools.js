@@ -671,17 +671,13 @@ dev.togglePerformanceStats = function() {
 
 // Buys all perks, will end up buying semi-randomly if not enough pp
 dev.buyAllPerks = function() {
-  let numPerks = Perk.all.length
-  let perkNames = Object.keys(Perk).filter(name => name !== "all" && name !== "find")
-  while (player.reality.perks.length < numPerks && player.reality.pp > 0) {
-    for (name in perkNames) {
-      if (typeof perkNames[name] !== "function") {
-        Perk[perkNames[name]].purchase()
-      }
-    }
+  const visited = [];
+  const toVisit = [Perk.glyphChoice3];
+  while (toVisit.length > 0) {
+    if (player.reality.pp < 1) break;
+    const perk = toVisit.shift();
+    visited.push(perk);
+    toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
+    perk.purchase();
   }
-  GameCache.achSkipPerkCount.invalidate();
-  GameCache.buyablePerks.invalidate();
-  document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
-  drawPerkNetwork()
 };

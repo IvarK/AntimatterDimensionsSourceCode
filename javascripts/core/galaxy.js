@@ -39,7 +39,7 @@ class Galaxy {
     }
 
     if (type === GalaxyType.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (799 + Effects.sum(GlyphSacrifice.power)))));
+      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (800 + Effects.sum(GlyphSacrifice.power)))));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);
@@ -52,12 +52,13 @@ class Galaxy {
     return 100 + Effects.sum(
       TimeStudy(223),
       TimeStudy(224),
-      EternityChallenge(5).reward
+      EternityChallenge(5).reward,
+      GlyphSacrifice.power
     );
   }
 
   static get type() {
-    if (player.galaxies >= 800 + Effects.sum(GlyphSacrifice.power)) {
+    if (player.galaxies >= 800 && !player.reality.upg.includes(21)) {
       return GalaxyType.REMOTE;
     }
     if (EternityChallenge(5).isRunning || player.galaxies >= this.costScalingStart) {

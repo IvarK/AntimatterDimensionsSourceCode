@@ -147,23 +147,23 @@ dev.refundDilStudies = function() {
     }
 }
 
-dev.giveSpecialGlyph = function (color, symbol, level) {
+dev.giveSpecialGlyph = function (color, symbol, level, rawLevel) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  let glyph = GlyphGenerator.randomGlyph(level, false);
+  let glyph = GlyphGenerator.randomGlyph(level, rawLevel, false);
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
 }
 
 dev.giveMusicGlyph = function() {
-  dev.giveSpecialGlyph("#FF80AB", "266b", 1)
+  dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1)
 }
 
-dev.giveGlyph = function (level) {
+dev.giveGlyph = function (level, rawLevel) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, rawLevel, false));
 }
 
 dev.decriminalize = function() {
@@ -534,6 +534,15 @@ dev.updateTestSave = function() {
       delete player.blackHole[i].duration;
     }
     player.options.testVersion = 31;
+  }
+  if (player.options.testVersion === 31) {
+    for (let i of player.reality.glyphs.active) {
+      i.rawLevel = i.level;
+    }
+    for (let i of player.reality.glyphs.inventory) {
+      i.rawLevel = i.level;
+    }
+    player.options.testVersion = 32;
   }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")

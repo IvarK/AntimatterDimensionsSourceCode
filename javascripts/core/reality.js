@@ -9,8 +9,8 @@ const GlyphSelection = {
   get choiceCount() {
     return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
   },
-  generate(count, level) {
-    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
+  generate(count, level, rawLevel) {
+    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, rawLevel, false));
     ui.view.modal.glyphSelection = true;
     if (!Perk.glyphUncommonGuarantee.isBought) return;
     // If no choices are rare enough, pick one randomly and reroll its rarity until it is
@@ -64,15 +64,17 @@ function requestManualReality() {
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   let choiceCount = GlyphSelection.choiceCount;
+  let level = gainedGlyphLevel();
+  let rawLevel = gainedRawGlyphLevel();
   if (choiceCount === 1) {
     // First reality gets a specially generated glyph:
     const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(gainedGlyphLevel())
-      : GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+      ? GlyphGenerator.startingGlyph(level, rawLevel)
+      : GlyphGenerator.randomGlyph(level, rawLevel, false);
     Glyphs.addToInventory(newGlyph);
     return manualReality();
   }
-  GlyphSelection.generate(choiceCount, gainedGlyphLevel());
+  GlyphSelection.generate(choiceCount, level, rawLevel);
 }
 
 function manualReality() {
@@ -99,13 +101,14 @@ function manualReality() {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   let gainedLevel = gainedGlyphLevel();
+  let gainedRawLevel = gainedRawGlyphLevel();
   let newGlyph;
   if (EffarigUnlock.autopicker.isUnlocked) {
     let glyphs = Array.range(0, GlyphSelection.choiceCount)
-      .map(() => GlyphGenerator.randomGlyph(gainedLevel));
+      .map(() => GlyphGenerator.randomGlyph(gainedLevel, gainedRawLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, gainedRawLevel, false);
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {

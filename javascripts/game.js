@@ -262,8 +262,16 @@ function gainedGlyphLevel(round) {
     return ret
 }
 
+function gainedRawGlyphLevel(round) {
+  if (round === undefined) round = true
+  let glyphState = getGlyphLevelInputs();
+  var ret = glyphState.rawLevel;
+  if (round) ret = Math.round(ret)
+  if (ret == Infinity || isNaN(ret)) return 0
+  return ret
+}
+
 function percentToNextGlyphLevel() {
-    var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
     var ret = gainedGlyphLevel(false)
     var retOffset = 0;
     if (Math.round(ret) > ret) {
@@ -670,6 +678,7 @@ setInterval(function() {
     }
 
     if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
+    if (player.replicanti.amount.gte(new Decimal("1e100000"))) giveAchievement("It will never be enough")
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 28000) giveAchievement("This is what I have to do to get rid of you.")
     if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
@@ -691,8 +700,8 @@ setInterval(function() {
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
-    if (player.replicanti.amount.gte(new Decimal("1e70000"))) unlockRealityUpgrade(21)
-    if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
+    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2750) unlockRealityUpgrade(21)
+    if (player.timeShards.gte('1e25000')) unlockRealityUpgrade(22)
     ttMaxTimer++;
     if (Perk.autobuyerTT4.isBought) maxTheorems()
     else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
@@ -878,8 +887,7 @@ function gameLoop(diff, options = {}) {
     Enslaved.trackInfinityGeneration(infGen);
 
     if (player.reality.upg.includes(14)) {
-        let eternitiesGain = diff * player.realities / 1000
-        if (player.reality.upg.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
+        let eternitiesGain = diff * player.realities * Math.pow(3, player.reality.rebuyables[3]) / 1000
         player.reality.partEternitied += eternitiesGain;
         player.eternities += Math.floor(player.reality.partEternitied)
         player.reality.partEternitied -= Math.floor(player.reality.partEternitied)

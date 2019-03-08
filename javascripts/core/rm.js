@@ -87,7 +87,7 @@ const AutoGlyphPicker = {
 const GlyphGenerator = {
   lastFake: "power",
 
-  startingGlyph(level) {
+  startingGlyph(level, rawLevel) {
     let strength = this.randomStrength(false);
     player.reality.glyphs.last = "power";
     return {
@@ -96,13 +96,14 @@ const GlyphGenerator = {
       type: "power",
       strength: strength,
       level: level,
+      rawLevel: rawLevel,
       effects: {
         pow: getGlyphEffectStrength("powerpow", level, strength),
       },
     }
   },
 
-  randomGlyph(level, fake) {
+  randomGlyph(level, rawLevel, fake) {
     let strength = this.randomStrength(fake);
     let type = this.randomType(fake);
     let numEffects = this.randomNumberOfEffects(strength, level, fake);
@@ -116,6 +117,7 @@ const GlyphGenerator = {
       type: type,
       strength: strength,
       level: level,
+      rawLevel: rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
         e => getGlyphEffectStrength(e, level, strength)),
     }
@@ -533,7 +535,7 @@ function getActiveGlyphEffects() {
 
 function deleteGlyph(id, force) {
   const glyph = Glyphs.findById(id);
-  if (canSacrifice(glyph)) return sacrificeGlyph(glyph, force);
+  if (canSacrifice()) return sacrificeGlyph(glyph, force);
   if (force || confirm("Do you really want to delete this glyph?")) {
     Glyphs.removeFromInventory(glyph);
   }
@@ -616,7 +618,8 @@ function updateRealityUpgrades() {
   const rupg12Value = shortenRateOfChange(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1));
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
+  $("#rupg22").html("<b>Requires: 1e25000 time shards</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
+  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.max(9e5 / player.bestReality, 1))+"<br>Cost: 100,000 RM</div>")
 }
 
 function respecGlyphs() {
@@ -624,20 +627,13 @@ function respecGlyphs() {
   player.reality.respec = false;
 }
 
-function canSacrifice(glyph) {
-  return (glyph.type === "power" || glyph.type === "time")
-    ? player.reality.upg.includes(19)
-    : player.reality.upg.includes(21);
+function canSacrifice() {
+  return player.reality.upg.includes(19);
 }
 
 function glyphSacrificeGain(glyph) {
-  if (!canSacrifice(glyph)) return 0;
-  let gain = glyph.level * glyph.strength;
-  if (glyph.type === 'effarig') {
-    gain *= Math.pow(Teresa.runRewardMultiplier, 0.2);
-  } else {
-    gain *= Teresa.runRewardMultiplier;
-  }
+  if (!canSacrifice()) return 0;
+  let gain = Math.pow(glyph.rawLevel * glyph.strength, 5) * Teresa.runRewardMultiplier;
   return gain;
 }
 
@@ -653,7 +649,6 @@ function sacrificeGlyph(glyph, force = false) {
   }
   Glyphs.removeFromInventory(glyph);
 
-  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
   if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
 }
 
@@ -732,6 +727,7 @@ function getGlyphLevelInputs() {
     perkShop: player.celestials.teresa.glyphLevelMult,
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
+    rawLevel: baseLevel + perkFactor,
     finalLevel: scaledLevel + perkFactor,
   };
 }

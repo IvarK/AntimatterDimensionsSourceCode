@@ -282,7 +282,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 193,
     cost: 300,
     description: "Normal Dimension boost based on Eternities",
-    effect: () => Decimal.pow(1.03, player.eternities),
+    effect: () => Decimal.pow(1.0285, player.eternities),
     cap: new Decimal("1e13000"),
     formatEffect: value => formatX(value, 2, 1)
   },
@@ -317,8 +317,8 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "Sacrifice boosts the 8th Dimension even more",
     effect: () => {
       const totalBoost = Sacrifice.totalBoost;
-      const firstPart = totalBoost.pow(8).clampMax("1e46000");
-      const secondPart = totalBoost.pow(1.1).clampMax("1e125000");
+      const firstPart = totalBoost.pow(7.6).clampMax("1e44000");
+      const secondPart = totalBoost.pow(1.05).clampMax("1e120000");
       return firstPart.times(secondPart);
     },
     cap: new Decimal("1e171000"),

@@ -368,7 +368,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerpow":
       return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "powermult":
-      return Decimal.pow(level * strength * 10, level * strength * 10)
+      return Decimal.pow(level * strength * 10, level * strength * 9.5)
     case "powerdimboost":
       return Math.pow(level * strength, 0.5)
     case "powerbuy10":

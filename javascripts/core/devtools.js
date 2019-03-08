@@ -654,10 +654,30 @@ dev.showProductionBreakdown = function() {
 }
 
 let tempSpeedupToggle = false;
-dev.goFast = function() {   // Speeds up game 500x, intentionally doesn't persist between refreshes
-  tempSpeedupToggle = !tempSpeedupToggle;
+let tempSpeedupFactor = 500;
+dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persist between refreshes
+  if (speed !== undefined && speed > 0) {
+    tempSpeedupToggle = true
+    tempSpeedupFactor = speed
+  }
+  else {  // With no arguments, toggles on/off
+    tempSpeedupToggle = !tempSpeedupToggle;
+  }
 }
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
+};
+
+// Buys all perks, will end up buying semi-randomly if not enough pp
+dev.buyAllPerks = function() {
+  const visited = [];
+  const toVisit = [Perk.glyphChoice3];
+  while (toVisit.length > 0) {
+    if (player.reality.pp < 1) break;
+    const perk = toVisit.shift();
+    visited.push(perk);
+    toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
+    perk.purchase();
+  }
 };

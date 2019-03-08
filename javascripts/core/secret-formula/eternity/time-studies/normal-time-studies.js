@@ -282,7 +282,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 193,
     cost: 300,
     description: "Normal Dimension boost based on Eternities",
-    effect: () => Decimal.pow(1.0315, player.eternities),
+    effect: () => Decimal.pow(1.0285, player.eternities),
     cap: new Decimal("1e13000"),
     formatEffect: value => formatX(value, 2, 1)
   },

@@ -167,14 +167,14 @@ dev.giveGlyph = function (level) {
 }
 
 dev.decriminalize = function () {
-  player.achievements.delete("s23");
-  GameCache.achievementCount.invalidate();
+  player.secretAchiements.delete(23);
   GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function (name) {
-  player.achievements.delete(name);
-  GameCache.achievementCount.invalidate();
+  if (typeof (name) === "number") return player.achievements.delete(name);
+  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1)));
+  else if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1)));
 }
 
 dev.realize = function() {
@@ -534,6 +534,10 @@ dev.updateTestSave = function() {
       delete player.blackHole[i].duration;
     }
     player.options.testVersion = 31;
+  }
+  if (player.options.testVersion === 31) {
+    convertAchivementsToNumbers();
+    player.options.testVersion = 32;
   }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")

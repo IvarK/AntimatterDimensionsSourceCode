@@ -50,6 +50,7 @@ var player = {
   eightPow: new Decimal(1),
   sacrificed: new Decimal(0),
   achievements: new Set(),
+  secretAchievements: new Set(),
   infinityUpgrades: [],
   infinityRebuyables: [0, 0],
   challenges: [],

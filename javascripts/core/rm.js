@@ -633,8 +633,7 @@ function canSacrifice() {
 
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
-  let gain = Math.pow(glyph.rawLevel * glyph.strength, 5) * Teresa.runRewardMultiplier;
-  return gain;
+  return Math.pow(glyph.rawLevel * glyph.strength, 5) * Teresa.runRewardMultiplier;
 }
 
 function sacrificeGlyph(glyph, force = false) {

@@ -255,20 +255,20 @@ function gainedRealityMachines() {
 
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
-    let glyphState = getGlyphLevelInputs();
-    var ret = glyphState.finalLevel;
-    if (round) ret = Math.round(ret)
-    if (ret == Infinity || isNaN(ret)) return 0
-    return ret
+    const glyphState = getGlyphLevelInputs();
+    let finalLevel = glyphState.finalLevel;
+    if (round) finalLevel = Math.round(finalLevel)
+    if (finalLevel == Infinity || isNaN(finalLevel)) return 0
+    return finalLevel
 }
 
 function gainedRawGlyphLevel(round) {
   if (round === undefined) round = true
-  let glyphState = getGlyphLevelInputs();
-  var ret = glyphState.rawLevel;
-  if (round) ret = Math.round(ret)
-  if (ret == Infinity || isNaN(ret)) return 0
-  return ret
+  const glyphState = getGlyphLevelInputs();
+  let rawLevel = glyphState.rawLevel;
+  if (round) rawLevel = Math.round(rawLevel)
+  if (rawLevel == Infinity || isNaN(rawLevel)) return 0
+  return rawLevel
 }
 
 function percentToNextGlyphLevel() {

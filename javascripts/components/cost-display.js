@@ -4,7 +4,7 @@ Vue.component("cost-display", {
     br: Boolean,
     singular: String,
     plural: String,
-    prefix: {
+    title: {
       type: String,
       default: "Cost:",
     }
@@ -46,5 +46,5 @@ Vue.component("cost-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template: `<span v-if="isVisible"><br v-if="br">{{prefix}} {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
+  template: `<span v-if="isVisible"><br v-if="br">{{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
 });

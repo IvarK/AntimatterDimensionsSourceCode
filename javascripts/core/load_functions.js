@@ -297,7 +297,7 @@ function checkPerkValidity() {
 }
 
 function convertAchivementsToNumbers() {
-  if (player.achievements.countIf(e => typeof (e) !== "number") === 0) return;
+  if (player.achievements.countWhere(e => typeof (e) !== "number") === 0) return;
   let old = player.achievements;
   player.achievements = new Set();   // player.secretAchievements should be an empty set in this case
   for (let oldId of old) {

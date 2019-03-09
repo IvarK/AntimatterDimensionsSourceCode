@@ -54,8 +54,6 @@ const GameCache = {
       .map(s => player.timestudy.studies.includes(s.id));
   }),
 
-  achievementCount: new Lazy(() => player.achievements.countIf(a => !a.startsWith("s"))),
-
   achSkipPerkCount: new Lazy(() => {
     return Effects.max(
       0,

@@ -128,45 +128,46 @@ function onLoad() {
     player.achievements.delete("s36");
   }
 
-    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
-    if (player.version < 13) {
-        //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (isDevEnvironment()) player.options.testVersion = 31;
-        player.version = 13
-        if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
-        if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
-        player.realTimePlayed = player.totalTimePlayed;
-        player.thisReality = player.totalTimePlayed;
-        player.realTimePlayed *= 100;
-        player.totalTimePlayed *= 100;
-        player.thisInfinityTime*= 100;
-        player.thisEternity *= 100;
-        player.thisReality *= 100;
-        player.thisInfinityRealTime = player.thisInfinityTime;
-        player.thisEternityRealTime = player.thisEternity;
-        player.thisRealityRealTime = player.thisReality;
-        if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
-        else player.bestInfinityTime *= 100;
-        if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
-        else player.bestEternity *= 100;
-        for (var i=0; i<10; i++) {
-            player.lastTenEternities[i][0] *= 100;
-            player.lastTenRuns[i][0] *= 100;
-            player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
-            player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
-        }
-        for (var i=0; i<11; i++) {
-            setChallengeTime(i, player.challengeTimes[i] * 100);
-        }
-        for (var i=0; i<8; i++) {
-            setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
-        }
-        convertAutobuyerMode();
-        unfuckChallengeIds();
-        unfuckMultCosts();
-        player.secretUnlocks.why = player.why
-        delete player.why
+  //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
+  if (player.version < 13) {
+    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+    if (isDevEnvironment()) player.options.testVersion = 32;
+    player.version = 13
+    if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
+    if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
+    player.realTimePlayed = player.totalTimePlayed;
+    player.thisReality = player.totalTimePlayed;
+    player.realTimePlayed *= 100;
+    player.totalTimePlayed *= 100;
+    player.thisInfinityTime *= 100;
+    player.thisEternity *= 100;
+    player.thisReality *= 100;
+    player.thisInfinityRealTime = player.thisInfinityTime;
+    player.thisEternityRealTime = player.thisEternity;
+    player.thisRealityRealTime = player.thisReality;
+    if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
+    else player.bestInfinityTime *= 100;
+    if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
+    else player.bestEternity *= 100;
+    for (var i = 0; i < 10; i++) {
+      player.lastTenEternities[i][0] *= 100;
+      player.lastTenRuns[i][0] *= 100;
+      player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
+      player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
     }
+    for (var i = 0; i < 11; i++) {
+      setChallengeTime(i, player.challengeTimes[i] * 100);
+    }
+    for (var i = 0; i < 8; i++) {
+      setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
+    }
+    convertAutobuyerMode();
+    unfuckChallengeIds();
+    unfuckMultCosts();
+    convertAchivementsToNumbers();
+    player.secretUnlocks.why = player.why
+    delete player.why
+  }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
   if (player.version === 13) dev.updateTestSave()
@@ -293,6 +294,23 @@ function checkPerkValidity() {
   if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
   dev.respecPerks();
   Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}
+
+function convertAchivementsToNumbers() {
+  if (player.achievements.countIf(e => typeof (e) !== "number") === 0) return;
+  let old = player.achievements;
+  player.achievements = new Set();   // player.secretAchievements should be an empty set in this case
+  for (let oldId of old) {
+    let newId = parseInt(oldId.slice(1));
+    if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
+    if (oldId.startsWith("r")) {
+      if (Achievement(newId) === "undefined") throw crash(`Unrecognized achievement ${oldId}`);
+      player.achievements.add(newId);
+    } else if (oldId.startsWith("s")) {
+      if (SecretAchievement(newId) === "undefined") throw crash(`Unrecognized secret achievement ${newId}`);
+      player.secretAchievements.add(newId);
+    }
+  }
 }
 
 function load_cloud_save(saveId, cloudPlayer) {

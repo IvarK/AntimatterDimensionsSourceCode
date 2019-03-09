@@ -218,7 +218,7 @@ Array.prototype.randomElement = function() {
 
 Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
 
-Set.prototype.countIf = function (predicate) {
+Set.prototype.countWhere = function (predicate) {
   let count = 0;
   for (let item of this) {
     if (predicate(item))++count;

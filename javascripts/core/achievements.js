@@ -111,7 +111,7 @@ const allAchievements = {
   r146 : "Perks of living",
   r147 : "Master of Reality",
   r148 : "Royal Flush",
-  r151 : "It will never be enough",
+  r151 : "Transcension sucked anyway",
   r152 : "Personal Space",
   r153 : "Do I really have to do this?",
   r154 : "I didn't even realize how fast you are",

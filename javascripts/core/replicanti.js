@@ -222,7 +222,8 @@ const ReplicantiUpgrade = {
     get costIncrease() { return 1e15; }
 
     get cap() {
-      return Achievement(151).isEnabled ? Infinity : 1;
+      // Chance never goes over 100%.
+      return 1;
     }
 
     get isCapped() {

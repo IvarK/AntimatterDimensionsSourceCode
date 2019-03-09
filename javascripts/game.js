@@ -678,7 +678,6 @@ setInterval(function() {
     }
 
     if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
-    if (player.replicanti.amount.gte(new Decimal("1e100000"))) giveAchievement("It will never be enough")
     if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
     if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 28000) giveAchievement("This is what I have to do to get rid of you.")
     if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")

@@ -648,6 +648,7 @@ function sacrificeGlyph(glyph, force = false) {
   }
   Glyphs.removeFromInventory(glyph);
 
+  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
   if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
 }
 

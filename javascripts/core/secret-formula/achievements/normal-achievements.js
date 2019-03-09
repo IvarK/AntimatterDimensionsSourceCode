@@ -624,13 +624,13 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 151,
-    name: "It will never be enough",
-    tooltip: () => `Reach ${shorten("1e100000", 0, 0)} Replicanti. Reward: You can buy replicanti chance over 100%.`
+    name: "Transcension sucked anyway",
+    tooltip: "Sacrifice a Transcendent glyph"
   },
   {
     id: 152,
     name: "Personal Space",
-    tooltip: "Have 100 glyphs in your inventory",
+    tooltip: "Have 100 glyphs in your inventory"
   },
   {
     id: 153,

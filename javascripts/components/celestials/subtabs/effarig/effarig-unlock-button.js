@@ -31,7 +31,7 @@ Vue.component("effarig-unlock-button", {
         v-if="!isBought"
         :config="config"
         singular="Relic Shard"
-        prefix=""
+        title=""
       />
       <div v-else>
         (Unlocked)

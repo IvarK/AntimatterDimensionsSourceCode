@@ -10,7 +10,7 @@ Vue.component('effarig-tab', {
         };
       },
       computed: {
-        descriptions() {
+        descriptionLines() {
           return this.unlock.config.description.split("\n");
         },
         symbol: () => GLYPH_SYMBOLS.effarig,
@@ -24,7 +24,7 @@ Vue.component('effarig-tab', {
         <div class="l-effarig-tab__reward">
           <div class="c-effarig-tab__reward-label">{{ unlock.config.label }}: </div>
           <div v-if="isUnlocked" class="l-effarig-tab__reward-descriptions">
-            <div v-for="description in descriptions">
+            <div v-for="description in descriptionLines">
               <span class="c-effarig-tab__reward-symbol">{{symbol}}</span>{{description}}
             </div>
           </div>
@@ -112,7 +112,7 @@ Vue.component('effarig-tab', {
         <div v-if="runUnlocked" class="l-effarig-run">
           <div class="c-effarig-run-description">{{runDescription}}</div>
           <div :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
-               @click="startRun()">
+               @click="startRun">
             <div :class="runButtonInnerClass" :button-symbol="symbol">{{symbol}}</div>
           </div>
           <run-unlock-reward v-for="(unlock, i) in runUnlocks"

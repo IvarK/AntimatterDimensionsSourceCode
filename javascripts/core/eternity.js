@@ -166,7 +166,7 @@ function eternity(force, auto) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
             if (player.reality.tdbuyers[i - 1]) {
-                buyMaxTimeDims(i);
+                buyMaxTimeDimTier(i);
             }
         }
     }

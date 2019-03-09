@@ -23,13 +23,12 @@ function timeDimensionCost(tier, bought) {
   return cost;
 }
 
-function buyTimeDimension(tier, upd, threshold) {
+function buyTimeDimension(tier, upd) {
   if (upd === undefined) upd = true
-  if (threshold == undefined) threshold = 1
 
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
-  if (player.eternityPoints.lt(dim.cost.times(1/threshold))) return false
+  if (player.eternityPoints.lt(dim.cost)) return false
 
   player.eternityPoints = player.eternityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(1);
@@ -56,7 +55,7 @@ function toggleAllTimeDims() {
   }
 }
 
-function buyMaxTimeDims(tier) {
+function buyMaxTimeDimTier(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
   if (player.eternityPoints.lt(dim.cost)) return false;
@@ -101,9 +100,6 @@ function buyMaxTimeDims(tier) {
     otherCost = newCost;
     ++count;
   }
-  if (count > 10) {
-    console.log(`tier = ${tier} count = ${count} canBuy = ${canBuy}`);
-  }
   let totalCost = baseCost.plus(otherCost);
   // check the purchase price again
   if (player.eternityPoints.lt(totalCost)) {
@@ -124,15 +120,14 @@ function buyMaxTimeDims(tier) {
   return true
 }
 
-function buyMaxTimeDimensions(threshold) {
+function buyMaxTimeDimensions() {
   if (player.eternityPoints.gte(1e10)) {  // Default behavior: Buy as many as possible, starting with the highest dimension first (reduces overhead at higher EP)
-    if (threshold == undefined) threshold = 1
-    for(var i=8; i>0; i--) while(buyTimeDimension(i, false, threshold)) continue
+    for (var i = 8; i > 0; i--) buyMaxTimeDimTier(i);
   }
   else {  // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
     for (let i=4; i > 0 && player["timeDimension"+i].bought == 0; i--)
-      buyTimeDimension(i, false, threshold);
-    
+      buyTimeDimension(i, false);
+
     for (let stop = 0; stop < 1000; stop++) { // Should never take more than like 50 iterations; explicit infinite loops make me nervous
       let cheapestDim = 1;
       let cheapestCost = player["timeDimension1"].cost;
@@ -144,7 +139,7 @@ function buyMaxTimeDimensions(threshold) {
       }
       let bought = false;
       if (player.eternityPoints.gte(cheapestCost))
-        bought = buyTimeDimension(cheapestDim, false, threshold);
+        bought = buyTimeDimension(cheapestDim, false);
       if (!bought)
         break;
     }

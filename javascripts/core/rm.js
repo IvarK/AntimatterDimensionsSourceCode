@@ -87,7 +87,7 @@ const AutoGlyphPicker = {
 const GlyphGenerator = {
   lastFake: "power",
 
-  startingGlyph(level, rawLevel) {
+  startingGlyph(level) {
     let strength = this.randomStrength(false);
     player.reality.glyphs.last = "power";
     return {
@@ -95,15 +95,15 @@ const GlyphGenerator = {
       idx: null,
       type: "power",
       strength: strength,
-      level: level,
-      rawLevel: rawLevel,
+      level: level.finalLevel,
+      rawLevel: level.rawLevel,
       effects: {
         pow: getGlyphEffectStrength("powerpow", level, strength),
       },
     }
   },
 
-  randomGlyph(level, rawLevel, fake) {
+  randomGlyph(level, fake) {
     let strength = this.randomStrength(fake);
     let type = this.randomType(fake);
     let numEffects = this.randomNumberOfEffects(strength, level, fake);
@@ -116,8 +116,8 @@ const GlyphGenerator = {
       idx: null,
       type: type,
       strength: strength,
-      level: level,
-      rawLevel: rawLevel,
+      level: level.finalLevel,
+      rawLevel: level.rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
         e => getGlyphEffectStrength(e, level, strength)),
     }
@@ -633,7 +633,7 @@ function canSacrifice() {
 
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
-  return Math.pow(glyph.rawLevel * glyph.strength, 5) * Teresa.runRewardMultiplier;
+  return Math.pow(glyph.rawLevel, 5) * Math.pow(glyph.strength, 2) * Teresa.runRewardMultiplier;
 }
 
 function sacrificeGlyph(glyph, force = false) {

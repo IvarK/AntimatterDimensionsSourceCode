@@ -53,7 +53,7 @@ Vue.component("reality-button", {
       this.canReality = true;
       this.machinesGained = gainedRealityMachines();
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
-      this.glyphLevel = gainedGlyphLevel();
+      this.glyphLevel = gainedGlyphLevel().finalLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = logEPforRM(this.machinesGained.plus(1));
       this.shardsGained = Effarig.shardsGained;

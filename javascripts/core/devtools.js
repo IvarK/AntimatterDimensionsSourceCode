@@ -147,11 +147,11 @@ dev.refundDilStudies = function() {
     }
 }
 
-dev.giveSpecialGlyph = function (color, symbol, level, rawLevel) {
+dev.giveSpecialGlyph = function (color, symbol, level, rawLevel=level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  let glyph = GlyphGenerator.randomGlyph(level, rawLevel, false);
+  let glyph = GlyphGenerator.randomGlyph({finalLevel: level, rawLevel: rawLevel}, false);
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
@@ -161,9 +161,9 @@ dev.giveMusicGlyph = function() {
   dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1)
 }
 
-dev.giveGlyph = function (level, rawLevel) {
+dev.giveGlyph = function (level, rawLevel=level) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, rawLevel, false));
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph({finalLevel: level, rawLevel: rawLevel}, false));
 }
 
 dev.decriminalize = function() {
@@ -535,14 +535,16 @@ dev.updateTestSave = function() {
     }
     player.options.testVersion = 31;
   }
-  if (player.options.testVersion === 31) {
-    for (let i of player.reality.glyphs.active) {
-      i.rawLevel = i.level;
+
+  for (let i of player.reality.glyphs.active) {
+    if (!('rawLevel' in i)) {
+      i.rawLevel = i.level < 1000 ? i.level : (Math.pow(0.004 * i.level - 3, 2) - 1) * 125 + 1000;
     }
-    for (let i of player.reality.glyphs.inventory) {
-      i.rawLevel = i.level;
+  }
+  for (let i of player.reality.glyphs.inventory) {
+    if (!('rawLevel' in i)) {
+      i.rawLevel = i.level < 1000 ? i.level : (Math.pow(0.004 * i.level - 3, 2) - 1) * 125 + 1000;
     }
-    player.options.testVersion = 32;
   }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")

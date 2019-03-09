@@ -9,8 +9,8 @@ const GlyphSelection = {
   get choiceCount() {
     return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
   },
-  generate(count, level, rawLevel) {
-    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, rawLevel, false));
+  generate(count, level) {
+    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
     ui.view.modal.glyphSelection = true;
     if (!Perk.glyphUncommonGuarantee.isBought) return;
     // If no choices are rare enough, pick one randomly and reroll its rarity until it is
@@ -23,9 +23,12 @@ const GlyphSelection = {
     this.glyphs.randomElement().strength = newStrength;
   },
   update(level) {
-    for (let g of this.glyphs.filter(g => g.level < level)) {
-        g.level = level;
-        calculateGlyph(g);
+    for (let g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
+      g.rawLevel = level.rawLevel;
+    }
+    for (let g of this.glyphs.filter(g => g.level < level.finalLevel)) {
+      g.level = level.finalLevel;
+      calculateGlyph(g);
     }
   },
   select(index) {
@@ -65,16 +68,15 @@ function requestManualReality() {
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   let choiceCount = GlyphSelection.choiceCount;
   let level = gainedGlyphLevel();
-  let rawLevel = gainedRawGlyphLevel();
   if (choiceCount === 1) {
     // First reality gets a specially generated glyph:
     const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(level, rawLevel)
-      : GlyphGenerator.randomGlyph(level, rawLevel, false);
+      ? GlyphGenerator.startingGlyph(level)
+      : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
     return manualReality();
   }
-  GlyphSelection.generate(choiceCount, level, rawLevel);
+  GlyphSelection.generate(choiceCount, level);
 }
 
 function manualReality() {
@@ -101,14 +103,13 @@ function manualReality() {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   let gainedLevel = gainedGlyphLevel();
-  let gainedRawLevel = gainedRawGlyphLevel();
   let newGlyph;
   if (EffarigUnlock.autopicker.isUnlocked) {
     let glyphs = Array.range(0, GlyphSelection.choiceCount)
-      .map(() => GlyphGenerator.randomGlyph(gainedLevel, gainedRawLevel));
+      .map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
-    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, gainedRawLevel, false);
+    newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
@@ -132,7 +133,7 @@ function completeReality(force, reset, auto = false) {
     }
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
+    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().finalLevel);
     if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
     if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
       let tempBool = true;
@@ -166,7 +167,7 @@ function completeReality(force, reset, auto = false) {
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel(), auto))
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().finalLevel, auto))
     }
   }
 

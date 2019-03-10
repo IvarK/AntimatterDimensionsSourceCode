@@ -304,10 +304,10 @@ function convertAchivementsToNumbers() {
     let newId = parseInt(oldId.slice(1));
     if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
     if (oldId.startsWith("r")) {
-      if (Achievement(newId) === "undefined") throw crash(`Unrecognized achievement ${oldId}`);
+      if (Achievement(newId) === undefined) throw crash(`Unrecognized achievement ${oldId}`);
       player.achievements.add(newId);
     } else if (oldId.startsWith("s")) {
-      if (SecretAchievement(newId) === "undefined") throw crash(`Unrecognized secret achievement ${newId}`);
+      if (SecretAchievement(newId) === undefined) throw crash(`Unrecognized secret achievement ${newId}`);
       player.secretAchievements.add(newId);
     }
   }

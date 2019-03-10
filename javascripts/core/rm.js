@@ -95,10 +95,10 @@ const GlyphGenerator = {
       idx: null,
       type: "power",
       strength: strength,
-      level: level.finalLevel,
+      level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: {
-        pow: getGlyphEffectStrength("powerpow", level.finalLevel, strength),
+        pow: getGlyphEffectStrength("powerpow", level.actualLevel, strength),
       },
     }
   },
@@ -106,7 +106,7 @@ const GlyphGenerator = {
   randomGlyph(level, fake) {
     let strength = this.randomStrength(fake);
     let type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level.finalLevel, fake);
+    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
     let effects = this.randomEffects(type, numEffects, fake);
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
@@ -116,10 +116,10 @@ const GlyphGenerator = {
       idx: null,
       type: type,
       strength: strength,
-      level: level.finalLevel,
+      level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
-        e => getGlyphEffectStrength(e, level.finalLevel, strength)),
+        e => getGlyphEffectStrength(e, level.actualLevel, strength)),
     }
   },
 
@@ -733,7 +733,7 @@ function getGlyphLevelInputs() {
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
     rawLevel: baseLevel + perkFactor,
-    finalLevel: scaledLevel + perkFactor,
+    actualLevel: scaledLevel + perkFactor,
   };
 }
 

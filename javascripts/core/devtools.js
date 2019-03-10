@@ -147,11 +147,11 @@ dev.refundDilStudies = function() {
     }
 }
 
-dev.giveSpecialGlyph = function (color, symbol, level, rawLevel=level) {
+dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  let glyph = GlyphGenerator.randomGlyph({finalLevel: level, rawLevel: rawLevel}, false);
+  let glyph = GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false);
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
@@ -161,9 +161,9 @@ dev.giveMusicGlyph = function() {
   dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1)
 }
 
-dev.giveGlyph = function (level, rawLevel=level) {
+dev.giveGlyph = function (level, rawLevel = level) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph({finalLevel: level, rawLevel: rawLevel}, false));
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false));
 }
 
 dev.decriminalize = function() {

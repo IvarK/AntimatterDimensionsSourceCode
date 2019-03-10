@@ -259,17 +259,17 @@ function gainedGlyphLevel(round) {
     let rawLevel = glyphState.rawLevel;
     if (round) rawLevel = Math.round(rawLevel)
     if (rawLevel == Infinity || isNaN(rawLevel)) rawLevel = 0;
-    let finalLevel = glyphState.finalLevel;
-    if (round) finalLevel = Math.round(finalLevel)
-    if (finalLevel == Infinity || isNaN(finalLevel)) finalLevel = 0
+    let actualLevel = glyphState.actualLevel;
+    if (round) actualLevel = Math.round(actualLevel)
+    if (actualLevel == Infinity || isNaN(actualLevel)) actualLevel = 0
     return {
       rawLevel: rawLevel,
-      finalLevel: finalLevel
+      actualLevel: actualLevel
     }
 }
 
 function percentToNextGlyphLevel() {
-    var ret = gainedGlyphLevel(false).finalLevel
+    var ret = gainedGlyphLevel(false).actualLevel
     var retOffset = 0;
     if (Math.round(ret) > ret) {
         retOffset = 0.5;

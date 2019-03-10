@@ -26,8 +26,8 @@ const GlyphSelection = {
     for (let g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
       g.rawLevel = level.rawLevel;
     }
-    for (let g of this.glyphs.filter(g => g.level < level.finalLevel)) {
-      g.level = level.finalLevel;
+    for (let g of this.glyphs.filter(g => g.level < level.actualLevel)) {
+      g.level = level.actualLevel;
       calculateGlyph(g);
     }
   },
@@ -133,7 +133,7 @@ function completeReality(force, reset, auto = false) {
     }
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().finalLevel);
+    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
     if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
       let tempBool = true;
@@ -167,7 +167,7 @@ function completeReality(force, reset, auto = false) {
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().finalLevel, auto))
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
     }
   }
 

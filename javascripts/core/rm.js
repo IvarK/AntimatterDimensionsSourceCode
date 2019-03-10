@@ -477,8 +477,13 @@ function recalculateAllGlyphs() {
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
 function calculateGlyph(glyph) {
-  if (glyph.color == undefined && glyph.symbol == undefined) {
+  if (glyph.color === undefined && glyph.symbol === undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
+    if (glyph.rawLevel === undefined) {
+      // Only correct below the second round of instability, but it only matters for glyphs produced before
+      // this was merged, so it's not a big deal.
+      glyph.rawLevel = glyph.level < 1000 ? glyph.level : (Math.pow(0.004 * glyph.level - 3, 2) - 1) * 125 + 1000;
+    }
     if (glyph.strength == 1)
       glyph.strength = gaussianBellCurve()
     for (let effect in glyph.effects) {

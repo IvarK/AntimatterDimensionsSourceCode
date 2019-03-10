@@ -536,17 +536,6 @@ dev.updateTestSave = function() {
     player.options.testVersion = 31;
   }
 
-  for (let i of player.reality.glyphs.active) {
-    if (!('rawLevel' in i)) {
-      i.rawLevel = i.level < 1000 ? i.level : (Math.pow(0.004 * i.level - 3, 2) - 1) * 125 + 1000;
-    }
-  }
-  for (let i of player.reality.glyphs.inventory) {
-    if (!('rawLevel' in i)) {
-      i.rawLevel = i.level < 1000 ? i.level : (Math.pow(0.004 * i.level - 3, 2) - 1) * 125 + 1000;
-    }
-  }
-
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
   if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6

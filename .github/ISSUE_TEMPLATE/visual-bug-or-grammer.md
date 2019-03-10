@@ -2,7 +2,7 @@
 name: Visual bug or grammer
 about: Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn
 title: ''
-labels: visual
+labels: visual bug
 assignees: ''
 
 ---

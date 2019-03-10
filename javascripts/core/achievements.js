@@ -185,7 +185,7 @@ function clearOldAchieves() {
 
 function giveAchievement(name) {
   let id = allAchievementNums[name];
-  if (id === "undefined") throw crash(`giveAchievement of unknown "${name}"`);
+  if (id === undefined) throw crash(`giveAchievement of unknown "${name}"`);
   let achNumber = parseInt(id.slice(1));
   if (isNaN(achNumber)) throw crash(`Couldn't get achievement number from id ${id}`);
   if (id.startsWith("s")) {

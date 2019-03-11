@@ -18,5 +18,5 @@ function crash(message) {
   });
   crashed = true;
   debugger;
-  return "Fatal Error: " + message;
+  return Error("Fatal Error: " + message);
 }

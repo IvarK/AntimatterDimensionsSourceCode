@@ -105,7 +105,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier.pow(glyphPowMultiplier.times(glyphEffarigPowMultiplier));
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));

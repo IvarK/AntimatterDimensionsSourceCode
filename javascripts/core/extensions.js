@@ -244,3 +244,7 @@ Array.prototype.compact = function() {
 };
 
 Decimal.MAX_NUMBER = new Decimal(Number.MAX_VALUE);
+
+String.isWhiteSpace = function(value) {
+  return value && !value.trim();
+};

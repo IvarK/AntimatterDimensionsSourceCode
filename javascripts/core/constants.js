@@ -321,7 +321,7 @@ function _makeAutomatorInstructionsById() {
   return ret;
 }
 
-const Automator = Object.freeze({
+const AutomatorInstructions = Object.freeze({
   Instructions: _AutomatorInstructions,
   InstructionsById: _makeAutomatorInstructionsById(),
 });

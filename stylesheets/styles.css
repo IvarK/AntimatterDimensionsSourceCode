@@ -901,7 +901,6 @@ p,
 ul,
 ol,
 table,
-pre,
 dl {
     margin: 0 0 3px;
 }
@@ -957,21 +956,6 @@ blockquote {
     margin: 0;
     padding: 0 0 0 20px;
     font-style: italic;
-}
-
-code,
-pre {
-    font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, Consolas, Liberation Mono, DejaVu Sans Mono, Courier New, monospace;
-    color: #333;
-    font-size: 12px;
-}
-
-pre {
-    padding: 8px 15px;
-    background: #f8f8f8;
-    border-radius: 5px;
-    border: 1px solid #e5e5e5;
-    overflow-x: auto;
 }
 
 table {
@@ -1279,10 +1263,6 @@ screen and (max-width: 720px) {
     header ul,
     header p.view {
         position: static;
-    }
-    pre,
-    code {
-        word-wrap: normal;
     }
 }
 

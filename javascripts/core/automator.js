@@ -388,13 +388,13 @@ function updateAutomatorState() {
 function buyAutomatorInstruction(id) {
   if (!canBuyAutomatorInstruction(id)) return false
   if (player.reality.automatorCommands.has(id)) return false
-  player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price)
+  player.reality.realityMachines = player.reality.realityMachines.minus(AutomatorInstructions.InstructionsById[id].price)
   player.reality.automatorCommands.add(id)
   return true
 }
 
 function canBuyAutomatorInstruction(id) {
-  var info = Automator.InstructionsById[id];
+  var info = AutomatorInstructions.InstructionsById[id];
   if (player.reality.realityMachines.lt(info.price)) return false;
   return info.parent === undefined || player.reality.automatorCommands.has(info.parent);
 }

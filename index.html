@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+    <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
@@ -378,6 +379,10 @@
 
 <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
 
+<script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@4"></script>
+<link rel="stylesheet" href="https://unpkg.com/tippy.js@4/themes/light-border.css"/>
+
 <script type="text/javascript" src="javascripts/lib/vue.js"></script>
 <script type="text/javascript" src="javascripts/lib/v-tooltip.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/mousetrap.min.js"></script>
@@ -391,10 +396,15 @@
 <script type="text/javascript" src="javascripts/lib/vuedraggable.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/Tween.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/gamma.js"></script>
+<script type="text/javascript" src="javascripts/lib/vue-split-pane.min.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
 <script type="text/javascript" src="javascripts/tln.js"></script>
 <script type="text/javascript" src="javascripts/longpress.js"></script>
+
+<script type="text/javascript" src="javascripts/core/automator/lexer.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/parser.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/automator.js"></script>
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/extensions.js"></script>
@@ -613,6 +623,14 @@
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-unlock-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-upgrade-row.js"></script>
+
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-docs.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-editor.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/dom-iterator.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/escape-html.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/selection-range.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/unescape.js"></script>
 
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-shortcuts.js"></script>

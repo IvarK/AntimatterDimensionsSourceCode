@@ -648,7 +648,7 @@ Autobuyer.eternity = {
    * @returns {boolean}
    */
   get hasAdditionalModes() {
-    return player.reality.upg.includes(13);
+    return RealityUpgrades.includes(13);
   },
   /**
    * @returns {boolean}
@@ -726,7 +726,7 @@ Autobuyer.reality = {
    * @returns {boolean}
    */
   get isUnlocked() {
-    return player.reality.upg.includes(25);
+    return RealityUpgrades.includes(25);
   },
   /**
    * @returns {boolean}

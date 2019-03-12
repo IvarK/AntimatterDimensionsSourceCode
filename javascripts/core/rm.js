@@ -129,7 +129,7 @@ const GlyphGenerator = {
   },
 
   get strengthMultiplier() {
-    return player.reality.upg.includes(16) ? 1.3 : 1;
+    return RealityUpgrades.includes(16) ? 1.3 : 1;
   },
 
   randomStrength(fake) {
@@ -149,7 +149,7 @@ const GlyphGenerator = {
   randomNumberOfEffects(strength, level, fake) {
     let rng = this.getRNG(fake);
     let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
-    if (player.reality.upg.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
+    if (RealityUpgrades.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
     return ret;
   },
 
@@ -552,13 +552,13 @@ const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 function canBuyRealityUpg(id) {
   if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
-  if (player.reality.upg.includes(id)) return false // Doesn't have it already
+  if (RealityUpgrades.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
   var row = Math.floor((id - 1) / 5)
   if (row < 2) return true
   else {
     for (var i = row * 5 - 4; i <= row * 5; i++) {
-      if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row
+      if (!RealityUpgrades.includes(i)) return false // This checks that you have all the upgrades from the previous row
     }
   }
   return true
@@ -574,7 +574,7 @@ function buyRealityUpg(id) {
   if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
   else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   if (id < 6) player.reality.rebuyables[id]++
-  else player.reality.upg.push(id)
+  else RealityUpgrades.add(id);
   if (id == 9 || id == 24) {
     player.reality.glyphs.slots++
   }
@@ -584,7 +584,7 @@ function buyRealityUpg(id) {
     $("#bhupg2").show()
   }
 
-  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   updateBlackHoleUpgrades()
   return true
@@ -604,7 +604,7 @@ function updateRealityUpgrades() {
   });
 
   for (let i = 1; i <= 25; ++i) {
-    if (player.reality.upg.includes(i)) $("#rupg" + i).addClass("rUpgBought")
+    if (RealityUpgrades.includes(i)) $("#rupg" + i).addClass("rUpgBought")
     else $("#rupg" + i).removeClass("rUpgBought")
   }
 
@@ -632,8 +632,8 @@ function respecGlyphs() {
   player.reality.respec = false;
 }
 
-function canSacrifice() {
-  return player.reality.upg.includes(19);
+function canSacrifice(glyph) {
+  return RealityUpgrades.includes(19);
 }
 
 function glyphSacrificeGain(glyph) {
@@ -669,7 +669,7 @@ function getGlyphLevelInputs() {
   let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
   let dtBase = player.dilation.dilatedTime.exponent ?
     Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
-  let eterBase = player.reality.upg.includes(18) ?
+  let eterBase = RealityUpgrades.includes(18) ?
     Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1) : 1;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
@@ -762,4 +762,11 @@ const GlyphEffect = {
   epMult: new GlyphEffectState("timeeternity", {
     adjustApply: value => Decimal.max(1, value)
   })
+};
+
+const RealityUpgrades = {
+  includes: index => (player.reality.upgradeBits & (1 << index)) !== 0,
+  add: index => player.reality.upgradeBits = player.reality.upgradeBits | (1 << index),
+  remove: index => player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << index),
+  hasAll: () => (player.reality.upgradeBits >> 6) + 1 === 1 << (REALITY_UPGRADE_COSTS.length - 6),
 };

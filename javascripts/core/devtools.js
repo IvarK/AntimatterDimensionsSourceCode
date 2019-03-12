@@ -252,9 +252,9 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
         for (var i=1; i<6; i++) {
-            if (player.reality.upg.includes(i)) {
-                player.reality.rebuyables[i] = 1
-                player.reality.upg.splice(player.reality.upg.indexOf(i), 1)
+            if (RealityUpgrades.includes(i)) {
+              player.reality.rebuyables[i] = 1
+              RealityUpgrades.remove(i);
             }
         }
         player.options.testVersion = 5
@@ -323,16 +323,17 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 13) {
-      for (let i = 0; i < player.reality.automatorCommands.length; i++) {
-          let temp = player.reality.automatorCommands[i];
-          if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
-          player.reality.automatorCommands[i] = temp;
-      }
-      if (!player.reality.automatorCommands.includes(24)) player.reality.automatorCommands.push(24);
-      if (!player.reality.automatorCommands.includes(25)) player.reality.automatorCommands.push(25);
-      if (!player.reality.automatorCommands.includes(12)) player.reality.automatorCommands.push(12);
-      player.reality.realityMachines = new Decimal(player.reality.realityMachines);
-      player.options.testVersion = 14;
+    let newCommands = new Set();
+    for (let temp of player.reality.automatorCommands) {
+      if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
+      newCommands.add(temp);
+    }
+    player.reality.automatorCommands = newCommands;
+    if (!player.reality.automatorCommands.has(24)) player.reality.automatorCommands.add(24);
+    if (!player.reality.automatorCommands.has(25)) player.reality.automatorCommands.add(25);
+    if (!player.reality.automatorCommands.has(12)) player.reality.automatorCommands.add(12);
+    player.reality.realityMachines = new Decimal(player.reality.realityMachines);
+    player.options.testVersion = 14;
   }
 
   if (player.options.testVersion == 14) {
@@ -375,7 +376,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion == 17) {
-    if (player.reality.upg.includes(20)) {
+    if (RealityUpgrades.includes(20)) {
       player.wormhole[1].unlocked = true
       $("#bhupg2").show()
     }
@@ -542,17 +543,22 @@ dev.updateTestSave = function() {
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
     player.celestials.teresa.rmStore = Teresa.rmStoreMax;
+  }
+  if (player.reality.upg) {
+    for (let upg of player.reality.upg) RealityUpgrades.add(upg);
+    delete player.reality.upg;
   }
 }
 
 // Still WIP
 dev.showProductionBreakdown = function() {
   let NDComponent = new Decimal(1);
+  GameCache.normalDimensionCommonMultiplier.invalidate();
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }

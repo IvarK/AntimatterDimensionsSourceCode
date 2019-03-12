@@ -229,7 +229,7 @@ function gainedEternityPoints() {
       GlyphEffect.epMult
     );
 
-  if (player.reality.upg.includes(12)) {
+  if (RealityUpgrades.includes(12)) {
       ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
   }
   if (Teresa.isRunning) {
@@ -481,8 +481,8 @@ function gainedInfinities() {
     ).toDecimal();
     infGain = infGain.timesEffectsOf(TimeStudy(32));
     if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
-    infGain = infGain.times(Math.max(1, getAdjustedGlyphEffect("infinityinfmult")));
-    if (player.reality.upg.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));
+    infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
+    if (RealityUpgrades.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));
     return infGain;
 }
 
@@ -681,7 +681,7 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
-    if (player.reality.upg.length === REALITY_UPGRADE_COSTS.length - 6) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
+    if (RealityUpgrades.hasAll()) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
     else $("#celestialsbtn").hide()
 
     if (player.realities > 3) {
@@ -737,9 +737,9 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     return 1/1000;
   }
   if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
-    factor *= Math.max(1, getAdjustedGlyphEffect("timespeed"));
+    factor *= getAdjustedGlyphEffect("timespeed");
   }
-  
+
   if (player.blackHole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.BLACKHOLE)) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
@@ -768,7 +768,10 @@ let autobuyerOnGameLoop = true;
 function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
-    var thisUpdate = new Date().getTime();
+    GameCache.normalDimensionCommonMultiplier.invalidate();
+    GameCache.infinityDimensionCommonMultiplier.invalidate();
+    GameCache.timeDimensionCommonMultiplier.invalidate();
+    const thisUpdate = Date.now();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
@@ -860,7 +863,7 @@ function gameLoop(diff, options = {}) {
 
   let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
-        if (player.reality.upg.includes(11)) {
+        if (RealityUpgrades.includes(11)) {
           let gained = gainedInfinities().times(0.1).floor().times(diff / 1000);
           infGen = infGen.plus(gained);
 
@@ -881,8 +884,8 @@ function gameLoop(diff, options = {}) {
 
     player.infinitied = player.infinitied.plus(infGen);
     Enslaved.trackInfinityGeneration(infGen);
-
-    if (player.reality.upg.includes(14)) {
+    
+    if (RealityUpgrades.includes(14)) {
         let eternitiesGain = diff * player.realities * Math.pow(3, player.reality.rebuyables[3]) / 1000
         player.reality.partEternitied += eternitiesGain;
         player.eternities += Math.floor(player.reality.partEternitied)
@@ -890,7 +893,7 @@ function gameLoop(diff, options = {}) {
     }
 
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
-      let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
+      let isPostEc = RealityUpgrades.includes(10) ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
       }
@@ -1234,13 +1237,13 @@ function autoBuyInfDims() {
 }
 
 function autoBuyTimeDims() {
-    if (player.reality.upg.includes(13)) {
-      for (var i = 1; i < 9; i++) {
-        if (player.reality.tdbuyers[i - 1]) {
-          buyMaxTimeDims(i)
-        }
+  if (RealityUpgrades.includes(13)) {
+    for (var i = 1; i < 9; i++) {
+      if (player.reality.tdbuyers[i - 1]) {
+        buyMaxTimeDimTier(i)
       }
     }
+  }
 }
 
 function autoBuyExtraTimeDims() {

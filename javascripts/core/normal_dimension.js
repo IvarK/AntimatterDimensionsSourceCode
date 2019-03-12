@@ -1,3 +1,50 @@
+// Multiplier applied to all normal dimensions, regardless of tier. This is cached using a Lazy
+// and invalidated every update.
+function normalDimensionCommonMultiplier() {
+  let multiplier = new Decimal(1);
+  if (Achievement(11).isEnabled) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
+
+  multiplier = multiplier.times(kongDimMult);
+  multiplier = multiplier.times(kongAllDimMult);
+
+  if (!EternityChallenge(9).isRunning) {
+    const glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
+  }
+  multiplier = multiplier.timesEffectsOf(
+    BreakInfinityUpgrade.totalAMMult,
+    BreakInfinityUpgrade.currentAMMult,
+    BreakInfinityUpgrade.achievementMult,
+    BreakInfinityUpgrade.slowestChallengeMult,
+    InfinityUpgrade.totalTimeMult,
+    InfinityUpgrade.thisInfinityTimeMult,
+    Achievement(48),
+    Achievement(56),
+    Achievement(65),
+    Achievement(72),
+    Achievement(73),
+    Achievement(74),
+    Achievement(76),
+    Achievement(78),
+    Achievement(84),
+    Achievement(91),
+    Achievement(92),
+    TimeStudy(91),
+    TimeStudy(101),
+    TimeStudy(161),
+    TimeStudy(193),
+    InfinityChallenge(3),
+    InfinityChallenge(3).reward,
+    InfinityChallenge(8),
+    EternityChallenge(10)
+  );
+
+  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
+  multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
+
+  return multiplier;
+}
+
 function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const dimension = NormalDimension(tier);
@@ -10,18 +57,11 @@ function getDimensionFinalMultiplier(tier) {
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  if (Achievement(11).isEnabled) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
-  multiplier = multiplier.times(kongDimMult);
-  multiplier = multiplier.times(kongAllDimMult);
-  let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-  let glyphMultMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powermult"));
-  let glyphPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powerpow"));
-  let glyphEffarigPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("effarigdimensions"));
-  let glyphDilationPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("dilationpow"));
+  multiplier = multiplier.times(GameCache.normalDimensionCommonMultiplier.value);
 
-  if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
-  }
+  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
+  const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
+  const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     dimension.infinityUpgrade,
@@ -30,62 +70,33 @@ function getDimensionFinalMultiplier(tier) {
   infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
   multiplier = multiplier.times(infinitiedMult);
 
+  if (tier === 1) {
+    multiplier = multiplier
+      .timesEffectsOf(
+        InfinityUpgrade.unspentIPMult,
+        InfinityUpgrade.unspentIPMult.chargedEffect,
+        Achievement(28),
+        Achievement(31),
+        Achievement(68),
+        Achievement(71),
+        TimeStudy(234),
+      );
+  }
+
   multiplier = multiplier.timesEffectsOf(
-    BreakInfinityUpgrade.totalAMMult,
-    BreakInfinityUpgrade.currentAMMult,
-    BreakInfinityUpgrade.achievementMult,
-    BreakInfinityUpgrade.slowestChallengeMult,
-
-    InfinityUpgrade.unspentIPMult,
-    InfinityUpgrade.unspentIPMult.chargedEffect,
-    InfinityUpgrade.totalTimeMult,
-    InfinityUpgrade.thisInfinityTimeMult,
-
     tier === 8 ? Achievement(23) : null,
-    tier === 1 ? Achievement(28) : null,
-    tier === 1 ? Achievement(31) : null,
     tier !== 8 ? Achievement(34) : null,
     tier <= 4 ? Achievement(43) : null,
-    Achievement(48),
-    Achievement(56),
-    Achievement(65),
-    tier === 1 ? Achievement(68) : null,
-    tier === 1 ? Achievement(71) : null,
-    Achievement(72),
-    Achievement(73),
-    Achievement(74),
-    Achievement(76),
-    Achievement(78),
-    Achievement(84),
-    Achievement(91),
-    Achievement(92),
-
     tier !== 8 ? TimeStudy(71) : null,
-    TimeStudy(91),
-    TimeStudy(101),
-    TimeStudy(161),
-    TimeStudy(193),
     tier === 8 ? TimeStudy(214) : null,
-    tier === 1 ? TimeStudy(234) : null
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
   );
   if (Achievement(77).isEnabled) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
+
   multiplier = multiplier.clampMin(1);
-
-  multiplier = multiplier.timesEffectsOf(
-    InfinityChallenge(3),
-    InfinityChallenge(3).reward,
-    InfinityChallenge(8),
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
-  );
-
-  multiplier = multiplier.times(glyphMultMultiplier)
-
-  multiplier = multiplier.timesEffectsOf(EternityChallenge(10));
-
-  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
@@ -94,7 +105,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier.pow(glyphPowMultiplier.times(glyphEffarigPowMultiplier));
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
@@ -177,7 +188,7 @@ function getBuyTenMultiplier() {
   );
   dimMult += Effects.sum(EternityChallenge(3).reward);
 
-  dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
+  dimMult *= getAdjustedGlyphEffect("powerbuy10");
 
   dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"))
 

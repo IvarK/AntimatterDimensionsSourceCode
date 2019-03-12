@@ -58,7 +58,7 @@ class Galaxy {
   }
 
   static get type() {
-    if (player.galaxies >= 800 && !player.reality.upg.includes(21)) {
+    if (player.galaxies >= 800 && !RealityUpgrades.includes(21)) {
       return GalaxyType.REMOTE;
     }
     if (EternityChallenge(5).isRunning || player.galaxies >= this.costScalingStart) {

@@ -122,36 +122,36 @@ function mainIteration() {
         if (change(current) || cont) automatorIdx+=1
         break;
       case "respec":
-        if (!player.reality.automatorCommands.includes(61)) return false
+        if (!player.reality.automatorCommands.has(61)) return false
         player.respec = true
         automatorIdx+=1
         break;
       case "eternity":
-        if (!player.reality.automatorCommands.includes(62)) return false
+        if (!player.reality.automatorCommands.has(62)) return false
         if (eternity(false, true) || cont) automatorIdx+=1
         break;
       case "stop":
-        if (!player.reality.automatorCommands.includes(72)) return false
+        if (!player.reality.automatorCommands.has(72)) return false
         automatorOn = false
         $("#automatorOn")[0].checked = false
         break;
       case "load":
-        if (!player.reality.automatorCommands.includes(51)) return false
+        if (!player.reality.automatorCommands.has(51)) return false
         automatorIdx = 0
         loadScript(current.id)
         break;
       case "toggle":
-        if (!player.reality.automatorCommands.includes(53)) return false
+        if (!player.reality.automatorCommands.has(53)) return false
         toggle(current)
         automatorIdx+=1
         break;
       case "goto":
-        if (!player.reality.automatorCommands.includes(31)) return false
+        if (!player.reality.automatorCommands.has(31)) return false
         automatorIdx = parseInt(current.target)-1
         break;
 
       case "if":
-        if (!player.reality.automatorCommands.includes(21)) return false;
+        if (!player.reality.automatorCommands.has(21)) return false;
           if (wait(current)) automatorIdx += 1
           else automatorIdx += 2
     }
@@ -178,22 +178,22 @@ function buy(current) {
       } else return false
           break;
       case "studypath":
-          if (!player.reality.automatorCommands.includes(26)) return false;
+          if (!player.reality.automatorCommands.has(26)) return false;
           studyPath(current.id, current.args);
           return true;
           break;
       case "studyimport":
-          if (!player.reality.automatorCommands.includes(36)) return false;
+          if (!player.reality.automatorCommands.has(36)) return false;
           importStudyTree(current.id);
           return true;
           break;
     case "ttmax":
-      if (!player.reality.automatorCommands.includes(44)) return false
+      if (!player.reality.automatorCommands.has(44)) return false
       maxTheorems()
       return true
       break;
     case "ttip":
-      if (!player.reality.automatorCommands.includes(35)) return false
+      if (!player.reality.automatorCommands.has(35)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -206,7 +206,7 @@ function buy(current) {
       else return false
       break;
     case "ttep":
-      if (!player.reality.automatorCommands.includes(34)) return false
+      if (!player.reality.automatorCommands.has(34)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -219,7 +219,7 @@ function buy(current) {
       else return false
       break;
     case "ttam":
-      if (!player.reality.automatorCommands.includes(43)) return false
+      if (!player.reality.automatorCommands.has(43)) return false
       if (!buying) {
         buying = true
         tryingToBuy = 0
@@ -238,10 +238,10 @@ function buy(current) {
 }
 
 function unlock(current) {
-  if (!player.reality.automatorCommands.includes(54)) return false
+  if (!player.reality.automatorCommands.has(54)) return false
   switch(current.target) {
     case "ec":
-      if (!player.reality.automatorCommands.includes(64)) return false
+      if (!player.reality.automatorCommands.has(64)) return false
       if (player.eternityChallUnlocked == parseInt(current.id)) return true
       justImported = true;
       if (TimeStudy.eternityChallenge(current.id).purchase()) {
@@ -251,7 +251,7 @@ function unlock(current) {
       else return false
       break;
     case "dilation":
-      if (!player.reality.automatorCommands.includes(63)) return false
+      if (!player.reality.automatorCommands.has(63)) return false
       if (buyDilationStudy(1, 5000, true)) return true
       else return false
       break;
@@ -259,34 +259,34 @@ function unlock(current) {
 }
 
 function wait(current) {
-  if (!player.reality.automatorCommands.includes(11)) return false
+  if (!player.reality.automatorCommands.has(11)) return false
   let id;
   if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id)
   switch(current.target) {
     case "ep":
-      if (!player.reality.automatorCommands.includes(23)) return false
+      if (!player.reality.automatorCommands.has(23)) return false
       if (id.gt(player.eternityPoints)) return false
       else return true
       break;
     case "ip":
-      if (!player.reality.automatorCommands.includes(32)) return false
+      if (!player.reality.automatorCommands.has(32)) return false
       if (id.gt(player.infinityPoints)) return false
       else return true
       break;
     case "antimatter":
-      if (!player.reality.automatorCommands.includes(22)) return false
+      if (!player.reality.automatorCommands.has(22)) return false
       if (id.gt(player.money)) return false
       else return true
       break;
     case "replicanti":
-      if (!player.reality.automatorCommands.includes(33)) return false
+      if (!player.reality.automatorCommands.has(33)) return false
       if (id.gt(player.replicanti.amount)) return false
       else return true
       break;
     case "rg":
-      if (!player.reality.automatorCommands.includes(42)) return false
+      if (!player.reality.automatorCommands.has(42)) return false
       if (current.id == "max") {
-        if (!player.reality.automatorCommands.includes(51)) return false
+        if (!player.reality.automatorCommands.has(51)) return false
         if ((!TimeStudy(131).isBought ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
         else return false
       }
@@ -294,7 +294,7 @@ function wait(current) {
       else return true
       break;
     case "time":
-      if (!player.reality.automatorCommands.includes(41)) return false
+      if (!player.reality.automatorCommands.has(41)) return false
       if (timeStamp == 0) {
         timeStamp = new Date().getTime()
         return false
@@ -314,15 +314,15 @@ function wait(current) {
 }
 
 function start(current) {
-  if (!player.reality.automatorCommands.includes(73)) return false
+  if (!player.reality.automatorCommands.has(73)) return false
   switch(current.target) {
     case "ec":
-      if (!player.reality.automatorCommands.includes(84)) return false;
+      if (!player.reality.automatorCommands.has(84)) return false;
       const ec = EternityChallenge(current.id);
       if (ec.isRunning) return true;
       return ec.start();
     case "dilation":
-      if (!player.reality.automatorCommands.includes(83)) return false
+      if (!player.reality.automatorCommands.has(83)) return false
       if (startDilatedEternity()) return true
       else return false
       break;
@@ -330,7 +330,7 @@ function start(current) {
 }
 
 function change(current) {
-  if (!player.reality.automatorCommands.includes(71)) return false
+  if (!player.reality.automatorCommands.has(71)) return false
   switch(current.target) {
     case "ipautobuyer":
       Autobuyer.infinity.limit = new Decimal(current.id);
@@ -385,16 +385,16 @@ function loadScript(num) {
 
 function buyAutomatorInstruction(id) {
   if (!canBuyAutomatorInstruction(id)) return false
-  if (player.reality.automatorCommands.includes(id)) return false
+  if (player.reality.automatorCommands.has(id)) return false
   player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price)
-  player.reality.automatorCommands.push(id)
+  player.reality.automatorCommands.add(id)
   return true
 }
 
 function canBuyAutomatorInstruction(id) {
   var info = Automator.InstructionsById[id];
   if (player.reality.realityMachines.lt(info.price)) return false;
-  return info.parent === undefined || player.reality.automatorCommands.includes(info.parent);
+  return info.parent === undefined || player.reality.automatorCommands.has(info.parent);
 }
 
 function updateAutomatorRows() {

@@ -696,8 +696,8 @@ setInterval(function() {
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
-    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2750) unlockRealityUpgrade(21)
-    if (player.timeShards.gte('1e25000')) unlockRealityUpgrade(22)
+    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) unlockRealityUpgrade(21)
+    if (player.timeShards.gte('1e28000')) unlockRealityUpgrade(22)
     ttMaxTimer++;
     if (Perk.autobuyerTT4.isBought) maxTheorems()
     else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {

@@ -206,11 +206,11 @@ const FreeTickspeed = {
     // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
     // reports continue to be accurate.
     const fixedIncrease = 1 / TS171_MULTIPLIER;
-    const softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
+    const softcapFactor = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
     const tmpC = logShards - priceToCap;
-    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapAddition;
+    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapFactor
     const scaling = new LinearMultiplierScaling(tickmult, kGrowth);
     const purchases = Math.floor(scaling.purchasesForLogTotalMultiplier(tmpC));
     const next = scaling.logTotalMultiplierAfterPurchases(purchases + 1);

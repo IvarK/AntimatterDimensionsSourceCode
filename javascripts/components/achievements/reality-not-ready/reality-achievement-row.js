@@ -28,8 +28,7 @@ Vue.component('reality-achievement-row', {
       this.updateState();
     },
     updateState() {
-      const unlockState = Array.from({length: 8}, (v, i) => `r${this.row + 13}${i + 1}`)
-        .map(achId => isAchEnabled(achId));
+      const unlockState = Array.range(1, 8).map(i => Achievement((this.row + 13) * 10 + i).isEnabled);
       if (!unlockState.includes(false)) {
         this.isCompleted = true;
         return;

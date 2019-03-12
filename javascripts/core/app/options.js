@@ -25,7 +25,7 @@ class GameOptions {
   }
 
   static export() {
-    const save = btoa(JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; }));
+    const save = btoa(JSON.stringify(player, translatorForJSON));
 
     if (player.options.pastebinkey) {
       $.ajax({

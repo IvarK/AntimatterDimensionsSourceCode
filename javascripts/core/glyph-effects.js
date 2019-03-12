@@ -4,6 +4,7 @@
 // The last glyph type you can only get if you got effarig reality
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"]
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", effarig: "Ϙ" }
+const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡", effarig: "🦒" }
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),

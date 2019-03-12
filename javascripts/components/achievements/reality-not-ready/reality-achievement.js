@@ -84,7 +84,7 @@ Vue.component('normal-achievement', {
         this.isEnabled = true;
         return;
       }
-      const remainingTime = timeUntilAch(`r${this.achId}`);
+      const remainingTime = timeUntilAch(this.achId);
       this.isEnabled = isNaN(remainingTime) || remainingTime <= 0;
       if (this.isEnabled) {
         return;

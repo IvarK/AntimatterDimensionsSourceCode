@@ -3,7 +3,11 @@ Vue.component("cost-display", {
     config: Object,
     br: Boolean,
     singular: String,
-    plural: String
+    plural: String,
+    title: {
+      type: String,
+      default: "Cost:",
+    }
   },
   data() {
     return {
@@ -42,5 +46,5 @@ Vue.component("cost-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template: `<span v-if="isVisible"><br v-if="br">Cost: {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
+  template: `<span v-if="isVisible"><br v-if="br">{{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
 });

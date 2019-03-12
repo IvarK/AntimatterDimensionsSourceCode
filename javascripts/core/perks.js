@@ -38,6 +38,7 @@ class PerkState extends PurchasableMechanicState {
     if (player.reality.perks.length === Perk.all.length) {
       giveAchievement("Perks of living");
     }
+    drawPerkNetwork()
   }
 }
 

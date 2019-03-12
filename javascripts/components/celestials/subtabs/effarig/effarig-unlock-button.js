@@ -27,10 +27,14 @@ Vue.component("effarig-unlock-button", {
       @click="purchase"
     >
       <description-display :config="config"/>
-      <cost-display br
+      <cost-display
         v-if="!isBought"
         :config="config"
         singular="Relic Shard"
+        title=""
       />
+      <div v-else>
+        (Unlocked)
+      </div>
     </button>`
 });

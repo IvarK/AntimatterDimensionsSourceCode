@@ -50,9 +50,9 @@ const GlyphTooltipComponent = {
       type: Number,
       default: 0,
     },
-    effectiveLevel: {
+    levelCap: {
       type: Number,
-      default: 0,
+      default: Number.MAX_VALUE,
     }
   },
   computed: {
@@ -80,15 +80,15 @@ const GlyphTooltipComponent = {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
     },
     isLevelCapped() {
-      return this.level == this.effectiveLevel
+      return this.levelCap < this.level;
     },
     levelText() {
       return this.isLevelCapped
-        ? `Level: ${this.level}`
-        : `Level: ▼${this.effectiveLevel}▼`;
+        ? `Level: ▼${this.levelCap}▼`
+        : `Level: ${this.level}`;
     },
     levelStyle() {
-      return { color: this.isLevelCapped ? "#FFFFFF" : "#FF1111" }
+      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" }
     },
     sacrificeText() {
       return this.onTouchDevice
@@ -194,7 +194,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
-      effectiveLevel: 0,
+      levelCap: Number.MAX_VALUE,
     }
   },
   computed: {
@@ -276,7 +276,7 @@ Vue.component("glyph-component", {
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = glyphSacrificeGain(this.glyph);
-      this.effectiveLevel = (Effarig.isRunning && this.glyph.level > Effarig.glyphLevelCap) ? Effarig.glyphLevelCap : this.glyph.level;
+      this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
@@ -380,7 +380,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
-                       :effectiveLevel="effectiveLevel"
+                       :levelCap="levelCap"
                        :visible="isCurrentTooltip"/>
       </div>
       <div ref="over"

@@ -53,7 +53,7 @@ function eternity(force, auto, switchingDilation) {
       TimeStudy(191)
     );
     if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
-    if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && RealityUpgrades.includes(10))) && player.reality.upgReqChecks[0]) {
+    if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && RealityUpgrade(10).isBought)) && player.reality.upgReqChecks[0]) {
       unlockRealityUpgrade(6);
     }
     if (player.dilation.active && !force) {
@@ -170,7 +170,7 @@ function eternity(force, auto, switchingDilation) {
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
     if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
 
-    if (RealityUpgrades.includes(13)) {
+    if (RealityUpgrade(13).isBought) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
             if (player.reality.tdbuyers[i - 1]) {
@@ -313,7 +313,7 @@ const EternityUpgrade = function() {
       },
       autobuyer: {
         get isUnlocked() {
-          return RealityUpgrades.includes(13);
+          return RealityUpgrade(13).isBought;
         },
         get isOn() {
           return player.reality.epmultbuyer;

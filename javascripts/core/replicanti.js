@@ -63,8 +63,10 @@ function getReplicantiInterval(noMod, interval) {
     interval /= getAdjustedGlyphEffect("replicationspeed");
     if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
-    if (RealityUpgrades.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
-    if (RealityUpgrades.includes(23)) interval /= Math.clamp(9e5 / player.bestReality, 1, 900)
+    interval /= Effects.product(
+      RealityUpgrade(6),
+      RealityUpgrade(23)
+    );
     if (V.isRunning) {
       interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
     }

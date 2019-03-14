@@ -40,7 +40,7 @@ function bigCrunchReset() {
       unlockRealityUpgrade(7);
     }
 
-    if (player.realities > 0 && (player.eternities === 0 || (RealityUpgrades.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
+    if (player.realities > 0 && (player.eternities === 0 || (RealityUpgrade(10).isBought && player.eternities === 100)) && player.infinitied.eq(0)) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
 

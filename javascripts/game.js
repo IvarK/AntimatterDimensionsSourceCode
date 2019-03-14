@@ -226,12 +226,10 @@ function gainedEternityPoints() {
       TimeStudy(122),
       TimeStudy(121),
       TimeStudy(123),
+      RealityUpgrade(12),
       GlyphEffect.epMult
     );
 
-  if (RealityUpgrades.includes(12)) {
-    ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
-  }
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
@@ -479,10 +477,13 @@ function gainedInfinities() {
       1,
       Achievement(87)
     ).toDecimal();
-    infGain = infGain.timesEffectsOf(TimeStudy(32));
+
+    infGain = infGain.timesEffectsOf(
+      TimeStudy(32),
+      RealityUpgrade(7)
+    );
     if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
-    if (RealityUpgrades.includes(7)) infGain = infGain.times(1 + (player.galaxies / 30));
     return infGain;
 }
 
@@ -681,7 +682,7 @@ setInterval(function() {
     if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
-    if (RealityUpgrades.hasAll()) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
+    if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
     else $("#celestialsbtn").hide()
 
     if (player.realities > 3) {
@@ -868,11 +869,11 @@ function gameLoop(diff, options = {}) {
 
   let infGen = new Decimal(0);
     if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
-        if (RealityUpgrades.includes(11)) {
-          let gained = gainedInfinities().times(0.1).floor().times(diff / 1000);
-          infGen = infGen.plus(gained);
-
-        } else player.partInfinitied += diff / player.bestInfinityTime;
+      if (RealityUpgrade(11).isBought) {
+        infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
+      } else {
+        player.partInfinitied += diff / player.bestInfinityTime;
+      }
     }
     if (player.partInfinitied >= 50) {
         infGen = infGen.plus(Math.floor(player.partInfinitied / 5));
@@ -890,7 +891,7 @@ function gameLoop(diff, options = {}) {
     player.infinitied = player.infinitied.plus(infGen);
     Enslaved.trackInfinityGeneration(infGen);
     
-    if (RealityUpgrades.includes(14)) {
+    if (RealityUpgrade(14).isBought) {
         let eternitiesGain = diff * player.realities * Math.pow(3, player.reality.rebuyables[3]) / 1000
         player.reality.partEternitied += eternitiesGain;
         player.eternities += Math.floor(player.reality.partEternitied)
@@ -898,7 +899,7 @@ function gameLoop(diff, options = {}) {
     }
 
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
-      let isPostEc = RealityUpgrades.includes(10) ? player.eternities > 100 : player.eternities > 0
+      let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
       }
@@ -1244,7 +1245,7 @@ function autoBuyInfDims() {
 }
 
 function autoBuyTimeDims() {
-  if (RealityUpgrades.includes(13)) {
+  if (RealityUpgrade(13).isBought) {
     for (var i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i)

@@ -1331,7 +1331,13 @@ function replicantiGalaxy() {
     }
 }
 
-
+function getReplicantiScaling() {
+  if (player.dilation.upgrades.includes(12)) {
+    return 1 + 1 / (5 + Math.pow(player.dilation.dilatedTime.plus(1e15).log10() - 15, 2) / 5);
+  } else {
+    return 1.2;
+  }
+}
 
 function updateMilestones() {
     var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100]
@@ -4262,8 +4268,8 @@ function unlockDilation() {
 
  const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                               5e6,        1e9,         5e7,
-                              2e12,        1e10,         1e11,
-                                            1e15]
+                              2e12,       1e10,        1e11,
+                              1e15,       1e18,        1e20]
 
 
 function buyDilationUpgrade(id, costInc) {
@@ -4293,7 +4299,7 @@ function buyDilationUpgrade(id, costInc) {
 }
 
 function updateDilationUpgradeButtons() {
-    for (var i = 1; i <= 10; i++) {
+    for (var i = 1; i <= 12; i++) {
         if (i <= 3) {
             document.getElementById("dil"+i).className = ( new Decimal(DIL_UPG_COSTS[i][0]).times(Decimal.pow(DIL_UPG_COSTS[i][1],(player.dilation.rebuyables[i]))).gt(player.dilation.dilatedTime) ) ? "dilationupgrebuyablelocked" : "dilationupgrebuyable";
         } else if (player.dilation.upgrades.includes(i)) {
@@ -4304,6 +4310,7 @@ function updateDilationUpgradeButtons() {
     }
     document.getElementById("dil7desc").textContent = "Currently: "+shortenMoney(player.dilation.dilatedTime.pow(1000).max(1))+"x"
     document.getElementById("dil10desc").textContent = "Currently: "+shortenMoney(Math.floor(player.dilation.tachyonParticles.div(20000).max(1)))+"/s"
+    document.getElementById("dil11desc").textContent = "Currently: "+shortenMoney(Math.pow(2, Math.sqrt(player.eternityPoints.max(1).log10() / 308)))+"x"
 }
 
 function updateDilationUpgradeCosts() {
@@ -4317,6 +4324,8 @@ function updateDilationUpgradeCosts() {
     document.getElementById("dil8cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[8]) + " dilated time"
     document.getElementById("dil9cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[9]) + " dilated time"
     document.getElementById("dil10cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[10]) + " dilated time"
+    document.getElementById("dil11cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[11]) + " dilated time"
+    document.getElementById("dil12cost").textContent = "Cost: " + shortenCosts(DIL_UPG_COSTS[12]) + " dilated time"
 }
 
 
@@ -4871,14 +4880,14 @@ function gameLoop(diff) {
     if (player.timestudy.studies.includes(133) || player.replicanti.amount.gt(Number.MAX_VALUE)) interval *= 10
     if (player.timestudy.studies.includes(213)) interval /= 20
     if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
-    if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(1.2, (player.replicanti.amount.log10() - 308)/308), interval)
+    if (player.replicanti.amount.gt(Number.MAX_VALUE)) interval = Math.max(interval * Math.pow(getReplicantiScaling(), (player.replicanti.amount.log10() - 308)/308), interval)
     var est = Math.log(player.replicanti.chance+1) * 1000 / interval
 
     var current = player.replicanti.amount.ln()
 
     if (player.replicanti.unl && (diff > 5 || interval < 50 || player.timestudy.studies.includes(192))) {
         var gained = Decimal.pow(Math.E, current +(diff*est/10))
-        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff*est/10) * (Math.log10(1.2)/308)+1) / (Math.log10(1.2)/308))
+        if (player.timestudy.studies.includes(192)) gained = Decimal.pow(Math.E, current +Math.log((diff*est/10) * (Math.log10(getReplicantiScaling())/308)+1) / (Math.log10(getReplicantiScaling())/308))
         player.replicanti.amount = Decimal.min(Number.MAX_VALUE, gained)
         if (player.timestudy.studies.includes(192)) player.replicanti.amount = gained
         replicantiTicks = 0

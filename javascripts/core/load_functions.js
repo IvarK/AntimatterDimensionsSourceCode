@@ -346,6 +346,10 @@ if (player.version < 5) {
       document.getElementById("tdtabbtn").style.display = "none";
   }
 
+  if (!player.dilation.studies.includes(6)) {
+      document.getElementById("xdtabbtn").style.display = "none";
+  }
+
   if (player.eternityUpgrades === undefined) player.eternityUpgrades = []
 
   if (player.infDimBuyers === undefined) player.infDimBuyers = [false, false, false, false, false, false, false, false]

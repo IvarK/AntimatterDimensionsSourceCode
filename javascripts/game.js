@@ -4789,6 +4789,10 @@ function gameLoop(diff) {
 
     if (player.eternities > 0) document.getElementById("tdtabbtn").style.display = "inline-block"
 
+    if (player.dilation.studies.includes(6)) {
+      document.getElementById("xdtabbtn").style.display = "inline-block"
+    }
+
     for (let tier=1;tier<9;tier++) {
         if (tier != 8 && (player.infDimensionsUnlocked[tier-1] || ECTimesCompleted("eterc7") > 0)) player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(DimensionProduction(tier+1).times(diff/100))
         if (player.infDimensionsUnlocked[tier-1]) {

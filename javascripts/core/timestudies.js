@@ -261,7 +261,7 @@ function updateTimeStudyButtons() {
       }
   }
 
-  for (i=1; i<6; i++) {
+  for (i=1; i<=6; i++) {
     if (player.dilation.studies.includes(i)) document.getElementById("dilstudy"+i).className = "dilationupgbought"
     else if (canBuyDilationStudy(i)) document.getElementById("dilstudy"+i).className = "dilationupg"
     else document.getElementById("dilstudy"+i).className = "timestudylocked"

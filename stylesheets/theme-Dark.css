@@ -251,13 +251,23 @@ input {
 }
 
 #timeShardAmount {
-    color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
+    color: #673AB7 !important;
+    text-shadow: 0px 0px 7px #673AB7;
 }
 
 #tickThreshold {
-    color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
+    color: #673AB7 !important;
+    text-shadow: 0px 0px 7px #673AB7;
+}
+
+#exponentialPowerAmount {
+  color: #64DD17 !important;
+  text-shadow: 0px 0px 7px #64DD17;
+}
+
+#exponentialPowerExponentAmount {
+  color: #64DD17 !important;
+  text-shadow: 0px 0px 7px #64DD17;
 }
 
 #replicantiamount {

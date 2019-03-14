@@ -165,6 +165,14 @@ input {
     color: #673AB7 !important;
 }
 
+#exponentialPowerAmount {
+  color: #64DD17 !important;
+}
+
+#exponentialPowerExponentAmount {
+  color: #64DD17 !important;
+}
+
 #replicantiamount {
     color: #03A9F4 !important;
 }

@@ -208,9 +208,7 @@ function gainedInfinityPoints() {
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
     ip = ip.times(totalIPMult());
-    if (Teresa.isRunning) {
-        ip = ip.pow(0.6);
-    } else if (V.isRunning) {
+    if (Teresa.isRunning || V.isRunning) {
       ip = ip.pow(0.5);
     }
     return ip.floor();
@@ -230,11 +228,9 @@ function gainedEternityPoints() {
     );
 
   if (RealityUpgrades.includes(12)) {
-      ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
+    ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
   }
-  if (Teresa.isRunning) {
-    ep = ep.pow(0.6);
-  } else if (V.isRunning) {
+  if (Teresa.isRunning || V.isRunning) {
     ep = ep.pow(0.5)
   }
   if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
@@ -855,7 +851,7 @@ function gameLoop(diff, options = {}) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (player.celestials.teresa.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
+        if (Teresa.isRunning || V.isRunning) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.5))
         else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
         player.partInfinityPoint -= genCount;
       }

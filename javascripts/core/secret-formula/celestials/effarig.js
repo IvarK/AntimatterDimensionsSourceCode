@@ -3,22 +3,22 @@ GameDatabase.celestials.effarig = {
     adjuster: {
       id: 0,
       description: "Glyph level adjustment",
-      cost: 1e7
+      cost: 1e8
     },
     autosacrifice: {
       id: 1,
       description: "Automatic glyph sacrifice",
-      cost: 2e8
+      cost: 2e9
     },
     autopicker: {
       id: 2,
       description: "Automatic glyph picker",
-      cost: 3e9
+      cost: 3e10
     },
     run: {
       id: 3,
       description: "Effarig's reality",
-      cost: 1e12
+      cost: 1e13
     },
     infinity: {
       id: 4,

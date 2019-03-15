@@ -14,22 +14,22 @@ var teresaQuotes = [
 const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
-    price: 5e12,
+    price: 1e18,
     description: "unlock Teresa's reality.",
   },
   EPGEN: {
     id: 1,
-    price: 1e18,
+    price: 1e24,
     description: "unlock Teresa's EP generation.",
   },
   EFFARIG: {
     id: 2,
-    price: 5e21,
+    price: 1e27,
     description: "unlock Effarig, Celestial of Ancient Relics.",
   },
   SHOP: {
     id: 3,
-    price: 1e24,
+    price: 1e30,
     description: "unlock Perk Point Shop.",
   },
 }
@@ -38,7 +38,7 @@ var Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
   lastUnlock: "SHOP",
-  rmStoreMax: 1e24,
+  rmStoreMax: 1e30,
   pourRM(diff) {
     if (this.rmstore >= Teresa.rmStoreMax) return
     this.timePoured += diff
@@ -87,7 +87,7 @@ var Teresa = {
     player.celestials.teresa.rmStore = amount
   },
   get fill() {
-    return Math.min(Math.log10(this.rmStore) / 24, 1)
+    return Math.min(Math.log10(this.rmStore) / 30, 1)
   },
   get rmMultiplier() {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)

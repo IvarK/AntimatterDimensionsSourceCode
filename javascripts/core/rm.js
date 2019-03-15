@@ -378,7 +378,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "infinitypow":
       return 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
     case "infinityrate":
-      return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
+      return Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1
     case "infinityipgain":
       return Math.pow(level * strength, 5) * 100
     case "infinityinfmult":

@@ -1,9 +1,9 @@
 GameDatabase.reality.glyphSacrifice = [
   {
     id: "power",
-    effect: () => Math.floor(4 * Math.log10(player.reality.glyphs.sac.power + 1)),
+    effect: () => Math.floor(2 * Math.log10(player.reality.glyphs.sac.power + 1)),
     description: amount => {
-      let nextDistantGalaxy = Math.pow(10, (amount + 1) / 4) - 1;
+      let nextDistantGalaxy = Math.pow(10, (amount + 1) / 2) - 1;
       return `Distant galaxies start ${amount} later (next at ${shorten(nextDistantGalaxy, 2, 2)})`;
     }
   }, {

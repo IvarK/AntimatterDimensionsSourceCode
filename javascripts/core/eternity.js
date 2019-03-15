@@ -24,7 +24,7 @@ function eternity(force, auto) {
     }
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
-    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
+    if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
     if (EternityChallenge.isRunning()) {
       const challenge = EternityChallenge.current();
       challenge.addCompletion();

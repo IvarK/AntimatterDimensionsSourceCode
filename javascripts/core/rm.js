@@ -368,7 +368,7 @@ const GlyphSacrifice = (function() {
 function getGlyphEffectStrength(effectKey, level, strength) {
   switch (effectKey) {
     case "powerpow":
-      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
+      return 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
     case "powermult":
       return Decimal.pow(level * strength * 10, level * strength * 9.5)
     case "powerdimboost":
@@ -376,7 +376,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerbuy10":
       return 1 + Math.pow(level * strength, 0.8) / 10
     case "infinitypow":
-      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
+      return 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
     case "infinityrate":
       return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
     case "infinityipgain":

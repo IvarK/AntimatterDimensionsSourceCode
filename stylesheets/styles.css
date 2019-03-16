@@ -5330,6 +5330,26 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
+.o-laitela-shop-button {
+  width: 30rem;
+  padding: 1rem;
+  background: antiquewhite;
+  border: .1rem solid gray;
+  border-radius: .5rem;
+  margin-left: 1rem;
+  margin-top: 2rem;
+  font-family: Typewriter;
+}
+
+.o-laitela-shop-button-available {
+  background: aquamarine !important;
+  cursor: pointer;
+}
+
+.o-laitela-shop-button-bought {
+  background: #16c55e !important;
+}
+
 /* #endregion laitela tab*/
 
 

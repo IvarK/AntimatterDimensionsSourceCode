@@ -1,6 +1,15 @@
 
 const LAITELA_UNLOCKS = {
-
+  PELLE: {
+    id: 0,
+    price: 308,
+    description: "Unlock Pelle, the Celestial of Antimatter",
+  },
+  TD: {
+    id: 1,
+    price: 1e10,
+    description: "Reduce Time Dimension cost multipliers by 20%"
+  }
 }
 
 const laitelaRunUnlockThresholds = ["1e4000", "1e4500", "1e5000"].map( u => new Decimal(u))
@@ -18,6 +27,16 @@ const Laitela = {
 
   has(info) {
     return player.celestials.laitela.unlocks.includes(info.id)
+  },
+  canBuyUnlock(info) {
+    if (player.celestials.laitela.matter < info.price) return false
+    if (this.has(info)) return false
+    return true
+  },
+  buyUnlock(info) {
+    if (!this.canBuyUnlock) return false
+    player.celestials.laitela.matter -= info.price
+    player.celestials.laitela.unlocks.push(info.id)
   },
   startRun() {
     if (MatterDimension(1).amount == 0) MatterDimension(1).amount++;

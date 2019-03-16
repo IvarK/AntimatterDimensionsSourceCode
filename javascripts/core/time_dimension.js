@@ -2,23 +2,29 @@ var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
 var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
 var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]
 
+function timeDimensionCostMult(tier) {
+  var base = timeDimCostMults[tier]
+  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8
+  return base
+}
+
 function timeDimensionCost(tier, bought) {
   if (tier > 4) {
-    let cost = Decimal.pow(timeDimCostMults[tier] * 100, bought).times(timeDimStartCosts[tier])
+    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier])
     if (cost.gte("1e6000")) {
-      cost = Decimal.pow(timeDimCostMults[tier] * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
     }
     return cost;
   }
-  let cost = Decimal.pow(timeDimCostMults[tier], bought).times(timeDimStartCosts[tier])
+  let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
   if (cost.gte(Number.MAX_VALUE)) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 1.5, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e1300")) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 2.2, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e6000")) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
   }
   return cost;
 }

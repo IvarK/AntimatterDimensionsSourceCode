@@ -78,7 +78,7 @@ Vue.component('celestials-tab', {
       this.vUnlocked = Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)
       this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
       this.laitelaUnlocked = Ra.has(RA_UNLOCKS.UNNAMED_UNLOCK)
-      this.pelleUnlocked = false
+      this.pelleUnlocked = Laitela.has(LAITELA_UNLOCKS.PELLE)
     }
   },
   template:

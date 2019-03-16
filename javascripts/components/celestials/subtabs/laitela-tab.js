@@ -14,6 +14,15 @@ Vue.component('laitela-tab', {
     },
     startRun() {
       Laitela.startRun()
+    },
+    buyUnlock(info) {
+      Laitela.buyUnlock(info)
+    },
+    hasUnlock(info) {
+      return Laitela.has(info)
+    },
+    canBuyUnlock(info) {
+      return Laitela.canBuyUnlock(info)
     }
   },
   computed: {
@@ -22,6 +31,9 @@ Vue.component('laitela-tab', {
     },
     runUnlockThresholds() {
       return laitelaRunUnlockThresholds
+    },
+    unlocksInfo() {
+      return LAITELA_UNLOCKS
     }
   },
   template:
@@ -37,6 +49,14 @@ Vue.component('laitela-tab', {
         />
       </div>
       <div>{{ nextUnlock }}</div>
+      <div class="l-laitela-unlocks-container">
+        <button 
+          v-for="unlock in unlocksInfo" 
+          :key="unlock.id" 
+          class="o-laitela-shop-button"
+          :class="{ 'o-laitela-shop-button-bought': hasUnlock(unlock), 'o-laitela-shop-button-available': canBuyUnlock(unlock) }"
+          @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ shorten(unlock.price) }}</button>
+      </div>
     </div>`
 });
 

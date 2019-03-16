@@ -5330,6 +5330,11 @@ screen and (max-width: 480px) {
   cursor: pointer;
 }
 
+.l-laitela-unlocks-container {
+  width: 70rem;
+  margin: auto;
+}
+
 .o-laitela-shop-button {
   width: 30rem;
   padding: 1rem;

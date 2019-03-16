@@ -9,6 +9,18 @@ const LAITELA_UNLOCKS = {
     id: 1,
     price: 1e10,
     description: "Reduce Time Dimension cost multipliers by 20%"
+  },
+  TD2: {
+    id: 2,
+    price: 1e15,
+    description: "Reduce Time Dimension cost scaling past 1e6000 EP"
+  },
+  ID: {
+    id: 3,
+    price: 1e25,
+    description: "Increase Infinity Dimensions conversion amount",
+    value: () => Laitela.idConversionEffect,
+    format: x => "+" + x.toFixed(2)
   }
 }
 
@@ -57,5 +69,8 @@ const Laitela = {
   },
   get matterEffectPercentage() {
     return ((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2) + "%"
+  },
+  get idConversionEffect() {
+    return Math.sqrt(Math.log10(Math.max(player.celestials.laitela.matter, 1)))
   }
 }

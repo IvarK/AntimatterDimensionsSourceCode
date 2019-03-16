@@ -8,7 +8,8 @@ function normalDimensionCommonMultiplier() {
   multiplier = multiplier.times(kongAllDimMult);
 
   if (!EternityChallenge(9).isRunning) {
-    const glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    var glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect
     multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
   }
   multiplier = multiplier.timesEffectsOf(

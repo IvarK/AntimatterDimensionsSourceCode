@@ -93,7 +93,7 @@ var Teresa = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 2e8, 10), 1).toNumber()
+    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 2e8, 20), 1).toNumber()
   },
   get quote() {
     return teresaQuotes[player.celestials.teresa.quoteIdx]

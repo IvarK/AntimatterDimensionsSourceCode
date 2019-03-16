@@ -264,6 +264,11 @@ function getCostIncreaseThreshold() {
   return new Decimal(Number.MAX_VALUE);
 }
 
+function getDimensionMultDecrease() {
+  const base = Player.dimensionMultDecrease - 1
+  return 1 + base * Laitela.matterEffectToDimensionMultDecrease
+}
+
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
   const cost = dimension.cost;
@@ -306,7 +311,7 @@ function buyOneDimension(tier) {
     if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
-    if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease());
     floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
   }
 
@@ -361,7 +366,7 @@ function buyManyDimension(tier) {
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
-  if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+  if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease());
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
   floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
@@ -384,7 +389,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const costMultiplier = player.costMultipliers[tier - 1];
   const buyTenMultiplier = getBuyTenMultiplier();
   const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
-  const dimensionMultDecrease = Player.dimensionMultDecrease;
+  const dimensionMultDecrease = getDimensionMultDecrease();
   const costUntil10 = dimension.cost.times(remainingUntil10);
 
   if (tier >= 3 && Challenge(6).isRunning) {

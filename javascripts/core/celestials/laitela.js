@@ -25,5 +25,18 @@ const Laitela = {
   },
   get isRunning() {
     return player.celestials.laitela.run;
+  },
+  get nextMatterDimensionThreshold() {
+    for (let i = 1; i <= 3; i++) {
+      let d = MatterDimension(i + 1)
+      if (d.amount == 0 ) return `Next dimension at ${shorten(laitelaRunUnlockThresholds[i - 1])} EP`
+    }
+    return ""
+  },
+  get matterEffectToDimensionMultDecrease() {
+    return Math.pow(0.99, Math.log10(Math.max(player.celestials.laitela.matter, 1)))
+  },
+  get matterEffectPercentage() {
+    return ((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2) + "%"
   }
 }

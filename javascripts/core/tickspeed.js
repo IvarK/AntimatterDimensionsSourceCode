@@ -179,3 +179,54 @@ const Tickspeed = {
     return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
   }
 };
+
+const FreeTickspeed = {
+  SOFTCAP: 300000,
+  LESS_SOFTCAP: 500000,
+  GROWTH_RATE: 2e-5,
+  get amount() {
+    return player.totalTickGained;
+  },
+  fromShards(shards) {
+    if (!shards.gt(0)) return {
+      newAmount: 0,
+      nextShards: new Decimal(1),
+    };
+    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
+    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * multFromGlyph;
+    const logTickmult = Math.log(tickmult);
+    const logShards = shards.ln();
+    const uncapped = logShards / logTickmult;
+    if (uncapped <= FreeTickspeed.SOFTCAP) {
+      return {
+        newAmount: Math.ceil(uncapped),
+        nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
+      };
+    }
+    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
+    // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
+    // reports continue to be accurate.
+    const fixedIncrease = 1 / TS171_MULTIPLIER;
+    const softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
+    const logSoftmult = Math.log(tickmult + softcapAddition);
+    const softcapped = FreeTickspeed.SOFTCAP + (uncapped - FreeTickspeed.SOFTCAP) * logTickmult / logSoftmult;
+    if (softcapped <= FreeTickspeed.LESS_SOFTCAP) {
+      return {
+        newAmount: Math.ceil(softcapped),
+        nextShards: Decimal.pow(tickmult, FreeTickspeed.SOFTCAP).times(
+          Decimal.pow(softcapAddition + tickmult, Math.ceil(softcapped) - FreeTickspeed.SOFTCAP))
+      };
+    }
+    // Log of (cost - cost up to LESS_SOFTCAP)
+    const priceToCap = FreeTickspeed.SOFTCAP * logTickmult + (FreeTickspeed.LESS_SOFTCAP - FreeTickspeed.SOFTCAP) * logSoftmult
+    const tmpC = logShards - priceToCap;
+    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapAddition;
+    const scaling = new LinearMultiplierScaling(tickmult + softcapAddition, kGrowth);
+    const purchases = Math.floor(scaling.purchasesForLogTotalMultiplier(tmpC));
+    const next = scaling.logTotalMultiplierAfterPurchases(purchases + 1);
+    return {
+      newAmount: purchases + FreeTickspeed.LESS_SOFTCAP,
+      nextShards: Decimal.exp(priceToCap + next),
+    }
+  }
+}

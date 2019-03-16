@@ -126,22 +126,28 @@ const GlyphGenerator = {
     return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
   },
 
+  get strengthMultiplier() {
+    return RealityUpgrades.includes(16) ? 1.3 : 1;
+  },
+
   randomStrength(fake) {
     let result;
-    let minimumValue = player.reality.perks.includes(23) ? 1.125 : 1;
+    // Divide the extra minimum rarity by the strength multiplier
+    // since we'll multiply by the strength multiplier later.
+    let minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
+    result *= GlyphGenerator.strengthMultiplier;
     // Each rarity% is 0.025 strength.
     result += Effects.sum(GlyphSacrifice.effarig) / 40;
-    if (player.reality.upg.includes(16)) result *= 1.3;
     return result;
   },
 
   randomNumberOfEffects(strength, level, fake) {
     let rng = this.getRNG(fake);
     let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
-    if (player.reality.upg.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
+    if (RealityUpgrades.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
     return ret;
   },
 
@@ -255,6 +261,7 @@ const Glyphs = {
       throw crash("Inconsistent inventory indexing");
     }
     if (this.active[targetSlot] !== null) return;
+    if (glyph.type === 'effarig' && this.active.some(x => x && x.type === 'effarig')) return;
     this.removeFromInventory(glyph);
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
@@ -361,7 +368,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerpow":
       return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "powermult":
-      return Decimal.pow(level * strength * 10, level * strength * 10)
+      return Decimal.pow(level * strength * 10, level * strength * 9.5)
     case "powerdimboost":
       return Math.pow(level * strength, 0.5)
     case "powerbuy10":
@@ -403,19 +410,19 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
     case "effarigblackhole":
-      return 1.02 + Math.pow(level, 0.3) * Math.pow(strength, 0.5) / 75
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
     case "effarigrm":
-      return Math.pow(level, 0.3) * Math.pow(strength, 0.5)
+      return Math.pow(level, 0.6) * strength;
     case "effarigglyph":
-      return Math.floor(level * strength / 10);
+      return Math.floor(10 * Math.pow(level * strength, 0.5));
     case "effarigachievement":
-      return 1.1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
+      return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
     case "effarigforgotten":
-      return 1 + Math.sqrt(level * strength) / 1000
+      return 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4);
     case "effarigdimensions":
-      return level * strength
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500
     case "effarigantimatter":
-      return 1 + Math.sqrt(level * strength) / 10000
+      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000
     default:
       return 0;
   }
@@ -455,27 +462,33 @@ function getTotalEffect(effectKey) {
 
 function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-    fixGlyph(player.reality.glyphs.active[i]);
+    calculateGlyph(player.reality.glyphs.active[i]);
   }
   // Delete any glyphs that are in overflow spots:
   player.reality.glyphs.inventory = player.reality.glyphs.inventory.filter(
     glyph => glyph.idx < player.reality.glyphs.inventorySize);
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
-    fixGlyph(player.reality.glyphs.inventory[i]);
+    calculateGlyph(player.reality.glyphs.inventory[i]);
   }
   Glyphs.refresh();
 }
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
-function fixGlyph(glyph) {
+function calculateGlyph(glyph) {
   if (glyph.color == undefined && glyph.symbol == undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
     if (glyph.strength == 1)
       glyph.strength = gaussianBellCurve()
-    for (let effect in glyph.effects)
+    for (let effect in glyph.effects) {
       if (glyph.effects.hasOwnProperty(effect)) {
-        glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+        if (Effarig.isRunning) {
+          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, Math.min(glyph.level, Effarig.glyphLevelCap), glyph.strength);
+        }
+        else {
+          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
+        }
       }
+    }
   }
 }
 
@@ -530,26 +543,31 @@ const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 
 const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
 
 function canBuyRealityUpg(id) {
-  if (id < 6 && player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))) return false // Has enough RM accounting for rebuyables
+  if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
-  if (player.reality.upg.includes(id)) return false // Doesn't have it already
+  if (RealityUpgrades.includes(id)) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
   var row = Math.floor((id - 1) / 5)
   if (row < 2) return true
   else {
     for (var i = row * 5 - 4; i <= row * 5; i++) {
-      if (!player.reality.upg.includes(i)) return false // This checks that you have all the upgrades from the previous row
+      if (!RealityUpgrades.includes(i)) return false // This checks that you have all the upgrades from the previous row
     }
   }
   return true
 }
 
+function getRealityRebuyableCost(id) {
+  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e35, REALITY_UPGRADE_COSTS[id],
+    REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
+}
+
 function buyRealityUpg(id) {
   if (!canBuyRealityUpg(id)) return false
-  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id] * Math.pow(REALITY_UPGRADE_COST_MULTS[id], player.reality.rebuyables[id]))
+  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
   else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
   if (id < 6) player.reality.rebuyables[id]++
-  else player.reality.upg.push(id)
+  else RealityUpgrades.add(id);
   if (id == 9 || id == 24) {
     player.reality.glyphs.slots++
   }
@@ -559,7 +577,7 @@ function buyRealityUpg(id) {
     $("#bhupg2").show()
   }
 
-  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   updateRealityUpgrades()
   updateBlackHoleUpgrades()
   return true
@@ -579,7 +597,7 @@ function updateRealityUpgrades() {
   });
 
   for (let i = 1; i <= 25; ++i) {
-    if (player.reality.upg.includes(i)) $("#rupg" + i).addClass("rUpgBought")
+    if (RealityUpgrades.includes(i)) $("#rupg" + i).addClass("rUpgBought")
     else $("#rupg" + i).removeClass("rUpgBought")
   }
 
@@ -587,7 +605,7 @@ function updateRealityUpgrades() {
   let row1Costs = [null];
   for (var i = 1; i <= 5; i++) {
     row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-    row1Costs.push(shortenDimensions(REALITY_UPGRADE_COSTS[i] * Math.pow(REALITY_UPGRADE_COST_MULTS[i], player.reality.rebuyables[i])));
+    row1Costs.push(shortenDimensions(getRealityRebuyableCost(i)));
   }
 
   $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")
@@ -608,8 +626,8 @@ function respecGlyphs() {
 
 function canSacrifice(glyph) {
   return (glyph.type === "power" || glyph.type === "time")
-    ? player.reality.upg.includes(19)
-    : player.reality.upg.includes(21);
+    ? RealityUpgrades.includes(19)
+    : RealityUpgrades.includes(21);
 }
 
 function glyphSacrificeGain(glyph) {
@@ -651,7 +669,7 @@ function getGlyphLevelInputs() {
   let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
   let dtBase = player.dilation.dilatedTime.exponent ?
     Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
-  let eterBase = player.reality.upg.includes(18) ?
+  let eterBase = RealityUpgrades.includes(18) ?
     Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1) : 1;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
@@ -685,17 +703,23 @@ function getGlyphLevelInputs() {
   var replEffect = adjustFactor(replBase, weights.repl / 100);
   var dtEffect = adjustFactor(dtBase, weights.dt / 100);
   var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
+  var baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
+  var scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const glyphScaleBegin = 1000 + getAdjustedGlyphEffect("effarigglyph");
-  const glyphScaleRate = 500;
-  var glyphBaseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
-  var glyphScalePenalty = 1;
-  var glyphScaledLevel = glyphBaseLevel;
-  if (glyphBaseLevel > glyphScaleBegin) {
-    var excess = (glyphBaseLevel - glyphScaleBegin) / glyphScaleRate;
-    glyphScaledLevel = glyphScaleBegin + 0.5 * glyphScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-    glyphScalePenalty = glyphBaseLevel / glyphScaledLevel;
+  const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
+  const instabilityScaleBegin = 1000 + scaleDelay;
+  const instabilityScaleRate = 500;
+  if (scaledLevel > instabilityScaleBegin) {
+    const excess = (scaledLevel - instabilityScaleBegin) / instabilityScaleRate;
+    scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
+  const hyperInstabilityScaleBegin = 4000 + scaleDelay;
+  const hyperInstabilityScaleRate = 1000;
+  if (scaledLevel > hyperInstabilityScaleBegin) {
+    const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
+    scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
+  }
+  let scalePenalty = baseLevel / scaledLevel;
   let perkFactor = Effects.sum(
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2
@@ -706,9 +730,9 @@ function getGlyphLevelInputs() {
     dtEffect: dtEffect,
     eterEffect: eterEffect,
     perkShop: player.celestials.teresa.glyphLevelMult,
-    scalePenalty: glyphScalePenalty,
+    scalePenalty: scalePenalty,
     perkFactor: perkFactor,
-    finalLevel: glyphScaledLevel + perkFactor,
+    finalLevel: scaledLevel + perkFactor,
   };
 }
 
@@ -737,4 +761,11 @@ const GlyphEffect = {
   epMult: new GlyphEffectState("timeeternity", {
     adjustApply: value => Decimal.max(1, value)
   })
+};
+
+const RealityUpgrades = {
+  includes: index => (player.reality.upgradeBits & (1 << index)) !== 0,
+  add: index => player.reality.upgradeBits = player.reality.upgradeBits | (1 << index),
+  remove: index => player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << index),
+  hasAll: () => (player.reality.upgradeBits >> 6) + 1 === 1 << (REALITY_UPGRADE_COSTS.length - 6),
 };

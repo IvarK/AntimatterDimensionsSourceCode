@@ -24,7 +24,7 @@ function eternity(force, auto) {
     }
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
-    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
+    if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
     if (EternityChallenge.isRunning()) {
       const challenge = EternityChallenge.current();
       challenge.addCompletion();
@@ -45,7 +45,7 @@ function eternity(force, auto) {
       TimeStudy(191)
     );
     if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
-    if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && player.reality.upg.includes(10))) && player.reality.upgReqChecks[0]) {
+    if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && RealityUpgrades.includes(10))) && player.reality.upgReqChecks[0]) {
       unlockRealityUpgrade(6);
     }
     if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
@@ -133,9 +133,9 @@ function eternity(force, auto) {
       Autobuyer.tryUnlockAny();
     }
     
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE) && player.infinityPoints.gt(Number.MAX_VALUE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.ETERNITY_COMPLETE);
-      player.celestials.effarig.glyphEquipped = false;
+    if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Number.MAX_VALUE)) {
+      EffarigUnlock.eternity.unlock();
+      Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply with full effect; eternity count generates infinities and The Enslaved Ones have been unlocked.`);
     }
     
     resetInfinityPointsOnEternity();
@@ -162,11 +162,11 @@ function eternity(force, auto) {
     if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
     if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
 
-    if (player.reality.upg.includes(13)) {
+    if (RealityUpgrades.includes(13)) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
             if (player.reality.tdbuyers[i - 1]) {
-                buyMaxTimeDims(i);
+                buyMaxTimeDimTier(i);
             }
         }
     }
@@ -179,14 +179,14 @@ function eternity(force, auto) {
       player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
     }
 
-    if (!player.achievements.includes("r143") && player.lastTenEternities[9][1] !== 1) {
+    if (!Achievement(143).isUnlocked && player.lastTenEternities[9][1] !== 1) {
         var n = 0;
         for (i = 0; i < 9; i++) {
             if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
         }
         if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
     }
-  
+
     resetMoney();
 
     return true;
@@ -305,7 +305,7 @@ const EternityUpgrade = function() {
       },
       autobuyer: {
         get isUnlocked() {
-          return player.reality.upg.includes(13);
+          return RealityUpgrades.includes(13);
         },
         get isOn() {
           return player.reality.epmultbuyer;

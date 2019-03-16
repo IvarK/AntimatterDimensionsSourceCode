@@ -79,7 +79,7 @@ dev.cancerize = function() {
 };
 
 dev.fixSave = function() {
-    var save = JSON.stringify(player, function(k, v) { return (v === Infinity) ? "Infinity" : v; })
+  var save = JSON.stringify(player, translatorForJSON);
   
     var fixed = save.replace(/NaN/gi, "10")
     var stillToDo = JSON.parse(fixed)
@@ -166,15 +166,15 @@ dev.giveGlyph = function (level) {
   Glyphs.addToInventory(GlyphGenerator.randomGlyph(level, false));
 }
 
-dev.decriminalize = function() {
-    player.achievements.splice(player.achievements.indexOf("s23"), 1);
-    GameCache.achievementCount.invalidate();
-    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+dev.decriminalize = function () {
+  player.secretAchiements.delete(23);
+  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
-dev.removeAch = function(name) {
-    player.achievements.splice(player.achievements.indexOf(name), 1);
-    GameCache.achievementCount.invalidate();
+dev.removeAch = function (name) {
+  if (typeof (name) === "number") return player.achievements.delete(name);
+  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1)));
+  else if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1)));
 }
 
 dev.realize = function() {
@@ -252,9 +252,9 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
         for (var i=1; i<6; i++) {
-            if (player.reality.upg.includes(i)) {
-                player.reality.rebuyables[i] = 1
-                player.reality.upg.splice(player.reality.upg.indexOf(i), 1)
+            if (RealityUpgrades.includes(i)) {
+              player.reality.rebuyables[i] = 1
+              RealityUpgrades.remove(i);
             }
         }
         player.options.testVersion = 5
@@ -323,16 +323,17 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 13) {
-      for (let i = 0; i < player.reality.automatorCommands.length; i++) {
-          let temp = player.reality.automatorCommands[i];
-          if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
-          player.reality.automatorCommands[i] = temp;
-      }
-      if (!player.reality.automatorCommands.includes(24)) player.reality.automatorCommands.push(24);
-      if (!player.reality.automatorCommands.includes(25)) player.reality.automatorCommands.push(25);
-      if (!player.reality.automatorCommands.includes(12)) player.reality.automatorCommands.push(12);
-      player.reality.realityMachines = new Decimal(player.reality.realityMachines);
-      player.options.testVersion = 14;
+    let newCommands = new Set();
+    for (let temp of player.reality.automatorCommands) {
+      if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
+      newCommands.add(temp);
+    }
+    player.reality.automatorCommands = newCommands;
+    if (!player.reality.automatorCommands.has(24)) player.reality.automatorCommands.add(24);
+    if (!player.reality.automatorCommands.has(25)) player.reality.automatorCommands.add(25);
+    if (!player.reality.automatorCommands.has(12)) player.reality.automatorCommands.add(12);
+    player.reality.realityMachines = new Decimal(player.reality.realityMachines);
+    player.options.testVersion = 14;
   }
 
   if (player.options.testVersion == 14) {
@@ -375,7 +376,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion == 17) {
-    if (player.reality.upg.includes(20)) {
+    if (RealityUpgrades.includes(20)) {
       player.wormhole[1].unlocked = true
       $("#bhupg2").show()
     }
@@ -500,12 +501,16 @@ dev.updateTestSave = function() {
         effectScores: t.effects.mapToObject(e => e.id, () => 0),
       })),
     });
+    movePropIfPossible("teresa", "effarig", "autoGlyphPick", {
+      mode: AutoGlyphPickMode.RANDOM,
+    });
     movePropIfPossible("teresa", "effarig", "relicShards", 0, Math.max);
     movePropIfPossible("effarig", "teresa", "quoteIdx", 0);
     movePropIfPossible("effarig", "teresa", "bestRunAM", 0, Decimal.max);
     movePropIfPossible("effarig", "teresa", "rmStore", 0, Math.max);
     movePropIfPossible("effarig", "teresa", "glyphLevelMult", 1, Math.max);
     movePropIfPossible("effarig", "teresa", "rmMult", 1, Math.max);
+    movePropIfPossible("effarig", "teresa", "dtBulk", 1, Math.max);
     // These are unused now
     delete player.celestials.effarig.typePriorityOrder;
     delete player.celestials.teresa.typePriorityOrder;
@@ -519,16 +524,42 @@ dev.updateTestSave = function() {
     delete player.wormholePause
     player.options.testVersion = 30;
   }
+  if (player.options.testVersion === 30) {
+    for (let i = 0; i < player.blackHole.length; i++) {
+      player.blackHole[i].id = i;
+      player.blackHole[i].intervalUpgrades = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8));
+      player.blackHole[i].powerUpgrades = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35));
+      player.blackHole[i].durationUpgrades = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3));
+      delete player.blackHole[i].speed;
+      delete player.blackHole[i].power;
+      delete player.blackHole[i].duration;
+    }
+    player.options.testVersion = 31;
+  }
+  if (player.options.testVersion === 31) {
+    convertAchivementsToNumbers();
+    player.options.testVersion = 32;
+  }
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (player.reality.upg.length == REALITY_UPGRADE_COSTS.length - 6) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-
+  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
+    player.reality.realityMachines =
+      player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
+    player.celestials.teresa.rmStore = Teresa.rmStoreMax;
+  }
+  if (player.reality.upg) {
+    for (let upg of player.reality.upg) RealityUpgrades.add(upg);
+    delete player.reality.upg;
+  }
+  if (!RealityUpgrades.includes(25)) player.realityBuyer.isOn = false;
 }
 
 // Still WIP
 dev.showProductionBreakdown = function() {
   let NDComponent = new Decimal(1);
+  GameCache.normalDimensionCommonMultiplier.invalidate();
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }
@@ -559,7 +590,7 @@ dev.showProductionBreakdown = function() {
   let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    buyTenComponent = buyTenComponent.times(new Decimal(getDimensionPowerMultiplier(i)).pow(NormalDimension(i).bought / 10));
+    buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);
@@ -593,7 +624,7 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     boughtTDComponent = boughtTDComponent.times(player["timeDimension" + i].power);
   }
-  let tickspeedToTDComponent = isAchEnabled("r105") ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
+  let tickspeedToTDComponent = Achievement(105).isEnabled ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);
   if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))
   if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")))
@@ -634,10 +665,30 @@ dev.showProductionBreakdown = function() {
 }
 
 let tempSpeedupToggle = false;
-dev.goFast = function() {   // Speeds up game 500x, intentionally doesn't persist between refreshes
-  tempSpeedupToggle = !tempSpeedupToggle;
+let tempSpeedupFactor = 500;
+dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persist between refreshes
+  if (speed !== undefined && speed > 0) {
+    tempSpeedupToggle = true
+    tempSpeedupFactor = speed
+  }
+  else {  // With no arguments, toggles on/off
+    tempSpeedupToggle = !tempSpeedupToggle;
+  }
 }
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
+};
+
+// Buys all perks, will end up buying semi-randomly if not enough pp
+dev.buyAllPerks = function() {
+  const visited = [];
+  const toVisit = [Perk.glyphChoice3];
+  while (toVisit.length > 0) {
+    if (player.reality.pp < 1) break;
+    const perk = toVisit.shift();
+    visited.push(perk);
+    toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
+    perk.purchase();
+  }
 };

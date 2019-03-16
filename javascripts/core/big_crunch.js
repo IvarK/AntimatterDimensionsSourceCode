@@ -41,7 +41,7 @@ function bigCrunchReset() {
       unlockRealityUpgrade(7);
     }
 
-    if (player.realities > 0 && (player.eternities === 0 || (player.reality.upg.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
+    if (player.realities > 0 && (player.eternities === 0 || (RealityUpgrades.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
         if (checkForRUPG8()) unlockRealityUpgrade(8);
     }
 
@@ -91,8 +91,9 @@ function bigCrunchReset() {
 
     autoBuyReplicantiUpgrades();
 
-    if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.INFINITY_COMPLETE);
+    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+      EffarigUnlock.infinity.unlock();
+      Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
     }
 }
 
@@ -155,10 +156,10 @@ function checkBigCrunchAchievements() {
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
 
 function totalIPMult() {
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE)) {
+  if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return new Decimal(1);
   }
-  let ipMult = player.infMult
+  let ipMult = new Decimal(1)
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -171,12 +172,10 @@ function totalIPMult() {
       Achievement(116),
       Achievement(125),
       Achievement(141),
+      InfinityUpgrade.ipMult,
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Effarig.isRunning && !Effarig.has(EFFARIG_UNLOCKS.ETERNITY_COMPLETE)) {
-    ipMult = ipMult.pow(0.9);
-  }
   if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
 }
@@ -302,6 +301,10 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     return !this.isCapped && player.infinityPoints.gte(this.cost) && this.isRequirementSatisfied;
   }
 
+  get canBeApplied() {
+    return true;
+  }
+
   purchase(amount = 1) {
     if (!this.canBeBought) return;
     const costIncrease = this.costIncrease;
@@ -317,9 +320,9 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   adjustToCap() {
     if (this.isCapped) {
-      const capOffset = this.config.cap.dividedBy(player.infMult);
+      const capOffset = this.config.cap().dividedBy(player.infMult);
       player.autoIP = player.autoIP.times(capOffset);
-      player.infMult.copyFrom(this.config.cap);
+      player.infMult.copyFrom(this.config.cap());
       player.infMultCost.copyFrom(this.config.costCap);
     }
   }

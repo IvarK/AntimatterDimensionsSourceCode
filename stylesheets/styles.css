@@ -675,7 +675,7 @@ button {
     font-size: 14px;
     line-height: 1.2;
     transition-duration: .5s;
-    z-index: 2;
+    z-index: 3;
 }
 
 [ach-tooltip]:after {
@@ -4810,13 +4810,19 @@ screen and (max-width: 480px) {
 /* #region effarig tab */
 
 .o-effarig-shop-button {
-  padding: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  line-height: 1.5;
+  width: 100%;
+  padding: 1rem;
   font-size: 2rem;
   background-color: #5151ec;
   color: white;
   border: none;
-  border-radius: 5px;
-  margin: 10px;
+  border-radius: 0.5rem;
+  margin: 1rem;
   cursor: pointer;
   transition-duration: 0.12s;
 }
@@ -4832,34 +4838,218 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
-.effarig-run-button {
-  width: 300px;
-}
-
-.o-effarig-slider {
-  font-size: 1.2rem;
-  background-color: #5151ec;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 20rem;
-  cursor: default;
-  margin: 0.4rem;
-  padding: 0.5rem;
-}
-
-.l-effarig-glyph-settings {
+.l-effarig-run-button {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  border-style: none;
+  position: relative;
+  margin: 2rem;
 }
 
-.o-effarig-glyph-type {
-  padding: 12px;
+.c-effarig-run-button {
+  font-size: 10rem;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+
+.c-effarig-run-button--not-running {
   background-color: #5151ec;
   color: white;
-  margin-bottom: 7px;
-  border-radius: 5px;
-  cursor: grab;
+  z-index: 0;
+  -webkit-animation: effarig-run-button--not-running-glow 2s ease-in-out infinite alternate;
+  -moz-animation: effarig-run-button--not-running-glow 2s ease-in-out infinite alternate;
+  animation: effarig-run-button--not-running-glow 2s ease-in-out infinite alternate;
+}
+
+.c-effarig-run-button--not-running:hover {
+  background-color: black;
+}
+
+@keyframes effarig-run-button--not-running-glow {
+  from {
+    text-shadow: 0 0 1rem #fff, 0 0 2rem #fff, 0 0 3rem #1000b0, 0 0 4rem #1000b0, 0 0 5rem #1000b0, 0 0 6rem #1000b0, 0 0 7rem #1000b0;
+    box-shadow: 0 0 .5rem #1000b0, 0 0 1rem #1000b0, 0 0 1.5rem #1000b0;
+  }
+  to {
+    text-shadow: 0 0 2rem #fff, 0 0 3rem #2512d0, 0 0 4rem #2512d0, 0 0 5rem #2512d0, 0 0 6rem #2512d0, 0 0 7rem #2512d0, 0 0 8rem #2512d0;
+    box-shadow: 0 0 .5rem #2512d0, 0 0 1rem #2512d0, 0 0 1.5rem #2512d0, 0 0 2rem #2512d0;
+  }
+}
+
+.c-effarig-run-button--running {
+  background: black;
+  z-index: 0;
+  -webkit-animation: effarig-run-button--running-glow 2s infinite alternate;
+  -moz-animation: effarig-run-button--running-glow 2s infinite alternate;
+  animation: effarig-run-button--running-glow 2s infinite alternate;
+}
+
+.c-effarig-run-button--running:hover {
+  background: #400000;
+}
+
+.c-effarig-run-button__inner--running {
+  background-image: url("../images/noise.png");
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: rgba(255, 0, 0, 0.5);
+  -webkit-animation: effarig-run-button--running-noise 15s infinite alternate;
+  -moz-animation: effarig-run-button--running-noise 15s infinite alternate;
+  animation: effarig-run-button--running-noise 15s infinite alternate;
+  position: relative;
+}
+
+
+.c-effarig-run-button__inner--running:after {
+  background: none;
+  content: attr(button-symbol);
+  z-index: -1;
+  position: absolute;
+  -webkit-animation: effarig-run-button__inner--running-glow 2s infinite alternate;
+  -moz-animation: effarig-run-button__inner--running-glow 2s infinite alternate;
+  animation: effarig-run-button__inner--running-glow 2s infinite alternate;
+  left: 0;
+  top: 0;
+}
+
+@keyframes effarig-run-button--running-noise {
+  0%   { -webkit-text-fill-color: rgba(255, 0, 0, 1);  }
+  20%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: -50px 0;
+  }
+  22%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 0.5);
+    background-position: 100px -10px;
+  }
+  24%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 0 -150px;
+  }
+  50%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: -50px 0;
+  }
+  51%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 0.5);
+    background-position: 100px -10px;
+  }
+  52%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 0 -150px;
+  }
+  54%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 50px 0;
+  }
+  56%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 0.5);
+    background-position: -100px 10px;
+  }
+  58%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 0 50px;
+  }
+  90%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 50px 50px;
+  }
+  91%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 0.5);
+    background-position: 100px -110px;
+  }
+  92%  {
+    -webkit-text-fill-color: rgba(255, 0, 0, 1);
+    background-position: 0 70px;
+  }
+  100% { -webkit-text-fill-color: rgba(255, 0, 0, 1); }
+}
+
+@keyframes effarig-run-button--running-glow {
+  from {
+    box-shadow: 0 0 .5rem #c20707 inset, 0 0 1rem #c20707 inset, 0 0 1.5rem #c20707 inset;
+  }
+  to {
+    box-shadow: 0 0 .5rem #e21717 inset, 0 0 1rem #e21717 inset, 0 0 1.5rem #e21717 inset, 0 0 2rem #e21717 inset;
+  }
+}
+
+@keyframes effarig-run-button__inner--running-glow {
+  from {
+    text-shadow: 0 0 0.5rem #a20707, 0 0 1rem #a20707, 0 0 1.5rem #a20707;
+  }
+  to {
+    text-shadow: 0 0 0.5rem #c21717, 0 0 1rem #c21717, 0 0 1.5rem #c21717, 0 0 2rem #c21717;
+  }
+}
+
+.l-effarig-run-button__bg {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+}
+
+.l-effarig-run-button__fg {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.l-effarig-shop {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-effarig-shop-and-run {
+  margin-top: 2rem;
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.l-effarig-run {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 3rem;
+  width: 500px;
+}
+
+.c-effarig-run-description {
+  font-size: larger;
+  margin-top: 1rem;
+}
+
+.l-effarig-tab__reward {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.5rem;
+}
+
+.c-effarig-tab__reward-label {
+  padding-right: 1rem;
+  font-weight: bold;
+}
+
+.c-effarig-tab__reward-symbol {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.l-effarig-tab__reward-descriptions {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.c-effarig-tab__reward-description {
+  text-align: left;
 }
 
 .sortable-drag {

@@ -9,10 +9,10 @@ const GlyphTooltipEffect = {
       return GameDatabase.reality.glyphEffects[this.effect];
     },
     prefix() {
-      return this.effectConfig.singleDescSplit[0].replace("<br>", "\n");
+      return this.effectConfig.singleDescSplit[0].replace("\n", "<br>");
     },
     suffix() {
-      return this.effectConfig.singleDescSplit[1].replace("<br>", "\n");
+      return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
     },
     displayValue() {
       let value = this.effectConfig.formatEffect(this.value);
@@ -29,11 +29,11 @@ const GlyphTooltipEffect = {
   },
   template: /*html*/`
     <div class="c-glyph-tooltip__effect">
-      {{prefix}}
+      <span v-html="prefix"/>
       <span :style="valueStyle">{{displayValue}}</span>
-      {{suffix}}
+      <span v-html="suffix"/>
     </div>
-  `
+    `
 };
 
 const GlyphTooltipComponent = {
@@ -49,6 +49,10 @@ const GlyphTooltipComponent = {
     sacrificeReward: {
       type: Number,
       default: 0,
+    },
+    levelCap: {
+      type: Number,
+      default: Number.MAX_VALUE,
     }
   },
   computed: {
@@ -75,8 +79,16 @@ const GlyphTooltipComponent = {
     description() {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
     },
+    isLevelCapped() {
+      return this.levelCap < this.level;
+    },
     levelText() {
-      return `Level: ${this.level}`;
+      return this.isLevelCapped
+        ? `Level: ▼${this.levelCap}▼`
+        : `Level: ${this.level}`;
+    },
+    levelStyle() {
+      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" }
     },
     sacrificeText() {
       return this.onTouchDevice
@@ -122,7 +134,7 @@ const GlyphTooltipComponent = {
     <div class="l-glyph-tooltip__header">
       <span class="c-glyph-tooltip__description"
             :style="descriptionStyle">{{description}}</span>
-      <span class="l-glyph-tooltip__level">{{levelText}}</span>
+      <span class="l-glyph-tooltip__level" :style="levelStyle">{{levelText}}</span>
     </div>
     <div class="l-glyph-tooltip__effects">
       <effect-desc v-for="e in sortedEffects"
@@ -182,6 +194,7 @@ Vue.component("glyph-component", {
       suppressTooltip: false,
       isTouched: false,
       sacrificeReward: 0,
+      levelCap: Number.MAX_VALUE,
     }
   },
   computed: {
@@ -195,7 +208,7 @@ Vue.component("glyph-component", {
       const symbol = this.glyph.symbol;
       return symbol
         ? (symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol)
-        : this.typeConfig.symbol;
+        : this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -263,6 +276,7 @@ Vue.component("glyph-component", {
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
       this.sacrificeReward = glyphSacrificeGain(this.glyph);
+      this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
@@ -296,6 +310,8 @@ Vue.component("glyph-component", {
       ev.dataTransfer.setData(GLYPH_MIME_TYPE, this.glyph.id.toString());
       ev.dataTransfer.dropEffect = "move";
       this.$viewModel.draggingUIID = this.componentID;
+      const rect = this.$refs.over.getBoundingClientRect();
+      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX-rect.left, ev.clientY-rect.top);
     },
     dragEnd() {
       this.isDragging = false;
@@ -364,6 +380,7 @@ Vue.component("glyph-component", {
                        ref="tooltip"
                        v-bind="glyph"
                        :sacrificeReward="sacrificeReward"
+                       :levelCap="levelCap"
                        :visible="isCurrentTooltip"/>
       </div>
       <div ref="over"

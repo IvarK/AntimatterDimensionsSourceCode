@@ -22,7 +22,7 @@ Vue.component('v-tab', {
   computed: {
     runUnlocks: () => VRunUnlockState.all,
     runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
-    db: () => GameDatabase.Celestials.V,
+    db: () => GameDatabase.celestials.v,
   },
   template:
     `<div class="l-v-celestial-tab">

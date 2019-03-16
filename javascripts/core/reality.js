@@ -25,7 +25,7 @@ const GlyphSelection = {
   update(level) {
     for (let g of this.glyphs.filter(g => g.level < level)) {
         g.level = level;
-        fixGlyph(g);
+        calculateGlyph(g);
     }
   },
   select(index) {
@@ -65,7 +65,11 @@ function requestManualReality() {
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   let choiceCount = GlyphSelection.choiceCount;
   if (choiceCount === 1) {
-    Glyphs.addToInventory(GlyphGenerator.randomGlyph(gainedGlyphLevel(), false));
+    // First reality gets a specially generated glyph:
+    const newGlyph = player.realities === 0
+      ? GlyphGenerator.startingGlyph(gainedGlyphLevel())
+      : GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+    Glyphs.addToInventory(newGlyph);
     return manualReality();
   }
   GlyphSelection.generate(choiceCount, gainedGlyphLevel());
@@ -96,14 +100,14 @@ function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   let gainedLevel = gainedGlyphLevel();
   let newGlyph;
-  if (Effarig.has(EFFARIG_UNLOCKS.AUTOPICKER)) {
+  if (EffarigUnlock.autopicker.isUnlocked) {
     let glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
     newGlyph = GlyphGenerator.randomGlyph(gainedLevel, false);
   }
-  if (Effarig.has(EFFARIG_UNLOCKS.AUTOSACRIFICE)) {
+  if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
       // FIXME: remove console.log after initial rollout to testers
       console.log("Sacrificing a glyph: ")
@@ -167,6 +171,7 @@ function completeReality(force, reset, auto = false) {
     respecGlyphs();
   }
   handleCelestialRuns(force)
+  recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
   postc8Mult = new Decimal(0);
@@ -175,37 +180,37 @@ function completeReality(force, reset, auto = false) {
   player.sacrificed = new Decimal(0);
 
   player.challenges = [];
-  if (player.reality.upg.includes(10)) {
+  if (RealityUpgrades.includes(10)) {
     for (let challenge of Challenge.all) {
       challenge.complete();
     }
   }
   player.currentChallenge = "";
-  player.infinityUpgrades = player.reality.upg.includes(10) ? player.infinityUpgrades : [];
+  player.infinityUpgrades = RealityUpgrades.includes(10) ? player.infinityUpgrades : [];
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = player.reality.upg.includes(10) ? 4 : 0;
-  player.galaxies = player.reality.upg.includes(10) ? 1 : 0;
+  player.resets = RealityUpgrades.includes(10) ? 4 : 0;
+  player.galaxies = RealityUpgrades.includes(10) ? 1 : 0;
   player.tickDecrease = 0.9;
   player.interval = null;
-  if (!player.reality.upg.includes(10)) {
+  if (!RealityUpgrades.includes(10)) {
     Autobuyer.resetUnlockables();
   }
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = player.reality.upg.includes(10) ? player.break : false;
+  player.break = RealityUpgrades.includes(10) ? player.break : false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  if (!player.reality.upg.includes(10)) {
+  if (!RealityUpgrades.includes(10)) {
     player.infinityRebuyables = [0, 0];
   }
   player.postChallUnlocked = 0;
   player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
   player.infinityPower = new Decimal(1);
-  player.infDimBuyers = player.reality.upg.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
+  player.infDimBuyers = RealityUpgrades.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
 
@@ -224,10 +229,10 @@ function completeReality(force, reset, auto = false) {
   player.epmult = new Decimal(1);
   player.epmultCost = new Decimal(500);
   player.totalTickGained = 0;
-  player.offlineProd = player.reality.upg.includes(10) ? player.offlineProd : 0;
-  player.offlineProdCost = player.reality.upg.includes(10) ? player.offlineProdCost : 1e7;
+  player.offlineProd = RealityUpgrades.includes(10) ? player.offlineProd : 0;
+  player.offlineProdCost = RealityUpgrades.includes(10) ? player.offlineProdCost : 1e7;
   player.challengeTarget = new Decimal(0);
-  if (!player.reality.upg.includes(10)) {
+  if (!RealityUpgrades.includes(10)) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
@@ -238,8 +243,8 @@ function completeReality(force, reset, auto = false) {
   player.etercreq = 0;
   player.autoIP = new Decimal(0);
   player.autoTime = 1e300;
-  player.infMultBuyer = player.reality.upg.includes(10) ? player.infMultBuyer : false;
-  if (!player.reality.upg.includes(10)) {
+  player.infMultBuyer = RealityUpgrades.includes(10) ? player.infMultBuyer : false;
+  if (!RealityUpgrades.includes(10)) {
     player.autoCrunchMode = AutoCrunchMode.AMOUNT;
   }
   player.respec = false;
@@ -256,7 +261,9 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
-  player.eternityBuyer.isOn = false;
+  if (!RealityUpgrades.includes(10)) {
+    player.eternityBuyer.isOn = false;
+  }
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
@@ -285,14 +292,14 @@ function completeReality(force, reset, auto = false) {
   resetChallengeStuff();
   resetDimensions();
   secondSoftReset();
-  if (player.reality.upg.includes(10)) player.eternities = 100;
+  if (RealityUpgrades.includes(10)) player.eternities = 100;
   if (!reset) player.reality.pp++;
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
   Autobuyer.tryUnlockAny()
-  if (player.realities === 4) player.reality.automatorCommands = [12, 24, 25];
+  if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   resetInfDimensions();
   IPminpeak = new Decimal(0);
@@ -317,8 +324,8 @@ function completeReality(force, reset, auto = false) {
 
 
   function resetReplicanti() {
-    player.replicanti.amount = player.reality.upg.includes(10) ? new Decimal(1) : new Decimal(0);
-    player.replicanti.unl = player.reality.upg.includes(10);
+    player.replicanti.amount = RealityUpgrades.includes(10) ? new Decimal(1) : new Decimal(0);
+    player.replicanti.unl = RealityUpgrades.includes(10);
     player.replicanti.chance = 0.01;
     player.replicanti.chanceCost = new Decimal(1e150);
     player.replicanti.interval = 1000;
@@ -326,14 +333,14 @@ function completeReality(force, reset, auto = false) {
     player.replicanti.gal = 0;
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
-    player.replicanti.galaxybuyer = player.reality.upg.includes(10) ? player.replicanti.galaxybuyer : undefined;
-    player.replicanti.auto = [player.reality.upg.includes(10) ? player.replicanti.auto[0] : false, player.reality.upg.includes(10) ? player.replicanti.auto[1] : false, player.reality.upg.includes(10) ? player.replicanti.auto[2] : false];
+    player.replicanti.galaxybuyer = RealityUpgrades.includes(10) ? player.replicanti.galaxybuyer : undefined;
+    player.replicanti.auto = [RealityUpgrades.includes(10) ? player.replicanti.auto[0] : false, RealityUpgrades.includes(10) ? player.replicanti.auto[1] : false, RealityUpgrades.includes(10) ? player.replicanti.auto[2] : false];
   }
-  if (player.reality.upg.includes(13)) {
+  if (RealityUpgrades.includes(13)) {
     if (player.reality.epmultbuyer) buyMaxEPMult();
     for (var i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
-        buyMaxTimeDims(i);
+        buyMaxTimeDimTier(i);
       }
     }
   }
@@ -343,14 +350,14 @@ function completeReality(force, reset, auto = false) {
 }
 
 function handleCelestialRuns(force) {
-  if (player.celestials.teresa.run) {
+  if (Teresa.isRunning) {
     player.celestials.teresa.run = false
     if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false
-    if (!force && !Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE)) {
-      Effarig.unlock(EFFARIG_UNLOCKS.REALITY_COMPLETE);
+    if (!force && !EffarigUnlock.reality.isUnlocked) {
+      EffarigUnlock.reality.unlock();
     }
   }
   if (Enslaved.isRunning) {

@@ -10,7 +10,11 @@ Vue.component("effect-display", {
   data() {
     return {
       isVisible: false,
-      effectValue: 0
+      effectValue: 0,
+      // Number.MAX_VALUE doesn't really matter here, but we need it because
+      // undefined values are not allowed for reactive properties
+      cap: Number.MAX_VALUE,
+      hasCap: false
     };
   },
   watch: {
@@ -26,30 +30,43 @@ Vue.component("effect-display", {
         this.formatEffect = formatEffect;
         const effectValue = effect();
         this.effectValue = effectValue;
-        this.updateFn = typeof effectValue === "number" ?
+        let isNumber = typeof effectValue === "number";
+        this.updateFn = isNumber ?
           () => this.effectValue = effect() :
           () => this.effectValue.copyFrom(effect());
-        if (this.hasCap) {
-          this.reachedCap = typeof effectValue === "number" ?
-            () => this.effectValue >= this.cap :
-            () => this.effectValue.gte(this.cap);
+        const cap = config.cap;
+        if (cap === undefined) return;
+        this.reachedCapFn = isNumber ?
+          () => this.effectValue >= this.cap :
+          () => this.effectValue.gte(this.cap);
+        if (typeof cap !== "function") {
+          this.hasCap = true;
+          this.cap = isNumber ? cap : new Decimal(cap);
+          return;
         }
+        const updateCap = () => {
+          this.cap = cap();
+          this.hasCap = this.cap !== undefined;
+        };
+        const updateEffect = this.updateFn;
+        this.updateFn = () => {
+          updateEffect();
+          updateCap();
+        };
+        updateCap();
       }
     }
   },
   computed: {
+    reachedCap() {
+      return this.reachedCapFn();
+    },
     titleDisplay() {
       if (this.config.staticEffect) return undefined;
-      return (this.hasCap && this.reachedCap() ? "Capped" : this.title) + ": ";
+      return (this.hasCap && this.reachedCap ? "Capped" : this.title) + ": ";
     },
     effectDisplay() {
-      return this.formatEffect(this.hasCap && this.reachedCap() ? this.cap : this.effectValue);
-    },
-    cap() {
-      return this.config.cap;
-    },
-    hasCap() {
-      return this.cap !== undefined;
+      return this.formatEffect(this.hasCap && this.reachedCap ? this.cap : this.effectValue);
     }
   },
   methods: {

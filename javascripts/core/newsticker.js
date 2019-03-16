@@ -196,15 +196,15 @@ const newsArray = [
   ["Why is there no 9th dimension? Because 7 8 9.", "b15", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.", "b16", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through before you encounter bad things, so you should be fine", "b17", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
-  ["Conditions must be met for Hevipelle to sleep. First, it needs to be a blue moon. Second, a specific town in the arctic must have not seen light for a month. Third, he needs to release an AD update. And finally, no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up forcefully to avoid getting the offline achievement.", "b18", () => (player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0) && player.achievements.includes("r22")],
+  ["Conditions must be met for Hevipelle to sleep. First, it needs to be a blue moon. Second, a specific town in the arctic must have not seen light for a month. Third, he needs to release an AD update. And finally, no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up forcefully to avoid getting the offline achievement.", "b18", () => (player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0) && Achievements(22).isUnlocked],
   ["If the 9th dimension is all evil, then is 3 the root of all evil?", "b19", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
 //basic (post-inf pre-rep)
   ["Infinity: the one thing that's supposed to break.", "b20", () => player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["I've got 1.79e308 problems, but none of them antimatters", "b21", () => player.infinitied.gt(0) && !player.break],
   ["Anti Emoji Movie a huge hit", "b18", () => player.spreadingCancer >= 5],
-  ["If this game was made by Valve, Zero Deaths would be impossible.", "b22", () => player.achievements.includes("r43")],
-  ["Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.", "b23", () => player.achievements.includes("r43")],
-  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => player.achievements.length >= 40],
+  ["If this game was made by Valve, Zero Deaths would be impossible.", "b22", () => Achievement(43).isUnlocked],
+  ["Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.", "b23", () => Achievement(43).isUnlocked],
+  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => player.achievements.size >= 40],
 //basic (post-rep)
   ["Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi has a fully powered eternity gauntlet", "b25", () => player.eternities > 0 || player.realities > 0],
   ["New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.", "b26", () => player.replicanti.unl && player.replicanti.chance === 0.01],
@@ -227,7 +227,7 @@ const newsArray = [
   ["You do know that you won't reach Infinity in -1 seconds, right?", "c1", () => player.bestInfinityTime === 0.1],
   ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],  //might not be poss?
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
-  ["Achievement Unlocked!", "c4", () => player.achievements.length === 88],
+  ["Achievement Unlocked!", "c4", () => player.achievements.size === 88],
   ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)],
@@ -249,7 +249,7 @@ const newsArray = [
   ["Just how lucky are you?", "l9", () => Math.random() < 1e-11],
   ["This news message is 1000000000000x rarer than all the others.", "l10", () => Math.random() <= 1e-12],
 //missable / pay req
-  ["How dare you actually get zero deaths on a first run?", "s1", () => player.achievements.includes("r43") && player.infinitied.eq(1) && player.eternities === 0],
+  ["How dare you actually get zero deaths on a first run?", "s1", () => Achievement(43).isUnlocked && player.infinitied.eq(1) && player.eternities === 0],
   ["Legend says the ninth dimension is supposed to be found here, but I don't see anything.", "s2", () => player.money.e >= 41900 && !player.replicanti.unl && player.eternities === 0],
   ["Person with money likes to support this game.", "s3", () => kongDimMult > 1 || kongIPMult > 1],
   ["Whale is bad at making smart purchases.", "s4", () => kongIPMult > 500 && kongDimMult < 5e307],

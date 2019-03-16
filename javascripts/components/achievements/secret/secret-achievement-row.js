@@ -21,8 +21,7 @@ Vue.component('secret-achievement-row', {
   },
   methods: {
     updateState() {
-      const unlockState = Array.from({length: 8}, (v, i) => `s${this.row}${i + 1}`)
-        .map(achId => player.achievements.includes(achId));
+      const unlockState = Array.range(1, 8).map(i => SecretAchievement(this.row * 10 + i).isUnlocked);
       this.isCompleted = !unlockState.includes(false);
     }
   },

@@ -63,10 +63,10 @@ function getReplicantiInterval(noMod, interval) {
       TimeStudy(213)
     );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
-    interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
+    interval /= getAdjustedGlyphEffect("replicationspeed");
     if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
-    if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
+    if (RealityUpgrades.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
     if (V.isRunning) {
       interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
     }
@@ -77,7 +77,9 @@ function getReplicantiInterval(noMod, interval) {
 let scaleLog10 = 308;
 let scaleFactor = 1.2;
 function replicantiCap() {
-  return Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE) ? player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
+  return EffarigUnlock.infinity.isUnlocked ?
+    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) :
+    new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {
@@ -143,7 +145,7 @@ function replicantiMult() {
   return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))
-    .pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
+    .pow(getAdjustedGlyphEffect("replicationpow"));
 }
 
 function autoBuyReplicantiUpgrades() {

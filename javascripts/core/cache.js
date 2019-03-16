@@ -54,10 +54,6 @@ const GameCache = {
       .map(s => player.timestudy.studies.includes(s.id));
   }),
 
-  achievementCount: new Lazy(() => {
-    return player.achievements.filter(a => !a.startsWith("s")).length;
-  }),
-
   achSkipPerkCount: new Lazy(() => {
     return Effects.max(
       0,
@@ -71,6 +67,20 @@ const GameCache = {
   }),
 
   buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+
+  normalDimensionCommonMultiplier: new Lazy(() => {
+    // The effect is defined in normal_dimensions.js because that's where the non-cached
+    // code originally lived.
+    return normalDimensionCommonMultiplier();
+  }),
+
+  infinityDimensionCommonMultiplier: new Lazy(() => {
+    return infinityDimensionCommonMultiplier();
+  }),
+
+  timeDimensionCommonMultiplier: new Lazy(() => {
+    return timeDimensionCommonMultiplier();
+  }),
 
   invalidate() {
     for (let key in this) {

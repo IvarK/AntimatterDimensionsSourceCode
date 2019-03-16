@@ -4,10 +4,16 @@
 // The last glyph type you can only get if you got effarig reality
 const GLYPH_TYPES = ["time", "dilation", "replication", "infinity", "power", "effarig"]
 const GLYPH_SYMBOLS = { time: "Δ", dilation: "Ψ", replication: "Ξ", infinity: "∞", power: "Ω", effarig: "Ϙ" }
+const CANCER_GLYPH_SYMBOLS = { time: "🕟", dilation: "☎", replication: "⚤", infinity: "8", power: "⚡", effarig: "🦒" }
 
 const GlyphCombiner = Object.freeze({
   add: x => x.reduce(Number.sumReducer, 0),
   multiply: x => x.reduce(Number.prodReducer, 1),
+  // For exponents, the base value is 1, so when we add two exponents a and b we want to get a + b - 1,
+  // so that if a and b are both close to 1 so is their sum. In general, when we add a list x of exponents,
+  // we have to add 1 - x.length to the actual sum, so that if all the exponents are close to 1 the result
+  // is also close to 1 rather than close to x.length.
+  addExponents: x => x.reduce(Number.sumReducer, 1 - x.length),
 });
 
 /**
@@ -192,9 +198,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
-    combine: GlyphCombiner.multiply,
-    /** @type {function(number): number} */
-    softcap: value => value > 10 ? 10 + Math.pow(value - 10, 0.5) : value,
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationspeed",
     glyphTypes: ["replication"],
@@ -207,10 +211,7 @@ GameDatabase.reality.glyphEffects = [
     id: "replicationpow",
     glyphTypes: ["replication"],
     singleDesc: "Replicanti multiplier ^{value}",
-    combine: effects => {
-      // Combines things additively, while keeping a null value of 1.
-      return { value: effects.reduce(Number.sumReducer, 1 - effects.length), capped: false };
-    }
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationdtgain",
     glyphTypes: ["replication"],
@@ -222,7 +223,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "replicationglyphlevel",
     glyphTypes: ["replication"],
-    singleDesc: "Replicanti scaling for next glyph level: <br>^0.4 ➜ ^(0.4 + {value})",
+    singleDesc: "Replicanti scaling for next glyph level: \n^0.4 ➜ ^(0.4 + {value})",
     totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
     genericDesc: "Replicanti scaling for glyph level",
     combine: effects => {
@@ -241,7 +242,7 @@ GameDatabase.reality.glyphEffects = [
     id: "infinityrate",
     glyphTypes: ["infinity"],
 
-    singleDesc: "Infinity power conversion rate: <br>^7 ➜ ^(7 + {value})",
+    singleDesc: "Infinity power conversion rate: \n^7 ➜ ^(7 + {value})",
     totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
     genericDesc: "Infinity power conversion rate",
     formatEffect: x => x.toFixed(2),
@@ -256,6 +257,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "IP gain multiplier",
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
+    softcap: value => (Effarig.eternityCap !== undefined) ? Math.min(value, Effarig.eternityCap.toNumber()) : value
   }, {
     id: "infinityinfmult",
     glyphTypes: ["infinity"],
@@ -314,13 +316,15 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigforgotten",
     glyphTypes: ["effarig"],
-    singleDesc: "For each ten dimensions bought, multiply the buy10 effect by {value}x",
+    singleDesc: "Raise the bonus gained from buying 10 Dimensions to a power of ^{value}",
+    totalDesc: "Multiplier from \"Buy 10\" ^{value}",
+    genericDesc: "\"Buy 10\" bonus multiplier ^x",
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigdimensions",
     glyphTypes: ["effarig"],
-    singleDesc: "Delay the dimension cost increase starting by 1e{value}",
-    combine: GlyphCombiner.add,
+    singleDesc: "All dimension multipliers ^{value}",
+    combine: GlyphCombiner.multiply,
   }, {
     id: "effarigantimatter",
     glyphTypes: ["effarig"],
@@ -433,7 +437,7 @@ const GlyphTypes = {
     symbol: GLYPH_SYMBOLS.effarig,
     effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
-    unlockedFn: () => Effarig.has(EFFARIG_UNLOCKS.REALITY_COMPLETE),
+    unlockedFn: () => EffarigUnlock.reality.isUnlocked,
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

@@ -77,6 +77,6 @@ const Laitela = {
     return player.celestials.laitela.matter
   },
   set matter(x) {
-    player.celestials.laitela.matter += x
+    player.celestials.laitela.matter = x
   }
 }

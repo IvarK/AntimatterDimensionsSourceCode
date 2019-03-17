@@ -29,15 +29,13 @@ Vue.component('laitela-tab', {
         'o-laitela-shop-button-bought': this.hasUnlock(info), 
         'o-laitela-shop-button-available': this.canBuyUnlock(info)
       }
-    },
-    activeDimensions() {
-      return this.dimensions.filter(d => d.amount !== 0)
     }
   },
   computed: {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
-    unlocksInfo: () => LAITELA_UNLOCKS
+    unlocksInfo: () => LAITELA_UNLOCKS,
+    activeDimensions: () => this.dimensions.filter(d => d.amount !== 0)
   },
   template:
     `<div class="l-laitela-celestial-tab">
@@ -45,7 +43,7 @@ Vue.component('laitela-tab', {
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Matter</div>
       <div>Matter causes your dimension cost multipliers to raise {{ matterEffectPercentage }} slower</div>
       <matter-dimension-row 
-        v-for="(dimension, i) in activeDimensions()"
+        v-for="(dimension, i) in activeDimensions"
         :key="i"
         :dimension="dimension"
       />

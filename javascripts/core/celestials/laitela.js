@@ -42,7 +42,7 @@ const Laitela = {
   },
   canBuyUnlock(info) {
     if (player.celestials.laitela.matter < info.price) return false
-    if (this.has(info)) return false
+    return !this.has(info);
     return true
   },
   buyUnlock(info) {

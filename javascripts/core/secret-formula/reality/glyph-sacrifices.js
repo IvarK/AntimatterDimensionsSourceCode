@@ -23,7 +23,11 @@ GameDatabase.reality.glyphSacrifice = [
     }
   }, {
     id: "dilation",
-    effect: () => Math.pow(Math.max(player.reality.glyphs.sac.dilation, 1), 0.1),
+    effect: () => {
+      let sacPower = player.reality.glyphs.sac.dilation;
+      let exponent = 0.1 * Math.pow(Math.log10(sacPower + 1), 0.1);
+      return Math.pow(Math.max(sacPower, 1), exponent);
+    },
     description: amount => `Multiply Tachyon Particle gain by ${shorten(amount, 2, 2)}x`
   }, {
     id: "effarig",

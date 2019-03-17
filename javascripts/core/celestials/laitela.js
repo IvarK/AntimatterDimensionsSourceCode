@@ -24,7 +24,7 @@ const LAITELA_UNLOCKS = {
   }
 }
 
-const laitelaRunUnlockThresholds = ["1e4000", "1e4500", "1e5000"].map( u => new Decimal(u))
+const laitelaRunUnlockThresholds = ["1e4000", "1e4500", "1e5000"].map(u => new Decimal(u))
 
 
 const Laitela = {

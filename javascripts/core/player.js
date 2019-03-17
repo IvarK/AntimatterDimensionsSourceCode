@@ -432,36 +432,14 @@ var player = {
       matter: 0,
       run: false,
       unlocks: [],
-      dimensions: [
-        {
-          amount: 0,
-          chanceUpgrades: 0,
-          intervalUpgrades: 0,
-          powerUpgrades: 0,
-          lastUpdate: Date.now()
-        },
-        {
-          amount: 0,
-          chanceUpgrades: 0,
-          intervalUpgrades: 0,
-          powerUpgrades: 0,
-          lastUpdate: Date.now()
-        },
-        {
-          amount: 0,
-          chanceUpgrades: 0,
-          intervalUpgrades: 0,
-          powerUpgrades: 0,
-          lastUpdate: Date.now()
-        },
-        {
-          amount: 0,
-          chanceUpgrades: 0,
-          intervalUpgrades: 0,
-          powerUpgrades: 0,
-          lastUpdate: Date.now()
-        }
-      ]
+      dimensions: Array.range(0, 4).map(() =>
+      ({
+        amount: 0,
+        chanceUpgrades: 0,
+        intervalUpgrades: 0,
+        powerUpgrades: 0,
+        lastUpdate: Date.now()
+      }))
     }
   },
   autoEcIsOn: true,
@@ -546,7 +524,8 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    return GameCache.dimensionMultDecrease.value;
+    const base = GameCache.dimensionMultDecrease.value - 1
+    return 1 + base * Laitela.matterEffectToDimensionMultDecrease
   },
 
   get hasFreeInventorySpace() {

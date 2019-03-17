@@ -75,7 +75,7 @@ function maxAll() {
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
           dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease())
+          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
 
 
@@ -101,7 +101,7 @@ function maxAll() {
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
           dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease())
+          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
           if (Challenge(4).isRunning) clearDimensions(tier - 1)
         }
       } else {
@@ -114,14 +114,14 @@ function maxAll() {
             dimension.amount = Decimal.round(dimension.amount.plus(10))
             dimension.bought += 10
             dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-            if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease())
+            if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
             if (Challenge(4).isRunning) clearDimensions(tier - 1)
           }
         }
 
         if (dimension.cost.gte(Number.MAX_VALUE)) {
-          var a = Math.log10(Math.sqrt(getDimensionMultDecrease()))
-          var b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(getDimensionMultDecrease())).log10()
+          var a = Math.log10(Math.sqrt(Player.dimensionMultDecrease))
+          var b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10()
           var c = dimension.cost.dividedBy(player.money).log10()
           var discriminant = Math.pow(b, 2) - (c * a * 4)
           if (discriminant < 0) continue
@@ -134,15 +134,15 @@ function maxAll() {
           dimension.bought += 10 * buying
           dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying))
 
-          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(getDimensionMultDecrease(), postInfBuy * (postInfBuy + 1) / 2))
-          newMult = costMults[tier].times(Decimal.pow(getDimensionMultDecrease(), postInfBuy + 1))
-          //if (buying > 0 )dimension.cost = player.costMultipliers[tier-1].times(Decimal.pow(getDimensionMultDecrease(), (buying * buying - buying)/2)).times(dimension.cost)
+          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2))
+          newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1))
+          //if (buying > 0 )dimension.cost = player.costMultipliers[tier-1].times(Decimal.pow(Player.dimensionMultDecrease, (buying * buying - buying)/2)).times(dimension.cost)
 
           dimension.cost = newCost
           player.costMultipliers[tier - 1] = newMult
           if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost)
           dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1])
-          player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionMultDecrease())
+          player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
 
 

@@ -87,14 +87,14 @@ class MatterDimensionState {
 
 }
 
-MatterDimensionState.all = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));
+MatterDimensionState.list = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));
 
 /**
  * @param {number} tier
  * @return {NormalDimensionState}
  */
 function MatterDimension(tier) {
-  return MatterDimensionState.all[tier - 1];
+  return MatterDimensionState.list[tier - 1];
 }
 
 

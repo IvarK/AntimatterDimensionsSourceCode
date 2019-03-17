@@ -41,13 +41,13 @@ const Laitela = {
     return player.celestials.laitela.unlocks.includes(info.id)
   },
   canBuyUnlock(info) {
-    if (player.celestials.laitela.matter < info.price) return false
+    if (this.matter < info.price) return false
     return !this.has(info);
     return true
   },
   buyUnlock(info) {
     if (!this.canBuyUnlock) return false
-    player.celestials.laitela.matter -= info.price
+    this.matter -= info.price
     player.celestials.laitela.unlocks.push(info.id)
   },
   startRun() {
@@ -65,12 +65,18 @@ const Laitela = {
     return ""
   },
   get matterEffectToDimensionMultDecrease() {
-    return Math.pow(0.99, Math.log10(Math.max(player.celestials.laitela.matter, 1)))
+    return Math.pow(0.99, Math.log10(Math.max(this.matter, 1)))
   },
   get matterEffectPercentage() {
     return ((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2) + "%"
   },
   get idConversionEffect() {
-    return Math.sqrt(Math.log10(Math.max(player.celestials.laitela.matter, 1)))
+    return Math.sqrt(Math.log10(Math.max(this.matter, 1)))
+  },
+  get matter() {
+    return player.celestials.laitela.matter
+  },
+  set matter(x) {
+    player.celestials.laitela.matter += x
   }
 }

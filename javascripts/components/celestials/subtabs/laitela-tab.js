@@ -35,7 +35,9 @@ Vue.component('laitela-tab', {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
     unlocksInfo: () => LAITELA_UNLOCKS,
-    activeDimensions: () => this.dimensions.filter(d => d.amount !== 0)
+    activeDimensions() {
+      return this.dimensions.filter(d => d.amount !== 0)
+    }
   },
   template:
     `<div class="l-laitela-celestial-tab">

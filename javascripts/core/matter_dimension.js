@@ -87,7 +87,7 @@ class MatterDimensionState {
 
 }
 
-MatterDimensionState.all = [0, 1, 2, 3].map(tier => new MatterDimensionState(tier));
+MatterDimensionState.all = Array.range(1, 4).map(tier => new MatterDimensionState(tier - 1));
 
 /**
  * @param {number} tier

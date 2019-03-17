@@ -27,7 +27,7 @@ Vue.component('laitela-tab', {
   },
   computed: {
     dimensions() {
-      return Array.range(1, 4).map( tier => MatterDimension(tier) )
+      return Array.range(1, 4).map(tier => MatterDimension(tier))
     },
     runUnlockThresholds() {
       return laitelaRunUnlockThresholds

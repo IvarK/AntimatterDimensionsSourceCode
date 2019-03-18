@@ -352,6 +352,7 @@ class GlyphType {
    * @param {string} setup.id
    * @param {string} setup.symbol
    * @param {string} setup.color
+   * @param {function} [setup.primaryEffect] All glyphs generated will have this effect, if specified
    * @param {function} [setup.unlockedFn] If this glyph type is not available initially, this specifies
    * how to check to see if it is available
    * @param {function(string):boolean} [setup.effectUnlockedFn] If certain effects of this glyph are not
@@ -364,8 +365,10 @@ class GlyphType {
     this.symbol = setup.symbol;
     /** @member {GlyphEffectConfig[]} effects list of effects that this glyph can have */
     this.effects = findGlyphTypeEffects(setup.id);
-  /** @member {string} color used for glyph borders and other places where color coding is needed */
+    /** @member {string} color used for glyph borders and other places where color coding is needed */
     this.color = setup.color;
+    /** @member {string?} primaryEffect all glyphs generated will have at least this effect */
+    this.primaryEffect = setup.primaryEffect;
     /** @private @member {function?} unlockedFn */
     this.unlockedFn = setup.unlockedFn;
     /** @private @member {function(string):boolean?} effectUnlockedFn */
@@ -407,6 +410,7 @@ const GlyphTypes = {
     symbol: GLYPH_SYMBOLS.time,
     effects: findGlyphTypeEffects("time"),
     color: "#b241e3",
+    primaryEffect: "timepow",
   }),
   dilation: new GlyphType({
     id: "dilation",
@@ -425,12 +429,14 @@ const GlyphTypes = {
     symbol: GLYPH_SYMBOLS.infinity,
     effects: findGlyphTypeEffects("infinity"),
     color: "#b67f33",
+    primaryEffect: "infinitypow",
   }),
   power: new GlyphType({
     id: "power",
     symbol: GLYPH_SYMBOLS.power,
     effects: findGlyphTypeEffects("power"),
     color: "#22aa48",
+    primaryEffect: "powerpow",
   }),
   effarig: new GlyphType({
     id: "effarig",
@@ -438,6 +444,7 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
     unlockedFn: () => EffarigUnlock.reality.isUnlocked,
+    // effarig glyphs have no primary effect; all are equially likely
   }),
   /**
     * @param {function(): number} rng Random number source (0..1)

@@ -162,7 +162,7 @@ function multiplyPC5Costs(cost, tier) {
 }
 
 function isTickspeedPurchaseUnlocked() {
-  return player.secondAmount.gt(0);
+  return player.secondAmount.gt(0) || player.eternities >= 30;
 }
 
 function canBuyDimension(tier) {

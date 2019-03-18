@@ -107,7 +107,7 @@ const GlyphGenerator = {
     let strength = this.randomStrength(fake);
     let type = this.randomType(fake);
     let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
-    let effects = this.randomEffects(type, numEffects, fake);
+    let effects = this.generateEffects(type, numEffects, fake);
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
     let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
@@ -153,10 +153,11 @@ const GlyphGenerator = {
     return ret;
   },
 
-  randomEffects(type, count, fake) {
+  generateEffects(type, count, fake) {
     let rng = this.getRNG(fake);
     let ret = [];
-    for (let i = 0; i < count; ++i) {
+    if (GlyphTypes[type].primaryEffect) ret.push(GlyphTypes[type].primaryEffect);
+    for (let i = ret.length; i < count; ++i) {
       let effect = GlyphTypes[type].randomEffect(rng, ret);
       if (!effect) break;
       ret.push(effect);

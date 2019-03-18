@@ -107,9 +107,11 @@ function galaxyResetBtnClick() {
 function maxBuyGalaxies(manual) {
   if (EternityChallenge(6).isRunning || Challenge(8).isRunning || player.currentChallenge === "postc7") return
   if (Autobuyer.galaxy.limit > player.galaxies || manual) {
-    while (player.eightAmount.gte(Galaxy.requirement.amount) && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
+    let req = Galaxy.requirement;
+    while (NormalDimension(req.tier).amount.gte(req.amount) && (Autobuyer.galaxy.limit > player.galaxies || manual)) {
       if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
       player.galaxies++;
+      req = Galaxy.requirement;
     }
     player.galaxies--;
     galaxyReset();

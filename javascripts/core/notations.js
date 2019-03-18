@@ -502,7 +502,11 @@ Notation.imperial = new class ImperialNotation extends Notation {
     return true;
   }
 
-  formatDecimal(value, places) {
+  formatUnder1000(value) {
+    return this.formatDecimal(new Decimal(value));
+  }
+
+  formatDecimal(value) {
     // The first column is the size in pL
     // the second is the name
     // the third is an index offset (going backwards) to the smallest unit that
@@ -510,26 +514,29 @@ Notation.imperial = new class ImperialNotation extends Notation {
     // this is 7, which means that if we're within one pin of a tun, we'll say we're
     // "almost a tun" rather than "a pin short of a tun"
     const VOLUME_UNITS = [
-      [0, "pL", 0, 61611520],
-      [61611520, "minim", 0, 60],
-      [61611520*60, "dram", 1, 8],
-      [61611520*60*8, "ounce", 2, 4],
-      [61611520*60*8*4, "gill", 2, 2],
-      [61611520*60*8*4*2, "cup", 3, 2],
-      [61611520*60*8*4*2*2, "pint", 4, 2],
-      [61611520*60*8*4*2*2*2, "quart", 4, 4],
-      [61611520*60*8*4*2*2*2*4, "gallon", 4, 4.5],
-      [61611520*60*8*4*2*2*2*4*4.5, "pin", 3, 2],
-      [61611520*60*8*4*2*2*2*4*9, "firkin", 3, 2],
-      [61611520*60*8*4*2*2*2*4*18, "kilderkin", 4, 2],
-      [61611520*60*8*4*2*2*2*4*36, "barrel", 4, 1.5],
-      [61611520*60*8*4*2*2*2*4*54, "hogshead", 5, 4/3],
-      [61611520*60*8*4*2*2*2*4*72, "puncheon", 6, 1.5],
-      [61611520*60*8*4*2*2*2*4*108, "butt", 7, 2],
-      [61611520*60*8*4*2*2*2*4*216, "tun", 7, Infinity],
+      [0, "pL", 0],
+      [61611520, "minim", 0],
+      [61611520*60, "dram", 1],
+      [61611520*60*8, "ounce", 2],
+      [61611520*60*8*4, "gill", 2],
+      [61611520*60*8*4*2, "cup", 3],
+      [61611520*60*8*4*2*2, "pint", 4],
+      [61611520*60*8*4*2*2*2, "quart", 4],
+      [61611520*60*8*4*2*2*2*4, "gallon", 4],
+      [61611520*60*8*4*2*2*2*4*4.5, "pin", 3],
+      [61611520*60*8*4*2*2*2*4*9, "firkin", 3],
+      [61611520*60*8*4*2*2*2*4*18, "kilderkin", 4],
+      [61611520*60*8*4*2*2*2*4*36, "barrel", 4],
+      [61611520*60*8*4*2*2*2*4*54, "hogshead", 5],
+      [61611520*60*8*4*2*2*2*4*72, "puncheon", 6],
+      [61611520*60*8*4*2*2*2*4*108, "butt", 7],
+      [61611520*60*8*4*2*2*2*4*216, "tun", 7],
     ]
+
+    const MINIMS = VOLUME_UNITS[1];
+  
     const VOLUME_ADJECTIVES = ["minute ", "tiny ", "petite ", "small ", "modest ", "medium ", "generous ",
-    "large ", "great ", "huge ", "gigantic ", "colossal ", "vast ", "cosmic "];
+      "large ", "great ", "huge ", "gigantic ", "colossal ", "vast ", "cosmic "];
 
     const VOWELS = new Set("aeiouAEIOU");
     const isVowel = x => VOWELS.has(x);
@@ -559,28 +566,25 @@ Notation.imperial = new class ImperialNotation extends Notation {
       }
       return;
     }
-    const findVolume = x => {
-      let low = 0;
-      let high = VOLUME_UNITS.length;
-      let guess;
-      while (high - low > 1) {
-        guess = Math.floor((low + high) / 2);
-        if (VOLUME_UNITS[guess][0] > x) high = guess;
-        else low = guess;
+
+    // The metric units don't get an adjective and are handled pretty simply
+    function formatMetric(x) {
+      // The jump from metric to minim is sudden. Small values (< 10) get more decimal places
+      // because that's usually something like sacrifice multiplier
+      if (x < 1000) {
+        return x < 10  || x === Math.round(x) ? x.toFixed(2) : x.toFixed(0) + "pL"
       }
-      return low;
+      if (x < 1e6) return (x / 1000).toPrecision(4) + "nL";
+      return (x / 1e6).toPrecision(4) + "μL";
     }
 
-    function convertToVolume(x, adjective) {
-      const volIdx = findVolume(x);
-      const big = VOLUME_UNITS[volIdx]
-      // The jump from pL to minim is sudden
-      if (volIdx === 0) {
-        return x < 10 ? x.toFixed(2) : x.toFixed(0) + "pL"
-      }
+    // handles cases involving everything up to ounces; in the case of ounces it may
+    // return nothing, in which case, the normal code path should be used.
+    function formatSmallUnits(adjective, x, volIdx) {
+      const big = VOLUME_UNITS[volIdx];
       // Check for some minims short of a small unit break:
-      if (volIdx <= 3 && x + 9.5 * VOLUME_UNITS[1][0] > VOLUME_UNITS[volIdx + 1][0]) {
-          return almostOrShortOf(x, adjective,  1, VOLUME_UNITS[volIdx + 1], VOLUME_UNITS[1]);
+      if (volIdx <= 3 && x + 9.5 * MINIMS[0] > VOLUME_UNITS[volIdx + 1][0]) {
+          return almostOrShortOf(x, adjective,  1, VOLUME_UNITS[volIdx + 1], MINIMS);
       }
       // minims to drams. This goes:
       // a minim
@@ -590,8 +594,8 @@ Notation.imperial = new class ImperialNotation extends Notation {
       // a minim short of a dram
       // almost a dram               <-- handled above
       if (volIdx === 1) {
-        let deciMinims = Math.round(x * 10 / VOLUME_UNITS[1][0]);
-        if (deciMinims === 10) return addArticle(adjective + VOLUME_UNITS[1][1]);
+        let deciMinims = Math.round(x * 10 / big[0]);
+        if (deciMinims === 10) return addArticle(adjective + big[1]);
         let places = deciMinims < 100 ? 1 : 0;
         return `${(deciMinims/10).toFixed(places)} ${adjective}${big[1]}s`
       }
@@ -605,6 +609,30 @@ Notation.imperial = new class ImperialNotation extends Notation {
           return bigAndSmall(adjective, numBig, big, numSmall, VOLUME_UNITS[1]);
         }
       }
+    }
+
+    const findVolumeUnit = x => {
+      let low = 0;
+      let high = VOLUME_UNITS.length;
+      let guess;
+      while (high - low > 1) {
+        guess = Math.floor((low + high) / 2);
+        if (VOLUME_UNITS[guess][0] > x) high = guess;
+        else low = guess;
+      }
+      return low;
+    }
+
+    function convertToVolume(x, adjective) {
+      const volIdx = findVolumeUnit(x);
+      if (volIdx === 0) return formatMetric(x);
+
+      const smallStr = formatSmallUnits(adjective, x, volIdx);
+      if (smallStr) return smallStr;
+
+      const big = VOLUME_UNITS[volIdx]
+      const numBig = Math.floor(x / big[0]);
+      const remainder = x - numBig * big[0];
       // When we are within a specified rounding error, unit break:
       if (volIdx < VOLUME_UNITS.length - 1) {
         const ret = checkAlmost(adjective, x, 0, volIdx + 1);

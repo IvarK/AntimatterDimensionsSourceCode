@@ -496,6 +496,162 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
   }
 }();
 
+
+Notation.imperial = new class ImperialNotation extends Notation {
+  get isPainful() {
+    return true;
+  }
+
+  formatDecimal(value, places) {
+    // The first column is the size in pL
+    // the second is the name
+    // the third is an index offset (going backwards) to the smallest unit that
+    // is larger than "roudning error" for the unit in question (so, for a tun,
+    // this is 7, which means that if we're within one pin of a tun, we'll say we're
+    // "almost a tun" rather than "a pin short of a tun"
+    const VOLUME_UNITS = [
+      [0, "pL", 0, 61611520],
+      [61611520, "minim", 0, 60],
+      [61611520*60, "dram", 1, 8],
+      [61611520*60*8, "ounce", 2, 4],
+      [61611520*60*8*4, "gill", 2, 2],
+      [61611520*60*8*4*2, "cup", 3, 2],
+      [61611520*60*8*4*2*2, "pint", 4, 2],
+      [61611520*60*8*4*2*2*2, "quart", 4, 4],
+      [61611520*60*8*4*2*2*2*4, "gallon", 4, 4.5],
+      [61611520*60*8*4*2*2*2*4*4.5, "pin", 3, 2],
+      [61611520*60*8*4*2*2*2*4*9, "firkin", 3, 2],
+      [61611520*60*8*4*2*2*2*4*18, "kilderkin", 4, 2],
+      [61611520*60*8*4*2*2*2*4*36, "barrel", 4, 1.5],
+      [61611520*60*8*4*2*2*2*4*54, "hogshead", 5, 4/3],
+      [61611520*60*8*4*2*2*2*4*72, "puncheon", 6, 1.5],
+      [61611520*60*8*4*2*2*2*4*108, "butt", 7, 2],
+      [61611520*60*8*4*2*2*2*4*216, "tun", 7, Infinity],
+    ]
+    const VOLUME_ADJECTIVES = ["minute ", "tiny ", "petite ", "small ", "modest ", "medium ", "generous ",
+    "large ", "great ", "huge ", "gigantic ", "colossal ", "vast ", "cosmic "];
+
+    const VOWELS = new Set("aeiouAEIOU");
+    const isVowel = x => VOWELS.has(x);
+    const addArticle = x => (isVowel(x[0]) ? "an " : "a ") + x;
+    const pluralOrArticle = (num, str) => num === 1 ? addArticle(str) : num + " " + str + "s";
+    const shortOf = (adjective, numBig, big, numSmall, small) =>
+      pluralOrArticle(numSmall, small[1]) + " short of " + pluralOrArticle(numBig, adjective + big[1]);
+    const almost = (adjective, numBig, big) => "almost " + pluralOrArticle(numBig, adjective + big[1]);
+    const almostOrShortOf = (x, adjective, numBig, big, small) => {
+        const short = Math.round((numBig * big[0] - x) / small[0]);
+        return short ? shortOf(adjective, numBig, big, short, small) : almost(adjective, numBig, big);
+    }
+    const bigAndSmall = (adjective, numBig, big, numSmall, small) => {
+      const bigStr = pluralOrArticle(numBig, adjective + big[1]);
+      return numSmall === 0 ? bigStr : bigStr + " and " + pluralOrArticle(numSmall, small[1]);
+    }
+    // Either do "almost a big thing" or "a thing short of a big thing", based on the setting
+    // we have for rounding error units
+    function checkAlmost(adjective, x, numBig, bigIndex) {
+      const big = VOLUME_UNITS[bigIndex];
+      if (x + VOLUME_UNITS[bigIndex - big[2]][0] >= big[0]) {
+        return almost(adjective, numBig + 1, big);
+      }
+      const small = VOLUME_UNITS[bigIndex + 1 - big[2]];
+      if (x + small[0] >= big[0]) {
+        return shortOf(adjective, numBig + 1, big, 1, small);
+      }
+      return;
+    }
+    const findVolume = x => {
+      let low = 0;
+      let high = VOLUME_UNITS.length;
+      let guess;
+      while (high - low > 1) {
+        guess = Math.floor((low + high) / 2);
+        if (VOLUME_UNITS[guess][0] > x) high = guess;
+        else low = guess;
+      }
+      return low;
+    }
+
+    function convertToVolume(x, adjective) {
+      const volIdx = findVolume(x);
+      const big = VOLUME_UNITS[volIdx]
+      // The jump from pL to minim is sudden
+      if (volIdx === 0) {
+        return x < 10 ? x.toFixed(2) : x.toFixed(0) + "pL"
+      }
+      // Check for some minims short of a small unit break:
+      if (volIdx <= 3 && x + 9.5 * VOLUME_UNITS[1][0] > VOLUME_UNITS[volIdx + 1][0]) {
+          return almostOrShortOf(x, adjective,  1, VOLUME_UNITS[volIdx + 1], VOLUME_UNITS[1]);
+      }
+      // minims to drams. This goes:
+      // a minim
+      // 1.5 minims                  <-- we don't do this with larger units
+      // 10 minims ... 50 minims
+      // 9 minims short of a dram
+      // a minim short of a dram
+      // almost a dram               <-- handled above
+      if (volIdx === 1) {
+        let deciMinims = Math.round(x * 10 / VOLUME_UNITS[1][0]);
+        if (deciMinims === 10) return addArticle(adjective + VOLUME_UNITS[1][1]);
+        let places = deciMinims < 100 ? 1 : 0;
+        return `${(deciMinims/10).toFixed(places)} ${adjective}${big[1]}s`
+      }
+      const numBig = Math.floor(x / big[0]);
+      const remainder = x - numBig * big[0];
+      if (volIdx === 2) {
+        if (remainder > 50.5 * VOLUME_UNITS[1][0]) { // 9 minims short of a dram
+          return almostOrShortOf(x, adjective, numBig + 1, big, VOLUME_UNITS[1]);
+        } else { // a dram and 15 minims
+          const numSmall = Math.round(remainder / VOLUME_UNITS[1][0]);
+          return bigAndSmall(adjective, numBig, big, numSmall, VOLUME_UNITS[1]);
+        }
+      }
+      // When we are within a specified rounding error, unit break:
+      if (volIdx < VOLUME_UNITS.length - 1) {
+        const ret = checkAlmost(adjective, x, 0, volIdx + 1);
+        if (ret) return ret;
+      }
+      const nearMultiple = checkAlmost(adjective, remainder, numBig, volIdx);
+      if (nearMultiple) return nearMultiple;
+      // just over a multiple, in units that are too small:
+      if (remainder < VOLUME_UNITS[volIdx - big[2]][0]) {
+        return pluralOrArticle(numBig, adjective + big[1]);
+      }
+      // Search for the best unit to pair with:
+      let numBest = Math.floor(remainder / VOLUME_UNITS[volIdx - 1][0]);
+      let bestUnitIndex = volIdx - 1;
+      let bestUnitError = remainder - numBest * VOLUME_UNITS[volIdx -1][0];
+      for (let thirdUnitIndex = volIdx - 2; thirdUnitIndex > 0 && thirdUnitIndex > volIdx - big[2]; --thirdUnitIndex) {
+        const third = VOLUME_UNITS[thirdUnitIndex];
+        const numThird = Math.floor(remainder / third[0]);
+        // If we have a lot of the unit under consideration -- then stop. The exception is in
+        // case of minims, where it may be normal to have a bunch of them; in that case, we print
+        // drams if possible.
+        if (numThird > 9 && (thirdUnitIndex != 1 || bestUnits)) break;
+        // we are using floor, so we can compare error diretly, without abs
+        const thirdUnitError = remainder - numThird * third[0];
+        if (thirdUnitError < 0.99 * bestUnitError) {
+          numBest = numThird;
+          bestUnitIndex = thirdUnitIndex;
+          bestUnitError = thirdUnitError;
+        }
+      }
+      return bigAndSmall(adjective, numBig, big, numBest, VOLUME_UNITS[bestUnitIndex]);
+    }
+
+    const logCutoff = 10 * VOLUME_UNITS[VOLUME_UNITS.length-1][0];
+    if (value.lt(logCutoff)) {
+      return convertToVolume(value.toNumber(), VOLUME_ADJECTIVES[0]);
+    }
+    let logValue = value.log10() - Math.log10(logCutoff);
+    const reduceRatio = Math.log10(logCutoff/VOLUME_UNITS[1][0]);
+    let adjectiveIndex = 1;
+    while (logValue > reduceRatio) {
+      adjectiveIndex++;
+      logValue /= reduceRatio;
+    }
+    return convertToVolume(Math.pow(10, logValue) * VOLUME_UNITS[1][0], VOLUME_ADJECTIVES[adjectiveIndex]);
+  }
+}("Imperial");
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
  * (Object.values doesn't guarantee any order)
@@ -515,4 +671,5 @@ Notation.all = [
   Notation.roman,
   Notation.dots,
   Notation.zalgo,
+  Notation.imperial,
 ];

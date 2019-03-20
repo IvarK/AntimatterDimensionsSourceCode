@@ -529,6 +529,9 @@ Notation.imperial = new class ImperialNotation extends Notation {
     this.VOLUME_ADJECTIVES = ["minute ", "tiny ", "petite ", "small ", "modest ", "medium ", "generous ",
       "large ", "great ", "huge ", "gigantic ", "colossal ", "vast ", "cosmic "];
     this.VOWELS = new Set("aeiouAEIOU");
+    this.maxVolume = 10 * this.VOLUME_UNITS[this.VOLUME_UNITS.length-1][0];
+    this.logMaxVolume = Math.log10(this.maxVolume);
+    this.reduceRatio = Math.log10(this.maxVolume/this.MINIMS[0]);
   }
 
   get isPainful() {
@@ -540,18 +543,16 @@ Notation.imperial = new class ImperialNotation extends Notation {
   }
 
   formatDecimal(value) {
-    const logCutoff = 10 * this.VOLUME_UNITS[this.VOLUME_UNITS.length-1][0];
-    if (value.lt(logCutoff)) {
+    if (value.lt(this.maxVolume)) {
       return this.convertToVolume(value.toNumber(), this.VOLUME_ADJECTIVES[0]);
     }
-    let logValue = value.log10() - Math.log10(logCutoff);
-    const reduceRatio = Math.log10(logCutoff/this.VOLUME_UNITS[1][0]);
+    let logValue = value.log10() - this.logMaxVolume;
     let adjectiveIndex = 1;
-    while (logValue > reduceRatio) {
+    while (logValue > this.reduceRatio) {
       adjectiveIndex++;
-      logValue /= reduceRatio;
+      logValue /= this.reduceRatio;
     }
-    return this.convertToVolume(Math.pow(10, logValue) * this.VOLUME_UNITS[1][0], this.VOLUME_ADJECTIVES[adjectiveIndex]);
+    return this.convertToVolume(Math.pow(10, logValue) * this.MINIMS[0], this.VOLUME_ADJECTIVES[adjectiveIndex]);
   }
 
   convertToVolume(x, adjective) {

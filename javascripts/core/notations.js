@@ -634,9 +634,9 @@ Notation.imperial = new class ImperialNotation extends Notation {
     // a minim short of a dram
     // almost a dram               <-- handled above
     if (volIdx === 1) {
-      let deciMinims = Math.round(x * 10 / big[0]);
+      const deciMinims = Math.round(x * 10 / big[0]);
       if (deciMinims === 10) return this.addArticle(adjective + big[1]);
-      let places = deciMinims < 100 ? 1 : 0;
+      const places = deciMinims < 100 ? 1 : 0;
       return `${(deciMinims / 10).toFixed(places)} ${adjective}${big[1]}s`
     }
     if (volIdx === 2) {
@@ -644,10 +644,10 @@ Notation.imperial = new class ImperialNotation extends Notation {
       const remainder = x - numBig * big[0];
       if (remainder > 50.5 * this.MINIMS[0]) { // 9 minims short of a dram
         return this.almostOrShortOf(x, adjective, numBig + 1, big, this.MINIMS);
-      } else { // a dram and 15 minims
-        const numSmall = Math.round(remainder / this.MINIMS[0]);
-        return this.bigAndSmall(adjective, numBig, big, numSmall, this.MINIMS);
       }
+      // for example, a dram and 15 minims
+      const numSmall = Math.round(remainder / this.MINIMS[0]);
+      return this.bigAndSmall(adjective, numBig, big, numSmall, this.MINIMS);
     }
   }
 

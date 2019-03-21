@@ -40,6 +40,9 @@ Vue.component("glyph-inventory", {
     glyphsChanged() {
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);
     },
+    sort() {
+      Glyphs.sort();
+    }
   },
   template: /*html*/`
   <div class="l-glyph-inventory">
@@ -57,6 +60,11 @@ Vue.component("glyph-inventory", {
                          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>
+    <button class="l-glyph-inventory__sort c-reality-upgrade"
+            ach-tooltip="Sort by type and level * rarity"
+            @click="sort">
+      Sort
+    </button>
   </div>
   `,
 })

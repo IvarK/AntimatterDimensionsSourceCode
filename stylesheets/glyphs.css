@@ -498,3 +498,9 @@
 .t-s6 .c-glyph-inventory__slot {
   background-color: #333333;
 }
+
+.l-glyph-inventory__sort {
+  width: auto;
+  height: auto;
+  padding: 0.5em;
+}

@@ -300,6 +300,7 @@ const Glyphs = {
     this.validate();
   },
   swap(glyphA, glyphB) {
+    if (glyphA.idx === glyphB.idx) return;
     this.validate();
     this.inventory[glyphA.idx] = glyphB;
     this.inventory[glyphB.idx] = glyphA;
@@ -341,6 +342,39 @@ const Glyphs = {
       if (this.inventory[i] && this.inventory[i].idx !== i) {
         throw crash("backwards validation error");
       }
+    }
+  },
+  sort() {
+    let freeSpace = this.freeInventorySpace;
+    let byType = GLYPH_TYPES.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
+    for (let g of player.reality.glyphs.inventory) byType[g.type].glyphs.push(g);
+    const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;
+    let totalDesiredPadding = 0;
+    for (let t of Object.values(byType)) {
+      t.glyphs.sort(compareGlyphs);
+      t.padding = Math.ceil(t.glyphs.length / 10) * 10 - t.glyphs.length;
+      // Try to get a full row of padding if possible in some cases
+      if (t.padding < 5 && t.glyphs.length > 8) t.padding += 10;
+      totalDesiredPadding += t.padding;
+    }
+    while (totalDesiredPadding > freeSpace) {
+      // try to remove padding 5 at a time if possible
+      let biggestPadding = GLYPH_TYPES[0];
+      for (let t of GLYPH_TYPES) {
+        if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
+      }
+      const delta = byType[biggestPadding].padding > 12 ? 10 : (byType[biggestPadding].padding > 5 ? 5 : 1);
+      totalDesiredPadding -= delta;
+      byType[biggestPadding].padding -= delta;
+    }
+    let outIndex = 0;
+    for (let t of Object.values(byType)) {
+      for (let g of t.glyphs) {
+        if (this.inventory[outIndex]) this.swap(this.inventory[outIndex], g);
+        else this.moveToEmpty(g, outIndex);
+        ++outIndex;
+      }
+      outIndex += t.padding;
     }
   },
 };

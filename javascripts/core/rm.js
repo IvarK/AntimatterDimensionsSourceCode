@@ -345,7 +345,7 @@ const Glyphs = {
     }
   },
   sort() {
-    let freeSpace = this.freeInventorySpace;
+    const freeSpace = this.freeInventorySpace;
     let byType = GLYPH_TYPES.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (let g of player.reality.glyphs.inventory) byType[g.type].glyphs.push(g);
     const compareGlyphs = (a, b) => -a.level * a.strength + b.level * b.strength;

@@ -649,6 +649,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
       const numSmall = Math.round(remainder / this.MINIMS[0]);
       return this.bigAndSmall(adjective, numBig, big, numSmall, this.MINIMS);
     }
+    return null;
   }
 
 
@@ -680,7 +681,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
     if (x + small[0] >= big[0]) {
       return this.shortOf(adjective, numBig + 1, big, 1, small);
     }
-    return;
+    return null;
   }
 
   bigAndSmall(adjective, numBig, big, numSmall, small) {

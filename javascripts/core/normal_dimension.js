@@ -8,7 +8,8 @@ function normalDimensionCommonMultiplier() {
   multiplier = multiplier.times(kongAllDimMult);
 
   if (!EternityChallenge(9).isRunning) {
-    const glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect
     multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
@@ -48,6 +49,10 @@ function normalDimensionCommonMultiplier() {
 function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const dimension = NormalDimension(tier);
+
+  if (Laitela.isRunning && tier > 1) {
+    return new Decimal(0)
+  }
 
   let multiplier = new Decimal(dimension.pow);
 
@@ -124,6 +129,8 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5)
+  } else if (Laitela.isRunning) {
+    multiplier = multiplier.pow(0.01)
   }
 
   return multiplier;
@@ -257,6 +264,8 @@ function onBuyDimension(tier) {
 function getCostIncreaseThreshold() {
   return new Decimal(Number.MAX_VALUE);
 }
+
+
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);

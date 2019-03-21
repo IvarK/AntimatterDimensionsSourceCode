@@ -2,23 +2,29 @@ var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
 var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
 var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]
 
+function timeDimensionCostMult(tier) {
+  var base = timeDimCostMults[tier]
+  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8
+  return base
+}
+
 function timeDimensionCost(tier, bought) {
   if (tier > 4) {
-    let cost = Decimal.pow(timeDimCostMults[tier] * 100, bought).times(timeDimStartCosts[tier])
+    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier])
     if (cost.gte("1e6000")) {
-      cost = Decimal.pow(timeDimCostMults[tier] * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
     }
     return cost;
   }
-  let cost = Decimal.pow(timeDimCostMults[tier], bought).times(timeDimStartCosts[tier])
+  let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
   if (cost.gte(Number.MAX_VALUE)) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 1.5, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e1300")) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 2.2, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e6000")) {
-    cost = Decimal.pow(timeDimCostMults[tier] * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3)).times(timeDimStartCosts[tier])
   }
   return cost;
 }
@@ -221,6 +227,11 @@ class TimeDimensionState {
 
   get multiplier() {
     const tier = this._tier;
+
+    if (Laitela.isRunning && tier > 1) {
+      return new Decimal(0)
+    }
+
     if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = this.power
       .pow(2)
@@ -243,6 +254,8 @@ class TimeDimensionState {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
       mult = mult.pow(0.5)
+    } else if (Laitela.isRunning) {
+      mult = mult.pow(0.01)
     }
 
     return mult;
@@ -252,6 +265,7 @@ class TimeDimensionState {
     if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || Enslaved.isRunning) {
       return new Decimal(0);
     }
+
     if (EternityChallenge(11).isRunning) {
       return this.amount;
     }

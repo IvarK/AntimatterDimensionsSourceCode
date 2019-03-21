@@ -427,6 +427,19 @@ var player = {
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
       activeMode: false, // false if idle, true if active
+    },
+    laitela: {
+      matter: 0,
+      run: false,
+      unlocks: [],
+      dimensions: Array.range(0, 4).map(() =>
+      ({
+        amount: 0,
+        chanceUpgrades: 0,
+        intervalUpgrades: 0,
+        powerUpgrades: 0,
+        lastUpdate: 0
+      }))
     }
   },
   autoEcIsOn: true,
@@ -511,7 +524,8 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    return GameCache.dimensionMultDecrease.value;
+    const base = GameCache.dimensionMultDecrease.value - 1
+    return 1 + base * Laitela.matterEffectToDimensionMultDecrease
   },
 
   get hasFreeInventorySpace() {

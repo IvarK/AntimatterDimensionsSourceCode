@@ -254,6 +254,11 @@ class InfinityDimensionState {
 
   get multiplier() {
     const tier = this._tier;
+
+    if (Laitela.isRunning && tier > 1) {
+      return new Decimal(0)
+    }
+
     if (EternityChallenge(2).isRunning) {
       return new Decimal(0);
     }
@@ -282,6 +287,8 @@ class InfinityDimensionState {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
       mult = mult.pow(0.5)
+    } else if (Laitela.isRunning) {
+      mult = mult.pow(0.01)
     }
     
     return mult;

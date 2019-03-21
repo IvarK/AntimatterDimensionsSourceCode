@@ -5281,6 +5281,83 @@ screen and (max-width: 480px) {
 
 /* #endregion ra tab*/
 
+/* #startregion laitela tab*/
+
+.o-laitela-run-button {
+  width: 25rem;
+  padding: 2rem;
+  border-radius: .5rem;
+  border: .2rem solid indianred;
+  background: #f1857f;
+  font-family: Typewriter;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.o-laitela-matter-amount {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.c-matter-dimension-container {
+  border: .2rem solid gainsboro;
+  background: whitesmoke;
+  width: 40rem;
+  margin: auto;
+  padding: 2rem;
+  border-radius: .5rem;
+  margin-bottom: 1rem;
+}
+
+.o-matter-dimension-amount {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.c-matter-dimension-buttons button {
+  padding: 1rem;
+  width: 10rem;
+  font-family: Typewriter;
+  background: antiquewhite;
+  border: .1rem solid grey;
+  border-radius: .5rem;
+}
+
+.o-matter-dimension-button-available {
+  background: aquamarine !important;
+  cursor: pointer;
+}
+
+.l-laitela-unlocks-container {
+  width: 70rem;
+  margin: auto;
+}
+
+.o-laitela-shop-button {
+  width: 30rem;
+  padding: 1rem;
+  background: antiquewhite;
+  border: .1rem solid gray;
+  border-radius: .5rem;
+  margin-left: 1rem;
+  margin-top: 2rem;
+  font-family: Typewriter;
+}
+
+.o-laitela-shop-button-available {
+  background: aquamarine;
+  cursor: pointer;
+}
+
+.o-laitela-shop-button-bought {
+  background: #16c55e;
+}
+
+/* #endregion laitela tab*/
+
+
 .c-performance-stats {
   width: 25rem;
   padding: .3rem;

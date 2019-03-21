@@ -438,7 +438,7 @@ var player = {
         chanceUpgrades: 0,
         intervalUpgrades: 0,
         powerUpgrades: 0,
-        lastUpdate: Date.now()
+        lastUpdate: 0
       }))
     }
   },

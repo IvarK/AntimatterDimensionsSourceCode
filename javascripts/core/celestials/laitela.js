@@ -33,7 +33,10 @@ const Laitela = {
     if (!Laitela.isRunning) return
     for (let i = 1; i <= 3; i++) {
       let d = MatterDimension(i + 1)
-      if (d.amount == 0 && player.eternityPoints.gte(laitelaRunUnlockThresholds[i - 1])) d.amount++;
+      if (d.amount == 0 && player.eternityPoints.gte(laitelaRunUnlockThresholds[i - 1])) {
+        d.amount++;
+        d.lastUpdate = player.realTimePlayed
+      }
     } 
   },
 

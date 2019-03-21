@@ -132,8 +132,8 @@ function matterDimensionLoop() {
   for (let i = 1; i <= 4; i++) {
     let d = MatterDimension(i)
 
-    if (d.lastUpdate + d.interval < Date.now()) {
-      let ticks = Math.floor((Date.now() - d.lastUpdate) / d.interval)
+    if (d.lastUpdate + d.interval < player.realTimePlayed) {
+      let ticks = Math.floor((player.realTimePlayed - d.lastUpdate) / d.interval)
       if (i == 1) player.celestials.laitela.matter += getMatterDimensionProduction(i, ticks)
       else MatterDimension(i - 1).amount += getMatterDimensionProduction(i, ticks)
 

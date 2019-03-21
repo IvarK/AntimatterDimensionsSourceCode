@@ -5347,12 +5347,12 @@ screen and (max-width: 480px) {
 }
 
 .o-laitela-shop-button-available {
-  background: aquamarine !important;
+  background: aquamarine;
   cursor: pointer;
 }
 
 .o-laitela-shop-button-bought {
-  background: #16c55e !important;
+  background: #16c55e;
 }
 
 /* #endregion laitela tab*/

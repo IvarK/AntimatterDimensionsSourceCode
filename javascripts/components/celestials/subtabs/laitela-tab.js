@@ -57,7 +57,7 @@ Vue.component('laitela-tab', {
           class="o-laitela-shop-button"
           :class="unlockClassObject(unlock)"
           @click="buyUnlock(unlock)"> 
-            {{ unlock.description }} <br/>> Costs: {{ shorten(unlock.price) }} 
+            {{ unlock.description }} <br/> Costs: {{ shorten(unlock.price) }} 
             <span v-if="unlock.value"><br/>Currently: {{ unlock.format(unlock.value()) }}</span>
         </button>
       </div>

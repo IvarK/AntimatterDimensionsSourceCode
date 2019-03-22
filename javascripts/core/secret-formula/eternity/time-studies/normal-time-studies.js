@@ -45,7 +45,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 41,
     cost: 4,
     description: "Each galaxy gives a 1.2x multiplier on IP gained.",
-    effect: () => Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies),
+    effect: () => Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies),
     formatEffect: value => formatX(value, 2, 1)
   },
   {

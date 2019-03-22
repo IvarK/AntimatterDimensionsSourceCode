@@ -606,7 +606,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
     // The jump from metric to minim is sudden. Small values (< 10) get more decimal places
     // because that's usually something like sacrifice multiplier
     if (x < 1000) {
-      return x < 10 || x === Math.round(x) ? x.toFixed(2) : x.toFixed(0) + "pL"
+      return ((x < 10 || x === Math.round(x)) ? x.toFixed(2) : x.toFixed(0)) + "pL"
     }
     if (x < 1e6) return (x / 1000).toPrecision(4) + "nL";
     return (x / 1e6).toPrecision(4) + "μL";

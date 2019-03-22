@@ -79,7 +79,7 @@ function getBlackHoleDurationCost(blackHole) {
 function getBlackHoleUpgradeCost(amountOfPurchases, i, initialCost, costMult) {
   let wormholeCostMultipliers = [1, 1000, 1e35];
   initialCost *= wormholeCostMultipliers[i];
-  return getCostWithLinearCostScaling(amountOfPurchases, 1e35, initialCost, costMult, 0.2);
+  return getCostWithLinearCostScaling(amountOfPurchases, 1e30, initialCost, costMult, 0.2);
 }
 
 function upgradeBlackHoleInterval(i) {

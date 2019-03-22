@@ -566,7 +566,7 @@ function canBuyRealityUpg(id) {
 }
 
 function getRealityRebuyableCost(id) {
-  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e35, REALITY_UPGRADE_COSTS[id],
+  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e30, REALITY_UPGRADE_COSTS[id],
     REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
 }
 
@@ -639,7 +639,7 @@ function canSacrifice(glyph) {
 
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
-  return Math.pow(glyph.rawLevel + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
+  return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
 }
 
 function sacrificeGlyph(glyph, force = false) {

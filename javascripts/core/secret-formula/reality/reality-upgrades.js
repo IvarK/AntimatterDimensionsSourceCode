@@ -1,34 +1,44 @@
 GameDatabase.reality.upgrades = [
   {
     id: 1,
-    cost: 1,
-    description: "You gain Dilated Time 3 times faster"
+    cost: () => getRealityRebuyableCost(1),
+    description: "You gain Dilated Time 3 times faster",
+    effect: () => Math.pow(3, player.reality.rebuyables[1]),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 2,
-    cost: 2,
-    description: "You gain Replicanti 3 times faster"
+    cost: () => getRealityRebuyableCost(2),
+    description: "You gain Replicanti 3 times faster",
+    effect: () => Math.pow(3, player.reality.rebuyables[2]),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 3,
-    cost: 2,
-    description: "You gain 3 times more Eternities"
+    cost: () => getRealityRebuyableCost(3),
+    description: "You gain 3 times more Eternities",
+    effect: () => Math.pow(3, player.reality.rebuyables[3]),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 4,
-    cost: 3,
-    description: "You gain 3 times more Tachyon Particles"
+    cost: () => getRealityRebuyableCost(4),
+    description: "You gain 3 times more Tachyon Particles",
+    effect: () => Math.pow(3, player.reality.rebuyables[4]),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 5,
-    cost: 4,
-    description: "You gain 5 times more Infinities"
+    cost: () => getRealityRebuyableCost(5),
+    description: "You gain 5 times more Infinities",
+    effect: () => Math.pow(5, player.reality.rebuyables[5]),
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 6,
     cost: 15,
     requirement: "Reach first Eternity without getting any RGs during that Eternity",
-    description: "Replicanti gain is boosted from RGs (x RG/50)",
+    description: "Replicanti gain is boosted from RGs",
     effect: () => 1 + (player.replicanti.galaxies / 50),
     formatEffect: value => formatX(value, 2, 2)
   },
@@ -36,14 +46,14 @@ GameDatabase.reality.upgrades = [
     id: 7,
     cost: 15,
     requirement: "Reach first Infinity with just 1 galaxy",
-    description: "Infinitied stat gain is boosted from Antimatter Galaxies (x Galaxies/30)",
+    description: "Infinitied stat gain is boosted from Antimatter Galaxies",
     effect: () => 1 + (player.galaxies / 30),
     formatEffect: value => formatX(value, 2, 2)
   },
   {
     id: 8,
     cost: 15,
-    description: "Tachyon Particle gain is multiplied based on achievement multiplier (mult^0.5)",
+    description: "Tachyon Particle gain is multiplied based on achievement multiplier",
     requirement: "Have the first 13 rows of achievements when you Infinity the first time",
     effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")).sqrt(),
     formatEffect: value => formatX(value, 2, 2)
@@ -66,7 +76,7 @@ GameDatabase.reality.upgrades = [
     requirement: "1,000,000,000,000 banked Infinities",
     description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
     effect: () => gainedInfinities().times(0.1).floor(),
-    formatEffect: value => `${shorten(value)} Infinities/sec`
+    formatEffect: value => `${shorten(value)} per second`
   },
   {
     id: 12,
@@ -120,7 +130,7 @@ GameDatabase.reality.upgrades = [
     id: 19,
     cost: 1500,
     requirement: "Have a total of 30 glyphs",
-    description: "You can sacrifice glyphs for permanent bonuses (shift+click)"
+    description: "You can sacrifice glyphs for permanent bonuses (Shift + click)"
   },
   {
     id: 20,
@@ -146,7 +156,7 @@ GameDatabase.reality.upgrades = [
     id: 23,
     cost: 100000,
     requirement: "Reality in under 15 minutes",
-    description: "Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality)",
+    description: "Replicanti gain is boosted from your fastest reality",
     effect: () => Math.max(15 / Time.bestReality.totalMinutes, 1),
     cap: 900,
     formatEffect: value => formatX(value, 2, 2)
@@ -154,8 +164,8 @@ GameDatabase.reality.upgrades = [
   {
     id: 24,
     cost: 100000,
-    requirement: "Gain another glyph slot",
-    description: "Reality for 5000 RM without glyphs"
+    requirement: "Reality for 5000 RM without glyphs",
+    description: "Gain another glyph slot"
   },
   {
     id: 25,

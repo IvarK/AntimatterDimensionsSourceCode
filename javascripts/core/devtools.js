@@ -553,7 +553,7 @@ dev.updateTestSave = function() {
     for (let upg of player.reality.upg) RealityUpgrade(upg).purchase();
     delete player.reality.upg;
   }
-  if (!RealityUpgrades.includes(25)) player.realityBuyer.isOn = false;
+  if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
 }
 
 // Still WIP

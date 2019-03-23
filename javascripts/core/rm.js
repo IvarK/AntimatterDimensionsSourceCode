@@ -589,13 +589,6 @@ function canBuyRealityUpg(id) {
   if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
   if (RealityUpgrade(id).isBought) return false // Doesn't have it already
   if (!player.reality.upgReqs[id]) return false // Has done conditions
-  var row = Math.floor((id - 1) / 5)
-  if (row < 2) return true
-  else {
-    for (var i = row * 5 - 4; i <= row * 5; i++) {
-      if (!RealityUpgrade(i).isBought) return false // This checks that you have all the upgrades from the previous row
-    }
-  }
   return true
 }
 
@@ -620,46 +613,8 @@ function buyRealityUpg(id) {
   }
 
   if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-  updateRealityUpgrades()
   updateBlackHoleUpgrades()
   return true
-}
-
-function updateRealityUpgrades() {
-  for (let i = 1; i <= 25; ++i) {
-    if (!canBuyRealityUpg(i)) $("#rupg" + i).addClass("rUpgUn")
-    else $("#rupg" + i).removeClass("rUpgUn")
-  }
-
-  player.reality.upgReqs.forEach((check, idx) => {
-    if (idx > 0) {
-      if (check) $("#rupg" + idx).removeClass("rUpgReqNotMet")
-      else $("#rupg" + idx).addClass("rUpgReqNotMet")
-    }
-  });
-
-  for (let i = 1; i <= 25; ++i) {
-    if (RealityUpgrade(i).isBought) $("#rupg" + i).addClass("rUpgBought")
-    else $("#rupg" + i).removeClass("rUpgBought")
-  }
-
-  let row1Mults = [null, 3, 3, 3, 3, 5];
-  let row1Costs = [null];
-  for (var i = 1; i <= 5; i++) {
-    row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-    row1Costs.push(shortenDimensions(getRealityRebuyableCost(i)));
-  }
-
-  $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")
-  $("#rupg2").html("You gain Replicanti 3 times faster<br>Currently: " + row1Mults[2] + "x<br>Cost: " + row1Costs[2] + " RM")
-  $("#rupg3").html("You gain 3 times more Eternities<br>Currently: " + row1Mults[3] + "x<br>Cost: " + row1Costs[3] + " RM")
-  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: " + row1Mults[4] + "x<br>Cost: " + row1Costs[4] + " RM")
-  $("#rupg5").html("You gain 5 times more Infinities<br>Currently: " + row1Mults[5] + "x<br>Cost: " + row1Costs[5] + " RM")
-  const rupg12Value = shortenRateOfChange(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1));
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
-  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e28000 time shards</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
-  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.clamp(9e5 / player.bestReality, 1, 900))+"<br>Cost: 100,000 RM</div>")
 }
 
 function respecGlyphs() {
@@ -807,19 +762,58 @@ class RealityUpgradeState extends GameMechanicState {
     return (player.reality.upgradeBits & (1 << this.id)) !== 0;
   }
 
+  get canBeBought() {
+    return canBuyRealityUpg(this.id);
+  }
+
   purchase() {
-    player.reality.upgradeBits = player.reality.upgradeBits | (1 << this.id);
+    const id = this.id;
+    if (!this.canBeBought) return false
+    if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
+    else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
+    if (id < 6) player.reality.rebuyables[id]++
+    else player.reality.upgradeBits = player.reality.upgradeBits | (1 << this.id);
+    if (id == 9 || id == 24) {
+      player.reality.glyphs.slots++
+    }
+    if (id == 20) {
+      if (!player.blackHole[0].unlocked) return
+      player.blackHole[1].unlocked = true
+      $("#bhupg2").show()
+    }
+
+    if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+    updateBlackHoleUpgrades()
+    return true
   }
 
   remove() {
     player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << this.id);
   }
+
+  get isRequirementMet() {
+    return player.reality.upgReqs[this.id];
+  }
 }
 
 RealityUpgradeState.list = mapGameData(
-  GameDatabase.reality.upgrades,
+  GameDatabase.reality.upgrades.slice(5),
   config => new RealityUpgradeState(config)
 );
+
+class RebuyableRealityUpgradeState extends RealityUpgradeState {
+  get isBought() {
+    return false;
+  }
+
+  get canBeBought() {
+    return canBuyRealityUpg(this.id);
+  }
+}
+
+for (let i = 1; i < 6; i++) {
+  RealityUpgradeState.list[i] = new RebuyableRealityUpgradeState(GameDatabase.reality.upgrades[i - 1]);
+}
 
 /**
  *

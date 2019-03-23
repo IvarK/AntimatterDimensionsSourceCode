@@ -694,7 +694,6 @@ setInterval(function() {
     }
 
     updateAchievementPower();
-    updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
     if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) unlockRealityUpgrade(21)
@@ -1246,7 +1245,7 @@ function autoBuyInfDims() {
 
 function autoBuyTimeDims() {
   if (RealityUpgrade(13).isBought) {
-    for (var i = 1; i < 9; i++) {
+    for (let i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i)
       }

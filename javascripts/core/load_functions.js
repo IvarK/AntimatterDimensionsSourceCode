@@ -185,7 +185,6 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  updateRealityUpgrades();
   updateBlackHoleUpgrades()
   updateAutomatorRows()
   checkPerkValidity()

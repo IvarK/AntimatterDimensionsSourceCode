@@ -908,64 +908,6 @@ br {
     pointer-events:none;
 }
 
-.l-reality-upgrade {
-  padding: 12px;
-  margin-bottom: 12px;
-  height: 100px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.c-reality-upgrade {
-  background-color: black;
-  border: 2px solid #0b600e;
-  border-radius: 5px;
-  color: #d5ffd7;
-  cursor: pointer;
-  transition-duration: 0.12s;
-  text-align: center;
-}
-
-.c-reality-upgrade:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-/*
-reality upgrade unavailable
-*/
-.rUpgUn {
-    background-color: #656565;
-    cursor: default;
-}
-
-.rUpgUn:hover {
-    background-color: #656565;
-    color: #d5ffd7;
-}
-
-.rUpgBought {
-    background-color: #0b600e;
-    border-color: #094E0B;
-    cursor: default;
-}
-
-.rUpgBought:hover {
-    color: #d5ffd7;
-    background-color: #0b600e
-}
-
-.rUpgReqNotMet {
-    background-color: rgb(165, 57, 57)
-}
-
-.rUpgReqNotMet:hover {
-    background-color: rgb(165, 57, 57)
-}
-
 .videocontainer {
     position: fixed;
     z-index: -1000;
@@ -1094,11 +1036,6 @@ reality upgrade unavailable
     transition-duration: 0.12s;
     width: 150px;
     height: 50px;
-}
-
-
-.realityUpgradeTable > tbody > tr > td {
-    width: 18%;
 }
 
 #pp {
@@ -5535,4 +5472,74 @@ screen and (max-width: 480px) {
   flex-direction: column;
   padding-top: 2rem;
   justify-content: flex-start;
+}
+
+.l-reality-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-reality-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-reality-upgrade-grid__row > * {
+  margin: 1.2rem;
+  flex: 1 1 0;
+}
+
+.l-reality-upgrade {
+  height: 10rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.c-reality-upgrade {
+  background-color: black;
+  border: .2rem solid #0b600e;
+  border-radius: .5rem;
+  color: #d5ffd7;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter, serif;
+}
+
+.c-reality-upgrade:hover {
+  color: black;
+  background-color: #d5ffd7;
+}
+
+.c-reality-upgrade--unavailable {
+  background-color: #656565;
+  cursor: default;
+}
+
+.c-reality-upgrade--unavailable:hover {
+  background-color: #656565;
+  color: #d5ffd7;
+}
+
+.c-reality-upgrade--bought {
+  background-color: #0b600e;
+  border-color: #094E0B;
+  cursor: default;
+}
+
+.c-reality-upgrade--bought:hover {
+  color: #d5ffd7;
+  background-color: #0b600e
+}
+
+.c-reality-upgrade--requirement-not-met {
+  background-color: #a53939
+}
+
+.c-reality-upgrade--requirement-not-met:hover {
+  background-color: #a53939
 }

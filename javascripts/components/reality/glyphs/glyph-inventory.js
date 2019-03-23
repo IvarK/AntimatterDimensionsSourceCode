@@ -60,7 +60,7 @@ Vue.component("glyph-inventory", {
                          @clicked="clickGlyph(col, $event)"/>
       </div>
     </div>
-    <button class="l-glyph-inventory__sort c-reality-upgrade"
+    <button class="l-glyph-inventory__sort c-reality-upgrade-btn"
             ach-tooltip="Sort by type and level * rarity"
             @click="sort">
       Sort

@@ -32,9 +32,10 @@ Vue.component("reality-upgrade-button", {
   template: `
     <button
       :class="classObject"
-      class="l-reality-upgrade c-reality-upgrade"
+      class="l-reality-upgrade-btn c-reality-upgrade-btn"
       @click="upgrade.purchase()"
     >
+      <hint-text class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
       <b v-if="!isUnlocked">Requires: {{config.requirement}}</b>
       <template v-else>

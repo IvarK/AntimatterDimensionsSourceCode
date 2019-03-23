@@ -9,6 +9,7 @@ Vue.component("game-header-eternity-button", {
       gainedTachyons: new Decimal(0),
       challengeCompletions: 0,
       gainedCompletions: 0,
+      fullyCompleted: false,
       failedCondition: undefined,
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0)
@@ -70,6 +71,7 @@ Vue.component("game-header-eternity-button", {
         gainedCompletions++;
       }
       const totalCompletions = currentCompletions + gainedCompletions;
+      this.fullyCompleted = currentCompletions === 5;
       let maxEC4Valid = 0;
       if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
       if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {
@@ -142,15 +144,21 @@ Vue.component("game-header-eternity-button", {
       <!-- Challenge with multiple completions -->
       <template v-else-if="type === 6">
         Other challenges await...
-        <br>
-        {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
-        <template v-if="failedCondition">
+        <template v-if="fullyCompleted">
           <br>
-          {{failedCondition}}
+          (This challenge is already fully completed)
         </template>
-        <template v-else-if="hasMoreCompletions">
+        <template v-else>
           <br>
-          Next goal at {{shortenCosts(nextGoalAt)}} IP
+          {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
+          <template v-if="failedCondition">
+            <br>
+            {{failedCondition}}
+          </template>
+          <template v-else-if="hasMoreCompletions">
+            <br>
+            Next goal at {{shortenCosts(nextGoalAt)}} IP
+          </template>
         </template>
       </template>
     </button>`

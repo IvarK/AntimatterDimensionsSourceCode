@@ -13,11 +13,15 @@ Vue.component("dilation-button", {
     update() {
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
-      this.hasGain = getTachyonGain().gt(0);
-      this.requiredForGain.copyFrom(getTachyonReq());
       this.canEternity = player.infinityPoints.gte(player.eternityChallGoal)
-      this.eternityChallGoal.copyFrom(player.eternityChallGoal)
-      this.tachyonGain.copyFrom(getTachyonGain());
+      this.hasGain = getTachyonGain().gt(0);
+      if (this.canEternity && this.hasGain) {
+        this.tachyonGain.copyFrom(getTachyonGain());
+      } else if (this.hasGain) {
+        this.eternityChallGoal.copyFrom(player.eternityChallGoal);
+      } else {
+        this.requiredForGain.copyFrom(getTachyonReq());
+      }
     }
   },
   template:

@@ -63,6 +63,8 @@ Vue.component("game-header-eternity-button", {
     updateChallengeWithRUPG() {
       const currentEC = EternityChallenge.current();
       const currentCompletions = currentEC.completions;
+      this.fullyCompleted = currentCompletions === 5;
+      if (this.fullyCompleted) return;
       let gainedCompletions = 1;
       while (
         player.infinityPoints.gte(currentEC.goalAtCompletions(currentCompletions + gainedCompletions)) &&
@@ -71,7 +73,6 @@ Vue.component("game-header-eternity-button", {
         gainedCompletions++;
       }
       const totalCompletions = currentCompletions + gainedCompletions;
-      this.fullyCompleted = currentCompletions === 5;
       let maxEC4Valid = 0;
       if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
       if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {

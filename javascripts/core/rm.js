@@ -659,7 +659,7 @@ function updateRealityUpgrades() {
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
   $("#rupg22").html("<b>Requires: 1e28000 time shards</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
-  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.max(9e5 / player.bestReality, 1))+"<br>Cost: 100,000 RM</div>")
+  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.clamp(9e5 / player.bestReality, 1, 900))+"<br>Cost: 100,000 RM</div>")
 }
 
 function respecGlyphs() {

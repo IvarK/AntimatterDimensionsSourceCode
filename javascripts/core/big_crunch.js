@@ -2,7 +2,6 @@ function bigCrunchReset() {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
     if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
     const isInChallenge = player.currentChallenge !== "";
-    const isInPreBreakChallenge = isInChallenge && !player.currentChallenge.includes("post");
     if (player.money.lt(Number.MAX_VALUE)) {
         return;
     }

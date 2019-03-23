@@ -1,11 +1,19 @@
-function eternity(force, auto) {
+function canEternity() {
+  const challenge = EternityChallenge.current();
+  if (challenge === undefined && player.infinityPoints.lt(Number.MAX_VALUE)) return false;
+  if (challenge !== undefined && !challenge.canBeCompleted) return false;
+  return true;
+}
+
+function eternity(force, auto, disablingDilation) {
+    if (disablingDilation) {
+      if (!canEternity()) force = true;
+    }
     if (force) {
       player.currentEternityChall = String.empty;
     }
     else {
-      const challenge = EternityChallenge.current();
-      if (challenge === undefined && player.infinityPoints.lt(Number.MAX_VALUE)) return false;
-      if (challenge !== undefined && !challenge.canBeCompleted) return false;
+      if (!canEternity()) return false;
       if (!auto && !askEternityConfirmation()) return false;
       if (player.thisEternity < player.bestEternity) {
         player.bestEternity = player.thisEternity;
@@ -21,9 +29,9 @@ function eternity(force, auto) {
       if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) {
         giveAchievement("Now you're thinking with dilation!");
       }
+      player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
+      addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     }
-    player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
     if (EternityChallenge.isRunning()) {
       const challenge = EternityChallenge.current();
@@ -48,7 +56,7 @@ function eternity(force, auto) {
     if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && RealityUpgrades.includes(10))) && player.reality.upgReqChecks[0]) {
       unlockRealityUpgrade(6);
     }
-    if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
+    if (player.dilation.active && !force) {
         player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
         player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
     }

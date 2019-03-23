@@ -29,8 +29,60 @@ const AutoRealityMode = {
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 const TS171_MULTIPLIER = 1.25;
 
-// Use through Automator.Instructions; here to support
-// creation of index by ID
+// Used as drag and drop data type
+const GLYPH_MIME_TYPE = "text/x-ivark-glyph";
+
+// These need to be in descending order for searching over them to work trivially
+const GlyphRarities = [
+  {
+    minStrength: 3.5,
+    name: "Celestial",
+    color: "#5151ec"
+  }, {
+    minStrength: 3.25,
+    name: "Transcendent",
+    color: "#03ffec"
+  }, {
+    minStrength: 3,
+    name: "Mythical",
+    color: "#d50000"
+  }, {
+    minStrength: 2.75,
+    name: "Legendary",
+    color: "#ff9800"
+  }, {
+    minStrength: 2.5,
+    name: "Epic",
+    color: "#9c27b0"
+  }, {
+    minStrength: 2,
+    name: "Rare",
+    color: "#2196f3"
+  }, {
+    minStrength: 1.5,
+    name: "Uncommon",
+    color: "#43a047"
+  }, {
+    minStrength: 1,
+    name: "Common",
+    color: "white"
+  },
+];
+
+const AutoGlyphSacMode = {
+  NONE: 0,
+  ALL: 1,
+  RARITY_THRESHOLDS: 2,
+  ADVANCED: 3,
+}
+
+const AutoGlyphPickMode = {
+  RANDOM: 0,
+  RARITY: 1,
+  ABOVE_SACRIFICE_THRESHOLD: 2,
+}
+
+// Use through Automator.Instructions; here to support creation of index by ID
 const _AutomatorInstructions = Object.freeze({
   WAIT: {
     id: 11,

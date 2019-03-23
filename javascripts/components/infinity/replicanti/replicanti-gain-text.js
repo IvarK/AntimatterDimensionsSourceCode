@@ -12,7 +12,7 @@ Vue.component("replicanti-gain-text", {
       const galaxyInterval = logInfinity / logChance * noModInterval;
       if (galaxyInterval < Time.deltaTimeMs / 2) {
         const gps = 1000 / Math.max(galaxyInterval, 0);
-        const speed = gps < 1000 ? gps.toPrecision(3) : formatWithCommas(Math.floor(gps));
+        const speed = gps < 1000 ? gps.toPrecision(3) : gps < 1000000000 ? formatWithCommas(Math.floor(gps)) : shorten(gps, 3);
         this.text = `You gain Approximately ${speed} RGs per Second`;
       } else {
         const est = logChance * 1000 / getReplicantiInterval();

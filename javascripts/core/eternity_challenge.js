@@ -12,7 +12,7 @@ function startEternityChallenge() {
       }
     }
     player.currentChallenge = "";
-    player.infinitied = 0;
+    player.infinitied = new Decimal(0);
     player.bestInfinityTime = 9999999999;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
@@ -51,7 +51,6 @@ function startEternityChallenge() {
     player.dimlife = true;
     player.dead = true;
 
-    player.dilation.active = false;
     resetInfinityRuns();
     fullResetInfDimensions();
     eternityResetReplicanti();
@@ -230,7 +229,7 @@ EternityChallenge.completedTiers = () => {
 EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
 EternityChallenge.currentAutoCompleteThreshold = function() {
-  const hours = Effects.min(
+  let hours = Effects.min(
     Number.MAX_VALUE,
     Perk.autocompleteEC1,
     Perk.autocompleteEC2,
@@ -238,6 +237,7 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
     Perk.autocompleteEC4,
     Perk.autocompleteEC5
   );
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect()
   return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
 }
 
@@ -253,7 +253,7 @@ EternityChallenge.autoCompleteNext = function() {
 }
 
 EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = player.reality.upg.includes(10) ? player.eternities > 100 : player.eternities > 0
+  let isPostEc = RealityUpgrades.includes(10) ? player.eternities > 100 : player.eternities > 0
   if (!isPostEc || !player.autoEcIsOn) return
   let threshold = this.currentAutoCompleteThreshold()
   while (player.reality.lastAutoEC - threshold > 0) {

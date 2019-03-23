@@ -9,7 +9,6 @@ var justImported = false;
 var saved = 0;
 var failureCount = 0;
 var implosionCheck = 0;
-var realizationCheck = 0;
 var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
@@ -50,14 +49,15 @@ var player = {
   seventhPow: new Decimal(1),
   eightPow: new Decimal(1),
   sacrificed: new Decimal(0),
-  achievements: [],
+  achievements: new Set(),
+  secretAchievements: new Set(),
   infinityUpgrades: [],
   infinityRebuyables: [0, 0],
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
-  infinitied: 0,
-  infinitiedBank: 0,
+  infinitied: new Decimal(0),
+  infinitiedBank: new Decimal(0),
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
@@ -315,7 +315,7 @@ var player = {
       4: 0,
       5: 0,
     },
-    upg: [],
+    upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
               false, false, false, false, false, 
               false, false, false, false, false, 
@@ -326,7 +326,7 @@ var player = {
     automatorOn: false,
     automatorCurrentRow: 0,
     automatorRows: 0,
-    automatorCommands: [],
+    automatorCommands: new Set(),
     perks: [],
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
@@ -336,34 +336,37 @@ var player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  wormhole: [{
-    speed: 60 * 60, // Seconds to fill
-    power: 180, // Multiplier from the wormhole
-    duration: 10, // How long it lasts.
+  blackHole: [{
+    id: 0,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,
     activations: 0
   },
   {
-    speed: 60 * 6,
-    power: 90, 
-    duration: 7, 
+    id: 1,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,
     activations: 0
   },
   {
-    speed: 6 * 6,
-    power: 45, 
-    duration: 4, 
+    id: 2,
+    intervalUpgrades: 0,
+    powerUpgrades: 0,
+    durationUpgrades: 0,
     phase: 0,
     active: false,
     unlocked: false,
     activations: 0
   }],
-  wormholePause: false,
+  blackHolePause: false,
   ttbuyer: false,
   celestials: {
     teresa: {
@@ -373,29 +376,70 @@ var player = {
       run: false,
       bestRunAM: new Decimal(0),
       glyphLevelMult: 1,
-      rmMult: 1
+      rmMult: 1,
+      dtBulk: 1
     },
     effarig: {
       relicShards: 0,
       unlocks: [],
       run: false,
+      quoteIdx: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
         dt: 25,
         eternities: 25
       },
-      typePriorityOrder: ["Power", "Time", "Infinity", "Dilation", "Replication"]
+      autoGlyphSac: {
+        mode: AutoGlyphSacMode.NONE,
+        types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+        })),
+      },
+      autoGlyphPick: {
+        mode: AutoGlyphPickMode.RANDOM,
+      },
     },
     enslaved: {
       isStoring: false,
+      quoteIdx: 0,
       stored: 0,
       unlocks: [],
-      run: false
+      run: false,
+      quoteIdx: 0,
+      maxQuotes: 6
     },
     v: {
       unlocks: [],
+      quoteIdx: 0,
       run: false,
+      runUnlocks: [0, 0, 0, 0, 0, 0],
+      additionalStudies: 0
+    },
+    ra: {
+      level: 1,
+      exp: 0,
+      unlocks: [],
+      run: false,
+      charged: [],
+      quoteIdx: 0,
+      maxEpGained: new Decimal(0),
+      activeMode: false, // false if idle, true if active
+    },
+    laitela: {
+      matter: 0,
+      run: false,
+      unlocks: [],
+      dimensions: Array.range(0, 4).map(() =>
+      ({
+        amount: 0,
+        chanceUpgrades: 0,
+        intervalUpgrades: 0,
+        powerUpgrades: 0,
+        lastUpdate: 0
+      }))
     }
   },
   autoEcIsOn: true,
@@ -439,7 +483,7 @@ var player = {
 const Player = {
 
   get totalInfinitied() {
-    return Math.max(player.infinitied + player.infinitiedBank, 0);
+    return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
   get isInMatterChallenge() {
@@ -480,8 +524,13 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    return GameCache.dimensionMultDecrease.value;
-  }
+    const base = GameCache.dimensionMultDecrease.value - 1
+    return 1 + base * Laitela.matterEffectToDimensionMultDecrease
+  },
+
+  get hasFreeInventorySpace() {
+    return Glyphs.freeInventorySpace > 0;
+  },
 };
 
 function guardFromNaNValues(obj) {

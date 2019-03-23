@@ -1,57 +1,24 @@
-function getDimensionFinalMultiplier(tier) {
-  //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
-  const dimension = NormalDimension(tier);
+// Multiplier applied to all normal dimensions, regardless of tier. This is cached using a Lazy
+// and invalidated every update.
+function normalDimensionCommonMultiplier() {
+  let multiplier = new Decimal(1);
+  if (Achievement(11).isEnabled) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
 
-  let multiplier = new Decimal(dimension.pow);
-
-  if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
-  if (Challenge(12).isRunning) {
-    if (tier === 4) multiplier = multiplier.pow(1.4);
-    if (tier === 2) multiplier = multiplier.pow(1.7)
-  }
-
-  if (isAchEnabled("r11")) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
-  let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-  let glyphMultMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powermult"));
-  let glyphPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("powerpow"));
-  let glyphDilationPowMultiplier = new Decimal(1).max(getAdjustedGlyphEffect("dilationpow"));
 
   if (!EternityChallenge(9).isRunning) {
+    let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
+    if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect
     multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
   }
-
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
     BreakInfinityUpgrade.currentAMMult,
     BreakInfinityUpgrade.achievementMult,
-    BreakInfinityUpgrade.slowestChallengeMult
-  );
-
-  let infinitiedMult = new Decimal(1).timesEffectsOf(
-    dimension.infinityUpgrade,
-    BreakInfinityUpgrade.infinitiedMult
-  );
-  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
-  multiplier = multiplier.times(infinitiedMult);
-  if (tier === 1) {
-    multiplier = multiplier
-      .timesEffectsOf(
-        InfinityUpgrade.unspentIPMult,
-        Achievement(28),
-        Achievement(31),
-        Achievement(68),
-        Achievement(71)
-      );
-  }
-
-  multiplier = multiplier.timesEffectsOf(
+    BreakInfinityUpgrade.slowestChallengeMult,
     InfinityUpgrade.totalTimeMult,
     InfinityUpgrade.thisInfinityTimeMult,
-    tier === 8 ? Achievement(23) : null,
-    tier !== 8 ? Achievement(34) : null,
-    tier <= 4 ? Achievement(43) : null,
     Achievement(48),
     Achievement(56),
     Achievement(65),
@@ -63,23 +30,78 @@ function getDimensionFinalMultiplier(tier) {
     Achievement(84),
     Achievement(91),
     Achievement(92),
-    tier !== 8 ? TimeStudy(71) : null,
-    tier === 1 ? TimeStudy(234) : null,
     TimeStudy(91),
     TimeStudy(101),
     TimeStudy(161),
+    TimeStudy(193),
     InfinityChallenge(3),
     InfinityChallenge(3).reward,
     InfinityChallenge(8),
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
+    EternityChallenge(10)
   );
 
+  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
+  multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
+
+  return multiplier;
+}
+
+function getDimensionFinalMultiplier(tier) {
+  //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
+  const dimension = NormalDimension(tier);
+
+  if (Laitela.isRunning && tier > 1) {
+    return new Decimal(0)
+  }
+
+  let multiplier = new Decimal(dimension.pow);
+
+  if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
+  if (Challenge(12).isRunning) {
+    if (tier === 4) multiplier = multiplier.pow(1.4);
+    if (tier === 2) multiplier = multiplier.pow(1.7)
+  }
+
+  multiplier = multiplier.times(GameCache.normalDimensionCommonMultiplier.value);
+
+  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
+  const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
+  const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
+
+  let infinitiedMult = new Decimal(1).timesEffectsOf(
+    dimension.infinityUpgrade,
+    BreakInfinityUpgrade.infinitiedMult
+  );
+  infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
+  multiplier = multiplier.times(infinitiedMult);
+
+  if (tier === 1) {
+    multiplier = multiplier
+      .timesEffectsOf(
+        InfinityUpgrade.unspentIPMult,
+        InfinityUpgrade.unspentIPMult.chargedEffect,
+        Achievement(28),
+        Achievement(31),
+        Achievement(68),
+        Achievement(71),
+        TimeStudy(234),
+      );
+  }
+
+  multiplier = multiplier.timesEffectsOf(
+    tier === 8 ? Achievement(23) : null,
+    tier !== 8 ? Achievement(34) : null,
+    tier <= 4 ? Achievement(43) : null,
+    tier !== 8 ? TimeStudy(71) : null,
+    tier === 8 ? TimeStudy(214) : null,
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
+  );
   if (Achievement(77).isEnabled) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
 
-  multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
+  multiplier = multiplier.clampMin(1);
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
@@ -88,14 +110,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier
-    .timesEffectsOf(
-      TimeStudy(193),
-      tier === 8 ? TimeStudy(214) : null,
-      EternityChallenge(10)
-    );
-  multiplier = multiplier.clampMin(1);
-  multiplier = multiplier.times(glyphMultMultiplier).pow(glyphPowMultiplier);
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
@@ -103,10 +118,21 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
+  multiplier = multiplier
+    .powEffectsOf(
+      dimension.infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
+    )
+
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
+  } else if (V.isRunning) {
+    multiplier = multiplier.pow(0.5)
+  } else if (Laitela.isRunning) {
+    multiplier = multiplier.pow(0.01)
   }
-  
+
   return multiplier;
 }
 
@@ -143,7 +169,7 @@ function multiplyPC5Costs(cost, tier) {
 }
 
 function isTickspeedPurchaseUnlocked() {
-  return player.secondAmount.gt(0);
+  return player.secondAmount.gt(0) || player.eternities >= 30;
 }
 
 function canBuyDimension(tier) {
@@ -157,21 +183,23 @@ function canBuyDimension(tier) {
   return tier < 7 || !Challenge(10).isRunning;
 }
 
-function getDimensionPowerMultiplier(tier) {
+function getBuyTenMultiplier() {
   let dimMult = 2;
 
   if (Challenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
 
-  dimMult+= Effects.sum(Achievement(141).secondaryEffect);
+  dimMult += Effects.sum(Achievement(141).secondaryEffect);
   dimMult *= Effects.product(
     InfinityUpgrade.buy10Mult,
     Achievement(58)
   );
   dimMult += Effects.sum(EternityChallenge(3).reward);
 
-  dimMult *= Math.max(1, getAdjustedGlyphEffect("powerbuy10"))
+  dimMult *= getAdjustedGlyphEffect("powerbuy10");
 
-  dimMult = Decimal.pow(getAdjustedGlyphEffect("effarigforgotten"), NormalDimension(tier).bought/10).times(dimMult)
+  dimMult = Decimal.pow(dimMult, getAdjustedGlyphEffect("effarigforgotten"))
+
+  dimMult = dimMult.powEffectsOf(InfinityUpgrade.buy10Mult.chargedEffect)
 
   return dimMult;
 }
@@ -234,8 +262,10 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  return new Decimal(Number.MAX_VALUE).times(Decimal.pow(10, getAdjustedGlyphEffect("effarigdimensions")))
+  return new Decimal(Number.MAX_VALUE);
 }
+
+
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
@@ -275,12 +305,12 @@ function buyOneDimension(tier) {
   dimension.bought++;
 
   if (dimension.boughtBefore10 === 0) {
-    dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+    dimension.pow = dimension.pow.times(getBuyTenMultiplier());
     if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
     if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
-    floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)))
+    floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
   }
 
   if (Challenge(2).isRunning) player.chall2Pow = 0;
@@ -330,14 +360,14 @@ function buyManyDimension(tier) {
 
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
-  dimension.pow = dimension.pow.times(getDimensionPowerMultiplier(tier));
+  dimension.pow = dimension.pow.times(getBuyTenMultiplier());
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
   if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0;
   if (Challenge(4).isRunning) clearDimensions(tier - 1);
-  floatText(tier, "x" + shortenMoney(getDimensionPowerMultiplier(tier)));
+  floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
   onBuyDimension(tier);
 
   return true;
@@ -355,7 +385,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = player.costMultipliers[tier - 1];
-  const dimensionPowerMultiplier = getDimensionPowerMultiplier(tier);
+  const buyTenMultiplier = getBuyTenMultiplier();
   const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
   const dimensionMultDecrease = Player.dimensionMultDecrease;
   const costUntil10 = dimension.cost.times(remainingUntil10);
@@ -367,7 +397,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       lowerDimension.amount = lowerDimension.amount.minus(costUntil10);
       dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
       dimension.bought += remainingUntil10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       dimension.cost = dimension.cost.times(dimensionCostMultiplier)
     }
     let x = bulk;
@@ -376,7 +406,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       dimension.cost = dimension.cost.times(dimensionCostMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
       x--;
     }
@@ -387,7 +417,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     player.money = player.money.minus(costUntil10);
     dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
     dimension.bought += remainingUntil10;
-    dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+    dimension.pow = dimension.pow.times(buyTenMultiplier);
     dimension.cost = dimension.cost.times(dimensionCostMultiplier)
   }
   if (player.money.lt(dimension.cost.times(10))) return false;
@@ -401,7 +431,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       else dimension.cost = dimension.cost.times(dimensionCostMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
-      dimension.pow = dimension.pow.times(dimensionPowerMultiplier);
+      dimension.pow = dimension.pow.times(buyTenMultiplier);
       if (dimension.cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
       if (Challenge(4).isRunning) clearDimensions(tier - 1);
       x--;
@@ -427,7 +457,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
         else cost = cost.times(dimensionCostMultiplier);
         amount = amount.plus(10).round();
         bought += 10;
-        pow.fromDecimal(pow.times(dimensionPowerMultiplier));
+        pow.fromDecimal(pow.times(buyTenMultiplier));
         if (cost.gte(getCostIncreaseThreshold())) costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
         if (Challenge(4).isRunning) clearDimensions(tier - 1);
         x--;
@@ -454,21 +484,19 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       let postInfBuy = bought / 10 + buying - preInfBuy - 1;
       let postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
       bought += 10 * buying;
-      pow = pow.times(Decimal.pow(dimensionPowerMultiplier, buying));
+      pow = pow.times(Decimal.pow(buyTenMultiplier, buying));
 
       let newCost = null;
       let postInfBuyOriginal = postInfBuy;
       postInfBuy++;
 
-      do
-      {
-          postInfBuy--;
-          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
+      do {
+        postInfBuy--;
+        newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
       }
       while (newCost.gt(money) && postInfBuy >= 0);
 
-      if (postInfBuyOriginal < postInfBuy)
-      {
+      if (postInfBuyOriginal < postInfBuy) {
         console.log("Had to decrease postInfBuy. Tier = " + tier + ", a = " + a + ", b = " + b + ", c = " + c + ", discriminant = " + discriminant + ", buying = " + buying + ", amount = " + amount + ", preInfBuy = " + preInfBuy + ", postInfBuy = " + postInfBuy + ", postInfBuyOriginal = " + postInfBuyOriginal + ", postInfInitCost = ", + postInfInitCost.toString() + " , bought = " + bought + ", newCost = " + newCost.toString() + ", money = " + money.toString() + ".");
       }
 
@@ -537,8 +565,9 @@ function getDimensionProductionPerSecond(tier) {
   if (!postBreak && production.gte(Number.MAX_VALUE)) {
     production = production.min("1e315");
   }
-  if (tier === 1) {
-    production.e = Math.floor(Math.pow(production.e, getAdjustedGlyphEffect("effarigantimatter")))
+  if (tier === 1 && production.gt(0)) {
+    const log10 = production.log10();
+    production = Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), getAdjustedGlyphEffect("effarigantimatter")));
   }
   return production;
 }

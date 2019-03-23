@@ -9,6 +9,9 @@ function cloneUnlessOtherwiseSpecified(value, options) {
   if (value instanceof Decimal) {
     return new Decimal(value);
   }
+  if (value instanceof Set) {
+    return new Set(value);
+  }
   return (options.clone !== false && options.isMergeableObject(value)) ?
     deepmerge(emptyTarget(value), value, options) :
     value;
@@ -30,6 +33,8 @@ function mergeObject(target, source, options) {
   Object.keys(source).forEach(function(key) {
     if (target[key] && target[key] instanceof Decimal) {
       destination[key] = new Decimal(source[key]);
+    } else if (target[key] && target[key] instanceof Set) {
+      destination[key] = new Set(source[key]);
     } else if (!options.isMergeableObject(source[key]) || !target[key]) {
       destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
     } else {
@@ -46,6 +51,10 @@ function deepmerge(target, source, options) {
 
   if (target instanceof Decimal) {
     return new Decimal(source);
+  }
+
+  if (target instanceof Set) {
+    return new Set(source);
   }
 
   const sourceIsArray = Array.isArray(source);
@@ -71,6 +80,8 @@ deepmerge.all = function deepmergeAll(array, options) {
       return sourceArray.map(function(element, index) {
         if (destinationArray[index] && destinationArray[index] instanceof Decimal) {
           return new Decimal(element);
+        } else if (destinationArray[index] && destinationArray[index] instanceof Set) {
+          return new Set(element);
         } else if (!options.isMergeableObject(element) || !destinationArray[index]) {
           return cloneUnlessOtherwiseSpecified(element, options);
         } else {

@@ -5,7 +5,8 @@ let ui = {
       cloudConflicts: [],
       message: String.empty,
       callback: undefined,
-      closeButton: false
+      closeButton: false,
+      glyphSelection: false,
     },
     tabs: {
       current: undefined,
@@ -33,6 +34,7 @@ let ui = {
       reality: {
         subtab: String.empty,
         openGlyphWeights: false,
+        currentGlyphTooltip: -1,
       },
       celestials: {
         subtab: String.empty
@@ -41,6 +43,8 @@ let ui = {
     shiftDown: false,
     theme: undefined,
     bigCrunch: false,
+    scrollWindow: 0,
+    draggingUIID: -1,
   },
-  notationName: String.empty
+  notationName: String.empty,
 };

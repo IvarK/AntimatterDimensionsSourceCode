@@ -1,7 +1,4 @@
 var repMs = 0;
-function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
-  return nearestPercent(1 + getGlyphSacEffect("replication") / 100);
-}
 
 // Rounding errors suck
 function nearestPercent(x) {
@@ -14,6 +11,7 @@ function maxReplicantiGalaxy(diff) {
     var infiTime = Math.max(Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true), 0);
     maxGal += Effects.sum(TimeStudy(131));
     var curGal = player.replicanti.galaxies;
+    if (Ra.isRunning) maxGal = 0
     let gainGal = 0;
     if (curGal < maxGal) { 
         if (diff / infiTime < maxGal - curGal) {
@@ -62,10 +60,14 @@ function getReplicantiInterval(noMod, interval) {
       TimeStudy(213)
     );
     if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
-    interval /= Math.max(1, getAdjustedGlyphEffect("replicationspeed"));
+    interval /= getAdjustedGlyphEffect("replicationspeed");
     if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
-    if (player.reality.upg.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
+    if (RealityUpgrades.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
+    if (RealityUpgrades.includes(23)) interval /= Math.clamp(9e5 / player.bestReality, 1, 900)
+    if (V.isRunning) {
+      interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
+    }
     return interval;
 }
 
@@ -73,7 +75,9 @@ function getReplicantiInterval(noMod, interval) {
 let scaleLog10 = 308;
 let scaleFactor = 1.2;
 function replicantiCap() {
-  return Effarig.has(EFFARIG_UNLOCKS.INFINITY_COMPLETE) ? new Decimal(player.infinitied + player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) : new Decimal(Number.MAX_VALUE);
+  return EffarigUnlock.infinity.isUnlocked ?
+    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) :
+    new Decimal(Number.MAX_VALUE);
 }
 
 function replicantiLoop(diff) {
@@ -87,7 +91,7 @@ function replicantiLoop(diff) {
     PerformanceStats.start("Replicanti");
     let interval = getReplicantiInterval();
 
-    var current = player.replicanti.amount.ln();
+    var current = player.replicanti.amount.clampMin(1).ln();
     let speedCheck = Math.log(Number.MAX_VALUE) / Math.log(player.replicanti.chance + 1) * getReplicantiInterval(true) < diff / 2;
     if (speedCheck && player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)) diff = maxReplicantiGalaxy(diff);
 
@@ -139,7 +143,7 @@ function replicantiMult() {
   return Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
     .plusEffectOf(TimeStudy(21))
     .timesEffectOf(TimeStudy(102))
-    .pow(new Decimal(1).max(getAdjustedGlyphEffect("replicationpow")));
+    .pow(getAdjustedGlyphEffect("replicationpow"));
 }
 
 function autoBuyReplicantiUpgrades() {
@@ -218,7 +222,8 @@ const ReplicantiUpgrade = {
     get costIncrease() { return 1e15; }
 
     get cap() {
-      return getMaxReplicantiChance();
+      // Chance never goes over 100%.
+      return 1;
     }
 
     get isCapped() {
@@ -230,6 +235,20 @@ const ReplicantiUpgrade = {
     }
 
     get autobuyerId() { return 0; }
+
+    autobuyerTick() {
+      if (!this.isAutobuyerUnlocked || !this.isAutobuyerOn) return;
+      // Fixed price increase of 1e15; so total cost for N upgrades is:
+      // cost + cost * 1e15 + cost * 1e30 + ... + cost * 1e15^(N-1) == cost * (1e15^N - 1) / (1e15 - 1)
+      // N = log(IP * (1e15 - 1) / cost + 1) / log(1e15)
+      let N = player.infinityPoints.times(this.costIncrease - 1).dividedBy(this.cost).plus(1).log(this.costIncrease);
+      N = Math.round((Math.min(this.value + 0.01 * Math.floor(N), this.cap) - this.value) * 100);
+      if (N <= 0) return;
+      const totalCost = this.cost.times(Decimal.pow(this.costIncrease, N).minus(1).dividedBy(this.costIncrease - 1));
+      player.infinityPoints = player.infinityPoints.minus(totalCost);
+      this.cost = this.cost.times(Decimal.pow(this.costIncrease, N));
+      this.value = nearestPercent(this.value + 0.01 * N);
+    }
   }(),
   interval: new class ReplicantiIntervalUpgrade extends ReplicantiUpgradeState {
     get value() { return player.replicanti.interval; }
@@ -280,8 +299,9 @@ const ReplicantiUpgrade = {
       let increase = EternityChallenge(6).isRunning ?
         Decimal.pow(1e2, galaxies).times(1e2) :
         Decimal.pow(1e5, galaxies).times(1e25);
-      if (galaxies >= 100) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - 95));
+      let distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      if (galaxies >= distantReplicatedGalaxyStart) {
+        increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
       }
       return increase;
     }
@@ -331,6 +351,7 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
+      if (Ra.isRunning) return false
       if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
       return this.bought < this.max;
     },

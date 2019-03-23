@@ -159,9 +159,8 @@ function updateAchievementPower() {
   let completedRows = 0
   for (let i = 1; i <= TOTAL_ACH_ROWS; i++) {
     let achUnlocked = 0;
-    for (let j = 1; j <= ACH_PER_ROW; j++ ) {
-      const achId = `r${i}${j}`;
-      if (isAchEnabled(achId)) {
+    for (let j = 1; j <= ACH_PER_ROW; j++) {
+      if (Achievement(i*10 + j).isEnabled) {
         achUnlocked++;
       }
     }
@@ -173,54 +172,44 @@ function updateAchievementPower() {
 }
 
 function clearOldAchieves() {
-  var toRemove = [];
-  var achieveKey;
-  var values = Object.keys(allAchievements).map(function(e) {
-    return allAchievements[e]
-  });
-  for (var i = 0; i < player.achievements.length; i++) {
-    if (values.indexOf(player.achievements[i]) !== -1) {  // does index[i] exist in allAchievements as a value?
-      toRemove.push(i); // mark it for removal
-      achieveKey = Object.keys(allAchievements).find(function(key) {
-        return allAchievements[key] === player.achievements[i];
-      });
-      if (!player.achievements.includes(achieveKey)) { // check if new key already exists as well
-        player.achievements.push(achieveKey); // if not... add it
-      }
-    } else if (allAchievements[player.achievements[i]] === undefined) {
-      toRemove.push(i);
+  for (let achId of player.achievements) {
+    const achieveKey = Object.keys(allAchievements).find(key => allAchievements[key] === achId);
+    if (achieveKey !== undefined) {
+      player.achievements.delete(achId);
+      player.achievements.add(achieveKey);
+    } else if (Achievement(achId) === undefined && allAchievements[achId] === undefined) {
+      player.achievements.delete(achId);
     }
   }
-
-
-  toRemove.reverse();
-  for (var i = 0; i < toRemove.length; i++) {
-    player.achievements.splice(toRemove[i], 1);
-  }
-  GameCache.achievementCount.invalidate();
 }
 
 function giveAchievement(name) {
+  let id = allAchievementNums[name];
+  if (id === undefined) throw crash(`giveAchievement of unknown "${name}"`);
+  let achNumber = parseInt(id.slice(1));
+  if (isNaN(achNumber)) throw crash(`Couldn't get achievement number from id ${id}`);
+  if (id.startsWith("s")) {
+    if (player.secretAchievements.has(achNumber)) return false;
+    player.secretAchievements.add(achNumber);
+  } else if (id.startsWith("r")) {
+    if (player.achievements.has(achNumber)) return false;
+    player.achievements.add(achNumber);
+  } else {
+    throw crash(`Achievement id ${id} doesn't start with r or s`);
+  }
 
-    if (player.achievements.includes(name)){ clearOldAchieves(); }
-
-    if (player.achievements.includes(allAchievementNums[name])) return false
-
-    GameUI.notify.success(name);
-    player.achievements.push(allAchievementNums[name]);
-    GameCache.achievementCount.invalidate();
-    kong.submitStats('Achievements', player.achievements.length);
-    if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
-      Autobuyer.infinity.bumpLimit(4);
-    }
-    updateAchievementPower();
-    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  GameUI.notify.success(name);
+  kong.submitStats('Achievements', player.achievements.size + player.secretAchievements.size);
+  if (name === "All your IP are belong to us" || name === "MAXIMUM OVERDRIVE") {
+    Autobuyer.infinity.bumpLimit(4);
+  }
+  updateAchievementPower();
+  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
-function isAchEnabled(name, id) {
-  if (!player.achievements.includes(name)) return false;
+function isAchEnabled(achId) {
+  if (!player.achievements.has(achId)) return false;
   if (player.realities === 0) return true;
-  const achId = id !== undefined ? id : parseInt(name.split("r")[1]);
   if (achId > 140) return true;
   const row = Math.floor(achId / 10);
   if (row <= GameCache.achSkipPerkCount.value) return true;
@@ -262,18 +251,11 @@ function nextAchIn() {
   return (timeReq - currentSeconds) * 1000
 }
 
-function timeUntilAch(name) {
-  if (!player.achievements.includes(name)) {
-    return NaN;
-  }
-  const achId = parseInt(name.split("r")[1]);
-  if (achId > 140 || isNaN(achId)) {
-    return NaN;
-  }
+function timeUntilAch(achId) {
+  if (achId > 140 || isNaN(achId)) return NaN;
+  if (!player.achievements.has(achId)) return NaN;
   const row = Math.floor(achId / 10);
-  if (row <= GameCache.achSkipPerkCount.value) {
-    return NaN;
-  }
+  if (row <= GameCache.achSkipPerkCount.value) return NaN;
   const currentSeconds = player.thisReality / 1000;
   return timeRequiredForAchievement(achId) - currentSeconds;
 }
@@ -354,11 +336,11 @@ class AchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.achievements.includes(this._fullId);
+    return player.achievements.has(this.id);
   }
 
   get isEnabled() {
-    return isAchEnabled(this._fullId, this._id);
+    return isAchEnabled(this.id);
   }
 
   get isEffectConditionSatisfied() {
@@ -394,7 +376,7 @@ class SecretAchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.achievements.includes(this._fullId);
+    return player.secretAchievements.has(this.id);
   }
 }
 

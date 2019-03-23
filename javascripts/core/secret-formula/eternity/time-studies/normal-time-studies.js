@@ -45,7 +45,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 41,
     cost: 4,
     description: "Each galaxy gives a 1.2x multiplier on IP gained.",
-    effect: () => Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies),
+    effect: () => Decimal.pow(1.2, Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies),
     formatEffect: value => formatX(value, 2, 1)
   },
   {
@@ -232,7 +232,8 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 4,
     description: "Multiplier to IP, which increases over this Infinity",
     effect: () => _TS_thisInfinityMult(),
-    formatEffect: value => formatX(value, 2, 1)
+    formatEffect: value => formatX(value, 2, 1),
+    cap: () => Effarig.eternityCap
   },
   {
     id: 151,
@@ -268,7 +269,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 191,
     cost: 400,
     description: "After Eternity you permanently keep 5% of your Infinities",
-    effect: () => Math.floor(player.infinitied * 0.05)
+    effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 192,
@@ -281,7 +282,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 193,
     cost: 300,
     description: "Normal Dimension boost based on Eternities",
-    effect: () => Decimal.pow(1.03, player.eternities),
+    effect: () => Decimal.pow(1.0285, player.eternities),
     cap: new Decimal("1e13000"),
     formatEffect: value => formatX(value, 2, 1)
   },
@@ -316,8 +317,8 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "Sacrifice boosts the 8th Dimension even more",
     effect: () => {
       const totalBoost = Sacrifice.totalBoost;
-      const firstPart = totalBoost.pow(8).clampMax("1e46000");
-      const secondPart = totalBoost.pow(1.1).clampMax("1e125000");
+      const firstPart = totalBoost.pow(7.6).clampMax("1e44000");
+      const secondPart = totalBoost.pow(1.05).clampMax("1e120000");
       return firstPart.times(secondPart);
     },
     cap: new Decimal("1e171000"),

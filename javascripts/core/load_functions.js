@@ -26,7 +26,7 @@ function onLoad() {
   if (isDevEnvironment()) {
     guardFromNaNValues(player);
   }
-  if (player.infinitied > 0 && !Challenge(1).isCompleted) {
+  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
   $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
@@ -88,27 +88,14 @@ function onLoad() {
   clearOldAchieves()
 
   if (player.version < 9 ) {
-      player.version = 9
-      let achs = []
-      if (player.achievements.includes("r22")) {
-          achs.push("r35")
-          player.achievements.splice(player.achievements.indexOf("r22"), 1)
-      }
-      if (player.achievements.includes("r35")) {
-          achs.push("r76")
-          player.achievements.splice(player.achievements.indexOf("r35"), 1)
-      }
-      if (player.achievements.includes("r41")) {
-          achs.push("r22")
-          player.achievements.splice(player.achievements.indexOf("r41"), 1)
-      }
-      if (player.achievements.includes("r76")) {
-          achs.push("r41")
-          player.achievements.splice(player.achievements.indexOf("r76"), 1)
-      }
-
-      for (var i=0; i<achs.length;i++) player.achievements.push(achs[i])
-      player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
+    player.version = 9
+    let achs = []
+    if (player.achievements.delete("r22")) achs.push("r35");
+    if (player.achievements.delete("r35")) achs.push("r76");
+    if (player.achievements.delete("r41")) achs.push("r22");
+    if (player.achievements.delete("r76")) achs.push("r41");
+    for (let id of achs) player.achievements.add(id);
+    player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
   }
 
   if (player.version < 9.5) {
@@ -138,48 +125,49 @@ function onLoad() {
   // player.version is currently 12 on live, and will be 13 after the update is released
   if (player.version < 12.1) {
     player.version = 12.1
-    if (player.achievements.includes("s36")) {
-        player.achievements.splice(player.achievements.indexOf("s36"), 1)
-    }
+    player.achievements.delete("s36");
   }
 
-    //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second
-    if (player.version < 13) {
-        //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-        if (isDevEnvironment()) player.options.testVersion = 27;
-        player.version = 13
-        if (player.achievements.includes("r85")) player.infMult = player.infMult.div(4);
-        if (player.achievements.includes("r93")) player.infMult = player.infMult.div(4);
-        player.realTimePlayed = player.totalTimePlayed;
-        player.thisReality = player.totalTimePlayed;
-        player.realTimePlayed *= 100;
-        player.totalTimePlayed *= 100;
-        player.thisInfinityTime*= 100;
-        player.thisEternity *= 100;
-        player.thisReality *= 100;
-        player.thisInfinityRealTime = player.thisInfinityTime;
-        player.thisEternityRealTime = player.thisEternity;
-        player.thisRealityRealTime = player.thisReality;
-        if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
-        else player.bestInfinityTime *= 100;
-        if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
-        else player.bestEternity *= 100;
-        for (var i=0; i<10; i++) {
-            player.lastTenEternities[i][0] *= 100;
-            player.lastTenRuns[i][0] *= 100;
-            player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
-            player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
-        }
-        for (var i=0; i<11; i++) {
-            setChallengeTime(i, player.challengeTimes[i] * 100);
-        }
-        for (var i=0; i<8; i++) {
-            setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
-        }
-        convertAutobuyerMode();
-        unfuckChallengeIds();
-        unfuckMultCosts();
+  //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
+  if (player.version < 13) {
+    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+    if (isDevEnvironment()) player.options.testVersion = 32;
+    player.version = 13
+    if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
+    if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
+    player.realTimePlayed = player.totalTimePlayed;
+    player.thisReality = player.totalTimePlayed;
+    player.realTimePlayed *= 100;
+    player.totalTimePlayed *= 100;
+    player.thisInfinityTime *= 100;
+    player.thisEternity *= 100;
+    player.thisReality *= 100;
+    player.thisInfinityRealTime = player.thisInfinityTime;
+    player.thisEternityRealTime = player.thisEternity;
+    player.thisRealityRealTime = player.thisReality;
+    if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
+    else player.bestInfinityTime *= 100;
+    if (player.bestEternity === 9999999999) player.bestEternity = 999999999999;
+    else player.bestEternity *= 100;
+    for (var i = 0; i < 10; i++) {
+      player.lastTenEternities[i][0] *= 100;
+      player.lastTenRuns[i][0] *= 100;
+      player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
+      player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
     }
+    for (var i = 0; i < 11; i++) {
+      setChallengeTime(i, player.challengeTimes[i] * 100);
+    }
+    for (var i = 0; i < 8; i++) {
+      setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
+    }
+    convertAutobuyerMode();
+    unfuckChallengeIds();
+    unfuckMultCosts();
+    convertAchivementsToNumbers();
+    player.secretUnlocks.why = player.why
+    delete player.why
+  }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
   if (player.version === 13) dev.updateTestSave()
@@ -188,7 +176,7 @@ function onLoad() {
     document.getElementById("game").style.display = "none";
   }
 
-	initializeWormhole();
+	initializeBlackHole();
   recalculateAllGlyphs();
 
   Autobuyer.tryUnlockAny();
@@ -197,14 +185,14 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  generateGlyphTable();
   updateRealityUpgrades();
-  updateWormholeUpgrades()
+  updateBlackHoleUpgrades()
   updateAutomatorRows()
   checkPerkValidity()
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
   updatePerkColors()
+  V.updateTotalRunUnlocks()
 
   const notation = player.options.notation;
   if (notation === undefined) {
@@ -220,23 +208,16 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
-  $(".wormhole-upgrades").hide()
-  if (player.wormhole[0].unlocked) {
-    $("#wormholeunlock").hide()
-    $("#wormholecontainer").show()
-    $("#whupg1").show()
+  $(".blackhole-upgrades").hide()
+  if (player.blackHole[0].unlocked) {
+    $("#blackholeunlock").hide()
+    $("#blackholecontainer").show()
+    $("#bhupg1").show()
   }
-  if (player.wormhole[1].unlocked) $("#whupg2").show()
-  if (player.wormhole[2].unlocked) $("#whupg3").show()
-  
+  if (player.blackHole[1].unlocked) $("#bhupg2").show()
+  if (player.blackHole[2].unlocked) $("#bhupg3").show()
+
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
-  if (player.reality.respec) {
-    $("#glyphRespec").addClass("rUpgBought")
-    document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Respec is active and will place your currently-equipped glyphs into your inventory after reality.");
-  }
-  else
-	  document.getElementById("glyphRespec").setAttribute('ach-tooltip', "Your currently-equipped glyphs will stay equipped on reality.");
-    
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true
@@ -249,11 +230,11 @@ function onLoad() {
       simulateTime(diff/1000)
   }
 
-  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the wormhole in the correct phase.
-  for (let i = 0; i < player.wormhole.length; i++) {
-    updateWormholeStatusText(i);
+  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the black hole in the correct phase.
+  for (let i = 0; i < player.blackHole.length; i++) {
+    updateBlackHoleStatusText(i);
   }
-  updateWormholeGraphics();
+  updateBlackHoleGraphics();
 }
 
 function convertAutobuyerMode() {
@@ -315,6 +296,23 @@ function checkPerkValidity() {
   Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
 }
 
+function convertAchivementsToNumbers() {
+  if (player.achievements.countWhere(e => typeof (e) !== "number") === 0) return;
+  let old = player.achievements;
+  player.achievements = new Set();   // player.secretAchievements should be an empty set in this case
+  for (let oldId of old) {
+    let newId = parseInt(oldId.slice(1));
+    if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
+    if (oldId.startsWith("r")) {
+      if (Achievement(newId) === undefined) throw crash(`Unrecognized achievement ${oldId}`);
+      player.achievements.add(newId);
+    } else if (oldId.startsWith("s")) {
+      if (SecretAchievement(newId) === undefined) throw crash(`Unrecognized secret achievement ${newId}`);
+      player.secretAchievements.add(newId);
+    }
+  }
+}
+
 function load_cloud_save(saveId, cloudPlayer) {
   saves[saveId] = cloudPlayer;
 
@@ -356,7 +354,7 @@ function load_game(root) {
 
 
 function save_game(changed, silent) {
-  if ( possibleGlyphs.length > 0 ) return
+  if (GlyphSelection.active) return;
   if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
   else set_save('dimensionSave', currentSave, player);
   if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");
@@ -396,9 +394,19 @@ function transformSaveToDecimal() {
   }
 }
 
+function translatorForJSON(key, value) {
+  if (value === Infinity) {
+    return "Infinity";
+  }
+  if (value instanceof Set) {
+    return Array.from(value.keys());
+  }
+  return value;
+}
+
 function set_save(name, saveId, value) {
 	saves[saveId] = value;
-    localStorage.setItem(name, btoa(JSON.stringify(getRootSaveObject(), function(k, v) { return (v === Infinity) ? "Infinity" : v; })));
+  localStorage.setItem(name, btoa(JSON.stringify(getRootSaveObject(), translatorForJSON)));
 }
 
 function get_save(name) {

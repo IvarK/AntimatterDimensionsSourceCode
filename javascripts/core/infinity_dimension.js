@@ -1,3 +1,24 @@
+function infinityDimensionCommonMultiplier() {
+  let mult = new Decimal(kongAllDimMult)
+    .timesEffectsOf(
+      Achievement(75),
+      TimeStudy(82),
+      TimeStudy(92),
+      TimeStudy(162),
+      InfinityChallenge(1).reward,
+      EternityChallenge(4).reward,
+      EternityChallenge(9).reward,
+      EternityUpgrade.idMultEP,
+      EternityUpgrade.idMultEternities,
+      EternityUpgrade.idMultICRecords
+    );
+
+  if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
+    mult = mult.times(replicantiMult());
+  }
+  return mult;
+}
+
 function resetInfDimensions() {
 
   if (player.infDimensionsUnlocked[0]) {
@@ -80,8 +101,8 @@ function buyManyInfinityDimension(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  if (tier == 8) dim.power = dim.power.times(infPowerMults[tier] * getGlyphSacEffect("infinity"))
-  else dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
   dim.baseAmount += IDPurchasesToIDAmount(1)
 
   if (EternityChallenge(8).isRunning) {
@@ -105,8 +126,8 @@ function buyMaxInfDims(tier) {
   dim.cost = dim.cost.times(costMult)
   dim.amount = dim.amount.plus(10*toBuy);
   if (toBuy > 0) {
-    if (tier == 8) dim.power = dim.power.times(Decimal.pow(infPowerMults[tier] * getGlyphSacEffect("infinity"), toBuy))
-    else dim.power = dim.power.times(Decimal.pow(infPowerMults[tier], toBuy))
+    const base = infPowerMults[tier] * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
+    dim.power = dim.power.times(Decimal.pow(base, toBuy));
   }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
   buyManyInfinityDimension(tier)
@@ -233,6 +254,11 @@ class InfinityDimensionState {
 
   get multiplier() {
     const tier = this._tier;
+
+    if (Laitela.isRunning && tier > 1) {
+      return new Decimal(0)
+    }
+
     if (EternityChallenge(2).isRunning) {
       return new Decimal(0);
     }
@@ -240,26 +266,12 @@ class InfinityDimensionState {
       return new Decimal(1);
     }
     let mult = this.power
-      .times(kongAllDimMult)
+      .times(GameCache.infinityDimensionCommonMultiplier.value)
       .timesEffectsOf(
         tier === 1 ? Achievement(94) : null,
-        Achievement(75),
         tier === 4 ? TimeStudy(72) : null,
-        TimeStudy(82),
-        TimeStudy(92),
-        TimeStudy(162),
-        InfinityChallenge(1).reward,
-        tier === 1 ? EternityChallenge(2).reward : null,
-        EternityChallenge(4).reward,
-        EternityChallenge(9).reward,
-        EternityUpgrade.idMultEP,
-        EternityUpgrade.idMultEternities,
-        EternityUpgrade.idMultICRecords
+        tier === 1 ? EternityChallenge(2).reward : null
       );
-
-    if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
-      mult = mult.times(replicantiMult());
-    }
 
     mult = mult.clampMin(0);
 
@@ -267,10 +279,16 @@ class InfinityDimensionState {
       mult = dilatedValueOf(mult);
     }
 
-    mult = mult.pow(new Decimal(1).max(getAdjustedGlyphEffect("infinitypow")));
+    mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
+
+    mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
+    } else if (V.isRunning) {
+      mult = mult.pow(0.5)
+    } else if (Laitela.isRunning) {
+      mult = mult.pow(0.01)
     }
     
     return mult;

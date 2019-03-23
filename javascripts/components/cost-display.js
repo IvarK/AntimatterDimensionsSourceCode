@@ -3,7 +3,11 @@ Vue.component("cost-display", {
     config: Object,
     br: Boolean,
     singular: String,
-    plural: String
+    plural: String,
+    title: {
+      type: String,
+      default: "Cost:",
+    }
   },
   data() {
     return {
@@ -11,26 +15,36 @@ Vue.component("cost-display", {
       cost: 0
     };
   },
+  watch: {
+    config: {
+      immediate: true,
+      handler(config) {
+        this.isVisible = false;
+        if (config === undefined) return;
+        const cost = config.cost;
+        if (cost === undefined) return;
+        this.isVisible = true;
+        this.formatCost = this.config.formatCost;
+        if (typeof cost !== "function") {
+          this.cost = cost;
+          return;
+        }
+        this.cost = cost();
+        this.updateFn = typeof this.cost === "number" ?
+          () => this.cost = cost() :
+          () => this.cost.copyFrom(cost());
+      }
+    }
+  },
   computed: {
     costDisplay() {
       return this.formatCost ? this.formatCost(this.cost) : this.shorten(this.cost, 0, 0);
     }
   },
-  created() {
-    if (this.config === undefined) return;
-    const cost = this.config.cost;
-    if (cost === undefined) return;
-    this.isVisible = true;
-    this.formatCost = this.config.formatCost;
-    if (typeof cost !== "function") {
-      this.cost = cost;
-      return;
+  methods: {
+    update() {
+      if (this.updateFn) this.updateFn();
     }
-    this.cost = cost();
-    const update = typeof this.cost === "number" ?
-      () => this.cost = cost() :
-      () => this.cost.copyFrom(cost());
-    this.on$(GameEvent.UPDATE, update);
   },
-  template: `<span v-if="isVisible"><br v-if="br">Cost: {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
+  template: `<span v-if="isVisible"><br v-if="br">{{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
 });

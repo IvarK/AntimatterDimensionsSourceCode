@@ -147,6 +147,21 @@ Array.prototype.last = function(predicate) {
 };
 
 /**
+ * @param {function?} keyFun
+ * @param {function?} valueFun
+ * @returns {object}
+ */
+Array.prototype.mapToObject = function(keyFun, valueFun) {
+  if (typeof keyFun !== "function" || typeof valueFun !== "function")
+    throw "keyFun and valueFun must be functions";
+  let out = {}
+  for (let idx = 0; idx < this.length; ++idx) {
+    out[keyFun(this[idx], idx)] = valueFun(this[idx], idx);
+  }
+  return out;
+}
+
+/**
  * @type {number[]}
  */
 Array.dimensionTiers = Array.range(1, 8);
@@ -202,3 +217,11 @@ Array.prototype.randomElement = function() {
 };
 
 Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
+
+Set.prototype.countWhere = function (predicate) {
+  let count = 0;
+  for (let item of this) {
+    if (predicate(item))++count;
+  }
+  return count;
+}

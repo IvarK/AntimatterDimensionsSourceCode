@@ -23,7 +23,7 @@ function drawAutomatorTreeBranch(num1, num2) {
     var y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
     ctx4.lineWidth=10;
     ctx4.beginPath();
-    if (player.reality.automatorCommands.includes(id1) && player.reality.automatorCommands.includes(id2)) {
+    if (player.reality.automatorCommands.has(id1) && player.reality.automatorCommands.has(id2)) {
         ctx4.strokeStyle="#000";
     } else {
         ctx4.strokeStyle="#444";

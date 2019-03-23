@@ -51,19 +51,19 @@ function updateSpoilers() {
 	if (spoilers === 0) {
 		for (i=1; i<25; i++) {
 			displayed = 0;
-			if (i === 5 && (player.resets >= 4 || player.infinitied >= 1 || player.eternities >= 1)) {
+			if (i === 5 && (player.resets >= 4 || player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 6 && (player.galaxies >= 1 || player.infinitied >= 1 || player.eternities >= 1)) {
+			if (i === 6 && (player.galaxies >= 1 || player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 8 && (player.infinitied >= 1 || player.eternities >= 1)) {
+			if (i === 8 && (player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 9 && (player.infinitied >= 1 || player.eternities >= 1)) {
+			if (i === 9 && (player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 10 && (player.infinitied >= 1 || player.eternities >= 1)) {
+			if (i === 10 && (player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i === 11 && (player.autobuyers[11].interval>100 || player.eternities >= 1)) {
@@ -105,10 +105,10 @@ function updateSpoilers() {
 			if (i === 23 && player.realities >= 4) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 24 && player.reality.realityMachines >= 50 || player.reality.wormhole[0].unlocked) {
+			if (i === 24 && player.reality.realityMachines >= 50 || player.reality.blackHole[0].unlocked) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 25 && player.reality.upg.length === 20) {
+			if (i === 25 && RealityUpgrades.hasAll()) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i < 5 || i === 7) {

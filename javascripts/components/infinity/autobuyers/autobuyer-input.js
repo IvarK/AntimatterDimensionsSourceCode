@@ -91,7 +91,7 @@ Vue.component("autobuyer-input", {
     validateDecimal(input) {
       try {
         const decimal = Decimal.fromString(input);
-        if (isNaN(decimal.mantissa)) return false;
+        if (isNaN(decimal.mantissa) || isNaN(decimal.exponent)) return false;
         this.actualValue = decimal;
       }
       catch (e) {

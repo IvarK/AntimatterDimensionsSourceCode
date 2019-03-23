@@ -56,8 +56,11 @@ function buyDilationUpgrade(id) {
     let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
     if (player.dilation.dilatedTime.lt(realCost)) return false
 
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(realCost)
-    player.dilation.rebuyables[id] += 1
+    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber()
+    buying = Math.min(buying, player.celestials.teresa.dtBulk)
+    let cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount)
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost)
+    player.dilation.rebuyables[id] += buying
     if (id == 2) {
         if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
         player.dilation.nextThreshold = new Decimal(1000)
@@ -73,8 +76,8 @@ function buyDilationUpgrade(id) {
         Perk.retroactiveTP3,
         Perk.retroactiveTP4
       );
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(retroactiveTPFactor)
-      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(retroactiveTPFactor)
+      player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
+      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
   return true
@@ -94,19 +97,19 @@ function getDilationGainPerSecond() {
       Achievement(132)
     );
   if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
-  ret = ret.times(new Decimal(1).max(getAdjustedGlyphEffect("dilationdilationMult")));
+  ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
+  if (V.isRunning) ret = ret.pow(0.5)
   return ret
 }
 
 function getTachyonGain() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
   if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
-  if (player.reality.upg.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
-  if (player.reality.upg.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
-  let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult = mult.times(sacEffect)
+  if (RealityUpgrades.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
+  if (RealityUpgrades.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
+  mult = mult.timesEffectOf(GlyphSacrifice.dilation);
 
   let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
@@ -114,13 +117,11 @@ function getTachyonGain() {
 
 function getTachyonReq() {
   let mult = DilationUpgrade.tachyonGain.effectValue;
-  if (player.reality.rebuyables[4] > 0) mult *= Math.pow(3, player.reality.rebuyables[4])
-  if (player.reality.upg.includes(8)) mult *= Math.sqrt(Math.pow(player.achPow, getAdjustedGlyphEffect("effarigachievement")))
-  if (player.reality.upg.includes(15)) mult *= Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)
-  let sacEffect = getGlyphSacEffect("dilation")
-  if (sacEffect > 1) mult *= sacEffect
-  
-  let req = Decimal.pow(10, Math.pow(player.dilation.totalTachyonParticles * Math.pow(400, 1.5) / mult, 2/3))
+  if (player.reality.rebuyables[4] > 0) mult = mult.times(Math.pow(3, player.reality.rebuyables[4]))
+  if (RealityUpgrades.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
+  if (RealityUpgrades.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
+  mult = mult.timesEffectOf(GlyphSacrifice.dilation);
+  let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
   return req
 }
 

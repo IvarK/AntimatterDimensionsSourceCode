@@ -6,18 +6,21 @@ Vue.component("infinity-upgrade-button", {
     return {
       canBeBought: false,
       isBought: false,
+      isCharged: false,
     };
   },
   computed: {
     config() {
-      return this.upgrade.config;
+      const config = this.upgrade.config;
+      return this.isCharged ? config.charged : config;
     },
     classObject() {
       return {
         "o-infinity-upgrade-btn": true,
         "o-infinity-upgrade-btn--bought": this.isBought,
         "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
-        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought
+        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--charged": this.isCharged,
       };
     }
   },
@@ -26,11 +29,12 @@ Vue.component("infinity-upgrade-button", {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isMaxed;
       this.canBeBought = upgrade.canBeBought;
-    },
+      this.isCharged = upgrade.isCharged;
+    }
   },
   template:
     `<button :class="classObject" @click="upgrade.purchase()">
-      <description-display :config="config" />
+      <description-display :config="config"/>
       <effect-display br :config="config" />
       <cost-display br
         v-if="!isBought"

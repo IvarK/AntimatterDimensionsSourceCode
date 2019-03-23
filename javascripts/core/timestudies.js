@@ -73,7 +73,13 @@ function buyTimeStudy(name, cost, check) {
       player.timestudy.theorem = player.timestudy.theorem.minus(cost)
       GameCache.timeStudies.invalidate();
       return true
-  } else return false
+  } else if (canBuyLocked(name, cost)) {
+    player.celestials.v.additionalStudies++
+    player.timestudy.studies.push(name)
+    player.timestudy.theorem = player.timestudy.theorem.minus(cost)
+    GameCache.timeStudies.invalidate();
+  }
+  else return false
 }
 
 function buyDilationStudy(name, cost, quiet) {
@@ -156,14 +162,17 @@ function canBuyStudy(name) {
       case 8:
       case 9:
       case 10:
-      case 13:
-      case 14:
       if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
       break;
 
       case 12:
       if (hasRow(row-1) && !hasRow(row)) return true; else return false
       break;
+
+      
+      case 13:
+      case 14:
+      return (player.timestudy.studies.includes((row-1)*10 + col) && !hasRow(row))
 
       case 7:
       if (DilationUpgrade.timeStudySplit.isBought) {
@@ -186,6 +195,52 @@ function canBuyStudy(name) {
       case 23:
       if ( (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && !player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)) return true; else return false;
       break;
+  }
+}
+
+/**
+ * 
+ * This function is used to check whether you can no longer buy a certain study without a respec
+ * Only works for rows 12-14 and 22-23
+ * Used by V-celestial
+ */
+function studyIsLocked(name) {
+  var row = Math.floor(name/10)
+
+  switch (row) {
+
+    case 22:
+    case 23:
+    return player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)
+
+    case 12:
+    case 13:
+    case 14:
+    return hasRow(row)
+  } 
+  
+  return false
+}
+
+function canBuyLocked(name, cost) {
+  if (player.timestudy.theorem.lt(cost)) return false
+  if (!studyIsLocked(name)) return false
+  if (!V.canBuyLockedPath()) return false
+
+  
+  var row = Math.floor(name/10)
+  var col = name%10
+
+  switch (row) {
+
+    case 12:
+    case 22:
+    case 23:
+    return hasRow(row - 1)
+
+    case 13:
+    case 14:
+    return player.timestudy.studies.includes((row-1) * 10 + col)
   }
 }
 
@@ -353,6 +408,7 @@ function respecTimeStudies() {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
+  player.celestials.v.additionalStudies = 0
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -445,7 +501,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return canBuyStudy(this.id);
+    return canBuyStudy(this.id) || canBuyLocked(this.id, this.cost);
   }
 
   get canBeApplied() {

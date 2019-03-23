@@ -57,9 +57,9 @@ function getReplicantiInterval(noMod, interval) {
     if (TimeStudy(133).isBought || (player.replicanti.amount.gt(replicantiCap()) || noMod)) interval *= 10
     interval /= Effects.product(
       TimeStudy(62),
-      TimeStudy(213)
+      TimeStudy(213),
+      RealityUpgrade(2)
     );
-    if (player.reality.rebuyables[2] > 0) interval /= Math.pow(3, player.reality.rebuyables[2])
     interval /= getAdjustedGlyphEffect("replicationspeed");
     if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)

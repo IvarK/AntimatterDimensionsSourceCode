@@ -480,9 +480,9 @@ function gainedInfinities() {
 
     infGain = infGain.timesEffectsOf(
       TimeStudy(32),
+      RealityUpgrade(5),
       RealityUpgrade(7)
     );
-    if (player.reality.rebuyables[5] > 0) infGain = infGain.times(Decimal.pow(5, player.reality.rebuyables[5]));
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
     return infGain;
 }
@@ -695,9 +695,9 @@ setInterval(function() {
 
     updateAchievementPower();
 
-    if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
-    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) unlockRealityUpgrade(21)
-    if (player.timeShards.gte('1e28000')) unlockRealityUpgrade(22)
+    if (Time.totalTimePlayed.totalYears > 2) RealityUpgrade(20).unlock();
+    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) RealityUpgrade(21).unlock();
+    if (player.timeShards.gte("1e28000")) RealityUpgrade(22).unlock();
     ttMaxTimer++;
     if (Perk.autobuyerTT4.isBought) maxTheorems()
     else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
@@ -891,10 +891,12 @@ function gameLoop(diff, options = {}) {
     Enslaved.trackInfinityGeneration(infGen);
     
     if (RealityUpgrade(14).isBought) {
-        let eternitiesGain = diff * player.realities * Math.pow(3, player.reality.rebuyables[3]) / 1000
-        player.reality.partEternitied += eternitiesGain;
-        player.eternities += Math.floor(player.reality.partEternitied)
-        player.reality.partEternitied -= Math.floor(player.reality.partEternitied)
+      player.reality.partEternitied += Time.deltaTime * Effects.product(
+        RealityUpgrade(3),
+        RealityUpgrade(14)
+      );
+      player.eternities += Math.floor(player.reality.partEternitied);
+      player.reality.partEternitied -= Math.floor(player.reality.partEternitied);
     }
 
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.

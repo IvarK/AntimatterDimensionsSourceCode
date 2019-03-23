@@ -4,7 +4,7 @@ Vue.component("reality-upgrade-button", {
   },
   data() {
     return {
-      isRequirementMet: false,
+      isUnlocked: false,
       canBeBought: false,
       isBought: false
     };
@@ -16,15 +16,15 @@ Vue.component("reality-upgrade-button", {
     classObject() {
       return {
         "c-reality-upgrade--bought": this.isBought,
-        "c-reality-upgrade--unavailable": !this.isBought && !this.canBeBought,
-        "c-reality-upgrade--requirement-not-met": !this.isRequirementMet,
+        "c-reality-upgrade--unavailable": !this.isBought && !this.canBeBought && this.isUnlocked,
+        "c-reality-upgrade--locked": !this.isUnlocked,
       };
     }
   },
   methods: {
     update() {
       const upgrade = this.upgrade;
-      this.isRequirementMet = upgrade.isRequirementMet;
+      this.isUnlocked = upgrade.isUnlocked;
       this.canBeBought = upgrade.canBeBought;
       this.isBought = upgrade.isBought;
     }
@@ -36,7 +36,7 @@ Vue.component("reality-upgrade-button", {
       @click="upgrade.purchase()"
     >
       <description-display :config="config"/>
-      <b v-if="!isRequirementMet">Requires: {{config.requirement}}</b>
+      <b v-if="!isUnlocked">Requires: {{config.requirement}}</b>
       <template v-else>
         <effect-display :config="config" />
         <cost-display

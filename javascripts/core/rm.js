@@ -581,42 +581,6 @@ function deleteGlyph(id, force) {
   }
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500, 1e5, 1e5, 1e5, 1e5, 1e5]
-const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
-
-function canBuyRealityUpg(id) {
-  if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
-  if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
-  if (RealityUpgrade(id).isBought) return false // Doesn't have it already
-  if (!player.reality.upgReqs[id]) return false // Has done conditions
-  return true
-}
-
-function getRealityRebuyableCost(id) {
-  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e30, REALITY_UPGRADE_COSTS[id],
-    REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
-}
-
-function buyRealityUpg(id) {
-  if (!canBuyRealityUpg(id)) return false
-  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
-  else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
-  if (id < 6) player.reality.rebuyables[id]++
-  else RealityUpgrade(id).purchase();
-  if (id == 9 || id == 24) {
-    player.reality.glyphs.slots++
-  }
-  if (id == 20) {
-    if (!player.blackHole[0].unlocked) return
-    player.blackHole[1].unlocked = true
-    $("#bhupg2").show()
-  }
-
-  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-  updateBlackHoleUpgrades()
-  return true
-}
-
 function respecGlyphs() {
   Glyphs.unequipAll();
   player.reality.respec = false;
@@ -758,62 +722,87 @@ class RealityUpgradeState extends GameMechanicState {
     super(config);
   }
 
+  get isAffordable() {
+    return player.reality.realityMachines.gte(this.cost);
+  }
+
   get isBought() {
     return (player.reality.upgradeBits & (1 << this.id)) !== 0;
   }
 
   get canBeBought() {
-    return canBuyRealityUpg(this.id);
+    return !this.isBought && this.isAffordable && this.isUnlocked;
+  }
+
+  get canBeApplied() {
+    return this.isBought;
   }
 
   purchase() {
     const id = this.id;
-    if (!this.canBeBought) return false
-    if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
-    else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
-    if (id < 6) player.reality.rebuyables[id]++
-    else player.reality.upgradeBits = player.reality.upgradeBits | (1 << this.id);
-    if (id == 9 || id == 24) {
+    if (!this.canBeBought) return false;
+    player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
+    if (id < 6) {
+      player.reality.rebuyables[id]++;
+    }
+    else {
+      player.reality.upgradeBits = player.reality.upgradeBits | (1 << id);
+    }
+    if (id === 9 || id === 24) {
       player.reality.glyphs.slots++
     }
-    if (id == 20) {
-      if (!player.blackHole[0].unlocked) return
-      player.blackHole[1].unlocked = true
+    if (id === 20) {
+      if (!player.blackHole[0].unlocked) return;
+      player.blackHole[1].unlocked = true;
       $("#bhupg2").show()
     }
 
-    if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-    updateBlackHoleUpgrades()
-    return true
+    if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
+    updateBlackHoleUpgrades();
+    return true;
   }
 
   remove() {
     player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << this.id);
   }
 
-  get isRequirementMet() {
+  get isUnlocked() {
     return player.reality.upgReqs[this.id];
+  }
+
+  unlock() {
+    if (this.isUnlocked) return;
+    player.reality.upgReqs[this.id] = true;
+    if (player.realities > 0) {
+      GameUI.notify.success("You've unlocked a Reality upgrade!");
+    }
   }
 }
 
-RealityUpgradeState.list = mapGameData(
-  GameDatabase.reality.upgrades.slice(5),
-  config => new RealityUpgradeState(config)
-);
-
 class RebuyableRealityUpgradeState extends RealityUpgradeState {
+  get cost() {
+    return this.config.cost();
+  }
+
   get isBought() {
     return false;
   }
 
+  get canBeApplied() {
+    return true;
+  }
+
   get canBeBought() {
-    return canBuyRealityUpg(this.id);
+    return this.isAffordable;
   }
 }
 
-for (let i = 1; i < 6; i++) {
-  RealityUpgradeState.list[i] = new RebuyableRealityUpgradeState(GameDatabase.reality.upgrades[i - 1]);
-}
+RealityUpgradeState.list = mapGameData(
+  GameDatabase.reality.upgrades,
+  config => config.id < 6 ?
+    new RebuyableRealityUpgradeState(config) :
+    new RealityUpgradeState(config)
+);
 
 /**
  *

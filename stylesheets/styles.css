@@ -5533,13 +5533,15 @@ screen and (max-width: 480px) {
 
 .c-reality-upgrade--bought:hover {
   color: #d5ffd7;
-  background-color: #0b600e
+  background-color: #0b600e;
 }
 
-.c-reality-upgrade--requirement-not-met {
-  background-color: #a53939
+.c-reality-upgrade--locked {
+  background-color: #a53939;
+  cursor: default;
 }
 
-.c-reality-upgrade--requirement-not-met:hover {
-  background-color: #a53939
+.c-reality-upgrade--locked:hover {
+  background-color: #a53939;
+  color: #d5ffd7;
 }

@@ -94,9 +94,9 @@ function getDilationGainPerSecond() {
   let ret = new Decimal(player.dilation.tachyonParticles)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
-      Achievement(132)
+      Achievement(132),
+      RealityUpgrade(1)
     );
-  if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
   ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
@@ -108,10 +108,10 @@ function getTachyonGain() {
   let mult = new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
+    RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
   );
-  if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
 
   let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
@@ -121,10 +121,10 @@ function getTachyonReq() {
   let mult = new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
+    RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
   );
-  if (player.reality.rebuyables[4] > 0) mult = mult.times(Math.pow(3, player.reality.rebuyables[4]))
   let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
   return req
 }

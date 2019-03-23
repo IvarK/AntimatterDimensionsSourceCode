@@ -784,7 +784,7 @@ Notation.clock = new class ClockNotation extends Notation {
    * @private
    */
   hour(number) {
-    return this._hours[Math.max(Math.min(Math.floor(number), 11),0)];
+    return this._hours[Math.clamp(Math.floor(number), 0, 11)];
   }
 }("Clock");
 

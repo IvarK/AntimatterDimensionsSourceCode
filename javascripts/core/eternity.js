@@ -5,8 +5,8 @@ function canEternity() {
   return true;
 }
 
-function eternity(force, auto, disablingDilation) {
-    if (disablingDilation) {
+function eternity(force, auto, switchingDilation) {
+    if (switchingDilation) {
       if (!canEternity()) force = true;
     }
     if (force) {

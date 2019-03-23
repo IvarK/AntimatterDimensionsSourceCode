@@ -2,7 +2,7 @@ function startDilatedEternity() {
   if (!TimeStudy.dilation.isBought) return false
   GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
-      eternity(true)
+      eternity(false, false, true)
       setTimeout(function() {
         GameIntervals.gameLoop.start();
       }, 250)
@@ -15,7 +15,7 @@ function startDilatedEternity() {
       return false
   }
   giveAchievement("I told you already, time is relative")
-  eternity(true)
+  eternity(false, false, true)
   player.dilation.active = true;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)

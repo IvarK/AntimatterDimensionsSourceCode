@@ -31,7 +31,7 @@ GameDatabase.reality.glyphSacrifice = [
     description: amount => `Multiply Tachyon Particle gain by ${shorten(amount, 2, 2)}x`
   }, {
     id: "effarig",
-    effect: () => 2 * Math.log10(player.reality.glyphs.sac.effarig / 1e12 + 1),
+    effect: () => 2 * Math.log10(player.reality.glyphs.sac.effarig / 1e20 + 1),
     description: amount => `${amount.toFixed(2)}% additional glyph rarity`,
   }
 ].mapToObject(g => g.id, g => g);

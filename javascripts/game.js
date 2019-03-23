@@ -209,7 +209,7 @@ function gainedInfinityPoints() {
       new Decimal(308 / div);
     ip = ip.times(totalIPMult());
     if (Teresa.isRunning) {
-        ip = ip.pow(0.6);
+      ip = ip.pow(0.55);
     } else if (V.isRunning) {
       ip = ip.pow(0.5);
     }
@@ -230,12 +230,12 @@ function gainedEternityPoints() {
     );
 
   if (RealityUpgrades.includes(12)) {
-      ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
+    ep = ep.times(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1))
   }
   if (Teresa.isRunning) {
-    ep = ep.pow(0.6);
+    ep = ep.pow(0.55);
   } else if (V.isRunning) {
-    ep = ep.pow(0.5)
+    ep = ep.pow(0.5);
   }
   if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
   return ep.floor();
@@ -255,16 +255,21 @@ function gainedRealityMachines() {
 
 function gainedGlyphLevel(round) {
     if (round === undefined) round = true
-    let glyphState = getGlyphLevelInputs();
-    var ret = glyphState.finalLevel;
-    if (round) ret = Math.round(ret)
-    if (ret == Infinity || isNaN(ret)) return 0
-    return ret
+    const glyphState = getGlyphLevelInputs();
+    let rawLevel = glyphState.rawLevel;
+    if (round) rawLevel = Math.round(rawLevel)
+    if (rawLevel == Infinity || isNaN(rawLevel)) rawLevel = 0;
+    let actualLevel = glyphState.actualLevel;
+    if (round) actualLevel = Math.round(actualLevel)
+    if (actualLevel == Infinity || isNaN(actualLevel)) actualLevel = 0
+    return {
+      rawLevel: rawLevel,
+      actualLevel: actualLevel
+    }
 }
 
 function percentToNextGlyphLevel() {
-    var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
-    var ret = gainedGlyphLevel(false)
+    var ret = gainedGlyphLevel(false).actualLevel
     var retOffset = 0;
     if (Math.round(ret) > ret) {
         retOffset = 0.5;
@@ -691,8 +696,8 @@ setInterval(function() {
     updateRealityUpgrades()
 
     if (player.totalTimePlayed > 1000 * 60 * 60 * 24 * 365 * 2) unlockRealityUpgrade(20)
-    if (player.replicanti.amount.gte(new Decimal("1e70000"))) unlockRealityUpgrade(21)
-    if (player.dilation.dilatedTime.gte(1e75)) unlockRealityUpgrade(22)
+    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) unlockRealityUpgrade(21)
+    if (player.timeShards.gte('1e28000')) unlockRealityUpgrade(22)
     ttMaxTimer++;
     if (Perk.autobuyerTT4.isBought) maxTheorems()
     else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
@@ -850,8 +855,13 @@ function gameLoop(diff, options = {}) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
-        if (player.celestials.teresa.run) player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.6))
-        else player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+        if (Teresa.isRunning) {
+          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.55))
+        } else if (V.isRunning) {
+          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.5))
+        } else {
+          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+        }
         player.partInfinityPoint -= genCount;
       }
     }
@@ -879,10 +889,9 @@ function gameLoop(diff, options = {}) {
 
     player.infinitied = player.infinitied.plus(infGen);
     Enslaved.trackInfinityGeneration(infGen);
-
+    
     if (RealityUpgrades.includes(14)) {
-        let eternitiesGain = diff * player.realities / 1000
-        if (RealityUpgrades.includes(23)) eternitiesGain *= Math.pow(3, player.reality.rebuyables[3])
+        let eternitiesGain = diff * player.realities * Math.pow(3, player.reality.rebuyables[3]) / 1000
         player.reality.partEternitied += eternitiesGain;
         player.eternities += Math.floor(player.reality.partEternitied)
         player.reality.partEternitied -= Math.floor(player.reality.partEternitied)

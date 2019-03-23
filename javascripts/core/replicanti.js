@@ -1,7 +1,4 @@
 var repMs = 0;
-function getMaxReplicantiChance() { // Also shows up in the replicanti autobuyer loop
-  return nearestPercent(1 + Effects.sum(GlyphSacrifice.replication) / 100);
-}
 
 // Rounding errors suck
 function nearestPercent(x) {
@@ -67,6 +64,7 @@ function getReplicantiInterval(noMod, interval) {
     if ((player.replicanti.amount.lt(replicantiCap()) || noMod) && Achievement(134).isEnabled) interval /= 2
     if (player.replicanti.amount.gt(replicantiCap()) && !noMod) interval = Math.max(interval * Math.pow(scaleFactor, (player.replicanti.amount.log10() - replicantiCap().log10())/scaleLog10), interval)
     if (RealityUpgrades.includes(6)) interval /= 1+(player.replicanti.galaxies/50)
+    if (RealityUpgrades.includes(23)) interval /= Math.max(9e5 / player.bestReality, 1)
     if (V.isRunning) {
       interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
     }
@@ -224,7 +222,8 @@ const ReplicantiUpgrade = {
     get costIncrease() { return 1e15; }
 
     get cap() {
-      return getMaxReplicantiChance();
+      // Chance never goes over 100%.
+      return 1;
     }
 
     get isCapped() {
@@ -300,8 +299,9 @@ const ReplicantiUpgrade = {
       let increase = EternityChallenge(6).isRunning ?
         Decimal.pow(1e2, galaxies).times(1e2) :
         Decimal.pow(1e5, galaxies).times(1e25);
-      if (galaxies >= 100) {
-        increase = increase.times(Decimal.pow(1e50, galaxies - 95));
+      let distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      if (galaxies >= distantReplicatedGalaxyStart) {
+        increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
       }
       return increase;
     }

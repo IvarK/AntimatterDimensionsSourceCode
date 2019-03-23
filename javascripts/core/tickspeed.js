@@ -182,7 +182,6 @@ const Tickspeed = {
 
 const FreeTickspeed = {
   SOFTCAP: 300000,
-  LESS_SOFTCAP: 500000,
   GROWTH_RATE: 2e-5,
   get amount() {
     return player.totalTickGained;
@@ -207,25 +206,16 @@ const FreeTickspeed = {
     // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
     // reports continue to be accurate.
     const fixedIncrease = 1 / TS171_MULTIPLIER;
-    const softcapAddition = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
-    const logSoftmult = Math.log(tickmult + softcapAddition);
-    const softcapped = FreeTickspeed.SOFTCAP + (uncapped - FreeTickspeed.SOFTCAP) * logTickmult / logSoftmult;
-    if (softcapped <= FreeTickspeed.LESS_SOFTCAP) {
-      return {
-        newAmount: Math.ceil(softcapped),
-        nextShards: Decimal.pow(tickmult, FreeTickspeed.SOFTCAP).times(
-          Decimal.pow(softcapAddition + tickmult, Math.ceil(softcapped) - FreeTickspeed.SOFTCAP))
-      };
-    }
-    // Log of (cost - cost up to LESS_SOFTCAP)
-    const priceToCap = FreeTickspeed.SOFTCAP * logTickmult + (FreeTickspeed.LESS_SOFTCAP - FreeTickspeed.SOFTCAP) * logSoftmult
+    const softcapFactor = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
+    // Log of (cost - cost up to SOFTCAP)
+    const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
     const tmpC = logShards - priceToCap;
-    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapAddition;
-    const scaling = new LinearMultiplierScaling(tickmult + softcapAddition, kGrowth);
+    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapFactor
+    const scaling = new LinearMultiplierScaling(tickmult, kGrowth);
     const purchases = Math.floor(scaling.purchasesForLogTotalMultiplier(tmpC));
     const next = scaling.logTotalMultiplierAfterPurchases(purchases + 1);
     return {
-      newAmount: purchases + FreeTickspeed.LESS_SOFTCAP,
+      newAmount: purchases + FreeTickspeed.SOFTCAP,
       nextShards: Decimal.exp(priceToCap + next),
     }
   }

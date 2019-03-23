@@ -95,9 +95,10 @@ const GlyphGenerator = {
       idx: null,
       type: "power",
       strength: strength,
-      level: level,
+      level: level.actualLevel,
+      rawLevel: level.rawLevel,
       effects: {
-        pow: getGlyphEffectStrength("powerpow", level, strength),
+        pow: getGlyphEffectStrength("powerpow", level.actualLevel, strength),
       },
     }
   },
@@ -105,7 +106,7 @@ const GlyphGenerator = {
   randomGlyph(level, fake) {
     let strength = this.randomStrength(fake);
     let type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level, fake);
+    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
     let effects = this.generateEffects(type, numEffects, fake);
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
@@ -115,9 +116,10 @@ const GlyphGenerator = {
       idx: null,
       type: type,
       strength: strength,
-      level: level,
+      level: level.actualLevel,
+      rawLevel: level.rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
-        e => getGlyphEffectStrength(e, level, strength)),
+        e => getGlyphEffectStrength(e, level.actualLevel, strength)),
     }
   },
 
@@ -401,7 +403,7 @@ const GlyphSacrifice = (function() {
 function getGlyphEffectStrength(effectKey, level, strength) {
   switch (effectKey) {
     case "powerpow":
-      return 1.015 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
+      return 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
     case "powermult":
       return Decimal.pow(level * strength * 10, level * strength * 9.5)
     case "powerdimboost":
@@ -409,9 +411,9 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "powerbuy10":
       return 1 + Math.pow(level * strength, 0.8) / 10
     case "infinitypow":
-      return 1.007 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
+      return 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
     case "infinityrate":
-      return Math.pow(level, 0.25) * Math.pow(strength, 0.4) * 0.1
+      return Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1
     case "infinityipgain":
       return Math.pow(level * strength, 5) * 100
     case "infinityinfmult":
@@ -510,8 +512,13 @@ function recalculateAllGlyphs() {
 
 // Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
 function calculateGlyph(glyph) {
-  if (glyph.color == undefined && glyph.symbol == undefined) {
+  if (glyph.color === undefined && glyph.symbol === undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
+    if (glyph.rawLevel === undefined) {
+      // Only correct below the second round of instability, but it only matters for glyphs produced before
+      // this was merged, so it's not a big deal.
+      glyph.rawLevel = glyph.level < 1000 ? glyph.level : (Math.pow(0.004 * glyph.level - 3, 2) - 1) * 125 + 1000;
+    }
     if (glyph.strength == 1)
       glyph.strength = gaussianBellCurve()
     for (let effect in glyph.effects) {
@@ -568,7 +575,7 @@ function getActiveGlyphEffects() {
 
 function deleteGlyph(id, force) {
   const glyph = Glyphs.findById(id);
-  if (canSacrifice(glyph)) return sacrificeGlyph(glyph, force);
+  if (canSacrifice()) return sacrificeGlyph(glyph, force);
   if (force || confirm("Do you really want to delete this glyph?")) {
     Glyphs.removeFromInventory(glyph);
   }
@@ -593,7 +600,7 @@ function canBuyRealityUpg(id) {
 }
 
 function getRealityRebuyableCost(id) {
-  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e35, REALITY_UPGRADE_COSTS[id],
+  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e30, REALITY_UPGRADE_COSTS[id],
     REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
 }
 
@@ -651,7 +658,8 @@ function updateRealityUpgrades() {
   const rupg12Value = shortenRateOfChange(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1));
   $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
   $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e75 DT</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
+  $("#rupg22").html("<b>Requires: 1e28000 time shards</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
+  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.max(9e5 / player.bestReality, 1))+"<br>Cost: 100,000 RM</div>")
 }
 
 function respecGlyphs() {
@@ -660,20 +668,12 @@ function respecGlyphs() {
 }
 
 function canSacrifice(glyph) {
-  return (glyph.type === "power" || glyph.type === "time")
-    ? RealityUpgrades.includes(19)
-    : RealityUpgrades.includes(21);
+  return RealityUpgrades.includes(19);
 }
 
 function glyphSacrificeGain(glyph) {
-  if (!canSacrifice(glyph)) return 0;
-  let gain = glyph.level * glyph.strength;
-  if (glyph.type === 'effarig') {
-    gain *= Math.pow(Teresa.runRewardMultiplier, 0.2);
-  } else {
-    gain *= Teresa.runRewardMultiplier;
-  }
-  return gain;
+  if (!canSacrifice()) return 0;
+  return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
 }
 
 function sacrificeGlyph(glyph, force = false) {
@@ -767,7 +767,8 @@ function getGlyphLevelInputs() {
     perkShop: player.celestials.teresa.glyphLevelMult,
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
-    finalLevel: scaledLevel + perkFactor,
+    rawLevel: baseLevel + perkFactor,
+    actualLevel: scaledLevel + perkFactor,
   };
 }
 

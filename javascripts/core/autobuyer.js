@@ -792,7 +792,7 @@ Autobuyer.reality = {
     if (!this.isActive || GlyphSelection.active) return;
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);
-    const glyphProc = gainedGlyphLevel() >= this.glyph;
+    const glyphProc = gainedGlyphLevel().actualLevel >= this.glyph;
     switch (this.mode) {
       case AutoRealityMode.RM:
         proc = rmProc;

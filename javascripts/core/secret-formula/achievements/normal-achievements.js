@@ -625,12 +625,12 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "Transcension sucked anyway",
-    tooltip: "Sacrifice a Transcendent glyph",
+    tooltip: "Sacrifice a Transcendent glyph"
   },
   {
     id: 152,
     name: "Personal Space",
-    tooltip: "Have 100 glyphs in your inventory",
+    tooltip: "Have 100 glyphs in your inventory"
   },
   {
     id: 153,

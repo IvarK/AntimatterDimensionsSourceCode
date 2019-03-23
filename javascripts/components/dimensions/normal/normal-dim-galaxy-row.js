@@ -52,7 +52,7 @@ Vue.component('normal-dim-galaxy-row', {
       this.hasIncreasedScaling = player.galaxies > distantStart;
       if (Galaxy.type.startsWith("Distant")) this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
       else if (Galaxy.type.startsWith("Remote")) {
-        let remoteStart = 799 + Effects.sum(GlyphSacrifice.power);
+        let remoteStart = 800;
         this.costScalingText = `Increased galaxy cost scaling: Quadratic past ${distantStart} (distant), exponential past ${remoteStart} (remote)`;
       }
       else  this.costScalingText = "";

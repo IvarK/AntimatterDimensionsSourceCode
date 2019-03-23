@@ -14,7 +14,7 @@ var teresaQuotes = [
 const TERESA_UNLOCKS = {
   RUN: {
     id: 0,
-    price: 5e12,
+    price: 1e14,
     description: "unlock Teresa's reality.",
   },
   EPGEN: {
@@ -24,7 +24,7 @@ const TERESA_UNLOCKS = {
   },
   EFFARIG: {
     id: 2,
-    price: 5e21,
+    price: 1e21,
     description: "unlock Effarig, Celestial of Ancient Relics.",
   },
   SHOP: {
@@ -93,7 +93,7 @@ var Teresa = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1)
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 5e8, 1 + Math.pow(Math.log10(player.realities), 1.5)), 1).toNumber()
+    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 1.5e8, 12), 1).toNumber()
   },
   get quote() {
     return teresaQuotes[player.celestials.teresa.quoteIdx]

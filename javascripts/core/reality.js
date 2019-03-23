@@ -23,9 +23,12 @@ const GlyphSelection = {
     this.glyphs.randomElement().strength = newStrength;
   },
   update(level) {
-    for (let g of this.glyphs.filter(g => g.level < level)) {
-        g.level = level;
-        calculateGlyph(g);
+    for (let g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
+      g.rawLevel = level.rawLevel;
+    }
+    for (let g of this.glyphs.filter(g => g.level < level.actualLevel)) {
+      g.level = level.actualLevel;
+      calculateGlyph(g);
     }
   },
   select(index) {
@@ -64,15 +67,16 @@ function requestManualReality() {
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
   let choiceCount = GlyphSelection.choiceCount;
+  let level = gainedGlyphLevel();
   if (choiceCount === 1) {
     // First reality gets a specially generated glyph:
     const newGlyph = player.realities === 0
-      ? GlyphGenerator.startingGlyph(gainedGlyphLevel())
-      : GlyphGenerator.randomGlyph(gainedGlyphLevel(), false);
+      ? GlyphGenerator.startingGlyph(level)
+      : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
     return manualReality();
   }
-  GlyphSelection.generate(choiceCount, gainedGlyphLevel());
+  GlyphSelection.generate(choiceCount, level);
 }
 
 function manualReality() {
@@ -129,7 +133,7 @@ function completeReality(force, reset, auto = false) {
     }
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
-    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel());
+    addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
     if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
       let tempBool = true;
@@ -163,7 +167,7 @@ function completeReality(force, reset, auto = false) {
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel(), auto))
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
     }
   }
 

@@ -1189,9 +1189,9 @@ function simulateTime(seconds, real, fast) {
     if (player.infinityPower.gt(playerStart.infinityPower)) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
     if (player.timeShards.gt(playerStart.timeShards)) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
     if (player.infinitied.gt(playerStart.infinitied) || player.eternities > playerStart.eternities) popupString+= ","
-  else popupString += "."
-  if (player.infinitied.gt(playerStart.infinitied)) popupString += "<br>you infinitied " + shorten(player.infinitied.sub(playerStart.infinitied), 4) + (player.infinitied.sub(playerStart.infinitied).eq(1)) ? " time." : " times.";
-    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied "+(player.eternities-playerStart.eternities)+((player.eternities-playerStart.eternities === 1) ? " time." : " times.")
+    else popupString += "."
+    if (player.infinitied.gt(playerStart.infinitied)) popupString += "<br>you infinitied " + shorten(player.infinitied.sub(playerStart.infinitied), 4) + ((player.infinitied.sub(playerStart.infinitied).eq(1)) ? " time." : " times.");
+    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied " + (player.eternities-playerStart.eternities) + ((player.eternities-playerStart.eternities === 1) ? " time." : " times.");
     for (let i = 0; i < player.blackHole.length; i++) {
       let currentActivations = player.blackHole[i].activations;
       let oldActivations = playerStart.blackHole[i].activations;

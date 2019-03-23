@@ -409,7 +409,6 @@ Notation.roman = new class RomanNotation extends Notation {
   }
 }("Roman");
 
-
 Notation.dots = new class DotsNotation extends Notation {
   formatUnder1000(value, places) {
     return this.dotify(value * 254);
@@ -495,7 +494,6 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
     return displayChars.join("");
   }
 }();
-
 
 Notation.imperial = new class ImperialNotation extends Notation {
   constructor() {
@@ -652,7 +650,6 @@ Notation.imperial = new class ImperialNotation extends Notation {
     return null;
   }
 
-
   /**
    * Search for the largest unit smaller than x
    * @param {number} x
@@ -692,7 +689,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
   almost(adjective, numBig, big) {
     return "almost " + this.pluralOrArticle(numBig, adjective + big[1]);
   }
-  
+
   almostOrShortOf(x, adjective, numBig, big, small) {
     const short = Math.round((numBig * big[0] - x) / small[0]);
     return short
@@ -715,6 +712,48 @@ Notation.imperial = new class ImperialNotation extends Notation {
 
 }();
 
+Notation.clock = new class ClockNotation extends Notation {
+  constructor() {
+    super("Clock");
+    this._hours = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"];
+  }
+
+  formatInfinite() {
+    return "🕛🕡";
+  }
+
+  formatUnder1000(value, places) {
+    return this.clockwise(value.toDecimal());
+  }
+
+  formatDecimal(value, places) {
+    return this.clockwise(value);
+  }
+
+  /**
+   * @param {Decimal} value
+   * @return {string}
+   * @private
+   */
+  clockwise(value) {
+    if (value.lt(12)) {
+      return this.hour(value.toNumber());
+    }
+    const log = value.log(12);
+    const exponent = Math.floor(log);
+    const mantissa = Math.pow(12, log - exponent);
+    return this.clockwise((exponent - 1).toDecimal()) + "" + this.hour(Math.max(mantissa - 1, 0));
+  }
+
+  /**
+   * @param {number} number
+   * @return {string}
+   * @private
+   */
+  hour(number) {
+    return this._hours[Math.floor(number)];
+  }
+}("Clock");
 
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
@@ -736,4 +775,5 @@ Notation.all = [
   Notation.dots,
   Notation.zalgo,
   Notation.imperial,
+  Notation.clock,
 ];

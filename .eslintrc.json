@@ -80,7 +80,13 @@
         "args": "all"
       }
     ],
-    "no-use-before-define": ["error", { "functions": false }],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "variables": false
+      }
+    ],
     "array-bracket-spacing": "error",
     "block-spacing": "error",
     "brace-style": "error",
@@ -101,7 +107,13 @@
     "key-spacing": "error",
     "keyword-spacing": "error",
     "line-comment-position": "error",
-    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
     "max-depth": "warn",
     "max-len": [
       "warn",

@@ -39,7 +39,7 @@ Vue.component('past-runs-tab', {
       return tempstring;
     },
     averageRunGain: function(run) {
-      return this.averageGain(run[0], run[1]);
+      return this.averageGain(run[this.realTimeIndex], run[1]);
     },
     runTime(run) {
       return timeDisplayShort(run[0]);

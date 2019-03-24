@@ -4,7 +4,8 @@ GameDatabase.reality.upgrades = (function () {
       player.reality.rebuyables[props.id],
       1e30,
       props.initialCost,
-      props.costMult
+      props.costMult,
+      props.costMult / 10
     );
     const effect = props.effect;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);

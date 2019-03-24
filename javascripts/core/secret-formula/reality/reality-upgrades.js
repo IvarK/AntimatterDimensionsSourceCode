@@ -198,7 +198,7 @@ GameDatabase.reality.upgrades = (function () {
       requirement: "Reality in under 15 minutes",
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       description: "Replicanti gain is boosted from your fastest reality",
-      effect: () => Math.max(15 / Time.bestReality.totalMinutes, 1),
+      effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1/60, 15),
       cap: 900,
       formatEffect: value => formatX(value, 2, 2)
     },

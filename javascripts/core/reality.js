@@ -134,35 +134,7 @@ function completeReality(force, reset, auto = false) {
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) RealityUpgrade(9).unlock();
-    if (!RealityUpgrade(16).isUnlocked && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        if (player.reality.glyphs.active[i].strength < 1.5) tempBool = false
-      }
-      if (tempBool) RealityUpgrade(16).unlock();
-    }
-    if (!RealityUpgrade(17).isUnlocked && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        let count = 0;
-        for (let y in player.reality.glyphs.active[i].effects) {
-          count++
-        }
-        if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
-      }
-      if (tempBool) RealityUpgrade(17).unlock();
-    }
-    if (!RealityUpgrade(18).isUnlocked && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        if (player.reality.glyphs.active[i].level < 10) tempBool = false
-      }
-      if (tempBool) RealityUpgrade(18).unlock();
-    }
-    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) RealityUpgrade(19).unlock();
-    if (player.thisReality < 15 * 60 * 1000) RealityUpgrade(23).unlock();
-    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) RealityUpgrade(24).unlock();
+    RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")

@@ -457,18 +457,6 @@ function checkForEndMe() {
     if (temp2 <= 6666) giveAchievement("Yes. This is hell.")
 }
 
-function checkForRUPG8() {
-    if (nextAchIn() !== 0) return false
-
-    for (var row = 1; row <= 13; row++) {
-        for (var col = 1; col <= 8; col++) {
-            if (!player.achievements.has(row*10 + col)) return false
-        }
-    }
-
-    return true
-}
-
 function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
         return new Decimal(1);
@@ -695,9 +683,7 @@ setInterval(function() {
 
     updateAchievementPower();
 
-    if (Time.totalTimePlayed.totalYears > 2) RealityUpgrade(20).unlock();
-    if (Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > 2800) RealityUpgrade(21).unlock();
-    if (player.timeShards.gte("1e28000")) RealityUpgrade(22).unlock();
+    RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;
     if (Perk.autobuyerTT4.isBought) maxTheorems()
     else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {

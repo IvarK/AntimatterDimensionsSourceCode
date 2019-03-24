@@ -36,13 +36,7 @@ function bigCrunchReset() {
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    if (player.realities > 0 && Player.totalInfinitied.eq(0) && player.eternities === 0 && player.galaxies <= 1) {
-      RealityUpgrade(7).unlock();
-    }
-
-    if (player.realities > 0 && (player.eternities === 0 || (RealityUpgrade(10).isBought && player.eternities === 100)) && player.infinitied.eq(0)) {
-        if (checkForRUPG8()) RealityUpgrade(8).unlock();
-    }
+    RealityUpgrades.tryUnlock([7, 8]);
 
     if (autoS && auto) {
         let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);

@@ -37,7 +37,10 @@ Vue.component("reality-upgrade-button", {
     >
       <hint-text class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
-      <b v-if="!isUnlocked">Requires: {{config.requirement}}</b>
+      <span
+        class="c-reality-upgrade-btn__requirement"
+        v-if="!isUnlocked"
+      >Requires: {{config.requirement}}</span>
       <template v-else>
         <effect-display :config="config" />
         <cost-display

@@ -5516,6 +5516,10 @@ screen and (max-width: 480px) {
   font-family: Typewriter, serif;
 }
 
+.c-reality-upgrade-btn__requirement {
+  font-weight: bold;
+}
+
 .c-reality-upgrade-btn:hover {
   color: black;
   background-color: #d5ffd7;

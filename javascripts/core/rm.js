@@ -773,7 +773,7 @@ class RealityUpgradeState extends GameMechanicState {
   tryUnlock() {
     if (!this.isUnlocked && this.config.checkRequirement()) {
       player.reality.upgReqs[this.id] = true;
-      if (player.realities > 0) {
+      if (player.realities > 0 || TimeStudy.reality.isBought) {
         GameUI.notify.success("You've unlocked a Reality upgrade!");
       }
     }

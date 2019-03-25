@@ -86,7 +86,7 @@ GameDatabase.reality.upgrades = (function () {
       id: 9,
       cost: 15,
       requirement: "Reality with only a single glyph with a level 3 or higher equipped.",
-      checkRequirement: () => Glyphs.active.countWhere(g => g && g.level >= 3) === 1,
+      checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
       description: "Gain another glyph slot"
     },
     {
@@ -125,7 +125,7 @@ GameDatabase.reality.upgrades = (function () {
       id: 14,
       cost: 50,
       requirement: "1,000,000 Eternities",
-      checkRequirement: () => player.realities > 0 && player.eternities > 1e6,
+      checkRequirement: () => player.realities > 0 && player.eternities >= 1e6,
       description: "Gain Eternities per second equal to your Realities",
       effect: () => player.realities,
       formatEffect: value => `${shorten(value)} per second`
@@ -143,22 +143,22 @@ GameDatabase.reality.upgrades = (function () {
       id: 16,
       cost: 1500,
       requirement: "Reality with 4 glyphs with uncommon or better rarity",
-      checkRequirement: () => Glyphs.active.countWhere(g => g && g.strength >= 1.5) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => g.strength >= 1.5) === 4,
       description: "Improve the glyph rarity formula",
       effect: () => 1.3
     },
     {
       id: 17,
       cost: 1500,
-      requirement: "Reality with 4 glyphs, with each having 2 effects",
-      checkRequirement: () => Glyphs.active.countWhere(g => g && g.effects === 2) === 4,
+      requirement: "Reality with 4 glyphs, with each having at least 2 effects",
+      checkRequirement: () => Glyphs.activeList.countWhere(g => Object.keys(g.effects).length >= 2) === 4,
       description: "50% chance to get +1 effect on glyphs"
     },
     {
       id: 18,
       cost: 1500,
       requirement: "Reality with 4 level 10 or higher glyphs equipped.",
-      checkRequirement: () => Glyphs.active.countWhere(g => g && g.level >= 10) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       description: "Eternities affect glyph level",
       effect: () => Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1)
     },
@@ -206,7 +206,7 @@ GameDatabase.reality.upgrades = (function () {
       id: 24,
       cost: 100000,
       requirement: "Reality for 5000 RM without glyphs",
-      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.active.countWhere(g => g) === 0,
+      checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
       description: "Gain another glyph slot"
     },
     {

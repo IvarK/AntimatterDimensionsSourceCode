@@ -205,6 +205,9 @@ const GlyphGenerator = {
 const Glyphs = {
   inventory: [],
   active: [],
+  get activeList() {
+    return player.reality.glyphs.active;
+  },
   findFreeIndex() {
     this.validate();
     return this.inventory.indexOf(null);

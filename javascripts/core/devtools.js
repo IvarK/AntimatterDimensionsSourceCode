@@ -252,9 +252,9 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
         for (var i=1; i<6; i++) {
-            if (RealityUpgrades.includes(i)) {
+            if (RealityUpgrade(i).isBought) {
               player.reality.rebuyables[i] = 1
-              RealityUpgrades.remove(i);
+              RealityUpgrade(i).remove();
             }
         }
         player.options.testVersion = 5
@@ -376,7 +376,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion == 17) {
-    if (RealityUpgrades.includes(20)) {
+    if (RealityUpgrade(20).isBought) {
       player.wormhole[1].unlocked = true
       $("#bhupg2").show()
     }
@@ -543,17 +543,17 @@ dev.updateTestSave = function() {
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
     player.celestials.teresa.rmStore = Teresa.rmStoreMax;
   }
   if (player.reality.upg) {
-    for (let upg of player.reality.upg) RealityUpgrades.add(upg);
+    for (let upg of player.reality.upg) RealityUpgrade(upg).purchase();
     delete player.reality.upg;
   }
-  if (!RealityUpgrades.includes(25)) player.realityBuyer.isOn = false;
+  if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
 }
 
 // Still WIP

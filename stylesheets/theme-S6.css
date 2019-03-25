@@ -179,25 +179,6 @@ input {
     text-shadow: 0px 0px 7px #0b600e;
 }
 
-.c-reality-upgrade:hover {
-    background-color: #d5ffd7 !important;
-}
-
-.rUpgUn:hover {
-    background-color: #656565 !important;
-    color: #d5ffd7 !important;
-}
-
-.rUpgBought {
-    background-color: #0b600e !important;
-    border-color: #094E0B !important;
-}
-
-.rUpgBought:hover {
-    color: #d5ffd7 !important;
-    background-color: #0b600e !important;
-}
-
 .automatorinstruction.command {
     background-color: black !important;
 }

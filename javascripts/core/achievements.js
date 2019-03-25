@@ -369,6 +369,10 @@ function Achievement(id) {
   return AchievementState.all[id];
 }
 
+const Achievements = {
+  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
+};
+
 class SecretAchievementState extends GameMechanicState {
   constructor(config) {
     super(config);

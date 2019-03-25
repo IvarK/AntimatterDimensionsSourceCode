@@ -53,18 +53,13 @@ function eternity(force, auto, switchingDilation) {
       TimeStudy(191)
     );
     if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
-    if (player.realities > 0 && (player.eternities === 0 || (player.eternities === 100 && RealityUpgrades.includes(10))) && player.reality.upgReqChecks[0]) {
-      unlockRealityUpgrade(6);
-    }
     if (player.dilation.active && !force) {
         player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
         player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
     }
-    if (player.realities > 0 && player.eternities === 0 && player.infinityPoints.gte(new Decimal("1e400"))) unlockRealityUpgrade(10);
+    RealityUpgrades.tryUnlock([6, 10]);
     if (!force) {
-        var tempEterGain = 1;
-        if (player.reality.rebuyables[3] > 0) tempEterGain *= Math.pow(3, player.reality.rebuyables[3]);
-        player.eternities += tempEterGain
+        player.eternities += Effects.product(RealityUpgrade(3));
     }
     player.sacrificed = new Decimal(0);
     player.challenges = [];
@@ -159,18 +154,14 @@ function eternity(force, auto, switchingDilation) {
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     resetTickspeed();
     playerInfinityUpgradesOnEternity();
-    if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities == Math.pow(3, player.reality.rebuyables[3]) && player.eternityPoints.lte(10))) {
+    if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
     }
     Marathon2 = 0;
-    if (player.realities > 0 && player.infinitiedBank.gt(1e12)) unlockRealityUpgrade(11);
-    if (player.eternityPoints.gte(1e70) && EternityChallenge(1).completions === 0) unlockRealityUpgrade(12);
-    if (player.eternityPoints.gte(new Decimal("1e3500")) && player.timeDimension5.amount.equals(0)) unlockRealityUpgrade(13);
-    if (player.realities > 0 && player.eternities > 1e6) unlockRealityUpgrade(14);
-    if (player.epmult.equals(1) && player.eternityPoints.gte(1e10)) unlockRealityUpgrade(15);
-    if (player.eternityPoints.gte("1e10500")) unlockRealityUpgrade(25)
 
-    if (RealityUpgrades.includes(13)) {
+    RealityUpgrades.tryUnlock([11, 12, 13, 14, 15, 25]);
+
+    if (RealityUpgrade(13).isBought) {
         if (player.reality.epmultbuyer) buyMaxEPMult();
         for (var i = 1; i < 9; i++) {
             if (player.reality.tdbuyers[i - 1]) {
@@ -313,7 +304,7 @@ const EternityUpgrade = function() {
       },
       autobuyer: {
         get isUnlocked() {
-          return RealityUpgrades.includes(13);
+          return RealityUpgrade(13).isBought;
         },
         get isOn() {
           return player.reality.epmultbuyer;

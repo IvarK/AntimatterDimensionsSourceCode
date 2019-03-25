@@ -908,64 +908,6 @@ br {
     pointer-events:none;
 }
 
-.l-reality-upgrade {
-  padding: 12px;
-  margin-bottom: 12px;
-  height: 100px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.c-reality-upgrade {
-  background-color: black;
-  border: 2px solid #0b600e;
-  border-radius: 5px;
-  color: #d5ffd7;
-  cursor: pointer;
-  transition-duration: 0.12s;
-  text-align: center;
-}
-
-.c-reality-upgrade:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-/*
-reality upgrade unavailable
-*/
-.rUpgUn {
-    background-color: #656565;
-    cursor: default;
-}
-
-.rUpgUn:hover {
-    background-color: #656565;
-    color: #d5ffd7;
-}
-
-.rUpgBought {
-    background-color: #0b600e;
-    border-color: #094E0B;
-    cursor: default;
-}
-
-.rUpgBought:hover {
-    color: #d5ffd7;
-    background-color: #0b600e
-}
-
-.rUpgReqNotMet {
-    background-color: rgb(165, 57, 57)
-}
-
-.rUpgReqNotMet:hover {
-    background-color: rgb(165, 57, 57)
-}
-
 .videocontainer {
     position: fixed;
     z-index: -1000;
@@ -1094,11 +1036,6 @@ reality upgrade unavailable
     transition-duration: 0.12s;
     width: 150px;
     height: 50px;
-}
-
-
-.realityUpgradeTable > tbody > tr > td {
-    width: 18%;
 }
 
 #pp {
@@ -2006,6 +1943,10 @@ screen and (max-width: 480px) {
 
 .l-hint-text--time-study {
   top: -1.85rem;
+}
+
+.l-hint-text--reality-upgrade {
+  top: -2rem;
 }
 
 /*#endregion hint-text*/
@@ -5535,4 +5476,140 @@ screen and (max-width: 480px) {
   flex-direction: column;
   padding-top: 2rem;
   justify-content: flex-start;
+}
+
+.l-reality-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+}
+
+.l-reality-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-reality-upgrade-grid__row > * {
+  margin: 1.2rem;
+  flex: 1 1 0;
+}
+
+.l-reality-upgrade-btn {
+  height: 10rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.c-reality-upgrade-btn {
+  background-color: black;
+  border: .2rem solid #0b600e;
+  border-radius: .5rem;
+  color: #d5ffd7;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter, serif;
+}
+
+.c-reality-upgrade-btn__requirement {
+  font-weight: bold;
+}
+
+.c-reality-upgrade-btn:hover {
+  color: black;
+  background-color: #d5ffd7;
+}
+
+.c-reality-upgrade--unavailable {
+  background-color: #656565;
+  cursor: default;
+}
+
+.c-reality-upgrade--unavailable:hover {
+  background-color: #656565;
+  color: #d5ffd7;
+}
+
+.c-reality-upgrade--bought {
+  background-color: #0b600e;
+  border-color: #094E0B;
+  cursor: default;
+}
+
+.c-reality-upgrade--bought:hover {
+  color: #d5ffd7;
+  background-color: #0b600e;
+}
+
+.c-reality-upgrade--locked {
+  background-color: #a53939;
+  cursor: default;
+}
+
+.c-reality-upgrade--locked:hover {
+  background-color: #a53939;
+  color: #d5ffd7;
+}
+
+.t-dark.c-reality-upgrade-btn {
+  background-color: black !important;
+}
+
+.t-dark.c-reality-upgrade-btn:hover {
+  color: black !important;
+  background-color: #d5ffd7 !important;
+}
+
+.t-dark.c-reality-upgrade--unavailable {
+  color: #d5ffd7 !important;
+  background-color: #656565 !important;
+}
+
+.t-dark.c-reality-upgrade--unavailable:hover {
+  color: #d5ffd7 !important;
+  background-color: #656565 !important;
+}
+
+.t-dark.c-reality-upgrade--bought {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
+}
+
+.t-dark.c-reality-upgrade--bought:hover {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
+}
+
+.t-dark.c-reality-upgrade--locked {
+  color: #d5ffd7 !important;
+  background-color: #a53939 !important;
+}
+
+.t-dark.c-reality-upgrade--locked:hover {
+  color: #d5ffd7 !important;
+  background-color: #a53939 !important;
+}
+
+.t-s6.c-reality-upgrade-btn:hover {
+  background-color: #d5ffd7 !important;
+}
+
+.t-s6.c-reality-upgrade--unavailable:hover {
+  background-color: #656565 !important;
+  color: #d5ffd7 !important;
+}
+
+.t-s6.c-reality-upgrade--bought {
+  background-color: #0b600e !important;
+  border-color: #094E0B !important;
+}
+
+.t-s6.c-reality-upgrade--bought:hover {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
 }

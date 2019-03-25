@@ -486,6 +486,10 @@ const Player = {
     return player.infinitied.plus(player.infinitiedBank).clampMin(0);
   },
 
+  get gainedEternities() {
+    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
+  },
+
   get isInMatterChallenge() {
     return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
   },

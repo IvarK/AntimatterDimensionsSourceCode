@@ -166,15 +166,11 @@ function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultAchs,
       EternityUpgrade.tdMultTheorems,
       EternityUpgrade.tdMultRealTime,
-      player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null
+      player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
+      RealityUpgrade(22)
     );
   if (EternityChallenge(9).isRunning) {
     mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
-  }
-
-  if (RealityUpgrades.includes(22)) {
-    let days = player.thisReality / (1000 * 60 * 60 * 24);
-    mult = mult.times(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(days + 1), 1.6)));
   }
   return mult;
 }

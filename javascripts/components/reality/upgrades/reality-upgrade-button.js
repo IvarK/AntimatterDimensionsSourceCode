@@ -23,7 +23,7 @@ Vue.component("reality-upgrade-button", {
   },
   methods: {
     update() {
-      const upgrade = this.upgrade;
+      const { upgrade } = this;
       this.isUnlocked = upgrade.isUnlocked;
       this.canBeBought = upgrade.canBeBought;
       this.isBought = upgrade.isBought;

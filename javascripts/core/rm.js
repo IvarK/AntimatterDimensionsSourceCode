@@ -721,15 +721,12 @@ const GlyphEffect = {
 };
 
 class RealityUpgradeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
   get isAffordable() {
     return player.reality.realityMachines.gte(this.cost);
   }
 
   get isBought() {
+    // eslint-disable-next-line no-bitwise
     return (player.reality.upgradeBits & (1 << this.id)) !== 0;
   }
 
@@ -742,22 +739,22 @@ class RealityUpgradeState extends GameMechanicState {
   }
 
   purchase() {
-    const id = this.id;
+    const { id } = this;
     if (!this.canBeBought) return false;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     if (id < 6) {
       player.reality.rebuyables[id]++;
-    }
-    else {
-      player.reality.upgradeBits = player.reality.upgradeBits | (1 << id);
+    } else {
+      // eslint-disable-next-line no-bitwise
+      player.reality.upgradeBits |= (1 << id);
     }
     if (id === 9 || id === 24) {
-      player.reality.glyphs.slots++
+      player.reality.glyphs.slots++;
     }
     if (id === 20) {
-      if (!player.blackHole[0].unlocked) return;
+      if (!player.blackHole[0].unlocked) return true;
       player.blackHole[1].unlocked = true;
-      $("#bhupg2").show()
+      $("#bhupg2").show();
     }
 
     if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
@@ -766,7 +763,8 @@ class RealityUpgradeState extends GameMechanicState {
   }
 
   remove() {
-    player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << this.id);
+    // eslint-disable-next-line no-bitwise
+    player.reality.upgradeBits &= ~(1 << this.id);
   }
 
   get isUnlocked() {
@@ -788,10 +786,12 @@ class RebuyableRealityUpgradeState extends RealityUpgradeState {
     return this.config.cost();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   get isBought() {
     return false;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   get canBeApplied() {
     return true;
   }
@@ -803,9 +803,12 @@ class RebuyableRealityUpgradeState extends RealityUpgradeState {
 
 RealityUpgradeState.list = mapGameData(
   GameDatabase.reality.upgrades,
-  config => config.id < 6 ?
-    new RebuyableRealityUpgradeState(config) :
-    new RealityUpgradeState(config)
+  // eslint-disable-next-line arrow-body-style
+  config => {
+    return config.id < 6 ?
+      new RebuyableRealityUpgradeState(config) :
+      new RealityUpgradeState(config);
+  }
 );
 
 /**
@@ -823,11 +826,12 @@ const RealityUpgrades = {
   },
 
   get allBought() {
+    // eslint-disable-next-line no-bitwise
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 6);
   },
 
   tryUnlock(ids) {
-    for (let id of ids) {
+    for (const id of ids) {
       RealityUpgrade(id).tryUnlock();
     }
   }

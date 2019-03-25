@@ -1,4 +1,4 @@
-GameDatabase.reality.upgrades = (function () {
+GameDatabase.reality.upgrades = (function() {
   const rebuyable = props => {
     props.cost = () => getCostWithLinearCostScaling(
       player.reality.rebuyables[props.id],
@@ -7,7 +7,7 @@ GameDatabase.reality.upgrades = (function () {
       props.costMult,
       props.costMult / 10
     );
-    const effect = props.effect;
+    const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
     props.formatEffect = value => formatX(value, 2, 2);
     return props;
@@ -198,7 +198,7 @@ GameDatabase.reality.upgrades = (function () {
       requirement: "Reality in under 15 minutes",
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       description: "Replicanti gain is boosted from your fastest reality",
-      effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1/60, 15),
+      effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1 / 60, 15),
       cap: 900,
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -217,4 +217,4 @@ GameDatabase.reality.upgrades = (function () {
       description: "Reality autobuyer"
     },
   ];
-})();
+}());

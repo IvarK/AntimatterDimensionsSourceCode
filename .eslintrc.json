@@ -91,7 +91,13 @@
     "block-spacing": "error",
     "brace-style": "error",
     "camelcase": "error",
-    "capitalized-comments": "error",
+    "capitalized-comments": [
+      "error",
+      "always",
+      {
+          "ignoreConsecutiveComments": true
+      }
+    ],
     "comma-spacing": "error",
     "comma-style": "error",
     "computed-property-spacing": "error",

@@ -132,6 +132,7 @@ class TimeStudyTreeLayout {
     /**
      * @type {TimeStudyRow[]}
      */
+    /* eslint-disable no-multi-spaces, space-in-parens */
     this.rows = [
       normalRow(                       null,   TS(11),   null                         ),
       normalRow(                           TS(21), TS(22)                             ),
@@ -193,6 +194,7 @@ class TimeStudyTreeLayout {
       normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
       normalRow(                          TimeStudy.reality                           )
     );
+    /* eslint-enable no-multi-spaces, space-in-parens */
 
     /**
      * @type {TimeStudySetup[]}

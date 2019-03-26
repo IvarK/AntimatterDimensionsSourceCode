@@ -852,29 +852,22 @@ function gameLoop(diff, options = {}) {
       }
     }
 
-  let infGen = new Decimal(0);
-    if (BreakInfinityUpgrade.infinitiedGen.isBought && !EternityChallenge(4).isRunning) {
+    if (!EternityChallenge(4).isRunning) {
+      let infGen = new Decimal(0);
+      if (BreakInfinityUpgrade.infinitiedGen.isBought) {
+        infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.bestInfinityTime);
+      }
       if (RealityUpgrade(11).isBought) {
         infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
-      } else {
-        player.partInfinitied += diff / player.bestInfinityTime;
       }
+      if (EffarigUnlock.eternity.isUnlocked) {
+        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+      }
+      infGen = infGen.plus(player.partInfinitied);
+      player.infinitied = player.infinitied.plus(infGen.floor());
+      Enslaved.trackInfinityGeneration(infGen.floor());
+      player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
     }
-    if (player.partInfinitied >= 50) {
-        infGen = infGen.plus(Math.floor(player.partInfinitied / 5));
-        player.partInfinitied = 0;
-    }
-
-    if (player.partInfinitied >= 5) {
-        player.partInfinitied -= 5;
-        infGen = infGen.plus(1);
-    }
-    if (EffarigUnlock.eternity.isUnlocked && !EternityChallenge(4).isRunning) {
-      infGen = infGen.plus(gainedInfinities().times(player.eternities).floor().times(diff/1000))
-    }
-
-    player.infinitied = player.infinitied.plus(infGen);
-    Enslaved.trackInfinityGeneration(infGen);
     
     if (RealityUpgrade(14).isBought) {
       player.reality.partEternitied += Time.deltaTime * Effects.product(

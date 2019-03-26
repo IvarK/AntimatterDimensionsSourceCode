@@ -102,7 +102,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "1,000,000,000,000 banked Infinities",
       checkRequirement: () => player.realities > 0 && player.infinitiedBank.exponent >= 12,
       description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
-      effect: () => gainedInfinities().times(0.1).floor(),
+      effect: () => gainedInfinities().times(0.1),
       formatEffect: value => `${shorten(value)} per second`
     },
     {

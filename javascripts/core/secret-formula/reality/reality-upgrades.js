@@ -92,7 +92,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 10,
       cost: 15,
-      requirement: "Do your first Eternity with 1e400 IP",
+      requirement: () => `Do your first Eternity with ${shorten("1e400")} IP`,
       checkRequirement: () => player.infinityPoints.exponent >= 400 && isFirstEternity(),
       description: "Start with 100 Eternities"
     },
@@ -108,7 +108,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 12,
       cost: 50,
-      requirement: "1e70 EP without EC1",
+      requirement: () => `${shorten(1e70)} EP without EC1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       description: "EP mult based on Realities and TT",
       effect: () => player.timestudy.theorem.minus(1e3).clampMin(2).pow(Math.log2(player.realities)).clampMin(1),
@@ -117,7 +117,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: "1e3500 EP without TD5",
+      requirement: () => `${shorten("1e3500")} EP without TD5`,
       checkRequirement: () => player.eternityPoints.exponent >= 3500 && TimeDimension(5).amount.equals(0),
       description: "More Eternity autobuyer options, EP multiplier autobuyer, Time Dimension autobuyers"
     },
@@ -133,7 +133,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 15,
       cost: 50,
-      requirement: "Reach 1e10 EP without purchasing the 5xEP upgrade",
+      requirement: () => `Reach ${shorten(1e10)} EP without purchasing the 5xEP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmult.equals(1),
       description: "Multiply TP gain based on EP mult",
       effect: () => Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1),
@@ -186,7 +186,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 22,
       cost: 100000,
-      requirement: "1e28000 time shards",
+      requirement: () => `${shorten("1e28000")} time shards`,
       checkRequirement: () => player.timeShards.exponent >= 28000,
       description: "Growing bonus to TD based on days spent in this Reality",
       effect: () => Decimal.pow10(Math.pow(1 + 2 * Math.log10(Time.thisReality.totalDays + 1), 1.6)),
@@ -212,7 +212,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 25,
       cost: 100000,
-      requirement: "1e10500 EP",
+      requirement: () => `${shorten("1e10500")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 10500,
       description: "Reality autobuyer"
     },

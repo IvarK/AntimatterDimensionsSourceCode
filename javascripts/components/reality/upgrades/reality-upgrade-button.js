@@ -19,6 +19,11 @@ Vue.component("reality-upgrade-button", {
         "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isUnlocked,
         "c-reality-upgrade-btn--locked": !this.isUnlocked,
       };
+    },
+    requirementConfig() {
+      return {
+        description: this.config.requirement
+      };
     }
   },
   methods: {
@@ -37,10 +42,12 @@ Vue.component("reality-upgrade-button", {
     >
       <hint-text class="l-hint-text--reality-upgrade">RUPG {{config.id}}</hint-text>
       <description-display :config="config"/>
-      <span
-        class="c-reality-upgrade-btn__requirement"
+      <description-display
         v-if="!isUnlocked"
-      >Requires: {{config.requirement}}</span>
+        :config="requirementConfig"
+        title="Requirement:"
+        class="c-reality-upgrade-btn__requirement"
+      />
       <template v-else>
         <effect-display :config="config" />
         <cost-display

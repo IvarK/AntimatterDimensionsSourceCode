@@ -87,7 +87,7 @@ Vue.component("equipped-glyphs", {
         </div>
       </template>
     </div>
-    <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade', {rUpgBought: respec}]"
+    <button :class="['l-equipped-glyphs__respec', 'c-reality-upgrade-btn', {'c-reality-upgrade-btn--bought': respec}]"
             :ach-tooltip="respecTooltip"
             @click="toggleRespec">
       Clear glyph slots on Reality

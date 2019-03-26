@@ -15,9 +15,9 @@ Vue.component("reality-upgrade-button", {
     },
     classObject() {
       return {
-        "c-reality-upgrade--bought": this.isBought,
-        "c-reality-upgrade--unavailable": !this.isBought && !this.canBeBought && this.isUnlocked,
-        "c-reality-upgrade--locked": !this.isUnlocked,
+        "c-reality-upgrade-btn--bought": this.isBought,
+        "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isUnlocked,
+        "c-reality-upgrade-btn--locked": !this.isUnlocked,
       };
     }
   },

@@ -5525,33 +5525,33 @@ screen and (max-width: 480px) {
   background-color: #d5ffd7;
 }
 
-.c-reality-upgrade--unavailable {
+.c-reality-upgrade-btn--unavailable {
   background-color: #656565;
   cursor: default;
 }
 
-.c-reality-upgrade--unavailable:hover {
+.c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565;
   color: #d5ffd7;
 }
 
-.c-reality-upgrade--bought {
+.c-reality-upgrade-btn--bought {
   background-color: #0b600e;
   border-color: #094E0B;
   cursor: default;
 }
 
-.c-reality-upgrade--bought:hover {
+.c-reality-upgrade-btn--bought:hover {
   color: #d5ffd7;
   background-color: #0b600e;
 }
 
-.c-reality-upgrade--locked {
+.c-reality-upgrade-btn--locked {
   background-color: #a53939;
   cursor: default;
 }
 
-.c-reality-upgrade--locked:hover {
+.c-reality-upgrade-btn--locked:hover {
   background-color: #a53939;
   color: #d5ffd7;
 }
@@ -5565,32 +5565,32 @@ screen and (max-width: 480px) {
   background-color: #d5ffd7 !important;
 }
 
-.t-dark.c-reality-upgrade--unavailable {
+.t-dark.c-reality-upgrade-btn--unavailable {
   color: #d5ffd7 !important;
   background-color: #656565 !important;
 }
 
-.t-dark.c-reality-upgrade--unavailable:hover {
+.t-dark.c-reality-upgrade-btn--unavailable:hover {
   color: #d5ffd7 !important;
   background-color: #656565 !important;
 }
 
-.t-dark.c-reality-upgrade--bought {
+.t-dark.c-reality-upgrade-btn--bought {
   color: #d5ffd7 !important;
   background-color: #0b600e !important;
 }
 
-.t-dark.c-reality-upgrade--bought:hover {
+.t-dark.c-reality-upgrade-btn--bought:hover {
   color: #d5ffd7 !important;
   background-color: #0b600e !important;
 }
 
-.t-dark.c-reality-upgrade--locked {
+.t-dark.c-reality-upgrade-btn--locked {
   color: #d5ffd7 !important;
   background-color: #a53939 !important;
 }
 
-.t-dark.c-reality-upgrade--locked:hover {
+.t-dark.c-reality-upgrade-btn--locked:hover {
   color: #d5ffd7 !important;
   background-color: #a53939 !important;
 }
@@ -5599,17 +5599,17 @@ screen and (max-width: 480px) {
   background-color: #d5ffd7 !important;
 }
 
-.t-s6.c-reality-upgrade--unavailable:hover {
+.t-s6.c-reality-upgrade-btn--unavailable:hover {
   background-color: #656565 !important;
   color: #d5ffd7 !important;
 }
 
-.t-s6.c-reality-upgrade--bought {
+.t-s6.c-reality-upgrade-btn--bought {
   background-color: #0b600e !important;
   border-color: #094E0B !important;
 }
 
-.t-s6.c-reality-upgrade--bought:hover {
+.t-s6.c-reality-upgrade-btn--bought:hover {
   color: #d5ffd7 !important;
   background-color: #0b600e !important;
 }

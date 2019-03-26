@@ -827,7 +827,7 @@ const RealityUpgrades = {
 
   get allBought() {
     // eslint-disable-next-line no-bitwise
-    return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 6);
+    return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
   },
 
   tryUnlock(ids) {

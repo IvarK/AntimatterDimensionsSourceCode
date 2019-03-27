@@ -87,7 +87,8 @@ GameDatabase.reality.upgrades = (function() {
       cost: 15,
       requirement: "Reality with only a single glyph with a level 3 or higher equipped.",
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
-      description: "Gain another glyph slot"
+      description: "Gain another glyph slot",
+      effect: () => 1
     },
     {
       id: 10,
@@ -207,7 +208,8 @@ GameDatabase.reality.upgrades = (function() {
       cost: 100000,
       requirement: "Reality for 5000 RM without glyphs",
       checkRequirement: () => gainedRealityMachines().gte(5000) && Glyphs.activeList.length === 0,
-      description: "Gain another glyph slot"
+      description: "Gain another glyph slot",
+      effect: () => 1
     },
     {
       id: 25,

@@ -217,7 +217,7 @@ const Glyphs = {
     return this.inventory.filter(e => e === null).length;
   },
   refresh() {
-    this.active = new Array(player.reality.glyphs.slots).fill(null);
+    this.active = new Array(3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24))).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")
@@ -747,9 +747,6 @@ class RealityUpgradeState extends GameMechanicState {
     } else {
       // eslint-disable-next-line no-bitwise
       player.reality.upgradeBits |= (1 << id);
-    }
-    if (id === 9 || id === 24) {
-      player.reality.glyphs.slots++;
     }
     if (id === 20) {
       if (!player.blackHole[0].unlocked) return true;

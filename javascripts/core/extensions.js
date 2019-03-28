@@ -183,6 +183,18 @@ Array.prototype.max = function() {
 };
 
 /**
+ * @param {function} predicate
+ * @returns {number}
+ */
+Array.prototype.countWhere = function (predicate) {
+  let count = 0;
+  for (let item of this) {
+    if (predicate(item))++count;
+  }
+  return count;
+}
+
+/**
  * @returns {Decimal}
  */
 Decimal.prototype.clamp = function(min, max) {

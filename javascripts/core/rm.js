@@ -216,11 +216,11 @@ const Glyphs = {
     this.validate();
     return this.inventory.filter(e => e === null).length;
   },
-  get slots() {
+  get activeSlotCount() {
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
   },
   refreshActive() {
-    this.active = new Array(this.slots).fill(null);
+    this.active = new Array(this.activeSlotCount).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")

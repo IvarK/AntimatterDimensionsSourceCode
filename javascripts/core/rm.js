@@ -752,7 +752,7 @@ class RealityUpgradeState extends GameMechanicState {
       player.reality.upgradeBits |= (1 << id);
     }
 
-    if (id === 9 || id == 24) {
+    if (id === 9 || id === 24) {
       Glyphs.refreshActive();
     }
 

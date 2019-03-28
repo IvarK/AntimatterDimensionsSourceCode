@@ -216,14 +216,20 @@ const Glyphs = {
     this.validate();
     return this.inventory.filter(e => e === null).length;
   },
-  refresh() {
-    this.active = new Array(player.reality.glyphs.slots).fill(null);
+  get activeSlotCount() {
+    return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
+  },
+  refreshActive() {
+    this.active = new Array(this.activeSlotCount).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")
       }
       this.active[g.idx] = g;
     }
+  },
+  refresh() {
+    this.refreshActive();
     this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
     // Glyphs could previously end up occupying the same inventory slot (Stacking)
     let stacked = [];
@@ -748,9 +754,11 @@ class RealityUpgradeState extends GameMechanicState {
       // eslint-disable-next-line no-bitwise
       player.reality.upgradeBits |= (1 << id);
     }
+
     if (id === 9 || id === 24) {
-      player.reality.glyphs.slots++;
+      Glyphs.refreshActive();
     }
+
     if (id === 20) {
       if (!player.blackHole[0].unlocked) return true;
       player.blackHole[1].unlocked = true;

@@ -186,13 +186,13 @@ Array.prototype.max = function() {
  * @param {function} predicate
  * @returns {number}
  */
-Array.prototype.countWhere = function (predicate) {
+Array.prototype.countWhere = function(predicate) {
   let count = 0;
-  for (let item of this) {
+  for (const item of this) {
     if (predicate(item))++count;
   }
   return count;
-}
+};
 
 /**
  * @returns {Decimal}
@@ -230,9 +230,9 @@ Array.prototype.randomElement = function() {
 
 Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
 
-Set.prototype.countWhere = function (predicate) {
+Set.prototype.countWhere = function(predicate) {
   let count = 0;
-  for (let item of this) {
+  for (const item of this) {
     if (predicate(item))++count;
   }
   return count;

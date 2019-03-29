@@ -196,9 +196,9 @@ function gainedInfinityPoints() {
 function gainedEternityPoints() {
   const ip = player.infinityPoints.plus(gainedInfinityPoints());
   let ep = Decimal.pow(5, ip.e / 308 - 0.7)
-    .times(EternityUpgrade.epMult.effectValue)
     .times(kongEPMult)
     .timesEffectsOf(
+      EternityUpgrade.epMult,
       TimeStudy(61),
       TimeStudy(122),
       TimeStudy(121),

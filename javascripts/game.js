@@ -216,7 +216,7 @@ function gainedEternityPoints() {
     ep = ep.pow(0.5);
   }
   if (Enslaved.isRunning) {
-    return Decimal.pow(5, ip.e / 308 - 0.7).times(EternityUpgrade.epMult.effectValue).times(kongEPMult).floor();
+    //    return Decimal.pow(5, ip.e / 308 - 0.7).times(EternityUpgrade.epMult.effectValue).times(kongEPMult).floor();
   }
   return ep.floor();
 }
@@ -276,6 +276,7 @@ function resetDimensions() {
   player.eightCost = new Decimal(1e24)
   player.eightPow = new Decimal(player.chall11Pow)
   player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function resetChallengeStuff() {

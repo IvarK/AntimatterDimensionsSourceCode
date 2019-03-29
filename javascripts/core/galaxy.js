@@ -106,7 +106,7 @@ class Galaxy {
   }
 
   static get canBeBought() {
-    return !(EternityChallenge(6).isRunning
+    return !((EternityChallenge(6).isRunning && !Enslaved.isRunning)
       || Challenge(8).isRunning
       || player.currentChallenge === "postc7"
       || (!player.break && player.money.gt(Number.MAX_VALUE)));

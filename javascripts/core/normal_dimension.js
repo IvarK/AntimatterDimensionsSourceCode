@@ -114,8 +114,9 @@ function getDimensionFinalMultiplier(tier) {
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
+  } else if (Enslaved.isRunning) {
+    multiplier = dilatedValueOf(multiplier);
   }
-
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   multiplier = multiplier
@@ -561,7 +562,7 @@ function getDimensionProductionPerSecond(tier) {
   if (Challenge(2).isRunning) {
     production = production.times(player.chall2Pow);
   }
-  const postBreak = (player.break && player.currentChallenge === "") || player.currentChallenge.includes("post");
+  const postBreak = (player.break && player.currentChallenge === "") || player.currentChallenge.includes("post") || Enslaved.isRunning;
   if (!postBreak && production.gte(Number.MAX_VALUE)) {
     production = production.min("1e315");
   }

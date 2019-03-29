@@ -49,7 +49,11 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    startChallenge(this._fullId, new Decimal(Number.MAX_VALUE));
+    let target = new Decimal(Number.MAX_VALUE);
+    if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
+      target = Decimal.pow(10, 1e15);
+    }
+    startChallenge(this._fullId, target);
   }
 
   get isCompleted() {

@@ -119,10 +119,15 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   set completions(value) {
+    if (Enslaved.isRunning && this.id === 1) {
+      player.eternityChalls[this.fullId] = Math.min(1000, value);
+      return;
+    }
     player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
   }
 
   get isFullyCompleted() {
+    if (Enslaved.isRunning && this.id === 1) return this.completions === 1000;
     return this.completions === TIERS_PER_EC;
   }
 

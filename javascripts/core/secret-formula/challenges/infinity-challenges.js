@@ -2,7 +2,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 1,
     description: "All previous challenges (except tickspeed challenge and automatic big crunch challenge) at once.",
-    goal: new Decimal("1e850"),
+    goal: new Decimal("1e85000"),
     isQuickResettable: true,
     reward: {
       description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",

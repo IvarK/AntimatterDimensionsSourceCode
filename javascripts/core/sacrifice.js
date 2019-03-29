@@ -1,9 +1,9 @@
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
-  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE)) return false;
+  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE) && !Enslaved.isRunning) return false;
   const totalBoost = Sacrifice.totalBoost;
-  if (Challenge(8).isRunning && (totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))) return false;
+  if (Challenge(8).isRunning && (totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE)) && !Enslaved.isRunning) return false;
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, "x" + shortenMoney(nextBoost));
   if (nextBoost.gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference");
@@ -46,7 +46,7 @@ class Sacrifice {
   static get nextBoost() {
     if (player.firstAmount.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")) {
+    if (player.challenges.includes("postc2")){
       const scale = Effects.max(
         0.01,
         Achievement(88),

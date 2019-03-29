@@ -283,10 +283,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 192,
       cost: 730,
-      description: () =>
-        `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
-        "but growth slows down at higher replicanti amounts."
-    },
+      description: () => (Enslaved.isRunning
+        ? "There is not enough space in this reality"
+        : `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
+        "but growth slows down at higher replicanti amounts.")
+      },
     {
       id: 193,
       cost: 300,

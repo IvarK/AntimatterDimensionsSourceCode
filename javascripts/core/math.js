@@ -5,6 +5,76 @@
  */
 
 /**
+ * @typedef {Object} bulkBuyBinarySearch_result
+ * @property {number} quantity amount purchased (relative)
+ * @property {Decimal} purchasePrice amount that needs to be paid to get that
+ */
+
+/**
+ * bulkBuyBinarySearch is a helper for bulk buyers of non-linear prices. If the price of
+ * a thing is f(n), it's hard to figure out how much of it can be bought without an inverse
+ * of f. This helper starts at some n0, and then searches forward in powers of 2 until it
+ * finds a value that is not affordable. After that, it performs a binary search to figure
+ * out how much can actually be bought. Returns an object with a quantity and price, or
+ * null if nothing can be bought
+ * @param {Decimal} money Amount of currency available
+ * @param {function(number): Decimal} costFunction price of the n'th purchase (starting from 0)
+ * @param {number} alreadyBought amount already purchased
+ * @param {Decimal} [firstCost] Cost of the next purchase; this is usually available/cached. Will
+ *   be calculated from costFunction if not provided.
+ * @returns {bulkBuyBinarySearch_result | null}
+ */
+function bulkBuyBinarySearch(money, costFunction, alreadyBought, firstCost) {
+  if (firstCost === undefined) firstCost = costFunction(alreadyBought);
+  if (money.lt(firstCost)) return null;
+  // Attempt to find the max we can purchase. We know we can buy 1, so we try 2, 4, 8, etc
+  // to figure out the upper limit
+  let cantBuy = 1;
+  let nextCost;
+  do {
+    cantBuy *= 2;
+    nextCost = costFunction(alreadyBought + cantBuy - 1);
+  } while (money.gt(nextCost));
+  // Deal with the simple case of buying just one
+  if (cantBuy === 2) {
+    return { quantity: 1, purchasePrice: firstCost };
+  }
+  // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
+  // to find the exact value:
+  let canBuy = cantBuy / 2;
+  let buyCost;
+  while (cantBuy - canBuy > 1) {
+    let middle = Math.floor((canBuy + cantBuy) / 2);
+    if (money.gt(costFunction(alreadyBought + middle - 1))) {
+      canBuy = middle;
+    } else {
+      cantBuy = middle;
+    }
+  }
+  let baseCost = costFunction(alreadyBought + canBuy - 1);
+  let otherCost = new Decimal(0);
+  // account for costs leading up to that purchase; we are basically adding things
+  // up until they are insignificant
+  let count = 0;
+  for (let i = canBuy - 1; i > 0; --i) {
+    const newCost = otherCost.plus(costFunction(alreadyBought + i - 1));
+    if (newCost.eq(otherCost)) break;
+    otherCost = newCost;
+    if (++count > 1000) throw crash("unexpected long loop"); // buggy cost function?
+  }
+  let totalCost = baseCost.plus(otherCost);
+  // check the purchase price again
+  if (money.lt(totalCost)) {
+    --canBuy;
+    // Since prices grow rather steeply, we can safely assume that we can, indeed, buy
+    // one less (e.g. if prices were A, B, C, D, we could afford D, but not A+B+C+D; we
+    // assume we can afford A+B+C because A+B+C < D)
+    totalCost = otherCost;
+  }
+  return { quantity: canBuy, purchasePrice: totalCost };
+}
+
+/**
  * LinearMultiplierScaling performs calculations for multipliers that scale up
  * linearly. The simplest case you might consider could be a factorial -- or something
  * much slower, like 2 * 2.01 * 2.02 * 2.03 * ...

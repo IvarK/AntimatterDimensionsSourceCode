@@ -136,9 +136,9 @@ GameDatabase.reality.upgrades = (function() {
       id: 15,
       cost: 50,
       requirement: () => `Reach ${shorten(1e10)} EP without purchasing the 5xEP upgrade`,
-      checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmult.equals(1),
+      checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       description: "Multiply TP gain based on EP mult",
-      effect: () => Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1),
+      effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {

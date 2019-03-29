@@ -203,8 +203,7 @@ function completeReality(force, reset, auto = false) {
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
   player.eternityUpgrades = [];
-  player.epmult = new Decimal(1);
-  player.epmultCost = new Decimal(500);
+  EternityUpgrade.epMult.reset();
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
@@ -314,7 +313,7 @@ function completeReality(force, reset, auto = false) {
     player.replicanti.auto = [isRUPG10Bought ? player.replicanti.auto[0] : false, isRUPG10Bought ? player.replicanti.auto[1] : false, isRUPG10Bought ? player.replicanti.auto[2] : false];
   }
   if (RealityUpgrade(13).isBought) {
-    if (player.reality.epmultbuyer) buyMaxEPMult();
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
     for (var i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i);

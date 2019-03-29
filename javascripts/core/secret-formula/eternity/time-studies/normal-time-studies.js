@@ -174,7 +174,7 @@ GameDatabase.eternity.timeStudies.normal = [
       "The worse your average EP/min is, the more EP you get",
     effect: () => Perk.studyActiveEP.isBought ?
       50 :
-      (253 - Player.averageEPPerRun.dividedBy(player.epmult.times(10)).clamp(3, 248).toNumber()) / 5,
+      (253 - Player.averageEPPerRun.dividedBy(EternityUpgrade.epMult.effectValue.times(10)).clamp(3, 248).toNumber()) / 5,
     formatEffect: value => Perk.studyActiveEP.isBought ?
       undefined :
       formatX(value, 0, 0)

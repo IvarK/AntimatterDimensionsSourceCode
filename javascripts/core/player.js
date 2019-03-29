@@ -111,8 +111,7 @@ var player = {
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
   eternityUpgrades: [],
-  epmult: new Decimal(1),
-  epmultCost: new Decimal(500),
+  epmultUpgrades: 0,
   infinityDimension1: {
     cost: new Decimal(1e8),
     amount: new Decimal(0),

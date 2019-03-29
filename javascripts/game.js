@@ -157,29 +157,6 @@ function maxAll() {
   }
 }
 
-function buyEPMult(upd, threshold) {
-    if (upd === undefined) upd = true // this stupid solution because IE can't handle default values in the row above
-    if (threshold == undefined) threshold = 1
-    if (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
-        player.epmult = player.epmult.times(5)
-        Autobuyer.eternity.bumpLimit(5);
-        player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
-        let count = player.epmult.ln()/Math.log(5)
-        if (player.epmultCost.gte(new Decimal("1e4000"))) player.epmultCost = Decimal.pow(1000, count + Math.pow(count-1334, 1.2)).times(500)
-        else if (player.epmultCost.gte(new Decimal("1e1300"))) player.epmultCost = Decimal.pow(1000, count).times(500)
-        else if (player.epmultCost.gte(Number.MAX_VALUE)) player.epmultCost = Decimal.pow(500, count).times(500)
-        else if (player.epmultCost.gte(new Decimal("1e100"))) player.epmultCost = Decimal.pow(100, count).times(500)
-        else player.epmultCost = Decimal.pow(50, count).times(500)
-    }
-}
-
-function buyMaxEPMult(threshold) {
-    if (threshold == undefined) threshold = 1
-    while (player.eternityPoints.gte(player.epmultCost.times(1/threshold))) {
-        buyEPMult(false, threshold)
-    }
-}
-
 function playerInfinityUpgradesOnEternity() {
     if (player.eternities < 4) player.infinityUpgrades = []
     else if (player.eternities < 20) player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]
@@ -219,7 +196,7 @@ function gainedInfinityPoints() {
 function gainedEternityPoints() {
   const ip = player.infinityPoints.plus(gainedInfinityPoints());
   let ep = Decimal.pow(5, ip.e / 308 - 0.7)
-    .times(player.epmult)
+    .times(EternityUpgrade.epMult.effectValue)
     .times(kongEPMult)
     .timesEffectsOf(
       TimeStudy(61),
@@ -235,7 +212,9 @@ function gainedEternityPoints() {
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
   }
-  if (Enslaved.isRunning) return Decimal.pow(5, ip.e / 308 - 0.7).times(player.epmult).times(kongEPMult).floor()
+  if (Enslaved.isRunning) {
+    return Decimal.pow(5, ip.e / 308 - 0.7).times(EternityUpgrade.epMult.effectValue).times(kongEPMult).floor();
+  }
   return ep.floor();
 }
 
@@ -998,7 +977,7 @@ function gameLoop(diff, options = {}) {
       InfinityUpgrade.ipMult.autobuyerTick();
     }
 
-    if (player.reality.epmultbuyer) buyMaxEPMult();
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)

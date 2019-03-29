@@ -64,65 +64,15 @@ function toggleAllTimeDims() {
 function buyMaxTimeDimTier(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
-  if (player.eternityPoints.lt(dim.cost)) return false;
-  // Attempt to find the max we can purchase. We know we can buy 1, so we try 2, 4, 8, etc
-  // to figure out the upper limit
-  let cantBuy = 1;
-  let nextCost;
-  do {
-    cantBuy *= 2;
-    nextCost = timeDimensionCost(tier, dim.bought + cantBuy - 1);
-  } while (player.eternityPoints.gt(nextCost));
-  // Deal with the simple case of buying just one
-  if (cantBuy === 2) {
-    player.eternityPoints = player.eternityPoints.minus(dim.cost)
-    dim.amount = dim.amount.plus(1);
-    dim.bought += 1
-    dim.cost = nextCost;
-    dim.power = dim.power
-      .times(2)
-      .timesEffectsOf(tier === 8 ? GlyphSacrifice.time : null);
-    return true
-  }
-  // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
-  // to find the exact value:
-  let canBuy = cantBuy / 2;
-  let buyCost;
-  while (cantBuy - canBuy > 1) {
-    let middle = Math.floor((canBuy + cantBuy) / 2);
-    if (player.eternityPoints.gt(timeDimensionCost(tier, dim.bought + middle - 1))) {
-      canBuy = middle;
-    } else {
-      cantBuy = middle;
-    }
-  }
-  let baseCost = timeDimensionCost(tier, dim.bought + canBuy - 1);
-  let otherCost = new Decimal(0);
-  // account for costs leading up to that dimension:
-  let count = 0;
-  for (let i = canBuy - 1; i > 0; --i) {
-    const newCost = otherCost.plus(timeDimensionCost(tier, dim.bought + i - 1));
-    if (newCost.eq(otherCost)) break;
-    otherCost = newCost;
-    ++count;
-  }
-  let totalCost = baseCost.plus(otherCost);
-  // check the purchase price again
-  if (player.eternityPoints.lt(totalCost)) {
-    --canBuy;
-    // Since prices grow rather steeply, we can safely assume that we can, indeed, buy
-    // one less.
-    totalCost = otherCost;
-  }
-  const oldPoints = player.eternityPoints;
-  player.eternityPoints = player.eternityPoints.minus(totalCost);
-  dim.amount = dim.amount.plus(canBuy);
-  dim.bought += canBuy;
+  const bulk = bulkBuyBinarySearch(player.eternityPoints,
+    bought => timeDimensionCost(tier, bought), dim.bought, dim.cost);
+  if (!bulk) return false;
+  player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
+  dim.amount = dim.amount.plus(bulk.quantity);
+  dim.bought += bulk.quantity;
   dim.cost = timeDimensionCost(tier, dim.bought);
   let basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
   dim.power = Decimal.pow(basePower, dim.bought);
-  if (player.eternityPoints.gte(dim.cost))
-    throw crash("Should not be able to afford more")
   return true
 }
 

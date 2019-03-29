@@ -34,7 +34,7 @@ Vue.component("ep-multiplier-button", {
       this.multiplier.copyFrom(upgrade.effectValue);
       this.cost.copyFrom(upgrade.cost);
       this.isAffordable = upgrade.isAffordable;
-    }
+    },
   },
   template:
     `<div class="l-spoon-btn-group">
@@ -47,7 +47,7 @@ Vue.component("ep-multiplier-button", {
       </button>
       <primary-button
         class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
-        onclick="buyMaxEPMult()"
+        @click="upgrade.buyMax()"
       >Max EP mult</primary-button>
       <primary-button-on-off
         v-if="isAutoUnlocked"

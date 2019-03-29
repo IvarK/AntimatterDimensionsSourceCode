@@ -165,6 +165,7 @@ function onLoad() {
     unfuckChallengeIds();
     unfuckMultCosts();
     convertAchivementsToNumbers();
+    convertEPMult();
     player.secretUnlocks.why = player.why
     delete player.why
   }
@@ -234,6 +235,18 @@ function onLoad() {
     updateBlackHoleStatusText(i);
   }
   updateBlackHoleGraphics();
+}
+
+function convertEPMult() {
+  if (player.epmult === undefined) return;
+  const mult = new Decimal(player.epmult);
+  delete player.epmultCost;
+  delete player.epmult;
+  if (mult.lte(1)) { // paranoia
+    player.epmultUpgrades = 0;
+    return;
+  }
+  player.epmultUpgrades = mult.log(5);
 }
 
 function convertAutobuyerMode() {

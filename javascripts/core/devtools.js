@@ -132,8 +132,7 @@ dev.refundTimeDims = function() {
 }
 
 dev.refundEPMult = function() {
-    player.epmult = new Decimal(1)
-    player.epmultCost = new Decimal(500)
+  player.epmultUpgrades = 0;
 }
 
 dev.refundDilStudies = function() {
@@ -540,6 +539,8 @@ dev.updateTestSave = function() {
     convertAchivementsToNumbers();
     player.options.testVersion = 32;
   }
+
+  convertEPMult(); // checks for presense of property, so need for a version bump
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")

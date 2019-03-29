@@ -10,6 +10,7 @@ GameDatabase.reality.upgrades = (function() {
     const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);
     props.formatEffect = value => formatX(value, 2, 2);
+    props.formatCost = value => shorten(value, 2, 0);
     return props;
   };
   const isFirstEternity = () => player.realities > 0 && Player.gainedEternities === 0;
@@ -146,14 +147,16 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reality with 4 glyphs with uncommon or better rarity",
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.strength >= 1.5) === 4,
       description: "Improve the glyph rarity formula",
-      effect: () => 1.3
+      effect: () => 1.3,
+      formatCost: value => shorten(value, 1, 0)
     },
     {
       id: 17,
       cost: 1500,
       requirement: "Reality with 4 glyphs, with each having at least 2 effects",
       checkRequirement: () => Glyphs.activeList.countWhere(g => Object.keys(g.effects).length >= 2) === 4,
-      description: "50% chance to get +1 effect on glyphs"
+      description: "50% chance to get +1 effect on glyphs",
+      formatCost: value => shorten(value, 1, 0)
     },
     {
       id: 18,
@@ -161,21 +164,24 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reality with 4 level 10 or higher glyphs equipped.",
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       description: "Eternities affect glyph level",
-      effect: () => Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1)
+      effect: () => Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1),
+      formatCost: value => shorten(value, 1, 0)
     },
     {
       id: 19,
       cost: 1500,
       requirement: "Have a total of 30 or more glyphs",
       checkRequirement: () => Glyphs.active.concat(Glyphs.inventory).countWhere(g => g) >= 30,
-      description: "You can sacrifice glyphs for permanent bonuses (Shift + click)"
+      description: "You can sacrifice glyphs for permanent bonuses (Shift + click)",
+      formatCost: value => shorten(value, 1, 0)
     },
     {
       id: 20,
       cost: 1500,
       requirement: "2 years total play time",
       checkRequirement: () => Time.totalTimePlayed.totalYears >= 2,
-      description: "You can have 2 black holes"
+      description: "You can have 2 black holes",
+      formatCost: value => shorten(value, 1, 0)
     },
     {
       id: 21,

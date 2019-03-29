@@ -20,7 +20,8 @@ GameDatabase.eternity.dilation = (function() {
       increment: 10,
       description: "Double Dilated Time gain.",
       effect: bought => Math.pow(2, bought),
-      formatEffect: value => formatX(value, 2, 0)
+      formatEffect: value => formatX(value, 2, 0),
+      formatCost: value => shorten(value, 2, 0)
     }),
     galaxyThreshold: rebuyable({
       id: 2,
@@ -32,7 +33,7 @@ GameDatabase.eternity.dilation = (function() {
         "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
       effect: bought => Math.pow(0.8, bought),
       formatEffect: () => getFreeGalaxyMult().toFixed(3),
-      formatCost: value => shorten(value, 1, 1)
+      formatCost: value => shorten(value, 2, 0)
     }),
     tachyonGain: rebuyable({
       id: 3,
@@ -40,7 +41,8 @@ GameDatabase.eternity.dilation = (function() {
       increment: 20,
       description: "Triple the amount of Tachyon Particles gained.",
       effect: bought => Decimal.pow(3, bought),
-      formatEffect: value => formatX(value, 2, 0)
+      formatEffect: value => formatX(value, 2, 0),
+      formatCost: value => shorten(value, 2, 0)
     }),
     doubleGalaxies: {
       id: 4,

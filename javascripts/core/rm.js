@@ -624,14 +624,14 @@ function getGlyphLevelInputs() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
   // below. These *Base values are the nominal inputs, as they would be multiplied without Effarig
-  let epBase = Math.pow(Math.max(1, player.eternityPoints.log10()) / 4000, 0.5);
+  const epBase = Math.pow(Math.max(1, player.eternityPoints.log10()) / 4000, 0.5);
   // @ts-ignore
-  var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
   // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
   // factors assigned to repl and dt can be arbitrarily tuned
-  let replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
-  let dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.log10()), 1.3) * 0.02514867;
-  let eterBase = Effects.max(1, RealityUpgrade(18));
+  const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
+  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.log10()), 1.3) * 0.02514867;
+  const eterBase = Effects.max(1, RealityUpgrade(18));
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the

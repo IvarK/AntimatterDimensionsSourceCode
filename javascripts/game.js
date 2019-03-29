@@ -778,6 +778,9 @@ function gameLoop(diff, options = {}) {
 
     const realDiff = diff;
 
+    // Black hole is affected only by time glyphs.
+    let blackHoleDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
+
     if (options.gameDiff === undefined) {
       let speedFactor;
       if (options.blackHoleSpeedup === undefined) {
@@ -787,11 +790,14 @@ function gameLoop(diff, options = {}) {
         speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
       if (player.celestials.enslaved.isStoring) {
-        const speedFactorWithoutBlackHole = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH]);
-        // Note that in EC12, this is 0, so it's not an issue there.
-        const timeStoredFactor = speedFactor / speedFactorWithoutBlackHole - 1;
+        const baseSpeedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12]);
+        // Note that in EC12, timeStoredFactor is 0, so it's not an issue there.
+        const timeStoredFactor = speedFactor / baseSpeedFactor - 1;
+        // If you're storing time, you're also storing the time produced by time glyphs,
+        // so the black hole diff is just the real diff.
+        blackHoleDiff = realDiff;
         // Note that if gameDiff is specified, we don't store enslaved time.
-        // Currently this only happens in a tick where we're using all the enslaved time,
+        // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
         player.celestials.enslaved.stored += diff * timeStoredFactor;
         speedFactor = speedFactorWithoutBlackHole;
@@ -802,9 +808,6 @@ function gameLoop(diff, options = {}) {
     }
 
     DeltaTimeState.update(realDiff, diff);
-
-    // Black hole is affected only by time glyphs.
-    let blackHoleDiff = realDiff * getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
 
     if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity

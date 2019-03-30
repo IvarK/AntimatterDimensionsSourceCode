@@ -187,7 +187,12 @@
       "as-needed"
     ],
     "arrow-spacing": "error",
-    "no-confusing-arrow": "error",
+    "no-confusing-arrow": [
+      "error",
+      {
+        "allowParens": true
+      }
+    ],
     "no-duplicate-imports": "error",
     "no-useless-computed-key": "error",
     "no-useless-constructor": "error",

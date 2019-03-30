@@ -793,12 +793,10 @@ class RebuyableRealityUpgradeState extends RealityUpgradeState {
     return this.config.cost();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get isBought() {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get canBeApplied() {
     return true;
   }
@@ -810,12 +808,9 @@ class RebuyableRealityUpgradeState extends RealityUpgradeState {
 
 RealityUpgradeState.list = mapGameData(
   GameDatabase.reality.upgrades,
-  // eslint-disable-next-line arrow-body-style
-  config => {
-    return config.id < 6 ?
-      new RebuyableRealityUpgradeState(config) :
-      new RealityUpgradeState(config);
-  }
+  config => (config.id < 6
+      ? new RebuyableRealityUpgradeState(config)
+      : new RealityUpgradeState(config))
 );
 
 /**

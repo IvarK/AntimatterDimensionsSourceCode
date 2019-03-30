@@ -242,7 +242,8 @@ function convertEPMult() {
   const mult = new Decimal(player.epmult);
   delete player.epmultCost;
   delete player.epmult;
-  if (mult.lte(1)) { // paranoia
+  // The multiplier should never be less than 1, but we don't want to break anyone's save
+  if (mult.lte(1)) {
     player.epmultUpgrades = 0;
     return;
   }

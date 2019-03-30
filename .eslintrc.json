@@ -17,7 +17,6 @@
     "no-console": "warn",
     "no-template-curly-in-string": "warn",
     "array-callback-return": "error",
-    "class-methods-use-this": "warn",
     "complexity": "warn",
     "consistent-return": "error",
     "dot-location": [

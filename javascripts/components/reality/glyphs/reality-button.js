@@ -47,8 +47,8 @@ Vue.component("reality-button", {
       }
       function EPforRM(rm) {
         rm = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
-        if (rm.lte(1)) return Decimal.pow(10, 4000);
-        return Decimal.pow(10, Math.ceil(4000 * (rm.log10() / 3 + 1)));
+        if (rm.lte(1)) return Decimal.pow10(4000);
+        return Decimal.pow10(Math.ceil(4000 * (rm.log10() / 3 + 1)));
       }
       this.canReality = true;
       this.machinesGained = gainedRealityMachines();

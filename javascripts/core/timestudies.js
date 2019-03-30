@@ -89,12 +89,12 @@ function buyDilationStudy(name, cost, quiet) {
               Tab.eternity.dilation.show();
             }
           if (Perk.autounlockDilation1.isBought) {
-            for (let id of [4, 5, 6]) player.dilation.upgrades.add(id);
+            for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
           }
           if (Perk.autounlockDilation2.isBought) {
-            for (let id of [7, 8, 9]) player.dilation.upgrades.add(id);
+            for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
           }
-          if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10)
+          if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10);
         }
         if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");

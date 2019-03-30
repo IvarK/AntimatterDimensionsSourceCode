@@ -1192,9 +1192,9 @@ updateChart(true);
 
 function autoBuyDilationUpgrades() {
   if (Perk.autobuyerDilation.isBought) {
-    buyDilationUpgrade(1)
-    buyDilationUpgrade(2)
-    buyDilationUpgrade(3)
+    DilationUpgrade.dtGain.purchase();
+    DilationUpgrade.galaxyThreshold.purchase();
+    DilationUpgrade.tachyonGain.purchase();
   }
 }
 

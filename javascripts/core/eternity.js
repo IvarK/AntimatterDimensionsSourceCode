@@ -318,7 +318,7 @@ class EPMultiplierState extends GameMechanicState {
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
-    Autobuyer.eternity.bumpLimit(Math.pow(5, diff));
+    Autobuyer.eternity.bumpLimit(Decimal.pow(5, diff));
   }
 
   get effectValue() {

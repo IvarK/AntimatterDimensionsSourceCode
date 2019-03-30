@@ -58,16 +58,20 @@ class PurchasableMechanicState extends GameMechanicState {
   }
 
   get isBought() {
-    return this.collection.includes(this.id);
+    return this.collection.has(this.id);
   }
 
   get canBeBought() {
     return !this.isBought && this.isAffordable && this.isAvailable;
   }
 
+  setBought() {
+    this.collection.add(this.id);
+  }
+
   purchase() {
     if (!this.canBeBought) return false;
-    this.collection.push(this.id);
+    this.setBought();
     const currency = this._currency.value;
     if (typeof currency === "number") {
       this._currency.value = currency - this.cost;

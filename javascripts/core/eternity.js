@@ -309,14 +309,16 @@ class EPMultiplierState extends GameMechanicState {
     return this.cachedCost.value;
   }
 
-  get bought() {
+  get boughtAmount() {
     return player.epmultUpgrades;
   }
 
-  set bought(value) {
+  set boughtAmount(value) {
+    const diff = value - player.epmultUpgrades;
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
+    Autobuyer.eternity.bumpLimit(Math.pow(5, diff));
   }
 
   get effectValue() {
@@ -326,22 +328,20 @@ class EPMultiplierState extends GameMechanicState {
   purchase() {
     if (!this.isAffordable) return false;
     player.eternityPoints = player.eternityPoints.minus(this.cost);
-    ++this.bought;
-    Autobuyer.eternity.bumpLimit(5);
+    ++this.boughtAmount;
     return true;
   }
 
   buyMax() {
-    const bulk = bulkBuyBinarySearch(player.eternityPoints, this.costAfterCount, this.bought, this.cost);
+    const bulk = bulkBuyBinarySearch(player.eternityPoints, this.costAfterCount, this.boughtAmount, this.cost);
     if (!bulk) return false;
     player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
-    this.bought += bulk.quantity;
-    Autobuyer.eternity.bumpLimit(Math.pow(5, bulk.quantity));
+    this.boughtAmount += bulk.quantity;
     return true;
   }
 
   reset() {
-    this.bought = 0;
+    this.boughtAmount = 0;
   }
 
   costAfterCount(count) {

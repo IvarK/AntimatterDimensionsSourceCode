@@ -40,35 +40,37 @@ function startDilatedEternity() {
 
 const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                             5e6,        1e9,         5e7,
-                            2e12,        1e10,         1e11,
-                                          1e15]
+                            2e12,       1e10,        1e11,
+                                        1e15];
 
 
 function buyDilationUpgrade(id) {
-  if (id > 3) { // Not rebuyable
-    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false // Not enough dilated time
-    if (player.dilation.upgrades.includes(id)) return false // Has the upgrade
+  // Upgrades 1-3 are rebuyable
+  if (id > 3) {
+    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
+    if (player.dilation.upgrades.has(id)) return false;
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
-    player.dilation.upgrades.push(id)
-    if (id == 4) player.dilation.freeGalaxies *= 2 // Double the current galaxies
-  } else { // Is rebuyable
-    let upgAmount = player.dilation.rebuyables[id];
-    let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
-    if (player.dilation.dilatedTime.lt(realCost)) return false
+    player.dilation.upgrades.add(id);
+    if (id === 4) player.dilation.freeGalaxies *= 2;
+  } else {
+    const upgAmount = player.dilation.rebuyables[id];
+    const realCost = new Decimal(DIL_UPG_COSTS[id][0]).times(Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)));
+    if (player.dilation.dilatedTime.lt(realCost)) return false;
 
-    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber()
-    buying = Math.min(buying, player.celestials.teresa.dtBulk)
-    let cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount)
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost)
-    player.dilation.rebuyables[id] += buying
-    if (id == 2) {
-        if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
-        player.dilation.nextThreshold = new Decimal(1000)
-        player.dilation.baseFreeGalaxies = 0
-        player.dilation.freeGalaxies = 0
+    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
+      DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
+    buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
+    player.dilation.rebuyables[id] += buying;
+    if (id === 2) {
+      if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      player.dilation.nextThreshold = new Decimal(1000);
+      player.dilation.baseFreeGalaxies = 0;
+      player.dilation.freeGalaxies = 0;
     }
 
-    if (id == 3) {
+    if (id === 3) {
       const retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,

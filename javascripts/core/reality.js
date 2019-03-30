@@ -163,7 +163,7 @@ function completeReality(force, reset, auto = false) {
     }
   }
   player.currentChallenge = "";
-  player.infinityUpgrades = isRUPG10Bought ? player.infinityUpgrades : [];
+  if (!isRUPG10Bought) player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
@@ -205,7 +205,7 @@ function completeReality(force, reset, auto = false) {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
-  player.eternityUpgrades = [];
+  player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
@@ -250,7 +250,7 @@ function completeReality(force, reset, auto = false) {
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseFreeGalaxies = 0;
   player.dilation.freeGalaxies = 0;
-  player.dilation.upgrades = [];
+  player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,
     2: 0,

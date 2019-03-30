@@ -198,7 +198,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   get canBeApplied() {
     return this.isBought && !this.isCharged;
   }
-  
+
   get chargedEffect() {
     return this._chargedEffect;
   }
@@ -217,7 +217,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   get isCharged() {
-    return player.celestials.ra.charged.includes(this.id);
+    return player.celestials.ra.charged.has(this.id);
   }
 
   get canCharge() {
@@ -225,12 +225,11 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   charge() {
-    player.celestials.ra.charged.push(this.id);
+    player.celestials.ra.charged.add(this.id);
   }
 
   disCharge() {
-    const charged = player.celestials.ra.charged;
-    charged.splice(charged.indexOf(this.id), 1);
+    player.celestials.ra.charged.delete(this.id);
   }
 }
 
@@ -256,7 +255,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   InfinityUpgrade.skipReset2 = upgrade(db.skipReset2, InfinityUpgrade.skipReset1);
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
-})();
+}());
 
 class InfinityIPMultUpgrade extends GameMechanicState {
   constructor(config) {

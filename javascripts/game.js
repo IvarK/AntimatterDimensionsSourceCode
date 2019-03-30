@@ -158,9 +158,12 @@ function maxAll() {
 }
 
 function playerInfinityUpgradesOnEternity() {
-    if (player.eternities < 4) player.infinityUpgrades = []
-    else if (player.eternities < 20) player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen", "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]
-    else player.infinityUpgrades = player.infinityUpgrades
+  if (player.eternities < 4) player.infinityUpgrades.clear();
+  else if (player.eternities < 20) {
+    player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
+      "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
+      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]);
+  }
 }
 
 function breakInfinity() {

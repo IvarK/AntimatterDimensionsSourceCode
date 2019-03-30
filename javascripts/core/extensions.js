@@ -230,10 +230,17 @@ Array.prototype.randomElement = function() {
 
 Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
 
-Set.prototype.countWhere = function(predicate) {
+Set.prototype.countWhere = function (predicate) {
   let count = 0;
   for (const item of this) {
     if (predicate(item))++count;
   }
   return count;
-}
+};
+
+Set.prototype.every = function (predicate) {
+  for (const item of this) {
+    if (!predicate(item)) return false;
+  }
+  return true;
+};

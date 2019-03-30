@@ -170,12 +170,12 @@ function eternity(force, auto, switchingDilation) {
         }
     }
 
-    if (player.eternityUpgrades.length < 3 && Perk.autounlockEU1.isBought) {
-      player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(1).add(2).add(3)];
+    if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+      for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
     }
 
-    if (player.eternityUpgrades.length < 6 && Perk.autounlockEU2.isBought) {
-      player.eternityUpgrades = [...new Set(player.eternityUpgrades).add(4).add(5).add(6)];
+    if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+      for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
     }
 
     if (!Achievement(143).isUnlocked && player.lastTenEternities[9][1] !== 1) {

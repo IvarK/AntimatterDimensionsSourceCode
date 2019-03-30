@@ -83,7 +83,7 @@ const Ra = {
     return Math.floor((player.celestials.ra.level + 1) / 3)
   },
   get chargesLeft() {
-    return this.totalCharges - player.celestials.ra.charged.length
+    return this.totalCharges - player.celestials.ra.charged.size;
   },
   get superChargeUnlocked() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && player.celestials.ra.level > 1

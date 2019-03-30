@@ -39,7 +39,7 @@ class Galaxy {
     }
 
     if (type === GalaxyType.REMOTE) {
-      amount = Math.floor(amount * Math.pow(1.002, (galaxies - (800 + Effects.sum(GlyphSacrifice.power)))));
+      amount = Math.floor(amount * Math.pow(1.002, galaxies - 800));
     }
 
     amount -= Effects.sum(InfinityUpgrade.resetBoost);

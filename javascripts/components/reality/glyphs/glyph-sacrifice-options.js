@@ -124,12 +124,7 @@ Vue.component("glyph-sacrifice-options", {
         "glow-blur": "0.3rem",
         "glow-spread": "0.1rem",
         "text-proportion": 0.66
-      }
-    },
-    effectFilterButtonClass() {
-      return this.effectFilters[type].enabled
-        ? ".c-glyph-sacrifice-options__advanced-toggle--off"
-        : ".c-glyph-sacrifice-options__advanced-toggle--on"
+      };
     },
   },
   methods: {

@@ -659,10 +659,12 @@ dev.showProductionBreakdown = function() {
   productionText += "\nTime Dimension Multipliers:\n"
   productionText += "  " + (100*boughtTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% purchased\n"
   productionText += "  " + (100*tickspeedToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from tickspeed\n"
-  productionText += "  " + (player.dilation.upgrades.has(5) ? 10*replicantiComponent.log10()/totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n"
-  productionText += "  " + (100*TSmultToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from other time studies\n"
+  productionText += "  " + (player.dilation.upgrades.has(5) ?
+    10 * replicantiComponent.log10() / totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n";
+  productionText += "  " + (100 * TSmultToTDComponent.log10() / totalTDMults.log10()).toFixed(2) +
+    "% from other time studies\n";
   productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
-  
+
   console.log(productionText);
 }
 

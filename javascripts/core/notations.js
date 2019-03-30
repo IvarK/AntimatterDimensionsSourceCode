@@ -905,7 +905,6 @@ Notation.Prime = new class PrimeNotation extends Notation {
     for (let i = generatedArray[generatedArray.length - 1] + 2; i < this._maxInt; i += 2) {
       if (nonPrimes.indexOf(i) === -1) generatedArray.push(i);
     }
-    console.log(generatedArray);
     // Split up the giant array in to multiple smaller arrays, so we don't need to look trough all values every time.
     this._primeArrays = [];
     for (let i = 0; i < generatedArray.length; i += 100) {
@@ -949,19 +948,28 @@ Notation.Prime = new class PrimeNotation extends Notation {
     // If the number is greater than 1e10006, we need to again format it differently.
     // So we increase our stack size to three, and repeat the process above from 
     // top down.
-    if (temp.lte(this._maxInt)) {
-      return this.formatFromList(this.primesFromInt(temp.floor().toNumber()));
-    }
+    if (temp.lte(this._maxInt)) return this.formatFromList(this.primesFromInt(temp.floor().toNumber()));
     let exp = temp.log10() / Math.log10(this._maxInt);
     let base = Math.pow(this._maxInt, exp / Math.ceil(exp));
-    if (exp <= this._maxInt) {
-      return "(" + this.formatFromList(this.primesFromInt(Math.floor(base))) + ")^(" + this.formatFromList(this.primesFromInt(Math.ceil(exp))) + ")";
-    }
+    if (exp <= this._maxInt) return formatBaseExp(base, exp);
     const exp2 = Math.log10(exp) / Math.log10(this._maxInt);
     exp = Math.pow(this._maxInt, exp2 / Math.ceil(exp2));
     base = Math.pow(this._maxInt, exp / Math.ceil(exp));
     const exp2List = this.primesFromInt(Math.ceil(exp2));
-    return "(" + this.formatFromList(this.primesFromInt(Math.floor(base))) + ")^(" + this.formatFromList(this.primesFromInt(Math.ceil(exp))) + ")" + (exp2List.length === 1 ? this._sup[exp2List[0]] : "^(" + this.formatFromList(exp2List) + ")");
+    const formatedExp2 = (exp2List.length === 1 ? this._sup[exp2List[0]] : "^(" + this.formatFromList(exp2List) + ")");
+    return formatBaseExp(base, exp) + formatedExp2;
+  }
+
+  /**
+   * @param {Array} base
+   * @param {Array} exp
+   * @return {string}
+   * @private
+   */
+  formatBaseExp(base, exp) {
+    const formatedBase = this.formatFromList(this.primesFromInt(Math.floor(base)));
+    const formatedExp = this.formatFromList(this.primesFromInt(Math.ceil(exp)));
+    return "(" + formatedBase + ")^(" + formatedExp + ")";
   }
 
   /**
@@ -970,6 +978,9 @@ Notation.Prime = new class PrimeNotation extends Notation {
    * @private
    */
   formatFromList(list) {
+    // Formats an array of prime numbers such that all like pairs are combined,
+    // they are then raised to an exponent signifying how many times the value apears.
+    // Finally multiplication signs are put between all values.
     const out = [];
     let last = 0;
     let count = 0;
@@ -998,8 +1009,11 @@ Notation.Prime = new class PrimeNotation extends Notation {
    * @private
    */
   primesFromInt(value) {
+    // Searches through the lists of primes which have values less than the input.
+    // If it finds a divisor it divides and goes again, a for loop is used instead of a while loop
+    // for safty theough the loop should never go over ~1200 iterations.
     let temp = value;
-    const usefulArrays = this._primeArrays.filter((x, i) => this._primeMin[i] <= value);
+    let usefulArrays = this._primeArrays.filter((x, i) => this._primeMin[i] <= value);
     const list = [];
     for (let i = 0; i < 10000; i++) {
       const highestPrimes = usefulArrays[usefulArrays.length - 1];
@@ -1012,6 +1026,7 @@ Notation.Prime = new class PrimeNotation extends Notation {
         if (temp % highestPrimes[j] === 0) {
           list.push(highestPrimes[j]);
           temp /= highestPrimes[j];
+          usefulArrays = usefulArrays.filter((x, id) => this._primeMin[id] <= temp);
           break;
         }
         if (j === 0) {
@@ -1021,7 +1036,7 @@ Notation.Prime = new class PrimeNotation extends Notation {
     }
     return list.reverse();
   }
-}("Prime");
+  }("Prime");
 
 /**
  * Explicit array declaration instead of Object.values for sorting purposes

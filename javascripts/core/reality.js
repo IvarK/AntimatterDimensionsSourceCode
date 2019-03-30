@@ -198,12 +198,14 @@ function completeReality(force, reset, auto = false) {
     Perk.startEP3
   ).toDecimal();
 
+  // This has to be reset before player.eternities to make the bumpLimit logic work
+  // correctly
+  EternityUpgrade.epMult.reset();
   player.eternities = 0;
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
   player.eternityUpgrades = [];
-  EternityUpgrade.epMult.reset();
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;

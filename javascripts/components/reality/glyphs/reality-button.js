@@ -25,7 +25,7 @@ Vue.component("reality-button", {
     },
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
-        return `Next at 1e${this.nextMachineEP} EP`;
+        return `Next at ${shorten(this.nextMachineEP, 0)} EP`;
       } else {
         return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`
       }
@@ -45,17 +45,17 @@ Vue.component("reality-button", {
         this.shardsGained = 0;
         return;
       }
-      function logEPforRM(rm) {
+      function EPforRM(rm) {
         rm = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
-        if (rm.lte(1)) return 4000;
-        return Math.ceil(4000 * (rm.log10() / 3 + 1));
+        if (rm.lte(1)) return Decimal.pow10(4000);
+        return Decimal.pow10(Math.ceil(4000 * (rm.log10() / 3 + 1)));
       }
       this.canReality = true;
       this.machinesGained = gainedRealityMachines();
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();
-      this.nextMachineEP = logEPforRM(this.machinesGained.plus(1));
+      this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.shardsGained = Effarig.shardsGained;
       this.expGained = Ra.gainedExp(this.glyphLevel)
       this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])

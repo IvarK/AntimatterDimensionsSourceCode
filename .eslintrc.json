@@ -94,7 +94,7 @@
       "error",
       "always",
       {
-          "ignoreConsecutiveComments": true
+        "ignoreConsecutiveComments": true
       }
     ],
     "comma-spacing": "error",
@@ -153,7 +153,13 @@
     "operator-assignment": "error",
     "operator-linebreak": [
       "error",
-      "after"
+      "after",
+      {
+        "overrides": {
+          "?": "before",
+          ":": "before"
+        }
+      }
     ],
     "quotes": [
       "error",

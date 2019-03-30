@@ -328,6 +328,7 @@ class EPMultiplierState extends GameMechanicState {
     player.eternityPoints = player.eternityPoints.minus(this.cost);
     ++this.bought;
     Autobuyer.eternity.bumpLimit(5);
+    return true;
   }
 
   buyMax() {
@@ -336,6 +337,7 @@ class EPMultiplierState extends GameMechanicState {
     player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
     this.bought += bulk.quantity;
     Autobuyer.eternity.bumpLimit(Math.pow(5, bulk.quantity));
+    return true;
   }
 
   reset() {
@@ -343,20 +345,20 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   costAfterCount(count) {
-    // up to just past 1e100
+    // Up to just past 1e100
     if (count <= 58) return Decimal.pow(50, count).times(500);
-    // up to just past Number.MAX_VALUE
+    // Up to just past Number.MAX_VALUE
     if (count <= 153) return Decimal.pow(100, count).times(500);
-    // up to just past 1e1300
+    // Up to just past 1e1300
     if (count <= 481) return Decimal.pow(500, count).times(500);
-    // up to 1e4000
+    // Up to 1e4000
     if (count <= 1333) return Decimal.pow(1000, count).times(500);
     return Decimal.pow(1000, count + Math.pow(count - 1334, 1.2)).times(500);
   }
 }
 
 
-const EternityUpgrade = function() {
+const EternityUpgrade = (function() {
   const db = GameDatabase.eternity.upgrades;
   return {
     idMultEP: new EternityUpgradeState(db.idMultEP),
@@ -367,4 +369,4 @@ const EternityUpgrade = function() {
     tdMultRealTime: new EternityUpgradeState(db.tdMultRealTime),
     epMult: new EPMultiplierState(),
   };
-}();
+}());

@@ -540,7 +540,8 @@ dev.updateTestSave = function() {
     player.options.testVersion = 32;
   }
 
-  convertEPMult(); // checks for presense of property, so need for a version bump
+  // Checks for presense of property, so no need for a version bump
+  convertEPMult();
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")

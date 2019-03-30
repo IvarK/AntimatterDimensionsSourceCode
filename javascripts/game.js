@@ -800,7 +800,7 @@ function gameLoop(diff, options = {}) {
         // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
         player.celestials.enslaved.stored += diff * timeStoredFactor;
-        speedFactor = speedFactorWithoutBlackHole;
+        speedFactor = baseSpeedFactor;
       }
       diff *= speedFactor;
     } else {

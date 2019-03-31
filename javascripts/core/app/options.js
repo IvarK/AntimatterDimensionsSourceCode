@@ -71,7 +71,7 @@ class GameOptions {
     }
     GameIntervals.gameLoop.restart();
     Enslaved.infinityTracking = []
-    Enslaved.totalInfinities = 0
+    Enslaved.totalInfinities = new Decimal(0);
   }
 }
 

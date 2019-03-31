@@ -195,7 +195,7 @@ class TimeSpan {
    */
   toString() {
     if (this.years > 1e6) {
-      return shorten(this.totalYears, 6, 0) + " years";
+      return shorten(this.totalYears, 3, 0) + " years";
     }
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();

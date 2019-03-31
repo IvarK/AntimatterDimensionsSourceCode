@@ -333,7 +333,11 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   buyMax() {
-    const bulk = bulkBuyBinarySearch(player.eternityPoints, this.costAfterCount, this.boughtAmount, this.cost);
+    const bulk = bulkBuyBinarySearch(player.eternityPoints, {
+      costFunction: this.costAfterCount,
+      cumulative: true,
+      firstCost: this.cost,
+    }, this.boughtAmount);
     if (!bulk) return false;
     player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
     this.boughtAmount += bulk.quantity;

@@ -64,8 +64,11 @@ function toggleAllTimeDims() {
 function buyMaxTimeDimTier(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
-  const bulk = bulkBuyBinarySearch(player.eternityPoints,
-    bought => timeDimensionCost(tier, bought), dim.bought, dim.cost);
+  const bulk = bulkBuyBinarySearch(player.eternityPoints, {
+    costFunction: bought => timeDimensionCost(tier, bought),
+    cumulative: true,
+    firstCost: dim.cost,
+  }, dim.bought);
   if (!bulk) return false;
   player.eternityPoints = player.eternityPoints.minus(bulk.purchasePrice);
   dim.amount = dim.amount.plus(bulk.quantity);
@@ -77,14 +80,17 @@ function buyMaxTimeDimTier(tier) {
 }
 
 function buyMaxTimeDimensions() {
-  if (player.eternityPoints.gte(1e10)) {  // Default behavior: Buy as many as possible, starting with the highest dimension first (reduces overhead at higher EP)
-    for (var i = 8; i > 0; i--) buyMaxTimeDimTier(i);
-  }
-  else {  // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
-    for (let i=4; i > 0 && player["timeDimension"+i].bought == 0; i--)
+  // Default behavior: Buy as many as possible, starting with the highest dimension first
+  // (reduces overhead at higher EP)
+  if (player.eternityPoints.gte(1e10)) {
+    for (let i = 8; i > 0; i--) buyMaxTimeDimTier(i);
+  } else {  
+    // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
+    for (let i = 4; i > 0 && player["timeDimension" + i].bought === 0; i--)
       buyTimeDimension(i, false);
 
-    for (let stop = 0; stop < 1000; stop++) { // Should never take more than like 50 iterations; explicit infinite loops make me nervous
+    // Should never take more than like 50 iterations; explicit infinite loops make me nervous
+    for (let stop = 0; stop < 1000; stop++) {
       let cheapestDim = 1;
       let cheapestCost = player["timeDimension1"].cost;
       for (let i = 2; i <= 4; i++) {

@@ -877,34 +877,32 @@ Notation.clock = new class ClockNotation extends Notation {
   }
 }("Clock");
 
-Notation.Prime = new class PrimeNotation extends Notation {
+Notation.prime = new class PrimeNotation extends Notation {
   constructor() {
     super("Prime");
     // The maximum number we can reliably find all prime factors for.
     this._maxInt = 10006;
+    this._maxIntDecimal = new Decimal(this._maxInt);
+    this._maxIntLog10 = Math.log10(this._maxInt);
     // List of primes from 2-9973, cause thats how many I check for.
     const primes = [];
-    const visitedMarks = new Array(max).fill(false);
-    const sieveLimit = Math.ceil(Math.sqrt(max));
+    const visitedMarks = new Array(this._maxInt).fill(false);
+    const sieveLimit = Math.ceil(Math.sqrt(this._maxInt));
     for (let number = 2; number < sieveLimit; number++) {
       if (visitedMarks[number]) continue;
       primes.push(number);
-      for (let mark = number; mark <= max; mark += number) {
+      for (let mark = number; mark <= this._maxInt; mark += number) {
         visitedMarks[mark] = true;
       }
     }
-    for (let number = sieveLimit; number < max; number++) {
+    for (let number = sieveLimit; number < this._maxInt; number++) {
       if (!visitedMarks[number]) {
         primes.push(number);
       }
     }
-    // Split up the giant array in to multiple smaller arrays, so we don't need to look trough all values every time.
-    this._primeArrays = [];
-    for (let i = 0; i < primes.length; i += 100) {
-      this._primeArrays.push(primes.slice(i, Math.min(primes.length, i + 100)));
-    }
-    // Find the smallest number in each of the sub arrays.
-    this._primeMin = this._primeArrays.map(x => x[0]);
+    this._primes = primes;
+    this._lastPrimeIndex = primes.length - 1;
+    this._maxPrime = this._primes[this._lastPrimeIndex];
     
     // Unicode characters for exponents ranging 0 - 13.
     this._exponentCharacters = [
@@ -932,29 +930,35 @@ Notation.Prime = new class PrimeNotation extends Notation {
    * @private
    */
   primify(value) {
-    const temp = value;
-    // Basic checks to see if number is 0 or 1.
-    if (temp.floor().eq(0)) return 0;
-    if (temp.floor().eq(1)) return 1;
     // We take the number and do 1 of 3 things depending on how big it is.
     // If the number is smaller than maxInt, 10006, then we just find the primes and 
     // format them.
     // If not we need a way of representing the number, using only primes of course.
-    // So we derive an exponent that will keep the base bellow the maxInt, then
-    // we derive prime factorials for both and format them as (base)^(exponent).
+    // So we derive an exponent that will keep the base under the maxInt, then
+    // we derive prime factors for both and format them as (base)^(exponent).
     // If the number is greater than 1e10006, we need to again format it differently.
     // So we increase our stack size to three, and repeat the process above from 
     // top down.
-    if (temp.lte(this._maxInt)) return this.formatFromList(this.primesFromInt(temp.floor().toNumber()));
-    let exp = temp.log10() / Math.log10(this._maxInt);
+    if (value.lte(this._maxIntDecimal)) {
+      const floored = Math.floor(value.toNumber());
+      if (floored === 0) return 0;
+      if (floored === 1) return 1;
+      return this.formatFromList(this.primesFromInt(floored));
+    }
+    let exp = value.log10() / this._maxIntLog10;
     let base = Math.pow(this._maxInt, exp / Math.ceil(exp));
-    if (exp <= this._maxInt) return formatBaseExp(base, exp);
+    if (exp <= this._maxInt) {
+      return this.formatBaseExp(base, exp);
+    }
     const exp2 = Math.log10(exp) / Math.log10(this._maxInt);
-    exp = Math.pow(this._maxInt, exp2 / Math.ceil(exp2));
+    const exp2Ceil = Math.ceil(exp2);
+    exp = Math.pow(this._maxInt, exp2 / exp2Ceil);
     base = Math.pow(this._maxInt, exp / Math.ceil(exp));
-    const exp2List = this.primesFromInt(Math.ceil(exp2));
-    const formatedExp2 = (exp2List.length === 1 ? this._exponentCharacters[exp2List[0]] : "^(" + this.formatFromList(exp2List) + ")");
-    return formatBaseExp(base, exp) + formatedExp2;
+    const exp2List = this.primesFromInt(exp2Ceil);
+    const formatedExp2 = exp2List.length === 1
+      ? this._exponentCharacters[exp2List[0]]
+      : `^(${this.formatFromList(exp2List)})`;
+    return this.formatBaseExp(base, exp) + formatedExp2;
   }
 
   /**
@@ -966,7 +970,7 @@ Notation.Prime = new class PrimeNotation extends Notation {
   formatBaseExp(base, exp) {
     const formatedBase = this.formatFromList(this.primesFromInt(Math.floor(base)));
     const formatedExp = this.formatFromList(this.primesFromInt(Math.ceil(exp)));
-    return "(" + formatedBase + ")^(" + formatedExp + ")";
+    return `(${formatedBase})^(${formatedExp})`;
   }
 
   /**
@@ -1000,40 +1004,53 @@ Notation.Prime = new class PrimeNotation extends Notation {
     return out.join("\u00D7");
   }
 
+  findGreatestLtePrimeIndex(value) {
+    // Lte stands for "less than or equal"
+    if (value >= this._maxPrime) return this._lastPrimeIndex;
+    let min = 0;
+    let max = this._lastPrimeIndex;
+    while (max !== min + 1) {
+      const middle = Math.floor((max + min) / 2);
+      const prime = this._primes[middle];
+      if (prime === value) return middle;
+      if (value < prime) max = middle;
+      else min = middle;
+    }
+    return min;
+  }
+  
   /**
    * @param {Decimal} list
    * @return {Array}
    * @private
    */
   primesFromInt(value) {
-    // Searches through the lists of primes which have values less than the input.
-    // If it finds a divisor it divides and goes again, a for loop is used instead of a while loop
-    // for safty theough the loop should never go over ~1200 iterations.
-    let temp = value;
-    let usefulArrays = this._primeArrays.filter((x, i) => this._primeMin[i] <= value);
-    const list = [];
-    for (let i = 0; i < 10000; i++) {
-      const highestPrimes = usefulArrays[usefulArrays.length - 1];
-      if (highestPrimes.indexOf(temp) > -1) {
-        list.push(temp);
-        temp = 1;
+    const factors = [];
+    let factoringValue = value;
+    while (factoringValue !== 1) {
+      const ltePrimeIndex = this.findGreatestLtePrimeIndex(factoringValue);
+      const ltePrime = this._primes[ltePrimeIndex];
+      if (ltePrime === factoringValue) {
+        factors.push(factoringValue);
         break;
       }
-      for (let j = highestPrimes.length - 1; j >= 0; j--) {
-        if (temp % highestPrimes[j] === 0) {
-          list.push(highestPrimes[j]);
-          temp /= highestPrimes[j];
-          usefulArrays = usefulArrays.filter((x, id) => this._primeMin[id] <= temp);
-          break;
-        }
-        if (j === 0) {
-          usefulArrays.pop();
+      // Search for greatest prime that is lesser than factored / 2, because
+      // all greater values won't be factors anyway
+      const halfFactoring = factoringValue / 2;
+      let primeIndex = this.findGreatestLtePrimeIndex(halfFactoring);
+      let factor;
+      while (factor === undefined) {
+        const prime = this._primes[primeIndex--];
+        if (factoringValue % prime === 0) {
+          factor = prime;
         }
       }
+      factoringValue /= factor;
+      factors.push(factor);
     }
-    return list.reverse();
+    return factors.reverse();
   }
-  }("Prime");
+}();
 
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
@@ -1057,5 +1074,5 @@ Notation.all = [
   Notation.hex,
   Notation.imperial,
   Notation.clock,
-  Notation.Prime,
+  Notation.prime,
 ];

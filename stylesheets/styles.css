@@ -4589,6 +4589,11 @@ screen and (max-width: 480px) {
   border-color: #4980cc;
 }
 
+.o-notification--black-hole {
+  background-color: #b341e0;
+  border-color: black;
+}
+
 .a-notification--enter {
   animation: a-notification--enter 0.5s ease-out;
   animation-fill-mode: both;

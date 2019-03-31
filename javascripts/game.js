@@ -1122,7 +1122,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    GameUI.notify.blackHoles = false;
+    GameUI.notify.showBlackHoles = false;
 
     // Upper-bound the number of ticks (this also applies if the black hole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1175,7 +1175,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    GameUI.notify.blackHoles = true;
+    GameUI.notify.showBlackHoles = true;
 }
 
 function updateChart(first) {

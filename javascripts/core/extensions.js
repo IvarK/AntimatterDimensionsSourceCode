@@ -216,6 +216,14 @@ Decimal.prototype.clampMax = function(max) {
 };
 
 /**
+ * @returns {Decimal}
+ */
+Decimal.prototype.clampMaxExponent = function(maxExp) {
+  return this.exponent >= maxExp
+    ? Decimal.fromMantissaExponent_noNormalize(1, maxExp) : this;
+};
+
+/**
  * @return {Decimal}
  */
 Number.prototype.toDecimal = function() {

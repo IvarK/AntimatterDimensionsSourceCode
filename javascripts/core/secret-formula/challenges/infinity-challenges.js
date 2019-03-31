@@ -37,10 +37,10 @@ GameDatabase.challenges.infinity = [
     description: "Only latest bought dimension production is normal, all other dimensions produce less (^0.25)",
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
-    effect: () => 0.25,
+    effect: 0.25,
     reward: {
       description: "All normal dimension multipliers become multiplier^1.05",
-      effect: () => 1.05
+      effect: 1.05
     }
   },
   {
@@ -50,7 +50,7 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: true,
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
-      effect: () => 1.1
+      effect: 1.1
     }
   },
   {
@@ -71,10 +71,10 @@ GameDatabase.challenges.infinity = [
     description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x ➜ 10x",
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
-    effect: () => 10,
+    effect: 10,
     reward: {
       description: "Dimension Boost multiplier 2.5x ➜ 4x",
-      effect: () => 4
+      effect: 4
     }
   },
   {

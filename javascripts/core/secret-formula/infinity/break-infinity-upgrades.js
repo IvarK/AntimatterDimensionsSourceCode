@@ -33,7 +33,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "postGalaxy",
       cost: 5e11,
       description: "Galaxies are 50% stronger",
-      effect: () => 1.5
+      effect: 1.5
     },
     infinitiedMult: {
       id: "infinitiedMult",

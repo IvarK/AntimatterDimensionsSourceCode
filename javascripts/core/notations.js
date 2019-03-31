@@ -883,32 +883,25 @@ Notation.Prime = new class PrimeNotation extends Notation {
     // The maximum number we can reliably find all prime factors for.
     this._maxInt = 10006;
     // List of primes from 2-9973, cause thats how many I check for.
-    const generatedArray = [2];
-    for (let i = 3; i <= Math.sqrt(this._maxInt); i += 2) {
-      let check = true;
-      for (let j = 3; j < i; j += 2) {
-        if (i % j === 0) {
-          check = false;
-          break;
-        }
-      }
-      if (check) generatedArray.push(i);
-    }
-    const nonPrimes = [];
-    for (let i = 0; i < generatedArray.length; i++) {
-      let product = generatedArray[i];
-      while (product < this._maxInt) {
-        product += generatedArray[i];
-        nonPrimes.push(product);
+    const primes = [];
+    const visitedMarks = new Array(max).fill(false);
+    const sieveLimit = Math.ceil(Math.sqrt(max));
+    for (let number = 2; number < sieveLimit; number++) {
+      if (visitedMarks[number]) continue;
+      primes.push(number);
+      for (let mark = number; mark <= max; mark += number) {
+        visitedMarks[mark] = true;
       }
     }
-    for (let i = generatedArray[generatedArray.length - 1] + 2; i < this._maxInt; i += 2) {
-      if (nonPrimes.indexOf(i) === -1) generatedArray.push(i);
+    for (let number = sieveLimit; number < max; number++) {
+      if (!visitedMarks[number]) {
+        primes.push(number);
+      }
     }
     // Split up the giant array in to multiple smaller arrays, so we don't need to look trough all values every time.
     this._primeArrays = [];
-    for (let i = 0; i < generatedArray.length; i += 100) {
-      this._primeArrays.push(generatedArray.slice(i, Math.min(generatedArray.length, i + 100)));
+    for (let i = 0; i < primes.length; i += 100) {
+      this._primeArrays.push(primes.slice(i, Math.min(primes.length, i + 100)));
     }
     // Find the smallest number in each of the sub arrays.
     this._primeMin = this._primeArrays.map(x => x[0]);
@@ -922,11 +915,11 @@ Notation.Prime = new class PrimeNotation extends Notation {
     return "Primefinity?";
   }
 
-  formatUnder1000(value, places) {
+  formatUnder1000(value) {
     return this.primify(value.toDecimal());
   }
 
-  formatDecimal(value, places) {
+  formatDecimal(value) {
     return this.primify(value);
   }
 

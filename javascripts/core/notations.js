@@ -907,8 +907,11 @@ Notation.Prime = new class PrimeNotation extends Notation {
     this._primeMin = this._primeArrays.map(x => x[0]);
     
     // Unicode characters for exponents ranging 0 - 13.
-    this._sup = ["\u2070", "\u00B9", "\u00B2", "\u00B3", "\u2074", "\u2075", "\u2076", "\u2077", "\u2078", 
-    "\u2079", "\u00B9\u2070", "\u00B9\u00B9", "\u00B9\u00B2", "\u00B9\u00B3"];
+    this._exponentCharacters = [
+      "\u2070", "\u00B9", "\u00B2", "\u00B3", "\u2074",
+      "\u2075", "\u2076", "\u2077", "\u2078", "\u2079",
+      "\u00B9\u2070", "\u00B9\u00B9", "\u00B9\u00B2", "\u00B9\u00B3"
+    ];
   }
 
   formatInfinite() {
@@ -950,7 +953,7 @@ Notation.Prime = new class PrimeNotation extends Notation {
     exp = Math.pow(this._maxInt, exp2 / Math.ceil(exp2));
     base = Math.pow(this._maxInt, exp / Math.ceil(exp));
     const exp2List = this.primesFromInt(Math.ceil(exp2));
-    const formatedExp2 = (exp2List.length === 1 ? this._sup[exp2List[0]] : "^(" + this.formatFromList(exp2List) + ")");
+    const formatedExp2 = (exp2List.length === 1 ? this._exponentCharacters[exp2List[0]] : "^(" + this.formatFromList(exp2List) + ")");
     return formatBaseExp(base, exp) + formatedExp2;
   }
 
@@ -983,14 +986,14 @@ Notation.Prime = new class PrimeNotation extends Notation {
         count++;
       } else {
         if (last > 0) {
-          if (count > 1) out.push(last + this._sup[count]);
+          if (count > 1) out.push(last + this._exponentCharacters[count]);
           else out.push(last);
         }
         last = list[i];
         count = 1;
       }
       if (i === list.length - 1) {
-        if (count > 1) out.push(list[i] + this._sup[count]);
+        if (count > 1) out.push(list[i] + this._exponentCharacters[count]);
         else out.push(list[i]);
       }
     }

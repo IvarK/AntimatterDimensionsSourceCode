@@ -105,7 +105,8 @@
     "id-blacklist": [
       "error",
       "ret",
-      "helper"
+      "helper",
+      "temp"
     ],
     // TODO: uncomment once we get consistent indentation everywhere
     // "indent": ["error", 2],

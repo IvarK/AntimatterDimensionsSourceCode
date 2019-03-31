@@ -177,7 +177,6 @@ function onLoad() {
     document.getElementById("game").style.display = "none";
   }
 
-	initializeBlackHole();
   recalculateAllGlyphs();
 
   Autobuyer.tryUnlockAny();
@@ -186,7 +185,6 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  updateBlackHoleUpgrades()
   updateAutomatorRows()
   checkPerkValidity()
   GameCache.buyablePerks.invalidate();
@@ -208,15 +206,6 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
-  $(".blackhole-upgrades").hide()
-  if (player.blackHole[0].unlocked) {
-    $("#blackholeunlock").hide()
-    $("#blackholecontainer").show()
-    $("#bhupg1").show()
-  }
-  if (player.blackHole[1].unlocked) $("#bhupg2").show()
-  if (player.blackHole[2].unlocked) $("#bhupg3").show()
-
   $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
@@ -229,12 +218,6 @@ function onLoad() {
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
   }
-
-  // Annoyingly, this has to be done after simulating time, since otherwise the graphics won't show the black hole in the correct phase.
-  for (let i = 0; i < player.blackHole.length; i++) {
-    updateBlackHoleStatusText(i);
-  }
-  updateBlackHoleGraphics();
 }
 
 function convertEPMult() {

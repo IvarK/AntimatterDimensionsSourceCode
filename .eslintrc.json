@@ -208,7 +208,6 @@
     "object-shorthand": "error",
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
-    "prefer-destructuring": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "rest-spread-spacing": "error",

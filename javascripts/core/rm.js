@@ -754,7 +754,7 @@ class RealityUpgradeState extends GameMechanicState {
   }
 
   purchase() {
-    const { id } = this;
+    const id = this.id;
     if (!this.canBeBought) return false;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     if (id < 6) {
@@ -771,11 +771,9 @@ class RealityUpgradeState extends GameMechanicState {
     if (id === 20) {
       if (!player.blackHole[0].unlocked) return true;
       player.blackHole[1].unlocked = true;
-      $("#bhupg2").show();
     }
 
     if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
-    updateBlackHoleUpgrades();
     return true;
   }
 

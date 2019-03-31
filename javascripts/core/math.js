@@ -22,14 +22,19 @@
  * (it does check and make sure you can afford all of that put together. See below in code
  * for details)
  * @param {Decimal} money Amount of currency available
- * @param {function(number): Decimal} costFunction price of the n'th purchase (starting from 0)
- * @param {number} alreadyBought amount already purchased
- * @param {Decimal} [firstCost] Cost of the next purchase; this is usually available/cached. Will
+ * @param {Object} costInfo cost parameters:
+ * @param {function(number): Decimal} costInfo.costFunction price of the n'th purchase (starting from 0)
+ * @param {Decimal} [costInfo.firstCost] Cost of the next purchase; this is usually available/cached. Will
  *   be calculated from costFunction if not provided.
+ * @param {boolean} [costInfo.cumulative] (Defaults to true) specifies whether one must pay a cumulative
+ *   cost or just the highest cost.
+ * @param {number} alreadyBought amount already purchased
  * @returns {bulkBuyBinarySearch_result | null}
  */
-function bulkBuyBinarySearch(money, costFunction, alreadyBought, firstCost) {
-  if (firstCost === undefined) firstCost = costFunction(alreadyBought);
+function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
+  const costFunction = costInfo.costFunction;
+  const firstCost = costInfo.firstCost === undefined ? costFunction(alreadyBought) : costInfo.firstCost;
+  const isCumulative = costInfo.cumulative === undefined ? true : costInfo.cumulative;
   if (money.lt(firstCost)) return null;
   // Attempt to find the max we can purchase. We know we can buy 1, so we try 2, 4, 8, etc
   // to figure out the upper limit
@@ -55,6 +60,9 @@ function bulkBuyBinarySearch(money, costFunction, alreadyBought, firstCost) {
     }
   }
   const baseCost = costFunction(alreadyBought + canBuy - 1);
+  if (!isCumulative) {
+    return { quantity: canBuy, purchasePrice: baseCost };
+  }
   let otherCost = new Decimal(0);
   // Account for costs leading up to that purchase; we are basically adding things
   // up until they are insignificant

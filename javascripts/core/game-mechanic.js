@@ -1,10 +1,58 @@
 class GameMechanicState {
   constructor(config) {
     this.config = config;
+    if (!this.config) return;
+    this._id = this.config.id;
+    if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
+      const copy = this.config.effect;
+      Object.defineProperty(this, "effectValue", {
+        get: () => copy,
+      });
+    }
+    if (this.config.cap === undefined) {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          applyFn(this.effectValue);
+        }
+      };
+    } else if (this.config.cap instanceof Decimal) {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          applyFn(Decimal.min(this.effectValue, this.config.cap));
+        }
+      };
+    } else if (typeof this.config.cap === "number") {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          const ev = this.effectValue;
+          if (typeof ev === "number") {
+            applyFn(Math.min(ev, this.config.cap));
+          } else {
+            applyFn(Decimal.min(ev, this.config.cap));
+          }
+        }
+      };
+    } else if (typeof this.config.cap === "function") {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          const ev = this.effectValue;
+          const cap = this.config.cap();
+          if (cap === undefined) {
+            applyFn(ev);
+          } else if (typeof ev === "number") {
+            applyFn(Math.min(ev, cap));
+          } else {
+            applyFn(Decimal.min(ev, cap));
+          }
+        }
+      };
+    } else {
+      throw crash("config.cap should be a number, Decimal, or function");
+    }
   }
 
   get id() {
-    return this.config.id;
+    return this._id;
   }
 
   get cost() {

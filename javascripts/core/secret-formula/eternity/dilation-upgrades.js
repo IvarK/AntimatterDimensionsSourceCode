@@ -48,7 +48,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 4,
       cost: 5e6,
       description: "Gain twice as many free galaxies.",
-      effect: () => 2
+      effect: 2
     },
     tdMultReplicanti: {
       id: 5,
@@ -89,7 +89,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 9,
       cost: 1e11,
       description: "Reduce the Dilation penalty. (^1.05 after reduction)",
-      effect: () => 1.05
+      effect: 1.05,
     },
     ttGenerator: {
       id: 10,

@@ -22,13 +22,13 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 22,
     cost: 2,
     description: "Replicanti interval limit 50ms ➜ 1ms",
-    effect: () => 1
+    effect: 1
   },
   {
     id: 31,
     cost: 3,
     description: "Powers up bonuses that are based on your infinitied stat (infinitied^4)",
-    effect: () => 4
+    effect: 4
   },
   {
     id: 32,
@@ -52,25 +52,25 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 42,
     cost: 6,
     description: "Galaxy requirement goes up 52 8ths instead of 60.",
-    effect: () => 52
+    effect: 52
   },
   {
     id: 51,
     cost: 3,
     description: () => `You gain ${shorten(1e15, 0, 0)}x more IP`,
-    effect: () => 1e15
+    effect: 1e15
   },
   {
     id: 61,
     cost: 3,
     description: "You gain 10x more EP",
-    effect: () => 10
+    effect: 10
   },
   {
     id: 62,
     cost: 3,
     description: "You gain replicanti 3 times faster",
-    effect: () => 3
+    effect: 3
   },
   {
     id: 71,
@@ -100,7 +100,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 81,
     cost: 4,
     description: "Dimension Boost power becomes 10x",
-    effect: () => 10
+    effect: 10
   },
   {
     id: 82,
@@ -164,7 +164,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 111,
     cost: 12,
     description: "Make the IP formula better",
-    effect: () => 285
+    effect: 285
   },
   {
     id: 121,
@@ -182,7 +182,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 122,
     cost: 9,
     description: "You gain 35x more EP",
-    effect: () => 35
+    effect: 35
   },
   {
     id: 123,
@@ -205,13 +205,13 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 132,
     cost: 5,
     description: "Replicanti galaxies are 40% more effective",
-    effect: () => 0.4
+    effect: 0.4
   },
   {
     id: 133,
     cost: 5,
     description: "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger",
-    effect: () => 0.5
+    effect: 0.5
   },
   {
     id: 141,
@@ -224,7 +224,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 142,
     cost: 4,
     description: () => `You gain ${shorten(1e25, 0, 0)}x more IP`,
-    effect: () => 1e25
+    effect: 1e25
   },
   {
     id: 143,
@@ -238,7 +238,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 151,
     cost: 8,
     description: () => `${shorten(1e4, 0, 0)}x multiplier on all Time Dimensions`,
-    effect: () => 1e4
+    effect: 1e4
   },
   {
     id: 161,
@@ -250,7 +250,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 162,
     cost: 7,
     description: () => `${shorten(1e11, 0, 0)}x multiplier on all Infinity Dimensions`,
-    effect: () => 1e11
+    effect: 1e11
   },
   {
     id: 171,
@@ -294,7 +294,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 211,
     cost: 120,
     description: "Dimension Boost requirement scaling is reduced by 5",
-    effect: () => 5
+    effect: 5
   },
   {
     id: 212,
@@ -308,7 +308,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 213,
     cost: 200,
     description: "You gain Replicanti 20 times faster",
-    effect: () => 20
+    effect: 20
   },
   {
     id: 214,
@@ -316,8 +316,8 @@ GameDatabase.eternity.timeStudies.normal = [
     description: "Sacrifice boosts the 8th Dimension even more",
     effect: () => {
       const totalBoost = Sacrifice.totalBoost;
-      const firstPart = totalBoost.pow(7.6).clampMax("1e44000");
-      const secondPart = totalBoost.pow(1.05).clampMax("1e120000");
+      const firstPart = totalBoost.pow(7.6).clampMaxExponent(44000);
+      const secondPart = totalBoost.pow(1.05).clampMaxExponent(120000);
       return firstPart.times(secondPart);
     },
     cap: new Decimal("1e171000"),
@@ -334,13 +334,13 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 222,
     cost: 900,
     description: "Dimension Boost costs scale by another 2 less",
-    effect: () => 2
+    effect: 2
   },
   {
     id: 223,
     cost: 900,
     description: "Galaxy cost scaling starts 7 galaxies later",
-    effect: () => 7
+    effect: 7
   },
   {
     id: 224,
@@ -376,7 +376,7 @@ GameDatabase.eternity.timeStudies.normal = [
     id: 228,
     cost: 900,
     description: "Sacrifice scales better",
-    effect: () => 0.013
+    effect: 0.013
   },
   {
     id: 231,

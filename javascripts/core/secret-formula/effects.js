@@ -132,7 +132,7 @@ Decimal.prototype.powEffectsOf = function(...effectSources) {
 };
 
 function applyEffectsOf(effectSources, applyFn) {
-  for (let effectSource of effectSources.filter(s => s !== null && s !== undefined)) {
-    effectSource.applyEffect(applyFn);
+  for (const effectSource of effectSources) {
+    if (effectSource !== null && effectSource !== undefined) effectSource.applyEffect(applyFn);
   }
 }

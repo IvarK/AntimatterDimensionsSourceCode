@@ -63,7 +63,7 @@ GameDatabase.infinity.upgrades = {
     id: "resetBoost",
     cost: 1,
     description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9",
-    effect: () => 9,
+    effect: 9,
     charged: {
       description: "Decrease Dimension Boost requirement scaling based on Teresa level",
       effect: () => Math.floor(1 + player.celestials.ra.level/50),
@@ -74,7 +74,7 @@ GameDatabase.infinity.upgrades = {
     id: "dimMult",
     cost: 1,
     description: "Increase the multiplier for buying 10 Dimensions",
-    effect: () => 1.1,
+    effect: 1.1,
     formatEffect: () => "2x ➜ 2.2x",
     staticEffect: true,
     charged: {
@@ -87,7 +87,7 @@ GameDatabase.infinity.upgrades = {
     id: "galaxyBoost",
     cost: 2,
     description: "Galaxies are twice as effective",
-    effect: () => 2,
+    effect: 2,
     charged: {
       description: "Galaxies are more effective based on Teresa level",
       effect: () => 2 + player.celestials.ra.level / 100,
@@ -122,7 +122,7 @@ GameDatabase.infinity.upgrades = {
     id: "resetMult",
     cost: 7,
     description: "Increase Dimension Boost multiplier",
-    effect: () => 2.5,
+    effect: 2.5,
     formatEffect: () => "2x ➜ 2.5x",
     staticEffect: true,
     charged: {

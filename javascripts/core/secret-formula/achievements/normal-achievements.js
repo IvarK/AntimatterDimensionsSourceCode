@@ -324,7 +324,7 @@ GameDatabase.achievements.normal = [
     id: 83,
     name: "YOU CAN GET 50 GALAXIES!??",
     tooltip: "Get 50 Antimatter Galaxies. Reward: Tickspeed is 5% lower per Antimatter Galaxy.",
-    effect: () => Math.pow(0.95, player.galaxies)
+    effect: () => Decimal.pow(0.95, player.galaxies)
   },
   {
     id: 84,

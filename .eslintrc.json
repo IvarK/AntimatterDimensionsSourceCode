@@ -88,7 +88,13 @@
     ],
     "array-bracket-spacing": "error",
     "block-spacing": "error",
-    "brace-style": "error",
+    "brace-style": [
+      "error",
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
     "camelcase": "error",
     "capitalized-comments": [
       "error",

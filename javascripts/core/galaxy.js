@@ -22,8 +22,8 @@ class Galaxy {
 
   /**
    * Figure out what galaxy number we can buy up to
-   * @param {number} currency Either dim 8 or dim 6, depending
-   * @returns {number} max number of galaxies (total)
+   * @param {number} currency Either dim 8 or dim 6, depends on current challenge
+   * @returns {number} Max number of galaxies (total)
    */
   static buyableGalaxies(currency) {
     let constantTerm = Galaxy.baseCost;

@@ -158,20 +158,21 @@ function autoBuyReplicantiUpgrades() {
 /** @abstract */
 class ReplicantiUpgradeState {
   /** @abstract */
-  get value() { }
-  /** @abstract */
-  set value(value) { }
+  get value() { throw crash("unimplmented"); }
 
   /** @abstract */
-  get nextValue() { }
+  set value(value) { throw crash("unimplmented"); }
 
   /** @abstract */
-  get cost() { }
-  /** @abstract */
-  set cost(value) { }
+  get nextValue() { throw crash("unimplmented"); }
 
   /** @abstract */
-  get costIncrease() { }
+  get cost() { throw crash("unimplmented"); }
+  /** @abstract */
+  set cost(value) { throw crash("unimplmented"); }
+
+  /** @abstract */
+  get costIncrease() { throw crash("unimplmented"); }
 
   get baseCost() { return this.cost; }
 
@@ -179,9 +180,9 @@ class ReplicantiUpgradeState {
   get isCapped() { return false; }
 
   /** @abstract */
-  get autobuyerMilestone() { }
+  get autobuyerMilestone() { throw crash("unimplmented"); }
   /** @abstract */
-  get autobuyerId() { }
+  get autobuyerId() { throw crash("unimplmented"); }
 
   get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
 
@@ -301,7 +302,7 @@ const ReplicantiUpgrade = {
       let increase = EternityChallenge(6).isRunning ?
         Decimal.pow(1e2, galaxies).times(1e2) :
         Decimal.pow(1e5, galaxies).times(1e25);
-      let distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
       if (galaxies >= distantReplicatedGalaxyStart) {
         increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
       }
@@ -316,6 +317,36 @@ const ReplicantiUpgrade = {
 
     get extra() {
       return Effects.max(0, TimeStudy(131));
+    }
+
+    autobuyerTick() {
+      // This isn't a hot enough autobuyer to worry about doing an actual inverse.
+      if (!this.isAutobuyerUnlocked || !this.isAutobuyerOn) return;
+      const bulk = bulkBuyBinarySearch(player.infinityPoints, {
+        costFunction: this.costAfterCount,
+        firstCost: this.cost,
+        comulative: true,
+      }, this.value);
+      if (!bulk) return;
+      this.value += bulk.quantity;
+      this.cost = this.costAfterCount(this.value);
+    }
+
+    costAfterCount(count) {
+      const logBase = 170;
+      const logBaseIncrease = EternityChallenge(6).isRunning ? 2 : 25;
+      const logCostScaling = EternityChallenge(6).isRunning ? 2 : 5;
+      let logCost = logBase + count * logBaseIncrease + (count * (count - 1) / 2) * logCostScaling;
+      const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      if (count > distantReplicatedGalaxyStart) {
+        const logDistantScaling = 50;
+        // When distant scaling kicks in, the price increase jumps by a few extra steps.
+        // So, the difference between successive scales goes 5, 5, 5, 255, 55, 55, ...
+        const extraIncrements = 5;
+        const numDistant = count - distantReplicatedGalaxyStart;
+        logCost += logDistantScaling * numDistant * (numDistant + 2 * extraIncrements - 1) / 2;
+      }
+      return Decimal.pow(10, logCost).dividedByEffectOf(TimeStudy(233));
     }
   }(),
 };

@@ -272,7 +272,6 @@ function completeReality(force, reset, auto = false) {
   secondSoftReset();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
-  $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
@@ -293,7 +292,7 @@ function completeReality(force, reset, auto = false) {
   Marathon2 = 0;
   updateAutomatorRows();
   drawPerkNetwork();
-  document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
+  updatePerkPointText();
 
   if (player.realities >= 4) giveAchievement("How does this work?")
 

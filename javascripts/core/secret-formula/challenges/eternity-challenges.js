@@ -147,9 +147,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 12,
-    description: () => player.realities > 0 ?
-      "The game runs 1000x slower; all other gamespeed effects are disabled." :
-      "The game runs 1000x slower.",
+    description: () => player.realities > 0
+      ? "The game runs 1000x slower; all other gamespeed effects are disabled."
+      : "The game runs 1000x slower.",
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,

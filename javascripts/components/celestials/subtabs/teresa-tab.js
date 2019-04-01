@@ -78,7 +78,7 @@ Vue.component('teresa-tab', {
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
-            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 2) }} Perk Points.</span>
+            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} Perk Points.</span>
             <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shorten(glyphUpg.cost, 1, 1) }} PP</button>
             <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shorten(rmUpg, 1, 1) }} PP</button>
             <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br>Currently {{ shortenRateOfChange(dtBulk ) }}x, Costs: {{ shorten(dtBulk * 100, 1, 1) }} PP</button>

@@ -206,7 +206,7 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
-  $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
+  updatePerkPointText()
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true

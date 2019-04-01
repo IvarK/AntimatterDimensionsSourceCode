@@ -198,7 +198,9 @@ GameDatabase.eternity.timeStudies.normal = [
   {
     id: 131,
     cost: 5,
-    description: "Automatic Replicanti galaxies are disabled, but you can get 50% more",
+    description: () => (Achievement(138).isEnabled
+      ? "You can get 50% more Replicanti galaxies"
+      : "Automatic Replicanti galaxies are disabled, but you can get 50% more"),
     effect: () => Math.floor(player.replicanti.gal / 2)
   },
   {

@@ -45,7 +45,7 @@ Vue.component("reality-upgrade-button", {
       <description-display
         v-if="!isUnlocked"
         :config="requirementConfig"
-        title="Requirement:"
+        title="Requires:"
         class="c-reality-upgrade-btn__requirement"
       />
       <template v-else>

@@ -72,7 +72,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 8,
       cost: 15,
-      requirement: "Have the first 13 rows of achievements when you Infinity the first time",
+      requirement: "Have the first 13 rows of achievements when you first Infinity",
       checkRequirement: () =>
         isFirstInfinity() &&
         nextAchIn() === 0 &&
@@ -121,7 +121,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${shorten("1e4000")} EP without TD5`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 && TimeDimension(5).amount.equals(0),
-      description: "More Eternity autobuyer options, EP multiplier autobuyer, Time Dimension autobuyers"
+      description: "More Eternity autobuyer options, EP multiplier and Time Dimension autobuyers"
     },
     {
       id: 14,

@@ -148,13 +148,13 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => player.realities > 0 ?
-      "The game runs 1000x slower; black holes and time glyph effects are disabled." :
+      "The game runs 1000x slower; all other gamespeed effects are disabled." :
       "The game runs 1000x slower.",
     goal: new Decimal("1e110000"),
     goalIncrease: new Decimal("1e12000"),
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
-    formatRestriction: restriction => `in ${restriction} ${restriction === 1 ? "second" : "seconds"} or less.`,
+    formatRestriction: restriction => `in ${restriction} in-game ${restriction === 1 ? "second" : "seconds"} or less.`,
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,

@@ -86,7 +86,7 @@ function buyMaxTimeDimensions() {
     for (let i = 8; i > 0; i--) buyMaxTimeDimTier(i);
   } else {  
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
-    for (let i = 4; i > 0 && player["timeDimension" + i].bought === 0; i--)
+    for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--)
       buyTimeDimension(i, false);
 
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous

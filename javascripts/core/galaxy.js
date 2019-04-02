@@ -50,14 +50,14 @@ class Galaxy {
     }
     constantTerm += quadraticBegin * (quadraticBegin - 1);
     linearTerm += 1 - 2 * quadraticBegin;
-    const quadSol = 0.5 * (-linearTerm + Math.sqrt(linearTerm ** 2 - 4 * (constantTerm - currency - finalOffset)));
+    const quadSol = 0.5 * (-linearTerm + Math.sqrt(Math.pow(linearTerm, 2) - 4 * (constantTerm - currency - finalOffset)));
     // There might be a small rounding error, and if we use floor, we might underestimate the quantity.
     // Instead, we use round, then check if the resulting price is too high, and go down one if need be.
     quantity = Math.round(quadSol);
-    let price = quantity ** 2 + linearTerm * quantity + constantTerm - finalOffset;
+    let price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
     if (price > currency) {
       quantity--;
-      price = quantity ** 2 + linearTerm * quantity + constantTerm - finalOffset;
+      price = Math.pow(quantity, 2) + linearTerm * quantity + constantTerm - finalOffset;
     }
     // Check for remote scaling
     if (quantity >= 800 && !RealityUpgrade(21).isBought) {

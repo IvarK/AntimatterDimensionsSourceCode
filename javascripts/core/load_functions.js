@@ -223,7 +223,7 @@ function onLoad() {
   if (automatorOn) $("#automatorOn")[0].checked = true
   automatorIdx = player.reality.automatorCurrentRow;
 
-  GameCache.invalidate();
+  Lazy.invalidateAll();
 
   let diff = new Date().getTime() - player.lastUpdate
   if (diff > 1000*1000) {

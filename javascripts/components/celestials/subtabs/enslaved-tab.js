@@ -107,8 +107,12 @@ Vue.component("enslaved-tab", {
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <button class="o-enslaved-run-button" @click="startRun">
-          Start Enslaved One's Reality.<br>IDs, TDs, IP multipliers other than the 2x multiplier, and EP multipliers other than the 5x multiplier are disabled, but you gain a 3rd black hole. You also gain a bonus to dilated time production
-          based on infinities gained in the last 10 seconds (real time).
+          <div>Start Enslaved One's Reality</div>
+          <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
+          <p>Normal dimension multipliers are always dilated (the glyph effect still only applies in actual dilation)</p>
+          <p>Time study 192 is locked</p>
+          <p>The black hole is disabled</p>
+          <p>Tachyon production and dilated time production are severely reduced</p>
         </button>
         <div class="o-enslaved-gained-infinities">You have gained <b>{{ shorten(enslavedInfinities) }}</b> infinities in the last 10 seconds.</div>
       </div>

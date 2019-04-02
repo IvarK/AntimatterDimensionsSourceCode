@@ -6,13 +6,13 @@ class Lazy {
 
   static get registrar() {
     if (Lazy._registrar === undefined) {
-      Lazy._registrar = new Set();
+      Lazy._registrar = [];
     }
     return Lazy._registrar;
   }
 
   static registerLazy(object) {
-    Lazy.registrar.add(object);
+    Lazy.registrar.push(object);
   }
 
   static invalidateAll() {

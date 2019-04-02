@@ -336,8 +336,8 @@ const ReplicantiUpgrade = {
       const logBase = 170;
       const logBaseIncrease = EternityChallenge(6).isRunning ? 2 : 25;
       const logCostScaling = EternityChallenge(6).isRunning ? 2 : 5;
-      let logCost = logBase + count * logBaseIncrease + (count * (count - 1) / 2) * logCostScaling;
       const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      let logCost = logBase + count * logBaseIncrease + (count * (count - 1) / 2) * logCostScaling;
       if (count > distantReplicatedGalaxyStart) {
         const logDistantScaling = 50;
         // When distant scaling kicks in, the price increase jumps by a few extra steps.

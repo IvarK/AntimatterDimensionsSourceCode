@@ -16,7 +16,8 @@ Vue.component('teresa-tab', {
         mult: 1
       },
       rmUpg: 1, // Cost and mult are the same
-      pp: 0
+      pp: 0,
+      leakRate: 0
     };
   },
   computed: {
@@ -44,6 +45,7 @@ Vue.component('teresa-tab', {
       this.dtBulk = player.celestials.teresa.dtBulk
       this.pp = player.reality.pp
       this.rm = player.reality.realityMachines
+      this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1/60))
     },
     nextQuote() {
       Teresa.nextQuote()
@@ -94,7 +96,9 @@ Vue.component('teresa-tab', {
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}</div>
+              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain
+                <br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}
+                <br>Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
             </div>
             <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
               {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}

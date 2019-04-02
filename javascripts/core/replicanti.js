@@ -158,21 +158,21 @@ function autoBuyReplicantiUpgrades() {
 /** @abstract */
 class ReplicantiUpgradeState {
   /** @abstract */
-  get value() { throw crash("unimplmented"); }
+  get value() { throw NotImplementedCrash(); }
 
   /** @abstract */
-  set value(value) { throw crash("unimplmented"); }
+  set value(value) { throw NotImplementedCrash(); }
 
   /** @abstract */
-  get nextValue() { throw crash("unimplmented"); }
+  get nextValue() { throw NotImplementedCrash(); }
 
   /** @abstract */
-  get cost() { throw crash("unimplmented"); }
+  get cost() { throw NotImplementedCrash(); }
   /** @abstract */
-  set cost(value) { throw crash("unimplmented"); }
+  set cost(value) { throw NotImplementedCrash(); }
 
   /** @abstract */
-  get costIncrease() { throw crash("unimplmented"); }
+  get costIncrease() { throw NotImplementedCrash(); }
 
   get baseCost() { return this.cost; }
 
@@ -180,9 +180,9 @@ class ReplicantiUpgradeState {
   get isCapped() { return false; }
 
   /** @abstract */
-  get autobuyerMilestone() { throw crash("unimplmented"); }
+  get autobuyerMilestone() { throw NotImplementedCrash(); }
   /** @abstract */
-  get autobuyerId() { throw crash("unimplmented"); }
+  get autobuyerId() { throw NotImplementedCrash(); }
 
   get isAutobuyerUnlocked() { return this.autobuyerMilestone.isReached; }
 

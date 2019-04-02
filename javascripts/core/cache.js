@@ -1,6 +1,24 @@
 class Lazy {
   constructor(getValue) {
     this._getValue = getValue;
+    Lazy.registerLazy(this);
+  }
+
+  static get registrar() {
+    if (Lazy._registrar === undefined) {
+      Lazy._registrar = new Set();
+    }
+    return Lazy._registrar;
+  }
+
+  static registerLazy(object) {
+    Lazy.registrar.add(object);
+  }
+
+  static invalidateAll() {
+    for (const obj of Lazy.registrar) {
+      obj.invalidate();
+    }
   }
 
   get value() {
@@ -81,14 +99,4 @@ const GameCache = {
   timeDimensionCommonMultiplier: new Lazy(() => {
     return timeDimensionCommonMultiplier();
   }),
-
-  invalidate() {
-    for (let key in this) {
-      if (!this.hasOwnProperty(key)) continue;
-      const property = this[key];
-      if (property instanceof Lazy) {
-        property.invalidate();
-      }
-    }
-  }
 };

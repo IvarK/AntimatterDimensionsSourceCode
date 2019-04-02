@@ -323,7 +323,7 @@ function completeReality(force, reset, auto = false) {
     }
   }
 
-  GameCache.invalidate();
+  Lazy.invalidateAll();
   GameUI.dispatch(GameEvent.REALITY);
 }
 

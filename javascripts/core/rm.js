@@ -86,6 +86,7 @@ const AutoGlyphPicker = {
 
 const GlyphGenerator = {
   lastFake: "power",
+  glyphChoices: [],
 
   startingGlyph(level) {
     let strength = this.randomStrength(false);
@@ -103,11 +104,62 @@ const GlyphGenerator = {
     }
   },
 
+  clearGlyphChoices() {
+    this.glyphChoices = []
+  },
+
+  /**
+   * Tries to add a glyph type+effect combination to an ongoing list of combinations,
+   * returning true and adding it if sufficiently unique and returning false without
+   * adding it if it's too similar to something that's already in the list.
+   * 
+   * If the list doesn't already contain a glyph of the specified type, it is automatically
+   * considered unique.  If not, it then checks the effects of glyphs that have the same type.
+   * It calculates a pairwise uniqueness score to each glyph it checks and only adds the new
+   * glyph if the score exceeds the specified threshold for every glyph already in the list.
+   * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
+   */
+  checkUniqueGlyph(type, effects) {
+    let sameTypeGlyphs = this.glyphChoices.filter(glyph => glyph.type === type);
+    if (sameTypeGlyphs.length == 0) {
+      this.addUniqueGlyph(type, effects)
+      return true
+    }
+    let uniquenessThreshold = 3
+    for (let i = 0; i < sameTypeGlyphs.length; i++) {
+      let currGlyph = sameTypeGlyphs[i];
+      union = new Set([...effects, ...currGlyph.effects])
+      intersection = new Set(effects.filter(x => new Set(currGlyph.effects).has(x)))
+      uniqueEffects = [...union].filter(x => !intersection.has(x))
+      if (uniqueEffects.length < uniquenessThreshold) return false;
+    }
+    this.addUniqueGlyph(type, effects)
+    return true
+  },
+
+  // Add a new type+effect combination; clear the list if it's the last one
+  addUniqueGlyph(type, effects) {
+    this.glyphChoices.push({
+      type: type,
+      effects: effects
+    })
+    if (this.glyphChoices.length == GlyphSelection.choiceCount) {
+      GlyphGenerator.clearGlyphChoices()
+    }
+  },
+
   randomGlyph(level, fake) {
-    let strength = this.randomStrength(fake);
-    let type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
-    let effects = this.generateEffects(type, numEffects, fake);
+    // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
+    // get stuck in an infinite loop if we decide to increase the number of glyph choices
+    // for some reason and forget about the uniqueness check
+    let strength, type, numEffects, effects
+    for (let regenAttempts = 0; regenAttempts < 100; regenAttempts++) {
+      strength = this.randomStrength(fake);
+      type = this.randomType(fake);
+      numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+      effects = this.generateEffects(type, numEffects, fake);
+      if (this.checkUniqueGlyph(type, effects))  break;
+    }
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
     let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;

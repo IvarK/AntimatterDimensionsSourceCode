@@ -1,4 +1,4 @@
-Vue.component('infinity-dim-row', {
+Vue.component("infinity-dim-row", {
   props: {
     tier: Number
   },

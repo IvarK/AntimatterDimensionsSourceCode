@@ -13,11 +13,12 @@ Vue.component('normal-dim-galaxy-row', {
       },
       isAffordable: false,
       hasIncreasedScaling: false,
-      costScalingText: ""
+      costScalingText: "",
+      lockMessage: null,
     };
   },
   computed: {
-    galaxySumDisplay: function() {
+    galaxySumDisplay() {
       const galaxies = this.galaxies;
       let sum = galaxies.normal.toString();
       if (galaxies.replicanti > 0) {
@@ -28,8 +29,13 @@ Vue.component('normal-dim-galaxy-row', {
       }
       return sum;
     },
-    dimName: function() {
+    dimName() {
       return DISPLAY_NAMES[this.requirement.tier];
+    },
+    buttonMessage() {
+      return this.lockMessage
+        ? this.lockMessage
+        : "Lose all your previous progress, but get a tickspeed boost";
     }
   },
   methods: {
@@ -42,20 +48,31 @@ Vue.component('normal-dim-galaxy-row', {
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
       this.isAffordable = requirement.isSatisfied;
+      if (Galaxy.canBeBought) {
+        this.lockMessage = null;
+      } else if (EternityChallenge(6).isRunning) {
+        this.lockMessage = "Locked (Eternity Challenge 6)";
+      } else if (Challenge(8).isRunning) {
+        this.lockMessage = "Locked (8th Dimension Autobuyer Challenge)";
+      } else if (player.currentChallenge === "postc7") {
+        this.lockMessage = "Locked (Infinity Challenge 7";
+      } else {
+        this.lockMessage = null;
+      }
       this.updateCostScaling();
     },
-    secondSoftReset: function() {
+    secondSoftReset() {
       galaxyResetBtnClick();
     },
-    updateCostScaling: function() {
-      let distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
+    updateCostScaling() {
+      const distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.hasIncreasedScaling = player.galaxies > distantStart;
       if (Galaxy.type.startsWith("Distant")) this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
       else if (Galaxy.type.startsWith("Remote")) {
-        let remoteStart = 800;
+        const remoteStart = 800;
         this.costScalingText = `Increased galaxy cost scaling: Quadratic past ${distantStart} (distant), exponential past ${remoteStart} (remote)`;
       }
-      else  this.costScalingText = "";
+      else this.costScalingText = "";
     }
   },
   template:
@@ -69,6 +86,6 @@ Vue.component('normal-dim-galaxy-row', {
         :enabled="isAffordable"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="secondSoftReset"
-      >Lose all your previous progress, but get a tickspeed boost</primary-button>
+      >{{buttonMessage}}</primary-button>
     </div>`
 });

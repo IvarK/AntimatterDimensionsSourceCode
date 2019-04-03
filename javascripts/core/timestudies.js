@@ -207,6 +207,7 @@ function canBuyStudy(name) {
       break;
 
       case 19:
+      if (name == 192 && Enslaved.isRunning) return false;
       if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; else return false
       break;
 

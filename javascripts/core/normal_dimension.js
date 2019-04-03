@@ -177,7 +177,6 @@ function canBuyDimension(tier) {
   if (tier === 9) {
     return !player.secondAmount.equals(0);
   }
-
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
   if (tier > player.resets + 4) return false;
   if (tier > 1 && NormalDimension(tier - 1).amount.eq(0) && player.eternities < 30) return false;
@@ -295,6 +294,7 @@ function buyOneDimension(tier) {
     }
   }
 
+  if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
 
   if (tier < 3 || !Challenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -353,6 +353,8 @@ function buyManyDimension(tier) {
     }
   }
 
+  if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
+
   if (tier < 3 || !Challenge(6).isRunning) {
     player.money = player.money.minus(cost);
   } else {
@@ -382,6 +384,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (!canBuyDimension(tier)) return false;
   let money = new Decimal(player.money);
   if (money.eq(0)) return false;
+  if (tier === 8 && Enslaved.isRunning) return buyManyDimension(8);
   const dimension = NormalDimension(tier);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;

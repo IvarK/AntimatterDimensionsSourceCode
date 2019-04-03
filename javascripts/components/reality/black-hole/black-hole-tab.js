@@ -2,7 +2,8 @@ Vue.component("black-hole-tab", {
   data() {
     return {
       isUnlocked: false,
-      isPaused: false
+      isPaused: false,
+      isEnslaved: false,
     };
   },
   computed: {
@@ -18,6 +19,7 @@ Vue.component("black-hole-tab", {
     update() {
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
+      this.isEnslaved = Enslaved.isRunning;
     },
     togglePause() {
       BlackHoles.togglePause();
@@ -26,7 +28,10 @@ Vue.component("black-hole-tab", {
   },
   template: `
     <div class="l-black-hole-tab">
-      <black-hole-unlock-button v-if="!isUnlocked" />
+      <div v-if="isEnslaved">
+        The physics of this reality do not permit singularities.
+      </div>
+      <black-hole-unlock-button v-else-if="!isUnlocked" />
       <template v-else>
         <canvas class="c-black-hole-canvas" ref="canvas" width="400" height="400" />
         <div class="l-black-hole-upgrade-grid">

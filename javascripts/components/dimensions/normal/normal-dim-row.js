@@ -6,6 +6,7 @@ Vue.component("normal-dim-row", {
   data() {
     return {
       isUnlocked: false,
+      isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       boughtBefore10: 0,
@@ -36,6 +37,7 @@ Vue.component("normal-dim-row", {
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const dimension = NormalDimension(tier);
+      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
@@ -68,13 +70,21 @@ Vue.component("normal-dim-row", {
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
-        @click="buySingle"
-      ><span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}</primary-button>
+        @click="buySingle">
+        <span v-if="isCapped">Capped!</span>
+        <template v-else>
+          <span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}
+        </template>
+      </primary-button>
       <primary-button
         :enabled="isAffordableUntil10"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
-        @click="buyUntil10"
-      >Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}</primary-button>
+        @click="buyUntil10">
+        <span v-if="isCapped">Capped!</span>
+        <template v-else>
+          Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}
+        </template>
+      </primary-button>
       <div
         v-for="text in floatingText"
         :key="text.key"

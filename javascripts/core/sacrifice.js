@@ -46,7 +46,7 @@ class Sacrifice {
   static get nextBoost() {
     if (player.firstAmount.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")){
+    if (player.challenges.includes("postc2")) {
       const scale = Effects.max(
         0.01,
         Achievement(88),

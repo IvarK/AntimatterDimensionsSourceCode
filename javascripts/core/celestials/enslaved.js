@@ -95,7 +95,9 @@ const Enslaved = {
   },
   useStoredTime() {
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
-    gameLoop(0, { gameDiff: player.celestials.enslaved.stored });
+    let release = player.celestials.enslaved.stored;
+    if (Enslaved.isRunning) release = storedTimeInsideEnslaved(release);
+    gameLoop(0, { gameDiff: release });
     player.celestials.enslaved.stored = 0;
   },
   has(info) {
@@ -112,6 +114,8 @@ const Enslaved = {
   startRun() {
     if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
     player.celestials.enslaved.run = startRealityOver();
+    // Round to the nearest multiple of 2 to make the secret study hide
+    player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
   },
   get isRunning() {
     return player.celestials.enslaved.run;
@@ -142,5 +146,9 @@ const Enslaved = {
   get realityBoostRatio() {
     return Math.max(1, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
+  },
+  storedTimeInsideEnslaved(stored) {
+    if (stored <= 1) return stored;
+    return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
   }
 };

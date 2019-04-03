@@ -102,7 +102,7 @@ function getDilationGainPerSecond() {
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning) {
-    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10());
+    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
   }
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;

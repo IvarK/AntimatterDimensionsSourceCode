@@ -203,7 +203,7 @@ Vue.component("time-studies-tab", {
   data() {
     return {
       respec: player.respec,
-      layoutType: StudyTreeLayoutType.NORMAL
+      layoutType: StudyTreeLayoutType.NORMAL,
     };
   },
   watch: {

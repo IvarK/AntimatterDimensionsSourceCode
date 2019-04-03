@@ -11,6 +11,7 @@ Vue.component("eternity-challenges-tab", {
           isCompleted: false,
           completions: 0,
           showGoalSpan: false,
+          enslavedSpanOverride: false,
         };
       },
       computed: {
@@ -35,7 +36,17 @@ Vue.component("eternity-challenges-tab", {
           return this.goalAtCompletions(0);
         },
         lastGoal() {
-          return this.goalAtCompletions(TIERS_PER_EC - 1);
+          const goal = this.goalAtCompletions(TIERS_PER_EC - 1);
+          if (this.enslavedSpanOverride) {
+            // Fuck up the text
+            let mangled = "";
+            for (let idx = 0; idx < goal.length; ++idx) {
+              let badChar = Math.random() > 0.4 ? goal.charCodeAt(idx) : Math.floor(Math.random() * 65000 + 65);
+              mangled += String.fromCharCode(badChar);
+            }
+            return mangled;
+          }
+          return goal;
         },
         currentRewardConfig() {
           const challenge = this.challenge;
@@ -67,6 +78,7 @@ Vue.component("eternity-challenges-tab", {
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
           this.showGoalSpan = player.realities > 0;
+          this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
         },
         start() {
           this.challenge.start();

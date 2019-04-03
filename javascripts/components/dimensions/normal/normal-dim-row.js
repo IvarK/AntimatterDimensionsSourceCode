@@ -28,6 +28,11 @@ Vue.component("normal-dim-row", {
       return this.tier < 8
         ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
         : "";
+    },
+    cappedTooltip() {
+      return this.isCapped
+        ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
+        : null;
     }
   },
   methods: {
@@ -70,6 +75,7 @@ Vue.component("normal-dim-row", {
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
+        :ach-tooltip="cappedTooltip"
         @click="buySingle">
         <span v-if="isCapped">Capped!</span>
         <template v-else>
@@ -79,6 +85,7 @@ Vue.component("normal-dim-row", {
       <primary-button
         :enabled="isAffordableUntil10"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
+        :ach-tooltip="cappedTooltip"
         @click="buyUntil10">
         <span v-if="isCapped">Capped!</span>
         <template v-else>

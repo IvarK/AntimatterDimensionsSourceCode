@@ -1,9 +1,15 @@
+let hacky = false;
+
 function startChallenge(name, target) {
     if (!askChallengeConfirmation(name)) return;
     player.currentChallenge = name;
     player.challengeTarget = target;
     secondSoftReset();
-    Tab.dimensions.normal.show();
+  Tab.dimensions.normal.show();
+  if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
+    hacky = true;
+    alert("... did not ... underestimate you ...")
+  }
 }
 
 function askChallengeConfirmation(challenge) {

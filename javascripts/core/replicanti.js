@@ -362,7 +362,7 @@ const Replicanti = {
       return Effects.sum(
         TimeStudy(225),
         TimeStudy(226)
-      );
+      ) + Effarig.bonusRG;
     },
     get total() {
       return this.bought + this.extra;

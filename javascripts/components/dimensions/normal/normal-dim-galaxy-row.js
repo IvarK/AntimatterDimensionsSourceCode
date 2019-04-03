@@ -9,7 +9,7 @@ Vue.component('normal-dim-galaxy-row', {
       },
       requirement: {
         tier: 1,
-        amount: 1
+        amount: ""
       },
       isAffordable: false,
       hasIncreasedScaling: false,
@@ -20,12 +20,12 @@ Vue.component('normal-dim-galaxy-row', {
   computed: {
     galaxySumDisplay() {
       const galaxies = this.galaxies;
-      let sum = galaxies.normal.toString();
+      let sum = shortenSmallInteger(galaxies.normal);
       if (galaxies.replicanti > 0) {
-        sum += " + " + galaxies.replicanti;
+        sum += " + " + shortenSmallInteger(galaxies.replicanti);
       }
       if (galaxies.dilation > 0) {
-        sum += " + " + galaxies.dilation;
+        sum += " + " + shortenSmallInteger(galaxies.dilation);
       }
       return sum;
     },
@@ -45,7 +45,7 @@ Vue.component('normal-dim-galaxy-row', {
       this.galaxies.dilation = player.dilation.freeGalaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
       const requirement = Galaxy.requirement;
-      this.requirement.amount = requirement.amount;
+      this.requirement.amount = shortenSmallInteger(requirement.amount);
       this.requirement.tier = requirement.tier;
       this.isAffordable = requirement.isSatisfied;
       if (Galaxy.canBeBought) {

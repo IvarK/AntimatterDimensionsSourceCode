@@ -17,8 +17,8 @@ Vue.component("replicanti-galaxy-button", {
     galaxyCountDisplay() {
       const bought = this.boughtGalaxies;
       const extra = this.extraGalaxies;
-      const galaxyNoun = extra === 0 && bought === 1 ? "galaxy" : "galaxies";
-      const galaxyCount = extra > 0 ? `${bought}+${extra}` : bought;
+      const galaxyNoun = (extra + bought === 1) ? "galaxy" : "galaxies";
+      const galaxyCount = extra > 0 ? `${shortenSmallInteger(bought)}+${shortenSmallInteger(extra)}` : bought;
       return `${galaxyCount} replicated ${galaxyNoun} created.`;
     },
     autobuyer: function() {

@@ -3,11 +3,11 @@ Vue.component('normal-dim-shift-row', {
     return {
       requirement: {
         tier: 1,
-        amount: 1
+        amount: ""
       },
       isShift: false,
       isAffordable: false,
-      resets: 0
+      resets: ""
     };
   },
   computed: {
@@ -25,10 +25,10 @@ Vue.component('normal-dim-shift-row', {
     update() {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
-      this.requirement.amount = requirement.amount;
+      this.requirement.amount = shortenSmallInteger(requirement.amount);
       this.isAffordable = requirement.isSatisfied;
       this.isShift = DimBoost.isShift;
-      this.resets = player.resets;
+      this.resets = shortenSmallInteger(player.resets);
     },
     softReset: function() {
       softResetBtnClick();

@@ -14,6 +14,7 @@ function getTickSpeedMultiplier() {
     TimeStudy(225),
     TimeStudy(226)
   );
+  replicantiGalaxies += Effarig.bonusRG
   let nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies

@@ -102,9 +102,11 @@ const GameCache = {
 
   glyphEffects: new Lazy(() => {
     return orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k));
-  })
+  }),
+
+  totalIPMult: new Lazy(() => totalIPMult()),
 };
 
 EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {
-  GameCache.glyphEffects.invalidate;
+  GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);

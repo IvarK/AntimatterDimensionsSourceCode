@@ -137,7 +137,7 @@ GameDatabase.infinity.upgrades = {
     description: "Infinity Point generation based on fastest Infinity",
     // cutting corners: this is not actual effect (player.infMult is), but
     // it is totalIPMult that is displyed on upgrade
-    effect: () => totalIPMult(),
+    effect: () => GameCache.totalIPMult.value,
     formatEffect: value => {
       const income = shorten(value, 2, 0);
       const period = player.bestInfinityTime >= 999999999999  ?

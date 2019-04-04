@@ -475,12 +475,22 @@ function getGlyphEffectStrength(effectKey, level, strength) {
 }
 
 /**
- * getTotalEffect outputs the softcap status as well; this is just shorthand
+ * This returns just the value, unlike getTotalEffect(), which outputs the softcap status as well
+ * This variant is used by GameCache
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
+function getAdjustedGlyphEffectUncached(effectKey) {
+  return getTotalEffect(effectKey).value;
+}
+
+/**
+ * This returns just the value, unlike getTotalEffect(), which outputs the softcap status as well
  * @param {string} effectKey
  * @return {number | Decimal}
  */
 function getAdjustedGlyphEffect(effectKey) {
-  return getTotalEffect(effectKey).value;
+  return GameCache.glyphEffects.value[effectKey];
 }
 
 /**

@@ -100,9 +100,7 @@ const GameCache = {
     return timeDimensionCommonMultiplier();
   }),
 
-  glyphEffects: new Lazy(() => {
-    return orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k));
-  }),
+  glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
   totalIPMult: new Lazy(() => totalIPMult()),
 };

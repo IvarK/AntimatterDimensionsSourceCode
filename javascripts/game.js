@@ -831,9 +831,9 @@ function gameLoop(diff, options = {}) {
         const genCount = Math.floor(player.partInfinityPoint);
         const genBoost = GameCache.totalIPMult.value.times(genCount);
         if (Teresa.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55))
+          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55));
         } else if (V.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5))
+          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5));
         } else {
           player.infinityPoints = player.infinityPoints.plus(genBoost);
         }

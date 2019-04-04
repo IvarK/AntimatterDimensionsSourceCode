@@ -95,22 +95,12 @@ Decimal.prototype.timesEffectsOf = function(...effectSources) {
   let resultMantissa = this.mantissa;
   let resultExponent = this.exponent;
   applyEffectsOf(effectSources, v => {
-    const tmp = typeof v === "number" ? new Decimal(v) : v;
-    resultMantissa *= tmp.mantissa;
-    resultExponent += tmp.exponent;
+    const decimal = typeof v === "number" ? new Decimal(v) : v;
+    resultMantissa *= decimal.mantissa;
+    resultExponent += decimal.exponent;
   });
   return Decimal.fromMantissaExponent(resultMantissa, resultExponent);
 };
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.timesEffectsOfOld = function(...effectSources) {
-  let result = this;
-  applyEffectsOf(effectSources, v => result = result.times(v));
-  return result;
-};
-
 
 /**
  * @returns {Decimal}

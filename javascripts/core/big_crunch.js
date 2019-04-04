@@ -188,7 +188,9 @@ class InfinityUpgrade extends PurchasableMechanicState {
   constructor(config, requirement) {
     super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
-    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
+    if (config.charged) {
+      this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
+    }
   }
 
   get isAvailable() {

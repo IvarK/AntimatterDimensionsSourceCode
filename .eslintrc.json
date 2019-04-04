@@ -112,7 +112,8 @@
       "error",
       "ret",
       "helper",
-      "temp"
+      "temp",
+      "tmp"
     ],
     // TODO: uncomment once we get consistent indentation everywhere
     // "indent": ["error", 2],

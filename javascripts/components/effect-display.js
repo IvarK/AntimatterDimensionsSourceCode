@@ -28,9 +28,13 @@ Vue.component("effect-display", {
         if (effect === undefined || formatEffect === undefined) return;
         this.isVisible = true;
         this.formatEffect = formatEffect;
+        if (typeof effect !== "function") {
+          this.effectValue = effect;
+          return;
+        }
         const effectValue = effect();
         this.effectValue = effectValue;
-        let isNumber = typeof effectValue === "number";
+        const isNumber = typeof effectValue === "number";
         this.updateFn = isNumber ?
           () => this.effectValue = effect() :
           () => this.effectValue.copyFrom(effect());

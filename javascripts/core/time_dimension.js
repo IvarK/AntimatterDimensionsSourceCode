@@ -1,6 +1,7 @@
-var timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561]
-var timeDimStartCosts = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"]
-var timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456]
+const timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
+const timeDimStartCosts = [null, 1, 5, 100, 1000,
+  new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];
+const timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
 
 function timeDimensionCostMult(tier) {
   var base = timeDimCostMults[tier]

@@ -2,21 +2,19 @@ class GameMechanicState {
   constructor(config) {
     if (!config) throw crash("Must specify config for GameMechanicState");
     this.config = config;
-    this._id = this.config.id;
     this._effectIsConstant = false;
     if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
       this._effectIsConstant = true;
-      const copy = this.config.effect;
       Object.defineProperty(this, "effectValue", {
         configurable: false,
         writable: false,
-        value: copy,
+        value: this.config.effect,
       });
     }
   }
 
   get id() {
-    return this._id;
+    return this.config.id;
   }
 
   get cost() {
@@ -32,51 +30,19 @@ class GameMechanicState {
   }
 
   applyEffect(applyFn) {
-    // The first time this gets called, we figure stuff out about our effects
-    // and make a specialized version. This method gets replaced as part of that.
-    this.compileApplyEffect();
-    this.applyEffect(applyFn);
-  }
-
-  compileApplyEffect() {
-    // We can now safely call the effect function, and figure out the data type
-    // even for non constant effects:
-    const sampleEffect = this.effectValue;
-    if (this.config.cap === undefined) {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          applyFn(this.effectValue);
+    if (this.canBeApplied) {
+      let effectValue = this.effectValue;
+      if (this.config.cap !== undefined) {
+        const cap = typeof this.config.cap === "function" ?
+         this.config.cap() :
+         this.config.cap;
+        if (cap !== undefined) {
+          effectValue = typeof effectValue === "number" ?
+            Math.min(effectValue, cap) :
+            Decimal.min(effectValue, cap);
         }
-      };
-      return;
-    }
-    let capIsNumber = typeof this.config.cap === "number";
-    const capIsDecimal = this.config.cap instanceof Decimal;
-    const capCopy = this.config.cap;
-    if (capIsNumber && typeof sampleEffect === "number") {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          applyFn(Math.min(this.effectValue, capCopy));
-        }
-      };
-      return;
-    }
-    if (capIsNumber || capIsDecimal) {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          applyFn(Decimal.min(this.effectValue, capCopy));
-        }
-      };
-      return;
-    }
-    // There are some poorly specified caps (ones that return undefined
-    // in some cases, for example). For now, we don't bother doing anything smart
-    this.applyEffect = applyFn => {
-      const cap = this.config.cap();
-      const effect = this.effectValue;
-      if (cap === undefined) return applyFn(effect);
-      if (effect instanceof Decimal) return applyFn(Decimal.min(effect, cap));
-      return applyFn(Math.min(effect, cap));
+      }
+      applyFn(effectValue);
     }
   }
 }

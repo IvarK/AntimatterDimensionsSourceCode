@@ -99,4 +99,12 @@ const GameCache = {
   timeDimensionCommonMultiplier: new Lazy(() => {
     return timeDimensionCommonMultiplier();
   }),
+
+  glyphEffects: new Lazy(() => {
+    return orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k));
+  })
 };
+
+EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {
+  GameCache.glyphEffects.invalidate;
+}, GameCache.glyphEffects);

@@ -224,6 +224,20 @@ Decimal.prototype.clampMaxExponent = function(maxExp) {
 };
 
 /**
+ * This version of times avoids an extra conversion to Decimal, if possible. Since the
+ * mantissa is -10...10, any number short of MAX/10 can be safely multiplied in
+ * @returns {Decimal}
+ */
+Decimal.prototype.times = function (value) {
+  if (typeof value === "number" && value < 1e307 && value > -1e307) {
+    return Decimal.fromMantissaExponent(this.mantissa * value, this.exponent);
+  } else if (typeof value === "string") {
+    return this.times(new Decimal(value));
+  }
+  return Decimal.fromMantissaExponent(this.mantissa * value.mantissa, this.exponent + value.exponent);
+}
+
+/**
  * @return {Decimal}
  */
 Number.prototype.toDecimal = function() {
@@ -252,3 +266,4 @@ Set.prototype.every = function(predicate) {
   }
   return true;
 };
+

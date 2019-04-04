@@ -1,53 +1,17 @@
 class GameMechanicState {
   constructor(config) {
+    if (!config) throw crash("Must specify config for GameMechanicState");
     this.config = config;
-    if (!this.config) return;
     this._id = this.config.id;
+    this._effectIsConstant = false;
     if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
+      this._effectIsConstant = true;
       const copy = this.config.effect;
       Object.defineProperty(this, "effectValue", {
-        get: () => copy,
+        configurable: false,
+        writable: false,
+        value: copy,
       });
-    }
-    if (this.config.cap === undefined) {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          applyFn(this.effectValue);
-        }
-      };
-    } else if (this.config.cap instanceof Decimal) {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          applyFn(Decimal.min(this.effectValue, this.config.cap));
-        }
-      };
-    } else if (typeof this.config.cap === "number") {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          const ev = this.effectValue;
-          if (typeof ev === "number") {
-            applyFn(Math.min(ev, this.config.cap));
-          } else {
-            applyFn(Decimal.min(ev, this.config.cap));
-          }
-        }
-      };
-    } else if (typeof this.config.cap === "function") {
-      this.applyEffect = applyFn => {
-        if (this.canBeApplied) {
-          const ev = this.effectValue;
-          const cap = this.config.cap();
-          if (cap === undefined) {
-            applyFn(ev);
-          } else if (typeof ev === "number") {
-            applyFn(Math.min(ev, cap));
-          } else {
-            applyFn(Decimal.min(ev, cap));
-          }
-        }
-      };
-    } else {
-      throw crash("config.cap should be a number, Decimal, or function");
     }
   }
 
@@ -68,19 +32,51 @@ class GameMechanicState {
   }
 
   applyEffect(applyFn) {
-    if (this.canBeApplied) {
-      let effectValue = this.effectValue;
-      if (this.config.cap !== undefined) {
-        const cap = typeof this.config.cap === "function" ?
-         this.config.cap() :
-         this.config.cap;
-        if (cap !== undefined) {
-          effectValue = typeof effectValue === "number" ?
-            Math.min(effectValue, cap) :
-            Decimal.min(effectValue, cap);
+    // The first time this gets called, we figure stuff out about our effects
+    // and make a specialized version. This method gets replaced as part of that.
+    this.compileApplyEffect();
+    this.applyEffect(applyFn);
+  }
+
+  compileApplyEffect() {
+    // We can now safely call the effect function, and figure out the data type
+    // even for non constant effects:
+    const sampleEffect = this.effectValue;
+    if (this.config.cap === undefined) {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          applyFn(this.effectValue);
         }
-      }
-      applyFn(effectValue);
+      };
+      return;
+    }
+    let capIsNumber = typeof this.config.cap === "number";
+    const capIsDecimal = this.config.cap instanceof Decimal;
+    const capCopy = this.config.cap;
+    if (capIsNumber && typeof sampleEffect === "number") {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          applyFn(Math.min(this.effectValue, capCopy));
+        }
+      };
+      return;
+    }
+    if (capIsNumber || capIsDecimal) {
+      this.applyEffect = applyFn => {
+        if (this.canBeApplied) {
+          applyFn(Decimal.min(this.effectValue, capCopy));
+        }
+      };
+      return;
+    }
+    // There are some poorly specified caps (ones that return undefined
+    // in some cases, for example). For now, we don't bother doing anything smart
+    this.applyEffect = applyFn => {
+      const cap = this.config.cap();
+      const effect = this.effectValue;
+      if (cap === undefined) return applyFn(effect);
+      if (effect instanceof Decimal) return applyFn(Decimal.min(effect, cap));
+      return applyFn(Math.min(effect, cap));
     }
   }
 }

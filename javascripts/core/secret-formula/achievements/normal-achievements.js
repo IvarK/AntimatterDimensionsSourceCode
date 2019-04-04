@@ -478,7 +478,9 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
-    effect: () => Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()),
+    // Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()) can be rewritten as
+    // a single pow
+    effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), 0.30102999566398114),
     cap: () => Effarig.eternityCap
   },
   {

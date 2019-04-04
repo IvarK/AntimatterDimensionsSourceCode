@@ -229,8 +229,13 @@ Decimal.prototype.clampMaxExponent = function(maxExp) {
  * @returns {Decimal}
  */
 Decimal.prototype.times = function(value) {
-  if (typeof value === "number" && value < 1e307 && value > -1e307) {
-    return Decimal.fromMantissaExponent(this.mantissa * value, this.exponent);
+  if (typeof value === "number") {
+    if (value < 1e307 && value > -1e307) {
+      return Decimal.fromMantissaExponent(this.mantissa * value, this.exponent);
+    }
+    // If the value is larger than 1e307, we can divide that out of mantissa (since it's
+    // greater than 1, it won't underflow)
+    return Decimal.fromMantissaExponent(this.mantissa * 1e-307 * value, this.exponent + 307);
   }
   if (typeof value === "string") return this.times(new Decimal(value));
   return Decimal.fromMantissaExponent(this.mantissa * value.mantissa, this.exponent + value.exponent);

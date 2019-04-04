@@ -187,7 +187,7 @@ function gainedInfinityPoints() {
     let ip = player.break ?
       Decimal.pow(10, player.money.e / div - 0.75) :
       new Decimal(308 / div);
-    ip = ip.times(totalIPMult());
+    ip = ip.times(GameCache.totalIPMult.value);
     if (Teresa.isRunning) {
       ip = ip.pow(0.55);
     } else if (V.isRunning) {
@@ -736,9 +736,6 @@ let autobuyerOnGameLoop = true;
 function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
-    GameCache.normalDimensionCommonMultiplier.invalidate();
-    GameCache.infinityDimensionCommonMultiplier.invalidate();
-    GameCache.timeDimensionCommonMultiplier.invalidate();
     const thisUpdate = Date.now();
     if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
@@ -757,6 +754,12 @@ function gameLoop(diff, options = {}) {
         Autobuyer.tick();
       }
     }
+    // We do these after autobuyers, since it's possible something there might
+    // change a multiplier.
+    GameCache.normalDimensionCommonMultiplier.invalidate();
+    GameCache.infinityDimensionCommonMultiplier.invalidate();
+    GameCache.timeDimensionCommonMultiplier.invalidate();
+    GameCache.totalIPMult.invalidate();
 
     const realDiff = diff;
 
@@ -826,12 +829,13 @@ function gameLoop(diff, options = {}) {
       player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
       if (player.partInfinityPoint >= 1) {
         const genCount = Math.floor(player.partInfinityPoint);
+        const genBoost = GameCache.totalIPMult.value.times(genCount);
         if (Teresa.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.55))
+          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55))
         } else if (V.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount).pow(0.5))
+          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5))
         } else {
-          player.infinityPoints = player.infinityPoints.plus(totalIPMult().times(genCount));
+          player.infinityPoints = player.infinityPoints.plus(genBoost);
         }
         player.partInfinityPoint -= genCount;
       }

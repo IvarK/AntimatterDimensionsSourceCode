@@ -848,7 +848,8 @@ function gameLoop(diff, options = {}) {
 
     if (!EternityChallenge(4).isRunning) {
       let infGen = new Decimal(0);
-      if (BreakInfinityUpgrade.infinitiedGen.isBought) {  // Multipliers are done this way to explicitly exclude ach87 and TS32
+      if (BreakInfinityUpgrade.infinitiedGen.isBought) {
+        // Multipliers are done this way to explicitly exclude ach87 and TS32
         infGen = infGen.plus(0.2 * Time.deltaTimeMs / player.bestInfinityTime);
         infGen = infGen.timesEffectsOf(
           RealityUpgrade(5),

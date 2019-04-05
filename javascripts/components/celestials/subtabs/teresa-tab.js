@@ -98,7 +98,7 @@ Vue.component('teresa-tab', {
             <div class="c-rm-store-inner" :style="{ height: percentage}">
               <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain
                 <br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}
-                <br>Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
+                <br v-if="leakRate > 0">Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
             </div>
             <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
               {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}

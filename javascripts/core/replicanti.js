@@ -25,16 +25,16 @@ function replicantiGalaxy() {
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 function fastReplicantiBelow308(gainFactor, isAutobuyerActive) {
-  if (isAutobuyerActive) {
-    let replicantiExponent = gainFactor.log10() + player.replicanti.amount.log10()
-    let toBuy = Ra.isRunning
-      ? 0
-      : Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies))
-    player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(10, replicantiExponent - 308 * toBuy))
-    player.replicanti.galaxies += toBuy
-  } else {
-    player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount.times(gainFactor))
+  if (!isAutobuyerActive) {
+    player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount.times(gainFactor));
+    return;
   }
+  const replicantiExponent = gainFactor.log10() + player.replicanti.amount.log10();
+  const toBuy = Ra.isRunning
+    ? 0
+    : Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
+  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(10, replicantiExponent - 308 * toBuy));
+  player.replicanti.galaxies += toBuy;
 }
 
 function replicantiGalaxyAutoToggle(forcestate) {

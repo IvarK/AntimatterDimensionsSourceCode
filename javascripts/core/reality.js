@@ -13,7 +13,8 @@ const GlyphSelection = {
     this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
     ui.view.modal.glyphSelection = true;
     if (!Perk.glyphUncommonGuarantee.isBought) return;
-    // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+    // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
+    // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;  // Uncommon
     if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
@@ -272,7 +273,6 @@ function completeReality(force, reset, auto = false) {
   secondSoftReset();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
-  $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
@@ -293,7 +293,6 @@ function completeReality(force, reset, auto = false) {
   Marathon2 = 0;
   updateAutomatorRows();
   drawPerkNetwork();
-  document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
   if (player.realities >= 4) giveAchievement("How does this work?")
 

@@ -34,7 +34,6 @@ class PerkState extends PurchasableMechanicState {
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
     updateAutomatorRows();
-    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.");
     if (player.reality.perks.length === Perk.all.length) {
       giveAchievement("Perks of living");
     }

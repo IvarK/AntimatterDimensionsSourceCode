@@ -30,6 +30,12 @@ function shorten(value, places, placesUnder1000) {
   return Notation.current.format(value, places, placesUnder1000);
 }
 
+function shortenSmallInteger(value) {
+  return Notation.current.isPainful
+    ? shorten(value, 2, 2)
+    : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
+}
+
 function shortenPostBreak(value, places, placesUnder1000) {
   Notation.forcePostBreakFormat = true;
   const shortened = this.shorten(value, places, placesUnder1000);

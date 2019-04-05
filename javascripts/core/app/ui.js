@@ -1,45 +1,48 @@
 Vue.mixin({
   computed: {
-    $viewModel: function() {
+    $viewModel() {
       return ui.view;
     }
   },
   methods: {
-    emitClick: function() {
-      this.$emit('click');
+    emitClick() {
+      this.$emit("click");
     },
-    emitInput: function(val) {
-      this.$emit('input', val);
+    emitInput(val) {
+      this.$emit("input", val);
     },
-    emitClose: function() {
-      this.$emit('close');
+    emitClose() {
+      this.$emit("close");
     },
-    on$: function(event, fn) {
+    on$(event, fn) {
       EventHub.global.on(event, fn, this);
     },
-    shorten: function(value, places, placesUnder1000) {
+    shorten(value, places, placesUnder1000) {
       return shorten(value, places, placesUnder1000);
     },
-    shortenPostBreak: function(value, places, placesUnder1000) {
+    shortenPostBreak(value, places, placesUnder1000) {
       return shortenPostBreak(value, places, placesUnder1000);
     },
-    shortenRateOfChange: function(value) {
+    shortenRateOfChange(value) {
       return shortenRateOfChange(value);
     },
-    shortenCosts: function(value) {
+    shortenCosts(value) {
       return shortenCosts(value);
     },
-    shortenDimensions: function(value) {
+    shortenDimensions(value) {
       return shortenDimensions(value);
     },
-    shortenMoney: function(value) {
+    shortenMoney(value) {
       return shortenMoney(value);
     },
-    shortenGlyphEffect: function(value) {
+    shortenGlyphEffect(value) {
       return shortenGlyphEffect(value);
     },
-    shortenMultiplier: function(value) {
+    shortenMultiplier(value) {
       return shortenMultiplier(value);
+    },
+    shortenSmallInteger(value) {
+      return shortenSmallInteger(value);
     }
   },
   created() {

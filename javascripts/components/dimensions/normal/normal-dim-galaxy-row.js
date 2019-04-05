@@ -1,5 +1,5 @@
-Vue.component('normal-dim-galaxy-row', {
-  data: function() {
+Vue.component("normal-dim-galaxy-row", {
+  data() {
     return {
       type: String.empty,
       galaxies: {
@@ -9,7 +9,7 @@ Vue.component('normal-dim-galaxy-row', {
       },
       requirement: {
         tier: 1,
-        amount: 1
+        amount: 0
       },
       isAffordable: false,
       hasIncreasedScaling: false,
@@ -20,12 +20,12 @@ Vue.component('normal-dim-galaxy-row', {
   computed: {
     galaxySumDisplay() {
       const galaxies = this.galaxies;
-      let sum = galaxies.normal.toString();
+      let sum = shortenSmallInteger(galaxies.normal);
       if (galaxies.replicanti > 0) {
-        sum += " + " + galaxies.replicanti;
+        sum += " + " + shortenSmallInteger(galaxies.replicanti);
       }
       if (galaxies.dilation > 0) {
-        sum += " + " + galaxies.dilation;
+        sum += " + " + shortenSmallInteger(galaxies.dilation);
       }
       return sum;
     },
@@ -67,19 +67,24 @@ Vue.component('normal-dim-galaxy-row', {
     updateCostScaling() {
       const distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.hasIncreasedScaling = player.galaxies > distantStart;
-      if (Galaxy.type.startsWith("Distant")) this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
-      else if (Galaxy.type.startsWith("Remote")) {
-        const remoteStart = 800;
-        this.costScalingText = `Increased galaxy cost scaling: Quadratic past ${distantStart} (distant), exponential past ${remoteStart} (remote)`;
+      if (Galaxy.type.startsWith("Distant")) {
+        this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
+        return;
       }
-      else this.costScalingText = "";
+      if (Galaxy.type.startsWith("Remote")) {
+        const remoteStart = 800;
+        this.costScalingText = "Increased galaxy cost scaling: " +
+          `Quadratic past ${distantStart} (distant), exponential past ${remoteStart} (remote)`;
+        return;
+      }
+      this.costScalingText = "";
     }
   },
   template:
     `<div class="c-normal-dim-row">
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{type}} ({{galaxySumDisplay}}): requires {{requirement.amount}} {{dimName}} Dimensions
+      >{{type}} ({{galaxySumDisplay}}): requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button

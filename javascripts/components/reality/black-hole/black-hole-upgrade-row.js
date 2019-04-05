@@ -11,7 +11,7 @@ Vue.component("black-hole-upgrade-row", {
     intervalConfig() {
       return {
         upgrade: this.blackHole.intervalUpgrade,
-        description: "Speed up the black hole by 25%",
+        description: "Reduce the black hole inactive time by 20%",
         effectTitle: "Current interval",
         formatEffect: value => `${value.toFixed(1)} seconds`
       };

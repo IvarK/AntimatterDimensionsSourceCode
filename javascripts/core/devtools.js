@@ -195,7 +195,6 @@ dev.respecPerks = function() {
     player.reality.perks = [];
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    updatePerkPointText()
     drawPerkNetwork()
 }
 

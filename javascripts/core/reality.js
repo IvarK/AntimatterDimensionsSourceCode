@@ -293,7 +293,6 @@ function completeReality(force, reset, auto = false) {
   Marathon2 = 0;
   updateAutomatorRows();
   drawPerkNetwork();
-  updatePerkPointText();
 
   if (player.realities >= 4) giveAchievement("How does this work?")
 

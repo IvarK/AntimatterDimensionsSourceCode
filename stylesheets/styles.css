@@ -1038,12 +1038,6 @@ br {
     height: 50px;
 }
 
-#pp {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
 #perks {
     width: 900px;
     height: 500px;
@@ -5649,4 +5643,10 @@ screen and (max-width: 480px) {
 
 .c-black-hole-canvas {
   border: .1rem solid black;
-} 
+}
+
+.c-pp-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

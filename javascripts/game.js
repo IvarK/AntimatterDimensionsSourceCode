@@ -702,21 +702,26 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   if (EternityChallenge(12).isRunning && effectsToConsider.includes(GameSpeedEffect.EC12)) {
     // If we're taking account of EC12 at all and we're in EC12, we'll never want to consider anything else,
     // since part of the effect of EC12 is to disable all other things that affect gamespeed.
-    return 1/1000;
+    return 1 / 1000;
   }
   if (effectsToConsider.includes(GameSpeedEffect.TIMEGLYPH)) {
     factor *= getAdjustedGlyphEffect("timespeed");
   }
 
-  if (player.blackHole[0] !== undefined && effectsToConsider.includes(GameSpeedEffect.BLACKHOLE)) {
+  if (effectsToConsider.includes(GameSpeedEffect.BLACKHOLE)) {
     if (blackHoleOverride !== undefined) {
       factor *= blackHoleOverride;
-    } else if (!player.blackHolePause) {
-      for (let i = 0; i < player.blackHole.length && blackHoleIsUnlocked(player.blackHole[i]) &&
-        ((blackHolesActiveOverride !== undefined) ? i <= blackHolesActiveOverride : player.blackHole[i].active); i++) {
-        blackHole = player.blackHole[i];
-        factor *= getBlackHolePower(blackHole);
-        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect()
+    } else if (!BlackHoles.arePaused) {
+      for (const blackHole of BlackHoles.list) {
+        if (!blackHole.isUnlocked) break;
+        const isActive = blackHolesActiveOverride === undefined
+          ? blackHole.isActive
+          : blackHole.id <= blackHolesActiveOverride;
+        if (!isActive) break;
+        factor *= blackHole.power;
+        if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+          factor *= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1].effect();
+        }
       }
     }
   }
@@ -1080,14 +1085,9 @@ function gameLoop(diff, options = {}) {
     );
 
   document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
-  if (player.blackHole[0].unlocked && !player.blackHolePause) {
-    updateBlackHolePhases(blackHoleDiff);
-    for (let i = 0; i < player.blackHole.length; i++) {
-      updateBlackHoleStatusText(i);
-      updateBlackHoleUpgradeDisplay(i);
-    }
-    updateBlackHoleGraphics();
-  }
+
+  BlackHoles.updatePhases(blackHoleDiff);
+
   // Reality unlock and TTgen perk autobuy
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines().gt(0))  buyDilationStudy(6, 5e9);
@@ -1122,7 +1122,7 @@ function simulateTime(seconds, real, fast) {
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);
     autobuyerOnGameLoop = false;
-    GameUI.notify.blackHoles = false;
+    GameUI.notify.showBlackHoles = false;
 
     // Upper-bound the number of ticks (this also applies if the black hole is unlocked)
     if (ticks > 1000 && !real && !fast) {
@@ -1134,13 +1134,13 @@ function simulateTime(seconds, real, fast) {
     }
     
     // Simulation code with black hole
-    if (player.blackHole[0].unlocked && !player.blackHolePause) {
+    if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
       let remainingRealSeconds = seconds;
       for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
         let timeGlyphSpeedup = getGameSpeedupFactor([GameSpeedEffect.TIMEGLYPH]);
         // The black hole is affected by time glyphs, but nothing else.
         let remainingblackHoleSeconds = remainingRealSeconds * timeGlyphSpeedup;
-        [realTickTime, blackHoleSpeedup] = calculateBlackHoleOfflineTick(remainingblackHoleSeconds, numberOfTicksRemaining, 0.0001);
+        let [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingblackHoleSeconds, numberOfTicksRemaining, 0.0001);
         realTickTime /= timeGlyphSpeedup;
         remainingRealSeconds -= realTickTime;
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
@@ -1175,7 +1175,7 @@ function simulateTime(seconds, real, fast) {
 
     Modal.message.show(popupString);
     autobuyerOnGameLoop = true;
-    GameUI.notify.blackHoles = true;
+    GameUI.notify.showBlackHoles = true;
 }
 
 function updateChart(first) {

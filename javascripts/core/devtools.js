@@ -377,7 +377,6 @@ dev.updateTestSave = function() {
   if (player.options.testVersion == 17) {
     if (RealityUpgrade(20).isBought) {
       player.wormhole[1].unlocked = true
-      $("#bhupg2").show()
     }
     player.options.testVersion = 18
   }

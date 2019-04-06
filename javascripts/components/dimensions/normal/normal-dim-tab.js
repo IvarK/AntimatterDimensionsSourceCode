@@ -1,8 +1,8 @@
-Vue.component('normal-dim-tab', {
-  data: function() {
+Vue.component("normal-dim-tab", {
+  data() {
     return {
       isChallengePowerVisible: false,
-      challengePower: String.empty,
+      challengePower: "",
       isQuickResetAvailable: false
     };
   },
@@ -17,11 +17,9 @@ Vue.component('normal-dim-tab', {
         const c3Power = `${this.shortenRateOfChange(player.chall3Pow.times(100))}%`;
         if (isC2Running && isC3Running) {
           this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
-        }
-        else if (isC2Running) {
+        } else if (isC2Running) {
           this.challengePower = `Production: ${c2Power}`;
-        }
-        else if (isC3Running) {
+        } else if (isC3Running) {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
@@ -30,7 +28,7 @@ Vue.component('normal-dim-tab', {
       this.isQuickResetAvailable = challenge !== undefined && challenge.isQuickResettable ||
         infinityChallenge !== undefined && infinityChallenge.isQuickResettable;
     },
-    quickReset: function() {
+    quickReset() {
       quickReset();
     }
   },

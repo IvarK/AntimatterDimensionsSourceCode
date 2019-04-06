@@ -1,15 +1,15 @@
-Vue.component('normal-dim-tab-progress-bar', {
-  data: function() {
+Vue.component("normal-dim-tab-progress-bar", {
+  data() {
     return {
       fill: new Decimal(0),
-      tooltip: String.empty
+      tooltip: ""
     };
   },
   computed: {
-    percents: function() {
+    percents() {
       return `${this.fill.toFixed(2)}%`;
     },
-    progressBarStyle: function() {
+    progressBarStyle() {
       return {
         width: this.percents
       };

@@ -1,7 +1,7 @@
 Vue.component("normal-dim-galaxy-row", {
   data() {
     return {
-      type: String.empty,
+      type: "",
       galaxies: {
         normal: 0,
         replicanti: 0,

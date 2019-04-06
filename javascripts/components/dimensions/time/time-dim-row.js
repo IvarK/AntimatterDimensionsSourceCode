@@ -1,9 +1,9 @@
-Vue.component('time-dim-row', {
+Vue.component("time-dim-row", {
   props: {
     tier: Number,
     areAutobuyersUnlocked: Boolean
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
@@ -15,13 +15,13 @@ Vue.component('time-dim-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    rateOfChangeDisplay: function() {
-      return this.tier < 8 ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
     }
   },
   methods: {
@@ -39,7 +39,7 @@ Vue.component('time-dim-row', {
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
     },
-    buyTimeDimension: function() {
+    buyTimeDimension() {
       buyTimeDimension(this.tier);
     }
   },

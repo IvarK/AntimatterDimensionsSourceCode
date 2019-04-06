@@ -18,7 +18,7 @@ Vue.component("normal-dim-tab-progress-bar", {
   methods: {
     update() {
       const setProgress = (current, goal, tooltip) => {
-        this.fill.copyFrom(Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100));
+        this.fill.copyFrom(Decimal.min(current.pLog10() / Decimal.log10(goal) * 100, 100));
         this.tooltip = tooltip;
       };
       if (player.currentChallenge !== "") {

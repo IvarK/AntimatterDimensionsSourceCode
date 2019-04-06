@@ -195,48 +195,9 @@ Array.prototype.countWhere = function(predicate) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.clamp = function(min, max) {
-  return this.max(min).min(max);
-};
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.clampMin = function(min) {
-  return this.max(min);
-};
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.clampMax = function(max) {
-  return this.min(max);
-};
-
-/**
- * @returns {Decimal}
- */
 Decimal.prototype.clampMaxExponent = function(maxExp) {
   return this.exponent >= maxExp
     ? Decimal.fromMantissaExponent_noNormalize(1, maxExp) : this;
-};
-
-/**
- * This version of times avoids an extra conversion to Decimal, if possible. Since the
- * mantissa is -10...10, any number short of MAX/10 can be safely multiplied in
- * @returns {Decimal}
- */
-Decimal.prototype.times = function(value) {
-  if (typeof value === "number") {
-    if (value < 1e307 && value > -1e307) {
-      return Decimal.fromMantissaExponent(this.mantissa * value, this.exponent);
-    }
-    // If the value is larger than 1e307, we can divide that out of mantissa (since it's
-    // greater than 1, it won't underflow)
-    return Decimal.fromMantissaExponent(this.mantissa * 1e-307 * value, this.exponent + 307);
-  }
-  if (typeof value === "string") return this.times(new Decimal(value));
-  return Decimal.fromMantissaExponent(this.mantissa * value.mantissa, this.exponent + value.exponent);
 };
 
 /**

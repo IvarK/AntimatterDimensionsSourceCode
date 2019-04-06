@@ -21,7 +21,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
+    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, " +
+      "you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => player.postC3Reward,
@@ -45,7 +46,9 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. When buying dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.",
+    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. " +
+      "When buying dimensions 5-8, everything with costs bigger or equal increases. " +
+      "When buying tickspeed, everything with the same cost increases.",
     goal: new Decimal("1e11111"),
     isQuickResettable: true,
     reward: {
@@ -55,7 +58,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 6,
-    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
+    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter " +
+      "that divides the multiplier on all of your dimensions.",
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),

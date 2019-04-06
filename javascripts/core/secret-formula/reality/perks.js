@@ -221,7 +221,8 @@ GameDatabase.reality.perks = {
   studyECBulk: {
     id: 73,
     label: "TS4",
-    description: "You can complete multiple tiers of Eternity Challenges at once if you reach the goal for a higher completion of that challenge"
+    description: "You can complete multiple tiers of Eternity Challenges at once " +
+      "if you reach the goal for a higher completion of that challenge"
   },
   retroactiveTP1: {
     id: 80,
@@ -395,7 +396,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.achievementRowGroup6]
   ];
   const connections = {};
-  for (let group of groups) {
+  for (const group of groups) {
     const ids = group.map(perk => perk.id);
     const start = ids.shift();
     connections[start] = ids;

@@ -6,7 +6,7 @@ Vue.component("dilation-time-study", {
     return {
       showCost: true,
       showRequirement: false,
-      requirement: String.empty
+      requirement: ""
     };
   },
   computed: {

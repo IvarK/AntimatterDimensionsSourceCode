@@ -92,8 +92,6 @@ function safeCall(fn) {
     if (fn) fn();
 }
 
-String.empty = "";
-
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };

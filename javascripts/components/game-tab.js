@@ -25,7 +25,7 @@ Vue.component('game-tab', {
     );
     if (!this.$slots.default) return renderResult;
     for (let slot of this.$slots.default) {
-      let staticClass = String.empty;
+      let staticClass = "";
       if (!slot.data) {
         slot.data = {};
       }

@@ -389,7 +389,7 @@ Notation.roman = new class RomanNotation extends Notation {
     const decimalValue = this._decimalValue;
     const romanNumeral = this._romanNumeral;
     const romanFractions = this._romanFractions;
-    let roman = String.empty;
+    let roman = "";
     for (let i = 0; i < decimalValue.length; i++) {
       while (decimalValue[i] <= value) {
         roman += romanNumeral[i];
@@ -398,7 +398,7 @@ Notation.roman = new class RomanNotation extends Notation {
     }
     let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
     if (duodecimal === 0) {
-      return roman === String.empty ? "nulla" : roman;
+      return roman === "" ? "nulla" : roman;
     }
     if (duodecimal > 5) {
       duodecimal -= 6;

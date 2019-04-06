@@ -10,7 +10,7 @@ function eternity(force, auto, switchingDilation) {
       if (!canEternity()) force = true;
     }
     if (force) {
-      player.currentEternityChall = String.empty;
+      player.currentEternityChall = "";
     }
     else {
       if (!canEternity()) return false;

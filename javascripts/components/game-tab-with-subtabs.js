@@ -8,7 +8,7 @@ Vue.component('game-tab-with-subtabs', {
       return this.tabs[0];
     },
     openedTab: function() {
-      if (!this.value || this.value === String.empty) {
+      if (!this.value || this.value === "") {
         return this.firstTab;
       }
       const tab = this.tabs.find(tab => tab.id === this.value);

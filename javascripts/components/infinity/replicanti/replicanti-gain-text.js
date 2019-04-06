@@ -1,7 +1,7 @@
 Vue.component("replicanti-gain-text", {
   data() {
     return {
-      text: String.empty
+      text: ""
     };
   },
   methods: {

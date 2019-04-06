@@ -3,7 +3,7 @@ let ui = {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: String.empty,
+      message: "",
       callback: undefined,
       closeButton: false,
       glyphSelection: false,
@@ -11,33 +11,33 @@ let ui = {
     tabs: {
       current: undefined,
       dimensions: {
-        subtab: String.empty,
+        subtab: "",
         normal: {
           floatingText: Array.from({length: 9}, () => [])
         },
       },
       statistics: {
-        subtab: String.empty
+        subtab: ""
       },
       achievements: {
-        subtab: String.empty
+        subtab: ""
       },
       challenges: {
-        subtab: String.empty
+        subtab: ""
       },
       infinity: {
-        subtab: String.empty
+        subtab: ""
       },
       eternity: {
-        subtab: String.empty
+        subtab: ""
       },
       reality: {
-        subtab: String.empty,
+        subtab: "",
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
       },
       celestials: {
-        subtab: String.empty
+        subtab: ""
       }
     },
     shiftDown: false,
@@ -46,5 +46,5 @@ let ui = {
     scrollWindow: 0,
     draggingUIID: -1,
   },
-  notationName: String.empty,
+  notationName: "",
 };

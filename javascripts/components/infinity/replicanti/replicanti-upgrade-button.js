@@ -4,9 +4,9 @@ Vue.component("replicanti-upgrade-button", {
   },
   data: function() {
     return {
-      description: String.empty,
+      description: "",
       canBeBought: false,
-      costDescription: String.empty,
+      costDescription: "",
       isCapped: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,

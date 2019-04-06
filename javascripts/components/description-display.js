@@ -10,7 +10,7 @@ Vue.component("description-display", {
   },
   data() {
     return {
-      description: String.empty
+      description: ""
     };
   },
   watch: {

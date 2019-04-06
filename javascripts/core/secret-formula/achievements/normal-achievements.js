@@ -42,7 +42,8 @@ GameDatabase.achievements.normal = [
   {
     id: 21,
     name: "To infinity!",
-    tooltip: "Reach Infinite antimatter. Reward: Start with 100 antimatter.",
+    tooltip: "Reach Infinite antimatter.",
+    reward: "Start with 100 antimatter.",
     effect: 100
   },
   {
@@ -53,7 +54,8 @@ GameDatabase.achievements.normal = [
   {
     id: 23,
     name: "The 9th Dimension is a lie",
-    tooltip: "Have exactly 99 8th Dimensions. Reward: 8th Dimensions are 10% stronger.",
+    tooltip: "Have exactly 99 8th Dimensions.",
+    reward: "8th Dimensions are 10% stronger.",
     effect: 1.1
   },
   {
@@ -79,19 +81,22 @@ GameDatabase.achievements.normal = [
   {
     id: 28,
     name: "There's no point in doing that",
-    tooltip: () => `Buy a single 1st Dimension when you have over ${shorten(1e150, 0, 0)} of them. Reward: 1st Dimensions are 10% stronger.`,
+    tooltip: () => `Buy a single 1st Dimension when you have over ${shorten(1e150, 0, 0)} of them.`,
+    reward: "1st Dimensions are 10% stronger.",
     effect: 1.1
   },
   {
     id: 31,
     name: "I forgot to nerf that",
-    tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}. Reward: 1st Dimensions are 5% stronger.`,
+    tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}`,
+    reward: "1st Dimensions are 5% stronger.",
     effect: 1.05
   },
   {
     id: 32,
     name: "The Gods are pleased",
-    tooltip: "Get over 600x from Dimensional Sacrifice in total. Reward: Sacrifice is slightly stronger.",
+    tooltip: "Get over 600x from Dimensional Sacrifice in total.",
+    reward: "Sacrifice is slightly stronger.",
     effect: 0.2
   },
   {
@@ -102,7 +107,8 @@ GameDatabase.achievements.normal = [
   {
     id: 34,
     name: "You didn't need it anyway",
-    tooltip: "Reach Infinite antimatter without having any 8th Dimensions. Reward: Dimensions 1-7 are 2% stronger.",
+    tooltip: "Reach Infinite antimatter without having any 8th Dimensions.",
+    reward: "Dimensions 1-7 are 2% stronger.",
     effect: 1.02
   },
   {
@@ -113,13 +119,15 @@ GameDatabase.achievements.normal = [
   {
     id: 36,
     name: "Claustrophobic",
-    tooltip: "Go Infinite with just 1 Antimatter Galaxy. Reward: Reduces starting tick interval by 2%.",
+    tooltip: "Go Infinite with just 1 Antimatter Galaxy.",
+    reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
   {
     id: 37,
     name: "That's fast!",
-    tooltip: "Go infinite in under 2 hours. Reward: Start with 1000 antimatter.",
+    tooltip: "Go infinite in under 2 hours.",
+    reward: "Start with 1000 antimatter.",
     effect: 1000
   },
   {
@@ -140,7 +148,8 @@ GameDatabase.achievements.normal = [
   {
     id: 43,
     name: "Zero Deaths",
-    tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge. Reward: Dimensions 1-4 are 25% stronger.",
+    tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
+    reward: "Dimensions 1-4 are 25% stronger.",
     effect: 1.25
   },
   {
@@ -151,7 +160,8 @@ GameDatabase.achievements.normal = [
   {
     id: 45,
     name: "Faster than a potato",
-    tooltip: () => `Get more than ${shorten(1e29, 0, 0)} ticks per second. Reward: Reduces starting tick interval by 2%.`,
+    tooltip: () => `Get more than ${shorten(1e29, 0, 0)} ticks per second.`,
+    reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
   {
@@ -167,7 +177,8 @@ GameDatabase.achievements.normal = [
   {
     id: 48,
     name: "AntiChallenged",
-    tooltip: "Complete all the challenges. Reward: All Dimensions are 10% stronger.",
+    tooltip: "Complete all the challenges.",
+    reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
   {
@@ -188,32 +199,37 @@ GameDatabase.achievements.normal = [
   {
     id: 54,
     name: "That's faster!",
-    tooltip: "Infinity in 10 minutes or less. Reward: Start with 200000 antimatter.",
+    tooltip: "Infinity in 10 minutes or less.",
+    reward: "Start with 200000 antimatter.",
     effect: 2e5
   },
   {
     id: 55,
     name: "Forever isn't that long",
-    tooltip: "Infinity in 1 minute or less. Reward: Start with 1e10 antimatter.",
+    tooltip: "Infinity in 1 minute or less.",
+    reward: "Start with 1e10 antimatter.",
     effect: 1e10
   },
   {
     id: 56,
     name: "Many Deaths",
-    tooltip: "Complete the Second Dimension Autobuyer challenge in 3 minutes or less. Reward: All Dimensions are stronger in the first 3 minutes of Infinities.",
+    tooltip: "Complete the Second Dimension Autobuyer challenge in 3 minutes or less.",
+    reward: "All Dimensions are stronger in the first 3 minutes of Infinities.",
     effect: () => 6 / (Time.thisInfinity.totalMinutes + 3),
     effectCondition: () => Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 57,
     name: "Gift from the Gods",
-    tooltip: "Complete the Eighth Dimension Autobuyer challenge in 3 minutes or less. Reward: Dimensional sacrifices are a lot stronger.",
+    tooltip: "Complete the Eighth Dimension Autobuyer challenge in 3 minutes or less.",
+    reward: "Dimensional sacrifices are a lot stronger.",
     effect: 0.2
   },
   {
     id: 58,
     name: "Is this hell?",
-    tooltip: "Complete the Tickspeed Autobuyer challenge in 3 minutes or less. Reward: Boost per 10 Dimensions +1%.",
+    tooltip: "Complete the Tickspeed Autobuyer challenge in 3 minutes or less.",
+    reward: "Boost per 10 Dimensions +1%.",
     effect: 1.01
   },
   {
@@ -239,14 +255,16 @@ GameDatabase.achievements.normal = [
   {
     id: 65,
     name: "Not-so-challenging",
-    tooltip: "Get the sum of all of your challenge times under 3 minutes. Reward: All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
+    tooltip: "Get the sum of all of your challenge times under 3 minutes.",
+    reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => player.currentChallenge !== "" && Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 66,
     name: "Faster than a squared potato",
-    tooltip: () => `Get more than ${shorten(1e58, 0, 0)} ticks per second. Reward: Reduces starting tick interval by 2%.`,
+    tooltip: () => `Get more than ${shorten(1e58, 0, 0)} ticks per second.`,
+    reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
   {
@@ -257,55 +275,66 @@ GameDatabase.achievements.normal = [
   {
     id: 68,
     name: "You did this again just for the achievement right?",
-    tooltip: "Complete the Third Dimension Autobuyer challenge in 10 seconds or less. Reward: 1st Dimensions are 50% stronger.",
+    tooltip: "Complete the Third Dimension Autobuyer challenge in 10 seconds or less.",
+    reward: "1st Dimensions are 50% stronger.",
     effect: 1.5
   },
   {
     id: 71,
     name: "ERROR 909: Dimension not found",
-    tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts or Antimatter Galaxies, while in the Automatic Antimatter Galaxies Challenge. Reward: 1st Dimensions are 3 times stronger.",
+    tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts " +
+      "or Antimatter Galaxies, while in the Automatic Antimatter Galaxies Challenge.",
+    reward: "1st Dimensions are 3 times stronger.",
     effect: 3
   },
   {
     id: 72,
     name: "Can't hold all these infinities",
-    tooltip: "Get all Dimension multipliers over 1e308. Reward: All Dimensions are 10% stronger.",
+    tooltip: "Get all Dimension multipliers over 1e308.",
+    reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
   {
     id: 73,
     name: "This achievement doesn't exist",
-    tooltip: "Get 9.9999e9999 antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.",
+    tooltip: "Get 9.9999e9999 antimatter.",
+    reward: "Dimensions are more powerful the more unspent antimatter you have.",
     effect: () => player.money.pow(0.00002).clampMin(1)
   },
   {
     id: 74,
     name: "End me",
-    tooltip: "Get the sum of all best challenge times under 5 seconds. Reward: All Dimensions are 40% stronger, but only in challenges.",
+    tooltip: "Get the sum of all best challenge times under 5 seconds.",
+    reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
     effectCondition: () => player.currentChallenge !== ""
   },
   {
     id: 75,
     name: "NEW DIMENSIONS???",
-    tooltip: "Unlock the 4th Infinity Dimension. Reward: Your achievement bonus affects Infinity Dimensions.",
+    tooltip: "Unlock the 4th Infinity Dimension.",
+    reward: "Your achievement bonus affects Infinity Dimensions.",
     effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))
   },
   {
     id: 76,
     name: "One for each dimension",
-    tooltip: "Play for 8 days. Reward: Extremely small multiplier to Dimensions based on time played.",
+    tooltip: "Play for 8 days.",
+    reward: "Extremely small multiplier to Dimensions based on time played.",
     effect: () => Math.pow(Time.totalTimePlayed.totalDays / 2, 0.05)
   },
   {
     id: 77,
     name: "How the antitables have turned",
-    tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc. Reward: Each Dimension gains a boost proportional to tier (8th dimension gets 8%, 7th gets 7%, etc.)"
+    tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
+    reward: "Each Dimension gains a boost proportional to tier (8th dimension gets 8%, 7th gets 7%, etc.)",
   },
   {
     id: 78,
     name: "Blink of an eye",
-    tooltip: () => `Get to Infinity in under 200 milliseconds. Reward: Start with ${shorten(1e25, 0, 0)} antimatter and all Dimensions are stronger in the first 300ms of Infinities.`,
+    tooltip: "Get to Infinity in under 200 milliseconds.",
+    reward: () => `Start with ${shorten(1e25, 0, 0)} antimatter ` +
+      "and all Dimensions are stronger in the first 300ms of Infinities.",
     effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
     effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
     secondaryEffect: () => 1e25
@@ -323,70 +352,81 @@ GameDatabase.achievements.normal = [
   {
     id: 83,
     name: "YOU CAN GET 50 GALAXIES!??",
-    tooltip: "Get 50 Antimatter Galaxies. Reward: Tickspeed is 5% lower per Antimatter Galaxy.",
+    tooltip: "Get 50 Antimatter Galaxies.",
+    reward: "Tickspeed is 5% lower per Antimatter Galaxy.",
     effect: () => Decimal.pow(0.95, player.galaxies)
   },
   {
     id: 84,
     name: "I got a few to spare",
-    tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.`,
+    tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter.`,
+    reward: "Dimensions are more powerful the more unspent antimatter you have.",
     effect: () => player.money.pow(0.00004).clampMin(1)
   },
   {
     id: 85,
     name: "All your IP are belong to us",
-    tooltip: () => `Big Crunch for ${shorten(1e150, 0, 0)} IP. Reward: Additional 4x multiplier to IP.`,
+    tooltip: () => `Big Crunch for ${shorten(1e150, 0, 0)} IP.`,
+    reward: "Additional 4x multiplier to IP.",
     effect: 4
   },
   {
     id: 86,
     name: "Do you even bend time bro?",
-    tooltip: "Reach -99.9% tickspeed per upgrade. Reward: Galaxies are 1% more powerful.",
+    tooltip: "Reach -99.9% tickspeed per upgrade.",
+    reward: "Galaxies are 1% more powerful.",
     effect: 1.01
   },
   {
     id: 87,
     name: "2 Million Infinities",
-    tooltip: "Infinity 2000000 times. Reward: Infinities more than 5 seconds long give 250 infinitied stat.",
+    tooltip: "Infinity 2000000 times.",
+    reward: "Infinities more than 5 seconds long give 250 infinitied stat.",
     effect: 250,
     effectCondition: () => Time.thisInfinity.totalSeconds > 5
   },
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice. Reward: Sacrifices are stronger.`,
+    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`,
+    reward: "Sacrifices are stronger.",
     effect: 0.011,
   },
   {
     id: 91,
     name: "Ludicrous Speed",
-    tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in 2 seconds or less. Reward: All Dimensions are significantly stronger in the first 5 seconds of Infinities.`,
+    tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in 2 seconds or less.`,
+    reward: "All Dimensions are significantly stronger in the first 5 seconds of Infinities.",
     effect: () => Math.max((5 - Time.thisInfinity.totalSeconds) * 60, 1),
     effectCondition: () => Time.thisInfinity.totalSeconds < 5
   },
   {
     id: 92,
     name: "I brake for nobody",
-    tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in 20 seconds or less. Reward: All Dimensions are significantly stronger in the first 60 seconds of Infinities.`,
+    tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in 20 seconds or less.`,
+    reward: "All Dimensions are significantly stronger in the first 60 seconds of Infinities.",
     effect: () => Math.max((1 - Time.thisInfinity.totalMinutes) * 100, 1),
     effectCondition: () => Time.thisInfinity.totalMinutes < 1
   },
   {
     id: 93,
     name: "MAXIMUM OVERDRIVE",
-    tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min. Reward: Additional 4x multiplier to IP.`,
+    tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min.`,
+    reward: "Additional 4x multiplier to IP.",
     effect: 4
   },
   {
     id: 94,
     name: "4.3333 minutes of Infinity",
-    tooltip: () => `Reach ${shorten(1e260, 0, 0)} infinity power. Reward: Double Infinity power gain.`,
+    tooltip: () => `Reach ${shorten(1e260, 0, 0)} infinity power.`,
+    reward: "Double Infinity power gain.",
     effect: 2
   },
   {
     id: 95,
     name: "Is this safe?",
-    tooltip: "Gain Infinite replicanti in 30 minutes. Reward: Infinity doesn't reset your Replicanti amount."
+    tooltip: "Gain Infinite replicanti in 30 minutes.",
+    reward: "Infinity doesn't reset your Replicanti amount."
   },
   {
     id: 96,
@@ -406,7 +446,8 @@ GameDatabase.achievements.normal = [
   {
     id: 101,
     name: "Costco sells dimboosts now",
-    tooltip: "Bulk buy 750 Dimension Boosts at once. Reward: Dimension Boosts are 1% more powerful (to Normal Dimensions).",
+    tooltip: "Bulk buy 750 Dimension Boosts at once.",
+    reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
     effect: 1.01
   },
   {
@@ -417,19 +458,22 @@ GameDatabase.achievements.normal = [
   {
     id: 103,
     name: "This achievement doesn't exist II",
-    tooltip: "Reach 9.99999e999 IP. Reward: Gain more IP based on amount of antimatter you had when crunching.",
+    tooltip: "Reach 9.99999e999 IP.",
+    reward: "Gain more IP based on amount of antimatter you had when crunching.",
     effect: 307.8
   },
   {
     id: 104,
     name: "That wasn't an eternity",
-    tooltip: "Eternity in under 30 seconds. Reward: Start Eternities with 2e25 IP.",
+    tooltip: "Eternity in under 30 seconds.",
+    reward: "Start Eternities with 2e25 IP.",
     effect: 2e25
   },
   {
     id: 105,
     name: "Infinite time",
-    tooltip: "Get 308 tickspeed upgrades (in one Eternity) from Time Dimensions. Reward: Time Dimensions are affected slightly by tickspeed.",
+    tooltip: "Get 308 tickspeed upgrades (in one Eternity) from Time Dimensions.",
+    reward: "Time Dimensions are affected slightly by tickspeed.",
     effect: () => player.tickspeed.div(1000).pow(0.000005).reciprocate()
   },
   {
@@ -450,23 +494,28 @@ GameDatabase.achievements.normal = [
   {
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
-    tooltip: () => `Have all your Infinities in your past 10 Infinities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one. Reward: Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy.`
+    tooltip: () => "Have all your Infinities in your past 10 Infinities be at least " +
+      `${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one.`,
+    reward: "Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy."
   },
   {
     id: 112,
     name: "Never again",
-    tooltip: "Max out your third Eternity upgrade. Reward: The limit for it is a bit higher.",
+    tooltip: "Max out your third Eternity upgrade.",
+    reward: "The limit for it is a bit higher.",
     effect: 610
   },
   {
     id: 113,
     name: "Long lasting relationship",
-    tooltip: "Have your Infinity power per second exceed your Infinity power for 60 consecutive seconds during a single Infinity."
+    tooltip: "Have your Infinity power per second exceed your Infinity power " +
+      "for 60 consecutive seconds during a single Infinity.",
   },
   {
     id: 114,
     name: "You're a mistake",
-    tooltip: "Fail an Eternity challenge. Reward: A fading sense of accomplishment.",
+    tooltip: "Fail an Eternity challenge.",
+    reward: "A fading sense of accomplishment.",
     effect: () => "Accomplishm"
   },
   {
@@ -477,7 +526,8 @@ GameDatabase.achievements.normal = [
   {
     id: 116,
     name: "Do I really need to infinity",
-    tooltip: "Eternity with only 1 Infinity. Reward: Multiplier to IP based on Infinities.",
+    tooltip: "Eternity with only 1 Infinity.",
+    reward: "Multiplier to IP based on Infinities.",
     // Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()) can be rewritten as
     // a single pow
     effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), 0.30102999566398114),
@@ -491,7 +541,8 @@ GameDatabase.achievements.normal = [
   {
     id: 118,
     name: "IT'S OVER 9000",
-    tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}. Reward: Sacrifice doesn't reset your Dimensions.`
+    tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}.`,
+    reward: "Sacrifice doesn't reset your Dimensions.",
   },
   {
     id: 121,
@@ -516,8 +567,9 @@ GameDatabase.achievements.normal = [
   {
     id: 125,
     name: "Like feasting on a behind",
-    tooltip: () => `Reach ${shorten(1e100, 0, 0)} IP without any Infinities or 1st Dimensions. Reward: IP multiplier based on time spent this Infinity.`,
-    effect: function() {
+    tooltip: () => `Reach ${shorten(1e100, 0, 0)} IP without any Infinities or 1st Dimensions.`,
+    reward: "IP multiplier based on time spent this Infinity.",
+    effect() {
       const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
       return Decimal.pow(2, Math.log(thisInfinity) * Math.min(Math.pow(thisInfinity, 0.11), 500));
     },
@@ -526,7 +578,9 @@ GameDatabase.achievements.normal = [
   {
     id: 126,
     name: "Popular music",
-    tooltip: () => `Have 180 times more Replicanti Galaxies than Antimatter Galaxies. Reward: Replicanti galaxies divide your Replicanti by ${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`
+    tooltip: "Have 180 times more Replicanti Galaxies than Antimatter Galaxies.",
+    reward: () => "Replicanti galaxies divide your Replicanti by " +
+      `${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`,
   },
   {
     id: 127,
@@ -536,30 +590,35 @@ GameDatabase.achievements.normal = [
   {
     id: 128,
     name: "What do I have to do to get rid of you",
-    tooltip: () => `Reach ${shorten("1e22000", 0, 0)} IP without any time studies. Reward: Time Dimensions are multiplied by the number of studies you have.`,
+    tooltip: () => `Reach ${shorten("1e22000", 0, 0)} IP without any time studies.`,
+    reward: "Time Dimensions are multiplied by the number of studies you have.",
     effect: () => Math.max(player.timestudy.studies.length, 1)
   },
   {
     id: 131,
     name: "No ethical consumption",
-    tooltip: "Get 5 billion banked Infinities. Reward: After Eternity you permanently keep 5% of your Infinities.",
+    tooltip: "Get 5 billion banked Infinities.",
+    reward: "After Eternity you permanently keep 5% of your Infinities.",
     effect: () => player.infinitied.times(0.05).floor()
   },
   {
     id: 132,
     name: "Unique snowflakes",
-    tooltip: "Have 630 Antimatter Galaxies without having any Replicanti Galaxies. Reward: Gain a multiplier to Dilated Time gain based on Antimatter Galaxies.",
+    tooltip: "Have 630 Antimatter Galaxies without having any Replicanti Galaxies.",
+    reward: "Gain a multiplier to Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1)
   },
   {
     id: 133,
     name: "I never liked this infinity stuff anyway",
-    tooltip: () => `Reach ${shorten("1e200000", 0, 0)} IP without buying IDs or IP multipliers. Reward: You start Eternities with all Infinity Challenges unlocked and completed.`
+    tooltip: () => `Reach ${shorten("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    reward: "You start Eternities with all Infinity Challenges unlocked and completed."
   },
   {
     id: 134,
     name: "When will it be enough?",
-    tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti. Reward: You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
+    tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti.`,
+    reward: () => `You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
@@ -579,25 +638,30 @@ GameDatabase.achievements.normal = [
   {
     id: 138,
     name: "This is what I have to do to get rid of you.",
-    tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated. Reward: The active time study path doesn't disable your Replicanti autobuyer.`
+    tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated.`,
+    reward: "The active time study path doesn't disable your Replicanti autobuyer."
   },
   {
     id: 141,
     name: "Snap back to reality",
-    tooltip: "Make a new Reality. Reward: 4x IP gain and boost from buying 10 Dimensions +0.1",
+    tooltip: "Make a new Reality.",
+    reward: "4x IP gain and boost from buying 10 Dimensions +0.1",
     effect: 4,
     secondaryEffect: () => 0.1
   },
   {
     id: 142,
     name: "How does this work?",
-    tooltip: "Unlock the automator. Reward: Dimension Boosts are 50% more effective.",
+    tooltip: "Unlock the automator.",
+    reward: "Dimension Boosts are 50% more effective.",
     effect: 1.5,
   },
   {
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
-    tooltip: () => `Have all your Eternities in your past 10 Eternities be at least ${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one. Reward: nothing right now.`
+    tooltip: () => "Have all your Eternities in your past 10 Eternities be at least " +
+      `${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one.`,
+    reward: "nothing right now."
   },
   {
     id: 144,

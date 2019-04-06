@@ -35,8 +35,15 @@ Vue.component('normal-achievement', {
       };
     },
     detailsTooltip() {
-      const tooltip = this.achievement.config.tooltip;
-      return typeof tooltip === "function" ? tooltip() : tooltip;
+      function evaluateText(prop) {
+        return typeof prop === "function" ? prop() : prop;
+      }
+      const { config } = this.achievement;
+      let tooltip = evaluateText(config.tooltip);
+      if (config.reward !== undefined) {
+        tooltip += ` Reward: ${evaluateText(config.reward)}`;
+      }
+      return tooltip;
     },
     lockedTooltip() {
       const remainingTime = this.remainingTime;

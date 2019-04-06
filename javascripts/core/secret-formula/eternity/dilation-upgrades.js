@@ -28,9 +28,9 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        Perk.bypassDGReset.isBought ?
-        "Reset Dilated Galaxies, but lower their threshold" :
-        "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
+        (Perk.bypassDGReset.isBought
+        ? "Reset Dilated Galaxies, but lower their threshold"
+        : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
       formatEffect: () => getFreeGalaxyMult().toFixed(3),
       formatCost: value => shorten(value, 2, 0)
@@ -54,10 +54,10 @@ GameDatabase.eternity.dilation = (function() {
       id: 5,
       cost: 1e9,
       description: () => {
-        let mult = replicantiMult().log10();
+        const mult = replicantiMult().log10();
         const ratio = DilationUpgrade.tdMultReplicanti.effectValue.log10() / mult;
-        let out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
-        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`
+        const out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
+        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`;
       },
       effect: () => {
         let rep10 = replicantiMult().log10() * 0.1;
@@ -99,4 +99,4 @@ GameDatabase.eternity.dilation = (function() {
       formatEffect: value => formatX(value, 2, 1)
     }
   };
-})();
+}());

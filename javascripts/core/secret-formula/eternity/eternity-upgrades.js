@@ -10,7 +10,7 @@ GameDatabase.eternity.upgrades = {
     id: 2,
     cost: 10,
     description: "Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x))",
-    effect: function() {
+    effect() {
       const log4 = Math.log4;
       const eternities = Math.min(player.eternities, 100000);
       const base = eternities / 200 + 1;
@@ -26,7 +26,7 @@ GameDatabase.eternity.upgrades = {
     id: 3,
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
-    effect: function() {
+    effect() {
       const sumOfRecords = Math.max(infchallengeTimes, Effects.min(750, Achievement(112)));
       return Decimal.pow(2, 30000 / sumOfRecords);
     },

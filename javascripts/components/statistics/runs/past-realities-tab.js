@@ -1,10 +1,10 @@
-Vue.component('past-realities-tab', {
+Vue.component("past-realities-tab", {
   mixins: [pastRunsMixin],
-  data: function() {
+  data() {
     return {
       runs: player.lastTenRealities,
-      reward: function(run) {
-        let rm = run[1].eq(1) ? " reality machine" : " reality machines";
+      reward(run) {
+        const rm = run[1].eq(1) ? " reality machine" : " reality machines";
         return this.runGain(run) + rm + " and a level " + run[2] + " glyph";
       }
     };

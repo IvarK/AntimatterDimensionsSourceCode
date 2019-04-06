@@ -1,9 +1,9 @@
-Vue.component('past-eternities-tab', {
+Vue.component("past-eternities-tab", {
   mixins: [pastRunsMixin],
-  data: function() {
+  data() {
     return {
       runs: player.lastTenEternities,
-      reward: function(run) {
+      reward(run) {
         return this.runGain(run) + " EP";
       }
     };

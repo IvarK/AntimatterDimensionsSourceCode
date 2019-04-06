@@ -1,9 +1,9 @@
-Vue.component('past-infinities-tab', {
+Vue.component("past-infinities-tab", {
   mixins: [pastRunsMixin],
-  data: function() {
+  data() {
     return {
       runs: player.lastTenRuns,
-      reward: function(run) {
+      reward(run) {
         return this.runGain(run) + " IP";
       }
     };

@@ -113,7 +113,8 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `${shorten(1e70)} EP without EC1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       description: "EP mult based on Realities and TT",
-      effect: () => player.timestudy.theorem.minus(1e3).clampMin(2).pow(Math.log2(player.realities)).clampMin(1),
+      effect: () => player.timestudy.theorem.minus(1e3).clampMin(2).pow(
+        Math.log2(Math.min(player.realities, 1e4))).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {

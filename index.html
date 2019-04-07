@@ -105,6 +105,7 @@
                 <div class="l-reality-button-column">
                   <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
                     <reality-button></reality-button>
+                    <reality-amplify-button></reality-amplify-button>
                     <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'" label="Glyph level factors"
                         container-class="c-glyph-level-factors-dropdown-header">
                       <glyph-levels-and-weights slot="dropdown" />
@@ -571,6 +572,7 @@
 <script type="text/javascript" src="javascripts/components/reality/glyphs/current-glyph-effects.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/sacrificed-glyphs.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-inventory.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/reality-amplify-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-animation.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-state-row.js"></script>

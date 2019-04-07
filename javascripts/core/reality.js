@@ -65,17 +65,27 @@ function requestManualReality() {
     alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
     return;
   }
+  const level = gainedGlyphLevel();
+  if (Enslaved.boostReality) {
+    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
+    if (Enslaved.lockedInBoostRatio > 1) {
+      Enslaved.lockedInGlyphLevel = level;
+      Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      manualReality();
+      return;
+    }
+  }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
-  let choiceCount = GlyphSelection.choiceCount;
-  let level = gainedGlyphLevel();
+  const choiceCount = GlyphSelection.choiceCount;
   if (choiceCount === 1) {
     // First reality gets a specially generated glyph:
     const newGlyph = player.realities === 0
       ? GlyphGenerator.startingGlyph(level)
       : GlyphGenerator.randomGlyph(level);
     Glyphs.addToInventory(newGlyph);
-    return manualReality();
+    manualReality();
+    return;
   }
   GlyphSelection.generate(choiceCount, level);
 }
@@ -85,12 +95,12 @@ function manualReality() {
     document.getElementById("container").style.animation = "realize 10s 1";
     document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
     document.getElementById("realityanimbg").style.display = "block";
-    setTimeout(function () {
+    setTimeout(() => {
       document.getElementById("realityanimbg").play();
       document.getElementById("realityanimbg").currentTime = 0;
       document.getElementById("realityanimbg").play();
     }, 2000);
-    setTimeout(function () {
+    setTimeout(() => {
       document.getElementById("container").style.animation = "";
       document.getElementById("realityanimbg").style.animation = "";
       document.getElementById("realityanimbg").style.display = "none";
@@ -101,12 +111,10 @@ function manualReality() {
   }
 }
 
-function autoReality() {
-  if (GlyphSelection.active || !isRealityAvailable()) return;
-  let gainedLevel = gainedGlyphLevel();
+function processAutoGlyph(gainedLevel) {
   let newGlyph;
   if (EffarigUnlock.autopicker.isUnlocked) {
-    let glyphs = Array.range(0, GlyphSelection.choiceCount)
+    const glyphs = Array.range(0, GlyphSelection.choiceCount)
       .map(() => GlyphGenerator.randomGlyph(gainedLevel));
     newGlyph = AutoGlyphPicker.pick(glyphs);
   } else {
@@ -114,9 +122,6 @@ function autoReality() {
   }
   if (EffarigUnlock.autosacrifice.isUnlocked) {
     if (AutoGlyphSacrifice.wouldSacrifice(newGlyph) || !Player.hasFreeInventorySpace) {
-      // FIXME: remove console.log after initial rollout to testers
-      console.log("Sacrificing a glyph: ")
-      console.log(newGlyph);
       sacrificeGlyph(newGlyph, true);
       newGlyph = null;
     }
@@ -124,11 +129,45 @@ function autoReality() {
   if (newGlyph && Player.hasFreeInventorySpace) {
     Glyphs.addToInventory(newGlyph);
   }
+}
+
+function autoReality() {
+  if (GlyphSelection.active || !isRealityAvailable()) return;
+  const gainedLevel = gainedGlyphLevel();
+  if (Enslaved.boostReality) {
+    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
+    if (Enslaved.lockedInBoostRatio > 1) {
+      Enslaved.lockedInGlyphLevel = gainedLevel;
+      Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      completeReality(false, false, true);
+      return;
+    }
+  }
+  processAutoGlyph(gainedLevel);
   completeReality(false, false, true);
+}
+
+function boostedRealityRewards() {
+  // The ratio is the amount on top of the regular reality amount.
+  const ratio = Enslaved.lockedInBoostRatio;
+  player.reality.realityMachines = player.reality.realityMachines
+    .plus(Enslaved.lockedInRealityMachines.times(ratio));
+  // No glyph reward was given earlier
+  for (let glyphCount = 0; glyphCount < ratio + 1; ++glyphCount) {
+    processAutoGlyph(Enslaved.lockedInGlyphLevel);
+  }
+  player.realities += ratio;
+  player.reality.pp += ratio;
+  player.celestials.enslaved.storedReal = 0;
+  Enslaved.lockedInBoostRatio = 1;
+  Enslaved.boostReality = false;
 }
 
 function completeReality(force, reset, auto = false) {
   if (!reset) {
+    if (Enslaved.lockedInBoostRatio > 1) {
+      boostedRealityRewards();
+    }
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
     }

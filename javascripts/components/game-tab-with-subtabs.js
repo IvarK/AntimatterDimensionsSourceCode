@@ -1,17 +1,23 @@
-Vue.component('game-tab-with-subtabs', {
-  props: ['tabs', 'value'],
+Vue.component("game-tab-with-subtabs", {
+  props: {
+    tabs: Array,
+    value: {
+      type: String,
+      default: undefined
+    }
+  },
   computed: {
-    visibleTabs: function() {
+    visibleTabs() {
       return this.tabs.filter(tab => this.isUnlocked(tab));
     },
-    firstTab: function() {
+    firstTab() {
       return this.tabs[0];
     },
-    openedTab: function() {
+    openedTab() {
       if (!this.value || this.value === "") {
         return this.firstTab;
       }
-      const tab = this.tabs.find(tab => tab.id === this.value);
+      const tab = this.tabs.find(t => t.id === this.value);
       if (!this.isUnlocked(tab)) {
         return this.firstTab;
       }

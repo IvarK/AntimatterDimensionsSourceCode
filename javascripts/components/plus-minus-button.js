@@ -6,9 +6,9 @@ Vue.component("plus-minus-button", {
     },
     size: String,
   },
-  data: function() {
+  data() {
     return {
-      color: 'white',
+      color: "white",
       computedSize: 0,
     };
   },
@@ -32,12 +32,10 @@ Vue.component("plus-minus-button", {
   },
   methods: {
     hvStyle(rx, ry) {
-      var szx = this.findGoodSizes(rx);
-      var szy = this.findGoodSizes(ry);
+      const szx = this.findGoodSizes(rx);
+      const szy = this.findGoodSizes(ry);
       return {
         display: "block !important",
-        width: this.size,
-        height: this.size,
         position: "absolute !important",
         width: szx[1],
         height: szy[1],
@@ -46,12 +44,15 @@ Vue.component("plus-minus-button", {
         background: this.color,
        };
     },
-    /* Given a desired width or height, this finds a pixel-perfect value for the
-    dimension (width or height) and offset (left or top) */
+    // Given a desired width or height, this finds a pixel-perfect value for the
+    // dimension (width or height) and offset (left or top)
     findGoodSizes(x) {
-      var edgePixels = Math.round(this.computedSize * (1 - x)/2);
-      var midPixels = this.computedSize - edgePixels * 2;
-      return [(edgePixels/this.computedSize * 100).toFixed(2)+"%", (midPixels/this.computedSize * 100).toFixed(2)+"%"]
+      const edgePixels = Math.round(this.computedSize * (1 - x) / 2);
+      const midPixels = this.computedSize - edgePixels * 2;
+      return [
+        (edgePixels / this.computedSize * 100).toFixed(2) + "%",
+        (midPixels / this.computedSize * 100).toFixed(2) + "%"
+      ];
     },
   },
   template:

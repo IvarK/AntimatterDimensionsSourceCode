@@ -1,4 +1,4 @@
-Vue.component('primary-button', {
+Vue.component("primary-button", {
   props: {
     enabled: {
       type: Boolean,
@@ -10,7 +10,7 @@ Vue.component('primary-button', {
       <slot/>
     </button>`,
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "o-primary-btn": true,
         "o-primary-btn--disabled": !this.enabled,
@@ -19,7 +19,7 @@ Vue.component('primary-button', {
   }
 });
 
-Vue.component('primary-button-on-off-custom', {
+Vue.component("primary-button-on-off-custom", {
   props: {
     on: String,
     off: String,
@@ -29,7 +29,7 @@ Vue.component('primary-button-on-off-custom', {
     '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{value ? on : off}}</primary-button>'
 });
 
-Vue.component('primary-button-on-off', {
+Vue.component("primary-button-on-off", {
   props: {
     text: String,
     value: Boolean
@@ -37,7 +37,7 @@ Vue.component('primary-button-on-off', {
   template:
     '<primary-button v-bind="$attrs" @click="emitInput(!value)">{{displayText}}</primary-button>',
   computed: {
-    displayText: function() {
+    displayText() {
       let text = this.text;
       text = text && text.length > 0 ? text + " " : "";
       return this.value ? text + "ON" : text + "OFF";

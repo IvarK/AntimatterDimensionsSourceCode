@@ -9,8 +9,8 @@
 // But why render function? The problem is that one cannot pass classes straight to slots,
 // and given that $slots.default is an array, we need to manually patch them with l-game-tab__content
 
-Vue.component('game-tab', {
-  render: function (createElement) {
+Vue.component("game-tab", {
+  render(createElement) {
     const renderResult = createElement(
       "div", { class: { "l-game-tab": true } },
       [
@@ -24,7 +24,7 @@ Vue.component('game-tab', {
       ]
     );
     if (!this.$slots.default) return renderResult;
-    for (let slot of this.$slots.default) {
+    for (const slot of this.$slots.default) {
       let staticClass = "";
       if (!slot.data) {
         slot.data = {};

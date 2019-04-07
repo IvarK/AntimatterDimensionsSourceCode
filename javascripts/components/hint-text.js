@@ -1,6 +1,6 @@
 Vue.component("hint-text", {
   computed: {
-    isVisible: function() {
+    isVisible() {
       return ui.view.shiftDown;
     }
   },

@@ -37,7 +37,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "infinitiedMult",
       cost: 1e5,
       description: "Normal dimensions gain a multiplier based on amount infinitied",
-      effect: () => 1 + Player.totalInfinitied.clampMin(1).log10() * 10,
+      effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {

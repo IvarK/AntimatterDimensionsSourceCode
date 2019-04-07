@@ -1,66 +1,108 @@
-Vue.component('enslaved-tab', {
-  data: function() {
-    return {
-      isStoring: false,
-      stored: 0,
-      enslavedInfinities: 0,
-      unlocks: [],
-      quote: "",
-      quoteIdx: 0,
-    };
+Vue.component("enslaved-tab", {
+  data: () => ({
+    isStoringBlack: false,
+    isStoringReal: false,
+    autoStoreReal: false,
+    storedBlack: 0,
+    storedReal: 0,
+    storedRealEffiency: 0,
+    storedRealCap: 0,
+    enslavedInfinities: 0,
+    unlocks: [],
+    quote: "",
+    quoteIdx: 0,
+  }),
+  computed: {
+    storedRealEfficiencyDesc() {
+      return Math.round((this.storedRealEffiency * 100)).toString() + "%";
+    },
+    storedRealCapDesc() {
+      return timeDisplayShort(this.storedRealCap);
+    },
+    unlocksInfo() {
+      return ENSLAVED_UNLOCKS;
+    }
   },
   methods: {
     update() {
-      this.isStoring = player.celestials.enslaved.isStoring
-      this.stored = player.celestials.enslaved.stored
-      this.enslavedInfinities = Enslaved.totalInfinities
-      this.unlocks = player.celestials.enslaved.unlocks
-      this.quote = Enslaved.quote
-      this.quoteIdx = player.celestials.enslaved.quoteIdx
+      this.isStoringBlack = player.celestials.enslaved.isStoring;
+      this.storedBlack = player.celestials.enslaved.stored;
+      this.isStoringReal = player.celestials.enslaved.isStoringReal;
+      this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.storedReal = player.celestials.enslaved.storedReal;
+      this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
+      this.storedRealCap = Enslaved.storedRealTimeCap;
+      this.enslavedInfinities = Enslaved.totalInfinities;
+      this.unlocks = player.celestials.enslaved.unlocks;
+      this.quote = Enslaved.quote;
+      this.quoteIdx = player.celestials.enslaved.quoteIdx;
     },
-    toggleStore() {
-      Enslaved.toggleStore()
+    toggleStoreBlack() {
+      Enslaved.toggleStoreBlack();
+    },
+    toggleStoreReal() {
+      Enslaved.toggleStoreReal();
+    },
+    toggleAutoStoreReal() {
+      Enslaved.toggleAutoStoreReal();
     },
     useStored() {
-      Enslaved.useStoredTime()
+      Enslaved.useStoredTime();
     },
     timeDisplayShort(ms) {
-      return timeDisplayShort(ms)
+      return timeDisplayShort(ms);
     },
     buyUnlock(info) {
-      Enslaved.buyUnlock(info)
+      Enslaved.buyUnlock(info);
     },
     startRun() {
-      Enslaved.startRun()
+      Enslaved.startRun();
     },
     hasUnlock(info) {
-      return Enslaved.has(info)
+      return Enslaved.has(info);
     },
     nextQuote() {
-      Enslaved.nextQuote()
+      Enslaved.nextQuote();
     },
     hasNextQuote() {
-      return this.quoteIdx < Enslaved.maxQuoteIdx
-    }
-  },
-  computed: {
-    unlocksInfo() {
-      return ENSLAVED_UNLOCKS
+      return this.quoteIdx < Enslaved.maxQuoteIdx;
     }
   },
   template:
     `<div class="l-enslaved-celestial-tab">
-      <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
+      <div class="o-teresa-quotes"> {{ quote }}</div>
+      <button class="o-quote-button" @click="nextQuote()" v-if="hasNextQuote()">→</button>
       <div class="l-enslaved-top-container">
-        <div class="o-enslaved-stored-time"> You have {{ timeDisplayShort(stored) }} stored</div>
-        <button class="o-enslaved-mechanic-button" :class="{'o-enslaved-mechanic-button--storing-time': isStoring}" @click="toggleStore">{{ isStoring ? "Storing black hole time": "Store black hole time" }}</button>
-        <button class="o-enslaved-mechanic-button" @click="useStored">Use all stored time in a single tick</button>
+        <div class="l-enslaved-top-container__half">
+          <button :class="['o-enslaved-mechanic-button',
+                           {'o-enslaved-mechanic-button--storing-time': isStoringBlack }]"
+                  @click="toggleStoreBlack">
+            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlack) }}</div>
+            <div>{{ isStoringBlack ? "Storing black hole time": "Store black hole time" }}</div>
+          </button>
+          <button class="o-enslaved-mechanic-button" @click="useStored">Use stored black hole time</button>
+        </div>
+        <div class="l-enslaved-top-container__half">
+          <button :class="['o-enslaved-mechanic-button',
+                           {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
+                  @click="toggleStoreReal">
+            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedReal) }}</div>
+            <div>{{ isStoringReal ? "Storing real time": "Store real time" }}</div>
+          </button>
+          <button :class="['o-enslaved-mechanic-button',
+                           {'o-enslaved-mechanic-button--storing-time': autoStoreReal}]"
+                  @click="toggleAutoStoreReal">
+            <div>{{ autoStoreReal ? "Offline time stored": "Offline time used for production" }}</div>
+          </button>
+          <div> Efficiency: {{ storedRealEfficiencyDesc }} </div>
+          <div> Maximum: {{ storedRealCapDesc }} </div>
+        </div>
       </div>
       <div class="l-enslaved-shop-container">
-        <button 
-          v-for="unlock in unlocksInfo" 
-          :key="unlock.id" 
-          class="o-enslaved-shop-button" 
+        <button
+          v-for="unlock in unlocksInfo"
+          :key="unlock.id"
+          class="o-enslaved-shop-button"
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

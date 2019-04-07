@@ -514,6 +514,11 @@ button {
   background: #642a2c !important;
 }
 
+.l-reality-amplify-button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 [draggable] {
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -5000,9 +5005,30 @@ screen and (max-width: 480px) {
 
 /* #startregion enslaved tab */
 
+.l-enslaved-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-enslaved-top-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.l-enslaved-top-container__half {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 24rem;
+  margin: 1rem;
+}
+
 .o-enslaved-stored-time, .o-enslaved-gained-infinities {
   font-size: 1.6rem;
-  margin: 1rem 0;
+  min-width: 18rem;
+  padding-bottom: 0.5rem;
 }
 
 .o-enslaved-mechanic-button {
@@ -5012,6 +5038,10 @@ screen and (max-width: 480px) {
   background-color: #fdd3b0;
   cursor: pointer;
   margin: 1rem .5rem;
+  min-width: 18rem;
+  min-height: 6rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
   font-family: Typewriter;
 }
 

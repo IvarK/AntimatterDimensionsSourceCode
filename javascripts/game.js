@@ -739,6 +739,13 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 let autobuyerOnGameLoop = true;
 
 function gameLoop(diff, options = {}) {
+  // When storing real time, all we do is count time and update the UI. This ignores any logic
+  // that may have gone into diff or options.
+  if (Enslaved.isStoringRealTime) {
+    Enslaved.storeRealTime();
+    GameUI.update();
+    return;
+  }
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     const thisUpdate = Date.now();

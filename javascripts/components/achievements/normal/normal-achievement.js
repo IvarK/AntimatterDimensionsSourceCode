@@ -1,4 +1,4 @@
-Vue.component('normal-achievement', {
+Vue.component("normal-achievement", {
   props: {
     row: Number,
     column: Number
@@ -51,17 +51,15 @@ Vue.component('normal-achievement', {
         const floored = Math.floor(remainingTime);
         return `(Locked: ${floored} ${floored === 1 ? "second" : "seconds"})`;
       }
-      else if (remainingTime < 3600) {
+      if (remainingTime < 3600) {
         return "(Locked: " + (remainingTime / 60).toFixed(1) + " minutes)";
       }
-      else if (remainingTime < 86400) {
+      if (remainingTime < 86400) {
         return "(Locked: " + (remainingTime / 3600).toFixed(1) + " hours)";
       }
-      else {
-        return "(Locked: " + (remainingTime / 86400).toFixed(1) + " days)";
-      }
+      return "(Locked: " + (remainingTime / 86400).toFixed(1) + " days)";
     },
-    tooltip: function() {
+    tooltip() {
       if (this.isUnlocked && !this.isEnabled && this.isMouseOver) {
         return `${this.detailsTooltip}\n${this.lockedTooltip}`;
       }
@@ -98,11 +96,11 @@ Vue.component('normal-achievement', {
       }
       this.enablesAt = new Date().getTime() / 1000 + remainingTime;
     },
-    onMouseEnter: function() {
+    onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
       this.isMouseOver = true;
     },
-    onMouseLeave: function() {
+    onMouseLeave() {
       this.mouseOverInterval = setTimeout(() => this.isMouseOver = false, 500);
     }
   },

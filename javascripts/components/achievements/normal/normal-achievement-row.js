@@ -1,15 +1,15 @@
-Vue.component('normal-achievement-row', {
+Vue.component("normal-achievement-row", {
   props: {
     row: Number
   },
-  data: function() {
+  data() {
     return {
       isCompleted: false,
       updateStateAt: 0
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "l-achievement-grid__row": true,
         "c-achievement-grid__row--completed": this.isCompleted

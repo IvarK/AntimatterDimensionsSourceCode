@@ -541,7 +541,7 @@ button {
     cursor: move;
     font-family: Typewriter;
     box-sizing: border-box;
-    
+
 }
 
 #reality * {
@@ -908,78 +908,20 @@ br {
     pointer-events:none;
 }
 
-.l-reality-upgrade {
-  padding: 12px;
-  margin-bottom: 12px;
-  height: 100px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.c-reality-upgrade {
-  background-color: black;
-  border: 2px solid #0b600e;
-  border-radius: 5px;
-  color: #d5ffd7;
-  cursor: pointer;
-  transition-duration: 0.12s;
-  text-align: center;
-}
-
-.c-reality-upgrade:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-/*
-reality upgrade unavailable
-*/
-.rUpgUn {
-    background-color: #656565;
-    cursor: default;
-}
-
-.rUpgUn:hover {
-    background-color: #656565;
-    color: #d5ffd7;
-}
-
-.rUpgBought {
-    background-color: #0b600e;
-    border-color: #094E0B;
-    cursor: default;
-}
-
-.rUpgBought:hover {
-    color: #d5ffd7;
-    background-color: #0b600e
-}
-
-.rUpgReqNotMet {
-    background-color: rgb(165, 57, 57)
-}
-
-.rUpgReqNotMet:hover {
-    background-color: rgb(165, 57, 57)
-}
-
 .videocontainer {
     position: fixed;
     z-index: -1000;
     top: 0;
     bottom: 0;
     width: 100%;
-    height: 100%; 
+    height: 100%;
     overflow: hidden;
     pointer-events: none;
 }
 
 #realityanimbg {
-    min-width: 100%; 
-    min-height: 100%; 
+    min-width: 100%;
+    min-height: 100%;
     width: auto;
     height: auto;
     position: absolute;
@@ -1094,17 +1036,6 @@ reality upgrade unavailable
     transition-duration: 0.12s;
     width: 150px;
     height: 50px;
-}
-
-
-.realityUpgradeTable > tbody > tr > td {
-    width: 18%;
-}
-
-#pp {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 #perks {
@@ -2006,6 +1937,10 @@ screen and (max-width: 480px) {
 
 .l-hint-text--time-study {
   top: -1.85rem;
+}
+
+.l-hint-text--reality-upgrade {
+  top: -2rem;
 }
 
 /*#endregion hint-text*/
@@ -4648,6 +4583,11 @@ screen and (max-width: 480px) {
   border-color: #4980cc;
 }
 
+.o-notification--black-hole {
+  background-color: #b341e0;
+  border-color: black;
+}
+
 .a-notification--enter {
   animation: a-notification--enter 0.5s ease-out;
   animation-fill-mode: both;
@@ -5535,4 +5475,178 @@ screen and (max-width: 480px) {
   flex-direction: column;
   padding-top: 2rem;
   justify-content: flex-start;
+}
+
+.l-reality-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+}
+
+.l-reality-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-reality-upgrade-grid__row > * {
+  margin: 1.2rem;
+  flex: 1 1 0;
+}
+
+.l-reality-upgrade-btn {
+  height: 10rem;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.c-reality-upgrade-btn {
+  background-color: black;
+  border: .2rem solid #0b600e;
+  border-radius: .5rem;
+  color: #d5ffd7;
+  cursor: pointer;
+  transition-duration: 0.12s;
+  text-align: center;
+  font-size: 1rem;
+  font-family: Typewriter, serif;
+  width: 25rem;
+}
+
+.c-reality-upgrade-btn__requirement {
+  font-weight: bold;
+}
+
+.c-reality-upgrade-btn:hover {
+  color: black;
+  background-color: #d5ffd7;
+}
+
+.c-reality-upgrade-btn--unavailable {
+  background-color: #656565;
+  cursor: default;
+}
+
+.c-reality-upgrade-btn--unavailable:hover {
+  background-color: #656565;
+  color: #d5ffd7;
+}
+
+.c-reality-upgrade-btn--bought {
+  background-color: #0b600e;
+  border-color: #094E0B;
+  cursor: default;
+}
+
+.c-reality-upgrade-btn--bought:hover {
+  color: #d5ffd7;
+  background-color: #0b600e;
+}
+
+.c-reality-upgrade-btn--locked {
+  background-color: #a53939;
+  cursor: default;
+}
+
+.c-reality-upgrade-btn--locked:hover {
+  background-color: #a53939;
+  color: #d5ffd7;
+}
+
+.c-reality-upgrade-btn--black-hole-unlock {
+  text-shadow: -0.1rem 0.1rem 0.3rem #d5ffd7
+}
+
+.t-dark.c-reality-upgrade-btn {
+  background-color: black !important;
+}
+
+.t-dark.c-reality-upgrade-btn:hover {
+  color: black !important;
+  background-color: #d5ffd7 !important;
+}
+
+.t-dark.c-reality-upgrade-btn--unavailable {
+  color: #d5ffd7 !important;
+  background-color: #656565 !important;
+}
+
+.t-dark.c-reality-upgrade-btn--unavailable:hover {
+  color: #d5ffd7 !important;
+  background-color: #656565 !important;
+}
+
+.t-dark.c-reality-upgrade-btn--bought {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
+}
+
+.t-dark.c-reality-upgrade-btn--bought:hover {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
+}
+
+.t-dark.c-reality-upgrade-btn--locked {
+  color: #d5ffd7 !important;
+  background-color: #a53939 !important;
+}
+
+.t-dark.c-reality-upgrade-btn--locked:hover {
+  color: #d5ffd7 !important;
+  background-color: #a53939 !important;
+}
+
+.t-s6.c-reality-upgrade-btn:hover {
+  background-color: #d5ffd7 !important;
+}
+
+.t-s6.c-reality-upgrade-btn--unavailable:hover {
+  background-color: #656565 !important;
+  color: #d5ffd7 !important;
+}
+
+.t-s6.c-reality-upgrade-btn--bought {
+  background-color: #0b600e !important;
+  border-color: #094E0B !important;
+}
+
+.t-s6.c-reality-upgrade-btn--bought:hover {
+  color: #d5ffd7 !important;
+  background-color: #0b600e !important;
+}
+
+.l-black-hole-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.l-black-hole-upgrade-grid {
+  display: flex;
+  flex-direction: column;
+  width: 75rem;
+  align-items: center;
+}
+
+.l-black-hole-upgrade-grid__row {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-black-hole-upgrade-grid__row > * {
+  margin: 1.2rem;
+  flex: 1 1 0;
+}
+
+.c-black-hole-canvas {
+  border: .1rem solid black;
+}
+
+.c-pp-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }

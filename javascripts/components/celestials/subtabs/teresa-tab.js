@@ -16,7 +16,8 @@ Vue.component('teresa-tab', {
         mult: 1
       },
       rmUpg: 1, // Cost and mult are the same
-      pp: 0
+      pp: 0,
+      leakRate: 0
     };
   },
   computed: {
@@ -44,6 +45,7 @@ Vue.component('teresa-tab', {
       this.dtBulk = player.celestials.teresa.dtBulk
       this.pp = player.reality.pp
       this.rm = player.reality.realityMachines
+      this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1/60))
     },
     nextQuote() {
       Teresa.nextQuote()
@@ -78,10 +80,10 @@ Vue.component('teresa-tab', {
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
-            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 2) }} Perk Points.</span>
-            <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shortenCosts(glyphUpg.cost) }} PP</button>
-            <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shortenCosts(rmUpg) }} PP</button>
-            <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br>Currently {{ shortenRateOfChange(dtBulk ) }}x, Costs: {{ shortenCosts(dtBulk * 100) }} PP</button>
+            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} Perk Points.</span>
+            <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, Costs: {{ shorten(glyphUpg.cost, 1, 1) }} PP</button>
+            <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br>Currently {{ shortenRateOfChange(rmUpg ) }}x, Costs: {{ shorten(rmUpg, 1, 1) }} PP</button>
+            <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br>Currently {{ shortenRateOfChange(dtBulk ) }}x, Costs: {{ shorten(dtBulk * 100, 1, 1) }} PP</button>
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
@@ -94,7 +96,9 @@ Vue.component('teresa-tab', {
           >Pour RM</button>
           <div class="c-rm-store">
             <div class="c-rm-store-inner" :style="{ height: percentage}">
-              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain<br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}</div>
+              <div class="c-rm-store-label"> {{ shortenRateOfChange(rmMult) }}x RM gain
+                <br>{{ shortenRateOfChange(rmStore) }}/{{ shortenRateOfChange(rmStoreMax) }}
+                <br v-if="leakRate > 0">Leaking {{ shorten(leakRate, 2, 2) }} RM/s</div>
             </div>
             <div v-for="unlockInfo in unlockInfo" class="c-teresa-unlock-description" :style="unlockDescriptionStyle(unlockInfo)" :id="unlockInfo.id">
               {{ shortenRateOfChange(unlockInfo.price) }}: {{ unlockInfo.description }}

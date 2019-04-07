@@ -2,7 +2,7 @@ Vue.component("autobuyer-input", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
       isValid: true,
       actualValue: undefined,
@@ -11,16 +11,16 @@ Vue.component("autobuyer-input", {
     };
   },
   computed: {
-    type: function() {
+    type() {
       return this.setup.type;
     },
-    classObject: function() {
+    classObject() {
       return {
         "o-autobuyer-input": true,
         "o-autobuyer-input--invalid": !this.isValid,
       };
     },
-    inputType: function() {
+    inputType() {
       return this.type === AutobuyerInputType.INT ? "number" : "text";
     }
   },
@@ -52,7 +52,7 @@ Vue.component("autobuyer-input", {
       this.setup.setValue(value);
       this.displayValue = this.formatActualValue();
     },
-    handleInput: function(event) {
+    handleInput(event) {
       const input = event.target.value;
       this.displayValue = input;
       if (input.length === 0) {
@@ -61,17 +61,16 @@ Vue.component("autobuyer-input", {
       }
       this.isValid = this.validate(input);
     },
-    handleFocus: function() {
+    handleFocus() {
       this.isFocused = true;
     },
-    handleBlur: function() {
+    handleBlur() {
       if (this.displayValue === "69") {
         giveAchievement("Nice.");
       }
       if (this.isValid) {
         this.setValue(this.actualValue);
-      }
-      else {
+      } else {
         this.fetchActualValue();
       }
       this.isValid = true;
@@ -93,8 +92,7 @@ Vue.component("autobuyer-input", {
         const decimal = Decimal.fromString(input);
         if (isNaN(decimal.mantissa) || isNaN(decimal.exponent)) return false;
         this.actualValue = decimal;
-      }
-      catch (e) {
+      } catch (e) {
         return false;
       }
       return true;
@@ -106,7 +104,7 @@ Vue.component("autobuyer-input", {
       return true;
     },
     validateInt(input) {
-      const int = parseInt(input);
+      const int = parseInt(input, 10);
       if (isNaN(int) || !Number.isInteger(int)) return false;
       this.actualValue = int;
       return true;
@@ -142,8 +140,7 @@ class AutobuyerInputSetup {
     if (type === AutobuyerInputType.DECIMAL) {
       this.getValue = () => new Decimal(getValue());
       this.setValue = value => setValue(new Decimal(value));
-    }
-    else {
+    } else {
       this.getValue = getValue;
       this.setValue = setValue;
     }

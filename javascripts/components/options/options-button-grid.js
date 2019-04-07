@@ -1,4 +1,4 @@
-Vue.component('options-button-grid', {
+Vue.component("options-button-grid", {
   components: {
     "options-button": {
       template:
@@ -28,18 +28,18 @@ Vue.component('options-button-grid', {
          </div>`
     }
   },
-  data: function() {
+  data() {
     return {
       options: player.options
     };
   },
   computed: {
-    theme: function() {
+    theme() {
       return Themes.find(this.options.theme).displayName();
     }
   },
   methods: {
-    hardReset: function() {
+    hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
         hardReset();
       }

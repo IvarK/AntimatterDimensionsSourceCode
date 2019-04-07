@@ -30,9 +30,9 @@ Vue.component("cost-display", {
           return;
         }
         this.cost = cost();
-        this.updateFn = typeof this.cost === "number" ?
-          () => this.cost = cost() :
-          () => this.cost.copyFrom(cost());
+        this.updateFn = typeof this.cost === "number"
+          ? () => this.cost = cost()
+          : () => this.cost.copyFrom(cost());
       }
     }
   },
@@ -46,5 +46,10 @@ Vue.component("cost-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template: `<span v-if="isVisible"><br v-if="br">{{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}</span>`
+  template: `
+    <span v-if="isVisible">
+      <br v-if="br">
+      {{title}} {{costDisplay}} {{singular | pluralize(cost, plural)}}
+    </span>
+  `
 });

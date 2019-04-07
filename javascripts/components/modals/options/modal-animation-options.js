@@ -1,6 +1,6 @@
-Vue.component('modal-animation-options', {
+Vue.component("modal-animation-options", {
   mixins: [modalOptionsMixin],
-  data: function() {
+  data() {
     return {
       options: player.options.animations
     };

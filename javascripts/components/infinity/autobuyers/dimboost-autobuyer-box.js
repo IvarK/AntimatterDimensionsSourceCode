@@ -1,35 +1,35 @@
 Vue.component("dimboost-autobuyer-box", {
-  data: function() {
+  data() {
     return {
       isBulkBuyUnlocked: false,
       isBuyMaxUnlocked: false
     };
   },
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return Autobuyer.dimboost;
     },
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic DimBoosts", this.autobuyer);
     },
-    limitInputSetup: function() {
+    limitInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
         () => this.autobuyer.maxDimBoosts,
         value => this.autobuyer.maxDimBoosts = value
       );
     },
-    galaxiesInputSetup: function() {
+    galaxiesInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
         () => this.autobuyer.galaxies,
         value => this.autobuyer.galaxies = value
       );
     },
-    bulkBuyModeDisplay: function() {
+    bulkBuyModeDisplay() {
       return this.isBuyMaxUnlocked ? "Buy max DimBoosts every X seconds" : "Bulk DimBoost Amount";
     },
-    bulkInputSetup: function() {
+    bulkInputSetup() {
       return new AutobuyerInputSetup(
         this.isBuyMaxUnlocked ? AutobuyerInputType.FLOAT : AutobuyerInputType.INT,
         () => this.autobuyer.bulk,

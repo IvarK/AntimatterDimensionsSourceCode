@@ -86,6 +86,7 @@ const AutoGlyphPicker = {
 
 const GlyphGenerator = {
   lastFake: "power",
+  glyphChoices: [],
 
   startingGlyph(level) {
     let strength = this.randomStrength(false);
@@ -103,11 +104,62 @@ const GlyphGenerator = {
     }
   },
 
+  clearGlyphChoices() {
+    this.glyphChoices = []
+  },
+
+  /**
+   * Tries to add a glyph type+effect combination to an ongoing list of combinations,
+   * returning true and adding it if sufficiently unique and returning false without
+   * adding it if it's too similar to something that's already in the list.
+   * 
+   * If the list doesn't already contain a glyph of the specified type, it is automatically
+   * considered unique.  If not, it then checks the effects of glyphs that have the same type.
+   * It calculates a pairwise uniqueness score to each glyph it checks and only adds the new
+   * glyph if the score exceeds the specified threshold for every glyph already in the list.
+   * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
+   */
+  checkUniqueGlyph(type, effects) {
+    let sameTypeGlyphs = this.glyphChoices.filter(glyph => glyph.type === type);
+    if (sameTypeGlyphs.length == 0) {
+      this.addUniqueGlyph(type, effects)
+      return true
+    }
+    let uniquenessThreshold = 3
+    for (let i = 0; i < sameTypeGlyphs.length; i++) {
+      let currGlyph = sameTypeGlyphs[i];
+      union = new Set([...effects, ...currGlyph.effects])
+      intersection = new Set(effects.filter(x => new Set(currGlyph.effects).has(x)))
+      uniqueEffects = [...union].filter(x => !intersection.has(x))
+      if (uniqueEffects.length < uniquenessThreshold) return false;
+    }
+    this.addUniqueGlyph(type, effects)
+    return true
+  },
+
+  // Add a new type+effect combination; clear the list if it's the last one
+  addUniqueGlyph(type, effects) {
+    this.glyphChoices.push({
+      type: type,
+      effects: effects
+    })
+    if (this.glyphChoices.length == GlyphSelection.choiceCount) {
+      GlyphGenerator.clearGlyphChoices()
+    }
+  },
+
   randomGlyph(level, fake) {
-    let strength = this.randomStrength(fake);
-    let type = this.randomType(fake);
-    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
-    let effects = this.generateEffects(type, numEffects, fake);
+    // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
+    // get stuck in an infinite loop if we decide to increase the number of glyph choices
+    // for some reason and forget about the uniqueness check
+    let strength, type, numEffects, effects
+    for (let regenAttempts = 0; regenAttempts < 100; regenAttempts++) {
+      strength = this.randomStrength(fake);
+      type = this.randomType(fake);
+      numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+      effects = this.generateEffects(type, numEffects, fake);
+      if (this.checkUniqueGlyph(type, effects))  break;
+    }
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
     let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
@@ -129,7 +181,7 @@ const GlyphGenerator = {
   },
 
   get strengthMultiplier() {
-    return RealityUpgrades.includes(16) ? 1.3 : 1;
+    return Effects.max(1, RealityUpgrade(16));
   },
 
   randomStrength(fake) {
@@ -149,7 +201,7 @@ const GlyphGenerator = {
   randomNumberOfEffects(strength, level, fake) {
     let rng = this.getRNG(fake);
     let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
-    if (RealityUpgrades.includes(17) && rng() > 0.5) ret = Math.min(ret + 1, 4)
+    if (RealityUpgrade(17).isBought && rng() > 0.5) ret = Math.min(ret + 1, 4)
     return ret;
   },
 
@@ -205,6 +257,9 @@ const GlyphGenerator = {
 const Glyphs = {
   inventory: [],
   active: [],
+  get activeList() {
+    return player.reality.glyphs.active;
+  },
   findFreeIndex() {
     this.validate();
     return this.inventory.indexOf(null);
@@ -213,14 +268,20 @@ const Glyphs = {
     this.validate();
     return this.inventory.filter(e => e === null).length;
   },
-  refresh() {
-    this.active = new Array(player.reality.glyphs.slots).fill(null);
+  get activeSlotCount() {
+    return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
+  },
+  refreshActive() {
+    this.active = new Array(this.activeSlotCount).fill(null);
     for (let g of player.reality.glyphs.active) {
       if (this.active[g.idx]) {
         throw crash("Stacked active glyphs?")
       }
       this.active[g.idx] = g;
     }
+  },
+  refresh() {
+    this.refreshActive();
     this.inventory = new Array(player.reality.glyphs.inventorySize).fill(null);
     // Glyphs could previously end up occupying the same inventory slot (Stacking)
     let stacked = [];
@@ -439,7 +500,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
-        return ret * Math.max(Math.sqrt(Enslaved.totalInfinities.clampMin(1).log10()), 1);
+        return ret * Math.max(Math.sqrt(Enslaved.totalInfinities.pLog10()), 1);
       }
       else return ret
     case "timefreeTickMult":
@@ -466,12 +527,22 @@ function getGlyphEffectStrength(effectKey, level, strength) {
 }
 
 /**
- * getTotalEffect outputs the softcap status as well; this is just shorthand
+ * This returns just the value, unlike getTotalEffect(), which outputs the softcap status as well
+ * This variant is used by GameCache
+ * @param {string} effectKey
+ * @return {number | Decimal}
+ */
+function getAdjustedGlyphEffectUncached(effectKey) {
+  return getTotalEffect(effectKey).value;
+}
+
+/**
+ * This returns just the value, unlike getTotalEffect(), which outputs the softcap status as well
  * @param {string} effectKey
  * @return {number | Decimal}
  */
 function getAdjustedGlyphEffect(effectKey) {
-  return getTotalEffect(effectKey).value;
+  return GameCache.glyphEffects.value[effectKey];
 }
 
 /**
@@ -581,94 +652,13 @@ function deleteGlyph(id, force) {
   }
 }
 
-const REALITY_UPGRADE_COSTS = [null, 1, 2, 2, 3, 4, 15, 15, 15, 15, 15, 50, 50, 50, 50, 50, 1500, 1500, 1500, 1500, 1500, 1e5, 1e5, 1e5, 1e5, 1e5]
-const REALITY_UPGRADE_COST_MULTS = [null, 30, 30, 30, 30, 50,]
-
-function canBuyRealityUpg(id) {
-  if (id < 6 && player.reality.realityMachines.lt(getRealityRebuyableCost(id))) return false // Has enough RM accounting for rebuyables
-  if (player.reality.realityMachines.lt(REALITY_UPGRADE_COSTS[id])) return false // Has enough RM
-  if (RealityUpgrades.includes(id)) return false // Doesn't have it already
-  if (!player.reality.upgReqs[id]) return false // Has done conditions
-  var row = Math.floor((id - 1) / 5)
-  if (row < 2) return true
-  else {
-    for (var i = row * 5 - 4; i <= row * 5; i++) {
-      if (!RealityUpgrades.includes(i)) return false // This checks that you have all the upgrades from the previous row
-    }
-  }
-  return true
-}
-
-function getRealityRebuyableCost(id) {
-  return getCostWithLinearCostScaling(player.reality.rebuyables[id], 1e30, REALITY_UPGRADE_COSTS[id],
-    REALITY_UPGRADE_COST_MULTS[id], REALITY_UPGRADE_COST_MULTS[id] / 10)
-}
-
-function buyRealityUpg(id) {
-  if (!canBuyRealityUpg(id)) return false
-  if (id < 6) player.reality.realityMachines = player.reality.realityMachines.minus(getRealityRebuyableCost(id))
-  else player.reality.realityMachines = player.reality.realityMachines.minus(REALITY_UPGRADE_COSTS[id])
-  if (id < 6) player.reality.rebuyables[id]++
-  else RealityUpgrades.add(id);
-  if (id == 9 || id == 24) {
-    player.reality.glyphs.slots++
-  }
-  if (id == 20) {
-    if (!player.blackHole[0].unlocked) return
-    player.blackHole[1].unlocked = true
-    $("#bhupg2").show()
-  }
-
-  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
-  updateRealityUpgrades()
-  updateBlackHoleUpgrades()
-  return true
-}
-
-function updateRealityUpgrades() {
-  for (let i = 1; i <= 25; ++i) {
-    if (!canBuyRealityUpg(i)) $("#rupg" + i).addClass("rUpgUn")
-    else $("#rupg" + i).removeClass("rUpgUn")
-  }
-
-  player.reality.upgReqs.forEach((check, idx) => {
-    if (idx > 0) {
-      if (check) $("#rupg" + idx).removeClass("rUpgReqNotMet")
-      else $("#rupg" + idx).addClass("rUpgReqNotMet")
-    }
-  });
-
-  for (let i = 1; i <= 25; ++i) {
-    if (RealityUpgrades.includes(i)) $("#rupg" + i).addClass("rUpgBought")
-    else $("#rupg" + i).removeClass("rUpgBought")
-  }
-
-  let row1Mults = [null, 3, 3, 3, 3, 5];
-  let row1Costs = [null];
-  for (var i = 1; i <= 5; i++) {
-    row1Mults[i] = Math.pow(row1Mults[i], player.reality.rebuyables[i]);
-    row1Costs.push(shortenDimensions(getRealityRebuyableCost(i)));
-  }
-
-  $("#rupg1").html("You gain Dilated Time 3 times faster<br>Currently: " + row1Mults[1] + "x<br>Cost: " + row1Costs[1] + " RM")
-  $("#rupg2").html("You gain Replicanti 3 times faster<br>Currently: " + row1Mults[2] + "x<br>Cost: " + row1Costs[2] + " RM")
-  $("#rupg3").html("You gain 3 times more Eternities<br>Currently: " + row1Mults[3] + "x<br>Cost: " + row1Costs[3] + " RM")
-  $("#rupg4").html("You gain 3 times more Tachyon Particles<br>Currently: " + row1Mults[4] + "x<br>Cost: " + row1Costs[4] + " RM")
-  $("#rupg5").html("You gain 5 times more Infinities<br>Currently: " + row1Mults[5] + "x<br>Cost: " + row1Costs[5] + " RM")
-  const rupg12Value = shortenRateOfChange(Decimal.max(Decimal.pow(Decimal.max(player.timestudy.theorem.minus(1e3), 2), Math.log2(player.realities)), 1));
-  $("#rupg12").html("<b>Requires: 1e70 EP without EC1</b><br>EP mult based on Realities and TT, Currently " + rupg12Value + "x<br>Cost: 50 RM")
-  $("#rupg15").html("<b>Requires: Reach 1e10 EP without purchasing the 5xEP upgrade</b><br>Multiply TP gain based on EP mult, Currently " + shortenRateOfChange(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1)) + "x<br>Cost: 50 RM")
-  $("#rupg22").html("<b>Requires: 1e28000 time shards</b><br>Growing bonus to TD based on days spent in this Reality, Currently " + shortenRateOfChange(Decimal.pow(10, Math.pow(1 + 2 * Math.log10(player.thisReality / (1000 * 60 * 60 * 24) + 1), 1.6))) + "x<br>Cost: 100,000 RM")
-  $("#rupg23").html("<b>Requires: Reality in under 15 minutes</b><br>Replicanti gain is boosted from your fastest reality (x 15 minutes / fastest reality), Currently "+shortenRateOfChange(Math.max(9e5 / player.bestReality, 1))+"<br>Cost: 100,000 RM</div>")
-}
-
 function respecGlyphs() {
   Glyphs.unequipAll();
   player.reality.respec = false;
 }
 
 function canSacrifice(glyph) {
-  return RealityUpgrades.includes(19);
+  return RealityUpgrade(19).isBought;
 }
 
 function glyphSacrificeGain(glyph) {
@@ -696,16 +686,14 @@ function getGlyphLevelInputs() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
   // below. These *Base values are the nominal inputs, as they would be multiplied without Effarig
-  let epBase = Math.pow(player.eternityPoints.e / 4000, 0.5);
+  const epBase = Math.pow(Math.max(1, player.eternityPoints.log10()) / 4000, 0.5);
   // @ts-ignore
-  var replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
   // 0.025148668593658708 comes from 1/Math.sqrt(100000 / Math.sqrt(4000)), but really, the
   // factors assigned to repl and dt can be arbitrarily tuned
-  let replBase = Math.pow(player.replicanti.amount.e, replPow) * 0.02514867;
-  let dtBase = player.dilation.dilatedTime.exponent ?
-    Math.pow(player.dilation.dilatedTime.log10(), 1.3) * 0.02514867 : 0;
-  let eterBase = RealityUpgrades.includes(18) ?
-    Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1) : 1;
+  const replBase = Math.pow(Math.max(1, player.replicanti.amount.log10()), replPow) * 0.02514867;
+  const dtBase = Math.pow(Math.max(1, player.dilation.dilatedTime.log10()), 1.3) * 0.02514867;
+  const eterBase = Effects.max(1, RealityUpgrade(18));
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -799,9 +787,114 @@ const GlyphEffect = {
   })
 };
 
+class RealityUpgradeState extends GameMechanicState {
+  get isAffordable() {
+    return player.reality.realityMachines.gte(this.cost);
+  }
+
+  get isBought() {
+    // eslint-disable-next-line no-bitwise
+    return (player.reality.upgradeBits & (1 << this.id)) !== 0;
+  }
+
+  get canBeBought() {
+    return !this.isBought && this.isAffordable && this.isUnlocked;
+  }
+
+  get canBeApplied() {
+    return this.isBought;
+  }
+
+  purchase() {
+    const id = this.id;
+    if (!this.canBeBought) return false;
+    player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
+    if (id < 6) {
+      player.reality.rebuyables[id]++;
+    } else {
+      // eslint-disable-next-line no-bitwise
+      player.reality.upgradeBits |= (1 << id);
+    }
+
+    if (id === 9 || id === 24) {
+      Glyphs.refreshActive();
+    }
+
+    if (id === 20) {
+      if (!player.blackHole[0].unlocked) return true;
+      player.blackHole[1].unlocked = true;
+    }
+
+    if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
+    return true;
+  }
+
+  remove() {
+    // eslint-disable-next-line no-bitwise
+    player.reality.upgradeBits &= ~(1 << this.id);
+  }
+
+  get isUnlocked() {
+    return player.reality.upgReqs[this.id];
+  }
+
+  tryUnlock() {
+    if (!this.isUnlocked && this.config.checkRequirement()) {
+      player.reality.upgReqs[this.id] = true;
+      if (player.realities > 0 || TimeStudy.reality.isBought) {
+        GameUI.notify.success("You've unlocked a Reality upgrade!");
+      }
+    }
+  }
+}
+
+class RebuyableRealityUpgradeState extends RealityUpgradeState {
+  get cost() {
+    return this.config.cost();
+  }
+
+  get isBought() {
+    return false;
+  }
+
+  get canBeApplied() {
+    return true;
+  }
+
+  get canBeBought() {
+    return this.isAffordable;
+  }
+}
+
+RealityUpgradeState.list = mapGameData(
+  GameDatabase.reality.upgrades,
+  config => (config.id < 6
+      ? new RebuyableRealityUpgradeState(config)
+      : new RealityUpgradeState(config))
+);
+
+/**
+ *
+ * @param {number} id
+ * @return {RealityUpgradeState}
+ */
+function RealityUpgrade(id) {
+  return RealityUpgradeState.list[id];
+}
+
 const RealityUpgrades = {
-  includes: index => (player.reality.upgradeBits & (1 << index)) !== 0,
-  add: index => player.reality.upgradeBits = player.reality.upgradeBits | (1 << index),
-  remove: index => player.reality.upgradeBits = player.reality.upgradeBits & ~(1 << index),
-  hasAll: () => (player.reality.upgradeBits >> 6) + 1 === 1 << (REALITY_UPGRADE_COSTS.length - 6),
+  get list() {
+    return RealityUpgradeState.list;
+  },
+
+  get allBought() {
+    // eslint-disable-next-line no-bitwise
+    return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
+  },
+
+  tryUnlock(ids) {
+    for (const id of ids) {
+      RealityUpgrade(id).tryUnlock();
+    }
+  }
 };

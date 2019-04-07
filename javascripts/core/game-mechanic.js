@@ -1,6 +1,16 @@
 class GameMechanicState {
   constructor(config) {
+    if (!config) throw crash("Must specify config for GameMechanicState");
     this.config = config;
+    this._effectIsConstant = false;
+    if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
+      this._effectIsConstant = true;
+      Object.defineProperty(this, "effectValue", {
+        configurable: false,
+        writable: false,
+        value: this.config.effect,
+      });
+    }
   }
 
   get id() {
@@ -58,7 +68,15 @@ class PurchasableMechanicState extends GameMechanicState {
   }
 
   get isBought() {
-    return this.collection.includes(this.id);
+    return this.collection.has(this.id);
+  }
+
+  set isBought(value) {
+    if (value) {
+      this.collection.add(this.id);
+    } else {
+      this.collection.delete(this.id);
+    }
   }
 
   get canBeBought() {
@@ -67,7 +85,7 @@ class PurchasableMechanicState extends GameMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
-    this.collection.push(this.id);
+    this.isBought = true;
     const currency = this._currency.value;
     if (typeof currency === "number") {
       this._currency.value = currency - this.cost;

@@ -27,8 +27,7 @@ Vue.component("dilation-upgrade", {
     update() {
       if (this.isRebuyable) {
         this.isAffordable = this.upgrade.isAffordable;
-      }
-      else {
+      } else {
         this.isBought = this.upgrade.isBought;
         if (!this.isBought) {
           this.isAffordable = this.upgrade.isAffordable;

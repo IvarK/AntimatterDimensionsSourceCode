@@ -21,7 +21,8 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
+    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, " +
+      "you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
     effect: () => player.postC3Reward,
@@ -37,25 +38,28 @@ GameDatabase.challenges.infinity = [
     description: "Only latest bought dimension production is normal, all other dimensions produce less (^0.25)",
     goal: new Decimal("1e13000"),
     isQuickResettable: true,
-    effect: () => 0.25,
+    effect: 0.25,
     reward: {
       description: "All normal dimension multipliers become multiplier^1.05",
-      effect: () => 1.05
+      effect: 1.05
     }
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. When buying dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.",
+    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. " +
+      "When buying dimensions 5-8, everything with costs bigger or equal increases. " +
+      "When buying tickspeed, everything with the same cost increases.",
     goal: new Decimal("1e11111"),
     isQuickResettable: true,
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
-      effect: () => 1.1
+      effect: 1.1
     }
   },
   {
     id: 6,
-    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
+    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter " +
+      "that divides the multiplier on all of your dimensions.",
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
@@ -71,10 +75,10 @@ GameDatabase.challenges.infinity = [
     description: "You can't get Antimatter Galaxies, but Dimension Boost multiplier 2.5x ➜ 10x",
     goal: new Decimal("1e10000"),
     isQuickResettable: false,
-    effect: () => 10,
+    effect: 10,
     reward: {
       description: "Dimension Boost multiplier 2.5x ➜ 4x",
-      effect: () => 4
+      effect: 4
     }
   },
   {

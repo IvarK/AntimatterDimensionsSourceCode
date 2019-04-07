@@ -6,8 +6,8 @@ const pastRunsMixin = {
   }
 };
 
-Vue.component('past-runs-tab', {
-  data: function() {
+Vue.component("past-runs-tab", {
+  data() {
     return {
       isRealityUnlocked: false,
     };
@@ -22,44 +22,46 @@ Vue.component('past-runs-tab', {
     realTimeIndex: Number,
   },
   computed: {
-    averageRun: function() {
+    averageRun() {
       return averageRun(this.runs);
     }
   },
   methods: {
-    update: function() {
+    update() {
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
     },
-    averageGain: function(time, amount) {
-      let rpm = ratePerMinute(amount, time);
+    averageGain(time, amount) {
+      const rpm = ratePerMinute(amount, time);
       let tempstring = shortenRateOfChange(rpm) + " " + this.points + "/min";
       if (Decimal.lt(rpm, 1)) {
         tempstring = shortenRateOfChange(Decimal.mul(rpm, 60)) + " " + this.points + "/hour";
       }
       return tempstring;
     },
-    averageRunGain: function(run) {
-      return this.averageGain(run[0], run[1]);
+    averageRunGain(run) {
+      return this.averageGain(run[this.realTimeIndex], run[1]);
     },
     runTime(run) {
       return timeDisplayShort(run[0]);
     },
     realRunTime(run) {
-      return run[this.realTimeIndex] == undefined ? "unrecorded" : timeDisplayShort(run[this.realTimeIndex]);
+      return run[this.realTimeIndex] === undefined ? "unrecorded" : timeDisplayShort(run[this.realTimeIndex]);
     }
   },
   template:
-    '<div>\
-      <br>\
-      <div v-for="(run, index) in runs" :key="index">\
-        <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\
-        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>\
-        <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>\
-      </div>\
-      <br>\
-      <div>\
-        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }}. </span>\
-        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>\
-      </div>\
-    </div>'
+    `<div>
+      <br>
+      <div v-for="(run, index) in runs" :key="index">
+        <span>
+          The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
+        </span>
+        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>
+        <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>
+      </div>
+      <br>
+      <div>
+        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }}. </span>
+        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>
+      </div>
+    </div>`
 });

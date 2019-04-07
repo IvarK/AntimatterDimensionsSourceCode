@@ -14,7 +14,7 @@ const GameDatabase = {
 
 function mapGameData(gameData, mapFn) {
   const result = [];
-  for (let data of gameData) {
+  for (const data of gameData) {
     result[data.id] = mapFn(data);
   }
   return result;

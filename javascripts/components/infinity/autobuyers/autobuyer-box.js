@@ -4,13 +4,13 @@ Vue.component("autobuyer-box", {
       props: {
         autobuyer: Object
       },
-      data: function() {
+      data() {
         return {
           interval: 0
         };
       },
       computed: {
-        intervalDisplay: function() {
+        intervalDisplay() {
           let seconds = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
           if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
             seconds /= 2;
@@ -30,17 +30,17 @@ Vue.component("autobuyer-box", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       isOn: false
     };
   },
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return this.setup.autobuyer;
     },
-    hasInterval: function() {
+    hasInterval() {
       return (this.autobuyer instanceof AutobuyerState);
     }
   },
@@ -52,7 +52,7 @@ Vue.component("autobuyer-box", {
       if (!this.isUnlocked) return;
       this.isOn = autobuyer.isOn;
     },
-    changeActive: function() {
+    changeActive() {
       const newValue = !this.autobuyer.isOn;
       this.autobuyer.isOn = newValue;
       this.active = newValue;

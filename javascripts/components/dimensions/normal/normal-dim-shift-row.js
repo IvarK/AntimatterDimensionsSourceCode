@@ -1,9 +1,9 @@
-Vue.component('normal-dim-shift-row', {
-  data: function() {
+Vue.component("normal-dim-shift-row", {
+  data() {
     return {
       requirement: {
         tier: 1,
-        amount: 1
+        amount: 0
       },
       isShift: false,
       isAffordable: false,
@@ -11,13 +11,13 @@ Vue.component('normal-dim-shift-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return this.isShift ? "Shift" : "Boost";
     },
-    dimName: function() {
+    dimName() {
       return DISPLAY_NAMES[this.requirement.tier];
     },
-    buttonText: function() {
+    buttonText() {
       return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
     }
   },
@@ -30,7 +30,7 @@ Vue.component('normal-dim-shift-row', {
       this.isShift = DimBoost.isShift;
       this.resets = player.resets;
     },
-    softReset: function() {
+    softReset() {
       softResetBtnClick();
     }
   },
@@ -38,7 +38,10 @@ Vue.component('normal-dim-shift-row', {
     `<div class="c-normal-dim-row">
       <div 
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >Dimension {{name}} ({{resets}}): requires {{requirement.amount}} {{dimName}} Dimensions</div>
+      >
+        Dimension {{name}} ({{shortenSmallInteger(resets)}}):
+        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+      </div>
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--dimboost c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"

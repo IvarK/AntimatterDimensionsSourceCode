@@ -9,6 +9,7 @@ Vue.component("game-header-eternity-button", {
       gainedTachyons: new Decimal(0),
       challengeCompletions: 0,
       gainedCompletions: 0,
+      fullyCompleted: false,
       failedCondition: undefined,
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0)
@@ -62,6 +63,8 @@ Vue.component("game-header-eternity-button", {
     updateChallengeWithRUPG() {
       const currentEC = EternityChallenge.current();
       const currentCompletions = currentEC.completions;
+      this.fullyCompleted = currentCompletions === 5;
+      if (this.fullyCompleted) return;
       let gainedCompletions = 1;
       while (
         player.infinityPoints.gte(currentEC.goalAtCompletions(currentCompletions + gainedCompletions)) &&
@@ -142,15 +145,21 @@ Vue.component("game-header-eternity-button", {
       <!-- Challenge with multiple completions -->
       <template v-else-if="type === 6">
         Other challenges await...
-        <br>
-        {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
-        <template v-if="failedCondition">
+        <template v-if="fullyCompleted">
           <br>
-          {{failedCondition}}
+          (This challenge is already fully completed)
         </template>
-        <template v-else-if="hasMoreCompletions">
+        <template v-else>
           <br>
-          Next goal at {{shortenCosts(nextGoalAt)}} IP
+          {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
+          <template v-if="failedCondition">
+            <br>
+            {{failedCondition}}
+          </template>
+          <template v-else-if="hasMoreCompletions">
+            <br>
+            Next goal at {{shortenCosts(nextGoalAt)}} IP
+          </template>
         </template>
       </template>
     </button>`

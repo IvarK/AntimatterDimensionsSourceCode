@@ -2,7 +2,7 @@ Vue.component("ec-time-study", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
       hasRequirement: false,
       requirement: {
@@ -12,16 +12,16 @@ Vue.component("ec-time-study", {
     };
   },
   computed: {
-    study: function() {
+    study() {
       return this.setup.study;
     },
-    id: function() {
+    id() {
       return this.study.id;
     },
-    hasDecimalRequirement: function() {
+    hasDecimalRequirement() {
       return this.id > 6;
     },
-    requirementResource: function() {
+    requirementResource() {
       return this.study.config.requirement.resource;
     }
   },
@@ -35,8 +35,7 @@ Vue.component("ec-time-study", {
       if (this.hasDecimalRequirement) {
         requirement.total.copyFrom(study.requirementTotal);
         requirement.current.copyFrom(study.requirementCurrent.min(requirement.total));
-      }
-      else {
+      } else {
         requirement.total = study.requirementTotal;
         requirement.current = Decimal.min(study.requirementCurrent, requirement.total);
       }

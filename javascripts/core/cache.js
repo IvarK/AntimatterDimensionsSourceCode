@@ -1,6 +1,24 @@
 class Lazy {
   constructor(getValue) {
     this._getValue = getValue;
+    Lazy.registerLazy(this);
+  }
+
+  static get registrar() {
+    if (Lazy._registrar === undefined) {
+      Lazy._registrar = [];
+    }
+    return Lazy._registrar;
+  }
+
+  static registerLazy(object) {
+    Lazy.registrar.push(object);
+  }
+
+  static invalidateAll() {
+    for (const obj of Lazy.registrar) {
+      obj.invalidate();
+    }
   }
 
   get value() {
@@ -82,13 +100,11 @@ const GameCache = {
     return timeDimensionCommonMultiplier();
   }),
 
-  invalidate() {
-    for (let key in this) {
-      if (!this.hasOwnProperty(key)) continue;
-      const property = this[key];
-      if (property instanceof Lazy) {
-        property.invalidate();
-      }
-    }
-  }
+  glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
+
+  totalIPMult: new Lazy(() => totalIPMult()),
 };
+
+EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {
+  GameCache.glyphEffects.invalidate();
+}, GameCache.glyphEffects);

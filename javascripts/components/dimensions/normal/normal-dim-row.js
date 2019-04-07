@@ -1,9 +1,9 @@
-Vue.component('normal-dim-row', {
+Vue.component("normal-dim-row", {
   props: {
     floatingText: Array,
     tier: Number
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
@@ -17,16 +17,16 @@ Vue.component('normal-dim-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    amountDisplay: function() {
-      return this.tier < 8 ? this.shortenDimensions(this.amount) : Decimal.round(this.amount).toString();
+    amountDisplay() {
+      return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);
     },
-    rateOfChangeDisplay: function() {
-      return this.tier < 8 ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
     }
   },
   methods: {
@@ -47,13 +47,13 @@ Vue.component('normal-dim-row', {
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
     },
-    buySingle: function() {
+    buySingle() {
       buyOneDimensionBtnClick(this.tier);
     },
-    buyUntil10: function() {
+    buyUntil10() {
       buyManyDimensionsBtnClick(this.tier);
     },
-    showCostTitle: function(value) {
+    showCostTitle(value) {
       return value.exponent < 1000000;
     }
   },

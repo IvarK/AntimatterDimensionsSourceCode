@@ -1,5 +1,5 @@
-Vue.component('challenge-records-tab', {
-  data: function() {
+Vue.component("challenge-records-tab", {
+  data() {
     return {
       normalChallenges: player.challengeTimes.slice(0),
       infinityChallenges: player.infchallengeTimes.slice(0),

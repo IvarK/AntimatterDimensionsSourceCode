@@ -1,4 +1,4 @@
-Vue.component('footer-links', {
+Vue.component("footer-links", {
   data() {
     return {
       isVisible: true

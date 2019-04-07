@@ -1,11 +1,11 @@
 Vue.component("break-infinity-tab", {
-  data: function() {
+  data() {
     return {
       isUnlocked: false
     };
   },
   computed: {
-    grid: function() {
+    grid() {
       return [
         [
           BreakInfinityUpgrade.totalAMMult,
@@ -34,7 +34,7 @@ Vue.component("break-infinity-tab", {
     update() {
       this.isUnlocked = Autobuyer.infinity.isUnlocked && Autobuyer.infinity.hasMaxedInterval;
     },
-    btnClassObject: function(column) {
+    btnClassObject(column) {
       return {
         "l-infinity-upgrade-grid__cell": true,
         "o-infinity-upgrade-btn--multiplier": column === 3

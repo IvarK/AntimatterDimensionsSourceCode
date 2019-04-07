@@ -173,6 +173,19 @@ const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get bestReality() {
+    return this.fromMilliseconds(() => player.bestReality);
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set bestReality(timespan) {
+    this.toMilliseconds(timespan, value => player.bestReality = value);
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get thisRealityRealTime() {
     return this.fromMilliseconds(() => player.thisRealityRealTime);
   },

@@ -1,5 +1,5 @@
-Vue.component('stats-tab', {
-  data: function() {
+Vue.component("stats-tab", {
+  data() {
     return {
       isChallengeTabUnlocked: false,
       isInfinitiesTabUnlocked: false,

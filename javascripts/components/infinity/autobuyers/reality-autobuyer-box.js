@@ -1,16 +1,16 @@
 Vue.component("reality-autobuyer-box", {
   computed: {
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic Reality", Autobuyer.reality);
     },
-    targetRMInputSetup: function() {
+    targetRMInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
         () => Autobuyer.reality.rm,
         value => Autobuyer.reality.rm = value
       );
     },
-    targetGlyphInputSetup: function() {
+    targetGlyphInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
         () => Autobuyer.reality.glyph,

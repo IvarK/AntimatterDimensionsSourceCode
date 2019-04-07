@@ -132,8 +132,7 @@ dev.refundTimeDims = function() {
 }
 
 dev.refundEPMult = function() {
-    player.epmult = new Decimal(1)
-    player.epmultCost = new Decimal(500)
+  player.epmultUpgrades = 0;
 }
 
 dev.refundDilStudies = function() {
@@ -196,7 +195,6 @@ dev.respecPerks = function() {
     player.reality.perks = [];
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
     drawPerkNetwork()
 }
 
@@ -252,9 +250,9 @@ dev.updateTestSave = function() {
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
         for (var i=1; i<6; i++) {
-            if (RealityUpgrades.includes(i)) {
+            if (RealityUpgrade(i).isBought) {
               player.reality.rebuyables[i] = 1
-              RealityUpgrades.remove(i);
+              RealityUpgrade(i).remove();
             }
         }
         player.options.testVersion = 5
@@ -376,9 +374,8 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion == 17) {
-    if (RealityUpgrades.includes(20)) {
+    if (RealityUpgrade(20).isBought) {
       player.wormhole[1].unlocked = true
-      $("#bhupg2").show()
     }
     player.options.testVersion = 18
   }
@@ -541,19 +538,22 @@ dev.updateTestSave = function() {
     player.options.testVersion = 32;
   }
 
+  // Checks for presense of property, so no need for a version bump
+  convertEPMult();
+
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
   if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.hasAll()) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
     player.celestials.teresa.rmStore = Teresa.rmStoreMax;
   }
   if (player.reality.upg) {
-    for (let upg of player.reality.upg) RealityUpgrades.add(upg);
+    for (let upg of player.reality.upg) RealityUpgrade(upg).purchase();
     delete player.reality.upg;
   }
-  if (!RealityUpgrades.includes(25)) player.realityBuyer.isOn = false;
+  if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
 }
 
 // Still WIP
@@ -657,10 +657,12 @@ dev.showProductionBreakdown = function() {
   productionText += "\nTime Dimension Multipliers:\n"
   productionText += "  " + (100*boughtTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% purchased\n"
   productionText += "  " + (100*tickspeedToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from tickspeed\n"
-  productionText += "  " + (player.dilation.upgrades.includes(5) ? 10*replicantiComponent.log10()/totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n"
-  productionText += "  " + (100*TSmultToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from other time studies\n"
+  productionText += "  " + (player.dilation.upgrades.has(5) ?
+    10 * replicantiComponent.log10() / totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n";
+  productionText += "  " + (100 * TSmultToTDComponent.log10() / totalTDMults.log10()).toFixed(2) +
+    "% from other time studies\n";
   productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
-  
+
   console.log(productionText);
 }
 

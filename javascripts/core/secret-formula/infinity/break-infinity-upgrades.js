@@ -4,12 +4,10 @@ GameDatabase.infinity.breakUpgrades = (function() {
     return {
       id: config.id,
       cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinityRebuyables[config.id]),
-      maxUpgrades: maxUpgrades,
+      maxUpgrades,
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
-      formatEffect: value => {
-        return value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`;
-      },
+      formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
       staticEffect: true
     };
   }
@@ -33,20 +31,26 @@ GameDatabase.infinity.breakUpgrades = (function() {
       id: "postGalaxy",
       cost: 5e11,
       description: "Galaxies are 50% stronger",
-      effect: () => 1.5
+      effect: 1.5
     },
     infinitiedMult: {
       id: "infinitiedMult",
       cost: 1e5,
       description: "Normal dimensions gain a multiplier based on amount infinitied",
-      effect: () => 1 + Player.totalInfinitied.clampMin(1).log10() * 10,
+      effect: () => 1 + Player.totalInfinitied.pLog10() * 10,
       formatEffect: value => formatX(value, 2, 2)
     },
     achievementMult: {
       id: "achievementMult",
       cost: 1e6,
       description: "Normal dimensions gain a multiplier based on achievements completed",
-      effect: () => Math.max(Math.pow(Math.pow((player.achievements.size - 30), 3) / 40, getAdjustedGlyphEffect("effarigachievement")), 1),
+      effect: () => Math.max(
+        Math.pow(
+          Math.pow((player.achievements.size - 30), 3) / 40,
+          getAdjustedGlyphEffect("effarigachievement")
+        ),
+        1
+      ),
       formatEffect: value => formatX(value, 2, 2)
     },
     slowestChallengeMult: {
@@ -62,9 +66,9 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: "You passively generate Infinitied stat based on your fastest infinity",
       effect: () => player.bestInfinityTime,
       formatEffect: value => {
-        const period = value >= 999999999999 ?
-          "hundred or so years" :
-          Time.bestInfinity.multiply(5);
+        const period = value >= 999999999999
+          ? "hundred or so years"
+          : Time.bestInfinity.multiply(5);
         return `1 Infinity every ${period}`;
       }
     },
@@ -102,7 +106,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
         }
         return `${generation} of your best IP/min from last 10 infinities, works offline`;
       },
-      // cutting corners: this is not actual effect (player.offlineProd is), but
+      // Cutting corners: this is not actual effect (player.offlineProd is), but
       // it is actual IPPM that is displyed on upgrade
       effect: () => Player.bestRunIPPM.times(player.offlineProd / 100),
       formatEffect: value => `${shorten(value, 2, 1)} IP/min`

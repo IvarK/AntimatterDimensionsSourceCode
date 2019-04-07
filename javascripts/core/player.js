@@ -51,7 +51,7 @@ var player = {
   sacrificed: new Decimal(0),
   achievements: new Set(),
   secretAchievements: new Set(),
-  infinityUpgrades: [],
+  infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0],
   challenges: [],
   currentChallenge: "",
@@ -110,9 +110,8 @@ var player = {
   thisEternity: 0,
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
-  eternityUpgrades: [],
-  epmult: new Decimal(1),
-  epmultCost: new Decimal(500),
+  eternityUpgrades: new Set(),
+  epmultUpgrades: 0,
   infinityDimension1: {
     cost: new Decimal(1e8),
     amount: new Decimal(0),
@@ -273,7 +272,7 @@ var player = {
     totalTachyonParticles: new Decimal(0),
     nextThreshold: new Decimal(1000),
     freeGalaxies: 0,
-    upgrades: [],
+    upgrades: new Set(),
     rebuyables: {
       1: 0,
       2: 0,
@@ -296,7 +295,6 @@ var player = {
       active: [],
       inventory: [],
       inventorySize: 100,
-      slots: 3,
       last: "",
       sac: {
         power: 0,
@@ -327,7 +325,7 @@ var player = {
     automatorCurrentRow: 0,
     automatorRows: 0,
     automatorCommands: new Set(),
-    perks: [],
+    perks: new Set(),
     respec: false,
     tdbuyers: [false, false, false, false, false, false, false, false],
     epmultbuyer: false,
@@ -423,7 +421,7 @@ var player = {
       exp: 0,
       unlocks: [],
       run: false,
-      charged: [],
+      charged: new Set(),
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
       activeMode: false, // false if idle, true if active
@@ -484,6 +482,10 @@ const Player = {
 
   get totalInfinitied() {
     return player.infinitied.plus(player.infinitiedBank).clampMin(0);
+  },
+
+  get gainedEternities() {
+    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
   },
 
   get isInMatterChallenge() {

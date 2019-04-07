@@ -20,19 +20,20 @@ GameDatabase.eternity.dilation = (function() {
       increment: 10,
       description: "Double Dilated Time gain.",
       effect: bought => Math.pow(2, bought),
-      formatEffect: value => formatX(value, 2, 0)
+      formatEffect: value => formatX(value, 2, 0),
+      formatCost: value => shorten(value, 2, 0)
     }),
     galaxyThreshold: rebuyable({
       id: 2,
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        Perk.bypassDGReset.isBought ?
-        "Reset Dilated Galaxies, but lower their threshold" :
-        "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
+        (Perk.bypassDGReset.isBought
+        ? "Reset Dilated Galaxies, but lower their threshold"
+        : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
       formatEffect: () => getFreeGalaxyMult().toFixed(3),
-      formatCost: value => shorten(value, 1, 1)
+      formatCost: value => shorten(value, 2, 0)
     }),
     tachyonGain: rebuyable({
       id: 3,
@@ -40,22 +41,23 @@ GameDatabase.eternity.dilation = (function() {
       increment: 20,
       description: "Triple the amount of Tachyon Particles gained.",
       effect: bought => Decimal.pow(3, bought),
-      formatEffect: value => formatX(value, 2, 0)
+      formatEffect: value => formatX(value, 2, 0),
+      formatCost: value => shorten(value, 2, 0)
     }),
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
       description: "Gain twice as many free galaxies.",
-      effect: () => 2
+      effect: 2
     },
     tdMultReplicanti: {
       id: 5,
       cost: 1e9,
       description: () => {
-        let mult = replicantiMult().log10();
+        const mult = replicantiMult().log10();
         const ratio = DilationUpgrade.tdMultReplicanti.effectValue.log10() / mult;
-        let out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
-        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`
+        const out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
+        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`;
       },
       effect: () => {
         let rep10 = replicantiMult().log10() * 0.1;
@@ -87,7 +89,7 @@ GameDatabase.eternity.dilation = (function() {
       id: 9,
       cost: 1e11,
       description: "Reduce the Dilation penalty. (^1.05 after reduction)",
-      effect: () => 1.05
+      effect: 1.05,
     },
     ttGenerator: {
       id: 10,
@@ -97,4 +99,4 @@ GameDatabase.eternity.dilation = (function() {
       formatEffect: value => formatX(value, 2, 1)
     }
   };
-})();
+}());

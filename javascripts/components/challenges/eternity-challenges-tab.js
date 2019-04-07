@@ -35,7 +35,7 @@ Vue.component("eternity-challenges-tab", {
           return this.goalAtCompletions(0);
         },
         lastGoal() {
-          return this.goalAtCompletions(TIERS_PER_EC);
+          return this.goalAtCompletions(TIERS_PER_EC - 1);
         },
         currentRewardConfig() {
           const challenge = this.challenge;

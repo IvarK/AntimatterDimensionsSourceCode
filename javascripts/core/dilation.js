@@ -2,7 +2,7 @@ function startDilatedEternity() {
   if (!TimeStudy.dilation.isBought) return false
   GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
-      eternity(true)
+      eternity(false, false, true)
       setTimeout(function() {
         GameIntervals.gameLoop.start();
       }, 250)
@@ -15,7 +15,7 @@ function startDilatedEternity() {
       return false
   }
   giveAchievement("I told you already, time is relative")
-  eternity(true)
+  eternity(false, false, true)
   player.dilation.active = true;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
@@ -40,35 +40,37 @@ function startDilatedEternity() {
 
 const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                             5e6,        1e9,         5e7,
-                            2e12,        1e10,         1e11,
-                                          1e15]
+                            2e12,       1e10,        1e11,
+                                        1e15];
 
 
 function buyDilationUpgrade(id) {
-  if (id > 3) { // Not rebuyable
-    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false // Not enough dilated time
-    if (player.dilation.upgrades.includes(id)) return false // Has the upgrade
+  // Upgrades 1-3 are rebuyable
+  if (id > 3) {
+    if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
+    if (player.dilation.upgrades.has(id)) return false;
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(DIL_UPG_COSTS[id]);
-    player.dilation.upgrades.push(id)
-    if (id == 4) player.dilation.freeGalaxies *= 2 // Double the current galaxies
-  } else { // Is rebuyable
-    let upgAmount = player.dilation.rebuyables[id];
-    let realCost = new Decimal(DIL_UPG_COSTS[id][0]).times( Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)) )
-    if (player.dilation.dilatedTime.lt(realCost)) return false
+    player.dilation.upgrades.add(id);
+    if (id === 4) player.dilation.freeGalaxies *= 2;
+  } else {
+    const upgAmount = player.dilation.rebuyables[id];
+    const realCost = new Decimal(DIL_UPG_COSTS[id][0]).times(Decimal.pow(DIL_UPG_COSTS[id][1], (upgAmount)));
+    if (player.dilation.dilatedTime.lt(realCost)) return false;
 
-    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber()
-    buying = Math.min(buying, player.celestials.teresa.dtBulk)
-    let cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount)
-    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost)
-    player.dilation.rebuyables[id] += buying
-    if (id == 2) {
-        if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0)
-        player.dilation.nextThreshold = new Decimal(1000)
-        player.dilation.baseFreeGalaxies = 0
-        player.dilation.freeGalaxies = 0
+    let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
+      DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
+    buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
+    player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
+    player.dilation.rebuyables[id] += buying;
+    if (id === 2) {
+      if (!Perk.bypassDGReset.isBought) player.dilation.dilatedTime = new Decimal(0);
+      player.dilation.nextThreshold = new Decimal(1000);
+      player.dilation.baseFreeGalaxies = 0;
+      player.dilation.freeGalaxies = 0;
     }
 
-    if (id == 3) {
+    if (id === 3) {
       const retroactiveTPFactor = Effects.max(
         1,
         Perk.retroactiveTP1,
@@ -94,9 +96,9 @@ function getDilationGainPerSecond() {
   let ret = new Decimal(player.dilation.tachyonParticles)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
-      Achievement(132)
+      Achievement(132),
+      RealityUpgrade(1)
     );
-  if (player.reality.rebuyables[1] > 0) ret = ret.times(Math.pow(3, player.reality.rebuyables[1]))
   ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
   ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
@@ -105,22 +107,26 @@ function getDilationGainPerSecond() {
 }
 
 function getTachyonGain() {
-  let mult = DilationUpgrade.tachyonGain.effectValue;
-  if (player.reality.rebuyables[4] > 0) mult = mult.times(Decimal.pow(3, player.reality.rebuyables[4]))
-  if (RealityUpgrades.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
-  if (RealityUpgrades.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
-  mult = mult.timesEffectOf(GlyphSacrifice.dilation);
+  let mult = new Decimal(1).timesEffectsOf(
+    DilationUpgrade.tachyonGain,
+    GlyphSacrifice.dilation,
+    RealityUpgrade(4),
+    RealityUpgrade(8),
+    RealityUpgrade(15)
+  );
 
   let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
   return tachyonGain
 }
 
 function getTachyonReq() {
-  let mult = DilationUpgrade.tachyonGain.effectValue;
-  if (player.reality.rebuyables[4] > 0) mult = mult.times(Math.pow(3, player.reality.rebuyables[4]))
-  if (RealityUpgrades.includes(8)) mult = mult.times(Decimal.sqrt(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))))
-  if (RealityUpgrades.includes(15)) mult = mult.times(Math.max(Math.sqrt(Decimal.log10(player.epmult)) / 3, 1))
-  mult = mult.timesEffectOf(GlyphSacrifice.dilation);
+  let mult = new Decimal(1).timesEffectsOf(
+    DilationUpgrade.tachyonGain,
+    GlyphSacrifice.dilation,
+    RealityUpgrade(4),
+    RealityUpgrade(8),
+    RealityUpgrade(15)
+  );
   let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
   return req
 }

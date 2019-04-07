@@ -1,8 +1,8 @@
-Vue.component('infinity-dim-row', {
+Vue.component("infinity-dim-row", {
   props: {
     tier: Number
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
@@ -20,24 +20,24 @@ Vue.component('infinity-dim-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    rateOfChangeDisplay: function() {
-      return this.hasRateOfChange ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.hasRateOfChange
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
     },
-    costDisplay: function() {
+    costDisplay() {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
-    hardcapPurchases: function() {
+    hardcapPurchases() {
       return this.shortenCosts(HARDCAP_ID_PURCHASES);
     },
-    capTooltip: function() {
-      return this.isCapped ?
-        `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`:
-        undefined;
+    capTooltip() {
+      return this.isCapped
+        ? `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`
+        : undefined;
     }
   },
   methods: {
@@ -62,7 +62,7 @@ Vue.component('infinity-dim-row', {
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
     },
-    buyManyInfinityDimension: function() {
+    buyManyInfinityDimension() {
       buyManyInfinityDimension(this.tier);
     }
   },

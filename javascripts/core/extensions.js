@@ -92,8 +92,6 @@ function safeCall(fn) {
     if (fn) fn();
 }
 
-String.empty = "";
-
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
 };
@@ -183,24 +181,23 @@ Array.prototype.max = function() {
 };
 
 /**
- * @returns {Decimal}
+ * @param {function} predicate
+ * @returns {number}
  */
-Decimal.prototype.clamp = function(min, max) {
-  return this.max(min).min(max);
+Array.prototype.countWhere = function(predicate) {
+  let count = 0;
+  for (const item of this) {
+    if (predicate(item))++count;
+  }
+  return count;
 };
 
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.clampMin = function(min) {
-  return this.max(min);
-};
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.clampMax = function(max) {
-  return this.min(max);
+Decimal.prototype.clampMaxExponent = function(maxExp) {
+  return this.exponent >= maxExp
+    ? Decimal.fromMantissaExponent_noNormalize(1, maxExp) : this;
 };
 
 /**
@@ -218,10 +215,18 @@ Array.prototype.randomElement = function() {
 
 Decimal.prototype.valueOf = () => { throw crash("Implicit conversion from Decimal to number"); };
 
-Set.prototype.countWhere = function (predicate) {
+Set.prototype.countWhere = function(predicate) {
   let count = 0;
-  for (let item of this) {
+  for (const item of this) {
     if (predicate(item))++count;
   }
   return count;
-}
+};
+
+Set.prototype.every = function(predicate) {
+  for (const item of this) {
+    if (!predicate(item)) return false;
+  }
+  return true;
+};
+

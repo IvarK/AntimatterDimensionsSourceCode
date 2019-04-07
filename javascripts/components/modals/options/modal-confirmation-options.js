@@ -1,6 +1,6 @@
-Vue.component('modal-confirmation-options', {
+Vue.component("modal-confirmation-options", {
   mixins: [modalOptionsMixin],
-  data: function() {
+  data() {
     return {
       options: player.options.confirmations
     };

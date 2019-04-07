@@ -1,5 +1,5 @@
-Vue.component('normal-dim-tab-header', {
-  data: function() {
+Vue.component("normal-dim-tab-header", {
+  data() {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
@@ -8,10 +8,10 @@ Vue.component('normal-dim-tab-header', {
     };
   },
   computed: {
-    sacrificeBoostDisplay: function() {
+    sacrificeBoostDisplay() {
       return this.shortenRateOfChange(this.sacrificeBoost);
     },
-    sacrificeTooltip: function() {
+    sacrificeTooltip() {
       return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
     },
   },
@@ -23,10 +23,10 @@ Vue.component('normal-dim-tab-header', {
       this.isSacrificeAffordable = Sacrifice.isAffordable;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
-    sacrifice: function() {
+    sacrifice() {
       sacrificeBtnClick();
     },
-    maxAll: function() {
+    maxAll() {
       maxAll();
     }
   },

@@ -1,5 +1,5 @@
 Vue.component("eternity-milestones-tab", {
-  data: function() {
+  data() {
     return {
       eternityCount: 0,
     };

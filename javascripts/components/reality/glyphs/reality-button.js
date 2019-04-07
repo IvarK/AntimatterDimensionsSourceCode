@@ -1,5 +1,5 @@
 Vue.component("reality-button", {
-  data: function () {
+  data() {
     return {
       canReality: false,
       hasRealityStudy: false,
@@ -25,16 +25,16 @@ Vue.component("reality-button", {
     },
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
-        return `Next at 1e${this.nextMachineEP} EP`;
-      } else {
-        return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`
-      }
+        return `Next at ${shorten(this.nextMachineEP, 0)} EP`;
+      } 
+        return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
+      
     },
     formatGlyphLevel() {
-      return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`
+      return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`;
     },
     shardsGainedText() {
-      return `${this.shorten(this.shardsGained, 2)} Relic Shards (Effarig)`
+      return `${this.shorten(this.shardsGained, 2)} Relic Shards (Effarig)`;
     }
   },
   methods: {
@@ -45,20 +45,20 @@ Vue.component("reality-button", {
         this.shardsGained = 0;
         return;
       }
-      function logEPforRM(rm) {
-        rm = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
-        if (rm.lte(1)) return 4000;
-        return Math.ceil(4000 * (rm.log10() / 3 + 1));
+      function EPforRM(rm) {
+        const adjusted = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
+        if (adjusted.lte(1)) return Decimal.pow10(4000);
+        return Decimal.pow10(Math.ceil(4000 * (adjusted.log10() / 3 + 1)));
       }
       this.canReality = true;
       this.machinesGained = gainedRealityMachines();
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();
-      this.nextMachineEP = logEPforRM(this.machinesGained.plus(1));
+      this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.shardsGained = Effarig.shardsGained;
-      this.expGained = Ra.gainedExp(this.glyphLevel)
-      this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
+      this.expGained = Ra.gainedExp(this.glyphLevel);
+      this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]);
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -68,7 +68,7 @@ Vue.component("reality-button", {
       }
     },
   },
-  template: /*html*/`
+  template: `
   <button :class="['l-reality-button', 'c-reality-button', 'infotooltip',
                    canReality ? 'c-reality-button--good' : 'c-reality-button--bad']"
           @click="handleClick">

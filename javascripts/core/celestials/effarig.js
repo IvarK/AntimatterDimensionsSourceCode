@@ -141,7 +141,7 @@ var Effarig = {
     return new Decimal.pow(10, Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
-    const base = new Decimal(mult).clampMin(1).log10();
+    const base = new Decimal(mult).pLog10();
     const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
     return new Decimal.pow(10, Math.pow(base, pow));
   },

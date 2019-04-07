@@ -1,5 +1,5 @@
 Vue.component("replicanti-tab", {
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       isUnlockAffordable: false,
@@ -14,32 +14,33 @@ Vue.component("replicanti-tab", {
     };
   },
   computed: {
-    replicantiChanceSetup: function() {
+    replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(ReplicantiUpgrade.chance,
         value => `Replicate chance: ${Math.round(value * 100)}%`,
         cost => `+1% Costs: ${this.shortenCosts(cost)} IP`
       );
     },
-    replicantiIntervalSetup: function() {
+    replicantiIntervalSetup() {
       const upgrade = ReplicantiUpgrade.interval;
       function formatInterval(interval) {
         const actualInterval = upgrade.applyModifiers(interval);
-        return actualInterval < 1000 ?
-          `${actualInterval.toPrecision(3)}ms` :
-          upgrade.isCapped ?
-            TimeSpan.fromMilliseconds(actualInterval).toString():
-            `${Math.floor(actualInterval)}ms`;
+        if (actualInterval < 1000) {
+          return `${actualInterval.toPrecision(3)}ms`;
+        }
+        return upgrade.isCapped
+          ? TimeSpan.fromMilliseconds(actualInterval).toString()
+          : `${Math.floor(actualInterval)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
         cost => `➜ ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
       );
     },
-    maxGalaxySetup: function() {
+    maxGalaxySetup() {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => {
-          let description =`Max Replicanti galaxies: ${value}`;
+          let description = `Max Replicanti galaxies: ${value}`;
           const extra = upgrade.extra;
           if (extra > 0) {
             description += `+${extra}`;
@@ -79,11 +80,18 @@ Vue.component("replicanti-tab", {
         onclick="Replicanti.unlock();"
       >Unlock Replicanti<br>Cost: {{shortenCosts(1e140)}} IP</primary-button>
       <template v-else>
-        <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchases" | pluralize(ec8Purchases)}} left.</div>
-        <div v-if="hasRaisedCap">Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}} and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity. (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})</div>
+        <div v-if="isInEC8">You have {{ec8Purchases}} {{"purchase" | pluralize(ec8Purchases)}} left.</div>
+        <div v-if="hasRaisedCap">
+          Your replicanti cap without study 192 has been raised to {{shorten(replicantiCap, 2)}}
+          and is giving you {{effarigInfinityBonusRG}} extra RG due to Effarig Infinity.
+          (Next RG at {{shorten(nextEffarigRGThreshold, 2)}})
+        </div>
         <p class="c-replicanti-description">
-          You have <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
-          Translated to <span class="c-replicanti-description__accent">{{shortenRateOfChange(mult)}}</span>x multiplier on all Infinity Dimensions.
+          You have
+          <span class="c-replicanti-description__accent">{{shortenDimensions(amount)}}</span> Replicanti.
+          Translated to
+          <span class="c-replicanti-description__accent">{{shortenRateOfChange(mult)}}</span>x
+          multiplier on all Infinity Dimensions.
         </p>
         <br>
         <div class="l-replicanti-upgrade-row">

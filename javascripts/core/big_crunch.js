@@ -2,7 +2,6 @@ function bigCrunchReset() {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
     if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
     const isInChallenge = player.currentChallenge !== "";
-    const isInPreBreakChallenge = isInChallenge && !player.currentChallenge.includes("post");
     if (player.money.lt(Number.MAX_VALUE)) {
         return;
     }
@@ -37,13 +36,7 @@ function bigCrunchReset() {
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    if (player.realities > 0 && Player.totalInfinitied.eq(0) && player.eternities === 0 && player.galaxies <= 1) {
-      unlockRealityUpgrade(7);
-    }
-
-    if (player.realities > 0 && (player.eternities === 0 || (RealityUpgrades.includes(10) && player.eternities === 100)) && player.infinitied.eq(0)) {
-        if (checkForRUPG8()) unlockRealityUpgrade(8);
-    }
+    RealityUpgrades.tryUnlock([7, 8]);
 
     if (autoS && auto) {
         let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
@@ -195,7 +188,9 @@ class InfinityUpgrade extends PurchasableMechanicState {
   constructor(config, requirement) {
     super(config, Currency.infinityPoints, () => player.infinityUpgrades);
     this._requirement = requirement;
-    this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
+    if (config.charged) {
+      this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
+    }
   }
 
   get isAvailable() {
@@ -205,7 +200,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   get canBeApplied() {
     return this.isBought && !this.isCharged;
   }
-  
+
   get chargedEffect() {
     return this._chargedEffect;
   }
@@ -224,7 +219,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   get isCharged() {
-    return player.celestials.ra.charged.includes(this.id);
+    return player.celestials.ra.charged.has(this.id);
   }
 
   get canCharge() {
@@ -232,12 +227,11 @@ class InfinityUpgrade extends PurchasableMechanicState {
   }
 
   charge() {
-    player.celestials.ra.charged.push(this.id);
+    player.celestials.ra.charged.add(this.id);
   }
 
   disCharge() {
-    const charged = player.celestials.ra.charged;
-    charged.splice(charged.indexOf(this.id), 1);
+    player.celestials.ra.charged.delete(this.id);
   }
 }
 
@@ -263,7 +257,7 @@ class InfinityUpgrade extends PurchasableMechanicState {
   InfinityUpgrade.skipReset2 = upgrade(db.skipReset2, InfinityUpgrade.skipReset1);
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
-})();
+}());
 
 class InfinityIPMultUpgrade extends GameMechanicState {
   constructor(config) {

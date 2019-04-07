@@ -28,17 +28,21 @@ Vue.component("effect-display", {
         if (effect === undefined || formatEffect === undefined) return;
         this.isVisible = true;
         this.formatEffect = formatEffect;
+        if (typeof effect !== "function") {
+          this.effectValue = effect;
+          return;
+        }
         const effectValue = effect();
         this.effectValue = effectValue;
-        let isNumber = typeof effectValue === "number";
-        this.updateFn = isNumber ?
-          () => this.effectValue = effect() :
-          () => this.effectValue.copyFrom(effect());
+        const isNumber = typeof effectValue === "number";
+        this.updateFn = isNumber
+          ? () => this.effectValue = effect()
+          : () => this.effectValue.copyFrom(effect());
         const cap = config.cap;
         if (cap === undefined) return;
-        this.reachedCapFn = isNumber ?
-          () => this.effectValue >= this.cap :
-          () => this.effectValue.gte(this.cap);
+        this.reachedCapFn = isNumber
+          ? () => this.effectValue >= this.cap
+          : () => this.effectValue.gte(this.cap);
         if (typeof cap !== "function") {
           this.hasCap = true;
           this.cap = isNumber ? cap : new Decimal(cap);

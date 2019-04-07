@@ -1,4 +1,4 @@
-Vue.component('secret-achievement', {
+Vue.component("secret-achievement", {
   props: {
     row: Number,
     column: Number
@@ -15,19 +15,19 @@ Vue.component('secret-achievement', {
     achievement() {
       return SecretAchievement(this.achId);
     },
-    styleObject: function() {
+    styleObject() {
       return {
         "background-image": `url(images/s${this.achId}.png)`,
       };
     },
-    classObject: function() {
+    classObject() {
       return {
         "o-achievement": true,
         "o-achievement--hidden": !this.isUnlocked,
         "o-achievement--unlocked": this.isUnlocked
       };
     },
-    tooltip: function() {
+    tooltip() {
       const config = this.achievement.config;
       return this.isUnlocked ? config.tooltip : config.name;
     }
@@ -40,7 +40,7 @@ Vue.component('secret-achievement', {
     updateState() {
       this.isUnlocked = this.achievement.isUnlocked;
     },
-    onClick: function() {
+    onClick() {
       if (this.achId === 11 && !this.isUnlocked) {
         giveAchievement("The first one's always free");
       }

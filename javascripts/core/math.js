@@ -1,8 +1,89 @@
-'use strict';
+"use strict";
 
 /**
  * This is a file for general math utilities that can be used by many mechanics
  */
+
+/**
+ * @typedef {Object} bulkBuyBinarySearch_result
+ * @property {number} quantity amount purchased (relative)
+ * @property {Decimal} purchasePrice amount that needs to be paid to get that
+ */
+
+/**
+ * bulkBuyBinarySearch is a helper for bulk buyers of non-linear prices. If the price of
+ * a thing is f(n), it's hard to figure out how much of it can be bought without an inverse
+ * of f. This helper starts at some n0, and then searches forward in powers of 2 until it
+ * finds a value that is not affordable. After that, it performs a binary search to figure
+ * out how much can actually be bought. Returns an object with a quantity and price, or
+ * null if nothing can be bought
+ * NOTE: this will not work with slowly increasing prices. This makes the assumption that
+ * if you can afford purchase N, you can afford the combined cost of everything before N
+ * (it does check and make sure you can afford all of that put together. See below in code
+ * for details)
+ * @param {Decimal} money Amount of currency available
+ * @param {Object} costInfo cost parameters:
+ * @param {function(number): Decimal} costInfo.costFunction price of the n'th purchase (starting from 0)
+ * @param {Decimal} [costInfo.firstCost] Cost of the next purchase; this is usually available/cached. Will
+ *   be calculated from costFunction if not provided.
+ * @param {boolean} [costInfo.cumulative] (Defaults to true) specifies whether one must pay a cumulative
+ *   cost or just the highest cost.
+ * @param {number} alreadyBought amount already purchased
+ * @returns {bulkBuyBinarySearch_result | null}
+ */
+function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
+  const costFunction = costInfo.costFunction;
+  const firstCost = costInfo.firstCost === undefined ? costFunction(alreadyBought) : costInfo.firstCost;
+  const isCumulative = costInfo.cumulative === undefined ? true : costInfo.cumulative;
+  if (money.lt(firstCost)) return null;
+  // Attempt to find the max we can purchase. We know we can buy 1, so we try 2, 4, 8, etc
+  // to figure out the upper limit
+  let cantBuy = 1;
+  let nextCost;
+  do {
+    cantBuy *= 2;
+    nextCost = costFunction(alreadyBought + cantBuy - 1);
+  } while (money.gt(nextCost));
+  // Deal with the simple case of buying just one
+  if (cantBuy === 2) {
+    return { quantity: 1, purchasePrice: firstCost };
+  }
+  // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
+  // to find the exact value:
+  let canBuy = cantBuy / 2;
+  while (cantBuy - canBuy > 1) {
+    const middle = Math.floor((canBuy + cantBuy) / 2);
+    if (money.gt(costFunction(alreadyBought + middle - 1))) {
+      canBuy = middle;
+    } else {
+      cantBuy = middle;
+    }
+  }
+  const baseCost = costFunction(alreadyBought + canBuy - 1);
+  if (!isCumulative) {
+    return { quantity: canBuy, purchasePrice: baseCost };
+  }
+  let otherCost = new Decimal(0);
+  // Account for costs leading up to that purchase; we are basically adding things
+  // up until they are insignificant
+  let count = 0;
+  for (let i = canBuy - 1; i > 0; --i) {
+    const newCost = otherCost.plus(costFunction(alreadyBought + i - 1));
+    if (newCost.eq(otherCost)) break;
+    otherCost = newCost;
+    if (++count > 1000) throw crash("unexpected long loop (buggy cost function?)");
+  }
+  let totalCost = baseCost.plus(otherCost);
+  // Check the purchase price again
+  if (money.lt(totalCost)) {
+    --canBuy;
+    // Since prices grow rather steeply, we can safely assume that we can, indeed, buy
+    // one less (e.g. if prices were A, B, C, D, we could afford D, but not A+B+C+D; we
+    // assume we can afford A+B+C because A+B+C < D)
+    totalCost = otherCost;
+  }
+  return { quantity: canBuy, purchasePrice: totalCost };
+}
 
 /**
  * LinearMultiplierScaling performs calculations for multipliers that scale up
@@ -27,6 +108,7 @@ class LinearMultiplierScaling {
     this.baseRatio = baseRatio;
     this.growth = growth;
   }
+
   /**
    * Multiply both the base ratio and the growth rate by the specified factor
    * @param {number} ratio
@@ -37,6 +119,7 @@ class LinearMultiplierScaling {
     this.growth *= ratio;
     return this;
   }
+
   /**
    * Shift by the specified number of purchases. For example, if you set up 2, 0.1, but you
    * want the first scale factor to be 2.1, you could shift by 1
@@ -47,6 +130,7 @@ class LinearMultiplierScaling {
     this.baseRatio += this.growth * count;
     return this;
   }
+
   /**
    * Find the combined multiplier after N purchases. N = 0 means a multiplier of 1 -- since no
    * purchases have been made, no scaling has been applied. N = 1 is baseRatio, N=2 gives
@@ -81,7 +165,6 @@ class LinearMultiplierScaling {
       const fDeriv = Lg + Lb - tmp * (tmp / 3 + 1);
       const fD2 = tmp * (2 + tmp * (2 + tmp / 3));
       const delta1 = fVal / fDeriv;
-//      return g - delta1;
       return g - 2 * delta1 / (1 + Math.sqrt(1 - 2 * delta1 * fD2 / fDeriv));
     };
     // We calculate an initial estimate, assuming that the price doesn't increase:
@@ -114,17 +197,18 @@ class LinearMultiplierScaling {
    * @param {number} count
    */
   logTotalMultiplierAfterPurchases_baseline(count) {
-    let ret = 0;
+    let logMult = 0;
     const k = this.growth / this.baseRatio;
-    for (let x = 0; x < count; ++x) ret += Math.log1p(k * x);
-    return ret + count * Math.log(this.baseRatio);
+    for (let x = 0; x < count; ++x) logMult += Math.log1p(k * x);
+    return logMult + count * Math.log(this.baseRatio);
   }
 }
 
 function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initialCost, costMult, costMultGrowth) {
-  let preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
-  let preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
-  let scaling = new LinearMultiplierScaling(costMult, costMultGrowth);
-  let postScalingCost = Math.exp(scaling.logTotalMultiplierAfterPurchases(Math.max(0, amountOfPurchases - preScalingPurchases)));
+  const preScalingPurchases = Math.max(0, Math.floor(Math.log(costScalingStart / initialCost) / Math.log(costMult)));
+  const preScalingCost = Math.ceil(Math.pow(costMult, Math.min(preScalingPurchases, amountOfPurchases)) * initialCost);
+  const scaling = new LinearMultiplierScaling(costMult, costMultGrowth);
+  const postScalingCost = Math.exp(scaling.logTotalMultiplierAfterPurchases(
+    Math.max(0, amountOfPurchases - preScalingPurchases)));
   return preScalingCost * postScalingCost;
 }

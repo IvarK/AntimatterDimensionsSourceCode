@@ -211,12 +211,12 @@ EternityChallenge.all = EternityChallengeState.all;
  * @returns {EternityChallengeState}
  */
 EternityChallenge.current = () => {
-  if (player.currentEternityChall === String.empty) return undefined;
+  if (player.currentEternityChall === "") return undefined;
   const id = parseInt(player.currentEternityChall.split("eterc")[1]);
   return EternityChallenge(id);
 };
 
-EternityChallenge.isRunning = () => player.currentEternityChall !== String.empty;
+EternityChallenge.isRunning = () => player.currentEternityChall !== "";
 
 EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
 
@@ -253,7 +253,7 @@ EternityChallenge.autoCompleteNext = function() {
 }
 
 EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = RealityUpgrades.includes(10) ? player.eternities > 100 : player.eternities > 0
+  let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
   if (!isPostEc || !player.autoEcIsOn) return
   let threshold = this.currentAutoCompleteThreshold()
   while (player.reality.lastAutoEC - threshold > 0) {

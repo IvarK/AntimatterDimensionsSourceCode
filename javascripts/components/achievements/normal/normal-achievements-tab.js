@@ -1,5 +1,5 @@
-Vue.component('normal-achievements-tab', {
-  data: function() {
+Vue.component("normal-achievements-tab", {
+  data() {
     return {
       achPower: new Decimal(0),
       nextAchIn: 0,
@@ -21,10 +21,10 @@ Vue.component('normal-achievements-tab', {
       this.timeForAchs = totalAchTime;
       this.allAchIn = totalAchTime - player.thisReality;
     },
-    timeDisplay: function(value) {
+    timeDisplay(value) {
       return timeDisplay(value);
     },
-    timeDisplayNoDecimals: function(value) {
+    timeDisplayNoDecimals(value) {
       return timeDisplayNoDecimals(value);
     }
   },

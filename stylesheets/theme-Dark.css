@@ -153,45 +153,6 @@ input {
     color: #757575 !important;
 }
 
-.c-reality-upgrade {
-    background-color: black !important;
-}
-
-.c-reality-upgrade:hover {
-    color: black !important;
-    background-color: #d5ffd7 !important;
-}
-
-.rUpgUn { 
-    color: #d5ffd7 !important;
-    background-color: #656565 !important;
-}
-
-.rUpgUn:hover {
-    color: #d5ffd7 !important;
-    background-color: #656565 !important;
-}
-
-.rUpgBought {
-    color: #d5ffd7 !important;
-    background-color: #0b600e !important;
-}
-
-.rUpgBought:hover {
-    color: #d5ffd7 !important;
-    background-color: #0b600e !important;
-}
-
-.rUpgReqNotMet {
-    color: #d5ffd7 !important;
-    background-color: rgb(165, 57, 57) !important;
-}
-
-.rUpgReqNotMet:hover {
-    color: #d5ffd7 !important;
-    background-color: rgb(165, 57, 57) !important;
-}
-
 .automatorinstruction.command {
     background-color: black !important;
 }

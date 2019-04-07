@@ -1,12 +1,12 @@
 Vue.component("infinity-upgrades-tab", {
-  data: function() {
+  data() {
     return {
       chargeUnlocked: false,
       chargesLeft: 0
-    }
+    };
   },
   computed: {
-    grid: function() {
+    grid() {
       return [
         [
           InfinityUpgrade.totalTimeMult,
@@ -37,15 +37,15 @@ Vue.component("infinity-upgrades-tab", {
   },
   methods: {
     update() {
-      this.chargeUnlocked = Ra.superChargeUnlocked
-      this.chargesLeft = Ra.chargesLeft
+      this.chargeUnlocked = Ra.superChargeUnlocked;
+      this.chargesLeft = Ra.chargesLeft;
     },
-    btnClassObject: function(column) {
+    btnClassObject(column) {
       const classObject = {
         "l-infinity-upgrade-grid__cell": true
       };
       if (column > 0) {
-        // indexing starts from 0, while css classes start from 2 (and first column has default css class)
+        // Indexing starts from 0, while css classes start from 2 (and first column has default css class)
         classObject[`o-infinity-upgrade-btn--color-${column + 1}`] = true;
       }
       return classObject;

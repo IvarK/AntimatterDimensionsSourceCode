@@ -13,7 +13,8 @@ const GlyphSelection = {
     this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
     ui.view.modal.glyphSelection = true;
     if (!Perk.glyphUncommonGuarantee.isBought) return;
-    // If no choices are rare enough, pick one randomly and reroll its rarity until it is
+    // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
+    // rarities until the threshold is passed and then assign that rarity to a random glyph
     const strengthThreshold = 1.5;  // Uncommon
     if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
@@ -134,35 +135,7 @@ function completeReality(force, reset, auto = false) {
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    if (player.reality.glyphs.active.length === 1 && player.reality.glyphs.active[0].level >= 3) unlockRealityUpgrade(9);
-    if (!player.reality.upgReqs[16] && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        if (player.reality.glyphs.active[i].strength < 1.5) tempBool = false
-      }
-      if (tempBool) unlockRealityUpgrade(16)
-    }
-    if (!player.reality.upgReqs[17] && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        let count = 0;
-        for (let y in player.reality.glyphs.active[i].effects) {
-          count++
-        }
-        if (count < 2 && i < 4) tempBool = false // Idk what caused this, but something made this loop 5 times, so I added the additional check
-      }
-      if (tempBool) unlockRealityUpgrade(17)
-    }
-    if (!player.reality.upgReqs[18] && player.reality.glyphs.active.length === 4) {
-      let tempBool = true;
-      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-        if (player.reality.glyphs.active[i].level < 10) tempBool = false
-      }
-      if (tempBool) unlockRealityUpgrade(18)
-    }
-    if (player.reality.glyphs.active.length + player.reality.glyphs.inventory.length >= 30) unlockRealityUpgrade(19)
-    if (player.thisReality < 15 * 60 * 1000) unlockRealityUpgrade(23)
-    if (player.reality.glyphs.active.length == 0 && gainedRealityMachines().gte(5000)) unlockRealityUpgrade(24)
+    RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
     if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
@@ -184,37 +157,38 @@ function completeReality(force, reset, auto = false) {
   player.sacrificed = new Decimal(0);
 
   player.challenges = [];
-  if (RealityUpgrades.includes(10)) {
+  let isRUPG10Bought = RealityUpgrade(10).isBought;
+  if (isRUPG10Bought) {
     for (let challenge of Challenge.all) {
       challenge.complete();
     }
   }
   player.currentChallenge = "";
-  player.infinityUpgrades = RealityUpgrades.includes(10) ? player.infinityUpgrades : [];
+  if (!isRUPG10Bought) player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = RealityUpgrades.includes(10) ? 4 : 0;
-  player.galaxies = RealityUpgrades.includes(10) ? 1 : 0;
+  player.resets = isRUPG10Bought ? 4 : 0;
+  player.galaxies = isRUPG10Bought ? 1 : 0;
   player.tickDecrease = 0.9;
   player.interval = null;
-  if (!RealityUpgrades.includes(10)) {
+  if (!isRUPG10Bought) {
     Autobuyer.resetUnlockables();
   }
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = RealityUpgrades.includes(10) ? player.break : false;
+  player.break = isRUPG10Bought ? player.break : false;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  if (!RealityUpgrades.includes(10)) {
+  if (!isRUPG10Bought) {
     player.infinityRebuyables = [0, 0];
   }
   player.postChallUnlocked = 0;
   player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
   player.infinityPower = new Decimal(1);
-  player.infDimBuyers = RealityUpgrades.includes(10) ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
+  player.infDimBuyers = isRUPG10Bought ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
 
@@ -225,18 +199,19 @@ function completeReality(force, reset, auto = false) {
     Perk.startEP3
   ).toDecimal();
 
+  // This has to be reset before player.eternities to make the bumpLimit logic work
+  // correctly
+  EternityUpgrade.epMult.reset();
   player.eternities = 0;
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
-  player.eternityUpgrades = [];
-  player.epmult = new Decimal(1);
-  player.epmultCost = new Decimal(500);
+  player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  player.offlineProd = RealityUpgrades.includes(10) ? player.offlineProd : 0;
-  player.offlineProdCost = RealityUpgrades.includes(10) ? player.offlineProdCost : 1e7;
+  player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
+  player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
   player.challengeTarget = new Decimal(0);
-  if (!RealityUpgrades.includes(10)) {
+  if (!isRUPG10Bought) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
@@ -247,8 +222,8 @@ function completeReality(force, reset, auto = false) {
   player.etercreq = 0;
   player.autoIP = new Decimal(0);
   player.autoTime = 1e300;
-  player.infMultBuyer = RealityUpgrades.includes(10) ? player.infMultBuyer : false;
-  if (!RealityUpgrades.includes(10)) {
+  player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
+  if (!isRUPG10Bought) {
     player.autoCrunchMode = AutoCrunchMode.AMOUNT;
   }
   player.respec = false;
@@ -265,7 +240,7 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
-  if (!RealityUpgrades.includes(10)) {
+  if (!RealityUpgrade(10).isBought) {
     player.eternityBuyer.isOn = false;
   }
   player.dilation.studies = [];
@@ -276,7 +251,7 @@ function completeReality(force, reset, auto = false) {
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseFreeGalaxies = 0;
   player.dilation.freeGalaxies = 0;
-  player.dilation.upgrades = [];
+  player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
     1: 0,
     2: 0,
@@ -296,9 +271,8 @@ function completeReality(force, reset, auto = false) {
   resetChallengeStuff();
   resetDimensions();
   secondSoftReset();
-  if (RealityUpgrades.includes(10)) player.eternities = 100;
+  if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
-  $("#pp").text("You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s."))
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
@@ -317,10 +291,8 @@ function completeReality(force, reset, auto = false) {
     Tab.dimensions.normal.show();
   }
   Marathon2 = 0;
-  updateBlackHoleUpgrades();
   updateAutomatorRows();
   drawPerkNetwork();
-  document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.")
 
   if (player.realities >= 4) giveAchievement("How does this work?")
 
@@ -328,8 +300,8 @@ function completeReality(force, reset, auto = false) {
 
 
   function resetReplicanti() {
-    player.replicanti.amount = RealityUpgrades.includes(10) ? new Decimal(1) : new Decimal(0);
-    player.replicanti.unl = RealityUpgrades.includes(10);
+    player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);
+    player.replicanti.unl = isRUPG10Bought;
     player.replicanti.chance = 0.01;
     player.replicanti.chanceCost = new Decimal(1e150);
     player.replicanti.interval = 1000;
@@ -337,11 +309,11 @@ function completeReality(force, reset, auto = false) {
     player.replicanti.gal = 0;
     player.replicanti.galaxies = 0;
     player.replicanti.galCost = new Decimal(1e170);
-    player.replicanti.galaxybuyer = RealityUpgrades.includes(10) ? player.replicanti.galaxybuyer : undefined;
-    player.replicanti.auto = [RealityUpgrades.includes(10) ? player.replicanti.auto[0] : false, RealityUpgrades.includes(10) ? player.replicanti.auto[1] : false, RealityUpgrades.includes(10) ? player.replicanti.auto[2] : false];
+    player.replicanti.galaxybuyer = isRUPG10Bought ? player.replicanti.galaxybuyer : undefined;
+    player.replicanti.auto = [isRUPG10Bought ? player.replicanti.auto[0] : false, isRUPG10Bought ? player.replicanti.auto[1] : false, isRUPG10Bought ? player.replicanti.auto[2] : false];
   }
-  if (RealityUpgrades.includes(13)) {
-    if (player.reality.epmultbuyer) buyMaxEPMult();
+  if (RealityUpgrade(13).isBought) {
+    if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
     for (var i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i);
@@ -349,7 +321,7 @@ function completeReality(force, reset, auto = false) {
     }
   }
 
-  GameCache.invalidate();
+  Lazy.invalidateAll();
   GameUI.dispatch(GameEvent.REALITY);
 }
 
@@ -390,12 +362,6 @@ function fullResetTimeDimensions() {
     dimension.bought = 0;
     dimension.power = new Decimal(1);
   }
-}
-
-function unlockRealityUpgrade(id) {
-  if (player.reality.upgReqs[id]) return
-  player.reality.upgReqs[id] = true
-  GameUI.notify.success("You've unlocked a Reality upgrade!");
 }
 
 function startRealityOver() {

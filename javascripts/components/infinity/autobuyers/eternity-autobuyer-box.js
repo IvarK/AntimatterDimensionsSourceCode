@@ -1,21 +1,21 @@
 Vue.component("eternity-autobuyer-box", {
-  data: function() {
+  data() {
     return {
       mode: AutoEternityMode.AMOUNT
     };
   },
   computed: {
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic Eternity", Autobuyer.eternity);
     },
-    limitInputSetup: function() {
+    limitInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
         () => Autobuyer.eternity.limit,
         value => Autobuyer.eternity.limit = value
       );
     },
-    modeDisplay: function() {
+    modeDisplay() {
       switch (this.mode) {
         case AutoEternityMode.AMOUNT: return "Amount of EP to wait until reset";
         case AutoEternityMode.TIME: return "Seconds between eternities";

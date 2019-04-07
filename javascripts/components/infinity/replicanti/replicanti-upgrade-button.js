@@ -2,11 +2,11 @@ Vue.component("replicanti-upgrade-button", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
-      description: String.empty,
+      description: "",
       canBeBought: false,
-      costDescription: String.empty,
+      costDescription: "",
       isCapped: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
@@ -20,7 +20,7 @@ Vue.component("replicanti-upgrade-button", {
     }
   },
   computed: {
-    upgrade: function() {
+    upgrade() {
       return this.setup.upgrade;
     }
   },

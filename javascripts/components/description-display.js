@@ -2,11 +2,15 @@ Vue.component("description-display", {
   props: {
     config: Object,
     name: String,
-    length: Number
+    length: Number,
+    title: {
+      type: String,
+      default: "",
+    }
   },
   data() {
     return {
-      description: String.empty
+      description: ""
     };
   },
   watch: {
@@ -41,5 +45,5 @@ Vue.component("description-display", {
       if (this.updateFn) this.updateFn();
     }
   },
-  template: `<span :class="classObject">{{description}}</span>`
+  template: `<span :class="classObject">{{title}} {{description}}</span>`
 });

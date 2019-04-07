@@ -15,7 +15,7 @@ Vue.component("current-glyph-effects", {
           return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
         }
       },
-      template: /*html*/`
+      template: `
         <div>
           {{effectConfig.totalDescSplit[0]}}
           <span :class="valueClass">{{formatValue}}</span>
@@ -23,7 +23,7 @@ Vue.component("current-glyph-effects", {
         </div>`
     }
   },
-  data: function () {
+  data() {
     return {
       effects: [],
     };
@@ -42,11 +42,11 @@ Vue.component("current-glyph-effects", {
       this.effects = getActiveGlyphEffects();
     }
   },
-  template: /*html*/`
+  template: `
   <div class="c-current-glyph-effects l-current-glyph-effects">
     <div v-if="isSoftcapActive" class="l-current-glyph-effects__capped-header">
       <span class="c-current-glyph-effects__effect--capped">Colored</span> numbers have a reduced effect
     </div>
     <current-effect v-for="effect in effects" :key="effect.id" :effect="effect"/>
   </div>`,
-})
+});

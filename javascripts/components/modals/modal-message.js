@@ -1,4 +1,4 @@
-Vue.component('modal-message', {
+Vue.component("modal-message", {
   computed: {
     modal() {
       return this.$viewModel.modal;

@@ -1,5 +1,5 @@
-Vue.component('dimensions-tab', {
-  data: function() {
+Vue.component("dimensions-tab", {
+  data() {
     return {
       isIDTabUnlocked: false,
       isTDTabUnlocked: false,

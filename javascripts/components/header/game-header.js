@@ -36,7 +36,7 @@ Vue.component("game-header", {
       else if (V.isRunning) this.currCelestial = "V'";
       else if (Ra.isRunning) this.currCelestial = "Ra'";
       else if (Laitela.isRunning) this.currCelestial = "Lai'tela"
-      else this.currCelestial = String.empty;
+      else this.currCelestial = "";
     },
     updateChallengeDisplay: function() {
       // Pls don't hate me Razen

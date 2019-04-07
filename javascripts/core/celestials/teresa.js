@@ -41,11 +41,11 @@ const Teresa = {
   pourRM(diff) {
     if (this.rmStore >= Teresa.rmStoreMax) return;
     this.timePoured += diff;
-    let rm = player.reality.realityMachines;
-    let rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
+    const rm = player.reality.realityMachines;
+    const rmPoured = Math.min((this.rmStore + 1e6) * 0.01 * Math.pow(this.timePoured, 2), rm.toNumber());
     this.rmStore += Math.min(rmPoured, Teresa.rmStoreMax - this.rmStore);
     player.reality.realityMachines = rm.minus(rmPoured);
-    this.checkForUnlocks()
+    this.checkForUnlocks();
   },
   checkForUnlocks() {
     Object.values(Teresa.unlockInfo).forEach(info => {

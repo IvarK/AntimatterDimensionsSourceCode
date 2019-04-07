@@ -1,5 +1,5 @@
 Vue.component("modal-glyph-selection", {
-  data: function () {
+  data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
     };
@@ -21,7 +21,7 @@ Vue.component("modal-glyph-selection", {
       GlyphSelection.select(index);
     }
   },
-  template: /*html*/`
+  template: `
   <div class="l-modal-overlay c-modal-overlay">
     <div class="l-modal-glyph-selection c-modal">
       <glyph-component v-for="(glyph, index) in glyphs"

@@ -15,7 +15,7 @@ const GlyphTooltipEffect = {
       return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
     },
     displayValue() {
-      let value = this.effectConfig.formatEffect(this.value);
+      const value = this.effectConfig.formatEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     valueStyle() {
@@ -24,10 +24,10 @@ const GlyphTooltipEffect = {
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
           color: "#76EE76",
-        }
+        };
     }
   },
-  template: /*html*/`
+  template: `
     <div class="c-glyph-tooltip__effect">
       <span v-html="prefix"/>
       <span :style="valueStyle">{{displayValue}}</span>
@@ -74,7 +74,7 @@ const GlyphTooltipComponent = {
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
                         -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
         float: "left"
-      }
+      };
     },
     description() {
       return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
@@ -88,7 +88,7 @@ const GlyphTooltipComponent = {
         : `Level: ${this.level}`;
     },
     levelStyle() {
-      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" }
+      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
     },
     sacrificeText() {
       return this.onTouchDevice
@@ -127,7 +127,7 @@ const GlyphTooltipComponent = {
       sacrificeGlyph(Glyphs.findById(this.id), false);
     },
   },
-  template: /*html*/`
+  template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
        :style="pointerEventStyle"
        v-on="eventHandlers">
@@ -186,7 +186,7 @@ Vue.component("glyph-component", {
       default: false,
     }
   },
-  data: function () {
+  data() {
     return {
       componentID: UIID.next(),
       isDragging: false,
@@ -195,7 +195,7 @@ Vue.component("glyph-component", {
       isTouched: false,
       sacrificeReward: 0,
       levelCap: Number.MAX_VALUE,
-    }
+    };
   },
   computed: {
     hasTooltip() {
@@ -206,9 +206,10 @@ Vue.component("glyph-component", {
     },
     symbol() {
       const symbol = this.glyph.symbol;
-      return symbol
-        ? (symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol)
-        : this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
+      if (symbol) {
+        return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
+      }
+      return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -221,7 +222,7 @@ Vue.component("glyph-component", {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     outerStyle() {
       return {
@@ -230,7 +231,7 @@ Vue.component("glyph-component", {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     innerStyle() {
       const rarityColor = this.glyph.color ||
@@ -242,10 +243,10 @@ Vue.component("glyph-component", {
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     mouseEventHandlers() {
-      let ret = this.hasTooltip ? {
+      const handlers = this.hasTooltip ? {
         mouseenter: this.mouseEnter,
         "&mousemove": this.mouseMove,
         mouseleave: this.mouseLeave,
@@ -254,16 +255,16 @@ Vue.component("glyph-component", {
         touchend: this.touchEnd
       } : {};
       if (this.hasTooltip || this.draggable) {
-        ret.touchmove = this.touchMove;
+        handlers.touchmove = this.touchMove;
       }
-      return ret;
+      return handlers;
     },
     isCurrentTooltip() {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
   },
   created() {
-    this.$on("tooltip-touched", () => this.hideTooltip() );
+    this.$on("tooltip-touched", () => this.hideTooltip());
   },
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
@@ -282,8 +283,8 @@ Vue.component("glyph-component", {
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = this.$el.getBoundingClientRect();
-        tooltipEl.style.left = `${x - rect.left}px`
-        tooltipEl.style.top = `${y - rect.top}px`
+        tooltipEl.style.left = `${x - rect.left}px`;
+        tooltipEl.style.top = `${y - rect.top}px`;
       }
     },
     mouseEnter() {
@@ -311,7 +312,7 @@ Vue.component("glyph-component", {
       ev.dataTransfer.dropEffect = "move";
       this.$viewModel.draggingUIID = this.componentID;
       const rect = this.$refs.over.getBoundingClientRect();
-      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX-rect.left, ev.clientY-rect.top);
+      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX - rect.left, ev.clientY - rect.top);
     },
     dragEnd() {
       this.isDragging = false;
@@ -328,7 +329,7 @@ Vue.component("glyph-component", {
       }
       const boundary = 100;
       if (ev.clientY < boundary) {
-        this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY/boundary;
+        this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY / boundary;
       } else if (ev.clientY > $(window).height() - boundary) {
         this.$viewModel.scrollWindow = 1 - 0.9 * ($(window).height() - ev.clientY) / boundary;
       } else {
@@ -362,7 +363,7 @@ Vue.component("glyph-component", {
       }
     },
   },
-  template:  /*html*/`
+  template: `
   <!-- The naive approach with a border and box-shadow seems to have problems with
       weird seams/artifacts at the edges. This makes for a rather complex workaround -->
     <div :style="outerStyle"

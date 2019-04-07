@@ -185,13 +185,13 @@ function onLoad() {
   updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
-  updateAutomatorRows()
-  checkPerkValidity()
-  checkPPShopValidity()
+  updateAutomatorRows();
+  checkPerkValidity();
+  checkPPShopValidity();
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
-  updatePerkColors()
-  V.updateTotalRunUnlocks()
+  updatePerkColors();
+  V.updateTotalRunUnlocks();
 
   const notation = player.options.notation;
   if (notation === undefined) {

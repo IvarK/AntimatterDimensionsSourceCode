@@ -62,7 +62,8 @@ class Notation {
    * @abstract
    * @protected
    */
-  formatDecimal(value, places) {}
+  // eslint-disable-next-line no-unused-vars
+  formatDecimal(value, places) { throw NotImplementedCrash(); }
 
   /**
    * @param {number} power
@@ -172,15 +173,15 @@ Notation.standard = new class StandardNotation extends EngineeringNotation {
   constructor() {
     super("Standard");
     this.abbreviations = [
-      '', 'K', 'M', 'B', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'Oc', 'No', 'Dc', 'UDc', 'DDc',
-      'TDc', 'QaDc', 'QtDc', 'SxDc', 'SpDc', 'ODc', 'NDc', 'Vg', 'UVg', 'DVg', 'TVg',
-      'QaVg', 'QtVg', 'SxVg', 'SpVg', 'OVg', 'NVg', 'Tg', 'UTg', 'DTg', 'TTg', 'QaTg',
-      'QtTg', 'SxTg', 'SpTg', 'OTg', 'NTg', 'Qd', 'UQd', 'DQd', 'TQd', 'QaQd', 'QtQd',
-      'SxQd', 'SpQd', 'OQd', 'NQd', 'Qi', 'UQi', 'DQi', 'TQi', 'QaQi', 'QtQi', 'SxQi',
-      'SpQi', 'OQi', 'NQi', 'Se', 'USe', 'DSe', 'TSe', 'QaSe', 'QtSe', 'SxSe', 'SpSe',
-      'OSe', 'NSe', 'St', 'USt', 'DSt', 'TSt', 'QaSt', 'QtSt', 'SxSt', 'SpSt', 'OSt',
-      'NSt', 'Og', 'UOg', 'DOg', 'TOg', 'QaOg', 'QtOg', 'SxOg', 'SpOg', 'OOg', 'NOg',
-      'Nn', 'UNn', 'DNn', 'TNn', 'QaNn', 'QtNn', 'SxNn', 'SpNn', 'ONn', 'NNn', 'Ce'
+      "", "K", "M", "B", "T", "Qa", "Qt", "Sx", "Sp", "Oc", "No", "Dc", "UDc", "DDc",
+      "TDc", "QaDc", "QtDc", "SxDc", "SpDc", "ODc", "NDc", "Vg", "UVg", "DVg", "TVg",
+      "QaVg", "QtVg", "SxVg", "SpVg", "OVg", "NVg", "Tg", "UTg", "DTg", "TTg", "QaTg",
+      "QtTg", "SxTg", "SpTg", "OTg", "NTg", "Qd", "UQd", "DQd", "TQd", "QaQd", "QtQd",
+      "SxQd", "SpQd", "OQd", "NQd", "Qi", "UQi", "DQi", "TQi", "QaQi", "QtQi", "SxQi",
+      "SpQi", "OQi", "NQi", "Se", "USe", "DSe", "TSe", "QaSe", "QtSe", "SxSe", "SpSe",
+      "OSe", "NSe", "St", "USt", "DSt", "TSt", "QaSt", "QtSt", "SxSt", "SpSt", "OSt",
+      "NSt", "Og", "UOg", "DOg", "TOg", "QaOg", "QtOg", "SxOg", "SpOg", "OOg", "NOg",
+      "Nn", "UNn", "DNn", "TNn", "QaNn", "QtNn", "SxNn", "SpNn", "ONn", "NNn", "Ce"
     ];
   }
 
@@ -191,9 +192,9 @@ Notation.standard = new class StandardNotation extends EngineeringNotation {
   formatDecimal(value, places) {
     const engineering = this.makeFixedEngineering(value, places);
     const mantissa = engineering.mantissa.toFixed(places);
-    const abbreviation = value.exponent <= 303 ?
-      this.abbreviations[engineering.exponent / 3] :
-      StandardNotation.getAbbreviation(value.exponent);
+    const abbreviation = value.exponent <= 303
+      ? this.abbreviations[engineering.exponent / 3]
+      : StandardNotation.getAbbreviation(value.exponent);
     return `${mantissa} ${abbreviation}`;
   }
 
@@ -204,23 +205,31 @@ Notation.standard = new class StandardNotation extends EngineeringNotation {
    */
   static getAbbreviation(e) {
     const prefixes = [
-      ['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
-      ['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
-      ['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']];
-    const prefixes2 = ['', 'MI-', 'MC-', 'NA-', 'PC-', 'FM-'];
+      ["", "U", "D", "T", "Qa", "Qt", "Sx", "Sp", "O", "N"],
+      ["", "Dc", "Vg", "Tg", "Qd", "Qi", "Se", "St", "Og", "Nn"],
+      ["", "Ce", "Dn", "Tc", "Qe", "Qu", "Sc", "Si", "Oe", "Ne"]];
+    const prefixes2 = ["", "MI-", "MC-", "NA-", "PC-", "FM-"];
     e = Math.floor(e / 3) - 1;
     let index2 = 0;
-    let prefix = [prefixes[0][e % 10]];
+    const prefix = [prefixes[0][e % 10]];
     while (e >= 10) {
       e = Math.floor(e / 10);
       prefix.push(prefixes[(++index2) % 3][e % 10]);
     }
     index2 = Math.floor(index2 / 3);
     while (prefix.length % 3 !== 0) prefix.push("");
-    let ret = "";
-    while (index2 >= 0) ret += prefix[index2 * 3] + prefix[index2 * 3 + 1] + prefix[index2 * 3 + 2] + prefixes2[index2--];
-    if (ret.endsWith("-")) ret = ret.slice(0, ret.length - 1)
-    return ret.replace("UM", "M").replace("UNA", "NA").replace("UPC", "PC").replace("UFM", "FM");
+    let abbreviation = "";
+    while (index2 >= 0) {
+      abbreviation += prefix[index2 * 3] + prefix[index2 * 3 + 1] + prefix[index2 * 3 + 2] + prefixes2[index2--];
+    }
+    if (abbreviation.endsWith("-")) {
+      abbreviation = abbreviation.slice(0, abbreviation.length - 1);
+    }
+    return abbreviation
+      .replace("UM", "M")
+      .replace("UNA", "NA")
+      .replace("UPC", "PC")
+      .replace("UFM", "FM");
   }
 }();
 
@@ -253,9 +262,9 @@ Notation.infinity = new class InfinityNotation extends Notation {
       const parts = formatted.split(".");
       return `${formatWithCommas(parts[0])}.${parts[1]}∞`;
     }
-    else {
+    
       return `${formatted}∞`;
-    }
+    
   }
 }("Infinity");
 
@@ -277,16 +286,16 @@ Notation.brackets = new class BracketsNotation extends Notation {
     return true;
   }
 
-  formatDecimal(value, places) {
-    let table = [")", "[", "{", "]", "(", "}"];
-    let log6 = Math.LN10 / Math.log(6) * value.log10();
+  formatDecimal(value) {
+    const table = [")", "[", "{", "]", "(", "}"];
+    const log6 = Math.LN10 / Math.log(6) * value.log10();
     let wholePartOfLog = Math.floor(log6);
-    let decimalPartOfLog = log6 - wholePartOfLog;
-    //Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
-    let decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
+    const decimalPartOfLog = log6 - wholePartOfLog;
+    // Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
+    const decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
     let string = "";
     while (wholePartOfLog >= 6) {
-      let remainder = wholePartOfLog % 6;
+      const remainder = wholePartOfLog % 6;
       wholePartOfLog -= remainder;
       wholePartOfLog /= 6;
       string = table[remainder] + string;
@@ -322,9 +331,11 @@ class LettersNotation extends EngineeringNotation {
     while (power >= lN(++i)) ;
     if (i === 1) return str[power - 1];
     power -= lN(i - 1);
-    let ret = '';
-    while (i > 0) ret += str[Math.floor(power / Math.pow(len, --i)) % len];
-    return ret;
+    let letter = "";
+    while (i > 0) {
+      letter += str[Math.floor(power / Math.pow(len, --i)) % len];
+    }
+    return letter;
   }
 
   formatDecimal(value, places) {
@@ -337,7 +348,7 @@ class LettersNotation extends EngineeringNotation {
 
 Notation.letters = new LettersNotation("Letters", "abcdefghijklmnopqrstuvwxyz");
 
-Notation.cancer = new class CancerNotation extends LettersNotation{
+Notation.cancer = new class CancerNotation extends LettersNotation {
   get isPainful() {
     return true;
   }
@@ -346,13 +357,44 @@ Notation.cancer = new class CancerNotation extends LettersNotation{
     super.setCurrent();
     GameUI.notify.success("😂😂😂");
   }
-}("Cancer", ['😠', '🎂', '🎄', '💀', '🍆', '👪', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡']);
+}(
+  "Cancer",
+  [
+    "😠", "🎂", "🎄", "💀", "🍆", "👪", "🌈", "💯", "🍦", "🎃", "💋", "😂", "🌙",
+    "⛔", "🐙", "💩", "❓", "☢", "🙈", "👍", "☂", "✌", "⚠", "❌", "😋", "⚡"
+  ]
+);
 
 Notation.roman = new class RomanNotation extends Notation {
   constructor() {
     super("Roman");
-    this._decimalValue = [ 1000000, 900000, 500000, 400000, 100000, 90000, 50000, 40000, 10000, 9000,  5000, 4000, 1000,  900,    500,  400,   100,   90,    50,   40,     10,   9,    5,     4,     1   ];
-    this._romanNumeral = [ "M̄",     "C̄M̄",   "D̄",    "C̄D̄",   "C̄",    "X̄C̄",  "L̄",   "X̄L̄",  "X̄",   "ⅯX̄", "V̄",  "ⅯV̄", "Ⅿ",  "ⅭⅯ", "Ⅾ", "ⅭⅮ", "Ⅽ", "ⅩⅭ", "Ⅼ", "ⅩⅬ", "Ⅹ", "ⅠⅩ","Ⅴ", "ⅠⅤ", "Ⅰ" ];
+    this._romanNumbers = [
+      [1000000, "M̄"],
+      [900000, "C̄M̄"],
+      [500000, "D̄"],
+      [400000, "C̄D̄"],
+      [100000, "C̄"],
+      [90000, "X̄C̄"],
+      [50000, "L̄"],
+      [40000, "X̄L̄"],
+      [10000, "X̄"],
+      [9000, "ⅯX̄"],
+      [5000, "V̄"],
+      [4000, "ⅯV̄"],
+      [1000, "Ⅿ"],
+      [900, "ⅭⅯ"],
+      [500, "Ⅾ"],
+      [400, "ⅭⅮ"],
+      [100, "Ⅽ"],
+      [90, "ⅩⅭ"],
+      [50, "Ⅼ"],
+      [40, "ⅩⅬ"],
+      [10, "Ⅹ"],
+      [9, "ⅠⅩ"],
+      [5, "Ⅴ"],
+      [4, "ⅠⅤ"],
+      [1, "Ⅰ"],
+    ];
     this._romanFractions = ["", "·", ":", "∴", "∷", "⁙"];
     this.maximum = 4000000;
     this._maxLog10 = Math.log10(this.maximum);
@@ -366,11 +408,11 @@ Notation.roman = new class RomanNotation extends Notation {
     return "Infinitus";
   }
 
-  formatUnder1000(value, places) {
+  formatUnder1000(value) {
     return this.romanize(value);
   }
 
-  formatDecimal(value, places) {
+  formatDecimal(value) {
     if (value.lt(this.maximum)) {
       return this.romanize(value.toNumber());
     }
@@ -386,31 +428,32 @@ Notation.roman = new class RomanNotation extends Notation {
    * @private
    */
   romanize(value) {
-    const decimalValue = this._decimalValue;
-    const romanNumeral = this._romanNumeral;
-    const romanFractions = this._romanFractions;
-    let roman = "";
-    for (let i = 0; i < decimalValue.length; i++) {
-      while (decimalValue[i] <= value) {
-        roman += romanNumeral[i];
-        value -= decimalValue[i];
+    const romanNumbers = this._romanNumbers;
+    let romanized = "";
+    for (const numberPair of romanNumbers) {
+      const decimal = numberPair[0];
+      const roman = numberPair[1];
+      while (decimal <= value) {
+        romanized += roman;
+        value -= decimal;
       }
     }
     let duodecimal = Math.round(Math.floor(value * 10) * 1.2);
     if (duodecimal === 0) {
-      return roman === "" ? "nulla" : roman;
+      return romanized === "" ? "nulla" : romanized;
     }
     if (duodecimal > 5) {
       duodecimal -= 6;
-      roman += "Ｓ";
+      romanized += "Ｓ";
     }
-    roman += romanFractions[duodecimal];
-    return roman;
+    const romanFractions = this._romanFractions;
+    romanized += romanFractions[duodecimal];
+    return romanized;
   }
 }("Roman");
 
 Notation.dots = new class DotsNotation extends Notation {
-  formatUnder1000(value, places) {
+  formatUnder1000(value) {
     return this.dotify(value * 254);
   }
 
@@ -418,7 +461,7 @@ Notation.dots = new class DotsNotation extends Notation {
     return "⣿⠀⣿";
   }
 
-  formatDecimal(value, places) {
+  formatDecimal(value) {
     if (value.lt(16387063.9980315)) {
       return this.dotify(value.toNumber() * 254);
     }
@@ -450,8 +493,11 @@ Notation.dots = new class DotsNotation extends Notation {
 Notation.zalgo = new class ZalgoNotation extends Notation {
   constructor() {
     super("Zalgo");
-    this._zalgoChars = ['\u030D', '\u0336', '\u0353', '\u033F', '\u0489', '\u0330', '\u031A', '\u0338', '\u035A', '\u0337'];
-    this._heComes = ["H", "E" , " ", "C" , "O" , "M" , "E", "S"];
+    this._zalgoChars = [
+      "\u030D", "\u0336", "\u0353", "\u033F", "\u0489",
+      "\u0330", "\u031A", "\u0338", "\u035A", "\u0337"
+    ];
+    this._heComes = ["H", "E", " ", "C", "O", "M", "E", "S"];
   }
 
   get isPainful() {
@@ -464,11 +510,11 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
       .join("");
   }
 
-  formatUnder1000(value, places) {
+  formatUnder1000(value) {
     return this.heComes(value.toDecimal());
   }
 
-  formatDecimal(value, places) {
+  formatDecimal(value) {
     return this.heComes(value);
   }
 
@@ -478,16 +524,16 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
    */
   heComes(value) {
     // Eternity seems to happen around e66666 antimatter, who would've thought? Scaled down to 1000.
-    let scaled = value.clampMin(1).log10() / 66666 * 1000;
-    let displayPart = scaled.toFixed(2);
-    let zalgoPart = Math.floor(Math.abs(Math.pow(2, 30) * (scaled - displayPart)));
+    const scaled = value.clampMin(1).log10() / 66666 * 1000;
+    const displayPart = scaled.toFixed(2);
+    const zalgoPart = Math.floor(Math.abs(Math.pow(2, 30) * (scaled - displayPart)));
 
-    let displayChars = Array.from(formatWithCommas(displayPart));
-    let zalgoIndices = Array.from(zalgoPart.toString() + scaled.toFixed(0));
+    const displayChars = Array.from(formatWithCommas(displayPart));
+    const zalgoIndices = Array.from(zalgoPart.toString() + scaled.toFixed(0));
 
     for (let i = 0; i < zalgoIndices.length; i++) {
-      let zalgoIndex = parseInt(zalgoIndices[i]);
-      let displayIndex = 7 * i % displayChars.length;
+      const zalgoIndex = parseInt(zalgoIndices[i], 10);
+      const displayIndex = 7 * i % displayChars.length;
       displayChars[displayIndex] += this._zalgoChars[zalgoIndex];
     }
 
@@ -497,8 +543,8 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
 
 Notation.hex = new class HexNotation extends Notation {
   constructor() {
-    super("Hex")
-    this.signs = {POSITIVE: 0, NEGATIVE: 1};
+    super("Hex");
+    this.signs = { POSITIVE: 0, NEGATIVE: 1 };
   }
 
   formatUnder1000(value) {
@@ -513,7 +559,7 @@ Notation.hex = new class HexNotation extends Notation {
     // The `this.rawValue(x, 32, 8)` returns an integer between 0 and 2^32,
     // the .toString(16).toUpperCase().padStart(8, '0') formats it as
     // 8 hexadecimal digits.
-    return this.rawValue(value, 32, 8).toString(16).toUpperCase().padStart(8, '0');
+    return this.rawValue(value, 32, 8).toString(16).toUpperCase().padStart(8, "0");
   }
 
   modifiedLogarithm(x) {
@@ -542,7 +588,7 @@ Notation.hex = new class HexNotation extends Notation {
     // the last digit, if it's 0 the last digit will almost always be odd
     // for non-dyadic x, if it's too high the code might be slower.
     // 8 (the value used) should be high enough for good results.
-    let signs = [];
+    const signs = [];
     for (let i = 0; i < numberOfBits + extraPrecisionForRounding; i++) {
       if (!this.isFinite(value)) {
         break;
@@ -596,29 +642,29 @@ Notation.imperial = new class ImperialNotation extends Notation {
     this.VOLUME_UNITS = [
       [0, "pL", 0],
       [61611520, "minim", 0],
-      [61611520*60, "dram", 1],
-      [61611520*60*8, "ounce", 2],
-      [61611520*60*8*4, "gill", 2],
-      [61611520*60*8*4*2, "cup", 3],
-      [61611520*60*8*4*2*2, "pint", 4],
-      [61611520*60*8*4*2*2*2, "quart", 4],
-      [61611520*60*8*4*2*2*2*4, "gallon", 4],
-      [61611520*60*8*4*2*2*2*4*4.5, "pin", 3],
-      [61611520*60*8*4*2*2*2*4*9, "firkin", 3],
-      [61611520*60*8*4*2*2*2*4*18, "kilderkin", 4],
-      [61611520*60*8*4*2*2*2*4*36, "barrel", 4],
-      [61611520*60*8*4*2*2*2*4*54, "hogshead", 5],
-      [61611520*60*8*4*2*2*2*4*72, "puncheon", 6],
-      [61611520*60*8*4*2*2*2*4*108, "butt", 7],
-      [61611520*60*8*4*2*2*2*4*216, "tun", 7],
+      [61611520 * 60, "dram", 1],
+      [61611520 * 60 * 8, "ounce", 2],
+      [61611520 * 60 * 8 * 4, "gill", 2],
+      [61611520 * 60 * 8 * 4 * 2, "cup", 3],
+      [61611520 * 60 * 8 * 4 * 2 * 2, "pint", 4],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2, "quart", 4],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4, "gallon", 4],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 4.5, "pin", 3],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 9, "firkin", 3],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 18, "kilderkin", 4],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 36, "barrel", 4],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 54, "hogshead", 5],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 72, "puncheon", 6],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 108, "butt", 7],
+      [61611520 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 216, "tun", 7],
     ];
     this.MINIMS = this.VOLUME_UNITS[1];
     this.VOLUME_ADJECTIVES = ["minute ", "tiny ", "petite ", "small ", "modest ", "medium ", "generous ",
       "large ", "great ", "huge ", "gigantic ", "colossal ", "vast ", "cosmic "];
     this.VOWELS = new Set("aeiouAEIOU");
-    this.maxVolume = 10 * this.VOLUME_UNITS[this.VOLUME_UNITS.length-1][0];
+    this.maxVolume = 10 * this.VOLUME_UNITS[this.VOLUME_UNITS.length - 1][0];
     this.logMaxVolume = Math.log10(this.maxVolume);
-    this.reduceRatio = Math.log10(this.maxVolume/this.MINIMS[0]);
+    this.reduceRatio = Math.log10(this.maxVolume / this.MINIMS[0]);
   }
 
   get isPainful() {
@@ -649,17 +695,17 @@ Notation.imperial = new class ImperialNotation extends Notation {
     const smallStr = this.checkSmallUnits(adjective, x, volIdx);
     if (smallStr) return smallStr;
 
-    const big = this.VOLUME_UNITS[volIdx]
+    const big = this.VOLUME_UNITS[volIdx];
     const numBig = Math.floor(x / big[0]);
     const remainder = x - numBig * big[0];
     // When we are within a specified rounding error, unit break:
     if (volIdx < this.VOLUME_UNITS.length - 1) {
-      const ret = this.checkAlmost(adjective, x, 0, volIdx + 1);
-      if (ret) return ret;
+      const volume = this.checkAlmost(adjective, x, 0, volIdx + 1);
+      if (volume) return volume;
     }
     const nearMultiple = this.checkAlmost(adjective, remainder, numBig, volIdx);
     if (nearMultiple) return nearMultiple;
-    // just over a multiple, in units that are too small:
+    // Just over a multiple, in units that are too small:
     if (remainder < this.VOLUME_UNITS[volIdx - big[2]][0]) {
       return this.pluralOrArticle(numBig, adjective + big[1]);
     }
@@ -673,8 +719,8 @@ Notation.imperial = new class ImperialNotation extends Notation {
       // If we have a lot of the unit under consideration -- then stop. The exception is in
       // case of minims, where it may be normal to have a bunch of them; in that case, we print
       // drams if possible.
-      if (numThird > 9 && (thirdUnitIndex != 1 || bestUnits)) break;
-      // we are using floor, so we can compare error diretly, without abs
+      if (numThird > 9 && (thirdUnitIndex !== 1 || bestUnits)) break;
+      // We are using floor, so we can compare error diretly, without abs
       const thirdUnitError = remainder - numThird * third[0];
       if (thirdUnitError < 0.99 * bestUnitError) {
         numBest = numThird;
@@ -688,19 +734,19 @@ Notation.imperial = new class ImperialNotation extends Notation {
   /**
    * Format a small quantity that is less than the smallest minim; this is done without adjective
    * @param {number} x
-   **/
+   */
   formatMetric(x) {
     // The jump from metric to minim is sudden. Small values (< 10) get more decimal places
     // because that's usually something like sacrifice multiplier
     if (x < 1000) {
-      return ((x < 10 || x === Math.round(x)) ? x.toFixed(2) : x.toFixed(0)) + "pL"
+      return ((x < 10 || x === Math.round(x)) ? x.toFixed(2) : x.toFixed(0)) + "pL";
     }
     if (x < 1e6) return (x / 1000).toPrecision(4) + "nL";
     return (x / 1e6).toPrecision(4) + "μL";
   }
 
   /**
-   * handles cases involving everything up to ounces; in the case of ounces it may
+   * Handles cases involving everything up to ounces; in the case of ounces it may
    * return nothing, in which case, the normal code path should be used.
    * @param {string} adjective will be attached to unit
    * @param {number} x value to be formatted
@@ -713,7 +759,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
     if (volIdx <= 3 && x + 9.5 * this.MINIMS[0] > this.VOLUME_UNITS[volIdx + 1][0]) {
       return this.almostOrShortOf(x, adjective, 1, this.VOLUME_UNITS[volIdx + 1], this.MINIMS);
     }
-    // minims to drams. This goes:
+    // Minims to drams. This goes:
     // a minim
     // 1.5 minims                  <-- we don't do this with larger units
     // 10 minims ... 50 minims
@@ -724,15 +770,16 @@ Notation.imperial = new class ImperialNotation extends Notation {
       const deciMinims = Math.round(x * 10 / big[0]);
       if (deciMinims === 10) return this.addArticle(adjective + big[1]);
       const places = deciMinims < 100 ? 1 : 0;
-      return `${(deciMinims / 10).toFixed(places)} ${adjective}${big[1]}s`
+      return `${(deciMinims / 10).toFixed(places)} ${adjective}${big[1]}s`;
     }
     if (volIdx === 2) {
       const numBig = Math.floor(x / big[0]);
       const remainder = x - numBig * big[0];
-      if (remainder > 50.5 * this.MINIMS[0]) { // 9 minims short of a dram
+      if (remainder > 50.5 * this.MINIMS[0]) {
+        // 9 minims short of a dram
         return this.almostOrShortOf(x, adjective, numBig + 1, big, this.MINIMS);
       }
-      // for example, a dram and 15 minims
+      // For example, a dram and 15 minims
       const numSmall = Math.round(remainder / this.MINIMS[0]);
       return this.bigAndSmall(adjective, numBig, big, numSmall, this.MINIMS);
     }
@@ -743,7 +790,7 @@ Notation.imperial = new class ImperialNotation extends Notation {
    * Search for the largest unit smaller than x
    * @param {number} x
    * @returns {number} index into VOLUME_UNITS
-   **/
+   */
   findVolumeUnit(x) {
     let low = 0;
     let high = this.VOLUME_UNITS.length;
@@ -812,11 +859,11 @@ Notation.clock = new class ClockNotation extends Notation {
     return "🕛🕡";
   }
 
-  formatUnder1000(value, places) {
+  formatUnder1000(value) {
     return this.clockwise(value.toDecimal());
   }
 
-  formatDecimal(value, places) {
+  formatDecimal(value) {
     return this.clockwise(value);
   }
 
@@ -827,7 +874,7 @@ Notation.clock = new class ClockNotation extends Notation {
    */
   clockwise(value) {
     if (value.lt(12)) return this.hour(value.toNumber());
-    // say the clock goes 0123456789ab. A single digit covers 0 through 11.
+    // Say the clock goes 0123456789ab. A single digit covers 0 through 11.
     // Two digits (clocks) go 00, 01, 02... 0b, 10, 11, ... bb
     // The leading digit is distinct from the absense of a clock. So, if we make
     // 00 be 12, and go up by multiples of 12, then 01 is 24, 02 is 36, etc; 0b is then

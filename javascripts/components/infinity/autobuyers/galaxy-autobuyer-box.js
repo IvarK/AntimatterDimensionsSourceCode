@@ -1,24 +1,24 @@
 Vue.component("galaxy-autobuyer-box", {
-  data: function() {
+  data() {
     return {
       isBuyMaxUnlocked: false
     };
   },
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return Autobuyer.galaxy;
     },
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic Galaxies", this.autobuyer);
     },
-    limitInputSetup: function() {
+    limitInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.INT,
         () => this.autobuyer.limit,
         value => this.autobuyer.limit = value
       );
     },
-    buyMaxIntervalInputSetup: function() {
+    buyMaxIntervalInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.FLOAT,
         () => this.autobuyer.buyMaxInterval,

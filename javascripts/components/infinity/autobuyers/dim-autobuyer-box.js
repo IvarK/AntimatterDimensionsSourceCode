@@ -4,7 +4,7 @@ Vue.component("dim-autobuyer-box", {
       props: {
         autobuyer: Object
       },
-      data: function() {
+      data() {
         return {
           hasMaxedInterval: false,
           hasMaxedBulk: false,
@@ -13,7 +13,7 @@ Vue.component("dim-autobuyer-box", {
         };
       },
       computed: {
-        bulkDisplay: function() {
+        bulkDisplay() {
           let bulk = this.bulk;
           if (!this.hasMaxedBulk) {
             bulk = Math.min(bulk * 2, 1e100);
@@ -51,20 +51,20 @@ Vue.component("dim-autobuyer-box", {
   props: {
     tier: Number,
   },
-  data: function() {
+  data() {
     return {
       mode: AutobuyerMode.BUY_SINGLE
     };
   },
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return Autobuyer.dim(this.tier);
     },
-    boxSetup: function() {
+    boxSetup() {
       const name = DISPLAY_NAMES[this.tier];
       return new AutobuyerBoxSetup(`${name} Dimension Autobuyer`, this.autobuyer);
     },
-    modeDisplay: function() {
+    modeDisplay() {
       switch (this.mode) {
         case AutobuyerMode.BUY_SINGLE: return "Buys singles";
         case AutobuyerMode.BUY_10: return "Buys max";

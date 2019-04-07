@@ -1,5 +1,5 @@
-Vue.component('infinity-tab', {
-  data: function() {
+Vue.component("infinity-tab", {
+  data() {
     return {
       infinityPoints: new Decimal(0),
       tabs: [
@@ -27,7 +27,7 @@ Vue.component('infinity-tab', {
     };
   },
   computed: {
-    ipNoun: function() {
+    ipNoun() {
       return this.infinityPoints.equals(1) ? "Infinity Point" : "Infinity Points";
     }
   },
@@ -45,6 +45,10 @@ Vue.component('infinity-tab', {
       <div
         slot="before-subtabs"
         class="c-infinity-tab__header"
-      >You have <span class="c-infinity-tab__infinity-points">{{shortenDimensions(infinityPoints)}}</span> {{ipNoun}}.</div>
+      >
+        You have
+        <span class="c-infinity-tab__infinity-points">{{shortenDimensions(infinityPoints)}}</span>
+        {{ipNoun}}.
+      </div>
     </game-tab-with-subtabs>`
 });

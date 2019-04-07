@@ -1,5 +1,5 @@
 Vue.component("replicanti-galaxy-button", {
-  data: function() {
+  data() {
     return {
       isAvailable: false,
       isAutoUnlocked: false,
@@ -21,7 +21,7 @@ Vue.component("replicanti-galaxy-button", {
       const galaxyCount = extra > 0 ? `${shortenSmallInteger(bought)}+${shortenSmallInteger(extra)}` : bought;
       return `${galaxyCount} replicated ${galaxyNoun} created.`;
     },
-    autobuyer: function() {
+    autobuyer() {
       return Replicanti.galaxies.autobuyer;
     },
     autobuyerOnTextDisplay() {

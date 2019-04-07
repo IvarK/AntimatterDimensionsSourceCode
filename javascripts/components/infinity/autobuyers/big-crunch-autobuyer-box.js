@@ -1,25 +1,25 @@
 Vue.component("big-crunch-autobuyer-box", {
-  data: function() {
+  data() {
     return {
       postBreak: false,
       mode: AutoCrunchMode.AMOUNT
     };
   },
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return Autobuyer.infinity;
     },
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic Big Crunch", this.autobuyer);
     },
-    limitInputSetup: function() {
+    limitInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.DECIMAL,
         () => this.autobuyer.limit,
         value => this.autobuyer.limit = value
       );
     },
-    modeDisplay: function() {
+    modeDisplay() {
       switch (this.mode) {
         case AutoCrunchMode.AMOUNT: return "Amount of IP to wait until reset";
         case AutoCrunchMode.TIME: return "Seconds between crunches";

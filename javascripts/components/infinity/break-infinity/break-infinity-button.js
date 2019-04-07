@@ -1,12 +1,12 @@
 Vue.component("break-infinity-button", {
-  data: function() {
+  data() {
     return {
       isBroken: false,
       isUnlocked: false
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "o-infinity-upgrade-btn": true,
         "o-infinity-upgrade-btn--color-2": true,
@@ -14,10 +14,10 @@ Vue.component("break-infinity-button", {
         "o-infinity-upgrade-btn--unavailable": !this.isUnlocked,
       };
     },
-    tooltip: function() {
-      return this.isUnlocked ?
-        "Cost multipliers post-infinity will begin increasing faster, but so will the Infinity Point gain" :
-        undefined;
+    tooltip() {
+      return this.isUnlocked
+        ? "Cost multipliers post-infinity will begin increasing faster, but so will the Infinity Point gain"
+        : undefined;
     }
   },
   methods: {

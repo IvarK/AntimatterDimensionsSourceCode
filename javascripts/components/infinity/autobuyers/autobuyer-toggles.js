@@ -1,5 +1,5 @@
 Vue.component("autobuyer-toggles", {
-  data: function() {
+  data() {
     return {
       options: player.options,
       hasAdditionalCrunchModes: false,
@@ -11,7 +11,7 @@ Vue.component("autobuyer-toggles", {
     };
   },
   computed: {
-    autoCrunchModeDisplay: function() {
+    autoCrunchModeDisplay() {
       switch (this.autoCrunchMode) {
         case AutoCrunchMode.AMOUNT: return "amount";
         case AutoCrunchMode.TIME: return "time";
@@ -19,7 +19,7 @@ Vue.component("autobuyer-toggles", {
       }
       throw "Unknown auto crunch mode";
     },
-    autoEternityModeDisplay: function() {
+    autoEternityModeDisplay() {
       switch (this.autoEternityMode) {
         case AutoEternityMode.AMOUNT: return "amount";
         case AutoEternityMode.TIME: return "time";
@@ -27,7 +27,7 @@ Vue.component("autobuyer-toggles", {
       }
       throw "Unknown auto eternity mode";
     },
-    autoRealityModeDisplay: function() {
+    autoRealityModeDisplay() {
       switch (this.autoRealityMode) {
         case AutoRealityMode.RM: return "reality machines";
         case AutoRealityMode.GLYPH: return "glyph level";

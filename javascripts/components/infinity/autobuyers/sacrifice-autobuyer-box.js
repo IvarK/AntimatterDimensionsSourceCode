@@ -1,12 +1,12 @@
-Vue.component("sacrifice-autobuyer-box",{
+Vue.component("sacrifice-autobuyer-box", {
   computed: {
-    autobuyer: function() {
+    autobuyer() {
       return Autobuyer.sacrifice;
     },
-    boxSetup: function() {
+    boxSetup() {
       return new AutobuyerBoxSetup("Automatic Sacrifice", this.autobuyer);
     },
-    limitInputSetup: function() {
+    limitInputSetup() {
       return new AutobuyerInputSetup(
         AutobuyerInputType.FLOAT,
         () => this.autobuyer.limit,

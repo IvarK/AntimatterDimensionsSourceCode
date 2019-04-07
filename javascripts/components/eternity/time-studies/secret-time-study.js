@@ -3,20 +3,20 @@ Vue.component("secret-time-study", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
-      isVisible: player.secretUnlocks.secretTS % 2 == 1,
+      isVisible: player.secretUnlocks.secretTS % 2 === 1,
       lastClick: 0,
     };
   },
   computed: {
-    styleObject: function() {
+    styleObject() {
       return {
         top: this.rem(this.setup.top),
         left: this.rem(this.setup.left)
       };
     },
-    classObject: function() {
+    classObject() {
       return {
         "l-time-study": true,
         "o-time-study": true,
@@ -28,24 +28,25 @@ Vue.component("secret-time-study", {
   },
   methods: {
     update() {
-      this.isVisible = player.secretUnlocks.secretTS % 2 == 1;
+      this.isVisible = player.secretUnlocks.secretTS % 2 === 1;
     },
     handleClick() {
-      if (!this.isVisible) {
-        this.lastClick = 0; // if a click made the study visible, it's not part of the double click to hide
-        if (++player.secretUnlocks.secretTS == 1) {
-          this.$refs.study.addEventListener("transitionend", function achGiver(e) {
-            giveAchievement("Go study in real life instead");
-            e.target.removeEventListener(e.type, achGiver);
-          });
-        }
-      } else {
-        let clickTime = Date.now();
+      if (this.isVisible) {
+        const clickTime = Date.now();
         if (clickTime - this.lastClick < 750) {
           this.lastClick = 0;
           ++player.secretUnlocks.secretTS;
         } else {
           this.lastClick = clickTime;
+        }
+      } else {
+        // If a click made the study visible, it's not part of the double click to hide
+        this.lastClick = 0;
+        if (++player.secretUnlocks.secretTS === 1) {
+          this.$refs.study.addEventListener("transitionend", function achGiver(e) {
+            giveAchievement("Go study in real life instead");
+            e.target.removeEventListener(e.type, achGiver);
+          });
         }
       }
     },
@@ -64,13 +65,13 @@ Vue.component("secret-time-study-connection", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
-      isVisible: player.secretUnlocks.secretTS % 2 == 1,
+      isVisible: player.secretUnlocks.secretTS % 2 === 1,
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "o-time-study-connection": true,
         "o-time-study-connection--bought": true,
@@ -81,7 +82,7 @@ Vue.component("secret-time-study-connection", {
   },
   methods: {
     update() {
-      this.isVisible = player.secretUnlocks.secretTS % 2 == 1;
+      this.isVisible = player.secretUnlocks.secretTS % 2 === 1;
     },
     percents(value) {
       return value * 100 + "%";

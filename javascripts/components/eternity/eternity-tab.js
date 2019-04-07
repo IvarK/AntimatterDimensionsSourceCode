@@ -1,5 +1,5 @@
 Vue.component("eternity-tab", {
-  data: function() {
+  data() {
     return {
       isDilationUnlocked: false,
       tabs: [

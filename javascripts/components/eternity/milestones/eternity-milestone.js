@@ -36,7 +36,9 @@ Vue.component("eternity-milestone", {
   },
   template:
     `<div class="l-eternity-milestone">
-      <span class="o-eternity-milestone__goal">{{eternities}} {{"Eternity" | pluralize(eternities, "Eternities")}}:</span>
+      <span class="o-eternity-milestone__goal">
+        {{eternities}} {{"Eternity" | pluralize(eternities, "Eternities")}}:
+      </span>
       <button :class="rewardClassObject">{{reward}}</button>
     </div>`
 });

@@ -13,7 +13,7 @@ Vue.component("dilation-button", {
     update() {
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
-      this.canEternity = player.infinityPoints.gte(player.eternityChallGoal)
+      this.canEternity = player.infinityPoints.gte(player.eternityChallGoal);
       this.hasGain = getTachyonGain().gt(0);
       if (this.canEternity && this.hasGain) {
         this.tachyonGain.copyFrom(getTachyonGain());

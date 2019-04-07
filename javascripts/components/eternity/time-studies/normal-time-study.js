@@ -8,19 +8,21 @@ Vue.component("normal-time-study", {
     },
     classObject() {
       const classObject = {};
-      let pathClass = "o-time-study--normal";
-      switch (this.setup.path) {
-        case TimeStudyPath.NORMAL_DIM: pathClass = "o-time-study--normal-dim"; break;
-        case TimeStudyPath.INFINITY_DIM: pathClass = "o-time-study--infinity-dim"; break;
-        case TimeStudyPath.TIME_DIM: pathClass = "o-time-study--time-dim"; break;
-        case TimeStudyPath.ACTIVE: pathClass = "o-time-study--active"; break;
-        case TimeStudyPath.PASSIVE: pathClass = "o-time-study--passive"; break;
-        case TimeStudyPath.IDLE: pathClass = "o-time-study--idle"; break;
-        case TimeStudyPath.LIGHT: pathClass = "o-time-study--light"; break;
-        case TimeStudyPath.DARK: pathClass = "o-time-study--dark"; break;
-      }
-      classObject[pathClass] = true;
+      classObject[this.pathClass] = true;
       return classObject;
+    },
+    pathClass() {
+      switch (this.setup.path) {
+        case TimeStudyPath.NORMAL_DIM: return "o-time-study--normal-dim";
+        case TimeStudyPath.INFINITY_DIM: return "o-time-study--infinity-dim";
+        case TimeStudyPath.TIME_DIM: return "o-time-study--time-dim";
+        case TimeStudyPath.ACTIVE: return "o-time-study--active";
+        case TimeStudyPath.PASSIVE: return "o-time-study--passive";
+        case TimeStudyPath.IDLE: return "o-time-study--idle";
+        case TimeStudyPath.LIGHT: return "o-time-study--light";
+        case TimeStudyPath.DARK: return "o-time-study--dark";
+        default: return "o-time-study--normal";
+      }
     },
     hintText() {
       const id = this.study.id;

@@ -1,25 +1,25 @@
-Vue.component('modal-load-game', {
+Vue.component("modal-load-game", {
   components: {
-    'save-game-record': {
+    "save-game-record": {
       props: {
         saveId: Number
       },
-      data: function() {
+      data() {
         const save = saves[this.saveId];
         return {
           antimatter: new Decimal(save ? save.money : 10)
         };
       },
       computed: {
-        isSelected: function() {
+        isSelected() {
           return currentSave === this.saveId;
         }
       },
       methods: {
-        loadSave: function() {
+        loadSave() {
           change_save(this.saveId);
         },
-        formatMoney: function(money) {
+        formatMoney(money) {
           return this.shortenPostBreak(money, 2, 1);
         },
         update() {

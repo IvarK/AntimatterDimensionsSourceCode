@@ -1,4 +1,4 @@
-Vue.component('modal-options', {
+Vue.component("modal-options", {
   template:
     `<div class="c-modal-options l-modal-options">
       <modal-close-button @click="emitClose"/>
@@ -7,7 +7,7 @@ Vue.component('modal-options', {
 });
 
 const modalOptionsMixin = {
-  data: function() {
+  data() {
     return {
       bigCrunchUnlocked: false,
       eternityUnlocked: false,

@@ -1,6 +1,6 @@
-Vue.component('modal-popup', {
+Vue.component("modal-popup", {
   methods: {
-    hide: function() {
+    hide() {
       Modal.hide();
     }
   },
@@ -10,7 +10,7 @@ Vue.component('modal-popup', {
     </div>`
 });
 
-Vue.component('modal-close-button', {
+Vue.component("modal-close-button", {
   template:
     `<primary-button
       class="o-primary-btn--modal-close c-modal__close-btn"

@@ -1,5 +1,5 @@
 Vue.component("modal-import", {
-  data: function() {
+  data() {
     return {
       input: ""
     };
@@ -34,36 +34,36 @@ Vue.component("modal-import", {
       >Import</primary-button>
     </div>`,
   computed: {
-    player: function() {
+    player() {
       return parseSaveData(this.input);
     },
-    progress: function() {
+    progress() {
       return PlayerProgress.of(this.player);
     },
-    hasInput: function() {
+    hasInput() {
       return this.input !== "";
     },
-    inputIsValid: function() {
+    inputIsValid() {
       return this.inputIsValidSave || this.inputIsSecret;
     },
-    inputIsValidSave: function() {
+    inputIsValidSave() {
       return this.player !== undefined;
     },
-    inputIsSecret: function() {
+    inputIsSecret() {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     }
   },
   methods: {
-    formatMoney: function(money) {
+    formatMoney(money) {
       return this.shortenPostBreak(money, 2, 1);
     },
-    importSave: function() {
+    importSave() {
       if (!this.inputIsValid) return;
       Modal.hide();
       importSave(this.input);
     }
   },
-  mounted: function() {
+  mounted() {
     this.$refs.input.select();
   }
 });

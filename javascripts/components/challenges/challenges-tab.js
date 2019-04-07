@@ -45,7 +45,9 @@ Vue.component('challenges-tab', {
       this.showAllChallenges = player.options.showAllChallenges;
       const isECTabUnlocked = player.eternityChallUnlocked !== 0 || Object.keys(player.eternityChalls).length > 0;
       this.isECTabUnlocked = isECTabUnlocked;
-      const isICTabUnlocked = isECTabUnlocked || player.money.gte(new Decimal("1e2000")) || player.postChallUnlocked > 0;
+      const isICTabUnlocked = isECTabUnlocked ||
+        player.money.gte(new Decimal("1e2000")) ||
+        player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = Challenge.isRunning() || InfinityChallenge.isRunning() || EternityChallenge.isRunning();
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);

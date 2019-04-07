@@ -7,7 +7,7 @@ class GameOptions {
   }
 
   static changeNotation() {
-    const notations = Notation.all.map(n => n.name);
+    const notations = Notations.list.map(n => n.name);
     const current = player.options.notation;
     const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
     Notation.find(next).setCurrent();

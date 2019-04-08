@@ -1,9 +1,9 @@
 Vue.component("enslaved-tab", {
   data: () => ({
-    isStoringBlack: false,
+    isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
-    storedBlack: 0,
+    storedBlackHole: 0,
     storedReal: 0,
     storedRealEffiency: 0,
     storedRealCap: 0,
@@ -25,8 +25,8 @@ Vue.component("enslaved-tab", {
   },
   methods: {
     update() {
-      this.isStoringBlack = player.celestials.enslaved.isStoring;
-      this.storedBlack = player.celestials.enslaved.stored;
+      this.isStoringBlackHole = player.celestials.enslaved.isStoring;
+      this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -37,8 +37,8 @@ Vue.component("enslaved-tab", {
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
     },
-    toggleStoreBlack() {
-      Enslaved.toggleStoreBlack();
+    toggleStoreBlackHole() {
+      Enslaved.toggleStoreBlackHole();
     },
     toggleStoreReal() {
       Enslaved.toggleStoreReal();
@@ -75,10 +75,10 @@ Vue.component("enslaved-tab", {
       <div class="l-enslaved-top-container">
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',
-                           {'o-enslaved-mechanic-button--storing-time': isStoringBlack }]"
-                  @click="toggleStoreBlack">
-            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlack) }}</div>
-            <div>{{ isStoringBlack ? "Storing black hole time": "Store black hole time" }}</div>
+                           {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
+                  @click="toggleStoreBlackHole">
+            <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
+            <div>{{ isStoringBlackHole ? "Storing black hole time": "Store black hole time" }}</div>
           </button>
           <button class="o-enslaved-mechanic-button" @click="useStored">Use stored black hole time</button>
         </div>

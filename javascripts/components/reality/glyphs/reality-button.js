@@ -52,6 +52,9 @@ Vue.component("reality-button", {
       }
       this.canReality = true;
       this.machinesGained = gainedRealityMachines();
+      if (Enslaved.boostReality) {
+        this.machinesGained = this.machinesGained.times(Enslaved.realityBoostRatio);
+      }
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();

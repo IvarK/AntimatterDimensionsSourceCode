@@ -380,7 +380,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 227,
       cost: 900,
       description: "Sacrifice affects the 4th Time Dimension with reduced effect",
-      effect: () => Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1)
+      effect: () => Math.max(Math.pow(Sacrifice.totalBoost.pLog10(), 10), 1)
     },
     {
       id: 228,

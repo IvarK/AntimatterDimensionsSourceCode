@@ -52,20 +52,12 @@ const Enslaved = {
   totalInfinities: new Decimal(0),
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
-    if (player.celestials.enslaved.isStoring) {
-      player.celestials.enslaved.isStoring = false;
-    } else {
-      player.celestials.enslaved.isStoring = true;
-      player.celestials.enslaved.isStoringReal = false;
-    }
+    player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
+    player.celestials.enslaved.isStoringReal = false;
   },
   toggleStoreReal() {
-    if (player.celestials.enslaved.isStoringReal) {
-      player.celestials.enslaved.isStoringReal = false;
-    } else {
-      player.celestials.enslaved.isStoringReal = true;
-      player.celestials.enslaved.isStoring = false;
-    }
+    player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
+    player.celestials.enslaved.isStoring = false;
   },
   toggleAutoStoreReal() {
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
@@ -84,8 +76,11 @@ const Enslaved = {
     const diff = Math.max(thisUpdate - player.lastUpdate, 0);
     const efficiency = this.storedRealTimeEfficiency;
     const maxTime = this.storedRealTimeCap;
-    player.celestials.enslaved.storedReal =
-      Math.min(player.celestials.enslaved.storedReal + diff * efficiency, maxTime);
+    player.celestials.enslaved.storedReal += diff * efficiency;
+    if (player.celestials.enslaved.storedReal > maxTime) {
+      player.celestials.enslaved.isStoringReal = false;
+      player.celestials.enslaved.storedReal = maxTime;
+    }
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {

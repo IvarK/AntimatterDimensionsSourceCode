@@ -50,7 +50,7 @@ const Enslaved = {
   lockedInRealityMachines: new Decimal(0),
   infinityTracking: [],
   totalInfinities: new Decimal(0),
-  toggleStoreBlack() {
+  toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     if (player.celestials.enslaved.isStoring) {
       player.celestials.enslaved.isStoring = false;

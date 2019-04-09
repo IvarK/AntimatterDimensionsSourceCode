@@ -402,8 +402,11 @@ var player = {
     },
     enslaved: {
       isStoring: false,
-      quoteIdx: 0,
       stored: 0,
+      isStoringReal: false,
+      storedReal: 0,
+      autoStoreReal: false,
+      quoteIdx: 0,
       unlocks: [],
       run: false,
       quoteIdx: 0,

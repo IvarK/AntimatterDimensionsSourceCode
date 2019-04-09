@@ -192,6 +192,7 @@ function onLoad() {
   drawPerkNetwork();
   updatePerkColors();
   V.updateTotalRunUnlocks();
+  Enslaved.boostReality = false;
 
   const notation = player.options.notation;
   if (notation === undefined) {
@@ -215,6 +216,9 @@ function onLoad() {
   Lazy.invalidateAll();
 
   let diff = new Date().getTime() - player.lastUpdate
+  if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
+    diff = Enslaved.autoStoreRealTime(diff);
+  }
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
   }

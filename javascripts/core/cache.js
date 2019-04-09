@@ -103,6 +103,14 @@ const GameCache = {
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
   totalIPMult: new Lazy(() => totalIPMult()),
+
+  achievementPower: new Lazy(() => Decimal.pow(
+    1.5,
+    Array
+      .range(1, TOTAL_ACH_ROWS)
+      .map(Achievements.row)
+      .countWhere(row => row.every(ach => ach.isEnabled))
+  ))
 };
 
 EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {

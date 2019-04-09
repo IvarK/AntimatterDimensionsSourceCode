@@ -78,7 +78,7 @@ const V_UNLOCKS = {
     id: 1,
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
-    effect: () => Math.pow(player.achPow.toNumber(), getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => Player.achievementPower.toNumber(),
     format: x => formatX(x),
     requirement: () => V.totalRunUnlocks >= 10
     },

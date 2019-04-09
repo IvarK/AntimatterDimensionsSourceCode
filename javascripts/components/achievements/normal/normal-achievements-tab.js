@@ -9,7 +9,7 @@ Vue.component("normal-achievements-tab", {
   },
   methods: {
     update() {
-      this.achPower.copyFrom(player.achPow);
+      this.achPower.copyFrom(GameCache.achievementPower.value);
       if (player.realities === 0) {
         this.nextAchAt = 0;
         this.timeForAchs = 0;

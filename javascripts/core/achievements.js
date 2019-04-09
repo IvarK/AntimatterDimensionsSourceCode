@@ -21,6 +21,9 @@ class AchievementState extends GameMechanicState {
   unlock() {
     if (this.isUnlocked) return false;
     player.achievements.add(this.id);
+    if (this.id === 85 || this.id === 93) {
+      Autobuyer.infinity.bumpLimit(4);
+    }
     return true;
   }
 
@@ -103,22 +106,6 @@ const SecretAchievements = {
   byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
 };
 
-function updateAchievementPower() {
-  let completedRows = 0;
-  for (let i = 1; i <= TOTAL_ACH_ROWS; i++) {
-    let achUnlocked = 0;
-    for (let j = 1; j <= ACH_PER_ROW; j++) {
-      if (Achievement(i * 10 + j).isEnabled) {
-        achUnlocked++;
-      }
-    }
-    if (achUnlocked === ACH_PER_ROW) {
-      completedRows++;
-    }
-  }
-  player.achPow = Decimal.pow(1.5, completedRows);
-}
-
 function clearOldAchieves() {
   for (const achId of player.achievements) {
     const achByName = Achievements.list.find(a => a.name === achId);
@@ -139,10 +126,7 @@ function giveAchievement(name) {
   if (!achievement.unlock()) return;
   GameUI.notify.success(name);
   kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
-  if (name === "All your IP are belong to us" || name === "MAXIMUM OVERDRIVE") {
-    Autobuyer.infinity.bumpLimit(4);
-  }
-  updateAchievementPower();
+  GameCache.achievementPower.invalidate();
   GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 

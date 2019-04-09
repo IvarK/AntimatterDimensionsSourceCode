@@ -132,7 +132,7 @@ var Effarig = {
         c = 25
         break
     }
-    return 3 * (1 - c / (c + Math.sqrt(x.pLog10())));
+    return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {
     const base = 3 + player.tickspeed.reciprocal().log10();

@@ -48,11 +48,11 @@ const Teresa = {
     this.checkForUnlocks();
   },
   checkForUnlocks() {
-    Object.values(Teresa.unlockInfo).forEach(info => {
+    for (const info of Object.values(Teresa.unlockInfo)) {
       if (!this.has(info) && this.rmStore >= info.price) {
         player.celestials.teresa.unlocks.push(info.id);
       }
-    });
+    };
   },
   has(info) {
     if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";

@@ -61,9 +61,6 @@ Vue.component("options-button-grid", {
           </div>
           <select-notation slot="dropdown" />
         </expanding-control-box>
-        <!-- <options-button
-          onclick="GameOptions.changeNotation()"
-        ></options-button> -->
         <options-button
           onclick="GameOptions.toggleNews()"
         >Hide/show the news</options-button>

@@ -38,7 +38,7 @@ Vue.component("options-button-grid", {
       return Themes.find(this.options.theme).displayName();
     },
     notationLabel() {
-      return `Notation: ${this.options.notation} ▼`
+      return `Notation: ${this.options.notation} ▼`;
     }
   },
   methods: {
@@ -48,7 +48,7 @@ Vue.component("options-button-grid", {
       }
     }
   },
-  template: /*html*/`
+  template: `
     <div class="l-options-grid">
       <div class="l-options-grid__row">
         <options-button

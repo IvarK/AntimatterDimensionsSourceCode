@@ -6,10 +6,11 @@
 
 Vue.component("expanding-control-box", {
   props: {
-    containerClass: [String, Array], // class assigned to visible container; specify border and background here
+    // Class assigned to visible container; specify border and background here
+    containerClass: [String, Array],
     label: String,
     widthSource: {
-      // content sizes the width based on what's in the dropdown.
+      // Content sizes the width based on what's in the dropdown.
       // header sizes based on the menu header (container ref)
       type: String,
       default: "content",
@@ -66,8 +67,8 @@ Vue.component("expanding-control-box", {
   mounted() {
     // Set the root and container elements to match the height of the button
     const headerHeight = this.$refs.expandButton.offsetHeight;
-    this.closedHeight = headerHeight + "px"
-    this.openHeight = (headerHeight + this.$refs.dropdown.offsetHeight) + "px"
+    this.closedHeight = headerHeight + "px";
+    this.openHeight = (headerHeight + this.$refs.dropdown.offsetHeight) + "px";
     this.$refs.container.style.maxHeight = this.closedHeight;
     this.$refs.root.style.height = this.closedHeight;
     this.updateBaseWidth();

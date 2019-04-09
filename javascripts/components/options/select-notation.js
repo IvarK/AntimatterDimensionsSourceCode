@@ -10,7 +10,7 @@ Vue.component("select-notation", {
       GameOptions.setNotation(name);
     }
   },
-  template: /*html*/`
+  template: `
     <div class="l-select-notation">
       <div v-for="notation in notations" :key="notation"
            class="o-primary-btn l-select-notation__item c-select-notation__item"

@@ -4,7 +4,7 @@ get isPainful() {
 }
 
 formatDecimal(value) {
-  const table = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"];
+  const table = ["", "", "", "", "", "", "", "", ""];
   const log8 = Math.LN10 / Math.log(8) * value.log10();
   let wholeLog = Math.floor(log8);
   const decimalLog = log8 - wholeLog;

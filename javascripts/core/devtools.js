@@ -45,10 +45,9 @@ const specialGlyphSymbols = {
 }
 
 dev.giveAllAchievements = function() {
-    Object.keys(allAchievements).forEach( function(key) {
-        giveAchievement(allAchievements[key])
-    })
-}
+  const allAchievements = Achievements.list.concat(SecretAchievements.list);
+  for (const achievement of allAchievements) achievement.unlock();
+};
 
 dev.doubleEverything = function() {
     Object.keys(player).forEach( function(key) {

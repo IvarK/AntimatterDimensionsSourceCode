@@ -6,17 +6,6 @@ class GameOptions {
     next.set();
   }
 
-  static changeNotation() {
-    const notations = Notations.list.map(n => n.name);
-    const current = player.options.notation;
-    const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
-    Notation.find(next).setCurrent();
-  }
-
-  static setNotation(name) {
-    Notation.find(name).setCurrent();
-  }
-
   static toggleNews() {
     if (!player.options.newsHidden) {
       document.getElementById("game").style.display = "none";

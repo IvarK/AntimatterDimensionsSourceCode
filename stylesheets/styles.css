@@ -33,9 +33,9 @@ body {
 }
 
 @font-face {
-	font-family: sans-serif;
+	font-family: Noto Sans;
 	src: url('MonospaceTypewriter.ttf');
-	unicode-range: U+F420-29;
+	unicode-range: U+F420-29
 }
 
 *:focus {

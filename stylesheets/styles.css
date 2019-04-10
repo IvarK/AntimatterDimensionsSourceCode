@@ -32,6 +32,12 @@ body {
     src: url('MonospaceTypewriter.ttf');
 }
 
+@font-face {
+	font-family: Noto Sans;
+	src: url('MonospaceTypewriter.ttf');
+	unicode-range: U+F420-F430;
+}
+
 *:focus {
     outline: none;
 }

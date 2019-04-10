@@ -120,7 +120,6 @@ var Effarig = {
     return player.celestials.effarig.relicShards
   },
   nerfFactor(power) {
-    let x = Decimal.max(power, 1);
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
@@ -133,7 +132,7 @@ var Effarig = {
         c = 25
         break
     }
-    return 3 * (1 - c / (c + Math.sqrt(x.log10())));
+    return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {
     const base = 3 + player.tickspeed.reciprocal().log10();

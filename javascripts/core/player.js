@@ -90,8 +90,8 @@ var player = {
     themes: [],
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
-  infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
+  challengeTimes: Array.repeat(defaultMaxTime, 11),
+  infchallengeTimes: Array.repeat(defaultMaxTime, 8),
   lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
@@ -539,7 +539,15 @@ const Player = {
 
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
-  }
+  },
+
+  get challengeTimeSum() {
+    return GameCache.challengeTimeSum.value;
+  },
+
+  get infinityChallengeTimeSum() {
+    return GameCache.infinityChallengeTimeSum.value;
+  },
 };
 
 function guardFromNaNValues(obj) {

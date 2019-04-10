@@ -109,7 +109,11 @@ const GameCache = {
     Array.range(1, TOTAL_ACH_ROWS)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
-  ))
+  )),
+
+  challengeTimeSum: new Lazy(() => player.challengeTimes.sum()),
+
+  infinityChallengeTimeSum: new Lazy(() => player.infchallengeTimes.sum()),
 };
 
 EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {

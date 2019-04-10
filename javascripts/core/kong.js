@@ -21,6 +21,10 @@ kong.submitStats = function(name, value) {
     } catch(e) { console.log(e) }
 };
 
+kong.submitAchievements = function() {
+  kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
+};
+
 kong.purchaseIP = function() {
     console.log("purchase ip");
     kongregate.mtx.purchaseItems(['doubleip'], kong.onPurchaseResult);

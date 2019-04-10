@@ -182,7 +182,6 @@ function onLoad() {
   Autobuyer.checkAllAchievements();
   transformSaveToDecimal();
   resizeCanvas();
-  checkForEndMe();
   updateAutomatorRows();
   checkPerkValidity();
   checkPPShopValidity();

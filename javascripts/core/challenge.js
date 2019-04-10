@@ -18,14 +18,18 @@ function askChallengeConfirmation(challenge) {
 }
 
 function setChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.challengeTimes.splice(id, 1, time);
-    GameCache.worstChallengeTime.invalidate();
+  // Use splice so Vue could track changes
+  player.challengeTimes.splice(id, 1, time);
+  GameCache.challengeTimeSum.invalidate();
+  GameCache.worstChallengeTime.invalidate();
+  Achievements.tryUnlock([65, 74]);
 }
 
 function setInfChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.infchallengeTimes.splice(id, 1, time);
+  // Use splice so Vue could track changes
+  player.infchallengeTimes.splice(id, 1, time);
+  GameCache.infinityChallengeTimeSum.invalidate();
+  Achievement(112).tryUnlock();
 }
 
 class ChallengeState extends GameMechanicState {

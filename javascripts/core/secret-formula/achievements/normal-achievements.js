@@ -256,6 +256,7 @@ GameDatabase.achievements.normal = [
     id: 65,
     name: "Not-so-challenging",
     tooltip: "Get the sum of all of your challenge times under 3 minutes.",
+    checkRequirement: () => Time.challengeSum.totalMinutes < 3,
     reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => player.currentChallenge !== "" && Time.thisInfinity.totalMinutes < 3
@@ -291,6 +292,8 @@ GameDatabase.achievements.normal = [
     id: 72,
     name: "Can't hold all these infinities",
     tooltip: "Get all Dimension multipliers over 1e308.",
+    checkRequirement: () => Array.range(1, 8)
+      .every(tier => getDimensionFinalMultiplier(tier).gte("1e308")),
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -305,6 +308,7 @@ GameDatabase.achievements.normal = [
     id: 74,
     name: "End me",
     tooltip: "Get the sum of all best challenge times under 5 seconds.",
+    checkRequirement: () => Time.challengeSum.totalSeconds < 5,
     reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
     effectCondition: () => player.currentChallenge !== ""
@@ -327,6 +331,13 @@ GameDatabase.achievements.normal = [
     id: 77,
     name: "How the antitables have turned",
     tooltip: "Get the 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc.",
+    checkRequirement: () => {
+      const multipliers = Array.range(1, 8).map(getDimensionFinalMultiplier);
+      for (let i = 0; i < multipliers.length - 1; i++) {
+        if (multipliers[i].gte(multipliers[i + 1])) return false;
+      }
+      return true;
+    },
     reward: "Each Dimension gains a boost proportional to tier (8th dimension gets 8%, 7th gets 7%, etc.)",
   },
   {
@@ -374,6 +385,7 @@ GameDatabase.achievements.normal = [
     id: 86,
     name: "Do you even bend time bro?",
     tooltip: "Reach -99.9% tickspeed per upgrade.",
+    checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
     reward: "Galaxies are 1% more powerful.",
     effect: 1.01
   },
@@ -502,6 +514,7 @@ GameDatabase.achievements.normal = [
     id: 112,
     name: "Never again",
     tooltip: "Max out your third Eternity upgrade.",
+    checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
     reward: "The limit for it is a bit higher.",
     effect: 610
   },

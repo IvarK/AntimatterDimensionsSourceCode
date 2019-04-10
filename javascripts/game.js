@@ -422,23 +422,6 @@ function addRealityTime(time, realTime, rm, level) {
   player.lastTenRealities.unshift([time, rm, level, realTime]);
 }
 
-var infchallengeTimes = 999999999
-
-function checkForEndMe() {
-    var temp = 0
-    for (var i=0; i<11; i++) {
-        temp += player.challengeTimes[i]
-    }
-    if (temp <= 180000) giveAchievement("Not-so-challenging")
-    if (temp <= 5000) giveAchievement("End me")
-    var temp2 = 0
-    for (var i=0; i<8;i++) {
-        temp2 += player.infchallengeTimes[i]
-    }
-    infchallengeTimes = temp2
-    if (temp2 <= 6666) giveAchievement("Yes. This is hell.")
-}
-
 function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
         return new Decimal(1);
@@ -578,22 +561,7 @@ var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000
 
 var ttMaxTimer = 0
 setInterval(function() {
-    if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(3).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(4).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(5).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(6).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(7).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(8).gte(new Decimal("1e308"))) giveAchievement("Can't hold all these infinities")
-
-    if (getDimensionFinalMultiplier(1).lt(getDimensionFinalMultiplier(2)) &&
-        getDimensionFinalMultiplier(2).lt(getDimensionFinalMultiplier(3)) &&
-        getDimensionFinalMultiplier(3).lt(getDimensionFinalMultiplier(4)) &&
-        getDimensionFinalMultiplier(4).lt(getDimensionFinalMultiplier(5)) &&
-        getDimensionFinalMultiplier(5).lt(getDimensionFinalMultiplier(6)) &&
-        getDimensionFinalMultiplier(6).lt(getDimensionFinalMultiplier(7)) &&
-        getDimensionFinalMultiplier(7).lt(getDimensionFinalMultiplier(8))) giveAchievement("How the antitables have turned")
+  Achievements.tryUnlock([72, 77, 86]);
 
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
@@ -603,13 +571,10 @@ setInterval(function() {
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     else document.getElementById("eternitystorebtn").style.display = "none"
 
-    if (getTickSpeedMultiplier().lt(0.001)) giveAchievement("Do you even bend time bro?")
-
     if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
     }
 
-    if (infchallengeTimes < 750) giveAchievement("Never again")
     if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
     if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
     if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")

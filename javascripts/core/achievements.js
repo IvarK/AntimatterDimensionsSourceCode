@@ -17,6 +17,12 @@ class AchievementState extends GameMechanicState {
   get isUnlocked() {
     return player.achievements.has(this.id);
   }
+  
+  tryUnlock() {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement()) return;
+    this.unlock();
+  }
 
   unlock() {
     if (this.isUnlocked) return false;
@@ -24,6 +30,10 @@ class AchievementState extends GameMechanicState {
     if (this.id === 85 || this.id === 93) {
       Autobuyer.infinity.bumpLimit(4);
     }
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    GameCache.achievementPower.invalidate();
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
     return true;
   }
 
@@ -64,9 +74,12 @@ const Achievements = {
   /**
    * @type {AchievementState[]}
    */
-  list: AchievementState.list.compact(),
-  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
-  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
+  list: AchievementState.list.compact(),  
+  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),  
+  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column)),
+  tryUnlock: ids => {
+    for (const id of ids) Achievement(id).tryUnlock();
+  }
 };
 
 class SecretAchievementState extends GameMechanicState {
@@ -81,6 +94,9 @@ class SecretAchievementState extends GameMechanicState {
   unlock() {
     if (this.isUnlocked) return false;
     player.secretAchievements.add(this.id);
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
     return true;
   }
 }

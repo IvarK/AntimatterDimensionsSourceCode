@@ -52,7 +52,7 @@ const Teresa = {
       if (!this.has(info) && this.rmStore >= info.price) {
         player.celestials.teresa.unlocks.push(info.id);
       }
-    };
+    }
   },
   has(info) {
     if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";

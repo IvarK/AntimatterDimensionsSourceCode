@@ -74,21 +74,21 @@ Vue.component("automator-shop-button", {
         "automatorinstruction": this.available,
         "automatorinstructionlocked": !this.available
       };
-      classObject[Automator.Instructions[this.name].type] = true;
+      classObject[AutomatorInstructions.Instructions[this.name].type] = true;
       return classObject;
     },
     // This assumes prices are constant
     cost() {
-      return Automator.Instructions[this.name].price;
+      return AutomatorInstructions.Instructions[this.name].price;
     },
     instructionID() {
-      return Automator.Instructions[this.name].id;
+      return AutomatorInstructions.Instructions[this.name].id;
     },
     domID() {
-      return "automator" + Automator.Instructions[this.name].id;
+      return "automator" + AutomatorInstructions.Instructions[this.name].id;
     },
     displayName() {
-      return Automator.Instructions[this.name].displayName;
+      return AutomatorInstructions.Instructions[this.name].displayName;
     },
     popoverTrigger() {
       // If the html did not specify a tooltip, we set the trigger to

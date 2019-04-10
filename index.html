@@ -39,6 +39,7 @@
 <div id="snow" style="display: none; "></div>
 <body>
 <div id="ui" style="height: 100%; width: 100%;">
+    <automator-tab></automator-tab>
     <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
     <new-ui v-show="newUI"></new-ui>
     <div v-show="!newUI" id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">

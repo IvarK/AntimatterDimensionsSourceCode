@@ -230,3 +230,6 @@ Set.prototype.every = function(predicate) {
   return true;
 };
 
+Array.prototype.compact = function() {
+  return this.filter(x => x !== undefined && x !== null);
+};

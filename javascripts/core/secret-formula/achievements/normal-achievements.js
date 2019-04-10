@@ -314,7 +314,7 @@ GameDatabase.achievements.normal = [
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension.",
     reward: "Your achievement bonus affects Infinity Dimensions.",
-    effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement"))
+    effect: () => Player.achievementPower
   },
   {
     id: 76,

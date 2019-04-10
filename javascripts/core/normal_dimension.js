@@ -2,7 +2,7 @@
 // and invalidated every update.
 function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
-  if (Achievement(11).isEnabled) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
+  if (Achievement(11).isEnabled) multiplier = multiplier.times(Player.achievementPower);
 
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);

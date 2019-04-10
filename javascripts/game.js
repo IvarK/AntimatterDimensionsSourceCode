@@ -663,7 +663,7 @@ setInterval(function() {
         $(".automator-container").hide()
     }
 
-    updateAchievementPower();
+    GameCache.achievementPower.invalidate();
 
     RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;

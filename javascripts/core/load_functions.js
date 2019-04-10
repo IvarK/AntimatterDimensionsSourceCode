@@ -167,7 +167,8 @@ function onLoad() {
     convertAchivementsToNumbers();
     convertEPMult();
     player.secretUnlocks.why = player.why
-    delete player.why
+    delete player.why;
+    delete player.achPow;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -182,7 +183,6 @@ function onLoad() {
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
   transformSaveToDecimal();
-  updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
   updateAutomatorRows()

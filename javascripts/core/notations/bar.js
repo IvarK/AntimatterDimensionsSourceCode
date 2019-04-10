@@ -1,4 +1,4 @@
-Notation.redacted = new class RedactedNotation extends Notation {
+Notation.bar = new class BarNotation extends Notation {
 get isPainful() {
   return false;
 }
@@ -21,5 +21,5 @@ formatDecimal(value) {
   string += table[decimalLog64 % 8];
   return string;
   }
- }("Redacted");
+ }("Bar");
   

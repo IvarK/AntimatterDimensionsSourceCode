@@ -16,7 +16,7 @@ formatDecimal(value) {
     wholeLog /= 8;
     string = table[remainder] + string;
    }
-  string = "e" + table[wholeLog] + string + ".";
+  string = table[wholeLog] + string + ".";
   string += table[Math.floor(decimalLog64 / 8)];
   string += table[decimalLog64 % 8];
   return string;

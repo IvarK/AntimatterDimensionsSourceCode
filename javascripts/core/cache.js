@@ -106,8 +106,7 @@ const GameCache = {
 
   achievementPower: new Lazy(() => Decimal.pow(
     1.5,
-    Array
-      .range(1, TOTAL_ACH_ROWS)
+    Array.range(1, TOTAL_ACH_ROWS)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
   ))

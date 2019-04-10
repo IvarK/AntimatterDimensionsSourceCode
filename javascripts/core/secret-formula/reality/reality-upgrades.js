@@ -80,7 +80,7 @@ GameDatabase.reality.upgrades = (function() {
           .map(row => Achievements.row(row))
           .every(row => row.every(ach => ach.isUnlocked)),
       description: "Tachyon Particle gain is multiplied based on achievement multiplier",
-      effect: () => Player.achievementPower,
+      effect: () => Player.achievementPower.sqrt(),
       formatEffect: value => formatX(value, 2, 2)
     },
     {

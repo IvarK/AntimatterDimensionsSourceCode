@@ -108,7 +108,7 @@ const SecretAchievements = {
 
 function clearOldAchieves() {
   for (const achId of player.achievements) {
-    const achByName = Achievements.list.find(a => a.name === achId);
+    const achByName = Achievements.byName[achId];
     if (achByName !== undefined) {
       player.achievements.delete(achByName.name);
       player.achievements.add(achByName.id);

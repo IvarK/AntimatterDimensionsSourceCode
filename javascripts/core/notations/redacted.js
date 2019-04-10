@@ -5,20 +5,20 @@ get isPainful() {
 
 formatDecimal(value) {
   const table = ["", "", "", "", "", "", "", "", ""];
-  const log8 = Math.LN10 / Math.log(8) * value.log10();
-  let wholeLog = Math.floor(log8);
-  const decimalLog = log8 - wholeLog;
-  const decimalLog64 = Math.floor(decimalLog * 64);
+  const log8 = Math.LN10 / Math.log(9) * value.log10();
+  let wholeLog = Math.floor(log9);
+  const decimalLog = log9 - wholeLog;
+  const decimalLog81 = Math.floor(decimalLog * 81);
   let string = "";
-  while (wholeLog >= 8) {
-    const remainder = wholeLog % 8;
+  while (wholeLog >= 9) {
+    const remainder = wholeLog % 9;
     wholeLog -= remainder;
-    wholeLog /= 8;
+    wholeLog /= 9;
     string = table[remainder] + string;
    }
   string = table[wholeLog] + string + ".";
-  string += table[Math.floor(decimalLog64 / 8)];
-  string += table[decimalLog64 % 8];
+  string += table[Math.floor(decimalLog81 / 9)];
+  string += table[decimalLog81 % 9];
   return string;
   }
  }("Redacted");

@@ -57,6 +57,7 @@ GameDatabase.achievements.normal = [
     id: 23,
     name: "The 9th Dimension is a lie",
     tooltip: "Have exactly 99 8th Dimensions.",
+    checkRequirement: () => NormalDimension(8).amount.eq(99),
     reward: "8th Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -86,6 +87,7 @@ GameDatabase.achievements.normal = [
     id: 28,
     name: "There's no point in doing that",
     tooltip: () => `Buy a single 1st Dimension when you have over ${shorten(1e150, 0, 0)} of them.`,
+    checkRequirement: () => NormalDimension(1).amount.exponent >= 150,
     reward: "1st Dimensions are 10% stronger.",
     effect: 1.1
   },

@@ -82,6 +82,21 @@ const Achievements = {
   }
 };
 
+(function() {
+  const events = new Set();
+  for (const achievement of Achievements.list) {
+    const event = achievement.config.checkEvent;
+    if (event === undefined) continue;
+    events.add(event);
+  }
+  for (const event of events) {
+    const achievements = Achievements.list.filter(a => a.config.checkEvent === event);
+    EventHub.global.on(event, () => {
+      for (const achievement of achievements) achievement.tryUnlock();
+    }, Achievements);
+  }
+}());
+
 class SecretAchievementState extends GameMechanicState {
   get name() {
     return this.config.name;

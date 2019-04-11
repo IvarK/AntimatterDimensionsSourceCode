@@ -31,6 +31,7 @@ class EventHub {
 EventHub.global = new EventHub();
 
 const GameEvent = {
+  GAME_TICK: "GAME_TICK",
   UPDATE: "UPDATE",
   TAB_CHANGED: "TAB_CHANGED",
   ACHIEVEMENT_UNLOCKED: "ACHIEVEMENT_UNLOCKED",

@@ -22,7 +22,8 @@ function setChallengeTime(id, time) {
   player.challengeTimes.splice(id, 1, time);
   GameCache.challengeTimeSum.invalidate();
   GameCache.worstChallengeTime.invalidate();
-  Achievements.tryUnlock([65, 74]);
+  Achievement(65).tryUnlock();
+  Achievement(74).tryUnlock();
 }
 
 function setInfChallengeTime(id, time) {

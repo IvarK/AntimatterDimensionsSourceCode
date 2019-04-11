@@ -61,7 +61,9 @@ GameDatabase.achievements.normal = [
   {
     id: 24,
     name: "Antimatter Apocalypse",
-    tooltip: () => `Get over ${shorten(1e80, 0, 0)} antimatter.`
+    tooltip: () => `Get over ${shorten(1e80, 0, 0)} antimatter.`,
+    checkRequirement: () => player.money.exponent >= 80,
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 25,
@@ -89,6 +91,8 @@ GameDatabase.achievements.normal = [
     id: 31,
     name: "I forgot to nerf that",
     tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}`,
+    checkRequirement: () => NormalDimension(1).pow.exponent >= 31,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "1st Dimensions are 5% stronger.",
     effect: 1.05
   },
@@ -161,13 +165,17 @@ GameDatabase.achievements.normal = [
     id: 45,
     name: "Faster than a potato",
     tooltip: () => `Get more than ${shorten(1e29, 0, 0)} ticks per second.`,
+    checkRequirement: () => player.tickspeed.exponent <= -26,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
   {
     id: 46,
     name: "Multidimensional",
-    tooltip: () => `Reach ${shorten(1e12, 0, 0)} of all Dimensions except the 8th.`
+    tooltip: () => `Reach ${shorten(1e12, 0, 0)} of all Dimensions except the 8th.`,
+    checkRequirement: () => NormalDimension(7).amount.exponent >= 12,
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 47,
@@ -245,12 +253,16 @@ GameDatabase.achievements.normal = [
   {
     id: 63,
     name: "A new beginning.",
-    tooltip: "Begin generation of Infinity power."
+    tooltip: "Begin generation of Infinity power.",
+    checkRequirement: () => player.infinityPower.gt(1),
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 64,
     name: "1 million is a lot",
-    tooltip: "Reach 1e6 Infinity power."
+    tooltip: () => `Reach ${shorten(1e6, 0, 0)} Infinity power.`,
+    checkRequirement: () => player.infinityPower.exponent >= 6,
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 65,
@@ -265,6 +277,8 @@ GameDatabase.achievements.normal = [
     id: 66,
     name: "Faster than a squared potato",
     tooltip: () => `Get more than ${shorten(1e58, 0, 0)} ticks per second.`,
+    checkRequirement: () => player.tickspeed.exponent <= -55,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
@@ -293,7 +307,8 @@ GameDatabase.achievements.normal = [
     name: "Can't hold all these infinities",
     tooltip: "Get all Dimension multipliers over 1e308.",
     checkRequirement: () => Array.range(1, 8)
-      .every(tier => getDimensionFinalMultiplier(tier).gte("1e308")),
+      .every(tier => getDimensionFinalMultiplier(tier).exponent >= 308),
+    checkEvent: GameEvent.GAME_TICK,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -301,6 +316,8 @@ GameDatabase.achievements.normal = [
     id: 73,
     name: "This achievement doesn't exist",
     tooltip: "Get 9.9999e9999 antimatter.",
+    checkRequirement: () => player.money.gte("9.9999e9999"),
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
     effect: () => player.money.pow(0.00002).clampMin(1)
   },
@@ -324,6 +341,8 @@ GameDatabase.achievements.normal = [
     id: 76,
     name: "One for each dimension",
     tooltip: "Play for 8 days.",
+    checkRequirement: () => Time.totalTimePlayed.totalDays >= 8,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Extremely small multiplier to Dimensions based on time played.",
     effect: () => Math.pow(Time.totalTimePlayed.totalDays / 2, 0.05)
   },
@@ -338,6 +357,7 @@ GameDatabase.achievements.normal = [
       }
       return true;
     },
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Each Dimension gains a boost proportional to tier (8th dimension gets 8%, 7th gets 7%, etc.)",
   },
   {
@@ -371,6 +391,8 @@ GameDatabase.achievements.normal = [
     id: 84,
     name: "I got a few to spare",
     tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter.`,
+    checkRequirement: () => player.money.exponent >= 35000,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
     effect: () => player.money.pow(0.00004).clampMin(1)
   },
@@ -386,6 +408,7 @@ GameDatabase.achievements.normal = [
     name: "Do you even bend time bro?",
     tooltip: "Reach -99.9% tickspeed per upgrade.",
     checkRequirement: () => getTickSpeedMultiplier().lt(0.001),
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Galaxies are 1% more powerful.",
     effect: 1.01
   },
@@ -393,6 +416,8 @@ GameDatabase.achievements.normal = [
     id: 87,
     name: "2 Million Infinities",
     tooltip: "Infinity 2000000 times.",
+    checkRequirement: () => player.infinitied.gt(2e6),
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Infinities more than 5 seconds long give 250 infinitied stat.",
     effect: 250,
     effectCondition: () => Time.thisInfinity.totalSeconds > 5
@@ -431,6 +456,8 @@ GameDatabase.achievements.normal = [
     id: 94,
     name: "4.3333 minutes of Infinity",
     tooltip: () => `Reach ${shorten(1e260, 0, 0)} infinity power.`,
+    checkRequirement: () => player.infinityPower.exponent >= 260,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Double Infinity power gain.",
     effect: 2
   },
@@ -471,6 +498,8 @@ GameDatabase.achievements.normal = [
     id: 103,
     name: "This achievement doesn't exist II",
     tooltip: "Reach 9.99999e999 IP.",
+    checkRequirement: () => player.infinityPoints.gte("9.99999e999"),
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Gain more IP based on amount of antimatter you had when crunching.",
     effect: 307.8
   },
@@ -485,6 +514,8 @@ GameDatabase.achievements.normal = [
     id: 105,
     name: "Infinite time",
     tooltip: "Get 308 tickspeed upgrades (in one Eternity) from Time Dimensions.",
+    checkRequirement: () => player.totalTickGained >= 308,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Time Dimensions are affected slightly by tickspeed.",
     effect: () => player.tickspeed.div(1000).pow(0.000005).reciprocate()
   },
@@ -560,7 +591,9 @@ GameDatabase.achievements.normal = [
   {
     id: 121,
     name: "Can you get infinite IP?",
-    tooltip: () => `Reach ${shorten("1e30008", 0, 0)} IP.`
+    tooltip: () => `Reach ${shorten("1e30008", 0, 0)} IP.`,
+    checkRequirement: () => player.infinityPoints.exponent >= 30008,
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 122,
@@ -581,6 +614,14 @@ GameDatabase.achievements.normal = [
     id: 125,
     name: "Like feasting on a behind",
     tooltip: () => `Reach ${shorten(1e100, 0, 0)} IP without any Infinities or 1st Dimensions.`,
+    checkRequirement: () =>
+      player.infinityPoints.exponent >= 100 &&
+      NormalDimension(1).amount.eq(0) &&
+      player.infinitied.eq(0) &&
+      player.resets <= 4 &&
+      player.galaxies <= 1 &&
+      player.replicanti.galaxies === 0,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "IP multiplier based on time spent this Infinity.",
     effect() {
       const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
@@ -592,18 +633,24 @@ GameDatabase.achievements.normal = [
     id: 126,
     name: "Popular music",
     tooltip: "Have 180 times more Replicanti Galaxies than Antimatter Galaxies.",
+    checkRequirement: () => player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies > 0,
+    checkEvent: GameEvent.GAME_TICK,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
       `${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`,
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 1, 0)} EP.`
+    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 1, 0)} EP.`,
+    checkRequirement: () => player.eternityPoints.gte(Number.MAX_VALUE),
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 128,
     name: "What do I have to do to get rid of you",
     tooltip: () => `Reach ${shorten("1e22000", 0, 0)} IP without any time studies.`,
+    checkRequirement: () => player.infinityPoints.exponent >= 22000 && player.timestudy.studies.length === 0,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "Time Dimensions are multiplied by the number of studies you have.",
     effect: () => Math.max(player.timestudy.studies.length, 1)
   },
@@ -625,18 +672,27 @@ GameDatabase.achievements.normal = [
     id: 133,
     name: "I never liked this infinity stuff anyway",
     tooltip: () => `Reach ${shorten("1e200000", 0, 0)} IP without buying IDs or IP multipliers.`,
+    checkRequirement: () =>
+      Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
+      player.infMultCost.equals(10) &&
+      player.infinityPoints.exponent >= 200000,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "You start Eternities with all Infinity Challenges unlocked and completed."
   },
   {
     id: 134,
     name: "When will it be enough?",
     tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti.`,
+    checkRequirement: () => player.replicanti.amount.exponent >= 20000,
+    checkEvent: GameEvent.GAME_TICK,
     reward: () => `You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
   },
   {
     id: 135,
     name: "Faster than a potato^286078",
-    tooltip: () => `Get more than ${shorten("1e8296262", 0, 0)} ticks per second.`
+    tooltip: () => `Get more than ${shorten("1e8296262", 0, 0)} ticks per second.`,
+    checkRequirement: () => player.tickspeed.exponent <= -8296262,
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 136,
@@ -652,6 +708,11 @@ GameDatabase.achievements.normal = [
     id: 138,
     name: "This is what I have to do to get rid of you.",
     tooltip: () => `Reach ${shorten("1e28000", 0, 0)} IP without any time studies while Dilated.`,
+    checkRequirement: () =>
+      player.timestudy.studies.length === 0 &&
+      player.dilation.active &&
+      player.infinityPoints.exponent >= 28000,
+    checkEvent: GameEvent.GAME_TICK,
     reward: "The active time study path doesn't disable your Replicanti autobuyer."
   },
   {

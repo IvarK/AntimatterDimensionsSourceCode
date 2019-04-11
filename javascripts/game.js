@@ -561,8 +561,6 @@ var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000
 
 var ttMaxTimer = 0
 setInterval(function() {
-  Achievements.tryUnlock([72, 77, 86]);
-
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
     document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
@@ -575,46 +573,17 @@ setInterval(function() {
         failChallenge();
     }
 
-    if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
-    if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
-    if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
-    if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied.eq(0) && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
-    if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
-    if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
-    if (player.infinitied.gt(2e6)) giveAchievement("2 Million Infinities")
-    if (player.money.gte("9.9999e9999")) giveAchievement("This achievement doesn't exist")
-    if (player.money.gte("1e35000")) giveAchievement("I got a few to spare")
-    if (player.infinityPower.gt(1)) giveAchievement("A new beginning.");
-    if (player.infinityPower.gt(1e6)) giveAchievement("1 million is a lot"); //TBD
-    if (player.infinityPower.gt(1e260)) giveAchievement("4.3333 minutes of Infinity"); //TBD
-    if (player.totalTickGained >= 308) giveAchievement("Infinite time");
-    if (player.firstPow.gt(10e30)) giveAchievement("I forgot to nerf that")
-    if (player.money.gt(10e79)) giveAchievement("Antimatter Apocalypse")
-    if (player.totalTimePlayed >= 1000 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
-    if (player.seventhAmount.gt(1e12)) giveAchievement("Multidimensional");
-    if (player.tickspeed.lt(1e-26)) giveAchievement("Faster than a potato");
-    if (player.tickspeed.lt(1e-55)) giveAchievement("Faster than a squared potato");
-    if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
-    if ((player.matter.gte(2.586e15) && player.currentChallenge == "postc6") || player.matter.gte(Number.MAX_VALUE)) giveAchievement("It's not called matter dimensions is it?")
-
-    if (player.infinityDimension1.baseAmount == 0 &&
-        player.infinityDimension2.baseAmount == 0 &&
-        player.infinityDimension3.baseAmount == 0 &&
-        player.infinityDimension4.baseAmount == 0 &&
-        player.infinityDimension5.baseAmount == 0 &&
-        player.infinityDimension6.baseAmount == 0 &&
-        player.infinityDimension7.baseAmount == 0 &&
-        player.infinityDimension8.baseAmount == 0 &&
-        player.infMultCost.equals(10) &&
-        player.infinityPoints.gt(new Decimal("1e200000"))) {
-        giveAchievement("I never liked this infinity stuff anyway")
+    if (Math.random() < 0.00001) {
+      SecretAchievement(18).unlock();
+    }
+    if ((player.matter.gte(2.586e15) && InfinityChallenge(6).isRunning) || player.matter.gte(Number.MAX_VALUE)) {
+      SecretAchievement(27).unlock();
+    }
+    if (player.secretUnlocks.why >= 1e5) {
+      SecretAchievement(35).unlock();
     }
 
-    if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
-    if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
-    if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 28000) giveAchievement("This is what I have to do to get rid of you.")
-    if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
-    if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
+    if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
     if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
@@ -627,8 +596,6 @@ setInterval(function() {
         $("#automatorUnlock").show()
         $(".automator-container").hide()
     }
-
-    GameCache.achievementPower.invalidate();
 
     RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;
@@ -1064,6 +1031,8 @@ function gameLoop(diff, options = {}) {
   Laitela.handleRunUnlocks()
   matterDimensionLoop()
 
+    // Not GameUI because it's not UI-related
+    EventHub.global.emit(GameEvent.GAME_TICK);
     GameUI.update();
     player.lastUpdate = thisUpdate;
     PerformanceStats.end("Game Update");

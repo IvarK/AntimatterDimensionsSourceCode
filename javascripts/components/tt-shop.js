@@ -183,7 +183,8 @@ Vue.component("tt-save-load-button", {
 Vue.component("tt-buy-button", {
   props: ["budget", "cost", "format", "action"],
   template: `
-    <button :class="['l-tt-buy-button', 'c-tt-buy-button', enabledClass]"
+    <button class="l-tt-buy-button c-tt-buy-button"
+            :class="enabledClass"
             @click="action">
       {{ format(cost) }}
     </button>`,

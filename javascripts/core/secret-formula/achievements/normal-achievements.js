@@ -159,7 +159,11 @@ GameDatabase.achievements.normal = [
   {
     id: 42,
     name: "Supersanic",
-    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}`
+    tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}`,
+    checkRequirement: () =>
+      player.money.exponent >= 63 &&
+      getDimensionProductionPerSecond(1).gt(player.money),
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 43,

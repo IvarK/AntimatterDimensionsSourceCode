@@ -44,7 +44,7 @@ function floatText(tier, text) {
 
 document.getElementById("news").onclick = function () {
     if (document.getElementById("news").textContent === "Click this to unlock a secret achievement.") {
-        giveAchievement("Real news")
+      SecretAchievement(24).unlock();
     }
 };
 
@@ -168,11 +168,11 @@ function playerInfinityUpgradesOnEternity() {
 function breakInfinity() {
     if (!Autobuyer.infinity.isUnlocked || !Autobuyer.infinity.hasMaxedInterval) return false;
     if (player.break && !player.currentChallenge.includes("post")) {
-        player.break = false
-        if (player.dilation.active) giveAchievement("Time fixes everything")
+        player.break = false;
+        if (player.dilation.active) SecretAchievement(43).unlock();
     } else {
-        player.break = true
-        giveAchievement("Limit Break")
+        player.break = true;
+        Achievement(51).unlock();
     }
     GameUI.update();
 }
@@ -442,9 +442,8 @@ function gainedInfinities() {
 function failChallenge() {
     Modal.message.show("You failed the challenge, you will now exit it.");
     setTimeout(exitChallenge, 500);
-    giveAchievement("You're a mistake");
-    failureCount++;
-    if (failureCount > 9) giveAchievement("You're a failure");
+    Achievement(114).unlock();
+    SecretAchievement(26).tryUnlock();
 }
 
 function exitChallenge() {
@@ -929,8 +928,6 @@ function gameLoop(diff, options = {}) {
 
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 
-    if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
-
     if (TimeStudy.dilation.isBought) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
     }
@@ -1082,7 +1079,7 @@ function simulateTime(seconds, real, fast) {
     }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
-        giveAchievement("While you were away... Nothing happened.")
+        SecretAchievement(36).unlock();
     }
 
     Modal.message.show(popupString);

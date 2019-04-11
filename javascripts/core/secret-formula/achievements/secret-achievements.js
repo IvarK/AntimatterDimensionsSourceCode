@@ -70,7 +70,11 @@ GameDatabase.achievements.secret = [
   {
     id: 26,
     name: "You're a failure",
-    tooltip: "Fail eternity challenges 10 times without refreshing. What are you doing with your life..."
+    tooltip: "Fail eternity challenges 10 times without refreshing. What are you doing with your life...",
+    checkRequirement: (function() {
+      let count = 0;
+      return () => ++count >= 10;
+    }())
   },
   {
     id: 27,

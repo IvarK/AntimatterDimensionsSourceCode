@@ -44,7 +44,7 @@ Vue.component("secret-time-study", {
         this.lastClick = 0;
         if (++player.secretUnlocks.secretTS === 1) {
           this.$refs.study.addEventListener("transitionend", function achGiver(e) {
-            giveAchievement("Go study in real life instead");
+            SecretAchievement(21).unlock();
             e.target.removeEventListener(e.type, achGiver);
           });
         }

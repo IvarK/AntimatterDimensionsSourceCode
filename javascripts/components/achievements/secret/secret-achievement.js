@@ -42,7 +42,7 @@ Vue.component("secret-achievement", {
     },
     onClick() {
       if (this.achId === 11 && !this.isUnlocked) {
-        giveAchievement("The first one's always free");
+        SecretAchievement(11).unlock();
       }
     }
   },

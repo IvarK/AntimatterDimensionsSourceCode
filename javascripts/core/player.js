@@ -5,7 +5,6 @@ var controlDown = false;
 var controlShiftDown = false;
 var justImported = false;
 var saved = 0;
-var failureCount = 0;
 var implosionCheck = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 

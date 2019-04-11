@@ -419,6 +419,79 @@ button {
 
 }
 
+.c-shop-header {
+  font-size: 2rem;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-shop-header > span {
+  margin-right: 1rem;
+}
+
+.o-shop-buy-more {
+  padding: 1.2rem;
+  font-family: Typewriter;
+  border: none;
+  border-radius: .5rem;
+  font-size: 1.5rem;
+  background: burlywood;
+  margin-left: 1.5rem;
+  transition-duration: 0.12s;
+  cursor: pointer;
+}
+
+.o-shop-buy-more:hover {
+  background: #c19a68;
+}
+
+.l-shop-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.c-shop-button-container {
+  border: .2rem solid gainsboro;
+  background: whitesmoke;
+  display: inline-block;
+  padding: 2rem;
+  border-radius: .5rem;
+  width: 40rem;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.o-shop-button-description {
+  margin-bottom: 1rem;
+}
+
+.o-shop-button-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 17rem;
+  font-family: Typewriter;
+  font-size: 2rem;
+  padding: 1rem;
+  border: none;
+  background: turquoise;
+  border-radius: .5rem;
+  margin: auto;
+  cursor: pointer;
+  transition-duration: .12s;
+}
+
+.o-shop-button-button:hover {
+  background: rgb(68, 163, 154);
+}
+
 #automatorTreeCanvas {
     top: 0;
     left: 0;

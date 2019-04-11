@@ -21,25 +21,44 @@ kong.submitStats = function(name, value) {
     } catch(e) { console.log(e) }
 };
 
-kong.purchaseIP = function() {
-    console.log("purchase ip");
-    kongregate.mtx.purchaseItems(['doubleip'], kong.onPurchaseResult);
+kong.purchaseIP = function(cost) {
+  if (player.IAP.STD < cost) return
+  player.IAP.STD -= cost
+  if (player.IAP.IPMult == 1) player.IAP.IPMult = 2;
+  else player.IAP.IPMult += 2;
+
+  //kongregate.mtx.purchaseItems(['doubleip'], kong.onPurchaseResult);
 };
 
-kong.purchaseDimMult = function() {
-    kongregate.mtx.purchaseItems(['doublemult'], kong.onPurchaseResult);
+kong.purchaseDimMult = function(cost) {
+  if (player.IAP.STD < cost) return
+  player.IAP.STD -= cost
+  if (player.IAP.dimMult == 1) player.IAP.dimMult = 2;
+  else player.IAP.dimMult += 2;
+  //kongregate.mtx.purchaseItems(['doublemult'], kong.onPurchaseResult);
 };
 
-kong.purchaseAllDimMult = function() {
-    kongregate.mtx.purchaseItems(['alldimboost'], kong.onPurchaseResult);
+kong.purchaseAllDimMult = function(cost) {
+  if (player.IAP.STD < cost) return
+  player.IAP.STD -= cost
+  if (player.IAP.allDimMult == 1) player.IAP.allDimMult = 2;
+  else player.IAP.allDimMult += 2;
+  //kongregate.mtx.purchaseItems(['alldimboost'], kong.onPurchaseResult);
 };
 
-kong.purchaseTimeSkip = function() {
-    kongregate.mtx.purchaseItems(['timeskip'], kong.onPurchaseTimeSkip);
+kong.purchaseTimeSkip = function(cost) {
+  if (player.IAP.STD < cost) return
+  player.IAP.STD -= cost
+  simulateTime(21600);
+  //kongregate.mtx.purchaseItems(['timeskip'], kong.onPurchaseTimeSkip);
 };
 
-kong.purchaseEP = function() {
-    kongregate.mtx.purchaseItems(['tripleep'], kong.onPurchaseResult);
+kong.purchaseEP = function(cost) {
+  if (player.IAP.STD < cost) return
+  player.IAP.STD -= cost
+  if (player.IAP.EPMult == 1) player.IAP.EPMult = 2;
+  else player.IAP.EPMult += 2;
+  //kongregate.mtx.purchaseItems(['tripleep'], kong.onPurchaseResult);
 };
 
 kong.onPurchaseResult = function(result) {

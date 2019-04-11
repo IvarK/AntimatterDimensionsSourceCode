@@ -474,6 +474,13 @@ var player = {
       dilation: true,
       reality: true
     }
+  },
+  IAP: {
+    STD: 0,
+    IPMult: 1,
+    EPMult: 1,
+    dimMult: 1,
+    allDimMult: 1
   }
 };
 

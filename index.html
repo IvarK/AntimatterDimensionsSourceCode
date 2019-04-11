@@ -89,7 +89,9 @@
         </game-tab>
         <div id="reality" class="tab" align="center" style="margin-top: 10px;">
             <br>
-            <div id="realitymachines" style="color: black; font-size: 15px; width: 40%; margin: 0 auto">You have x Reality Machines.</div>
+            <div class="l-rm-amount__desc c-rm-amount__desc">
+              You have <span id="rm-amount" class="c-rm-amount">x</span> Reality Machines.
+            </div>
             <br>
             <table class="table" align="center" style="margin: auto">
                 <tr>
@@ -362,7 +364,7 @@
 </div>
 </body>
 <div class="videocontainer">
-    <video autoplay muted loop id="stars" style="display: none;">
+    <video autoplay muted loop id="stars">
         <source src="images/s6-bg.webm" type="video/webm">
     </video>
 </div>

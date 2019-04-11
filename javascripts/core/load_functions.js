@@ -29,7 +29,6 @@ function onLoad() {
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
-  $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   Theme.set(player.options.theme);
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?");

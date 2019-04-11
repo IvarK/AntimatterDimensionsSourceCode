@@ -74,13 +74,13 @@ const AutoGlyphSacMode = {
   ALL: 1,
   RARITY_THRESHOLDS: 2,
   ADVANCED: 3,
-}
+};
 
 const AutoGlyphPickMode = {
   RANDOM: 0,
   RARITY: 1,
   ABOVE_SACRIFICE_THRESHOLD: 2,
-}
+};
 
 // Use through Automator.Instructions; here to support creation of index by ID
 const _AutomatorInstructions = Object.freeze({
@@ -309,14 +309,14 @@ const _AutomatorInstructions = Object.freeze({
 });
 
 var _makeAutomatorInstructionsById = function() {
-  var ret={};
+  const ret = {};
   for (k in _AutomatorInstructions) {
     if (_AutomatorInstructions.hasOwnProperty(k)) {
       ret[_AutomatorInstructions[k].id] = _AutomatorInstructions[k];
     }
   }
   return ret;
-}
+};
 
 const Automator = Object.freeze({
   Instructions: _AutomatorInstructions,

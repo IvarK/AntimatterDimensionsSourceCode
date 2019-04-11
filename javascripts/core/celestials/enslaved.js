@@ -15,7 +15,7 @@ const enslavedQuotes = [
   "Please... don’t. Let me rest.",
   "Do not enter. I am growing in power... this is not the price I want to pay.",
   "Stop... both of our sakes.",
-]
+];
 
 
 const ENSLAVED_UNLOCKS = {
@@ -39,7 +39,7 @@ const ENSLAVED_UNLOCKS = {
     price: TimeSpan.fromYears(1e60).totalMilliseconds,
     description: "Unlock the 3rd Black Hole"
   }
-}
+};
 
 const Enslaved = {
   boostReality: false,

@@ -34,12 +34,12 @@
   * 
   * The player can use rows equal to Math.ceil(realities^0.5)
   */
-var automatorRows = []
-var automatorIdx = 0
-var tryingToBuy = 0
+var automatorRows = [];
+var automatorIdx = 0;
+var tryingToBuy = 0;
 function updateState() {
-  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
-  automatorIdx = 0
+  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(row => row !== "");
+  automatorIdx = 0;
 }
 
 function getAutomatorRows() {
@@ -54,17 +54,15 @@ function getAutomatorRows() {
 
 function automatorOnOff() {
   automatorOn = !automatorOn;
-  automatorIdx = 0
+  automatorIdx = 0;
   if (!automatorOn) {
-    $("#automator")[0].blur()
+    $("#automator")[0].blur();
   }
 }
 
 function highlightcurrent() {
-    var row = automatorRows[automatorIdx];
-    var idx = automatorRows.slice(0, automatorIdx).reduce(function (acc, x) {
-        return acc + x.length + 1;
-    }, 0);
+    const row = automatorRows[automatorIdx];
+    const idx = automatorRows.slice(0, automatorIdx).reduce((acc, x) => acc + x.length + 1, 0);
     
   if (idx >= 0) {
       $("#automator")[0].focus();
@@ -72,110 +70,110 @@ function highlightcurrent() {
   }
 }
 
-var automatorOn = false
-var timeStamp = 0
-var buying = false
+var automatorOn = false;
+var timeStamp = 0;
+var buying = false;
 function mainIteration() {
   if (automatorRows[0] === undefined) return false;
-  var cont = false
-  if (automatorRows[automatorIdx][0] == "*") cont = true
+  let cont = false;
+  if (automatorRows[automatorIdx][0] == "*") cont = true;
   if (automatorOn) {
-    var row = automatorRows[automatorIdx].split(" ")
+    const row = automatorRows[automatorIdx].split(" ");
       if (cont) row.splice(0, 1);
       if (row.length == 1) {
           var current = {
               action: row[0]
-          }
+          };
       } else if (row.length == 2) {
           var current = {
               action: row[0],
               target: row[1]
-          }
+          };
       } else if (row.length == 3) {
           var current = {
               action: row[0],
               target: row[1],
               id: row[2]
-          }          
-      } else if (row.length >= 4) { //added more flexibility to allow for more arguments in automator commands
+          };          
+      } else if (row.length >= 4) { // Added more flexibility to allow for more arguments in automator commands
           var current = {
               action: row[0],
               target: row[1],
               id: row[2],
               args: row.slice(3)
-          }
+          };
       }
-    switch(current.action) {
+    switch (current.action) {
       case "buy":
-        if (buy(current) || cont) automatorIdx+=1
+        if (buy(current) || cont) automatorIdx += 1;
         break;
       case "wait":
-        if (wait(current)) automatorIdx+=1
+        if (wait(current)) automatorIdx += 1;
         break;
       case "unlock":
-        if (unlock(current) || cont) automatorIdx+=1
+        if (unlock(current) || cont) automatorIdx += 1;
         break;
       case "start":
-        if (start(current) || cont) automatorIdx+=1
+        if (start(current) || cont) automatorIdx += 1;
         break;
       case "change":
-        if (change(current) || cont) automatorIdx+=1
+        if (change(current) || cont) automatorIdx += 1;
         break;
       case "respec":
-        if (!player.reality.automatorCommands.has(61)) return false
-        player.respec = true
-        automatorIdx+=1
+        if (!player.reality.automatorCommands.has(61)) return false;
+        player.respec = true;
+        automatorIdx += 1;
         break;
       case "eternity":
-        if (!player.reality.automatorCommands.has(62)) return false
-        if (eternity(false, true) || cont) automatorIdx+=1
+        if (!player.reality.automatorCommands.has(62)) return false;
+        if (eternity(false, true) || cont) automatorIdx += 1;
         break;
       case "stop":
-        if (!player.reality.automatorCommands.has(72)) return false
-        automatorOn = false
-        $("#automatorOn")[0].checked = false
+        if (!player.reality.automatorCommands.has(72)) return false;
+        automatorOn = false;
+        $("#automatorOn")[0].checked = false;
         break;
       case "load":
-        if (!player.reality.automatorCommands.has(51)) return false
-        automatorIdx = 0
-        loadScript(current.id)
+        if (!player.reality.automatorCommands.has(51)) return false;
+        automatorIdx = 0;
+        loadScript(current.id);
         break;
       case "toggle":
-        if (!player.reality.automatorCommands.has(53)) return false
-        toggle(current)
-        automatorIdx+=1
+        if (!player.reality.automatorCommands.has(53)) return false;
+        toggle(current);
+        automatorIdx += 1;
         break;
       case "goto":
-        if (!player.reality.automatorCommands.has(31)) return false
-        automatorIdx = parseInt(current.target)-1
+        if (!player.reality.automatorCommands.has(31)) return false;
+        automatorIdx = parseInt(current.target) - 1;
         break;
 
       case "if":
         if (!player.reality.automatorCommands.has(21)) return false;
-          if (wait(current)) automatorIdx += 1
-          else automatorIdx += 2
+          if (wait(current)) automatorIdx += 1;
+          else automatorIdx += 2;
     }
     
 
-    if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > getAutomatorRows() ) automatorIdx = 0 //The player can use rows equal to Math.ceil(realities^0.7) + 6
-    if ( $("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent()
+    if (automatorRows.length - 1 < automatorIdx || automatorIdx + 1 > getAutomatorRows()) automatorIdx = 0; // The player can use rows equal to Math.ceil(realities^0.7) + 6
+    if ($("#reality").css("display") == "block" && $("#automation").css("display") == "block") highlightcurrent();
   }
 }
 
 function buy(current) {
-  switch(current.target) {
+  switch (current.target) {
     case "study":
-      id = parseInt(current.id)
-      if (TimeStudy(id).isBought) return true
-      else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
-      else return false
+      id = parseInt(current.id);
+      if (TimeStudy(id).isBought) return true;
+      if (buyTimeStudy(id, studyCosts[all.indexOf(id)], 0)) return true;
+      return false;
       break;
       case "studyuntil":
           id = parseInt(current.id);
           if (!TimeStudy(id).isBought) {
-              studiesUntil(id);//passes arguments into the studies until function.
-        return true
-      } else return false
+              studiesUntil(id);// Passes arguments into the studies until function.
+        return true;
+      } return false;
           break;
       case "studypath":
           if (!player.reality.automatorCommands.has(26)) return false;
@@ -188,166 +186,166 @@ function buy(current) {
           return true;
           break;
     case "ttmax":
-      if (!player.reality.automatorCommands.has(44)) return false
-      maxTheorems()
-      return true
+      if (!player.reality.automatorCommands.has(44)) return false;
+      maxTheorems();
+      return true;
       break;
     case "ttip":
-      if (!player.reality.automatorCommands.has(35)) return false
+      if (!player.reality.automatorCommands.has(35)) return false;
       if (!buying) {
-        buying = true
-        tryingToBuy = 0
+        buying = true;
+        tryingToBuy = 0;
       }
-      if (buyWithIP()) tryingToBuy++
+      if (buyWithIP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
-        buying = false
-        return true
+        buying = false;
+        return true;
       }
-      else return false
+      return false;
       break;
     case "ttep":
-      if (!player.reality.automatorCommands.has(34)) return false
+      if (!player.reality.automatorCommands.has(34)) return false;
       if (!buying) {
-        buying = true
-        tryingToBuy = 0
+        buying = true;
+        tryingToBuy = 0;
       }
-      if (buyWithEP()) tryingToBuy++
+      if (buyWithEP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
-        buying = false
-        return true
+        buying = false;
+        return true;
       }
-      else return false
+      return false;
       break;
     case "ttam":
-      if (!player.reality.automatorCommands.has(43)) return false
+      if (!player.reality.automatorCommands.has(43)) return false;
       if (!buying) {
-        buying = true
-        tryingToBuy = 0
+        buying = true;
+        tryingToBuy = 0;
       }
-      if (buyWithAntimatter()) tryingToBuy++
+      if (buyWithAntimatter()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
-        buying = false
-        return true
+        buying = false;
+        return true;
       }
-      else return false
+      return false;
       break;
     case "ttgen":
-      if (buyDilationUpgrade(10)) return true
-      else return false
+      if (buyDilationUpgrade(10)) return true;
+      return false;
   }
 }
 
 function unlock(current) {
-  if (!player.reality.automatorCommands.has(54)) return false
-  switch(current.target) {
+  if (!player.reality.automatorCommands.has(54)) return false;
+  switch (current.target) {
     case "ec":
-      if (!player.reality.automatorCommands.has(64)) return false
-      if (player.eternityChallUnlocked == parseInt(current.id)) return true
+      if (!player.reality.automatorCommands.has(64)) return false;
+      if (player.eternityChallUnlocked == parseInt(current.id)) return true;
       justImported = true;
       if (TimeStudy.eternityChallenge(current.id).purchase()) {
         justImported = false;
         return true;
       }
-      else return false
+      return false;
       break;
     case "dilation":
-      if (!player.reality.automatorCommands.has(63)) return false
-      if (buyDilationStudy(1, 5000, true)) return true
-      else return false
+      if (!player.reality.automatorCommands.has(63)) return false;
+      if (buyDilationStudy(1, 5000, true)) return true;
+      return false;
       break;
   }
 }
 
 function wait(current) {
-  if (!player.reality.automatorCommands.has(11)) return false
+  if (!player.reality.automatorCommands.has(11)) return false;
   let id;
-  if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id)
-  switch(current.target) {
+  if (current.id !== "max" && current.target !== "time") id = new Decimal(current.id);
+  switch (current.target) {
     case "ep":
-      if (!player.reality.automatorCommands.has(23)) return false
-      if (id.gt(player.eternityPoints)) return false
-      else return true
+      if (!player.reality.automatorCommands.has(23)) return false;
+      if (id.gt(player.eternityPoints)) return false;
+      return true;
       break;
     case "ip":
-      if (!player.reality.automatorCommands.has(32)) return false
-      if (id.gt(player.infinityPoints)) return false
-      else return true
+      if (!player.reality.automatorCommands.has(32)) return false;
+      if (id.gt(player.infinityPoints)) return false;
+      return true;
       break;
     case "antimatter":
-      if (!player.reality.automatorCommands.has(22)) return false
-      if (id.gt(player.money)) return false
-      else return true
+      if (!player.reality.automatorCommands.has(22)) return false;
+      if (id.gt(player.money)) return false;
+      return true;
       break;
     case "replicanti":
-      if (!player.reality.automatorCommands.has(33)) return false
-      if (id.gt(player.replicanti.amount)) return false
-      else return true
+      if (!player.reality.automatorCommands.has(33)) return false;
+      if (id.gt(player.replicanti.amount)) return false;
+      return true;
       break;
     case "rg":
-      if (!player.reality.automatorCommands.has(42)) return false
+      if (!player.reality.automatorCommands.has(42)) return false;
       if (current.id == "max") {
-        if (!player.reality.automatorCommands.has(51)) return false
-        if ((!TimeStudy(131).isBought ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true
-        else return false
+        if (!player.reality.automatorCommands.has(51)) return false;
+        if ((!TimeStudy(131).isBought ? player.replicanti.gal : Math.floor(player.replicanti.gal * 1.5)) == player.replicanti.galaxies) return true;
+        return false;
       }
-      if (id.gt(player.replicanti.galaxies)) return false
-      else return true
+      if (id.gt(player.replicanti.galaxies)) return false;
+      return true;
       break;
     case "time":
-      if (!player.reality.automatorCommands.has(41)) return false
+      if (!player.reality.automatorCommands.has(41)) return false;
       if (timeStamp == 0) {
-        timeStamp = new Date().getTime()
-        return false
-      } else {
+        timeStamp = new Date().getTime();
+        return false;
+      } 
         if (timeStamp + current.id * 1000 < new Date().getTime()) {
-          timeStamp = 0 
-          return true
+          timeStamp = 0; 
+          return true;
         }
-        else return false
-      }
+        return false;
+      
 
       break;
     case "tt":
-      if (id.gt(player.timestudy.theorem)) return false
-      else return true
+      if (id.gt(player.timestudy.theorem)) return false;
+      return true;
   }
 }
 
 function start(current) {
-  if (!player.reality.automatorCommands.has(73)) return false
-  switch(current.target) {
+  if (!player.reality.automatorCommands.has(73)) return false;
+  switch (current.target) {
     case "ec":
       if (!player.reality.automatorCommands.has(84)) return false;
       const ec = EternityChallenge(current.id);
       if (ec.isRunning) return true;
       return ec.start();
     case "dilation":
-      if (!player.reality.automatorCommands.has(83)) return false
-      if (startDilatedEternity()) return true
-      else return false
+      if (!player.reality.automatorCommands.has(83)) return false;
+      if (startDilatedEternity()) return true;
+      return false;
       break;
   }
 }
 
 function change(current) {
-  if (!player.reality.automatorCommands.has(71)) return false
-  switch(current.target) {
+  if (!player.reality.automatorCommands.has(71)) return false;
+  switch (current.target) {
     case "ipautobuyer":
       Autobuyer.infinity.limit = new Decimal(current.id);
-      return true
+      return true;
     case "epautobuyer":
       Autobuyer.eternity.limit = new Decimal(current.id);
-      return true
+      return true;
   }
 }
 
 function toggle(current) {
-    if (current.target === "rg") { //RG is handled differently
+    if (current.target === "rg") { // RG is handled differently
         replicantiGalaxyAutoToggle(current.id);
         return true;
     }
-    let options = Array.range(1, 8)
-      .map(tier => { return { name: `d${tier}`, autobuyer: Autobuyer.dim(tier) }; });
+    const options = Array.range(1, 8)
+      .map(tier => ({ name: `d${tier}`, autobuyer: Autobuyer.dim(tier) }));
     options.push({ name: "tickspeed", autobuyer: Autobuyer.tickspeed });
     options.push({ name: "dimboost", autobuyer: Autobuyer.dimboost });
     options.push({ name: "galaxy", autobuyer: Autobuyer.galaxy });
@@ -355,8 +353,8 @@ function toggle(current) {
     options.push({ name: "sacrifice", autobuyer: Autobuyer.sacrifice });
     options.push({ name: "eternity", autobuyer: Autobuyer.eternity });
     let state;
-    let id = options.map(o => o.name).indexOf(current.target);
-    if (id === -1) return false; //Fails if the specified autobuyer doesnt exist
+    const id = options.map(o => o.name).indexOf(current.target);
+    if (id === -1) return false; // Fails if the specified autobuyer doesnt exist
     const autobuyer = options[id].autobuyer;
     if (current.id === "on") state = true;
     else if (current.id === "off") state = false;
@@ -368,40 +366,40 @@ function toggle(current) {
 
 function automatorSaveButton(num, forceSave) {
   if (shiftDown || forceSave) {
-      localStorage.setItem("automatorScript"+num, JSON.stringify(automatorRows));
+      localStorage.setItem("automatorScript" + num, JSON.stringify(automatorRows));
       GameUI.notify.info(`Automator script ${num} saved`);
   } else {
-    loadScript(num)
+    loadScript(num);
   }
 }
 
 function loadScript(num) {
-  if (localStorage.getItem("automatorScript"+num) !== null && localStorage.getItem("automatorScript"+num) !== "|0") {
-    importAutomatorScript(localStorage.getItem("automatorScript"+num));
-    automatorIdx = 0
+  if (localStorage.getItem("automatorScript" + num) !== null && localStorage.getItem("automatorScript" + num) !== "|0") {
+    importAutomatorScript(localStorage.getItem("automatorScript" + num));
+    automatorIdx = 0;
     GameUI.notify.info(`Automator script ${num} loaded`);
   }
 }
 
 function buyAutomatorInstruction(id) {
-  if (!canBuyAutomatorInstruction(id)) return false
-  if (player.reality.automatorCommands.has(id)) return false
-  player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price)
-  player.reality.automatorCommands.add(id)
-  return true
+  if (!canBuyAutomatorInstruction(id)) return false;
+  if (player.reality.automatorCommands.has(id)) return false;
+  player.reality.realityMachines = player.reality.realityMachines.minus(Automator.InstructionsById[id].price);
+  player.reality.automatorCommands.add(id);
+  return true;
 }
 
 function canBuyAutomatorInstruction(id) {
-  var info = Automator.InstructionsById[id];
+  const info = Automator.InstructionsById[id];
   if (player.reality.realityMachines.lt(info.price)) return false;
   return info.parent === undefined || player.reality.automatorCommands.has(info.parent);
 }
 
 function updateAutomatorRows() {
   const pow = Effects.max(0.7, Perk.automatorRowScaling);
-  var rows = 6 + Math.ceil(Math.pow(player.realities, pow))
-  var next = Math.ceil( Math.pow(rows - 6, 1 / pow) )
-  $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows; next row at " + next + " realities.")
+  const rows = 6 + Math.ceil(Math.pow(player.realities, pow));
+  const next = Math.ceil(Math.pow(rows - 6, 1 / pow));
+  $("#rowsAvailable").text("Your automator can use " + getAutomatorRows() + " rows; next row at " + next + " realities.");
 }
 
-setInterval(mainIteration, 50)
+setInterval(mainIteration, 50);

@@ -15,7 +15,7 @@ const GlyphSelection = {
     if (!Perk.glyphUncommonGuarantee.isBought) return;
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
-    const strengthThreshold = 1.5;  // Uncommon
+    const strengthThreshold = 1.5; // Uncommon
     if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
     do {
@@ -24,10 +24,10 @@ const GlyphSelection = {
     this.glyphs.randomElement().strength = newStrength;
   },
   update(level) {
-    for (let g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
+    for (const g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
       g.rawLevel = level.rawLevel;
     }
-    for (let g of this.glyphs.filter(g => g.level < level.actualLevel)) {
+    for (const g of this.glyphs.filter(g => g.level < level.actualLevel)) {
       g.level = level.actualLevel;
       calculateGlyph(g);
     }
@@ -38,7 +38,7 @@ const GlyphSelection = {
     this.glyphs = [];
     manualReality();
   }
-}
+};
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
@@ -46,7 +46,7 @@ function confirmReality() {
       "and will lock your achievements, which you will regain over the course of 2 days. " +
       "You will also gain reality machines based on your EP, a glyph with a power level " +
       "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
-      "life upgrades, and unlock various upgrades.")
+      "life upgrades, and unlock various upgrades.");
 }
 
 function isRealityAvailable() {
@@ -169,36 +169,36 @@ function completeReality(force, reset, auto = false) {
       boostedRealityRewards();
     }
     if (player.thisReality < player.bestReality) {
-      player.bestReality = player.thisReality
+      player.bestReality = player.thisReality;
     }
     giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
-    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
+    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
+    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are");
+    if (GLYPH_TYPES.every(type => type === "effarig" || player.reality.glyphs.active.some(g => g.type == type))) giveAchievement("Royal Flush");
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto));
     }
   }
 
   if (player.reality.respec) {
     respecGlyphs();
   }
-  handleCelestialRuns(force)
-  recalculateAllGlyphs()
+  handleCelestialRuns(force);
+  recalculateAllGlyphs();
 
-  //reset global values to avoid a tick of unupdated production
+  // Reset global values to avoid a tick of unupdated production
   postc8Mult = new Decimal(0);
   mult18 = new Decimal(1);
 
   player.sacrificed = new Decimal(0);
 
   player.challenges = [];
-  let isRUPG10Bought = RealityUpgrade(10).isBought;
+  const isRUPG10Bought = RealityUpgrade(10).isBought;
   if (isRUPG10Bought) {
-    for (let challenge of Challenge.all) {
+    for (const challenge of Challenge.all) {
       challenge.complete();
     }
   }
@@ -270,7 +270,7 @@ function completeReality(force, reset, auto = false) {
   player.eterc8repl = 40;
   player.dimlife = true;
   player.dead = true;
-  if (!reset) player.realities = player.realities + 1;
+  if (!reset) player.realities += 1;
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
   player.thisRealityRealTime = 0;
@@ -315,7 +315,7 @@ function completeReality(force, reset, auto = false) {
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
-  Autobuyer.tryUnlockAny()
+  Autobuyer.tryUnlockAny();
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   resetInfDimensions();
@@ -333,7 +333,7 @@ function completeReality(force, reset, auto = false) {
   updateAutomatorRows();
   drawPerkNetwork();
 
-  if (player.realities >= 4) giveAchievement("How does this work?")
+  if (player.realities >= 4) giveAchievement("How does this work?");
 
   resetInfinityPoints();
 
@@ -353,7 +353,7 @@ function completeReality(force, reset, auto = false) {
   }
   if (RealityUpgrade(13).isBought) {
     if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-    for (var i = 1; i < 9; i++) {
+    for (let i = 1; i < 9; i++) {
       if (player.reality.tdbuyers[i - 1]) {
         buyMaxTimeDimTier(i);
       }
@@ -366,36 +366,36 @@ function completeReality(force, reset, auto = false) {
 
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
-    player.celestials.teresa.run = false
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
+    player.celestials.teresa.run = false;
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money;
   }
   if (Effarig.isRunning) {
-    player.celestials.effarig.run = false
+    player.celestials.effarig.run = false;
     if (!force && !EffarigUnlock.reality.isUnlocked) {
       EffarigUnlock.reality.unlock();
     }
   }
   if (Enslaved.isRunning) {
-    player.celestials.enslaved.run = false
+    player.celestials.enslaved.run = false;
   }
 
   if (V.isRunning) {
-    player.celestials.v.run = false
+    player.celestials.v.run = false;
   }
 
   if (Ra.isRunning) {
-    player.celestials.ra.run = false
+    player.celestials.ra.run = false;
   }
 
   if (Laitela.isRunning) {
-    player.celestials.laitela.run = false
+    player.celestials.laitela.run = false;
   }
 }
 
 function fullResetTimeDimensions() {
   const cost = [1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
   for (let i = 0; i < 8; i++) {
-    let dimension = player["timeDimension" + (i + 1)];
+    const dimension = player["timeDimension" + (i + 1)];
     dimension.cost = new Decimal(cost[i]);
     dimension.amount = new Decimal(0);
     dimension.bought = 0;

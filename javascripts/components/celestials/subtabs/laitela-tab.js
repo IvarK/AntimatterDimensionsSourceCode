@@ -1,5 +1,5 @@
 Vue.component('laitela-tab', {
-  data: function() {
+  data() {
     return {
       matter: 0,
       nextUnlock: "",
@@ -8,27 +8,27 @@ Vue.component('laitela-tab', {
   },
   methods: {
     update() {
-      this.matter = player.celestials.laitela.matter
-      this.nextUnlock = Laitela.nextMatterDimensionThreshold
-      this.matterEffectPercentage = Laitela.matterEffectPercentage
+      this.matter = player.celestials.laitela.matter;
+      this.nextUnlock = Laitela.nextMatterDimensionThreshold;
+      this.matterEffectPercentage = Laitela.matterEffectPercentage;
     },
     startRun() {
-      Laitela.startRun()
+      Laitela.startRun();
     },
     buyUnlock(info) {
-      Laitela.buyUnlock(info)
+      Laitela.buyUnlock(info);
     },
     hasUnlock(info) {
-      return Laitela.has(info)
+      return Laitela.has(info);
     },
     canBuyUnlock(info) {
-      return Laitela.canBuyUnlock(info)
+      return Laitela.canBuyUnlock(info);
     },
     unlockClassObject(info) {
       return {
         'o-laitela-shop-button-bought': this.hasUnlock(info), 
         'o-laitela-shop-button-available': this.canBuyUnlock(info)
-      }
+      };
     }
   },
   computed: {
@@ -36,7 +36,7 @@ Vue.component('laitela-tab', {
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
     unlocksInfo: () => LAITELA_UNLOCKS,
     activeDimensions() {
-      return this.dimensions.filter(d => d.amount !== 0)
+      return this.dimensions.filter(d => d.amount !== 0);
     }
   },
   template:

@@ -56,11 +56,11 @@ class Sacrifice {
     }
 
     if (!Challenge(8).isRunning) {
-      let sacrificePow = 2 + Effects.sum(
+      const sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)
       );
-      return Decimal.pow((player.firstAmount.e/10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
+      return Decimal.pow((player.firstAmount.e / 10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
     }
 
     return player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
@@ -79,13 +79,13 @@ class Sacrifice {
     }
 
     if (!Challenge(8).isRunning) {
-      let sacrificePow = 2 + Effects.sum(
+      const sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)
       );
-      return Decimal.pow((player.sacrificed.e/10.0), sacrificePow);
+      return Decimal.pow((player.sacrificed.e / 10.0), sacrificePow);
     }
 
-    return player.sacrificed.pow(0.05); //this is actually off but like im not sure how youd make it good. not that it matters
+    return player.sacrificed.pow(0.05); // This is actually off but like im not sure how youd make it good. not that it matters
   }
 }

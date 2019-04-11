@@ -22,36 +22,36 @@ const LAITELA_UNLOCKS = {
     value: () => Laitela.idConversionEffect,
     format: x => "+" + x.toFixed(2)
   }
-}
+};
 
-const laitelaRunUnlockThresholds = ["1e4000", "1e4500", "1e5000"].map(u => new Decimal(u))
+const laitelaRunUnlockThresholds = ["1e4000", "1e4500", "1e5000"].map(u => new Decimal(u));
 
 
 const Laitela = {
 
   handleRunUnlocks() {
-    if (!Laitela.isRunning) return
+    if (!Laitela.isRunning) return;
     for (let i = 1; i <= 3; i++) {
-      let d = MatterDimension(i + 1)
+      const d = MatterDimension(i + 1);
       if (d.amount == 0 && player.eternityPoints.gte(laitelaRunUnlockThresholds[i - 1])) {
         d.amount++;
-        d.lastUpdate = player.realTimePlayed
+        d.lastUpdate = player.realTimePlayed;
       }
     } 
   },
 
   has(info) {
-    return player.celestials.laitela.unlocks.includes(info.id)
+    return player.celestials.laitela.unlocks.includes(info.id);
   },
   canBuyUnlock(info) {
-    if (this.matter < info.price) return false
+    if (this.matter < info.price) return false;
     return !this.has(info);
-    return true
+    return true;
   },
   buyUnlock(info) {
-    if (!this.canBuyUnlock) return false
-    this.matter -= info.price
-    player.celestials.laitela.unlocks.push(info.id)
+    if (!this.canBuyUnlock) return false;
+    this.matter -= info.price;
+    player.celestials.laitela.unlocks.push(info.id);
   },
   startRun() {
     if (MatterDimension(1).amount == 0) MatterDimension(1).amount++;
@@ -62,24 +62,24 @@ const Laitela = {
   },
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
-      let d = MatterDimension(i + 1)
-      if (d.amount == 0 ) return `Next dimension at ${shorten(laitelaRunUnlockThresholds[i - 1])} EP`
+      const d = MatterDimension(i + 1);
+      if (d.amount == 0) return `Next dimension at ${shorten(laitelaRunUnlockThresholds[i - 1])} EP`;
     }
-    return ""
+    return "";
   },
   get matterEffectToDimensionMultDecrease() {
-    return Math.pow(0.99, Math.log10(Math.max(this.matter, 1)))
+    return Math.pow(0.99, Math.log10(Math.max(this.matter, 1)));
   },
   get matterEffectPercentage() {
-    return ((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2) + "%"
+    return ((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2) + "%";
   },
   get idConversionEffect() {
-    return Math.sqrt(Math.log10(Math.max(this.matter, 1)))
+    return Math.sqrt(Math.log10(Math.max(this.matter, 1)));
   },
   get matter() {
-    return player.celestials.laitela.matter
+    return player.celestials.laitela.matter;
   },
   set matter(x) {
-    player.celestials.laitela.matter = x
+    player.celestials.laitela.matter = x;
   }
-}
+};

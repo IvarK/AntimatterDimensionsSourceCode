@@ -1,5 +1,5 @@
 /**
- * runUnlocks:
+ * RunUnlocks:
  * id: unique id
  * name: the achievement name
  * description: Description what you need to do, for values add {value}
@@ -14,7 +14,7 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get completions() {
-    let completions = player.celestials.v.runUnlocks[this.id];
+    const completions = player.celestials.v.runUnlocks[this.id];
     return completions === undefined ? 0 : completions;
   }
 
@@ -24,9 +24,9 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get formattedDescription() {
-    let val = this.conditionValue
-    const formatted = this.config.format ? this.config.format(val) : shorten(val)
-    return this.config.description.replace('{value}', formatted)
+    const val = this.conditionValue;
+    const formatted = this.config.format ? this.config.format(val) : shorten(val);
+    return this.config.description.replace('{value}', formatted);
   }
 
   set completions(value) {
@@ -37,7 +37,7 @@ class VRunUnlockState extends GameMechanicState {
     if (this.completions === 6 || !this.config.condition(this.conditionValue)) return;
     this.completions++;
     GameUI.notify.success(`You have unlocked V achievement '${this.config.name}' tier ${this.completions}`);
-    V.updateTotalRunUnlocks()
+    V.updateTotalRunUnlocks();
   }
 }
 
@@ -108,7 +108,7 @@ const V = {
       GameUI.notify.success(V_UNLOCKS.MAIN_UNLOCK.description);
     }
 
-    for (let i = 0; i<V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
+    for (let i = 0; i < V_UNLOCKS.RUN_UNLOCK_THRESHOLDS.length; i++) {
       const unl = V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[i];
       if (unl.requirement() && !this.has(unl)) {
         player.celestials.v.unlocks.push(unl.id);
@@ -117,7 +117,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (let unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlockState.all) {
         unlock.tryComplete();
       }
     }
@@ -129,16 +129,16 @@ const V = {
     player.celestials.v.run = startRealityOver();
   },
   canBuyLockedPath() {
-    return player.celestials.v.additionalStudies < this.totalAdditionalStudies
+    return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
   },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()
+    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
   },
   get isRunning() {
     return player.celestials.v.run;
   },
   get totalAdditionalStudies() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3)
-    else return Math.floor(this.totalRunUnlocks / 6)
+    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3);
+    return Math.floor(this.totalRunUnlocks / 6);
   }
 };

@@ -7,11 +7,11 @@ function startChallenge(name, target) {
 }
 
 function askChallengeConfirmation(challenge) {
-    if (!player.options.confirmations.challenges || challenge === ""){
+    if (!player.options.confirmations.challenges || challenge === "") {
         return true;
     }
-    let goal = challenge.includes("post") ? "a set goal" : "infinity";
-    let message = "You will start over with just your infinity upgrades, and achievements. " +
+    const goal = challenge.includes("post") ? "a set goal" : "infinity";
+    const message = "You will start over with just your infinity upgrades, and achievements. " +
         "You need to reach " + goal + " with special conditions. " +
         "NOTE: The rightmost infinity upgrade column doesn't work on challenges.";
     return confirm(message);
@@ -173,9 +173,9 @@ function InfinityChallenge(id) {
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  return challenge.startsWith("postc") ?
-    InfinityChallenge(parseInt(challenge.substr(5))) :
-    undefined;
+  return challenge.startsWith("postc")
+    ? InfinityChallenge(parseInt(challenge.substr(5)))
+    : undefined;
 };
 
 /**

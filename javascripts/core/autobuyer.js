@@ -175,7 +175,7 @@ class AutobuyerState {
     player.infinityPoints = player.infinityPoints.minus(this.cost);
     this.interval = Math.max(this.interval * 0.6, 100);
     if (this.interval > 120) {
-      // if your last purchase wont be very strong, dont double the cost
+      // If your last purchase wont be very strong, dont double the cost
       this.cost *= 2;
     }
     Autobuyer.checkIntervalAchievements();
@@ -239,8 +239,7 @@ class DimensionAutobuyerState extends AutobuyerState {
     if (!canBuyDimension(tier)) return;
     if (this.mode === AutobuyerMode.BUY_SINGLE) {
       buyOneDimension(tier);
-    }
-    else {
+    } else {
       const bulk = player.options.bulkOn ? this.bulk : 1;
       buyManyDimensionAutobuyer(tier, bulk);
     }
@@ -298,8 +297,7 @@ class TickspeedAutobuyerState extends AutobuyerState {
     if (!isTickspeedPurchaseUnlocked()) return;
     if (this.mode === AutobuyerMode.BUY_SINGLE) {
       buyTickSpeed();
-    }
-    else {
+    } else {
       buyMaxTickSpeed();
     }
     this.resetTicks();
@@ -399,11 +397,10 @@ class DimboostAutobuyerState extends AutobuyerState {
       return;
     }
     if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
-      var bulk = Math.max(this.bulk, 1);
+      const bulk = Math.max(this.bulk, 1);
       if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
       softReset(bulk);
-    }
-    else {
+    } else {
       if (!DimBoost.requirement.isSatisfied) return;
       softReset(1);
     }
@@ -468,8 +465,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
     if (this.limit <= player.galaxies) return;
     if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
       this.buyMax();
-    }
-    else {
+    } else {
       this.buySingle();
       this.resetTicks();
     }
@@ -627,7 +623,7 @@ Autobuyer.unlockables = Autobuyer.allDims
   ]);
 
 Autobuyer.tryUnlockAny = function() {
-  for (let autobuyer of this.unlockables) {
+  for (const autobuyer of this.unlockables) {
     autobuyer.tryUnlock();
   }
 };
@@ -711,7 +707,7 @@ Autobuyer.eternity = {
         proc = EternityChallenge.isRunning() || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
-        proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)
+        proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit);
         break;
       case AutoEternityMode.RELATIVE:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));
@@ -819,7 +815,7 @@ Autobuyer.tick = function() {
   Autobuyer.galaxy.tick();
   Autobuyer.dimboost.tick();
   Autobuyer.sacrifice.tick();
-  for (let autobuyer of Autobuyer.priorityQueue()) {
+  for (const autobuyer of Autobuyer.priorityQueue()) {
     autobuyer.tick();
   }
   PerformanceStats.end();
@@ -864,7 +860,7 @@ function toggleAutobuyers() {
       Autobuyer.reality
     ])
     .filter(autobuyer => autobuyer.isUnlocked);
-  for (let autobuyer of autobuyers) {
+  for (const autobuyer of autobuyers) {
     autobuyer.isOn = !isOn;
   }
 }

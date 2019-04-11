@@ -2,20 +2,20 @@
 
 function buyWithAntimatter() {
   if (player.money.gte(player.timestudy.amcost)) {
-      player.money = player.money.minus(player.timestudy.amcost)
-      player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
-      player.timestudy.theorem = player.timestudy.theorem.plus(1)
-      return true
-  } else return false
+      player.money = player.money.minus(player.timestudy.amcost);
+      player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"));
+      player.timestudy.theorem = player.timestudy.theorem.plus(1);
+      return true;
+  } return false;
 }
 
 function buyWithIP() {
   if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-      player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
-      player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
-      player.timestudy.theorem = player.timestudy.theorem.plus(1)
-      return true
-  } else return false
+      player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
+      player.timestudy.ipcost = player.timestudy.ipcost.times(1e100);
+      player.timestudy.theorem = player.timestudy.theorem.plus(1);
+      return true;
+  } return false;
 }
 
 function buyWithEP() {
@@ -64,7 +64,7 @@ function maxTheorems() {
     const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
     player.timestudy.epcost = finalEPCost;
     player.eternityPoints = player.eternityPoints.minus(totalEPCost);
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
     // The above code block will sometimes buy one too few TT, but it never over-buys
     buyWithEP();
   }
@@ -84,17 +84,16 @@ function calculateTimeStudiesCost() {
 function buyTimeStudy(name, cost, check) {
   if (shiftDown && check === undefined) studiesUntil(name);
   if (player.timestudy.theorem.gte(cost) && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
-      player.timestudy.studies.push(name)
-      player.timestudy.theorem = player.timestudy.theorem.minus(cost)
+      player.timestudy.studies.push(name);
+      player.timestudy.theorem = player.timestudy.theorem.minus(cost);
       GameCache.timeStudies.invalidate();
-      return true
-  } else if (canBuyLocked(name, cost)) {
-    player.celestials.v.additionalStudies++
-    player.timestudy.studies.push(name)
-    player.timestudy.theorem = player.timestudy.theorem.minus(cost)
+      return true;
+  } if (canBuyLocked(name, cost)) {
+    player.celestials.v.additionalStudies++;
+    player.timestudy.studies.push(name);
+    player.timestudy.theorem = player.timestudy.theorem.minus(cost);
     GameCache.timeStudies.invalidate();
-  }
-  else return false
+  } else return false;
 }
 
 function buyDilationStudy(name, cost, quiet) {
@@ -114,16 +113,16 @@ function buyDilationStudy(name, cost, quiet) {
         if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");
         }
-        player.dilation.studies.push(name)
-        if (name !== 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-        else if (player.realities === 0 && name === 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-        return true
-    } return false
+        player.dilation.studies.push(name);
+        if (name !== 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost);
+        else if (player.realities === 0 && name === 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost);
+        return true;
+    } return false;
   }
 
 function hasRow(row) {
-  for (var i=0; i<player.timestudy.studies.length; i++) {
-      if (Math.floor(player.timestudy.studies[i]/10) == row) return true
+  for (let i = 0; i < player.timestudy.studies.length; i++) {
+      if (Math.floor(player.timestudy.studies[i] / 10) == row) return true;
   }
 }
 
@@ -181,11 +180,11 @@ function canBuyStudy(name) {
       case 8:
       case 9:
       case 10:
-      if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
+      if (player.timestudy.studies.includes((row-1)*10 + col)) return true; return false
       break;
 
       case 12:
-      if (hasRow(row-1) && !hasRow(row)) return true; else return false
+      if (hasRow(row-1) && !hasRow(row)) return true; return false
       break;
 
       
@@ -195,24 +194,24 @@ function canBuyStudy(name) {
 
       case 7:
       if (DilationUpgrade.timeStudySplit.isBought) {
-        if (player.timestudy.studies.includes(61)) return true; else return false;
-      } else if (!player.timestudy.studies.includes(201)) {
-          if (player.timestudy.studies.includes(61) && !hasRow(row)) return true; else return false
-      } else {
-          if (player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length < 2) return true; else return false
-      }
+        if (player.timestudy.studies.includes(61)) return true; return false;
+      } if (!player.timestudy.studies.includes(201)) {
+          if (player.timestudy.studies.includes(61) && !hasRow(row)) return true; return false
+      } 
+          if (player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length < 2) return true; return false
+      
       break;
 
       case 19:
-      if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; else return false
+      if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; return false
       break;
 
       case 22:
-      if (player.timestudy.studies.includes(210 + Math.round(col/2)) && ((name%2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1))) return true; else return false
+      if (player.timestudy.studies.includes(210 + Math.round(col/2)) && ((name%2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1))) return true; return false
       break;
 
       case 23:
-      if ( (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && !player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)) return true; else return false;
+      if ( (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && !player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)) return true; return false;
       break;
   }
 }
@@ -224,42 +223,42 @@ function canBuyStudy(name) {
  * Used by V-celestial
  */
 function studyIsLocked(name) {
-  var row = Math.floor(name/10)
+  const row = Math.floor(name / 10);
 
   switch (row) {
 
     case 22:
     case 23:
-    return player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)
+    return player.timestudy.studies.includes((name % 2 == 0) ? name - 1 : name + 1);
 
     case 12:
     case 13:
     case 14:
-    return hasRow(row)
+    return hasRow(row);
   } 
   
-  return false
+  return false;
 }
 
 function canBuyLocked(name, cost) {
-  if (player.timestudy.theorem.lt(cost)) return false
-  if (!studyIsLocked(name)) return false
-  if (!V.canBuyLockedPath()) return false
+  if (player.timestudy.theorem.lt(cost)) return false;
+  if (!studyIsLocked(name)) return false;
+  if (!V.canBuyLockedPath()) return false;
 
   
-  var row = Math.floor(name/10)
-  var col = name%10
+  const row = Math.floor(name / 10);
+  const col = name % 10;
 
   switch (row) {
 
     case 12:
     case 22:
     case 23:
-    return hasRow(row - 1)
+    return hasRow(row - 1);
 
     case 13:
     case 14:
-    return player.timestudy.studies.includes((row-1) * 10 + col)
+    return player.timestudy.studies.includes((row - 1) * 10 + col);
   }
 }
 
@@ -282,25 +281,25 @@ function canBuyDilationStudy(name) {
   return player.dilation.studies.includes(name - 1) && player.timestudy.theorem.gte(config.cost);
 }
 
-var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234];
+var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500];
 
 function studiesUntil(id) {
-    let col = id % 10;
-    let row = Math.floor(id / 10);
-    let path = [0, 0];
+    const col = id % 10;
+    const row = Math.floor(id / 10);
+    const path = [0, 0];
     for (let i = 1; i < 4; i++) {
         if (player.timestudy.studies.includes(70 + i)) path[0] = i;
         if (player.timestudy.studies.includes(120 + i)) path[1] = i;
     }
   if ((row > 10 && path[0] === 0 && !DilationUpgrade.timeStudySplit.isBought) || (row > 14 && path[1] === 0)) return;
   for (let i = 1; i < row; i++) {
-      let chosenPath = path[i > 11 ? 1 : 0];
+      const chosenPath = path[i > 11 ? 1 : 0];
       let secondPath;
       if (row > 6 && row < 11)secondPath = col;
       if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), studyCosts[all.indexOf(i * 10 + (chosenPath === 0 ? col : chosenPath))], 0);
       if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, studyCosts[all.indexOf(i * 10 + secondPath)], 0);
-      else for (let j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
+      else for (let j = 1; all.includes(i * 10 + j); j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
   }
   buyTimeStudy(id, studyCosts[all.indexOf(id)], 0);
 }
@@ -308,36 +307,36 @@ function studiesUntil(id) {
 function studyPath(mode, args) {
     if (!(mode === 'none' || mode === 'all')) return false;
     if (args === undefined) args = [];
-    args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
+    args = args.map(x => { if (!isNaN(x)) return parseInt(x); return x; });
     let row = 0;
-    let master = [];
-    let locks = [0, 0, 0];
-    main: while (row < 24) {
+    const master = [];
+    const locks = [0, 0, 0];
+    while (row < 24) {
         row++;
         if (mode === 'none') {
             if (row >= 2 && row <= 4) {
                 for (let i = 20; i <= 40; i += 10) {
-                    if (args.includes(i + 1) && !master.includes(row*10 + 1)) master.push(row*10 + 1);
-                    if (args.includes(i + 2) && !master.includes(row*10 + 2)) master.push(row*10 + 2);
+                    if (args.includes(i + 1) && !master.includes(row * 10 + 1)) master.push(row * 10 + 1);
+                    if (args.includes(i + 2) && !master.includes(row * 10 + 2)) master.push(row * 10 + 2);
                 }
                 if (row === 3 && args.includes(33)) master.push(33);
-                continue main;
+                continue;
             }
             if (row === 6) {
                 if (args.includes(62)) master.push(61, 62);
                 else master.push(61);
-                continue main;
+                continue;
             }
             if (row === 16) {
                 if (args.includes(161)) master.push(161);
                 if (args.includes(162)) master.push(162);
-                continue main;
+                continue;
             }
             if (row === 19) {
                 if (args.includes(191)) master.push(191);
                 if (args.includes(192) || args.includes(201)) master.push(192);
                 if (args.includes(193)) master.push(193);
-                continue main;
+                continue;
             }
             if (row === 21) {
                 for (let i = 0; i < args.length; i++) {
@@ -348,36 +347,36 @@ function studyPath(mode, args) {
                     }
 
                 }
-                continue main;
+                continue;
             }
         }
         if (row >= 7 && row <= 10) {
             if (mode === 'all' && DilationUpgrade.timeStudySplit.isBought) {
-                master.push(row*10 + 1, row*10 + 2, row*10 + 3);
-                continue main;
+                master.push(row * 10 + 1, row * 10 + 2, row * 10 + 3);
+                continue;
             }
             if (locks[0] === 0) {
                 let temp = [];
-                let options = ['nd', 'id', 'td', 'normal', 'infinity', 'time'];
+                const options = ['nd', 'id', 'td', 'normal', 'infinity', 'time'];
                 for (let k = 0; k < args.length; k++) {
                     for (let i = 70; i <= 100; i += 10) {
                         for (let j = 1; j <= 3; j++) {
-                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j+3]) temp.push(j);
+                            if (args[k] === i + j || args[k] === options[j - 1] || args[k] === options[j + 3]) temp.push(j);
                         }
                     }
                 }
-                if (temp.length === 0) break main;
+                if (temp.length === 0) break;
                 locks[0] = temp[0];
-                temp = temp.filter(function (x) { if (x !== locks[0]) return x;});
+                temp = temp.filter(x => { if (x !== locks[0]) return x; });
                 if (temp.length > 0) locks[2] = temp[0];
             }
-            master.push(row*10 + locks[0]);
-            continue main;
+            master.push(row * 10 + locks[0]);
+            continue;
         }
         if (row >= 12 && row <= 14) {
             if (locks[1] === 0) {
-                let temp = [];
-                let options = ['active', 'passive', 'idle'];
+                const temp = [];
+                const options = ['active', 'passive', 'idle'];
                 for (let k = 0; k < args.length; k++) {
                     for (let i = 120; i <= 140; i += 10) {
                         for (let j = 1; j <= 3; j++) {
@@ -385,33 +384,31 @@ function studyPath(mode, args) {
                         }
                     }
                 }
-                if (temp.length === 0) break main;
+                if (temp.length === 0) break;
                 locks[1] = temp[0];
             }
-            master.push(row*10 + locks[1]);
-            continue main;
+            master.push(row * 10 + locks[1]);
+            continue;
         }
         if (row === 22 || row === 23) {
             col: for (let i = 1; i <= 8 / (row - 21); i += 2) {
                 for (let j = 0; j < args.length; j++) {
                     for (let k = 0; k < 2; k++) {
-                        if (args[j] === row*10 + i + k) {
+                        if (args[j] === row * 10 + i + k) {
                             master.push(args[j]);
                             continue col;
                         }
                     }
                 }
             }
-            continue main;
+            continue;
         }
         for (let i = 1; all.includes(row * 10 + i); i++)master.push(row * 10 + i);
     }
     if (locks[2] > 0) {
         master.push(70 + locks[2], 80 + locks[2], 90 + locks[2], 100 + locks[2]);
     }
-    let string = master.reduce(function (acc, x) {
-        return acc += x + ',';
-    }, '');
+    let string = master.reduce((acc, x) => acc += x + ',', '');
     string = string.slice(0, -1);
     string += '|0';
     importStudyTree(string);
@@ -419,15 +416,15 @@ function studyPath(mode, args) {
 
 
 function respecTimeStudies() {
-  for (let study of TimeStudy.boughtNormalTS()) {
+  for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
   if (player.timestudy.studies.length === 0) {
-    giveAchievement("You do know how these work, right?")
+    giveAchievement("You do know how these work, right?");
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.additionalStudies = 0
+  player.celestials.v.additionalStudies = 0;
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -440,27 +437,27 @@ function exportStudyTree() {
 }
 
 function importStudyTree(input) {
-  if (typeof input !== 'string') var input = prompt()
-  if (sha512_256(input) == "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") giveAchievement("You followed the instructions")
-  if (input === "") return false
-  var studiesToBuy = input.split("|")[0].split(",");
-  for (i=0; i<studiesToBuy.length; i++) {
-    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))],0)
+  if (typeof input !== 'string') var input = prompt();
+  if (sha512_256(input) == "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") giveAchievement("You followed the instructions");
+  if (input === "") return false;
+  const studiesToBuy = input.split("|")[0].split(",");
+  for (i = 0; i < studiesToBuy.length; i++) {
+    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))],0);
   }
   if (parseInt(input.split("|")[1]) !== 0) {
       justImported = true;
       TimeStudy.eternityChallenge(parseInt(input.split("|")[1])).purchase();
-      setTimeout(function(){ justImported = false; }, 100);
+      setTimeout(() => { justImported = false; }, 100);
   }
-};
+}
 
 function studyTreeSaveButton(num, forceSave) {
     if (shiftDown || forceSave) {
-        localStorage.setItem("studyTree"+num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
-        GameUI.notify.info("Study tree "+num+" saved")
-    } else if (localStorage.getItem("studyTree"+num) !== null && localStorage.getItem("studyTree"+num) !== "|0") {
-        importStudyTree(localStorage.getItem("studyTree"+num));
-        GameUI.notify.info("Study tree "+num+" loaded")
+        localStorage.setItem("studyTree" + num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
+        GameUI.notify.info("Study tree " + num + " saved");
+    } else if (localStorage.getItem("studyTree" + num) !== null && localStorage.getItem("studyTree" + num) !== "|0") {
+        importStudyTree(localStorage.getItem("studyTree" + num));
+        GameUI.notify.info("Study tree " + num + " loaded");
     }
 }
 
@@ -645,9 +642,9 @@ TimeStudy.eternityChallenge = function(id) {
  * @returns {ECTimeStudyState|undefined}
  */
 TimeStudy.eternityChallenge.current = function() {
-  return player.eternityChallUnlocked !== 0 ?
-    TimeStudy.eternityChallenge(player.eternityChallUnlocked) :
-    undefined;
+  return player.eternityChallUnlocked !== 0
+    ? TimeStudy.eternityChallenge(player.eternityChallUnlocked)
+    : undefined;
 };
 
 class DilationTimeStudyState extends TimeStudyState {
@@ -724,7 +721,7 @@ class TimeStudyConnection {
 /**
  * @type {TimeStudyConnection[]}
  */
-TimeStudy.allConnections = function() {
+TimeStudy.allConnections = (function() {
   const TS = id => TimeStudy(id);
   const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [
@@ -852,8 +849,8 @@ TimeStudy.allConnections = function() {
     [TimeStudy.timeDimension(8), TimeStudy.reality]
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
-  for (let connection of connections) {
+  for (const connection of connections) {
     connection.to.incomingConnections.push(connection);
   }
   return connections;
-}();
+}());

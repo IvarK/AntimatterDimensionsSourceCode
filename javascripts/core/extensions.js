@@ -1,11 +1,9 @@
 Array.prototype.distinct = function() {
-    return this.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    });
+    return this.filter((value, index, self) => self.indexOf(value) === index);
 };
 
 Math.wrap = function(number, min, max) {
-    let range = max - min + 1;
+    const range = max - min + 1;
     number = ((number - min) % range);
     return number < 0 ? min + 1 + number : min + number;
 };
@@ -65,7 +63,7 @@ Decimal.prototype.copyFrom = function(decimal) {
 };
 
 const copyToClipboard = (function() {
-  let el = document.createElement('textarea');
+  const el = document.createElement('textarea');
   document.body.appendChild(el);
   el.style.position = "absolute";
   el.style.left = '-9999999px';
@@ -75,7 +73,7 @@ const copyToClipboard = (function() {
       el.value = str;
       el.select();
       return document.execCommand('copy');
-    } catch(ex) {
+    } catch (ex) {
       console.log(ex);
       return false;
     }
@@ -152,12 +150,12 @@ Array.prototype.last = function(predicate) {
 Array.prototype.mapToObject = function(keyFun, valueFun) {
   if (typeof keyFun !== "function" || typeof valueFun !== "function")
     throw "keyFun and valueFun must be functions";
-  let out = {}
+  const out = {};
   for (let idx = 0; idx < this.length; ++idx) {
     out[keyFun(this[idx], idx)] = valueFun(this[idx], idx);
   }
   return out;
-}
+};
 
 /**
  * @type {number[]}

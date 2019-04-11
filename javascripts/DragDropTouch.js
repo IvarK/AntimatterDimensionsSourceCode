@@ -1,5 +1,5 @@
 var DragDropTouch;
-(function (DragDropTouch_1) {
+(function(DragDropTouch_1) {
     'use strict';
     /**
      * Object used to hold the data that is being dragged during drag and drop operations.
@@ -11,7 +11,7 @@ var DragDropTouch;
      * This object is created automatically by the @see:DragDropTouch singleton and is
      * accessible through the @see:dataTransfer property of all drag events.
      */
-    var DataTransfer = (function () {
+    const DataTransfer = (function() {
         function DataTransfer() {
             this._dropEffect = 'move';
             this._effectAllowed = 'all';
@@ -22,10 +22,10 @@ var DragDropTouch;
              * Gets or sets the type of drag-and-drop operation currently selected.
              * The value must be 'none',  'copy',  'link', or 'move'.
              */
-            get: function () {
+            get() {
                 return this._dropEffect;
             },
-            set: function (value) {
+            set(value) {
                 this._dropEffect = value;
             },
             enumerable: true,
@@ -37,10 +37,10 @@ var DragDropTouch;
              * Must be one of 'none', 'copy', 'copyLink', 'copyMove', 'link',
              * 'linkMove', 'move', 'all' or 'uninitialized'.
              */
-            get: function () {
+            get() {
                 return this._effectAllowed;
             },
-            set: function (value) {
+            set(value) {
                 this._effectAllowed = value;
             },
             enumerable: true,
@@ -50,7 +50,7 @@ var DragDropTouch;
             /**
              * Gets an array of strings giving the formats that were set in the @see:dragstart event.
              */
-            get: function () {
+            get() {
                 return Object.keys(this._data);
             },
             enumerable: true,
@@ -65,11 +65,10 @@ var DragDropTouch;
          *
          * @param type Type of data to remove.
          */
-        DataTransfer.prototype.clearData = function (type) {
+        DataTransfer.prototype.clearData = function(type) {
             if (type != null) {
                 delete this._data[type];
-            }
-            else {
+            } else {
                 this._data = null;
             }
         };
@@ -79,7 +78,7 @@ var DragDropTouch;
          *
          * @param type Type of data to retrieve.
          */
-        DataTransfer.prototype.getData = function (type) {
+        DataTransfer.prototype.getData = function(type) {
             return this._data[type] || '';
         };
         /**
@@ -91,7 +90,7 @@ var DragDropTouch;
          * @param type Type of data to add.
          * @param value Data to add.
          */
-        DataTransfer.prototype.setData = function (type, value) {
+        DataTransfer.prototype.setData = function(type, value) {
             this._data[type] = value;
         };
         /**
@@ -101,8 +100,8 @@ var DragDropTouch;
          * @param offsetX The horizontal offset within the image.
          * @param offsetY The vertical offset within the image.
          */
-        DataTransfer.prototype.setDragImage = function (img, offsetX, offsetY) {
-            var ddt = DragDropTouch._instance;
+        DataTransfer.prototype.setDragImage = function(img, offsetX, offsetY) {
+            const ddt = DragDropTouch._instance;
             ddt._imgCustom = img;
             ddt._imgOffset = { x: offsetX, y: offsetY };
         };
@@ -127,28 +126,28 @@ var DragDropTouch;
      * For details and examples on HTML drag and drop, see
      * https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations.
      */
-    var DragDropTouch = (function () {
+    var DragDropTouch = (function() {
         /**
          * Initializes the single instance of the @see:DragDropTouch class.
          */
         function DragDropTouch() {
             this._lastClick = 0;
-            // enforce singleton pattern
+            // Enforce singleton pattern
             if (DragDropTouch._instance) {
                 throw 'DragDropTouch instance already created.';
             }
-            // detect passive event support
+            // Detect passive event support
             // https://github.com/Modernizr/Modernizr/issues/1894
-            var supportsPassive = false;
-            document.addEventListener('test', function () { }, {
+            let supportsPassive = false;
+            document.addEventListener('test', () => { }, {
                 get passive() {
                     supportsPassive = true;
                     return true;
                 }
             });
-            // listen to touch events
+            // Listen to touch events
             if ('ontouchstart' in document) {
-                var d = document, ts = this._touchstart.bind(this), tm = this._touchmove.bind(this), te = this._touchend.bind(this), opt = supportsPassive ? { passive: false, capture: false } : false;
+                const d = document, ts = this._touchstart.bind(this), tm = this._touchmove.bind(this), te = this._touchend.bind(this), opt = supportsPassive ? { passive: false, capture: false } : false;
                 d.addEventListener('touchstart', ts, opt);
                 d.addEventListener('touchmove', tm, opt);
                 d.addEventListener('touchend', te);
@@ -158,14 +157,14 @@ var DragDropTouch;
         /**
          * Gets a reference to the @see:DragDropTouch singleton.
          */
-        DragDropTouch.getInstance = function () {
+        DragDropTouch.getInstance = function() {
             return DragDropTouch._instance;
         };
-        // ** event handlers
-        DragDropTouch.prototype._touchstart = function (e) {
-            var _this = this;
+        // ** Event handlers
+        DragDropTouch.prototype._touchstart = function(e) {
+            const _this = this;
             if (this._shouldHandle(e)) {
-                // raise double-click and prevent zooming
+                // Raise double-click and prevent zooming
                 if (Date.now() - this._lastClick < DragDropTouch._DBLCLICK) {
                     if (this._dispatchEvent(e, 'dblclick', e.target)) {
                         e.preventDefault();
@@ -173,21 +172,21 @@ var DragDropTouch;
                         return;
                     }
                 }
-                // clear all variables
+                // Clear all variables
                 this._reset();
-                // get nearest draggable element
-                var src = this._closestDraggable(e.target);
+                // Get nearest draggable element
+                const src = this._closestDraggable(e.target);
                 if (src) {
-                    // give caller a chance to handle the hover/move events
+                    // Give caller a chance to handle the hover/move events
                     if (!this._dispatchEvent(e, 'mousemove', e.target) &&
                         !this._dispatchEvent(e, 'mousedown', e.target)) {
-                        // get ready to start dragging
+                        // Get ready to start dragging
                         this._dragSource = src;
                         this._ptDown = this._getPoint(e);
                         this._lastTouch = e;
                         e.preventDefault();
-                        // show context menu if the user hasn't started dragging after a while
-                        setTimeout(function () {
+                        // Show context menu if the user hasn't started dragging after a while
+                        setTimeout(() => {
                             if (_this._dragSource == src && _this._img == null) {
                                 if (_this._dispatchEvent(e, 'contextmenu', src)) {
                                     _this._reset();
@@ -195,7 +194,7 @@ var DragDropTouch;
                             }
                         }, DragDropTouch._CTXMENU);
                         if (DragDropTouch._ISPRESSHOLDMODE) {
-                            this._pressHoldInterval = setTimeout(function () {
+                            this._pressHoldInterval = setTimeout(() => {
                                 _this._isDragEnabled = true;
                                 _this._touchmove(e);
                             }, DragDropTouch._PRESSHOLDAWAIT);
@@ -204,29 +203,29 @@ var DragDropTouch;
                 }
             }
         };
-        DragDropTouch.prototype._touchmove = function (e) {
-            if(this._shouldCancelPressHoldMove(e)) {
+        DragDropTouch.prototype._touchmove = function(e) {
+            if (this._shouldCancelPressHoldMove(e)) {
               this._reset();
               return;
             }
             if (this._shouldHandleMove(e) || this._shouldHandlePressHoldMove(e)) {
-                // see if target wants to handle move
-                var target = this._getTarget(e);
+                // See if target wants to handle move
+                const target = this._getTarget(e);
                 if (this._dispatchEvent(e, 'mousemove', target)) {
                     this._lastTouch = e;
                     e.preventDefault();
                     return;
                 }
-                // start dragging
+                // Start dragging
                 if (this._dragSource && !this._img && this._shouldStartDragging(e)) {
                     this._dispatchEvent(e, 'dragstart', this._dragSource);
                     this._createImage(e);
                     this._dispatchEvent(e, 'dragenter', target);
                 }
-                // continue dragging
+                // Continue dragging
                 if (this._img) {
                     this._lastTouch = e;
-                    e.preventDefault(); // prevent scrolling
+                    e.preventDefault(); // Prevent scrolling
                     if (target != this._lastTarget) {
                         this._dispatchEvent(this._lastTouch, 'dragleave', this._lastTarget);
                         this._dispatchEvent(e, 'dragenter', target);
@@ -237,20 +236,20 @@ var DragDropTouch;
                 }
             }
         };
-        DragDropTouch.prototype._touchend = function (e) {
+        DragDropTouch.prototype._touchend = function(e) {
             if (this._shouldHandle(e)) {
-                // see if target wants to handle up
+                // See if target wants to handle up
                 if (this._dispatchEvent(this._lastTouch, 'mouseup', e.target)) {
                     e.preventDefault();
                     return;
                 }
-                // user clicked the element but didn't drag, so clear the source and simulate a click
+                // User clicked the element but didn't drag, so clear the source and simulate a click
                 if (!this._img) {
                     this._dragSource = null;
                     this._dispatchEvent(this._lastTouch, 'click', e.target);
                     this._lastClick = Date.now();
                 }
-                // finish dragging
+                // Finish dragging
                 this._destroyImage();
                 if (this._dragSource) {
                     if (e.type.indexOf('cancel') < 0) {
@@ -261,40 +260,40 @@ var DragDropTouch;
                 }
             }
         };
-        // ** utilities
+        // ** Utilities
         // ignore events that have been handled or that involve more than one touch
-        DragDropTouch.prototype._shouldHandle = function (e) {
+        DragDropTouch.prototype._shouldHandle = function(e) {
             return e &&
                 !e.defaultPrevented &&
                 e.touches && e.touches.length < 2;
         };
 
-        // use regular condition outside of press & hold mode
-        DragDropTouch.prototype._shouldHandleMove = function (e) {
+        // Use regular condition outside of press & hold mode
+        DragDropTouch.prototype._shouldHandleMove = function(e) {
           return !DragDropTouch._ISPRESSHOLDMODE && this._shouldHandle(e);
         };
 
-        // allow to handle moves that involve many touches for press & hold
-        DragDropTouch.prototype._shouldHandlePressHoldMove = function (e) {
+        // Allow to handle moves that involve many touches for press & hold
+        DragDropTouch.prototype._shouldHandlePressHoldMove = function(e) {
           return DragDropTouch._ISPRESSHOLDMODE &&
               this._isDragEnabled && e && e.touches && e.touches.length;
         };
 
-        // reset data if user drags without pressing & holding
-        DragDropTouch.prototype._shouldCancelPressHoldMove = function (e) {
+        // Reset data if user drags without pressing & holding
+        DragDropTouch.prototype._shouldCancelPressHoldMove = function(e) {
           return DragDropTouch._ISPRESSHOLDMODE && !this._isDragEnabled &&
               this._getDelta(e) > DragDropTouch._PRESSHOLDMARGIN;
         };
 
-        // start dragging when specified delta is detected
-        DragDropTouch.prototype._shouldStartDragging = function (e) {
-            var delta = this._getDelta(e);
+        // Start dragging when specified delta is detected
+        DragDropTouch.prototype._shouldStartDragging = function(e) {
+            const delta = this._getDelta(e);
             return delta > DragDropTouch._THRESHOLD ||
                 (DragDropTouch._ISPRESSHOLDMODE && delta >= DragDropTouch._PRESSHOLDTHRESHOLD);
-        }
+        };
 
-        // clear all members
-        DragDropTouch.prototype._reset = function () {
+        // Clear all members
+        DragDropTouch.prototype._reset = function() {
             this._destroyImage();
             this._dragSource = null;
             this._lastTouch = null;
@@ -304,62 +303,62 @@ var DragDropTouch;
             this._isDragEnabled = false;
             clearInterval(this._pressHoldInterval);
         };
-        // get point for a touch event
-        DragDropTouch.prototype._getPoint = function (e, page) {
+        // Get point for a touch event
+        DragDropTouch.prototype._getPoint = function(e, page) {
             if (e && e.touches) {
                 e = e.touches[0];
             }
             return { x: page ? e.pageX : e.clientX, y: page ? e.pageY : e.clientY };
         };
-        // get distance between the current touch event and the first one
-        DragDropTouch.prototype._getDelta = function (e) {
+        // Get distance between the current touch event and the first one
+        DragDropTouch.prototype._getDelta = function(e) {
             if (DragDropTouch._ISPRESSHOLDMODE && !this._ptDown) { return 0; }
-            var p = this._getPoint(e);
+            const p = this._getPoint(e);
             return Math.abs(p.x - this._ptDown.x) + Math.abs(p.y - this._ptDown.y);
         };
-        // get the element at a given touch event
-        DragDropTouch.prototype._getTarget = function (e) {
-            var pt = this._getPoint(e), el = document.elementFromPoint(pt.x, pt.y);
+        // Get the element at a given touch event
+        DragDropTouch.prototype._getTarget = function(e) {
+            let pt = this._getPoint(e), el = document.elementFromPoint(pt.x, pt.y);
             while (el && getComputedStyle(el).pointerEvents == 'none') {
                 el = el.parentElement;
             }
             return el;
         };
-        // create drag image from source element
-        DragDropTouch.prototype._createImage = function (e) {
-            // just in case...
+        // Create drag image from source element
+        DragDropTouch.prototype._createImage = function(e) {
+            // Just in case...
             if (this._img) {
                 this._destroyImage();
             }
-            // create drag image from custom element or drag source
-            var src = this._imgCustom || this._dragSource;
+            // Create drag image from custom element or drag source
+            const src = this._imgCustom || this._dragSource;
             this._img = src.cloneNode(true);
             this._copyStyle(src, this._img);
             this._img.style.top = this._img.style.left = '-9999px';
-            // if creating from drag source, apply offset and opacity
+            // If creating from drag source, apply offset and opacity
             if (!this._imgCustom) {
-                var rc = src.getBoundingClientRect(), pt = this._getPoint(e);
+                const rc = src.getBoundingClientRect(), pt = this._getPoint(e);
                 this._imgOffset = { x: pt.x - rc.left, y: pt.y - rc.top };
                 this._img.style.opacity = DragDropTouch._OPACITY.toString();
             }
-            // add image to document
+            // Add image to document
             this._moveImage(e);
             document.body.appendChild(this._img);
         };
-        // dispose of drag image element
-        DragDropTouch.prototype._destroyImage = function () {
+        // Dispose of drag image element
+        DragDropTouch.prototype._destroyImage = function() {
             if (this._img && this._img.parentElement) {
                 this._img.parentElement.removeChild(this._img);
             }
             this._img = null;
             this._imgCustom = null;
         };
-        // move the drag image element
-        DragDropTouch.prototype._moveImage = function (e) {
-            var _this = this;
-            requestAnimationFrame(function () {
+        // Move the drag image element
+        DragDropTouch.prototype._moveImage = function(e) {
+            const _this = this;
+            requestAnimationFrame(() => {
                 if (_this._img) {
-                    var pt = _this._getPoint(e, true), s = _this._img.style;
+                    const pt = _this._getPoint(e, true), s = _this._img.style;
                     s.position = 'absolute';
                     s.pointerEvents = 'none';
                     s.zIndex = '999999';
@@ -368,42 +367,42 @@ var DragDropTouch;
                 }
             });
         };
-        // copy properties from an object to another
-        DragDropTouch.prototype._copyProps = function (dst, src, props) {
-            for (var i = 0; i < props.length; i++) {
-                var p = props[i];
+        // Copy properties from an object to another
+        DragDropTouch.prototype._copyProps = function(dst, src, props) {
+            for (let i = 0; i < props.length; i++) {
+                const p = props[i];
                 dst[p] = src[p];
             }
         };
-        DragDropTouch.prototype._copyStyle = function (src, dst) {
-            // remove potentially troublesome attributes
-            DragDropTouch._rmvAtts.forEach(function (att) {
+        DragDropTouch.prototype._copyStyle = function(src, dst) {
+            // Remove potentially troublesome attributes
+            DragDropTouch._rmvAtts.forEach(att => {
                 dst.removeAttribute(att);
             });
-            // copy canvas content
+            // Copy canvas content
             if (src instanceof HTMLCanvasElement) {
-                var cSrc = src, cDst = dst;
+                const cSrc = src, cDst = dst;
                 cDst.width = cSrc.width;
                 cDst.height = cSrc.height;
                 cDst.getContext('2d').drawImage(cSrc, 0, 0);
             }
-            // copy style (without transitions)
-            var cs = getComputedStyle(src);
+            // Copy style (without transitions)
+            const cs = getComputedStyle(src);
             for (var i = 0; i < cs.length; i++) {
-                var key = cs[i];
+                const key = cs[i];
                 if (key.indexOf('transition') < 0) {
                     dst.style[key] = cs[key];
                 }
             }
             dst.style.pointerEvents = 'none';
-            // and repeat for all children
+            // And repeat for all children
             for (var i = 0; i < src.children.length; i++) {
                 this._copyStyle(src.children[i], dst.children[i]);
             }
         };
-        DragDropTouch.prototype._dispatchEvent = function (e, type, target) {
+        DragDropTouch.prototype._dispatchEvent = function(e, type, target) {
             if (e && target) {
-                var evt = document.createEvent('Event'), t = e.touches ? e.touches[0] : e;
+                const evt = document.createEvent('Event'), t = e.touches ? e.touches[0] : e;
                 evt.initEvent(type, true, true);
                 evt.button = 0;
                 evt.which = evt.buttons = 1;
@@ -415,8 +414,8 @@ var DragDropTouch;
             }
             return false;
         };
-        // gets an element's closest draggable ancestor
-        DragDropTouch.prototype._closestDraggable = function (e) {
+        // Gets an element's closest draggable ancestor
+        DragDropTouch.prototype._closestDraggable = function(e) {
             for (; e; e = e.parentElement) {
                 if (e.hasAttribute('draggable') && e.draggable) {
                     return e;
@@ -426,21 +425,21 @@ var DragDropTouch;
         };
         return DragDropTouch;
     }());
-    /*private*/ DragDropTouch._instance = new DragDropTouch(); // singleton
+    /* Private*/ DragDropTouch._instance = new DragDropTouch(); // Singleton
     // constants
-    DragDropTouch._THRESHOLD = 5; // pixels to move before drag starts
-    DragDropTouch._OPACITY = 0.5; // drag image opacity
-    DragDropTouch._DBLCLICK = 500; // max ms between clicks in a double click
-    DragDropTouch._CTXMENU = 900; // ms to hold before raising 'contextmenu' event
-    DragDropTouch._ISPRESSHOLDMODE = false; // decides of press & hold mode presence
-    DragDropTouch._PRESSHOLDAWAIT = 400; // ms to wait before press & hold is detected
-    DragDropTouch._PRESSHOLDMARGIN = 25; // pixels that finger might shiver while pressing
-    DragDropTouch._PRESSHOLDTHRESHOLD = 0; // pixels to move before drag starts
+    DragDropTouch._THRESHOLD = 5; // Pixels to move before drag starts
+    DragDropTouch._OPACITY = 0.5; // Drag image opacity
+    DragDropTouch._DBLCLICK = 500; // Max ms between clicks in a double click
+    DragDropTouch._CTXMENU = 900; // Ms to hold before raising 'contextmenu' event
+    DragDropTouch._ISPRESSHOLDMODE = false; // Decides of press & hold mode presence
+    DragDropTouch._PRESSHOLDAWAIT = 400; // Ms to wait before press & hold is detected
+    DragDropTouch._PRESSHOLDMARGIN = 25; // Pixels that finger might shiver while pressing
+    DragDropTouch._PRESSHOLDTHRESHOLD = 0; // Pixels to move before drag starts
     // copy styles/attributes from drag source to drag image element
     DragDropTouch._rmvAtts = 'id,class,style,draggable'.split(',');
-    // synthesize and dispatch an event
+    // Synthesize and dispatch an event
     // returns true if the event has been handled (e.preventDefault == true)
     DragDropTouch._kbdProps = 'altKey,ctrlKey,metaKey,shiftKey'.split(',');
     DragDropTouch._ptProps = 'pageX,pageY,clientX,clientY,screenX,screenY'.split(',');
     DragDropTouch_1.DragDropTouch = DragDropTouch;
-})(DragDropTouch || (DragDropTouch = {}));
+}(DragDropTouch || (DragDropTouch = {})));

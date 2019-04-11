@@ -154,6 +154,7 @@ class TimeSpan {
   get totalMilliseconds() {
     return this._ms;
   }
+
   /**
    * @param {TimeSpan} other
    * @returns {TimeSpan}
@@ -234,18 +235,18 @@ class TimeSpan {
     if (totalSeconds <= 10) {
       return `${totalSeconds.toFixed(3)} seconds`;
     }
-    else if (totalSeconds <= 60) {
+    if (totalSeconds <= 60) {
       return `${totalSeconds.toFixed(2)} seconds`;
     }
-    else if (this.totalHours < 10000) {
+    if (this.totalHours < 10000) {
       return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
     }
-    else if (this.totalDays < 10000) {
+    if (this.totalDays < 10000) {
       return `${this.totalDays.toFixed(2)} days`;
     }
-    else { 
+     
       return `${shorten(this.totalYears, 3, 0)} years`;
-    }
+    
     function format(value) {
       const s = value.toString();
       return s.length === 1 ? "0" + s : s;

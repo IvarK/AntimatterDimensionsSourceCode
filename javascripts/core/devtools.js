@@ -42,7 +42,7 @@ const specialGlyphSymbols = {
   key26ee: "⛮", key26ef: "⛯", key26f0: "⛰", key26f1: "⛱", key26f2: "⛲", key26f3: "⛳",
   key26f4: "⛴", key26f5: "⛵", key26f6: "⛶", key26f7: "⛷", key26f8: "⛸", key26f9: "⛹",
   key26fa: "⛺", key26fb: "⛻", key26fc: "⛼", key26fd: "⛽", key26fe: "⛾", key26ff: "⛿"
-}
+};
 
 dev.giveAllAchievements = function() {
   const allAchievements = Achievements.list.concat(SecretAchievements.list);
@@ -50,27 +50,27 @@ dev.giveAllAchievements = function() {
 };
 
 dev.doubleEverything = function() {
-    Object.keys(player).forEach( function(key) {
+    Object.keys(player).forEach(key => {
         if (typeof player[key] === "number") player[key] *= 2;
         if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
         if (typeof player[key] === "object" && !isFinite(player[key])) {
-            Object.keys(player[key]).forEach( function(key2) {
-                if (typeof player[key][key2] === "number") player[key][key2] *= 2
-                if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object) player[key][key2] = player[key][key2].times(2)
-            })
+            Object.keys(player[key]).forEach(key2 => {
+                if (typeof player[key][key2] === "number") player[key][key2] *= 2;
+                if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object) player[key][key2] = player[key][key2].times(2);
+            });
         }
-    })
-}
+    });
+};
 
 dev.spin3d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite"
-    else document.body.style.animation = ""
-}
+    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+    else document.body.style.animation = "";
+};
 
 dev.spin4d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite"
-    else document.body.style.animation = ""
-}
+    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+    else document.body.style.animation = "";
+};
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
@@ -78,14 +78,14 @@ dev.cancerize = function() {
 };
 
 dev.fixSave = function() {
-  var save = JSON.stringify(player, translatorForJSON);
+  const save = JSON.stringify(player, translatorForJSON);
   
-    var fixed = save.replace(/NaN/gi, "10")
-    var stillToDo = JSON.parse(fixed)
-    for (var i=0; i<stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
-    console.log(stillToDo)
+    const fixed = save.replace(/NaN/gi, "10");
+    const stillToDo = JSON.parse(fixed);
+    for (let i = 0; i < stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false;
+    console.log(stillToDo);
     
-    var save_data = stillToDo
+    const save_data = stillToDo;
     if (!save_data || !verify_save(save_data)) {
         alert('could not load the save..');
         load_custom_game();
@@ -93,109 +93,109 @@ dev.fixSave = function() {
     }
 
     saved = 0;
-    postc8Mult = new Decimal(0)
-    mult18 = new Decimal(1)
+    postc8Mult = new Decimal(0);
+    mult18 = new Decimal(1);
     player = save_data;
     save_game();
     load_game();
-    transformSaveToDecimal()
-}
+    transformSaveToDecimal();
+};
 
 dev.implode = function() {
     document.body.style.animation = "implode 2s 1";
-    setTimeout(function(){ document.body.style.animation = ""; }, 2000)
-}
+    setTimeout(() => { document.body.style.animation = ""; }, 2000);
+};
 
 dev.updateTDCosts = function() {
-    for (var i=1; i<9; i++) {
-        var dim = player["timeDimension"+i]
+    for (let i = 1; i < 9; i++) {
+        const dim = player["timeDimension" + i];
         if (dim.cost.gte(Number.MAX_VALUE)) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
+            dim.cost = Decimal.pow(timeDimCostMults[i] * 1.5, dim.bought).times(timeDimStartCosts[i]);
         }
         if (dim.cost.gte("1e1300")) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*2.2, dim.bought).times(timeDimStartCosts[i])
+            dim.cost = Decimal.pow(timeDimCostMults[i] * 2.2, dim.bought).times(timeDimStartCosts[i]);
         }
         if (i > 4) {
-          dim.cost = Decimal.pow(timeDimCostMults[i]*100, dim.bought).times(timeDimStartCosts[i])
+          dim.cost = Decimal.pow(timeDimCostMults[i] * 100, dim.bought).times(timeDimStartCosts[i]);
         }
     }
-}
+};
 
 dev.refundTimeDims = function() {
-    for (var i=1; i<9; i++) {
-        var dim = player["timeDimension"+i]
+    for (let i = 1; i < 9; i++) {
+        const dim = player["timeDimension" + i];
         dim.bought = 0;
         dim.power = new Decimal(1);
     }
-    dev.updateTDCosts()
-}
+    dev.updateTDCosts();
+};
 
 dev.refundEPMult = function() {
   player.epmultUpgrades = 0;
-}
+};
 
 dev.refundDilStudies = function() {
-    for (var i=0; i<6; i++) {
-        if (player.dilation.studies.includes(i+1)) {
-            player.dilation.studies.splice(player.dilation.studies.indexOf(i+1), 1);
-            console.log(document.getElementById("dilstudy"+(i+1)))
-            let refund = parseInt(document.getElementById("dilstudy"+(i+1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""));
+    for (let i = 0; i < 6; i++) {
+        if (player.dilation.studies.includes(i + 1)) {
+            player.dilation.studies.splice(player.dilation.studies.indexOf(i + 1), 1);
+            console.log(document.getElementById("dilstudy" + (i + 1)));
+            const refund = parseInt(document.getElementById("dilstudy" + (i + 1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""));
             player.timestudy.theorem = player.timestudy.theorem.plus(refund);
         }
     }
-}
+};
 
-dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
+dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  let glyph = GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false);
+  const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false);
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
-}
+};
 
 dev.giveMusicGlyph = function() {
-  dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1)
-}
+  dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1);
+};
 
-dev.giveGlyph = function (level, rawLevel = level) {
+dev.giveGlyph = function(level, rawLevel = level) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false));
-}
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false));
+};
 
-dev.decriminalize = function () {
+dev.decriminalize = function() {
   player.secretAchiements.delete(23);
   GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-}
+};
 
-dev.removeAch = function (name) {
+dev.removeAch = function(name) {
   if (typeof (name) === "number") return player.achievements.delete(name);
   if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1)));
-  else if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1)));
-}
+  if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1)));
+};
 
 dev.realize = function() {
     document.getElementById("container").style.animation = "realize 10s 1";
     document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-    setTimeout(function(){
+    setTimeout(() => {
         document.getElementById("realityanimbg").play();
         document.getElementById("realityanimbg").currentTime = 0;
         document.getElementById("realityanimbg").play();
-    }, 2000)
-    setTimeout(function(){
+    }, 2000);
+    setTimeout(() => {
         document.getElementById("container").style.animation = "";
         document.getElementById("realityanimbg").style.animation = "";
-    }, 10000)
-}
+    }, 10000);
+};
 
 dev.respecPerks = function() {
-    player.reality.pp += player.reality.perks.length
+    player.reality.pp += player.reality.perks.length;
     player.reality.perks = [];
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    drawPerkNetwork()
-}
+    drawPerkNetwork();
+};
 
 function isDevEnvironment() {
   const href = window.location.href;
@@ -208,12 +208,12 @@ function isLocalEnvironment() {
 }
 
 dev.updateTestSave = function() {
-    if (!isDevEnvironment()) return false
+    if (!isDevEnvironment()) return false;
     if (player.options.testVersion === undefined) {
         player.options.testVersion = 1;
         player.realTimePlayed *= 100;
         player.totalTimePlayed *= 100;
-        player.thisInfinityTime*= 100;
+        player.thisInfinityTime *= 100;
         player.thisEternity *= 100;
         player.thisReality *= 100;
         if (player.bestInfinityTime === 9999999999) player.bestInfinityTime = 999999999999;
@@ -222,15 +222,15 @@ dev.updateTestSave = function() {
         else player.bestEternity *= 100;
         if (player.bestReality === 9999999999) player.bestReality = 999999999999;
         else player.bestReality *= 100;
-        for (var i=0; i<10; i++) {
+        for (var i = 0; i < 10; i++) {
             player.lastTenRealities[i][0] *= 100;
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
         }
-        for (var i=0; i<11; i++) {
+        for (var i = 0; i < 11; i++) {
             setChallengeTime(i, player.challengeTimes[i] * 100);
         }
-        for (var i=0; i<8; i++) {
+        for (var i = 0; i < 8; i++) {
             setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
         }
     }
@@ -240,87 +240,87 @@ dev.updateTestSave = function() {
     }
     if (player.options.testVersion === 2) {
         player.options.testVersion = 3;
-        player.secretUnlocks.themes = []
+        player.secretUnlocks.themes = [];
     }
     if (player.options.testVersion == 3) {
-        player.wormhole.power *= 36
-        player.options.testVersion = 4
+        player.wormhole.power *= 36;
+        player.options.testVersion = 4;
     }
     if (player.options.testVersion == 4) {
-        player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
-        for (var i=1; i<6; i++) {
+        player.reality.rebuyables = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, };
+        for (var i = 1; i < 6; i++) {
             if (RealityUpgrade(i).isBought) {
-              player.reality.rebuyables[i] = 1
+              player.reality.rebuyables[i] = 1;
               RealityUpgrade(i).remove();
             }
         }
-        player.options.testVersion = 5
+        player.options.testVersion = 5;
     }
 
     if (player.options.testVersion == 5) {
       player.reality.tdbuyer = {
         on: false,
         threshhold: 1
-      }
+      };
       player.reality.epmultbuyer = {
         on: false,
         threshhold: 1
-      }
-      player.options.testVersion = 6
+      };
+      player.options.testVersion = 6;
     }
 
     if (player.options.testVersion == 6) {
-        player.reality.perks = []
-        player.options.testVersion = 7
+        player.reality.perks = [];
+        player.options.testVersion = 7;
       }
     if (player.options.testVersion == 7) {
-      player.reality.pp = 0
-      player.options.testVersion = 8
+      player.reality.pp = 0;
+      player.options.testVersion = 8;
     }
     if (player.options.testVersion == 8) {
-        player.reality.pp = player.realities
-        player.options.testVersion = 9
+        player.reality.pp = player.realities;
+        player.options.testVersion = 9;
     }
     if (player.options.testVersion == 9) {
-        //give starting perk
-        if(player.reality.pp > 0) {
-            player.reality.pp -= 1
-            player.reality.perks.push(0)
+        // Give starting perk
+        if (player.reality.pp > 0) {
+            player.reality.pp -= 1;
+            player.reality.perks.push(0);
         }
-        player.options.testVersion = 10
+        player.options.testVersion = 10;
     }
     if (player.options.testVersion == 10) {
-        //var for s45
+        // Var for s45
         player.secretUnlocks.dragging = 0;
-        player.options.testVersion = 11
+        player.options.testVersion = 11;
     }
 
     if (player.options.testVersion == 11) {
       for (i = 0; i < player.reality.glyphs.active.length; i++) {
-        let glyph = player.reality.glyphs.active[i]
+        const glyph = player.reality.glyphs.active[i];
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
-          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+          glyph.effects.autochall = undefined;
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10;
         }
       }
 
       for (i = 0; i < player.reality.glyphs.inventory.length; i++) {
-        let glyph = player.reality.glyphs.inventory[i]
+        const glyph = player.reality.glyphs.inventory[i];
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
-          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
+          glyph.effects.autochall = undefined;
+          glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10;
         }
       }
-      player.options.testVersion = 12
+      player.options.testVersion = 12;
     }
 
   if (player.options.testVersion == 12) {
-    player.reality.upgReqs.push(false, false, false, false, false)
-    player.options.testVersion = 13
+    player.reality.upgReqs.push(false, false, false, false, false);
+    player.options.testVersion = 13;
   }
 
   if (player.options.testVersion === 13) {
-    let newCommands = new Set();
+    const newCommands = new Set();
     for (let temp of player.reality.automatorCommands) {
       if (Math.floor(temp / 10) === 2 || Math.floor(temp / 10) === 3) temp += 1;
       newCommands.add(temp);
@@ -340,14 +340,14 @@ dev.updateTestSave = function() {
       time: 0,
       replication: 0,
       dilation: 0
-    }
-    player.options.testVersion = 15
+    };
+    player.options.testVersion = 15;
   }
 
   if (player.options.testVersion == 15) {
-    player.wormhole.pause = false
+    player.wormhole.pause = false;
 
-    player.options.testVersion = 16
+    player.options.testVersion = 16;
   }
   if (player.options.testVersion == 16) {
     player.wormholePause = false;
@@ -367,35 +367,35 @@ dev.updateTestSave = function() {
           phase: 0,
           active: false,
           unlocked: false,
-        }]
+        }];
     }
-    player.options.testVersion = 17
+    player.options.testVersion = 17;
   }
 
   if (player.options.testVersion == 17) {
     if (RealityUpgrade(20).isBought) {
-      player.wormhole[1].unlocked = true
+      player.wormhole[1].unlocked = true;
     }
-    player.options.testVersion = 18
+    player.options.testVersion = 18;
   }
 
   if (player.options.testVersion == 18) {
-    player.reality.upgReqs.push(false, false, false, false, false)
-    player.options.testVersion = 19
+    player.reality.upgReqs.push(false, false, false, false, false);
+    player.options.testVersion = 19;
   }
 
   if (player.options.testVersion == 19) {
-    player.reality.tdbuyer = undefined
-    player.reality.tdbuyers = [false, false, false, false, false, false, false, false]
-    player.reality.epmultbuyer = false
-    player.options.testVersion = 20
+    player.reality.tdbuyer = undefined;
+    player.reality.tdbuyers = [false, false, false, false, false, false, false, false];
+    player.reality.epmultbuyer = false;
+    player.options.testVersion = 20;
   }
 
   if (player.options.testVersion === 20) {
     if (!Object.values(AutoRealityMode).includes(Autobuyer.reality.mode)) {
       Autobuyer.reality.mode = AutoRealityMode.RM;
     }
-    player.options.testVersion = 21
+    player.options.testVersion = 21;
   }
 
   if (player.options.testVersion === 21) {
@@ -405,26 +405,26 @@ dev.updateTestSave = function() {
 
   if (player.options.testVersion === 22) {
       for (i in player.celestials.effarig.glyphWeights) {
-          player.celestials.effarig.glyphWeights[i] *= 100
+          player.celestials.effarig.glyphWeights[i] *= 100;
       }
     player.options.testVersion = 23;
   }
 
-  //the above line of code didn't work if loading a test save before celestials were added, whoops
+  // The above line of code didn't work if loading a test save before celestials were added, whoops
   if (player.options.testVersion === 23) {
     for (i in player.celestials.effarig.glyphWeights) {
-        player.celestials.effarig.glyphWeights[i] = 25
+        player.celestials.effarig.glyphWeights[i] = 25;
     }
     player.options.testVersion = 24;
   }
 
   if (player.options.testVersion === 24) {
-    // following logic from autobuyers (before the addition of wall clock time stats)
-    var speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
+    // Following logic from autobuyers (before the addition of wall clock time stats)
+    const speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
-    for (var i=0; i<10; i++) {
+    for (var i = 0; i < 10; i++) {
       player.lastTenRuns[i][2] = undefined;
       player.lastTenEternities[i][2] = undefined;
       player.lastTenRealities[i][3] = undefined;
@@ -444,21 +444,21 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 27) {
-    let temp = player.celestials.effarig
-    player.celestials.effarig = player.celestials.teresa
-    player.celestials.teresa = temp
+    const temp = player.celestials.effarig;
+    player.celestials.effarig = player.celestials.teresa;
+    player.celestials.teresa = temp;
     
     for (i in player.reality.glyphs.active) {
-      let g = player.reality.glyphs.active[i]
+      const g = player.reality.glyphs.active[i];
       if (g.type == 'teresa') {
-        g.type = 'effarig'
+        g.type = 'effarig';
       }
     }
 
     for (i in player.reality.glyphs.inventory) {
-      let g = player.reality.glyphs.inventory[i]
+      const g = player.reality.glyphs.inventory[i];
       if (g.type == 'teresa') {
-        g.type = 'effarig'
+        g.type = 'effarig';
       }
     }
   
@@ -469,7 +469,7 @@ dev.updateTestSave = function() {
   // and then swapped into the incorrect place. We can blow away glyph weights and auto sac
   // settings
   if (player.options.testVersion === 28) {
-    function movePropIfPossible(celestial1, celestial2, prop, defaultValue, merge=null) {
+    function movePropIfPossible(celestial1, celestial2, prop, defaultValue, merge = null) {
       if (player.celestials[celestial1][prop] !== undefined) {
         if (player.celestials[celestial2][prop] === undefined) {
           player.celestials[celestial2][prop] = player.celestials[celestial1][prop];
@@ -479,7 +479,7 @@ dev.updateTestSave = function() {
         }
         delete player.celestials[celestial1][prop];
       } else if (player.celestials[celestial2][prop] === undefined) {
-        // both undefined shouldn't really happen, but might as well be thorough here
+        // Both undefined shouldn't really happen, but might as well be thorough here
         player.celestials[celestial2][prop] = defaultValue;
       }
     }
@@ -514,10 +514,10 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 29) {
-    player.blackHole = player.wormhole
-    player.blackHolePause = player.wormholePause
-    delete player.wormhole
-    delete player.wormholePause
+    player.blackHole = player.wormhole;
+    player.blackHolePause = player.wormholePause;
+    delete player.wormhole;
+    delete player.wormholePause;
     player.options.testVersion = 30;
   }
   if (player.options.testVersion === 30) {
@@ -525,7 +525,7 @@ dev.updateTestSave = function() {
       player.blackHole[i].id = i;
       player.blackHole[i].intervalUpgrades = Math.round(Math.log(player.blackHole[i].speed / (3600 / (Math.pow(10, i)))) / Math.log(0.8));
       player.blackHole[i].powerUpgrades = Math.round(Math.log(player.blackHole[i].power / (180 / Math.pow(2, i))) / Math.log(1.35));
-      player.blackHole[i].durationUpgrades = Math.round(Math.log(player.blackHole[i].duration / (10 - i*3)) / Math.log(1.3));
+      player.blackHole[i].durationUpgrades = Math.round(Math.log(player.blackHole[i].duration / (10 - i * 3)) / Math.log(1.3));
       delete player.blackHole[i].speed;
       delete player.blackHole[i].power;
       delete player.blackHole[i].duration;
@@ -540,20 +540,20 @@ dev.updateTestSave = function() {
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 
-  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?");
+  if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living");
+  if (RealityUpgrades.allBought) giveAchievement("Master of Reality"); // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
     player.celestials.teresa.rmStore = Teresa.rmStoreMax;
   }
   if (player.reality.upg) {
-    for (let upg of player.reality.upg) RealityUpgrade(upg).purchase();
+    for (const upg of player.reality.upg) RealityUpgrade(upg).purchase();
     delete player.reality.upg;
   }
   if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
-}
+};
 
 // Still WIP
 dev.showProductionBreakdown = function() {
@@ -562,17 +562,17 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }
-  let tickComponent = player.tickspeed.reciprocal().pow(8);
-  let NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
-  let tickPercent = 100 - NDPercent;
+  const tickComponent = player.tickspeed.reciprocal().pow(8);
+  const NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
+  const tickPercent = 100 - NDPercent;
   
-  let totalTickspeedUpgrades = player.tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
-  let freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
-  let purchasedTickPercent = 100 - freeTickPercent;
+  const totalTickspeedUpgrades = player.tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
+  const freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
+  const purchasedTickPercent = 100 - freeTickPercent;
   
   // Assumes >= 3 galaxies
-  let effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
-  let AGCount = player.galaxies
+  const effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
+  const AGCount = player.galaxies;
   let RGCount = player.replicanti.galaxies;
   RGCount += Effects.sum(
     TimeStudy(133),
@@ -581,12 +581,12 @@ dev.showProductionBreakdown = function() {
     TimeStudy(226)
   );
   RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 * EternityChallenge(8).completions) - 1, 0);
-  let FGCount = player.dilation.freeGalaxies;
-  let totalCount = AGCount + RGCount + FGCount;
+  const FGCount = player.dilation.freeGalaxies;
+  const totalCount = AGCount + RGCount + FGCount;
   
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
-  let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
-  let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
+  const IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
+  const DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
@@ -597,8 +597,8 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(234)) sacrificeComponent = sacrificeComponent.times(Sacrifice.totalBoost);
   if (player.timestudy.studies.includes(214)) sacrificeComponent = sacrificeComponent.times((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1).min(new Decimal("1e125000"))));
   sacrificeComponent = sacrificeComponent.pow(IC4pow);
-  let IC8Component = mult18.pow(6).pow(IC4pow);
-  let NDPowComponent = getAdjustedGlyphEffect("powerpow") == 0 ? 0 : (getAdjustedGlyphEffect("powerpow") - 1) / getAdjustedGlyphEffect("powerpow");
+  const IC8Component = mult18.pow(6).pow(IC4pow);
+  const NDPowComponent = getAdjustedGlyphEffect("powerpow") == 0 ? 0 : (getAdjustedGlyphEffect("powerpow") - 1) / getAdjustedGlyphEffect("powerpow");
   
   let totalIDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
@@ -608,12 +608,12 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     boughtIDComponent = boughtIDComponent.times(player["infinityDimension" + i].power);
   }
-  let replicantiComponent = replicantiMult().pow(8);
+  const replicantiComponent = replicantiMult().pow(8);
   let TSmultToIDComponent = new Decimal(1);
-  if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
-  if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
-  let EU1Component = player.eternityPoints.plus(1).pow(8);
-  let IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
+  if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"));
+  if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)));
+  const EU1Component = player.eternityPoints.plus(1).pow(8);
+  const IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
   
   let totalTDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
@@ -625,57 +625,56 @@ dev.showProductionBreakdown = function() {
   }
   let tickspeedToTDComponent = Achievement(105).isEnabled ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);
-  if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))
-  if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")))
-  if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent.times(Decimal.pow(1.0025, player.resets)).pow(8)
-  if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent.times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1))
-  let TDPowComponent = getAdjustedGlyphEffect("timepow") == 0 ? 0 : (getAdjustedGlyphEffect("timepow") - 1) / getAdjustedGlyphEffect("timepow");
+  if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)));
+  if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")));
+  if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent.times(Decimal.pow(1.0025, player.resets)).pow(8);
+  if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent.times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
+  const TDPowComponent = getAdjustedGlyphEffect("timepow") == 0 ? 0 : (getAdjustedGlyphEffect("timepow") - 1) / getAdjustedGlyphEffect("timepow");
   
-  let productionText = ""
+  let productionText = "";
   productionText += tickPercent.toFixed(2) + "% from tickspeed (" + totalTickspeedUpgrades.toFixed(0) + " upgrades + " + effectiveGalaxyCount.toFixed(2) + " effective galaxies)\n";
-  productionText += "  Tickspeed upgrades\n"
-  productionText += "    " + purchasedTickPercent.toFixed(2) + "% purchased\n"
-  productionText += "    " + freeTickPercent.toFixed(2) + "% from TDs\n"
-  productionText += "  Galaxies\n"
-  productionText += "    " + (100*AGCount/totalCount).toFixed(2) + "% Antimatter Galaxies\n"
-  productionText += "    " + (100*RGCount/totalCount).toFixed(2) + "% Replicanti Galaxies\n"
-  productionText += "    " + (100*FGCount/totalCount).toFixed(2) + "% Dilation Galaxies\n"
+  productionText += "  Tickspeed upgrades\n";
+  productionText += "    " + purchasedTickPercent.toFixed(2) + "% purchased\n";
+  productionText += "    " + freeTickPercent.toFixed(2) + "% from TDs\n";
+  productionText += "  Galaxies\n";
+  productionText += "    " + (100 * AGCount / totalCount).toFixed(2) + "% Antimatter Galaxies\n";
+  productionText += "    " + (100 * RGCount / totalCount).toFixed(2) + "% Replicanti Galaxies\n";
+  productionText += "    " + (100 * FGCount / totalCount).toFixed(2) + "% Dilation Galaxies\n";
   productionText += NDPercent.toFixed(2) + "% from Normal Dimensions\n";
-  productionText += "  " + (100*IDComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Infinity Dimensions\n"
-  productionText += "  " + (100*DBComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Dimension Boosts\n"
-  productionText += "  " + (100*buyTenComponent.log10()/NDComponent.log10()).toFixed(2) + "% from \"Buy 10\"\n"
-  productionText += "  " + (100*sacrificeComponent.log10()/NDComponent.log10()).toFixed(2) + "% from sacrifice\n"
-  productionText += "  " + (100*IC8Component.log10()/NDComponent.log10()).toFixed(2) + "% from IC8\n"
-  productionText += "  " + (100*NDPowComponent).toFixed(2) + "% from ND power glyphs\n"
-  productionText += "\nInfinity Dimension Multipliers:\n"
-  productionText += "  " + (100*boughtIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% purchased\n"
-  productionText += "  " + (100*replicantiComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from replicanti\n"
-  productionText += "  " + (100*TSmultToIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from time studies\n"
-  productionText += "  " + (100*EU1Component.log10()/totalIDMults.log10()).toFixed(2) + "% from EU1\n"
-  productionText += "  " + (100*IDPowComponent).toFixed(2) + "% from ID power glyphs\n"
-  productionText += "\nTime Dimension Multipliers:\n"
-  productionText += "  " + (100*boughtTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% purchased\n"
-  productionText += "  " + (100*tickspeedToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from tickspeed\n"
-  productionText += "  " + (player.dilation.upgrades.has(5) ?
-    10 * replicantiComponent.log10() / totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n";
+  productionText += "  " + (100 * IDComponent.log10() / NDComponent.log10()).toFixed(2) + "% from Infinity Dimensions\n";
+  productionText += "  " + (100 * DBComponent.log10() / NDComponent.log10()).toFixed(2) + "% from Dimension Boosts\n";
+  productionText += "  " + (100 * buyTenComponent.log10() / NDComponent.log10()).toFixed(2) + "% from \"Buy 10\"\n";
+  productionText += "  " + (100 * sacrificeComponent.log10() / NDComponent.log10()).toFixed(2) + "% from sacrifice\n";
+  productionText += "  " + (100 * IC8Component.log10() / NDComponent.log10()).toFixed(2) + "% from IC8\n";
+  productionText += "  " + (100 * NDPowComponent).toFixed(2) + "% from ND power glyphs\n";
+  productionText += "\nInfinity Dimension Multipliers:\n";
+  productionText += "  " + (100 * boughtIDComponent.log10() / totalIDMults.log10()).toFixed(2) + "% purchased\n";
+  productionText += "  " + (100 * replicantiComponent.log10() / totalIDMults.log10()).toFixed(2) + "% from replicanti\n";
+  productionText += "  " + (100 * TSmultToIDComponent.log10() / totalIDMults.log10()).toFixed(2) + "% from time studies\n";
+  productionText += "  " + (100 * EU1Component.log10() / totalIDMults.log10()).toFixed(2) + "% from EU1\n";
+  productionText += "  " + (100 * IDPowComponent).toFixed(2) + "% from ID power glyphs\n";
+  productionText += "\nTime Dimension Multipliers:\n";
+  productionText += "  " + (100 * boughtTDComponent.log10() / totalTDMults.log10()).toFixed(2) + "% purchased\n";
+  productionText += "  " + (100 * tickspeedToTDComponent.log10() / totalTDMults.log10()).toFixed(2) + "% from tickspeed\n";
+  productionText += "  " + (player.dilation.upgrades.has(5)
+    ? 10 * replicantiComponent.log10() / totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n";
   productionText += "  " + (100 * TSmultToTDComponent.log10() / totalTDMults.log10()).toFixed(2) +
     "% from other time studies\n";
-  productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
+  productionText += "  " + (100 * TDPowComponent).toFixed(2) + "% from TD power glyphs\n";
 
   console.log(productionText);
-}
+};
 
 let tempSpeedupToggle = false;
 let tempSpeedupFactor = 500;
-dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persist between refreshes
+dev.goFast = function(speed) { // Speeds up game, intentionally doesn't persist between refreshes
   if (speed !== undefined && speed > 0) {
-    tempSpeedupToggle = true
-    tempSpeedupFactor = speed
-  }
-  else {  // With no arguments, toggles on/off
+    tempSpeedupToggle = true;
+    tempSpeedupFactor = speed;
+  } else { // With no arguments, toggles on/off
     tempSpeedupToggle = !tempSpeedupToggle;
   }
-}
+};
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();

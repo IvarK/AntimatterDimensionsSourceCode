@@ -18,7 +18,7 @@ class PerkState extends PurchasableMechanicState {
   initializeConnections(perks) {
     const dbConnections = GameDatabase.reality.perkConnections;
     const connections = new Set(dbConnections[this.id]);
-    for (let start in dbConnections) {
+    for (const start in dbConnections) {
       if (!dbConnections.hasOwnProperty(start)) continue;
       const startId = parseInt(start);
       if (startId === this.id) continue;
@@ -37,7 +37,7 @@ class PerkState extends PurchasableMechanicState {
     if (player.reality.perks.length === Perk.all.length) {
       giveAchievement("Perks of living");
     }
-    drawPerkNetwork()
+    drawPerkNetwork();
   }
 }
 
@@ -115,7 +115,7 @@ const Perk = (function() {
   perks.find = function(id) {
     return perks.all.find(p => p.id === id);
   };
-  for (let perk of perks.all) {
+  for (const perk of perks.all) {
     perk.initializeConnections(perks);
   }
   return perks;

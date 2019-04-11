@@ -1,5 +1,5 @@
 Vue.component('ra-tab', {
-  data: function() {
+  data() {
     return {
       fillPercentage: "",
       exp: 0,
@@ -15,30 +15,30 @@ Vue.component('ra-tab', {
   },
   methods: {
     update() {
-      this.fillPercentage = Ra.percentageToNextLevel*100 + "%"
-      this.exp = player.celestials.ra.exp
-      this.expRequired = Ra.requiredExp
-      this.level = player.celestials.ra.level
-      this.totalCharges = Ra.totalCharges
-      this.unlocks = player.celestials.ra.unlocks
-      this.realityReward = Ra.realityReward
-      this.activeMode = player.celestials.ra.activeMode
-      this.glyphMult = Ra.glyphMult
-      this.rmMult = Ra.rmMult
+      this.fillPercentage = Ra.percentageToNextLevel * 100 + "%";
+      this.exp = player.celestials.ra.exp;
+      this.expRequired = Ra.requiredExp;
+      this.level = player.celestials.ra.level;
+      this.totalCharges = Ra.totalCharges;
+      this.unlocks = player.celestials.ra.unlocks;
+      this.realityReward = Ra.realityReward;
+      this.activeMode = player.celestials.ra.activeMode;
+      this.glyphMult = Ra.glyphMult;
+      this.rmMult = Ra.rmMult;
     },
     has(id) {
-      return this.unlocks.includes(id)
+      return this.unlocks.includes(id);
     },
     startRun() {
-      Ra.startRun()
+      Ra.startRun();
     },
     toggleMode() {
-      Ra.toggleMode()
+      Ra.toggleMode();
     }
   },
   computed: {
     raUnlocks() {
-      return RA_UNLOCKS
+      return RA_UNLOCKS;
     }
   },
   template:

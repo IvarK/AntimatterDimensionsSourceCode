@@ -2,7 +2,7 @@ Vue.component('matter-dimension-row', {
   props: {
     dimension: Object
   },
-  data: function() {
+  data() {
     return {
       chance: 0,
       interval: 0,
@@ -14,20 +14,20 @@ Vue.component('matter-dimension-row', {
       canBuyChance: false,
       canBuyInterval: false,
       canBuyPower: false
-    }
+    };
   },
   methods: {
     update() {
-      this.chance = this.dimension.chance
-      this.interval = this.dimension.interval
-      this.power = this.dimension.power
-      this.chanceCost = this.dimension.chanceCost
-      this.intervalCost = this.dimension.intervalCost
-      this.powerCost = this.dimension.powerCost
-      this.amount = this.dimension.amount
-      this.canBuyChance = player.celestials.laitela.matter >= this.chanceCost
-      this.canBuyInterval = player.celestials.laitela.matter >= this.intervalCost
-      this.canBuyPower = player.celestials.laitela.matter >= this.powerCost
+      this.chance = this.dimension.chance;
+      this.interval = this.dimension.interval;
+      this.power = this.dimension.power;
+      this.chanceCost = this.dimension.chanceCost;
+      this.intervalCost = this.dimension.intervalCost;
+      this.powerCost = this.dimension.powerCost;
+      this.amount = this.dimension.amount;
+      this.canBuyChance = player.celestials.laitela.matter >= this.chanceCost;
+      this.canBuyInterval = player.celestials.laitela.matter >= this.intervalCost;
+      this.canBuyPower = player.celestials.laitela.matter >= this.powerCost;
     }
   },
   template:
@@ -41,4 +41,4 @@ Vue.component('matter-dimension-row', {
   </div>
   
   `
-})
+});

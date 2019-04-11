@@ -2,12 +2,12 @@ function startEternityChallenge() {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
+      for (const challenge of Challenge.all) {
         challenge.complete();
       }
     }
     if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
+      for (const challenge of InfinityChallenge.all) {
         challenge.complete();
       }
     }
@@ -147,9 +147,9 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   goalAtCompletions(completions) {
-    return completions > 0 ?
-      this.initialGoal.times(this.goalIncrease.pow(completions)) :
-      this.initialGoal;
+    return completions > 0
+      ? this.initialGoal.times(this.goalIncrease.pow(completions))
+      : this.initialGoal;
   }
 
   addCompletion() {
@@ -220,11 +220,9 @@ EternityChallenge.isRunning = () => player.currentEternityChall !== "";
 
 EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
 
-EternityChallenge.completedTiers = () => {
-  return EternityChallenge.all
+EternityChallenge.completedTiers = () => EternityChallenge.all
     .map(ec => ec.completions)
     .sum();
-};
 
 EternityChallenge.remainingTiers = () => EternityChallenge.TOTAL_TIER_COUNT - EternityChallenge.completedTiers();
 
@@ -237,27 +235,27 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
     Perk.autocompleteEC4,
     Perk.autocompleteEC5
   );
-  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect()
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect();
   return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
-}
+};
 
 EternityChallenge.autoCompleteNext = function() {
-  for (let i=1; i<=12; i++) {
-    let c = EternityChallenge(i)
+  for (let i = 1; i <= 12; i++) {
+    const c = EternityChallenge(i);
     if (!c.isFullyCompleted) {
-      c.addCompletion()
-      return true
+      c.addCompletion();
+      return true;
     }
   }
-  return false
-}
+  return false;
+};
 
-EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
-  if (!isPostEc || !player.autoEcIsOn) return
-  let threshold = this.currentAutoCompleteThreshold()
+EternityChallenge.autoCompleteTick = function() {
+  const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
+  if (!isPostEc || !player.autoEcIsOn) return;
+  const threshold = this.currentAutoCompleteThreshold();
   while (player.reality.lastAutoEC - threshold > 0) {
-    this.autoCompleteNext()
-    player.reality.lastAutoEC -= threshold
+    this.autoCompleteNext();
+    player.reality.lastAutoEC -= threshold;
   }
-}
+};

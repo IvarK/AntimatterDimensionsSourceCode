@@ -1,5 +1,5 @@
 Vue.component("game-header-eternity-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       type: EPButtonDisplayType.FIRST_TIME,
@@ -16,7 +16,7 @@ Vue.component("game-header-eternity-button", {
     };
   },
   computed: {
-    isGainedEPAmountSmall: function() {
+    isGainedEPAmountSmall() {
       return this.gainedEP.lt(1e6);
     }
   },
@@ -47,16 +47,16 @@ Vue.component("game-header-eternity-button", {
         player.replicanti.amount.exponent > 20000;
 
       if (player.dilation.active) {
-        this.type = hasNewContent ?
-          EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT :
-          EPButtonDisplayType.DILATION;
+        this.type = hasNewContent
+          ? EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT
+          : EPButtonDisplayType.DILATION;
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }
 
-      this.type = hasNewContent ?
-        EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT :
-        EPButtonDisplayType.NORMAL;
+      this.type = hasNewContent
+        ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
+        : EPButtonDisplayType.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(Time.thisEternity.totalMinutes));
       this.peakEPPM.copyFrom(EPminpeak);
     },
@@ -74,7 +74,7 @@ Vue.component("game-header-eternity-button", {
       }
       const totalCompletions = currentCompletions + gainedCompletions;
       let maxEC4Valid = 0;
-      if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
+      if (player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
       if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {
         this.gainedCompletions = Math.min(totalCompletions, maxEC4Valid) - currentCompletions;
         this.failedCondition = "(Too many infinities for more)";

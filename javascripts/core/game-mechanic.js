@@ -33,13 +33,13 @@ class GameMechanicState {
     if (this.canBeApplied) {
       let effectValue = this.effectValue;
       if (this.config.cap !== undefined) {
-        const cap = typeof this.config.cap === "function" ?
-         this.config.cap() :
-         this.config.cap;
+        const cap = typeof this.config.cap === "function"
+         ? this.config.cap()
+         : this.config.cap;
         if (cap !== undefined) {
-          effectValue = typeof effectValue === "number" ?
-            Math.min(effectValue, cap) :
-            Decimal.min(effectValue, cap);
+          effectValue = typeof effectValue === "number"
+            ? Math.min(effectValue, cap)
+            : Decimal.min(effectValue, cap);
         }
       }
       applyFn(effectValue);

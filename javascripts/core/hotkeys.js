@@ -26,8 +26,7 @@ GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
 GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen()) {
     Modal.hide();
-  }
-  else {
+  } else {
     Tab.options.show();
   }
 });
@@ -44,7 +43,7 @@ GameKeyboard.bind(["ctrl+shift", "command+shift"], () => setControlShiftKey(true
 GameKeyboard.bind("9", () => giveAchievement("That dimension doesn’t exist"));
 
 GameKeyboard.bind(["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"], () => {
-  giveAchievement("Stop right there criminal scum!")
+  giveAchievement("Stop right there criminal scum!");
 });
 
 GameKeyboard.bind("up up down down left right left right b a", () => {

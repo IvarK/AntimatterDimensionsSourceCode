@@ -88,13 +88,13 @@ var player = {
     fixed: "notyetfixed",
     dragging: 0,
     themes: [],
-    secretTS: 0,    // incremented every time secret time study toggles
+    secretTS: 0, // Incremented every time secret time study toggles
   },
   challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
   infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
-  lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
-  lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
-  lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
+  lastTenRuns: Array.from({ length: 10 }, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenEternities: Array.from({ length: 10 }, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenRealities: Array.from({ length: 10 }, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   overXGalaxies: 10,
@@ -427,7 +427,7 @@ var player = {
       charged: new Set(),
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
-      activeMode: false, // false if idle, true if active
+      activeMode: false, // False if idle, true if active
     },
     laitela: {
       matter: 0,
@@ -529,8 +529,8 @@ const Player = {
   },
 
   get dimensionMultDecrease() {
-    const base = GameCache.dimensionMultDecrease.value - 1
-    return 1 + base * Laitela.matterEffectToDimensionMultDecrease
+    const base = GameCache.dimensionMultDecrease.value - 1;
+    return 1 + base * Laitela.matterEffectToDimensionMultDecrease;
   },
 
   get hasFreeInventorySpace() {
@@ -543,14 +543,14 @@ const Player = {
 };
 
 function guardFromNaNValues(obj) {
-  function isObject (obj) {
+  function isObject(obj) {
     return obj !== null && typeof obj === "object" && !(obj instanceof Decimal);
   }
 
-  for (let key in obj) {
+  for (const key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
-    //TODO: rework autobuyer saving
+    // TODO: rework autobuyer saving
     if (key === "autobuyers" || key === "autoSacrifice") continue;
 
     let value = obj[key];

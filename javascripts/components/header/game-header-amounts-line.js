@@ -1,5 +1,5 @@
 Vue.component("game-header-amounts-line", {
-  data: function() {
+  data() {
     return {
       showInfinityPoints: false,
       infinityPoints: new Decimal(0),

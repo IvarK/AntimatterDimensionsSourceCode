@@ -1,5 +1,5 @@
 Vue.component('teresa-tab', {
-  data: function() {
+  data() {
     return {
       pour: false,
       time: new Date().getTime(),
@@ -26,45 +26,45 @@ Vue.component('teresa-tab', {
   },
   methods: {
     update() {
-      let now = new Date().getTime()
+      const now = new Date().getTime();
       if (this.pour) {
-        let diff = (now - this.time)/1000
-        Teresa.pourRM(diff)
+        const diff = (now - this.time) / 1000;
+        Teresa.pourRM(diff);
       }
-      this.time = now
-      this.rmStore = player.celestials.teresa.rmStore
-      this.percentage = (Teresa.fill * 100) + "%"
-      this.rmMult = Teresa.rmMultiplier
-      this.quote = Teresa.quote
-      this.quoteIdx = player.celestials.teresa.quoteIdx
-      this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter((x) => x)
+      this.time = now;
+      this.rmStore = player.celestials.teresa.rmStore;
+      this.percentage = (Teresa.fill * 100) + "%";
+      this.rmMult = Teresa.rmMultiplier;
+      this.quote = Teresa.quote;
+      this.quoteIdx = player.celestials.teresa.quoteIdx;
+      this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter(x => x);
       this.runReward = Teresa.runRewardMultiplier,
-      this.glyphUpg.cost = Math.pow( 2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) )
-      this.glyphUpg.mult = player.celestials.teresa.glyphLevelMult
-      this.rmUpg = player.celestials.teresa.rmMult
-      this.dtBulk = player.celestials.teresa.dtBulk
-      this.pp = player.reality.pp
-      this.rm = player.reality.realityMachines
-      this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1/60))
+      this.glyphUpg.cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));
+      this.glyphUpg.mult = player.celestials.teresa.glyphLevelMult;
+      this.rmUpg = player.celestials.teresa.rmMult;
+      this.dtBulk = player.celestials.teresa.dtBulk;
+      this.pp = player.reality.pp;
+      this.rm = player.reality.realityMachines;
+      this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1 / 60));
     },
     nextQuote() {
-      Teresa.nextQuote()
+      Teresa.nextQuote();
     },
     startRun() {
-      Teresa.startRun()
+      Teresa.startRun();
     },
     buyRmMult() {
-      Teresa.buyRmMult()
+      Teresa.buyRmMult();
     },
     buyGlyphMult() {
-      Teresa.buyGlyphLevelPower()
+      Teresa.buyGlyphLevelPower();
     },
     buyDtBulk() {
-      Teresa.buyDtBulk()
+      Teresa.buyDtBulk();
     },
-    unlockDescriptionStyle: function(unlockInfo) {
-      let maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
-      let pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
+    unlockDescriptionStyle(unlockInfo) {
+      const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
+      const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
       return {
          bottom: pos.toFixed(2) + "%",
       };

@@ -1,5 +1,5 @@
 Vue.component("game-header-big-crunch-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       gainedIP: new Decimal(0),
@@ -8,10 +8,10 @@ Vue.component("game-header-big-crunch-button", {
     };
   },
   computed: {
-    peakIPPMThreshold: function() {
+    peakIPPMThreshold() {
       return new Decimal("1e100000");
     },
-    isPeakIPPMVisible: function() {
+    isPeakIPPMVisible() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     }
   },

@@ -12,21 +12,21 @@ function resizeCanvas() {
 }
 
 function drawAutomatorTreeBranch(num1, num2) {
-    if (document.getElementById("automation").style.display === "none") return
-    var id1 = parseInt(num1.split("automator")[1])
-    var id2 = parseInt(num2.split("automator")[1])
-    var start = document.getElementById(num1).getBoundingClientRect();
-    var end = document.getElementById(num2).getBoundingClientRect();
-    var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
-    var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
-    var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
-    var y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
-    ctx4.lineWidth=10;
+    if (document.getElementById("automation").style.display === "none") return;
+    const id1 = parseInt(num1.split("automator")[1]);
+    const id2 = parseInt(num2.split("automator")[1]);
+    const start = document.getElementById(num1).getBoundingClientRect();
+    const end = document.getElementById(num2).getBoundingClientRect();
+    const x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+    const y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+    const x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
+    const y2 = end.top + (end.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
+    ctx4.lineWidth = 10;
     ctx4.beginPath();
     if (player.reality.automatorCommands.has(id1) && player.reality.automatorCommands.has(id2)) {
-        ctx4.strokeStyle="#000";
+        ctx4.strokeStyle = "#000";
     } else {
-        ctx4.strokeStyle="#444";
+        ctx4.strokeStyle = "#444";
     }
     ctx4.moveTo(x1, y1);
     ctx4.lineTo(x2, y2);
@@ -68,11 +68,11 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator73", "automator84");
 }
 
-var nodes = []
-var edges = []
+var nodes = [];
+var edges = [];
 var nodeContainer = $(".vis-network")[0];
-var nodeData = {}
-var nodeOptions = {}
+var nodeData = {};
+var nodeOptions = {};
 var network = null;
 
 
@@ -85,18 +85,18 @@ function getNodeColor(perk) {
   else if (isBought) background = "#0b600e";
   else background = "#656565";
 
-  let hoverColor = canBeBought || isBought ? "#0b600e" : "#656565";
-  let borderColor = isBought ? "#094E0B" : "#0b600e";
+  const hoverColor = canBeBought || isBought ? "#0b600e" : "#656565";
+  const borderColor = isBought ? "#094E0B" : "#0b600e";
 
   return {
-    background: background,
+    background,
     border: borderColor,
     hover: {
       background: hoverColor,
       border: borderColor
     },
     highlight: {
-      background: background,
+      background,
       border: borderColor
     }
   };
@@ -104,21 +104,19 @@ function getNodeColor(perk) {
 
 function updatePerkColors() {
   const data = Perk.all
-    .map(perk => {
-      return {
+    .map(perk => ({
         id: perk.id,
         color: getNodeColor(perk)
-      };
-    });
+      }));
   nodes.update(data);
 }
 
 function hidePerkLabels() {
-    network.setOptions({nodes: {font: {size: 0}}});
+    network.setOptions({ nodes: { font: { size: 0 } } });
 }
 
 function showPerkLabels() {
-    network.setOptions({nodes: {font: {size: 20}}});
+    network.setOptions({ nodes: { font: { size: 20 } } });
 }
 
 function drawPerkNetwork() {
@@ -126,28 +124,26 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
-    nodes = Perk.all.map(perk => {
-      return {
+    nodes = Perk.all.map(perk => ({
         id: perk.id,
         label: perk.config.label,
         title: perk.config.description
-      };
-    });
+      }));
     nodes = new vis.DataSet(nodes);
 
     edges = [];
-    for (let perk of Perk.all) {
-      for (let connectedPerk of perk.connectedPerks) {
+    for (const perk of Perk.all) {
+      for (const connectedPerk of perk.connectedPerks) {
         const from = Math.min(perk.id, connectedPerk.id);
         const to = Math.max(perk.id, connectedPerk.id);
         if (edges.find(edge => edge.from === from && edge.to === to)) continue;
-        edges.push({ from: from, to: to });
+        edges.push({ from, to });
       }
     }
 
     nodeData = {
-        nodes: nodes,
-        edges: edges
+        nodes,
+        edges
     };
     nodeOptions = {
         interaction: {
@@ -172,29 +168,29 @@ function drawPerkNetwork() {
     };
     network = new vis.Network(nodeContainer, nodeData, nodeOptions);
 
-    //buying perks TODO: lower the cost.
-    network.on("click", function(params) {
+    // Buying perks TODO: lower the cost.
+    network.on("click", params => {
       const id = params.nodes[0];
       if (!isFinite(id)) return;
       Perk.find(id).purchase();
-      updatePerkColors()
+      updatePerkColors();
     });
-    //hide tooltips on drag
-    network.on("dragStart", function(params) {
-        if(document.getElementsByClassName("vis-tooltip")[0] !== undefined) document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
+    // Hide tooltips on drag
+    network.on("dragStart", params => {
+        if (document.getElementsByClassName("vis-tooltip")[0] !== undefined) document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden";
     });
-    //secret ach check
-    network.on("dragging", function(params) {
+    // Secret ach check
+    network.on("dragging", params => {
         player.secretUnlocks.dragging++;
-        if(player.secretUnlocks.dragging / 100 >= 60) giveAchievement("This dragging is dragging on")
+        if (player.secretUnlocks.dragging / 100 >= 60) giveAchievement("This dragging is dragging on");
     });
-    //set min and max zoom
-    network.on("zoom",function(){
-        if(network.getScale() <= 0.2 ) {
-            network.moveTo({scale: 0.2,});
+    // Set min and max zoom
+    network.on("zoom",() => {
+        if (network.getScale() <= 0.2) {
+            network.moveTo({ scale: 0.2, });
         }
-        if(network.getScale() >= 4 ) {
-            network.moveTo({scale: 4,});
+        if (network.getScale() >= 4) {
+            network.moveTo({ scale: 4, });
         }
-    })
+    });
 }

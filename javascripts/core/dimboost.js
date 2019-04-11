@@ -48,14 +48,13 @@ class DimBoost {
   }
 
   static bulkRequirement(bulk) {
-    let targetResets = player.resets + bulk;
-    let tier = Math.min(targetResets + 3, this.maxShiftTier);
+    const targetResets = player.resets + bulk;
+    const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
 
     if (tier === 6 && Challenge(10).isRunning) {
       amount += Math.ceil((targetResets - 3) * 20);
-    }
-    else if (tier === 8) {
+    } else if (tier === 8) {
       const mult = 15 - Effects.sum(
         TimeStudy(211),
         TimeStudy(222)
@@ -81,7 +80,7 @@ function applyDimensionBoost() {
 }
 
 function softReset(bulk) {
-    //if (bulk < 1) bulk = 1 (fixing issue 184)
+    // If (bulk < 1) bulk = 1 (fixing issue 184)
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
     player.resets += bulk;
     if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
@@ -96,7 +95,7 @@ function softReset(bulk) {
     applyChallengeModifiers();
     skipResetsIfPossible();
     resetTickspeed();
-    let currentMoney = player.money;
+    const currentMoney = player.money;
     resetMoney();
     if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
@@ -126,8 +125,7 @@ function skipResetsIfPossible() {
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {
     player.resets = 4;
     if (player.galaxies === 0) player.galaxies = 1;
-  }
-  else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
+  } else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
   else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
   else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
 }
@@ -137,9 +135,9 @@ function softResetBtnClick() {
   if (Ra.isRunning) return;
   auto = false;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
-  else softReset(1)
+  else softReset(1);
   
-  for (let tier = 1; tier<9; tier++) {
+  for (let tier = 1; tier < 9; tier++) {
     const mult = DimBoost.power.pow(player.resets + 1 - tier);
     if (mult.gt(1)) floatText(tier, "x" + shortenDimensions(mult));
   }

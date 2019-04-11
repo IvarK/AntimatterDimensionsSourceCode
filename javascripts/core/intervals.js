@@ -21,12 +21,12 @@ const GameIntervals = (function() {
         .filter(i => i.hasOwnProperty("start") && i.hasOwnProperty("stop"));
     },
     start() {
-      for (let interval of this.all()) {
+      for (const interval of this.all()) {
         interval.start();
       }
     },
     stop() {
-      for (let interval of this.all()) {
+      for (const interval of this.all()) {
         interval.stop();
       }
     },

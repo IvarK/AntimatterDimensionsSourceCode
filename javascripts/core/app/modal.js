@@ -28,11 +28,11 @@ Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
 Modal.addCloudConflict = function(saveId, cloudSave, localSave, onAccept, onLastConflict) {
   ui.view.modal.cloudConflicts.push({
-    saveId: saveId,
+    saveId,
     cloud: getSaveInfo(cloudSave),
     local: getSaveInfo(localSave),
-    onAccept: onAccept,
-    onLastConflict: onLastConflict
+    onAccept,
+    onLastConflict
   });
 
   function getSaveInfo(save) {

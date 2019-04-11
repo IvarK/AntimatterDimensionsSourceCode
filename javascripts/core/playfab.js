@@ -1,55 +1,53 @@
 function playFabLogin() {
   try {
-    var authTicket = kongregate.services.getGameAuthToken();
-    var requestData = {
+    const authTicket = kongregate.services.getGameAuthToken();
+    const requestData = {
         TitleId: titleId,
         KongregateId: kongregate.services.getUserId(),
         AuthTicket: authTicket,
         CreateAccount: true
-    }
+    };
     try {
       PlayFab.ClientApi.LoginWithKongregate(requestData, playFabLoginCallback);
     } catch (e) {
       console.log("Unable to send login request to PlayFab.");
     }
 
-    /*
-    // Dev playfab login
-    titleId = "144";
-    var requestData = {
-        TitleId: titleId,
-        CustomId: "GettingStartedGuide",
-        CreateAccount: true
-    }
-    try {
-      PlayFab.ClientApi.LoginWithCustomID(requestData, playFabLoginCallback);
-    } catch (e) {
-      console.log("Unable to send login request to PlayFab.");
-    }
-    */
+    // // Dev playfab login
+    // titleId = "144";
+    // var requestData = {
+    // TitleId: titleId,
+    // CustomId: "GettingStartedGuide",
+    // CreateAccount: true
+    // }
+    // try {
+    // PlayFab.ClientApi.LoginWithCustomID(requestData, playFabLoginCallback);
+    // } catch (e) {
+    // console.log("Unable to send login request to PlayFab.");
+    // }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 
 var titleId = "5695";
-var playFabId = -1
+var playFabId = -1;
 
 function playFabLoginCallback(data, error) {
   if (error) {
     console.log(error.errorMessage);
     GameUI.notify.error("Couldn't log in to PlayFab Cloud. You need to be logged in to Kongregate.");
-    document.getElementById("cloudOptions").style.display = "none"
-    document.getElementById("cloud").style.display = "none"
+    document.getElementById("cloudOptions").style.display = "none";
+    document.getElementById("cloud").style.display = "none";
     return;
   }
   if (data) {
-    //NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
+    // NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
     playFabId = data.data.PlayFabId;
     GameUI.notify.info("Logged in to PlayFab Cloud");
 
-    if (player.options.cloud) playFabLoadCheck()
-    console.log("Logged in to playFab")
+    if (player.options.cloud) playFabLoadCheck();
+    console.log("Logged in to playFab");
   }
 }
 
@@ -57,17 +55,17 @@ function saveToPlayFab(root) {
   if (!playFabId || typeof PlayFab === 'undefined' || typeof PlayFab.ClientApi === 'undefined') return false;
 
   // Cut compressed root object into strings of 10,000 bytes for PlayFab
-  var chunks = LZString.compressToEncodedURIComponent(JSON.stringify(root)).match(/.{1,10000}/g);
+  const chunks = LZString.compressToEncodedURIComponent(JSON.stringify(root)).match(/.{1,10000}/g);
   if (chunks.length > 10) {
     GameUI.notify.error("Error saving to cloud: size limit exceeded");
   }
 
-  var requestData = {
+  const requestData = {
     TitleId: titleId,
     PlayFabId: playFabId,
-    // convert array into object with numbers as keys
+    // Convert array into object with numbers as keys
     Data: $.extend({}, chunks)
-  }
+  };
   try {
     PlayFab.ClientApi.UpdateUserData(requestData, saveToPlayFabCallback);
   } catch (e) {
@@ -84,7 +82,7 @@ function saveToPlayFabCallback(data, error) {
   if (data) {
     console.log("Game Saved!");
     GameUI.notify.info("Game saved to cloud");
-    save_game()
+    save_game();
     return true;
   }
 }
@@ -94,10 +92,10 @@ function loadFromPlayFab(callback) {
     console.log(playFabId, PlayFab);
     return false;
   }
-  var requestData = {
+  const requestData = {
     Keys: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "save"],
     PlayFabId: playFabId
-  }
+  };
   try {
     console.log('attempting to send load request');
     PlayFab.ClientApi.GetUserData(requestData, loadFromPlayFabCallback.bind(this, callback));
@@ -118,22 +116,22 @@ function loadFromPlayFabCallback(callback, data, error) {
   if (data) {
     // Start: Migration
     if (data.data.Data.save) {
-      var oldSave = JSON.parse(LZString.decompressFromEncodedURIComponent(data.data.Data.save.Value));
-      var requestData = {
+      const oldSave = JSON.parse(LZString.decompressFromEncodedURIComponent(data.data.Data.save.Value));
+      const requestData = {
         TitleId: titleId,
         PlayFabId: playFabId,
-        // convert array into object with numbers as keys
+        // Convert array into object with numbers as keys
         Data: {
           save: null,
           infinitied: null,
           eternities: null
         }
-      }
+      };
       try {
-        PlayFab.ClientApi.UpdateUserData(requestData, function(_, error) {
+        PlayFab.ClientApi.UpdateUserData(requestData, (_, error) => {
           if (error) alert("Error migrating cloud saves, please report this.");
 
-          var newRoot = {
+          const newRoot = {
             current: 0,
             saves: {
               0: oldSave,
@@ -149,8 +147,8 @@ function loadFromPlayFabCallback(callback, data, error) {
         console.log(e);
       }
     } else {
-      var root = getRootFromChunks(data.data.Data);
-      callback(root || {saves: []});
+      const root = getRootFromChunks(data.data.Data);
+      callback(root || { saves: [] });
     }
     // End: Migration
 
@@ -158,26 +156,24 @@ function loadFromPlayFabCallback(callback, data, error) {
 }
 
 function getRootFromChunks(chunks) {
-  // merge chunks back together
+  // Merge chunks back together
   return JSON.parse(LZString.decompressFromEncodedURIComponent(
     Object.values(chunks)
-    .map(function(val) {
-      return val.Value;
-    })
+    .map(val => val.Value)
     .join("")
   ));
 }
 
-// if both of them are the same, undefined will be returned
+// If both of them are the same, undefined will be returned
 function newestSave(first, second) {
     function getSaveInfo(save) {
         return {
             infinities: save ? save.infinitied : 0,
             eternities: save ? save.eternities : 0
-        }
+        };
     }
-    let firstInfo = getSaveInfo(first);
-    let secondInfo = getSaveInfo(second);
+    const firstInfo = getSaveInfo(first);
+    const secondInfo = getSaveInfo(second);
     if (firstInfo.eternities === secondInfo.eternities && firstInfo.infinities === secondInfo.infinities) {
         return undefined;
     }
@@ -191,14 +187,14 @@ function newestSave(first, second) {
 }
 
 function playFabLoadCheck() {
-  loadFromPlayFab(function(cloudRoot) {
+  loadFromPlayFab(cloudRoot => {
     GameUI.notify.info("Loaded from cloud");
 
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = saves[saveId];
+      const newestSave = newestSave(cloudSave, localSave);
       function overwriteLocalSave() {
           load_cloud_save(saveId, cloudSave);
       }
@@ -213,12 +209,12 @@ function playFabLoadCheck() {
 }
 
 function playFabSaveCheck() {
-  loadFromPlayFab(function(cloudRoot) {
-    for (var i = 0; i < 3; i++) {
-      let saveId = i;
-      let cloudSave = cloudRoot.saves[saveId];
-      let localSave = saves[saveId];
-      let newestSave = newestSave(cloudSave, localSave);
+  loadFromPlayFab(cloudRoot => {
+    for (let i = 0; i < 3; i++) {
+      const saveId = i;
+      const cloudSave = cloudRoot.saves[saveId];
+      const localSave = saves[saveId];
+      const newestSave = newestSave(cloudSave, localSave);
       let isConflicted = false;
       function overwriteCloudSave() {
           cloudRoot.saves[saveId] = saves[saveId];
@@ -233,7 +229,7 @@ function playFabSaveCheck() {
       } else {
           overwriteCloudSave();
       }
-      if (!isConflicted){
+      if (!isConflicted) {
           sendCloudSave();
       }
     }

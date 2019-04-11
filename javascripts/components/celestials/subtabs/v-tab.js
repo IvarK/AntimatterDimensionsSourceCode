@@ -1,5 +1,5 @@
 Vue.component('v-tab', {
-  data: function() {
+  data() {
     return {
       mainUnlock: false,
       totalUnlocks: 0,
@@ -8,15 +8,15 @@ Vue.component('v-tab', {
   },
   methods: {
     update() {
-      this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK)
-      this.totalUnlocks = V.totalRunUnlocks
-      this.totalAdditionalStudies = V.totalAdditionalStudies
+      this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
+      this.totalUnlocks = V.totalRunUnlocks;
+      this.totalAdditionalStudies = V.totalAdditionalStudies;
     },
     startRun() {
-      V.startRun()
+      V.startRun();
     },
     has(info) {
-      return V.has(info)
+      return V.has(info);
     }
   },
   computed: {

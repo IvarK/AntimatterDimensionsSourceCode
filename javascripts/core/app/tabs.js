@@ -52,7 +52,7 @@ Tab.eternity.timeStudies = new Subtab("Time studies", Tab.eternity, ui.view.tabs
 Tab.eternity.dilation = new Subtab("Time dilation", Tab.eternity, ui.view.tabs.eternity);
 Tab.celestials = new Tab("celestials-tab");
 
-// small hack until Vue migration is complete
+// Small hack until Vue migration is complete
 function tryShowtab(tab) {
   if (tab === 'options') {
     Tab.options.show();

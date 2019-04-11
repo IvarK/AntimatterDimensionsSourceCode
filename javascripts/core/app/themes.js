@@ -1,21 +1,21 @@
 var Theme = function Theme(name, colors) {
     this.name = name;
 
-    this.isDefault = function () {
+    this.isDefault = function() {
         return name === undefined;
     };
 
-    this.isSecret = function () {
+    this.isSecret = function() {
         return !this.isDefault() && name.length === 2;
     };
 
-    this.isAvailable = function () {
+    this.isAvailable = function() {
         if (!this.isSecret()) return true;
         return player.secretUnlocks.themes
-            .some(function (theme) { return theme.includes(name); });
+            .some(theme => theme.includes(name));
     };
 
-    this.displayName = function () {
+    this.displayName = function() {
         if (this.isDefault()) return "Normal";
         if (!this.isSecret()) return name;
         if (!this.isAvailable()) {
@@ -24,12 +24,12 @@ var Theme = function Theme(name, colors) {
         }
         // Secret themes are stored as "S9Whatever", so we need to strip the SN part
         return player.secretUnlocks.themes
-            .find(function (theme) { return theme.includes(name); })
+            .find(theme => theme.includes(name))
             .substr(2);
     };
 
-    this.set = function () {
-        for (let c of document.body.classList) {
+    this.set = function() {
+        for (const c of document.body.classList) {
           if (c.startsWith("t-")) {
             document.body.classList.remove(c);
           }
@@ -51,18 +51,18 @@ var Theme = function Theme(name, colors) {
     };
 };
 
-Theme.current = function () {
+Theme.current = function() {
     return Themes.find(player.options.theme);
 };
 
 Theme.set = function(name) {
-    let theme = Themes.find(name);
+    const theme = Themes.find(name);
     theme.set();
     return theme;
 };
 
 Theme.secretThemeIndex = function(name) {
-  let secretThemes = [
+  const secretThemes = [
     "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537",
     "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290",
     "a3d64c3d1e1749b60b2b3dba10ed5ae9425300e9600ca05bcbafe4df6c69941f",
@@ -72,7 +72,7 @@ Theme.secretThemeIndex = function(name) {
     "da3b3c152083f0c70245f104f06331497b97b52ac80edec05e26a33ee704cae7",
     "1bbc0800145e72dfea5bfb218eba824c52510488b3a05ee88feaaa6683322d19"
   ];
-  let sha = sha512_256(name.toUpperCase());
+  const sha = sha512_256(name.toUpperCase());
   return secretThemes.indexOf(sha);
 };
 
@@ -81,11 +81,11 @@ Theme.isSecretTheme = function(name) {
 };
 
 Theme.tryUnlock = function(name) {
-    let index = Theme.secretThemeIndex(name);
+    const index = Theme.secretThemeIndex(name);
     if (index === -1) {
       return false;
     }
-    let prefix = "S" + (index + 1);
+    const prefix = "S" + (index + 1);
     player.secretUnlocks.themes.push(prefix + name.capitalize());
     Theme.set(prefix);
     giveAchievement("Shhh... It's a secret");
@@ -93,19 +93,19 @@ Theme.tryUnlock = function(name) {
 };
 
 Theme.light = function(name) {
-    let colors = {
+    const colors = {
         chartFont: '#000',
         chartBorder: '#000'
     };
-    return new Theme(name, colors)
+    return new Theme(name, colors);
 };
 
 Theme.dark = function(name) {
-    let colors = {
+    const colors = {
         chartFont: '#888',
         chartBorder: '#888'
     };
-    return new Theme(name, colors)
+    return new Theme(name, colors);
 };
 
 var Themes = {
@@ -126,13 +126,13 @@ var Themes = {
         Theme.light("S8")
     ],
 
-    available: function () {
+    available() {
         return Themes.all
-            .filter(function (theme) { return theme.isAvailable(); })
+            .filter(theme => theme.isAvailable());
     },
 
-    find: function(name) {
+    find(name) {
         return Themes.all
-            .find(function (theme) { return theme.name === name; });
+            .find(theme => theme.name === name);
     }
 };

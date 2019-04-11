@@ -143,7 +143,7 @@ class LinearMultiplierScaling {
     if (count === 0) return 0;
     const k = this.growth / this.baseRatio;
     const u = k * count;
-    return (1 / k + count - 0.5) * Math.log1p(u) + count * (Math.log(this.baseRatio) - 1) -  k * u / (12 * (1 + u));
+    return (1 / k + count - 0.5) * Math.log1p(u) + count * (Math.log(this.baseRatio) - 1) - k * u / (12 * (1 + u));
   }
 
   /**
@@ -152,8 +152,8 @@ class LinearMultiplierScaling {
    * @param {number} logMult natural logarithm of combined multiplier
    */
   purchasesForLogTotalMultiplier(logMult) {
-    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations")
-    let Lb = Math.log(this.baseRatio);
+    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations");
+    const Lb = Math.log(this.baseRatio);
     const k = this.growth / this.baseRatio;
     // Final refinement step, applying 2nd order iteration directly to the formula of
     // logTotalMultiplierAfterPurchases

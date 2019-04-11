@@ -1,4 +1,4 @@
-let ui = {
+const ui = {
   view: {
     modal: {
       current: undefined,
@@ -13,7 +13,7 @@ let ui = {
       dimensions: {
         subtab: "",
         normal: {
-          floatingText: Array.from({length: 9}, () => [])
+          floatingText: Array.from({ length: 9 }, () => [])
         },
       },
       statistics: {

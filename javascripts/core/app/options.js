@@ -30,10 +30,10 @@ class GameOptions {
           api_paste_name: Date.now(),
           api_paste_code: encodeURIComponent(save)
         },
-        success: function(response) {
+        success(response) {
           window.open(response);
         },
-        fail: function(response) {
+        fail(response) {
           console.log(response);
         }
       });
@@ -63,7 +63,7 @@ class GameOptions {
       giveAchievement("You should download some more RAM");
     }
     GameIntervals.gameLoop.restart();
-    Enslaved.infinityTracking = []
+    Enslaved.infinityTracking = [];
     Enslaved.totalInfinities = new Decimal(0);
   }
 }
@@ -72,7 +72,7 @@ function importSave(save_data) {
     if (tryImportSecret(save_data) || Theme.tryUnlock(save_data)) {
       return;
     }
-    let parsedSave = parseSaveData(save_data);
+    const parsedSave = parseSaveData(save_data);
     if (parsedSave === undefined) {
       alert('could not load the save..');
       load_custom_game();
@@ -91,7 +91,7 @@ function importSave(save_data) {
     transformSaveToDecimal();
 }
 
-let secretImports = [
+const secretImports = [
   "80b7fdc794f5dfc944da6a445a3f21a2d0f7c974d044f2ea25713037e96af9e3",
   "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274"
 ];
@@ -106,7 +106,7 @@ function isSecretImport(data) {
 }
 
 function tryImportSecret(data) {
-  let index = secretImportIndex(data);
+  const index = secretImportIndex(data);
   if (index === 0) {
     document.body.style.animation = "barrelRoll 5s 1";
     giveAchievement("Do a barrel roll!");
@@ -123,9 +123,8 @@ function tryImportSecret(data) {
 function parseSaveData(save) {
   let parsedSave;
   try {
-    parsedSave = JSON.parse(atob(save), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-  }
-  catch (e) {
+    parsedSave = JSON.parse(atob(save), (k, v) => ((v === Infinity) ? "Infinity" : v));
+  } catch (e) {
     parsedSave = undefined;
   }
   if (!parsedSave || !verify_save(parsedSave)) {

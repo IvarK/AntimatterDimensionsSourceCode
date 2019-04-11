@@ -1,6 +1,6 @@
 function bigCrunchReset() {
-    var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
-    if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
+    let challNumber = parseInt(player.currentChallenge[player.currentChallenge.length - 1]);
+    if (player.currentChallenge.length === 11) challNumber = parseInt("1" + player.currentChallenge[player.currentChallenge.length - 1]);
     const isInChallenge = player.currentChallenge !== "";
     if (player.money.lt(Number.MAX_VALUE)) {
         return;
@@ -12,11 +12,11 @@ function bigCrunchReset() {
     if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
         implosionCheck = 1;
         document.body.style.animation = "implode 2s 1";
-        setTimeout(function() {
+        setTimeout(() => {
             document.body.style.animation = "";
         }, 2000);
         setTimeout(bigCrunchReset, 1000);
-        return
+        return;
     }
     implosionCheck = 0;
     if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
@@ -33,18 +33,18 @@ function bigCrunchReset() {
     if (Challenge(9).isRunning) {
         kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
     }
-    let infinityPoints = gainedInfinityPoints();
+    const infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
     addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
     RealityUpgrades.tryUnlock([7, 8]);
 
     if (autoS && auto) {
-        let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
+        const autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
         if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
         if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
     }
 
-    auto = autoS; //only allow autoing if prev crunch was autoed
+    auto = autoS; // Only allow autoing if prev crunch was autoed
     autoS = true;
     player.infinitied = player.infinitied.plus(gainedInfinities().round());
     player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
@@ -59,11 +59,11 @@ function bigCrunchReset() {
 
     checkForEndMe();
     // FIXME: Infinitified is now Decimal so decide what happens here!
-    //kong.submitStats('Infinitied', Player.totalInfinitied);
+    // kong.submitStats('Infinitied', Player.totalInfinitied);
     kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
 
-    let currenReplicanti = player.replicanti.amount;
-    let currentReplicantiGalaxies = player.replicanti.galaxies;
+    const currenReplicanti = player.replicanti.amount;
+    const currentReplicantiGalaxies = player.replicanti.galaxies;
     secondSoftReset();
 
     if (Achievement(95).isEnabled) {
@@ -74,10 +74,10 @@ function bigCrunchReset() {
     }
 
     if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
-        for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
+        for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
             if (player.infDimBuyers[i - 1]) {
                 buyMaxInfDims(i);
-                buyManyInfinityDimension(i)
+                buyManyInfinityDimension(i);
             }
         }
     }
@@ -134,14 +134,14 @@ function checkBigCrunchAchievements() {
         const infinityPoints = gainedInfinityPoints();
         if (infinityPoints.gte(1e150)) giveAchievement("All your IP are belong to us");
         if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
-        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
+        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody");
     }
     if (!Achievement(111).isUnlocked && player.lastTenRuns[9][1] !== 1) {
-        var n = 0;
+        let n = 0;
         for (i = 0; i < 9; i++) {
             if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i + 1][1].times(Number.MAX_VALUE))) n++;
         }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked infinities...")
+        if (n === 9) giveAchievement("Yo dawg, I heard you liked infinities...");
     }
     if (player.bestInfinityTime <= 1) giveAchievement("Less than or equal to 0.001");
 }
@@ -152,7 +152,7 @@ function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return new Decimal(1);
   }
-  let ipMult = new Decimal(1)
+  const ipMult = new Decimal(1)
     .times(kongIPMult)
     .timesEffectsOf(
       TimeStudy(41),
@@ -169,7 +169,7 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
+  if (Enslaved.isRunning) return player.infMult.times(kongIPMult);
   return ipMult;
 }
 
@@ -329,7 +329,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       if (purchases <= 0) return;
       this.purchase(purchases);
     }
-    // do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
+    // Do not replace it with `if else` - it's specifically designed to process two sides of threshold separately
     // (for example, we have 1e4000000 IP and no mult - first it will go to 1e3000000 and then it will go in this part)
     if (this.hasIncreasedCost) {
       const buyUntil = Math.min(player.infinityPoints.exponent, this.config.costCap.exponent);
@@ -362,7 +362,7 @@ class BreakInfinityUpgrade extends PurchasableMechanicState {
   BreakInfinityUpgrade.infinitiedGen = upgrade(db.infinitiedGen);
   BreakInfinityUpgrade.bulkDimBoost = upgrade(db.bulkDimBoost);
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
-})();
+}());
 
 class BreakInfinityMultiplierCostUpgrade extends GameMechanicState {
   constructor(config) {

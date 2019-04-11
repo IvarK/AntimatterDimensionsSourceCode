@@ -6,13 +6,13 @@ var saves = {
 };
 
 function importAutomatorScript(script) {
-  var outputString = JSON.parse(script).join("\n")
-  document.getElementById("automator").value = outputString
-  updateState()
+  const outputString = JSON.parse(script).join("\n");
+  document.getElementById("automator").value = outputString;
+  updateState();
 }
 
 function updateState() {
-    automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+    automatorRows = $("#automator").val().toLowerCase().split("\n").filter(row => row !== "");
   }
 
 function onLoad() {
@@ -34,7 +34,7 @@ function onLoad() {
     giveAchievement("Was it even broken?");
   }
 
-  for (let i=0; i<12; i++) {
+  for (let i = 0; i < 12; i++) {
     if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
       player.autobuyers[i].target = AutobuyerMode.BUY_SINGLE;
     }
@@ -44,94 +44,94 @@ function onLoad() {
     }
   }
 
-  IPminpeak = new Decimal(0)
-  EPminpeak = new Decimal(0)
+  IPminpeak = new Decimal(0);
+  EPminpeak = new Decimal(0);
 
   if (typeof player.autobuyers[9].bulk !== "number") {
-      player.autobuyers[9].bulk = 1
+      player.autobuyers[9].bulk = 1;
   }
 
-  if (player.version === undefined) { // value will need to be adjusted when update goes live
+  if (player.version === undefined) { // Value will need to be adjusted when update goes live
       for (var i = 0; i < player.autobuyers.length; i++) {
-          if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
+          if (player.autobuyers[i] % 1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1;
       }
-      player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-      player.version = 1
+      player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      player.version = 1;
   }
   if (player.version == 1) {
       if (player.dimensionMultDecrease != 10) {
           if (player.dimensionMultDecrease == 9) {
-              player.dimensionMultDecrease = 10
-              player.dimensionMultDecreaseCost = 1e8
-              player.infinityPoints = player.infinityPoints.plus(1e8)
+              player.dimensionMultDecrease = 10;
+              player.dimensionMultDecreaseCost = 1e8;
+              player.infinityPoints = player.infinityPoints.plus(1e8);
           }
           if (player.dimensionMultDecrease == 8) {
-              player.dimensionMultDecrease = 10
-              player.dimensionMultDecreaseCost = 1e8
-              player.infinityPoints = player.infinityPoints.plus(2.1e9)
+              player.dimensionMultDecrease = 10;
+              player.dimensionMultDecreaseCost = 1e8;
+              player.infinityPoints = player.infinityPoints.plus(2.1e9);
           }
           if (player.dimensionMultDecrease == 7) {
-              player.dimensionMultDecrease = 10
-              player.dimensionMultDecreaseCost = 1e8
-              player.infinityPoints = player.infinityPoints.plus(4.21e10)
+              player.dimensionMultDecrease = 10;
+              player.dimensionMultDecreaseCost = 1e8;
+              player.infinityPoints = player.infinityPoints.plus(4.21e10);
           }
       }
-      player.version = 2
+      player.version = 2;
   }
   if (player.version < 5) {
-    player.newsArray = []
-    player.version = 5
+    player.newsArray = [];
+    player.version = 5;
   }
 
   transformSaveToDecimal();
-  clearOldAchieves()
+  clearOldAchieves();
 
-  if (player.version < 9 ) {
-    player.version = 9
-    let achs = []
+  if (player.version < 9) {
+    player.version = 9;
+    const achs = [];
     if (player.achievements.delete("r22")) achs.push("r35");
     if (player.achievements.delete("r35")) achs.push("r76");
     if (player.achievements.delete("r41")) achs.push("r22");
     if (player.achievements.delete("r76")) achs.push("r41");
-    for (let id of achs) player.achievements.add(id);
-    player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
+    for (const id of achs) player.achievements.add(id);
+    player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20);
   }
 
   if (player.version < 9.5) {
-      player.version = 9.5
+      player.version = 9.5;
       if (player.timestudy.studies.includes(191)) player.timestudy.theorem = player.timestudy.theorem.plus(100);
   }
 
   if (player.version < 10) {
-      player.version = 10
+      player.version = 10;
       if (player.timestudy.studies.includes(72)) {
-          for (i=4; i<8; i++) {
-              player["infinityDimension"+i].amount = player["infinityDimension"+i].amount.div(Sacrifice.totalBoost.pow(0.02))
+          for (i = 4; i < 8; i++) {
+              player["infinityDimension" + i].amount = player["infinityDimension" + i].amount.div(Sacrifice.totalBoost.pow(0.02));
           }
       }
   }
-  //updates TD costs to harsher scaling
+  // Updates TD costs to harsher scaling
   if (player.version < 12) {
-      player.version = 12
-      for (i=1; i<5; i++) {
-        if (player["timeDimension"+i].cost.gte("1e1300")) {
-            player["timeDimension"+i].cost = Decimal.pow(timeDimCostMults[i]*2.2, player["timeDimension"+i].bought).times(timeDimStartCosts[i])
+      player.version = 12;
+      for (i = 1; i < 5; i++) {
+        if (player["timeDimension" + i].cost.gte("1e1300")) {
+            player["timeDimension" + i].cost = Decimal.pow(timeDimCostMults[i] * 2.2, player["timeDimension" + i].bought).times(timeDimStartCosts[i]);
           }
       }
       if (player.bestEternity <= 0.01 || player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
   }
 
-  // player.version is currently 12 on live, and will be 13 after the update is released
+  // Player.version is currently 12 on live, and will be 13 after the update is released
   if (player.version < 12.1) {
-    player.version = 12.1
+    player.version = 12.1;
     player.achievements.delete("s36");
   }
 
-  //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
+  // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
   if (player.version < 13) {
-    //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+    // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
     if (isDevEnvironment()) player.options.testVersion = 32;
-    player.version = 13
+    player.version = 13;
     if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
     if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
     player.realTimePlayed = player.totalTimePlayed;
@@ -165,13 +165,13 @@ function onLoad() {
     unfuckMultCosts();
     convertAchivementsToNumbers();
     convertEPMult();
-    player.secretUnlocks.why = player.why
+    player.secretUnlocks.why = player.why;
     delete player.why;
     delete player.achPow;
   }
 
-  //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
-  if (player.version === 13) dev.updateTestSave()
+  // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
+  if (player.version === 13) dev.updateTestSave();
 
   if (player.options.newsHidden) {
     document.getElementById("game").style.display = "none";
@@ -184,12 +184,12 @@ function onLoad() {
   transformSaveToDecimal();
   resizeCanvas();
   checkForEndMe();
-  updateAutomatorRows()
-  checkPerkValidity()
+  updateAutomatorRows();
+  checkPerkValidity();
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
-  updatePerkColors()
-  V.updateTotalRunUnlocks()
+  updatePerkColors();
+  V.updateTotalRunUnlocks();
   Enslaved.boostReality = false;
 
   const notation = player.options.notation;
@@ -208,17 +208,17 @@ function onLoad() {
 
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
-  if (automatorOn) $("#automatorOn")[0].checked = true
+  if (automatorOn) $("#automatorOn")[0].checked = true;
   automatorIdx = player.reality.automatorCurrentRow;
 
   Lazy.invalidateAll();
 
-  let diff = new Date().getTime() - player.lastUpdate
+  let diff = new Date().getTime() - player.lastUpdate;
   if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
     diff = Enslaved.autoStoreRealTime(diff);
   }
-  if (diff > 1000*1000) {
-      simulateTime(diff/1000)
+  if (diff > 1000 * 1000) {
+      simulateTime(diff / 1000);
   }
 }
 
@@ -241,8 +241,7 @@ function convertAutobuyerMode() {
     if (!autobuyer.isUnlocked) continue;
     if (autobuyer.mode < 10) {
       autobuyer.mode = AutobuyerMode.BUY_SINGLE;
-    }
-    else {
+    } else {
       autobuyer.mode = AutobuyerMode.BUY_10;
     }
   }
@@ -250,8 +249,7 @@ function convertAutobuyerMode() {
   if (tickspeedAutobuyer.isUnlocked) {
     if (tickspeedAutobuyer.mode < 10) {
       tickspeedAutobuyer.mode = AutobuyerMode.BUY_SINGLE;
-    }
-    else {
+    } else {
       tickspeedAutobuyer.mode = AutobuyerMode.BUY_MAX;
     }
   }
@@ -296,10 +294,10 @@ function checkPerkValidity() {
 
 function convertAchivementsToNumbers() {
   if (player.achievements.countWhere(e => typeof (e) !== "number") === 0) return;
-  let old = player.achievements;
-  player.achievements = new Set();   // player.secretAchievements should be an empty set in this case
-  for (let oldId of old) {
-    let newId = parseInt(oldId.slice(1));
+  const old = player.achievements;
+  player.achievements = new Set(); // Player.secretAchievements should be an empty set in this case
+  for (const oldId of old) {
+    const newId = parseInt(oldId.slice(1));
     if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
     if (oldId.startsWith("r")) {
       if (Achievement(newId) === undefined) throw crash(`Unrecognized achievement ${oldId}`);
@@ -331,7 +329,7 @@ function load_game(root) {
 
   // Start: Migration for old save format
   if (root && !root.saves) {
-    var _root = getRootSaveObject();
+    const _root = getRootSaveObject();
     _root.saves[currentSave] = root;
     root = _root;
 
@@ -363,31 +361,31 @@ function change_save(saveId) {
   save_game(false, true);
   currentSave = saveId;
   saved = 0;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
-  IPminpeak = new Decimal(0)
-  EPminpeak = new Decimal(0)
+  postc8Mult = new Decimal(0);
+  mult18 = new Decimal(1);
+  IPminpeak = new Decimal(0);
+  EPminpeak = new Decimal(0);
   player = saves[saveId] || defaultStart;
   save_game(true, false);
   load_game();
-  transformSaveToDecimal()
+  transformSaveToDecimal();
   Tab.dimensions.normal.show();
   Modal.hide();
 }
 
 function transformSaveToDecimal() {
-  if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autobuyers[11].priority !== "undefined")player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority)
+  if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autobuyers[11].priority !== "undefined")player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
-    let glyph = player.reality.glyphs.active[i]
+    const glyph = player.reality.glyphs.active[i];
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      glyph.effects.mult = new Decimal(glyph.effects.mult);
     }
   }
 
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
-    let glyph = player.reality.glyphs.inventory[i]
+    const glyph = player.reality.glyphs.inventory[i];
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      glyph.effects.mult = new Decimal(glyph.effects.mult);
     }
   }
 }
@@ -409,13 +407,13 @@ function set_save(name, saveId, value) {
 
 function get_save(name) {
   try {
-    return JSON.parse(atob(localStorage.getItem(name)), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-  } catch(e) { console.log("Fuck IE", e); }
+    return JSON.parse(atob(localStorage.getItem(name)), (k, v) => ((v === Infinity) ? "Infinity" : v));
+  } catch (e) { console.log("Fuck IE", e); }
 }
 
 function getRootSaveObject() {
   return {
     current: currentSave,
-    saves: saves
+    saves
   };
 }

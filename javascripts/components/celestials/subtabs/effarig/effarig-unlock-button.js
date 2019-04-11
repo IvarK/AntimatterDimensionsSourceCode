@@ -2,7 +2,7 @@ Vue.component("effarig-unlock-button", {
   props: {
     unlock: Object
   },
-  data: function() {
+  data() {
     return {
       isBought: false
     };

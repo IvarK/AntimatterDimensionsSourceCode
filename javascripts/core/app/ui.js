@@ -58,17 +58,15 @@ Vue.mixin({
   }
 });
 
-Vue.filter("pluralize", function (value, amount, plural) {
+Vue.filter("pluralize", (value, amount, plural) => {
   if (value === undefined || amount === undefined)
     throw "Arguments must be defined";
   let isSingular = true;
   if (typeof amount === "number") {
     isSingular = amount === 1;
-  }
-  else if (amount instanceof Decimal) {
+  } else if (amount instanceof Decimal) {
     isSingular = amount.eq(1);
-  }
-  else
+  } else
     throw "Amount must be either a number or Decimal";
   return isSingular ? value : (plural !== undefined ? plural : value + "s");
 });
@@ -99,7 +97,7 @@ const GameUI = {
       Vue.nextTick(() => PerformanceStats.start("Vue Render"));
       PerformanceStats.start("Vue Update");
     }
-    for (let event of this.events) {
+    for (const event of this.events) {
       EventHub.global.emit(event);
     }
     EventHub.global.emit(GameEvent.UPDATE);
@@ -118,10 +116,10 @@ const GameUI = {
   }
 };
 
-const UIID = function() {
+const UIID = (function() {
   let id = 0;
   return { next: () => id++ };
-}();
+}());
 
 (function() {
   const vTooltip = VTooltip.VTooltip.options;
@@ -163,7 +161,7 @@ ui = new Vue({
           this.view.tabs.reality.currentGlyphTooltip = -1;
           document.removeEventListener("click", GameUI.globalClickListener);
           GameUI.globalClickListener = null;
-        }
+        };
         document.addEventListener("click", GameUI.globalClickListener);
       } else if (newVal === -1 && GameUI.globalClickListener) {
         document.removeEventListener("click", GameUI.globalClickListener);

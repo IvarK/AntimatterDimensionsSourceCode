@@ -28,30 +28,28 @@ class LongPress {
     LongPress._pressTimer = null;
     LongPress._currentCancelHandler = null;
     LongPress._currentTarget = null;
-    LongPress._pressCount = 0; // debug
+    LongPress._pressCount = 0; // Debug
   }
 
   static addTo(obj, timeout, handlers) {
     if (!handlers.hasOwnProperty("longPress")) {
-      throw "Need to specify a longPress handler"
+      throw "Need to specify a longPress handler";
     }
-    var begin = (e) => {
-      return LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, handlers.repeat, e)
-    }
-    $(obj).on("mousedown touchstart", begin)
-    $(obj).on("mouseout touchcancel", LongPress._cancelCurrentPress)
-    $(obj).on("touchmove", (e) => {
-      e.preventDefault();  // suggested in stackoverflow example
-      var t = e.changedTouches[0];
+    const begin = e => LongPress._pressBegin(timeout, handlers.longPress, handlers.cancel, handlers.repeat, e);
+    $(obj).on("mousedown touchstart", begin);
+    $(obj).on("mouseout touchcancel", LongPress._cancelCurrentPress);
+    $(obj).on("touchmove", e => {
+      e.preventDefault(); // Suggested in stackoverflow example
+      const t = e.changedTouches[0];
       if (obj !== document.elementFromPoint(t.pageX,t.pageY)) {
         LongPress._cancelCurrentPress();
       }
     });
     if (handlers.click) {
-      $(obj).on("click", (e) => LongPress._handleClick(e, handlers.click));
-      $(obj).on("touchend", (e) => LongPress._handleTouchEnd(e, handlers.click));
+      $(obj).on("click", e => LongPress._handleClick(e, handlers.click));
+      $(obj).on("touchend", e => LongPress._handleTouchEnd(e, handlers.click));
     } else {
-      $(obj).on("click touchend", LongPress._cancelCurrentPress)
+      $(obj).on("click touchend", LongPress._cancelCurrentPress);
     }
   }
 
@@ -74,7 +72,7 @@ class LongPress {
     LongPress._cancelCurrentPress(e);
     // Ignore right click
     if (e.type == "click" && e.button != 0) return;
-    var savedPressCount = LongPress._pressCount;
+    const savedPressCount = LongPress._pressCount;
     ++LongPress._pressCount;
     LongPress._currentCancelHandler = cancel_handler;
     LongPress._wasLongPress = false;
@@ -101,11 +99,11 @@ class LongPress {
   }
 
   static _handleClick(e, handler) {
-    var wasLP = LongPress._wasLongPress;
+    const wasLP = LongPress._wasLongPress;
     // If the click was of a right button, just handle it
     if (e.button != 0) return handler(e);
     // Cancel any existing presses
-    LongPress._cancelCurrentPress(e)
+    LongPress._cancelCurrentPress(e);
     // If we just had a long press event, ignore the click
     return !wasLP ? handler(e) : false;
   }
@@ -114,10 +112,10 @@ class LongPress {
     // On touch devices, I don't think we get a normal click event; so we determine
     // a click based on a touch ending. To be on the safe side, we make sure the touch
     // began in the same place.
-    var savedTarget = LongPress._currentTarget;
-    var wasLP = LongPress._wasLongPress;
+    const savedTarget = LongPress._currentTarget;
+    const wasLP = LongPress._wasLongPress;
     // Cancel any existing presses
-    LongPress._cancelCurrentPress(e)
+    LongPress._cancelCurrentPress(e);
     // If we just had a long press event, ignore the click; make sure targets match
     return !wasLP && savedTarget === e.target ? handler(e) : false;
   }
@@ -126,14 +124,14 @@ class LongPress {
 LongPress.initializeVars();
 
 Vue.directive("long-press", {
-  bind: function (el, binding, vnode) {
+  bind(el, binding, vnode) {
     // This seems to be the only way to get events to our component
-    var emit = (name, data) => {
-      var handlers = (vnode.data && vnode.data.on);
+    const emit = (name, data) => {
+      const handlers = (vnode.data && vnode.data.on);
       if (handlers && handlers[name]) {
-        handlers[name].fns(data)
+        handlers[name].fns(data);
       }
-    }
+    };
     LongPress.addTo(el, binding.value.delay, {
       longPress: () => emit("longpress"),
       cancel: () => emit("longpresscancel"),
@@ -143,14 +141,14 @@ Vue.directive("long-press", {
 });
 
 Vue.directive("repeating-click", {
-  bind: function (el, binding, vnode) {
+  bind(el, binding, vnode) {
     // This seems to be the only way to get events to our component
-    var emit = (name, data) => {
-      var handlers = (vnode.data && vnode.data.on);
+    const emit = (name, data) => {
+      const handlers = (vnode.data && vnode.data.on);
       if (handlers && handlers[name]) {
-        handlers[name].fns(data)
+        handlers[name].fns(data);
       }
-    }
+    };
     LongPress.addTo(el, binding.value.delay, {
       longPress: () => emit("repeatclick"),
       click: () => emit("firstclick"),

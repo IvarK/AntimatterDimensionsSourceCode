@@ -4,53 +4,53 @@ const timeDimStartCosts = [null, 1, 5, 100, 1000,
 const timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
 
 function timeDimensionCostMult(tier) {
-  var base = timeDimCostMults[tier]
-  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8
-  return base
+  let base = timeDimCostMults[tier];
+  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8;
+  return base;
 }
 
 function timeDimensionCost(tier, bought) {
   if (tier > 4) {
-    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier])
+    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier]);
     if (cost.gte("1e6000")) {
-      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier]);
     }
     return cost;
   }
-  let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
+  let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier]);
   if (cost.gte(Number.MAX_VALUE)) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier]);
   }
   if (cost.gte("1e1300")) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier]);
   }
   if (cost.gte("1e6000")) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3)).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3)).times(timeDimStartCosts[tier]);
   }
   return cost;
 }
 
 function buyTimeDimension(tier, upd) {
-  if (upd === undefined) upd = true
+  if (upd === undefined) upd = true;
 
   const dim = TimeDimension(tier);
-  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
-  if (player.eternityPoints.lt(dim.cost)) return false
+  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
+  if (player.eternityPoints.lt(dim.cost)) return false;
 
-  player.eternityPoints = player.eternityPoints.minus(dim.cost)
+  player.eternityPoints = player.eternityPoints.minus(dim.cost);
   dim.amount = dim.amount.plus(1);
-  dim.bought += 1
+  dim.bought += 1;
   dim.cost = timeDimensionCost(tier, dim.bought);
   dim.power = dim.power
     .times(2)
     .timesEffectsOf(tier === 8 ? GlyphSacrifice.time : null);
-  return true
+  return true;
 }
 
 function resetTimeDimensions() {
-  for (var i=1; i<9; i++) {
-      var dim = player["timeDimension"+i]
-      dim.amount = new Decimal(dim.bought)
+  for (let i = 1; i < 9; i++) {
+      const dim = player["timeDimension" + i];
+      dim.amount = new Decimal(dim.bought);
   }
 
 }
@@ -75,9 +75,9 @@ function buyMaxTimeDimTier(tier) {
   dim.amount = dim.amount.plus(bulk.quantity);
   dim.bought += bulk.quantity;
   dim.cost = timeDimensionCost(tier, dim.bought);
-  let basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
+  const basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
   dim.power = Decimal.pow(basePower, dim.bought);
-  return true
+  return true;
 }
 
 function buyMaxTimeDimensions() {
@@ -93,11 +93,11 @@ function buyMaxTimeDimensions() {
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
     for (let stop = 0; stop < 1000; stop++) {
       let cheapestDim = 1;
-      let cheapestCost = player["timeDimension1"].cost;
+      let cheapestCost = player.timeDimension1.cost;
       for (let i = 2; i <= 4; i++) {
-        if (player["timeDimension"+i].cost.lte(player["timeDimension"+cheapestDim].cost)) {
+        if (player["timeDimension" + i].cost.lte(player["timeDimension" + cheapestDim].cost)) {
           cheapestDim = i;
-          cheapestCost = player["timeDimension"+cheapestDim].cost;
+          cheapestCost = player["timeDimension" + cheapestDim].cost;
         }
       }
       let bought = false;
@@ -182,7 +182,7 @@ class TimeDimensionState {
     const tier = this._tier;
 
     if (Laitela.isRunning && tier > 1) {
-      return new Decimal(0)
+      return new Decimal(0);
     }
 
     if (EternityChallenge(11).isRunning) return new Decimal(1);
@@ -206,9 +206,9 @@ class TimeDimensionState {
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
-      mult = mult.pow(0.5)
+      mult = mult.pow(0.5);
     } else if (Laitela.isRunning) {
-      mult = mult.pow(0.01)
+      mult = mult.pow(0.01);
     }
 
     return mult;

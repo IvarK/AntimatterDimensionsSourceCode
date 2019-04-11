@@ -1,5 +1,5 @@
 Vue.component('challenges-tab', {
-  data: function() {
+  data() {
     return {
       isICTabUnlocked: false,
       isECTabUnlocked: false,

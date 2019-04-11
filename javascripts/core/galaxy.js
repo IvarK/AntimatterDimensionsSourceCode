@@ -17,7 +17,7 @@ class GalaxyRequirement {
 
 class Galaxy {
   static get requirement() {
-    return this.requirementAt(player.galaxies)
+    return this.requirementAt(player.galaxies);
   }
 
   /**
@@ -28,7 +28,7 @@ class Galaxy {
   static buyableGalaxies(currency) {
     let constantTerm = Galaxy.baseCost;
     let linearTerm = Galaxy.costMult;
-    let quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
+    const quadraticBegin = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart - 1;
     // Separate because it's applied post remote scaling:
     const finalOffset = Effects.sum(InfinityUpgrade.resetBoost) +
       (InfinityChallenge(5).isCompleted ? 1 : 0);
@@ -106,10 +106,10 @@ class Galaxy {
   }
 
   static get canBeBought() {
-    return !(EternityChallenge(6).isRunning
-      || Challenge(8).isRunning
-      || player.currentChallenge === "postc7"
-      || (!player.break && player.money.gt(Number.MAX_VALUE)));
+    return !(EternityChallenge(6).isRunning ||
+      Challenge(8).isRunning ||
+      player.currentChallenge === "postc7" ||
+      (!player.break && player.money.gt(Number.MAX_VALUE)));
   }
 
   static get costScalingStart() {
@@ -172,7 +172,7 @@ function maxBuyGalaxies(manual) {
   if (!req.isSatisfied) return false;
   const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(NormalDimension(req.tier).amount.toNumber()));
   if (Notation.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
-  // galaxyReset increments galaxies, so we add one less than we should:
+  // GalaxyReset increments galaxies, so we add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();
   return true;

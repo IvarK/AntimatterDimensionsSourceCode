@@ -48,7 +48,7 @@ const PerformanceStats = {
     let fps;
     function render(rootBlock) {
       indentLevel++;
-      for (let blockName in rootBlock) {
+      for (const blockName in rootBlock) {
         if (!rootBlock.hasOwnProperty(blockName)) continue;
         const block = rootBlock[blockName];
         const records = block.records;
@@ -60,7 +60,7 @@ const PerformanceStats = {
           let sum = 0;
           let max = Number.MIN_VALUE;
           let min = Number.MAX_VALUE;
-          for (let record of records) {
+          for (const record of records) {
             const duration = record.duration;
             sum += duration;
             if (duration > max) max = duration;
@@ -68,7 +68,7 @@ const PerformanceStats = {
           }
           const average = sum / records.length;
           if (fps === undefined) {
-            // we are at root frame block
+            // We are at root frame block
             fps = 1000 / average;
             text = `FPS: ${Math.floor(fps)}<br>` + text;
           }

@@ -23,7 +23,7 @@ const EFFARIG_STAGES = {
   INFINITY: 1,
   ETERNITY: 2,
   REALITY: 3
-}
+};
 
 class EffarigUnlockState extends GameMechanicState {
   constructor(config) {
@@ -62,13 +62,13 @@ const EffarigUnlock = (function() {
     eternity: new EffarigUnlockState(db.eternity),
     reality: new EffarigUnlockState(db.reality),
   };
-})();
+}());
 
 var Effarig = {
   startRun() {
     if (!startRealityOver()) return;
-    player.celestials.effarig.run = true
-    recalculateAllGlyphs()
+    player.celestials.effarig.run = true;
+    recalculateAllGlyphs();
     showRealityTab("glyphstab");
     Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.`);
   },
@@ -98,39 +98,39 @@ var Effarig = {
     }
   },
   get glyphEffectAmount() {
-    let counted = []
-    let counter = 0
-    player.reality.glyphs.active.forEach((g) => {
+    const counted = [];
+    let counter = 0;
+    player.reality.glyphs.active.forEach(g => {
       for (i in g.effects) {
         if (!counted.includes(g.type + i)) {
-          counted.push(g.type + i)
-          counter += 1
+          counted.push(g.type + i);
+          counter += 1;
         }
       }
-    })
-    return counter
+    });
+    return counter;
   },
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount));
     }
-    return 0
+    return 0;
   },
   get shardAmount() {
-    return player.celestials.effarig.relicShards
+    return player.celestials.effarig.relicShards;
   },
   nerfFactor(power) {
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
-        c = 1000
-        break
+        c = 1000;
+        break;
       case EFFARIG_STAGES.ETERNITY: 
-        c = 30
-        break
+        c = 30;
+        break;
       case EFFARIG_STAGES.REALITY:
-        c = 25
-        break
+        c = 25;
+        break;
     }
     return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
@@ -164,9 +164,9 @@ var Effarig = {
     return base + unlockQuotes;
   },
   get quote() {
-    return effarigQuotes[player.celestials.effarig.quoteIdx]
+    return effarigQuotes[player.celestials.effarig.quoteIdx];
   },
   nextQuote() {
-    if (player.celestials.effarig.quoteIdx < this.maxQuoteIdx) player.celestials.effarig.quoteIdx++
+    if (player.celestials.effarig.quoteIdx < this.maxQuoteIdx) player.celestials.effarig.quoteIdx++;
   }
 };

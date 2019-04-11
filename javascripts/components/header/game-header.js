@@ -1,5 +1,5 @@
 Vue.component("game-header", {
-  data: function() {
+  data() {
     return {
       isInAnyChallenge: false,
       isInMatterChallenge: false,
@@ -11,7 +11,7 @@ Vue.component("game-header", {
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "l-game-header--hidden": this.$viewModel.bigCrunch
       };
@@ -29,23 +29,23 @@ Vue.component("game-header", {
       this.updateCelestial();
       this.updateChallengeDisplay();
     },
-    updateCelestial: function() {
+    updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
       else if (Effarig.isRunning) this.currCelestial = "Effarig's";
       else if (Enslaved.isRunning) this.currCelestial = "The Enslaved Ones'";
       else if (V.isRunning) this.currCelestial = "V'";
       else if (Ra.isRunning) this.currCelestial = "Ra'";
-      else if (Laitela.isRunning) this.currCelestial = "Lai'tela"
+      else if (Laitela.isRunning) this.currCelestial = "Lai'tela";
       else this.currCelestial = "";
     },
-    updateChallengeDisplay: function() {
+    updateChallengeDisplay() {
       // Pls don't hate me Razen
       let displayValue = "";
 
-      let inCelestialReality = this.currCelestial.length !== 0;
+      const inCelestialReality = this.currCelestial.length !== 0;
       if (inCelestialReality) displayValue += " + " + this.currCelestial + " Reality";
 
-      let inDilation = player.dilation.active;
+      const inDilation = player.dilation.active;
       if (inDilation) displayValue += " + Time Dilation";
 
       const challenge = Challenge.current();
@@ -59,7 +59,7 @@ Vue.component("game-header", {
 
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
       else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      else  this.challengeDisplay = "";
+      else this.challengeDisplay = "";
     }
   },
   template:

@@ -1,5 +1,5 @@
 Vue.component("game-header-new-dim-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       requirement: new Decimal(0),

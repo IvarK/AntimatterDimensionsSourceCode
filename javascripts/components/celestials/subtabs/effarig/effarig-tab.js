@@ -4,7 +4,7 @@ Vue.component('effarig-tab', {
       props: {
         unlock: Object
       },
-      data: function() {
+      data() {
         return {
           isUnlocked: false
         };
@@ -20,7 +20,7 @@ Vue.component('effarig-tab', {
           this.isUnlocked = this.unlock.isUnlocked;
         }
       },
-      template: /*html*/`
+      template: /* Html*/`
         <div class="l-effarig-tab__reward">
           <div class="c-effarig-tab__reward-label">{{ unlock.config.label }}: </div>
           <div v-if="isUnlocked" class="l-effarig-tab__reward-descriptions">
@@ -33,7 +33,7 @@ Vue.component('effarig-tab', {
       `
     }
   },
-  data: function() {
+  data() {
     return {
       relicShards: 0,
       shardsGained: 0,
@@ -70,7 +70,7 @@ Vue.component('effarig-tab', {
         ? "You are in Effarig's Reality - give up?"
         : `Start a new reality, all production and gamespeed is severely lowered,
           infinity and time dimensions reduce the production penalty.
-          Glyph levels are temporarily capped.`
+          Glyph levels are temporarily capped.`;
     }
   },
   methods: {
@@ -90,10 +90,10 @@ Vue.component('effarig-tab', {
       else startRealityOver();
     },
     nextQuote() {
-      Effarig.nextQuote()
+      Effarig.nextQuote();
     },
     hasNextQuote() {
-      return this.quoteIdx < Effarig.maxQuoteIdx
+      return this.quoteIdx < Effarig.maxQuoteIdx;
     }
   },
   template:

@@ -4,7 +4,7 @@ function canBuyTickSpeed() {
 
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  if (Ra.isRunning) return new Decimal(0.89)
+  if (Ra.isRunning) return new Decimal(0.89);
   let replicantiGalaxies = player.replicanti.galaxies;
   replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),
@@ -14,18 +14,18 @@ function getTickSpeedMultiplier() {
     TimeStudy(225),
     TimeStudy(226)
   );
-  replicantiGalaxies += Effarig.bonusRG
-  let nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
+  replicantiGalaxies += Effarig.bonusRG;
+  const nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
-      if (player.galaxies == 0) baseMultiplier = 0.89
-      if (player.galaxies == 1) baseMultiplier = 0.895
+      if (player.galaxies == 0) baseMultiplier = 0.89;
+      if (player.galaxies == 1) baseMultiplier = 0.895;
       if (Challenge(5).isRunning) baseMultiplier = 0.93;
-      let perGalaxy = 0.02 * Effects.product(
+      const perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         InfinityUpgrade.galaxyBoost.chargedEffect,
         BreakInfinityUpgrade.galaxyBoost,
@@ -34,9 +34,9 @@ function getTickSpeedMultiplier() {
         InfinityChallenge(5).reward
       );
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
-  } else {
-      let baseMultiplier = 0.8
-      if (Challenge(5).isRunning) baseMultiplier = 0.83
+  } 
+      let baseMultiplier = 0.8;
+      if (Challenge(5).isRunning) baseMultiplier = 0.83;
       galaxies -= 2;
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
@@ -47,9 +47,9 @@ function getTickSpeedMultiplier() {
         Achievement(86),
         InfinityChallenge(5).reward
       );
-      let perGalaxy = new Decimal(0.965)
+      const perGalaxy = new Decimal(0.965);
       return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
-  }
+  
 }
 
 function buyTickSpeed() {
@@ -63,13 +63,13 @@ function buyTickSpeed() {
 
   player.money = player.money.minus(player.tickSpeedCost);
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
-  else multiplySameCosts(player.tickSpeedCost)
+  else multiplySameCosts(player.tickSpeedCost);
   if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
-  if (Challenge(2).isRunning) player.chall2Pow = 0
+  if (Challenge(2).isRunning) player.chall2Pow = 0;
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
-  if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
-  postc8Mult = new Decimal(1)
-  player.secretUnlocks.why++
+  if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05 + (player.galaxies * 0.005));
+  postc8Mult = new Decimal(1);
+  player.secretUnlocks.why++;
   GameUI.update();
   return true;
 }
@@ -80,7 +80,7 @@ function buyMaxTickSpeed() {
   if (money.eq(0)) return false;
   const mult = getTickSpeedMultiplier();
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
-  let tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
+  const tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let tickspeed = new Decimal(player.tickspeed);
   let postC3Reward = new Decimal(player.postC3Reward);
@@ -129,7 +129,7 @@ function buyMaxTickSpeed() {
     }
     tickspeed = tickspeed.times(Decimal.pow(mult, buying));
     if (underIC3Effect) {
-      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying))
+      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying));
     }
     increaseTickSpeedCost(buying - 1);
     money = money.minus(tickSpeedCost).max(0);
@@ -211,13 +211,13 @@ const FreeTickspeed = {
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
     const tmpC = logShards - priceToCap;
-    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapFactor
+    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapFactor;
     const scaling = new LinearMultiplierScaling(tickmult, kGrowth);
     const purchases = Math.floor(scaling.purchasesForLogTotalMultiplier(tmpC));
     const next = scaling.logTotalMultiplierAfterPurchases(purchases + 1);
     return {
       newAmount: purchases + FreeTickspeed.SOFTCAP,
       nextShards: Decimal.exp(priceToCap + next),
-    }
+    };
   }
-}
+};

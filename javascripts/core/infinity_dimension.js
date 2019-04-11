@@ -22,59 +22,57 @@ function infinityDimensionCommonMultiplier() {
 function resetInfDimensions() {
 
   if (player.infDimensionsUnlocked[0]) {
-      player.infinityPower = new Decimal(0)
+      player.infinityPower = new Decimal(0);
   }
-  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount.neq(0) && EternityChallenge(7).completions > 0){
-      player.infinityDimension8.amount = new Decimal(player.infinityDimension8.baseAmount)
-      player.infinityDimension7.amount = new Decimal(player.infinityDimension7.baseAmount)
-      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount)
-      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount)
-      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount)
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount.neq(0) && EternityChallenge(7).completions > 0) {
+      player.infinityDimension8.amount = new Decimal(player.infinityDimension8.baseAmount);
+      player.infinityDimension7.amount = new Decimal(player.infinityDimension7.baseAmount);
+      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount);
+      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount);
+      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount);
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
-  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount.neq(0)){
-      player.infinityDimension7.amount = new Decimal(player.infinityDimension7.baseAmount)
-      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount)
-      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount)
-      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount)
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[7] && player.infinityDimension6.amount.neq(0)) {
+      player.infinityDimension7.amount = new Decimal(player.infinityDimension7.baseAmount);
+      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount);
+      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount);
+      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount);
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
-  if (player.infDimensionsUnlocked[6] && player.infinityDimension6.amount.neq(0)){
-      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount)
-      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount)
-      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount)
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[6] && player.infinityDimension6.amount.neq(0)) {
+      player.infinityDimension6.amount = new Decimal(player.infinityDimension6.baseAmount);
+      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount);
+      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount);
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
-  if (player.infDimensionsUnlocked[5] && player.infinityDimension6.amount.neq(0)){
-      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount)
-      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount)
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[5] && player.infinityDimension6.amount.neq(0)) {
+      player.infinityDimension5.amount = new Decimal(player.infinityDimension5.baseAmount);
+      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount);
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
-  if (player.infDimensionsUnlocked[4] && player.infinityDimension5.amount.neq(0)){
-      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount)
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[4] && player.infinityDimension5.amount.neq(0)) {
+      player.infinityDimension4.amount = new Decimal(player.infinityDimension4.baseAmount);
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
-  if (player.infDimensionsUnlocked[3] && player.infinityDimension4.amount.neq(0)){
-      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount)
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
-  }
-  else if (player.infDimensionsUnlocked[2] && player.infinityDimension3.amount.neq(0)){
-      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount)
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
-  }
-  else if (player.infDimensionsUnlocked[1] && player.infinityDimension2.amount.neq(0)){
-      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount)
+  if (player.infDimensionsUnlocked[3] && player.infinityDimension4.amount.neq(0)) {
+      player.infinityDimension3.amount = new Decimal(player.infinityDimension3.baseAmount);
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
+  } else if (player.infDimensionsUnlocked[2] && player.infinityDimension3.amount.neq(0)) {
+      player.infinityDimension2.amount = new Decimal(player.infinityDimension2.baseAmount);
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
+  } else if (player.infDimensionsUnlocked[1] && player.infinityDimension2.amount.neq(0)) {
+      player.infinityDimension1.amount = new Decimal(player.infinityDimension1.baseAmount);
   }
 
 }
@@ -90,25 +88,25 @@ function IDAmountToIDPurchases(baseAmount) {
 }
 
 const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
-var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
-var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
+var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30];
+var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5];
 const HARDCAP_ID_PURCHASES = 2000000;
 const HARDCAP_ID_BASE_AMOUNT = IDPurchasesToIDAmount(HARDCAP_ID_PURCHASES);
 
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;
   const dim = InfinityDimension(tier);
-  player.infinityPoints = player.infinityPoints.minus(dim.cost)
+  player.infinityPoints = player.infinityPoints.minus(dim.cost);
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.times(infPowerMults[tier]);
   dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
-  dim.baseAmount += IDPurchasesToIDAmount(1)
+  dim.baseAmount += IDPurchasesToIDAmount(1);
 
   if (EternityChallenge(8).isRunning) {
     player.eterc8ids -= 1;
   }
-  return true
+  return true;
 }
 
 function buyMaxInfDims(tier) {
@@ -116,21 +114,21 @@ function buyMaxInfDims(tier) {
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
 
-  var toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult))
+  let toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult));
   if (tier !== 8) {
     const purchasesUntilHardcap = IDAmountToIDPurchases(HARDCAP_ID_BASE_AMOUNT - dim.baseAmount);
     toBuy = Math.min(toBuy, purchasesUntilHardcap);
   }
-  dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
-  player.infinityPoints = player.infinityPoints.minus(dim.cost)
-  dim.cost = dim.cost.times(costMult)
-  dim.amount = dim.amount.plus(10*toBuy);
+  dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
+  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  dim.cost = dim.cost.times(costMult);
+  dim.amount = dim.amount.plus(10 * toBuy);
   if (toBuy > 0) {
     const base = infPowerMults[tier] * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
     dim.power = dim.power.times(Decimal.pow(base, toBuy));
   }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
-  buyManyInfinityDimension(tier)
+  buyManyInfinityDimension(tier);
 }
 
 function canBuyInfinityDimension(tier) {
@@ -141,8 +139,8 @@ function canBuyInfinityDimension(tier) {
 
 function buyMaxInfinityDimensions() {
   if (EternityChallenge(8).isRunning) return false;
-  for (let tier of Array.dimensionTiers) {
-    buyMaxInfDims(tier)
+  for (const tier of Array.dimensionTiers) {
+    buyMaxInfDims(tier);
   }
 }
 
@@ -228,8 +226,7 @@ class InfinityDimensionState {
     let toGain = new Decimal(0);
     if (tier === 8) {
       EternityChallenge(7).reward.applyEffect(v => toGain = v);
-    }
-    else {
+    } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
     const current = Decimal.max(this.amount, 1);
@@ -256,7 +253,7 @@ class InfinityDimensionState {
     const tier = this._tier;
 
     if (Laitela.isRunning && tier > 1) {
-      return new Decimal(0)
+      return new Decimal(0);
     }
 
     if (EternityChallenge(2).isRunning) {
@@ -286,9 +283,9 @@ class InfinityDimensionState {
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
-      mult = mult.pow(0.5)
+      mult = mult.pow(0.5);
     } else if (Laitela.isRunning) {
-      mult = mult.pow(0.01)
+      mult = mult.pow(0.01);
     }
     
     return mult;

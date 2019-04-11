@@ -11,8 +11,7 @@ function eternity(force, auto, switchingDilation) {
     }
     if (force) {
       player.currentEternityChall = "";
-    }
-    else {
+    } else {
       if (!canEternity()) return false;
       if (!auto && !askEternityConfirmation()) return false;
       if (player.thisEternity < player.bestEternity) {
@@ -55,7 +54,7 @@ function eternity(force, auto, switchingDilation) {
     if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
     if (player.dilation.active && !force) {
         player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
+        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain());
     }
     RealityUpgrades.tryUnlock([6, 10]);
     if (!force) {
@@ -64,12 +63,12 @@ function eternity(force, auto, switchingDilation) {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
+      for (const challenge of Challenge.all) {
         challenge.complete();
       }
     }
     if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
+      for (const challenge of InfinityChallenge.all) {
         challenge.complete();
       }
     }
@@ -78,15 +77,15 @@ function eternity(force, auto, switchingDilation) {
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
-    player.resets = (player.eternities >= 4) ? 4  : 0;
-    player.galaxies = (player.eternities >= 4) ? 1  : 0;
+    player.resets = (player.eternities >= 4) ? 4 : 0;
+    player.galaxies = (player.eternities >= 4) ? 1 : 0;
     player.tickDecrease = 0.9;
     if (player.eternities < 2) {
       Autobuyer.resetUnlockables();
     }
     player.partInfinityPoint = 0;
     player.partInfinitied = 0;
-    player.break= player.eternities >= 2 ? player.break : false;
+    player.break = player.eternities >= 2 ? player.break : false;
     player.infMult = new Decimal(1);
     player.infMultCost = new Decimal(10);
     if (player.eternities < 20) {
@@ -149,7 +148,7 @@ function eternity(force, auto, switchingDilation) {
     try {
         kong.submitStats('Eternities', player.eternities);
     } catch (err) {
-        console.log("Couldn't load Kongregate API")
+        console.log("Couldn't load Kongregate API");
     }
     if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
     resetTickspeed();
@@ -179,11 +178,11 @@ function eternity(force, auto, switchingDilation) {
     }
 
     if (!Achievement(143).isUnlocked && player.lastTenEternities[9][1] !== 1) {
-        var n = 0;
+        let n = 0;
         for (i = 0; i < 9; i++) {
             if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
         }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
+        if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...");
     }
 
     resetMoney();
@@ -207,7 +206,7 @@ function eternityResetReplicanti() {
 function fullResetInfDimensions() {
     const cost = [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
     for (let i = 0; i < 8; i++) {
-        let dimension = player["infinityDimension" + (i + 1)];
+        const dimension = player["infinityDimension" + (i + 1)];
         dimension.cost = new Decimal(cost[i]);
         dimension.amount = new Decimal(0);
         dimension.bought = 0;
@@ -220,7 +219,7 @@ function askEternityConfirmation() {
     if (!player.options.confirmations.eternity) {
         return true;
     }
-    let message = "Eternity will reset everything except achievements and challenge records. " +
+    const message = "Eternity will reset everything except achievements and challenge records. " +
         "You will also gain an Eternity point and unlock various upgrades.";
     return confirm(message);
 }
@@ -248,7 +247,7 @@ class EternityMilestoneState {
   }
 }
 
-const EternityMilestone = function() {
+const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
     .map(tier => new EternityMilestoneState(db["autobuyerID" + tier]));
@@ -271,7 +270,7 @@ const EternityMilestone = function() {
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
   };
-}();
+}());
 
 class EternityUpgradeState extends PurchasableMechanicState {
   constructor(config) {

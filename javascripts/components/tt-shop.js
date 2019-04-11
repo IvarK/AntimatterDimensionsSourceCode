@@ -5,6 +5,7 @@ Vue.component("tt-shop", {
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
+      ttAutobuyerOn: false,
       budget: {
         am: new Decimal(0),
         ip: new Decimal(0),
@@ -41,6 +42,9 @@ Vue.component("tt-shop", {
         // Transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
       };
+    },
+    autobuyerText() {
+      return this.ttAutobuyerOn ? "Auto: ON" : "Auto: OFF";
     }
   },
   methods: {
@@ -48,7 +52,7 @@ Vue.component("tt-shop", {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
     formatAM(am) {
-      return this.shortenCosts(am);
+      return this.shortenCosts(am) + " AM";
     },
     buyWithAM() {
       buyWithAntimatter();
@@ -70,6 +74,7 @@ Vue.component("tt-shop", {
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
+      this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
       budget.am.copyFrom(player.money);
       budget.ip.copyFrom(player.infinityPoints);
@@ -78,6 +83,9 @@ Vue.component("tt-shop", {
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
+    },
+    toggleTTAutobuyer() {
+      player.ttbuyer = !player.ttbuyer;
     }
   },
   template:
@@ -85,24 +93,23 @@ Vue.component("tt-shop", {
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
           <button
-            class="timetheorembtn"
+            class="o-tt-buy-max-button c-tt-buy-button c-tt-buy-button--unlocked"
             style="width:130px; white-space:nowrap;"
             v-if="!minimized"
             onclick="maxTheorems()"
           >
-            Buy max Theorems
+            Buy max
           </button>
           <button
             v-if="hasTTAutobuyer"
-            onclick="toggleTTAutomation()"
-            class="timetheorembtn"
+            @click="toggleTTAutobuyer"
+            class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
             id="ttautobuyer"
-            style="width: 130px; font-size: 0.5em"
           >
-            Autobuyer: on
+            {{autobuyerText}}
           </button>
           <p id="timetheorems">
-            You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.
+            <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.
           </p>
           <div style="display: flex; flex-direction: row; align-items: center">
             <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
@@ -175,14 +182,17 @@ Vue.component("tt-save-load-button", {
 
 Vue.component("tt-buy-button", {
   props: ["budget", "cost", "format", "action"],
-  template:
-    `<button :class="cssClass" @click="action">Buy Time Theorems Cost: {{ format(cost) }}</button>`,
+  template: `
+    <button :class="['l-tt-buy-button', 'c-tt-buy-button', enabledClass]"
+            @click="action">
+      {{ format(cost) }}
+    </button>`,
   computed: {
     isEnabled() {
       return this.budget.gte(this.cost);
     },
-    cssClass() {
-      return this.isEnabled ? "timetheorembtn" : "timetheorembtnlocked";
+    enabledClass() {
+      return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
     }
   }
 });

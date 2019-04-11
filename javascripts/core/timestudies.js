@@ -20,38 +20,53 @@ function buyWithIP() {
 
 function buyWithEP() {
   if (player.timeDimension1.bought < 1 && player.realities === 0) {
-      alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.")
-      return false;
+    alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.");
+    return false;
   }
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
-      player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost)
-      player.timestudy.epcost = player.timestudy.epcost.times(2)
-      player.timestudy.theorem = player.timestudy.theorem.plus(1)
-      return true
-  } else return false
+    player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
+    player.timestudy.epcost = player.timestudy.epcost.times(2);
+    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    return true;
+  }
+  return false;
+}
+
+function autoBuyMaxTheorems() {
+  if (!player.ttbuyer) return false;
+  if (Perk.autobuyerTT4.isBought ||
+    (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) ||
+    (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) ||
+    (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10)) {
+    maxTheorems();
+    return true;
+  }
+  return false;
 }
 
 function maxTheorems() {
-  var AMowned = player.timestudy.amcost.e / 20000 - 1
+  const AMowned = player.timestudy.amcost.e / 20000 - 1;
   if (player.money.gte(player.timestudy.amcost)) {
-    player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned)
-    player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000))
+    player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000;
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned);
+    player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000));
   }
-  var IPowned = player.timestudy.ipcost.e / 100
+  const IPowned = player.timestudy.ipcost.e / 100;
   if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-    player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned)
-    player.infinityPoints = player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100))
+    player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100;
+    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
+    player.infinityPoints =
+      player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
   }
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
-    let EPowned = Math.round(player.timestudy.epcost.log2());
-    let finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
-    let totalEPCost = finalEPCost.minus(player.timestudy.epcost);
+    const EPowned = Math.round(player.timestudy.epcost.log2());
+    const finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
+    const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
     player.timestudy.epcost = finalEPCost;
     player.eternityPoints = player.eternityPoints.minus(totalEPCost);
     player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
-    buyWithEP();  // The above code block will sometimes buy one too few TT, but it never over-buys
+    // The above code block will sometimes buy one too few TT, but it never over-buys
+    buyWithEP();
   }
 }
 
@@ -447,11 +462,6 @@ function studyTreeSaveButton(num, forceSave) {
         importStudyTree(localStorage.getItem("studyTree"+num));
         GameUI.notify.info("Study tree "+num+" loaded")
     }
-}
-
-function toggleTTAutomation() {
-  player.ttbuyer = !player.ttbuyer
-  $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
 }
 
 const TimeStudyType = {

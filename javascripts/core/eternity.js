@@ -157,7 +157,7 @@ function eternity(force, auto, switchingDilation) {
     if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
         Tab.dimensions.time.show();
     }
-    Marathon2 = 0;
+    AchievementTimers.marathon2.reset();
 
     RealityUpgrades.tryUnlock([11, 12, 13, 14, 15, 25]);
 

@@ -14,7 +14,6 @@ function showTab(tabName) {
     hideLegacyTabs(tabName);
     resizeCanvas();
     Modal.hide();
-    if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
@@ -669,7 +668,7 @@ function gameLoop(diff, options = {}) {
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
     const thisUpdate = Date.now();
-    if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
+    if (thisUpdate - player.lastUpdate >= 21600000) Achievement(35).unlock();
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
 
@@ -927,28 +926,6 @@ function gameLoop(diff, options = {}) {
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
-
-    if (!Achievement(44).isUnlocked && getDimensionProductionPerSecond(1).gt(player.money)) {
-        Marathon+=player.options.updateRate/1000;
-        if (Marathon >= 30) giveAchievement("Over in 30 seconds");
-    } else {
-        Marathon = 0;
-    }
-    if (!Achievement(113).isUnlocked && !EternityChallenge(7).isRunning && InfinityDimension(1).productionPerSecond.gt(player.infinityPower)) {
-        Marathon2+=player.options.updateRate/1000;
-        if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
-    } else {
-        Marathon2 = 0;
-    }
-    if (player.eternities >= 1 && Notation.current.isPainful) {
-        player.secretUnlocks.painTimer += player.options.updateRate/1000;
-        if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
-    }
-
-    if (Tab.statistics.isOpen) {
-        statsTimer += player.options.updateRate/1000;
-        if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
-    }
 
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 

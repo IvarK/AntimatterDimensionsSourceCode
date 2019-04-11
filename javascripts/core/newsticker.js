@@ -232,7 +232,7 @@ const newsArray = [
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)],
   ["The achievement is for two million, not two billion...", "c8", () => player.infinitied.gt(2e9)],
-  ["Keep up the quick pace!", "c9", () => Marathon > 1200],
+  ["Keep up the quick pace!", "c9", () => AchievementTimers.marathon1.time > 1200],
   ["One day you will stop your incessant grind.", "c10", () => player.eternities > 50000],
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
   ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],

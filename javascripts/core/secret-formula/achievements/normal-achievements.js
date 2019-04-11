@@ -159,7 +159,10 @@ GameDatabase.achievements.normal = [
   {
     id: 44,
     name: "Over in 30 seconds",
-    tooltip: "Have antimatter/sec exceed your current antimatter for 30 consecutive seconds."
+    tooltip: "Have antimatter/sec exceed your current antimatter for 30 consecutive seconds.",
+    checkRequirement: () => AchievementTimers.marathon1
+      .check(getDimensionProductionPerSecond(1).gt(player.money), 30),
+    checkEvent: GameEvent.GAME_TICK,
   },
   {
     id: 45,
@@ -554,6 +557,13 @@ GameDatabase.achievements.normal = [
     name: "Long lasting relationship",
     tooltip: "Have your Infinity power per second exceed your Infinity power " +
       "for 60 consecutive seconds during a single Infinity.",
+    checkRequirement: () => AchievementTimers.marathon2
+      .check(
+        !EternityChallenge(7).isRunning &&
+        InfinityDimension(1).productionPerSecond.gt(player.infinityPower),
+        60
+      ),
+    checkEvent: GameEvent.GAME_TICK
   },
   {
     id: 114,

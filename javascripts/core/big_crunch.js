@@ -102,7 +102,7 @@ function secondSoftReset() {
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
-    Marathon2 = 0;
+    AchievementTimers.marathon2.reset();
 }
 
 function checkBigCrunchAchievements() {

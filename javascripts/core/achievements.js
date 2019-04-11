@@ -82,22 +82,13 @@ const Achievements = {
   }
 };
 
-(function() {
-  const events = new Set();
-  for (const achievement of Achievements.list) {
-    const event = achievement.config.checkEvent;
-    if (event === undefined) continue;
-    events.add(event);
-  }
-  for (const event of events) {
-    const achievements = Achievements.list.filter(a => a.config.checkEvent === event);
-    EventHub.global.on(event, () => {
-      for (const achievement of achievements) achievement.tryUnlock();
-    }, Achievements);
-  }
-}());
-
 class SecretAchievementState extends GameMechanicState {
+  tryUnlock() {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement()) return;
+    this.unlock();
+  }
+
   get name() {
     return this.config.name;
   }
@@ -135,6 +126,52 @@ const SecretAchievements = {
    */
   list: SecretAchievementState.list.compact(),
   byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
+};
+
+(function() {
+  const events = new Set();
+  const allAchievements = Achievements.list.concat(SecretAchievements.list);
+  for (const achievement of allAchievements) {
+    const event = achievement.config.checkEvent;
+    if (event === undefined) continue;
+    events.add(event);
+  }
+  for (const event of events) {
+    const achievements = allAchievements.filter(a => a.config.checkEvent === event);
+    EventHub.global.on(event, () => {
+      for (const achievement of achievements) achievement.tryUnlock();
+    }, Achievements);
+  }
+}());
+
+class AchievementTimer {
+  constructor() {
+    this.time = 0;
+  }
+  
+  reset() {
+    this.time = 0;
+  }
+  
+  advance() {
+    this.time += player.options.updateRate / 1000;
+  }
+  
+  check(condition, duration) {
+    if (!condition) {
+      this.reset();
+      return false;
+    }
+    this.advance();
+    return this.time >= duration;    
+  }
+}
+
+const AchievementTimers = {
+  marathon1: new AchievementTimer(),
+  marathon2: new AchievementTimer(),
+  pain: new AchievementTimer(),
+  stats: new AchievementTimer()
 };
 
 function clearOldAchieves() {

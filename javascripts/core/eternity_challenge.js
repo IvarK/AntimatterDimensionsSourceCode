@@ -69,7 +69,7 @@ function startEternityChallenge() {
     resetTickspeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    Marathon2 = 0;
+    AchievementTimers.marathon2.reset();
     return true;
 }
 

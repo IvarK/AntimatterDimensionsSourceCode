@@ -1,5 +1,3 @@
-var Marathon = 0;
-var Marathon2 = 0;
 var auto = false;
 var autoS = true;
 var shiftDown = false;
@@ -9,7 +7,6 @@ var justImported = false;
 var saved = 0;
 var failureCount = 0;
 var implosionCheck = 0;
-var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 var player = {
@@ -83,7 +80,6 @@ var player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
-    painTimer: 0,
     why: 0,
     fixed: "notyetfixed",
     dragging: 0,

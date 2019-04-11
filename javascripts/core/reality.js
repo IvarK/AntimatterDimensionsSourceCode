@@ -371,7 +371,7 @@ function completeReality(force, reset, auto = false) {
   if (player.eternities <= 1) {
     Tab.dimensions.normal.show();
   }
-  Marathon2 = 0;
+  AchievementTimers.marathon2.reset();
   updateAutomatorRows();
   drawPerkNetwork();
 

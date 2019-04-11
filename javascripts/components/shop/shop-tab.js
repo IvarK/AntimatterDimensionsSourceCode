@@ -38,6 +38,10 @@ Vue.component('shop-tab', {
     getNextAllDimMult() {
       if (this.allDimMult < 32) return this.allDimMult * 2
       else return this.allDimMult + 16
+    },
+    showStore() {
+      Modal.shop.show()
+      this.$viewModel.modal.closeButton = true;
     }
   },
   template: 
@@ -45,19 +49,19 @@ Vue.component('shop-tab', {
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img src="images/std_coin.png" height="40">
-      <button class="o-shop-buy-more">Buy More</button>
+      <button class="o-shop-buy-more" @click="showStore()">Buy More</button>
     </div>
     <div class="l-shop-buttons-container">
       <shop-button :cost="40" :buyFn="buyIP">
-        Double your IP gain from all sources. Forever. <br>Currently {{ IPMult }}x, next: {{ getAdditiveNext(IPMult, 2) }}x
+        Double your IP gain from all sources. (additive) <br>Currently {{ IPMult }}x, next: {{ getAdditiveNext(IPMult, 2) }}x
       </shop-button>
       <shop-button :cost="50" :buyFn="buyEP">
-        Triple your EP gain from all sources. Forever. <br>Currently {{ EPMult }}x, next: {{ getAdditiveNext(EPMult, 3) }}x
+        Triple your EP gain from all sources. (additive) <br>Currently {{ EPMult }}x, next: {{ getAdditiveNext(EPMult, 3) }}x
       </shop-button>
       <shop-button :cost="30" :buyFn="buyDimMult">
         Double all your dimension multipliers (dimensions 1-8). Forever. <br>Currently {{ shorten(dimMult) }}x, next: {{ shorten(dimMult*2, 2, 0) }}x
       </shop-button>
-      <shop-button :cost="60" :buyFn="buyDimMult">
+      <shop-button :cost="60" :buyFn="buyAllDimMult">
         Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. <br>Currently {{ allDimMult }}x, next: {{ getNextAllDimMult() }}x
       </shop-button>
       <shop-button :cost="10" :buyFn="buyTimeSkip">

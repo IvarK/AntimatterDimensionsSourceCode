@@ -33,16 +33,15 @@ kong.purchaseIP = function(cost) {
 kong.purchaseDimMult = function(cost) {
   if (player.IAP.STD < cost) return
   player.IAP.STD -= cost
-  if (player.IAP.dimMult == 1) player.IAP.dimMult = 2;
-  else player.IAP.dimMult += 2;
+  player.IAP.dimMult *= 2;
   //kongregate.mtx.purchaseItems(['doublemult'], kong.onPurchaseResult);
 };
 
 kong.purchaseAllDimMult = function(cost) {
   if (player.IAP.STD < cost) return
   player.IAP.STD -= cost
-  if (player.IAP.allDimMult == 1) player.IAP.allDimMult = 2;
-  else player.IAP.allDimMult += 2;
+  if (player.IAP.allDimMult < 32) player.IAP.allDimMult *= 2;
+  else player.IAP.allDimMult += 16;
   //kongregate.mtx.purchaseItems(['alldimboost'], kong.onPurchaseResult);
 };
 
@@ -56,10 +55,18 @@ kong.purchaseTimeSkip = function(cost) {
 kong.purchaseEP = function(cost) {
   if (player.IAP.STD < cost) return
   player.IAP.STD -= cost
-  if (player.IAP.EPMult == 1) player.IAP.EPMult = 2;
-  else player.IAP.EPMult += 2;
+  if (player.IAP.EPMult == 1) player.IAP.EPMult = 3;
+  else player.IAP.EPMult += 3;
   //kongregate.mtx.purchaseItems(['tripleep'], kong.onPurchaseResult);
 };
+
+kong.buyMoreSTD = function(STD, kreds) {
+  kongregate.mtx.purchaseItems([`${kreds}worthofstd`], function(result) {
+    if (result.success) {
+      player.IAP.STD += STD
+    }
+  });
+}
 
 kong.onPurchaseResult = function(result) {
     console.log("purchasing...");
@@ -106,8 +113,4 @@ kong.updatePurchases = function() {
       else kongEPMult = 1
   }
 
-  document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
-  document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
-  document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
-  document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
 };

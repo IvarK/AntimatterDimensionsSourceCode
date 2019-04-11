@@ -90,7 +90,9 @@ GameDatabase.achievements.secret = [
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds."
+    tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.",
+    checkRequirement: () => Time.bestInfinity.totalMilliseconds <= 1,
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 33,

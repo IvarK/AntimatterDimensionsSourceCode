@@ -43,6 +43,8 @@ GameDatabase.achievements.normal = [
     id: 21,
     name: "To infinity!",
     tooltip: "Reach Infinite antimatter.",
+    checkRequirement: () => true,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Start with 100 antimatter.",
     effect: 100
   },
@@ -106,12 +108,16 @@ GameDatabase.achievements.normal = [
   {
     id: 33,
     name: "That's a lot of infinites",
-    tooltip: "Reach Infinity 10 times."
+    tooltip: "Reach Infinity 10 times.",
+    checkRequirement: () => player.infinitied.gte(10),
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 34,
     name: "You didn't need it anyway",
     tooltip: "Reach Infinite antimatter without having any 8th Dimensions.",
+    checkRequirement: () => NormalDimension(8).amount.eq(0),
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Dimensions 1-7 are 2% stronger.",
     effect: 1.02
   },
@@ -124,6 +130,8 @@ GameDatabase.achievements.normal = [
     id: 36,
     name: "Claustrophobic",
     tooltip: "Go Infinite with just 1 Antimatter Galaxy.",
+    checkRequirement: () => player.galaxies === 1,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
   },
@@ -131,6 +139,8 @@ GameDatabase.achievements.normal = [
     id: 37,
     name: "That's fast!",
     tooltip: "Go infinite in under 2 hours.",
+    checkRequirement: () => Time.thisInfinity.totalHours <= 2,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Start with 1000 antimatter.",
     effect: 1000
   },
@@ -153,6 +163,8 @@ GameDatabase.achievements.normal = [
     id: 43,
     name: "Zero Deaths",
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
+    checkRequirement: () => player.galaxies === 0 && player.resets === 0,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Dimensions 1-4 are 25% stronger.",
     effect: 1.25
   },
@@ -183,12 +195,16 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: "Complete 2 challenges."
+    tooltip: "Complete 2 challenges.",
+    checkRequirement: () => player.challenges.length === 2,
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
+    checkRequirement: () => player.challenges.length === 12,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
   },
@@ -211,6 +227,8 @@ GameDatabase.achievements.normal = [
     id: 54,
     name: "That's faster!",
     tooltip: "Infinity in 10 minutes or less.",
+    checkRequirement: () => Time.thisInfinity.totalMinutes <= 10,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Start with 200000 antimatter.",
     effect: 2e5
   },
@@ -218,6 +236,8 @@ GameDatabase.achievements.normal = [
     id: 55,
     name: "Forever isn't that long",
     tooltip: "Infinity in 1 minute or less.",
+    checkRequirement: () => Time.thisInfinity.totalMinutes <= 1,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Start with 1e10 antimatter.",
     effect: 1e10
   },
@@ -225,6 +245,8 @@ GameDatabase.achievements.normal = [
     id: 56,
     name: "Many Deaths",
     tooltip: "Complete the Second Dimension Autobuyer challenge in 3 minutes or less.",
+    checkRequirement: () => Challenge(2).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "All Dimensions are stronger in the first 3 minutes of Infinities.",
     effect: () => 6 / (Time.thisInfinity.totalMinutes + 3),
     effectCondition: () => Time.thisInfinity.totalMinutes < 3
@@ -233,6 +255,8 @@ GameDatabase.achievements.normal = [
     id: 57,
     name: "Gift from the Gods",
     tooltip: "Complete the Eighth Dimension Autobuyer challenge in 3 minutes or less.",
+    checkRequirement: () => Challenge(8).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Dimensional sacrifices are a lot stronger.",
     effect: 0.2
   },
@@ -240,6 +264,8 @@ GameDatabase.achievements.normal = [
     id: 58,
     name: "Is this hell?",
     tooltip: "Complete the Tickspeed Autobuyer challenge in 3 minutes or less.",
+    checkRequirement: () => Challenge(9).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Boost per 10 Dimensions +1%.",
     effect: 1.01
   },
@@ -288,12 +314,16 @@ GameDatabase.achievements.normal = [
   {
     id: 67,
     name: "Infinitely Challenging",
-    tooltip: "Complete an Infinity Challenge."
+    tooltip: "Complete an Infinity Challenge.",
+    checkRequirement: () => player.challenges.length > 12,
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 68,
     name: "You did this again just for the achievement right?",
     tooltip: "Complete the Third Dimension Autobuyer challenge in 10 seconds or less.",
+    checkRequirement: () => Challenge(3).isRunning && Time.thisInfinity.totalSeconds <= 10,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "1st Dimensions are 50% stronger.",
     effect: 1.5
   },
@@ -302,6 +332,12 @@ GameDatabase.achievements.normal = [
     name: "ERROR 909: Dimension not found",
     tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts " +
       "or Antimatter Galaxies, while in the Automatic Antimatter Galaxies Challenge.",
+    checkRequirement: () =>
+      Challenge(11).isRunning &&
+      NormalDimension(1).amount.eq(1) &&
+      player.resets === 0 &&
+      player.galaxies === 0,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "1st Dimensions are 3 times stronger.",
     effect: 3
   },
@@ -367,6 +403,8 @@ GameDatabase.achievements.normal = [
     id: 78,
     name: "Blink of an eye",
     tooltip: "Get to Infinity in under 200 milliseconds.",
+    checkRequirement: () => Time.thisInfinity.totalMilliseconds <= 200,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: () => `Start with ${shorten(1e25, 0, 0)} antimatter ` +
       "and all Dimensions are stronger in the first 300ms of Infinities.",
     effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
@@ -376,12 +414,16 @@ GameDatabase.achievements.normal = [
   {
     id: 81,
     name: "Hevipelle did nothing wrong",
-    tooltip: "Beat Infinity Challenge 5 in 10 seconds or less."
+    tooltip: "Beat Infinity Challenge 5 in 10 seconds or less.",
+    checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinity.totalSeconds <= 10,
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 82,
     name: "Anti-antichallenged",
-    tooltip: "Complete 8 Infinity Challenges."
+    tooltip: "Complete 8 Infinity Challenges.",
+    checkRequirement: () => player.challenges.length === 20,
+    checkEvent: GameEvent.BIG_CRUNCH
   },
   {
     id: 83,
@@ -403,6 +445,8 @@ GameDatabase.achievements.normal = [
     id: 85,
     name: "All your IP are belong to us",
     tooltip: () => `Big Crunch for ${shorten(1e150, 0, 0)} IP.`,
+    checkRequirement: () => gainedInfinityPoints().exponent >= 150,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Additional 4x multiplier to IP.",
     effect: 4
   },
@@ -436,6 +480,8 @@ GameDatabase.achievements.normal = [
     id: 91,
     name: "Ludicrous Speed",
     tooltip: () => `Big Crunch for ${shorten(1e200, 0, 0)} IP in 2 seconds or less.`,
+    checkRequirement: () => gainedInfinityPoints().exponent >= 200 && Time.thisInfinity.totalSeconds <= 2,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "All Dimensions are significantly stronger in the first 5 seconds of Infinities.",
     effect: () => Math.max((5 - Time.thisInfinity.totalSeconds) * 60, 1),
     effectCondition: () => Time.thisInfinity.totalSeconds < 5
@@ -444,6 +490,8 @@ GameDatabase.achievements.normal = [
     id: 92,
     name: "I brake for nobody",
     tooltip: () => `Big Crunch for ${shorten(1e250, 0, 0)} IP in 20 seconds or less.`,
+    checkRequirement: () => gainedInfinityPoints().exponent >= 250 && Time.thisInfinity.totalSeconds <= 20,
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "All Dimensions are significantly stronger in the first 60 seconds of Infinities.",
     effect: () => Math.max((1 - Time.thisInfinity.totalMinutes) * 100, 1),
     effectCondition: () => Time.thisInfinity.totalMinutes < 1
@@ -542,6 +590,14 @@ GameDatabase.achievements.normal = [
     name: "Yo dawg, I heard you liked infinities...",
     tooltip: () => "Have all your Infinities in your past 10 Infinities be at least " +
       `${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one.`,
+    checkRequirement: () => {
+      const infinities = player.lastTenRuns.map(run => run[1]);
+      for (let i = 0; i < infinities.length - 1; i++) {
+        if (infinities[i].lt(infinities[i + 1])) return false;
+      }
+      return true;
+    },
+    checkEvent: GameEvent.BIG_CRUNCH,
     reward: "Your antimatter doesn't reset on Dimension Boost/Shift/Galaxy."
   },
   {

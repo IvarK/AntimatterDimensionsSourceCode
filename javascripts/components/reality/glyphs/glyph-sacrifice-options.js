@@ -60,7 +60,7 @@ const AutoSacTypeTab = {
         <div>
           <div class="c-auto-sac-type-tab__header">
             Minimum score
-            <div class="o-questionmark" ach-tooltip="questionmarkTooltip">?</div>
+            <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
           </div>
           <div class="l-auto-sac-type-tab__help-text">
             rarity % + Σ effects
@@ -172,7 +172,7 @@ Vue.component("glyph-sacrifice-options", {
   template: `
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
     <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-      <div class="o-questionmark" ach-tooltip="questionmarkTooltip">?</div>
+      <div class="o-questionmark" :ach-tooltip="questionmarkTooltip">?</div>
     </div>
     <div :class="optionClass(modes.NONE)" @click="setMode(modes.NONE)">
       Auto sacrifice disabled

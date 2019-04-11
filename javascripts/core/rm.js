@@ -86,83 +86,31 @@ const AutoGlyphPicker = {
 
 const GlyphGenerator = {
   lastFake: "power",
-  glyphChoices: [],
 
   startingGlyph(level) {
-    let strength = this.randomStrength(false);
     player.reality.glyphs.last = "power";
     return {
       id: Date.now(),
       idx: null,
       type: "power",
-      strength: strength,
+      // The initial strength is very slightly above average.
+      strength: 1.5,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: {
         pow: getGlyphEffectStrength("powerpow", level.actualLevel, strength),
       },
-    }
-  },
-
-  clearGlyphChoices() {
-    this.glyphChoices = []
-  },
-
-  /**
-   * Tries to add a glyph type+effect combination to an ongoing list of combinations,
-   * returning true and adding it if sufficiently unique and returning false without
-   * adding it if it's too similar to something that's already in the list.
-   * 
-   * If the list doesn't already contain a glyph of the specified type, it is automatically
-   * considered unique.  If not, it then checks the effects of glyphs that have the same type.
-   * It calculates a pairwise uniqueness score to each glyph it checks and only adds the new
-   * glyph if the score exceeds the specified threshold for every glyph already in the list.
-   * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
-   */
-  checkUniqueGlyph(type, effects) {
-    let sameTypeGlyphs = this.glyphChoices.filter(glyph => glyph.type === type);
-    if (sameTypeGlyphs.length == 0) {
-      this.addUniqueGlyph(type, effects)
-      return true
-    }
-    let uniquenessThreshold = 3
-    for (let i = 0; i < sameTypeGlyphs.length; i++) {
-      let currGlyph = sameTypeGlyphs[i];
-      union = new Set([...effects, ...currGlyph.effects])
-      intersection = new Set(effects.filter(x => new Set(currGlyph.effects).has(x)))
-      uniqueEffects = [...union].filter(x => !intersection.has(x))
-      if (uniqueEffects.length < uniquenessThreshold) return false;
-    }
-    this.addUniqueGlyph(type, effects)
-    return true
-  },
-
-  // Add a new type+effect combination; clear the list if it's the last one
-  addUniqueGlyph(type, effects) {
-    this.glyphChoices.push({
-      type: type,
-      effects: effects
-    })
-    if (this.glyphChoices.length == GlyphSelection.choiceCount) {
-      GlyphGenerator.clearGlyphChoices()
-    }
+    };
   },
 
   randomGlyph(level, fake) {
-    // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
-    // get stuck in an infinite loop if we decide to increase the number of glyph choices
-    // for some reason and forget about the uniqueness check
-    let strength, type, numEffects, effects
-    for (let regenAttempts = 0; regenAttempts < 100; regenAttempts++) {
-      strength = this.randomStrength(fake);
-      type = this.randomType(fake);
-      numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
-      effects = this.generateEffects(type, numEffects, fake);
-      if (this.checkUniqueGlyph(type, effects))  break;
-    }
+    const strength = this.randomStrength(fake);
+    const type = this.randomType(fake);
+    const numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+    const effects = this.generateEffects(type, numEffects, fake);
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
-    let abbreviateEffect = e => e.startsWith(type) ? e.substr(type.length) : e;
+    const abbreviateEffect = e => (e.startsWith(type) ? e.substr(type.length) : e);
     return {
       id: this.makeId(fake),
       idx: null,
@@ -172,12 +120,12 @@ const GlyphGenerator = {
       rawLevel: level.rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
         e => getGlyphEffectStrength(e, level.actualLevel, strength)),
-    }
+    };
   },
 
   makeId(fake) {
-    let rng = this.getRNG(fake);
-    return parseInt(Date.now().toString().slice(-11) + rng().toFixed(2).slice(2));
+    const rng = this.getRNG(fake);
+    return parseInt(Date.now().toString(10).slice(-11) + rng().toFixed(2).slice(2), 10);
   },
 
   get strengthMultiplier() {
@@ -188,37 +136,37 @@ const GlyphGenerator = {
     let result;
     // Divide the extra minimum rarity by the strength multiplier
     // since we'll multiply by the strength multiplier later.
-    let minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
+    const minimumValue = 1 + (Perk.glyphRarityIncrease.isBought ? 0.125 / GlyphGenerator.strengthMultiplier : 0);
     do {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
     // Each rarity% is 0.025 strength.
     result += Effects.sum(GlyphSacrifice.effarig) / 40;
-    return result;
+    return Math.min(result, rarityToStrength(100));
   },
 
   randomNumberOfEffects(strength, level, fake) {
-    let rng = this.getRNG(fake);
-    let ret = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
-    if (RealityUpgrade(17).isBought && rng() > 0.5) ret = Math.min(ret + 1, 4)
-    return ret;
+    const rng = this.getRNG(fake);
+    let num = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
+    if (RealityUpgrade(17).isBought && rng() > 0.5) num = Math.min(num + 1, 4)
+    return num;
   },
 
   generateEffects(type, count, fake) {
-    let rng = this.getRNG(fake);
-    let ret = [];
-    if (GlyphTypes[type].primaryEffect) ret.push(GlyphTypes[type].primaryEffect);
-    for (let i = ret.length; i < count; ++i) {
-      let effect = GlyphTypes[type].randomEffect(rng, ret);
+    const rng = this.getRNG(fake);
+    const effects = [];
+    if (GlyphTypes[type].primaryEffect) effects.push(GlyphTypes[type].primaryEffect);
+    for (let i = effects.length; i < count; ++i) {
+      const effect = GlyphTypes[type].randomEffect(rng, effects);
       if (!effect) break;
-      ret.push(effect);
+      effects.push(effect);
     }
-    return ret;
+    return effects;
   },
 
   randomType(fake) {
-    let rng = this.getRNG(fake);
+    const rng = this.getRNG(fake);
     if (fake) {
       GlyphGenerator.lastFake = GlyphTypes.random(rng, [GlyphGenerator.lastFake]);
       return GlyphGenerator.lastFake;
@@ -232,7 +180,7 @@ const GlyphGenerator = {
   },
 
   random() {
-    let x = Math.sin(player.reality.seed++) * 10000;
+    const x = Math.sin(player.reality.seed++) * 10000;
     return x - Math.floor(x);
   },
 
@@ -242,10 +190,9 @@ const GlyphGenerator = {
    * More than 2 approx 6%
    * More than 1.5 approx 38.43%
    */
-  gaussianBellCurve(rng) {
-    if (rng === undefined) rng = GlyphGenerator.random;
-    let u = Math.max(rng(), Number.MIN_VALUE);
-    let v = rng();
+  gaussianBellCurve(rng = GlyphGenerator.random) {
+    const u = Math.max(rng(), Number.MIN_VALUE);
+    const v = rng();
     return Math.pow(Math.max(Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v) + 1, 1), 0.65);
   },
 
@@ -581,7 +528,7 @@ function recalculateAllGlyphs() {
   Glyphs.refresh();
 }
 
-// Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and also recalculates effects accordingly
+// Makes sure level is a positive whole number and rarity is >0% (retroactive fixes) and recalculates effects
 function calculateGlyph(glyph) {
   if (glyph.color === undefined && glyph.symbol === undefined) {
     glyph.level = Math.max(1, Math.round(glyph.level));
@@ -590,9 +537,11 @@ function calculateGlyph(glyph) {
       // this was merged, so it's not a big deal.
       glyph.rawLevel = glyph.level < 1000 ? glyph.level : (Math.pow(0.004 * glyph.level - 3, 2) - 1) * 125 + 1000;
     }
-    if (glyph.strength == 1)
-      glyph.strength = gaussianBellCurve()
-    for (let effect in glyph.effects) {
+
+    if (glyph.strength === 1) glyph.strength = gaussianBellCurve();
+    glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
+
+    for (const effect in glyph.effects) {
       if (glyph.effects.hasOwnProperty(effect)) {
         if (Effarig.isRunning) {
           glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, Math.min(glyph.level, Effarig.glyphLevelCap), glyph.strength);
@@ -720,14 +669,14 @@ function getGlyphLevelInputs() {
   // 100000, 100, 100, 100 with weights of 0, 1, 0, 0 results in 1.49e-5
   // For display purposes, each term is divided independently by s.
   const preScale = 5;
-  let weights = player.celestials.effarig.glyphWeights;
-  var adjustFactor = (input, weight) => input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0;
-  var epEffect = adjustFactor(epBase, weights.ep / 100);
-  var replEffect = adjustFactor(replBase, weights.repl / 100);
-  var dtEffect = adjustFactor(dtBase, weights.dt / 100);
-  var eterEffect = adjustFactor(eterBase, weights.eternities / 100);
-  var baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
-  var scaledLevel = baseLevel;
+  const weights = player.celestials.effarig.glyphWeights;
+  const adjustFactor = (input, weight) => (input > 0 ? Math.pow(input * preScale, Math.pow(4 * weight, blendExp)) / preScale : 0);
+  const epEffect = adjustFactor(epBase, weights.ep / 100);
+  const replEffect = adjustFactor(replBase, weights.repl / 100);
+  const dtEffect = adjustFactor(dtBase, weights.dt / 100);
+  const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
+  const baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult * Ra.glyphMult;
+  let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
   const instabilityScaleBegin = 1000 + scaleDelay;
@@ -742,8 +691,8 @@ function getGlyphLevelInputs() {
     const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
     scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
-  let scalePenalty = baseLevel / scaledLevel;
-  let perkFactor = Effects.sum(
+  const scalePenalty = baseLevel / scaledLevel;
+  const perkFactor = Effects.sum(
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2
   );

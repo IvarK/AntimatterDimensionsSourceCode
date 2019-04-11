@@ -588,7 +588,7 @@ button {
 .circle .fill {
     background-color: #97a71d;
     /* rect(<top>, <right>, <bottom>, <left>) */
-    clip: rect(0px, 60px, 120px, 0px);
+    clip: rect(0px, 60px, 120px, 0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -1163,7 +1163,7 @@ screen and (max-width: 480px) {
 }
 
 @keyframes float {
-    0% { bottom: 0px; opacity: 0;}
+    0% { bottom: 0; opacity: 0;}
     50% {opacity: 1; }
     100% { bottom: 50px; opacity: 0;}
 }
@@ -3341,7 +3341,7 @@ screen and (max-width: 480px) {
 .t-s6 .o-infinity-upgrade-btn {
   color: white;
   background-color: black;
-  box-shadow: 0px 0px 7px 2px #111111;
+  box-shadow: 0 0 7px 2px #111111;
 }
 
 .o-infinity-upgrade-btn:hover {

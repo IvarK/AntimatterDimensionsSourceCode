@@ -13,7 +13,7 @@ body.t-dark-metro {
 
 .t-dark-metro .popup {
     background-color: #455A64;
-    box-shadow: 0px 0px 10px 0px black;
+    box-shadow: 0 0 10px 0 black;
 }
 
 .t-dark-metro #news {
@@ -34,7 +34,7 @@ body.t-dark-metro {
     color: #E0E0E0;
     background: #455A64;
     border: 1px solid #1E88E5;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
     border-radius: 0;
 }
 
@@ -46,7 +46,7 @@ body.t-dark-metro {
     color: #E0E0E0;
     background: #455A64;
     border: 1px solid #1E88E5;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
     border-radius: 0;
 }
 
@@ -57,7 +57,7 @@ body.t-dark-metro {
 .t-dark-metro .storebtn {
     background: #455A64;
     border: 1px solid #43A047;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
 }
 
 .t-dark-metro .storebtn:hover {
@@ -67,7 +67,7 @@ body.t-dark-metro {
 .t-dark-metro .unavailablebtn {
     background: #37474F;
     border: 1px solid #E53935;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
 }
 
 .t-dark-metro .unavailablebtn:hover {
@@ -78,7 +78,7 @@ body.t-dark-metro {
     color: black;
     background: white;
     border: 1px solid #FF9800;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
 }
 
 .t-dark-metro .infinitytabbtn:hover {
@@ -89,12 +89,12 @@ body.t-dark-metro {
     color: #673AB7;
     background: black;
     border: 1px solid #673AB7;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
 }
 
 .t-dark-metro .eternitytabbtn:hover {
     background: white;
-    box-shadow: 1px 1px 1px 0px black;
+    box-shadow: 1px 1px 1px 0 black;
 }
 
 .t-dark-metro .c-tt-buy-button--unlocked {
@@ -111,7 +111,7 @@ body.t-dark-metro {
 .t-dark-metro .c-tt-buy-button--locked {
     background: #9E9E9E;
     border: none;
-    box-shadow: 1px 1px 1px 0px #000;
+    box-shadow: 1px 1px 1px 0 #000;
 }
 
 .t-dark-metro .c-tt-buy-button--locked:hover {

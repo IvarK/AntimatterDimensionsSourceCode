@@ -5,14 +5,14 @@ body.t-dark {
 
 .t-dark .popup {
     background-color: #455A64;
-    box-shadow: 0px 0px 15px 0px black;
+    box-shadow: 0 0 15px 0 black;
 }
 
 .t-dark .storebtn {
     color: #E0E0E0;
     background-color: #455A64;
     border: 1px solid black;
-    box-shadow: 0px 0px 7px 2px #111111;
+    box-shadow: 0 0 7px 2px #111111;
 }
 
 .t-dark .storebtn:hover {
@@ -72,7 +72,7 @@ input.t-dark {
 
 .t-dark .c-rm-amount {
     color: #0b600e;
-    text-shadow: 0px 0px 7px #0b600e;
+    text-shadow: 0 0 7px #0b600e;
 }
 
 .t-dark .unavailablebtn {
@@ -96,7 +96,7 @@ input.t-dark {
 
 .t-dark .c-tt-amount {
     color: #64DD17;
-    text-shadow: 0px 0px 7px #64DD17;
+    text-shadow: 0 0 7px #64DD17;
 }
 
 .t-dark .c-tt-buy-button--unlocked {

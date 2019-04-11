@@ -22,9 +22,7 @@ class BlackHoleUpgradeState {
     if (!this.isAffordable) return;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
-    if (BlackHoles.list.some(bh => bh.interval < bh.duration)) {
-      giveAchievement("Are you sure these are the right way around?");
-    }
+    Achievement(145).tryUnlock();
   }
 }
 
@@ -210,7 +208,7 @@ const BlackHoles = {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
     player.reality.realityMachines = player.reality.realityMachines.minus(50);
-    giveAchievement("Is this an Interstellar reference?");
+    Achievement(144).unlock();
   },
 
   togglePause: () => player.blackHolePause = !player.blackHolePause,
@@ -229,9 +227,7 @@ const BlackHoles = {
       if (!blackHole.isUnlocked) break;
       blackHole.updatePhase(activePeriods[blackHole.id - 1]);
     }
-    if (TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24) {
-      giveAchievement("Bruh, are you like, inside the hole?");
-    }
+    Achievement(158).tryUnlock();
   },
 
   /**

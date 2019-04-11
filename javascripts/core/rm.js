@@ -774,7 +774,7 @@ class RealityUpgradeState extends GameMechanicState {
       player.blackHole[1].unlocked = true;
     }
 
-    if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
+    Achievement(147).tryUnlock();
     return true;
   }
 

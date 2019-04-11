@@ -179,7 +179,8 @@ function onLoad() {
   recalculateAllGlyphs();
 
   Autobuyer.tryUnlockAny();
-  Autobuyer.checkAllAchievements();
+  Autobuyer.checkIntervalAchievements();
+  Autobuyer.checkBulkAchievements();
   transformSaveToDecimal();
   resizeCanvas();
   updateAutomatorRows();

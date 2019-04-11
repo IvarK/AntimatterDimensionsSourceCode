@@ -89,7 +89,8 @@ GameDatabase.achievements.secret = [
   {
     id: 31,
     name: "You should download some more RAM",
-    tooltip: "Set your update rate to 200ms."
+    tooltip: "Set your update rate to 200ms.",
+    checkRequirement: () => player.options.updateRate === 200
   },
   {
     id: 32,
@@ -106,7 +107,8 @@ GameDatabase.achievements.secret = [
   {
     id: 34,
     name: "You do know how these work, right?",
-    tooltip: "Respec with an empty study tree."
+    tooltip: "Respec with an empty study tree.",
+    checkRequirement: () => player.timestudy.studies.length === 0
   },
   {
     id: 35,
@@ -126,7 +128,9 @@ GameDatabase.achievements.secret = [
   {
     id: 38,
     name: "Professional bodybuilder",
-    tooltip: "Get all your dimension bulk buyers to 1e100."
+    tooltip: "Get all your dimension bulk buyers to 1e100.",
+    checkRequirement: () => Autobuyer.allDims
+      .countWhere(a => a.hasMaxedBulk) === DIMENSION_COUNT
   },
   {
     id: 41,
@@ -153,7 +157,8 @@ GameDatabase.achievements.secret = [
   {
     id: 45,
     name: "This dragging is dragging on",
-    tooltip: "Drag the perks around for a minute."
+    tooltip: "Drag the perks around for a minute.",
+    checkRequirement: () => ++player.secretUnlocks.dragging / 100 >= 60
   },
   {
     id: 46,

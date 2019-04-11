@@ -51,7 +51,8 @@ GameDatabase.achievements.normal = [
   {
     id: 22,
     name: "Fake News",
-    tooltip: "Encounter 50 different news messages."
+    tooltip: "Encounter 50 different news messages.",
+    checkRequirement: () => player.newsArray.length >= 50
   },
   {
     id: 23,
@@ -71,7 +72,8 @@ GameDatabase.achievements.normal = [
   {
     id: 25,
     name: "Boosting to the max",
-    tooltip: "Buy 10 Dimension Boosts."
+    tooltip: "Buy 10 Dimension Boosts.",
+    checkRequirement: () => player.resets >= 10
   },
   {
     id: 26,
@@ -149,7 +151,8 @@ GameDatabase.achievements.normal = [
   {
     id: 38,
     name: "I don't believe in Gods",
-    tooltip: "Buy an Antimatter Galaxy without Sacrificing."
+    tooltip: "Buy an Antimatter Galaxy without Sacrificing.",
+    checkRequirement: () => player.sacrificed.eq(0)
   },
   {
     id: 41,
@@ -222,12 +225,16 @@ GameDatabase.achievements.normal = [
   {
     id: 52,
     name: "Age of Automation",
-    tooltip: "Max any 9 autobuyers."
+    tooltip: "Max any 9 autobuyers.",
+    checkRequirement: () => Autobuyer.unlockables
+      .countWhere(a => a.hasMaxedInterval) >= 9
   },
   {
     id: 53,
     name: "Definitely not worth it",
-    tooltip: "Max all the autobuyers."
+    tooltip: "Max all the autobuyers.",
+    checkRequirement: () => Autobuyer.unlockables
+      .countWhere(a => a.hasMaxedInterval) >= 12
   },
   {
     id: 54,
@@ -278,12 +285,15 @@ GameDatabase.achievements.normal = [
   {
     id: 61,
     name: "Bulked up",
-    tooltip: "Get all of your Dimension bulk buyers to 512 or higher."
+    tooltip: "Get all of your Dimension bulk buyers to 512 or higher.",
+    checkRequirement: () => Autobuyer.allDims
+        .countWhere(a => a.isUnlocked && a.bulk >= 512) === DIMENSION_COUNT
   },
   {
     id: 62,
     name: "Oh hey, you're still here",
-    tooltip: "Reach 1e8 IP per minute."
+    tooltip: "Reach 1e8 IP per minute.",
+    checkRequirement: () => Player.bestRunIPPM.exponent >= 8
   },
   {
     id: 63,
@@ -506,6 +516,7 @@ GameDatabase.achievements.normal = [
     id: 93,
     name: "MAXIMUM OVERDRIVE",
     tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min.`,
+    checkRequirement: () => Player.bestRunIPPM.exponent >= 300,
     reward: "Additional 4x multiplier to IP.",
     effect: 4
   },
@@ -817,17 +828,20 @@ GameDatabase.achievements.normal = [
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    tooltip: "Have the Black Hole interval smaller than the duration"
+    tooltip: "Have the Black Hole interval smaller than the duration",
+    checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration)
   },
   {
     id: 146,
     name: "Perks of living",
-    tooltip: "Have all perks bought"
+    tooltip: "Have all perks bought",
+    checkRequirement: () => player.reality.perks.size === Perk.all.length
   },
   {
     id: 147,
     name: "Master of Reality",
-    tooltip: "Have all Reality upgrades bought"
+    tooltip: "Have all Reality upgrades bought",
+    checkRequirement: () => RealityUpgrades.allBought
   },
   {
     id: 148,
@@ -872,6 +886,7 @@ GameDatabase.achievements.normal = [
   {
     id: 158,
     name: "Bruh, are you like, inside the hole?",
-    tooltip: "Spend 24 hours with black hole active in a row"
+    tooltip: "Spend 24 hours with black hole active in a row",
+    checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24
   },
 ];

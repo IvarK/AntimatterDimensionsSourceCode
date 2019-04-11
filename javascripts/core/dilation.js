@@ -14,7 +14,7 @@ function startDilatedEternity() {
       }, 250)
       return false
   }
-  giveAchievement("I told you already, time is relative")
+  Achievement(136).unlock();
   eternity(false, false, true)
   player.dilation.active = true;
   postc8Mult = new Decimal(0)

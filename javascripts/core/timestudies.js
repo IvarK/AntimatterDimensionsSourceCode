@@ -422,9 +422,7 @@ function respecTimeStudies() {
   for (let study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
-  if (player.timestudy.studies.length === 0) {
-    giveAchievement("You do know how these work, right?")
-  }
+  SecretAchievement(34).tryUnlock();
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
   player.celestials.v.additionalStudies = 0
@@ -441,7 +439,9 @@ function exportStudyTree() {
 
 function importStudyTree(input) {
   if (typeof input !== 'string') var input = prompt()
-  if (sha512_256(input) == "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") giveAchievement("You followed the instructions")
+  if (sha512_256(input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") {
+    SecretAchievement(37).unlock();
+  }
   if (input === "") return false
   var studiesToBuy = input.split("|")[0].split(",");
   for (i=0; i<studiesToBuy.length; i++) {

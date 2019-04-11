@@ -131,8 +131,7 @@ class InfinityChallengeState extends GameMechanicState {
   start() {
     startChallenge(this._fullId, this.config.goal);
     player.break = true;
-    if (EternityChallenge.isRunning())
-      giveAchievement("I wish I had gotten 7 eternities");
+    if (EternityChallenge.isRunning()) Achievement(115).unlock();
   }
 
   get isCompleted() {

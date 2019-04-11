@@ -398,11 +398,15 @@ function addInfinityTime(time, realTime, ip) {
   player.lastTenRuns.pop();
   player.lastTenRuns.unshift([time, ip, realTime]);
   GameCache.bestRunIPPM.invalidate();
+  Achievement(62).tryUnlock();
+  Achievement(93).tryUnlock();
 }
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
   GameCache.bestRunIPPM.invalidate();
+  Achievement(62).tryUnlock();
+  Achievement(93).tryUnlock();
 }
 
 function addEternityTime(time, realTime, ep) {
@@ -486,19 +490,18 @@ function getNewInfReq() {
 
 function newDimension() {
     if (Perk.bypassIDAntimatter.isBought || (player.money.gte(getNewInfReq()))) {
-        if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
-        else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
-        else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
+        if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true;
+        else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true;
+        else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true;
         else if (!player.infDimensionsUnlocked[3]) {
-            player.infDimensionsUnlocked[3] = true
-            giveAchievement("NEW DIMENSIONS???")
-        }
-        else if (!player.infDimensionsUnlocked[4]) player.infDimensionsUnlocked[4] = true
-        else if (!player.infDimensionsUnlocked[5]) player.infDimensionsUnlocked[5] = true
-        else if (!player.infDimensionsUnlocked[6]) player.infDimensionsUnlocked[6] = true
+            player.infDimensionsUnlocked[3] = true;
+            Achievement(75).unlock();
+        } else if (!player.infDimensionsUnlocked[4]) player.infDimensionsUnlocked[4] = true;
+        else if (!player.infDimensionsUnlocked[5]) player.infDimensionsUnlocked[5] = true;
+        else if (!player.infDimensionsUnlocked[6]) player.infDimensionsUnlocked[6] = true;
         else if (!player.infDimensionsUnlocked[7]) {
-            player.infDimensionsUnlocked[7] = true
-            giveAchievement("0 degrees from infinity")
+            player.infDimensionsUnlocked[7] = true;
+            Achievement(98).unlock();
         }
     }
 }

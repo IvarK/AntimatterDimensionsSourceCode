@@ -148,7 +148,7 @@ class Galaxy {
 function galaxyReset() {
   if (autoS) auto = false;
   autoS = true;
-  if (player.sacrificed.eq(0)) giveAchievement("I don't believe in Gods");
+  Achievement(38).tryUnlock();
   player.galaxies++;
   player.tickDecrease -= 0.03;
   player.resets = 0;

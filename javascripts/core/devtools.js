@@ -540,9 +540,9 @@ dev.updateTestSave = function() {
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 
-  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.size === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.blackHole[0].unlocked) Achievement(144).unlock();
+  Achievement(146).tryUnlock();
+  Achievement(147).tryUnlock();
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);

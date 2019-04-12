@@ -167,6 +167,7 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
+    delete player.themes;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

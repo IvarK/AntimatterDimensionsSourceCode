@@ -13,7 +13,7 @@ Vue.component("options-tab", {
         adjusts the function of certain buttons.
         <br>
         You can hold shift while buying time studies to buy all up until that point,
-        save study trees, cycle backwards through themes and notations, and delete glyphs.
+        save study trees, and delete glyphs.
         <br>
         Hotkeys do not work while holding control.
       </p>

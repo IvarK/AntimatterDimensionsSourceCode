@@ -453,7 +453,7 @@ var player = {
     bulkOn: true,
     cloud: true,
     hotkeys: true,
-    theme: undefined,
+    theme: "Normal",
     secretThemeKey: "",
     commas: true,
     updateRate: 50,

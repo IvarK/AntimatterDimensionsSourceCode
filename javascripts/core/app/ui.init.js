@@ -41,7 +41,7 @@ let ui = {
       }
     },
     shiftDown: false,
-    theme: undefined,
+    theme: "Normal",
     bigCrunch: false,
     scrollWindow: 0,
     draggingUIID: -1,

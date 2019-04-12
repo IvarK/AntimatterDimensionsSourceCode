@@ -34,8 +34,8 @@ Vue.component("options-button-grid", {
     };
   },
   computed: {
-    theme() {
-      return Themes.find(this.options.theme).displayName();
+    themeLabel() {
+      return `Theme: ${Themes.find(this.options.theme).displayName()} ▼`;
     },
     notationLabel() {
       return `Notation: ${this.options.notation} ▼`;
@@ -51,10 +51,12 @@ Vue.component("options-button-grid", {
   template: `
     <div class="l-options-grid">
       <div class="l-options-grid__row">
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.changeTheme()"
-        >Current theme: {{ theme }}</options-button>
+        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+            {{themeLabel}}
+          </div>
+          <select-theme slot="dropdown" />
+        </expanding-control-box>
         <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
           <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
             {{notationLabel}}

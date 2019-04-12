@@ -2,7 +2,8 @@ GameDatabase.reality.perks = {
   glyphChoice3: {
     id: 0,
     label: "G0",
-    description: "You can now choose from 3 different glyphs on Reality."
+    description: "You can now choose from 3 different glyphs on Reality.",
+    effect: () => 3,
   },
   startAM1: {
     id: 10,
@@ -66,7 +67,8 @@ GameDatabase.reality.perks = {
   glyphChoice4: {
     id: 22,
     label: "G3",
-    description: "+1 glyph choice on Reality"
+    description: "+1 glyph choice on Reality",
+    effect: () => 4,
   },
   glyphRarityIncrease: {
     id: 23,

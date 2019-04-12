@@ -183,12 +183,13 @@ function onLoad() {
   transformSaveToDecimal();
   resizeCanvas();
   checkForEndMe();
-  updateAutomatorRows()
-  checkPerkValidity()
+  updateAutomatorRows();
+  checkPerkValidity();
+  checkPPShopValidity();
   GameCache.buyablePerks.invalidate();
   drawPerkNetwork();
-  updatePerkColors()
-  V.updateTotalRunUnlocks()
+  updatePerkColors();
+  V.updateTotalRunUnlocks();
   Enslaved.boostReality = false;
 
   const notation = player.options.notation;
@@ -291,6 +292,26 @@ function checkPerkValidity() {
   if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
   dev.respecPerks();
   Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}
+
+function checkPPShopValidity() {
+  let totalPPSpent = 0;
+  if (Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) > 12) {
+    totalPPSpent += Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)) - 4096;
+    player.celestials.teresa.glyphLevelMult = Math.pow(1.05, 12);
+  }
+  if (player.celestials.teresa.rmMult > 2096) {
+    totalPPSpent += player.celestials.teresa.rmMult - 4096;
+    player.celestials.teresa.rmMult = 4096;
+  }
+  if (player.celestials.teresa.dtBulk > 32) {
+    totalPPSpent += player.celestials.teresa.rdtBulk * 100 - 3200;
+    player.celestials.teresa.dtBulk = 32;
+  }
+  if (totalPPSpent > 0) {
+    player.reality.pp += totalPPSpent;
+    Modal.message.show("You had too many PP shop purchases, your PP shop purchases have been capped and your perk points refunded.");
+  }
 }
 
 function convertAchivementsToNumbers() {

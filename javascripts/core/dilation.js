@@ -106,29 +106,34 @@ function getDilationGainPerSecond() {
   return ret
 }
 
-function getTachyonGain() {
-  let mult = new Decimal(1).timesEffectsOf(
+function tachyonGainMultiplier() {
+  return new Decimal(1).timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
   );
+}
 
-  let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
-  return tachyonGain
+function getTachyonGain() {
+  const mult = tachyonGainMultiplier();
+
+  return Decimal
+    .pow(Decimal.log10(player.money) / 400, 1.5)
+    .times(mult)
+    .minus(player.dilation.totalTachyonParticles)
+    .clampMin(0);
 }
 
 function getTachyonReq() {
-  let mult = new Decimal(1).timesEffectsOf(
-    DilationUpgrade.tachyonGain,
-    GlyphSacrifice.dilation,
-    RealityUpgrade(4),
-    RealityUpgrade(8),
-    RealityUpgrade(15)
-  );
-  let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
-  return req
+  const mult = tachyonGainMultiplier();
+
+  return Decimal.pow(10, Decimal.pow(
+    player.dilation.totalTachyonParticles
+      .times(Math.pow(400, 1.5))
+      .dividedBy(mult),
+    2 / 3));
 }
 
 function dilatedValueOf(value) {

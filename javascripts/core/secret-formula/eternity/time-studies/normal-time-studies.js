@@ -128,7 +128,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 91,
       cost: 4,
       description: "Normal dimensions gain a multiplier based on time spent this eternity",
-      effect: () => Decimal.pow(10, Math.min(Time.thisEternity.totalMinutes, 30) * 10),
+      effect: () => Decimal.pow10(Math.min(Time.thisEternity.totalMinutes, 30) * 10),
       cap: new Decimal("1e300"),
       formatEffect: value => formatX(value, 2, 1)
     },

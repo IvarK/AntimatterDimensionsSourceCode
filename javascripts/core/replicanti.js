@@ -23,7 +23,7 @@ function replicantiGalaxy() {
     galaxyGain = Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
     // In the unlikely case of different rounding error between canBuyMore and the above
     if (galaxyGain < 1) return;
-    player.replicanti.amount = Decimal.pow(10, logReplicanti - LOG10_MAX_VALUE * galaxyGain);
+    player.replicanti.amount = Decimal.pow10(logReplicanti - LOG10_MAX_VALUE * galaxyGain);
   } else {
     player.replicanti.amount = new Decimal(1);
   }
@@ -43,7 +43,7 @@ function fastReplicantiBelow308(gainFactor, isAutobuyerActive) {
   const toBuy = Ra.isRunning
     ? 0
     : Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
-  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(10, replicantiExponent - 308 * toBuy));
+  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow10(replicantiExponent - 308 * toBuy));
   player.replicanti.galaxies += toBuy;
 }
 
@@ -347,7 +347,7 @@ const ReplicantiUpgrade = {
         const numDistant = count - distantReplicatedGalaxyStart;
         logCost += logDistantScaling * numDistant * (numDistant + 2 * extraIncrements - 1) / 2;
       }
-      return Decimal.pow(10, logCost);
+      return Decimal.pow10(logCost);
     }
   }(),
 };

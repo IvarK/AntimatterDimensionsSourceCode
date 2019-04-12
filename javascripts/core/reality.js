@@ -45,7 +45,7 @@ const GlyphSelection = {
       // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
       // get stuck in an infinite loop if we decide to increase the number of glyph choices
       // for some reason and forget about the uniqueness check
-      for (let tries = 0; tries < 20; ++tries) {
+      for (let tries = 0; tries < 100; ++tries) {
         glyph = GlyphGenerator.randomGlyph(level, false);
         if (this.checkUniqueGlyph(glyph)) break;
       }

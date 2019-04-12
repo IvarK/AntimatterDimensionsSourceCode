@@ -1,5 +1,7 @@
 "use strict";
 
+const LOG10_MAX_VALUE = Math.log10(Number.MAX_VALUE);
+
 /**
  * This is a file for general math utilities that can be used by many mechanics
  */

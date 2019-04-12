@@ -29,7 +29,6 @@ function onLoad() {
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
-  $("#ttautobuyer").text(player.ttbuyer ? "Automator: ON" : "Automator: OFF")
   Theme.set(player.options.theme);
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     giveAchievement("Was it even broken?");
@@ -127,7 +126,6 @@ function onLoad() {
     player.version = 12.1
     player.achievements.delete("s36");
   }
-
   //last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards, change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
   if (player.version < 13) {
     //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -167,7 +165,8 @@ function onLoad() {
     convertAchivementsToNumbers();
     convertEPMult();
     player.secretUnlocks.why = player.why
-    delete player.why
+    delete player.why;
+    delete player.achPow;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -182,7 +181,6 @@ function onLoad() {
   Autobuyer.tryUnlockAny();
   Autobuyer.checkAllAchievements();
   transformSaveToDecimal();
-  updateAchievementPower();
   resizeCanvas();
   checkForEndMe();
   updateAutomatorRows();
@@ -318,10 +316,11 @@ function checkPPShopValidity() {
 
 function convertAchivementsToNumbers() {
   if (player.achievements.countWhere(e => typeof (e) !== "number") === 0) return;
-  let old = player.achievements;
-  player.achievements = new Set();   // player.secretAchievements should be an empty set in this case
-  for (let oldId of old) {
-    let newId = parseInt(oldId.slice(1));
+  const old = player.achievements;
+  // In this case, player.secretAchievements should be an empty set
+  player.achievements = new Set();
+  for (const oldId of old) {
+    const newId = parseInt(oldId.slice(1), 10);
     if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
     if (oldId.startsWith("r")) {
       if (Achievement(newId) === undefined) throw crash(`Unrecognized achievement ${oldId}`);

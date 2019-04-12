@@ -3,19 +3,59 @@
  */
 const GlyphSelection = {
   glyphs: [],
+
   get active() {
     return ui.view.modal.glyphSelection;
   },
+
   get choiceCount() {
-    return Perk.glyphChoice4.isBought ? 4 : (Perk.glyphChoice3.isBought ? 3 : 1);
+    return Effects.max(
+      1,
+      Perk.glyphChoice4,
+      Perk.glyphChoice3
+    );
   },
+
+  /**
+   * Checks that a given glyph is sufficiently different from the current selection.
+   *
+   * If the list doesn't already contain a glyph of the specified type, it is automatically
+   * considered unique.  If not, it then checks the effects of glyphs that have the same type.
+   * It calculates a pairwise uniqueness score to each glyph it checks and only adds the new
+   * glyph if the score exceeds the specified threshold for every glyph already in the list.
+   * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
+   */
+  checkUniqueGlyph(toCheck) {
+    const sameTypeGlyphs = this.glyphs.filter(glyph => glyph.type === toCheck.type);
+    const uniquenessThreshold = 3;
+    const checkEffects = Object.keys(toCheck.effects);
+    for (const currGlyph of sameTypeGlyphs) {
+      const currEffects = Object.keys(currGlyph.effects);
+      const union = new Set([...checkEffects, ...currEffects]);
+      const intersection = new Set(checkEffects.filter(x => new Set(currEffects).has(x)));
+      if (union.size - intersection.size < uniquenessThreshold) return false;
+    }
+    return true;
+  },
+
   generate(count, level) {
-    this.glyphs = new Array(count).fill().map(() => GlyphGenerator.randomGlyph(level, false));
+    this.glyphs = [];
+    for (let out = 0; out < count; ++out) {
+      let glyph;
+      // Attempt to generate a unique glyph, but give up after 100 tries so the game doesn't
+      // get stuck in an infinite loop if we decide to increase the number of glyph choices
+      // for some reason and forget about the uniqueness check
+      for (let tries = 0; tries < 100; ++tries) {
+        glyph = GlyphGenerator.randomGlyph(level, false);
+        if (this.checkUniqueGlyph(glyph)) break;
+      }
+      this.glyphs.push(glyph);
+    }
     ui.view.modal.glyphSelection = true;
     if (!Perk.glyphUncommonGuarantee.isBought) return;
     // If no choices are rare enough and the player has the uncommon glyph perk, randomly generate
     // rarities until the threshold is passed and then assign that rarity to a random glyph
-    const strengthThreshold = 1.5;  // Uncommon
+    const strengthThreshold = 1.5;
     if (this.glyphs.some(e => e.strength >= strengthThreshold)) return;
     let newStrength;
     do {
@@ -23,22 +63,24 @@ const GlyphSelection = {
     } while (newStrength < strengthThreshold);
     this.glyphs.randomElement().strength = newStrength;
   },
+
   update(level) {
-    for (let g of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
-      g.rawLevel = level.rawLevel;
+    for (const glyph of this.glyphs.filter(g => g.rawLevel < level.rawLevel)) {
+      glyph.rawLevel = level.rawLevel;
     }
-    for (let g of this.glyphs.filter(g => g.level < level.actualLevel)) {
-      g.level = level.actualLevel;
-      calculateGlyph(g);
+    for (const glyph of this.glyphs.filter(g => g.level < level.actualLevel)) {
+      glyph.level = level.actualLevel;
+      calculateGlyph(glyph);
     }
   },
+
   select(index) {
     ui.view.modal.glyphSelection = false;
     Glyphs.addToInventory(this.glyphs[index]);
     this.glyphs = [];
     manualReality();
   }
-}
+};
 
 function confirmReality() {
   return !player.options.confirmations.reality ||

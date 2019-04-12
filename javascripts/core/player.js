@@ -536,6 +536,10 @@ const Player = {
   get hasFreeInventorySpace() {
     return Glyphs.freeInventorySpace > 0;
   },
+
+  get achievementPower() {
+    return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
+  }
 };
 
 function guardFromNaNValues(obj) {

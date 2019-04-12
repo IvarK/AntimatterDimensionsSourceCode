@@ -2,7 +2,7 @@
 // and invalidated every update.
 function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
-  if (Achievement(11).isEnabled) multiplier = multiplier.times(player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")));
+  if (Achievement(11).isEnabled) multiplier = multiplier.times(Player.achievementPower);
 
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
@@ -565,9 +565,9 @@ function getDimensionProductionPerSecond(tier) {
   if (!postBreak && production.gte(Number.MAX_VALUE)) {
     production = production.min("1e315");
   }
-  if (tier === 1 && production.gt(0)) {
+  if (tier === 1 && production.gt(10)) {
     const log10 = production.log10();
-    production = Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), getAdjustedGlyphEffect("effarigantimatter")));
+    production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
   }
   return production;
 }

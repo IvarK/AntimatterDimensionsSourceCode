@@ -82,14 +82,14 @@ Vue.component('teresa-tab', {
   template:
     `<div class="l-teresa-celestial-tab">
       <div class="o-teresa-quotes"> {{ quote }}</div><button class="o-quote-button" @click="nextQuote()" v-if="quoteIdx < 4 + unlocks.length">→</button>
-      <div>You have {{shortenRateOfChange(rm)}} Reality Machines.</div>
+      <div>You have {{shortenRateOfChange(rm)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
           <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x, based on realities.</div>
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
-            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} Perk Points.</span>
+            <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
             <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br/>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, {{ glyphMultCostDisplay() }}</button>
             <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br/>Currently {{ shortenRateOfChange(rmUpg ) }}x, {{ rmMultCostDisplay() }}</button>
             <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br/>Currently {{ shortenRateOfChange(dtBulk ) }}x, {{ dtBulkCostDisplay() }}</button>

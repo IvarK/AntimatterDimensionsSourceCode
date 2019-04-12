@@ -1,209 +1,137 @@
-const allAchievements = {
-  r11 : "You gotta start somewhere",
-  r12 : "100 antimatter is a lot",
-  r13 : "Half life 3 confirmed",
-  r14 : "L4D: Left 4 Dimensions",
-  r15 : "5 Dimension Antimatter Punch",
-  r16 : "We couldn't afford 9",
-  r17 : "Not a luck related achievement",
-  r18 : "90 degrees to infinity",
-  r21 : "To infinity!",
-  r22 : "Fake News",
-  r23 : "The 9th Dimension is a lie",
-  r24 : "Antimatter Apocalypse",
-  r25 : "Boosting to the max",
-  r26 : "You got past The Big Wall",
-  r27 : "Double Galaxy",
-  r28 : "There's no point in doing that",
-  r31 : "I forgot to nerf that",
-  r32 : "The Gods are pleased",
-  r33 : "That's a lot of infinites",
-  r34 : "You didn't need it anyway",
-  r35 : "Don't you dare to sleep",
-  r36 : "Claustrophobic",
-  r37 : "That's fast!",
-  r38 : "I don't believe in Gods",
-  r41 : "Spreading Cancer",
-  r42 : "Supersanic",
-  r43 : "Zero Deaths",
-  r44 : "Over in 30 seconds",
-  r45 : "Faster than a potato",
-  r46 : "Multidimensional",
-  r47 : "Daredevil",
-  r48 : "AntiChallenged",
-  r51 : "Limit Break",
-  r52 : "Age of Automation",
-  r53 : "Definitely not worth it",
-  r54 : "That's faster!",
-  r55 : "Forever isn't that long",
-  r56 : "Many Deaths",
-  r57 : "Gift from the Gods",
-  r58 : "Is this hell?",
-  r61 : "Bulked up",
-  r62 : "Oh hey, you're still here",
-  r63 : "A new beginning.",
-  r64 : "1 million is a lot",
-  r65 : "Not-so-challenging",
-  r66 : "Faster than a squared potato",
-  r67 : "Infinitely Challenging",
-  r68 : "You did this again just for the achievement right?",
-  r71 : "ERROR 909: Dimension not found",
-  r72 : "Can't hold all these infinities",
-  r73 : "This achievement doesn't exist",
-  r74 : "End me",
-  r75 : "NEW DIMENSIONS???",
-  r76 : "One for each dimension",
-  r77 : "How the antitables have turned",
-  r78 : "Blink of an eye",
-  r81 : "Hevipelle did nothing wrong",
-  r82 : "Anti-antichallenged",
-  r83 : "YOU CAN GET 50 GALAXIES!??",
-  r84 : "I got a few to spare",
-  r85 : "All your IP are belong to us",
-  r86 : "Do you even bend time bro?",
-  r87 : "2 Million Infinities",
-  r88 : "Yet another infinity reference",
-  r91 : "Ludicrous Speed",
-  r92 : "I brake for nobody",
-  r93 : "MAXIMUM OVERDRIVE",
-  r94 : "4.3333 minutes of Infinity",
-  r95 : "Is this safe?",
-  r96 : "Time is relative",
-  r97 : "Yes. This is hell.",
-  r98 : "0 degrees from infinity",
-  r101 : "Costco sells dimboosts now",
-  r102 : "This mile took an Eternity",
-  r103 : "This achievement doesn't exist II",
-  r104 : "That wasn't an eternity",
-  r105 : "Infinite time",
-  r106 : "The swarm",
-  r107 : "Do you really need a guide for this?",
-  r108 : "We could afford 9",
-  r111 : "Yo dawg, I heard you liked infinities...",
-  r112 : "Never again",
-  r113 : "Long lasting relationship",
-  r114 : "You're a mistake",
-  r115 : "I wish I had gotten 7 eternities",
-  r116 : "Do I really need to infinity",
-  r117 : "8 nobody got time for that",
-  r118 : "IT'S OVER 9000",
-  r121 : "Can you get infinite IP?",
-  r122 : "You're already dead.",
-  r123 : "5 more eternities until the update",
-  r124 : "Eternities are the new infinity",
-  r125 : "Like feasting on a behind",
-  r126 : "Popular music",
-  r127 : "But I wanted another prestige layer...",
-  r128 : "What do I have to do to get rid of you",
-  r131 : "No ethical consumption",
-  r132 : "Unique snowflakes",
-  r133 : "I never liked this infinity stuff anyway",
-  r134 : "When will it be enough?",
-  r135 : "Faster than a potato^286078",
-  r136 : "I told you already, time is relative",
-  r137 : "Now you're thinking with dilation!",
-  r138 : "This is what I have to do to get rid of you.",
-  r141 : "Snap back to reality",
-  r142 : "How does this work?",
-  r143 : "Yo dawg, I heard you liked reskins...",
-  r144 : "Is this an Interstellar reference?",
-  r145 : "Are you sure these are the right way around?",
-  r146 : "Perks of living",
-  r147 : "Master of Reality",
-  r148 : "Royal Flush",
-  r151 : "Transcension sucked anyway",
-  r152 : "Personal Space",
-  r153 : "Do I really have to do this?",
-  r154 : "I didn't even realize how fast you are",
-  r155 : "Why did you have to add RNG to the game?",
-  r156 : "True Sacrifice",
-  r157 : "I'm up all night to get lucky",
-  r158 : "Bruh, are you like, inside the hole?",
-  s11 : "The first one's always free",
-  s12 : "Just in case",
-  s13 : "It pays to have respect",
-  s14 : "So do I",
-  s15 : "Do a barrel roll!",
-  s16 : "Do you enjoy pain?",
-  s17 : "30 Lives",
-  s18 : "Do you feel lucky? Well do ya punk?",
-  s21 : "Go study in real life instead",
-  s22 : "Cancer = Spread",
-  s23 : "Stop right there criminal scum!",
-  s24 : "Real news",
-  s25 : "Shhh... It's a secret",
-  s26 : "You're a failure",
-  s27 : "It's not called matter dimensions is it?",
-  s28 : "Nice.",
-  s31 : "You should download some more RAM",
-  s32 : "Less than or equal to 0.001",
-  s33 : "A sound financial decision",
-  s34 : "You do know how these work, right?",
-  s35 : "Should we tell them about buy max...",
-  s36 : "While you were away... Nothing happened.",
-  s37 : "You followed the instructions",
-  s38 : "Professional bodybuilder",
-  s41 : "That dimension doesn’t exist",
-  s42 : "Was it even broken?",
-  s43 : "Time fixes everything",
-  s44 : "Are you statisfied now?",
-  s45 : "This dragging is dragging on",
-  s46 : "s46",
-  s47 : "s47",
-  s48 : "s48",
-};
-const allAchievementNums = Object.invert(allAchievements)
-// to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");
-
-function updateAchievementPower() {
-  let completedRows = 0
-  for (let i = 1; i <= TOTAL_ACH_ROWS; i++) {
-    let achUnlocked = 0;
-    for (let j = 1; j <= ACH_PER_ROW; j++) {
-      if (Achievement(i*10 + j).isEnabled) {
-        achUnlocked++;
-      }
-    }
-    if (achUnlocked === ACH_PER_ROW) {
-      completedRows++;
+class AchievementState extends GameMechanicState {
+  constructor(config) {
+    super(config);
+    if (config.secondaryEffect) {
+      const secondaryConfig = {
+        id: config.id,
+        effect: config.secondaryEffect
+      };
+      this._secondaryState = new AchievementState(secondaryConfig);
     }
   }
-  player.achPow = Decimal.pow(1.5, completedRows);
+
+  get name() {
+    return this.config.name;
+  }
+
+  get isUnlocked() {
+    return player.achievements.has(this.id);
+  }
+
+  unlock() {
+    if (this.isUnlocked) return false;
+    player.achievements.add(this.id);
+    if (this.id === 85 || this.id === 93) {
+      Autobuyer.infinity.bumpLimit(4);
+    }
+    return true;
+  }
+
+  get isEnabled() {
+    return isAchEnabled(this.id);
+  }
+
+  get isEffectConditionSatisfied() {
+    return this.config.effectCondition === undefined || this.config.effectCondition();
+  }
+
+  get canBeApplied() {
+    return this.isEnabled && this.isEffectConditionSatisfied;
+  }
+
+  get secondaryEffect() {
+    return this._secondaryState;
+  }
 }
 
+/**
+ * @type {AchievementState[]}
+ */
+AchievementState.list = mapGameData(
+  GameDatabase.achievements.normal,
+  data => new AchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {AchievementState}
+ */
+function Achievement(id) {
+  return AchievementState.list[id];
+}
+
+const Achievements = {
+  /**
+   * @type {AchievementState[]}
+   */
+  list: AchievementState.list.compact(),
+  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
+  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
+};
+
+class SecretAchievementState extends GameMechanicState {
+  get name() {
+    return this.config.name;
+  }
+
+  get isUnlocked() {
+    return player.secretAchievements.has(this.id);
+  }
+
+  unlock() {
+    if (this.isUnlocked) return false;
+    player.secretAchievements.add(this.id);
+    return true;
+  }
+}
+
+SecretAchievementState.list = mapGameData(
+  GameDatabase.achievements.secret,
+  data => new SecretAchievementState(data)
+);
+
+/**
+ * @param {number} id
+ * @returns {SecretAchievementState}
+ */
+function SecretAchievement(id) {
+  return SecretAchievementState.list[id];
+}
+
+const SecretAchievements = {
+  /**
+   * @type {SecretAchievementState[]}
+   */
+  list: SecretAchievementState.list.compact(),
+  byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
+};
+
 function clearOldAchieves() {
-  for (let achId of player.achievements) {
-    const achieveKey = Object.keys(allAchievements).find(key => allAchievements[key] === achId);
-    if (achieveKey !== undefined) {
-      player.achievements.delete(achId);
-      player.achievements.add(achieveKey);
-    } else if (Achievement(achId) === undefined && allAchievements[achId] === undefined) {
+  const oldIdMatch = /^[rs][1-9][0-9]+/u;
+  for (const achId of player.achievements) {
+    // Numeric ID's are the new thing, leave them alone
+    if (!isNaN(parseInt(achId, 10))) continue;
+    // ID's like r123 and s123 are pre-version 13; we let the version update code handle them
+    if (oldIdMatch.test(achId)) continue;
+    const achByName = Achievements.byName[achId];
+    if (achByName !== undefined) {
+      player.achievements.delete(achByName.name);
+      player.achievements.add(achByName.id);
+      continue;
+    }
+    if (Achievement(achId) === undefined) {
       player.achievements.delete(achId);
     }
   }
 }
 
 function giveAchievement(name) {
-  let id = allAchievementNums[name];
-  if (id === undefined) throw crash(`giveAchievement of unknown "${name}"`);
-  let achNumber = parseInt(id.slice(1));
-  if (isNaN(achNumber)) throw crash(`Couldn't get achievement number from id ${id}`);
-  if (id.startsWith("s")) {
-    if (player.secretAchievements.has(achNumber)) return false;
-    player.secretAchievements.add(achNumber);
-  } else if (id.startsWith("r")) {
-    if (player.achievements.has(achNumber)) return false;
-    player.achievements.add(achNumber);
-  } else {
-    throw crash(`Achievement id ${id} doesn't start with r or s`);
-  }
-
+  const achievement = Achievements.byName[name] || SecretAchievements.byName[name];
+  if (achievement === undefined) throw crash(`giveAchievement of unknown "${name}"`);
+  if (!achievement.unlock()) return;
   GameUI.notify.success(name);
-  kong.submitStats('Achievements', player.achievements.size + player.secretAchievements.size);
-  if (name === "All your IP are belong to us" || name === "MAXIMUM OVERDRIVE") {
-    Autobuyer.infinity.bumpLimit(4);
-  }
-  updateAchievementPower();
+  kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
+  GameCache.achievementPower.invalidate();
   GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
@@ -320,79 +248,4 @@ function updateRealityAchievementModifiers() {
     rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
     secondsForAllAchs: secondsForAllAchs
   };
-}
-
-class AchievementState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    this._fullId = "r" + this.id;
-    if (config.secondaryEffect) {
-      const secondaryConfig = {
-        id: config.id,
-        effect: config.secondaryEffect
-      };
-      this._secondaryState = new AchievementState(secondaryConfig);
-    }
-  }
-
-  get isUnlocked() {
-    return player.achievements.has(this.id);
-  }
-
-  get isEnabled() {
-    return isAchEnabled(this.id);
-  }
-
-  get isEffectConditionSatisfied() {
-    return this.config.effectCondition === undefined || this.config.effectCondition();
-  }
-
-  get canBeApplied() {
-    return this.isEnabled && this.isEffectConditionSatisfied;
-  }
-
-  get secondaryEffect() {
-    return this._secondaryState;
-  }
-}
-
-AchievementState.all = mapGameData(
-  GameDatabase.achievements.normal,
-  data => new AchievementState(data)
-);
-
-/**
- * @param {number} id
- * @returns {AchievementState}
- */
-function Achievement(id) {
-  return AchievementState.all[id];
-}
-
-const Achievements = {
-  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
-};
-
-class SecretAchievementState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    this._fullId = "s" + this.id;
-  }
-
-  get isUnlocked() {
-    return player.secretAchievements.has(this.id);
-  }
-}
-
-SecretAchievementState.all = mapGameData(
-  GameDatabase.achievements.secret,
-  data => new SecretAchievementState(data)
-);
-
-/**
- * @param {number} id
- * @returns {AchievementState}
- */
-function SecretAchievement(id) {
-  return SecretAchievementState.all[id];
 }

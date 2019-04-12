@@ -31,7 +31,7 @@ GameKeyboard.bindHotkey("esc", () => {
     Tab.options.show();
   }
 });
-GameKeyboard.bindHotkey("b", () => pauseBlackHole());
+GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 
 GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");

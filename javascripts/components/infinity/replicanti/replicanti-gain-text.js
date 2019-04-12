@@ -6,27 +6,29 @@ Vue.component("replicanti-gain-text", {
   },
   methods: {
     update() {
-      const modifiedTimePerTick = Time.deltaTimeMs * getGameSpeedupFactor();
-      const logGainFactorPerTick = modifiedTimePerTick / 1000 *
+      const updateRateMs = player.options.updateRate;
+      const ticksPerSecond = 1000 / updateRateMs;
+      const logGainFactorPerTick = getGameSpeedupFactor() / ticksPerSecond *
         (Math.log(player.replicanti.chance + 1) * 1000 / getReplicantiInterval());
-      const log10GainFactorPerTick = Decimal.pow(Math.E, logGainFactorPerTick).log10();
+      const log10GainFactorPerTick = logGainFactorPerTick / Math.LN10;
       if (TimeStudy(192).isBought && player.replicanti.amount.log10() > 308) {
-        const postScale = Math.log10(scaleFactor) / scaleLog10;
+        const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
         const factorGainPerSecond = Decimal.pow(
-          Math.E,
-          Math.log(logGainFactorPerTick * postScale + 1) / postScale * (1000 / Time.deltaTimeMs)
+          logGainFactorPerTick * postScale + 1,
+          ticksPerSecond / postScale
         );
         this.text = `You are gaining x${shorten(factorGainPerSecond, 2, 1)} Replicanti per second`;
         return;
       }
       if (log10GainFactorPerTick > 308) {
-        const galaxiesPerSecond = (1000 / Time.deltaTimeMs) * log10GainFactorPerTick / 308;
-        this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second`;
+        const galaxiesPerSecond = ticksPerSecond * log10GainFactorPerTick / 308;
+        this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
+          `(all galaxies within ${TimeSpan.fromSeconds(Replicanti.galaxies.max / galaxiesPerSecond)})`;
         return;
       }
-      const totalTime = Math.log10(Number.MAX_VALUE) / (1000 / Time.deltaTimeMs * log10GainFactorPerTick);
+      const totalTime = Math.log10(Number.MAX_VALUE) / (ticksPerSecond * log10GainFactorPerTick);
       const remainingTime = (Math.log10(Number.MAX_VALUE) - player.replicanti.amount.log10()) /
-        (1000 / Time.deltaTimeMs * log10GainFactorPerTick);
+        (ticksPerSecond * log10GainFactorPerTick);
       this.text = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti ` +
         `(${TimeSpan.fromSeconds(totalTime)} total)`;
     }

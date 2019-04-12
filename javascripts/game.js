@@ -663,23 +663,11 @@ setInterval(function() {
         $(".automator-container").hide()
     }
 
-    updateAchievementPower();
+    GameCache.achievementPower.invalidate();
 
     RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;
-    if (Perk.autobuyerTT4.isBought) maxTheorems()
-    else if (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) {
-      maxTheorems(); 
-      ttMaxTimer = 0;
-    }
-    else if (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) {
-      maxTheorems(); 
-      ttMaxTimer = 0;
-    }
-    else if (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10) {
-      maxTheorems(); 
-      ttMaxTimer = 0;
-    }
+    if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
     EternityChallenge.autoCompleteTick()
     if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
@@ -1097,7 +1085,7 @@ function gameLoop(diff, options = {}) {
       player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime))
     );
 
-  document.getElementById("realitymachines").innerHTML = "You have <span class=\"RMAmount1\">" + shortenDimensions(player.reality.realityMachines) + "</span> Reality Machine" + ((player.reality.realityMachines.eq(1)) ? "." : "s.")
+  document.getElementById("rm-amount").textContent = shortenDimensions(player.reality.realityMachines);
 
   BlackHoles.updatePhases(blackHoleDiff);
 

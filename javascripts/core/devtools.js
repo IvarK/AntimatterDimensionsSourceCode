@@ -45,10 +45,9 @@ const specialGlyphSymbols = {
 }
 
 dev.giveAllAchievements = function() {
-    Object.keys(allAchievements).forEach( function(key) {
-        giveAchievement(allAchievements[key])
-    })
-}
+  const allAchievements = Achievements.list.concat(SecretAchievements.list);
+  for (const achievement of allAchievements) achievement.unlock();
+};
 
 dev.doubleEverything = function() {
     Object.keys(player).forEach( function(key) {
@@ -191,8 +190,8 @@ dev.realize = function() {
 }
 
 dev.respecPerks = function() {
-    player.reality.pp += player.reality.perks.length
-    player.reality.perks = [];
+    player.reality.pp += player.reality.perks.size;
+    player.reality.perks = new Set();
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
     drawPerkNetwork()
@@ -271,7 +270,7 @@ dev.updateTestSave = function() {
     }
 
     if (player.options.testVersion == 6) {
-        player.reality.perks = []
+        player.reality.perks = new Set();
         player.options.testVersion = 7
       }
     if (player.options.testVersion == 7) {
@@ -286,7 +285,7 @@ dev.updateTestSave = function() {
         //give starting perk
         if(player.reality.pp > 0) {
             player.reality.pp -= 1
-            player.reality.perks.push(0)
+            player.reality.perks.add(0);
         }
         player.options.testVersion = 10
     }
@@ -542,7 +541,7 @@ dev.updateTestSave = function() {
   convertEPMult();
 
   if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.length === Perk.all.length) giveAchievement("Perks of living")
+  if (player.reality.perks.size === Perk.all.length) giveAchievement("Perks of living")
   if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =

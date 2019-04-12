@@ -285,7 +285,7 @@ dev.updateTestSave = function() {
         //give starting perk
         if(player.reality.pp > 0) {
             player.reality.pp -= 1
-            player.reality.perks.add(0)
+            player.reality.perks.add(0);
         }
         player.options.testVersion = 10
     }

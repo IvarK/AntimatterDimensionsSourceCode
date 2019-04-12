@@ -10,6 +10,6 @@ Vue.component("pp-label", {
     }
   },
   template: `
-    <div class="c-pp-label">You have {{ shorten(pp, 0, 0) }} Perk points</div>
+    <div class="c-pp-label">You have {{ shorten(pp, 0, 0) }} {{"Perk Point" | pluralize(pp)}}</div>
   `
 });

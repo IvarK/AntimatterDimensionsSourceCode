@@ -12,7 +12,7 @@ Vue.component("replicanti-gain-text", {
         (Math.log(player.replicanti.chance + 1) * 1000 / getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick / Math.LN10;
       if (TimeStudy(192).isBought && player.replicanti.amount.log10() > 308) {
-        const postScale = Math.log10(scaleFactor) / scaleLog10;
+        const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
         const factorGainPerSecond = Decimal.pow(
           logGainFactorPerTick * postScale + 1,
           ticksPerSecond / postScale

@@ -34,7 +34,7 @@ class PerkState extends PurchasableMechanicState {
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
     updateAutomatorRows();
-    if (player.reality.perks.length === Perk.all.length) {
+    if (player.reality.perks.size === Perk.all.length) {
       giveAchievement("Perks of living");
     }
     drawPerkNetwork()

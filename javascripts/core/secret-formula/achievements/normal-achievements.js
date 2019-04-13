@@ -866,12 +866,16 @@ GameDatabase.achievements.normal = [
   {
     id: 152,
     name: "Personal Space",
-    tooltip: "Have 100 glyphs in your inventory"
+    tooltip: "Have 100 glyphs in your inventory",
+    checkRequirement: () => Glyphs.inventoryList.length === 100,
+    checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 153,
     name: "Do I really have to do this?",
-    tooltip: "Have 0 glyphs in your inventory and 100 or more realities"
+    tooltip: "Have 0 glyphs in your inventory and 100 or more realities",
+    checkRequirement: () => Glyphs.inventoryList.length === 0 && player.realities >= 100,
+    checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 154,
@@ -881,7 +885,9 @@ GameDatabase.achievements.normal = [
   {
     id: 155,
     name: "Why did you have to add RNG to the game?",
-    tooltip: "Get a Celestial glyph"
+    tooltip: "Get a Celestial glyph",
+    checkRequirement: () => Glyphs.inventoryList.some(g => g.strength >= 3.5),
+    checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 156,
@@ -891,7 +897,9 @@ GameDatabase.achievements.normal = [
   {
     id: 157,
     name: "I'm up all night to get lucky",
-    tooltip: "Have 100 rare or better glyphs"
+    tooltip: "Have 100 rare or better glyphs",
+    checkRequirement: () => Glyphs.inventoryList.length === 100 && Glyphs.inventoryList.every(g => g.strength >= 2),
+    checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 158,

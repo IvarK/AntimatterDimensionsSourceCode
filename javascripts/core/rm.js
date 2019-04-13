@@ -204,6 +204,9 @@ const GlyphGenerator = {
 const Glyphs = {
   inventory: [],
   active: [],
+  get inventoryList() {
+    return player.reality.glyphs.inventory;
+  },
   get activeList() {
     return player.reality.glyphs.active;
   },
@@ -254,7 +257,6 @@ const Glyphs = {
       this.removeFromInventory(stacked.pop());
     }
     this.validate();
-    checkGlyphAchievements();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   findById(id) {
@@ -327,7 +329,6 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
-    checkGlyphAchievements();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
@@ -338,7 +339,6 @@ const Glyphs = {
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
     player.reality.glyphs.inventory.splice(index, 1);
-    checkGlyphAchievements();
     EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
@@ -574,14 +574,6 @@ function separateEffectKey(effectKey) {
   return [type, effect]
 }
 
-function checkGlyphAchievements() {
-  const glyphs = player.reality.glyphs.inventory;
-  if (glyphs.length === 100) giveAchievement("Personal Space")
-  if (glyphs.length === 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
-  if (glyphs.some((g) => g.strength >= 3.5)) giveAchievement("Why did you have to add RNG to the game?")
-  if (glyphs.every((g) => g.strength >= 2) && glyphs.length === 100) giveAchievement("I'm up all night to get lucky")
-}
-
 // Returns both effect value and softcap status
 function getActiveGlyphEffects() {
   return orderedEffectList
@@ -627,8 +619,8 @@ function sacrificeGlyph(glyph, force = false) {
   }
   Glyphs.removeFromInventory(glyph);
 
-  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
-  if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
+  if (glyph.strength >= 3.25) Achievement(151).unlock();
+  if (glyph.strength >= 3.5) Achievement(156).unlock();
 }
 
 function getGlyphLevelInputs() {

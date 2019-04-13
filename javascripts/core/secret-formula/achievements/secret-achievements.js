@@ -98,7 +98,9 @@ GameDatabase.achievements.secret = [
     id: 32,
     name: "Less than or equal to 0.001",
     tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.",
-    checkRequirement: () => Time.bestInfinity.totalMilliseconds <= 1,
+    checkRequirement: () =>
+      Time.bestInfinity.totalMilliseconds <= 1 ||
+      Time.bestEternity.totalMilliseconds <= 1,
     checkEvent: GameEvent.INFINTIY_RESET
   },
   {
@@ -142,7 +144,8 @@ GameDatabase.achievements.secret = [
   {
     id: 42,
     name: "Was it even broken?",
-    tooltip: '"Fix" your save.'
+    tooltip: '"Fix" your save.',
+    checkRequirement: () => player.secretUnlocks.fixed === "hasbeenfixed"
   },
   {
     id: 43,

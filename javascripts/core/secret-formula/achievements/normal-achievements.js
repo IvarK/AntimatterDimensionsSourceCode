@@ -110,6 +110,8 @@ GameDatabase.achievements.normal = [
     id: 32,
     name: "The Gods are pleased",
     tooltip: "Get over 600x from Dimensional Sacrifice in total.",
+    checkRequirement: () => Sacrifice.totalBoost.gte(600),
+    checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice is slightly stronger.",
     effect: 0.2
   },
@@ -497,6 +499,8 @@ GameDatabase.achievements.normal = [
     id: 88,
     name: "Yet another infinity reference",
     tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`,
+    checkRequirement: () => Sacrifice.nextBoost.gte(Number.MAX_VALUE),
+    checkEvent: GameEvent.SACRIFICE_RESET_BEFORE,
     reward: "Sacrifices are stronger.",
     effect: 0.011,
   },
@@ -677,6 +681,8 @@ GameDatabase.achievements.normal = [
     id: 118,
     name: "IT'S OVER 9000",
     tooltip: () => `Get a total sacrifice multiplier of ${shorten("1e9000", 0, 0)}.`,
+    checkRequirement: () => Sacrifice.totalBoost.mantissa >= 9000,
+    checkEvent: GameEvent.SACRIFICE_RESET_AFTER,
     reward: "Sacrifice doesn't reset your Dimensions.",
   },
   {

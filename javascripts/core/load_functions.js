@@ -29,10 +29,8 @@ function onLoad() {
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
+  SecretAchievement(42).tryUnlock();
   Theme.set(player.options.theme);
-  if (player.secretUnlocks.fixed === "hasbeenfixed") {
-    giveAchievement("Was it even broken?");
-  }
 
   for (let i=0; i<12; i++) {
     if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
@@ -118,7 +116,7 @@ function onLoad() {
             player["timeDimension"+i].cost = Decimal.pow(timeDimCostMults[i]*2.2, player["timeDimension"+i].bought).times(timeDimStartCosts[i])
           }
       }
-      if (player.bestEternity <= 0.01 || player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
+      SecretAchievement(32).tryUnlock();
   }
 
   // player.version is currently 12 on live, and will be 13 after the update is released

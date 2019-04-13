@@ -50,7 +50,9 @@ GameDatabase.achievements.secret = [
   {
     id: 22,
     name: "Cancer = Spread",
-    tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation."
+    tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation.",
+    checkRequirement: () => player.spreadingCancer >= 100000,
+    checkEvent: GameEvent.GALAXY_RESET
   },
   {
     id: 23,
@@ -97,7 +99,7 @@ GameDatabase.achievements.secret = [
     name: "Less than or equal to 0.001",
     tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.",
     checkRequirement: () => Time.bestInfinity.totalMilliseconds <= 1,
-    checkEvent: GameEvent.BIG_CRUNCH
+    checkEvent: GameEvent.INFINTIY_RESET
   },
   {
     id: 33,

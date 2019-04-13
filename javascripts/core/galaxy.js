@@ -134,15 +134,6 @@ class Galaxy {
     }
     return GalaxyType.NORMAL;
   }
-
-  static checkAchievements() {
-    if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer");
-    if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread");
-    if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??");
-    if (player.galaxies >= 2) giveAchievement("Double Galaxy");
-    if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
-    if (player.galaxies >= 630 && player.replicanti.galaxies === 0) giveAchievement("Unique snowflakes");
-  }
 }
 
 function galaxyReset() {
@@ -154,7 +145,7 @@ function galaxyReset() {
   player.resets = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
-  Galaxy.checkAchievements();
+  EventHub.dispatch(GameEvent.GALAXY_RESET);
 }
 
 function galaxyResetBtnClick() {

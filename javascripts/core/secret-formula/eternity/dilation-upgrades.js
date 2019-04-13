@@ -62,7 +62,7 @@ GameDatabase.eternity.dilation = (function() {
       effect: () => {
         let rep10 = replicantiMult().pLog10() * 0.1;
         rep10 = rep10 > 9000 ? 9000 + 0.5 * (rep10 - 9000) : rep10;
-        return Decimal.pow(10, rep10);
+        return Decimal.pow10(rep10);
       },
       formatEffect: value => formatX(value, 2, 1)
     },

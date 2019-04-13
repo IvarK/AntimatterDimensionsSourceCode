@@ -30,7 +30,7 @@ GameDatabase.achievements.secret = [
     tooltip: "Use standard, cancer, or bracket notation for 10 minutes with more than 1 eternity.",
     checkRequirement: () => AchievementTimers.pain
       .check(player.eternities >= 1 && Notation.current.isPainful, 600),
-    checkEvent: GameEvent.GAME_TICK
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 17,
@@ -52,7 +52,7 @@ GameDatabase.achievements.secret = [
     name: "Cancer = Spread",
     tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation.",
     checkRequirement: () => player.spreadingCancer >= 100000,
-    checkEvent: GameEvent.GALAXY_RESET
+    checkEvent: GameEvent.GALAXY_RESET_AFTER
   },
   {
     id: 23,
@@ -157,7 +157,7 @@ GameDatabase.achievements.secret = [
     name: "Are you statisfied now?",
     tooltip: "Stare intently at the statistics tab for 15 minutes.",
     checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
-    checkEvent: GameEvent.GAME_TICK
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 45,

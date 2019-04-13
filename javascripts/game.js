@@ -669,6 +669,7 @@ function gameLoop(diff, options = {}) {
   }
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
+    EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
     const thisUpdate = Date.now();
     if (thisUpdate - player.lastUpdate >= 21600000) Achievement(35).unlock();
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
@@ -1008,7 +1009,7 @@ function gameLoop(diff, options = {}) {
   Laitela.handleRunUnlocks()
   matterDimensionLoop()
 
-  EventHub.dispatch(GameEvent.GAME_TICK);
+  EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");

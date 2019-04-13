@@ -137,6 +137,7 @@ class Galaxy {
 }
 
 function galaxyReset() {
+  EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
   if (autoS) auto = false;
   autoS = true;
   Achievement(38).tryUnlock();
@@ -145,7 +146,7 @@ function galaxyReset() {
   player.resets = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
-  EventHub.dispatch(GameEvent.GALAXY_RESET);
+  EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
 function galaxyResetBtnClick() {

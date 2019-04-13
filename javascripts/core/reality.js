@@ -207,19 +207,17 @@ function boostedRealityRewards() {
 
 function completeReality(force, reset, auto = false) {
   if (!reset) {
+    EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
     if (Enslaved.lockedInBoostRatio > 1) {
       boostedRealityRewards();
     }
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
     }
-    giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
-    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
       Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
     }
@@ -375,8 +373,6 @@ function completeReality(force, reset, auto = false) {
   updateAutomatorRows();
   drawPerkNetwork();
 
-  if (player.realities >= 4) giveAchievement("How does this work?")
-
   resetInfinityPoints();
 
 
@@ -403,7 +399,7 @@ function completeReality(force, reset, auto = false) {
   }
 
   Lazy.invalidateAll();
-  EventHub.dispatch(GameEvent.REALITY);
+  EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
 }
 
 function handleCelestialRuns(force) {

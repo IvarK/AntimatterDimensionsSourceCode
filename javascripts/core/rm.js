@@ -255,7 +255,7 @@ const Glyphs = {
     }
     this.validate();
     checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -277,7 +277,7 @@ const Glyphs = {
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   unequipAll() {
@@ -288,7 +288,7 @@ const Glyphs = {
       this.active[glyph.idx] = null;
       Glyphs.addToInventory(glyph);
     }
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
@@ -303,7 +303,7 @@ const Glyphs = {
       this.inventory[glyph.idx] = null;
       this.inventory[targetSlot] = glyph;
       glyph.idx = targetSlot;
-      GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+      EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
       console.log("inventory slot full")
     }
@@ -318,7 +318,7 @@ const Glyphs = {
     glyphA.idx = glyphB.idx;
     glyphB.idx = tmp;
     this.validate();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   addToInventory(glyph) {
     this.validate();
@@ -328,7 +328,7 @@ const Glyphs = {
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
     checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   removeFromInventory(glyph) {
@@ -339,7 +339,7 @@ const Glyphs = {
     this.inventory[glyph.idx] = null;
     player.reality.glyphs.inventory.splice(index, 1);
     checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   validate() {

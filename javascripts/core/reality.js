@@ -403,7 +403,7 @@ function completeReality(force, reset, auto = false) {
   }
 
   Lazy.invalidateAll();
-  GameUI.dispatch(GameEvent.REALITY);
+  EventHub.dispatch(GameEvent.REALITY);
 }
 
 function handleCelestialRuns(force) {

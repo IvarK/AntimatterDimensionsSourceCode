@@ -1008,11 +1008,10 @@ function gameLoop(diff, options = {}) {
   Laitela.handleRunUnlocks()
   matterDimensionLoop()
 
-    // Not GameUI because it's not UI-related
-    EventHub.global.emit(GameEvent.GAME_TICK);
-    GameUI.update();
-    player.lastUpdate = thisUpdate;
-    PerformanceStats.end("Game Update");
+  EventHub.dispatch(GameEvent.GAME_TICK);
+  GameUI.update();
+  player.lastUpdate = thisUpdate;
+  PerformanceStats.end("Game Update");
 }
 
 // Reducing boilerplate code a bit (runs a specified number of ticks with a specified length and triggers autobuyers after each tick)

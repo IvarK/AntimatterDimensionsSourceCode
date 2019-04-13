@@ -33,7 +33,7 @@ class AchievementState extends GameMechanicState {
     GameUI.notify.success(this.name);
     kong.submitAchievements();
     GameCache.achievementPower.invalidate();
-    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
     return true;
   }
 
@@ -102,7 +102,7 @@ class SecretAchievementState extends GameMechanicState {
     player.secretAchievements.add(this.id);
     GameUI.notify.success(this.name);
     kong.submitAchievements();
-    GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
     return true;
   }
 }
@@ -138,7 +138,7 @@ const SecretAchievements = {
   }
   for (const event of events) {
     const achievements = allAchievements.filter(a => a.config.checkEvent === event);
-    EventHub.global.on(event, () => {
+    EventHub.logic.on(event, () => {
       for (const achievement of achievements) achievement.tryUnlock();
     }, Achievements);
   }
@@ -200,7 +200,7 @@ function giveAchievement(name) {
   GameUI.notify.success(name);
   kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
   GameCache.achievementPower.invalidate();
-  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 function isAchEnabled(achId) {

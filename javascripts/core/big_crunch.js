@@ -53,7 +53,7 @@ function bigCrunchReset() {
       failChallenge();
     }
 
-    EventHub.global.emit(GameEvent.BIG_CRUNCH);
+    EventHub.dispatch(GameEvent.BIG_CRUNCH);
     if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();

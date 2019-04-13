@@ -129,11 +129,13 @@ function getTachyonGain() {
 function getTachyonReq() {
   const mult = tachyonGainMultiplier();
 
-  return Decimal.pow(10, Decimal.pow(
+  return Decimal.pow10(
     player.dilation.totalTachyonParticles
       .times(Math.pow(400, 1.5))
-      .dividedBy(mult),
-    2 / 3));
+      .dividedBy(mult)
+      .pow(2 / 3)
+      .toNumber()
+  );
 }
 
 function dilatedValueOf(value) {

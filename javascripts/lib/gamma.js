@@ -19,7 +19,7 @@
 // modified for style
 
 // Spouge approximation (suitable for large arguments)
-function lngamma(z) {
+const lngamma = (function() {
   const g_ln = 607 / 128;
   const p_ln = [
     0.99999999999999709182,
@@ -38,9 +38,11 @@ function lngamma(z) {
     -0.26190838401581408670e-4,
     0.36899182659531622704e-5
   ];
-  if (z < 0) return NaN;
-  let x = p_ln[0];
-  for (let i = p_ln.length - 1; i > 0; --i) x += p_ln[i] / (z + i);
-  const t = z + g_ln + 0.5;
-  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x) - Math.log(z);
-}
+  return z => {
+    if (z < 0) return NaN;
+    let x = p_ln[0];
+    for (let i = p_ln.length - 1; i > 0; --i) x += p_ln[i] / (z + i);
+    const t = z + g_ln + 0.5;
+    return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x) - Math.log(z);
+  }
+}());

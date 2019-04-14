@@ -232,15 +232,14 @@ const logFactorial = (function() {
 const fastRandom = (function() {
   let state = Math.floor(Date.now()) % Math.pow(2, 32);
   const scale = 1 / (Math.pow(2, 32));
+  /* eslint-disable no-bitwise */
   return () => {
-    // eslint-disable-next-line no-bitwise
     state ^= state << 13;
-    // eslint-disable-next-line no-bitwise
     state ^= state >>> 17;
-    // eslint-disable-next-line no-bitwise
     state ^= state << 5;
     return state * scale + 0.5;
   };
+  /* eslint-enable no-bitwise */
 }());
 
 // Normal distribution with specified mean and standard deviation
@@ -248,7 +247,7 @@ const normalDistribution = (function() {
   let haveSpare = false;
   let spare = 0;
   return (mean, stdDev) => {
-    if (typeof mean !== "number" || typeof (stdDev) !== "number") return NaN;
+    if (typeof mean !== "number" || typeof stdDev !== "number") return NaN;
     if (haveSpare) {
       haveSpare = false;
       return mean + stdDev * spare;

@@ -169,7 +169,10 @@ function onLoad() {
     delete player.achPow;
     delete player.themes;
     if (player.options.theme === undefined) player.options.theme = "Normal";
-    if (player.options.secretThemeKey === 0) player.options.secretThemeKey = "";
+    if (player.options.secretThemeKey === 0) {
+      delete player.options.secretThemeKey
+      player.options.secretThemeKey = "";
+    }
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

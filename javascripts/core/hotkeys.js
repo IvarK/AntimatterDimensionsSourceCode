@@ -41,11 +41,15 @@ GameKeyboard.bind(["ctrl", "command"], () => setControlKey(false), "keyup");
 
 GameKeyboard.bind(["ctrl+shift", "command+shift"], () => setControlShiftKey(true), "keydown");
 
-GameKeyboard.bind("9", () => SecretAchievement(41).unlock());
+GameKeyboard.bind("9", () => {
+  SecretAchievement(41).unlock();
+});
 
 GameKeyboard.bind(
   ["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"],
-  () => SecretAchievement(23).unlock()
+  () => {
+    SecretAchievement(23).unlock();
+  }
 );
 
 GameKeyboard.bind("up up down down left right left right b a", () => {

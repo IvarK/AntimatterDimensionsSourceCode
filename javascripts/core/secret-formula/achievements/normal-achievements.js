@@ -545,7 +545,11 @@ GameDatabase.achievements.normal = [
     id: 95,
     name: "Is this safe?",
     tooltip: "Gain Infinite replicanti in 30 minutes.",
-    reward: "Infinity doesn't reset your Replicanti amount."
+    reward: "Infinity doesn't reset your Replicanti amount.",
+    checkRequirement: () =>
+      player.replicanti.amount.eq(Decimal.MAX_NUMBER) &&
+      Time.thisInfinity.totalMinutes <= 30,
+    checkEvent: GameEvent.REPLICANTI_TICK_AFTER
   },
   {
     id: 96,
@@ -602,7 +606,9 @@ GameDatabase.achievements.normal = [
   {
     id: 106,
     name: "The swarm",
-    tooltip: "Get 10 Replicanti galaxies in 15 seconds."
+    tooltip: "Get 10 Replicanti galaxies in 15 seconds.",
+    checkRequirement: () => player.replicanti.galaxies >= 10 && Time.thisInfinity.totalSeconds <= 15,
+    checkEvent: GameEvent.REPLICANTI_TICK_AFTER
   },
   {
     id: 107,

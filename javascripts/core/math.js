@@ -214,3 +214,175 @@ function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initi
     Math.max(0, amountOfPurchases - preScalingPurchases)));
   return preScalingCost * postScalingCost;
 }
+
+const logFactorial = (function() {
+  const LOGS = Array.range(1, 11).map(Math.log);
+  const TABLE = [0];
+  for (const x of LOGS) {
+    TABLE.push(TABLE[TABLE.length - 1] + x);
+  }
+  return x => {
+    if (typeof x !== "number" || x < 0) return NaN;
+    if (x < TABLE.length) return TABLE[x];
+    return lngamma(x + 1);
+  };
+}());
+
+/** 32 bit XORSHIFT generator */
+const fastRandom = (function() {
+  let state = Math.floor(Date.now()) % Math.pow(2, 32);
+  const scale = 1 / (Math.pow(2, 32));
+  return () => {
+    // eslint-disable-next-line no-bitwise
+    state ^= state << 13;
+    // eslint-disable-next-line no-bitwise
+    state ^= state >>> 17;
+    // eslint-disable-next-line no-bitwise
+    state ^= state << 5;
+    return state * scale + 0.5;
+  };
+}());
+
+// Normal distribution with specified mean and standard deviation
+const normalDistribution = (function() {
+  let haveSpare = false;
+  let spare = 0;
+  return (mean, stdDev) => {
+    if (typeof mean !== "number" || typeof (stdDev) !== "number") return NaN;
+    if (haveSpare) {
+      haveSpare = false;
+      return mean + stdDev * spare;
+    }
+    let mag, u, v;
+    do {
+      u = fastRandom() * 2 - 1;
+      v = fastRandom() * 2 - 1;
+      mag = u * u + v * v;
+    } while (mag >= 1 || mag === 0);
+    const t = Math.sqrt(-2 * Math.log(mag) / mag);
+    haveSpare = true;
+    spare = v * t;
+    return mean + stdDev * u * t;
+  };
+}());
+
+// Helper function for BTRD
+const binomialGeneratorFC = (function() {
+  const stirlingBase = x => -8.10614667953272582e-2 + (x + 0.5) * Math.log1p(x) - x;
+  const TABLE = Array.range(0, 20).map(x => logFactorial(x) - stirlingBase(x));
+  return x => {
+    if (typeof x !== "number" || x < 0) return NaN;
+    if (x < TABLE.length) return TABLE[x];
+    const xr = 1 / (x + 1);
+    return (1 / 12 - (1 / 360 - (xr * xr) / 1260) * (xr * xr)) * xr;
+  };
+}());
+
+/**
+ * This manually inverts the cumulative probability distribution
+ * @param {number} numSamples number of drawn samples
+ * @param {number} p probability
+ * @returns {number} number of samples that satisfied p
+ */
+function binomialDistributionSmallExpected(numSamples, p) {
+  const R = p / (1 - p);
+  const NxR = (numSamples + 1) * R;
+  // Calculate (1-p)^n without rounding error at 1 - p
+  let pdf = Math.exp(Math.log1p(-p) * numSamples);
+  const u = fastRandom();
+  let cdf = pdf;
+  let output = 0;
+  while (u > cdf) {
+    ++output;
+    pdf *= (NxR / output - R);
+    if (cdf + pdf === cdf) break;
+    cdf += pdf;
+  }
+  return output;
+}
+
+function binomialDistributionNaive(numSamples, p) {
+  let out = 0;
+  for (let i = 0; i < numSamples; ++i) {
+    if (fastRandom() < p) ++out;
+  }
+  return out;
+}
+
+function binomialDistribution(numSamples, p) {
+  if (p === 0) return 0;
+  const expected = numSamples * p;
+  // BTRD is good past 10, but the inversion method we use is faster up to 15 and is exact
+  if (expected < 15) return binomialDistributionSmallExpected(numSamples, p);
+  if (p > 0.5) return numSamples - binomialDistribution(numSamples, 1 - p);
+  // At some point, the variance is so small relative to the expected value that
+  // all samples are within eps of the mean
+  if (expected > 1e32) return expected;
+  const approximateVariance = expected * (1 - p);
+  // Normal approximation is good enough for larger distributions
+  if (approximateVariance > 1e4) return Math.round(normalDistribution(expected, Math.sqrt(approximateVariance)));
+  return binomialDistributionBTRD(numSamples, p);
+}
+
+/**
+ * Algorithm from https://core.ac.uk/download/pdf/11007254.pdf
+ */
+function binomialDistributionBTRD(numSamples, p) {
+  const expected = numSamples * p;
+  const approximateVariance = expected * (1 - p);
+  const approxStdev = Math.sqrt(approximateVariance);
+  const m = Math.floor(expected + p);
+  const R = p / (1 - p);
+  const NxR = (numSamples + 1) * R;
+  const b = 1.15 + 2.53 * approxStdev;
+  const a = -0.0873 + 0.0248 * b + 0.01 * p;
+  const c = expected + 0.5;
+  const alpha = (2.83 + 5.1 / b) * approxStdev;
+  const kU = 0.43;
+  const kV = 0.92 - 4.2 / b;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let v = fastRandom();
+    if (v <= 2 * kU * kV) {
+      const u = v / kV - kU;
+      return Math.floor((2 * a / (0.5 - Math.abs(u)) + b) * u + c);
+    }
+    let u;
+    if (v >= kV) {
+      u = fastRandom() - 0.5;
+    } else {
+      const w = v / kV - 0.93;
+      v = fastRandom() * kV;
+      u = (w > 0 ? 0.5 : -0.5) - w;
+    }
+    const us = 0.5 - Math.abs(u);
+    const k = Math.floor((2 * a / us + b) * u + c);
+    if (k < 0 || k > numSamples) continue;
+    v *= alpha / (a / (us * us) + b);
+    const km = Math.abs(k - m);
+    // These loops are very fast, compared to calculating all the logs and stuff below; the
+    // original paper has 15 here but 40 seems to be closer to optimal.
+    if (km <= 40) {
+      let f = 1;
+      if (m < k) {
+        for (let i = m + 1; i <= k; ++i) f *= (NxR / i - R);
+      } else if (m > k) {
+        for (let i = k + 1; i <= m; ++i) v *= (NxR / i - R);
+      }
+      if (v <= f) return k;
+      continue;
+    }
+    const rho = (km / approximateVariance) * (((km / 3 + 0.625) * km + 1 / 6) / approximateVariance + 0.5);
+    const t = -km * km / (2 * approximateVariance);
+    const logV = Math.log(v);
+    if (logV < t - rho) return k;
+    if (logV > t + rho) continue;
+    const _nm = numSamples - m + 1;
+    const _nk = numSamples - k + 1;
+    const h = (m + 0.5) * Math.log((m + 1) / (R * _nm)) +
+      binomialGeneratorFC(m) + binomialGeneratorFC(numSamples - m);
+    const j = (numSamples + 1) * Math.log(_nm / _nk) + (k + 0.5) * Math.log(_nk * R / (k + 1)) -
+      binomialGeneratorFC(k) - binomialGeneratorFC(numSamples - k);
+    if (logV <= h + j) return k;
+  }
+}

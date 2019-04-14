@@ -1,10 +1,4 @@
 class GameOptions {
-  static changeTheme() {
-    const themes = Themes.available();
-    const current = Theme.current();
-    const next = shiftDown ? themes.previousSibling(current) : themes.nextSibling(current);
-    next.set();
-  }
 
   static toggleNews() {
     if (!player.options.newsHidden) {

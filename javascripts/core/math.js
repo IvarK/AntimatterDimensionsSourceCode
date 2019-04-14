@@ -300,14 +300,6 @@ function binomialDistributionSmallExpected(numSamples, p) {
   return output;
 }
 
-function binomialDistributionNaive(numSamples, p) {
-  let out = 0;
-  for (let i = 0; i < numSamples; ++i) {
-    if (fastRandom() < p) ++out;
-  }
-  return out;
-}
-
 function binomialDistribution(numSamples, p) {
   if (p === 0) return 0;
   const expected = numSamples * p;

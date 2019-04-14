@@ -454,7 +454,6 @@ var player = {
     cloud: true,
     hotkeys: true,
     theme: "Normal",
-    secretThemeKey: "",
     commas: true,
     updateRate: 50,
     chart: {

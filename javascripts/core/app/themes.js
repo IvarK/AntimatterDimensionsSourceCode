@@ -35,8 +35,6 @@ const Theme = function Theme(name, colors) {
         }
         player.options.theme = name;
         ui.view.theme = name;
-        if (this.isSecret())
-            player.options.secretThemeKey = this.displayName();
 
         Chart.defaults.global.defaultFontColor = colors.chartFont;
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;

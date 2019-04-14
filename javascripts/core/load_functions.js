@@ -167,12 +167,9 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
-    delete player.themes;
+    delete player.options.themes;
     if (player.options.theme === undefined) player.options.theme = "Normal";
-    if (player.options.secretThemeKey === 0) {
-      delete player.options.secretThemeKey
-      player.options.secretThemeKey = "";
-    }
+    delete player.options.secretThemeKey;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

@@ -227,7 +227,7 @@ Set.prototype.find = function(predicate) {
   for (const item of this) {
     if (predicate(item)) return item;
   }
-  return false;
+  return undefined;
 };
 
 Set.prototype.every = function(predicate) {

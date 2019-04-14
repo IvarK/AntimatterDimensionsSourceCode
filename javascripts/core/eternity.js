@@ -15,19 +15,9 @@ function eternity(force, auto, switchingDilation) {
     else {
       if (!canEternity()) return false;
       if (!auto && !askEternityConfirmation()) return false;
+      EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
       if (player.thisEternity < player.bestEternity) {
         player.bestEternity = player.thisEternity;
-      }
-      if (player.thisEternity < 30000) giveAchievement("That wasn't an eternity");
-      if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity");
-      if (player.thisEternity <= 1) giveAchievement("Less than or equal to 0.001");
-      if (player.infinitied.lt(10)) giveAchievement("Do you really need a guide for this?");
-      if (Decimal.round(player.replicanti.amount).eq(9)) giveAchievement("We could afford 9");
-      if (player.dimlife) giveAchievement("8 nobody got time for that");
-      if (player.dead) giveAchievement("You're already dead.");
-      if (player.infinitied.lte(1)) giveAchievement("Do I really need to infinity");
-      if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) {
-        giveAchievement("Now you're thinking with dilation!");
       }
       player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
       addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
@@ -43,16 +33,12 @@ function eternity(force, auto, switchingDilation) {
       }
       player.etercreq = 0;
       respecTimeStudies();
-      if (EternityChallenge.completedTiers() >= 50) {
-        giveAchievement("5 more eternities until the update");
-      }
   }
 
     player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
       Achievement(131),
       TimeStudy(191)
     );
-    if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
     if (player.dilation.active && !force) {
         player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
         player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
@@ -126,8 +112,6 @@ function eternity(force, auto, switchingDilation) {
     resetDimensions();
     if (player.respec) respecTimeStudies();
     player.respec = false;
-    giveAchievement("Time is relative");
-    if (player.eternities >= 100) giveAchievement("This mile took an Eternity");
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
 
@@ -178,16 +162,9 @@ function eternity(force, auto, switchingDilation) {
       for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
     }
 
-    if (!Achievement(143).isUnlocked && player.lastTenEternities[9][1] !== 1) {
-        var n = 0;
-        for (i = 0; i < 9; i++) {
-            if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
-        }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
-    }
-
     resetMoney();
 
+    EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
     return true;
 }
 

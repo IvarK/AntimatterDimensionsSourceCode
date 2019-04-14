@@ -134,10 +134,17 @@ const SecretAchievements = {
   for (const achievement of allAchievements) {
     const event = achievement.config.checkEvent;
     if (event === undefined) continue;
-    events.add(event);
+    for (const e of event instanceof Array ? event : [event]) {
+      events.add(e);
+    }
+  }
+  function isCheckedOnEvent(achievement, event) {
+    return achievement.config.checkEvent instanceof Array
+      ? achievement.config.checkEvent.includes(event)
+      : achievement.config.checkEvent === event;
   }
   for (const event of events) {
-    const achievements = allAchievements.filter(a => a.config.checkEvent === event);
+    const achievements = allAchievements.filter(a => isCheckedOnEvent(a, event));
     EventHub.logic.on(event, () => {
       for (const achievement of achievements) achievement.tryUnlock();
     }, Achievements);

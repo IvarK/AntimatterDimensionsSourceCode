@@ -554,7 +554,9 @@ GameDatabase.achievements.normal = [
   {
     id: 96,
     name: "Time is relative",
-    tooltip: "Go Eternal."
+    tooltip: "Go Eternal.",
+    checkRequirement: () => true,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 97,
@@ -576,7 +578,9 @@ GameDatabase.achievements.normal = [
   {
     id: 102,
     name: "This mile took an Eternity",
-    tooltip: "Get all Eternity milestones."
+    tooltip: "Get all Eternity milestones.",
+    checkRequirement: () => player.eternities >= 100,
+    checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
     id: 103,
@@ -591,6 +595,8 @@ GameDatabase.achievements.normal = [
     id: 104,
     name: "That wasn't an eternity",
     tooltip: "Eternity in under 30 seconds.",
+    checkRequirement: () => Time.thisEternity.totalSeconds <= 30,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: "Start Eternities with 2e25 IP.",
     effect: 2e25
   },
@@ -613,12 +619,16 @@ GameDatabase.achievements.normal = [
   {
     id: 107,
     name: "Do you really need a guide for this?",
-    tooltip: "Eternity with the infinitied stat under 10."
+    tooltip: "Eternity with the infinitied stat under 10.",
+    checkRequirement: () => player.infinitied.lt(10),
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 108,
     name: "We could afford 9",
-    tooltip: "Eternity with exactly 9 Replicanti."
+    tooltip: "Eternity with exactly 9 Replicanti.",
+    checkRequirement: () => player.replicanti.amount.round().eq(9),
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 111,
@@ -628,7 +638,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
-        if (infinities[i].lt(infinities[i + 1])) return false;
+        if (infinities[i].lt(infinities[i + 1].times(Decimal.MAX_NUMBER))) return false;
       }
       return true;
     },
@@ -672,6 +682,8 @@ GameDatabase.achievements.normal = [
     id: 116,
     name: "Do I really need to infinity",
     tooltip: "Eternity with only 1 Infinity.",
+    checkRequirement: () => player.infinitied.lte(1),
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to IP based on Infinities.",
     // Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()) can be rewritten as
     // a single pow
@@ -681,7 +693,9 @@ GameDatabase.achievements.normal = [
   {
     id: 117,
     name: "8 nobody got time for that",
-    tooltip: "Eternity without buying Dimensions 1-7."
+    tooltip: "Eternity without buying Dimensions 1-7.",
+    checkRequirement: () => player.dimlife,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 118,
@@ -701,17 +715,23 @@ GameDatabase.achievements.normal = [
   {
     id: 122,
     name: "You're already dead.",
-    tooltip: "Eternity without buying Dimensions 2-8."
+    tooltip: "Eternity without buying Dimensions 2-8.",
+    checkRequirement: () => player.dead,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 123,
     name: "5 more eternities until the update",
-    tooltip: "Complete 50 unique Eternity Challenge tiers."
+    tooltip: "Complete 50 unique Eternity Challenge tiers.",
+    checkRequirement: () => EternityChallenge.completedTiers() >= 50,
+    checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
     id: 124,
     name: "Eternities are the new infinity",
-    tooltip: "Eternity in under 200ms."
+    tooltip: "Eternity in under 200ms.",
+    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 200,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 125,
@@ -761,6 +781,8 @@ GameDatabase.achievements.normal = [
     id: 131,
     name: "No ethical consumption",
     tooltip: "Get 5 billion banked Infinities.",
+    checkRequirement: () => player.infinitiedBank.gt(5000000000),
+    checkEvent: GameEvent.ETERNITY_RESET_AFTER,
     reward: "After Eternity you permanently keep 5% of your Infinities.",
     effect: () => player.infinitied.times(0.05).floor()
   },
@@ -807,7 +829,12 @@ GameDatabase.achievements.normal = [
   {
     id: 137,
     name: "Now you're thinking with dilation!",
-    tooltip: () => `Eternity for ${shorten("1e600", 0, 0)} EP in 1 minute or less while Dilated.`
+    tooltip: () => `Eternity for ${shorten("1e600", 0, 0)} EP in 1 minute or less while Dilated.`,
+    checkRequirement: () =>
+      gainedEternityPoints().exponent >= 600 &&
+      Time.thisEternity.totalMinutes <= 1 &&
+      player.dilation.active,
+    checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
     id: 138,
@@ -844,6 +871,14 @@ GameDatabase.achievements.normal = [
     name: "Yo dawg, I heard you liked reskins...",
     tooltip: () => "Have all your Eternities in your past 10 Eternities be at least " +
       `${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one.`,
+    checkRequirement: () => {
+      const eternities = player.lastTenEternities.map(run => run[1]);
+      for (let i = 0; i < eternities.length - 1; i++) {
+        if (eternities[i].lt(eternities[i + 1].times(Decimal.MAX_NUMBER))) return false;
+      }
+      return true;
+    },
+    checkEvent: GameEvent.INFINTIY_RESET,
     reward: "nothing right now."
   },
   {

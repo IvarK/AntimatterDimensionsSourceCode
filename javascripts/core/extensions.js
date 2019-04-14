@@ -223,6 +223,13 @@ Set.prototype.countWhere = function(predicate) {
   return count;
 };
 
+Set.prototype.find = function(predicate) {
+  for (const item of this) {
+    if (predicate(item)) return item;
+  }
+  return false;
+};
+
 Set.prototype.every = function(predicate) {
   for (const item of this) {
     if (!predicate(item)) return false;

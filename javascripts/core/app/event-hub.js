@@ -19,17 +19,19 @@ class EventHub {
     }
   }
 
-  dispatch(event) {
+  // eslint-disable-next-line max-params
+  dispatch(event, a1, a2, a3) {
     const handlers = this._handlers[event];
     if (handlers === undefined) return;
     for (const handler of handlers) {
-      handler.fn();
+      handler.fn(a1, a2, a3);
     }
   }
 
-  static dispatch(event) {
-    EventHub.logic.dispatch(event);
-    GameUI.dispatch(event);
+  // eslint-disable-next-line max-params
+  static dispatch(event, a1, a2, a3) {
+    EventHub.logic.dispatch(event, a1, a2, a3);
+    GameUI.dispatch(event, a1, a2, a3);
   }
 
   static get stats() {

@@ -165,7 +165,7 @@ dev.giveGlyph = function (level, rawLevel = level) {
 }
 
 dev.decriminalize = function () {
-  player.secretAchiements.delete(23);
+  player.secretAchievements.delete(23);
   EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 

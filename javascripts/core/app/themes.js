@@ -1,4 +1,4 @@
-let Theme = function Theme(name, colors) {
+const Theme = function Theme(name, colors) {
     this.name = name;
 
     this.isDefault = function() {
@@ -11,8 +11,7 @@ let Theme = function Theme(name, colors) {
 
     this.isAvailable = function() {
         if (!this.isSecret()) return true;
-        return player.secretUnlocks.themes
-            .some(theme => theme.includes(name));
+        return player.secretUnlocks.themes.countWhere(theme => theme.includes(name));
     };
 
     this.displayName = function() {
@@ -22,9 +21,7 @@ let Theme = function Theme(name, colors) {
             return name;
         }
         // Secret themes are stored as "S9Whatever", so we need to strip the SN part
-        return player.secretUnlocks.themes
-            .find(theme => theme.includes(name))
-            .substr(2);
+        return player.secretUnlocks.themes.find(theme => theme.includes(name)).substr(2);
     };
 
     this.set = function() {
@@ -55,7 +52,7 @@ Theme.current = function() {
 };
 
 Theme.set = function(name) {
-    let theme = Themes.find(name);
+    const theme = Themes.find(name);
     theme.set();
     return theme;
 };
@@ -86,7 +83,7 @@ Theme.tryUnlock = function(name) {
     }
     const prefix = "S" + (index + 1);
     const fullName = prefix + name.capitalize();
-    if (!player.secretUnlocks.themes.includes(fullName)) player.secretUnlocks.themes.push(fullName);
+    player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
     giveAchievement("Shhh... It's a secret");
     return true;
@@ -108,7 +105,7 @@ Theme.dark = function(name) {
     return new Theme(name, colors);
 };
 
-let Themes = {
+const Themes = {
     all: [
         Theme.light("Normal"),
         Theme.light("Metro"),

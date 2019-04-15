@@ -13,7 +13,7 @@ Vue.component("modal-shortcuts", {
       { name: "Eternity", keys: ["e"] },
       { name: "Toggle Black Hole", keys: ["b"] },
       { name: "Save game", keys: ["ctrl", "s"] },
-      { name: "Close modal or open options", keys: ["esc"] }
+      { name: "Close pop-up or open options", keys: ["esc"] }
     ]
   },
   template:

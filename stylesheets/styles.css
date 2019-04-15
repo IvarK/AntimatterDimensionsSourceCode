@@ -2488,6 +2488,10 @@ screen and (max-width: 480px) {
   margin-top: 1rem;
 }
 
+.c-options-tab__shortcuts-link {
+  cursor: pointer;
+}
+
 /*#region l-options-grid*/
 
 .l-options-grid {

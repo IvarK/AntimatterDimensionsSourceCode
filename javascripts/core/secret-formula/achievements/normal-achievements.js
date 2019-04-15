@@ -80,8 +80,8 @@ GameDatabase.achievements.normal = [
     id: 26,
     name: "You got past The Big Wall",
     tooltip: "Buy an Antimatter Galaxy.",
-    checkRequirement: () => player.galaxies >= 1,
-    checkEvent: GameEvent.GALAXY_RESET_AFTER
+    checkRequirement: () => true,
+    checkEvent: GameEvent.GALAXY_RESET_BEFORE
   },
   {
     id: 27,
@@ -509,8 +509,8 @@ GameDatabase.achievements.normal = [
   {
     id: 88,
     name: "Yet another infinity reference",
-    tooltip: () => `Get a ${formatX(Number.MAX_VALUE, 1, 0)} multiplier in a single sacrifice.`,
-    checkRequirement: () => Sacrifice.nextBoost.gte(Number.MAX_VALUE),
+    tooltip: () => `Get a ${formatX(Decimal.MAX_NUMBER, 1, 0)} multiplier in a single sacrifice.`,
+    checkRequirement: () => Sacrifice.nextBoost.gte(Decimal.MAX_NUMBER),
     checkEvent: GameEvent.SACRIFICE_RESET_BEFORE,
     reward: "Sacrifices are stronger.",
     effect: 0.011,
@@ -587,7 +587,7 @@ GameDatabase.achievements.normal = [
     name: "Costco sells dimboosts now",
     tooltip: "Bulk buy 750 Dimension Boosts at once.",
     checkRequirement: bulk => bulk >= 750,
-    checkEvent: GameEvent.DIMBOOST_BEFORE,
+    checkEvent: GameEvent.DIMBOOST_AFTER,
     reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
     effect: 1.01
   },
@@ -602,7 +602,7 @@ GameDatabase.achievements.normal = [
     id: 103,
     name: "This achievement doesn't exist II",
     tooltip: "Reach 9.99999e999 IP.",
-    checkRequirement: () => player.infinityPoints.gte("9.99999e999"),
+    checkRequirement: () => player.infinityPoints.exponent >= 1000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Gain more IP based on amount of antimatter you had when crunching.",
     effect: 307.8
@@ -650,7 +650,7 @@ GameDatabase.achievements.normal = [
     id: 111,
     name: "Yo dawg, I heard you liked infinities...",
     tooltip: () => "Have all your Infinities in your past 10 Infinities be at least " +
-      `${shorten(Number.MAX_VALUE, 1, 0)} times higher IP than the previous one.`,
+      `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher IP than the previous one.`,
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
@@ -690,7 +690,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => true,
     checkEvent: GameEvent.FAIL_CHALLENGE,
     reward: "A fading sense of accomplishment.",
-    effect: () => "Accomplishment"
+    effect: () => "Sense of accomplishment (fading)"
   },
   {
     id: 115,
@@ -778,13 +778,13 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies > 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
-      `${shorten(Number.MAX_VALUE, 1, 0)} instead of resetting them to 1.`,
+      `${shorten(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to 1.`,
   },
   {
     id: 127,
     name: "But I wanted another prestige layer...",
-    tooltip: () => `Reach ${shorten(Number.MAX_VALUE, 1, 0)} EP.`,
-    checkRequirement: () => player.eternityPoints.gte(Number.MAX_VALUE),
+    tooltip: () => `Reach ${shorten(Decimal.MAX_NUMBER, 1, 0)} EP.`,
+    checkRequirement: () => player.eternityPoints.gte(Decimal.MAX_NUMBER),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -831,7 +831,7 @@ GameDatabase.achievements.normal = [
     tooltip: () => `Reach ${shorten("1e20000", 0, 0)} Replicanti.`,
     checkRequirement: () => player.replicanti.amount.exponent >= 20000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: () => `You gain Replicanti 2 times faster under ${shorten(Number.MAX_VALUE, 1, 0)} Replicanti.`
+    reward: () => `You gain Replicanti 2 times faster under ${shorten(Decimal.MAX_NUMBER, 1, 0)} Replicanti.`
   },
   {
     id: 135,
@@ -889,7 +889,7 @@ GameDatabase.achievements.normal = [
     id: 143,
     name: "Yo dawg, I heard you liked reskins...",
     tooltip: () => "Have all your Eternities in your past 10 Eternities be at least " +
-      `${shorten(Number.MAX_VALUE, 1, 0)} times higher EP than the previous one.`,
+      `${shorten(Decimal.MAX_NUMBER, 1, 0)} times higher EP than the previous one.`,
     checkRequirement: () => {
       const eternities = player.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {

@@ -19,25 +19,25 @@ Vue.component("modal-shortcuts", {
   template:
     `<div class="c-modal-shortcuts l-modal-shortcuts">
       <div class="l-modal-shortcuts__column">
-        <div class="c-modal-shortcuts-row__name l-modal-shortcuts-row">
-          <span class="l-modal-shortcuts-row__name">Buy 1 Dimension</span>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Buy 1 Dimension</span>
           <kbd>shift</kbd><kbd>1</kbd>-<kbd>shift</kbd><kbd>8</kbd>
         </div>
-        <div class="c-modal-shortcuts-row__name l-modal-shortcuts-row">
-          <span class="l-modal-shortcuts-row__name">Buy 10 Dimensions</span>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Buy 10 Dimensions</span>
           <kbd>1</kbd>-<kbd>8</kbd>
         </div>
         <div
           v-for="shortcut in shortcuts"
-          class="c-modal-shortcuts-row__name l-modal-shortcuts-row"
+          class="l-modal-shortcuts-row"
         >
-          <span class="l-modal-shortcuts-row__name">{{shortcut.name}}</span>
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">{{shortcut.name}}</span>
           <kbd v-for="key in shortcut.keys">{{key}}</kbd>
         </div>
       </div>
       <div class="l-modal-shortcuts__column l-modal-shortcuts__column--right">
-        <div class="c-modal-shortcuts-row__name l-modal-shortcuts-row">
-          <span class="l-modal-shortcuts-row__name">Modifier key</span>
+        <div class="l-modal-shortcuts-row">
+          <span class="c-modal-shortcuts-row__name l-modal-shortcuts-row__name">Modifier key</span>
           <kbd>shift</kbd>
         </div>
         <span class="c-modal-shortcuts__shift-description">

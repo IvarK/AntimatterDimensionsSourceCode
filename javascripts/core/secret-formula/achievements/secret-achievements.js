@@ -76,12 +76,15 @@ GameDatabase.achievements.secret = [
     checkRequirement: (function() {
       let count = 0;
       return () => ++count >= 10;
-    }())
+    }()),
+    checkEvent: GameEvent.FAIL_CHALLENGE
   },
   {
     id: 27,
     name: "It's not called matter dimensions is it?",
-    tooltip: "Get Infinite matter."
+    tooltip: "Get Infinite matter.",
+    checkRequirement: () => player.matter.gte(InfinityChallenge(6).isRunning ? 2.586e15 : Decimal.MAX_NUMBER),
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 28,
@@ -117,7 +120,9 @@ GameDatabase.achievements.secret = [
   {
     id: 35,
     name: "Should we tell them about buy max...",
-    tooltip: "Buy single tickspeed 100,000 times."
+    tooltip: "Buy single tickspeed 100,000 times.",
+    checkRequirement: () => player.secretUnlocks.why >= 1e5,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 36,
@@ -150,7 +155,9 @@ GameDatabase.achievements.secret = [
   {
     id: 43,
     name: "Time fixes everything",
-    tooltip: "Fix infinity while dilated."
+    tooltip: "Fix infinity while dilated.",
+    checkRequirement: () => player.dilation.active,
+    checkEvent: GameEvent.FIX_INFINITY
   },
   {
     id: 44,

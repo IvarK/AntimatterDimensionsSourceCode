@@ -18,9 +18,9 @@ class AchievementState extends GameMechanicState {
     return player.achievements.has(this.id);
   }
   
-  tryUnlock() {
+  tryUnlock(a1, a2, a3) {
     if (this.isUnlocked) return;
-    if (!this.config.checkRequirement()) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
     this.unlock();
   }
 
@@ -76,25 +76,22 @@ const Achievements = {
    */
   list: AchievementState.list.compact(),  
   byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),  
-  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column)),
-  tryUnlock: ids => {
-    for (const id of ids) Achievement(id).tryUnlock();
-  }
+  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
 };
 
 class SecretAchievementState extends GameMechanicState {
-  tryUnlock() {
-    if (this.isUnlocked) return;
-    if (!this.config.checkRequirement()) return;
-    this.unlock();
-  }
-
   get name() {
     return this.config.name;
   }
 
   get isUnlocked() {
     return player.secretAchievements.has(this.id);
+  }
+
+  tryUnlock(a1, a2, a3) {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    this.unlock();
   }
 
   unlock() {
@@ -128,6 +125,8 @@ const SecretAchievements = {
   byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
 };
 
+setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
+
 (function() {
   const events = new Set();
   const allAchievements = Achievements.list.concat(SecretAchievements.list);
@@ -145,8 +144,8 @@ const SecretAchievements = {
   }
   for (const event of events) {
     const achievements = allAchievements.filter(a => isCheckedOnEvent(a, event));
-    EventHub.logic.on(event, () => {
-      for (const achievement of achievements) achievement.tryUnlock();
+    EventHub.logic.on(event, (a1, a2, a3) => {
+      for (const achievement of achievements) achievement.tryUnlock(a1, a2, a3);
     }, Achievements);
   }
 }());

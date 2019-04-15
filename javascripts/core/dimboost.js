@@ -83,8 +83,8 @@ function applyDimensionBoost() {
 function softReset(bulk) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
+    EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
     player.resets += bulk;
-    if (bulk >= 750) Achievement(101).unlock();
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
@@ -101,7 +101,7 @@ function softReset(bulk) {
     if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
     }
-    Achievement(25).tryUnlock();
+    EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
 }
 
 function applyChallengeModifiers() {

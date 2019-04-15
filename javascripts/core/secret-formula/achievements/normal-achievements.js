@@ -73,7 +73,8 @@ GameDatabase.achievements.normal = [
     id: 25,
     name: "Boosting to the max",
     tooltip: "Buy 10 Dimension Boosts.",
-    checkRequirement: () => player.resets >= 10
+    checkRequirement: () => player.resets >= 10,
+    checkEvent: GameEvent.DIMBOOST_AFTER
   },
   {
     id: 26,
@@ -135,6 +136,8 @@ GameDatabase.achievements.normal = [
     id: 35,
     name: "Don't you dare to sleep",
     tooltip: "Be offline for over 6 hours in a row.",
+    checkRequirement: () => Date.now() - player.lastUpdate >= 21600000,
+    checkEvent: GameEvent.GAME_TICK_BEFORE
   },
   {
     id: 36,
@@ -158,7 +161,8 @@ GameDatabase.achievements.normal = [
     id: 38,
     name: "I don't believe in Gods",
     tooltip: "Buy an Antimatter Galaxy without Sacrificing.",
-    checkRequirement: () => player.sacrificed.eq(0)
+    checkRequirement: () => player.sacrificed.eq(0),
+    checkEvent: GameEvent.GALAXY_RESET_BEFORE
   },
   {
     id: 41,
@@ -228,7 +232,9 @@ GameDatabase.achievements.normal = [
   {
     id: 51,
     name: "Limit Break",
-    tooltip: "Break Infinity."
+    tooltip: "Break Infinity.",
+    checkRequirement: () => true,
+    checkEvent: GameEvent.BREAK_INFINITY
   },
   {
     id: 52,
@@ -301,7 +307,8 @@ GameDatabase.achievements.normal = [
     id: 62,
     name: "Oh hey, you're still here",
     tooltip: "Reach 1e8 IP per minute.",
-    checkRequirement: () => Player.bestRunIPPM.exponent >= 8
+    checkRequirement: () => Player.bestRunIPPM.exponent >= 8,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 63,
@@ -322,6 +329,7 @@ GameDatabase.achievements.normal = [
     name: "Not-so-challenging",
     tooltip: "Get the sum of all of your challenge times under 3 minutes.",
     checkRequirement: () => Time.challengeSum.totalMinutes < 3,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
     effectCondition: () => player.currentChallenge !== "" && Time.thisInfinity.totalMinutes < 3
@@ -389,6 +397,7 @@ GameDatabase.achievements.normal = [
     name: "End me",
     tooltip: "Get the sum of all best challenge times under 5 seconds.",
     checkRequirement: () => Time.challengeSum.totalSeconds < 5,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
     effectCondition: () => player.currentChallenge !== ""
@@ -397,6 +406,8 @@ GameDatabase.achievements.normal = [
     id: 75,
     name: "NEW DIMENSIONS???",
     tooltip: "Unlock the 4th Infinity Dimension.",
+    checkRequirement: tier => tier >= 4,
+    checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED,
     reward: "Your achievement bonus affects Infinity Dimensions.",
     effect: () => Player.achievementPower
   },
@@ -529,6 +540,7 @@ GameDatabase.achievements.normal = [
     name: "MAXIMUM OVERDRIVE",
     tooltip: () => `Big Crunch with ${shorten(1e300, 0, 0)} IP/min.`,
     checkRequirement: () => Player.bestRunIPPM.exponent >= 300,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "Additional 4x multiplier to IP.",
     effect: 4
   },
@@ -566,12 +578,16 @@ GameDatabase.achievements.normal = [
   {
     id: 98,
     name: "0 degrees from infinity",
-    tooltip: "Unlock the 8th Infinity Dimension."
+    tooltip: "Unlock the 8th Infinity Dimension.",
+    checkRequirement: tier => tier >= 8,
+    checkEvent: GameEvent.INFINITY_DIMENSION_UNLOCKED
   },
   {
     id: 101,
     name: "Costco sells dimboosts now",
     tooltip: "Bulk buy 750 Dimension Boosts at once.",
+    checkRequirement: bulk => bulk >= 750,
+    checkEvent: GameEvent.DIMBOOST_BEFORE,
     reward: "Dimension Boosts are 1% more powerful (to Normal Dimensions).",
     effect: 1.01
   },
@@ -650,6 +666,7 @@ GameDatabase.achievements.normal = [
     name: "Never again",
     tooltip: "Max out your third Eternity upgrade.",
     checkRequirement: () => Time.infinityChallengeSum.totalMilliseconds < 750,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "The limit for it is a bit higher.",
     effect: 610
   },
@@ -670,8 +687,10 @@ GameDatabase.achievements.normal = [
     id: 114,
     name: "You're a mistake",
     tooltip: "Fail an Eternity challenge.",
+    checkRequirement: () => true,
+    checkEvent: GameEvent.FAIL_CHALLENGE,
     reward: "A fading sense of accomplishment.",
-    effect: () => "Accomplishm"
+    effect: () => "Accomplishment"
   },
   {
     id: 115,
@@ -916,7 +935,9 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "Transcension sucked anyway",
-    tooltip: "Sacrifice a Transcendent glyph"
+    tooltip: "Sacrifice a Transcendent glyph",
+    checkRequirement: glyph => glyph.strength >= 3.25,
+    checkEvent: GameEvent.GLYPH_SACRIFICED
   },
   {
     id: 152,
@@ -949,7 +970,9 @@ GameDatabase.achievements.normal = [
   {
     id: 156,
     name: "True Sacrifice",
-    tooltip: "Sacrifice a Celestial glyph"
+    tooltip: "Sacrifice a Celestial glyph",
+    checkRequirement: glyph => glyph.strength >= 3.5,
+    checkEvent: GameEvent.GLYPH_SACRIFICED
   },
   {
     id: 157,

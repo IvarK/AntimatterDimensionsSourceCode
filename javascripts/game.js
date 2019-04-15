@@ -166,15 +166,11 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function breakInfinity() {
-    if (!Autobuyer.infinity.isUnlocked || !Autobuyer.infinity.hasMaxedInterval) return false;
-    if (player.break && !player.currentChallenge.includes("post")) {
-        player.break = false;
-        if (player.dilation.active) SecretAchievement(43).unlock();
-    } else {
-        player.break = true;
-        Achievement(51).unlock();
-    }
-    GameUI.update();
+  if (!Autobuyer.infinity.hasMaxedInterval) return false;
+  if (InfinityChallenge.isRunning()) return false;
+  player.break = !player.break;
+  EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
+  GameUI.update();
 }
 
 function gainedInfinityPoints() {
@@ -398,15 +394,11 @@ function addInfinityTime(time, realTime, ip) {
   player.lastTenRuns.pop();
   player.lastTenRuns.unshift([time, ip, realTime]);
   GameCache.bestRunIPPM.invalidate();
-  Achievement(62).tryUnlock();
-  Achievement(93).tryUnlock();
 }
 
 function resetInfinityRuns() {
   player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
   GameCache.bestRunIPPM.invalidate();
-  Achievement(62).tryUnlock();
-  Achievement(93).tryUnlock();
 }
 
 function addEternityTime(time, realTime, ep) {
@@ -446,8 +438,7 @@ function gainedInfinities() {
 function failChallenge() {
     Modal.message.show("You failed the challenge, you will now exit it.");
     setTimeout(exitChallenge, 500);
-    Achievement(114).unlock();
-    SecretAchievement(26).tryUnlock();
+    EventHub.dispatch(GameEvent.FAIL_CHALLENGE);
 }
 
 function exitChallenge() {
@@ -487,24 +478,6 @@ function getNewInfReq() {
     else return new Decimal("1e60000")
 }
 
-
-function newDimension() {
-    if (Perk.bypassIDAntimatter.isBought || (player.money.gte(getNewInfReq()))) {
-        if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true;
-        else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true;
-        else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true;
-        else if (!player.infDimensionsUnlocked[3]) {
-            player.infDimensionsUnlocked[3] = true;
-            Achievement(75).unlock();
-        } else if (!player.infDimensionsUnlocked[4]) player.infDimensionsUnlocked[4] = true;
-        else if (!player.infDimensionsUnlocked[5]) player.infDimensionsUnlocked[5] = true;
-        else if (!player.infDimensionsUnlocked[6]) player.infDimensionsUnlocked[6] = true;
-        else if (!player.infDimensionsUnlocked[7]) {
-            player.infDimensionsUnlocked[7] = true;
-            Achievement(98).unlock();
-        }
-    }
-}
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -572,16 +545,6 @@ setInterval(function() {
 
     if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
-    }
-
-    if (Math.random() < 0.00001) {
-      SecretAchievement(18).unlock();
-    }
-    if ((player.matter.gte(2.586e15) && InfinityChallenge(6).isRunning) || player.matter.gte(Number.MAX_VALUE)) {
-      SecretAchievement(27).unlock();
-    }
-    if (player.secretUnlocks.why >= 1e5) {
-      SecretAchievement(35).unlock();
     }
 
     if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
@@ -671,7 +634,6 @@ function gameLoop(diff, options = {}) {
     PerformanceStats.start("Game Update");
     EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
     const thisUpdate = Date.now();
-    if (thisUpdate - player.lastUpdate >= 21600000) Achievement(35).unlock();
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
 
@@ -985,7 +947,7 @@ function gameLoop(diff, options = {}) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
-        newDimension()
+        InfinityDimension.unlockNext();
         if (player.infDimBuyers[i-1] && !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
         infdimpurchasewhileloop = 1;
     }

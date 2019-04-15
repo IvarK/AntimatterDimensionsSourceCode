@@ -22,15 +22,12 @@ function setChallengeTime(id, time) {
   player.challengeTimes.splice(id, 1, time);
   GameCache.challengeTimeSum.invalidate();
   GameCache.worstChallengeTime.invalidate();
-  Achievement(65).tryUnlock();
-  Achievement(74).tryUnlock();
 }
 
 function setInfChallengeTime(id, time) {
   // Use splice so Vue could track changes
   player.infchallengeTimes.splice(id, 1, time);
   GameCache.infinityChallengeTimeSum.invalidate();
-  Achievement(112).tryUnlock();
 }
 
 class ChallengeState extends GameMechanicState {

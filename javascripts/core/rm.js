@@ -618,9 +618,7 @@ function sacrificeGlyph(glyph, force = false) {
     player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
   }
   Glyphs.removeFromInventory(glyph);
-
-  if (glyph.strength >= 3.25) Achievement(151).unlock();
-  if (glyph.strength >= 3.5) Achievement(156).unlock();
+  EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);
 }
 
 function getGlyphLevelInputs() {

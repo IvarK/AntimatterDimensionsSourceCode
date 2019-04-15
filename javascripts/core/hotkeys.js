@@ -30,11 +30,20 @@ GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => automatorOnOff());
 
 GameKeyboard.bindHotkey("esc", () => {
-  if (Modal.isOpen()) {
+  if (Modal.isOpen) {
     Modal.hide();
   } else {
     Tab.options.show();
   }
+});
+
+GameKeyboard.bindHotkey("?", () => {
+  if (Modal.shortcuts.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.shortcuts.show();
 });
 
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {

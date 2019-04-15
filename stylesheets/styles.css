@@ -4681,6 +4681,62 @@ screen and (max-width: 480px) {
 
 /*#endregion l-modal-options*/
 
+/*#region c-modal-shortcuts*/
+
+.c-modal-shortcuts {
+  font-size: 1.25rem;
+}
+
+.l-modal-shortcuts {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-modal-shortcuts__column {
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.l-modal-shortcuts__column--right {
+  margin-left: 1rem;
+}
+
+.l-modal-shortcuts-row {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0.3rem;
+}
+
+.c-modal-shortcuts-row__name {
+  text-align: left;
+}
+
+.l-modal-shortcuts-row__name {
+  flex: 1 1 auto;
+}
+
+.c-modal-shortcuts__shift-description {
+  text-align: left;
+  font-size: 1rem;
+}
+
+kbd {
+  background-color: #fafbfc;
+  border: .1rem solid #d1d5da;
+  border-bottom-color: #c6cbd1;
+  border-radius: .3rem;
+  box-shadow: inset 0 -.1rem 0 #c6cbd1;
+  color: #444d56;
+  display: inline-block;
+  font: 1.1rem SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  line-height: 1rem;
+  padding: .3rem .5rem;
+  vertical-align: middle;
+}
+
+/*#endregion c-modal-shortcuts*/
+
 /*#endregion Modals*/
 
 .l-notification-container {

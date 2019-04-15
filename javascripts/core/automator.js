@@ -58,6 +58,7 @@ function automatorOnOff() {
   if (!automatorOn) {
     $("#automator")[0].blur()
   }
+  GameUI.notify.info(automatorOn ? "Automator turned on" : "Automator turned off");
 }
 
 function highlightcurrent() {

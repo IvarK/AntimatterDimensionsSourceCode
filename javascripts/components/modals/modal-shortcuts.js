@@ -6,7 +6,7 @@ Vue.component("modal-shortcuts", {
       { name: "Max all", keys: ["m"] },
       { name: "Sacrifice", keys: ["s"] },
       { name: "Dimension Boost", keys: ["d"] },
-      { name: "Andimatter Galaxy", keys: ["g"] },
+      { name: "Antimatter Galaxy", keys: ["g"] },
       { name: "Big Crunch", keys: ["c"] },
       { name: "Toggle Autobuyers", keys: ["a"] },
       { name: "Replicanti Galaxy", keys: ["r"] },

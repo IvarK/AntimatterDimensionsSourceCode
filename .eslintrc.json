@@ -211,6 +211,7 @@
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "rest-spread-spacing": "error",
-    "template-curly-spacing": "error"
+    "template-curly-spacing": "error",
+    "prefer-template": "error"
   }
 }

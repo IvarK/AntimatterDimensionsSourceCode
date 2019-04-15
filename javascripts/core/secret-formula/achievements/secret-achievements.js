@@ -101,7 +101,7 @@ GameDatabase.achievements.secret = [
     checkRequirement: () =>
       Time.bestInfinity.totalMilliseconds <= 1 ||
       Time.bestEternity.totalMilliseconds <= 1,
-    checkEvent: [GameEvent.INFINTIY_RESET, GameEvent.ETERNITY_RESET_BEFORE]
+    checkEvent: [GameEvent.BIG_CRUNCH_BEFORE, GameEvent.ETERNITY_RESET_BEFORE]
   },
   {
     id: 33,

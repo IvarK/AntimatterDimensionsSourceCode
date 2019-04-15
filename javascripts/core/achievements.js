@@ -200,16 +200,6 @@ function clearOldAchieves() {
   }
 }
 
-function giveAchievement(name) {
-  const achievement = Achievements.byName[name] || SecretAchievements.byName[name];
-  if (achievement === undefined) throw crash(`giveAchievement of unknown "${name}"`);
-  if (!achievement.unlock()) return;
-  GameUI.notify.success(name);
-  kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
-  GameCache.achievementPower.invalidate();
-  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-}
-
 function isAchEnabled(achId) {
   if (!player.achievements.has(achId)) return false;
   if (player.realities === 0) return true;

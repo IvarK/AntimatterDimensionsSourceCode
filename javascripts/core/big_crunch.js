@@ -19,6 +19,7 @@ function bigCrunchReset() {
         return
     }
     implosionCheck = 0;
+    EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
     if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
         player.challenges.push(player.currentChallenge);
         Autobuyer.tryUnlockAny();
@@ -53,7 +54,6 @@ function bigCrunchReset() {
       failChallenge();
     }
 
-    EventHub.dispatch(GameEvent.INFINTIY_RESET);
     if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
       Challenge(1).complete();
       Autobuyer.tryUnlockAny();
@@ -91,6 +91,7 @@ function bigCrunchReset() {
       EffarigUnlock.infinity.unlock();
       Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
     }
+    EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
 }
 
 function secondSoftReset() {

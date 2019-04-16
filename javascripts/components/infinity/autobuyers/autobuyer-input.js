@@ -66,7 +66,7 @@ Vue.component("autobuyer-input", {
     },
     handleBlur() {
       if (this.displayValue === "69") {
-        giveAchievement("Nice.");
+        SecretAchievement(28).unlock();
       }
       if (this.isValid) {
         this.setValue(this.actualValue);

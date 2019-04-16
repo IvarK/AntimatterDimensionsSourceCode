@@ -2,8 +2,8 @@
 // and invalidated every update.
 function normalDimensionCommonMultiplier() {
   let multiplier = new Decimal(1);
-  if (Achievement(11).isEnabled) multiplier = multiplier.times(Player.achievementPower);
 
+  multiplier = multiplier.times(Player.achievementPower);
   multiplier = multiplier.times(kongDimMult);
   multiplier = multiplier.times(kongAllDimMult);
 
@@ -204,13 +204,11 @@ function getBuyTenMultiplier() {
   return dimMult;
 }
 
-
 function clearDimensions(amount) {
   for (let i = 1; i <= amount; i++) {
     NormalDimension(i).amount = new Decimal(0);
   }
 }
-
 
 function getDimensionCostMultiplier(tier) {
 
@@ -221,51 +219,19 @@ function getDimensionCostMultiplier(tier) {
 
 function onBuyDimension(tier) {
   if (!player.break) {
-    switch (tier) {
-      case 1:
-        giveAchievement("You gotta start somewhere");
-        break;
-      case 2:
-        giveAchievement("100 antimatter is a lot");
-        break;
-      case 3:
-        giveAchievement("Half life 3 confirmed");
-        break;
-      case 4:
-        giveAchievement("L4D: Left 4 Dimensions");
-        break;
-      case 5:
-        giveAchievement("5 Dimension Antimatter Punch");
-        break;
-      case 6:
-        giveAchievement("We couldn't afford 9");
-        break;
-      case 7:
-        giveAchievement("Not a luck related achievement");
-        break;
-      case 8:
-        giveAchievement("90 degrees to infinity");
-        break;
-    }
+    Achievement(10 + tier).unlock();
   }
-
-  if (player.eightAmount.round().eq(99)) {
-    giveAchievement("The 9th Dimension is a lie");
-  }
+  Achievement(23).tryUnlock();
 
   player.postC4Tier = tier;
   postc8Mult = new Decimal(1);
   if (tier !== 8) player.dimlife = false;
   if (tier !== 1) player.dead = false
-
-
 }
 
 function getCostIncreaseThreshold() {
   return new Decimal(Number.MAX_VALUE);
 }
-
-
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
@@ -526,16 +492,16 @@ function buyOneDimensionBtnClick(tier) {
   resetMatterOnBuy(tier);
   if (tier === 1) {
     if (buyOneDimension(1)) {
-      // This achievement is granted only if the buy one button is pressed.
-      if (player.firstAmount.gte(1e150)) {
-        giveAchievement("There's no point in doing that");
-      }
+      // This achievement is granted only if the buy one button is pressed
+      Achievement(28).tryUnlock();
     }
-    if (player.firstAmount.lt(1)) {
-      player.money = new Decimal("0");
-      player.firstAmount = player.firstAmount.plus(1);
-      player.firstBought += 1;
-      giveAchievement("You gotta start somewhere");
+    let dimension = NormalDimension(1);
+    if (dimension.amount.lt(1)) {
+      // Edge case in the very beginning of the game
+      player.money = new Decimal(0);
+      dimension.amount = dimension.amount.plus(1);
+      dimension.bought++;
+      Achievement(11).unlock();
     }
     return;
   }

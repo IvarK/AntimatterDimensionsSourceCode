@@ -1,13 +1,9 @@
-var Marathon = 0;
-var Marathon2 = 0;
 var auto = false;
 var autoS = true;
 var shiftDown = false;
 var justImported = false;
 var saved = 0;
-var failureCount = 0;
 var implosionCheck = 0;
-var statsTimer = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 var player = {
@@ -81,15 +77,14 @@ var player = {
   partInfinitied: 0,
   break: false,
   secretUnlocks: {
-    painTimer: 0,
     why: 0,
     fixed: "notyetfixed",
     dragging: 0,
     themes: [],
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  challengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
-  infchallengeTimes: [defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime, defaultMaxTime],
+  challengeTimes: Array.repeat(defaultMaxTime, 11),
+  infchallengeTimes: Array.repeat(defaultMaxTime, 8),
   lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
@@ -537,7 +532,7 @@ const Player = {
 
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
-  }
+  },
 };
 
 function guardFromNaNValues(obj) {

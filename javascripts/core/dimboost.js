@@ -83,8 +83,8 @@ function applyDimensionBoost() {
 function softReset(bulk) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
     if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
+    EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
     player.resets += bulk;
-    if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
@@ -96,14 +96,12 @@ function softReset(bulk) {
     applyChallengeModifiers();
     skipResetsIfPossible();
     resetTickspeed();
-    let currentMoney = player.money;
+    const currentMoney = player.money;
     resetMoney();
     if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
     }
-    if (player.resets >= 10) {
-        giveAchievement("Boosting to the max");
-    }
+    EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
 }
 
 function applyChallengeModifiers() {

@@ -2,27 +2,27 @@ function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
   if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE) && !Enslaved.isRunning) return false;
-  const totalBoost = Sacrifice.totalBoost;
-  if (Challenge(8).isRunning && !Enslaved.isRunning) {
-    if (totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE)) return false;
+  if (
+    !Enslaved.isRunning &&
+    Challenge(8).isRunning &&
+    (Sacrifice.totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))
+  ) {
+    return false;
   }
+  EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, "x" + shortenMoney(nextBoost));
-  if (nextBoost.gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference");
-  player.eightPow = player.eightPow.times(nextBoost);
-  player.sacrificed = player.sacrificed.plus(player.firstAmount);
+  NormalDimension(8).pow = NormalDimension(8).pow.times(nextBoost);
+  player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
-  if (!Challenge(8).isRunning) {
-    if (Challenge(12).isRunning && !isAch118Enabled) clearDimensions(6);
-    else if (!isAch118Enabled) clearDimensions(7);
-  } else {
+  if (Challenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
     if (!isAch118Enabled) resetDimensions();
     player.money = new Decimal(100);
-
+  } else if (!isAch118Enabled) {
+    clearDimensions(Challenge(12).isRunning ? 6 : 7);
   }
-  if (totalBoost.gte(600)) giveAchievement("The Gods are pleased");
-  if (totalBoost.gte("1e9000")) giveAchievement("IT'S OVER 9000");
+  EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
 }
 
 function sacrificeBtnClick() {

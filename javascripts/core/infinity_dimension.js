@@ -159,6 +159,10 @@ class InfinityDimensionState {
     this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
   }
 
+  get tier() {
+    return this._tier;
+  }
+
   get cost() {
     return this._props.cost;
   }
@@ -201,6 +205,10 @@ class InfinityDimensionState {
 
   get isUnlocked() {
     return player.infDimensionsUnlocked[this._tier - 1];
+  }
+
+  set isUnlocked(value) {
+    player.infDimensionsUnlocked[this._tier - 1] = value;
   }
 
   get requirement() {
@@ -334,11 +342,18 @@ function InfinityDimension(tier) {
   return new InfinityDimensionState(tier);
 }
 
-InfinityDimension.nextRequirement = function() {
+InfinityDimension.unlockNext = function() {
+  if (InfinityDimension(8).isUnlocked) return;
+  const next = InfinityDimension.next();
+  if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
+  next.isUnlocked = !next.isUnlocked;
+  EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
+};
+
+InfinityDimension.next = function() {
   if (InfinityDimension(8).isUnlocked)
     throw "All Infinity Dimensions are unlocked";
   return Array.dimensionTiers
-    .map(tier => InfinityDimension(tier))
-    .first(dim => !dim.isUnlocked)
-    .requirement;
+    .map(InfinityDimension)
+    .first(dim => !dim.isUnlocked);
 };

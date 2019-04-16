@@ -10,7 +10,7 @@ Vue.component("game-header-new-dim-button", {
     update() {
       this.isVisible = player.break && !InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
-      const requirement = InfinityDimension.nextRequirement();
+      const requirement = InfinityDimension.next().requirement;
       this.requirement.copyFrom(requirement);
       this.isAffordable = player.money.gte(requirement);
     }
@@ -20,6 +20,6 @@ Vue.component("game-header-new-dim-button", {
       v-if="isVisible"
       :enabled="isAffordable"
       class="o-primary-btn--new-dim l-game-header__new-dim-btn"
-      onclick="newDimension()"
+      onclick="InfinityDimension.unlockNext()"
     >Get {{shortenCosts(requirement)}} antimatter to unlock a new Dimension.</primary-button>`
 });

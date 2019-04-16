@@ -17,14 +17,23 @@ class AchievementState extends GameMechanicState {
   get isUnlocked() {
     return player.achievements.has(this.id);
   }
+  
+  tryUnlock(a1, a2, a3) {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    this.unlock();
+  }
 
   unlock() {
-    if (this.isUnlocked) return false;
+    if (this.isUnlocked) return;
     player.achievements.add(this.id);
     if (this.id === 85 || this.id === 93) {
       Autobuyer.infinity.bumpLimit(4);
     }
-    return true;
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    GameCache.achievementPower.invalidate();
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
   }
 
   get isEnabled() {
@@ -78,10 +87,18 @@ class SecretAchievementState extends GameMechanicState {
     return player.secretAchievements.has(this.id);
   }
 
+  tryUnlock(a1, a2, a3) {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    this.unlock();
+  }
+
   unlock() {
-    if (this.isUnlocked) return false;
+    if (this.isUnlocked) return;
     player.secretAchievements.add(this.id);
-    return true;
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
   }
 }
 
@@ -106,6 +123,61 @@ const SecretAchievements = {
   byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
 };
 
+setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
+
+(function() {
+  const events = new Set();
+  const allAchievements = Achievements.list.concat(SecretAchievements.list);
+  for (const achievement of allAchievements) {
+    const event = achievement.config.checkEvent;
+    if (event === undefined) continue;
+    for (const e of event instanceof Array ? event : [event]) {
+      events.add(e);
+    }
+  }
+  function isCheckedOnEvent(achievement, event) {
+    return achievement.config.checkEvent instanceof Array
+      ? achievement.config.checkEvent.includes(event)
+      : achievement.config.checkEvent === event;
+  }
+  for (const event of events) {
+    const achievements = allAchievements.filter(a => isCheckedOnEvent(a, event));
+    EventHub.logic.on(event, (a1, a2, a3) => {
+      for (const achievement of achievements) achievement.tryUnlock(a1, a2, a3);
+    }, Achievements);
+  }
+}());
+
+class AchievementTimer {
+  constructor() {
+    this.time = 0;
+  }
+  
+  reset() {
+    this.time = 0;
+  }
+  
+  advance() {
+    this.time += player.options.updateRate / 1000;
+  }
+  
+  check(condition, duration) {
+    if (!condition) {
+      this.reset();
+      return false;
+    }
+    this.advance();
+    return this.time >= duration;    
+  }
+}
+
+const AchievementTimers = {
+  marathon1: new AchievementTimer(),
+  marathon2: new AchievementTimer(),
+  pain: new AchievementTimer(),
+  stats: new AchievementTimer()
+};
+
 function clearOldAchieves() {
   const oldIdMatch = /^[rs][1-9][0-9]+/u;
   for (const achId of player.achievements) {
@@ -123,16 +195,6 @@ function clearOldAchieves() {
       player.achievements.delete(achId);
     }
   }
-}
-
-function giveAchievement(name) {
-  const achievement = Achievements.byName[name] || SecretAchievements.byName[name];
-  if (achievement === undefined) throw crash(`giveAchievement of unknown "${name}"`);
-  if (!achievement.unlock()) return;
-  GameUI.notify.success(name);
-  kong.submitStats("Achievements", player.achievements.size + player.secretAchievements.size);
-  GameCache.achievementPower.invalidate();
-  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 function isAchEnabled(achId) {

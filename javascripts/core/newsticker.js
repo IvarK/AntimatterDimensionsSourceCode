@@ -231,11 +231,11 @@ const newsArray = [
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)],
   ["The achievement is for two million, not two billion...", "c8", () => player.infinitied.gt(2e9)],
-  ["Keep up the quick pace!", "c9", () => Marathon > 1200],
+  ["Keep up the quick pace!", "c9", () => AchievementTimers.marathon1.time > 1200],
   ["One day you will stop your incessant grind.", "c10", () => player.eternities > 50000],
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
   ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],
-  ["The amazing speedster", "c13", () => infchallengeTimes <= 80],
+  ["The amazing speedster", "c13", () => Time.infinityChallengeSum.totalMilliseconds <= 80],
 //luck
   ["This news message is 1000x rarer than all the others.", "l1", () => Math.random() < 0.001],
   ["You just won a small prize in the lottery.", "l2", () => Math.random() < 1e-4],
@@ -298,7 +298,7 @@ function scrollNextMessage() {
 
     if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][1])) {
         player.newsArray.push(newsArray[nextMsgIndex][1]);
-        if (player.newsArray.length>=50) giveAchievement("Fake News")
+        if (player.newsArray.length >= 50) Achievement(22).unlock();
     }
 
 

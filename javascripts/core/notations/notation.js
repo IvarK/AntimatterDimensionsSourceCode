@@ -19,7 +19,7 @@ class Notation {
       return this.formatInfinite();
     }
 
-    const decimal = new Decimal(value);
+    const decimal = Decimal.fromValue_noAlloc(value);
 
     if (decimal.exponent < 3) {
       return this.formatUnder1000(decimal.toNumber(), placesUnder1000);

@@ -10,7 +10,7 @@ class Tab {
   show() {
     hideLegacyTabs();
     ui.view.tabs.current = this._component;
-    GameUI.dispatch(GameEvent.TAB_CHANGED);
+    EventHub.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -31,7 +31,7 @@ class Subtab {
   show() {
     this._view.subtab = this._id;
     this._parent.show();
-    GameUI.dispatch(GameEvent.TAB_CHANGED);
+    EventHub.dispatch(GameEvent.TAB_CHANGED);
   }
 }
 
@@ -87,6 +87,6 @@ function tryShowtab(tab) {
     return true;
   }
   ui.view.tabs.current = undefined;
-  GameUI.dispatch(GameEvent.TAB_CHANGED);
+  EventHub.dispatch(GameEvent.TAB_CHANGED);
   return false;
 }

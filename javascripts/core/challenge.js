@@ -1,9 +1,16 @@
+// TODO: improve handling of this hint
+let hacky = false;
+
 function startChallenge(name, target) {
     if (!askChallengeConfirmation(name)) return;
     player.currentChallenge = name;
     player.challengeTarget = target;
     secondSoftReset();
-    Tab.dimensions.normal.show();
+  Tab.dimensions.normal.show();
+  if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
+    hacky = true;
+    alert("... did not ... underestimate you ...");
+  }
 }
 
 function askChallengeConfirmation(challenge) {
@@ -51,7 +58,11 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    startChallenge(this._fullId, new Decimal(Number.MAX_VALUE));
+    let target = new Decimal(Number.MAX_VALUE);
+    if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
+      target = Decimal.pow(10, 1e15);
+    }
+    startChallenge(this._fullId, target);
   }
 
   get isCompleted() {

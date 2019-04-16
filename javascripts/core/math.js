@@ -53,6 +53,7 @@ function bulkBuyBinarySearch(money, costInfo, alreadyBought) {
   // The amount we can actually buy is in the interval [canBuy/2, canBuy), we do a binary search
   // to find the exact value:
   let canBuy = cantBuy / 2;
+  if (cantBuy > Number.MAX_SAFE_INTEGER) throw crash("Overflow in binary search");
   while (cantBuy - canBuy > 1) {
     const middle = Math.floor((canBuy + cantBuy) / 2);
     if (money.gt(costFunction(alreadyBought + middle - 1))) {

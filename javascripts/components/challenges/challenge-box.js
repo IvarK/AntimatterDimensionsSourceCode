@@ -3,7 +3,11 @@ Vue.component("challenge-box", {
     name: String,
     isUnlocked: false,
     isRunning: false,
-    isCompleted: false
+    isCompleted: false,
+    overrideLabel: {
+      type: String,
+      default: "",
+    }
   },
   computed: {
     buttonClassObject() {
@@ -22,6 +26,7 @@ Vue.component("challenge-box", {
       return classObject;
     },
     buttonText() {
+      if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
       if (this.isCompleted) return "Completed";
       if (this.isUnlocked) return "Start";

@@ -133,7 +133,6 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
 }
 

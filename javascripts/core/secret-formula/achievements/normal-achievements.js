@@ -27,7 +27,9 @@ GameDatabase.achievements.normal = [
   {
     id: 16,
     name: "We couldn't afford 9",
-    tooltip: "Buy a single 6th Dimension."
+    tooltip: () => (Enslaved.isRunning
+      ? "Buy a single 6th Dimension (they never amount to anything)"
+      : "Buy a single 6th Dimension.")
   },
   {
     id: 17,
@@ -37,7 +39,9 @@ GameDatabase.achievements.normal = [
   {
     id: 18,
     name: "90 degrees to infinity",
-    tooltip: "Buy a single 8th Dimension."
+    tooltip: () => (Enslaved.isRunning
+      ? "Buy a single 8th Dimension (don't get used to it)"
+      : "Buy a single 8th Dimension.")
   },
   {
     id: 21,

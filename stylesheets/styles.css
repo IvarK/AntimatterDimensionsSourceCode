@@ -5251,7 +5251,7 @@ kbd {
   cursor: pointer;
   margin: 1rem .5rem;
   min-width: 18rem;
-  min-height: 6rem;
+  min-height: 7rem;
   padding-bottom: 1rem;
   padding-top: 1rem;
   font-family: Typewriter;
@@ -5292,7 +5292,7 @@ kbd {
 }
 
 .o-enslaved-run-button {
-  width: 25rem;
+  width: 35rem;
   padding: 2rem;
   border-radius: .5rem;
   border: 2px solid #cd945c;
@@ -5301,6 +5301,13 @@ kbd {
   font-size: 1.2rem;
   cursor: pointer;
   margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.o-enslaved-run-button__title {
+  font-weight: bold;
+  font-size: larger;
+  margin-bottom: 0.5rem;
 }
 
 /* #endregion enslaved tab*/

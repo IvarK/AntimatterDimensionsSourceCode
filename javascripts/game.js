@@ -483,12 +483,6 @@ function unlockEChall(idx) {
     }
 }
 
-function quickReset() {
-    if (player.resets == 0) player.resets--;
-    else player.resets -= 2;
-    softReset(1);
-}
-
 function getNewInfReq() {
     if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
     else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
@@ -796,11 +790,9 @@ function gameLoop(diff, options = {}) {
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
-    /*if (player.currentChallenge == "postc6" && player.matter.gte(1)) player.matter = player.matter.plus(diff/10)
-    else */
-    player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
+    if (player.secondAmount.neq(new Decimal(0))) player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
     if (player.matter.gt(player.money) && Challenge(11).isRunning) {
-        if (player.resets > 0) player.resets--;
+        Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ${shorten(player.matter, 2, 2)} matter.`);
         softReset(0);
     }
 

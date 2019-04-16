@@ -35,9 +35,6 @@ Vue.mixin({
     shortenMoney(value) {
       return shortenMoney(value);
     },
-    shortenGlyphEffect(value) {
-      return shortenGlyphEffect(value);
-    },
     shortenMultiplier(value) {
       return shortenMultiplier(value);
     },

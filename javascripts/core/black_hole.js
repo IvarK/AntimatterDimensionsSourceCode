@@ -211,7 +211,11 @@ const BlackHoles = {
     Achievement(144).unlock();
   },
 
-  togglePause: () => player.blackHolePause = !player.blackHolePause,
+  togglePause: () => {
+    if (!BlackHoles.areUnlocked) return;
+    player.blackHolePause = !player.blackHolePause;
+    GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+  },
 
   get arePaused() {
     return player.blackHolePause;

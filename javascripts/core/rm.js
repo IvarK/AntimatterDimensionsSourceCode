@@ -368,18 +368,19 @@ const Glyphs = {
       totalDesiredPadding += t.padding;
     }
     while (totalDesiredPadding > freeSpace) {
-      // try to remove padding 5 at a time if possible
+      // Try to remove padding 5 at a time if possible
       let biggestPadding = GLYPH_TYPES[0];
-      for (let t of GLYPH_TYPES) {
+      for (const t of GLYPH_TYPES) {
         if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
       }
-      const delta = byType[biggestPadding].padding > 12 ? 10 : (byType[biggestPadding].padding > 5 ? 5 : 1);
+      let delta = byType[biggestPadding].padding > 5 ? 5 : 1;
+      if (byType[biggestPadding].padding > 12) delta = 10;
       totalDesiredPadding -= delta;
       byType[biggestPadding].padding -= delta;
     }
     let outIndex = 0;
-    for (let t of Object.values(byType)) {
-      for (let g of t.glyphs) {
+    for (const t of Object.values(byType)) {
+      for (const g of t.glyphs) {
         if (this.inventory[outIndex]) this.swap(this.inventory[outIndex], g);
         else this.moveToEmpty(g, outIndex);
         ++outIndex;
@@ -390,11 +391,9 @@ const Glyphs = {
 };
 
 class GlyphSacrificeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
   get canBeApplied() { return true; }
 }
+
 const GlyphSacrifice = (function() {
   const db = GameDatabase.reality.glyphSacrifice;
   return {
@@ -405,7 +404,7 @@ const GlyphSacrifice = (function() {
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
   };
-})();
+}());
 
 // All glyph effects should be calculated here and will be recalculated on-load if rebalanced
 function getGlyphEffectStrength(effectKey, level, strength) {

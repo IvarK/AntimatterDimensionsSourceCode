@@ -174,21 +174,21 @@ function breakInfinity() {
 }
 
 function gainedInfinityPoints() {
-    const div = Effects.min(
-      308,
-      Achievement(103),
-      TimeStudy(111)
-    );
-    let ip = player.break ?
-      Decimal.pow(10, player.money.e / div - 0.75) :
-      new Decimal(308 / div);
-    ip = ip.times(GameCache.totalIPMult.value);
-    if (Teresa.isRunning) {
-      ip = ip.pow(0.55);
-    } else if (V.isRunning) {
-      ip = ip.pow(0.5);
-    }
-    return ip.floor();
+  const div = Effects.min(
+    308,
+    Achievement(103),
+    TimeStudy(111)
+  );
+  let ip = player.break
+    ? Decimal.pow10(player.money.e / div - 0.75)
+    : new Decimal(308 / div);
+  ip = ip.times(GameCache.totalIPMult.value);
+  if (Teresa.isRunning) {
+    ip = ip.pow(0.55);
+  } else if (V.isRunning) {
+    ip = ip.pow(0.5);
+  }
+  return ip.floor();
 }
 
 function gainedEternityPoints() {
@@ -1216,7 +1216,6 @@ window.onload = function() {
 }
 
 window.onfocus = function() {
-    setControlKey(false);
     setShiftKey(false);
     drawAutomatorTree();
 };
@@ -1227,20 +1226,10 @@ window.onblur = function() {
 
 function setShiftKey(isDown) {
   shiftDown = isDown;
-  if (!isDown) controlShiftDown = isDown;
   ui.view.shiftDown = isDown;
   document.getElementById("automatorloadsavetext").textContent = isDown ? "save:" : "load:";
   if (isDown) showPerkLabels()
   else hidePerkLabels()
-}
-
-function setControlKey(isDown) {
-  controlDown = isDown;
-  if (!isDown) controlShiftDown = isDown;
-}
-
-function setControlShiftKey(isDown) {
-  controlShiftDown = isDown;
 }
 
 var postc8Mult = new Decimal(0)

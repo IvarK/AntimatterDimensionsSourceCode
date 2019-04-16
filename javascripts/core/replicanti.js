@@ -23,7 +23,7 @@ function replicantiGalaxy() {
     galaxyGain = Math.min(maxGain, Math.floor(logReplicanti / LOG10_MAX_VALUE));
     // In the unlikely case of different rounding error between canBuyMore and the above
     if (galaxyGain < 1) return;
-    player.replicanti.amount = Decimal.pow(10, logReplicanti - LOG10_MAX_VALUE * galaxyGain);
+    player.replicanti.amount = Decimal.pow10(logReplicanti - LOG10_MAX_VALUE * galaxyGain);
   } else {
     player.replicanti.amount = new Decimal(1);
   }
@@ -43,7 +43,7 @@ function fastReplicantiBelow308(gainFactor, isAutobuyerActive) {
   const toBuy = Ra.isRunning
     ? 0
     : Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
-  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow(10, replicantiExponent - 308 * toBuy));
+  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow10(replicantiExponent - 308 * toBuy));
   player.replicanti.galaxies += toBuy;
 }
 
@@ -92,41 +92,28 @@ function replicantiLoop(diff) {
     }
     PerformanceStats.start("Replicanti");
     EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
-    let interval = getReplicantiInterval();
-    let isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
-    var logReplicanti = player.replicanti.amount.clampMin(1).ln();
+    const interval = getReplicantiInterval();
+    const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
+    const logReplicanti = player.replicanti.amount.clampMin(1).ln();
     const isUncapped = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isUncapped)) {
       // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
       const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
       const logGainFactorPerTick = diff / 1000 * (Math.log(player.replicanti.chance + 1) * 1000 / interval);
-      if (isUncapped) player.replicanti.amount = Decimal.pow(Math.E, logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale)
-      else fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled)
-      replicantiTicks = 0
-    } else {
-        if (interval <= replicantiTicks && player.replicanti.unl) {
-          // Gain code for slow replicanti (multiple game ticks per replicanti tick)
-            if (player.replicanti.amount.lte(100)) {
-              // When less than 100 replicanti, simulate each replicanti with an independent chance of replicating
-                var temp = player.replicanti.amount
-                for (var i=0; temp.gt(i); i++) {
-                    if (player.replicanti.chance > Math.random()) player.replicanti.amount = player.replicanti.amount.plus(1)
-                }
-            } else {
-              // When more than 100 replicanti, simulate 100 groups of replicanti that have independent chances of replicating
-              var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
-              let replicatedGroups = 0
-              for (var i=0; i<100; i++) {
-                if (player.replicanti.chance > Math.random()) {
-                  replicatedGroups++;
-                }
-              }
-              player.replicanti.amount = player.replicanti.amount.times(1 + replicatedGroups / 100)
-              if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount)
-            }
-            replicantiTicks -= interval
-        }
+      if (isUncapped) {
+        player.replicanti.amount =
+          Decimal.exp(logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale);
+      } else {
+        fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled);
+      }
+      replicantiTicks = 0;
+    } else if (interval <= replicantiTicks && player.replicanti.unl) {
+      const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
+      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+      if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
+      replicantiTicks -= interval;
     }
+
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
 
     if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Number.MAX_VALUE)) {
@@ -346,7 +333,7 @@ const ReplicantiUpgrade = {
         const numDistant = count - distantReplicatedGalaxyStart;
         logCost += logDistantScaling * numDistant * (numDistant + 2 * extraIncrements - 1) / 2;
       }
-      return Decimal.pow(10, logCost);
+      return Decimal.pow10(logCost);
     }
   }(),
 };

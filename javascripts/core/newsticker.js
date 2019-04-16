@@ -188,7 +188,6 @@ const newsArray = [
   ["A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.", "b8", () => player.spreadingCancer > 0],
   ["Antimatter ice cream stand has recently opened- they have octillions of flavors!", "b9", () => player.totalmoney.e >= 27],
   ["The Heavenly Pelle has generated too much antimatter and needed to create another galaxy. This one can be seen in the southwestern sky.", "b10", () => player.galaxies > 0 || player.infinitied.gt(0)],
-  ["What does the CTRL button do again?", "b11", () => controlDown],
 //9th dim
   ["9th Dimension is a lie.", "b12", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["The square root of 9 is 3, therefore the 9th dimension can't exist.", "b13", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],

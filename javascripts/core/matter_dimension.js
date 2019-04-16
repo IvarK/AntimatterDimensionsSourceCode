@@ -105,26 +105,9 @@ function MatterDimension(tier) {
  */
 function getMatterDimensionProduction(tier, ticks) {
   const d = MatterDimension(tier)
-
-  let prod = 0
-
-  if (d.amount < 100) {
-    let x = 0
-    while (x < d.amount) {
-      if (Math.random() < d.chance / 100) prod++;
-      x++;
-    }
-  } else {
-    let x = 0
-    while (x < 100) {
-      if (Math.random() < d.chance / 100) prod += Math.round(d.amount/100);
-      x++;
-    }
-  }
-
-  prod *= d.power * ticks
-
-  return Math.round(prod)
+  // The multiple ticks act just like more binomial samples
+  const produced = binomialDistribution(d.amount * ticks, d.chance / 100);
+  return Math.round(produced * d.power);
 }
 
 function matterDimensionLoop() {

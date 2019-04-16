@@ -17,29 +17,42 @@ GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
 GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchReset());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
-for (let i = 1; i < 9; i++) {
-  GameKeyboard.bindRepeatableHotkey(`${i}`, () => buyManyDimension(i));
-  GameKeyboard.bindRepeatableHotkey(`shift+${i}`, () => buyOneDimension(i));
-}
+(function() {
+  function bindDimensionHotkeys(tier) {
+    GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
+    GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
+  }
+  for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
+}());
 
 GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
+GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
+GameKeyboard.bindHotkey("u", () => automatorOnOff());
+
 GameKeyboard.bindHotkey("esc", () => {
-  if (Modal.isOpen()) {
+  if (Modal.isOpen) {
     Modal.hide();
-  }
-  else {
+  } else {
     Tab.options.show();
   }
 });
-GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
+
+GameKeyboard.bindHotkey("?", () => {
+  if (Modal.shortcuts.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.shortcuts.show();
+});
+
+GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
+  GameOptions.save();
+  return false;
+});
 
 GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");
-
-GameKeyboard.bind(["ctrl", "command"], () => setControlKey(true), "keydown");
-GameKeyboard.bind(["ctrl", "command"], () => setControlKey(false), "keyup");
-
-GameKeyboard.bind(["ctrl+shift", "command+shift"], () => setControlShiftKey(true), "keydown");
 
 GameKeyboard.bind("9", () => SecretAchievement(41).unlock());
 

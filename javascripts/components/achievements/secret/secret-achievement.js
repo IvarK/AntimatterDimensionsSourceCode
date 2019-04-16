@@ -16,9 +16,12 @@ Vue.component("secret-achievement", {
       return SecretAchievement(this.achId);
     },
     styleObject() {
-      return {
-        "background-image": `url(images/s${this.achId}.png)`,
-      };
+      if (this.isUnlocked) {
+        return {
+          "background-image": `url(images/s${this.achId}.png)`,
+        };
+      }
+      return {};
     },
     classObject() {
       return {

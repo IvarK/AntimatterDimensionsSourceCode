@@ -14,7 +14,6 @@ function showTab(tabName) {
     hideLegacyTabs(tabName);
     resizeCanvas();
     Modal.hide();
-    if (tabName !== "statistics") statsTimer = 0
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
@@ -45,12 +44,12 @@ function floatText(tier, text) {
 
 document.getElementById("news").onclick = function () {
     if (document.getElementById("news").textContent === "Click this to unlock a secret achievement.") {
-        giveAchievement("Real news")
+      SecretAchievement(24).unlock();
     }
 };
 
 function maxAll() {
-  if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
+  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return false;
   buyMaxTickSpeed();
 
   for (var tier = 1; tier < 9; tier++) {
@@ -75,7 +74,7 @@ function maxAll() {
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
           dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+          if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
         }
 
 
@@ -93,7 +92,7 @@ function maxAll() {
       if (player.money.lt(dimension.cost.times(10))) continue
 
       if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
-        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Number.MAX_VALUE)) || (player.money.gte(dimension.cost.times(10)) && !Challenge(9).isRunning)) {
+        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Decimal.MAX_NUMBER)) || (player.money.gte(dimension.cost.times(10)) && !Challenge(9).isRunning)) {
           player.money = player.money.minus(dimension.cost.times(10))
           if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
           else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
@@ -101,12 +100,12 @@ function maxAll() {
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
           dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+          if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
           if (Challenge(4).isRunning) clearDimensions(tier - 1)
         }
       } else {
-        if (dimension.cost.lt(Number.MAX_VALUE)) {
-          while (player.money.gte(dimension.cost.times(10)) && dimension.cost.lte(Number.MAX_VALUE)) {
+        if (dimension.cost.lt(Decimal.MAX_NUMBER)) {
+          while (player.money.gte(dimension.cost.times(10)) && dimension.cost.lte(Decimal.MAX_NUMBER)) {
             player.money = player.money.minus(dimension.cost.times(10))
             if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
             else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
@@ -114,12 +113,12 @@ function maxAll() {
             dimension.amount = Decimal.round(dimension.amount.plus(10))
             dimension.bought += 10
             dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-            if (dimension.cost.gte(Number.MAX_VALUE)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+            if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
             if (Challenge(4).isRunning) clearDimensions(tier - 1)
           }
         }
 
-        if (dimension.cost.gte(Number.MAX_VALUE)) {
+        if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
           var a = Math.log10(Math.sqrt(Player.dimensionMultDecrease))
           var b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10()
           var c = dimension.cost.dividedBy(player.money).log10()
@@ -167,15 +166,11 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function breakInfinity() {
-    if (!Autobuyer.infinity.isUnlocked || !Autobuyer.infinity.hasMaxedInterval) return false;
-    if (player.break && !player.currentChallenge.includes("post")) {
-        player.break = false
-        if (player.dilation.active) giveAchievement("Time fixes everything")
-    } else {
-        player.break = true
-        giveAchievement("Limit Break")
-    }
-    GameUI.update();
+  if (!Autobuyer.infinity.hasMaxedInterval) return false;
+  if (InfinityChallenge.isRunning()) return false;
+  player.break = !player.break;
+  EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
+  GameUI.update();
 }
 
 function gainedInfinityPoints() {
@@ -420,23 +415,6 @@ function addRealityTime(time, realTime, rm, level) {
   player.lastTenRealities.unshift([time, rm, level, realTime]);
 }
 
-var infchallengeTimes = 999999999
-
-function checkForEndMe() {
-    var temp = 0
-    for (var i=0; i<11; i++) {
-        temp += player.challengeTimes[i]
-    }
-    if (temp <= 180000) giveAchievement("Not-so-challenging")
-    if (temp <= 5000) giveAchievement("End me")
-    var temp2 = 0
-    for (var i=0; i<8;i++) {
-        temp2 += player.infchallengeTimes[i]
-    }
-    infchallengeTimes = temp2
-    if (temp2 <= 6666) giveAchievement("Yes. This is hell.")
-}
-
 function gainedInfinities() {
     if (EternityChallenge(4).isRunning) {
         return new Decimal(1);
@@ -458,9 +436,7 @@ function gainedInfinities() {
 function failChallenge() {
     Modal.message.show("You failed the challenge, you will now exit it.");
     setTimeout(exitChallenge, 500);
-    giveAchievement("You're a mistake");
-    failureCount++;
-    if (failureCount > 9) giveAchievement("You're a failure");
+    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
 }
 
 function exitChallenge() {
@@ -468,7 +444,7 @@ function exitChallenge() {
         startChallenge("", new Decimal(0));
     } else if (player.currentEternityChall !== "") {
         player.currentEternityChall = ""
-        player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
+        player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
         eternity(true)
     }
 }
@@ -494,25 +470,6 @@ function getNewInfReq() {
     else return new Decimal("1e60000")
 }
 
-
-function newDimension() {
-    if (Perk.bypassIDAntimatter.isBought || (player.money.gte(getNewInfReq()))) {
-        if (!player.infDimensionsUnlocked[0]) player.infDimensionsUnlocked[0] = true
-        else if (!player.infDimensionsUnlocked[1]) player.infDimensionsUnlocked[1] = true
-        else if (!player.infDimensionsUnlocked[2]) player.infDimensionsUnlocked[2] = true
-        else if (!player.infDimensionsUnlocked[3]) {
-            player.infDimensionsUnlocked[3] = true
-            giveAchievement("NEW DIMENSIONS???")
-        }
-        else if (!player.infDimensionsUnlocked[4]) player.infDimensionsUnlocked[4] = true
-        else if (!player.infDimensionsUnlocked[5]) player.infDimensionsUnlocked[5] = true
-        else if (!player.infDimensionsUnlocked[6]) player.infDimensionsUnlocked[6] = true
-        else if (!player.infDimensionsUnlocked[7]) {
-            player.infDimensionsUnlocked[7] = true
-            giveAchievement("0 degrees from infinity")
-        }
-    }
-}
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -570,23 +527,6 @@ var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000
 
 var ttMaxTimer = 0
 setInterval(function() {
-    if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(3).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(4).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(5).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(6).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(7).gte(new Decimal("1e308")) &&
-        getDimensionFinalMultiplier(8).gte(new Decimal("1e308"))) giveAchievement("Can't hold all these infinities")
-
-    if (getDimensionFinalMultiplier(1).lt(getDimensionFinalMultiplier(2)) &&
-        getDimensionFinalMultiplier(2).lt(getDimensionFinalMultiplier(3)) &&
-        getDimensionFinalMultiplier(3).lt(getDimensionFinalMultiplier(4)) &&
-        getDimensionFinalMultiplier(4).lt(getDimensionFinalMultiplier(5)) &&
-        getDimensionFinalMultiplier(5).lt(getDimensionFinalMultiplier(6)) &&
-        getDimensionFinalMultiplier(6).lt(getDimensionFinalMultiplier(7)) &&
-        getDimensionFinalMultiplier(7).lt(getDimensionFinalMultiplier(8))) giveAchievement("How the antitables have turned")
-
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
     document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
@@ -595,53 +535,11 @@ setInterval(function() {
     if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
     else document.getElementById("eternitystorebtn").style.display = "none"
 
-    if (getTickSpeedMultiplier().lt(0.001)) giveAchievement("Do you even bend time bro?")
-
     if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
         failChallenge();
     }
 
-    if (infchallengeTimes < 750) giveAchievement("Never again")
-    if (player.infinityPoints.gte(new Decimal("1e22000")) && player.timestudy.studies.length == 0) giveAchievement("What do I have to do to get rid of you")
-    if (player.replicanti.galaxies >= 180*player.galaxies && player.galaxies > 0) giveAchievement("Popular music")
-    if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
-    if (player.infinityPoints.gte(1e100) && player.firstAmount.equals(0) && player.infinitied.eq(0) && player.resets <= 4 && player.galaxies <= 1 && player.replicanti.galaxies == 0) giveAchievement("Like feasting on a behind")
-    if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
-    if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
-    if (player.infinitied.gt(2e6)) giveAchievement("2 Million Infinities")
-    if (player.money.gte("9.9999e9999")) giveAchievement("This achievement doesn't exist")
-    if (player.money.gte("1e35000")) giveAchievement("I got a few to spare")
-    if (player.infinityPower.gt(1)) giveAchievement("A new beginning.");
-    if (player.infinityPower.gt(1e6)) giveAchievement("1 million is a lot"); //TBD
-    if (player.infinityPower.gt(1e260)) giveAchievement("4.3333 minutes of Infinity"); //TBD
-    if (player.totalTickGained >= 308) giveAchievement("Infinite time");
-    if (player.firstPow.gt(10e30)) giveAchievement("I forgot to nerf that")
-    if (player.money.gt(10e79)) giveAchievement("Antimatter Apocalypse")
-    if (player.totalTimePlayed >= 1000 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
-    if (player.seventhAmount.gt(1e12)) giveAchievement("Multidimensional");
-    if (player.tickspeed.lt(1e-26)) giveAchievement("Faster than a potato");
-    if (player.tickspeed.lt(1e-55)) giveAchievement("Faster than a squared potato");
-    if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
-    if ((player.matter.gte(2.586e15) && player.currentChallenge == "postc6") || player.matter.gte(Number.MAX_VALUE)) giveAchievement("It's not called matter dimensions is it?")
-
-    if (player.infinityDimension1.baseAmount == 0 &&
-        player.infinityDimension2.baseAmount == 0 &&
-        player.infinityDimension3.baseAmount == 0 &&
-        player.infinityDimension4.baseAmount == 0 &&
-        player.infinityDimension5.baseAmount == 0 &&
-        player.infinityDimension6.baseAmount == 0 &&
-        player.infinityDimension7.baseAmount == 0 &&
-        player.infinityDimension8.baseAmount == 0 &&
-        player.infMultCost.equals(10) &&
-        player.infinityPoints.gt(new Decimal("1e200000"))) {
-        giveAchievement("I never liked this infinity stuff anyway")
-    }
-
-    if (player.replicanti.amount.gt(new Decimal("1e20000"))) giveAchievement("When will it be enough?")
-    if (player.tickspeed.e < -8296262) giveAchievement("Faster than a potato^286078")
-    if (player.timestudy.studies.length == 0 && player.dilation.active && player.infinityPoints.e >= 28000) giveAchievement("This is what I have to do to get rid of you.")
-    if (player.secretUnlocks.why >= 1e5) giveAchievement("Should we tell them about buy max...")
-    if ( player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
+    if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
     else $("#realitybtn").hide()
 
     if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
@@ -654,8 +552,6 @@ setInterval(function() {
         $("#automatorUnlock").show()
         $(".automator-container").hide()
     }
-
-    GameCache.achievementPower.invalidate();
 
     RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;
@@ -728,8 +624,8 @@ function gameLoop(diff, options = {}) {
   }
     PerformanceStats.start("Frame Time");
     PerformanceStats.start("Game Update");
+    EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
     const thisUpdate = Date.now();
-    if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare to sleep")
     if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
     if (diff < 0) diff = 1;
 
@@ -799,7 +695,7 @@ function gameLoop(diff, options = {}) {
     if (player.currentChallenge == "postc8") postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
 
     if (Challenge(3).isRunning || player.matter.gte(1)) {
-      player.chall3Pow = Decimal.min(Number.MAX_VALUE, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
+      player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
     }
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
     if (InfinityChallenge(2).isRunning) {
@@ -872,7 +768,7 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
-    if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
+    if (player.money.lte(Decimal.MAX_NUMBER) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
         let maxTierProduced = 7;
         if (Challenge(12).isRunning) {
@@ -916,6 +812,8 @@ function gameLoop(diff, options = {}) {
     player.thisReality += diff
     player.thisRealityRealTime += realDiff;
 
+    GameCache.achievementPower.invalidate();
+
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);
@@ -957,7 +855,7 @@ function gameLoop(diff, options = {}) {
   player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
   player.tickThreshold = freeTickspeed.nextShards;
 
-    if (player.money.gte(Number.MAX_VALUE) && (!player.break || (player.currentChallenge != "" && player.money.gte(player.challengeTarget)))) {
+    if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (player.currentChallenge != "" && player.money.gte(player.challengeTarget)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';
         if ((player.currentChallenge == "" || player.options.retryChallenge) && (player.bestInfinityTime <= 60000 || player.break)) {}
         else showTab('emptiness');
@@ -984,33 +882,9 @@ function gameLoop(diff, options = {}) {
 
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
-    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
-
-    if (!Achievement(44).isUnlocked && getDimensionProductionPerSecond(1).gt(player.money)) {
-        Marathon+=player.options.updateRate/1000;
-        if (Marathon >= 30) giveAchievement("Over in 30 seconds");
-    } else {
-        Marathon = 0;
-    }
-    if (!Achievement(113).isUnlocked && !EternityChallenge(7).isRunning && InfinityDimension(1).productionPerSecond.gt(player.infinityPower)) {
-        Marathon2+=player.options.updateRate/1000;
-        if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
-    } else {
-        Marathon2 = 0;
-    }
-    if (player.eternities >= 1 && Notation.current.isPainful) {
-        player.secretUnlocks.painTimer += player.options.updateRate/1000;
-        if (player.secretUnlocks.painTimer >= 600) giveAchievement("Do you enjoy pain?");
-    }
-
-    if (Tab.statistics.isOpen) {
-        statsTimer += player.options.updateRate/1000;
-        if (statsTimer >= 900) giveAchievement("Are you statisfied now?");
-    }
+    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin
 
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-
-    if(player.money.gt(Math.pow(10,63))) giveAchievement("Supersanic");
 
     if (TimeStudy.dilation.isBought) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
@@ -1039,7 +913,7 @@ function gameLoop(diff, options = {}) {
     document.getElementById("infinitybtn").style.display = "none";
     document.getElementById("challengesbtn").style.display = "none";
 
-    if (player.money.gte(Number.MAX_VALUE) && (((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) && !player.options.retryChallenge) || (player.bestInfinityTime > 600 && !player.break))) {
+    if (player.money.gte(Decimal.MAX_NUMBER) && (((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) && !player.options.retryChallenge) || (player.bestInfinityTime > 600 && !player.break))) {
         ui.view.bigCrunch = true;
         document.getElementById("dimensionsbtn").style.display = "none";
         document.getElementById("optionsbtn").style.display = "none";
@@ -1069,7 +943,7 @@ function gameLoop(diff, options = {}) {
         for (i=0; i<8; i++) {
             if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
         }
-        newDimension()
+        InfinityDimension.unlockNext();
         if (player.infDimBuyers[i-1] && !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
         infdimpurchasewhileloop = 1;
     }
@@ -1093,9 +967,10 @@ function gameLoop(diff, options = {}) {
   Laitela.handleRunUnlocks()
   matterDimensionLoop()
 
-    GameUI.update();
-    player.lastUpdate = thisUpdate;
-    PerformanceStats.end("Game Update");
+  EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
+  GameUI.update();
+  player.lastUpdate = thisUpdate;
+  PerformanceStats.end("Game Update");
 }
 
 // Reducing boilerplate code a bit (runs a specified number of ticks with a specified length and triggers autobuyers after each tick)
@@ -1165,7 +1040,7 @@ function simulateTime(seconds, real, fast) {
     }
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
-        giveAchievement("While you were away... Nothing happened.")
+        SecretAchievement(36).unlock();
     }
 
     Modal.message.show(popupString);

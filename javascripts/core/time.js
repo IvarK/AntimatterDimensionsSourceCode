@@ -201,5 +201,19 @@ const Time = {
    */
   get worstChallenge() {
     return this.fromMilliseconds(() => GameCache.worstChallengeTime.value);
+  },
+
+  /**
+   * @return {TimeSpan}
+   */
+  get challengeSum() {
+    return this.fromMilliseconds(() => GameCache.challengeTimeSum.value);
+  },
+
+  /**
+   * @return {TimeSpan}
+   */
+  get infinityChallengeSum() {
+    return this.fromMilliseconds(() => GameCache.infinityChallengeTimeSum.value);
   }
 };

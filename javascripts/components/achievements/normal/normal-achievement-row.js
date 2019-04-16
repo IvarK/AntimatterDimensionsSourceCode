@@ -18,7 +18,7 @@ Vue.component("normal-achievement-row", {
   },
   created() {
     this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
-    this.on$(GameEvent.REALITY, this.updateState);
+    this.on$(GameEvent.REALITY_RESET_AFTER, this.updateState);
     this.updateState();
   },
   methods: {

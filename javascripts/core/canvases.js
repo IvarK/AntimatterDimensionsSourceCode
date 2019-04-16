@@ -183,11 +183,7 @@ function drawPerkNetwork() {
     network.on("dragStart", function(params) {
         if(document.getElementsByClassName("vis-tooltip")[0] !== undefined) document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
     });
-    //secret ach check
-    network.on("dragging", function(params) {
-        player.secretUnlocks.dragging++;
-        if(player.secretUnlocks.dragging / 100 >= 60) giveAchievement("This dragging is dragging on")
-    });
+    network.on("dragging", () => SecretAchievement(45).tryUnlock());
     //set min and max zoom
     network.on("zoom",function(){
         if(network.getScale() <= 0.2 ) {

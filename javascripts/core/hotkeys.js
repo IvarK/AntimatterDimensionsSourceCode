@@ -54,14 +54,15 @@ GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
 GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");
 
-GameKeyboard.bind("9", () => giveAchievement("That dimension doesn’t exist"));
+GameKeyboard.bind("9", () => SecretAchievement(41).unlock());
 
-GameKeyboard.bind(["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"], () => {
-  giveAchievement("Stop right there criminal scum!")
-});
+GameKeyboard.bind(
+  ["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"],
+  () => SecretAchievement(23).unlock()
+);
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
-  giveAchievement("30 Lives");
+  SecretAchievement(17).unlock();
   if (player.money.lt(30)) {
     player.money = new Decimal(30);
   }
@@ -69,5 +70,5 @@ GameKeyboard.bind("up up down down left right left right b a", () => {
 
 GameKeyboard.bindRepeatable("f", () => {
   GameUI.notify.info("Paying respects");
-  giveAchievement("It pays to have respect");
+  SecretAchievement(13).unlock();
 });

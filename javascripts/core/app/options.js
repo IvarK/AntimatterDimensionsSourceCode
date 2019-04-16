@@ -44,7 +44,7 @@ class GameOptions {
 
   static save() {
     saved++;
-    if (saved > 99) giveAchievement("Just in case");
+    if (saved > 99) SecretAchievement(12).unlock();
     player.reality.automatorOn = automatorOn;
     player.reality.automatorCurrentRow = automatorIdx;
     save_game();
@@ -60,7 +60,7 @@ class GameOptions {
 
   static refreshUpdateRate() {
     if (player.options.updateRate === 200) {
-      giveAchievement("You should download some more RAM");
+      SecretAchievement(31).unlock();
     }
     GameIntervals.gameLoop.restart();
     Enslaved.infinityTracking = []
@@ -109,12 +109,12 @@ function tryImportSecret(data) {
   let index = secretImportIndex(data);
   if (index === 0) {
     document.body.style.animation = "barrelRoll 5s 1";
-    giveAchievement("Do a barrel roll!");
+    SecretAchievement(15).unlock();
     setTimeout(() => document.body.style.animation = "", 5000);
     return true;
   }
   if (index === 1) {
-    giveAchievement("So do I");
+    SecretAchievement(14).unlock();
     return true;
   }
   return false;

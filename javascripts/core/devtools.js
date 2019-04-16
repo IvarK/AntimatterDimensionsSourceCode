@@ -109,7 +109,7 @@ dev.implode = function() {
 dev.updateTDCosts = function() {
     for (var i=1; i<9; i++) {
         var dim = player["timeDimension"+i]
-        if (dim.cost.gte(Number.MAX_VALUE)) {
+        if (dim.cost.gte(Decimal.MAX_NUMBER)) {
             dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
         }
         if (dim.cost.gte("1e1300")) {
@@ -176,8 +176,8 @@ dev.giveGlyph = function (level, rawLevel = level) {
 }
 
 dev.decriminalize = function () {
-  player.secretAchiements.delete(23);
-  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  player.secretAchievements.delete(23);
+  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function (name) {
@@ -551,9 +551,9 @@ dev.updateTestSave = function() {
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 
-  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.size === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.blackHole[0].unlocked) Achievement(144).unlock();
+  Achievement(146).tryUnlock();
+  Achievement(147).tryUnlock();
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);

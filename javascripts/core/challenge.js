@@ -25,14 +25,16 @@ function askChallengeConfirmation(challenge) {
 }
 
 function setChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.challengeTimes.splice(id, 1, time);
-    GameCache.worstChallengeTime.invalidate();
+  // Use splice so Vue could track changes
+  player.challengeTimes.splice(id, 1, time);
+  GameCache.challengeTimeSum.invalidate();
+  GameCache.worstChallengeTime.invalidate();
 }
 
 function setInfChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.infchallengeTimes.splice(id, 1, time);
+  // Use splice so Vue could track changes
+  player.infchallengeTimes.splice(id, 1, time);
+  GameCache.infinityChallengeTimeSum.invalidate();
 }
 
 class ChallengeState extends GameMechanicState {
@@ -56,7 +58,7 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    let target = new Decimal(Number.MAX_VALUE);
+    let target = new Decimal(Decimal.MAX_NUMBER);
     if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
       target = Decimal.pow(10, 1e15);
     }
@@ -137,8 +139,7 @@ class InfinityChallengeState extends GameMechanicState {
   start() {
     startChallenge(this._fullId, this.config.goal);
     player.break = true;
-    if (EternityChallenge.isRunning())
-      giveAchievement("I wish I had gotten 7 eternities");
+    if (EternityChallenge.isRunning()) Achievement(115).unlock();
   }
 
   get isCompleted() {

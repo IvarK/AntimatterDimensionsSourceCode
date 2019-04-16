@@ -204,6 +204,9 @@ const GlyphGenerator = {
 const Glyphs = {
   inventory: [],
   active: [],
+  get inventoryList() {
+    return player.reality.glyphs.inventory;
+  },
   get activeList() {
     return player.reality.glyphs.active;
   },
@@ -254,8 +257,7 @@ const Glyphs = {
       this.removeFromInventory(stacked.pop());
     }
     this.validate();
-    checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);
@@ -277,7 +279,7 @@ const Glyphs = {
     player.reality.glyphs.active.push(glyph);
     glyph.idx = targetSlot;
     this.active[targetSlot] = glyph;
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   unequipAll() {
@@ -288,7 +290,7 @@ const Glyphs = {
       this.active[glyph.idx] = null;
       Glyphs.addToInventory(glyph);
     }
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   moveToSlot(glyph, targetSlot) {
     if (this.inventory[targetSlot] === null) this.moveToEmpty(glyph, targetSlot);
@@ -303,7 +305,7 @@ const Glyphs = {
       this.inventory[glyph.idx] = null;
       this.inventory[targetSlot] = glyph;
       glyph.idx = targetSlot;
-      GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+      EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     } else {
       console.log("inventory slot full")
     }
@@ -318,7 +320,7 @@ const Glyphs = {
     glyphA.idx = glyphB.idx;
     glyphB.idx = tmp;
     this.validate();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
   },
   addToInventory(glyph) {
     this.validate();
@@ -327,8 +329,7 @@ const Glyphs = {
     this.inventory[index] = glyph;
     glyph.idx = index;
     player.reality.glyphs.inventory.push(glyph);
-    checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   removeFromInventory(glyph) {
@@ -338,8 +339,7 @@ const Glyphs = {
     if (index < 0) return;
     this.inventory[glyph.idx] = null;
     player.reality.glyphs.inventory.splice(index, 1);
-    checkGlyphAchievements();
-    GameUI.dispatch(GameEvent.GLYPHS_CHANGED);
+    EventHub.dispatch(GameEvent.GLYPHS_CHANGED);
     this.validate();
   },
   validate() {
@@ -573,14 +573,6 @@ function separateEffectKey(effectKey) {
   return [type, effect]
 }
 
-function checkGlyphAchievements() {
-  const glyphs = player.reality.glyphs.inventory;
-  if (glyphs.length === 100) giveAchievement("Personal Space")
-  if (glyphs.length === 0 && player.realities >= 100) giveAchievement("Do I really have to do this?")
-  if (glyphs.some((g) => g.strength >= 3.5)) giveAchievement("Why did you have to add RNG to the game?")
-  if (glyphs.every((g) => g.strength >= 2) && glyphs.length === 100) giveAchievement("I'm up all night to get lucky")
-}
-
 // Returns both effect value and softcap status
 function getActiveGlyphEffects() {
   return orderedEffectList
@@ -625,9 +617,7 @@ function sacrificeGlyph(glyph, force = false) {
     player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
   }
   Glyphs.removeFromInventory(glyph);
-
-  if (glyph.strength >= 3.25) giveAchievement("Transcension sucked anyway")
-  if (glyph.strength >= 3.5) giveAchievement("True Sacrifice")
+  EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);
 }
 
 function getGlyphLevelInputs() {
@@ -773,7 +763,7 @@ class RealityUpgradeState extends GameMechanicState {
       player.blackHole[1].unlocked = true;
     }
 
-    if (RealityUpgrades.allBought) giveAchievement("Master of Reality");
+    EventHub.dispatch(GameEvent.REALITY_UPGRADE_BOUGHT);
     return true;
   }
 

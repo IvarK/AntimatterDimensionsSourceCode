@@ -78,8 +78,8 @@ function getReplicantiInterval(noMod, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked ?
-    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) :
-    new Decimal(Number.MAX_VALUE);
+    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER) :
+    new Decimal(Decimal.MAX_NUMBER);
 }
 
 function replicantiLoop(diff) {
@@ -91,6 +91,7 @@ function replicantiLoop(diff) {
         return;
     }
     PerformanceStats.start("Replicanti");
+    EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
     const interval = getReplicantiInterval();
     const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
     const logReplicanti = player.replicanti.amount.clampMin(1).ln();
@@ -115,12 +116,10 @@ function replicantiLoop(diff) {
 
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
 
-    if (logReplicanti == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");
-    if (player.replicanti.galaxies >= 10 && player.thisInfinityTime < 15000) giveAchievement("The swarm");
-
-    if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Number.MAX_VALUE)) {
+    if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
       replicantiGalaxy();
     }
+    EventHub.dispatch(GameEvent.REPLICANTI_TICK_AFTER);
     PerformanceStats.end();
 }
 
@@ -373,7 +372,7 @@ const Replicanti = {
     },
     get canBuyMore() {
       if (Ra.isRunning) return false
-      if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
+      if (!Replicanti.amount.gte(Decimal.MAX_NUMBER)) return false;
       return this.bought < this.max;
     },
     autobuyer: {

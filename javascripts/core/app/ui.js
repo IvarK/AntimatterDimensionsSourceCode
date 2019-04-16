@@ -15,7 +15,7 @@ Vue.mixin({
       this.$emit("close");
     },
     on$(event, fn) {
-      EventHub.global.on(event, fn, this);
+      EventHub.ui.on(event, fn, this);
     },
     shorten(value, places, placesUnder1000) {
       return shorten(value, places, placesUnder1000);
@@ -51,7 +51,7 @@ Vue.mixin({
     }
   },
   destroyed() {
-    EventHub.global.offAll(this);
+    EventHub.ui.offAll(this);
   }
 });
 
@@ -96,10 +96,10 @@ const GameUI = {
       Vue.nextTick(() => PerformanceStats.start("Vue Render"));
       PerformanceStats.start("Vue Update");
     }
-    for (let event of this.events) {
-      EventHub.global.emit(event);
+    for (const event of this.events) {
+      EventHub.ui.dispatch(event);
     }
-    EventHub.global.emit(GameEvent.UPDATE);
+    EventHub.ui.dispatch(GameEvent.UPDATE);
     if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
       Vue.nextTick(() => {

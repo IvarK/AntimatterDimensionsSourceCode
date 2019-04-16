@@ -589,7 +589,7 @@ class InfinityAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
-    if (!player.money.gte(Number.MAX_VALUE)) return;
+    if (!player.money.gte(Decimal.MAX_NUMBER)) return;
     let proc = !player.break || player.currentChallenge !== "";
     if (!proc) {
       switch (this.mode) {
@@ -826,29 +826,13 @@ Autobuyer.tick = function() {
 };
 
 Autobuyer.checkIntervalAchievements = function() {
-  const maxedAutobuy = Autobuyer.unlockables
-    .filter(a => a.hasMaxedInterval)
-    .length;
-
-  if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
-  if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
+  Achievement(52).tryUnlock();
+  Achievement(53).tryUnlock();
 };
 
 Autobuyer.checkBulkAchievements = function() {
-  const dims = Autobuyer.allDims;
-  const bulk512Count = dims
-    .filter(a => a.isUnlocked && a.bulk >= 512)
-    .length;
-  if (bulk512Count === DIMENSION_COUNT) giveAchievement("Bulked up");
-  const maxedBulkCount = dims
-    .filter(a => a.hasMaxedBulk)
-    .length;
-  if (maxedBulkCount === DIMENSION_COUNT) giveAchievement("Professional bodybuilder");
-};
-
-Autobuyer.checkAllAchievements = function() {
-  Autobuyer.checkIntervalAchievements();
-  Autobuyer.checkBulkAchievements();
+  Achievement(61).tryUnlock();
+  SecretAchievement(38).tryUnlock();
 };
 
 function toggleAutobuyers() {

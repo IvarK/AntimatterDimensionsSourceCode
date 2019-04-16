@@ -169,6 +169,7 @@ function onLoad() {
     delete player.achPow;
     player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
     delete player.options.sacrificeConfirmation;
+    player.gameCreatedTime = Date.now() - player.realTimePlayed;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

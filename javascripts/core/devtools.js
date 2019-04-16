@@ -548,6 +548,11 @@ dev.updateTestSave = function() {
     player.options.testVersion = 32;
   }
 
+  if (player.options.testVersion === 32) {
+    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    player.options.testVersion = 33;
+  }
+
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 

@@ -535,14 +535,6 @@ const Player = {
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },
-
-  get challengeTimeSum() {
-    return GameCache.challengeTimeSum.value;
-  },
-
-  get infinityChallengeTimeSum() {
-    return GameCache.infinityChallengeTimeSum.value;
-  },
 };
 
 function guardFromNaNValues(obj) {

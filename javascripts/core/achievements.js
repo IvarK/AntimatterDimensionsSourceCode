@@ -25,7 +25,7 @@ class AchievementState extends GameMechanicState {
   }
 
   unlock() {
-    if (this.isUnlocked) return false;
+    if (this.isUnlocked) return;
     player.achievements.add(this.id);
     if (this.id === 85 || this.id === 93) {
       Autobuyer.infinity.bumpLimit(4);
@@ -34,7 +34,6 @@ class AchievementState extends GameMechanicState {
     kong.submitAchievements();
     GameCache.achievementPower.invalidate();
     EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-    return true;
   }
 
   get isEnabled() {
@@ -95,12 +94,11 @@ class SecretAchievementState extends GameMechanicState {
   }
 
   unlock() {
-    if (this.isUnlocked) return false;
+    if (this.isUnlocked) return;
     player.secretAchievements.add(this.id);
     GameUI.notify.success(this.name);
     kong.submitAchievements();
     EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-    return true;
   }
 }
 

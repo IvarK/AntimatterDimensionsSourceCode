@@ -6,7 +6,7 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e200"),
     reward: {
       description: "Time Dimension multiplier based on time spent this Eternity",
-      effect: completions => Math.pow(Math.max(player.thisEternity * 10, 0.9), 0.3 + (completions * 0.05)),
+      effect: completions => Decimal.pow(Math.max(player.thisEternity * 10, 0.9), 0.3 + (completions * 0.05)),
       formatEffect: value => formatX(value, 2, 1)
     }
   },
@@ -62,8 +62,11 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 6,
-    description: "You can't gain Antimatter Galaxies normally, but the cost of " +
-      "upgrading your max Replicanti galaxies is massively reduced.",
+    description: () => (Enslaved.isRunning
+      ? "You c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
+      " galaxies is massively reduced"
+      : "You can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
+      " galaxies is massively reduced."),
     goal: new Decimal("1e850"),
     goalIncrease: new Decimal("1e250"),
     reward: {

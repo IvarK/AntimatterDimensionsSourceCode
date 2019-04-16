@@ -2,6 +2,9 @@ Vue.component("normal-time-study", {
   props: {
     setup: Object
   },
+  data: () => ({
+    showCost: true,
+  }),
   computed: {
     study() {
       return this.setup.study;
@@ -39,8 +42,13 @@ Vue.component("normal-time-study", {
       return id;
     }
   },
+  methods: {
+    update() {
+      this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
+    },
+  },
   template:
-    `<time-study :setup="setup" :class="classObject"">
+    `<time-study :setup="setup" :showCost="showCost" :class="classObject"">
       <hint-text class="l-hint-text--time-study">{{hintText}}</hint-text>
       <description-display :config="study.config" />
       <effect-display br :config="study.config" />

@@ -145,6 +145,17 @@ dev.refundDilStudies = function() {
     }
 }
 
+dev.resetDilation = function() {
+  player.dilation.dilatedTime = new Decimal(0);
+  player.dilation.tachyonParticles = new Decimal(0);
+  player.dilation.totalTachyonParticles = new Decimal(0);
+  player.dilation.rebuyables[1] = 0;
+  player.dilation.rebuyables[2] = 0;
+  player.dilation.rebuyables[3] = 0;
+  player.dilation.baseFreeGalaxies = 0;
+  player.dilation.freeGalaxies = 0;
+}
+
 dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
@@ -675,7 +686,7 @@ dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persis
   else {  // With no arguments, toggles on/off
     tempSpeedupToggle = !tempSpeedupToggle;
   }
-}
+};
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();

@@ -87,7 +87,7 @@ class BlackHoleState {
   }
 
   get isUnlocked() {
-    return this._data.unlocked || Enslaved.isRunning;
+    return this._data.unlocked && !Enslaved.isRunning;
   }
 
   get isCharged() {

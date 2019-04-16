@@ -109,7 +109,10 @@ function buyDilationStudy(name, cost, quiet) {
           if (Perk.autounlockDilation2.isBought) {
             for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
           }
-          if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10);
+          if (Perk.startTP.isBought) {
+            player.dilation.tachyonParticles =
+              player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
+          }
         }
         if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");
@@ -204,6 +207,7 @@ function canBuyStudy(name) {
       break;
 
       case 19:
+      if (name === 192 && Enslaved.isRunning) return false;
       if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; else return false
       break;
 

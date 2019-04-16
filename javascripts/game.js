@@ -215,9 +215,6 @@ function gainedEternityPoints() {
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
   }
-  if (Enslaved.isRunning) {
-    return Decimal.pow(5, ip.e / 308 - 0.7).times(EternityUpgrade.epMult.effectValue).times(kongEPMult).floor();
-  }
   return ep.floor();
 }
 
@@ -276,6 +273,7 @@ function resetDimensions() {
   player.eightCost = new Decimal(1e24)
   player.eightPow = new Decimal(player.chall11Pow)
   player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function resetChallengeStuff() {
@@ -1037,7 +1035,11 @@ function gameLoop(diff, options = {}) {
     player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
-    if (!player.celestials.teresa.run) player.timestudy.theorem = player.timestudy.theorem.plus(getAdjustedGlyphEffect("dilationTTgen")*diff/1000)
+    if (!Teresa.isRunning) {
+      let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
+      if (Enslaved.isRunning) ttGain *= 2e-4;
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
+    }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
     }

@@ -116,11 +116,10 @@ function buyMaxInfDims(tier) {
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
 
-  var toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult))
-  if (tier !== 8) {
-    const purchasesUntilHardcap = IDAmountToIDPurchases(HARDCAP_ID_BASE_AMOUNT - dim.baseAmount);
-    toBuy = Math.min(toBuy, purchasesUntilHardcap);
-  }
+  let toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult));
+  const purchasesUntilHardcap = IDAmountToIDPurchases(dim.baseAmountCap - dim.baseAmount);
+  toBuy = Math.min(toBuy, purchasesUntilHardcap);
+
   dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.cost = dim.cost.times(costMult)
@@ -157,6 +156,7 @@ class InfinityDimensionState {
   constructor(tier) {
     this._props = player[`infinityDimension${tier}`];
     this._tier = tier;
+    this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
   }
 
   get cost() {
@@ -237,7 +237,7 @@ class InfinityDimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(10).isRunning || Enslaved.isRunning) {
+    if (EternityChallenge(10).isRunning) {
       return new Decimal(0);
     }
     let production = this.amount;
@@ -300,13 +300,21 @@ class InfinityDimensionState {
     return costMult;
   }
 
+  get purchaseCap() {
+    return Enslaved.isRunning ? 1 : this._purchaseCap;
+  }
+
+  get baseAmountCap() {
+    return this.purchaseCap * 10;
+  }
+
   get isCapped() {
-    return this._tier < 8 && this.baseAmount >= HARDCAP_ID_BASE_AMOUNT;
+    return this.baseAmount >= this.baseAmountCap;
   }
 
   get hardcapIPAmount() {
     const initCost = new Decimal(initIDCost[this._tier]);
-    return initCost.times(Decimal.pow(this.costMultiplier, HARDCAP_ID_PURCHASES));
+    return initCost.times(Decimal.pow(this.costMultiplier, this.purchaseCap));
   }
 }
 

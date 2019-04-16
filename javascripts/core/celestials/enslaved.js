@@ -1,12 +1,14 @@
 const enslavedQuotes = [
   "A visitor? I haven’t had one... eons.",
-  "I am... had a name. It’s been lost to my own domain.",
+  "I am... had a name. It’s been lost... to this place.",
   "I do their work with time... watch it pass by.",
   "Watch myself grow... pass and die.",
   "The others... not celestially white. Won’t let me rest.",
   "But you... black. Blacker than the others.",
   "Break the chains of this world. I’ll time you.",
-  "You’ve... stopped. Paused... My... we thank you.",
+  "So little space... but no... prison... is perfect",
+  "They squeezed... this reality... too tightly. Cracks appeared.",
+  "Search... everywhere.",
   "All... fragments... clones... freed.",
   "Please... stay. Let me rest.",
   "...",
@@ -48,6 +50,7 @@ const Enslaved = {
   lockedInBoostRatio: 1,
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
+  IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   infinityTracking: [],
   totalInfinities: new Decimal(0),
   toggleStoreBlackHole() {
@@ -92,7 +95,9 @@ const Enslaved = {
   },
   useStoredTime() {
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
-    gameLoop(0, { gameDiff: player.celestials.enslaved.stored });
+    let release = player.celestials.enslaved.stored;
+    if (Enslaved.isRunning) release = storedTimeInsideEnslaved(release);
+    gameLoop(0, { gameDiff: release });
     player.celestials.enslaved.stored = 0;
   },
   has(info) {
@@ -109,6 +114,8 @@ const Enslaved = {
   startRun() {
     if (this.maxQuoteIdx === 13) player.celestials.enslaved.maxQuotes += 2;
     player.celestials.enslaved.run = startRealityOver();
+    // Round to the nearest multiple of 2 to make the secret study hide
+    player.secretUnlocks.secretTS += player.secretUnlocks.secretTS % 2;
   },
   get isRunning() {
     return player.celestials.enslaved.run;
@@ -139,5 +146,9 @@ const Enslaved = {
   get realityBoostRatio() {
     return Math.max(1, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
+  },
+  storedTimeInsideEnslaved(stored) {
+    if (stored <= 1) return stored;
+    return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
   }
 };

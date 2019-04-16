@@ -6,6 +6,7 @@ Vue.component("time-dim-row", {
   data() {
     return {
       isUnlocked: false,
+      isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       rateOfChange: new Decimal(0),
@@ -22,6 +23,9 @@ Vue.component("time-dim-row", {
       return this.tier < 8
         ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
         : "";
+    },
+    buttonContents() {
+      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
     }
   },
   methods: {
@@ -29,6 +33,7 @@ Vue.component("time-dim-row", {
       const tier = this.tier;
       const dimension = TimeDimension(tier);
       const isUnlocked = dimension.isUnlocked;
+      this.isCapped = Enslaved.isRunning && dimension.bought > 0;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
@@ -61,6 +66,6 @@ Vue.component("time-dim-row", {
         :enabled="isAffordable"
         class="o-primary-btn--buy-td c-time-dim-row__button"
         @click="buyTimeDimension"
-      >Cost: {{shortenDimensions(cost)}} EP</primary-button>
+      >{{buttonContents}}</primary-button>
     </div>`,
 });

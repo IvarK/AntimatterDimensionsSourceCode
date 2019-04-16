@@ -93,17 +93,19 @@ function getFreeGalaxyMult() {
 }
 
 function getDilationGainPerSecond() {
-  let ret = new Decimal(player.dilation.tachyonParticles)
+  let dtRate = new Decimal(player.dilation.tachyonParticles)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
       RealityUpgrade(1)
     );
-  ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
-  ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
-  if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
-  if (V.isRunning) ret = ret.pow(0.5)
-  return ret
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
+  dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  if (Enslaved.isRunning) {
+    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
+  }
+  if (V.isRunning) dtRate = dtRate.pow(0.5);
+  return dtRate;
 }
 
 function tachyonGainMultiplier() {
@@ -119,18 +121,20 @@ function tachyonGainMultiplier() {
 function getTachyonGain() {
   const mult = tachyonGainMultiplier();
 
-  return Decimal
+  let newTotal = Decimal
     .pow(Decimal.log10(player.money) / 400, 1.5)
-    .times(mult)
-    .minus(player.dilation.totalTachyonParticles)
-    .clampMin(0);
+    .times(mult);
+  if (Enslaved.isRunning) newTotal = newTotal.pow(0.25);
+  return newTotal.minus(player.dilation.totalTachyonParticles).clampMin(0);
 }
 
 function getTachyonReq() {
   const mult = tachyonGainMultiplier();
 
+  let effectiveTP = player.dilation.totalTachyonParticles;
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
   return Decimal.pow10(
-    player.dilation.totalTachyonParticles
+    effectiveTP
       .times(Math.pow(400, 1.5))
       .dividedBy(mult)
       .pow(2 / 3)

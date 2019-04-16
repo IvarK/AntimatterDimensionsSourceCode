@@ -3,6 +3,7 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
+    inEnslaved: false,
     storedBlackHole: 0,
     storedReal: 0,
     storedRealEffiency: 0,
@@ -21,7 +22,15 @@ Vue.component("enslaved-tab", {
     },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
-    }
+    },
+    nerfedBlackHoleTime() {
+      return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
+    },
+    realityTitle() {
+      return this.inEnslaved
+        ? "You're inside Enslaved Ones' Reality"
+        : "Start Enslaved One's Reality";
+    },
   },
   methods: {
     update() {
@@ -29,6 +38,7 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.inEnslaved = Enslaved.isRunning;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
@@ -80,7 +90,10 @@ Vue.component("enslaved-tab", {
             <div class="o-enslaved-stored-time">{{ timeDisplayShort(storedBlackHole) }}</div>
             <div>{{ isStoringBlackHole ? "Storing black hole time": "Store black hole time" }}</div>
           </button>
-          <button class="o-enslaved-mechanic-button" @click="useStored">Use stored black hole time</button>
+          <button class="o-enslaved-mechanic-button" @click="useStored">
+            Use stored black hole time
+            <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
+          </button>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',
@@ -107,8 +120,16 @@ Vue.component("enslaved-tab", {
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <button class="o-enslaved-run-button" @click="startRun">
-          Start Enslaved One's Reality.<br>IDs, TDs, IP multipliers other than the 2x multiplier, and EP multipliers other than the 5x multiplier are disabled, but you gain a 3rd black hole. You also gain a bonus to dilated time production
-          based on infinities gained in the last 10 seconds (real time).
+          <div class="o-enslaved-run-button__title">{{realityTitle}}</div>
+          <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
+          <p>Normal dimension multipliers are always dilated (the glyph effect still only
+             applies in actual dilation)</p>
+          <p>Time study 192 is locked</p>
+          <p>The black hole is disabled</p>
+          <p>Tachyon production and dilated time production are severely reduced</p>
+          <p>Time theorem generation from dilation glyphs is much slower</p>
+          <p>Certain challenge goals have been increased</p>
+          <p>Stored time is much less effective</p>
         </button>
         <div class="o-enslaved-gained-infinities">You have gained <b>{{ shorten(enslavedInfinities) }}</b> infinities in the last 10 seconds.</div>
       </div>

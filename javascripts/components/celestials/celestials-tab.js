@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('celestials-tab', {
   data: function() {
     return {

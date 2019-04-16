@@ -1,3 +1,5 @@
+"use strict";
+
 const timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
 const timeDimStartCosts = [null, 1, 5, 100, 1000,
   new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];

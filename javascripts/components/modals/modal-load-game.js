@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-load-game", {
   components: {
     "save-game-record": {

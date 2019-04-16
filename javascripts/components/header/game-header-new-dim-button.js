@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-header-new-dim-button", {
   data: function() {
     return {

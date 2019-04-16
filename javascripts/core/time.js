@@ -1,3 +1,5 @@
+"use strict";
+
 const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),

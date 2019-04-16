@@ -1,3 +1,5 @@
+"use strict";
+
 const GlyphTooltipEffect = {
   props: {
     effect: String,

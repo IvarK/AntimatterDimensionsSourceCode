@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.celestials.v = {
   mainUnlock: {
     realities: 10000,

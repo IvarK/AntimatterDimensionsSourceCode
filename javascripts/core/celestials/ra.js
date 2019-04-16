@@ -1,4 +1,4 @@
-
+"use strict";
 
 const RA_UNLOCKS = {
   CHARGE: {

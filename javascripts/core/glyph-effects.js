@@ -1,3 +1,4 @@
+"use strict";
 
 // There is a little too much stuff about glyph effects to put in constants.
 

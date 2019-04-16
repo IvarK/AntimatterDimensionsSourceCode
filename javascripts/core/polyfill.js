@@ -1,3 +1,5 @@
+"use strict";
+
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
     'use strict';

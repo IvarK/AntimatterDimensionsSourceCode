@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("black-hole-unlock-button", {
   data() {
     return {

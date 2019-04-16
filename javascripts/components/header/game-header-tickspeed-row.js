@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-header-tickspeed-row", {
   data: function() {
     return {

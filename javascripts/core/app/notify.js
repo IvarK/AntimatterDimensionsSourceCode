@@ -1,3 +1,5 @@
+"use strict";
+
 GameUI.notify = (function() {
   const container = document.getElementById("notification-container");
   const template = document.createElement("div");

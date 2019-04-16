@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("primary-button", {
   props: {
     enabled: {

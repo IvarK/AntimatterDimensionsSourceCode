@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("current-glyph-effects", {
   components: {
     "current-effect": {

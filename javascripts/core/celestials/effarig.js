@@ -1,3 +1,5 @@
+"use strict";
+
 const effarigQuotes = [
   "Welcome to my humble abode.",
   "I am Effarig, and I govern Glyphs.",
@@ -104,8 +106,8 @@ const Effarig = {
 
   get glyphEffectAmount() {
     const counted = new Set();
-    for (g of Glyphs.activeList) {
-      for (e in g.effects) counted.add(g.type + e);
+    for (const g of Glyphs.activeList) {
+      for (const e in g.effects) counted.add(g.type + e);
     }
     return counted.size;
   },

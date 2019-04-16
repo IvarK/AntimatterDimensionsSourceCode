@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("tachyon-particles", {
   data() {
     return {

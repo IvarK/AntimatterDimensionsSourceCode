@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("infinity-challenges-tab", {
   components: {
     "infinity-challenge-box": {

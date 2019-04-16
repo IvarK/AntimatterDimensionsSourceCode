@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("footer-links", {
   data() {
     return {

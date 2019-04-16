@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.infinity = new class InfinityNotation extends Notation {
   constructor() {
     super("Infinity");

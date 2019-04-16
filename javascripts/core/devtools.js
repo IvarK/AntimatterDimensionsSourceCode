@@ -1,3 +1,5 @@
+"use strict";
+
 var dev = {};
 const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
@@ -305,7 +307,7 @@ dev.updateTestSave = function() {
     }
 
     if (player.options.testVersion == 11) {
-      for (i = 0; i < player.reality.glyphs.active.length; i++) {
+      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         let glyph = player.reality.glyphs.active[i]
         if (glyph.effects.autochall !== undefined) {
           glyph.effects.autochall = undefined
@@ -313,7 +315,7 @@ dev.updateTestSave = function() {
         }
       }
 
-      for (i = 0; i < player.reality.glyphs.inventory.length; i++) {
+      for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
         let glyph = player.reality.glyphs.inventory[i]
         if (glyph.effects.autochall !== undefined) {
           glyph.effects.autochall = undefined
@@ -413,7 +415,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 22) {
-      for (i in player.celestials.effarig.glyphWeights) {
+      for (const i in player.celestials.effarig.glyphWeights) {
           player.celestials.effarig.glyphWeights[i] *= 100
       }
     player.options.testVersion = 23;
@@ -421,7 +423,7 @@ dev.updateTestSave = function() {
 
   //the above line of code didn't work if loading a test save before celestials were added, whoops
   if (player.options.testVersion === 23) {
-    for (i in player.celestials.effarig.glyphWeights) {
+    for (const i in player.celestials.effarig.glyphWeights) {
         player.celestials.effarig.glyphWeights[i] = 25
     }
     player.options.testVersion = 24;
@@ -457,14 +459,14 @@ dev.updateTestSave = function() {
     player.celestials.effarig = player.celestials.teresa
     player.celestials.teresa = temp
     
-    for (i in player.reality.glyphs.active) {
+    for (const i in player.reality.glyphs.active) {
       let g = player.reality.glyphs.active[i]
       if (g.type == 'teresa') {
         g.type = 'effarig'
       }
     }
 
-    for (i in player.reality.glyphs.inventory) {
+    for (const i in player.reality.glyphs.inventory) {
       let g = player.reality.glyphs.inventory[i]
       if (g.type == 'teresa') {
         g.type = 'effarig'

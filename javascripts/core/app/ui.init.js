@@ -1,3 +1,5 @@
+"use strict";
+
 let ui = {
   view: {
     modal: {

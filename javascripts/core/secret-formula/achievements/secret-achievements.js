@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.achievements.secret = [
   {
     id: 11,

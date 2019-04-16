@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-challenges-tab", {
   components: {
     "eternity-challenge-box": {

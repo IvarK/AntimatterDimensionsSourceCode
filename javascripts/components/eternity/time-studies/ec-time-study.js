@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("ec-time-study", {
   props: {
     setup: Object

@@ -1,3 +1,5 @@
+"use strict";
+
 const Autobuyer = function Autobuyer(interval) {
     this.target = 1;
     this.cost = 1;

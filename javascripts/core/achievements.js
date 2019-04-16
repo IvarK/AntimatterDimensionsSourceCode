@@ -1,3 +1,5 @@
+"use strict";
+
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);

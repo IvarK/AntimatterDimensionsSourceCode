@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.mixedScientific = new class MixedScientificNotation extends Notation {
   formatDecimal(value, places) {
     const notation = value.exponent >= 33 ? Notation.scientific : Notation.standard;

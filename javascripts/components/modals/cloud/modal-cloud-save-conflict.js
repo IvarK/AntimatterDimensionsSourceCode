@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-cloud-save-conflict", {
   mixins: [modalCloudConflictMixin],
   template:

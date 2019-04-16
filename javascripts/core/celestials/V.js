@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * runUnlocks:
  * id: unique id

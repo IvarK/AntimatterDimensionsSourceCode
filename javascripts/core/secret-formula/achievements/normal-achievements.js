@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.achievements.normal = [
   {
     id: 11,

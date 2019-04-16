@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-challenges-tab", {
   components: {
     "normal-challenge-box": {

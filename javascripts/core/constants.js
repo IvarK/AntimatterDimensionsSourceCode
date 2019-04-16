@@ -1,3 +1,5 @@
+"use strict";
+
 const DIMENSION_COUNT = 8;
 const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
 
@@ -308,9 +310,9 @@ const _AutomatorInstructions = Object.freeze({
   },
 });
 
-var _makeAutomatorInstructionsById = function() {
-  var ret={};
-  for (k in _AutomatorInstructions) {
+function _makeAutomatorInstructionsById() {
+  const ret={};
+  for (const k in _AutomatorInstructions) {
     if (_AutomatorInstructions.hasOwnProperty(k)) {
       ret[_AutomatorInstructions[k].id] = _AutomatorInstructions[k];
     }

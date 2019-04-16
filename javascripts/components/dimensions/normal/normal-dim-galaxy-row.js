@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-galaxy-row", {
   data() {
     return {

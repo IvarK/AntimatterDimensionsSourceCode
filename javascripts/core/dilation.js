@@ -1,3 +1,5 @@
+"use strict";
+
 function startDilatedEternity() {
   if (!TimeStudy.dilation.isBought) return false
   GameIntervals.gameLoop.stop();

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("replicanti-gain-text", {
   data() {
     return {

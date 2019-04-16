@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-header-big-crunch-button", {
   data: function() {
     return {

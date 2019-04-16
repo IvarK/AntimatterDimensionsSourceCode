@@ -1,3 +1,5 @@
+"use strict";
+
 const GalaxyType = {
   NORMAL: "Antimatter Galaxies",
   DISTANT: "Distant Antimatter Galaxies",

@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.infinity.breakUpgrades = (function() {
   function rebuyable(config) {
     const maxUpgrades = config.maxUpgrades;

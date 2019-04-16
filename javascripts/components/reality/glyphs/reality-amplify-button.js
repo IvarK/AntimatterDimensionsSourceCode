@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-amplify-button", {
   data: () => ({
     isUnlocked: false,

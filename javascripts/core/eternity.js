@@ -1,3 +1,5 @@
+"use strict";
+
 function canEternity() {
   const challenge = EternityChallenge.current;
   if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;

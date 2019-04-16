@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.prime = new class PrimeNotation extends Notation {
   constructor() {
     super("Prime");

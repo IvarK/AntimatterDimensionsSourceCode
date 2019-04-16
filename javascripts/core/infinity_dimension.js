@@ -1,3 +1,5 @@
+"use strict";
+
 function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(kongAllDimMult)
     .timesEffectsOf(

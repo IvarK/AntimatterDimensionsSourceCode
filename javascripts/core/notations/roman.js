@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.roman = new class RomanNotation extends Notation {
   constructor() {
     super("Roman");

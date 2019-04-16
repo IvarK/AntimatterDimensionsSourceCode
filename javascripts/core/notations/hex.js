@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.hex = new class HexNotation extends Notation {
   constructor() {
     super("Hex");

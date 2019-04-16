@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Object that manages the selection of glyphs offered to the player
  */

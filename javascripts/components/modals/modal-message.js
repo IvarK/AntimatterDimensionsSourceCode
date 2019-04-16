@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-message", {
   computed: {
     modal() {

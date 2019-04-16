@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-achievement", {
   props: {
     row: Number,

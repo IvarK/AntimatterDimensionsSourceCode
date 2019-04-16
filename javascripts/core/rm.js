@@ -1,3 +1,5 @@
+"use strict";
+
 // TODO, add more types
 //TODO, add more effects for time and effects for dilation and replication and infinity
 
@@ -343,7 +345,7 @@ const Glyphs = {
     this.validate();
   },
   validate() {
-    for (glyph of player.reality.glyphs.inventory) {
+    for (const glyph of player.reality.glyphs.inventory) {
       if (this.inventory[glyph.idx] !== glyph) {
         throw crash("validation error");
       }

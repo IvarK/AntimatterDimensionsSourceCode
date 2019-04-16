@@ -1,3 +1,5 @@
+"use strict";
+
 function canBuyTickSpeed() {
   return canBuyDimension(3) && !EternityChallenge(9).isRunning;
 }

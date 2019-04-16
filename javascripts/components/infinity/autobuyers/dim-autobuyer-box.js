@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("dim-autobuyer-box", {
   components: {
     "bulk-button": {

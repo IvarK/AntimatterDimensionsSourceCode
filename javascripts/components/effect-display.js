@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("effect-display", {
   props: {
     config: Object,

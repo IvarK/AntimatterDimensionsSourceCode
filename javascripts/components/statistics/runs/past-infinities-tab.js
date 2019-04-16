@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("past-infinities-tab", {
   mixins: [pastRunsMixin],
   data() {

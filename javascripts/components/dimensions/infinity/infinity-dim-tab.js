@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("infinity-dim-tab", {
   data() {
     return {

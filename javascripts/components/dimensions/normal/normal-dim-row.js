@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-row", {
   props: {
     floatingText: Array,

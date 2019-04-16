@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("secret-achievement-row", {
   props: {
     row: Number

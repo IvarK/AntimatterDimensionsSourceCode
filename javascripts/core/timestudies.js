@@ -1,3 +1,5 @@
+"use strict";
+
 const TimeStudyPath = {
   NONE: 0,
   NORMAL_DIM: 1,

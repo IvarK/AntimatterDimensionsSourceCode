@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.mixin({
   computed: {
     $viewModel() {

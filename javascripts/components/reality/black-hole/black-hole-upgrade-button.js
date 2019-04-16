@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("black-hole-upgrade-button", {
   props: {
     config: Object

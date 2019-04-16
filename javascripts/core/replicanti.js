@@ -91,41 +91,28 @@ function replicantiLoop(diff) {
         return;
     }
     PerformanceStats.start("Replicanti");
-    let interval = getReplicantiInterval();
-    let isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
-    var logReplicanti = player.replicanti.amount.clampMin(1).ln();
+    const interval = getReplicantiInterval();
+    const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
+    const logReplicanti = player.replicanti.amount.clampMin(1).ln();
     const isUncapped = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isUncapped)) {
       // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
       const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
       const logGainFactorPerTick = diff / 1000 * (Math.log(player.replicanti.chance + 1) * 1000 / interval);
-      if (isUncapped) player.replicanti.amount = Decimal.pow(Math.E, logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale)
-      else fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled)
-      replicantiTicks = 0
-    } else {
-        if (interval <= replicantiTicks && player.replicanti.unl) {
-          // Gain code for slow replicanti (multiple game ticks per replicanti tick)
-            if (player.replicanti.amount.lte(100)) {
-              // When less than 100 replicanti, simulate each replicanti with an independent chance of replicating
-                var temp = player.replicanti.amount
-                for (var i=0; temp.gt(i); i++) {
-                    if (player.replicanti.chance > Math.random()) player.replicanti.amount = player.replicanti.amount.plus(1)
-                }
-            } else {
-              // When more than 100 replicanti, simulate 100 groups of replicanti that have independent chances of replicating
-              var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
-              let replicatedGroups = 0
-              for (var i=0; i<100; i++) {
-                if (player.replicanti.chance > Math.random()) {
-                  replicatedGroups++;
-                }
-              }
-              player.replicanti.amount = player.replicanti.amount.times(1 + replicatedGroups / 100)
-              if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount)
-            }
-            replicantiTicks -= interval
-        }
+      if (isUncapped) {
+        player.replicanti.amount =
+          Decimal.exp(logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale);
+      } else {
+        fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled);
+      }
+      replicantiTicks = 0;
+    } else if (interval <= replicantiTicks && player.replicanti.unl) {
+      const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
+      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+      if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
+      replicantiTicks -= interval;
     }
+
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
 
     if (logReplicanti == Decimal.ln(Number.MAX_VALUE) && player.thisInfinityTime < 60000*30) giveAchievement("Is this safe?");

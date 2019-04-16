@@ -1,76 +1,24 @@
 function startEternityChallenge() {
-    player.sacrificed = new Decimal(0);
-    player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
-        challenge.complete();
-      }
-    }
-    if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
-    }
-    player.currentChallenge = "";
-    player.infinitied = new Decimal(0);
-    player.bestInfinityTime = 9999999999;
-    player.thisInfinityTime = 0;
-    player.thisInfinityRealTime = 0;
-    player.resets = (player.eternities >= 4) ? 4 : 0;
-    player.galaxies = (player.eternities >= 4) ? 1 : 0;
-    player.tickDecrease = 0.9;
-    player.partInfinityPoint = 0;
-    player.partInfinitied = 0;
-    player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
-    player.tickspeedMultiplier = new Decimal(10);
-    player.infMult = new Decimal(1);
-    player.infMultCost = new Decimal(10);
-    if (player.eternities < 20) {
-      player.infinityRebuyables = [0, 0];
-      GameCache.tickSpeedMultDecrease.invalidate();
-      GameCache.dimensionMultDecrease.invalidate();
-    }
-    player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
-    player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
-    player.infinityPower = new Decimal(1);
-    player.timeShards = new Decimal(0);
-    player.tickThreshold = new Decimal(1);
-    player.thisEternity = 0;
-    player.thisEternityRealTime = 0;
-    player.totalTickGained = 0;
-    player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
-    player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = new Decimal(0);
-    if (player.eternities < 7) {
-      player.autoSacrifice = 1;
-    }
-    player.autoIP = new Decimal(0);
-    player.autoTime = 1e300;
-    player.eterc8ids = 50;
-    player.eterc8repl = 40;
-    player.dimlife = true;
-    player.dead = true;
-
-    resetInfinityRuns();
-    fullResetInfDimensions();
-    eternityResetReplicanti();
-    resetChallengeStuff();
-    resetDimensions();
-    if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
-    player.replicanti.galaxies = 0;
-    resetInfinityPointsOnEternity();
-    resetInfDimensions();
-    IPminpeak = new Decimal(0);
-    EPminpeak = new Decimal(0);
-    resetTimeDimensions();
-    if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
-    kong.submitStats('Eternities', player.eternities);
-    if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    resetTickspeed();
-    resetMoney();
-    playerInfinityUpgradesOnEternity();
-    AchievementTimers.marathon2.reset();
-    return true;
+  initializeChallengeCompletions();
+  initializeResourcesAfterEternity();
+  resetInfinityRuns();
+  fullResetInfDimensions();
+  eternityResetReplicanti();
+  resetChallengeStuff();
+  resetDimensions();
+  player.replicanti.galaxies = 0;
+  resetInfinityPointsOnEternity();
+  resetInfDimensions();
+  IPminpeak = new Decimal(0);
+  EPminpeak = new Decimal(0);
+  resetTimeDimensions();
+  if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
+  kong.submitStats('Eternities', player.eternities);
+  resetTickspeed();
+  resetMoney();
+  playerInfinityUpgradesOnEternity();
+  AchievementTimers.marathon2.reset();
+  return true;
 }
 
 const TIERS_PER_EC = 5;
@@ -176,6 +124,7 @@ class EternityChallengeState extends GameMechanicState {
         "You need to reach a set IP with special conditions.";
       if (!confirm(confirmation)) return false;
     }
+    if (canEternity()) eternity(false, false);
     player.eternityChallGoal = this.currentGoal;
     player.currentEternityChall = this.fullId;
     return startEternityChallenge();

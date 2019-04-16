@@ -437,6 +437,9 @@ function respecTimeStudies() {
     ecStudy.refund();
     player.eternityChallUnlocked = 0;
   }
+  if (!justImported) {
+    Tab.eternity.timeStudies.show();
+  }
 }
 
 function exportStudyTree() {

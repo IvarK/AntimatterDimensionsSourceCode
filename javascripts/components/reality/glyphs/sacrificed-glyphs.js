@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("sacrificed-glyphs", {
   components: {
     "type-sacrifice": {

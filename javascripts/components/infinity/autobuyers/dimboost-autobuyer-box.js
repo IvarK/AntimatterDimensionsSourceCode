@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("dimboost-autobuyer-box", {
   data() {
     return {

@@ -1,3 +1,5 @@
+"use strict";
+
 class EventHub {
   constructor() {
     this._handlers = {};

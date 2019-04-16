@@ -1,3 +1,5 @@
+"use strict";
+
 var auto = false;
 var autoS = true;
 var shiftDown = false;

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-time-study", {
   props: {
     setup: Object

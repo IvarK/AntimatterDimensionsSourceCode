@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.imperial = new class ImperialNotation extends Notation {
   constructor() {
     super("Imperial");

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("tickspeed-autobuyer-box", {
   data() {
     return {

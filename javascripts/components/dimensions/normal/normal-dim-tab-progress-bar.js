@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-tab-progress-bar", {
   data() {
     return {

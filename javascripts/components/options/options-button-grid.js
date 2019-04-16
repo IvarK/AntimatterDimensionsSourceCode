@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("options-button-grid", {
   components: {
     "options-button": {

@@ -1,3 +1,5 @@
+"use strict";
+
 class GameMechanicState {
   constructor(config) {
     if (!config) throw crash("Must specify config for GameMechanicState");

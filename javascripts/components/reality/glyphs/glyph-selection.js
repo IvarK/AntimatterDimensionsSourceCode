@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-glyph-selection", {
   data() {
     return {
@@ -12,7 +14,7 @@ Vue.component("modal-glyph-selection", {
         const newGlyph = GlyphSelection.glyphs[i];
         if (currentGlyph.level === newGlyph.level) continue;
         currentGlyph.level = newGlyph.level;
-        for (e of Object.keys(currentGlyph.effects)) {
+        for (const e of Object.keys(currentGlyph.effects)) {
           currentGlyph.effects[e] = newGlyph.effects[e];
         }
       }

@@ -1,3 +1,5 @@
+"use strict";
+
 var currentSave = 0;
 var saves = {
   0: null,
@@ -105,7 +107,7 @@ function onLoad() {
   if (player.version < 10) {
       player.version = 10
       if (player.timestudy.studies.includes(72)) {
-          for (i=4; i<8; i++) {
+        for (let i = 4; i < 8; i++) {
               player["infinityDimension"+i].amount = player["infinityDimension"+i].amount.div(Sacrifice.totalBoost.pow(0.02))
           }
       }
@@ -113,7 +115,7 @@ function onLoad() {
   //updates TD costs to harsher scaling
   if (player.version < 12) {
       player.version = 12
-      for (i=1; i<5; i++) {
+    for (let i = 1; i < 5; i++) {
         if (player["timeDimension"+i].cost.gte("1e1300")) {
             player["timeDimension"+i].cost = Decimal.pow(timeDimCostMults[i]*2.2, player["timeDimension"+i].bought).times(timeDimStartCosts[i])
           }

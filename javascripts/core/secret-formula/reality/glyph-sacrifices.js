@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.reality.glyphSacrifice = [
   {
     id: "power",

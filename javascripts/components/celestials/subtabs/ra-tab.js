@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('ra-tab', {
   data: function() {
     return {

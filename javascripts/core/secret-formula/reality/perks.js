@@ -1,3 +1,5 @@
+"use strict";
+
 const PerkFamily = {
   NORMAL: "NORMAL",
   INFINITY: "INFINITY",

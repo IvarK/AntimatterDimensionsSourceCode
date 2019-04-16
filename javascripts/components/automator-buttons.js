@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("automator-save-load-button", {
   props: {
     saveslot: Number

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-tab", {
   data() {
     return {

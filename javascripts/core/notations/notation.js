@@ -1,3 +1,5 @@
+"use strict";
+
 class Notation {
   constructor(name) {
     this.name = name;

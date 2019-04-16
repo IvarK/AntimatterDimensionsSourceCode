@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("replicanti-upgrade-button", {
   props: {
     setup: Object

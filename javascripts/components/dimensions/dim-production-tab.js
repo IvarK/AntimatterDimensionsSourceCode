@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("dim-production-tab", {
   components: {
     "number-input": {

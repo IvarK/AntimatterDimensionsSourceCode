@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.challenges.normal = [
   {
     id: 1,

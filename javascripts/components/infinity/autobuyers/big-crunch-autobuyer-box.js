@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("big-crunch-autobuyer-box", {
   data() {
     return {

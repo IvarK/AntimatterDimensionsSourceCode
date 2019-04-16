@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.challenges.eternity = [
   {
     id: 1,

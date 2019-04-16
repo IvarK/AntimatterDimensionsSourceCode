@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-header-amounts-line", {
   data: function() {
     return {

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-options", {
   template:
     `<div class="c-modal-options l-modal-options">

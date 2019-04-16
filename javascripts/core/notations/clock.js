@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.clock = new class ClockNotation extends Notation {
   constructor() {
     super("Clock");

@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.milestones = {
   autobuyerIPMult: {
     eternities: 1,

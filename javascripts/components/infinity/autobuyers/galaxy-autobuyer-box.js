@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("galaxy-autobuyer-box", {
   data() {
     return {

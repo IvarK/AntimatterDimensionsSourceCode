@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("past-realities-tab", {
   mixins: [pastRunsMixin],
   data() {

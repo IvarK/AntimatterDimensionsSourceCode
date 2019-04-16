@@ -1,3 +1,4 @@
+"use strict";
 
 const LAITELA_UNLOCKS = {
   PELLE: {

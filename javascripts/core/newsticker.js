@@ -1,3 +1,5 @@
+"use strict";
+
 const newsArray = [
 //always true
   ["The cookie is a lie.", "a1"],

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("achievements-tab", {
   data() {
     return {

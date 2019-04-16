@@ -1,3 +1,5 @@
+"use strict";
+
 const BlackHoleAnimation = (function() {
   const PLANET_SIZE = 1.5;
   const PARTICLE_SIZE = 0.5;

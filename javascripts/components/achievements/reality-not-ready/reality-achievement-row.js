@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-achievement-row", {
   props: {
     row: Number

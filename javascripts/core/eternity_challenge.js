@@ -1,3 +1,5 @@
+"use strict";
+
 function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();

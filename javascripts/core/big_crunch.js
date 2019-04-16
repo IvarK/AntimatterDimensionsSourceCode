@@ -1,3 +1,5 @@
+"use strict";
+
 function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {

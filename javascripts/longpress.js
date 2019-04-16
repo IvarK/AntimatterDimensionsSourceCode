@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // There's a vue directive, long-press, defined at the bottom, which may be
 // what you want to use.

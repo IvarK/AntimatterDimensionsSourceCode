@@ -1,3 +1,5 @@
+"use strict";
+
 if (crashed) {
   throw "Initialization failed";
 }

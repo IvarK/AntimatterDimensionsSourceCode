@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("effarig-unlock-button", {
   props: {
     unlock: Object

@@ -1,3 +1,5 @@
+"use strict";
+
 class Tab {
   constructor(component) {
     this._component = component;

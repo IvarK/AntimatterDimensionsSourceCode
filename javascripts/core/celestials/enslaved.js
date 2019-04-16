@@ -1,3 +1,5 @@
+"use strict";
+
 const enslavedQuotes = [
   "A visitor? I haven’t had one... eons.",
   "I am... had a name. It’s been lost... to this place.",

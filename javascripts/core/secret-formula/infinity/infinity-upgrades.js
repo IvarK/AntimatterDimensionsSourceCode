@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.infinity.upgrades = (function() {
   function dimInfinityMult() {
     return Player.totalInfinitied.times(0.2).plus(1);

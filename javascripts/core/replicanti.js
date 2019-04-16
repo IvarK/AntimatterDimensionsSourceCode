@@ -1,3 +1,5 @@
+"use strict";
+
 var repMs = 0;
 
 // Slowdown parameters for replicanti growth, interval will increase by SCALE_FACTOR for every SCALE_LOG10

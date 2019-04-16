@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('v-tab', {
   data: function() {
     return {

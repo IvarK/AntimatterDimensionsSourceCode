@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("enslaved-tab", {
   data: () => ({
     isStoringBlackHole: false,

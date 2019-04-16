@@ -1,3 +1,5 @@
+"use strict";
+
 class DimBoostRequirement {
   constructor(tier, amount) {
     this.tier = tier;

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("glyph-inventory", {
   data() {
     return {

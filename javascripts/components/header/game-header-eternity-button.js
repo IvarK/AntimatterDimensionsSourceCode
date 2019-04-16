@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-header-eternity-button", {
   data: function() {
     return {

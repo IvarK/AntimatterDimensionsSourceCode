@@ -1,3 +1,5 @@
+"use strict";
+
 // Multiplier applied to all normal dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
 function normalDimensionCommonMultiplier() {

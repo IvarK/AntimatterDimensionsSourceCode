@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-dim-tab", {
   data() {
     return {

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-upgrades-tab", {
   computed: {
     grid() {

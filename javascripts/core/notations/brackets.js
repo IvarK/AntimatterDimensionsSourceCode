@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.brackets = new class BracketsNotation extends Notation {
   get isPainful() {
     return true;

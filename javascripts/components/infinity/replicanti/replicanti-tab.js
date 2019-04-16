@@ -8,7 +8,7 @@ Vue.component("replicanti-tab", {
       amount: new Decimal(0),
       mult: new Decimal(0),
       hasRaisedCap: false,
-      replicantiCap: new Decimal(Number.MAX_VALUE),
+      replicantiCap: new Decimal(Decimal.MAX_NUMBER),
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0
     };
@@ -67,7 +67,7 @@ Vue.component("replicanti-tab", {
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked;
       this.replicantiCap.copyFrom(replicantiCap());
       this.effarigInfinityBonusRG = Effarig.bonusRG;
-      this.nextEffarigRGThreshold = Decimal.pow(Number.MAX_VALUE, Effarig.bonusRG + 2);
+      this.nextEffarigRGThreshold = Decimal.MAX_NUMBER.pow(Effarig.bonusRG + 2);
     }
   },
   template:

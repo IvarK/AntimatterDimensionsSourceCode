@@ -109,7 +109,7 @@ class Galaxy {
     return !((EternityChallenge(6).isRunning && !Enslaved.isRunning)
       || Challenge(8).isRunning
       || player.currentChallenge === "postc7"
-      || (!player.break && player.money.gt(Number.MAX_VALUE)));
+      || (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
   }
 
   static get costScalingStart() {

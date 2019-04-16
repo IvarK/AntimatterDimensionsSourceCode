@@ -177,7 +177,7 @@ function canBuyDimension(tier) {
   if (tier === 9) {
     return !player.secondAmount.equals(0);
   }
-  if (!player.break && player.money.gt(Number.MAX_VALUE)) return false;
+  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return false;
   if (tier > player.resets + 4) return false;
   if (tier > 1 && NormalDimension(tier - 1).amount.eq(0) && player.eternities < 30) return false;
   return tier < 7 || !Challenge(10).isRunning;
@@ -230,7 +230,7 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  return new Decimal(Number.MAX_VALUE);
+  return new Decimal(Decimal.MAX_NUMBER);
 }
 
 function buyOneDimension(tier) {
@@ -532,7 +532,7 @@ function getDimensionProductionPerSecond(tier) {
     production = production.times(player.chall2Pow);
   }
   const postBreak = (player.break && player.currentChallenge === "") || player.currentChallenge.includes("post") || Enslaved.isRunning;
-  if (!postBreak && production.gte(Number.MAX_VALUE)) {
+  if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
     production = production.min("1e315");
   }
   if (tier === 1 && production.gt(10)) {

@@ -1,11 +1,11 @@
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
-  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Number.MAX_VALUE) && !Enslaved.isRunning) return false;
+  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     Challenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Number.MAX_VALUE) || player.chall11Pow.gte(Number.MAX_VALUE))
+    (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER) || player.chall11Pow.gte(Decimal.MAX_NUMBER))
   ) {
     return false;
   }

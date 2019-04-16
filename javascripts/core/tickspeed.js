@@ -64,7 +64,7 @@ function buyTickSpeed() {
   player.money = player.money.minus(player.tickSpeedCost);
   if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
-  if (player.tickSpeedCost.gte(Number.MAX_VALUE)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
+  if (player.tickSpeedCost.gte(Decimal.MAX_NUMBER)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
   if (Challenge(2).isRunning) player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
@@ -96,14 +96,14 @@ function buyMaxTickSpeed() {
   if (Challenge(2).isRunning) {
     player.chall2Pow = 0;
   }
-  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
-    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Number.MAX_VALUE) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed || InfinityChallenge(5).isRunning)) {
+  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Decimal.MAX_NUMBER) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
+    while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Decimal.MAX_NUMBER) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed || InfinityChallenge(5).isRunning)) {
       money = money.minus(tickSpeedCost);
       if (Challenge(9).isRunning || InfinityChallenge(5).isRunning) {
         multiplySameCosts(tickSpeedCost);
       }
       tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
-      if (tickSpeedCost.gte(Number.MAX_VALUE)) {
+      if (tickSpeedCost.gte(Decimal.MAX_NUMBER)) {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
       tickspeed = tickspeed.times(mult);
@@ -113,7 +113,7 @@ function buyMaxTickSpeed() {
       postc8Mult = new Decimal(1);
     }
   }
-  if (tickSpeedCost.gte(Number.MAX_VALUE)) {
+  if (tickSpeedCost.gte(Decimal.MAX_NUMBER)) {
     const a = Math.log10(Math.sqrt(tickSpeedMultDecrease));
     const b = tickspeedMultiplier.dividedBy(Math.sqrt(tickSpeedMultDecrease)).log10();
     const c = tickSpeedCost.dividedBy(money).log10();

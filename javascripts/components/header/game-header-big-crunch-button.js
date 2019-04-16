@@ -17,7 +17,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && player.money.gte(Number.MAX_VALUE) && player.currentChallenge === "";
+      this.isVisible = player.break && player.money.gte(Decimal.MAX_NUMBER) && player.currentChallenge === "";
       if (!this.isVisible) return;
       const gainedIP = gainedInfinityPoints();
       this.gainedIP.copyFrom(gainedIP);

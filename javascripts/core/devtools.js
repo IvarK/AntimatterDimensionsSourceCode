@@ -109,7 +109,7 @@ dev.implode = function() {
 dev.updateTDCosts = function() {
     for (var i=1; i<9; i++) {
         var dim = player["timeDimension"+i]
-        if (dim.cost.gte(Number.MAX_VALUE)) {
+        if (dim.cost.gte(Decimal.MAX_NUMBER)) {
             dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
         }
         if (dim.cost.gte("1e1300")) {

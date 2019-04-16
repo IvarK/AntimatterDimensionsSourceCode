@@ -18,7 +18,7 @@ function timeDimensionCost(tier, bought) {
     return cost;
   }
   let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
-  if (cost.gte(Number.MAX_VALUE)) {
+  if (cost.gte(Decimal.MAX_NUMBER)) {
     cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e1300")) {

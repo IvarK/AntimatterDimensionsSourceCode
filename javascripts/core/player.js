@@ -238,7 +238,7 @@ var player = {
     shopMinimized: false
   },
   eternityChalls: {},
-  eternityChallGoal: new Decimal(Number.MAX_VALUE),
+  eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
   currentEternityChall: "",
   eternityChallUnlocked: 0,
   etercreq: 0,

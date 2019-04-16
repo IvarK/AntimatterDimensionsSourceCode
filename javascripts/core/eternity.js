@@ -1,6 +1,6 @@
 function canEternity() {
   const challenge = EternityChallenge.current();
-  if (challenge === undefined && player.infinityPoints.lt(Number.MAX_VALUE)) return false;
+  if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
   if (challenge !== undefined && !challenge.canBeCompleted) return false;
   return true;
 }
@@ -94,7 +94,7 @@ function eternity(force, auto, switchingDilation) {
     if (player.eternities < 7 && !Achievement(133).isEnabled) {
         player.autoSacrifice = 1;
     }
-    player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+    player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
     player.currentEternityChall = "";
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
@@ -120,7 +120,7 @@ function eternity(force, auto, switchingDilation) {
       Autobuyer.tryUnlockAny();
     }
     
-    if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Number.MAX_VALUE)) {
+    if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
       EffarigUnlock.eternity.unlock();
       Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply with full effect; eternity count generates infinities and The Enslaved Ones have been unlocked.`);
     }

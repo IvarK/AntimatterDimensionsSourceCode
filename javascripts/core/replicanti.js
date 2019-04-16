@@ -78,8 +78,8 @@ function getReplicantiInterval(noMod, intervalIn) {
 
 function replicantiCap() {
   return EffarigUnlock.infinity.isUnlocked ?
-    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Number.MAX_VALUE) :
-    new Decimal(Number.MAX_VALUE);
+    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER) :
+    new Decimal(Decimal.MAX_NUMBER);
 }
 
 function replicantiLoop(diff) {
@@ -116,7 +116,7 @@ function replicantiLoop(diff) {
 
     if (player.replicanti.amount !== 0 && player.replicanti.unl) replicantiTicks += player.options.updateRate
 
-    if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Number.MAX_VALUE)) {
+    if (isRGAutobuyerEnabled && player.replicanti.amount.gte(Decimal.MAX_NUMBER)) {
       replicantiGalaxy();
     }
     EventHub.dispatch(GameEvent.REPLICANTI_TICK_AFTER);
@@ -372,7 +372,7 @@ const Replicanti = {
     },
     get canBuyMore() {
       if (Ra.isRunning) return false
-      if (!Replicanti.amount.gte(Number.MAX_VALUE)) return false;
+      if (!Replicanti.amount.gte(Decimal.MAX_NUMBER)) return false;
       return this.bought < this.max;
     },
     autobuyer: {

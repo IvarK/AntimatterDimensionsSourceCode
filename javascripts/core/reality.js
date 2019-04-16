@@ -294,7 +294,7 @@ function completeReality(force, reset, auto = false) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
-  player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+  player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
   player.reality.lastAutoEC = 0;
   player.currentEternityChall = "";
   player.eternityChallUnlocked = 0;

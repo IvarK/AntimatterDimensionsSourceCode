@@ -2,7 +2,7 @@ function bigCrunchReset() {
     var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
     if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
     const isInChallenge = player.currentChallenge !== "";
-    if (player.money.lt(Number.MAX_VALUE)) {
+    if (player.money.lt(Decimal.MAX_NUMBER)) {
         return;
     }
     if (isInChallenge && player.money.lt(player.challengeTarget)) {

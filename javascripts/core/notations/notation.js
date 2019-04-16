@@ -1,7 +1,6 @@
 class Notation {
   constructor(name) {
     this.name = name;
-    this._infDecimal = new Decimal(Number.MAX_VALUE);
   }
 
   get isPainful() {
@@ -52,7 +51,7 @@ class Notation {
    */
   isInfinite(decimal) {
     const isPreBreak = !player.break || Challenge.isRunning();
-    return !Notation.forcePostBreakFormat && isPreBreak && decimal.gte(this._infDecimal);
+    return !Notation.forcePostBreakFormat && isPreBreak && decimal.gte(Decimal.MAX_NUMBER);
   }
 
   /**

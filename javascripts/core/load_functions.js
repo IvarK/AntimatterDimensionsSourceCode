@@ -29,7 +29,9 @@ function onLoad() {
   if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
     Challenge(1).complete();
   }
-  SecretAchievement(42).tryUnlock();
+  if (player.secretUnlocks.fixed === "hasbeenfixed") {
+    SecretAchievement(42).unlock();
+  }
   Theme.set(player.options.theme);
 
   for (let i=0; i<12; i++) {

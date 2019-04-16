@@ -688,7 +688,7 @@ GameDatabase.achievements.normal = [
     name: "You're a mistake",
     tooltip: "Fail an Eternity challenge.",
     checkRequirement: () => true,
-    checkEvent: GameEvent.FAIL_CHALLENGE,
+    checkEvent: GameEvent.CHALLENGE_FAILED,
     reward: "A fading sense of accomplishment.",
     effect: () => "Sense of accomplishment (fading)"
   },
@@ -909,19 +909,22 @@ GameDatabase.achievements.normal = [
     id: 145,
     name: "Are you sure these are the right way around?",
     tooltip: "Have the Black Hole interval smaller than the duration",
-    checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration)
+    checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
+    checkEvent: GameEvent.BLACK_HOLE_UPGRADE_BOUGHT
   },
   {
     id: 146,
     name: "Perks of living",
     tooltip: "Have all perks bought",
-    checkRequirement: () => player.reality.perks.size === Perk.all.length
+    checkRequirement: () => player.reality.perks.size === Perk.all.length,
+    checkEvent: GameEvent.PERK_BOUGHT
   },
   {
     id: 147,
     name: "Master of Reality",
     tooltip: "Have all Reality upgrades bought",
-    checkRequirement: () => RealityUpgrades.allBought
+    checkRequirement: () => RealityUpgrades.allBought,
+    checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT
   },
   {
     id: 148,
@@ -985,6 +988,7 @@ GameDatabase.achievements.normal = [
     id: 158,
     name: "Bruh, are you like, inside the hole?",
     tooltip: "Spend 24 hours with black hole active in a row",
-    checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24
+    checkRequirement: () => TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
 ];

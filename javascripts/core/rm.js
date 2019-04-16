@@ -764,7 +764,7 @@ class RealityUpgradeState extends GameMechanicState {
       player.blackHole[1].unlocked = true;
     }
 
-    Achievement(147).tryUnlock();
+    EventHub.dispatch(GameEvent.REALITY_UPGRADE_BOUGHT);
     return true;
   }
 

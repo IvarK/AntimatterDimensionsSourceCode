@@ -22,7 +22,7 @@ class BlackHoleUpgradeState {
     if (!this.isAffordable) return;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
-    Achievement(145).tryUnlock();
+    EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }
 
@@ -227,7 +227,6 @@ const BlackHoles = {
       if (!blackHole.isUnlocked) break;
       blackHole.updatePhase(activePeriods[blackHole.id - 1]);
     }
-    Achievement(158).tryUnlock();
   },
 
   /**

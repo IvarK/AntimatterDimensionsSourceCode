@@ -422,7 +422,9 @@ function respecTimeStudies() {
   for (let study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
-  SecretAchievement(34).tryUnlock();
+  if (player.timestudy.studies.length === 0) {
+    SecretAchievement(34).unlock();
+  }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
   player.celestials.v.additionalStudies = 0

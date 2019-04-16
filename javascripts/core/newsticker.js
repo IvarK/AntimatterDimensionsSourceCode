@@ -299,7 +299,7 @@ function scrollNextMessage() {
 
     if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][1])) {
         player.newsArray.push(newsArray[nextMsgIndex][1]);
-        Achievement(22).tryUnlock();
+        if (player.newsArray.length >= 50) Achievement(22).unlock();
     }
 
 

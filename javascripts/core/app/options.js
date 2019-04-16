@@ -59,7 +59,9 @@ class GameOptions {
   }
 
   static refreshUpdateRate() {
-    SecretAchievement(31).tryUnlock();
+    if (player.options.updateRate === 200) {
+      SecretAchievement(31).unlock();
+    }
     GameIntervals.gameLoop.restart();
     Enslaved.infinityTracking = []
     Enslaved.totalInfinities = new Decimal(0);

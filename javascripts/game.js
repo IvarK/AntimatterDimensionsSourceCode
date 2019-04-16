@@ -438,7 +438,7 @@ function gainedInfinities() {
 function failChallenge() {
     Modal.message.show("You failed the challenge, you will now exit it.");
     setTimeout(exitChallenge, 500);
-    EventHub.dispatch(GameEvent.FAIL_CHALLENGE);
+    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
 }
 
 function exitChallenge() {

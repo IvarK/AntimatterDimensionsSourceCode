@@ -77,7 +77,7 @@ GameDatabase.achievements.secret = [
       let count = 0;
       return () => ++count >= 10;
     }()),
-    checkEvent: GameEvent.FAIL_CHALLENGE
+    checkEvent: GameEvent.CHALLENGE_FAILED
   },
   {
     id: 27,
@@ -94,8 +94,7 @@ GameDatabase.achievements.secret = [
   {
     id: 31,
     name: "You should download some more RAM",
-    tooltip: "Set your update rate to 200ms.",
-    checkRequirement: () => player.options.updateRate === 200
+    tooltip: "Set your update rate to 200ms."
   },
   {
     id: 32,
@@ -114,8 +113,7 @@ GameDatabase.achievements.secret = [
   {
     id: 34,
     name: "You do know how these work, right?",
-    tooltip: "Respec with an empty study tree.",
-    checkRequirement: () => player.timestudy.studies.length === 0
+    tooltip: "Respec with an empty study tree."
   },
   {
     id: 35,
@@ -149,8 +147,7 @@ GameDatabase.achievements.secret = [
   {
     id: 42,
     name: "Was it even broken?",
-    tooltip: '"Fix" your save.',
-    checkRequirement: () => player.secretUnlocks.fixed === "hasbeenfixed"
+    tooltip: '"Fix" your save.'
   },
   {
     id: 43,

@@ -215,9 +215,6 @@ function gainedEternityPoints() {
   } else if (V.isRunning) {
     ep = ep.pow(0.5);
   }
-  if (Enslaved.isRunning) {
-    //    return Decimal.pow(5, ip.e / 308 - 0.7).times(EternityUpgrade.epMult.effectValue).times(kongEPMult).floor();
-  }
   return ep.floor();
 }
 
@@ -1039,9 +1036,9 @@ function gameLoop(diff, options = {}) {
     player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
 
     if (!Teresa.isRunning) {
-      let gain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
-      if (Enslaved.isRunning) gain *= 2e-4;
-      player.timestudy.theorem = player.timestudy.theorem.plus(gain);
+      let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
+      if (Enslaved.isRunning) ttGain *= 2e-4;
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";

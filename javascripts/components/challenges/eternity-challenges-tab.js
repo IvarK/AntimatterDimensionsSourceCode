@@ -41,7 +41,7 @@ Vue.component("eternity-challenges-tab", {
             // Fuck up the text
             let mangled = "";
             for (let idx = 0; idx < goal.length; ++idx) {
-              let badChar = Math.random() > 0.4 ? goal.charCodeAt(idx) : Math.floor(Math.random() * 65000 + 65);
+              const badChar = Math.random() > 0.4 ? goal.charCodeAt(idx) : Math.floor(Math.random() * 65000 + 65);
               mangled += String.fromCharCode(badChar);
             }
             return mangled;

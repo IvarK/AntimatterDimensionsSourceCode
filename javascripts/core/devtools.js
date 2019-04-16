@@ -686,7 +686,7 @@ dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persis
   else {  // With no arguments, toggles on/off
     tempSpeedupToggle = !tempSpeedupToggle;
   }
-}
+};
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();

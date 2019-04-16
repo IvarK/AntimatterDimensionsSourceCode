@@ -29,7 +29,7 @@ Vue.component("enslaved-tab", {
     realityTitle() {
       return this.inEnslaved
         ? "You're inside Enslaved Ones' Reality"
-        : "Start Enslaved One's Reality"
+        : "Start Enslaved One's Reality";
     },
   },
   methods: {
@@ -122,7 +122,8 @@ Vue.component("enslaved-tab", {
         <button class="o-enslaved-run-button" @click="startRun">
           <div class="o-enslaved-run-button__title">{{realityTitle}}</div>
           <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
-          <p>Normal dimension multipliers are always dilated (the glyph effect still only applies in actual dilation)</p>
+          <p>Normal dimension multipliers are always dilated (the glyph effect still only
+             applies in actual dilation)</p>
           <p>Time study 192 is locked</p>
           <p>The black hole is disabled</p>
           <p>Tachyon production and dilated time production are severely reduced</p>

@@ -36,7 +36,7 @@ function buyTimeDimension(tier, upd) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
   if (player.eternityPoints.lt(dim.cost)) return false
-  if (Enslaved.isRunning && dim.bought > 0) return false
+  if (Enslaved.isRunning && dim.bought > 0) return false;
 
   player.eternityPoints = player.eternityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(1);

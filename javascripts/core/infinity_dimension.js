@@ -116,7 +116,7 @@ function buyMaxInfDims(tier) {
   const dim = InfinityDimension(tier);
   const costMult = dim.costMultiplier;
 
-  let toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult))
+  let toBuy = Math.floor((player.infinityPoints.e - dim.cost.e) / Math.log10(costMult));
   const purchasesUntilHardcap = IDAmountToIDPurchases(dim.baseAmountCap - dim.baseAmount);
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
 

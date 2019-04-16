@@ -1,3 +1,4 @@
+// TODO: improve handling of this hint
 let hacky = false;
 
 function startChallenge(name, target) {
@@ -8,7 +9,7 @@ function startChallenge(name, target) {
   Tab.dimensions.normal.show();
   if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
     hacky = true;
-    alert("... did not ... underestimate you ...")
+    alert("... did not ... underestimate you ...");
   }
 }
 

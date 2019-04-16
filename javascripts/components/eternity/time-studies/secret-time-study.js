@@ -11,17 +11,17 @@ Vue.component("secret-time-study", {
     };
   },
   computed: {
-    enslaved_tt: () => 100,
+    enslavedTT: () => 100,
     description() {
       return this.isEnslaved
         ? "... your infinities ... have great potential ..."
         : "Unlock a secret achievement";
     },
     hide() {
-      return this.isEnslaved ? "" : "(Double click to hide)"
+      return this.isEnslaved ? "" : "(Double click to hide)";
     },
     cost() {
-      return this.isEnslaved ? -this.enslaved_tt : 0;
+      return this.isEnslaved ? -this.enslavedTT : 0;
     },
     styleObject() {
       return {
@@ -65,7 +65,7 @@ Vue.component("secret-time-study", {
         }
         if (this.isEnslaved) {
           this.isVisible = true;
-          player.timestudy.theorem = player.timestudy.theorem.plus(this.enslaved_tt);
+          player.timestudy.theorem = player.timestudy.theorem.plus(this.enslavedTT);
         }
       }
     },

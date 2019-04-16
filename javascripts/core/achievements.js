@@ -73,8 +73,8 @@ const Achievements = {
   /**
    * @type {AchievementState[]}
    */
-  list: AchievementState.list.compact(),  
-  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),  
+  list: AchievementState.list.compact(),
+  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
   row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
 };
 

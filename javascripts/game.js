@@ -822,6 +822,8 @@ function gameLoop(diff, options = {}) {
     player.thisReality += diff
     player.thisRealityRealTime += realDiff;
 
+    GameCache.achievementPower.invalidate();
+
     for (let tier = 1; tier < 9; tier++) {
       if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);

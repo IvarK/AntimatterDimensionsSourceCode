@@ -99,17 +99,17 @@ function replicantiLoop(diff) {
       // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
       const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
       const logGainFactorPerTick = diff / 1000 * (Math.log(player.replicanti.chance + 1) * 1000 / interval);
-      if (isUncapped) player.replicanti.amount = Decimal.pow(Math.E, logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale)
-      else fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled)
-      replicantiTicks = 0
-    } else if (interval <= replicantiTicks && player.replicanti.unl) {
-      if (player.replicanti.amount.exponent < 300) {
-        const reproduced = binomialDistribution(player.replicanti.amount.toNumber(), player.replicanti.chance);
-        player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+      if (isUncapped) {
+        player.replicanti.amount =
+          Decimal.exp(logReplicanti + Math.log(logGainFactorPerTick * postScale + 1) / postScale);
       } else {
-        player.replicanti.amount = player.replicanti.amount.times(1 + player.replicanti.chance);
-        if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
+        fastReplicantiBelow308(Decimal.pow(Math.E, logGainFactorPerTick), isRGAutobuyerEnabled);
       }
+      replicantiTicks = 0;
+    } else if (interval <= replicantiTicks && player.replicanti.unl) {
+      const reproduced = binomialDistribution(player.replicanti.amount, player.replicanti.chance);
+      player.replicanti.amount = player.replicanti.amount.plus(reproduced);
+      if (!isUncapped) player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount);
       replicantiTicks -= interval;
     }
 

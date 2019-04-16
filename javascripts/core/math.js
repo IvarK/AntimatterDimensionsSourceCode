@@ -1,7 +1,7 @@
 "use strict";
 
 const LOG10_MAX_VALUE = Math.log10(Number.MAX_VALUE);
-
+const LN_SQRT_2_PI = 0.5 * Math.log(2 * Math.PI);
 /**
  * This is a file for general math utilities that can be used by many mechanics
  */
@@ -302,6 +302,15 @@ function binomialDistributionSmallExpected(numSamples, p) {
 
 function binomialDistribution(numSamples, p) {
   if (p === 0) return 0;
+  if (numSamples instanceof Decimal) {
+    if (numSamples.e < 308) {
+      const pNumber = typeof p === "number" ? p : p.toNumber();
+      return new Decimal(binomialDistribution(numSamples.toNumber(), pNumber));
+    }
+    const expected = numSamples.times(p);
+    if (expected.e > 32) return expected;
+    return poissonDistribution(numSamples.times(p));
+  }
   const expected = numSamples * p;
   // BTRD is good past 10, but the inversion method we use is faster up to 15 and is exact
   if (expected < 15) return binomialDistributionSmallExpected(numSamples, p);
@@ -313,6 +322,48 @@ function binomialDistribution(numSamples, p) {
   // Normal approximation is good enough for larger distributions
   if (approximateVariance > 1e4) return Math.round(normalDistribution(expected, Math.sqrt(approximateVariance)));
   return binomialDistributionBTRD(numSamples, p);
+}
+
+/**
+ * Chooses the method of generation based on the input
+ * @param {number|Decimal} expected expected value of distribution
+ * @returns {number|Decimal} number of poisson process events
+ */
+function poissonDistribution(expected) {
+  if (expected === 0) return 0;
+  if (expected instanceof Decimal) {
+    if (expected.e > 32) return expected;
+    return new Decimal(poissonDistribution(expected.toNumber()));
+  }
+  if (expected > 1e32) return expected;
+  if (expected > 1e4) return poissonDistributionViaNormal(expected);
+  if (expected < 20) return poissonDistributionSmallExpected(expected);
+  return poissonDistributionPTRD(expected);
+}
+
+/**
+ * Uses a normal approximation to sqrt(x)
+ */
+function poissonDistributionViaNormal(expected) {
+  const x = normalDistribution(Math.sqrt(expected), 0.5);
+  return Math.floor(x * x);
+}
+
+/**
+ * This manually inverts the cumulative probability distribution
+ */
+function poissonDistributionSmallExpected(expected) {
+  let pdf = Math.exp(-expected);
+  let cdf = pdf;
+  const u = fastRandom();
+  let output = 0;
+  while (u > cdf) {
+    ++output;
+    pdf *= expected / output;
+    if (cdf + pdf === cdf) break;
+    cdf += pdf;
+  }
+  return output;
 }
 
 /**
@@ -375,5 +426,46 @@ function binomialDistributionBTRD(numSamples, p) {
     const j = (numSamples + 1) * Math.log(_nm / _nk) + (k + 0.5) * Math.log(_nk * R / (k + 1)) -
       binomialGeneratorFC(k) - binomialGeneratorFC(numSamples - k);
     if (logV <= h + j) return k;
+  }
+}
+
+/**
+ * "The transformed rejection method for generating Poisson random variables"
+ * http://epub.wu.ac.at/352/1/document.pdf
+ * @param {number} mu expected value of distribution
+ * @returns {number} (integer) number of events in poisson process
+ */
+function poissonDistributionPTRD(mu) {
+  const sMu = Math.sqrt(mu);
+  const b = 0.931 + 2.53 * sMu;
+  const a = -0.059 + 0.02483 * b;
+  const iAlpha = 1.1239 + 1.328 / (b - 3.4);
+  const vR = 0.9277 - 3.6224 / (b - 2);
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let v = Math.random();
+    if (v < 0.86 * vR) {
+      const u = v / vR - 0.43;
+      return Math.floor((2 * a / (0.5 - Math.abs(u)) + b) * u + mu + 0.445);
+    }
+    let u;
+    if (v >= vR) {
+      u = fastRandom() - 0.5;
+    } else {
+      const w = v / vR - 0.93;
+      u = (w > 0 ? 0.5 : -0.5) - w;
+      v = fastRandom() * vR;
+    }
+    const us = 0.5 - Math.abs(u);
+    if (us < 0.013 && us < v) continue;
+    const k = Math.floor((2 * a / us + b) * u + mu + 0.445);
+    v *= iAlpha / (a / us / us + b);
+    const ik = 1 / k;
+    if (k >= 10) {
+      const t = (k + 0.5) * Math.log(mu * ik) - mu - LN_SQRT_2_PI + k - (1 / 12 - ik * ik / 360) * ik;
+      if (Math.log(v * sMu) <= t) return k;
+    } else {
+      if (Math.log(v) <= k * Math.log(mu) - mu - logFactorial(k)) return k;
+    }
   }
 }

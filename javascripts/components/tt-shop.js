@@ -29,7 +29,7 @@ Vue.component("tt-shop", {
       return Math.floor(theorems.toNumber()).toFixed(0);
     },
     theoremNoun() {
-      return this.theoremAmount.eq(1) ? "Theorem" : "Theorems";
+      return this.theoremAmount.floor().eq(1) ? "Theorem" : "Theorems";
     },
     minimized() {
       return this.minimizeAvailable && this.shopMinimized;

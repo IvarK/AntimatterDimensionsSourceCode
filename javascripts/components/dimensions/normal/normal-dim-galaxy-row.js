@@ -11,7 +11,7 @@ Vue.component("normal-dim-galaxy-row", {
         tier: 1,
         amount: 0
       },
-      isAffordable: false,
+      isBuyable: false,
       hasIncreasedScaling: false,
       costScalingText: "",
       lockMessage: null,
@@ -20,14 +20,14 @@ Vue.component("normal-dim-galaxy-row", {
   computed: {
     galaxySumDisplay() {
       const galaxies = this.galaxies;
-      let sum = shortenSmallInteger(galaxies.normal);
+      const galaxyCounts = [shortenSmallInteger(galaxies.normal)];
       if (galaxies.replicanti > 0) {
-        sum += " + " + shortenSmallInteger(galaxies.replicanti);
+        galaxyCounts.push(shortenSmallInteger(galaxies.replicanti));
       }
       if (galaxies.dilation > 0) {
-        sum += " + " + shortenSmallInteger(galaxies.dilation);
+        galaxyCounts.push(shortenSmallInteger(galaxies.dilation));
       }
-      return sum;
+      return galaxyCounts.join(" + ");
     },
     dimName() {
       return DISPLAY_NAMES[this.requirement.tier];
@@ -47,15 +47,15 @@ Vue.component("normal-dim-galaxy-row", {
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
-      this.isAffordable = requirement.isSatisfied;
+      this.isBuyable = requirement.isSatisfied && Galaxy.canBeBought;
       if (Galaxy.canBeBought) {
         this.lockMessage = null;
       } else if (EternityChallenge(6).isRunning) {
         this.lockMessage = "Locked (Eternity Challenge 6)";
+      } else if (InfinityChallenge(7).isRunning) {
+        this.lockMessage = "Locked (Infinity Challenge 7)";
       } else if (Challenge(8).isRunning) {
         this.lockMessage = "Locked (8th Dimension Autobuyer Challenge)";
-      } else if (player.currentChallenge === "postc7") {
-        this.lockMessage = "Locked (Infinity Challenge 7";
       } else {
         this.lockMessage = null;
       }
@@ -68,7 +68,7 @@ Vue.component("normal-dim-galaxy-row", {
       const distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.hasIncreasedScaling = player.galaxies > distantStart;
       if (Galaxy.type.startsWith("Distant")) {
-        this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
+        this.costScalingText = `Each galaxy is more expensive past ${distantStart} galaxies`;
         return;
       }
       if (Galaxy.type.startsWith("Remote")) {
@@ -88,7 +88,7 @@ Vue.component("normal-dim-galaxy-row", {
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button
-        :enabled="isAffordable"
+        :enabled="isBuyable"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="secondSoftReset"
       >{{buttonMessage}}</primary-button>

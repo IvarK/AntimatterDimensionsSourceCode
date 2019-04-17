@@ -6,7 +6,8 @@ Vue.component("normal-dim-shift-row", {
         amount: 0
       },
       isShift: false,
-      isAffordable: false,
+      isBuyable: false,
+      canSacrifice: false,
       resets: 0
     };
   },
@@ -18,6 +19,9 @@ Vue.component("normal-dim-shift-row", {
       return DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText() {
+      if (this.resets === 4 && this.canSacrifice) {
+        return `Reset the game to unlock sacrifice`;
+      }
       return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
     }
   },
@@ -26,7 +30,8 @@ Vue.component("normal-dim-shift-row", {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
-      this.isAffordable = requirement.isSatisfied;
+      this.isBuyable = requirement.isSatisfied;
+      this.canSacrifice = Sacrifice.isAffordable;
       this.isShift = DimBoost.isShift;
       this.resets = player.resets;
     },
@@ -43,7 +48,7 @@ Vue.component("normal-dim-shift-row", {
         requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
       </div>
       <primary-button
-        :enabled="isAffordable"
+        :enabled="isBuyable"
         class="o-primary-btn--dimboost c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="softReset"
       >{{buttonText}}</primary-button>

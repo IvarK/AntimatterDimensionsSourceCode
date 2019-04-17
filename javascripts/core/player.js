@@ -239,7 +239,7 @@ var player = {
     shopMinimized: false,
     presets: new Array(6).fill({
       name: "",
-      studies: [],
+      studies: "",
     }),
   },
   eternityChalls: {},

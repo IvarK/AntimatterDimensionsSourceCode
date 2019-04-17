@@ -36,6 +36,17 @@ function setInfChallengeTime(id, time) {
   GameCache.infinityChallengeTimeSum.invalidate();
 }
 
+function tryUnlockInfinityChallenges() {
+  while (player.postChallUnlocked < 8 &&
+    player.money.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    ++player.postChallUnlocked;
+    if (player.eternities > 6) {
+      InfinityChallenge(player.postChallUnlocked).complete();
+      Autobuyer.tryUnlockAny();
+    }
+  }
+}
+
 class NormalChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);

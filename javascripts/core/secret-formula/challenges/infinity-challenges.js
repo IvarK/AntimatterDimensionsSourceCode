@@ -8,7 +8,8 @@ GameDatabase.challenges.infinity = [
       description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",
       effect: () => Math.pow(1.3, InfinityChallenge.completed().length),
       formatEffect: value => formatX(value, 1, 1)
-    }
+    },
+    unlockAM: new Decimal("1e2000"),
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: false,
     reward: {
       description: "Sacrifice autobuyer and more powerful sacrifice"
-    }
+    },
+    unlockAM: new Decimal("1e5000"),
   },
   {
     id: 3,
@@ -31,7 +33,8 @@ GameDatabase.challenges.infinity = [
       description: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies",
       effect: () => player.postC3Reward,
       formatEffect: value => formatX(value, 2, 2),
-    }
+    },
+    unlockAM: new Decimal("1e12000"),
   },
   {
     id: 4,
@@ -42,7 +45,8 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "All normal dimension multipliers become multiplier^1.05",
       effect: 1.05
-    }
+    },
+    unlockAM: new Decimal("1e14000"),
   },
   {
     id: 5,
@@ -54,7 +58,8 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
       effect: 1.1
-    }
+    },
+    unlockAM: new Decimal("1e18000"),
   },
   {
     id: 6,
@@ -68,7 +73,8 @@ GameDatabase.challenges.infinity = [
       description: "Tickspeed affects Infinity Dimensions with reduced effect",
       effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
-    }
+    },
+    unlockAM: new Decimal("1e20000"),
   },
   {
     id: 7,
@@ -79,7 +85,8 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "Dimension Boost multiplier 2.5x ➜ 4x",
       effect: 4
-    }
+    },
+    unlockAM: new Decimal("1e23000"),
   },
   {
     id: 8,
@@ -92,5 +99,6 @@ GameDatabase.challenges.infinity = [
       effect: () => mult18,
       formatEffect: value => formatX(value, 2, 2)
     },
+    unlockAM: new Decimal("1e28000"),
   },
 ];

@@ -451,8 +451,6 @@ setInterval(function() {
     kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
 }, 10000)
 
-var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000"), new Decimal("1e14000"), new Decimal("1e18000"), new Decimal("1e20000"), new Decimal("1e23000"), new Decimal("1e28000")]
-
 var ttMaxTimer = 0
 setInterval(function() {
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
@@ -796,15 +794,9 @@ function gameLoop(diff, options = {}) {
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
 
-    while (player.money.gte(nextAt[player.postChallUnlocked]) && !InfinityChallenge(8).isCompleted && !InfinityChallenge(8).isUnlocked) {
-        if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
-        if (player.eternities > 6) {
-          InfinityChallenge(player.postChallUnlocked).complete();
-          Autobuyer.tryUnlockAny();
-        }
-    }
-    replicantiLoop(diff)
+    tryUnlockInfinityChallenges();
 
+    replicantiLoop(diff)
 
     if (player.infMultBuyer) {
       InfinityUpgrade.ipMult.autobuyerTick();

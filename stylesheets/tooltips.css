@@ -1,6 +1,7 @@
 .general-tooltip {
   display: block !important;
   z-index: 10000;
+  pointer-events: none;
 }
 
 .general-tooltip .tooltip-inner {
@@ -14,7 +15,6 @@
   font-size: 14px;
   line-height: 1.2;
   user-select: none;
-  pointer-events: none;
 }
 
 .tooltip-inner.automator-tooltip {

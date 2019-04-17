@@ -252,7 +252,7 @@ button {
   top: -0.5rem;
   left: 50%;
   transform: translate(-50%, -100%);
-  padding: 0.5rem 0rem 0.5rem 0rem;
+  padding: 0.5rem 0 0.5rem 0;
 }
 
 .c-tt-save-load-btn__menu {

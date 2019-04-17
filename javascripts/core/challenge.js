@@ -25,14 +25,14 @@ function askChallengeConfirmation(challenge) {
 
 function setChallengeTime(id, time) {
   // Use splice so Vue could track changes
-  player.challengeTimes.splice(id, 1, time);
+  player.challenge.normal.bestTimes.splice(id, 1, time);
   GameCache.challengeTimeSum.invalidate();
   GameCache.worstChallengeTime.invalidate();
 }
 
 function setInfChallengeTime(id, time) {
   // Use splice so Vue could track changes
-  player.infchallengeTimes.splice(id, 1, time);
+  player.challenge.infinity.bestTimes.splice(id, 1, time);
   GameCache.infinityChallengeTimeSum.invalidate();
 }
 
@@ -89,7 +89,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.challengeTimes[this.id - 2] > player.thisInfinityTime) {
+    if (player.challenge.normal.bestTimes[this.id - 2] > player.thisInfinityTime) {
       setChallengeTime(this.id - 2, player.thisInfinityTime);
     }
   }
@@ -191,7 +191,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.infchallengeTimes[this.id - 1] > player.thisInfinityTime) {
+    if (player.challenge.infinity.bestTimes[this.id - 1] > player.thisInfinityTime) {
       setInfChallengeTime(this.id - 1, player.thisInfinityTime);
     }
   }

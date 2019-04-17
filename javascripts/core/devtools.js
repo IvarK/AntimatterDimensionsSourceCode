@@ -238,13 +238,11 @@ dev.updateTestSave = function() {
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
         }
-        for (var i=0; i<11; i++) {
-            setChallengeTime(i, player.challengeTimes[i] * 100);
-        }
-        for (var i=0; i<8; i++) {
-            setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
-        }
-    }
+
+        player.challengeTimes = player.challengeTimes.map(e => e * 100);
+        player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+
+      }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;
         player.reality.glyphs.last = "";
@@ -559,6 +557,7 @@ dev.updateTestSave = function() {
   }
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
+  moveChallengeTimes();
 
   if (player.why !== undefined) {
     player.secretUnlocks.why = player.why

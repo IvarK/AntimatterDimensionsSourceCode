@@ -46,6 +46,14 @@ var player = {
   secretAchievements: new Set(),
   infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0],
+  challenge: {
+    normal: {
+      bestTimes: Array.repeat(defaultMaxTime, 11),
+    },
+    infinity: {
+      bestTimes: Array.repeat(defaultMaxTime, 8),
+    },
+  },
   challenges: [],
   currentChallenge: "",
   infinityPoints: new Decimal(0),
@@ -83,8 +91,6 @@ var player = {
     themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  challengeTimes: Array.repeat(defaultMaxTime, 11),
-  infchallengeTimes: Array.repeat(defaultMaxTime, 8),
   lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),

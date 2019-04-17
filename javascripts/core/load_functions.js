@@ -26,8 +26,8 @@ function onLoad() {
   if (isDevEnvironment()) {
     guardFromNaNValues(player);
   }
-  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-    Challenge(1).complete();
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
   }
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     SecretAchievement(42).unlock();
@@ -267,7 +267,7 @@ function unfuckChallengeIds() {
     wasFucked = true;
     const legacyId = parseInt(id.substr(9));
     const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
-    return Challenge(config.id).fullId;
+    return NormalChallenge(config.id).fullId;
   }
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);

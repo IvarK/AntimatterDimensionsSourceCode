@@ -94,20 +94,20 @@ class Galaxy {
   }
 
   static get costMult() {
-    return Challenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
+    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
   }
 
   static get baseCost() {
-    return Challenge(10).isRunning ? 99 : 80;
+    return NormalChallenge(10).isRunning ? 99 : 80;
   }
 
   static get requiredTier() {
-    return Challenge(10).isRunning ? 6 : 8;
+    return NormalChallenge(10).isRunning ? 6 : 8;
   }
 
   static get canBeBought() {
     return !((EternityChallenge(6).isRunning && !Enslaved.isRunning)
-      || Challenge(8).isRunning
+      || NormalChallenge(8).isRunning
       || player.currentChallenge === "postc7"
       || (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
   }

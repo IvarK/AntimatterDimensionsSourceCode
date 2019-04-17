@@ -56,7 +56,7 @@ function maxAll() {
     const dimension = NormalDimension(tier);
     var cost = dimension.cost.times(dimension.remainingUntil10)
     var multBefore = dimension.pow
-    if (tier >= 3 && Challenge(6).isRunning) {
+    if (tier >= 3 && NormalChallenge(6).isRunning) {
       const lowerTier = NormalDimension(tier - 2);
       if (!canBuyDimension(tier)) continue
       if (lowerTier.amount.lt(cost)) continue
@@ -91,30 +91,30 @@ function maxAll() {
       }
       if (player.money.lt(dimension.cost.times(10))) continue
 
-      if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || Challenge(9).isRunning)) {
-        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Decimal.MAX_NUMBER)) || (player.money.gte(dimension.cost.times(10)) && !Challenge(9).isRunning)) {
+      if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || NormalChallenge(9).isRunning)) {
+        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Decimal.MAX_NUMBER)) || (player.money.gte(dimension.cost.times(10)) && !NormalChallenge(9).isRunning)) {
           player.money = player.money.minus(dimension.cost.times(10))
-          if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+          if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
           else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
           else multiplySameCosts(dimension.cost)
           dimension.amount = Decimal.round(dimension.amount.plus(10))
           dimension.bought += 10
           dimension.pow = dimension.pow.times(getBuyTenMultiplier())
           if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-          if (Challenge(4).isRunning) clearDimensions(tier - 1)
+          if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
         }
       } else {
         if (dimension.cost.lt(Decimal.MAX_NUMBER)) {
           while (player.money.gte(dimension.cost.times(10)) && dimension.cost.lte(Decimal.MAX_NUMBER)) {
             player.money = player.money.minus(dimension.cost.times(10))
-            if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+            if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
             else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
             else multiplySameCosts(dimension.cost)
             dimension.amount = Decimal.round(dimension.amount.plus(10))
             dimension.bought += 10
             dimension.pow = dimension.pow.times(getBuyTenMultiplier())
             if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-            if (Challenge(4).isRunning) clearDimensions(tier - 1)
+            if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
           }
         }
 
@@ -147,8 +147,8 @@ function maxAll() {
 
       }
     }
-    if ((Challenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
-    if (Challenge(2).isRunning) player.chall2Pow = 0;
+    if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
+    if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
     if (player.currentChallenge == "postc1") clearDimensions(tier - 1);
     player.postC4Tier = tier;
     onBuyDimension(tier)
@@ -695,14 +695,14 @@ function gameLoop(diff, options = {}) {
     /*if (player.currentChallenge == "postc6" && player.matter.gte(1)) player.matter = player.matter.plus(diff/10)
     else */
     player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
-    if (player.matter.gt(player.money) && Challenge(11).isRunning) {
+    if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
         if (player.resets > 0) player.resets--;
         softReset(0);
     }
 
     if (player.currentChallenge == "postc8") postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
 
-    if (Challenge(3).isRunning || player.matter.gte(1)) {
+    if (NormalChallenge(3).isRunning || player.matter.gte(1)) {
       player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
     }
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
@@ -779,13 +779,13 @@ function gameLoop(diff, options = {}) {
     if (player.money.lte(Decimal.MAX_NUMBER) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
         let maxTierProduced = 7;
-        if (Challenge(12).isRunning) {
+        if (NormalChallenge(12).isRunning) {
           maxTierProduced = Math.min(maxTierProduced, 6);
         }
         if (EternityChallenge(3).isRunning) {
           maxTierProduced = Math.min(maxTierProduced, 3);
         }
-        if (Challenge(12).isRunning) {
+        if (NormalChallenge(12).isRunning) {
           for (let tier = maxTierProduced; tier >= 1; --tier) {
             const dimension = NormalDimension(tier);
             dimension.amount = dimension.amount.plus(getDimensionProductionPerSecond(tier + 2).times(diff / 10000));
@@ -797,14 +797,14 @@ function gameLoop(diff, options = {}) {
           }
         }
 
-        if (Challenge(3).isRunning) {
+        if (NormalChallenge(3).isRunning) {
             player.money = player.money.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
             player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
         } else {
             player.money = player.money.plus(getDimensionProductionPerSecond(1).times(diff/1000));
             player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(1).times(diff/1000));
         }
-        if (Challenge(12).isRunning) {
+        if (NormalChallenge(12).isRunning) {
             player.money = player.money.plus(getDimensionProductionPerSecond(2).times(diff/1000));
             player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(2).times(diff/1000))
         }
@@ -835,7 +835,7 @@ function gameLoop(diff, options = {}) {
 
     const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
     if (EternityChallenge(7).isRunning) {
-      if (!Challenge(10).isRunning) {
+      if (!NormalChallenge(10).isRunning) {
         player.seventhAmount = player.seventhAmount.plus(ID1ProductionThisTick)
       }
     }
@@ -1058,7 +1058,7 @@ function simulateTime(seconds, real, fast) {
 
 function updateChart(first) {
     if (first !== true && (player.infinitied.gte(1) || player.eternities >= 1) && player.options.chart.on === true) {
-        if (Challenge(3).isRunning) {
+        if (NormalChallenge(3).isRunning) {
             addChartData(getDimensionProductionPerSecond(1).times(player.chall3Pow));
         } else {
             addChartData(getDimensionProductionPerSecond(1));

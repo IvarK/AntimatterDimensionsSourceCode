@@ -50,7 +50,7 @@ function eternity(force, auto, switchingDilation) {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
+      for (let challenge of NormalChallenge.all) {
         challenge.complete();
       }
     }
@@ -115,8 +115,8 @@ function eternity(force, auto, switchingDilation) {
     if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
 
-    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-      Challenge(1).complete();
+    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+      NormalChallenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
     

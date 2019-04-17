@@ -31,8 +31,8 @@ function bigCrunchReset() {
         setInfChallengeTime(challNumber - 1, player.thisInfinityTime);
     }
     if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
-    if (Challenge(9).isRunning) {
-        kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
+    if (NormalChallenge(9).isRunning) {
+        kong.submitStats('NormalChallenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
     }
     let infinityPoints = gainedInfinityPoints();
     player.infinityPoints = player.infinityPoints.plus(infinityPoints);
@@ -54,8 +54,8 @@ function bigCrunchReset() {
       failChallenge();
     }
 
-    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-      Challenge(1).complete();
+    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+      NormalChallenge(1).complete();
       Autobuyer.tryUnlockAny();
     }
     if (!player.options.retryChallenge)

@@ -2,7 +2,7 @@ function startEternityChallenge() {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
+      for (let challenge of NormalChallenge.all) {
         challenge.complete();
       }
     }

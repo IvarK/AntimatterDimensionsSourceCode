@@ -440,7 +440,6 @@ var player = {
   options: {
     newsHidden: false,
     notation: "Mixed scientific",
-    noSacrificeConfirmation: false,
     retryChallenge: false,
     showAllChallenges: false,
     bulkOn: true,
@@ -465,6 +464,7 @@ var player = {
       reality: true
     },
     confirmations: {
+      sacrifice: true,
       challenges: true,
       eternity: true,
       dilation: true,

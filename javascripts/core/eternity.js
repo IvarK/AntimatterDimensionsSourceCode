@@ -90,7 +90,6 @@ function eternity(force, auto, switchingDilation) {
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = new Decimal(0);
     if (player.eternities < 7 && !Achievement(133).isEnabled) {
         player.autoSacrifice = 1;
     }

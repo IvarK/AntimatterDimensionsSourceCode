@@ -215,7 +215,6 @@ var player = {
   },
   offlineProd: 0,
   offlineProdCost: 1e7,
-  challengeTarget: new Decimal(0),
   autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),

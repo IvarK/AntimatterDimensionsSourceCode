@@ -4,7 +4,6 @@ let hacky = false;
 function startChallenge(name, target) {
     if (!askChallengeConfirmation(name)) return;
     player.currentChallenge = name;
-    player.challengeTarget = target;
     secondSoftReset();
   Tab.dimensions.normal.show();
   if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {

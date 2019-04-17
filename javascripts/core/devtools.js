@@ -586,6 +586,7 @@ dev.updateTestSave = function() {
     delete player.reality.upg;
   }
   if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
+  delete player.challengeTarget;
 }
 
 // Still WIP

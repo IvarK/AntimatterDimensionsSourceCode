@@ -174,6 +174,7 @@ function onLoad() {
     delete player.options.sacrificeConfirmation;
     player.gameCreatedTime = Date.now() - player.realTimePlayed;
     moveSavedStudyTrees();
+    delete player.challengeTarget;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

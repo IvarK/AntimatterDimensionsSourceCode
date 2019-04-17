@@ -2,9 +2,7 @@ class GameMechanicState {
   constructor(config) {
     if (!config) throw crash("Must specify config for GameMechanicState");
     this.config = config;
-    this._effectIsConstant = false;
     if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
-      this._effectIsConstant = true;
       Object.defineProperty(this, "effectValue", {
         configurable: false,
         writable: false,

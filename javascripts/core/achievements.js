@@ -119,8 +119,7 @@ const SecretAchievements = {
   /**
    * @type {SecretAchievementState[]}
    */
-  list: SecretAchievementState.list.compact(),
-  byName: SecretAchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
+  list: SecretAchievementState.list.compact()
 };
 
 setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);

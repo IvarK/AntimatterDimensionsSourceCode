@@ -48,14 +48,15 @@ var player = {
   infinityRebuyables: [0, 0],
   challenge: {
     normal: {
+      current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 11),
     },
     infinity: {
+      current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 8),
     },
   },
   challenges: [],
-  currentChallenge: "",
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),

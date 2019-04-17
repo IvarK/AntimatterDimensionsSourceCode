@@ -11,7 +11,8 @@ function startEternityChallenge() {
         challenge.complete();
       }
     }
-    player.currentChallenge = "";
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
     player.infinitied = new Decimal(0);
     player.bestInfinityTime = 9999999999;
     player.thisInfinityTime = 0;

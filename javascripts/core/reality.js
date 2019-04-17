@@ -242,8 +242,9 @@ function completeReality(force, reset, auto = false) {
       challenge.complete();
     }
   }
-  player.currentChallenge = "";
-  if (!isRUPG10Bought) player.infinityUpgrades.clear();
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
+if (!isRUPG10Bought) player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;

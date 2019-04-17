@@ -173,7 +173,7 @@ function onLoad() {
     player.gameCreatedTime = Date.now() - player.realTimePlayed;
     moveSavedStudyTrees();
     delete player.challengeTarget;
-    moveChallengeTimes();
+    moveChallengeInfo();
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -236,7 +236,7 @@ function moveSavedStudyTrees() {
   }
 }
 
-function moveChallengeTimes() {
+function moveChallengeInfo() {
   if (player.challengeTimes) {
     for (let i = 0; i < player.challengeTimes.length; ++i) {
       player.challenge.normal.bestTimes[i] = Math.min(player.challenge.normal.bestTimes[i],
@@ -250,6 +250,15 @@ function moveChallengeTimes() {
         player.infchallengeTimes[i]);
     }
     delete player.infchallengeTimes;
+  }
+  if (player.currentChallenge) {
+    const saved = player.currentChallenge;
+    delete player.currentChallenge;
+    if (saved.startsWith("challenge")) {
+      player.challenge.normal.current = parseInt(saved.slice(9), 10);
+    } else if (saved.startsWith("postc")) {
+      player.challenge.infinity.current = parseInt(saved.slice(5), 10);
+    } else if (saved !== "") throw crash(`Unrecognized challenge ID ${saved}`);
   }
 }
 

@@ -557,7 +557,7 @@ dev.updateTestSave = function() {
   }
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
-  moveChallengeTimes();
+  moveChallengeInfo();
 
   if (player.why !== undefined) {
     player.secretUnlocks.why = player.why

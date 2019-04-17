@@ -49,7 +49,7 @@ Vue.component('challenges-tab', {
         player.money.gte(new Decimal("1e2000")) ||
         player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
-      this.isInChallenge = NormalChallenge.isRunning() || InfinityChallenge.isRunning() || EternityChallenge.isRunning();
+      this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning();
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;

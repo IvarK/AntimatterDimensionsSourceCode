@@ -1,10 +1,17 @@
 // TODO: improve handling of this hint
 let hacky = false;
 
+// TODO: fix target, fix enslaved
 function startChallenge(name, target) {
-    if (!askChallengeConfirmation(name)) return;
-    player.currentChallenge = name;
-    secondSoftReset();
+  if (!askChallengeConfirmation(name)) return;
+  // TODO: fix this stuff
+  if (name.startsWith("postc")) player.challenge.infinity.current = parseInt(name.slice(5), 10);
+  else if (name.startsWith("challenge")) player.challenge.normal.current = parseInt(name.slice(9), 10);
+  else if (name === "") {
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
+  }
+  secondSoftReset();
   Tab.dimensions.normal.show();
   if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
     hacky = true;
@@ -63,7 +70,7 @@ class NormalChallengeState extends GameMechanicState {
 
   get isRunning() {
     const isPartOfIC1 = this.id !== 9 && this.id !== 12;
-    return player.currentChallenge === this._fullId || (isPartOfIC1 && InfinityChallenge(1).isRunning);
+    return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
   }
 
   start() {
@@ -112,14 +119,14 @@ function NormalChallenge(id) {
  * @returns {NormalChallengeState}
  */
 NormalChallenge.current = function() {
-  const challenge = player.currentChallenge;
-  if (!challenge.startsWith("challenge")) {
-    return undefined;
-  }
-  return NormalChallenge(parseInt(challenge.substr(9)));
+  return player.challenge.normal.current
+    ? NormalChallenge(player.challenge.normal.current)
+    : undefined;
 };
 
-NormalChallenge.isRunning = () => NormalChallenge.current() !== undefined;
+Object.defineProperty(NormalChallenge, "isRunning", {
+  get: () => NormalChallenge.current() !== undefined,
+});
 
 /**
  * @type {NormalChallengeState[]}
@@ -153,7 +160,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isRunning() {
-    return player.currentChallenge === this._fullId;
+    return player.challenge.infinity.current === this.id;
   }
 
   start() {
@@ -214,18 +221,17 @@ function InfinityChallenge(id) {
  * @returns {InfinityChallengeState}
  */
 InfinityChallenge.current = function() {
-  const challenge = player.currentChallenge;
-  return challenge.startsWith("postc")
-    ? InfinityChallenge(parseInt(challenge.substr(5)))
+  return player.challenge.infinity.current
+    ? InfinityChallenge(player.challenge.infinity.current)
     : undefined;
 };
 
 /**
  * @return {boolean}
  */
-InfinityChallenge.isRunning = function() {
-  return InfinityChallenge.current() !== undefined;
-};
+Object.defineProperty(InfinityChallenge, "isRunning", {
+  get: () => InfinityChallenge.current() !== undefined,
+});
 
 /**
  * @type {InfinityChallengeState[]}

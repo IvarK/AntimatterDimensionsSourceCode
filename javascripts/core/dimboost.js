@@ -118,7 +118,7 @@ function applyChallengeModifiers() {
 }
 
 function skipResetsIfPossible() {
-  if (NormalChallenge.current() || InfinityChallenge.current()) {
+  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
     return;
   }
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {

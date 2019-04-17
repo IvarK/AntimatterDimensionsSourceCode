@@ -1,7 +1,7 @@
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
-  if ((!player.break || (!InfinityChallenge.current() && NormalChallenge.current())) &&
+  if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
     player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&

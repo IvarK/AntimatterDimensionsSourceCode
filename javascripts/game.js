@@ -167,7 +167,7 @@ function playerInfinityUpgradesOnEternity() {
 
 function breakInfinity() {
   if (!Autobuyer.infinity.hasMaxedInterval) return false;
-  if (InfinityChallenge.isRunning()) return false;
+  if (InfinityChallenge.isRunning) return false;
   player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
   GameUI.update();
@@ -362,10 +362,10 @@ function failChallenge() {
 }
 
 function exitChallenge() {
-    if (NormalChallenge.current() || InfinityChallenge.current()) {
+    if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
         startChallenge("", new Decimal(0));
     } else if (player.currentEternityChall !== "") {
-        player.currentEternityChall = ""
+        player.currentEternityChall = "";
         player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
         eternity(true)
     }

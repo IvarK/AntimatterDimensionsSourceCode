@@ -59,7 +59,8 @@ function eternity(force, auto, switchingDilation) {
         challenge.complete();
       }
     }
-    player.currentChallenge = "";
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
     player.infinitied = new Decimal(0);
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;

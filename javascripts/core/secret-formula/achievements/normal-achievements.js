@@ -336,7 +336,7 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
-    effectCondition: () => player.currentChallenge !== "" && Time.thisInfinity.totalMinutes < 3
+    effectCondition: () => (NormalChallenge.isRunning || InfinityChallenge.isRunning) && Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 66,
@@ -404,7 +404,7 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
-    effectCondition: () => player.currentChallenge !== ""
+    effectCondition: () => NormalChallenge.isRunning || InfinityChallenge.isRunning
   },
   {
     id: 75,

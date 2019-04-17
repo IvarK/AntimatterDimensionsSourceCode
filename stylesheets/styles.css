@@ -149,7 +149,6 @@ button {
 #TTbuttons {
   position: sticky;
   bottom: 0;
-  overflow: hidden;
   font-family: Typewriter, serif;
   display: flex;
   align-items: flex-end;
@@ -165,9 +164,8 @@ button {
 
 .l-tt-buy-button {
   width: 17rem;
-  height: 4rem;
   z-index: 1;
-  margin: 0.5rem;
+  margin: 0.3rem;
 }
 
 .c-tt-buy-button {
@@ -210,28 +208,105 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: stretch;
 }
 
 .ttbuttons-top-row {
   align-items: center;
 }
 
-.o-tt-buy-max-button {
-  height: 3rem;
+.o-tt-top-row-button {
+  min-height: 3rem;
   font-size: 1.2rem;
-  margin: 0.5rem;
+  margin: 0.3rem;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-self: stretch;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .o-tt-autobuyer-button {
-  height: 3rem;
-  width: 14rem;
-  font-size: 0.7rem;
-  margin: 0.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  margin: 0.3rem;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-self: stretch;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-width: 8rem;
 }
 
-.ttbuttons-top-row .tt-save-load-btn {
-  width: 30px;
-  margin: 3px;
+.l-tt-save-load-btn__wrapper {
+  margin: 0.3em;
+  position: relative;
+}
+
+.l-tt-save-load-btn {
+  min-width: 2em;
+}
+
+.l-tt-save-load-btn__menu {
+  position: absolute;
+  top: -0.5rem;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  padding: 0.5rem 0rem 0.5rem 0rem;
+}
+
+.c-tt-save-load-btn__menu {
+  color: white;
+  background: black;
+  border-radius: 0.5rem;
+  text-align: left;
+  font-weight: bold;
+  font-family: Typewriter;
+  font-size: 1.4rem;
+}
+
+.l-tt-save-load-btn__menu::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -0.5rem;
+  border-width: 0.5rem;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.l-tt-save-load-btn__menu-rename {
+  margin: 0.3rem 0.5rem 0.5rem 0.7rem;
+}
+
+.c-tt-save-load-btn__menu-rename {
+  text-align: left;
+  font-weight: bold;
+  font-family: Typewriter;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.2rem;
+}
+
+.l-tt-save-load-btn__menu-item {
+  padding: 0.25rem 1rem 0.25rem 1rem;
+}
+
+.c-tt-save-load-btn__menu-item:hover {
+  background: white;
+  color: black;
+}
+
+.c-tt-autobuyer-toggle {
+  color: initial;
+}
+
+.l-tt-buy-max-vbox {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #theorembuybackground {
@@ -268,7 +343,7 @@ button {
   color: black;
 }
 
-#studytreeloadsavetext {
+.c-ttshop__save-load-text {
   color: black;
   font-size: 10px;
 }
@@ -4499,7 +4574,7 @@ screen and (max-width: 480px) {
 }
 
 .l-modal {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);

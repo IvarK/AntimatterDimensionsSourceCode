@@ -170,6 +170,7 @@ function onLoad() {
     player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
     delete player.options.sacrificeConfirmation;
     player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    moveSavedStudyTrees();
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -222,6 +223,13 @@ function onLoad() {
   }
   if (diff > 1000*1000) {
       simulateTime(diff/1000)
+  }
+}
+
+function moveSavedStudyTrees() {
+  for (let num = 1; num <= 3; ++num) {
+    const tree = localStorage.getItem(`studyTree${num}`);
+    if (tree) player.timestudy.presets[num - 1].studies = tree;
   }
 }
 

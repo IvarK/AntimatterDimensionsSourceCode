@@ -439,8 +439,12 @@ function respecTimeStudies() {
   }
 }
 
+function studyTreeExportString() {
+  return `${player.timestudy.studies}|${player.eternityChallUnlocked}`;
+}
+
 function exportStudyTree() {
-  copyToClipboardAndNotify(player.timestudy.studies + "|" + player.eternityChallUnlocked);
+  copyToClipboardAndNotify(studyTreeExportString());
 }
 
 function importStudyTree(input) {

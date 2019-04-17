@@ -553,6 +553,10 @@ dev.updateTestSave = function() {
     player.options.testVersion = 33;
   }
 
+  if (player.options.testVersion === 33) {
+    moveSavedStudyTrees();
+    player.options.testVersion = 34;
+  }
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 

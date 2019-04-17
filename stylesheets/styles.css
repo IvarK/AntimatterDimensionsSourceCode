@@ -311,7 +311,7 @@ button {
 
 .t-dark .tabbtn {
   color: #E0E0E0;
-  border: 2px solid #1565C0;
+  border: .2rem solid #1565C0;
   background-color: #455A64;
 }
 
@@ -324,8 +324,8 @@ button {
 .t-inverted-metro .tabbtn,
 .t-s8 .tabbtn {
   background: #eeeeee;
-  border: 1px solid #2196F3;
-  box-shadow: 1px 1px 1px 0px #9E9E9E;
+  border: .1rem solid #2196F3;
+  box-shadow: .1rem .1rem .1rem 0 #9E9E9E;
   border-radius: 0;
 }
 
@@ -340,8 +340,8 @@ button {
 .t-s6 .tabbtn {
   color: #E0E0E0;
   background: black;
-  border: 2px solid #1565C0;
-  text-shadow: 0 0 10px white;
+  border: .2rem solid #1565C0;
+  text-shadow: 0 0 1rem white;
 }
 
 .t-s6 .tabbtn:hover {
@@ -358,7 +358,7 @@ button {
 .t-inverted-metro .tabbtn:hover,
 .t-s8 .tabbtn:hover {
   background: #2196F3;
-  border: 1px solid #2196F3;
+  border: .1rem solid #2196F3;
 }
 
 .infinitytabbtn {
@@ -4680,7 +4680,7 @@ screen and (max-width: 480px) {
 .t-dark h3,
 .t-dark-metro h3 {
   color: #999;
-  text-shadow: -1px 1px 0px rgba(0, 0, 0, 0.5);
+  text-shadow: -.1rem .1rem 0 rgba(0, 0, 0, 0.5);
 }
 
 /*#endregion t-dark t-dark-metro*/

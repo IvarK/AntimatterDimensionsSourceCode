@@ -73,6 +73,16 @@ class NormalChallengeState extends GameMechanicState {
     if (this.isCompleted) return;
     player.challenges.push(this._fullId);
   }
+
+  get goal() {
+    return Decimal.MAX_NUMBER;
+  }
+
+  updateChallengeTime() {
+    if (player.challengeTimes[this.id - 2] > player.thisInfinityTime) {
+      setChallengeTime(this.id - 2, player.thisInfinityTime);
+    }
+  }
 }
 
 NormalChallengeState.all = mapGameData(
@@ -165,6 +175,16 @@ class InfinityChallengeState extends GameMechanicState {
   get isQuickResettable() {
     return this.config.isQuickResettable;
   }
+
+  get goal() {
+    return this.config.goal;
+  }
+
+  updateChallengeTime() {
+    if (player.infchallengeTimes[this.id - 1] > player.thisInfinityTime) {
+      setInfChallengeTime(this.id - 1, player.thisInfinityTime);
+    }
+  }
 }
 
 InfinityChallengeState.all = mapGameData(
@@ -185,9 +205,9 @@ function InfinityChallenge(id) {
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  return challenge.startsWith("postc") ?
-    InfinityChallenge(parseInt(challenge.substr(5))) :
-    undefined;
+  return challenge.startsWith("postc")
+    ? InfinityChallenge(parseInt(challenge.substr(5)))
+    : undefined;
 };
 
 /**

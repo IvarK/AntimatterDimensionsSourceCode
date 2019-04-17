@@ -113,12 +113,12 @@ function applyChallengeModifiers() {
         player.seventhCost = new Decimal(2e5);
         player.eightCost = new Decimal(4e6);
     }
-    if (player.currentChallenge === "postc1")
+    if (InfinityChallenge(1).isRunning)
         player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
 }
 
 function skipResetsIfPossible() {
-  if (player.currentChallenge !== "") {
+  if (NormalChallenge.current() || InfinityChallenge.current()) {
     return;
   }
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {

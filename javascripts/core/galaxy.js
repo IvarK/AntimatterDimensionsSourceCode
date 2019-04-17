@@ -106,10 +106,10 @@ class Galaxy {
   }
 
   static get canBeBought() {
-    return !((EternityChallenge(6).isRunning && !Enslaved.isRunning)
-      || NormalChallenge(8).isRunning
-      || player.currentChallenge === "postc7"
-      || (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
+    return !((EternityChallenge(6).isRunning && !Enslaved.isRunning) ||
+      NormalChallenge(8).isRunning ||
+      InfinityChallenge(7).isRunning ||
+      (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
   }
 
   static get costScalingStart() {

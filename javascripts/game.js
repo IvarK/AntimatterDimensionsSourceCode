@@ -149,7 +149,7 @@ function maxAll() {
     }
     if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
     if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-    if (player.currentChallenge == "postc1") clearDimensions(tier - 1);
+    if (InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
     player.postC4Tier = tier;
     onBuyDimension(tier)
     floatText(tier, "x" + shortenMoney(dimension.pow.dividedBy(multBefore)))
@@ -440,7 +440,7 @@ function failChallenge() {
 }
 
 function exitChallenge() {
-    if (player.currentChallenge !== "") {
+    if (NormalChallenge.current() || InfinityChallenge.current()) {
         startChallenge("", new Decimal(0));
     } else if (player.currentEternityChall !== "") {
         player.currentEternityChall = ""
@@ -700,7 +700,7 @@ function gameLoop(diff, options = {}) {
         softReset(0);
     }
 
-    if (player.currentChallenge == "postc8") postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
+    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
 
     if (NormalChallenge(3).isRunning || player.matter.gte(1)) {
       player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
@@ -776,7 +776,9 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
-    if (player.money.lte(Decimal.MAX_NUMBER) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
+    const challenge = NormalChallenge.current() || InfinityChallenge.current();
+    if (player.money.lte(Decimal.MAX_NUMBER) ||
+        (player.break && !challenge) || (challenge && player.money.lte(challenge.goal))) {
 
         let maxTierProduced = 7;
         if (NormalChallenge(12).isRunning) {
@@ -863,9 +865,9 @@ function gameLoop(diff, options = {}) {
   player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
   player.tickThreshold = freeTickspeed.nextShards;
 
-    if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (player.currentChallenge != "" && player.money.gte(player.challengeTarget)))) {
+    if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';
-        if ((player.currentChallenge == "" || player.options.retryChallenge) && (player.bestInfinityTime <= 60000 || player.break)) {}
+        if ((!challenge || player.options.retryChallenge) && (player.bestInfinityTime <= 60000 || player.break)) {}
         else showTab('emptiness');
     } else document.getElementById("bigcrunch").style.display = 'none';
 
@@ -875,7 +877,7 @@ function gameLoop(diff, options = {}) {
     while (player.money.gte(nextAt[player.postChallUnlocked]) && !InfinityChallenge(8).isCompleted && !InfinityChallenge(8).isUnlocked) {
         if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
         if (player.eternities > 6) {
-          player.challenges.push("postc"+player.postChallUnlocked)
+          InfinityChallenge(player.postChallUnlocked).complete();
           Autobuyer.tryUnlockAny();
         }
     }
@@ -921,7 +923,9 @@ function gameLoop(diff, options = {}) {
     document.getElementById("infinitybtn").style.display = "none";
     document.getElementById("challengesbtn").style.display = "none";
 
-    if (player.money.gte(Decimal.MAX_NUMBER) && (((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) && !player.options.retryChallenge) || (player.bestInfinityTime > 600 && !player.break))) {
+    if (player.money.gte(Decimal.MAX_NUMBER) &&
+        (((challenge && player.money.gte(challenge.goal)) && !player.options.retryChallenge) ||
+         (player.bestInfinityTime > 60000 && !player.break))) {
         ui.view.bigCrunch = true;
         document.getElementById("dimensionsbtn").style.display = "none";
         document.getElementById("optionsbtn").style.display = "none";

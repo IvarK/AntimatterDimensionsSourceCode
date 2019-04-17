@@ -115,12 +115,6 @@ Vue.component("tt-shop", {
               onclick="maxTheorems()">
               Auto: ON
             </button>
-            <!--
-            <div v-if="hasTTAutobuyer" class="o-autobuyer-toggle-checkbox c-tt-autobuyer-toggle" @click="toggleTTAutobuyer">
-              Auto:
-              <input :checked="ttAutobuyerOn" type="checkbox" />
-            </div>
-            -->
           </div>
         </div>
       </div>

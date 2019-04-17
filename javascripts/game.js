@@ -1024,20 +1024,33 @@ function simulateTime(seconds, real, fast) {
     else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
-    var popupString = "While you were away"
-    if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
-    if (player.infinityPower.gt(playerStart.infinityPower)) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
-    if (player.timeShards.gt(playerStart.timeShards)) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
-    if (player.infinitied.gt(playerStart.infinitied) || player.eternities > playerStart.eternities) popupString+= ","
-    else popupString += "."
-    if (player.infinitied.gt(playerStart.infinitied)) popupString += "<br>you infinitied " + shorten(player.infinitied.sub(playerStart.infinitied), 4) + ((player.infinitied.sub(playerStart.infinitied).eq(1)) ? " time." : " times.");
-    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied " + (player.eternities-playerStart.eternities) + ((player.eternities-playerStart.eternities === 1) ? " time." : " times.");
+
+    var offlineIncreases = ["While you were away"]
+    // OoM increase
+    const oomVarNames = ["money", "infinityPower", "timeShards"];
+    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
+    for (let i = 0; i < oomVarNames.length; i++) {
+      const varName = oomVarNames[i];
+      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
+      if (player[varName].gt(playerStart[varName])) offlineIncreases.push(`your ${oomResourceNames[i]} increased by ${shorten(oomIncrease, 2, 2)} orders of magnitude`);
+    }
+    // Linear increase
+    const linearVarNames = ["infinitied", "eternities"];
+    const linearResourceNames = ["infinities", "eternities"];
+    for (let i = 0; i < linearVarNames.length; i++) {
+      const varName = linearVarNames[i];
+      const linearIncrease = Decimal.sub(player[varName], playerStart[varName])
+      if (!Decimal.eq(player[varName], playerStart[varName])) offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+    }
+    // Black hole activations
     for (let i = 0; i < player.blackHole.length; i++) {
       let currentActivations = player.blackHole[i].activations;
       let oldActivations = playerStart.blackHole[i].activations;
       let activationsDiff = currentActivations - oldActivations;
-      if (activationsDiff > 0)  popupString += " <br>Black hole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
+      const pluralSuffix = activationsDiff == 1 ? " time" : " times";
+      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i+1} activated  ${activationsDiff} ${pluralSuffix}`);
     }
+    popupString = offlineIncreases.join(", <br>") + ".";
     if (popupString === "While you were away.") {
         popupString+= ".. Nothing happened."
         SecretAchievement(36).unlock();

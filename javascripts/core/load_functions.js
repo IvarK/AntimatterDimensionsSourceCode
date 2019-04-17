@@ -167,6 +167,7 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
+    player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
     delete player.options.sacrificeConfirmation;
   }
 

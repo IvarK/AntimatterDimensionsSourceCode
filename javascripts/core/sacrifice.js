@@ -4,7 +4,7 @@ function sacrificeReset(auto) {
   if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
-    Challenge(8).isRunning &&
+    NormalChallenge(8).isRunning &&
     (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER) || player.chall11Pow.gte(Decimal.MAX_NUMBER))
   ) {
     return false;
@@ -15,12 +15,12 @@ function sacrificeReset(auto) {
   NormalDimension(8).pow = NormalDimension(8).pow.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
-  if (Challenge(8).isRunning) {
+  if (NormalChallenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
     if (!isAch118Enabled) resetDimensions();
     player.money = new Decimal(100);
   } else if (!isAch118Enabled) {
-    clearDimensions(Challenge(12).isRunning ? 6 : 7);
+    clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
 }
@@ -57,7 +57,7 @@ class Sacrifice {
       return player.firstAmount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
     }
 
-    if (!Challenge(8).isRunning) {
+    if (!NormalChallenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)
@@ -80,7 +80,7 @@ class Sacrifice {
       return player.sacrificed.pow(scale).clampMin(1);
     }
 
-    if (!Challenge(8).isRunning) {
+    if (!NormalChallenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)

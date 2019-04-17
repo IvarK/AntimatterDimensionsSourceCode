@@ -486,11 +486,11 @@ const Player = {
   },
 
   get isInMatterChallenge() {
-    return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
+    return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
   },
 
   get effectiveMatterAmount() {
-    if (Challenge(11).isRunning) {
+    if (NormalChallenge(11).isRunning) {
       return player.matter;
     }
     if (InfinityChallenge(6).isRunning) {
@@ -501,10 +501,10 @@ const Player = {
 
   get antimatterPerSecond() {
     const basePerSecond = getDimensionProductionPerSecond(1);
-    if (Challenge(3).isRunning) {
+    if (NormalChallenge(3).isRunning) {
       return basePerSecond.times(player.chall3Pow);
     }
-    if (Challenge(12).isRunning) {
+    if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
     return basePerSecond.times(getGameSpeedupFactor());

@@ -1,7 +1,8 @@
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
-  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+  if ((!player.break || (!InfinityChallenge.current() && NormalChallenge.current())) &&
+    player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
@@ -48,7 +49,7 @@ class Sacrifice {
   static get nextBoost() {
     if (player.firstAmount.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")) {
+    if (InfinityChallenge(2).isCompleted) {
       const scale = Effects.max(
         0.01,
         Achievement(88),
@@ -71,7 +72,7 @@ class Sacrifice {
   static get totalBoost() {
     if (player.sacrificed.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")) {
+    if (InfinityChallenge(2).isCompleted) {
       const scale = Effects.max(
         0.01,
         Achievement(88),

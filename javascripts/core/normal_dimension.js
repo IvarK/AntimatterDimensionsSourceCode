@@ -295,7 +295,7 @@ function buyManyDimension(tier) {
 
   auto = false;
 
-  if ((NormalChallenge(11).isRunning || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
+  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
   if (!NormalChallenge(6).isRunning) {
     if (!canBuyDimension(tier)) {
       return false;

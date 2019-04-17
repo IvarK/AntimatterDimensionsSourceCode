@@ -686,7 +686,7 @@ function gameLoop(diff, options = {}) {
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
-    if (player.secondAmount.neq(new Decimal(0))) player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
+    if (player.secondAmount.neq(0)) player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
     if (player.matter.gt(player.money) && Challenge(11).isRunning) {
         Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ${shorten(player.matter, 2, 2)} matter.`);
         softReset(0);

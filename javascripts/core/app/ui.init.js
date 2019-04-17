@@ -45,6 +45,7 @@ let ui = {
     bigCrunch: false,
     scrollWindow: 0,
     draggingUIID: -1,
+    currentContextMenu: null,
   },
   notationName: "",
 };

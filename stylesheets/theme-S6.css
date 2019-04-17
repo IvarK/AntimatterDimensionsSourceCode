@@ -116,7 +116,7 @@ strong {
     text-shadow: 0 0 7px #64DD17;
 }
 
-.t-s6 #timetheorems, .t-s6 #studytreeloadsavetext, .t-s6 #minimizeArrow {
+.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
     color: grey;
 }
 

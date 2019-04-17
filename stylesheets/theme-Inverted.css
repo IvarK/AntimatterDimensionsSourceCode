@@ -20,7 +20,7 @@ body.t-inverted {
 }
 
 .t-inverted #timetheorems,
-.t-inverted #studytreeloadsavetext,
+.t-inverted .c-ttshop__save-load-text,
 .t-inverted #minimizeArrow {
     color: #bbb;
 }

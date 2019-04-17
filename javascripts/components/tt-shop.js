@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("tt-shop", {
   data() {
     return {
@@ -43,8 +45,8 @@ Vue.component("tt-shop", {
         width: this.minimized ? "440px" : "555px"
       };
     },
-    autobuyerText() {
-      return this.ttAutobuyerOn ? "Auto: ON" : "Auto: OFF";
+    saveLoadText() {
+      return this.$viewModel.shiftDown ? "save:" : "load:";
     }
   },
   methods: {
@@ -88,38 +90,38 @@ Vue.component("tt-shop", {
       player.ttbuyer = !player.ttbuyer;
     }
   },
-  template:
-    `<div id="TTbuttons">
+  template: `
+    <div id="TTbuttons">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
-          <button
-            class="o-tt-buy-max-button c-tt-buy-button c-tt-buy-button--unlocked"
-            style="width:130px; white-space:nowrap;"
-            v-if="!minimized"
-            onclick="maxTheorems()"
-          >
-            Buy max
-          </button>
-          <button
-            v-if="hasTTAutobuyer"
-            @click="toggleTTAutobuyer"
-            class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
-            id="ttautobuyer"
-          >
-            {{autobuyerText}}
-          </button>
           <p id="timetheorems">
-            <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.
+            <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}
           </p>
-          <div style="display: flex; flex-direction: row; align-items: center">
-            <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
-            <tt-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
+          <div style="display: flex; flex-direction: row; align-items: center;">
+            <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
+            <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
           <tt-buy-button :budget="budget.am" :cost="costs.am" :format="formatAM" :action="buyWithAM"/>
           <tt-buy-button :budget="budget.ip" :cost="costs.ip" :format="formatIP" :action="buyWithIP"/>
           <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"/>
+          <div class="l-tt-buy-max-vbox">
+            <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
+              onclick="maxTheorems()">
+              Buy max
+            </button>
+            <button v-if="!minimized" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+              onclick="maxTheorems()">
+              Auto: ON
+            </button>
+            <!--
+            <div v-if="hasTTAutobuyer" class="o-autobuyer-toggle-checkbox c-tt-autobuyer-toggle" @click="toggleTTAutobuyer">
+              Auto:
+              <input :checked="ttAutobuyerOn" type="checkbox" />
+            </div>
+            -->
+          </div>
         </div>
       </div>
       <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
@@ -132,52 +134,68 @@ Vue.component("tt-save-load-button", {
   props: {
     saveslot: Number
   },
-  data: () => ({
-      msg: "Hold to save",
-      showTip: false,
-    }),
+  data() {
+    return {
+      name: player.timestudy.presets[this.saveslot - 1].name,
+    };
+  },
   computed: {
-    tooltip() {
-      return {
-        content: this.msg,
-        placement: "top",
-        show: this.showTip,
-        trigger: "manual"
-      };
+    preset() {
+      return player.timestudy.presets[this.saveslot - 1];
     },
-    listeners() {
-      return Object.assign({}, this.$listeners, {
-        touchstart: () => this.showTip = true,
-        mouseover: () => this.showTip = true,
-        mouseout: () => this.resetTip(),
-        touchend: () => this.resetTip(),
-        touchcancel: () => this.resetTip(),
-        touchmove: e => {
-          e.preventDefault();
-          const t = e.changedTouches[0];
-          if (this.$el !== document.elementFromPoint(t.pageX, t.pageY)) {
-            this.resetTip();
-          }
-        },
-        "longpress": () => {
-          studyTreeSaveButton(this.saveslot, true);
-          this.msg = "Saved";
-        },
-        "longpressclick": () => {
-          studyTreeSaveButton(this.saveslot, false);
-        }
-      });
+    displayName() {
+      return this.name === "" ? this.saveslot : this.name;
     }
   },
-  template:
-    `<button class="timetheorembtn tt-save-load-btn" v-on="listeners"
-             v-tooltip="tooltip" v-long-press="{ delay: 1000 }">{{saveslot}}</button>`,
   methods: {
-    resetTip() {
-      this.msg = "Hold to save";
-      this.showTip = false;
+    nicknameBlur(event) {
+      this.preset.name = event.target.value.slice(0, 4);
+      this.name = this.preset.name;
+    },
+    hideContextMenu() {
+      this.$viewModel.currentContextMenu = null;
+    },
+    save() {
+      this.hideContextMenu();
+      this.preset.studies = studyTreeExportString();
+    },
+    load() {
+      this.hideContextMenu();
+      if (this.preset.studies !== "") importStudyTree(this.preset.studies);
+    },
+    handleExport() {
+      this.hideContextMenu();
+      copyToClipboardAndNotify(this.preset.studies);
+    },
+    edit() {
+      const newValue = prompt("Edit time study list", this.preset.studies);
+      this.hideContextMenu();
+      this.preset.studies = newValue;
     }
   },
+  template: `
+  <hover-menu class="l-tt-save-load-btn__wrapper">
+    <button slot="object"
+            class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+            @click.shift.exact="save"
+            @click.exact="load">
+      {{displayName}}
+    </button>
+    <div slot="menu"
+         class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
+      <input type="text" size="4" maxlength="4"
+             class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+             :value="name"
+             ach-tooltip="Set a custom name (up to 4 characters)"
+             @keyup.esc="hideContextMenu"
+             @blur="nicknameBlur" />
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
+    </div>
+  </hover-menu>
+`,
 });
 
 Vue.component("tt-buy-button", {

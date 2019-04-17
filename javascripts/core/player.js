@@ -235,7 +235,11 @@ var player = {
     ipcost: new Decimal(1),
     epcost: new Decimal(1),
     studies: [],
-    shopMinimized: false
+    shopMinimized: false,
+    presets: new Array(6).fill({
+      name: "",
+      studies: [],
+    }),
   },
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),

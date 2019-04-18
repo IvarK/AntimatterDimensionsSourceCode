@@ -23,10 +23,8 @@ Vue.component("normal-dim-tab", {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      const normalChallenge = NormalChallenge.current();
-      const infinityChallenge = InfinityChallenge.current();
-      this.isQuickResetAvailable = normalChallenge !== undefined && normalChallenge.isQuickResettable ||
-        infinityChallenge !== undefined && infinityChallenge.isQuickResettable;
+      const challenge = NormalChallenge.current || InfinityChallenge.current;
+      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
     },
     quickReset() {
       quickReset();

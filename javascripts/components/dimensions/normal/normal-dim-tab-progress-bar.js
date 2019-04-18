@@ -21,7 +21,7 @@ Vue.component("normal-dim-tab-progress-bar", {
         this.fill.copyFrom(Decimal.min(current.pLog10() / Decimal.log10(goal) * 100, 100));
         this.tooltip = tooltip;
       };
-      const challenge = NormalChallenge.current() || InfinityChallenge.current();
+      const challenge = NormalChallenge.current || InfinityChallenge.current;
       if (challenge) {
         setProgress(player.money, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {

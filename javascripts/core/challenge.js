@@ -103,14 +103,14 @@ function NormalChallenge(id) {
 /**
  * @returns {NormalChallengeState}
  */
-NormalChallenge.current = function() {
-  return player.challenge.normal.current
+Object.defineProperty(NormalChallenge, "current", {
+  get: () => (player.challenge.normal.current
     ? NormalChallenge(player.challenge.normal.current)
-    : undefined;
-};
+    : undefined),
+});
 
 Object.defineProperty(NormalChallenge, "isRunning", {
-  get: () => NormalChallenge.current() !== undefined,
+  get: () => NormalChallenge.current !== undefined,
 });
 
 NormalChallenge.clearCompletions = function() {
@@ -220,17 +220,17 @@ function InfinityChallenge(id) {
 /**
  * @returns {InfinityChallengeState}
  */
-InfinityChallenge.current = function() {
-  return player.challenge.infinity.current
+Object.defineProperty(InfinityChallenge, "current", {
+  get: () => (player.challenge.infinity.current
     ? InfinityChallenge(player.challenge.infinity.current)
-    : undefined;
-};
+    : undefined),
+});
 
 /**
  * @return {boolean}
  */
 Object.defineProperty(InfinityChallenge, "isRunning", {
-  get: () => InfinityChallenge.current() !== undefined,
+  get: () => InfinityChallenge.current !== undefined,
 });
 
 /**

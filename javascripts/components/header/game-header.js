@@ -48,13 +48,13 @@ Vue.component("game-header", {
       const inDilation = player.dilation.active;
       if (inDilation) displayValue += " + Time Dilation";
 
-      const normalChallenge = NormalChallenge.current();
+      const normalChallenge = NormalChallenge.current;
       if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
 
-      const infinityChallenge = InfinityChallenge.current();
+      const infinityChallenge = InfinityChallenge.current;
       if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
 
-      const eternityChallenge = EternityChallenge.current();
+      const eternityChallenge = EternityChallenge.current;
       if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
 
       if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);

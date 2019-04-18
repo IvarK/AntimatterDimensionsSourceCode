@@ -216,12 +216,14 @@ EternityChallenge.all = EternityChallengeState.all;
 /**
  * @returns {EternityChallengeState}
  */
-EternityChallenge.current = () => (player.challenge.eternity.current
-  ? EternityChallenge(player.challenge.eternity.current)
-  : undefined);
+Object.defineProperty(EternityChallenge, "current", {
+  get: () => (player.challenge.eternity.current
+    ? EternityChallenge(player.challenge.eternity.current)
+    : undefined),
+});
 
 Object.defineProperty(EternityChallenge, "isRunning", {
-  get: () => EternityChallenge.current() !== undefined,
+  get: () => EternityChallenge.current !== undefined,
 });
 
 EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;

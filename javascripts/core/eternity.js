@@ -1,5 +1,5 @@
 function canEternity() {
-  const challenge = EternityChallenge.current();
+  const challenge = EternityChallenge.current;
   if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
   if (challenge !== undefined && !challenge.canBeCompleted) return false;
   return true;
@@ -24,7 +24,7 @@ function eternity(force, auto, switchingDilation) {
     }
     if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
     if (EternityChallenge.isRunning) {
-      const challenge = EternityChallenge.current();
+      const challenge = EternityChallenge.current;
       challenge.addCompletion();
       if (Perk.studyECBulk.isBought) {
         while (!challenge.isFullyCompleted && challenge.canBeCompleted) {

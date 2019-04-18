@@ -7,7 +7,7 @@ function bigCrunchAnimation() {
 }
 
 function bigCrunchReset(disableAnimation = false) {
-  const challenge = NormalChallenge.current() || InfinityChallenge.current();
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (player.money.lt(Decimal.MAX_NUMBER) || (challenge && player.money.lt(challenge.goal))) {
     return;
   }

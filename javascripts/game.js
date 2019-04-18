@@ -699,7 +699,7 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
-    const challenge = NormalChallenge.current() || InfinityChallenge.current();
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
     if (player.money.lte(Decimal.MAX_NUMBER) ||
         (player.break && !challenge) || (challenge && player.money.lte(challenge.goal))) {
 

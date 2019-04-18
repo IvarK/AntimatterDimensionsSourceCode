@@ -67,12 +67,13 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isCompleted() {
-    return player.challenges.includes(this._fullId);
+    // eslint-disable-next-line no-bitwise
+    return (player.challenge.normal.completedBits & (1 << this.id)) !== 0;
   }
 
   complete() {
-    if (this.isCompleted) return;
-    player.challenges.push(this._fullId);
+    // eslint-disable-next-line no-bitwise
+    player.challenge.normal.completedBits |= 1 << this.id;
   }
 
   get goal() {
@@ -111,6 +112,14 @@ NormalChallenge.current = function() {
 Object.defineProperty(NormalChallenge, "isRunning", {
   get: () => NormalChallenge.current() !== undefined,
 });
+
+NormalChallenge.clearCompletions = function() {
+  player.challenge.normal.completedBits = 0;
+};
+
+NormalChallenge.completeAll = function() {
+  for (const challenge of NormalChallenge.all) challenge.complete();
+};
 
 /**
  * @type {NormalChallengeState[]}
@@ -160,12 +169,13 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   get isCompleted() {
-    return player.challenges.includes(this._fullId);
+    // eslint-disable-next-line no-bitwise
+    return (player.challenge.infinity.completedBits & (1 << this.id)) !== 0;
   }
 
   complete() {
-    if (this.isCompleted) return;
-    player.challenges.push(this._fullId);
+    // eslint-disable-next-line no-bitwise
+    player.challenge.infinity.completedBits |= 1 << this.id;
   }
 
   get canBeApplied() {
@@ -234,4 +244,12 @@ InfinityChallenge.all = Array.range(1, 8).map(InfinityChallenge);
 InfinityChallenge.completed = function() {
   return InfinityChallenge.all
     .filter(ic => ic.isCompleted);
+};
+
+InfinityChallenge.clearCompletions = function() {
+  player.challenge.infinity.completedBits = 0;
+};
+
+InfinityChallenge.completeAll = function() {
+  for (const challenge of InfinityChallenge.all) challenge.complete();
 };

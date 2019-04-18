@@ -48,19 +48,9 @@ function eternity(force, auto, switchingDilation) {
         player.eternities += Effects.product(RealityUpgrade(3));
     }
     player.sacrificed = new Decimal(0);
-    player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of NormalChallenge.all) {
-        challenge.complete();
-      }
-    }
-    if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
-    }
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
+
+    resetChallengesOnEternity();
+
     player.infinitied = new Decimal(0);
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;

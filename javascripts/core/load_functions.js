@@ -260,6 +260,18 @@ function moveChallengeInfo() {
       player.challenge.infinity.current = parseInt(saved.slice(5), 10);
     } else if (saved !== "") throw crash(`Unrecognized challenge ID ${saved}`);
   }
+  if (player.challenges) {
+    for (const fullID of player.challenges) {
+      /* eslint-disable no-bitwise */
+      if (fullID.startsWith("challenge")) {
+        player.challenge.normal.completedBits |= 1 << parseInt(fullID.slice(9), 10);
+      } else if (fullID.startsWith("postc")) {
+        player.challenge.infinity.completedBits |= 1 << parseInt(fullID.slice(5), 10);
+      } else throw crash(`Unrecognized challenge ID ${fullID}`);
+      /* eslint-enable no-bitwise */
+    }
+    delete player.challenges;
+  }
 }
 
 function convertEPMult() {

@@ -1,18 +1,19 @@
+function resetChallengesOnEternity() {
+  NormalChallenge.clearCompletions();
+  InfinityChallenge.clearCompletions();
+  if (EternityMilestone.keepAutobuyers.isReached) {
+    NormalChallenge.completeAll();
+  }
+  if (Achievement(133).isEnabled) {
+    InfinityChallenge.completeAll();
+  }
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
+}
+
 function startEternityChallenge() {
-    player.sacrificed = new Decimal(0);
-    player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of NormalChallenge.all) {
-        challenge.complete();
-      }
-    }
-    if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
-    }
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
+  player.sacrificed = new Decimal(0);
+  resetChallengesOnEternity();
     player.infinitied = new Decimal(0);
     player.bestInfinityTime = 9999999999;
     player.thisInfinityTime = 0;

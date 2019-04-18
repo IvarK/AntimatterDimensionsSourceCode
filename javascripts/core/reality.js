@@ -235,16 +235,14 @@ function completeReality(force, reset, auto = false) {
 
   player.sacrificed = new Decimal(0);
 
-  player.challenges = [];
-  let isRUPG10Bought = RealityUpgrade(10).isBought;
-  if (isRUPG10Bought) {
-    for (let challenge of NormalChallenge.all) {
-      challenge.complete();
-    }
-  }
+  NormalChallenge.clearCompletions();
+  InfinityChallenge.clearCompletions();
+  const isRUPG10Bought = RealityUpgrade(10).isBought;
+  if (isRUPG10Bought) NormalChallenge.completeAll();
+
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
-if (!isRUPG10Bought) player.infinityUpgrades.clear();
+  if (!isRUPG10Bought) player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;

@@ -221,14 +221,14 @@ GameDatabase.achievements.normal = [
     id: 47,
     name: "Daredevil",
     tooltip: "Complete 2 challenges.",
-    checkRequirement: () => player.challenges.length === 2,
+    checkRequirement: () => NormalChallenge.completed.length === 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
-    checkRequirement: () => player.challenges.length === 12,
+    checkRequirement: () => NormalChallenge.completed.length === 12,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
@@ -351,7 +351,7 @@ GameDatabase.achievements.normal = [
     id: 67,
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
-    checkRequirement: () => player.challenges.length > 12,
+    checkRequirement: () => InfinityChallenge.completed.length > 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -461,7 +461,7 @@ GameDatabase.achievements.normal = [
     id: 82,
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
-    checkRequirement: () => player.challenges.length === 20,
+    checkRequirement: () => NormalChallenge.completed.length === 12 && InfinityChallenge.completed.length === 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {

@@ -50,13 +50,14 @@ var player = {
     normal: {
       current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 11),
+      completedBits: 0,
     },
     infinity: {
       current: 0,
       bestTimes: Array.repeat(defaultMaxTime, 8),
+      completedBits: 0,
     },
   },
-  challenges: [],
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),

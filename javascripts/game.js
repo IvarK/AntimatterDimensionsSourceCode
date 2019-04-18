@@ -362,13 +362,16 @@ function failChallenge() {
 }
 
 function exitChallenge() {
-    if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-        startChallenge("", new Decimal(0));
-    } else if (player.currentEternityChall !== "") {
-        player.currentEternityChall = "";
-        player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-        eternity(true)
-    }
+  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
+    secondSoftReset();
+    Tab.dimensions.normal.show();
+  } else if (player.currentEternityChall !== "") {
+    player.currentEternityChall = "";
+    player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
+    eternity(true);
+  }
 }
 
 function unlockEChall(idx) {

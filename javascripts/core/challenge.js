@@ -1,33 +1,14 @@
-// TODO: improve handling of this hint
-let hacky = false;
-
-// TODO: fix target, fix enslaved
-function startChallenge(name, target) {
-  if (!askChallengeConfirmation(name)) return;
-  // TODO: fix this stuff
-  if (name.startsWith("postc")) player.challenge.infinity.current = parseInt(name.slice(5), 10);
-  else if (name.startsWith("challenge")) player.challenge.normal.current = parseInt(name.slice(9), 10);
-  else if (name === "") {
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
-  }
+function startChallenge() {
   secondSoftReset();
   Tab.dimensions.normal.show();
-  if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
-    hacky = true;
-    alert("... did not ... underestimate you ...");
-  }
 }
 
-function askChallengeConfirmation(challenge) {
-    if (!player.options.confirmations.challenges || challenge === ""){
-        return true;
-    }
-    let goal = challenge.includes("post") ? "a set goal" : "infinity";
-    let message = "You will start over with just your infinity upgrades, and achievements. " +
-        "You need to reach " + goal + " with special conditions. " +
+function askChallengeConfirmation(goal) {
+  if (!player.options.confirmations.challenges) return true;
+  const message = "You will start over with just your infinity upgrades, and achievements. " +
+        `You need to reach ${goal} with special conditions. ` +
         "NOTE: The rightmost infinity upgrade column doesn't work on challenges.";
-    return confirm(message);
+  return confirm(message);
 }
 
 function setChallengeTime(id, time) {
@@ -75,11 +56,14 @@ class NormalChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    let target = new Decimal(Decimal.MAX_NUMBER);
-    if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
-      target = Decimal.pow(10, 1e15);
-    }
-    startChallenge(this._fullId, target);
+    if (!askChallengeConfirmation("infinity")) return;
+
+    player.challenge.normal.current = this.id;
+    player.challenge.infinity.current = 0;
+
+    if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) Enslaved.showEC10C6Hint();
+
+    startChallenge();
   }
 
   get isCompleted() {
@@ -164,8 +148,14 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   start() {
-    startChallenge(this._fullId, this.config.goal);
+    if (!askChallengeConfirmation("a set goal")) return;
+
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = this.id;
+
+    startChallenge();
     player.break = true;
+
     if (EternityChallenge.isRunning()) Achievement(115).unlock();
   }
 

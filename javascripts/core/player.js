@@ -59,6 +59,7 @@ var player = {
     },
     eternity: {
       current: 0,
+      unlocked: 0,
     }
   },
   infinityPoints: new Decimal(0),
@@ -253,7 +254,6 @@ var player = {
   },
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
-  eternityChallUnlocked: 0,
   etercreq: 0,
   autoIP: new Decimal(0),
   autoTime: 1e300,

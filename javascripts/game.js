@@ -375,13 +375,13 @@ function exitChallenge() {
 }
 
 function unlockEChall(idx) {
-    if (player.eternityChallUnlocked == 0) {
-        player.eternityChallUnlocked = idx
-        if (!justImported) {
-          Tab.challenges.eternity.show();
-        }
-        if (idx !== 12 && idx !== 13) player.etercreq = idx
+  if (player.challenge.eternity.unlocked === 0) {
+    player.challenge.eternity.unlocked = idx;
+    if (!justImported) {
+      Tab.challenges.eternity.show();
     }
+    if (idx !== 12 && idx !== 13) player.etercreq = idx;
+  }
 }
 
 function quickReset() {

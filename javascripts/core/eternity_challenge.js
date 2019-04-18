@@ -103,7 +103,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.eternityChallUnlocked === this.id;
+    return player.challenge.eternity.unlocked === this.id;
   }
 
   get isRunning() {

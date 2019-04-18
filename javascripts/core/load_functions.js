@@ -279,6 +279,10 @@ function moveChallengeInfo() {
       player.challenge.eternity.current = parseInt(saved.slice(5), 10);
     } else if (saved !== "") throw crash(`Unrecognized eternity challenge ${saved}`);
   }
+  if (player.eternityChallUnlocked !== undefined) {
+    player.challenge.eternity.unlocked = player.eternityChallUnlocked;
+    delete player.eternityChallUnlocked;
+  }
 }
 
 function convertEPMult() {

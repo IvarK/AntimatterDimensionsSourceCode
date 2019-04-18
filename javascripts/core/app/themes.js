@@ -11,7 +11,7 @@ const Theme = function Theme(name, colors) {
 
     this.isAvailable = function() {
         if (!this.isSecret()) return true;
-        return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) > 1;
+        return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
     };
 
     this.displayName = function() {

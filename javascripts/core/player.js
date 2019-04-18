@@ -482,7 +482,8 @@ var player = {
       dilation: true,
       reality: true
     },
-    testVersion: 33,  // TODO: remove before test ends
+    // TODO: remove before test ends
+    testVersion: 33,
   }
 };
 

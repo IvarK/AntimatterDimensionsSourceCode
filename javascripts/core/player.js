@@ -103,7 +103,7 @@ var player = {
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   overXGalaxies: 10,
-  version: 10,
+  version: 13,
   infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
@@ -481,7 +481,8 @@ var player = {
       eternity: true,
       dilation: true,
       reality: true
-    }
+    },
+    testVersion: 33,  // TODO: remove before test ends
   }
 };
 

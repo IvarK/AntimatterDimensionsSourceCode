@@ -236,6 +236,17 @@ function moveSavedStudyTrees() {
   }
 }
 
+function parseChallengeName(name) {
+  if (name.startsWith("challenge")) {
+    return { type: "normal", id: parseInt(name.slice(9), 10) };
+  }
+  if (name.startsWith("postc")) {
+    return { type: "infinity", id: parseInt(name.slice(5), 10) };
+  }
+  if (name !== "") throw crash(`Unrecognized challenge ID ${name}`);
+  return null;
+}
+
 function moveChallengeInfo() {
   if (player.challengeTimes) {
     for (let i = 0; i < player.challengeTimes.length; ++i) {
@@ -252,23 +263,17 @@ function moveChallengeInfo() {
     delete player.infchallengeTimes;
   }
   if (player.currentChallenge !== undefined) {
-    const saved = player.currentChallenge;
+    const saved = parseChallengeName(player.currentChallenge);
     delete player.currentChallenge;
-    if (saved.startsWith("challenge")) {
-      player.challenge.normal.current = parseInt(saved.slice(9), 10);
-    } else if (saved.startsWith("postc")) {
-      player.challenge.infinity.current = parseInt(saved.slice(5), 10);
-    } else if (saved !== "") throw crash(`Unrecognized challenge ID ${saved}`);
+    if (saved) {
+      player.challenge[saved.type].current = saved.id;
+    }
   }
   if (player.challenges) {
     for (const fullID of player.challenges) {
-      /* eslint-disable no-bitwise */
-      if (fullID.startsWith("challenge")) {
-        player.challenge.normal.completedBits |= 1 << parseInt(fullID.slice(9), 10);
-      } else if (fullID.startsWith("postc")) {
-        player.challenge.infinity.completedBits |= 1 << parseInt(fullID.slice(5), 10);
-      } else throw crash(`Unrecognized challenge ID ${fullID}`);
-      /* eslint-enable no-bitwise */
+      const parsed = parseChallengeName(fullID);
+      // eslint-disable-next-line no-bitwise
+      player.challenge[parsed.type].completedBits |= 1 << parsed.id;
     }
     delete player.challenges;
   }

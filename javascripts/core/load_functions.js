@@ -251,7 +251,7 @@ function moveChallengeInfo() {
     }
     delete player.infchallengeTimes;
   }
-  if (player.currentChallenge) {
+  if (player.currentChallenge !== undefined) {
     const saved = player.currentChallenge;
     delete player.currentChallenge;
     if (saved.startsWith("challenge")) {
@@ -271,6 +271,13 @@ function moveChallengeInfo() {
       /* eslint-enable no-bitwise */
     }
     delete player.challenges;
+  }
+  if (player.currentEternityChall !== undefined) {
+    const saved = player.currentEternityChall;
+    delete player.currentEternityChall;
+    if (saved.startsWith("eterc")) {
+      player.challenge.eternity.current = parseInt(saved.slice(5), 10);
+    } else if (saved !== "") throw crash(`Unrecognized eternity challenge ${saved}`);
   }
 }
 

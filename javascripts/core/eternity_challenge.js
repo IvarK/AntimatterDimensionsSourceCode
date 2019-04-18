@@ -107,7 +107,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isRunning() {
-    return player.currentEternityChall === this.fullId;
+    return player.challenge.eternity.current === this.id;
   }
 
   get canBeApplied() {
@@ -178,7 +178,7 @@ class EternityChallengeState extends GameMechanicState {
       if (!confirm(confirmation)) return false;
     }
     player.eternityChallGoal = this.currentGoal;
-    player.currentEternityChall = this.fullId;
+    player.challenge.eternity.current = this.id;
     return startEternityChallenge();
   }
 
@@ -216,13 +216,13 @@ EternityChallenge.all = EternityChallengeState.all;
 /**
  * @returns {EternityChallengeState}
  */
-EternityChallenge.current = () => {
-  if (player.currentEternityChall === "") return undefined;
-  const id = parseInt(player.currentEternityChall.split("eterc")[1]);
-  return EternityChallenge(id);
-};
+EternityChallenge.current = () => (player.challenge.eternity.current
+  ? EternityChallenge(player.challenge.eternity.current)
+  : undefined);
 
-EternityChallenge.isRunning = () => player.currentEternityChall !== "";
+Object.defineProperty(EternityChallenge, "isRunning", {
+  get: () => EternityChallenge.current() !== undefined,
+});
 
 EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
 

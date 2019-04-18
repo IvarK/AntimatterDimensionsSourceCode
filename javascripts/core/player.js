@@ -57,6 +57,9 @@ var player = {
       bestTimes: Array.repeat(defaultMaxTime, 8),
       completedBits: 0,
     },
+    eternity: {
+      current: 0,
+    }
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
@@ -250,7 +253,6 @@ var player = {
   },
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
-  currentEternityChall: "",
   eternityChallUnlocked: 0,
   etercreq: 0,
   autoIP: new Decimal(0),

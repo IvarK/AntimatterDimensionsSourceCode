@@ -10,7 +10,7 @@ function eternity(force, auto, switchingDilation) {
       if (!canEternity()) force = true;
     }
     if (force) {
-      player.currentEternityChall = "";
+      player.challenge.eternity.current = 0;
     }
     else {
       if (!canEternity()) return false;
@@ -23,7 +23,7 @@ function eternity(force, auto, switchingDilation) {
       addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     }
     if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (EternityChallenge.isRunning()) {
+    if (EternityChallenge.isRunning) {
       const challenge = EternityChallenge.current();
       challenge.addCompletion();
       if (Perk.studyECBulk.isBought) {
@@ -85,7 +85,7 @@ function eternity(force, auto, switchingDilation) {
         player.autoSacrifice = 1;
     }
     player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-    player.currentEternityChall = "";
+    player.challenge.eternity.current = 0;
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.eterc8ids = 50;

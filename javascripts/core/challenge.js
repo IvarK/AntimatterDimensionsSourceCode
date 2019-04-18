@@ -165,7 +165,7 @@ class InfinityChallengeState extends GameMechanicState {
     startChallenge();
     player.break = true;
 
-    if (EternityChallenge.isRunning()) Achievement(115).unlock();
+    if (EternityChallenge.isRunning) Achievement(115).unlock();
   }
 
   get isCompleted() {

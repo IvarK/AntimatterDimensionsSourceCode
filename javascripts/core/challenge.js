@@ -1,6 +1,6 @@
 function startChallenge() {
   secondSoftReset();
-  Tab.dimensions.normal.show();
+  if (!Enslaved.isRunning) Tab.dimensions.normal.show();
 }
 
 function askChallengeConfirmation(goal) {

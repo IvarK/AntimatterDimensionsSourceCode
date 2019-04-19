@@ -11,7 +11,7 @@ Vue.component("normal-dim-galaxy-row", {
         tier: 1,
         amount: 0
       },
-      isBuyable: false,
+      canBeBought: false,
       hasIncreasedScaling: false,
       hasReplicantiGalaxies: false,
       hasDilationGalaxies: false,
@@ -38,7 +38,7 @@ Vue.component("normal-dim-galaxy-row", {
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
-      this.isBuyable = requirement.isSatisfied && Galaxy.canBeBought;
+      this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.hasReplicantiGalaxies = this.galaxies.replicanti !== 0;
       this.hasDilationGalaxies = this.galaxies.dilation !== 0;
       if (Galaxy.canBeBought) {
@@ -84,7 +84,7 @@ Vue.component("normal-dim-galaxy-row", {
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button
-        :enabled="isBuyable"
+        :enabled="canBeBought"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="secondSoftReset"
       >{{buttonMessage}}</primary-button>

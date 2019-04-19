@@ -65,7 +65,7 @@ Vue.component("normal-achievement", {
       }
       return this.detailsTooltip;
     },
-    shiftText() {
+    hintText() {
       return `${this.achId}`;
     }
   },
@@ -114,7 +114,7 @@ Vue.component("normal-achievement", {
       :ach-tooltip="tooltip"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave">
-      <hint-text class="l-hint-text--achievement">{{shiftText}}</hint-text>
+      <hint-text class="l-hint-text--achievement">{{hintText}}</hint-text>
       <br>
      </div>`
 });

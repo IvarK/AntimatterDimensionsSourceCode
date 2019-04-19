@@ -123,7 +123,7 @@ function initializeResourcesAfterEternity() {
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
+  player.infDimensionsUnlocked = Array.repeat(false, 8);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);

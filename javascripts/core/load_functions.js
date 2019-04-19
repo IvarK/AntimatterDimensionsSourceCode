@@ -167,6 +167,9 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
+    delete player.options.themes;
+    if (player.options.theme === undefined) player.options.theme = "Normal";
+    delete player.options.secretThemeKey;
     player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
     delete player.options.sacrificeConfirmation;
     player.gameCreatedTime = Date.now() - player.realTimePlayed;

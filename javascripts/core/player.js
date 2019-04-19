@@ -80,7 +80,7 @@ var player = {
     why: 0,
     fixed: "notyetfixed",
     dragging: 0,
-    themes: [],
+    themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
   },
   challengeTimes: Array.repeat(defaultMaxTime, 11),
@@ -449,8 +449,7 @@ var player = {
     bulkOn: true,
     cloud: true,
     hotkeys: true,
-    theme: undefined,
-    secretThemeKey: "",
+    theme: "Normal",
     commas: true,
     updateRate: 50,
     chart: {

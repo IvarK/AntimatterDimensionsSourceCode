@@ -560,6 +560,19 @@ dev.updateTestSave = function() {
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 
+  if (player.why !== undefined) {
+    player.secretUnlocks.why = player.why
+    delete player.why;
+  }
+  delete player.achPow;
+  delete player.options.themes;
+  if (player.options.theme === undefined) player.options.theme = "Normal";
+  delete player.options.secretThemeKey;
+  if (player.options.sacrificeConfirmation !== undefined) {
+    player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
+    delete player.options.sacrificeConfirmation;
+  }
+
   if (player.blackHole[0].unlocked) Achievement(144).unlock();
   Achievement(146).tryUnlock();
   Achievement(147).tryUnlock();

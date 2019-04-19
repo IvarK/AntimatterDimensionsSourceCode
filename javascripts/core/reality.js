@@ -309,6 +309,7 @@ function completeReality(force, reset, auto = false) {
   player.eterc8repl = 40;
   player.dimlife = true;
   player.dead = true;
+  player.reallydidnt = true;
   if (!reset) player.realities = player.realities + 1;
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;

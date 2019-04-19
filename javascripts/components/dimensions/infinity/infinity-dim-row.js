@@ -60,7 +60,7 @@ Vue.component("infinity-dim-row", {
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
-        this.hardcap = Enslaved.isRunning ? 1 : HARDCAP_ID_PURCHASES;
+        this.hardcap = dimension.purchaseCap;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
     },

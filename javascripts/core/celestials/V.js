@@ -1,5 +1,5 @@
 /**
- * runUnlocks:
+ * Information about how to format runUnlocks:
  * id: unique id
  * name: the achievement name
  * description: Description what you need to do, for values add {value}
@@ -9,24 +9,20 @@
  */
 
 class VRunUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
   get completions() {
-    let completions = player.celestials.v.runUnlocks[this.id];
+    const completions = player.celestials.v.runUnlocks[this.id];
     return completions === undefined ? 0 : completions;
   }
 
   get conditionValue() {
     const value = this.config.values[this.completions];
-    return value !== undefined ? value : this.config.values[this.completions - 1];
+    return value === undefined ? this.config.values[this.completions - 1] : value;
   }
 
   get formattedDescription() {
-    let val = this.conditionValue
-    const formatted = this.config.format ? this.config.format(val) : shorten(val)
-    return this.config.description.replace('{value}', formatted)
+    const val = this.conditionValue;
+    const formatted = this.config.format ? this.config.format(val) : shorten(val);
+    return this.config.description.replace("{value}", formatted).replace("{s}", pluralize("", value));
   }
 
   set completions(value) {

@@ -1,25 +1,25 @@
 GameDatabase.celestials.v = {
   mainUnlock: {
     realities: 10000,
-    eternities: 1e60,
+    eternities: 1e65,
     infinities: 1e150,
-    dilatedTime: 1e250,
-    replicanti: new Decimal("1e250000")
+    dilatedTime: 1e300,
+    replicanti: new Decimal("1e270000")
   },
   runUnlocks: [
     {
       id: 0,
-      name: "Running Man",
-      description: "Complete all challenges within {value} seconds from starting reality (real time).",
-      values: [18, 15, 12, 10, 7, 5],
-      condition: x => EternityChallenge.completedTiers() === 60 && Time.thisRealityRealTime.totalSeconds < x
+      name: "Cool Runnings",
+      description: "Unlock reality with at most {value} glyph{s} equipped.",
+      values: [5, 4, 3, 2, 1, 0],
+      condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x
     },
     {
       id: 1,
       name: "AntiStellar",
       description: "Have {value} total galaxies from all types.",
       values: [2500, 2750, 3000, 3250, 3500, 3750],
-      condition: (x) => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
+      condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
       format: x => x
     },
     {

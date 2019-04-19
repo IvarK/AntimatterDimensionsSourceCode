@@ -270,6 +270,7 @@ var player = {
   eterc8repl: 40,
   dimlife: true,
   dead: true,
+  reallydidnt: true,
   dilation: {
     studies: [],
     active: false,
@@ -415,6 +416,7 @@ var player = {
       quoteIdx: 0,
       unlocks: [],
       run: false,
+      completed: false,
       quoteIdx: 0,
       maxQuotes: 6
     },

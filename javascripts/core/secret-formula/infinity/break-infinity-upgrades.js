@@ -68,7 +68,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       formatEffect: value => {
         const period = value >= 999999999999
           ? "hundred or so years"
-          : Time.bestInfinity.multiply(5);
+          : Time.bestInfinity.times(5);
         return `1 Infinity every ${period}`;
       }
     },

@@ -62,18 +62,6 @@ strong {
     color: #999;
 }
 
-.t-s6 .tabbtn {
-  color: #E0E0E0;
-  background: black;
-  border: 2px solid #1565C0;
-  text-shadow: 0 0 10px white;
-}
-
-.t-s6 .tabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
 .t-s6 .secondarytabbtn {
     color: #E0E0E0;
     background: black;
@@ -116,7 +104,7 @@ strong {
     text-shadow: 0 0 7px #64DD17;
 }
 
-.t-s6 #timetheorems, .t-s6 #studytreeloadsavetext, .t-s6 #minimizeArrow {
+.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
     color: grey;
 }
 

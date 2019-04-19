@@ -8,20 +8,26 @@ Vue.component("normal-challenges-tab", {
         return {
           isRunning: false,
           isCompleted: false,
+          isImpossible: false,
         };
       },
       computed: {
         challenge() {
-          return Challenge(this.challengeId);
+          return NormalChallenge(this.challengeId);
         },
         name() {
           return `C${this.challengeId}`;
+        },
+        overrideLabel() {
+          return this.isImpossible ? "Impossible" : "";
         }
       },
       methods: {
         update() {
           this.isRunning = this.challenge.isRunning;
           this.isCompleted = this.challenge.isCompleted;
+          this.isImpossible = Enslaved.isRunning &&
+            !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.challengeId);
         }
       },
       template:
@@ -30,6 +36,7 @@ Vue.component("normal-challenges-tab", {
           :isUnlocked="true"
           :isRunning="isRunning"
           :isCompleted="isCompleted"
+          :overrideLabel="overrideLabel"
           class="c-challenge-box--normal"
           @start="challenge.start()"
         >

@@ -30,7 +30,7 @@ Vue.component("game-tab-with-subtabs", {
     },
     handleTabClick(tab) {
       this.emitInput(tab.id);
-      GameUI.dispatch(GameEvent.TAB_CHANGED);
+      EventHub.dispatch(GameEvent.TAB_CHANGED);
     }
   },
   template:

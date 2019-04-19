@@ -36,15 +36,11 @@ class Lazy {
 const GameCache = {
   worstChallengeTime: new Lazy(() => Math.max(player.challengeTimes.max(), 100)),
 
-  bestRunIPPM: new Lazy(() => {
-    const bestRunIppm = player.lastTenRuns
+  bestRunIPPM: new Lazy(() =>
+    player.lastTenRuns
       .map(run => ratePerMinute(run[1], run[0]))
-      .reduce(Decimal.maxReducer);
-
-    if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
-    if (bestRunIppm.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
-    return bestRunIppm;
-  }),
+      .reduce(Decimal.maxReducer)
+  ),
 
   averageEPPerRun: new Lazy(() => {
     return player.lastTenEternities
@@ -61,6 +57,7 @@ const GameCache = {
   }),
 
   dimensionMultDecrease: new Lazy(() => {
+    if (Enslaved.isRunning && !NormalChallenge(10).isRunning) return 10;
     return 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward
@@ -109,9 +106,13 @@ const GameCache = {
     Array.range(1, TOTAL_ACH_ROWS)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
-  ))
+  )),
+
+  challengeTimeSum: new Lazy(() => player.challengeTimes.sum()),
+
+  infinityChallengeTimeSum: new Lazy(() => player.infchallengeTimes.sum()),
 };
 
-EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {
+EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);

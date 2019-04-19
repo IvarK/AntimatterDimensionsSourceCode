@@ -150,7 +150,7 @@ GameDatabase.infinity.upgrades = (function() {
         const income = shorten(value, 2, 0);
         const period = player.bestInfinityTime >= 999999999999
           ? "hundred or so years"
-          : Time.bestInfinity.multiply(10);
+          : Time.bestInfinity.times(10);
         return `${income} every ${period}`;
       },
       charged: {

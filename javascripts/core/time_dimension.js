@@ -18,7 +18,7 @@ function timeDimensionCost(tier, bought) {
     return cost;
   }
   let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
-  if (cost.gte(Number.MAX_VALUE)) {
+  if (cost.gte(Decimal.MAX_NUMBER)) {
     cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e1300")) {
@@ -36,6 +36,7 @@ function buyTimeDimension(tier, upd) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false
   if (player.eternityPoints.lt(dim.cost)) return false
+  if (Enslaved.isRunning && dim.bought > 0) return false;
 
   player.eternityPoints = player.eternityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(1);
@@ -65,6 +66,7 @@ function toggleAllTimeDims() {
 function buyMaxTimeDimTier(tier) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
+  if (Enslaved.isRunning) return buyTimeDimension(tier);
   const bulk = bulkBuyBinarySearch(player.eternityPoints, {
     costFunction: bought => timeDimensionCost(tier, bought),
     cumulative: true,
@@ -215,7 +217,7 @@ class TimeDimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || Enslaved.isRunning) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
       return new Decimal(0);
     }
 

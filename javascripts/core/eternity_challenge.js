@@ -2,7 +2,7 @@ function startEternityChallenge() {
     player.sacrificed = new Decimal(0);
     player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
+      for (let challenge of NormalChallenge.all) {
         challenge.complete();
       }
     }
@@ -69,7 +69,7 @@ function startEternityChallenge() {
     resetTickspeed();
     resetMoney();
     playerInfinityUpgradesOnEternity();
-    Marathon2 = 0;
+    AchievementTimers.marathon2.reset();
     return true;
 }
 
@@ -119,10 +119,15 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   set completions(value) {
+    if (Enslaved.isRunning && this.id === 1) {
+      player.eternityChalls[this.fullId] = Math.min(1000, value);
+      return;
+    }
     player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
   }
 
   get isFullyCompleted() {
+    if (Enslaved.isRunning && this.id === 1) return this.completions === 1000;
     return this.completions === TIERS_PER_EC;
   }
 

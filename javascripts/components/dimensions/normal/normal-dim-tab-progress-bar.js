@@ -21,16 +21,16 @@ Vue.component("normal-dim-tab-progress-bar", {
         this.fill.copyFrom(Decimal.min(current.pLog10() / Decimal.log10(goal) * 100, 100));
         this.tooltip = tooltip;
       };
-      if (player.currentChallenge !== "") {
+      if (NormalChallenge.current() || InfinityChallenge.current()) {
         setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
       } else if (!player.break) {
-        setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
+        setProgress(player.money, Decimal.MAX_NUMBER, "Percentage to Infinity");
       } else if (player.infDimensionsUnlocked.includes(false)) {
         setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
       } else if (EternityChallenge.isRunning()) {
         setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
       } else {
-        setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
+        setProgress(player.infinityPoints, Decimal.MAX_NUMBER, "Percentage to Eternity");
       }
     }
   },

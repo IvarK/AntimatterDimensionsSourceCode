@@ -94,22 +94,22 @@ class Galaxy {
   }
 
   static get costMult() {
-    return Challenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
+    return NormalChallenge(10).isRunning ? 90 : Effects.min(60, TimeStudy(42));
   }
 
   static get baseCost() {
-    return Challenge(10).isRunning ? 99 : 80;
+    return NormalChallenge(10).isRunning ? 99 : 80;
   }
 
   static get requiredTier() {
-    return Challenge(10).isRunning ? 6 : 8;
+    return NormalChallenge(10).isRunning ? 6 : 8;
   }
 
   static get canBeBought() {
-    return !(EternityChallenge(6).isRunning
-      || Challenge(8).isRunning
-      || player.currentChallenge === "postc7"
-      || (!player.break && player.money.gt(Number.MAX_VALUE)));
+    return !((EternityChallenge(6).isRunning && !Enslaved.isRunning) ||
+      NormalChallenge(8).isRunning ||
+      InfinityChallenge(7).isRunning ||
+      (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
   }
 
   static get costScalingStart() {
@@ -134,27 +134,18 @@ class Galaxy {
     }
     return GalaxyType.NORMAL;
   }
-
-  static checkAchievements() {
-    if (player.spreadingCancer >= 10) giveAchievement("Spreading Cancer");
-    if (player.spreadingCancer >= 100000) giveAchievement("Cancer = Spread");
-    if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??");
-    if (player.galaxies >= 2) giveAchievement("Double Galaxy");
-    if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
-    if (player.galaxies >= 630 && player.replicanti.galaxies === 0) giveAchievement("Unique snowflakes");
-  }
 }
 
 function galaxyReset() {
+  EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
   if (autoS) auto = false;
   autoS = true;
-  if (player.sacrificed.eq(0)) giveAchievement("I don't believe in Gods");
   player.galaxies++;
   player.tickDecrease -= 0.03;
   player.resets = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
-  Galaxy.checkAchievements();
+  EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 
 function galaxyResetBtnClick() {

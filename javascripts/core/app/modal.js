@@ -8,17 +8,22 @@ class Modal {
     ui.view.modal.current = this._component;
   }
 
+  get isOpen() {
+    return ui.view.modal.current === this._component;
+  }
+
   static hide() {
     if (!GameUI.initialized) return;
     ui.view.modal.current = undefined;
     ui.view.modal.cloudConflicts = [];
   }
 
-  static isOpen() {
+  static get isOpen() {
     return ui.view.modal.current !== undefined;
   }
 }
 
+Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");

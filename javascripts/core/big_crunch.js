@@ -1,93 +1,90 @@
-function bigCrunchReset() {
-    var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
-    if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
-    const isInChallenge = player.currentChallenge !== "";
-    if (player.money.lt(Number.MAX_VALUE)) {
-        return;
-    }
-    if (isInChallenge && player.money.lt(player.challengeTarget)) {
-        return;
-    }
+function bigCrunchAnimation() {
+  document.body.style.animation = "implode 2s 1";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 2000);
+  setTimeout(bigCrunchReset(true), 1000);
+}
 
-    if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
-        implosionCheck = 1;
-        document.body.style.animation = "implode 2s 1";
-        setTimeout(function() {
-            document.body.style.animation = "";
-        }, 2000);
-        setTimeout(bigCrunchReset, 1000);
-        return
+function bigCrunchReset(disableAnimation = false) {
+  const challenge = NormalChallenge.current() || InfinityChallenge.current();
+  if (player.money.lt(Decimal.MAX_NUMBER) || (challenge && player.money.lt(challenge.goal))) {
+    return;
+  }
+  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
+  if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
+    bigCrunchAnimation();
+    return;
+  }
+  EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
+  if (challenge) {
+    if (!challenge.isCompleted) {
+      challenge.complete();
+      Autobuyer.tryUnlockAny();
     }
-    implosionCheck = 0;
-    if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
-        player.challenges.push(player.currentChallenge);
-        Autobuyer.tryUnlockAny();
-    }
-    if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) {
-        setChallengeTime(challNumber - 2, player.thisInfinityTime);
-    }
-    if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber - 1] > player.thisInfinityTime) {
-        setInfChallengeTime(challNumber - 1, player.thisInfinityTime);
-    }
-    if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
-    if (Challenge(9).isRunning) {
-        kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
-    }
-    let infinityPoints = gainedInfinityPoints();
-    player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-    addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    RealityUpgrades.tryUnlock([7, 8]);
+    challenge.updateChallengeTime();
+  }
+  if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
+  if (NormalChallenge(9).isRunning) {
+    kong.submitStats('NormalChallenge 9 time record (ms)', Math.floor(player.thisInfinityTime));
+  }
+  let infinityPoints = gainedInfinityPoints();
+  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
+  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
+  RealityUpgrades.tryUnlock([7, 8]);
 
-    if (autoS && auto) {
-        let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
-        if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
-        if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
+  if (autoS && auto) {
+    let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
+    if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
+    if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
+  }
+  auto = autoS; //only allow autoing if prev crunch was autoed
+  autoS = true;
+  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+  player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
+    failChallenge();
+  }
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
+    Autobuyer.tryUnlockAny();
+  }
+  if (!player.options.retryChallenge) {
+    player.currentChallenge = "";
+  }
+
+  // FIXME: Infinitified is now Decimal so decide what happens here!
+  //kong.submitStats('Infinitied', Player.totalInfinitied);
+  kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
+
+  const currenReplicanti = player.replicanti.amount;
+  const currentReplicantiGalaxies = player.replicanti.galaxies;
+  secondSoftReset();
+
+  if (Achievement(95).isEnabled) {
+    player.replicanti.amount = currenReplicanti;
+  }
+  if (TimeStudy(33).isBought) {
+    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+  }
+
+  if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
+    for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
+      if (player.infDimBuyers[i - 1]) {
+        buyMaxInfDims(i);
+        buyManyInfinityDimension(i)
+      }
     }
+  }
 
-    auto = autoS; //only allow autoing if prev crunch was autoed
-    autoS = true;
-    player.infinitied = player.infinitied.plus(gainedInfinities().round());
-    player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  autoBuyReplicantiUpgrades();
 
-    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
-      failChallenge();
-    }
+  if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+    EffarigUnlock.infinity.unlock();
+    Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
+  }
+  EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
 
-    checkBigCrunchAchievements();
-    if (!player.options.retryChallenge)
-        player.currentChallenge = "";
-
-    checkForEndMe();
-    // FIXME: Infinitified is now Decimal so decide what happens here!
-    //kong.submitStats('Infinitied', Player.totalInfinitied);
-    kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
-
-    let currenReplicanti = player.replicanti.amount;
-    let currentReplicantiGalaxies = player.replicanti.galaxies;
-    secondSoftReset();
-
-    if (Achievement(95).isEnabled) {
-        player.replicanti.amount = currenReplicanti;
-    }
-    if (TimeStudy(33).isBought) {
-        player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
-    }
-
-    if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
-        for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
-            if (player.infDimBuyers[i - 1]) {
-                buyMaxInfDims(i);
-                buyManyInfinityDimension(i)
-            }
-        }
-    }
-
-    autoBuyReplicantiUpgrades();
-
-    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
-      EffarigUnlock.infinity.unlock();
-      Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
-    }
 }
 
 function secondSoftReset() {
@@ -103,47 +100,7 @@ function secondSoftReset() {
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
-    Marathon2 = 0;
-}
-
-function checkBigCrunchAchievements() {
-    giveAchievement("To infinity!");
-    if (player.infinitied.gte(10)) giveAchievement("That's a lot of infinites");
-    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-      Challenge(1).complete();
-      Autobuyer.tryUnlockAny();
-    }
-    if (player.thisInfinityTime <= 7200000) giveAchievement("That's fast!");
-    if (player.thisInfinityTime <= 600000) giveAchievement("That's faster!");
-    if (player.thisInfinityTime <= 60000) giveAchievement("Forever isn't that long");
-    if (player.thisInfinityTime <= 200) giveAchievement("Blink of an eye");
-    if (player.eightAmount.eq(0)) giveAchievement("You didn't need it anyway");
-    if (player.galaxies === 1) giveAchievement("Claustrophobic");
-    if (player.galaxies === 0 && player.resets === 0) giveAchievement("Zero Deaths");
-    if (Challenge(2).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Many Deaths");
-    if (Challenge(8).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Gift from the Gods");
-    if (Challenge(9).isRunning && player.thisInfinityTime <= 180000) giveAchievement("Is this hell?");
-    if (Challenge(3).isRunning && player.thisInfinityTime <= 10000) giveAchievement("You did this again just for the achievement right?");
-    if (player.firstAmount.eq(1) && player.resets === 0 && player.galaxies === 0 && Challenge(11).isRunning) giveAchievement("ERROR 909: Dimension not found");
-    if (InfinityChallenge(5).isRunning && player.thisInfinityTime <= 10000) giveAchievement("Hevipelle did nothing wrong");
-    if (player.challenges.length >= 2) giveAchievement("Daredevil");
-    if (player.challenges.length === 12) giveAchievement("AntiChallenged");
-    if (player.challenges.length > 12) giveAchievement("Infinitely Challenging");
-    if (player.challenges.length === 20) giveAchievement("Anti-antichallenged");
-    if (player.break && player.currentChallenge === "") {
-        const infinityPoints = gainedInfinityPoints();
-        if (infinityPoints.gte(1e150)) giveAchievement("All your IP are belong to us");
-        if (infinityPoints.gte(1e200) && player.thisInfinityTime <= 2000) giveAchievement("Ludicrous Speed");
-        if (infinityPoints.gte(1e250) && player.thisInfinityTime <= 20000) giveAchievement("I brake for nobody")
-    }
-    if (!Achievement(111).isUnlocked && player.lastTenRuns[9][1] !== 1) {
-        var n = 0;
-        for (i = 0; i < 9; i++) {
-            if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i + 1][1].times(Number.MAX_VALUE))) n++;
-        }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked infinities...")
-    }
-    if (player.bestInfinityTime <= 1) giveAchievement("Less than or equal to 0.001");
+    AchievementTimers.marathon2.reset();
 }
 
 document.getElementById("bigcrunch").onclick = bigCrunchReset;
@@ -169,7 +126,6 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
-  if (Enslaved.isRunning) return player.infMult.times(kongIPMult)
   return ipMult;
 }
 

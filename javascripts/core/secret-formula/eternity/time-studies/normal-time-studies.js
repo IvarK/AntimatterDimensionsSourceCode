@@ -128,7 +128,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 91,
       cost: 4,
       description: "Normal dimensions gain a multiplier based on time spent this eternity",
-      effect: () => Decimal.pow(10, Math.min(Time.thisEternity.totalMinutes, 30) * 10),
+      effect: () => Decimal.pow10(Math.min(Time.thisEternity.totalMinutes, 30) * 10),
       cap: new Decimal("1e300"),
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -198,7 +198,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: "You gain more EP based on time spent this Eternity",
       effect: () => {
         let thisEternity = Time.thisEternity;
-        Perk.studyIdleEP.applyEffect(v => thisEternity = thisEternity.add(v));
+        Perk.studyIdleEP.applyEffect(v => thisEternity = thisEternity.plus(v));
         return Math.sqrt(1.39 * thisEternity.totalSeconds);
       },
       formatEffect: value => formatX(value, 1, 1)
@@ -283,10 +283,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 192,
       cost: 730,
-      description: () =>
-        `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
-        "but growth slows down at higher replicanti amounts."
-    },
+      description: () => (Enslaved.isRunning
+        ? "There is not enough space in this reality"
+        : `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
+        "but growth slows down at higher replicanti amounts.")
+      },
     {
       id: 193,
       cost: 300,

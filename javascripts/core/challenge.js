@@ -1,9 +1,16 @@
+// TODO: improve handling of this hint
+let hacky = false;
+
 function startChallenge(name, target) {
     if (!askChallengeConfirmation(name)) return;
     player.currentChallenge = name;
     player.challengeTarget = target;
     secondSoftReset();
-    Tab.dimensions.normal.show();
+  Tab.dimensions.normal.show();
+  if (!hacky && Enslaved.isRunning && EternityChallenge(6).isRunning && name === "challenge10") {
+    hacky = true;
+    alert("... did not ... underestimate you ...");
+  }
 }
 
 function askChallengeConfirmation(challenge) {
@@ -18,17 +25,19 @@ function askChallengeConfirmation(challenge) {
 }
 
 function setChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.challengeTimes.splice(id, 1, time);
-    GameCache.worstChallengeTime.invalidate();
+  // Use splice so Vue could track changes
+  player.challengeTimes.splice(id, 1, time);
+  GameCache.challengeTimeSum.invalidate();
+  GameCache.worstChallengeTime.invalidate();
 }
 
 function setInfChallengeTime(id, time) {
-    // Use splice so Vue could track changes
-    player.infchallengeTimes.splice(id, 1, time);
+  // Use splice so Vue could track changes
+  player.infchallengeTimes.splice(id, 1, time);
+  GameCache.infinityChallengeTimeSum.invalidate();
 }
 
-class ChallengeState extends GameMechanicState {
+class NormalChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
     this._fullId = `challenge${this.id}`;
@@ -49,7 +58,11 @@ class ChallengeState extends GameMechanicState {
 
   start() {
     if (this.id === 1) return;
-    startChallenge(this._fullId, new Decimal(Number.MAX_VALUE));
+    let target = new Decimal(Decimal.MAX_NUMBER);
+    if (Enslaved.isRunning && !Enslaved.IMPOSSIBLE_CHALLENGE_EXEMPTIONS.includes(this.id)) {
+      target = Decimal.pow(10, 1e15);
+    }
+    startChallenge(this._fullId, target);
   }
 
   get isCompleted() {
@@ -60,38 +73,48 @@ class ChallengeState extends GameMechanicState {
     if (this.isCompleted) return;
     player.challenges.push(this._fullId);
   }
+
+  get goal() {
+    return Decimal.MAX_NUMBER;
+  }
+
+  updateChallengeTime() {
+    if (player.challengeTimes[this.id - 2] > player.thisInfinityTime) {
+      setChallengeTime(this.id - 2, player.thisInfinityTime);
+    }
+  }
 }
 
-ChallengeState.all = mapGameData(
+NormalChallengeState.all = mapGameData(
   GameDatabase.challenges.normal,
-  data => new ChallengeState(data)
+  data => new NormalChallengeState(data)
 );
 
 /**
  * @param {number} id
- * @return {ChallengeState}
+ * @return {NormalChallengeState}
  */
-function Challenge(id) {
-  return ChallengeState.all[id];
+function NormalChallenge(id) {
+  return NormalChallengeState.all[id];
 }
 
 /**
- * @returns {ChallengeState}
+ * @returns {NormalChallengeState}
  */
-Challenge.current = function() {
+NormalChallenge.current = function() {
   const challenge = player.currentChallenge;
   if (!challenge.startsWith("challenge")) {
     return undefined;
   }
-  return Challenge(parseInt(challenge.substr(9)));
+  return NormalChallenge(parseInt(challenge.substr(9)));
 };
 
-Challenge.isRunning = () => Challenge.current() !== undefined;
+NormalChallenge.isRunning = () => NormalChallenge.current() !== undefined;
 
 /**
- * @type {ChallengeState[]}
+ * @type {NormalChallengeState[]}
  */
-Challenge.all = Array.range(1, 12).map(Challenge);
+NormalChallenge.all = Array.range(1, 12).map(NormalChallenge);
 
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
@@ -126,8 +149,7 @@ class InfinityChallengeState extends GameMechanicState {
   start() {
     startChallenge(this._fullId, this.config.goal);
     player.break = true;
-    if (EternityChallenge.isRunning())
-      giveAchievement("I wish I had gotten 7 eternities");
+    if (EternityChallenge.isRunning()) Achievement(115).unlock();
   }
 
   get isCompleted() {
@@ -153,6 +175,16 @@ class InfinityChallengeState extends GameMechanicState {
   get isQuickResettable() {
     return this.config.isQuickResettable;
   }
+
+  get goal() {
+    return this.config.goal;
+  }
+
+  updateChallengeTime() {
+    if (player.infchallengeTimes[this.id - 1] > player.thisInfinityTime) {
+      setInfChallengeTime(this.id - 1, player.thisInfinityTime);
+    }
+  }
 }
 
 InfinityChallengeState.all = mapGameData(
@@ -173,9 +205,9 @@ function InfinityChallenge(id) {
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  return challenge.startsWith("postc") ?
-    InfinityChallenge(parseInt(challenge.substr(5))) :
-    undefined;
+  return challenge.startsWith("postc")
+    ? InfinityChallenge(parseInt(challenge.substr(5)))
+    : undefined;
 };
 
 /**

@@ -38,18 +38,18 @@ Vue.component("game-header", {
       else if (Laitela.isRunning) this.currCelestial = "Lai'tela"
       else this.currCelestial = "";
     },
-    updateChallengeDisplay: function() {
+    updateChallengeDisplay() {
       // Pls don't hate me Razen
       let displayValue = "";
 
-      let inCelestialReality = this.currCelestial.length !== 0;
+      const inCelestialReality = this.currCelestial.length !== 0;
       if (inCelestialReality) displayValue += " + " + this.currCelestial + " Reality";
 
-      let inDilation = player.dilation.active;
+      const inDilation = player.dilation.active;
       if (inDilation) displayValue += " + Time Dilation";
 
-      const challenge = Challenge.current();
-      if (challenge !== undefined) displayValue += ` + ${challenge.config.reward} Challenge `;
+      const normalChallenge = NormalChallenge.current();
+      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
 
       const infinityChallenge = InfinityChallenge.current();
       if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;

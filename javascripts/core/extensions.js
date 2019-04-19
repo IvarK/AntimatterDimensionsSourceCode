@@ -240,3 +240,5 @@ Set.prototype.every = function(predicate) {
 Array.prototype.compact = function() {
   return this.filter(x => x !== undefined && x !== null);
 };
+
+Decimal.MAX_NUMBER = new Decimal(Number.MAX_VALUE);

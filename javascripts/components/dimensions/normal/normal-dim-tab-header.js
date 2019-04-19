@@ -32,13 +32,6 @@ Vue.component("normal-dim-tab-header", {
   },
   template:
     `<div class="l-normal-dim-tab__header">
-      <input
-        v-show="isSacrificeUnlocked"
-        v-model="options.noSacrificeConfirmation"
-        v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        type="checkbox"
-        class="o-big-checkbox"
-      />
       <primary-button
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"

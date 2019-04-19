@@ -109,7 +109,7 @@ dev.implode = function() {
 dev.updateTDCosts = function() {
     for (var i=1; i<9; i++) {
         var dim = player["timeDimension"+i]
-        if (dim.cost.gte(Number.MAX_VALUE)) {
+        if (dim.cost.gte(Decimal.MAX_NUMBER)) {
             dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
         }
         if (dim.cost.gte("1e1300")) {
@@ -145,6 +145,17 @@ dev.refundDilStudies = function() {
     }
 }
 
+dev.resetDilation = function() {
+  player.dilation.dilatedTime = new Decimal(0);
+  player.dilation.tachyonParticles = new Decimal(0);
+  player.dilation.totalTachyonParticles = new Decimal(0);
+  player.dilation.rebuyables[1] = 0;
+  player.dilation.rebuyables[2] = 0;
+  player.dilation.rebuyables[3] = 0;
+  player.dilation.baseFreeGalaxies = 0;
+  player.dilation.freeGalaxies = 0;
+}
+
 dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
   symbol = "key" + symbol;
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
@@ -165,8 +176,8 @@ dev.giveGlyph = function (level, rawLevel = level) {
 }
 
 dev.decriminalize = function () {
-  player.secretAchiements.delete(23);
-  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  player.secretAchievements.delete(23);
+  EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
 }
 
 dev.removeAch = function (name) {
@@ -537,12 +548,34 @@ dev.updateTestSave = function() {
     player.options.testVersion = 32;
   }
 
+  if (player.options.testVersion === 32) {
+    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    player.options.testVersion = 33;
+  }
+
+  if (player.options.testVersion === 33) {
+    moveSavedStudyTrees();
+    player.options.testVersion = 34;
+  }
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
 
-  if (player.blackHole[0].unlocked) giveAchievement("Is this an Interstellar reference?")
-  if (player.reality.perks.size === Perk.all.length) giveAchievement("Perks of living")
-  if (RealityUpgrades.allBought) giveAchievement("Master of Reality") // Rebuyables and that one null value = 6
+  if (player.why !== undefined) {
+    player.secretUnlocks.why = player.why
+    delete player.why;
+  }
+  delete player.achPow;
+  delete player.options.themes;
+  if (player.options.theme === undefined) player.options.theme = "Normal";
+  delete player.options.secretThemeKey;
+  if (player.options.sacrificeConfirmation !== undefined) {
+    player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
+    delete player.options.sacrificeConfirmation;
+  }
+
+  if (player.blackHole[0].unlocked) Achievement(144).unlock();
+  Achievement(146).tryUnlock();
+  Achievement(147).tryUnlock();
   if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
     player.reality.realityMachines =
       player.reality.realityMachines.plus(player.celestials.teresa.rmStore - Teresa.rmStoreMax);
@@ -675,7 +708,7 @@ dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persis
   else {  // With no arguments, toggles on/off
     tempSpeedupToggle = !tempSpeedupToggle;
   }
-}
+};
 
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();

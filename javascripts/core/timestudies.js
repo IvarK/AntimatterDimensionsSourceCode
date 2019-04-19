@@ -109,7 +109,10 @@ function buyDilationStudy(name, cost, quiet) {
           if (Perk.autounlockDilation2.isBought) {
             for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
           }
-          if (Perk.startTP.isBought) player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(10);
+          if (Perk.startTP.isBought) {
+            player.dilation.tachyonParticles =
+              player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
+          }
         }
         if (name === 6 && !Perk.autounlockReality.isBought) {
             showRealityTab("glyphstab");
@@ -204,6 +207,7 @@ function canBuyStudy(name) {
       break;
 
       case 19:
+      if (name === 192 && Enslaved.isRunning) return false;
       if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; else return false
       break;
 
@@ -423,7 +427,7 @@ function respecTimeStudies() {
     study.refund();
   }
   if (player.timestudy.studies.length === 0) {
-    giveAchievement("You do know how these work, right?")
+    SecretAchievement(34).unlock();
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
@@ -435,13 +439,19 @@ function respecTimeStudies() {
   }
 }
 
+function studyTreeExportString() {
+  return `${player.timestudy.studies}|${player.eternityChallUnlocked}`;
+}
+
 function exportStudyTree() {
-  copyToClipboardAndNotify(player.timestudy.studies + "|" + player.eternityChallUnlocked);
+  copyToClipboardAndNotify(studyTreeExportString());
 }
 
 function importStudyTree(input) {
   if (typeof input !== 'string') var input = prompt()
-  if (sha512_256(input) == "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") giveAchievement("You followed the instructions")
+  if (sha512_256(input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") {
+    SecretAchievement(37).unlock();
+  }
   if (input === "") return false
   var studiesToBuy = input.split("|")[0].split(",");
   for (i=0; i<studiesToBuy.length; i++) {

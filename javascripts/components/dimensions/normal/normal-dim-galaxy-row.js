@@ -52,9 +52,9 @@ Vue.component("normal-dim-galaxy-row", {
         this.lockMessage = null;
       } else if (EternityChallenge(6).isRunning) {
         this.lockMessage = "Locked (Eternity Challenge 6)";
-      } else if (Challenge(8).isRunning) {
+      } else if (NormalChallenge(8).isRunning) {
         this.lockMessage = "Locked (8th Dimension Autobuyer Challenge)";
-      } else if (player.currentChallenge === "postc7") {
+      } else if (InfinityChallenge(7).isRunning) {
         this.lockMessage = "Locked (Infinity Challenge 7";
       } else {
         this.lockMessage = null;

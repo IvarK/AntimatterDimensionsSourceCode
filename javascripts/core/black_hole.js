@@ -22,9 +22,7 @@ class BlackHoleUpgradeState {
     if (!this.isAffordable) return;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
-    if (BlackHoles.list.some(bh => bh.interval < bh.duration)) {
-      giveAchievement("Are you sure these are the right way around?");
-    }
+    EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }
 
@@ -87,7 +85,7 @@ class BlackHoleState {
   }
 
   get isUnlocked() {
-    return this._data.unlocked || Enslaved.isRunning;
+    return this._data.unlocked && !Enslaved.isRunning;
   }
 
   get isCharged() {
@@ -210,10 +208,14 @@ const BlackHoles = {
     if (!this.canBeUnlocked) return;
     player.blackHole[0].unlocked = true;
     player.reality.realityMachines = player.reality.realityMachines.minus(50);
-    giveAchievement("Is this an Interstellar reference?");
+    Achievement(144).unlock();
   },
 
-  togglePause: () => player.blackHolePause = !player.blackHolePause,
+  togglePause: () => {
+    if (!BlackHoles.areUnlocked) return;
+    player.blackHolePause = !player.blackHolePause;
+    GameUI.notify.blackHole(player.blackHolePause ? "Black Hole paused" : "Black Hole unpaused");
+  },
 
   get arePaused() {
     return player.blackHolePause;
@@ -228,9 +230,6 @@ const BlackHoles = {
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
       blackHole.updatePhase(activePeriods[blackHole.id - 1]);
-    }
-    if (TimeSpan.fromSeconds(BlackHole(1).phase).totalHours >= 24) {
-      giveAchievement("Bruh, are you like, inside the hole?");
     }
   },
 

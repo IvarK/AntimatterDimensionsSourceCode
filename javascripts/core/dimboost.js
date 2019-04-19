@@ -11,7 +11,7 @@ class DimBoostRequirement {
 
 class DimBoost {
   static get power() {
-    if (Challenge(8).isRunning) {
+    if (NormalChallenge(8).isRunning) {
       return new Decimal(1);
     }
 
@@ -34,7 +34,7 @@ class DimBoost {
   }
 
   static get maxShiftTier() {
-    return Challenge(10).isRunning ? 6 : 8;
+    return NormalChallenge(10).isRunning ? 6 : 8;
   }
 
   static get isShift() {
@@ -52,7 +52,7 @@ class DimBoost {
     let tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
 
-    if (tier === 6 && Challenge(10).isRunning) {
+    if (tier === 6 && NormalChallenge(10).isRunning) {
       amount += Math.ceil((targetResets - 3) * 20);
     }
     else if (tier === 8) {
@@ -82,9 +82,9 @@ function applyDimensionBoost() {
 
 function softReset(bulk) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
-    if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
+    if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
+    EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
     player.resets += bulk;
-    if (bulk >= 750) giveAchievement("Costco sells dimboosts now");
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
@@ -96,18 +96,16 @@ function softReset(bulk) {
     applyChallengeModifiers();
     skipResetsIfPossible();
     resetTickspeed();
-    let currentMoney = player.money;
+    const currentMoney = player.money;
     resetMoney();
     if (Achievement(111).isEnabled) {
         player.money = player.money.max(currentMoney);
     }
-    if (player.resets >= 10) {
-        giveAchievement("Boosting to the max");
-    }
+    EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
 }
 
 function applyChallengeModifiers() {
-    if (Challenge(6).isRunning) {
+    if (NormalChallenge(6).isRunning) {
         player.thirdCost = new Decimal(100);
         player.fourthCost = new Decimal(500);
         player.fifthCost = new Decimal(2500);
@@ -115,12 +113,12 @@ function applyChallengeModifiers() {
         player.seventhCost = new Decimal(2e5);
         player.eightCost = new Decimal(4e6);
     }
-    if (player.currentChallenge === "postc1")
+    if (InfinityChallenge(1).isRunning)
         player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
 }
 
 function skipResetsIfPossible() {
-  if (player.currentChallenge !== "") {
+  if (NormalChallenge.current() || InfinityChallenge.current()) {
     return;
   }
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {
@@ -133,7 +131,7 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.money.gt(Number.MAX_VALUE)) || !DimBoost.requirement.isSatisfied) return;
+  if ((!player.break && player.money.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
   if (Ra.isRunning) return;
   auto = false;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);

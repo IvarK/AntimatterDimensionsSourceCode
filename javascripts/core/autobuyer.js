@@ -41,7 +41,7 @@ class AutobuyerState {
   }
 
   /**
-   * @returns {ChallengeState|InfinityChallengeState}
+   * @returns {NormalChallengeState|InfinityChallengeState}
    */
   get challenge() {
     throw "This method should be overridden in inheriting class";
@@ -205,7 +205,7 @@ class DimensionAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(this._tier);
+    return NormalChallenge(this._tier);
   }
 
   /**
@@ -272,7 +272,7 @@ class TickspeedAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(9);
+    return NormalChallenge(9);
   }
 
   /**
@@ -326,7 +326,7 @@ class DimboostAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(10);
+    return NormalChallenge(10);
   }
 
   /**
@@ -423,7 +423,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(11);
+    return NormalChallenge(11);
   }
 
   /**
@@ -539,7 +539,7 @@ class InfinityAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(12);
+    return NormalChallenge(12);
   }
 
   /**
@@ -589,8 +589,8 @@ class InfinityAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
-    if (!player.money.gte(Number.MAX_VALUE)) return;
-    let proc = !player.break || player.currentChallenge !== "";
+    if (!player.money.gte(Decimal.MAX_NUMBER)) return;
+    let proc = !player.break || NormalChallenge.current() || InfinityChallenge.current();
     if (!proc) {
       switch (this.mode) {
         case AutoCrunchMode.AMOUNT:
@@ -826,29 +826,13 @@ Autobuyer.tick = function() {
 };
 
 Autobuyer.checkIntervalAchievements = function() {
-  const maxedAutobuy = Autobuyer.unlockables
-    .filter(a => a.hasMaxedInterval)
-    .length;
-
-  if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
-  if (maxedAutobuy >= 12) giveAchievement("Definitely not worth it");
+  Achievement(52).tryUnlock();
+  Achievement(53).tryUnlock();
 };
 
 Autobuyer.checkBulkAchievements = function() {
-  const dims = Autobuyer.allDims;
-  const bulk512Count = dims
-    .filter(a => a.isUnlocked && a.bulk >= 512)
-    .length;
-  if (bulk512Count === DIMENSION_COUNT) giveAchievement("Bulked up");
-  const maxedBulkCount = dims
-    .filter(a => a.hasMaxedBulk)
-    .length;
-  if (maxedBulkCount === DIMENSION_COUNT) giveAchievement("Professional bodybuilder");
-};
-
-Autobuyer.checkAllAchievements = function() {
-  Autobuyer.checkIntervalAchievements();
-  Autobuyer.checkBulkAchievements();
+  Achievement(61).tryUnlock();
+  SecretAchievement(38).tryUnlock();
 };
 
 function toggleAutobuyers() {

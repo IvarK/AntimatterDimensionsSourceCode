@@ -207,19 +207,17 @@ function boostedRealityRewards() {
 
 function completeReality(force, reset, auto = false) {
   if (!reset) {
+    EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
     if (Enslaved.lockedInBoostRatio > 1) {
       boostedRealityRewards();
     }
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality
     }
-    giveAchievement("Snap back to reality");
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
-    if (player.bestReality < 3000) giveAchievement("I didn't even realize how fast you are")
-    if (GLYPH_TYPES.every((type) => type === "effarig" || player.reality.glyphs.active.some((g) => g.type == type))) giveAchievement("Royal Flush")
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
       Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
     }
@@ -240,7 +238,7 @@ function completeReality(force, reset, auto = false) {
   player.challenges = [];
   let isRUPG10Bought = RealityUpgrade(10).isBought;
   if (isRUPG10Bought) {
-    for (let challenge of Challenge.all) {
+    for (let challenge of NormalChallenge.all) {
       challenge.complete();
     }
   }
@@ -296,7 +294,7 @@ function completeReality(force, reset, auto = false) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
-  player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
+  player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
   player.reality.lastAutoEC = 0;
   player.currentEternityChall = "";
   player.eternityChallUnlocked = 0;
@@ -354,8 +352,8 @@ function completeReality(force, reset, auto = false) {
   secondSoftReset();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
-  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-    Challenge(1).complete();
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
   }
   Autobuyer.tryUnlockAny()
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
@@ -371,11 +369,9 @@ function completeReality(force, reset, auto = false) {
   if (player.eternities <= 1) {
     Tab.dimensions.normal.show();
   }
-  Marathon2 = 0;
+  AchievementTimers.marathon2.reset();
   updateAutomatorRows();
   drawPerkNetwork();
-
-  if (player.realities >= 4) giveAchievement("How does this work?")
 
   resetInfinityPoints();
 
@@ -403,7 +399,7 @@ function completeReality(force, reset, auto = false) {
   }
 
   Lazy.invalidateAll();
-  GameUI.dispatch(GameEvent.REALITY);
+  EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
 }
 
 function handleCelestialRuns(force) {

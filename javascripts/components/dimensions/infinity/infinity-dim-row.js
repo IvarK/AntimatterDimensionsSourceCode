@@ -16,7 +16,8 @@ Vue.component("infinity-dim-row", {
       isCapped: false,
       capIP: new Decimal(0),
       autobuyers: player.infDimBuyers,
-      isEC8Running: false
+      isEC8Running: false,
+      hardcap: HARDCAP_ID_PURCHASES,
     };
   },
   computed: {
@@ -32,7 +33,7 @@ Vue.component("infinity-dim-row", {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
     hardcapPurchases() {
-      return this.shortenCosts(HARDCAP_ID_PURCHASES);
+      return this.shortenCosts(this.hardcap);
     },
     capTooltip() {
       return this.isCapped
@@ -59,6 +60,7 @@ Vue.component("infinity-dim-row", {
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
+        this.hardcap = Enslaved.isRunning ? 1 : HARDCAP_ID_PURCHASES;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
     },

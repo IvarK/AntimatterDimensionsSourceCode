@@ -13,22 +13,13 @@ Vue.component("normal-dim-galaxy-row", {
       },
       isBuyable: false,
       hasIncreasedScaling: false,
+      hasReplicantiGalaxies: false,
+      hasDilationGalaxies: false,
       costScalingText: "",
       lockMessage: null,
     };
   },
   computed: {
-    galaxySumDisplay() {
-      const galaxies = this.galaxies;
-      const galaxyCounts = [shortenSmallInteger(galaxies.normal)];
-      if (galaxies.replicanti > 0) {
-        galaxyCounts.push(shortenSmallInteger(galaxies.replicanti));
-      }
-      if (galaxies.dilation > 0) {
-        galaxyCounts.push(shortenSmallInteger(galaxies.dilation));
-      }
-      return galaxyCounts.join(" + ");
-    },
     dimName() {
       return DISPLAY_NAMES[this.requirement.tier];
     },
@@ -42,12 +33,14 @@ Vue.component("normal-dim-galaxy-row", {
     update() {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
-      this.galaxies.dilation = player.dilation.freeGalaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
+      this.galaxies.dilation = player.dilation.freeGalaxies;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
       this.isBuyable = requirement.isSatisfied && Galaxy.canBeBought;
+      this.hasReplicantiGalaxies = this.galaxies.replicanti !== 0;
+      this.hasDilationGalaxies = this.galaxies.dilation !== 0;
       if (Galaxy.canBeBought) {
         this.lockMessage = null;
       } else if (EternityChallenge(6).isRunning) {
@@ -84,7 +77,10 @@ Vue.component("normal-dim-galaxy-row", {
     `<div class="c-normal-dim-row">
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{type}} ({{galaxySumDisplay}}): requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+      >{{type}} ({{shortenSmallInteger(galaxies.normal)}}
+        <span v-if="hasReplicantiGalaxies"> + {{shortenSmallInteger(galaxies.replicanti)}}</span>
+        <span v-if="hasDilationGalaxies"> + {{shortenSmallInteger(galaxies.dilation)}}</span>):
+        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button

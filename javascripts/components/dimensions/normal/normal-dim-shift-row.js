@@ -7,7 +7,6 @@ Vue.component("normal-dim-shift-row", {
       },
       isShift: false,
       isBuyable: false,
-      canSacrifice: false,
       resets: 0
     };
   },
@@ -19,9 +18,6 @@ Vue.component("normal-dim-shift-row", {
       return DISPLAY_NAMES[this.requirement.tier];
     },
     buttonText() {
-      if (this.resets === 4 && this.canSacrifice) {
-        return `Reset the game to unlock sacrifice`;
-      }
       return `Reset the game for a ${this.isShift ? "new Dimension" : "boost"}`;
     }
   },
@@ -31,7 +27,6 @@ Vue.component("normal-dim-shift-row", {
       this.requirement.tier = requirement.tier;
       this.requirement.amount = requirement.amount;
       this.isBuyable = requirement.isSatisfied;
-      this.canSacrifice = Sacrifice.isAffordable;
       this.isShift = DimBoost.isShift;
       this.resets = player.resets;
     },

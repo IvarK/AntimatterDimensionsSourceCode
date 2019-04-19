@@ -396,12 +396,12 @@ setInterval(function() {
   if (isLocalEnvironment()) return;
   let commit;
   setInterval(() => {
-    let url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
-    let headers = new Headers();
+    const url = "https://api.github.com/repos/IvarK/HahaSlabWontGetHere/commits/master";
+    const headers = new Headers();
     // Yes, this is my GitHub API key for reading private repo details
     headers.append("Authorization", `Basic ${btoa("Razenpok:9b15284a7c7a1142b5766f81967a96f90b7879a8")}`);
 
-    fetch(url, { method: "GET", headers: headers })
+    fetch(url, { method: "GET", headers })
       .then(response => response.json())
       .then(json => {
         if (commit === undefined) {
@@ -409,10 +409,15 @@ setInterval(function() {
           return;
         }
         if (commit === json.sha) return;
-        // setTimeout so GH Pages get rebuilt
+        // GH Pages need some time to get rebuilt, so show message after 30 seconds
         setTimeout(() => {
-          Modal.message.show(`Refresh the page (game will be saved), we've got new stuff: ${json.commit.message}`, updateRefresh, true);
-        }, 30000)
+          Modal.message.show(
+            "Refresh the page (game will be saved), we've got new stuff: " +
+              `${json.commit.message} from ${json.author.login}`,
+            updateRefresh,
+            true
+          );
+        }, 30000);
       });
   }, 60000);
 }());

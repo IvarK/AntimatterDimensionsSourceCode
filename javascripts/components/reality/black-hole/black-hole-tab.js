@@ -15,7 +15,7 @@ Vue.component("black-hole-tab", {
     }
   },
   destroyed() {
-    this.animation.unmount();
+    if (this.animation) this.animation.unmount();
   },
   methods: {
     update() {

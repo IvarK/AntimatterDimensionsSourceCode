@@ -70,7 +70,6 @@ Vue.component("expanding-control-box", {
       this.processRequest(this.state, newOpen);
     },
   },
-
   methods: {
     processRequest(state, request) {
       if (request && (state === this.states.CLOSED || state === this.states.CLOSE_REQUESTED)) {

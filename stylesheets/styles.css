@@ -1980,6 +1980,11 @@ screen and (max-width: 480px) {
   top: -2rem;
 }
 
+.l-hint-text--achievement {
+  top: -2rem;
+  z-index: 1;
+}
+
 /*#endregion hint-text*/
 
 /*#region Header*/

@@ -830,7 +830,7 @@ function gameLoop(diff, options = {}) {
 
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
-      if (Enslaved.isRunning) ttGain *= 2e-4;
+      if (Enslaved.isRunning) ttGain *= 1e-3;
       player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {

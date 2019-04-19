@@ -22,8 +22,11 @@ Vue.component("replicanti-gain-text", {
       }
       if (log10GainFactorPerTick > 308) {
         const galaxiesPerSecond = ticksPerSecond * log10GainFactorPerTick / 308;
+        const effectiveMaxRG = RealityUpgrade(6).isBought
+          ? 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5)
+          : Replicanti.galaxies.max;
         this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
-          `(all galaxies within ${TimeSpan.fromSeconds(Replicanti.galaxies.max / galaxiesPerSecond)})`;
+          ` (all galaxies within ${TimeSpan.fromSeconds(effectiveMaxRG / galaxiesPerSecond)})`;
         return;
       }
       const totalTime = Math.log10(Number.MAX_VALUE) / (ticksPerSecond * log10GainFactorPerTick);

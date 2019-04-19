@@ -14,10 +14,6 @@ function shortenMoney(money) {
   return shorten(money, 2, 1);
 }
 
-function shortenGlyphEffect(money) {
-  return shorten(money, 2, 3);
-}
-
 function shortenMultiplier(money) {
   return shorten(money, 1, 1);
 }

@@ -293,6 +293,7 @@ const ACH_PER_ROW = 8;
 const TOTAL_ACH_ROWS = 14;
 const TOTAL_PRE_REALITY_ACH_ROWS = 13;
 const TOTAL_PRE_REALITY_ACHS = TOTAL_PRE_REALITY_ACH_ROWS * ACH_PER_ROW;
+const REDUCTION_PER_REALITY = 0.9;
 
 // TODO: further optimization:
 // pre-generate ach times on reality
@@ -300,7 +301,7 @@ function updateRealityAchievementModifiers() {
   if (realityAchievementModifiers.realities === player.realities) {
     return;
   }
-  const requiredTimeModifier = Math.pow(0.9, Math.max(player.realities - 1, 0));
+  const requiredTimeModifier = Math.pow(REDUCTION_PER_REALITY, Math.max(player.realities - 1, 0));
   const secondsForAllAchs = DEFAULT_SECONDS_FOR_ALL_ACHS * requiredTimeModifier;
   realityAchievementModifiers = {
     realities: player.realities,

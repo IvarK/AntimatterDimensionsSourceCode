@@ -11,24 +11,15 @@ Vue.component("normal-dim-galaxy-row", {
         tier: 1,
         amount: 0
       },
-      isAffordable: false,
+      canBeBought: false,
       hasIncreasedScaling: false,
+      hasReplicantiGalaxies: false,
+      hasDilationGalaxies: false,
       costScalingText: "",
       lockMessage: null,
     };
   },
   computed: {
-    galaxySumDisplay() {
-      const galaxies = this.galaxies;
-      let sum = shortenSmallInteger(galaxies.normal);
-      if (galaxies.replicanti > 0) {
-        sum += " + " + shortenSmallInteger(galaxies.replicanti);
-      }
-      if (galaxies.dilation > 0) {
-        sum += " + " + shortenSmallInteger(galaxies.dilation);
-      }
-      return sum;
-    },
     dimName() {
       return DISPLAY_NAMES[this.requirement.tier];
     },
@@ -42,20 +33,22 @@ Vue.component("normal-dim-galaxy-row", {
     update() {
       this.type = Galaxy.type;
       this.galaxies.normal = player.galaxies;
-      this.galaxies.dilation = player.dilation.freeGalaxies;
       this.galaxies.replicanti = Replicanti.galaxies.total;
+      this.galaxies.dilation = player.dilation.freeGalaxies;
       const requirement = Galaxy.requirement;
       this.requirement.amount = requirement.amount;
       this.requirement.tier = requirement.tier;
-      this.isAffordable = requirement.isSatisfied;
+      this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
+      this.hasReplicantiGalaxies = this.galaxies.replicanti !== 0;
+      this.hasDilationGalaxies = this.galaxies.dilation !== 0;
       if (Galaxy.canBeBought) {
         this.lockMessage = null;
       } else if (EternityChallenge(6).isRunning) {
         this.lockMessage = "Locked (Eternity Challenge 6)";
+      } else if (InfinityChallenge(7).isRunning) {
+        this.lockMessage = "Locked (Infinity Challenge 7)";
       } else if (NormalChallenge(8).isRunning) {
         this.lockMessage = "Locked (8th Dimension Autobuyer Challenge)";
-      } else if (InfinityChallenge(7).isRunning) {
-        this.lockMessage = "Locked (Infinity Challenge 7";
       } else {
         this.lockMessage = null;
       }
@@ -68,7 +61,7 @@ Vue.component("normal-dim-galaxy-row", {
       const distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.hasIncreasedScaling = player.galaxies > distantStart;
       if (Galaxy.type.startsWith("Distant")) {
-        this.costScalingText = "Each galaxy is more expensive past " + distantStart + " galaxies";
+        this.costScalingText = `Each galaxy is more expensive past ${distantStart} galaxies`;
         return;
       }
       if (Galaxy.type.startsWith("Remote")) {
@@ -84,11 +77,14 @@ Vue.component("normal-dim-galaxy-row", {
     `<div class="c-normal-dim-row">
       <div
         class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{type}} ({{galaxySumDisplay}}): requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
+      >{{type}} ({{shortenSmallInteger(galaxies.normal)}}
+        <span v-if="hasReplicantiGalaxies"> + {{shortenSmallInteger(galaxies.replicanti)}}</span>
+        <span v-if="hasDilationGalaxies"> + {{shortenSmallInteger(galaxies.dilation)}}</span>):
+        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
         <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
       </div>
       <primary-button
-        :enabled="isAffordable"
+        :enabled="canBeBought"
         class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
         @click="secondSoftReset"
       >{{buttonMessage}}</primary-button>

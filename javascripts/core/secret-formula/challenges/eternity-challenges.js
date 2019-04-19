@@ -29,8 +29,8 @@ GameDatabase.challenges.eternity = [
     goalIncrease: new Decimal("1e75"),
     reward: {
       description: "Increase the multiplier for buying 10 dimensions",
-      effect: completions => completions * 0.8,
-      formatEffect: value => formatX(value, 2, 2)
+      effect: completions => completions * 0.72,
+      formatEffect: value => `+${shorten(value, 2, 2)}`
     }
   },
   {

@@ -27,7 +27,7 @@ Vue.component("normal-dim-tab", {
       this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
     },
     quickReset() {
-      quickReset();
+      softReset(0);
     }
   },
   template:

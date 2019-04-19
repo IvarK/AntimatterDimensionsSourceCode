@@ -140,6 +140,7 @@ GameDatabase.reality.glyphEffects = [
     id: "timepow",
     glyphTypes: ["time"],
     singleDesc: "Time Dimension multipliers ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "timespeed",
@@ -147,6 +148,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs × {value} faster ",
     genericDesc: "Game speed multiplier",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "timefreeTickMult",
@@ -157,7 +159,7 @@ GameDatabase.reality.glyphEffects = [
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.
     /** @type{function(number): string} */
-    formatEffect: x => (x + (1 - x) / TS171_MULTIPLIER).toFixed(3),
+    formatEffect: x => shorten(x + (1 - x) / TS171_MULTIPLIER, 3, 3),
     combine: GlyphCombiner.multiply,
     /** @type{function(number): number} */
     softcap: value => Math.max(1e-5, value), // Cap it at "effectively zero", but this effect only ever reduces the threshold by 20%
@@ -174,13 +176,14 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["dilation"],
     singleDesc: "Multiply Dilated Time gain by {value}",
     totalDesc: "DT gain ×{value}",
-    formatEffect: x => shorten(x, 2, 0),
+    formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {
     id: "dilationgalaxyThreshold",
     glyphTypes: ["dilation"],
     singleDesc: "Free galaxy threshold multiplier ×{value}",
     genericDesc: "Free galaxy cost multiplier",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {  // TTgen generates slowly TT, value amount is per second, displayed per hour
     id: "dilationTTgen",
@@ -189,7 +192,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Generating {value} TT per hour",
     genericDesc: "TT generation",
     /** @type {function(number): string} */
-    formatEffect: x => (3600 * x).toFixed(2),
+    formatEffect: x => shorten(3600 * x, 2, 2),
     combine: GlyphCombiner.add,
   }, {
     id: "dilationpow",
@@ -198,6 +201,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Normal Dimension multipliers <br>^{value} while dilated",
     totalDesc: "Normal Dimension multipliers ^{value} while dilated",
     genericDesc: "Normal Dimensions ^x while dilated",
+    formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationspeed",
@@ -205,12 +209,13 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply replication speed by {value}",
     totalDesc: "Replication speed ×{value}",
     genericDesc: "Replication speed multiplier",
-    formatEffect: x => shorten(x, 2, 0),
+    formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {
     id: "replicationpow",
     glyphTypes: ["replication"],
     singleDesc: "Replicanti multiplier ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.addExponents,
   }, {
     id: "replicationdtgain",
@@ -218,7 +223,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply DT gain by \nlog₁₀(replicanti)×{value}",
     totalDesc: "DT gain from log₁₀(replicanti)×{value}",
     genericDesc: "DT gain multiplier (log₁₀(replicanti))",
-    formatEffect: x => x.toFixed(5),
+    formatEffect: x => shorten(x, 5, 5),
     combine: GlyphCombiner.add,
   }, {
     id: "replicationglyphlevel",
@@ -226,6 +231,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Replicanti scaling for next glyph level: \n^0.4 ➜ ^(0.4 + {value})",
     totalDesc: "Replicanti scaling for next glyph level: ^0.4 ➜ ^(0.4 + {value})",
     genericDesc: "Replicanti scaling for glyph level",
+    formatEffect: x => shorten(x, 3, 3),
     combine: effects => {
       let sum = effects.reduce(Number.sumReducer, 0);
       if (effects.length > 2) sum *= 6 / (effects.length + 4);
@@ -237,15 +243,15 @@ GameDatabase.reality.glyphEffects = [
     id: "infinitypow",
     glyphTypes: ["infinity"],
     singleDesc: "Infinity Dimension multipliers ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "infinityrate",
     glyphTypes: ["infinity"],
-
     singleDesc: "Infinity power conversion rate: \n^7 ➜ ^(7 + {value})",
     totalDesc: "Infinity power conversion rate: ^7 ➜ ^(7 + {value})",
     genericDesc: "Infinity power conversion rate",
-    formatEffect: x => x.toFixed(2),
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.add,
     /** @type {function(number):number} */
     softcap: value => value > 0.7 ? 0.7 + 0.2 * (value - 0.7) : value,
@@ -264,12 +270,13 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply infinitied stat gain by {value}",
     totalDesc: "Infinitied stat gain ×{value}",
     genericDesc: "Infinitied stat gain multiplier",
-    formatEffect: x => shorten(x, 2, 0),
+    formatEffect: x => shorten(x, 2, 1),
     combine: GlyphCombiner.multiply,
   }, {  //  * pow is for exponent on time dim multiplier (^1.02) or something like that
     id: "powerpow",
     glyphTypes: ["power"],
     singleDesc: "Normal Dimension multipliers ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "powermult",
@@ -282,7 +289,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["power"],
     singleDesc: "Dimension Boost multiplier ×{value}",
     genericDesc: "Dimension Boost multiplier",
-    formatEffect: x => x.toFixed(2),
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "powerbuy10",
@@ -290,28 +297,32 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {value}",
     totalDesc: "Multiplier from \"Buy 10\" ×{value}",
     genericDesc: "\"Buy 10\" bonus multiplier",
-    formatEffect: x => x.toFixed(2),
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],
     singleDesc: "Time modifier raised to the power of ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigrm",
     glyphTypes: ["effarig"],
     singleDesc: "Reality Machine multiplier x{value}",
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigglyph",
     glyphTypes: ["effarig"],
     singleDesc: "Instability starting glyph level +{value}",
+    formatEffect: x => shortenSmallInteger(x),
     combine: GlyphCombiner.add,
   }, {
     id: "effarigachievement",
     glyphTypes: ["effarig"],
     singleDesc: "Raise all achievement related effects to a power of ^{value}",
     genericDesc: "Achievement effect increase",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigforgotten",
@@ -319,16 +330,19 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Raise the bonus gained from buying 10 Dimensions to a power of ^{value}",
     totalDesc: "Multiplier from \"Buy 10\" ^{value}",
     genericDesc: "\"Buy 10\" bonus multiplier ^x",
+    formatEffect: x => shorten(x, 2, 2),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigdimensions",
     glyphTypes: ["effarig"],
     singleDesc: "All dimension multipliers ^{value}",
+    formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
     id: "effarigantimatter",
     glyphTypes: ["effarig"],
     singleDesc: "Power to antimatter production exponent of ^{value}",
+    formatEffect: x => shorten(x, 4, 4),
     combine: GlyphCombiner.multiply,
   }
 ].mapToObject(effect => effect.id, effect => new GlyphEffectConfig(effect));

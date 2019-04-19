@@ -49,110 +49,90 @@ document.getElementById("news").onclick = function () {
 };
 
 function maxAll() {
-  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return false;
+  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
   buyMaxTickSpeed();
 
-  for (var tier = 1; tier < 9; tier++) {
-    const dimension = NormalDimension(tier);
-    var cost = dimension.cost.times(dimension.remainingUntil10)
-    var multBefore = dimension.pow
-    if (tier >= 3 && NormalChallenge(6).isRunning) {
-      const lowerTier = NormalDimension(tier - 2);
-      if (!canBuyDimension(tier)) continue
-      if (lowerTier.amount.lt(cost)) continue
-      if (canBuyDimension(tier)) {
-        if (cost.lt(lowerTier.amount) && dimension.boughtBefore10 !== 0) {
-          lowerTier.amount = lowerTier.amount.minus(cost)
-          dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
-          dimension.bought += dimension.remainingUntil10;
-          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
-        }
-        while (lowerTier.amount.gt(dimension.cost.times(10))) {
-          lowerTier.amount = lowerTier.amount.minus(dimension.cost.times(10))
-          dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
-          dimension.amount = Decimal.round(dimension.amount.plus(10))
-          dimension.bought += 10
-          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-        }
+  for (let tier = 1; tier < 9; tier++) {
+    maxDimension(tier);
+  }
+}
 
+function maxDimension(tier) {
+  if (!canBuyDimension(tier)) return;
+  const dimension = NormalDimension(tier);
+  const cost = dimension.cost.times(dimension.remainingUntil10);
+  const multBefore = dimension.pow;
 
-        onBuyDimension(tier);
-      }
-    } else {
-      if (!canBuyDimension(tier)) continue
-      if (cost.lt(player.money) && dimension.boughtBefore10 !== 0) {
-        player.money = player.money.minus(cost)
-        dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
-        dimension.bought += dimension.remainingUntil10;
-        dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-        dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
-      }
-      if (player.money.lt(dimension.cost.times(10))) continue
-
-      if ((!BreakInfinityUpgrade.dimCostMult.isMaxed || InfinityChallenge(5).isRunning || NormalChallenge(9).isRunning)) {
-        while ((player.money.gte(dimension.cost.times(10)) && player.money.lte(Decimal.MAX_NUMBER)) || (player.money.gte(dimension.cost.times(10)) && !NormalChallenge(9).isRunning)) {
-          player.money = player.money.minus(dimension.cost.times(10))
-          if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
-          else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
-          else multiplySameCosts(dimension.cost)
-          dimension.amount = Decimal.round(dimension.amount.plus(10))
-          dimension.bought += 10
-          dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-          if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-          if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
-        }
-      } else {
-        if (dimension.cost.lt(Decimal.MAX_NUMBER)) {
-          while (player.money.gte(dimension.cost.times(10)) && dimension.cost.lte(Decimal.MAX_NUMBER)) {
-            player.money = player.money.minus(dimension.cost.times(10))
-            if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
-            else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
-            else multiplySameCosts(dimension.cost)
-            dimension.amount = Decimal.round(dimension.amount.plus(10))
-            dimension.bought += 10
-            dimension.pow = dimension.pow.times(getBuyTenMultiplier())
-            if (dimension.cost.gte(Decimal.MAX_NUMBER)) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-            if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
-          }
-        }
-
-        if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-          var a = Math.log10(Math.sqrt(Player.dimensionMultDecrease))
-          var b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10()
-          var c = dimension.cost.dividedBy(player.money).log10()
-          var discriminant = Math.pow(b, 2) - (c * a * 4)
-          if (discriminant < 0) continue
-          var buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1
-          if (buying <= 0) return false
-          dimension.amount = Decimal.round(dimension.amount.plus(10 * buying))
-          preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10())
-          postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1
-          postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy))
-          dimension.bought += 10 * buying
-          dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying))
-
-          newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2))
-          newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1))
-          //if (buying > 0 )dimension.cost = player.costMultipliers[tier-1].times(Decimal.pow(Player.dimensionMultDecrease, (buying * buying - buying)/2)).times(dimension.cost)
-
-          dimension.cost = newCost
-          player.costMultipliers[tier - 1] = newMult
-          if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost)
-          dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1])
-          player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
-        }
-
-
-      }
+  // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
+  if (tier >= 3 && NormalChallenge(6).isRunning) {
+    const lowerTier = NormalDimension(tier - 2);
+    if (lowerTier.amount.lt(cost)) return;
+    while (lowerTier.amount.gt(dimension.cost)) {
+      lowerTier.amount = lowerTier.amount.minus(dimension.cost);
+      buyUntilTen(tier);
     }
-    if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
-    if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-    if (InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
-    player.postC4Tier = tier;
-    onBuyDimension(tier)
-    floatText(tier, "x" + shortenMoney(dimension.pow.dividedBy(multBefore)))
+  } else {
+    // Buy any remaining until 10 before attempting to bulk-buy
+    if (cost.lt(player.money)) {
+      player.money = player.money.minus(cost);
+      buyUntilTen(tier);
+    }
+
+    // Buy in a while loop in order to properly trigger abnormal price increases
+    const hasAbnormalCostIncrease = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (player.money.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
+            dimension.cost.lte(Decimal.MAX_NUMBER))) {
+      player.money = player.money.minus(dimension.cost.times(10));
+      buyUntilTen(tier);
+    }
+      
+    // This blob is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
+    if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
+        BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
+      const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
+      const b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
+      const c = dimension.cost.dividedBy(player.money).log10();
+      const discriminant = Math.pow(b, 2) - (c * a * 4);
+      if (discriminant < 0) return;
+      const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
+      if (buying <= 0) return;
+      dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
+      preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
+      postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
+      postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
+      dimension.bought += 10 * buying;
+      dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying));
+      newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy))
+        .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
+      newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
+      dimension.cost = newCost;
+      player.costMultipliers[tier - 1] = newMult;
+      if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost);
+      dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1]);
+      player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    }
+  }
+  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
+    player.matter = new Decimal(1);
+  }
+  onBuyDimension(tier);
+  floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
+}
+
+// This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
+function buyUntilTen(tier) {
+  const dimension = NormalDimension(tier);
+  dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
+  dimension.bought += dimension.remainingUntil10;
+  dimension.pow = dimension.pow.times(getBuyTenMultiplier())
+
+  if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
+  else if (NormalChallenge(9)) multiplySameCosts(dimension.cost);
+  else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
+  
+  if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
+    player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   }
 }
 
@@ -384,12 +364,6 @@ function unlockEChall(idx) {
   }
 }
 
-function quickReset() {
-    if (player.resets == 0) player.resets--;
-    else player.resets -= 2;
-    softReset(1);
-}
-
 function getNewInfReq() {
     if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
     else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
@@ -615,18 +589,20 @@ function gameLoop(diff, options = {}) {
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
-    /*if (player.currentChallenge == "postc6" && player.matter.gte(1)) player.matter = player.matter.plus(diff/10)
-    else */
-    player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
+
+    if (player.secondAmount.neq(0)) {
+      player.matter = player.matter.times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
+    }
     if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
-        if (player.resets > 0) player.resets--;
+        Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` + 
+          `${shorten(player.matter, 2, 2)} matter.`);
         softReset(0);
     }
 
-    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
+    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
 
     if (NormalChallenge(3).isRunning || player.matter.gte(1)) {
-      player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff/100)));
+      player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)));
     }
     player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
     if (InfinityChallenge(2).isRunning) {
@@ -790,8 +766,9 @@ function gameLoop(diff, options = {}) {
 
     if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';
-        if ((!challenge || player.options.retryChallenge) && (player.bestInfinityTime <= 60000 || player.break)) {}
-        else showTab('emptiness');
+        if ((challenge && !player.options.retryChallenge) || (player.bestInfinityTime > 60000 && !player.break)) {
+          showTab("emptiness");
+        }
     } else document.getElementById("bigcrunch").style.display = 'none';
 
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
@@ -809,7 +786,7 @@ function gameLoop(diff, options = {}) {
 
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
-    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin
+    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin;
 
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 
@@ -953,22 +930,40 @@ function simulateTime(seconds, real, fast) {
     else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
-    var popupString = "While you were away"
-    if (player.money.gt(playerStart.money)) popupString+= ",<br> your antimatter increased "+shortenMoney(player.money.log10() - (playerStart.money).log10())+" orders of magnitude"
-    if (player.infinityPower.gt(playerStart.infinityPower)) popupString+= ",<br> infinity power increased "+shortenMoney(player.infinityPower.log10() - (Decimal.max(playerStart.infinityPower, 1)).log10())+" orders of magnitude"
-    if (player.timeShards.gt(playerStart.timeShards)) popupString+= ",<br> time shards increased "+shortenMoney(player.timeShards.log10() - (Decimal.max(playerStart.timeShards, 1)).log10())+" orders of magnitude"
-    if (player.infinitied.gt(playerStart.infinitied) || player.eternities > playerStart.eternities) popupString+= ","
-    else popupString += "."
-    if (player.infinitied.gt(playerStart.infinitied)) popupString += "<br>you infinitied " + shorten(player.infinitied.sub(playerStart.infinitied), 4) + ((player.infinitied.sub(playerStart.infinitied).eq(1)) ? " time." : " times.");
-    if (player.eternities > playerStart.eternities) popupString+= " <br>you eternitied " + (player.eternities-playerStart.eternities) + ((player.eternities-playerStart.eternities === 1) ? " time." : " times.");
-    for (let i = 0; i < player.blackHole.length; i++) {
-      let currentActivations = player.blackHole[i].activations;
-      let oldActivations = playerStart.blackHole[i].activations;
-      let activationsDiff = currentActivations - oldActivations;
-      if (activationsDiff > 0)  popupString += " <br>Black hole "+(i+1)+" activated  " + activationsDiff + (activationsDiff == 1 ? " time." : " times.")
+
+    const offlineIncreases = ["While you were away"];
+    // OoM increase
+    const oomVarNames = ["money", "infinityPower", "timeShards"];
+    const oomResourceNames = ["antimatter", "infinity power", "time shards"];
+    for (let i = 0; i < oomVarNames.length; i++) {
+      const varName = oomVarNames[i];
+      const oomIncrease = player[varName].log10() - playerStart[varName].log10();
+      if (player[varName].gt(playerStart[varName])) {
+        offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` + 
+          `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
+      }
     }
+    // Linear increase
+    const linearVarNames = ["infinitied", "eternities"];
+    const linearResourceNames = ["infinities", "eternities"];
+    for (let i = 0; i < linearVarNames.length; i++) {
+      const varName = linearVarNames[i];
+      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
+      if (!Decimal.eq(player[varName], playerStart[varName])) {
+        offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
+      }
+    }
+    // Black hole activations
+    for (let i = 0; i < player.blackHole.length; i++) {
+      const currentActivations = player.blackHole[i].activations;
+      const oldActivations = playerStart.blackHole[i].activations;
+      const activationsDiff = currentActivations - oldActivations;
+      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
+      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+    }
+    popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {
-        popupString+= ".. Nothing happened."
+        popupString += ".. Nothing happened."
         SecretAchievement(36).unlock();
     }
 

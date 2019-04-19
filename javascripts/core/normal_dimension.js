@@ -188,12 +188,15 @@ function getBuyTenMultiplier() {
 
   if (NormalChallenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
 
-  dimMult += Effects.sum(Achievement(141).secondaryEffect);
+  dimMult += Effects.sum(
+    Achievement(141).secondaryEffect,
+    EternityChallenge(3).reward
+  );
+
   dimMult *= Effects.product(
     InfinityUpgrade.buy10Mult,
     Achievement(58)
   );
-  dimMult += Effects.sum(EternityChallenge(3).reward);
 
   dimMult *= getAdjustedGlyphEffect("powerbuy10");
 
@@ -222,6 +225,9 @@ function onBuyDimension(tier) {
     Achievement(10 + tier).unlock();
   }
   Achievement(23).tryUnlock();
+
+  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+  if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
 
   player.postC4Tier = tier;
   postc8Mult = new Decimal(1);

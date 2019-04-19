@@ -2125,6 +2125,11 @@ screen and (max-width: 480px) {
   top: -2rem;
 }
 
+.l-hint-text--achievement {
+  top: -2rem;
+  z-index: 1;
+}
+
 /*#endregion hint-text*/
 
 /*#region Header*/
@@ -4920,6 +4925,7 @@ screen and (max-width: 480px) {
 .l-modal-shortcuts-row {
   display: flex;
   flex-direction: row;
+  line-height: 1.6rem;
   padding-bottom: 0.3rem;
 }
 

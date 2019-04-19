@@ -47,6 +47,9 @@ Vue.component("tt-shop", {
     },
     saveLoadText() {
       return this.$viewModel.shiftDown ? "save:" : "load:";
+    },
+    autobuyerText() {
+      return this.ttAutobuyerOn ? "ON" : "OFF";
     }
   },
   methods: {
@@ -112,8 +115,8 @@ Vue.component("tt-shop", {
               Buy max
             </button>
             <button v-if="!minimized" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
-              onclick="maxTheorems()">
-              Auto: ON
+              @click="toggleTTAutobuyer">
+              Auto: {{autobuyerText}}
             </button>
           </div>
         </div>

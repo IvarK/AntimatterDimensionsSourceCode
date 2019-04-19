@@ -238,13 +238,11 @@ dev.updateTestSave = function() {
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
         }
-        for (var i=0; i<11; i++) {
-            setChallengeTime(i, player.challengeTimes[i] * 100);
-        }
-        for (var i=0; i<8; i++) {
-            setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
-        }
-    }
+
+        player.challengeTimes = player.challengeTimes.map(e => e * 100);
+        player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+
+      }
     if (player.options.testVersion === 1) {
         player.options.testVersion = 2;
         player.reality.glyphs.last = "";
@@ -559,6 +557,20 @@ dev.updateTestSave = function() {
   }
   // Checks for presense of property, so no need for a version bump
   convertEPMult();
+  moveChallengeInfo();
+
+  if (player.why !== undefined) {
+    player.secretUnlocks.why = player.why
+    delete player.why;
+  }
+  delete player.achPow;
+  delete player.options.themes;
+  if (player.options.theme === undefined) player.options.theme = "Normal";
+  delete player.options.secretThemeKey;
+  if (player.options.sacrificeConfirmation !== undefined) {
+    player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
+    delete player.options.sacrificeConfirmation;
+  }
 
   if (player.blackHole[0].unlocked) Achievement(144).unlock();
   Achievement(146).tryUnlock();
@@ -573,6 +585,7 @@ dev.updateTestSave = function() {
     delete player.reality.upg;
   }
   if (!RealityUpgrade(25).isBought) player.realityBuyer.isOn = false;
+  delete player.challengeTarget;
 }
 
 // Still WIP

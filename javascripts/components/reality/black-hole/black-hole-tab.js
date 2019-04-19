@@ -10,10 +10,12 @@ Vue.component("black-hole-tab", {
     blackHoles: () => BlackHoles.list
   },
   mounted() {
-    this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
+    if (this.$refs.canvas) {
+      this.animation = new BlackHoleAnimation(this.$refs.canvas.getContext("2d"));
+    }
   },
   destroyed() {
-    this.animation.unmount();
+    if (this.animation) this.animation.unmount();
   },
   methods: {
     update() {

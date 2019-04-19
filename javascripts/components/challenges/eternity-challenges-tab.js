@@ -99,13 +99,12 @@ Vue.component("eternity-challenges-tab", {
           <description-display :config="config" slot="top" />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
-              <span>Completed {{completions}} {{"time" | pluralize(completions)}}</span>
-              <br>
-              <span>{{goalDisplay}}</span>
+              <div>Completed {{completions}} {{"time" | pluralize(completions)}}</div>
+              <div v-if="!isCompleted">{{goalDisplay}}</div>
             </div>
             <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
             <span>
-              Reward: 
+              Reward:
               <description-display
                 :config="config.reward"
                 :length="55"

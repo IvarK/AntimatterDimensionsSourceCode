@@ -53,6 +53,7 @@ const Enslaved = {
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   infinityTracking: [],
   totalInfinities: new Decimal(0),
+  ec6c10hintGiven: false,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
@@ -96,7 +97,7 @@ const Enslaved = {
   useStoredTime() {
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
-    if (Enslaved.isRunning) release = storedTimeInsideEnslaved(release);
+    if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     gameLoop(0, { gameDiff: release });
     player.celestials.enslaved.stored = 0;
   },
@@ -150,5 +151,10 @@ const Enslaved = {
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1) return stored;
     return Math.pow(10, Math.sqrt(Math.log10(stored / 1e3))) * 1e3;
-  }
+  },
+  showEC10C6Hint() {
+    if (this.ec6c10hintGiven) return;
+    this.ec6c10hintGiven = true;
+    alert("... did not ... underestimate you ...");
+  },
 };

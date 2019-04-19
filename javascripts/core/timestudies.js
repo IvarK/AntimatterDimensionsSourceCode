@@ -140,11 +140,11 @@ function canBuyStudy(name) {
     return (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
   }
 
-    if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12 && !Perk.studyECRequirement.isBought) {
+    if ((name == 71 || name == 72) && player.challenge.eternity.unlocked === 12 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
-  if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11 && !Perk.studyECRequirement.isBought) {
+  if ((name == 72 || name == 73) && player.challenge.eternity.unlocked === 11 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
@@ -435,7 +435,7 @@ function respecTimeStudies() {
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
-    player.eternityChallUnlocked = 0;
+    player.challenge.eternity.unlocked = 0;
   }
   if (!justImported) {
     Tab.eternity.timeStudies.show();
@@ -443,7 +443,7 @@ function respecTimeStudies() {
 }
 
 function studyTreeExportString() {
-  return `${player.timestudy.studies}|${player.eternityChallUnlocked}`;
+  return `${player.timestudy.studies}|${player.challenge.eternity.unlocked}`;
 }
 
 function exportStudyTree() {
@@ -466,16 +466,6 @@ function importStudyTree(input) {
       setTimeout(function(){ justImported = false; }, 100);
   }
 };
-
-function studyTreeSaveButton(num, forceSave) {
-    if (shiftDown || forceSave) {
-        localStorage.setItem("studyTree"+num, player.timestudy.studies + "|" + player.eternityChallUnlocked);
-        GameUI.notify.info("Study tree "+num+" saved")
-    } else if (localStorage.getItem("studyTree"+num) !== null && localStorage.getItem("studyTree"+num) !== "|0") {
-        importStudyTree(localStorage.getItem("studyTree"+num));
-        GameUI.notify.info("Study tree "+num+" loaded")
-    }
-}
 
 const TimeStudyType = {
   NORMAL: 0,
@@ -582,7 +572,7 @@ class ECTimeStudyState extends TimeStudyState {
   }
 
   get isBought() {
-    return player.eternityChallUnlocked === this.id;
+    return player.challenge.eternity.unlocked === this.id;
   }
 
   purchase() {
@@ -596,7 +586,7 @@ class ECTimeStudyState extends TimeStudyState {
     if (!this.isAffordable) {
       return false;
     }
-    if (player.eternityChallUnlocked !== 0) {
+    if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
     const isConnectionSatisfied = this.incomingConnections
@@ -658,9 +648,9 @@ TimeStudy.eternityChallenge = function(id) {
  * @returns {ECTimeStudyState|undefined}
  */
 TimeStudy.eternityChallenge.current = function() {
-  return player.eternityChallUnlocked !== 0 ?
-    TimeStudy.eternityChallenge(player.eternityChallUnlocked) :
-    undefined;
+  return player.challenge.eternity.unlocked
+    ? TimeStudy.eternityChallenge(player.challenge.eternity.unlocked)
+    : undefined;
 };
 
 class DilationTimeStudyState extends TimeStudyState {

@@ -1,3 +1,16 @@
+function resetChallengesOnEternity() {
+  NormalChallenge.clearCompletions();
+  InfinityChallenge.clearCompletions();
+  if (EternityMilestone.keepAutobuyers.isReached) {
+    NormalChallenge.completeAll();
+  }
+  if (Achievement(133).isEnabled) {
+    InfinityChallenge.completeAll();
+  }
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
+}
+
 function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
@@ -50,11 +63,11 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    return player.eternityChallUnlocked === this.id;
+    return player.challenge.eternity.unlocked === this.id;
   }
 
   get isRunning() {
-    return player.currentEternityChall === this.fullId;
+    return player.challenge.eternity.current === this.id;
   }
 
   get canBeApplied() {
@@ -126,7 +139,7 @@ class EternityChallengeState extends GameMechanicState {
     }
     if (canEternity()) eternity(false, false);
     player.eternityChallGoal = this.currentGoal;
-    player.currentEternityChall = this.fullId;
+    player.challenge.eternity.current = this.id;
     return startEternityChallenge();
   }
 
@@ -164,13 +177,15 @@ EternityChallenge.all = EternityChallengeState.all;
 /**
  * @returns {EternityChallengeState}
  */
-EternityChallenge.current = () => {
-  if (player.currentEternityChall === "") return undefined;
-  const id = parseInt(player.currentEternityChall.split("eterc")[1]);
-  return EternityChallenge(id);
-};
+Object.defineProperty(EternityChallenge, "current", {
+  get: () => (player.challenge.eternity.current > 0
+    ? EternityChallenge(player.challenge.eternity.current)
+    : undefined),
+});
 
-EternityChallenge.isRunning = () => player.currentEternityChall !== "";
+Object.defineProperty(EternityChallenge, "isRunning", {
+  get: () => EternityChallenge.current !== undefined,
+});
 
 EternityChallenge.TOTAL_TIER_COUNT = EternityChallenge.all.map(ec => ec.id).max() * TIERS_PER_EC;
 

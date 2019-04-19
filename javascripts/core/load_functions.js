@@ -153,12 +153,10 @@ function onLoad() {
       player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
       player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
     }
-    for (var i = 0; i < 11; i++) {
-      setChallengeTime(i, player.challengeTimes[i] * 100);
-    }
-    for (var i = 0; i < 8; i++) {
-      setInfChallengeTime(i, player.infchallengeTimes[i] * 100);
-    }
+
+    player.challengeTimes = player.challengeTimes.map(e => e * 100);
+    player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+
     convertAutobuyerMode();
     unfuckChallengeIds();
     unfuckMultCosts();
@@ -167,10 +165,15 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
+    delete player.options.themes;
+    if (player.options.theme === undefined) player.options.theme = "Normal";
+    delete player.options.secretThemeKey;
     player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
     delete player.options.sacrificeConfirmation;
     player.gameCreatedTime = Date.now() - player.realTimePlayed;
     moveSavedStudyTrees();
+    delete player.challengeTarget;
+    moveChallengeInfo();
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -230,6 +233,60 @@ function moveSavedStudyTrees() {
   for (let num = 1; num <= 3; ++num) {
     const tree = localStorage.getItem(`studyTree${num}`);
     if (tree) player.timestudy.presets[num - 1].studies = tree;
+  }
+}
+
+function parseChallengeName(name) {
+  if (name.startsWith("challenge")) {
+    return { type: "normal", id: parseInt(name.slice(9), 10) };
+  }
+  if (name.startsWith("postc")) {
+    return { type: "infinity", id: parseInt(name.slice(5), 10) };
+  }
+  if (name !== "") throw crash(`Unrecognized challenge ID ${name}`);
+  return null;
+}
+
+function moveChallengeInfo() {
+  if (player.challengeTimes) {
+    for (let i = 0; i < player.challengeTimes.length; ++i) {
+      player.challenge.normal.bestTimes[i] = Math.min(player.challenge.normal.bestTimes[i],
+        player.challengeTimes[i]);
+    }
+    delete player.challengeTimes;
+  }
+  if (player.infchallengeTimes) {
+    for (let i = 0; i < player.infchallengeTimes.length; ++i) {
+      player.challenge.infinity.bestTimes[i] = Math.min(player.challenge.infinity.bestTimes[i],
+        player.infchallengeTimes[i]);
+    }
+    delete player.infchallengeTimes;
+  }
+  if (player.currentChallenge !== undefined) {
+    const saved = parseChallengeName(player.currentChallenge);
+    delete player.currentChallenge;
+    if (saved) {
+      player.challenge[saved.type].current = saved.id;
+    }
+  }
+  if (player.challenges) {
+    for (const fullID of player.challenges) {
+      const parsed = parseChallengeName(fullID);
+      // eslint-disable-next-line no-bitwise
+      player.challenge[parsed.type].completedBits |= 1 << parsed.id;
+    }
+    delete player.challenges;
+  }
+  if (player.currentEternityChall !== undefined) {
+    const saved = player.currentEternityChall;
+    delete player.currentEternityChall;
+    if (saved.startsWith("eterc")) {
+      player.challenge.eternity.current = parseInt(saved.slice(5), 10);
+    } else if (saved !== "") throw crash(`Unrecognized eternity challenge ${saved}`);
+  }
+  if (player.eternityChallUnlocked !== undefined) {
+    player.challenge.eternity.unlocked = player.eternityChallUnlocked;
+    delete player.eternityChallUnlocked;
   }
 }
 

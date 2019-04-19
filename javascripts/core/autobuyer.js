@@ -590,7 +590,7 @@ class InfinityAutobuyerState extends AutobuyerState {
   tick() {
     if (!this.canTick()) return;
     if (!player.money.gte(Decimal.MAX_NUMBER)) return;
-    let proc = !player.break || NormalChallenge.current() || InfinityChallenge.current();
+    let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {
         case AutoCrunchMode.AMOUNT:
@@ -708,7 +708,7 @@ Autobuyer.eternity = {
     let proc = false;
     switch (this.mode) {
       case AutoEternityMode.AMOUNT:
-        proc = EternityChallenge.isRunning() || gainedEternityPoints().gte(this.limit);
+        proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.limit);
         break;
       case AutoEternityMode.TIME:
         proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)

@@ -221,14 +221,14 @@ GameDatabase.achievements.normal = [
     id: 47,
     name: "Daredevil",
     tooltip: "Complete 2 challenges.",
-    checkRequirement: () => player.challenges.length === 2,
+    checkRequirement: () => NormalChallenge.completed.length === 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
-    checkRequirement: () => player.challenges.length === 12,
+    checkRequirement: () => NormalChallenge.completed.length === 12,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1
@@ -336,7 +336,8 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are stronger in the first 3 minutes of infinities, but only in challenges.",
     effect: () => Math.max(4 / (Time.thisInfinity.totalMinutes + 1), 1),
-    effectCondition: () => player.currentChallenge !== "" && Time.thisInfinity.totalMinutes < 3
+    effectCondition: () => (NormalChallenge.isRunning || InfinityChallenge.isRunning) &&
+      Time.thisInfinity.totalMinutes < 3
   },
   {
     id: 66,
@@ -351,7 +352,7 @@ GameDatabase.achievements.normal = [
     id: 67,
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
-    checkRequirement: () => player.challenges.length > 12,
+    checkRequirement: () => InfinityChallenge.completed.length > 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -404,7 +405,7 @@ GameDatabase.achievements.normal = [
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 40% stronger, but only in challenges.",
     effect: 1.4,
-    effectCondition: () => player.currentChallenge !== ""
+    effectCondition: () => NormalChallenge.isRunning || InfinityChallenge.isRunning
   },
   {
     id: 75,
@@ -461,7 +462,7 @@ GameDatabase.achievements.normal = [
     id: 82,
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
-    checkRequirement: () => player.challenges.length === 20,
+    checkRequirement: () => InfinityChallenge.completed.length === 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {

@@ -483,9 +483,9 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     }
     flushValues();
   }
-  if ((NormalChallenge(11).isRunning || player.currentChallenge === "postc6") && player.matter.equals(0)) player.matter = new Decimal(1);
+  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (player.currentChallenge === "postc1") clearDimensions(tier - 1);
+  if (InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
   onBuyDimension(tier);
 }
 
@@ -537,7 +537,8 @@ function getDimensionProductionPerSecond(tier) {
   if (NormalChallenge(2).isRunning) {
     production = production.times(player.chall2Pow);
   }
-  const postBreak = (player.break && player.currentChallenge === "") || player.currentChallenge.includes("post") || Enslaved.isRunning;
+  const postBreak = (player.break && !InfinityChallenge.isRunning && !NormalChallenge.isRunning) ||
+    InfinityChallenge.isRunning || Enslaved.isRunning;
   if (!postBreak && production.gte(Decimal.MAX_NUMBER)) {
     production = production.min("1e315");
   }

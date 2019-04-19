@@ -1,5 +1,5 @@
 function canEternity() {
-  const challenge = EternityChallenge.current();
+  const challenge = EternityChallenge.current;
   if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
   if (challenge !== undefined && !challenge.canBeCompleted) return false;
   return true;
@@ -11,10 +11,11 @@ function eternity(force, auto, switchingDilation) {
   }
   
   if (force) {
-    player.currentEternityChall = "";
+    player.challenge.eternity.current = 0;
   }
   else {
-    if (!canEternity() || (!auto && !askEternityConfirmation())) return false;
+    if (!canEternity()) return false;
+    if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
@@ -23,8 +24,8 @@ function eternity(force, auto, switchingDilation) {
   }
 
   if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
-  if (EternityChallenge.isRunning()) {
-    const challenge = EternityChallenge.current();
+  if (EternityChallenge.isRunning) {
+    const challenge = EternityChallenge.current;
     challenge.addCompletion();
     if (Perk.studyECBulk.isBought) {
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
@@ -97,16 +98,16 @@ function eternity(force, auto, switchingDilation) {
 
 function initializeChallengeCompletions() {
   player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (const challenge of NormalChallenge.all) {
-        challenge.complete();
-      }
+  if (EternityMilestone.keepAutobuyers.isReached) {
+    for (const challenge of NormalChallenge.all) {
+      challenge.complete();
     }
-    if (Achievement(133).isEnabled) {
-      for (const challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
+  }
+  if (Achievement(133).isEnabled) {
+    for (const challenge of InfinityChallenge.all) {
+      challenge.complete();
     }
+  }
 }
 
 function initializeResourcesAfterEternity() {

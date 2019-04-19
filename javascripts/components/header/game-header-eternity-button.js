@@ -29,7 +29,7 @@ Vue.component("game-header-eternity-button", {
         return;
       }
 
-      if (EternityChallenge.current() !== undefined) {
+      if (EternityChallenge.current !== undefined) {
         if (!Perk.studyECBulk.isBought) {
           this.type = EPButtonDisplayType.CHALLENGE;
           return;
@@ -61,7 +61,7 @@ Vue.component("game-header-eternity-button", {
       this.peakEPPM.copyFrom(EPminpeak);
     },
     updateChallengeWithRUPG() {
-      const currentEC = EternityChallenge.current();
+      const currentEC = EternityChallenge.current;
       const currentCompletions = currentEC.completions;
       this.fullyCompleted = currentCompletions === 5;
       if (this.fullyCompleted) return;

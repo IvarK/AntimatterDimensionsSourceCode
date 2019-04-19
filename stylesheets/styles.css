@@ -2708,19 +2708,22 @@ screen and (max-width: 480px) {
 
 /*#endregion l-options-grid*/
 
-.l-select-notation {
+.l-select-notation,
+.l-select-theme {
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
-.l-select-notation__item {
+.l-select-notation__item,
+.l-select-theme__item {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.o-primary-btn.c-select-notation__item {
+.o-primary-btn.c-select-notation__item,
+.o-primary-btn.c-select-theme__item {
   box-shadow: none;
   border-top: none;
 }

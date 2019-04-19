@@ -226,6 +226,9 @@ function onBuyDimension(tier) {
   }
   Achievement(23).tryUnlock();
 
+  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+  if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
+
   player.postC4Tier = tier;
   postc8Mult = new Decimal(1);
   if (tier !== 8) player.dimlife = false;

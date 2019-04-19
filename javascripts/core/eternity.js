@@ -98,7 +98,7 @@ function eternity(force, auto, switchingDilation) {
 function initializeChallengeCompletions() {
   player.challenges = [];
     if (EternityMilestone.keepAutobuyers.isReached) {
-      for (const challenge of Challenge.all) {
+      for (const challenge of NormalChallenge.all) {
         challenge.complete();
       }
     }

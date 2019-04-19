@@ -1,10 +1,11 @@
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
-  if ((!player.break || (!player.currentChallenge.includes("post") && player.currentChallenge !== "")) && player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+  if ((!player.break || (!InfinityChallenge.current() && NormalChallenge.current())) &&
+    player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
-    Challenge(8).isRunning &&
+    NormalChallenge(8).isRunning &&
     (Sacrifice.totalBoost.gte(Decimal.MAX_NUMBER) || player.chall11Pow.gte(Decimal.MAX_NUMBER))
   ) {
     return false;
@@ -15,18 +16,18 @@ function sacrificeReset(auto) {
   NormalDimension(8).pow = NormalDimension(8).pow.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
-  if (Challenge(8).isRunning) {
+  if (NormalChallenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
     if (!isAch118Enabled) resetDimensions();
     player.money = new Decimal(100);
   } else if (!isAch118Enabled) {
-    clearDimensions(Challenge(12).isRunning ? 6 : 7);
+    clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
 }
 
 function sacrificeBtnClick() {
-  if (!player.options.noSacrificeConfirmation) {
+  if (player.options.confirmations.sacrifice) {
     if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
       return false;
     }
@@ -48,7 +49,7 @@ class Sacrifice {
   static get nextBoost() {
     if (player.firstAmount.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")) {
+    if (InfinityChallenge(2).isCompleted) {
       const scale = Effects.max(
         0.01,
         Achievement(88),
@@ -57,7 +58,7 @@ class Sacrifice {
       return player.firstAmount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
     }
 
-    if (!Challenge(8).isRunning) {
+    if (!NormalChallenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)
@@ -71,7 +72,7 @@ class Sacrifice {
   static get totalBoost() {
     if (player.sacrificed.eq(0)) return new Decimal(1);
 
-    if (player.challenges.includes("postc2")) {
+    if (InfinityChallenge(2).isCompleted) {
       const scale = Effects.max(
         0.01,
         Achievement(88),
@@ -80,7 +81,7 @@ class Sacrifice {
       return player.sacrificed.pow(scale).clampMin(1);
     }
 
-    if (!Challenge(8).isRunning) {
+    if (!NormalChallenge(8).isRunning) {
       let sacrificePow = 2 + Effects.sum(
         Achievement(32),
         Achievement(57)

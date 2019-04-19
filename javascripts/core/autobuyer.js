@@ -41,7 +41,7 @@ class AutobuyerState {
   }
 
   /**
-   * @returns {ChallengeState|InfinityChallengeState}
+   * @returns {NormalChallengeState|InfinityChallengeState}
    */
   get challenge() {
     throw "This method should be overridden in inheriting class";
@@ -205,7 +205,7 @@ class DimensionAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(this._tier);
+    return NormalChallenge(this._tier);
   }
 
   /**
@@ -272,7 +272,7 @@ class TickspeedAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(9);
+    return NormalChallenge(9);
   }
 
   /**
@@ -326,7 +326,7 @@ class DimboostAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(10);
+    return NormalChallenge(10);
   }
 
   /**
@@ -423,7 +423,7 @@ class GalaxyAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(11);
+    return NormalChallenge(11);
   }
 
   /**
@@ -539,7 +539,7 @@ class InfinityAutobuyerState extends AutobuyerState {
   }
 
   get challenge() {
-    return Challenge(12);
+    return NormalChallenge(12);
   }
 
   /**
@@ -590,7 +590,7 @@ class InfinityAutobuyerState extends AutobuyerState {
   tick() {
     if (!this.canTick()) return;
     if (!player.money.gte(Decimal.MAX_NUMBER)) return;
-    let proc = !player.break || player.currentChallenge !== "";
+    let proc = !player.break || NormalChallenge.current() || InfinityChallenge.current();
     if (!proc) {
       switch (this.mode) {
         case AutoCrunchMode.AMOUNT:

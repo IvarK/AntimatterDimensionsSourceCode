@@ -14,71 +14,59 @@
     border: 1px solid black !important;
 }
 
-.t-metro .tabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-    border-radius: 0;
-}
-
-.t-metro .tabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
-}
-
 .t-metro .secondarytabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
+    background: #EEEEEE;
+    border: 1px solid #2196F3;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
     border-radius: 0;
 }
 
 .t-metro .secondarytabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
+    background: #2196F3;
+    border: 1px solid #2196F3;
 }
 
 .t-metro .storebtn {
-    background: #EEEEEE !important;
-    border: 1px solid #66BB6A !important;
+    background: #EEEEEE;
+    border: 1px solid #66BB6A;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
 .t-metro .storebtn:hover {
-    background: #66BB6A !important;
+    background: #66BB6A;
 }
 
 .t-metro .unavailablebtn {
-    background: #9E9E9E !important;
-    border: 1px solid #EF5350 !important;
+    background: #9E9E9E;
+    border: 1px solid #EF5350;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
 .t-metro .unavailablebtn:hover {
-    background: #EF5350 !important;
+    background: #EF5350;
 }
 
 .t-metro .infinitytabbtn {
-    border: 1px solid #FF9800 !important;
-    background: #1F1F1F !important;
+    border: 1px solid #FF9800;
+    background: #1F1F1F;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
 .t-metro .infinitytabbtn:hover {
-    background: #FF9800 !important;
-    border: 1px solid #FF9800 !important;
+    background: #FF9800;
+    border: 1px solid #FF9800;
 }
 
 .t-metro .eternitytabbtn {
-    color: #673AB7 !important;
-    background: #000 !important;
-    border: 1px solid #673AB7 !important;
+    color: #673AB7;
+    background: #000;
+    border: 1px solid #673AB7;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
 .t-metro .eternitytabbtn:hover {
-    background: #FFF !important;
-    border: 1px solid #673AB7 !important;
+    background: #FFF;
+    border: 1px solid #673AB7;
 }
 
 .t-metro .c-rm-amount {

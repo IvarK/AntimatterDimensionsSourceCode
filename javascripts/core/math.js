@@ -146,7 +146,7 @@ class LinearMultiplierScaling {
     if (count === 0) return 0;
     const k = this.growth / this.baseRatio;
     const u = k * count;
-    return (1 / k + count - 0.5) * Math.log1p(u) + count * (Math.log(this.baseRatio) - 1) -  k * u / (12 * (1 + u));
+    return (1 / k + count - 0.5) * Math.log1p(u) + count * (Math.log(this.baseRatio) - 1) - k * u / (12 * (1 + u));
   }
 
   /**
@@ -155,18 +155,18 @@ class LinearMultiplierScaling {
    * @param {number} logMult natural logarithm of combined multiplier
    */
   purchasesForLogTotalMultiplier(logMult) {
-    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations")
-    let Lb = Math.log(this.baseRatio);
+    if (this.baseRatio < 1.01) throw crash("Ratio is too small for good calculations");
+    const Lb = Math.log(this.baseRatio);
     const k = this.growth / this.baseRatio;
     // Final refinement step, applying 2nd order iteration directly to the formula of
     // logTotalMultiplierAfterPurchases
     const refineFinal = g => {
       const u = k * g;
       const Lg = Math.log1p(u);
-      const tmp = 0.5 * k / (1 + u);
-      const fVal = (1 / k + g - 0.5) * Lg + g * (Lb - 1) - (logMult + tmp * u / 6);
-      const fDeriv = Lg + Lb - tmp * (tmp / 3 + 1);
-      const fD2 = tmp * (2 + tmp * (2 + tmp / 3));
+      const v = 0.5 * k / (1 + u);
+      const fVal = (1 / k + g - 0.5) * Lg + g * (Lb - 1) - (logMult + v * u / 6);
+      const fDeriv = Lg + Lb - v * (v / 3 + 1);
+      const fD2 = v * (2 + v * (2 + v / 3));
       const delta1 = fVal / fDeriv;
       return g - 2 * delta1 / (1 + Math.sqrt(1 - 2 * delta1 * fD2 / fDeriv));
     };
@@ -175,7 +175,7 @@ class LinearMultiplierScaling {
     // If the growth rate is really slow and there's not many steps, this is great guess
     // the other method (below) doesn't do well in that case.
     if (k * g0 < 0.01) return refineFinal(refineFinal(g0));
-    const rhs_0 = this.growth * logMult + this.baseRatio * (Lb - 1);
+    const rhs = this.growth * logMult + this.baseRatio * (Lb - 1);
 
     // First, we make a good guess at a solution, based on an approximation of the sum sas an
     // uncorrected integral; these parameters came from an optimization. We are solving for
@@ -183,11 +183,11 @@ class LinearMultiplierScaling {
     const K1 = 0.183709519164226;
     const K2 = 0.693791942633232;
     const K3 = 0.049293492810849;
-    const y = Math.sqrt(2 * (rhs_0 + 1));
+    const y = Math.sqrt(2 * (rhs + 1));
     const h0 = y * (1 + K1 * y) / (1 + K2 * Math.log1p(K3 * y));
 
     // Apply a refinement step; this also shifts the answer by 1
-    const h1 = (1 + h0 + rhs_0) / Math.log1p(h0);
+    const h1 = (1 + h0 + rhs) / Math.log1p(h0);
 
     // At this point we should have a pretty solid guess -- enough that this calcuolation
     // should be pretty accurate; the final refinement 
@@ -199,7 +199,7 @@ class LinearMultiplierScaling {
    * Manual calculation, for testing purposes
    * @param {number} count
    */
-  logTotalMultiplierAfterPurchases_baseline(count) {
+  logTotalMultiplierAfterPurchasesBaseline(count) {
     let logMult = 0;
     const k = this.growth / this.baseRatio;
     for (let x = 0; x < count; ++x) logMult += Math.log1p(k * x);
@@ -465,8 +465,6 @@ function poissonDistributionPTRD(mu) {
     if (k >= 10) {
       const t = (k + 0.5) * Math.log(mu * ik) - mu - LN_SQRT_2_PI + k - (1 / 12 - ik * ik / 360) * ik;
       if (Math.log(v * sMu) <= t) return k;
-    } else {
-      if (Math.log(v) <= k * Math.log(mu) - mu - logFactorial(k)) return k;
-    }
+    } else if (Math.log(v) <= k * Math.log(mu) - mu - logFactorial(k)) return k;
   }
 }

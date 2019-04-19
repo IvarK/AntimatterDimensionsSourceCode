@@ -50,7 +50,7 @@ class Notation {
    * @protected
    */
   isInfinite(decimal) {
-    const isPreBreak = !player.break || Challenge.isRunning();
+    const isPreBreak = !player.break || NormalChallenge.isRunning();
     return !Notation.forcePostBreakFormat && isPreBreak && decimal.gte(Decimal.MAX_NUMBER);
   }
 

@@ -8,8 +8,8 @@ Vue.component("normal-dim-tab", {
   },
   methods: {
     update() {
-      const isC2Running = Challenge(2).isRunning;
-      const isC3Running = Challenge(3).isRunning;
+      const isC2Running = NormalChallenge(2).isRunning;
+      const isC3Running = NormalChallenge(3).isRunning;
       const isChallengePowerVisible = isC2Running || isC3Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
@@ -23,9 +23,9 @@ Vue.component("normal-dim-tab", {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      const challenge = Challenge.current();
+      const normalChallenge = NormalChallenge.current();
       const infinityChallenge = InfinityChallenge.current();
-      this.isQuickResetAvailable = challenge !== undefined && challenge.isQuickResettable ||
+      this.isQuickResetAvailable = normalChallenge !== undefined && normalChallenge.isQuickResettable ||
         infinityChallenge !== undefined && infinityChallenge.isQuickResettable;
     },
     quickReset() {

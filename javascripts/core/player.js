@@ -3,7 +3,6 @@ var autoS = true;
 var shiftDown = false;
 var justImported = false;
 var saved = 0;
-var implosionCheck = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 var player = {
@@ -52,6 +51,7 @@ var player = {
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
+  gameCreatedTime: Date.now(),
   totalTimePlayed: 0,
   realTimePlayed: 0,
   bestInfinityTime: 999999999999,
@@ -235,7 +235,11 @@ var player = {
     ipcost: new Decimal(1),
     epcost: new Decimal(1),
     studies: [],
-    shopMinimized: false
+    shopMinimized: false,
+    presets: new Array(6).fill({
+      name: "",
+      studies: "",
+    }),
   },
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
@@ -440,7 +444,6 @@ var player = {
   options: {
     newsHidden: false,
     notation: "Mixed scientific",
-    noSacrificeConfirmation: false,
     retryChallenge: false,
     showAllChallenges: false,
     bulkOn: true,
@@ -465,6 +468,7 @@ var player = {
       reality: true
     },
     confirmations: {
+      sacrifice: true,
       challenges: true,
       eternity: true,
       dilation: true,
@@ -485,11 +489,11 @@ const Player = {
   },
 
   get isInMatterChallenge() {
-    return Challenge(11).isRunning || InfinityChallenge(6).isRunning;
+    return NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning;
   },
 
   get effectiveMatterAmount() {
-    if (Challenge(11).isRunning) {
+    if (NormalChallenge(11).isRunning) {
       return player.matter;
     }
     if (InfinityChallenge(6).isRunning) {
@@ -500,10 +504,10 @@ const Player = {
 
   get antimatterPerSecond() {
     const basePerSecond = getDimensionProductionPerSecond(1);
-    if (Challenge(3).isRunning) {
+    if (NormalChallenge(3).isRunning) {
       return basePerSecond.times(player.chall3Pow);
     }
-    if (Challenge(12).isRunning) {
+    if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
     return basePerSecond.times(getGameSpeedupFactor());

@@ -38,7 +38,7 @@ Vue.component("statistics-tab", {
       this.totalAntimatter.copyFrom(player.totalmoney);
       this.resets = player.resets;
       this.galaxies = Math.round(player.galaxies);
-      this.realTimePlayed.setFrom(player.realTimePlayed);
+      this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
       const infinity = this.infinity;

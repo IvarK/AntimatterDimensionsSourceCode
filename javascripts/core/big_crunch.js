@@ -1,97 +1,90 @@
-function bigCrunchReset() {
-    var challNumber = parseInt(player.currentChallenge[player.currentChallenge.length-1]);
-    if (player.currentChallenge.length === 11) challNumber = parseInt("1"+player.currentChallenge[player.currentChallenge.length-1]);
-    const isInChallenge = player.currentChallenge !== "";
-    if (player.money.lt(Decimal.MAX_NUMBER)) {
-        return;
-    }
-    if (isInChallenge && player.money.lt(player.challengeTarget)) {
-        return;
-    }
+function bigCrunchAnimation() {
+  document.body.style.animation = "implode 2s 1";
+  setTimeout(() => {
+      document.body.style.animation = "";
+  }, 2000);
+  setTimeout(bigCrunchReset(true), 1000);
+}
 
-    if ((player.bestInfinityTime > 60000 && !player.break) && implosionCheck === 0 && player.options.animations.bigCrunch) {
-        implosionCheck = 1;
-        document.body.style.animation = "implode 2s 1";
-        setTimeout(function() {
-            document.body.style.animation = "";
-        }, 2000);
-        setTimeout(bigCrunchReset, 1000);
-        return
-    }
-    implosionCheck = 0;
-    EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
-    if (player.currentChallenge !== "" && !player.challenges.includes(player.currentChallenge)) {
-        player.challenges.push(player.currentChallenge);
-        Autobuyer.tryUnlockAny();
-    }
-    if (player.currentChallenge !== "" && player.challengeTimes[challNumber - 2] > player.thisInfinityTime) {
-        setChallengeTime(challNumber - 2, player.thisInfinityTime);
-    }
-    if (player.currentChallenge.includes("post") && player.infchallengeTimes[challNumber - 1] > player.thisInfinityTime) {
-        setInfChallengeTime(challNumber - 1, player.thisInfinityTime);
-    }
-    if ((player.bestInfinityTime > 60000 && !player.break) || (player.currentChallenge !== "" && !player.options.retryChallenge)) showTab("dimensions");
-    if (Challenge(9).isRunning) {
-        kong.submitStats('Challenge 9 time record (ms)', Math.floor(player.thisInfinityTime * 100));
-    }
-    let infinityPoints = gainedInfinityPoints();
-    player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-    addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
-    RealityUpgrades.tryUnlock([7, 8]);
-
-    if (autoS && auto) {
-        let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
-        if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
-        if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
-    }
-
-    auto = autoS; //only allow autoing if prev crunch was autoed
-    autoS = true;
-    player.infinitied = player.infinitied.plus(gainedInfinities().round());
-    player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-
-    if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
-      failChallenge();
-    }
-
-    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-      Challenge(1).complete();
+function bigCrunchReset(disableAnimation = false) {
+  const challenge = NormalChallenge.current() || InfinityChallenge.current();
+  if (player.money.lt(Decimal.MAX_NUMBER) || (challenge && player.money.lt(challenge.goal))) {
+    return;
+  }
+  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
+  if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
+    bigCrunchAnimation();
+    return;
+  }
+  EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
+  if (challenge) {
+    if (!challenge.isCompleted) {
+      challenge.complete();
       Autobuyer.tryUnlockAny();
     }
-    if (!player.options.retryChallenge)
-        player.currentChallenge = "";
+    challenge.updateChallengeTime();
+  }
+  if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
+  if (NormalChallenge(9).isRunning) {
+    kong.submitStats('NormalChallenge 9 time record (ms)', Math.floor(player.thisInfinityTime));
+  }
+  let infinityPoints = gainedInfinityPoints();
+  player.infinityPoints = player.infinityPoints.plus(infinityPoints);
+  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
+  RealityUpgrades.tryUnlock([7, 8]);
 
-    // FIXME: Infinitified is now Decimal so decide what happens here!
-    //kong.submitStats('Infinitied', Player.totalInfinitied);
-    kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime * 100));
+  if (autoS && auto) {
+    let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
+    if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
+    if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
+  }
+  auto = autoS; //only allow autoing if prev crunch was autoed
+  autoS = true;
+  player.infinitied = player.infinitied.plus(gainedInfinities().round());
+  player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
+  if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
+    failChallenge();
+  }
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
+    Autobuyer.tryUnlockAny();
+  }
+  if (!player.options.retryChallenge) {
+    player.currentChallenge = "";
+  }
 
-    let currenReplicanti = player.replicanti.amount;
-    let currentReplicantiGalaxies = player.replicanti.galaxies;
-    secondSoftReset();
+  // FIXME: Infinitified is now Decimal so decide what happens here!
+  //kong.submitStats('Infinitied', Player.totalInfinitied);
+  kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
 
-    if (Achievement(95).isEnabled) {
-        player.replicanti.amount = currenReplicanti;
+  const currenReplicanti = player.replicanti.amount;
+  const currentReplicantiGalaxies = player.replicanti.galaxies;
+  secondSoftReset();
+
+  if (Achievement(95).isEnabled) {
+    player.replicanti.amount = currenReplicanti;
+  }
+  if (TimeStudy(33).isBought) {
+    player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
+  }
+
+  if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
+    for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
+      if (player.infDimBuyers[i - 1]) {
+        buyMaxInfDims(i);
+        buyManyInfinityDimension(i)
+      }
     }
-    if (TimeStudy(33).isBought) {
-        player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
-    }
+  }
 
-    if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
-        for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
-            if (player.infDimBuyers[i - 1]) {
-                buyMaxInfDims(i);
-                buyManyInfinityDimension(i)
-            }
-        }
-    }
+  autoBuyReplicantiUpgrades();
 
-    autoBuyReplicantiUpgrades();
+  if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
+    EffarigUnlock.infinity.unlock();
+    Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
+  }
+  EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
 
-    if (Effarig.isRunning && !EffarigUnlock.infinity.isUnlocked) {
-      EffarigUnlock.infinity.unlock();
-      Modal.message.show(`Effarig Infinity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply up to 1e50; infinitied count raises replicanti limit and gives you free RG.`);
-    }
-    EventHub.dispatch(GameEvent.BIG_CRUNCH_AFTER);
 }
 
 function secondSoftReset() {

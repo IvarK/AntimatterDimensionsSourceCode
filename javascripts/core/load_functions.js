@@ -26,8 +26,8 @@ function onLoad() {
   if (isDevEnvironment()) {
     guardFromNaNValues(player);
   }
-  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-    Challenge(1).complete();
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
   }
   if (player.secretUnlocks.fixed === "hasbeenfixed") {
     SecretAchievement(42).unlock();
@@ -167,6 +167,10 @@ function onLoad() {
     player.secretUnlocks.why = player.why
     delete player.why;
     delete player.achPow;
+    player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
+    delete player.options.sacrificeConfirmation;
+    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+    moveSavedStudyTrees();
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -222,6 +226,13 @@ function onLoad() {
   }
 }
 
+function moveSavedStudyTrees() {
+  for (let num = 1; num <= 3; ++num) {
+    const tree = localStorage.getItem(`studyTree${num}`);
+    if (tree) player.timestudy.presets[num - 1].studies = tree;
+  }
+}
+
 function convertEPMult() {
   if (player.epmult === undefined) return;
   const mult = new Decimal(player.epmult);
@@ -264,7 +275,7 @@ function unfuckChallengeIds() {
     wasFucked = true;
     const legacyId = parseInt(id.substr(9));
     const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
-    return Challenge(config.id).fullId;
+    return NormalChallenge(config.id).fullId;
   }
   player.currentChallenge = unfuckChallengeId(player.currentChallenge);
   player.challenges = player.challenges.map(unfuckChallengeId);

@@ -351,15 +351,6 @@ function findGlyphTypeEffects(glyphType) {
   return Object.values(GameDatabase.reality.glyphEffects).filter(e => e.glyphTypes.includes(glyphType));
 }
 
-// These names are short; that's how we current store effect inside player
-// The name is concatenated with the glyph type to make the full effect name
-const timeEffects = ["pow", "speed", "freeTickMult", "eternity"]
-const replicationEffects = ["speed", "pow", "dtgain", "glyphlevel"]
-const dilationEffects = ["dilationMult", "galaxyThreshold", "TTgen", "pow"]
-const infinityEffects = ["pow", "rate", "ipgain", "infmult"]
-const powerEffects = ["pow", "mult", "dimboost", "buy10"]
-const effarigEffects = ["blackhole", "rm", "glyph", "achievement", "forgotten", "dimensions", "antimatter"]
-
 class GlyphType {
   /**
    * @param {Object} setup

@@ -24,7 +24,7 @@ function getTickSpeedMultiplier() {
       let baseMultiplier = 0.9;
       if (player.galaxies == 0) baseMultiplier = 0.89
       if (player.galaxies == 1) baseMultiplier = 0.895
-      if (Challenge(5).isRunning) baseMultiplier = 0.93;
+      if (NormalChallenge(5).isRunning) baseMultiplier = 0.93;
       let perGalaxy = 0.02 * Effects.product(
         InfinityUpgrade.galaxyBoost,
         InfinityUpgrade.galaxyBoost.chargedEffect,
@@ -36,7 +36,7 @@ function getTickSpeedMultiplier() {
       return new Decimal(Math.max(0.01, baseMultiplier - (galaxies * perGalaxy)));
   } else {
       let baseMultiplier = 0.8
-      if (Challenge(5).isRunning) baseMultiplier = 0.83
+      if (NormalChallenge(5).isRunning) baseMultiplier = 0.83
       galaxies -= 2;
       galaxies *= Effects.product(
         InfinityUpgrade.galaxyBoost,
@@ -62,10 +62,10 @@ function buyTickSpeed() {
   }
 
   player.money = player.money.minus(player.tickSpeedCost);
-  if (!Challenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
+  if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
   if (player.tickSpeedCost.gte(Decimal.MAX_NUMBER)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
-  if (Challenge(2).isRunning) player.chall2Pow = 0
+  if (NormalChallenge(2).isRunning) player.chall2Pow = 0
   player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
   postc8Mult = new Decimal(1)
@@ -93,13 +93,13 @@ function buyMaxTickSpeed() {
   }
 
   const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
-  if (Challenge(2).isRunning) {
+  if (NormalChallenge(2).isRunning) {
     player.chall2Pow = 0;
   }
-  if (Challenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Decimal.MAX_NUMBER) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning || tickSpeedCost.lt(Decimal.MAX_NUMBER) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
     while (money.gt(tickSpeedCost) && (tickSpeedCost.lt(Decimal.MAX_NUMBER) || !BreakInfinityUpgrade.tickspeedCostMult.isMaxed || InfinityChallenge(5).isRunning)) {
       money = money.minus(tickSpeedCost);
-      if (Challenge(9).isRunning || InfinityChallenge(5).isRunning) {
+      if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
         multiplySameCosts(tickSpeedCost);
       }
       tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);

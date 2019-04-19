@@ -13,7 +13,7 @@ Vue.component("normal-challenges-tab", {
       },
       computed: {
         challenge() {
-          return Challenge(this.challengeId);
+          return NormalChallenge(this.challengeId);
         },
         name() {
           return `C${this.challengeId}`;

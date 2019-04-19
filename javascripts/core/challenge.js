@@ -37,7 +37,7 @@ function setInfChallengeTime(id, time) {
   GameCache.infinityChallengeTimeSum.invalidate();
 }
 
-class ChallengeState extends GameMechanicState {
+class NormalChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
     this._fullId = `challenge${this.id}`;
@@ -73,38 +73,48 @@ class ChallengeState extends GameMechanicState {
     if (this.isCompleted) return;
     player.challenges.push(this._fullId);
   }
+
+  get goal() {
+    return Decimal.MAX_NUMBER;
+  }
+
+  updateChallengeTime() {
+    if (player.challengeTimes[this.id - 2] > player.thisInfinityTime) {
+      setChallengeTime(this.id - 2, player.thisInfinityTime);
+    }
+  }
 }
 
-ChallengeState.all = mapGameData(
+NormalChallengeState.all = mapGameData(
   GameDatabase.challenges.normal,
-  data => new ChallengeState(data)
+  data => new NormalChallengeState(data)
 );
 
 /**
  * @param {number} id
- * @return {ChallengeState}
+ * @return {NormalChallengeState}
  */
-function Challenge(id) {
-  return ChallengeState.all[id];
+function NormalChallenge(id) {
+  return NormalChallengeState.all[id];
 }
 
 /**
- * @returns {ChallengeState}
+ * @returns {NormalChallengeState}
  */
-Challenge.current = function() {
+NormalChallenge.current = function() {
   const challenge = player.currentChallenge;
   if (!challenge.startsWith("challenge")) {
     return undefined;
   }
-  return Challenge(parseInt(challenge.substr(9)));
+  return NormalChallenge(parseInt(challenge.substr(9)));
 };
 
-Challenge.isRunning = () => Challenge.current() !== undefined;
+NormalChallenge.isRunning = () => NormalChallenge.current() !== undefined;
 
 /**
- * @type {ChallengeState[]}
+ * @type {NormalChallengeState[]}
  */
-Challenge.all = Array.range(1, 12).map(Challenge);
+NormalChallenge.all = Array.range(1, 12).map(NormalChallenge);
 
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
@@ -165,6 +175,16 @@ class InfinityChallengeState extends GameMechanicState {
   get isQuickResettable() {
     return this.config.isQuickResettable;
   }
+
+  get goal() {
+    return this.config.goal;
+  }
+
+  updateChallengeTime() {
+    if (player.infchallengeTimes[this.id - 1] > player.thisInfinityTime) {
+      setInfChallengeTime(this.id - 1, player.thisInfinityTime);
+    }
+  }
 }
 
 InfinityChallengeState.all = mapGameData(
@@ -185,9 +205,9 @@ function InfinityChallenge(id) {
  */
 InfinityChallenge.current = function() {
   const challenge = player.currentChallenge;
-  return challenge.startsWith("postc") ?
-    InfinityChallenge(parseInt(challenge.substr(5))) :
-    undefined;
+  return challenge.startsWith("postc")
+    ? InfinityChallenge(parseInt(challenge.substr(5)))
+    : undefined;
 };
 
 /**

@@ -93,7 +93,6 @@ const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
 const HARDCAP_ID_PURCHASES = 2000000;
-const HARDCAP_ID_BASE_AMOUNT = IDPurchasesToIDAmount(HARDCAP_ID_PURCHASES);
 
 function buyManyInfinityDimension(tier) {
   if (!canBuyInfinityDimension(tier)) return false;

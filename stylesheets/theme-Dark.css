@@ -38,17 +38,6 @@ input.t-dark {
     color: #888888;
 }
 
-.t-dark .tabbtn {
-  color: #E0E0E0;
-  border: 2px solid #1565C0;
-  background-color: #455A64;
-}
-
-.t-dark .tabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
 .t-dark .secondarytabbtn {
   color: #E0E0E0;
   border: 2px solid #1565C0;

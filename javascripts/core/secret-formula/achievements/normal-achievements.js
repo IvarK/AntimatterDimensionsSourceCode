@@ -276,7 +276,7 @@ GameDatabase.achievements.normal = [
     id: 56,
     name: "Many Deaths",
     tooltip: "Complete the Second Dimension Autobuyer challenge in 3 minutes or less.",
-    checkRequirement: () => Challenge(2).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(2).isRunning && Time.thisInfinity.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "All Dimensions are stronger in the first 3 minutes of Infinities.",
     effect: () => 6 / (Time.thisInfinity.totalMinutes + 3),
@@ -286,7 +286,7 @@ GameDatabase.achievements.normal = [
     id: 57,
     name: "Gift from the Gods",
     tooltip: "Complete the Eighth Dimension Autobuyer challenge in 3 minutes or less.",
-    checkRequirement: () => Challenge(8).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinity.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Dimensional sacrifices are a lot stronger.",
     effect: 0.2
@@ -295,7 +295,7 @@ GameDatabase.achievements.normal = [
     id: 58,
     name: "Is this hell?",
     tooltip: "Complete the Tickspeed Autobuyer challenge in 3 minutes or less.",
-    checkRequirement: () => Challenge(9).isRunning && Time.thisInfinity.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinity.totalMinutes <= 3,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Boost per 10 Dimensions +1%.",
     effect: 1.01
@@ -358,7 +358,7 @@ GameDatabase.achievements.normal = [
     id: 68,
     name: "You did this again just for the achievement right?",
     tooltip: "Complete the Third Dimension Autobuyer challenge in 10 seconds or less.",
-    checkRequirement: () => Challenge(3).isRunning && Time.thisInfinity.totalSeconds <= 10,
+    checkRequirement: () => NormalChallenge(3).isRunning && Time.thisInfinity.totalSeconds <= 10,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "1st Dimensions are 50% stronger.",
     effect: 1.5
@@ -369,7 +369,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity with only a single 1st Dimension without Dimension Boosts/Shifts " +
       "or Antimatter Galaxies, while in the Automatic Antimatter Galaxies Challenge.",
     checkRequirement: () =>
-      Challenge(11).isRunning &&
+      NormalChallenge(11).isRunning &&
       NormalDimension(1).amount.eq(1) &&
       player.resets === 0 &&
       player.galaxies === 0,

@@ -239,7 +239,7 @@ function completeReality(force, reset, auto = false) {
   player.challenges = [];
   let isRUPG10Bought = RealityUpgrade(10).isBought;
   if (isRUPG10Bought) {
-    for (let challenge of Challenge.all) {
+    for (let challenge of NormalChallenge.all) {
       challenge.complete();
     }
   }
@@ -353,8 +353,8 @@ function completeReality(force, reset, auto = false) {
   secondSoftReset();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
-  if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-    Challenge(1).complete();
+  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
   }
   Autobuyer.tryUnlockAny()
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);

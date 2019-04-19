@@ -680,7 +680,7 @@ function getGlyphLevelInputs() {
     const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
     scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
   }
-  const scalePenalty = baseLevel / scaledLevel;
+  const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
   const perkFactor = Effects.sum(
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2

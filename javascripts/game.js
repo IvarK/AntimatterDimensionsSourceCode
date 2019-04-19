@@ -366,7 +366,7 @@ function exitChallenge() {
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = 0;
     secondSoftReset();
-    Tab.dimensions.normal.show();
+    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   } else if (EternityChallenge.isRunning) {
     player.challenge.eternity.current = 0;
     player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);

@@ -19,7 +19,7 @@ GameDatabase.celestials.v = {
       name: "AntiStellar",
       description: "Have {value} total galaxies from all types.",
       values: [2500, 2750, 3000, 3250, 3500, 3750],
-      condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies > x,
+      condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
       format: x => x
     },
     {

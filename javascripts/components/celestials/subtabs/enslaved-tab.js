@@ -132,7 +132,6 @@ Vue.component("enslaved-tab", {
           <p>Stored time is much less effective</p>
           <p>Reward: ID purchase caps are increased by number of free tickspeed upgrades</p>
         </button>
-        <div class="o-enslaved-gained-infinities">You have gained <b>{{ shorten(enslavedInfinities) }}</b> infinities in the last 10 seconds.</div>
-      </div>
+        </div>
     </div>`
 });

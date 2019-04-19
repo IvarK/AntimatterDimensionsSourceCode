@@ -413,7 +413,7 @@ setInterval(function() {
         setTimeout(() => {
           Modal.message.show(
             "Refresh the page (game will be saved), we've got new stuff: " +
-              `${json.commit.message} from ${json.author.login}`,
+              `"${json.commit.message}" by ${json.author.login}`,
             updateRefresh,
             true
           );

@@ -133,22 +133,22 @@ function hasRow(row) {
 function canBuyStudy(name) {
   var row = Math.floor(name/10)
   var col = name%10
-  if (name == 33) {
+  if (name === 33) {
       if (player.timestudy.studies.includes(21)) return true; else return false
   }
-  if (name == 62) {
+  if (name === 62) {
     return (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
   }
 
-    if ((name == 71 || name == 72) && player.challenge.eternity.unlocked === 12 && !Perk.studyECRequirement.isBought) {
+    if ((name === 71 || name === 72) && player.challenge.eternity.unlocked === 12 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
-  if ((name == 72 || name == 73) && player.challenge.eternity.unlocked === 11 && !Perk.studyECRequirement.isBought) {
+  if ((name === 72 || name === 73) && player.challenge.eternity.unlocked === 11 && !Perk.studyECRequirement.isBought) {
     return false;
   }
 
-  if (name == 181) {
+  if (name === 181) {
       if ((player.eternityChalls.eterc1 !== undefined || Perk.bypassEC1Lock.isBought)
           && (player.eternityChalls.eterc2 !== undefined || Perk.bypassEC2Lock.isBought)
           && (player.eternityChalls.eterc3 !== undefined || Perk.bypassEC3Lock.isBought)

@@ -84,7 +84,7 @@ function maxDimension(tier) {
     while (player.money.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
             dimension.cost.lte(Decimal.MAX_NUMBER))) {
       player.money = player.money.minus(dimension.cost.times(10));
-      buyUntilTen(tier)
+      buyUntilTen(tier);
     }
       
     // This blob is the post-e308 bulk-buy math, explicitly ignored if abnormal cost increases are active
@@ -127,12 +127,12 @@ function buyUntilTen(tier) {
   dimension.bought += dimension.remainingUntil10;
   dimension.pow = dimension.pow.times(getBuyTenMultiplier())
 
-  if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier)
-  else if (NormalChallenge(9)) multiplySameCosts(dimension.cost)
-  else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier))
+  if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
+  else if (NormalChallenge(9)) multiplySameCosts(dimension.cost);
+  else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
   
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-    player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease)
+    player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   }
 }
 
@@ -590,14 +590,16 @@ function gameLoop(diff, options = {}) {
 
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
 
-    if (player.secondAmount.neq(0)) player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff/100));
+    if (player.secondAmount.neq(0)) {
+      player.matter = player.matter.times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
+    }
     if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
         Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` + 
           `${shorten(player.matter, 2, 2)} matter.`);
         softReset(0);
     }
 
-    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff/100))
+    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
 
     if (NormalChallenge(3).isRunning || player.matter.gte(1)) {
       player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)));
@@ -764,8 +766,9 @@ function gameLoop(diff, options = {}) {
 
     if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';
-        if ((!challenge || player.options.retryChallenge) && (player.bestInfinityTime <= 60000 || player.break)) {}
-        else showTab('emptiness');
+        if ((challenge && !player.options.retryChallenge) || (player.bestInfinityTime > 60000 && !player.break)) {
+          showTab("emptiness");
+        }
     } else document.getElementById("bigcrunch").style.display = 'none';
 
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
@@ -783,7 +786,7 @@ function gameLoop(diff, options = {}) {
 
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
-    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin
+    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin;
 
     mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 
@@ -928,7 +931,7 @@ function simulateTime(seconds, real, fast) {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
 
-    const offlineIncreases = ["While you were away"]
+    const offlineIncreases = ["While you were away"];
     // OoM increase
     const oomVarNames = ["money", "infinityPower", "timeShards"];
     const oomResourceNames = ["antimatter", "infinity power", "time shards"];
@@ -945,7 +948,7 @@ function simulateTime(seconds, real, fast) {
     const linearResourceNames = ["infinities", "eternities"];
     for (let i = 0; i < linearVarNames.length; i++) {
       const varName = linearVarNames[i];
-      const linearIncrease = Decimal.sub(player[varName], playerStart[varName])
+      const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
       if (!Decimal.eq(player[varName], playerStart[varName])) {
         offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
       }
@@ -955,8 +958,8 @@ function simulateTime(seconds, real, fast) {
       const currentActivations = player.blackHole[i].activations;
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
-      const pluralSuffix = activationsDiff == 1 ? " time" : " times";
-      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i+1} activated  ${activationsDiff} ${pluralSuffix}`);
+      const pluralSuffix = activationsDiff === 1 ? " time" : " times";
+      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
     }
     popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {

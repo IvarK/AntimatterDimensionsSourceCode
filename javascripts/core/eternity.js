@@ -57,7 +57,7 @@ function eternity(force, auto, switchingDilation) {
   }
   
   player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-  player.currentEternityChall = "";
+  player.challenge.eternity.current = 0;
   player.dilation.active = false;
   resetInfinityRuns();
   fullResetInfDimensions();
@@ -99,22 +99,20 @@ function eternity(force, auto, switchingDilation) {
 }
 
 function initializeChallengeCompletions() {
-  player.challenges = [];
+  NormalChallenge.clearCompletions();
+  InfinityChallenge.clearCompletions();
   if (EternityMilestone.keepAutobuyers.isReached) {
-    for (const challenge of NormalChallenge.all) {
-      challenge.complete();
-    }
+    NormalChallenge.completeAll();
   }
   if (Achievement(133).isEnabled) {
-    for (const challenge of InfinityChallenge.all) {
-      challenge.complete();
-    }
+    InfinityChallenge.completeAll();
   }
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
 }
 
 function initializeResourcesAfterEternity() {
   player.sacrificed = new Decimal(0);
-  player.currentChallenge = "";
   player.infinitied = new Decimal(0);
   player.bestInfinityTime = 9999999999;
   player.thisInfinityTime = 0;
@@ -146,7 +144,6 @@ function initializeResourcesAfterEternity() {
   }
   player.dimlife = true;
   player.dead = true;
-  player.challengeTarget = new Decimal(0);
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {
     player.autoSacrifice = 1;

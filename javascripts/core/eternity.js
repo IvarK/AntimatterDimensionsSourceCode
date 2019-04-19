@@ -57,7 +57,7 @@ function eternity(force, auto, switchingDilation) {
   }
   
   player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-  player.challenge.current.eternity = 0;
+  player.challenge.eternity.current = 0;
   player.dilation.active = false;
   resetInfinityRuns();
   fullResetInfDimensions();

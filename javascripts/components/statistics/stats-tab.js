@@ -41,7 +41,7 @@ Vue.component("stats-tab", {
   methods: {
     update() {
       const progress = PlayerProgress.current;
-      this.isChallengeTabUnlocked = player.challenges.length > 1;
+      this.isChallengeTabUnlocked = player.challenge.normal.challengeBits || player.challenge.infinity.challengeBits;
       this.isInfinitiesTabUnlocked = progress.isInfinityUnlocked;
       this.isEternitiesTabUnlocked = progress.isEternityUnlocked;
       this.isRealitiesTabUnlocked = progress.isRealityUnlocked;

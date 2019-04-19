@@ -1,5 +1,5 @@
 function canEternity() {
-  const challenge = EternityChallenge.current();
+  const challenge = EternityChallenge.current;
   if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
   if (challenge !== undefined && !challenge.canBeCompleted) return false;
   return true;
@@ -10,7 +10,7 @@ function eternity(force, auto, switchingDilation) {
       if (!canEternity()) force = true;
     }
     if (force) {
-      player.currentEternityChall = "";
+      player.challenge.eternity.current = 0;
     }
     else {
       if (!canEternity()) return false;
@@ -23,8 +23,8 @@ function eternity(force, auto, switchingDilation) {
       addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
     }
     if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (EternityChallenge.isRunning()) {
-      const challenge = EternityChallenge.current();
+    if (EternityChallenge.isRunning) {
+      const challenge = EternityChallenge.current;
       challenge.addCompletion();
       if (Perk.studyECBulk.isBought) {
         while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
@@ -48,18 +48,9 @@ function eternity(force, auto, switchingDilation) {
         player.eternities += Effects.product(RealityUpgrade(3));
     }
     player.sacrificed = new Decimal(0);
-    player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of NormalChallenge.all) {
-        challenge.complete();
-      }
-    }
-    if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
-    }
-    player.currentChallenge = "";
+
+    resetChallengesOnEternity();
+
     player.infinitied = new Decimal(0);
     player.bestInfinityTime = 999999999999;
     player.thisInfinityTime = 0;
@@ -90,12 +81,11 @@ function eternity(force, auto, switchingDilation) {
     player.totalTickGained = 0;
     player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
     player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = new Decimal(0);
     if (player.eternities < 7 && !Achievement(133).isEnabled) {
         player.autoSacrifice = 1;
     }
     player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-    player.currentEternityChall = "";
+    player.challenge.eternity.current = 0;
     player.autoIP = new Decimal(0);
     player.autoTime = 1e300;
     player.eterc8ids = 50;

@@ -46,8 +46,22 @@ var player = {
   secretAchievements: new Set(),
   infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0],
-  challenges: [],
-  currentChallenge: "",
+  challenge: {
+    normal: {
+      current: 0,
+      bestTimes: Array.repeat(defaultMaxTime, 11),
+      completedBits: 0,
+    },
+    infinity: {
+      current: 0,
+      bestTimes: Array.repeat(defaultMaxTime, 8),
+      completedBits: 0,
+    },
+    eternity: {
+      current: 0,
+      unlocked: 0,
+    }
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
@@ -83,15 +97,13 @@ var player = {
     themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  challengeTimes: Array.repeat(defaultMaxTime, 11),
-  infchallengeTimes: Array.repeat(defaultMaxTime, 8),
   lastTenRuns: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenRealities: Array.from({length:10}, () => [defaultMaxTime, new Decimal(1), 0, defaultMaxTime]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   overXGalaxies: 10,
-  version: 10,
+  version: 13,
   infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
@@ -215,7 +227,6 @@ var player = {
   },
   offlineProd: 0,
   offlineProdCost: 1e7,
-  challengeTarget: new Decimal(0),
   autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
@@ -243,8 +254,6 @@ var player = {
   },
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
-  currentEternityChall: "",
-  eternityChallUnlocked: 0,
   etercreq: 0,
   autoIP: new Decimal(0),
   autoTime: 1e300,
@@ -472,7 +481,9 @@ var player = {
       eternity: true,
       dilation: true,
       reality: true
-    }
+    },
+    // TODO: remove before test ends
+    testVersion: 33,
   }
 };
 

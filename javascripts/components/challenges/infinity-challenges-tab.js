@@ -58,7 +58,9 @@ Vue.component("infinity-challenges-tab", {
   },
   computed: {
     nextAtDisplay() {
-      const next = nextAt[this.postChallUnlocked];
+      const next = this.postChallUnlocked < 8
+        ? InfinityChallenge(this.postChallUnlocked + 1).config.unlockAM
+        : undefined;
       return next === undefined
         ? "All Infinity Challenges unlocked"
         : `Next challenge unlocks at ${this.shorten(next, 0, 0)} antimatter.`;

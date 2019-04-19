@@ -235,14 +235,13 @@ function completeReality(force, reset, auto = false) {
 
   player.sacrificed = new Decimal(0);
 
-  player.challenges = [];
-  let isRUPG10Bought = RealityUpgrade(10).isBought;
-  if (isRUPG10Bought) {
-    for (let challenge of NormalChallenge.all) {
-      challenge.complete();
-    }
-  }
-  player.currentChallenge = "";
+  NormalChallenge.clearCompletions();
+  InfinityChallenge.clearCompletions();
+  const isRUPG10Bought = RealityUpgrade(10).isBought;
+  if (isRUPG10Bought) NormalChallenge.completeAll();
+
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
   if (!isRUPG10Bought) player.infinityUpgrades.clear();
   player.infinitied = new Decimal(0);
   player.infinitiedBank = new Decimal(0);
@@ -289,15 +288,14 @@ function completeReality(force, reset, auto = false) {
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
-  player.challengeTarget = new Decimal(0);
   if (!isRUPG10Bought) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
   player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
   player.reality.lastAutoEC = 0;
-  player.currentEternityChall = "";
-  player.eternityChallUnlocked = 0;
+  player.challenge.eternity.current = 0;
+  player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
   player.autoIP = new Decimal(0);
   player.autoTime = 1e300;

@@ -167,7 +167,7 @@ function playerInfinityUpgradesOnEternity() {
 
 function breakInfinity() {
   if (!Autobuyer.infinity.hasMaxedInterval) return false;
-  if (InfinityChallenge.isRunning()) return false;
+  if (InfinityChallenge.isRunning) return false;
   player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
   GameUI.update();
@@ -362,23 +362,26 @@ function failChallenge() {
 }
 
 function exitChallenge() {
-    if (NormalChallenge.current() || InfinityChallenge.current()) {
-        startChallenge("", new Decimal(0));
-    } else if (player.currentEternityChall !== "") {
-        player.currentEternityChall = ""
-        player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
-        eternity(true)
-    }
+  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
+    secondSoftReset();
+    Tab.dimensions.normal.show();
+  } else if (EternityChallenge.isRunning) {
+    player.challenge.eternity.current = 0;
+    player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
+    eternity(true);
+  }
 }
 
 function unlockEChall(idx) {
-    if (player.eternityChallUnlocked == 0) {
-        player.eternityChallUnlocked = idx
-        if (!justImported) {
-          Tab.challenges.eternity.show();
-        }
-        if (idx !== 12 && idx !== 13) player.etercreq = idx
+  if (player.challenge.eternity.unlocked === 0) {
+    player.challenge.eternity.unlocked = idx;
+    if (!justImported) {
+      Tab.challenges.eternity.show();
     }
+    if (idx !== 12 && idx !== 13) player.etercreq = idx;
+  }
 }
 
 function quickReset() {
@@ -450,8 +453,6 @@ setInterval(function() {
     kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);
     kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
 }, 10000)
-
-var nextAt = [new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e12000"), new Decimal("1e14000"), new Decimal("1e18000"), new Decimal("1e20000"), new Decimal("1e23000"), new Decimal("1e28000")]
 
 var ttMaxTimer = 0
 setInterval(function() {
@@ -698,7 +699,7 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
-    const challenge = NormalChallenge.current() || InfinityChallenge.current();
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
     if (player.money.lte(Decimal.MAX_NUMBER) ||
         (player.break && !challenge) || (challenge && player.money.lte(challenge.goal))) {
 
@@ -796,15 +797,9 @@ function gameLoop(diff, options = {}) {
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
 
-    while (player.money.gte(nextAt[player.postChallUnlocked]) && !InfinityChallenge(8).isCompleted && !InfinityChallenge(8).isUnlocked) {
-        if (player.postChallUnlocked != 8) player.postChallUnlocked += 1
-        if (player.eternities > 6) {
-          InfinityChallenge(player.postChallUnlocked).complete();
-          Autobuyer.tryUnlockAny();
-        }
-    }
-    replicantiLoop(diff)
+    tryUnlockInfinityChallenges();
 
+    replicantiLoop(diff)
 
     if (player.infMultBuyer) {
       InfinityUpgrade.ipMult.autobuyerTick();

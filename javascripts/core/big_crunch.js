@@ -7,7 +7,7 @@ function bigCrunchAnimation() {
 }
 
 function bigCrunchReset(disableAnimation = false) {
-  const challenge = NormalChallenge.current() || InfinityChallenge.current();
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (player.money.lt(Decimal.MAX_NUMBER) || (challenge && player.money.lt(challenge.goal))) {
     return;
   }
@@ -50,7 +50,8 @@ function bigCrunchReset(disableAnimation = false) {
     Autobuyer.tryUnlockAny();
   }
   if (!player.options.retryChallenge) {
-    player.currentChallenge = "";
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
   }
 
   // FIXME: Infinitified is now Decimal so decide what happens here!

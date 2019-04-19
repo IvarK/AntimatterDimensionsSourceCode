@@ -243,7 +243,7 @@ function unlock(current) {
   switch(current.target) {
     case "ec":
       if (!player.reality.automatorCommands.has(64)) return false
-      if (player.eternityChallUnlocked == parseInt(current.id)) return true
+      if (player.challenge.eternity.unlocked === parseInt(current.id, 10)) return true;
       justImported = true;
       if (TimeStudy.eternityChallenge(current.id).purchase()) {
         justImported = false;

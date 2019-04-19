@@ -97,7 +97,7 @@ const Enslaved = {
   useStoredTime() {
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
-    if (Enslaved.isRunning) release = storedTimeInsideEnslaved(release);
+    if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     gameLoop(0, { gameDiff: release });
     player.celestials.enslaved.stored = 0;
   },

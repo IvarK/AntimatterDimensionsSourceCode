@@ -188,12 +188,15 @@ function getBuyTenMultiplier() {
 
   if (Challenge(7).isRunning) dimMult = Math.pow(10 / 0.30, Math.random()) * 0.30;
 
-  dimMult += Effects.sum(Achievement(141).secondaryEffect);
+  dimMult += Effects.sum(
+    Achievement(141).secondaryEffect,
+    EternityChallenge(3).reward
+  );
+
   dimMult *= Effects.product(
     InfinityUpgrade.buy10Mult,
     Achievement(58)
   );
-  dimMult += Effects.sum(EternityChallenge(3).reward);
 
   dimMult *= getAdjustedGlyphEffect("powerbuy10");
 

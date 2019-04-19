@@ -1,16 +1,3 @@
-function resetChallengesOnEternity() {
-  NormalChallenge.clearCompletions();
-  InfinityChallenge.clearCompletions();
-  if (EternityMilestone.keepAutobuyers.isReached) {
-    NormalChallenge.completeAll();
-  }
-  if (Achievement(133).isEnabled) {
-    InfinityChallenge.completeAll();
-  }
-  player.challenge.normal.current = 0;
-  player.challenge.infinity.current = 0;
-}
-
 function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();

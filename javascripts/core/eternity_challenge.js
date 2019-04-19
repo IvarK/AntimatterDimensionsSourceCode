@@ -217,7 +217,7 @@ EternityChallenge.all = EternityChallengeState.all;
  * @returns {EternityChallengeState}
  */
 Object.defineProperty(EternityChallenge, "current", {
-  get: () => (player.challenge.eternity.current
+  get: () => (player.challenge.eternity.current > 0
     ? EternityChallenge(player.challenge.eternity.current)
     : undefined),
 });

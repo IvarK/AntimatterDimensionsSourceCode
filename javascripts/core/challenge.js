@@ -107,7 +107,7 @@ function NormalChallenge(id) {
  * @returns {NormalChallengeState}
  */
 Object.defineProperty(NormalChallenge, "current", {
-  get: () => (player.challenge.normal.current
+  get: () => (player.challenge.normal.current > 0
     ? NormalChallenge(player.challenge.normal.current)
     : undefined),
 });
@@ -224,7 +224,7 @@ function InfinityChallenge(id) {
  * @returns {InfinityChallengeState}
  */
 Object.defineProperty(InfinityChallenge, "current", {
-  get: () => (player.challenge.infinity.current
+  get: () => (player.challenge.infinity.current > 0
     ? InfinityChallenge(player.challenge.infinity.current)
     : undefined),
 });

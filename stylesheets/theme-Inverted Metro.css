@@ -26,18 +26,6 @@ body.t-inverted-metro {
     border: 1px solid black;
 }
 
-.t-inverted-metro .tabbtn {
-    background: #EEEEEE;
-    border: 1px solid #2196F3;
-    border-radius: 0;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-inverted-metro .tabbtn:hover {
-    background: #2196F3;
-    border: 1px solid #2196F3;
-}
-
 .t-inverted-metro .secondarytabbtn {
     background: #EEEEEE;
     border: 1px solid #2196F3;

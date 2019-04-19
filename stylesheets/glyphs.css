@@ -487,16 +487,10 @@
   background-color: gainsboro;
 }
 
-.t-dark-metro .c--glyph-inventory__slot {
-  background-color: #333;
-}
-
-.t-dark .c-glyph-inventory__slot {
-  background-color: #333;
-}
-
+.t-dark .c-glyph-inventory__slot,
+.t-dark-metro .c-glyph-inventory__slot,
 .t-s6 .c-glyph-inventory__slot {
-  background-color: #333333;
+  background-color: #333;
 }
 
 .l-glyph-inventory__sort {

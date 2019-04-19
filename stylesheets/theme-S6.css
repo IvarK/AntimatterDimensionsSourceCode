@@ -62,18 +62,6 @@ strong {
     color: #999;
 }
 
-.t-s6 .tabbtn {
-  color: #E0E0E0;
-  background: black;
-  border: 2px solid #1565C0;
-  text-shadow: 0 0 10px white;
-}
-
-.t-s6 .tabbtn:hover {
-    background: #1565C0;
-    color: black;
-}
-
 .t-s6 .secondarytabbtn {
     color: #E0E0E0;
     background: black;

@@ -6216,3 +6216,43 @@ kbd {
 .c-automator-blocks {
   width: 100%;
 }
+
+.o-automator-command {
+  border: 1px solid gainsboro;
+  padding: .5rem;
+  display: inline-block;
+  background: burlywood;
+  border-radius: .5rem;
+  width: 6rem;
+  user-select: none;
+  cursor: grab;
+}
+
+.c-automator-command-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-automator-block-editor {
+  overflow-y: scroll;
+  height: 100%;
+  background-color: black;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  box-sizing: border-box;
+  padding: .5rem;
+  tab-size: 1.5em;
+  -moz-tab-size: 1.5em;
+}
+
+.o-automator-block-input {
+  border: 1px solid gainsboro;
+  padding: .5rem;
+  display: inline-block;
+  background: burlywood;
+  border-radius: .5rem;
+  color: #4F5957;
+  font-size: 1.1rem;
+  font-family: Typewriter, serif;
+}

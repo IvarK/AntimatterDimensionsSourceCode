@@ -13,7 +13,9 @@ Vue.component("automator-block-editor", {
     
   },
   methods: {
-
+    log() {
+      console.log(this.lines)
+    }
   },
   template:
     `<div class="c-automator-editor l-automator-editor">
@@ -21,8 +23,8 @@ Vue.component("automator-block-editor", {
         <div class="o-automator-line-number--sizer">999</div>
       </div>
       <draggable :list="lines" group="blocks" class="c-automator-blocks">
-        <div v-for="block in lines"> {{ block }}</div>
-        <button slot="header" style="height: 30px">You have {{ lines.length }} lines</button>
+        <div v-for="block in lines"> {{ block.cmd }}</div>
+        <button slot="header" style="height: 30px" @click="log">You have {{ lines.length }} lines</button>
       </draggable>
     </div>`
 });

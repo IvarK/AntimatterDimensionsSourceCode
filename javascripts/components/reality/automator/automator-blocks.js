@@ -1,16 +1,30 @@
 Vue.component("automator-blocks", {
-  computed: {
-    getBlocks() {
-      return ['WAIT', 'BUY', 'IF'] // TODO
+  data() {
+    return {
+      blocks: [
+        { 
+          cmd: 'WAIT' 
+        } , { 
+          cmd: 'BUY' 
+        }, {
+          cmd: 'IF' 
+        }
+      ]
+    }
+  },
+  methods: {
+    log() {
+      console.log(this.blocks)
     }
   },
   template:
     `<div class="c-automator-docs">
       <draggable 
-        :list="getBlocks"
+        v-model="blocks"
         :sort="false"
-        :group="{ name: 'blocks', pull: 'clone', put: false }">
-        <div v-for="block in getBlocks" :key="block"> {{ block }}</div>
+        :group="{ name: 'blocks', pull: 'clone', revertClone: true, put: false }"
+        :move="log">
+        <div v-for="(block, index) in blocks" :key="index"> {{ block.cmd }}</div>
       </draggable>
     </div>`
 });

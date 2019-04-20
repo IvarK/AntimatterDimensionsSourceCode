@@ -943,7 +943,7 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "You really didn't need it anyway",
-    tooltip: () => "Get 800 galaxies without buying 8th dimensions in your current reality.",
+    tooltip: () => "Get 800 galaxies without buying 8th dimensions in your current infinity.",
     checkRequirement: () => player.galaxies >= 800 && player.reallydidnt,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."

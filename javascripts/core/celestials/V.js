@@ -22,7 +22,7 @@ class VRunUnlockState extends GameMechanicState {
   get formattedDescription() {
     const val = this.conditionValue;
     const formatted = this.config.format ? this.config.format(val) : shorten(val);
-    return this.config.description.replace("{value}", formatted).replace("{s}", pluralize("", value));
+    return this.config.description.replace("{value}", formatted).replace("{s}", pluralize("", val));
   }
 
   set completions(value) {
@@ -82,7 +82,7 @@ const V_UNLOCKS = {
     id: 2,
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 23 V-achievements",
-    effect: () => Math.pow(1.1, Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement"))),
+    effect: () => Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement")),
     format: x => formatX(x),
     requirement: () => V.totalRunUnlocks >= 23
     },

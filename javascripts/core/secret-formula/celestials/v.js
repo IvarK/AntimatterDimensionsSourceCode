@@ -4,7 +4,7 @@ GameDatabase.celestials.v = {
     eternities: 1e65,
     infinities: 1e150,
     dilatedTime: 1e300,
-    replicanti: new Decimal("1e270000")
+    replicanti: new Decimal("1e280000")
   },
   runUnlocks: [
     {

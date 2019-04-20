@@ -15,6 +15,12 @@ const automator_blocks = [
     hasInput: true,
     nested: true
   }, {
+    cmd: 'WHILE',
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
+    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    hasInput: true,
+    nested: true
+  }, {
     cmd: 'UNLOCK',
     targets: ['EC', 'DILATION'],
     hasInput: true,

@@ -6221,7 +6221,7 @@ kbd {
   border: 1px solid gainsboro;
   padding: .5rem;
   display: inline-block;
-  background: burlywood;
+  background: #de8787;
   border-radius: .5rem;
   width: 6rem;
   user-select: none;

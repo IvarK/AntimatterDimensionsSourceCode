@@ -23,6 +23,8 @@ class BlackHoleUpgradeState {
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
     EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
+    this._lazyValue.invalidate();
+    this._lazyCost.invalidate();
   }
 }
 

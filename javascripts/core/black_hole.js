@@ -22,6 +22,8 @@ class BlackHoleUpgradeState {
     if (!this.isAffordable) return;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
+    this._lazyValue.invalidate();
+    this._lazyCost.invalidate();
     EventHub.dispatch(GameEvent.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }

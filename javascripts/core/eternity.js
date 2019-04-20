@@ -144,6 +144,7 @@ function initializeResourcesAfterEternity() {
   }
   player.dimlife = true;
   player.dead = true;
+  player.reallydidnt = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {
     player.autoSacrifice = 1;

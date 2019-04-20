@@ -46,11 +46,14 @@ Vue.component("automator-block-editor", {
       this.lines.splice(idx, 1)
     },
     parseLines() {
+      $("#automator").val( parseLines(this.lines).join("\n") )
+      updateState()
       console.log(parseLines(this.lines))
     }
   },
   template:
     `<div class="c-automator-block-editor l-automator-editor">
+      <button @click="parseLines">Parse <br>into <br>automator</button>
       <draggable v-model="lines" group="code-blocks" class="c-automator-blocks">
         <automator-single-block 
           v-for="(block, index) in lines" 

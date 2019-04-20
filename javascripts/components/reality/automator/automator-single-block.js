@@ -13,6 +13,12 @@ Vue.component("automator-single-block", {
   mounted() {
     this.b = this.block
   },
+  methods: {
+    deleteBlockFromNest(id) {
+      let idx = this.b.nest.findIndex( x => x.id == id)
+      this.b.nest.splice(idx, 1)
+    }
+  },
   computed: {
     hasInput() {
       return this.b.hasInput && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
@@ -39,7 +45,7 @@ Vue.component("automator-single-block", {
             :lineNumber="index"
             :block="block"
             :updateBlock="updateBlock"
-            :deleteBlock="deleteBlock"></automator-single-block>
+            :deleteBlock="deleteBlockFromNest"></automator-single-block>
         </draggable>
     </div>`
 });

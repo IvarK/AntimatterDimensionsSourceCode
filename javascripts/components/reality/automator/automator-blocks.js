@@ -1,16 +1,44 @@
 const automator_blocks = [
   { 
-    id: 0,
     cmd: 'WAIT',
-    targets: ['IP', 'EP', 'AM', 'TIME'],
+    targets: ['IP', 'EP', 'AM', 'TIME', 'REPLICANTI', 'RG', 'TT'],
     hasInput: true
   } , { 
-    id: 1,
-    cmd: 'BUY' 
+    cmd: 'BUY',
+    targets: ['STUDY', 'STUDYUNTIL', 'TTIP', 'TTEP', 'TTAM', 'TTMAX'],
+    hasInput: true,
+    targetsWithoutInput: ['TTMAX']
   }, {
-    id: 2,
-    cmd: 'IF' 
-  }
+    cmd: 'IF',
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
+    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    hasInput: true,
+    nested: true
+  }, {
+    cmd: 'UNLOCK',
+    targets: ['EC', 'DILATION'],
+    hasInput: true,
+    targetsWithoutInput: ['DILATION']
+  }, {
+    cmd: 'START',
+    targets: ['EC', 'DILATION'],
+    hasInput: true,
+    targetsWithoutInput: ['DILATION']
+  }, {
+    cmd: 'CHANGE',
+    targets: ['IP-autobuyer', 'EP-autobuyer'],
+    hasInput: true
+  }, {
+    cmd: 'RESPEC'
+  }, {
+    cmd: 'ETERNITY'
+  }, {
+    cmd: 'STOP'
+  }, {
+    cmd: 'LOAD',
+    hasInput: true
+  },
+
 ]
 
 
@@ -20,12 +48,27 @@ Vue.component("automator-blocks", {
       blocks: automator_blocks
     }
   },
+  methods: {
+    clone(block) {
+      let b = {
+        ...block,
+        id: UIID.next()
+      }
+
+      if (block.nested) b.nest = []
+      if (block.targets) b.target = ""
+      if (block.hasInput) b.inputValue = ""
+      if (block.secondaryTargets) b.secondaryTarget = ""
+      return b
+    }
+  },
   template:
     `<div class="c-automator-docs">
       <draggable 
         :list="blocks"
         :group="{ name: 'code-blocks', pull: 'clone', put: false }"
         :sort="false"
+        :clone="clone"
         class="c-automator-command-list">
         <div v-for="block in blocks" :key="block.id" class="o-automator-command"> {{ block.cmd }}</div>
       </draggable>

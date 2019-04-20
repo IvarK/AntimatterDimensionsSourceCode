@@ -6234,6 +6234,16 @@ kbd {
   align-items: center;
 }
 
+.c-automator-block-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.c-automator-block-row > * {
+  margin-right: .5rem
+}
+
 .c-automator-block-editor {
   overflow-y: scroll;
   height: 100%;
@@ -6255,4 +6265,24 @@ kbd {
   color: #4F5957;
   font-size: 1.1rem;
   font-family: Typewriter, serif;
+}
+
+.o-automator-linenumber {
+  color: #55ff55;
+  font-size: 1.4rem;
+}
+
+.l-automator-nested-block {
+  width: fit-content;
+  padding: 1rem;
+  border: 2px dotted #55ff55;
+  margin-left: 3rem;
+  margin-top: .5rem;
+  min-widtH: 30rem;
+}
+
+.o-automator-block-delete {
+  color: #ff3333;
+  font-size: 1.7rem;
+  cursor: pointer;
 }

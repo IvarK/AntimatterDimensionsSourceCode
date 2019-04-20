@@ -6211,3 +6211,8 @@ kbd {
   color: black;
   font-size: 1.5rem;
 }
+
+
+.c-automator-blocks {
+  width: 100%;
+}

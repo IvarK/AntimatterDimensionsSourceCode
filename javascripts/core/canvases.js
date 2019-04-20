@@ -76,43 +76,46 @@ let nodeOptions = {};
 let network = null;
 
 
-// Primary is lifted from the study tree (mostly), secondary is primary -15% l in hsl, apart from reality which is -10%
+// Primary is lifted from the study tree (mostly),
+// secondary is primary -15% l in hsl, apart from reality which is -10%
 const perkColors = {
-  normal: {
+  [PerkFamily.NORMAL]: {
     primary: "#22aa48",
     secondary: "#156a2d"
   },
-  infinity: {
+  [PerkFamily.INFINITY]: {
     primary: "#b67f33",
     secondary: "#7b5623"
   },
-  eternity: {
+  [PerkFamily.ETERNITY]: {
     primary: "#b241e3",
     secondary: "#8b1cba"
   },
-  dilation: {
+  [PerkFamily.DILATION]: {
     primary: "#64dd17",
     secondary: "#449810"
   },
-  reality: {
+  [PerkFamily.REALITY]: {
     primary: "#0b600e",
     secondary: "#063207"
   },
-  automator: {
+  [PerkFamily.AUTOMATOR]: {
     primary: "#ff0000",
     secondary: "#b30000"
   },
-  achievement: {
+  [PerkFamily.ACHIEVEMENT]: {
     primary: "#fdd835",
     secondary: "#e3ba02"
   },
 };
+
 function getNodeColor(perk) {
   const canBeBought = perk.canBeBought;
   const isBought = perk.isBought;
 
-  const primaryColor = perkColors[perk.config.type].primary;
-  const secondaryColor = perkColors[perk.config.type].secondary;
+  const perkColor = perkColors[perk.config.family];
+  const primaryColor = perkColor.primary;
+  const secondaryColor = perkColor.secondary;
 
   let backgroundColor;
   if (canBeBought) backgroundColor = "#000000";

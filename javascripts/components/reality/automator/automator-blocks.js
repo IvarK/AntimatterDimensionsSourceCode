@@ -21,6 +21,9 @@ const automator_blocks = [
     hasInput: true,
     nested: true
   }, {
+    cmd: 'GOTO',
+    hasInput: true
+  }, {
     cmd: 'UNLOCK',
     targets: ['EC', 'DILATION'],
     hasInput: true,
@@ -43,6 +46,10 @@ const automator_blocks = [
   }, {
     cmd: 'LOAD',
     hasInput: true
+  }, {
+    cmd: 'BLOCK',
+    getTargets: () => [], // TODO
+    targets: []
   },
 
 ]

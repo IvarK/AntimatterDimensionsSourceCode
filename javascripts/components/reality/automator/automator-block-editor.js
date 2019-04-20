@@ -1,3 +1,27 @@
+function parseBlock(block, indentation = 0) {
+  let ret = "\t".repeat(indentation) + block.cmd
+
+  if (block.target) ret += " " + block.target
+  if (block.secondaryTarget) ret += " " + block.secondaryTarget
+  if (block.inputValue) ret += " " + block.inputValue
+  if (block.cmd == "IF" || block.cmd == "WHILE") ret += " " + "{"
+
+  return ret
+}
+
+function parseLines(l, indentation = 0) {
+  let lines = []
+  for (let i = 0; i < l.length; i++) {
+    lines.push(parseBlock(l[i], indentation))
+    if (l[i].cmd == "IF" || l[i].cmd == "WHILE") {
+      lines.push( ...parseLines(l[i].nest, indentation + 1) )
+      lines.push("\t".repeat(indentation) + "}")
+    }
+  }
+
+  return lines
+}
+
 Vue.component("automator-block-editor", {
   data() {
     return {
@@ -20,6 +44,9 @@ Vue.component("automator-block-editor", {
     deleteBlock(id) {
       let idx = this.lines.findIndex( x => x.id == id)
       this.lines.splice(idx, 1)
+    },
+    parseLines() {
+      console.log(parseLines(this.lines))
     }
   },
   template:

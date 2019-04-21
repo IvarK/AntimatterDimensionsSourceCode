@@ -1,5 +1,369 @@
+// WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {
-  0: () => {
-    const a = 1;
+  patches: {
+    1: player => {
+      for (let i = 0; i < player.autobuyers.length; i++) {
+        if (player.autobuyers[i] % 1 !== 0) {
+          player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1;
+        }
+      }
+      player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    },
+    2: player => {
+      if (player.dimensionMultDecrease !== 10) {
+        if (player.dimensionMultDecrease === 9) {
+          player.dimensionMultDecrease = 10;
+          player.dimensionMultDecreaseCost = 1e8;
+          player.infinityPoints = player.infinityPoints.plus(1e8);
+        }
+        if (player.dimensionMultDecrease === 8) {
+          player.dimensionMultDecrease = 10;
+          player.dimensionMultDecreaseCost = 1e8;
+          player.infinityPoints = player.infinityPoints.plus(2.1e9);
+        }
+        if (player.dimensionMultDecrease === 7) {
+          player.dimensionMultDecrease = 10;
+          player.dimensionMultDecreaseCost = 1e8;
+          player.infinityPoints = player.infinityPoints.plus(4.21e10);
+        }
+      }
+    },
+    5: player => {
+      player.newsArray = [];
+    },
+    9: player => {
+      const achs = [];
+      if (player.achievements.delete("r22")) achs.push("r35");
+      if (player.achievements.delete("r35")) achs.push("r76");
+      if (player.achievements.delete("r41")) achs.push("r22");
+      if (player.achievements.delete("r76")) achs.push("r41");
+      for (const id of achs) player.achievements.add(id);
+      player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20);
+    },
+    9.5: player => {
+      if (player.timestudy.studies.includes(191)) player.timestudy.theorem = player.timestudy.theorem.plus(100);
+    },
+    10: player => {
+      if (player.timestudy.studies.includes(72)) {
+        for (i = 4; i < 8; i++) {
+          player[`infinityDimension${i}`].amount = player[`infinityDimension${i}`].amount
+            .div(Sacrifice.totalBoost.pow(0.02));
+        }
+      }
+    },
+    12: player => {
+      // Updates TD costs to harsher scaling
+      for (i = 1; i < 5; i++) {
+        if (player[`timeDimension${i}`].cost.gte("1e1300")) {
+          player[`timeDimension${i}`].cost = Decimal.pow(
+            timeDimCostMults[i] * 2.2,
+            player[`timeDimension${i}`].bought
+          ).times(timeDimStartCosts[i]);
+        }
+      }
+    },
+    12.1: player => {
+      player.achievements.delete("s36");
+    },
+    13: player => {
+      // 12.1 is currently on live, will be updated to 13 after release
+
+      // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST
+      if (isDevEnvironment()) GameStorage.devMigrations.setLatestTestVersion(player);
+
+      // Last update version check, fix emoji/cancer issue, account for new handling of r85/r93 rewards,
+      // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
+      // And all other kinds of stuff
+      if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
+      if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
+
+      player.realTimePlayed = player.totalTimePlayed;
+      player.thisReality = player.totalTimePlayed;
+      player.thisInfinityRealTime = player.thisInfinityTime;
+      player.thisEternityRealTime = player.thisEternity;
+      player.thisRealityRealTime = player.thisReality;
+      for (let i = 0; i < 10; i++) {
+        player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
+        player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
+      }
+
+      GameStorage.migrations.normalizeTimespans(player);
+      GameStorage.migrations.convertAutobuyerMode(player);
+      GameStorage.migrations.fixChallengeIds(player);
+      GameStorage.migrations.adjustMultCosts(player);
+      GameStorage.migrations.convertAchivementsToNumbers(player);
+      GameStorage.migrations.adjustGameCreatedTime(player);
+      GameStorage.migrations.moveSavedStudyTrees(player);
+      GameStorage.migrations.convertEPMult(player);
+      GameStorage.migrations.moveChallengeInfo(player);
+      GameStorage.migrations.adjustWhy(player);
+      GameStorage.migrations.adjustThemes(player);
+      GameStorage.migrations.removeAchPow(player);
+      GameStorage.migrations.adjustSacrificeConfirmation(player);
+      GameStorage.migrations.migrateNotation(player);
+      GameStorage.migrations.fixAutobuyers(player);
+    }
+  },
+
+  normalizeTimespans(player) {
+    player.realTimePlayed *= 100;
+    player.totalTimePlayed *= 100;
+    player.thisInfinityTime *= 100;
+    player.thisEternity *= 100;
+    player.thisReality *= 100;
+    player.bestInfinityTime = player.bestInfinityTime === 9999999999
+      ? 999999999999
+      : player.bestInfinityTime * 100;
+    player.bestEternity = player.bestEternity === 9999999999
+      ? 999999999999
+      : player.bestEternity * 100;
+    for (let i = 0; i < 10; i++) {
+      player.lastTenEternities[i][0] *= 100;
+      player.lastTenRuns[i][0] *= 100;
+    }
+
+    player.challengeTimes = player.challengeTimes.map(e => e * 100);
+    player.infchallengeTimes = player.infchallengeTimes.map(e => e * 100);
+  },
+
+  convertAutobuyerMode(player) {
+    for (let i = 0; i < 8; i++) {
+      const autobuyer = player.autobuyers[i];
+      if (autobuyer % 1 === 0) continue;
+      if (autobuyer.target < 10) {
+        autobuyer.target = AutobuyerMode.BUY_SINGLE;
+      } else {
+        autobuyer.target = AutobuyerMode.BUY_10;
+      }
+    }
+    const tickspeedAutobuyer = player.autobuyers[8];
+    if (tickspeedAutobuyer % 1 === 0) {
+      if (tickspeedAutobuyer.target < 10) {
+        tickspeedAutobuyer.target = AutobuyerMode.BUY_SINGLE;
+      } else {
+        tickspeedAutobuyer.target = AutobuyerMode.BUY_MAX;
+      }
+    }
+  },
+
+  fixChallengeIds(player) {
+    let wasFucked = false;
+    function unfuckChallengeId(id) {
+      if (!id.startsWith("challenge")) return id;
+      wasFucked = true;
+      const legacyId = parseInt(id.substr(9), 10);
+      const config = GameDatabase.challenges.normal.find(c => c.legacyId === legacyId);
+      return `challenge${config.id}`;
+    }
+    player.currentChallenge = unfuckChallengeId(player.currentChallenge);
+    player.challenges = player.challenges.map(unfuckChallengeId);
+    if (wasFucked) {
+      player.challengeTimes = GameDatabase.challenges.normal
+        .slice(1)
+        .map(c => player.challengeTimes[c.legacyId - 2]);
+    }
+  },
+
+  adjustMultCosts(player) {
+    if (player.tickSpeedMultDecreaseCost !== undefined) {
+      player.infinityRebuyables[0] = Math.round(Math.log(player.tickSpeedMultDecreaseCost / 3e6) / Math.log(5));
+    }
+    if (player.dimensionMultDecreaseCost !== undefined) {
+      player.infinityRebuyables[1] = Math.round(Math.log(player.dimensionMultDecreaseCost / 1e8) / Math.log(5e3));
+    }
+    delete player.tickSpeedMultDecrease;
+    delete player.tickSpeedMultDecreaseCost;
+    delete player.dimensionMultDecrease;
+    delete player.dimensionMultDecreaseCost;
+  },
+
+  convertAchivementsToNumbers(player) {
+    if (player.achievements.countWhere(e => typeof e !== "number") === 0) return;
+    const old = player.achievements;
+    // In this case, player.secretAchievements should be an empty set
+    player.achievements = new Set();
+    for (const oldId of old) {
+      const newId = parseInt(oldId.slice(1), 10);
+      if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
+      if (oldId.startsWith("r")) {
+        if (GameDatabase.achievements.normal.find(a => a.id === newId) === undefined) {
+          throw crash(`Unrecognized achievement ${oldId}`);
+        }
+        player.achievements.add(newId);
+      } else if (oldId.startsWith("s")) {
+        if (GameDatabase.achievements.secret.find(a => a.id === newId) === undefined) {
+          throw crash(`Unrecognized secret achievement ${newId}`);
+        }
+        player.secretAchievements.add(newId);
+      }
+    }
+  },
+
+  adjustGameCreatedTime(player) {
+    player.gameCreatedTime = Date.now() - player.realTimePlayed;
+  },
+
+  moveSavedStudyTrees(player) {
+    for (let num = 1; num <= 3; ++num) {
+      const tree = localStorage.getItem(`studyTree${num}`);
+      if (tree) player.timestudy.presets[num - 1].studies = tree;
+    }
+  },
+
+  convertEPMult(player) {
+    if (player.epmult === undefined) return;
+    const mult = new Decimal(player.epmult);
+    delete player.epmultCost;
+    delete player.epmult;
+    // The multiplier should never be less than 1, but we don't want to break anyone's save
+    if (mult.lte(1)) {
+      player.epmultUpgrades = 0;
+      return;
+    }
+    player.epmultUpgrades = mult.log(5);
+  },
+
+  moveChallengeInfo(player) {
+    function parseChallengeName(name) {
+      if (name.startsWith("challenge")) {
+        return { type: "normal", id: parseInt(name.slice(9), 10) };
+      }
+      if (name.startsWith("postc")) {
+        return { type: "infinity", id: parseInt(name.slice(5), 10) };
+      }
+      if (name !== "") throw crash(`Unrecognized challenge ID ${name}`);
+      return null;
+    }
+    if (player.challengeTimes) {
+      for (let i = 0; i < player.challengeTimes.length; ++i) {
+        player.challenge.normal.bestTimes[i] = Math.min(player.challenge.normal.bestTimes[i],
+          player.challengeTimes[i]);
+      }
+      delete player.challengeTimes;
+    }
+    if (player.infchallengeTimes) {
+      for (let i = 0; i < player.infchallengeTimes.length; ++i) {
+        player.challenge.infinity.bestTimes[i] = Math.min(player.challenge.infinity.bestTimes[i],
+          player.infchallengeTimes[i]);
+      }
+      delete player.infchallengeTimes;
+    }
+    if (player.currentChallenge !== undefined) {
+      const saved = parseChallengeName(player.currentChallenge);
+      delete player.currentChallenge;
+      if (saved) {
+        player.challenge[saved.type].current = saved.id;
+      }
+    }
+    if (player.challenges) {
+      for (const fullID of player.challenges) {
+        const parsed = parseChallengeName(fullID);
+        // eslint-disable-next-line no-bitwise
+        player.challenge[parsed.type].completedBits |= 1 << parsed.id;
+      }
+      delete player.challenges;
+    }
+    if (player.currentEternityChall !== undefined) {
+      const saved = player.currentEternityChall;
+      delete player.currentEternityChall;
+      if (saved.startsWith("eterc")) {
+        player.challenge.eternity.current = parseInt(saved.slice(5), 10);
+      } else if (saved !== "") throw crash(`Unrecognized eternity challenge ${saved}`);
+    }
+    if (player.eternityChallUnlocked !== undefined) {
+      player.challenge.eternity.unlocked = player.eternityChallUnlocked;
+      delete player.eternityChallUnlocked;
+    }
+    delete player.challengeTarget;
+  },
+
+  adjustWhy(player) {
+    if (player.why === undefined) return;
+    player.secretUnlocks.why = player.why;
+    delete player.why;
+  },
+
+  adjustThemes(player) {
+    delete player.options.themes;
+    if (player.options.theme === undefined) player.options.theme = "Normal";
+    delete player.options.secretThemeKey;
+  },
+
+  removeAchPow(player) {
+    delete player.achPow;
+  },
+
+  adjustSacrificeConfirmation(player) {
+    if (player.options.sacrificeConfirmation !== undefined) {
+      player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
+      delete player.options.sacrificeConfirmation;
+    }
+  },
+
+  migrateNotation(player) {
+    const notation = player.options.notation;
+    if (notation === undefined) {
+      player.options.notation = "Standard";
+    }
+    const notationMigration = {
+      "Mixed": "Mixed scientific",
+      "Default": "Brackets",
+      "Emojis": "Cancer"
+    };
+    if (notationMigration[notation] !== undefined) {
+      player.options.notation = notationMigration[notation];
+    }
+  },
+
+  fixAutobuyers(player) {
+    for (let i = 0; i < 12; i++) {
+      if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].target % 1 !== 0) {
+        player.autobuyers[i].target = AutobuyerMode.BUY_SINGLE;
+      }
+
+      if (
+        player.autobuyers[i] % 1 !== 0 &&
+          (player.autobuyers[i].bulk === undefined ||
+            isNaN(player.autobuyers[i].bulk) ||
+            player.autobuyers[i].bulk === null)
+      ) {
+        player.autobuyers[i].bulk = 1;
+      }
+    }
+    if (typeof player.autobuyers[9].bulk !== "number") {
+      player.autobuyers[9].bulk = 1;
+    }
+    if (
+      player.autobuyers[11] % 1 !== 0 &&
+      player.autobuyers[11].priority !== undefined &&
+      player.autobuyers[11].priority !== null &&
+      player.autobuyers[11].priority !== "undefined"
+    ) {
+      player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
+    }
+  },
+  
+  prePatch(saveData) {
+    // Initialize all possibly undefined properties that were not present in
+    // previous versions and which could be overwritten by deepmerge
+    saveData.totalmoney = saveData.totalmoney || saveData.money;
+    saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
+    saveData.version = saveData.version || 0;
+  },
+
+  patch(saveData) {
+    this.prePatch(saveData);
+    // This adds all the undefined properties to the save which are in player.js
+    const player = deepmerge.all([defaultStart, saveData]);
+    const versions = Object.keys(this.patches)
+      .map(parseFloat)
+      .sort();
+    let version;
+    while ((version = versions.find(v => player.version < v)) !== undefined) {
+      const patch = this.patches[version];
+      patch(player);
+      player.version = version;
+    }
+    return player;
   }
 };

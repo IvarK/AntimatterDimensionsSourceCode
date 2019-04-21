@@ -102,12 +102,67 @@ const GameStorage = {
 
   loadPlayerObject(playerObject) {
     this.saved = 0;
+
     postc8Mult = new Decimal(0);
     mult18 = new Decimal(1);
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
-    player = playerObject || defaultStart;
-    onLoad();
+
+    if (playerObject === undefined || playerObject === defaultStart) {
+      player = deepmerge.all([{}, defaultStart]);
+      if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
+    } else {
+      player = this.migrations.patch(playerObject);
+      this.devMigrations.patch(player);
+    }
+
     this.saves[this.currentSlot] = player;
+
+    if (isDevEnvironment()) {
+      guardFromNaNValues(player);
+    }
+
+    if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
+      NormalChallenge(1).complete();
+    }
+    if (player.secretUnlocks.fixed === "hasbeenfixed") {
+      SecretAchievement(42).unlock();
+    }
+
+    if (player.options.newsHidden) {
+      document.getElementById("game").style.display = "none";
+    }
+
+    recalculateAllGlyphs();
+    Autobuyer.tryUnlockAny();
+    Autobuyer.checkIntervalAchievements();
+    Autobuyer.checkBulkAchievements();
+    resizeCanvas();
+    updateAutomatorRows();
+    checkPerkValidity();
+    Teresa.checkPPShopValidity();
+    drawPerkNetwork();
+    updatePerkColors();
+    V.updateTotalRunUnlocks();
+    Enslaved.boostReality = false;
+    Theme.set(player.options.theme);
+    Notation.find(player.options.notation).setCurrent();
+
+    if (localStorage.getItem("automatorScript1") !== null) {
+      importAutomatorScript(localStorage.getItem("automatorScript1"));
+    }
+    automatorOn = player.reality.automatorOn;
+    if (automatorOn) $("#automatorOn")[0].checked = true;
+    automatorIdx = player.reality.automatorCurrentRow;
+
+    Lazy.invalidateAll();
+
+    let diff = new Date().getTime() - player.lastUpdate;
+    if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
+      diff = Enslaved.autoStoreRealTime(diff);
+    }
+    if (diff > 1000 * 1000) {
+      simulateTime(diff / 1000);
+    }
   }
 };

@@ -38,10 +38,6 @@
 var automatorRows = []
 var automatorIdx = 0
 var tryingToBuy = 0
-function updateState() {
-  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
-  automatorIdx = 0
-}
 
 function getAutomatorRows() {
   const realityFactor = Effects.max(0.7, Perk.automatorRowScaling);
@@ -385,6 +381,17 @@ function loadScript(num) {
     automatorIdx = 0
     GameUI.notify.info(`Automator script ${num} loaded`);
   }
+}
+
+function importAutomatorScript(script) {
+  var outputString = JSON.parse(script).join("\n")
+  document.getElementById("automator").value = outputString
+  updateAutomatorState()
+}
+
+function updateAutomatorState() {
+  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+  automatorIdx = 0
 }
 
 function buyAutomatorInstruction(id) {

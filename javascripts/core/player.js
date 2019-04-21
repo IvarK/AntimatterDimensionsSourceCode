@@ -481,9 +481,7 @@ let player = {
       eternity: true,
       dilation: true,
       reality: true
-    },
-    // TODO: remove before test ends
-    testVersion: 33,
+    }
   }
 };
 

@@ -1,36 +1,65 @@
 // Time studies
+const TimeTheorems = {
+  costMultipliers: {
+    AM: new Decimal("1e20000"),
+    IP: new Decimal(1e100),
+    EP: 2,
+  },
 
-function buyWithAntimatter() {
-  if (player.money.gte(player.timestudy.amcost)) {
-      player.money = player.money.minus(player.timestudy.amcost)
-      player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
-      player.timestudy.theorem = player.timestudy.theorem.plus(1)
-      return true
-  } else return false
-}
-
-function buyWithIP() {
-  if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-      player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
-      player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
-      player.timestudy.theorem = player.timestudy.theorem.plus(1)
-      return true
-  } else return false
-}
-
-function buyWithEP() {
-  if (player.timeDimension1.bought < 1 && player.realities === 0) {
-    alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.");
-    return false;
-  }
-  if (player.eternityPoints.gte(player.timestudy.epcost)) {
-    player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
-    player.timestudy.epcost = player.timestudy.epcost.times(2);
+  buyWithAntimatter() {
+    if (player.money.lt(player.timestudy.amcost)) return false;
+    player.money = player.money.minus(player.timestudy.amcost);
+    player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
     return true;
-  }
-  return false;
-}
+  },
+
+  buyWithIP() {
+    if (player.infinityPoints.lt(player.timestudy.ipcost)) return false;
+    player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
+    player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
+    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    return true;
+  },
+
+  buyWithEP() {
+    if (player.timeDimension1.bought < 1 && player.realities === 0) {
+      alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.");
+      return false;
+    }
+    if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
+    player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
+    player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
+    player.timestudy.theorem = player.timestudy.theorem.plus(1);
+    return true;
+  },
+
+  buyMax() {
+    const AMowned = player.timestudy.amcost.e / 20000 - 1;
+    if (player.money.gte(player.timestudy.amcost)) {
+      player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000;
+      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned);
+      player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000));
+    }
+    const IPowned = player.timestudy.ipcost.e / 100;
+    if (player.infinityPoints.gte(player.timestudy.ipcost)) {
+      player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100;
+      player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
+      player.infinityPoints =
+        player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
+    }
+    if (player.eternityPoints.gte(player.timestudy.epcost)) {
+      const EPowned = Math.round(player.timestudy.epcost.log2());
+      const finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
+      const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
+      player.timestudy.epcost = finalEPCost;
+      player.eternityPoints = player.eternityPoints.minus(totalEPCost);
+      player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
+      // The above code block will sometimes buy one too few TT, but it never over-buys
+      TimeTheorems.buyWithEP();
+    }
+  },
+};
 
 function autoBuyMaxTheorems() {
   if (!player.ttbuyer) return false;
@@ -38,36 +67,10 @@ function autoBuyMaxTheorems() {
     (Perk.autobuyerTT3.isBought && ttMaxTimer >= 3) ||
     (Perk.autobuyerTT2.isBought && ttMaxTimer >= 5) ||
     (Perk.autobuyerTT1.isBought && ttMaxTimer >= 10)) {
-    maxTheorems();
+    TimeTheorems.buyMax();
     return true;
   }
   return false;
-}
-
-function maxTheorems() {
-  const AMowned = player.timestudy.amcost.e / 20000 - 1;
-  if (player.money.gte(player.timestudy.amcost)) {
-    player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000;
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned);
-    player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000));
-  }
-  const IPowned = player.timestudy.ipcost.e / 100;
-  if (player.infinityPoints.gte(player.timestudy.ipcost)) {
-    player.timestudy.ipcost.e = Math.floor(player.infinityPoints.e / 100 + 1) * 100;
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
-    player.infinityPoints =
-      player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
-  }
-  if (player.eternityPoints.gte(player.timestudy.epcost)) {
-    const EPowned = Math.round(player.timestudy.epcost.log2());
-    const finalEPCost = new Decimal(2).pow(Math.floor(player.eternityPoints.log2()));
-    const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
-    player.timestudy.epcost = finalEPCost;
-    player.eternityPoints = player.eternityPoints.minus(totalEPCost);
-    player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
-    // The above code block will sometimes buy one too few TT, but it never over-buys
-    buyWithEP();
-  }
 }
 
 function calculateTimeStudiesCost() {

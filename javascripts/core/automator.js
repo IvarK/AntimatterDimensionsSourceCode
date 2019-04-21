@@ -190,7 +190,7 @@ function buy(current) {
           break;
     case "ttmax":
       if (!player.reality.automatorCommands.has(44)) return false
-      maxTheorems()
+      TimeTheorems.buyMax()
       return true
       break;
     case "ttip":
@@ -199,7 +199,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithIP()) tryingToBuy++
+      if (TimeTheorems.buyWithIP()) tryingToBuy++
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -212,7 +212,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithEP()) tryingToBuy++
+      if (TimeTheorems.buyWithEP()) tryingToBuy++
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -225,7 +225,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithAntimatter()) tryingToBuy++
+      if (TimeTheorems.buyWithAntimatter()) tryingToBuy++
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true

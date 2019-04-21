@@ -168,7 +168,7 @@ function buy(current) {
     case "study":
       id = parseInt(current.id)
       if (TimeStudy(id).isBought) return true
-      else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
+      else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)] ) ) return true
       else return false
       break;
       case "studyuntil":

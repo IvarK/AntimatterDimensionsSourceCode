@@ -81,8 +81,7 @@ function calculateTimeStudiesCost() {
   return totalCost;
 }
 
-function buyTimeStudy(name, cost, check) {
-  if (shiftDown && check === undefined) studiesUntil(name);
+function buyTimeStudy(name, cost) {
   if (player.timestudy.theorem.gte(cost) && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
       player.timestudy.studies.push(name)
       player.timestudy.theorem = player.timestudy.theorem.minus(cost)
@@ -290,23 +289,30 @@ var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 9
 var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 
 function studiesUntil(id) {
-    let col = id % 10;
-    let row = Math.floor(id / 10);
-    let path = [0, 0];
-    for (let i = 1; i < 4; i++) {
-        if (player.timestudy.studies.includes(70 + i)) path[0] = i;
-        if (player.timestudy.studies.includes(120 + i)) path[1] = i;
-    }
+  let col = id % 10;
+  let row = Math.floor(id / 10);
+  let path = [0, 0];
+  for (let i = 1; i < 4; i++) {
+    if (player.timestudy.studies.includes(70 + i)) path[0] = i;
+    if (player.timestudy.studies.includes(120 + i)) path[1] = i;
+  }
   if ((row > 10 && path[0] === 0 && !DilationUpgrade.timeStudySplit.isBought) || (row > 14 && path[1] === 0)) return;
   for (let i = 1; i < row; i++) {
-      let chosenPath = path[i > 11 ? 1 : 0];
-      let secondPath;
-      if (row > 6 && row < 11)secondPath = col;
-      if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), studyCosts[all.indexOf(i * 10 + (chosenPath === 0 ? col : chosenPath))], 0);
-      if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, studyCosts[all.indexOf(i * 10 + secondPath)], 0);
-      else for (let j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)], 0);
+    let chosenPath = path[i > 11 ? 1 : 0];
+    let secondPath;
+    if (row > 6 && row < 11) secondPath = col;
+    if ((i > 6 && i < 11) || (i > 11 && i < 15)) {
+      buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), studyCosts[all.indexOf(i * 10 + (chosenPath === 0 ? col : chosenPath))]);
+    }
+    if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) {
+      buyTimeStudy(i * 10 + secondPath, studyCosts[all.indexOf(i * 10 + secondPath)]);
+    } else {
+      for (let j = 1; all.includes(i * 10 + j); j++) {
+        buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)]);
+      }
+    }
   }
-  buyTimeStudy(id, studyCosts[all.indexOf(id)], 0);
+  buyTimeStudy(id, studyCosts[all.indexOf(id)]);
 }
 
 function studyPath(mode, args) {
@@ -458,7 +464,7 @@ function importStudyTree(input) {
   if (input === "") return false
   var studiesToBuy = input.split("|")[0].split(",");
   for (i=0; i<studiesToBuy.length; i++) {
-    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))],0)
+    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))])
   }
   if (parseInt(input.split("|")[1]) !== 0) {
       justImported = true;
@@ -530,9 +536,13 @@ class NormalTimeStudyState extends TimeStudyState {
     buyTimeStudy(this.id, this.cost);
   }
 
+  purchaseUntil() {
+    studiesUntil(this.id);
+  }
+
   get path() {
     const path = NormalTimeStudyState.paths.find(p => p.studies.includes(this.id));
-    return path !== undefined ? path.path : TimeStudyPath.NONE;
+    return path === undefined ? TimeStudyPath.NONE : path.path;
   }
 }
 

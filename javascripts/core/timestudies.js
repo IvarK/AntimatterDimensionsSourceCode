@@ -54,7 +54,7 @@ const TimeTheorems = {
       const totalEPCost = finalEPCost.minus(player.timestudy.epcost);
       player.timestudy.epcost = finalEPCost;
       player.eternityPoints = player.eternityPoints.minus(totalEPCost);
-      player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned)
+      player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
       // The above code block will sometimes buy one too few TT, but it never over-buys
       TimeTheorems.buyWithEP();
     }
@@ -112,9 +112,12 @@ function buyDilationStudy(name, cost, quiet) {
   }
 
 function hasRow(row) {
-  for (var i=0; i<player.timestudy.studies.length; i++) {
-      if (Math.floor(player.timestudy.studies[i]/10) == row) return true
+  for (let i = 1; i < 10; ++i) {
+    const study = TimeStudy(row * 10 + i);
+    if (!study) break;
+    if (study.isBought) return true;
   }
+  return false;
 }
 
 function canBuyStudy(id) {
@@ -128,42 +131,43 @@ function canBuyStudy(id) {
  * Only works for rows 12-14 and 22-23
  * Used by V-celestial
  */
-function studyIsLocked(name) {
-  var row = Math.floor(name/10)
+function studyIsLocked(id) {
+  const row = Math.floor(id / 10);
 
   switch (row) {
 
     case 22:
     case 23:
-    return player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1)
+      return TimeStudy(id % 2 === 0 ? id - 1 : id + 1).isBought;
 
     case 12:
     case 13:
     case 14:
-    return hasRow(row)
-  } 
-  
-  return false
+      return hasRow(row);
+  }
+
+  return false;
 }
 
-function canBuyLocked(name) {
-  if (!V.canBuyLockedPath()) return false
-  if (!studyIsLocked(name)) return false
+function canBuyLocked(id) {
+  if (!V.canBuyLockedPath()) return false;
+  if (!studyIsLocked(id)) return false;
 
-  var row = Math.floor(name/10)
-  var col = name%10
+  const row = Math.floor(id / 10);
+  const col = id % 10;
 
   switch (row) {
 
     case 12:
     case 22:
     case 23:
-    return hasRow(row - 1)
+      return hasRow(row - 1);
 
     case 13:
     case 14:
-    return player.timestudy.studies.includes((row-1) * 10 + col)
+      return TimeStudy((row - 1) * 10 + col).isBought;
   }
+  return false;
 }
 
 function canBuyDilationStudy(name) {
@@ -186,8 +190,8 @@ function canBuyDilationStudy(name) {
 }
 
 function studiesUntil(id) {
-  let col = id % 10;
-  let row = Math.floor(id / 10);
+  const col = id % 10;
+  const row = Math.floor(id / 10);
   let path = [0, 0];
   for (let i = 1; i < 4; i++) {
     if (player.timestudy.studies.includes(70 + i)) path[0] = i;
@@ -330,7 +334,7 @@ function studyPath(mode, args) {
 
 
 function respecTimeStudies() {
-  for (let study of TimeStudy.boughtNormalTS()) {
+  for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
   if (player.timestudy.studies.length === 0) {

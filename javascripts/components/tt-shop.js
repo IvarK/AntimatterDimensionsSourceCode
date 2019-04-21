@@ -60,19 +60,22 @@ Vue.component("tt-shop", {
       return this.shortenCosts(am) + " AM";
     },
     buyWithAM() {
-      buyWithAntimatter();
+      TimeTheorems.buyWithAntimatter();
     },
     formatIP(ip) {
       return this.shortenCosts(ip) + " IP";
     },
     buyWithIP() {
-      buyWithIP();
+      TimeTheorems.buyWithIP();
     },
     formatEP(ep) {
       return this.shortenDimensions(ep) + " EP";
     },
     buyWithEP() {
-      buyWithEP();
+      TimeTheorems.buyWithEP();
+    },
+    buyMaxTheorems() {
+      TimeTheorems.buyMax();
     },
     update() {
       this.theoremAmount = player.timestudy.theorem;
@@ -111,7 +114,7 @@ Vue.component("tt-shop", {
           <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"/>
           <div class="l-tt-buy-max-vbox">
             <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
-              onclick="maxTheorems()">
+              @click="buyMaxTheorems">
               Buy max
             </button>
             <button v-if="!minimized" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"

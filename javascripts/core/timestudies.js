@@ -81,21 +81,6 @@ function calculateTimeStudiesCost() {
   return totalCost;
 }
 
-function buyTimeStudy(name, cost) {
-  if (player.timestudy.theorem.gte(cost) && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
-      player.timestudy.studies.push(name)
-      player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-      GameCache.timeStudies.invalidate();
-      return true
-  } else if (canBuyLocked(name, cost)) {
-    player.celestials.v.additionalStudies++
-    player.timestudy.studies.push(name)
-    player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-    GameCache.timeStudies.invalidate();
-  }
-  else return false
-}
-
 function buyDilationStudy(name, cost, quiet) {
     if ((player.timestudy.theorem.gte(cost) || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
         if (name === 1) {
@@ -244,12 +229,10 @@ function studyIsLocked(name) {
   return false
 }
 
-function canBuyLocked(name, cost) {
-  if (player.timestudy.theorem.lt(cost)) return false
-  if (!studyIsLocked(name)) return false
+function canBuyLocked(name) {
   if (!V.canBuyLockedPath()) return false
+  if (!studyIsLocked(name)) return false
 
-  
   var row = Math.floor(name/10)
   var col = name%10
 
@@ -302,17 +285,17 @@ function studiesUntil(id) {
     let secondPath;
     if (row > 6 && row < 11) secondPath = col;
     if ((i > 6 && i < 11) || (i > 11 && i < 15)) {
-      buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), studyCosts[all.indexOf(i * 10 + (chosenPath === 0 ? col : chosenPath))]);
+      TimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath)).purchase();
     }
     if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) {
-      buyTimeStudy(i * 10 + secondPath, studyCosts[all.indexOf(i * 10 + secondPath)]);
+      TimeStudy(i * 10 + secondPath).purchase();
     } else {
       for (let j = 1; all.includes(i * 10 + j); j++) {
-        buyTimeStudy(i * 10 + j, studyCosts[all.indexOf(i * 10 + j)]);
+        TimeStudy(i * 10 + j).purchase();
       }
     }
   }
-  buyTimeStudy(id, studyCosts[all.indexOf(id)]);
+  TimeStudy(id).purchase();
 }
 
 function studyPath(mode, args) {
@@ -457,21 +440,24 @@ function exportStudyTree() {
 }
 
 function importStudyTree(input) {
-  if (typeof input !== 'string') var input = prompt()
-  if (sha512_256(input) === "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608") {
-    SecretAchievement(37).unlock();
+  const splitOnEC = input.split("|");
+  const studiesToBuy = splitOnEC[0].split(",");
+  for (const study of studiesToBuy) {
+    const id = parseInt(study, 10);
+    if (isNaN(id)) break;
+    TimeStudy(id).purchase();
   }
-  if (input === "") return false
-  var studiesToBuy = input.split("|")[0].split(",");
-  for (i=0; i<studiesToBuy.length; i++) {
-    buyTimeStudy(parseInt(studiesToBuy[i]),studyCosts[all.indexOf(parseInt(studiesToBuy[i]))])
-  }
-  if (parseInt(input.split("|")[1]) !== 0) {
+  if (splitOnEC.length === 2) {
+    const ecNumber = parseInt(splitOnEC[1], 10);
+    if (ecNumber !== 0 && !isNaN(ecNumber)) {
       justImported = true;
-      TimeStudy.eternityChallenge(parseInt(input.split("|")[1])).purchase();
-      setTimeout(function(){ justImported = false; }, 100);
+      TimeStudy.eternityChallenge(ecNumber).purchase();
+      setTimeout(() => {
+        justImported = false;
+      }, 100);
+    }
   }
-};
+}
 
 const TimeStudyType = {
   NORMAL: 0,
@@ -524,7 +510,7 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return canBuyStudy(this.id) || canBuyLocked(this.id, this.cost);
+    return canBuyStudy(this.id) || canBuyLocked(this.id);
   }
 
   get canBeApplied() {
@@ -532,8 +518,18 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   purchase() {
-    if (!this.canBeBought && !this.isAffordable) return;
-    buyTimeStudy(this.id, this.cost);
+    if (this.isBought || !this.isAffordable) return false;
+    if (!canBuyStudy(this.id)) {
+      if (canBuyLocked(this.id)) {
+        player.celestials.v.additionalStudies++;
+      } else {
+        return false;
+      }
+    }
+    player.timestudy.studies.push(this.id);
+    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
+    GameCache.timeStudies.invalidate();
+    return true;
   }
 
   purchaseUntil() {
@@ -737,7 +733,7 @@ class TimeStudyConnection {
 /**
  * @type {TimeStudyConnection[]}
  */
-TimeStudy.allConnections = function() {
+TimeStudy.allConnections = (function() {
   const TS = id => TimeStudy(id);
   const EC = id => TimeStudy.eternityChallenge(id);
   const connections = [
@@ -865,8 +861,8 @@ TimeStudy.allConnections = function() {
     [TimeStudy.timeDimension(8), TimeStudy.reality]
   ].map(props => new TimeStudyConnection(props[0], props[1], props[2]));
 
-  for (let connection of connections) {
+  for (const connection of connections) {
     connection.to.incomingConnections.push(connection);
   }
   return connections;
-}();
+}());

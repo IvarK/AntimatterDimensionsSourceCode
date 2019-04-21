@@ -129,7 +129,7 @@ const V = {
     player.celestials.v.run = startRealityOver();
   },
   canBuyLockedPath() {
-    return player.celestials.v.additionalStudies < this.totalAdditionalStudies
+    return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
   },
   updateTotalRunUnlocks() {
     this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()

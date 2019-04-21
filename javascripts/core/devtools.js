@@ -80,28 +80,23 @@ dev.cancerize = function() {
 };
 
 dev.fixSave = function() {
-  var save = JSON.stringify(player, translatorForJSON);
-  
-    var fixed = save.replace(/NaN/gi, "10")
-    var stillToDo = JSON.parse(fixed)
-    for (let i = 0; i < stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
-    console.log(stillToDo)
-    
-    var save_data = stillToDo
-    if (!save_data || !verify_save(save_data)) {
-        alert('could not load the save..');
-        load_custom_game();
-        return;
-    }
+  const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
 
-    saved = 0;
-    postc8Mult = new Decimal(0)
-    mult18 = new Decimal(1)
-    player = save_data;
-    save_game();
-    load_game();
-    transformSaveToDecimal()
-}
+  const fixed = save.replace(/NaN/gui, "10");
+  const stillToDo = JSON.parse(fixed);
+  for (let i = 0; i < stillToDo.autobuyers.length; i++) {
+    stillToDo.autobuyers[i].isOn = false;
+  }
+  console.log(stillToDo);
+
+  const saveData = stillToDo;
+  if (!saveData || !GameStorage.verify(saveData)) {
+    alert("Could not fix the save..");
+    return;
+  }
+  GameStorage.loadPlayerObject(saveData);
+  GameStorage.save();
+};
 
 dev.implode = function() {
     document.body.style.animation = "implode 2s 1";
@@ -558,7 +553,7 @@ dev.updateTestSave = function() {
     moveSavedStudyTrees();
     player.options.testVersion = 34;
   }
-  // Checks for presense of property, so no need for a version bump
+  // Checks for presence of property, so no need for a version bump
   convertEPMult();
   moveChallengeInfo();
 

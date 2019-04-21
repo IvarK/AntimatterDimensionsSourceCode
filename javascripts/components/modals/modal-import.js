@@ -37,7 +37,8 @@ Vue.component("modal-import", {
     </div>`,
   computed: {
     player() {
-      return parseSaveData(this.input);
+      const save = GameSaveSerializer.deserialize(this.input);
+      return GameStorage.verify(save) ? save : undefined;
     },
     progress() {
       return PlayerProgress.of(this.player);
@@ -62,7 +63,7 @@ Vue.component("modal-import", {
     importSave() {
       if (!this.inputIsValid) return;
       Modal.hide();
-      importSave(this.input);
+      GameStorage.import(this.input);
     }
   },
   mounted() {

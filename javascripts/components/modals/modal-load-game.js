@@ -7,19 +7,19 @@ Vue.component("modal-load-game", {
         saveId: Number
       },
       data() {
-        const save = saves[this.saveId];
+        const save = GameStorage.saves[this.saveId];
         return {
           antimatter: new Decimal(save ? save.money : 10)
         };
       },
       computed: {
         isSelected() {
-          return currentSave === this.saveId;
+          return GameStorage.currentSlot === this.saveId;
         }
       },
       methods: {
-        loadSave() {
-          change_save(this.saveId);
+        load() {
+          GameStorage.loadSlot(this.saveId);
         },
         formatMoney(money) {
           return this.shortenPostBreak(money, 2, 1);
@@ -36,7 +36,7 @@ Vue.component("modal-load-game", {
           <span>Antimatter: {{ formatMoney(antimatter) }}</span>
           <primary-button
             class="o-primary-btn--width-medium"
-            @click="loadSave"
+            @click="load"
           >Load</primary-button>
         </div>`
     }

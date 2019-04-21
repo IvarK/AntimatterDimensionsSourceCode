@@ -1,12 +1,5 @@
 "use strict";
 
-var currentSave = 0;
-var saves = {
-  0: null,
-  1: null,
-  2: null
-};
-
 function importAutomatorScript(script) {
   var outputString = JSON.parse(script).join("\n")
   document.getElementById("automator").value = outputString
@@ -404,70 +397,6 @@ function convertAchivementsToNumbers() {
   }
 }
 
-function load_cloud_save(saveId, cloudPlayer) {
-  saves[saveId] = cloudPlayer;
-
-  if (isDevEnvironment()) set_save('dimensionTestSave', saveId, cloudPlayer);
-  else set_save('dimensionSave', saveId, cloudPlayer);
-
-  if (currentSave == saveId) {
-    load_game();
-    transformSaveToDecimal();
-  }
-}
-
-function load_game(root) {
-  if (!root) {
-    if (isDevEnvironment()) var root = get_save('dimensionTestSave');
-    else var root = get_save('dimensionSave');
-  }
-
-  // Start: Migration for old save format
-  if (root && !root.saves) {
-    var _root = getRootSaveObject();
-    _root.saves[currentSave] = root;
-    root = _root;
-
-    player = root.saves[currentSave];
-    save_game();
-  }
-  // End: Migration
-
-  // If there's no save, insert default root object
-  if (!root) root = getRootSaveObject();
-
-  currentSave = root.current;
-  saves = root.saves;
-
-  if (saves[currentSave]) player = saves[currentSave];
-  onLoad();
-}
-
-
-function save_game(changed, silent) {
-  if (GlyphSelection.active) return;
-  if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, player);
-  else set_save('dimensionSave', currentSave, player);
-  if (!silent) GameUI.notify.info(changed ? "Game loaded" : "Game saved");
-}
-
-function change_save(saveId) {
-  // Save previous save to make sure no changes are lost
-  save_game(false, true);
-  currentSave = saveId;
-  saved = 0;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
-  IPminpeak = new Decimal(0)
-  EPminpeak = new Decimal(0)
-  player = saves[saveId] || defaultStart;
-  save_game(true, false);
-  load_game();
-  transformSaveToDecimal()
-  Tab.dimensions.normal.show();
-  Modal.hide();
-}
-
 function transformSaveToDecimal() {
   if (player.autobuyers[11].priority !== undefined && player.autobuyers[11].priority !== null && player.autobuyers[11].priority !== "undefined")player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority)
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
@@ -487,32 +416,4 @@ function transformSaveToDecimal() {
       glyph.effects.mult = newValue;
     }
   }
-}
-
-function translatorForJSON(key, value) {
-  if (value === Infinity) {
-    return "Infinity";
-  }
-  if (value instanceof Set) {
-    return Array.from(value.keys());
-  }
-  return value;
-}
-
-function set_save(name, saveId, value) {
-	saves[saveId] = value;
-  localStorage.setItem(name, btoa(JSON.stringify(getRootSaveObject(), translatorForJSON)));
-}
-
-function get_save(name) {
-  try {
-    return JSON.parse(atob(localStorage.getItem(name)), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-  } catch(e) { console.log("Fuck IE", e); }
-}
-
-function getRootSaveObject() {
-  return {
-    current: currentSave,
-    saves: saves
-  };
 }

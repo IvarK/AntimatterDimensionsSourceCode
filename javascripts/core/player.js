@@ -487,6 +487,7 @@ let player = {
   }
 };
 
+const defaultStart = deepmerge.all([{}, player]);
 
 const Player = {
 

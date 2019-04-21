@@ -118,94 +118,8 @@ function hasRow(row) {
 }
 
 function canBuyStudy(id) {
-  var row = Math.floor(id/10)
-  var col = id%10
-  if (id === 33) {
-      if (player.timestudy.studies.includes(21)) return true; else return false
-  }
-  if (id === 62) {
-    return (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && player.timestudy.studies.includes(42);
-  }
-
-    if ((id === 71 || id === 72) && player.challenge.eternity.unlocked === 12 && !Perk.studyECRequirement.isBought) {
-    return false;
-  }
-
-  if ((id === 72 || id === 73) && player.challenge.eternity.unlocked === 11 && !Perk.studyECRequirement.isBought) {
-    return false;
-  }
-
-  if (id === 181) {
-      if ((player.eternityChalls.eterc1 !== undefined || Perk.bypassEC1Lock.isBought)
-          && (player.eternityChalls.eterc2 !== undefined || Perk.bypassEC2Lock.isBought)
-          && (player.eternityChalls.eterc3 !== undefined || Perk.bypassEC3Lock.isBought)
-          && player.timestudy.studies.includes(171)) {
-        return true
-      }
-      else {
-        return false;
-      }
-  }
-  if (id == 201) if(player.timestudy.studies.includes(192) && !DilationUpgrade.timeStudySplit.isBought) return true; else return false
-  if (id == 211) if(player.timestudy.studies.includes(191)) return true; else return false
-  if (id == 212) if(player.timestudy.studies.includes(191)) return true; else return false
-  if (id == 213) if(player.timestudy.studies.includes(193)) return true; else return false
-  if (id == 214) if(player.timestudy.studies.includes(193)) return true; else return false
-  switch(row) {
-
-      case 1: return true
-      break;
-
-      case 2:
-      case 5:
-      case 6:
-      case 11:
-      case 15:
-      case 16:
-      case 17:
-      if (hasRow(row-1)) return true; else return false
-      break;
-
-      case 3:
-      case 4:
-      case 8:
-      case 9:
-      case 10:
-      if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
-      break;
-
-      case 12:
-      if (hasRow(row-1) && !hasRow(row)) return true; else return false
-      break;
-
-      
-      case 13:
-      case 14:
-      return (player.timestudy.studies.includes((row-1)*10 + col) && !hasRow(row))
-
-      case 7:
-      if (DilationUpgrade.timeStudySplit.isBought) {
-        if (player.timestudy.studies.includes(61)) return true; else return false;
-      } else if (!player.timestudy.studies.includes(201)) {
-          if (player.timestudy.studies.includes(61) && !hasRow(row)) return true; else return false
-      } else {
-          if (player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length < 2) return true; else return false
-      }
-      break;
-
-      case 19:
-      if (id === 192 && Enslaved.isRunning) return false;
-      if (player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)) return true; else return false
-      break;
-
-      case 22:
-      if (player.timestudy.studies.includes(210 + Math.round(col/2)) && ((id%2 == 0) ? !player.timestudy.studies.includes(id-1) : !player.timestudy.studies.includes(id+1))) return true; else return false
-      break;
-
-      case 23:
-      if ( (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && !player.timestudy.studies.includes((id%2 == 0) ? id-1 : id+1)) return true; else return false;
-      break;
-  }
+  const study = TimeStudy(id);
+  return study ? study.checkRequirement() : false;
 }
 
 /**
@@ -511,6 +425,12 @@ class NormalTimeStudyState extends TimeStudyState {
 
   get isBought() {
     return GameCache.timeStudies.value[this.id];
+  }
+
+  checkRequirement() {
+    const req = this.config.requirement;
+    if (typeof req === "number") return TimeStudy(req).isBought;
+    return req();
   }
 
   get canBeBought() {

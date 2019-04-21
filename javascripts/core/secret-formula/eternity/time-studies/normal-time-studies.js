@@ -256,7 +256,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 131,
       cost: 5,
-      requirement: 121,
+      requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
       description: () => (Achievement(138).isEnabled
         ? "You can get 50% more Replicanti galaxies"
         : "Automatic Replicanti galaxies are disabled, but you can get 50% more"),
@@ -265,21 +265,21 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 132,
       cost: 5,
-      requirement: 122,
+      requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       description: "Replicanti galaxies are 40% more effective",
       effect: 0.4
     },
     {
       id: 133,
       cost: 5,
-      requirement: 123,
+      requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       description: "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger",
       effect: 0.5
     },
     {
       id: 141,
       cost: 4,
-      requirement: 131,
+      requirement: () => TimeStudy(131).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought,
       description: "Multiplier to IP, which decays over this Infinity",
       effect: () => Decimal.divide(1e45, thisInfinityMult()).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
@@ -287,14 +287,14 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 142,
       cost: 4,
-      requirement: 132,
+      requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       description: () => `You gain ${shorten(1e25, 0, 0)}x more IP`,
       effect: 1e25
     },
     {
       id: 143,
       cost: 4,
-      requirement: 133,
+      requirement: () => TimeStudy(133).isBought && !TimeStudy(141).isBought && !TimeStudy(142).isBought,
       description: "Multiplier to IP, which increases over this Infinity",
       effect: () => thisInfinityMult(),
       formatEffect: value => formatX(value, 2, 1),

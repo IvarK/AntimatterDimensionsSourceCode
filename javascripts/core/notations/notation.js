@@ -50,7 +50,9 @@ class Notation {
    * @protected
    */
   isInfinite(decimal) {
-    return Notation.isPreBreakFormat && decimal.gte(Decimal.MAX_NUMBER);
+    return Notation.isPreBreakFormat &&
+      decimal.gte(Decimal.MAX_NUMBER) &&
+      !Notation.forcePostBreakFormat;
   }
 
   /**
@@ -123,6 +125,5 @@ Notation.forcePostBreakFormat = false;
 Notation.isPreBreakFormat = true;
 
 EventHub.logic.on(GameEvent.GAME_TICK_AFTER, () => {
-  const isPreBreak = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
-  Notation.isPreBreakFormat = !Notation.forcePostBreakFormat && isPreBreak;
+  Notation.isPreBreakFormat = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
 });

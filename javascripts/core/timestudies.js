@@ -412,11 +412,8 @@ class NormalTimeStudyState extends TimeStudyState {
   purchase() {
     if (this.isBought || !this.isAffordable) return false;
     if (!canBuyStudy(this.id)) {
-      if (canBuyLocked(this.id)) {
-        player.celestials.v.additionalStudies++;
-      } else {
-        return false;
-      }
+      if (!canBuyLocked(this.id)) return false;
+      player.celestials.v.additionalStudies++;
     }
     player.timestudy.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);

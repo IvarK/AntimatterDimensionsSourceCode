@@ -49,12 +49,13 @@ const AutomatorBackend = {
    */
   update() {
     // This should only come up for empty scripts
-    if (!this.Path.inBounds) {
+    if (!this.path.inBounds) {
       this.stop();
       return;
     }
     for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
-      const command = this.Path.currentCommand;
+      const command = this.path.currentCommand;
+      console.log(command);
       switch (AutomatorCommand(command.id).run(command)) {
         case AutomatorCommandStatus.SAME_INSTRUCTION:
           break;
@@ -70,7 +71,7 @@ const AutomatorBackend = {
     }
   },
 
-  Variables: {
+  variables: {
     get definedNumbers() {
       return AutomatorBackend.state.definedNumbers;
     },
@@ -115,7 +116,7 @@ const AutomatorBackend = {
    * name of the script, the current instruction index, and any intermediate indices
    * of nested blocks
    */
-  Path: {
+  path: {
     /**
      * This is a reference to an object containing automator instructions to run. This can't be serialized
      * into player directly
@@ -219,7 +220,7 @@ const AutomatorBackend = {
    * The stack manages execution context, so we can enter and exit subroutines and loops.
    * The stack is an array of path specifiers
    */
-  Stack: {
+  stack: {
     get value() {
       return AutomatorBackend.state.stack;
     },
@@ -229,11 +230,11 @@ const AutomatorBackend = {
     },
 
     pushCurrent() {
-      this.value.push(AutomatorBackend.Path.copy);
+      this.value.push(AutomatorBackend.path.copy);
     },
   
     pushNext() {
-      const pathCopy = AutomatorBackend.Path.copy;
+      const pathCopy = AutomatorBackend.path.copy;
       ++pathCopy.commandIndex;
       this.value.push(pathCopy);
     },
@@ -251,7 +252,7 @@ const AutomatorBackend = {
    * Initialize runtime values (ones that aren't stored in player); needs to be called on load.
    */
   init() {
-    this.Path.init();
+    this.path.init();
   },
 
   /**
@@ -259,9 +260,9 @@ const AutomatorBackend = {
    * we will remain paused)
    */
   reset() {
-    this.Variables.clear();
-    this.Path.reset(this.state.topLevelScript);
-    this.Stack.clear();
+    this.variables.clear();
+    this.path.reset(this.state.topLevelScript);
+    this.stack.clear();
   },
 
   /**
@@ -283,9 +284,9 @@ const AutomatorBackend = {
   },
 
   checkEndOfScript() {
-    if (!this.Path.inBounds) {
-      if (this.Stack.length > 0) {
-        this.Path.set(this.Stack.pop());
+    if (!this.path.inBounds) {
+      if (this.stack.length > 0) {
+        this.path.set(this.stack.pop());
         this.checkEndOfScript();
       } else {
         this.stop();
@@ -294,7 +295,7 @@ const AutomatorBackend = {
   },
 
   nextCommand() {
-    this.Path.next();
+    this.path.next();
     this.checkEndOfScript();
   },
 
@@ -329,11 +330,11 @@ AutomatorCommand.Debug = new class extends AutomatorCommandInterface {
   run(command) {
     // eslint-disable-next-line no-console
     console.log(`Automator debug message = ${command.message} state:
-      path: ${AutomatorBackend.Path.pathToString(AutomatorBackend.Path.value)}
+      path: ${AutomatorBackend.path.pathToString(AutomatorBackend.path.value)}
       stack contents:`);
-    for (const path of AutomatorBackend.Stack.value) {
+    for (const path of AutomatorBackend.stack.value) {
       // eslint-disable-next-line no-console
-      console.log(`    ${AutomatorBackend.Path.pathToString(path)}`);
+      console.log(`    ${AutomatorBackend.path.pathToString(path)}`);
     }
     return AutomatorCommandStatus.NEXT_INSTRUCTION;
   }
@@ -365,7 +366,7 @@ AutomatorCommand.WaitTime = new class extends AutomatorCommandInterface {
     } else {
       state.commandState.timeMs += Time.unscaledDeltaTime.milliseconds;
     }
-    return AutomatorBackend.Variables.resolveNumber(command.timeMs).gte(state.commandState.timeMs)
+    return AutomatorBackend.variables.resolveNumber(command.timeMs).gte(state.commandState.timeMs)
       ? AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION
       : AutomatorCommandStatus.NEXT_INSTRUCTION;
   }
@@ -373,7 +374,7 @@ AutomatorCommand.WaitTime = new class extends AutomatorCommandInterface {
 
 AutomatorCommand.BuyStudies = new class extends AutomatorCommandInterface {
   run(command) {
-    for (const tsId in AutomatorBackend.Variables.resolveStudies(command.studies)) {
+    for (const tsId in AutomatorBackend.variables.resolveStudies(command.studies)) {
       const ts = TimeStudy(tsId);
       if (!ts) throw crash(`Unknown study ${tsId}`);
       ts.purchase();
@@ -387,7 +388,7 @@ AutomatorCommand.WaitQuantity = new class extends AutomatorCommandInterface {
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    return quantity.lt(AutomatorBackend.Variables.resolveNumber(command.amount))
+    return quantity.lt(AutomatorBackend.variables.resolveNumber(command.amount))
       ? AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION
       : AutomatorCommandStatus.NEXT_INSTRUCTION;
   }
@@ -401,9 +402,9 @@ AutomatorCommand.Until = new class extends AutomatorCommandInterface {
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    if (!quantity[command.compare](AutomatorBackend.Variables.resolveNumber(command.amount))) {
-      AutomatorBackend.Stack.pushCurrent();
-      AutomatorBackend.Path.enterNested();
+    if (!quantity[command.compare](AutomatorBackend.variables.resolveNumber(command.amount))) {
+      AutomatorBackend.stack.pushCurrent();
+      AutomatorBackend.path.enterNested();
       return AutomatorCommandStatus.SAME_INSTRUCTION;
     }
     return AutomatorCommandStatus.NEXT_INSTRUCTION;
@@ -414,10 +415,10 @@ AutomatorCommand.If = new class extends AutomatorCommandInterface {
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    if (quantity[command.compare](AutomatorBackend.Variables.resolveNumber(command.amount))) {
+    if (quantity[command.compare](AutomatorBackend.variables.resolveNumber(command.amount))) {
       // We "return" from the if at the next instruction after the if block
-      AutomatorBackend.Stack.pushNext();
-      AutomatorBackend.Path.enterNested();
+      AutomatorBackend.stack.pushNext();
+      AutomatorBackend.path.enterNested();
       return AutomatorCommandStatus.SAME_INSTRUCTION;
     }
     return AutomatorCommandStatus.NEXT_INSTRUCTION;
@@ -428,8 +429,8 @@ AutomatorCommand.RunScript = new class extends AutomatorCommandInterface {
   run(command) {
     const script = AutomatorBackend.getScript(command.script);
     if (!script) throw crash(`Unknown script ${command.script}`);
-    AutomatorBackend.Stack.pushNext();
-    AutomatorBackend.Path.reset(command.script);
+    AutomatorBackend.stack.pushNext();
+    AutomatorBackend.path.reset(command.script);
     return AutomatorCommandStatus.SAME_INSTRUCTION;
   }
 }();

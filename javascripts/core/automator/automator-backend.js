@@ -1,6 +1,6 @@
 "use strict";
 
-const CurrencyGetters = {
+const ComparableGetters = {
   ip: () => player.infinityPoints,
   tt: () => player.timestudy.theorem,
   ep: () => player.eternityPoints,
@@ -389,8 +389,8 @@ AutomatorCommand.BuyStudies = new class extends AutomatorCommandInterface {
 
 AutomatorCommand.WaitQuantity = new class extends AutomatorCommandInterface {
   run(command) {
-    if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
-    const quantity = CurrencyGetters[command.type]();
+    if (ComparableGetters[command.type] === undefined) throw crash(`Unknown comparable ${command.type}`);
+    const quantity = ComparableGetters[command.type]();
     return quantity.lt(AutomatorBackend.variables.resolveNumber(command.amount))
       ? AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION
       : AutomatorCommandStatus.NEXT_INSTRUCTION;
@@ -403,8 +403,8 @@ AutomatorCommand.Until = new class extends AutomatorCommandInterface {
   }
 
   run(command) {
-    if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
-    const quantity = CurrencyGetters[command.type]();
+    if (ComparableGetters[command.type] === undefined) throw crash(`Unknown comparable ${command.type}`);
+    const quantity = ComparableGetters[command.type]();
     if (!quantity[command.compare](AutomatorBackend.variables.resolveNumber(command.amount))) {
       AutomatorBackend.stack.pushCurrent();
       AutomatorBackend.path.enterNested();
@@ -416,8 +416,8 @@ AutomatorCommand.Until = new class extends AutomatorCommandInterface {
 
 AutomatorCommand.If = new class extends AutomatorCommandInterface {
   run(command) {
-    if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
-    const quantity = CurrencyGetters[command.type]();
+    if (ComparableGetters[command.type] === undefined) throw crash(`Unknown comparable ${command.type}`);
+    const quantity = ComparableGetters[command.type]();
     if (quantity[command.compare](AutomatorBackend.variables.resolveNumber(command.amount))) {
       // We "return" from the if at the next instruction after the if block
       AutomatorBackend.stack.pushNext();

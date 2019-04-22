@@ -341,8 +341,21 @@ var player = {
     partEternitied: 0,
     automator: {
       state: {
-
+        paused: true,
+        commandState: null,
+        topLevelScript: "default",
+        path: {
+          name: "default",
+          nestedIndices: [],
+          commandIndex: 0,
+        },
+        stack: [],
+        definedStudies: {},
+        definedNumbers: {},
       },
+      scripts: {
+        default: [],
+      }
     }
   },
   blackHole: [{

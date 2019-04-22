@@ -48,6 +48,11 @@ const AutomatorBackend = {
    * If the automator is not paused, run stuff; called from gameLoop.
    */
   update() {
+    // This should only come up for empty scripts
+    if (!this.Path.inBounds) {
+      this.stop();
+      return;
+    }
     for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
       const command = this.Path.currentCommand;
       switch (AutomatorCommand(command.id).run(command)) {
@@ -118,7 +123,11 @@ const AutomatorBackend = {
      */
     _currentScriptObject: undefined,
     get copy() {
-      return Object.assign({}, this.value);
+      return {
+        name: this.value.name,
+        nestedIndices: Array.from(this.value.nestedIndices),
+        commandIndex: this.value.commandIndex,
+      };
     },
 
     get scriptName() {
@@ -162,6 +171,10 @@ const AutomatorBackend = {
       AutomatorBackend.state.commandState = null;
     },
 
+    init() {
+      this._currentScriptObject = this.findScriptObject();
+    },
+
     reset(script) {
       this.value.name = script;
       this.value.nestedIndices.length = 0;
@@ -196,6 +209,10 @@ const AutomatorBackend = {
       }
       return script;
     },
+
+    pathToString(path) {
+      return `name=${path.name} indices=${path.nestedIndices} commandIndex=${path.commandIndex}`;
+    }
   },
 
   /**
@@ -228,6 +245,13 @@ const AutomatorBackend = {
     clear() {
       this.value.length = 0;
     },
+  },
+
+  /**
+   * Initialize runtime values (ones that aren't stored in player); needs to be called on load.
+   */
+  init() {
+    this.Path.init();
   },
 
   /**
@@ -278,6 +302,10 @@ const AutomatorBackend = {
     return player.reality.automator.state;
   },
 
+  get scripts() {
+    return player.reality.automator.scripts;
+  },
+
   /** Paused means that we have a current command, but are not actively running */
   get isPaused() {
     return this.state.paused;
@@ -292,6 +320,23 @@ const AutomatorBackend = {
 AutomatorCommand.Comment = new class extends AutomatorCommandInterface {
   constructor() { super("rem"); }
   run() { return AutomatorCommandStatus.NEXT_INSTRUCTION; }
+}();
+
+
+AutomatorCommand.Debug = new class extends AutomatorCommandInterface {
+  constructor() { super("debug"); }
+
+  run(command) {
+    // eslint-disable-next-line no-console
+    console.log(`Automator debug message = ${command.message} state:
+      path: ${AutomatorBackend.Path.pathToString(AutomatorBackend.Path.value)}
+      stack contents:`);
+    for (const path of AutomatorBackend.Stack.value) {
+      // eslint-disable-next-line no-console
+      console.log(`    ${AutomatorBackend.Path.pathToString(path)}`);
+    }
+    return AutomatorCommandStatus.NEXT_INSTRUCTION;
+  }
 }();
 
 AutomatorCommand.DefineStudyTree = new class extends AutomatorCommandInterface {
@@ -309,6 +354,10 @@ AutomatorCommand.DefineNumber = new class extends AutomatorCommandInterface {
 }();
 
 AutomatorCommand.WaitTime = new class extends AutomatorCommandInterface {
+  constructor() {
+    super("waitTime");
+  }
+
   run(command) {
     const state = AutomatorBackend.state;
     if (state.commandState === null) {
@@ -316,7 +365,7 @@ AutomatorCommand.WaitTime = new class extends AutomatorCommandInterface {
     } else {
       state.commandState.timeMs += Time.unscaledDeltaTime.milliseconds;
     }
-    return state.commandState.timeMs.lt(AutomatorBackend.Vars.resolveNumber(command.timeMs))
+    return AutomatorBackend.Variables.resolveNumber(command.timeMs).gte(state.commandState.timeMs)
       ? AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION
       : AutomatorCommandStatus.NEXT_INSTRUCTION;
   }
@@ -324,7 +373,7 @@ AutomatorCommand.WaitTime = new class extends AutomatorCommandInterface {
 
 AutomatorCommand.BuyStudies = new class extends AutomatorCommandInterface {
   run(command) {
-    for (const tsId in AutomatorBackend.Vars.resolveStudies(command.studies)) {
+    for (const tsId in AutomatorBackend.Variables.resolveStudies(command.studies)) {
       const ts = TimeStudy(tsId);
       if (!ts) throw crash(`Unknown study ${tsId}`);
       ts.purchase();
@@ -338,17 +387,21 @@ AutomatorCommand.WaitQuantity = new class extends AutomatorCommandInterface {
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    return quantity.lt(AutomatorBackend.Vars.resolveNumber(command.amount))
+    return quantity.lt(AutomatorBackend.Variables.resolveNumber(command.amount))
       ? AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION
       : AutomatorCommandStatus.NEXT_INSTRUCTION;
   }
 }();
 
 AutomatorCommand.Until = new class extends AutomatorCommandInterface {
+  constructor() {
+    super("until");
+  }
+
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    if (!quantity[command.compare](AutomatorBackend.Vars.resolveNumber(command.amount))) {
+    if (!quantity[command.compare](AutomatorBackend.Variables.resolveNumber(command.amount))) {
       AutomatorBackend.Stack.pushCurrent();
       AutomatorBackend.Path.enterNested();
       return AutomatorCommandStatus.SAME_INSTRUCTION;
@@ -361,7 +414,7 @@ AutomatorCommand.If = new class extends AutomatorCommandInterface {
   run(command) {
     if (CurrencyGetters[command.type] === undefined) throw crash(`Unknown currency ${command.type}`);
     const quantity = CurrencyGetters[command.type]();
-    if (quantity[command.compare](AutomatorBackend.Vars.resolveNumber(command.amount))) {
+    if (quantity[command.compare](AutomatorBackend.Variables.resolveNumber(command.amount))) {
       // We "return" from the if at the next instruction after the if block
       AutomatorBackend.Stack.pushNext();
       AutomatorBackend.Path.enterNested();

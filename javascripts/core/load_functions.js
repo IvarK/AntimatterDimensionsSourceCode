@@ -213,6 +213,8 @@ function onLoad() {
   }
   Notation.find(player.options.notation).setCurrent();
 
+  AutomatorBackend.init();
+
   if (localStorage.getItem("automatorScript1") !== null) importAutomatorScript(localStorage.getItem("automatorScript1"));
   automatorOn = player.reality.automatorOn;
   if (automatorOn) $("#automatorOn")[0].checked = true

@@ -338,7 +338,12 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0
+    partEternitied: 0,
+    automator: {
+      state: {
+
+      },
+    }
   },
   blackHole: [{
     id: 0,

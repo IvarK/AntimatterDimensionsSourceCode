@@ -87,7 +87,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 62,
       cost: 3,
       requirement: () =>
-        (Perk.bypassEC5Lock.isBought || player.eternityChalls.eterc5 !== undefined) && TimeStudy(42).isBought,
+        (Perk.bypassEC5Lock.isBought || EternityChallenge(5).completions > 0) && TimeStudy(42).isBought,
       description: "You gain replicanti 3 times faster",
       effect: 3
     },
@@ -96,7 +96,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: () => {
         if (!TimeStudy(61).isBought) return false;
-        if (player.challenge.eternity.unlocked === 12 && !Perk.studyECRequirement.isBought) return false;
+        if (EternityChallenge(12).isUnlocked && !Perk.studyECRequirement.isBought) return false;
         if (DilationUpgrade.timeStudySplit.isBought) return true;
         const rowCount = (TimeStudy(72).isBought ? 1 : 0) + (TimeStudy(73).isBought ? 1 : 0);
         if (TimeStudy(201).isBought) return rowCount < 2;
@@ -112,7 +112,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: () => {
         if (!TimeStudy(61).isBought) return false;
-        if ((player.challenge.eternity.unlocked === 12 || player.challenge.eternity.unlocked === 11) &&
+        if ((EternityChallenge(12).isUnlocked || EternityChallenge(11).isUnlocked) &&
           !Perk.studyECRequirement.isBought) return false;
         if (DilationUpgrade.timeStudySplit.isBought) return true;
         const rowCount = (TimeStudy(71).isBought ? 1 : 0) + (TimeStudy(73).isBought ? 1 : 0);
@@ -129,7 +129,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: () => {
         if (!TimeStudy(61).isBought) return false;
-        if (player.challenge.eternity.unlocked === 11 && !Perk.studyECRequirement.isBought) return false;
+        if (EternityChallenge(11).isUnlocked && !Perk.studyECRequirement.isBought) return false;
         if (DilationUpgrade.timeStudySplit.isBought) return true;
         const rowCount = (TimeStudy(71).isBought ? 1 : 0) + (TimeStudy(72).isBought ? 1 : 0);
         if (TimeStudy(201).isBought) return rowCount < 2;
@@ -224,6 +224,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 121,
       cost: 9,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(122).isBought && !TimeStudy(123).isBought,
+      requirementV: () => TimeStudy(111).isBought && (TimeStudy(122).isBought || TimeStudy(123).isBought),
       description: () => (Perk.studyActiveEP.isBought
         ? "You gain 50x more EP"
         : "The worse your average EP/min is, the more EP you get"),
@@ -238,6 +239,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 122,
       cost: 9,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(123).isBought,
+      requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(123).isBought),
       description: "You gain 35x more EP",
       effect: 35
     },
@@ -245,6 +247,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 123,
       cost: 9,
       requirement: () => TimeStudy(111).isBought && !TimeStudy(121).isBought && !TimeStudy(122).isBought,
+      requirementV: () => TimeStudy(111).isBought && (TimeStudy(121).isBought || TimeStudy(122).isBought),
       description: "You gain more EP based on time spent this Eternity",
       effect: () => {
         let thisEternity = Time.thisEternity;
@@ -257,6 +260,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 131,
       cost: 5,
       requirement: () => TimeStudy(121).isBought && !TimeStudy(132).isBought && !TimeStudy(133).isBought,
+      requirementV: () => TimeStudy(121).isBought && (TimeStudy(132).isBought || TimeStudy(133).isBought),
       description: () => (Achievement(138).isEnabled
         ? "You can get 50% more Replicanti galaxies"
         : "Automatic Replicanti galaxies are disabled, but you can get 50% more"),
@@ -266,6 +270,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 132,
       cost: 5,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
+      requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
       description: "Replicanti galaxies are 40% more effective",
       effect: 0.4
     },
@@ -273,6 +278,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 133,
       cost: 5,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
+      requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
       description: "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger",
       effect: 0.5
     },
@@ -280,6 +286,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 141,
       cost: 4,
       requirement: () => TimeStudy(131).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought,
+      requirementV: () => TimeStudy(131).isBought && (TimeStudy(142).isBought || TimeStudy(143).isBought),
       description: "Multiplier to IP, which decays over this Infinity",
       effect: () => Decimal.divide(1e45, thisInfinityMult()).clampMin(1),
       formatEffect: value => formatX(value, 2, 1)
@@ -288,6 +295,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 142,
       cost: 4,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
+      requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
       description: () => `You gain ${shorten(1e25, 0, 0)}x more IP`,
       effect: 1e25
     },
@@ -295,6 +303,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 143,
       cost: 4,
       requirement: () => TimeStudy(133).isBought && !TimeStudy(141).isBought && !TimeStudy(142).isBought,
+      requirementV: () => TimeStudy(133).isBought && (TimeStudy(141).isBought || TimeStudy(142).isBought),
       description: "Multiplier to IP, which increases over this Infinity",
       effect: () => thisInfinityMult(),
       formatEffect: value => formatX(value, 2, 1),
@@ -332,23 +341,23 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 181,
       cost: 200,
       requirement: () => TimeStudy(171).isBought &&
-          (player.eternityChalls.eterc1 !== undefined || Perk.bypassEC1Lock.isBought) &&
-          (player.eternityChalls.eterc2 !== undefined || Perk.bypassEC2Lock.isBought) &&
-          (player.eternityChalls.eterc3 !== undefined || Perk.bypassEC3Lock.isBought),
+          (EternityChallenge(1).completions > 0 || Perk.bypassEC1Lock.isBought) &&
+          (EternityChallenge(2).completions > 0 || Perk.bypassEC2Lock.isBought) &&
+          (EternityChallenge(3).completions > 0 || Perk.bypassEC3Lock.isBought),
       description: "You gain 1% of your IP gained on crunch each second",
       effect: () => gainedInfinityPoints().times(Time.deltaTime / 100)
     },
     {
       id: 191,
       cost: 400,
-      requirement: () => TimeStudy(181).isBought && player.eternityChalls.eterc10 !== undefined,
+      requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: "After Eternity you permanently keep 5% of your Infinities",
       effect: () => player.infinitied.times(0.05).floor()
     },
     {
       id: 192,
       cost: 730,
-      requirement: () => TimeStudy(181).isBought && player.eternityChalls.eterc10 !== undefined && !Enslaved.isRunning,
+      requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0 && !Enslaved.isRunning,
       description: () => (Enslaved.isRunning
         ? "There is not enough space in this reality"
         : `Replicanti can go beyond ${shorten(replicantiCap(), 2, 1)}, ` +
@@ -357,7 +366,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
     {
       id: 193,
       cost: 300,
-      requirement: () => TimeStudy(181).isBought && player.eternityChalls.eterc10 !== undefined,
+      requirement: () => TimeStudy(181).isBought && EternityChallenge(10).completions > 0,
       description: "Normal Dimension boost based on Eternities",
       effect: () => Decimal.pow(1.0285, player.eternities),
       cap: new Decimal("1e13000"),
@@ -410,6 +419,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 221,
       cost: 900,
       requirement: () => TimeStudy(211).isBought && !TimeStudy(222).isBought,
+      requirementV: () => TimeStudy(211).isBought && TimeStudy(222).isBought,
       description: "Time Dimensions gain a multiplier based on Dimension Boosts",
       effect: () => Decimal.pow(1 + 0.0025, player.resets),
       formatEffect: value => formatX(value, 2, 1)
@@ -418,6 +428,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 222,
       cost: 900,
       requirement: () => TimeStudy(211).isBought && !TimeStudy(221).isBought,
+      requirementV: () => TimeStudy(211).isBought && TimeStudy(221).isBought,
       description: "Dimension Boost costs scale by another 2 less",
       effect: 2
     },
@@ -425,6 +436,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 223,
       cost: 900,
       requirement: () => TimeStudy(212).isBought && !TimeStudy(224).isBought,
+      requirementV: () => TimeStudy(212).isBought && TimeStudy(224).isBought,
       description: "Galaxy cost scaling starts 7 galaxies later",
       effect: 7
     },
@@ -432,6 +444,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 224,
       cost: 900,
       requirement: () => TimeStudy(212).isBought && !TimeStudy(223).isBought,
+      requirementV: () => TimeStudy(212).isBought && TimeStudy(223).isBought,
       description() {
         const effect = TimeStudy(224).effectValue;
         const noun = effect === 1 ? "galaxy" : "galaxies";
@@ -443,6 +456,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 225,
       cost: 900,
       requirement: () => TimeStudy(213).isBought && !TimeStudy(226).isBought,
+      requirementV: () => TimeStudy(213).isBought && TimeStudy(226).isBought,
       description: "You gain extra RGs based on your Replicanti amount",
       effect: () => Math.floor(Replicanti.amount.exponent / 1000),
       formatEffect: value => `+${value} RG`
@@ -451,6 +465,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 226,
       cost: 900,
       requirement: () => TimeStudy(213).isBought && !TimeStudy(225).isBought,
+      requirementV: () => TimeStudy(213).isBought && TimeStudy(225).isBought,
       description: "You gain extra RGs based on your max RGs",
       effect: () => Math.floor(player.replicanti.gal / 15),
       formatEffect: value => `+${value} RG`
@@ -459,6 +474,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 227,
       cost: 900,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(228).isBought,
+      requirementV: () => TimeStudy(214).isBought && TimeStudy(228).isBought,
       description: "Sacrifice affects the 4th Time Dimension with reduced effect",
       effect: () => Math.max(Math.pow(Sacrifice.totalBoost.pLog10(), 10), 1)
     },
@@ -466,6 +482,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 228,
       cost: 900,
       requirement: () => TimeStudy(214).isBought && !TimeStudy(227).isBought,
+      requirementV: () => TimeStudy(214).isBought && TimeStudy(227).isBought,
       description: "Sacrifice scales better",
       effect: 0.013
     },
@@ -473,6 +490,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 231,
       cost: 500,
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
+      requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
       description: "Dimension Boosts are more effective based on their amount",
       effect: () => Decimal.pow(player.resets, 0.3).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
@@ -481,6 +499,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 232,
       cost: 500,
       requirement: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && !TimeStudy(231).isBought,
+      requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
       description: "Galaxies are more effective based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
       formatEffect: value => "+" + formatPercents(value - 1, 3)
@@ -489,6 +508,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 233,
       cost: 500,
       requirement: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && !TimeStudy(234).isBought,
+      requirementV: () => (TimeStudy(225).isBought || TimeStudy(226).isBought) && TimeStudy(234).isBought,
       description: "Max Replicanti galaxy upgrade cost is reduced based on your Replicanti amount",
       effect: () => Replicanti.amount.pow(0.3)
     },
@@ -496,6 +516,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       id: 234,
       cost: 500,
       requirement: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && !TimeStudy(233).isBought,
+      requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
       description: "Sacrifice boosts First Dimension",
       effect: () => Sacrifice.totalBoost,
       formatEffect: value => formatX(value, 2, 1)

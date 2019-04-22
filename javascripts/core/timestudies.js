@@ -148,7 +148,35 @@ function canBuyDilationStudy(name) {
   return player.dilation.studies.includes(name - 1) && player.timestudy.theorem.gte(config.cost);
 }
 
+function getSelectedDimensionStudyPaths() {
+  const paths = [];
+  if (TimeStudy(71).isBought) paths.push(TimeStudyPath.NORMAL_DIM);
+  if (TimeStudy(72).isBought) paths.push(TimeStudyPath.INFINITY_DIM);
+  if (TimeStudy(73).isBought) paths.push(TimeStudyPath.TIME_DIM);
+  return paths;
+}
+
 function studiesUntil(id) {
+  const row = Math.floor(id / 10);
+  const lastInPrevRow = row * 10 - 1;
+  for (let buyId = 0; buyId < lastInPrevRow && buyId < 70; ++buyId) {
+    if (TimeStudy(buyId) !== undefined) {
+      TimeStudy(buyId).purchase();
+    }
+  }
+  const dimPaths = getSelectedDimensionStudyPaths();
+  if (DilationUpgrade.timeStudySplit.isBought) {
+    for (let buyId = 71; buyId < lastInPrevRow && buyId < 120; ++buyId) {
+      if (TimeStudy(buyId) !== undefined) {
+        TimeStudy(buyId).purchase();
+      }  
+    }
+  } else if (TimeStudy(201).isBought) {
+    
+  }
+  if (id < 70) return;
+  if (id > 103 && dimPaths.length < 1 && !TimeStudy(201).isBought && !DilationUpgrade.timeStudySplit.isBought) return;
+
   const col = id % 10;
   const row = Math.floor(id / 10);
   let path = [0, 0];
@@ -446,6 +474,8 @@ NormalTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.normal,
   config => new NormalTimeStudyState(config)
 );
+
+NormalTimeStudyState.all = NormalTimeStudyState.studies.filter(e => e !== undefined);
 
 /**
  * @returns {NormalTimeStudyState}

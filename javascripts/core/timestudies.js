@@ -24,7 +24,7 @@ const TimeTheorems = {
 
   buyWithEP() {
     if (player.timeDimension1.bought < 1 && player.realities === 0) {
-      alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.");
+      alert("You need to buy at least 1 Time Dimension before you can purchase theorems with Eternity points.");
       return false;
     }
     if (player.eternityPoints.lt(player.timestudy.epcost)) return false;
@@ -125,49 +125,8 @@ function canBuyStudy(id) {
   return study ? study.checkRequirement() : false;
 }
 
-/**
- * 
- * This function is used to check whether you can no longer buy a certain study without a respec
- * Only works for rows 12-14 and 22-23
- * Used by V-celestial
- */
-function studyIsLocked(id) {
-  const row = Math.floor(id / 10);
-
-  switch (row) {
-
-    case 22:
-    case 23:
-      return TimeStudy(id % 2 === 0 ? id - 1 : id + 1).isBought;
-
-    case 12:
-    case 13:
-    case 14:
-      return hasRow(row);
-  }
-
-  return false;
-}
-
 function canBuyLocked(id) {
-  if (!V.canBuyLockedPath()) return false;
-  if (!studyIsLocked(id)) return false;
-
-  const row = Math.floor(id / 10);
-  const col = id % 10;
-
-  switch (row) {
-
-    case 12:
-    case 22:
-    case 23:
-      return hasRow(row - 1);
-
-    case 13:
-    case 14:
-      return TimeStudy((row - 1) * 10 + col).isBought;
-  }
-  return false;
+  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkRaRequirement();
 }
 
 function canBuyDilationStudy(name) {
@@ -363,12 +322,13 @@ function exportStudyTree() {
 
 function importStudyTree(input) {
   const splitOnEC = input.split("|");
-  const studiesToBuy = splitOnEC[0].split(",");
-  for (const study of studiesToBuy) {
-    const id = parseInt(study, 10);
-    if (isNaN(id)) break;
-    TimeStudy(id).purchase();
-  }
+  splitOnEC[0].split(",")
+    .map(id => parseInt(id, 10))
+    .filter(id => !isNaN(id))
+    .map(TimeStudy)
+    .filter(study => study !== undefined)
+    .forEach(study => study.purchase());
+
   if (splitOnEC.length === 2) {
     const ecNumber = parseInt(splitOnEC[1], 10);
     if (ecNumber !== 0 && !isNaN(ecNumber)) {
@@ -433,8 +393,12 @@ class NormalTimeStudyState extends TimeStudyState {
 
   checkRequirement() {
     const req = this.config.requirement;
-    if (typeof req === "number") return TimeStudy(req).isBought;
-    return req();
+    return typeof req === "number" ? TimeStudy(req).isBought : req();
+  }
+
+  checkVRequirement() {
+    const req = this.config.requirementV;
+    return req === undefined ? false : req();
   }
 
   get canBeBought() {

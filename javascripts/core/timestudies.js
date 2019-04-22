@@ -126,7 +126,7 @@ function canBuyStudy(id) {
 }
 
 function canBuyLocked(id) {
-  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkRaRequirement();
+  return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkVRequirement();
 }
 
 function canBuyDilationStudy(name) {

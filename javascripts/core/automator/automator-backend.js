@@ -99,6 +99,9 @@ const AutomatorBackend = {
       if (typeof arg === "number") return new Decimal(arg);
       if (arg instanceof Decimal) return arg;
       if (typeof arg !== "string") throw crash("Can't turn this into a number");
+      const fromString = new Decimal(arg);
+      // TODO: deal with this string - Decimal issue
+      if (!isNaN(fromString.mantissa) && !isNaN(fromString.exponent)) return fromString;
       if (this.definedNumbers[arg] === undefined) throw crash(`Couldn't find variable name ${arg}`);
       return this.definedNumbers[arg];
     },

@@ -1,4 +1,30 @@
-// Time studies
+const TimeStudyPath = {
+  NONE: 0,
+  NORMAL_DIM: 1,
+  INFINITY_DIM: 2,
+  TIME_DIM: 3,
+  ACTIVE: 4,
+  PASSIVE: 5,
+  IDLE: 6,
+  LIGHT: 7,
+  DARK: 8
+};
+
+const NormalTimeStudies = {};
+
+NormalTimeStudies.pathList = [
+  { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
+  { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
+  { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
+  { path: TimeStudyPath.ACTIVE, studies: [121, 131, 141] },
+  { path: TimeStudyPath.PASSIVE, studies: [122, 132, 142] },
+  { path: TimeStudyPath.IDLE, studies: [123, 133, 143] },
+  { path: TimeStudyPath.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
+  { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
+];
+
+NormalTimeStudies.paths = NormalTimeStudies.pathList.mapToObject(e => e.path, e => e.studies);
+
 const TimeTheorems = {
   costMultipliers: {
     AM: new Decimal("1e20000"),
@@ -156,53 +182,93 @@ function getSelectedDimensionStudyPaths() {
   return paths;
 }
 
+function getSelectedPacePaths() {
+  const paths = [];
+  if (TimeStudy(121).isBought) paths.push(TimeStudyPath.ACTIVE);
+  if (TimeStudy(122).isBought) paths.push(TimeStudyPath.PASSIVE);
+  if (TimeStudy(123).isBought) paths.push(TimeStudyPath.IDLE);
+  return paths;
+}
+
+function buyTimeStudyRange(first, last) {
+  for (let id = first; id <= last; ++id) {
+    const study = TimeStudy(id);
+    if (study) study.purchase();
+  }
+}
+
+function buyTimeStudyListUntilID(list, maxId) {
+  for (const i of list) {
+    if (i <= maxId) TimeStudy(i).purchase();
+  }
+}
+
 function studiesUntil(id) {
   const row = Math.floor(id / 10);
-  const lastInPrevRow = row * 10 - 1;
-  for (let buyId = 0; buyId < lastInPrevRow && buyId < 70; ++buyId) {
-    if (TimeStudy(buyId) !== undefined) {
-      TimeStudy(buyId).purchase();
-    }
-  }
-  const dimPaths = getSelectedDimensionStudyPaths();
-  if (DilationUpgrade.timeStudySplit.isBought) {
-    for (let buyId = 71; buyId < lastInPrevRow && buyId < 120; ++buyId) {
-      if (TimeStudy(buyId) !== undefined) {
-        TimeStudy(buyId).purchase();
-      }  
-    }
-  } else if (TimeStudy(201).isBought) {
-    
-  }
-  if (id < 70) return;
-  if (id > 103 && dimPaths.length < 1 && !TimeStudy(201).isBought && !DilationUpgrade.timeStudySplit.isBought) return;
-
   const col = id % 10;
-  const row = Math.floor(id / 10);
-  let path = [0, 0];
-  for (let i = 1; i < 4; i++) {
-    if (player.timestudy.studies.includes(70 + i)) path[0] = i;
-    if (player.timestudy.studies.includes(120 + i)) path[1] = i;
-  }
-  if ((row > 10 && path[0] === 0 && !DilationUpgrade.timeStudySplit.isBought) || (row > 14 && path[1] === 0)) return;
-  for (let i = 1; i < row; i++) {
-    let chosenPath = path[i > 11 ? 1 : 0];
-    let secondPath;
-    if (row > 6 && row < 11) secondPath = col;
-    if ((i > 6 && i < 11) || (i > 11 && i < 15)) {
-      TimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath)).purchase();
+  const lastInPrevRow = row * 10 - 1;
+  const study = TimeStudy(id);
+  // This process is greedy (starts buying studies from the top). However, if the
+  // player shift clicks a study that is immeidately buyable, we try to buy it first --
+  // in case buying studies up to that point renders it unaffordable.
+  study.purchase();
+  const requestedPath = study.path;
+  buyTimeStudyRange(11, Math.min(lastInPrevRow, 70));
+  study.purchase();
+  if (id < 71) return;
+  const dimPaths = getSelectedDimensionStudyPaths();
+  // If we have already selected as many dimension paths as available, we can brute
+  // force our way through buying them; any locked paths will fail to purchase.
+  if (DilationUpgrade.timeStudySplit.isBought ||
+    (dimPaths.length === 2 && TimeStudy(201).isBought) ||
+    (dimPaths.length === 1 && !TimeStudy(201).isBought)) {
+    buyTimeStudyRange(71, Math.min(lastInPrevRow, 120));
+  } else if (id > 103) {
+    // If we haven't chosen dimension paths, and shift clicked something below
+    // them, we don't buy anything until the player makes their selection
+    return;
+  } else {
+    // We buy the requested path first
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
+    // If we have TS201 and previously had a different path than we just bought,
+    // we can buy things in that path as well:
+    if (dimPaths.length > 0 && dimPaths[0] !== requestedPath) {
+      buyTimeStudyListUntilID(NormalTimeStudies.paths[dimPaths[0]], lastInPrevRow);
     }
-    if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) {
-      TimeStudy(i * 10 + secondPath).purchase();
-    } else {
-      for (let j = 1; j < 10; j++) {
-        const study = TimeStudy(i * 10 + j);
-        if (!study) break;
-        study.purchase();
-      }
-    }
+    return;
   }
-  TimeStudy(id).purchase();
+  if (id >= 111) TimeStudy(111).purchase();
+  if (id < 121) return;
+  // If we clicked on a active/idle/passive path, purchase things on that path
+  // before doing anything else
+  if (id <= 143) {
+    buyTimeStudyListUntilID(NormalTimeStudies.paths[requestedPath], id);
+  }
+  // If V rewards are available, brute force purchase studies:
+  if (V.canBuyLockedPath()) {
+    buyTimeStudyRange(121, Math.min(lastInPrevRow, 214));
+  }
+  const pacePaths = getSelectedPacePaths();
+  // If we don't have a middle path chosen at this point, we either can't decide
+  // or can't afford any more studies
+  if (pacePaths.length === 0) return;
+  // Buy as much of the rest of the selected middle path as we need
+  buyTimeStudyListUntilID(NormalTimeStudies.paths[pacePaths[0]], id);
+  buyTimeStudyRange(151, Math.min(lastInPrevRow, 214));
+  // If the user clicked on a study in rows 19-22, we've tried to buy up to the previous
+  // row. Try to buy that study now:
+  study.purchase();
+  if (id < 230) return;
+  // If the user clicked on a study in row 23, then either a) the above purchase call bought it (in
+  // which case, they must have had one of the prerequisites) or b) it didn't, but the user has V
+  // rewards so will be able to buy both prerequisites or c) they can't buy it
+  if (V.canBuyLockedPath()) {
+    TimeStudy(220 + col * 2 - 1).purchase();
+    TimeStudy(220 + col * 2).purchase();
+    // Try to buy the rest of the row 22 studies
+    for (let i = 221; i <= 228; ++i) TimeStudy(i).purchase();
+    study.purchase();
+  }
 }
 
 function studyPath(mode, args) {
@@ -375,18 +441,6 @@ const TimeStudyType = {
   DILATION: 2
 };
 
-const TimeStudyPath = {
-  NONE: 0,
-  NORMAL_DIM: 1,
-  INFINITY_DIM: 2,
-  TIME_DIM: 3,
-  ACTIVE: 4,
-  PASSIVE: 5,
-  IDLE: 6,
-  LIGHT: 7,
-  DARK: 8
-};
-
 class TimeStudyState extends GameMechanicState {
   constructor(config, type) {
     super(config);
@@ -413,6 +467,8 @@ class TimeStudyState extends GameMechanicState {
 class NormalTimeStudyState extends TimeStudyState {
   constructor(config) {
     super(config, TimeStudyType.NORMAL);
+    const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
+    this._path = path === undefined ? TimeStudyPath.NONE : path.path;
   }
 
   get isBought() {
@@ -454,21 +510,9 @@ class NormalTimeStudyState extends TimeStudyState {
   }
 
   get path() {
-    const path = NormalTimeStudyState.paths.find(p => p.studies.includes(this.id));
-    return path === undefined ? TimeStudyPath.NONE : path.path;
+    return this._path;
   }
 }
-
-NormalTimeStudyState.paths = [
-  { path: TimeStudyPath.NORMAL_DIM, studies: [71, 81, 91, 101] },
-  { path: TimeStudyPath.INFINITY_DIM, studies: [72, 82, 92, 102] },
-  { path: TimeStudyPath.TIME_DIM, studies: [73, 83, 93, 103] },
-  { path: TimeStudyPath.ACTIVE, studies: [121, 131, 141] },
-  { path: TimeStudyPath.PASSIVE, studies: [122, 132, 142] },
-  { path: TimeStudyPath.IDLE, studies: [123, 133, 143] },
-  { path: TimeStudyPath.LIGHT, studies: [221, 223, 225, 227, 231, 233] },
-  { path: TimeStudyPath.DARK, studies: [222, 224, 226, 228, 232, 234] }
-];
 
 NormalTimeStudyState.studies = mapGameData(
   GameDatabase.eternity.timeStudies.normal,

@@ -870,7 +870,7 @@ function gameLoop(diff, options = {}) {
 
   // Reality unlock and TTgen perk autobuy
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
-  if (Perk.autounlockReality.isBought && player.timeDimension8.bought != 0 && gainedRealityMachines().gt(0))  buyDilationStudy(6, 5e9);
+  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
@@ -1023,11 +1023,8 @@ function autoBuyTimeDims() {
 }
 
 function autoBuyExtraTimeDims() {
-  if (player.timeDimension8.bought == 0 && Perk.autounlockTD.isBought) {
-    buyDilationStudy(2, 1000000)
-    buyDilationStudy(3, 1e7)
-    buyDilationStudy(4, 1e8)
-    buyDilationStudy(5, 1e9)
+  if (player.timeDimension8.bought === 0 && Perk.autounlockTD.isBought) {
+    for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
 }
 

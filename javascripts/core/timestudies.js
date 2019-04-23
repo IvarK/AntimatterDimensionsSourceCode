@@ -110,32 +110,21 @@ function calculateTimeStudiesCost() {
   return totalCost;
 }
 
-function buyDilationStudy(name, cost, quiet) {
-    if ((player.timestudy.theorem.gte(cost) || (name === 6 && player.realities > 0)) && canBuyDilationStudy(name) && !player.dilation.studies.includes(name)) {
-        if (name === 1) {
-            if (!quiet) {
-              Tab.eternity.dilation.show();
-            }
-          if (Perk.autounlockDilation1.isBought) {
-            for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
-          }
-          if (Perk.autounlockDilation2.isBought) {
-            for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
-          }
-          if (Perk.startTP.isBought) {
-            player.dilation.tachyonParticles =
-              player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
-          }
-        }
-        if (name === 6 && !Perk.autounlockReality.isBought) {
-            showRealityTab("glyphstab");
-        }
-        player.dilation.studies.push(name)
-        if (name !== 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-        else if (player.realities === 0 && name === 6) player.timestudy.theorem = player.timestudy.theorem.minus(cost)
-        return true
-    } return false
+function unlockDilation(quiet) {
+  if (!quiet) {
+    Tab.eternity.dilation.show();
   }
+  if (Perk.autounlockDilation1.isBought) {
+    for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
+  }
+  if (Perk.autounlockDilation2.isBought) {
+    for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
+  }
+  if (Perk.startTP.isBought) {
+    player.dilation.tachyonParticles =
+      player.dilation.tachyonParticles.plus(Enslaved.isRunning ? 1 : 10);
+  }
+}
 
 function hasRow(row) {
   for (let i = 1; i < 10; ++i) {
@@ -153,25 +142,6 @@ function canBuyStudy(id) {
 
 function canBuyLocked(id) {
   return V.canBuyLockedPath() && TimeStudy(id) && TimeStudy(id).checkVRequirement();
-}
-
-function canBuyDilationStudy(name) {
-  if (name === 1) {
-    const requirementSatisfied = Perk.bypassECDilation.isBought ||
-      EternityChallenge(11).isFullyCompleted &&
-      EternityChallenge(12).isFullyCompleted &&
-      player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(13000);
-    const isAffordable = player.timestudy.theorem.gte(5000);
-    const studiesAreBought = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
-    return requirementSatisfied && isAffordable && studiesAreBought;
-  }
-  if (name === 6) {
-    const isAffordable = player.timestudy.theorem.gte(5000000000) || player.realities > 0;
-    return player.eternityPoints.gte("1e4000") && TimeStudy.timeDimension(8).isBought && isAffordable;
-  }
-  // TODO
-  const config = Object.values(GameDatabase.eternity.timeStudies.dilation).find(config => config.id === name);
-  return player.dilation.studies.includes(name - 1) && player.timestudy.theorem.gte(config.cost);
 }
 
 function getSelectedDimensionStudyPaths() {
@@ -651,16 +621,25 @@ class DilationTimeStudyState extends TimeStudyState {
   }
 
   get canBeBought() {
-    return canBuyDilationStudy(this.id);
+    return this.isAffordable && this.config.requirement();
   }
 
   get description() {
     return this.config.description;
   }
 
-  purchase() {
-    if (!this.canBeBought) return false;
-    buyDilationStudy(this.id, this.cost);
+  get cost() {
+    return typeof this.config.cost === "function" ? this.config.cost() : this.config.cost;
+  }
+
+  purchase(quiet = false) {
+    if (this.isBought || !this.canBeBought) return false;
+    if (this.id === 1) unlockDilation(quiet);
+    if (this.id === 6 && !Perk.autounlockReality.isBought) {
+      showRealityTab("glyphstab");
+    }
+    player.dilation.studies.push(this.id);
+    player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;
   }
 }

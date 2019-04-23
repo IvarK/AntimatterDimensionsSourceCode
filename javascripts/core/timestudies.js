@@ -551,6 +551,25 @@ class ECTimeStudyState extends TimeStudyState {
     return true;
   }
 
+  purchaseUntil() {
+    const studiesToBuy = [
+      undefined,
+      171, 171, 171,
+      143, 42, 121,
+      111, 123, 151,
+      181, 212, 214
+    ];
+    studiesUntil(studiesToBuy[this.id]);
+    // For EC 11 and 12, we can't choose between light and dark, but we can buy the
+    // pair of row 21 things
+    if (this.id === 11) {
+      TimeStudy(211).pirchase();
+    } else if (this.id === 12) {
+      TimeStudy(213).purchase();
+    }
+    this.purchase();
+  }
+
   get canBeBought() {
     if (!this.isAffordable) {
       return false;

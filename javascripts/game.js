@@ -364,17 +364,6 @@ function unlockEChall(idx) {
   }
 }
 
-function getNewInfReq() {
-    if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
-    else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
-    else if (!player.infDimensionsUnlocked[2]) return new Decimal("1e2400")
-    else if (!player.infDimensionsUnlocked[3]) return new Decimal("1e10500")
-    else if (!player.infDimensionsUnlocked[4]) return new Decimal("1e30000")
-    else if (!player.infDimensionsUnlocked[5]) return new Decimal("1e45000")
-    else if (!player.infDimensionsUnlocked[6]) return new Decimal("1e54000")
-    else return new Decimal("1e60000")
-}
-
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -590,54 +579,13 @@ function gameLoop(diff, options = {}) {
 
     DeltaTimeState.update(realDiff, diff);
 
-    if (player.thisInfinityTime < -10) player.thisInfinityTime = Infinity
-    if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
-
     if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
 
-    if (player.secondAmount.neq(0)) {
-      player.matter = player.matter.times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
-    }
-    if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
-        Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` + 
-          `${shorten(player.matter, 2, 2)} matter.`);
-        softReset(0);
-    }
+    updateNormalAndInfinityChallenges(diff);
 
-    if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
-
-    if (NormalChallenge(3).isRunning || player.matter.gte(1)) {
-      player.chall3Pow = Decimal.min(Decimal.MAX_NUMBER, player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)));
-    }
-    player.chall2Pow = Math.min(player.chall2Pow + diff/100/1800, 1);
-    if (InfinityChallenge(2).isRunning) {
-        if (postC2Count >= 8 || diff > 8000) {
-            if (player.eightAmount.gt(0)) {
-                sacrificeReset();
-            }
-            postC2Count = 0;
-        }
-        else {
-          postC2Count++;
-        }
-    }
-    if (InfinityUpgrade.ipGen.isBought) {
-      const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
-      // player.partInfinityPoint - progress until next ipGen income (fractional, from 0 to 1)
-      player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
-      if (player.partInfinityPoint >= 1) {
-        const genCount = Math.floor(player.partInfinityPoint);
-        const genBoost = GameCache.totalIPMult.value.times(genCount);
-        if (Teresa.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55));
-        } else if (V.isRunning) {
-          player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5));
-        } else {
-          player.infinityPoints = player.infinityPoints.plus(genBoost);
-        }
-        player.partInfinityPoint -= genCount;
-      }
-    }
+    // IP generation is broken into a couple of places in gameLoop; changing that might change the
+    // behavior of eternity farming.
+    preProductionGenerateIP(diff);
 
     if (!EternityChallenge(4).isRunning) {
       let infGen = new Decimal(0);
@@ -677,8 +625,6 @@ function gameLoop(diff, options = {}) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
       }
     }
-
-    player.infinityPoints = player.infinityPoints.plus(Player.bestRunIPPM.times(player.offlineProd/100).times(diff/60000))
 
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     if (player.money.lte(Decimal.MAX_NUMBER) ||
@@ -849,15 +795,7 @@ function gameLoop(diff, options = {}) {
         document.getElementById("challengesbtn").style.display = "inline-block";
     }
 
-    var infdimpurchasewhileloop = 1;
-    while (player.eternities > 24 && (getNewInfReq().lt(player.money) || Perk.bypassIDAntimatter.isBought) && player.infDimensionsUnlocked[7] === false) {
-        for (i=0; i<8; i++) {
-            if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
-        }
-        InfinityDimension.unlockNext();
-        if (player.infDimBuyers[i-1] && !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
-        infdimpurchasewhileloop = 1;
-    }
+    tryUnlockInfinityDimensions();
 
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     DilationUpgrade.ttGenerator.applyEffect(gen =>

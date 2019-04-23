@@ -399,3 +399,25 @@ class BreakInfinityIPGenUpgrade extends GameMechanicState {
 }
 
 BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);
+
+function preProductionGenerateIP(diff) {
+  if (InfinityUpgrade.ipGen.isBought) {
+    const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
+    // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
+    player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+    if (player.partInfinityPoint >= 1) {
+      const genCount = Math.floor(player.partInfinityPoint);
+      const genBoost = GameCache.totalIPMult.value.times(genCount);
+      if (Teresa.isRunning) {
+        player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55));
+      } else if (V.isRunning) {
+        player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5));
+      } else {
+        player.infinityPoints = player.infinityPoints.plus(genBoost);
+      }
+      player.partInfinityPoint -= genCount;
+    }
+  }
+  player.infinityPoints = player.infinityPoints
+    .plus(Player.bestRunIPPM.times(player.offlineProd / 100).times(diff / 60000));
+}

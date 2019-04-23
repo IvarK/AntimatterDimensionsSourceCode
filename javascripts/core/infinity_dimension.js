@@ -1,3 +1,15 @@
+function getNewInfReq() {
+  if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
+  else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
+  else if (!player.infDimensionsUnlocked[2]) return new Decimal("1e2400")
+  else if (!player.infDimensionsUnlocked[3]) return new Decimal("1e10500")
+  else if (!player.infDimensionsUnlocked[4]) return new Decimal("1e30000")
+  else if (!player.infDimensionsUnlocked[5]) return new Decimal("1e45000")
+  else if (!player.infDimensionsUnlocked[6]) return new Decimal("1e54000")
+  else return new Decimal("1e60000")
+}
+
+
 function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(kongAllDimMult)
     .timesEffectsOf(
@@ -156,6 +168,18 @@ class InfinityDimensionState {
     this._props = player[`infinityDimension${tier}`];
     this._tier = tier;
     this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
+    const UNLOCK_REQUIREMENTS = [
+      undefined,
+      new Decimal("1e1100"),
+      new Decimal("1e1900"),
+      new Decimal("1e2400"),
+      new Decimal("1e10500"),
+      new Decimal("1e30000"),
+      new Decimal("1e45000"),
+      new Decimal("1e54000"),
+      new Decimal("1e60000"),
+    ];
+    this._unlockRequirement = UNLOCK_REQUIREMENTS[tier];
   }
 
   get tier() {
@@ -211,7 +235,7 @@ class InfinityDimensionState {
   }
 
   get requirement() {
-    return InfinityDimensionState.requirements[this._tier];
+    return this._unlockRequirement;
   }
 
   get isAutobuyerUnlocked() {
@@ -325,18 +349,6 @@ class InfinityDimensionState {
   }
 }
 
-InfinityDimensionState.requirements = [
-  null,
-  new Decimal("1e1100"),
-  new Decimal("1e1900"),
-  new Decimal("1e2400"),
-  new Decimal("1e10500"),
-  new Decimal("1e30000"),
-  new Decimal("1e45000"),
-  new Decimal("1e54000"),
-  new Decimal("1e60000")
-];
-
 function InfinityDimension(tier) {
   return new InfinityDimensionState(tier);
 }
@@ -356,3 +368,20 @@ InfinityDimension.next = function() {
     .map(InfinityDimension)
     .first(dim => !dim.isUnlocked);
 };
+
+function tryUnlockInfinityDimensions() {
+  var infdimpurchasewhileloop = 1;
+  while (player.eternities > 24 &&
+     (getNewInfReq().lt(player.money) || Perk.bypassIDAntimatter.isBought) &&
+      player.infDimensionsUnlocked[7] === false) {
+      for (i=0; i<8; i++) {
+          if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
+      }
+      InfinityDimension.unlockNext();
+      if (player.infDimBuyers[i-1] &&
+         !EternityChallenge(2).isRunning &&
+          !EternityChallenge(8).isRunning &&
+           !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
+      infdimpurchasewhileloop = 1;
+  }
+}

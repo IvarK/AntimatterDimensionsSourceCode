@@ -1,15 +1,3 @@
-function getNewInfReq() {
-  if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
-  else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1900")
-  else if (!player.infDimensionsUnlocked[2]) return new Decimal("1e2400")
-  else if (!player.infDimensionsUnlocked[3]) return new Decimal("1e10500")
-  else if (!player.infDimensionsUnlocked[4]) return new Decimal("1e30000")
-  else if (!player.infDimensionsUnlocked[5]) return new Decimal("1e45000")
-  else if (!player.infDimensionsUnlocked[6]) return new Decimal("1e54000")
-  else return new Decimal("1e60000")
-}
-
-
 function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(kongAllDimMult)
     .timesEffectsOf(
@@ -321,7 +309,7 @@ class InfinityDimensionState {
     } else if (Laitela.isRunning) {
       mult = mult.pow(0.01)
     }
-    
+
     return mult;
   }
 
@@ -370,18 +358,16 @@ InfinityDimension.next = function() {
 };
 
 function tryUnlockInfinityDimensions() {
-  var infdimpurchasewhileloop = 1;
-  while (player.eternities > 24 &&
-     (getNewInfReq().lt(player.money) || Perk.bypassIDAntimatter.isBought) &&
-      player.infDimensionsUnlocked[7] === false) {
-      for (i=0; i<8; i++) {
-          if (player.infDimensionsUnlocked[i]) infdimpurchasewhileloop++
+  if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
+  for (let tier = 1; tier <= 8; ++tier) {
+    if (InfinityDimension(tier).isUnlocked) continue;
+    if (Perk.bypassIDAntimatter.isBought || InfinityDimension(tier).requirement.lt(player.money)) {
+      InfinityDimension(tier).isUnlocked = true;
+      EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
+      if (player.infDimBuyers[tier - 1] &&
+        !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
+        buyMaxInfDims(tier);
       }
-      InfinityDimension.unlockNext();
-      if (player.infDimBuyers[i-1] &&
-         !EternityChallenge(2).isRunning &&
-          !EternityChallenge(8).isRunning &&
-           !EternityChallenge(10).isRunning) buyMaxInfDims(infdimpurchasewhileloop)
-      infdimpurchasewhileloop = 1;
+    }
   }
 }

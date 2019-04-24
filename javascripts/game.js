@@ -833,10 +833,10 @@ function gameLoopWithAutobuyers(seconds, ticks, real) {
 }
 
 function simulateTime(seconds, real, fast) {
-
-    //the game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted into a higher diff per tick
-    //warning: do not call this function with real unless you know what you're doing
-    //calling it with fast will only simulate it with a max of 50 ticks
+  // The game is simulated at a base 50ms update rate, with a max of 1000 ticks. additional ticks are converted
+  // into a higher diff per tick
+  // warning: do not call this function with real unless you know what you're doing
+  // calling it with fast will only simulate it with a max of 50 ticks
     var ticks = seconds * 20;
     var bonusDiff = 0;
     var playerStart = deepmerge.all([{}, player]);

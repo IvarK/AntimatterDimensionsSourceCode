@@ -407,14 +407,7 @@ function preProductionGenerateIP(diff) {
     player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
     if (player.partInfinityPoint >= 1) {
       const genCount = Math.floor(player.partInfinityPoint);
-      const genBoost = GameCache.totalIPMult.value.times(genCount);
-      if (Teresa.isRunning) {
-        player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.55));
-      } else if (V.isRunning) {
-        player.infinityPoints = player.infinityPoints.plus(genBoost.pow(0.5));
-      } else {
-        player.infinityPoints = player.infinityPoints.plus(genBoost);
-      }
+      player.infinityPoints = player.infinityPoints.plus(new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen));
       player.partInfinityPoint -= genCount;
     }
   }

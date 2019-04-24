@@ -361,13 +361,13 @@ function tryUnlockInfinityDimensions() {
   if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
-    if (Perk.bypassIDAntimatter.isBought || InfinityDimension(tier).requirement.lt(player.money)) {
-      InfinityDimension(tier).isUnlocked = true;
-      EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
-      if (player.infDimBuyers[tier - 1] &&
-        !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
-        buyMaxInfDims(tier);
-      }
+    // If we cannot unlock this one, we can't unlock the rest, either
+    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.money)) break;
+    InfinityDimension(tier).isUnlocked = true;
+    EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
+    if (player.infDimBuyers[tier - 1] &&
+      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
+      buyMaxInfDims(tier);
     }
   }
 }

@@ -101,7 +101,7 @@ function secondSoftReset() {
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
-    player.reallydidnt = true;
+    player.noEighthDimensions = true;
     AchievementTimers.marathon2.reset();
 }
 

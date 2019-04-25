@@ -270,7 +270,7 @@ var player = {
   eterc8repl: 40,
   dimlife: true,
   dead: true,
-  reallydidnt: true,
+  noEighthDimensions: true,
   dilation: {
     studies: [],
     active: false,

@@ -91,9 +91,6 @@ function IDAmountToIDPurchases(baseAmount) {
   return baseAmount / 10;
 }
 
-const initIDCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
-var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
-var infPowerMults = [null, 50, 30, 10, 5, 5, 5, 5, 5]
 const HARDCAP_ID_PURCHASES = 2000000;
 
 function buyManyInfinityDimension(tier) {
@@ -102,7 +99,7 @@ function buyManyInfinityDimension(tier) {
   player.infinityPoints = player.infinityPoints.minus(dim.cost)
   dim.amount = dim.amount.plus(10);
   dim.cost = Decimal.round(dim.cost.times(dim.costMultiplier));
-  dim.power = dim.power.times(infPowerMults[tier])
+  dim.power = dim.power.times(dim.powerMultiplier);
   dim.power = dim.power.timesEffectsOf(tier === 8 ? GlyphSacrifice.infinity : null);
   dim.baseAmount += IDPurchasesToIDAmount(1)
 
@@ -121,16 +118,17 @@ function buyMaxInfDims(tier) {
   const purchasesUntilHardcap = IDAmountToIDPurchases(dim.baseAmountCap - dim.baseAmount);
   toBuy = Math.min(toBuy, purchasesUntilHardcap);
 
-  dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
-  player.infinityPoints = player.infinityPoints.minus(dim.cost)
-  dim.cost = dim.cost.times(costMult)
-  dim.amount = dim.amount.plus(10*toBuy);
+  dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy - 1));
+  player.infinityPoints = player.infinityPoints.minus(dim.cost);
+  dim.cost = dim.cost.times(costMult);
+  dim.amount = dim.amount.plus(10 * toBuy);
   if (toBuy > 0) {
-    const base = infPowerMults[tier] * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
+    const base = dim.powerMultiplier * Effects.product(tier === 8 ? GlyphSacrifice.infinity : null);
     dim.power = dim.power.times(Decimal.pow(base, toBuy));
   }
   dim.baseAmount += IDPurchasesToIDAmount(toBuy);
-  buyManyInfinityDimension(tier)
+  buyManyInfinityDimension(tier);
+  return true;
 }
 
 function canBuyInfinityDimension(tier) {
@@ -140,9 +138,9 @@ function canBuyInfinityDimension(tier) {
 }
 
 function buyMaxInfinityDimensions() {
-  if (EternityChallenge(8).isRunning) return false;
-  for (let tier of Array.dimensionTiers) {
-    buyMaxInfDims(tier)
+  if (EternityChallenge(8).isRunning) return;
+  for (const tier of Array.dimensionTiers) {
+    buyMaxInfDims(tier);
   }
 }
 
@@ -170,6 +168,12 @@ class InfinityDimensionState {
       new Decimal("1e60000"),
     ];
     this._unlockRequirement = UNLOCK_REQUIREMENTS[tier];
+    const COST_MULTS = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30];
+    this._costMultiplier = COST_MULTS[tier];
+    const POWER_MULTS = [null, 50, 30, 10, 5, 5, 5, 5, 5];
+    this._powerMultiplier = POWER_MULTS[tier];
+    const BASE_COSTS = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
+    this._baseCost = new Decimal(BASE_COSTS[tier]);
   }
 
   get tier() {
@@ -249,8 +253,7 @@ class InfinityDimensionState {
     let toGain = new Decimal(0);
     if (tier === 8) {
       EternityChallenge(7).reward.applyEffect(v => toGain = v);
-    }
-    else {
+    } else {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
     const current = Decimal.max(this.amount, 1);
@@ -316,9 +319,13 @@ class InfinityDimensionState {
   }
 
   get costMultiplier() {
-    let costMult = infCostMults[this._tier];
+    let costMult = this._costMultiplier;
     EternityChallenge(12).reward.applyEffect(v => costMult = Math.pow(costMult, v));
     return costMult;
+  }
+
+  get powerMultiplier() {
+    return this._powerMultiplier;
   }
 
   get purchaseCap() {
@@ -334,8 +341,7 @@ class InfinityDimensionState {
   }
 
   get hardcapIPAmount() {
-    const initCost = new Decimal(initIDCost[this._tier]);
-    return initCost.times(Decimal.pow(this.costMultiplier, this.purchaseCap));
+    return this._baseCost.times(Decimal.pow(this.costMultiplier, this.purchaseCap));
   }
 }
 

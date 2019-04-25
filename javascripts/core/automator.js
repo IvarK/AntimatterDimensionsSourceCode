@@ -167,9 +167,9 @@ function buy(current) {
   switch(current.target) {
     case "study":
       id = parseInt(current.id)
-      if (TimeStudy(id).isBought) return true
-      else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
-      else return false
+      if (TimeStudy(id).isBought) return true;
+      if (TimeStudy(id).purchase()) return true;
+      return false;
       break;
       case "studyuntil":
           id = parseInt(current.id);
@@ -190,7 +190,7 @@ function buy(current) {
           break;
     case "ttmax":
       if (!player.reality.automatorCommands.has(44)) return false
-      maxTheorems()
+      TimeTheorems.buyMax();
       return true
       break;
     case "ttip":
@@ -199,7 +199,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithIP()) tryingToBuy++
+      if (TimeTheorems.buyWithIP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -212,7 +212,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithEP()) tryingToBuy++
+      if (TimeTheorems.buyWithEP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -225,7 +225,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithAntimatter()) tryingToBuy++
+      if (TimeTheorems.buyWithAntimatter()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -253,7 +253,7 @@ function unlock(current) {
       break;
     case "dilation":
       if (!player.reality.automatorCommands.has(63)) return false
-      if (buyDilationStudy(1, 5000, true)) return true
+      if (TimeStudy.dilation.purchase(true)) return true;
       else return false
       break;
   }

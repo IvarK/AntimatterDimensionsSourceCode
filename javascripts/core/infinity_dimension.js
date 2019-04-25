@@ -156,6 +156,18 @@ class InfinityDimensionState {
     this._props = player[`infinityDimension${tier}`];
     this._tier = tier;
     this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
+    const UNLOCK_REQUIREMENTS = [
+      undefined,
+      new Decimal("1e1100"),
+      new Decimal("1e1900"),
+      new Decimal("1e2400"),
+      new Decimal("1e10500"),
+      new Decimal("1e30000"),
+      new Decimal("1e45000"),
+      new Decimal("1e54000"),
+      new Decimal("1e60000"),
+    ];
+    this._unlockRequirement = UNLOCK_REQUIREMENTS[tier];
   }
 
   get tier() {
@@ -211,7 +223,7 @@ class InfinityDimensionState {
   }
 
   get requirement() {
-    return InfinityDimensionState.requirements[this._tier];
+    return this._unlockRequirement;
   }
 
   get isAutobuyerUnlocked() {
@@ -297,7 +309,7 @@ class InfinityDimensionState {
     } else if (Laitela.isRunning) {
       mult = mult.pow(0.01)
     }
-    
+
     return mult;
   }
 
@@ -331,18 +343,6 @@ class InfinityDimensionState {
   }
 }
 
-InfinityDimensionState.requirements = [
-  null,
-  new Decimal("1e1100"),
-  new Decimal("1e1900"),
-  new Decimal("1e2400"),
-  new Decimal("1e10500"),
-  new Decimal("1e30000"),
-  new Decimal("1e45000"),
-  new Decimal("1e54000"),
-  new Decimal("1e60000")
-];
-
 function InfinityDimension(tier) {
   return new InfinityDimensionState(tier);
 }
@@ -362,3 +362,18 @@ InfinityDimension.next = function() {
     .map(InfinityDimension)
     .first(dim => !dim.isUnlocked);
 };
+
+function tryUnlockInfinityDimensions() {
+  if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
+  for (let tier = 1; tier <= 8; ++tier) {
+    if (InfinityDimension(tier).isUnlocked) continue;
+    // If we cannot unlock this one, we can't unlock the rest, either
+    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.money)) break;
+    InfinityDimension(tier).isUnlocked = true;
+    EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
+    if (player.infDimBuyers[tier - 1] &&
+      !EternityChallenge(2).isRunning && !EternityChallenge(8).isRunning && !EternityChallenge(10).isRunning) {
+      buyMaxInfDims(tier);
+    }
+  }
+}

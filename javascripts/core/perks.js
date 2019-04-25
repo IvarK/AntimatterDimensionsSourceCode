@@ -18,9 +18,9 @@ class PerkState extends PurchasableMechanicState {
   initializeConnections(perks) {
     const dbConnections = GameDatabase.reality.perkConnections;
     const connections = new Set(dbConnections[this.id]);
-    for (let start in dbConnections) {
+    for (const start in dbConnections) {
       if (!dbConnections.hasOwnProperty(start)) continue;
-      const startId = parseInt(start);
+      const startId = parseInt(start, 10);
       if (startId === this.id) continue;
       if (dbConnections[start].includes(this.id)) {
         connections.add(startId);
@@ -113,7 +113,7 @@ const Perk = (function() {
   perks.find = function(id) {
     return perks.all.find(p => p.id === id);
   };
-  for (let perk of perks.all) {
+  for (const perk of perks.all) {
     perk.initializeConnections(perks);
   }
   return perks;

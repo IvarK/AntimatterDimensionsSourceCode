@@ -98,7 +98,7 @@ const GlyphGenerator = {
       level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: {
-        pow: getGlyphEffectStrength("powerpow", level.actualLevel, strength),
+        pow: GameDatabase.reality.glyphEffects.powerpow.effect(level.actualLevel, strength),
       },
     };
   },
@@ -119,7 +119,7 @@ const GlyphGenerator = {
       level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: effects.mapToObject(e => abbreviateEffect(e),
-        e => getGlyphEffectStrength(e, level.actualLevel, strength)),
+        e => GameDatabase.reality.glyphEffects[e].effect(level.actualLevel, strength)),
     };
   },
 
@@ -406,68 +406,6 @@ const GlyphSacrifice = (function() {
   };
 }());
 
-// All glyph effects should be calculated here and will be recalculated on-load if rebalanced
-function getGlyphEffectStrength(effectKey, level, strength) {
-  switch (effectKey) {
-    case "powerpow":
-      return 1.015 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
-    case "powermult":
-      return Decimal.pow(level * strength * 10, level * strength * 9.5)
-    case "powerdimboost":
-      return Math.pow(level * strength, 0.5)
-    case "powerbuy10":
-      return 1 + Math.pow(level * strength, 0.8) / 10
-    case "infinitypow":
-      return 1.007 + Math.pow(level, 0.2) * Math.pow(strength, 0.4) / 75
-    case "infinityrate":
-      return Math.pow(level, 0.2) * Math.pow(strength, 0.4) * 0.1
-    case "infinityipgain":
-      return Math.pow(level * strength, 5) * 100
-    case "infinityinfmult":
-      return Math.pow(level * strength, 1.5) * 2
-    case "replicationspeed":
-      return level * strength * 3
-    case "replicationpow":
-      return 1.1 + Math.pow(level, 0.5) * strength / 25
-    case "replicationdtgain":
-      return 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65) // player.replicanti.e * x
-    case "replicationglyphlevel":
-      return Math.pow(Math.pow(level, 0.25) * Math.pow(strength, 0.4), 0.5) / 50
-    case "dilationdilationMult":
-      return Math.pow(level * strength, 1.5) * 2
-    case "dilationgalaxyThreshold":
-      return 1 - Math.pow(level, 0.17) * Math.pow(strength, 0.35) / 100
-    case "dilationTTgen":
-      return Math.pow(level * strength, 0.5) / 10000 //Per second
-    case "dilationpow":
-      return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25
-    case "timepow":
-      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45) / 75
-    case "timespeed":
-      return 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
-    case "timefreeTickMult":
-      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
-    case "timeeternity":
-      return Math.pow(level * strength, 3) * 100
-    case "effarigblackhole":
-      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75
-    case "effarigrm":
-      return Math.pow(level, 0.6) * strength;
-    case "effarigglyph":
-      return Math.floor(10 * Math.pow(level * strength, 0.5));
-    case "effarigachievement":
-      return 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50
-    case "effarigforgotten":
-      return 1 + 2 * Math.pow(level, 0.25) * Math.pow(strength, 0.4);
-    case "effarigdimensions":
-      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 500
-    case "effarigantimatter":
-      return 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000
-    default:
-      return 0;
-  }
-}
-
 /**
  * This returns just the value, unlike getTotalEffect(), which outputs the softcap status as well
  * This variant is used by GameCache
@@ -536,14 +474,11 @@ function calculateGlyph(glyph) {
     if (glyph.strength === 1) glyph.strength = gaussianBellCurve();
     glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
 
+    const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
     for (const effect in glyph.effects) {
       if (glyph.effects.hasOwnProperty(effect)) {
-        if (Effarig.isRunning) {
-          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, Math.min(glyph.level, Effarig.glyphLevelCap), glyph.strength);
-        }
-        else {
-          glyph.effects[effect] = getGlyphEffectStrength(glyph.type + effect, glyph.level, glyph.strength);
-        }
+        const effectConfig = GameDatabase.reality.glyphEffects[glyph.type + effect];
+        glyph.effects[effect] = effectConfig.effect(level, glyph.strength);
       }
     }
   }
@@ -554,7 +489,7 @@ function getRarity(x) {
 }
 
 /**
- * key is type+effect
+ * Key is type+effect
  */
 function separateEffectKey(effectKey) {
   let type = "";

@@ -442,7 +442,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
     case "dilationpow":
       return 1.1 + Math.pow(level, 0.7) * Math.pow(strength, 0.7) / 25
     case "timepow":
-      return 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45) / 75
+      return 1.01 + Math.pow(level, 0.35) * Math.pow(strength, 0.45) / 75
     case "timespeed":
       let ret = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100
       if (Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)) {
@@ -450,7 +450,7 @@ function getGlyphEffectStrength(effectKey, level, strength) {
       }
       else return ret
     case "timefreeTickMult":
-      return 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100
+      return 1 - Math.pow(level, 0.36) * Math.pow(strength, 0.7) / 200
     case "timeeternity":
       return Math.pow(level * strength, 3) * 100
     case "effarigblackhole":

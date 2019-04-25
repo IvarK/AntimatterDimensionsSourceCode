@@ -298,7 +298,7 @@ GameDatabase.reality.glyphEffects = [
     totalDesc: "Multiplier from \"Buy 10\" ×{value}",
     genericDesc: "\"Buy 10\" bonus multiplier",
     formatEffect: x => shorten(x, 2, 2),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.add,
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],

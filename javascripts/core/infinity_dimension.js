@@ -324,7 +324,7 @@ class InfinityDimensionState {
       return 1;
     }
     if (Enslaved.isCompleted) {
-      return this._purchaseCap + player.totalTickGained;
+      return this._purchaseCap + Math.floor(player.totalTickGained / 1000) * 1000;
     }
     return this._purchaseCap;
   }

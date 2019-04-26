@@ -611,15 +611,19 @@ class NormalDimensionState {
   }
 
   /**
+   * @returns {Decimal}
+   */
+
+  get currencyAmount() {
+    return this._tier >= 3 && NormalChallenge(6).isRunning ? NormalDimension(this._tier - 2).amount : player.money;
+  }
+
+   /**
    * @returns {boolean}
    */
   get isAffordable() {
     if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
-    if (this._tier >= 3 && NormalChallenge(6).isRunning) {
-      return NormalDimension(this._tier - 2).amount.gte(this.cost);
-    } else {
-      return this.cost.lte(player.money);
-    }
+    return this.cost.lte(this.currencyAmount);
   }
 
   /**
@@ -627,11 +631,7 @@ class NormalDimensionState {
    */
   get isAffordableUntil10() {
     if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
-    if (this._tier >= 3 && NormalChallenge(6).isRunning) {
-      return NormalDimension(this._tier - 2).amount.gte(this.costUntil10);
-    } else {
-      return this.costUntil10.lte(player.money);
-    }
+    return this.costUntil10.lte(this.currencyAmount);
   }
 
   get isAvailable() {

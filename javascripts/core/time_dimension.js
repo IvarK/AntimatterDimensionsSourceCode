@@ -51,11 +51,11 @@ function buyTimeDimension(tier, upd) {
 }
 
 function resetTimeDimensions() {
-  for (const dim of TimeDimension.all) dim.amount = new Decimal(dim.bought);
+  for (const dim of TimeDimensions.all) dim.amount = new Decimal(dim.bought);
 }
 
 function fullResetTimeDimensions() {
-  for (const dim of TimeDimension.all) {
+  for (const dim of TimeDimensions.all) {
     dim.cost = new Decimal(timeDimStartCosts[dim.tier]);
     dim.amount = new Decimal(0);
     dim.bought = 0;
@@ -255,11 +255,10 @@ class TimeDimensionState {
 
 TimeDimensionState.all = Array.dimensionTiers.map(tier => new TimeDimensionState(tier));
 
-function TimeDimension(tier) {
-  return TimeDimensionState.all[tier - 1];
-}
+const TimeDimension = tier => TimeDimensionState.all[tier - 1];
 
-Object.defineProperty(TimeDimension, "all", {
-  writable: false,
-  value: TimeDimensionState.all,
-});
+const TimeDimensions = {
+  get all() {
+    return TimeDimensionState.all;
+  },
+};

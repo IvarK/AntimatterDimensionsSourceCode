@@ -351,30 +351,28 @@ class InfinityDimensionState {
 
 InfinityDimensionState.all = Array.dimensionTiers.map(tier => new InfinityDimensionState(tier));
 
-function InfinityDimension(tier) {
-  return InfinityDimensionState.all[tier - 1];
-}
+const InfinityDimension = tier => InfinityDimensionState.all[tier - 1];
 
-Object.defineProperty(InfinityDimension, "all", {
-  writable: false,
-  value: InfinityDimensionState.all,
-});
-
-InfinityDimension.unlockNext = function() {
-  if (InfinityDimension(8).isUnlocked) return;
-  const next = InfinityDimension.next();
-  if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
-  next.isUnlocked = !next.isUnlocked;
-  EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
+const InfinityDimensions = {
+  get all() {
+    return InfinityDimensionState.all;
+  },
+  unlockNext() {
+    if (InfinityDimension(8).isUnlocked) return;
+    const next = InfinityDimensions.next();
+    if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
+    next.isUnlocked = !next.isUnlocked;
+    EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
+  },
+  next() {
+    if (InfinityDimension(8).isUnlocked)
+      throw "All Infinity Dimensions are unlocked";
+    return Array.dimensionTiers
+      .map(InfinityDimension)
+      .first(dim => !dim.isUnlocked);
+  },
 };
 
-InfinityDimension.next = function() {
-  if (InfinityDimension(8).isUnlocked)
-    throw "All Infinity Dimensions are unlocked";
-  return Array.dimensionTiers
-    .map(InfinityDimension)
-    .first(dim => !dim.isUnlocked);
-};
 
 function tryUnlockInfinityDimensions() {
   if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;

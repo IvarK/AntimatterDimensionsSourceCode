@@ -70,6 +70,9 @@ const GlyphTooltipComponent = {
     rarityInfo() {
       return getRarity(this.strength);
     },
+    roundedRarity() {
+      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10);
+    },
     descriptionStyle() {
       return {
         color: this.rarityInfo.color,
@@ -79,7 +82,7 @@ const GlyphTooltipComponent = {
       };
     },
     description() {
-      return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
+      return `${this.rarityInfo.name} glyph of ${this.type} (${this.roundedRarity.toFixed(1)}%)`;
     },
     isLevelCapped() {
       return this.levelCap < this.level;

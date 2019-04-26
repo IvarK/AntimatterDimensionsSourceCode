@@ -35,7 +35,6 @@ function sacrificeBtnClick() {
     }
   }
 
-  auto = false;
   return sacrificeReset();
 }
 

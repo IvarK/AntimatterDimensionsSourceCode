@@ -140,8 +140,6 @@ class Galaxy {
 
 function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
-  if (autoS) auto = false;
-  autoS = true;
   player.galaxies++;
   player.tickDecrease -= 0.03;
   player.resets = 0;

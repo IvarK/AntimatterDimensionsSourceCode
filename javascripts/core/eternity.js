@@ -135,8 +135,6 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
   player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-  player.autoIP = new Decimal(0);
-  player.autoTime = 1e300;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   if (player.eternities < 20) {

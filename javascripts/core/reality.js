@@ -300,8 +300,6 @@ function completeReality(force, reset, auto = false) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.autoIP = new Decimal(0);
-  player.autoTime = 1e300;
   player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
   if (!isRUPG10Bought) {
     player.autoCrunchMode = AutoCrunchMode.AMOUNT;
@@ -428,17 +426,6 @@ function handleCelestialRuns(force) {
 
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false
-  }
-}
-
-function fullResetTimeDimensions() {
-  const cost = [1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
-  for (let i = 0; i < 8; i++) {
-    let dimension = player["timeDimension" + (i + 1)];
-    dimension.cost = new Decimal(cost[i]);
-    dimension.amount = new Decimal(0);
-    dimension.bought = 0;
-    dimension.power = new Decimal(1);
   }
 }
 

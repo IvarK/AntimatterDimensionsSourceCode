@@ -84,7 +84,7 @@ dev.fixSave = function() {
   
     var fixed = save.replace(/NaN/gi, "10")
     var stillToDo = JSON.parse(fixed)
-    for (let i=0; i<stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
+    for (let i = 0; i < stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
     console.log(stillToDo)
     
     var save_data = stillToDo
@@ -235,7 +235,7 @@ dev.updateTestSave = function() {
         else player.bestEternity *= 100;
         if (player.bestReality === 9999999999) player.bestReality = 999999999999;
         else player.bestReality *= 100;
-        for (var i=0; i<10; i++) {
+        for (let i=0; i<10; i++) {
             player.lastTenRealities[i][0] *= 100;
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
@@ -259,7 +259,7 @@ dev.updateTestSave = function() {
     }
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
-        for (var i=1; i<6; i++) {
+        for (let i=1; i<6; i++) {
             if (RealityUpgrade(i).isBought) {
               player.reality.rebuyables[i] = 1
               RealityUpgrade(i).remove();
@@ -435,7 +435,7 @@ dev.updateTestSave = function() {
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
-    for (let i=0; i<10; i++) {
+    for (let i = 0; i < 10; i++) {
       player.lastTenRuns[i][2] = undefined;
       player.lastTenEternities[i][2] = undefined;
       player.lastTenRealities[i][3] = undefined;

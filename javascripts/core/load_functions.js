@@ -54,7 +54,7 @@ function onLoad() {
   }
 
   if (player.version === undefined) { // value will need to be adjusted when update goes live
-      for (var i = 0; i < player.autobuyers.length; i++) {
+      for (let i = 0; i < player.autobuyers.length; i++) {
           if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
       }
       player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

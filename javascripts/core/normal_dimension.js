@@ -615,7 +615,9 @@ class NormalDimensionState {
    */
 
   get currencyAmount() {
-    return this._tier >= 3 && NormalChallenge(6).isRunning ? NormalDimension(this._tier - 2).amount : player.money;
+    return this._tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this._tier - 2).amount
+      : player.money;
   }
 
    /**

@@ -361,15 +361,13 @@ const InfinityDimensions = {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
     if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
-    next.isUnlocked = !next.isUnlocked;
+    next.isUnlocked = true;
     EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
   next() {
     if (InfinityDimension(8).isUnlocked)
       throw "All Infinity Dimensions are unlocked";
-    return Array.dimensionTiers
-      .map(InfinityDimension)
-      .first(dim => !dim.isUnlocked);
+    return this.all.first(dim => !dim.isUnlocked);
   },
 };
 

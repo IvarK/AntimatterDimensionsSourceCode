@@ -327,12 +327,12 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powerbuy10",
     glyphTypes: ["power"],
-    singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {value}",
+    singleDesc: "Increase the bonus from buying 10 dimensions by ×{value}",
     totalDesc: "Multiplier from \"Buy 10\" ×{value}",
-    genericDesc: "\"Buy 10\" bonus multiplier",
-    effect: (level, strength) => 1 + Math.pow(level * strength, 0.8) / 10,
+    genericDesc: "\"Buy 10\" bonus increase",
+    effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => shorten(x, 2, 2),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.add,
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],

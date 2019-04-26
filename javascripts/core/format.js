@@ -36,7 +36,7 @@ function shortenSmallInteger(value) {
 
 function shortenPostBreak(value, places, placesUnder1000) {
   Notation.forcePostBreakFormat = true;
-  const shortened = this.shorten(value, places, placesUnder1000);
+  const shortened = shorten(value, places, placesUnder1000);
   Notation.forcePostBreakFormat = false;
   return shortened;
 }

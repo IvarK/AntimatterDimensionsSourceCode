@@ -10,8 +10,7 @@ GameDatabase.celestials.v = {
     {
       id: 0,
       name: "Cool Runnings",
-      description: (formattedValue, value) =>
-      `Unlock reality with at most ${formattedValue} ${pluralize("glyph", value)} equipped.`,
+      description: value => `Unlock reality with at most ${value} ${pluralize("glyph", value)} equipped.`,
       values: [5, 4, 3, 2, 1, 0],
       condition: x => TimeStudy.reality.isBought && Glyphs.activeList.length <= x
     },
@@ -20,27 +19,26 @@ GameDatabase.celestials.v = {
       name: "AntiStellar",
       description: value => `Have ${value} total galaxies from all types.`,
       values: [2500, 2750, 3000, 3250, 3500, 3750],
-      condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x,
-      format: x => x
+      condition: x => Replicanti.galaxies.total + player.galaxies + player.dilation.freeGalaxies >= x
     },
     {
       id: 2,
       name: "Se7en deadly matters",
-      description: value => `Get ${value} IP in Eternity Challenge 7.`,
+      description: value => `Get ${shorten(value)} IP in Eternity Challenge 7.`,
       values: ["1e250000", "1e270000", "1e290000", "1e310000", "1e330000", "1e350000"].map(v => new Decimal(v)),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x)
     },
     {
       id: 3,
       name: "Young Boy",
-      description: value => `Get ${value} Antimatter in Eternity Challenge 12.`,
+      description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12.`,
       values: ["1e275000000", "1e300000000", "1e325000000", "1e350000000", "1e375000000", "1e400000000"].map(v => new Decimal(v)),
       condition: x => EternityChallenge(12).isRunning && player.money.gte(x)
     },
     {
       id: 4,
       name: "Eternal Sunshine",
-      description: value => `Get ${value} EP.`,
+      description: value => `Get ${shorten(value)} EP.`,
       values: ["1e2000", "1e2400", "1e2800", "1e3200", "1e3600", "1e4000"].map(v => new Decimal(v)),
       condition: x => player.eternityPoints.gte(x)
     },

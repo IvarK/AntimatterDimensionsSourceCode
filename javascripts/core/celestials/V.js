@@ -20,9 +20,7 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   get formattedDescription() {
-    const val = this.conditionValue;
-    const formatted = this.config.format ? this.config.format(val) : shorten(val);
-    return this.config.description(formatted, val);
+    return this.config.description(this.conditionValue);
   }
 
   set completions(value) {

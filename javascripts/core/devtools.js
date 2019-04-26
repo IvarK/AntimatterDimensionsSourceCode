@@ -84,7 +84,7 @@ dev.fixSave = function() {
   
     var fixed = save.replace(/NaN/gi, "10")
     var stillToDo = JSON.parse(fixed)
-    for (var i=0; i<stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
+    for (let i=0; i<stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
     console.log(stillToDo)
     
     var save_data = stillToDo
@@ -431,11 +431,11 @@ dev.updateTestSave = function() {
 
   if (player.options.testVersion === 24) {
     // following logic from autobuyers (before the addition of wall clock time stats)
-    var speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
+    let speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
-    for (var i=0; i<10; i++) {
+    for (let i=0; i<10; i++) {
       player.lastTenRuns[i][2] = undefined;
       player.lastTenEternities[i][2] = undefined;
       player.lastTenRealities[i][3] = undefined;

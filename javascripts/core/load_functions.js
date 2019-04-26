@@ -176,6 +176,8 @@ function onLoad() {
     moveSavedStudyTrees();
     delete player.challengeTarget;
     moveChallengeInfo();
+    delete player.autoIP;
+    delete player.autoTime;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)

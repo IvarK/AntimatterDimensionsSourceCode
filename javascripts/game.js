@@ -60,8 +60,8 @@ function maxAll() {
 }
 
 function maxDimension(tier) {
-  if (!canBuyDimension(tier)) return;
   const dimension = NormalDimension(tier);
+  if (!dimension.isAvailable) return;
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.pow;
 
@@ -132,7 +132,7 @@ function buyUntilTen(tier) {
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else if (NormalChallenge(9)) multiplySameCosts(dimension.cost);
   else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
-  
+
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
     player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   }
@@ -580,8 +580,6 @@ function gameLoop(diff, options = {}) {
     }
 
     DeltaTimeState.update(realDiff, diff);
-
-    if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
 
     updateNormalAndInfinityChallenges(diff);
 

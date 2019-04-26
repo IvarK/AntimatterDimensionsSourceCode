@@ -300,8 +300,6 @@ function completeReality(force, reset, auto = false) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.autoIP = new Decimal(0);
-  player.autoTime = 1e300;
   player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
   if (!isRUPG10Bought) {
     player.autoCrunchMode = AutoCrunchMode.AMOUNT;

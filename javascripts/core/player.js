@@ -1,7 +1,5 @@
 "use strict";
 
-var auto = false;
-var autoS = true;
 var shiftDown = false;
 var justImported = false;
 var saved = 0;
@@ -257,8 +255,6 @@ let player = {
   eternityChalls: {},
   eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
   etercreq: 0,
-  autoIP: new Decimal(0),
-  autoTime: 1e300,
   infMultBuyer: false,
   autoCrunchMode: AutoCrunchMode.AMOUNT,
   autoEternityMode: AutoEternityMode.AMOUNT,

@@ -238,7 +238,7 @@ class DimensionAutobuyerState extends AutobuyerState {
   tick() {
     if (!this.canTick()) return;
     const tier = this._tier;
-    if (!canBuyDimension(tier)) return;
+    if (!NormalDimension(tier).isAvailable) return;
     if (this.mode === AutobuyerMode.BUY_SINGLE) {
       buyOneDimension(tier);
     }
@@ -297,7 +297,6 @@ class TickspeedAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
-    if (!isTickspeedPurchaseUnlocked()) return;
     if (this.mode === AutobuyerMode.BUY_SINGLE) {
       buyTickSpeed();
     }
@@ -485,7 +484,6 @@ class GalaxyAutobuyerState extends AutobuyerState {
   }
 
   buySingle() {
-    autoS = false;
     galaxyResetBtnClick();
   }
 }
@@ -607,7 +605,6 @@ class InfinityAutobuyerState extends AutobuyerState {
       }
     }
     if (proc) {
-      autoS = false;
       bigCrunchReset();
     }
     this.resetTicks();

@@ -7,7 +7,7 @@ var justImported = false;
 var saved = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
-var player = {
+let player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
   tickspeed: new Decimal(1000),

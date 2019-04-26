@@ -153,7 +153,7 @@ function toggleAllInfDims() {
 
 class InfinityDimensionState {
   constructor(tier) {
-    this._props = player[`infinityDimension${tier}`];
+    this._propsName = `infinityDimension${tier}`;
     this._tier = tier;
     this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
     const UNLOCK_REQUIREMENTS = [
@@ -176,48 +176,52 @@ class InfinityDimensionState {
     this._baseCost = new Decimal(BASE_COSTS[tier]);
   }
 
+  get props() {
+    return player[this._propsName];
+  }
+
   get tier() {
     return this._tier;
   }
 
   get cost() {
-    return this._props.cost;
+    return this.props.cost;
   }
 
   set cost(value) {
-    this._props.cost = value;
+    this.props.cost = value;
   }
 
   get amount() {
-    return this._props.amount;
+    return this.props.amount;
   }
 
   set amount(value) {
-    this._props.amount = value;
+    this.props.amount = value;
   }
 
   get bought() {
-    return this._props.bought;
+    return this.props.bought;
   }
 
   set bought(value) {
-    this._props.bought = value;
+    this.props.bought = value;
   }
 
   get power() {
-    return this._props.power;
+    return this.props.power;
   }
 
   set power(value) {
-    this._props.power = value;
+    this.props.power = value;
   }
 
   get baseAmount() {
-    return this._props.baseAmount;
+    return this.props.baseAmount;
   }
 
   set baseAmount(value) {
-    this._props.baseAmount = value;
+    this.props.baseAmount = value;
   }
 
   get isUnlocked() {
@@ -345,9 +349,16 @@ class InfinityDimensionState {
   }
 }
 
+InfinityDimensionState.all = Array.dimensionTiers.map(tier => new InfinityDimensionState(tier));
+
 function InfinityDimension(tier) {
-  return new InfinityDimensionState(tier);
+  return InfinityDimensionState.all[tier - 1];
 }
+
+Object.defineProperty(InfinityDimension, "all", {
+  writable: false,
+  value: InfinityDimensionState.all,
+});
 
 InfinityDimension.unlockNext = function() {
   if (InfinityDimension(8).isUnlocked) return;

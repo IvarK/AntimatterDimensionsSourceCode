@@ -431,17 +431,6 @@ function handleCelestialRuns(force) {
   }
 }
 
-function fullResetTimeDimensions() {
-  const cost = [1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
-  for (let i = 0; i < 8; i++) {
-    let dimension = player["timeDimension" + (i + 1)];
-    dimension.cost = new Decimal(cost[i]);
-    dimension.amount = new Decimal(0);
-    dimension.bought = 0;
-    dimension.power = new Decimal(1);
-  }
-}
-
 function startRealityOver() {
   if (confirm("This will put you at the start of your reality and reset your progress in this reality. Are you sure you want to do this?")) {
     completeReality(true, true);

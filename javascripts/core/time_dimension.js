@@ -6,9 +6,9 @@ const timeDimStartCosts = [null, 1, 5, 100, 1000,
 const timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
 
 function timeDimensionCostMult(tier) {
-  var base = timeDimCostMults[tier]
-  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8
-  return base
+  let base = timeDimCostMults[tier];
+  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8;
+  return base;
 }
 
 function timeDimensionCost(tier, bought) {
@@ -51,11 +51,16 @@ function buyTimeDimension(tier, upd) {
 }
 
 function resetTimeDimensions() {
-  for (var i=1; i<9; i++) {
-      var dim = player["timeDimension"+i]
-      dim.amount = new Decimal(dim.bought)
-  }
+  for (const dim of TimeDimension.all) dim.amount = new Decimal(dim.bought);
+}
 
+function fullResetTimeDimensions() {
+  for (const dim of TimeDimension.all) {
+    dim.cost = new Decimal(timeDimStartCosts[dim.tier]);
+    dim.amount = new Decimal(0);
+    dim.bought = 0;
+    dim.power = new Decimal(1);
+  }
 }
 
 function toggleAllTimeDims() {
@@ -79,7 +84,7 @@ function buyMaxTimeDimTier(tier) {
   dim.amount = dim.amount.plus(bulk.quantity);
   dim.bought += bulk.quantity;
   dim.cost = timeDimensionCost(tier, dim.bought);
-  let basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
+  const basePower = 2 * Effects.product(tier === 8 ? GlyphSacrifice.time : null);
   dim.power = Decimal.pow(basePower, dim.bought);
   return true
 }
@@ -89,7 +94,7 @@ function buyMaxTimeDimensions() {
   // (reduces overhead at higher EP)
   if (player.eternityPoints.gte(1e10)) {
     for (let i = 8; i > 0; i--) buyMaxTimeDimTier(i);
-  } else {  
+  } else {
     // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
     for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--)
       buyTimeDimension(i, false);
@@ -97,11 +102,11 @@ function buyMaxTimeDimensions() {
     // Should never take more than like 50 iterations; explicit infinite loops make me nervous
     for (let stop = 0; stop < 1000; stop++) {
       let cheapestDim = 1;
-      let cheapestCost = player["timeDimension1"].cost;
+      let cheapestCost = TimeDimension(1).cost;
       for (let i = 2; i <= 4; i++) {
-        if (player["timeDimension"+i].cost.lte(player["timeDimension"+cheapestDim].cost)) {
+        if (TimeDimension(i).cost.lte(cheapestCost)) {
           cheapestDim = i;
-          cheapestCost = player["timeDimension"+cheapestDim].cost;
+          cheapestCost = TimeDimension(i).cost;
         }
       }
       let bought = false;
@@ -138,40 +143,44 @@ function timeDimensionCommonMultiplier() {
 
 class TimeDimensionState {
   constructor(tier) {
-    this._props = player[`timeDimension${tier}`];
+    this._propsName = `timeDimension${tier}`;
     this._tier = tier;
   }
 
+  get props() {
+    return player[this._propsName];
+  }
+
   get cost() {
-    return this._props.cost;
+    return this.props.cost;
   }
 
   set cost(value) {
-    this._props.cost = value;
+    this.props.cost = value;
   }
 
   get amount() {
-    return this._props.amount;
+    return this.props.amount;
   }
 
   set amount(value) {
-    this._props.amount = value;
+    this.props.amount = value;
   }
 
   get power() {
-    return this._props.power;
+    return this.props.power;
   }
 
   set power(value) {
-    this._props.power = value;
+    this.props.power = value;
   }
 
   get bought() {
-    return this._props.bought;
+    return this.props.bought;
   }
 
   set bought(value) {
-    this._props.bought = value;
+    this.props.bought = value;
   }
 
   get isUnlocked() {
@@ -244,6 +253,13 @@ class TimeDimensionState {
   }
 }
 
+TimeDimensionState.all = Array.dimensionTiers.map(tier => new TimeDimensionState(tier));
+
 function TimeDimension(tier) {
-  return new TimeDimensionState(tier);
+  return TimeDimensionState.all[tier - 1];
 }
+
+Object.defineProperty(TimeDimension, "all", {
+  writable: false,
+  value: TimeDimensionState.all,
+});

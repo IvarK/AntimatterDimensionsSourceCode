@@ -130,7 +130,9 @@ function mainIteration() {
         break;
       case "eternity":
         if (!player.reality.automatorCommands.has(62)) return false
+        justImported = true;
         if (eternity(false, true) || cont) automatorIdx+=1
+        justImported = false;
         break;
       case "stop":
         if (!player.reality.automatorCommands.has(72)) return false

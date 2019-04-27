@@ -1,3 +1,5 @@
+"use strict";
+
 const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);

@@ -1,3 +1,5 @@
+"use strict";
+
 const GameStorage = {
   currentSlot: 0,
   saves: {

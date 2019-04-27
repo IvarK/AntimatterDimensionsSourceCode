@@ -1,3 +1,5 @@
+"use strict";
+
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {
   patches: {
@@ -102,6 +104,7 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustSacrificeConfirmation(player);
       GameStorage.migrations.migrateNotation(player);
       GameStorage.migrations.fixAutobuyers(player);
+      GameStorage.migrations.removeAutoIPProperties(player);
     }
   },
 
@@ -341,6 +344,11 @@ GameStorage.migrations = {
     ) {
       player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
     }
+  },
+
+  removeAutoIPProperties(player) {
+    delete player.autoIP;
+    delete player.autoTime;
   },
   
   prePatch(saveData) {

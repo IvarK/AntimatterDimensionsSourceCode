@@ -1,3 +1,5 @@
+"use strict";
+
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.devMigrations = {
   patches: [
@@ -313,6 +315,7 @@ GameStorage.devMigrations = {
     GameStorage.migrations.adjustSacrificeConfirmation,
     GameStorage.migrations.migrateNotation,
     GameStorage.migrations.fixAutobuyers,
+    GameStorage.migrations.removeAutoIPProperties,
   ],
 
   patch(player) {

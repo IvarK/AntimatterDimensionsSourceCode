@@ -309,6 +309,7 @@ function completeReality(force, reset, auto = false) {
   player.eterc8repl = 40;
   player.dimlife = true;
   player.dead = true;
+  player.noEighthDimensions = true;
   if (!reset) player.realities = player.realities + 1;
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
@@ -403,29 +404,32 @@ function completeReality(force, reset, auto = false) {
 
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
-    player.celestials.teresa.run = false
+    player.celestials.teresa.run = false;
     if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
   }
   if (Effarig.isRunning) {
-    player.celestials.effarig.run = false
+    player.celestials.effarig.run = false;
     if (!force && !EffarigUnlock.reality.isUnlocked) {
       EffarigUnlock.reality.unlock();
     }
   }
   if (Enslaved.isRunning) {
-    player.celestials.enslaved.run = false
+    player.celestials.enslaved.run = false;
+    if (!force) {
+      Enslaved.completeRun();
+    }
   }
 
   if (V.isRunning) {
-    player.celestials.v.run = false
+    player.celestials.v.run = false;
   }
 
   if (Ra.isRunning) {
-    player.celestials.ra.run = false
+    player.celestials.ra.run = false;
   }
 
   if (Laitela.isRunning) {
-    player.celestials.laitela.run = false
+    player.celestials.laitela.run = false;
   }
 }
 

@@ -132,8 +132,8 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is much slower</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
+          <p>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</p>
         </button>
-        <div class="o-enslaved-gained-infinities">You have gained <b>{{ shorten(enslavedInfinities) }}</b> infinities in the last 10 seconds.</div>
-      </div>
+        </div>
     </div>`
 });

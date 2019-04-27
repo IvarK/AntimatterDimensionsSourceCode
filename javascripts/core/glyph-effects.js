@@ -155,12 +155,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs × {value} faster ",
     genericDesc: "Game speed multiplier",
-    effect: (level, strength) => {
-      const value = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100;
-      return Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)
-        ? value * Math.max(Math.sqrt(Enslaved.totalInfinities.pLog10()), 1)
-        : value;
-    },
+    effect: (level, strength) => 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {

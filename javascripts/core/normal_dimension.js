@@ -217,7 +217,8 @@ function onBuyDimension(tier) {
   player.postC4Tier = tier;
   postc8Mult = new Decimal(1);
   if (tier !== 8) player.dimlife = false;
-  if (tier !== 1) player.dead = false
+  if (tier !== 1) player.dead = false;
+  if (tier === 8) player.noEighthDimensions = false;
 }
 
 function getCostIncreaseThreshold() {

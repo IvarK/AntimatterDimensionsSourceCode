@@ -268,6 +268,7 @@ let player = {
   eterc8repl: 40,
   dimlife: true,
   dead: true,
+  noEighthDimensions: true,
   dilation: {
     studies: [],
     active: false,
@@ -413,6 +414,7 @@ let player = {
       quoteIdx: 0,
       unlocks: [],
       run: false,
+      completed: false,
       quoteIdx: 0,
       maxQuotes: 6
     },

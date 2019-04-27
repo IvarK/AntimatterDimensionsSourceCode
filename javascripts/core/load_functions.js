@@ -49,7 +49,7 @@ function onLoad() {
   IPminpeak = new Decimal(0)
   EPminpeak = new Decimal(0)
 
-  if (typeof player.autobuyers[9].bulk !== "number") {
+  if (typeof player.autobuyers[9] !== "number" && typeof player.autobuyers[9].bulk !== "number") {
       player.autobuyers[9].bulk = 1
   }
 

@@ -903,9 +903,9 @@ function simulateTime(seconds, real, fast) {
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
       if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
     }
-    popupString = `${offlineIncreases.join(", <br>")}.`;
+    let popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {
-        popupString += ".. Nothing happened."
+      popupString += ".. Nothing happened.";
         SecretAchievement(36).unlock();
     }
 

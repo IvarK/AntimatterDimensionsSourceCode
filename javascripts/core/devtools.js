@@ -350,7 +350,8 @@ dev.updateTestSave = function() {
       infinity: 0,
       time: 0,
       replication: 0,
-      dilation: 0
+      dilation: 0,
+      effarig: 0,
     }
     player.options.testVersion = 15
   }

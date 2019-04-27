@@ -473,14 +473,18 @@ function transformSaveToDecimal() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     let glyph = player.reality.glyphs.active[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      const newValue = new Decimal(glyph.effects.mult);
+      delete glyph.effects.mult;
+      glyph.effects.mult = newValue;
     }
   }
 
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     let glyph = player.reality.glyphs.inventory[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      const newValue = new Decimal(glyph.effects.mult);
+      delete glyph.effects.mult;
+      glyph.effects.mult = newValue;
     }
   }
 }

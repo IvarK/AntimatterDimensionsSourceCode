@@ -310,7 +310,7 @@ dev.updateTestSave = function() {
       for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         let glyph = player.reality.glyphs.active[i]
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         }
       }
@@ -318,7 +318,7 @@ dev.updateTestSave = function() {
       for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
         let glyph = player.reality.glyphs.inventory[i]
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         }
       }

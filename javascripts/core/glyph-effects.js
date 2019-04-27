@@ -145,7 +145,7 @@ GameDatabase.reality.glyphEffects = [
     id: "timepow",
     glyphTypes: ["time"],
     singleDesc: "Time Dimension multipliers ^{value}",
-    effect: (level, strength) => 1.01 + Math.pow(level, 0.3) * Math.pow(strength, 0.45) / 75,
+    effect: (level, strength) => 1.01 + Math.pow(level, 0.32) * Math.pow(strength, 0.45) / 75,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -167,7 +167,7 @@ GameDatabase.reality.glyphEffects = [
     glyphTypes: ["time"],
     singleDesc: "Free tickspeed threshold multiplier ×{value}",
     genericDesc: "Free tickspeed cost multiplier",
-    effect: (level, strength) => 1 - Math.pow(level, 0.18) * Math.pow(strength, 0.35) / 100,
+    effect: (level, strength) => 1 - Math.pow(level, 0.35) * Math.pow(strength, 0.7) / 200,
     // Accurately represent what the multiplier actually does in code, assuming TS171
     // The multiplier is applied only to the part of the multiplier > 1, which means it has less effect
     // than the description implies.

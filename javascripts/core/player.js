@@ -268,7 +268,7 @@ let player = {
   eterc8repl: 40,
   dimlife: true,
   dead: true,
-  noEighthDimensions: true,
+  noEighthDimensions: false,
   dilation: {
     studies: [],
     active: false,

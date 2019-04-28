@@ -485,9 +485,8 @@ let player = {
   }
 };
 
-const defaultStart = deepmerge.all([{}, player]);
-
 const Player = {
+  defaultStart: deepmerge.all([{}, player]),
 
   get totalInfinitied() {
     return player.infinitied.plus(player.infinitiedBank).clampMin(0);

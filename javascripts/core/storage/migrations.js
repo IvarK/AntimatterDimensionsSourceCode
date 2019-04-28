@@ -362,7 +362,7 @@ GameStorage.migrations = {
   patch(saveData) {
     this.prePatch(saveData);
     // This adds all the undefined properties to the save which are in player.js
-    const player = deepmerge.all([defaultStart, saveData]);
+    const player = deepmerge.all([Player.defaultStart, saveData]);
     const versions = Object.keys(this.patches)
       .map(parseFloat)
       .sort();

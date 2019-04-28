@@ -38,7 +38,7 @@ Vue.component("modal-import", {
   computed: {
     player() {
       const save = GameSaveSerializer.deserialize(this.input);
-      return GameStorage.verify(save) ? save : undefined;
+      return GameStorage.verifyPlayerObject(save) ? save : undefined;
     },
     progress() {
       return PlayerProgress.of(this.player);

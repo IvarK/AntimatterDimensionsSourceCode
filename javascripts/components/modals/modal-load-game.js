@@ -20,6 +20,7 @@ Vue.component("modal-load-game", {
       methods: {
         load() {
           GameStorage.loadSlot(this.saveId);
+          Modal.hide();
         },
         formatMoney(money) {
           return this.shortenPostBreak(money, 2, 1);

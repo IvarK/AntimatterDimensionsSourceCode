@@ -90,7 +90,7 @@ dev.fixSave = function() {
   console.log(stillToDo);
 
   const saveData = stillToDo;
-  if (!saveData || !GameStorage.verify(saveData)) {
+  if (!saveData || !GameStorage.verifyPlayerObject(saveData)) {
     alert("Could not fix the save..");
     return;
   }

@@ -19,7 +19,7 @@ const GameStorage = {
 
     if (root === undefined) {
       this.currentSlot = 0;
-      this.loadPlayerObject(defaultStart);
+      this.loadPlayerObject(Player.defaultStart);
       return;
     }
 
@@ -42,12 +42,11 @@ const GameStorage = {
   },
   
   loadSlot(slot) {
+    this.currentSlot = slot;
     // Save current slot to make sure no changes are lost
     this.save(true);
-    this.currentSlot = slot;
     this.loadPlayerObject(this.saves[slot]);
     Tab.dimensions.normal.show();
-    Modal.hide();
     GameUI.notify.info("Game loaded");
   },
 
@@ -55,12 +54,12 @@ const GameStorage = {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
-    const parsedSave = GameSaveSerializer.deserialize(saveData);
-    if (!this.verify(parsedSave)) {
+    const player = GameSaveSerializer.deserialize(saveData);
+    if (!this.verifyPlayerObject(player)) {
       Modal.message.show("Could not load the save");
       return;
     }
-    this.loadPlayerObject(parsedSave);
+    this.loadPlayerObject(player);
     this.save(true);
     GameUI.notify.info("Game imported");
   },
@@ -74,8 +73,8 @@ const GameStorage = {
     this.save(true);
   },
 
-  verify(save) {
-    return save !== undefined && save.money !== undefined;
+  verifyPlayerObject(save) {
+    return save !== undefined && save !== null && save.money !== undefined;
   },
   
   save(silent = false) {
@@ -97,7 +96,7 @@ const GameStorage = {
   },
 
   hardReset() {
-    this.loadPlayerObject(defaultStart);
+    this.loadPlayerObject(Player.defaultStart);
     this.save();
     Tab.dimensions.normal.show();
   },
@@ -110,8 +109,13 @@ const GameStorage = {
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
 
-    if (playerObject === undefined || playerObject === defaultStart) {
-      player = deepmerge.all([{}, defaultStart]);
+    if (
+      playerObject === Player.defaultStart ||
+      !this.verifyPlayerObject(playerObject)
+    ) {
+      player = deepmerge.all([{}, Player.defaultStart]);
+      player.gameCreatedTime = Date.now();
+      player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
     } else {
       player = this.migrations.patch(playerObject);
@@ -159,12 +163,13 @@ const GameStorage = {
 
     Lazy.invalidateAll();
 
-    let diff = new Date().getTime() - player.lastUpdate;
+    let diff = Date.now() - player.lastUpdate;
     if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
       diff = Enslaved.autoStoreRealTime(diff);
     }
     if (diff > 1000 * 1000) {
       simulateTime(diff / 1000);
     }
+    GameUI.update();
   }
 };

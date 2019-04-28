@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.logarithm = new class LogarithmNotation extends Notation {
   formatDecimal(value, places) {
     const log10 = value.log10();

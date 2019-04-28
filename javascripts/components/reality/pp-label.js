@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("pp-label", {
   data() {
     return {

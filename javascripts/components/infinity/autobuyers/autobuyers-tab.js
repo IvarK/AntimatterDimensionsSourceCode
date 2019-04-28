@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("autobuyers-tab", {
   template:
     `<div class="l-autobuyers-tab">

@@ -1,3 +1,5 @@
+"use strict";
+
 class EngineeringNotation extends Notation {
   formatDecimal(value, places) {
     const engineering = this.makeFixedEngineering(value, places);

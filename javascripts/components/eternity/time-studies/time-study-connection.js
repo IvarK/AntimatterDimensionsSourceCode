@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-study-connection", {
   data() {
     return {

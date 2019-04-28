@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("challenge-box", {
   props: {
     name: String,

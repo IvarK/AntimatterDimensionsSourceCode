@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("dilation-time-study", {
   props: {
     setup: Object

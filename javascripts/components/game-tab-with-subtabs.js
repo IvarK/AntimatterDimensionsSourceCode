@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("game-tab-with-subtabs", {
   props: {
     tabs: Array,

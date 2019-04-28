@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("infinity-upgrades-tab", {
   data() {
     return {

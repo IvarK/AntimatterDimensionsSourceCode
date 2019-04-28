@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.bar = new class BarNotation extends Notation {
 get isPainful() {
   return false;

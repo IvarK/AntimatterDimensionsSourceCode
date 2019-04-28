@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-study", {
   mixins: [remMixin],
   data() {
@@ -46,10 +48,16 @@ Vue.component("time-study", {
     },
     handleClick() {
       this.study.purchase();
-    }
+    },
+    shiftClick() {
+      if (this.study.purchaseUntil) this.study.purchaseUntil();
+    },
   },
   template:
-    `<button :class="classObject" :style="styleObject" @click="handleClick">
+    `<button :class="classObject"
+             :style="styleObject"
+             @click.exact="handleClick"
+             @click.shift.exact="shiftClick">
       <slot />
       <cost-display br
         v-if="showCost"

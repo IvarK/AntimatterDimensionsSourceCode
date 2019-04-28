@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.reality.upgrades = (function() {
   const rebuyable = props => {
     props.cost = () => getCostWithLinearCostScaling(

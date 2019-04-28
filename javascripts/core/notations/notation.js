@@ -1,3 +1,5 @@
+"use strict";
+
 class Notation {
   constructor(name) {
     this.name = name;
@@ -50,8 +52,9 @@ class Notation {
    * @protected
    */
   isInfinite(decimal) {
-    const isPreBreak = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
-    return !Notation.forcePostBreakFormat && isPreBreak && decimal.gte(Decimal.MAX_NUMBER);
+    return Notation.isPreBreakFormat &&
+      decimal.gte(Decimal.MAX_NUMBER) &&
+      !Notation.forcePostBreakFormat;
   }
 
   /**
@@ -121,3 +124,8 @@ class Notation {
 }
 
 Notation.forcePostBreakFormat = false;
+Notation.isPreBreakFormat = true;
+
+EventHub.logic.on(GameEvent.GAME_TICK_AFTER, () => {
+  Notation.isPreBreakFormat = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
+});

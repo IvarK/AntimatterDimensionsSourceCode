@@ -143,7 +143,7 @@
                             <label for="automatorOn" style="margin-left: 40px;">on:</label>
                             <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOnOff()">
                         </div>
-                        <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateState()"></textarea>
+                        <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateAutomatorState()"></textarea>
                     </div>
                     <table class="table" id="studytable">
                       <tr>
@@ -415,6 +415,11 @@
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
 
+<script type="text/javascript" src="javascripts/core/storage/serializer.js"></script>
+<script type="text/javascript" src="javascripts/core/storage/storage.js"></script>
+<script type="text/javascript" src="javascripts/core/storage/migrations.js"></script>
+<script type="text/javascript" src="javascripts/core/storage/dev-migrations.js"></script>
+
 <script type="text/javascript" src="javascripts/core/notations/notation.js"></script>
 <script type="text/javascript" src="javascripts/core/notations/scientific.js"></script>
 <script type="text/javascript" src="javascripts/core/notations/engineering.js"></script>
@@ -651,7 +656,6 @@
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
 <script type="text/javascript" src="javascripts/core/black_hole.js"></script>
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
-<script type="text/javascript" src="javascripts/core/load_functions.js"></script>
 <script type="text/javascript" src="javascripts/core/newsticker.js"></script>
 <script type="text/javascript" src="javascripts/core/kong.js"></script>
 <script type="text/javascript" src="javascripts/core/playfab.js"></script>

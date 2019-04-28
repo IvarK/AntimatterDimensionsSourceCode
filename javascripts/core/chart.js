@@ -1,3 +1,5 @@
+"use strict";
+
 Chart.defaults.global.defaultFontColor = 'black';
 Chart.defaults.global.defaultFontFamily = 'Typewriter';
 let dimChartEl = document.createElement("canvas");
@@ -93,7 +95,7 @@ function addChartData(data) {
         }
         if (chart.data.datasets[0].data.length >= points) {
             var temp2 = chart.data.datasets[0].data.slice();
-            for (i=0; i<temp.length; i++) {
+          for (let i = 0; i < temp.length; i++) {
                 temp2[chart.data.datasets[0].data.length - temp.length + i] = temp[i];
                 temp2[i] = data;
             }

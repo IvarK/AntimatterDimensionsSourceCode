@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("select-theme", {
   data() {
     return {

@@ -187,6 +187,10 @@
     "space-in-parens": "error",
     "space-infix-ops": "error",
     "spaced-comment": "error",
+    "strict": [
+      "error",
+      "global"
+    ],
     "switch-colon-spacing": "error",
     "template-tag-spacing": "error",
     "arrow-body-style": "error",

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("plus-minus-button", {
   props: {
     type: {

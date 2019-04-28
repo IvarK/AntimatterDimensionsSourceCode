@@ -1,3 +1,5 @@
+"use strict";
+
 function bigCrunchAnimation() {
   document.body.style.animation = "implode 2s 1";
   setTimeout(() => {
@@ -33,13 +35,6 @@ function bigCrunchReset(disableAnimation = false) {
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
   RealityUpgrades.tryUnlock([7, 8]);
 
-  if (autoS && auto) {
-    let autoIp = infinityPoints.dividedBy(player.thisInfinityTime / 100);
-    if (autoIp.gt(player.autoIP) && !player.break) player.autoIP = autoIp;
-    if (player.thisInfinityTime < player.autoTime) player.autoTime = player.thisInfinityTime;
-  }
-  auto = autoS; //only allow autoing if prev crunch was autoed
-  autoS = true;
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
   if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
@@ -101,6 +96,7 @@ function secondSoftReset() {
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
+    player.noEighthDimensions = true;
     AchievementTimers.marathon2.reset();
 }
 
@@ -261,7 +257,6 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
-    player.autoIP = player.autoIP.times(mult);
     Autobuyer.infinity.bumpLimit(mult);
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
@@ -271,8 +266,6 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
   adjustToCap() {
     if (this.isCapped) {
-      const capOffset = this.config.cap().dividedBy(player.infMult);
-      player.autoIP = player.autoIP.times(capOffset);
       player.infMult.copyFrom(this.config.cap());
       player.infMultCost.copyFrom(this.config.costCap);
     }
@@ -399,3 +392,18 @@ class BreakInfinityIPGenUpgrade extends GameMechanicState {
 }
 
 BreakInfinityUpgrade.ipGen = new BreakInfinityIPGenUpgrade(GameDatabase.infinity.breakUpgrades.ipGen);
+
+function preProductionGenerateIP(diff) {
+  if (InfinityUpgrade.ipGen.isBought) {
+    const genPeriod = Time.bestInfinity.totalMilliseconds * 10;
+    // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
+    player.partInfinityPoint += Time.deltaTimeMs / genPeriod;
+    if (player.partInfinityPoint >= 1) {
+      const genCount = Math.floor(player.partInfinityPoint);
+      player.infinityPoints = player.infinityPoints.plus(new Decimal(genCount).timesEffectOf(InfinityUpgrade.ipGen));
+      player.partInfinityPoint -= genCount;
+    }
+  }
+  player.infinityPoints = player.infinityPoints
+    .plus(Player.bestRunIPPM.times(player.offlineProd / 100).times(diff / 60000));
+}

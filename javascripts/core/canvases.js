@@ -1,3 +1,5 @@
+"use strict";
+
 var canvas4 = document.getElementById("automatorTreeCanvas");
 var ctx4 = canvas4.getContext("2d");
 
@@ -68,35 +70,72 @@ function drawAutomatorTree() {
     drawAutomatorTreeBranch("automator73", "automator84");
 }
 
-var nodes = []
-var edges = []
-var nodeContainer = $(".vis-network")[0];
-var nodeData = {}
-var nodeOptions = {}
-var network = null;
+let nodes = [];
+let edges = [];
+const nodeContainer = $(".vis-network")[0];
+let nodeData = {};
+let nodeOptions = {};
+let network = null;
 
+
+// Primary is lifted from the study tree (mostly),
+// secondary is primary -15% l in hsl, apart from reality which is -10%
+const perkColors = {
+  [PerkFamily.NORMAL]: {
+    primary: "#22aa48",
+    secondary: "#156a2d"
+  },
+  [PerkFamily.INFINITY]: {
+    primary: "#b67f33",
+    secondary: "#7b5623"
+  },
+  [PerkFamily.ETERNITY]: {
+    primary: "#b241e3",
+    secondary: "#8b1cba"
+  },
+  [PerkFamily.DILATION]: {
+    primary: "#64dd17",
+    secondary: "#449810"
+  },
+  [PerkFamily.REALITY]: {
+    primary: "#0b600e",
+    secondary: "#063207"
+  },
+  [PerkFamily.AUTOMATOR]: {
+    primary: "#ff0000",
+    secondary: "#b30000"
+  },
+  [PerkFamily.ACHIEVEMENT]: {
+    primary: "#fdd835",
+    secondary: "#e3ba02"
+  },
+};
 
 function getNodeColor(perk) {
   const canBeBought = perk.canBeBought;
   const isBought = perk.isBought;
 
-  let background;
-  if (canBeBought) background = "#000000";
-  else if (isBought) background = "#0b600e";
-  else background = "#656565";
+  const perkColor = perkColors[perk.config.family];
+  const primaryColor = perkColor.primary;
+  const secondaryColor = perkColor.secondary;
 
-  let hoverColor = canBeBought || isBought ? "#0b600e" : "#656565";
-  let borderColor = isBought ? "#094E0B" : "#0b600e";
+  let backgroundColor;
+  if (canBeBought) backgroundColor = "#000000";
+  else if (isBought) backgroundColor = primaryColor;
+  else backgroundColor = "#656565";
+
+  const hoverColor = canBeBought || isBought ? primaryColor : "#656565";
+  const borderColor = secondaryColor;
 
   return {
-    background: background,
+    background: backgroundColor,
     border: borderColor,
     hover: {
       background: hoverColor,
       border: borderColor
     },
     highlight: {
-      background: background,
+      background: backgroundColor,
       border: borderColor
     }
   };
@@ -104,21 +143,16 @@ function getNodeColor(perk) {
 
 function updatePerkColors() {
   const data = Perk.all
-    .map(perk => {
-      return {
-        id: perk.id,
-        color: getNodeColor(perk)
-      };
-    });
+    .map(perk => ({ id: perk.id, color: getNodeColor(perk) }));
   nodes.update(data);
 }
 
 function hidePerkLabels() {
-    network.setOptions({nodes: {font: {size: 0}}});
+    network.setOptions({ nodes: { font: { size: 0 } } });
 }
 
 function showPerkLabels() {
-    network.setOptions({nodes: {font: {size: 20}}});
+    network.setOptions({ nodes: { font: { size: 20 } } });
 }
 
 function drawPerkNetwork() {
@@ -126,28 +160,22 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
-    nodes = Perk.all.map(perk => {
-      return {
-        id: perk.id,
-        label: perk.config.label,
-        title: perk.config.description
-      };
-    });
+    nodes = Perk.all.map(perk => ({ id: perk.id, label: perk.config.label, title: perk.config.description }));
     nodes = new vis.DataSet(nodes);
 
     edges = [];
-    for (let perk of Perk.all) {
-      for (let connectedPerk of perk.connectedPerks) {
+    for (const perk of Perk.all) {
+      for (const connectedPerk of perk.connectedPerks) {
         const from = Math.min(perk.id, connectedPerk.id);
         const to = Math.max(perk.id, connectedPerk.id);
         if (edges.find(edge => edge.from === from && edge.to === to)) continue;
-        edges.push({ from: from, to: to });
+        edges.push({ from, to });
       }
     }
 
     nodeData = {
-        nodes: nodes,
-        edges: edges
+        nodes,
+        edges
     };
     nodeOptions = {
         interaction: {
@@ -167,30 +195,37 @@ function drawPerkNetwork() {
         },
         edges: {
             width: 2,
-            shadow: true
+            shadow: true,
+            hoverWidth: width => width,
+            selectionWidth: width => width,
+            color: {
+              inherit: "to"
+            }
         },
     };
     network = new vis.Network(nodeContainer, nodeData, nodeOptions);
 
-    //buying perks TODO: lower the cost.
-    network.on("click", function(params) {
+    // Buying perks
+    network.on("click", params => {
       const id = params.nodes[0];
       if (!isFinite(id)) return;
       Perk.find(id).purchase();
-      updatePerkColors()
+      updatePerkColors();
     });
-    //hide tooltips on drag
-    network.on("dragStart", function(params) {
-        if(document.getElementsByClassName("vis-tooltip")[0] !== undefined) document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden"
+    // Hide tooltips on drag
+    network.on("dragStart", () => {
+        if (document.getElementsByClassName("vis-tooltip")[0] !== undefined) {
+          document.getElementsByClassName("vis-tooltip")[0].style.visibility = "hidden";
+        }
     });
     network.on("dragging", () => SecretAchievement(45).tryUnlock());
-    //set min and max zoom
-    network.on("zoom",function(){
-        if(network.getScale() <= 0.2 ) {
-            network.moveTo({scale: 0.2,});
+    // Set min and max zoom
+    network.on("zoom", () => {
+        if (network.getScale() <= 0.2) {
+            network.moveTo({ scale: 0.2 });
         }
-        if(network.getScale() >= 4 ) {
-            network.moveTo({scale: 4,});
+        if (network.getScale() >= 4) {
+          network.moveTo({ scale: 4 });
         }
-    })
+    });
 }

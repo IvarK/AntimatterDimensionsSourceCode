@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-confirmation-options", {
   mixins: [modalOptionsMixin],
   data() {

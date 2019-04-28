@@ -1,3 +1,5 @@
+"use strict";
+
 class LettersNotation extends EngineeringNotation {
   constructor(name, letters) {
     super(name);

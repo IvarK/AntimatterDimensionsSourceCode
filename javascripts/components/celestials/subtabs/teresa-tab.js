@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('teresa-tab', {
   data: function() {
     return {

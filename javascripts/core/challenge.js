@@ -1,3 +1,5 @@
+"use strict";
+
 function startChallenge() {
   secondSoftReset();
   if (!Enslaved.isRunning) Tab.dimensions.normal.show();
@@ -31,6 +33,41 @@ function tryUnlockInfinityChallenges() {
     if (player.eternities > 6) {
       InfinityChallenge(player.postChallUnlocked).complete();
       Autobuyer.tryUnlockAny();
+    }
+  }
+}
+
+function updateNormalAndInfinityChallenges(diff) {
+  if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
+    if (player.secondAmount.neq(0)) {
+      player.matter = player.matter
+        .times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
+    }
+    if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
+      Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` +
+        `${shorten(player.matter, 2, 2)} matter.`);
+      softReset(0);
+    }
+  }
+
+  if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
+
+  if (NormalChallenge(3).isRunning) {
+    player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
+  }
+
+  if (NormalChallenge(2).isRunning) {
+    player.chall2Pow = Math.min(player.chall2Pow + diff / 100 / 1800, 1);
+  }
+
+  if (InfinityChallenge(2).isRunning) {
+    if (postC2Count >= 8 || diff > 8000) {
+      if (player.eightAmount.gt(0)) {
+        sacrificeReset();
+      }
+      postC2Count = 0;
+    } else {
+      postC2Count++;
     }
   }
 }
@@ -116,18 +153,18 @@ Object.defineProperty(NormalChallenge, "isRunning", {
   get: () => NormalChallenge.current !== undefined,
 });
 
-NormalChallenge.clearCompletions = function() {
-  player.challenge.normal.completedBits = 0;
+const NormalChallenges = {
+  all: NormalChallengeState.all.compact(),
+  completeAll() {
+    for (const challenge of NormalChallenges.all) challenge.complete();
+  },
+  clearCompletions() {
+    player.challenge.normal.completedBits = 0;
+  },
+  get completed() {
+    return NormalChallenges.all.filter(c => c.isCompleted);
+  }
 };
-
-NormalChallenge.completeAll = function() {
-  for (const challenge of NormalChallenge.all) challenge.complete();
-};
-
-/**
- * @type {NormalChallengeState[]}
- */
-NormalChallenge.all = Array.range(1, 12).map(NormalChallenge);
 
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {

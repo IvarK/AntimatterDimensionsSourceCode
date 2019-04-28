@@ -1,3 +1,5 @@
+"use strict";
+
 class TimeSpan {
   /**
    * @param {Number} value

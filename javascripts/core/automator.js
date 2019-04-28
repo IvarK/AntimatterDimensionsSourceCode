@@ -1,3 +1,4 @@
+"use strict";
 
 /**
  * 
@@ -37,10 +38,6 @@
 var automatorRows = []
 var automatorIdx = 0
 var tryingToBuy = 0
-function updateState() {
-  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
-  automatorIdx = 0
-}
 
 function getAutomatorRows() {
   const realityFactor = Effects.max(0.7, Perk.automatorRowScaling);
@@ -129,7 +126,9 @@ function mainIteration() {
         break;
       case "eternity":
         if (!player.reality.automatorCommands.has(62)) return false
+        justImported = true;
         if (eternity(false, true) || cont) automatorIdx+=1
+        justImported = false;
         break;
       case "stop":
         if (!player.reality.automatorCommands.has(72)) return false
@@ -167,9 +166,9 @@ function buy(current) {
   switch(current.target) {
     case "study":
       id = parseInt(current.id)
-      if (TimeStudy(id).isBought) return true
-      else if ( buyTimeStudy(id, studyCosts[all.indexOf(id)], 0) ) return true
-      else return false
+      if (TimeStudy(id).isBought) return true;
+      if (TimeStudy(id).purchase()) return true;
+      return false;
       break;
       case "studyuntil":
           id = parseInt(current.id);
@@ -190,7 +189,7 @@ function buy(current) {
           break;
     case "ttmax":
       if (!player.reality.automatorCommands.has(44)) return false
-      maxTheorems()
+      TimeTheorems.buyMax();
       return true
       break;
     case "ttip":
@@ -199,7 +198,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithIP()) tryingToBuy++
+      if (TimeTheorems.buyWithIP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -212,7 +211,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithEP()) tryingToBuy++
+      if (TimeTheorems.buyWithEP()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -225,7 +224,7 @@ function buy(current) {
         buying = true
         tryingToBuy = 0
       }
-      if (buyWithAntimatter()) tryingToBuy++
+      if (TimeTheorems.buyWithAntimatter()) tryingToBuy++;
       if (tryingToBuy == parseInt(current.id)) {
         buying = false
         return true
@@ -253,7 +252,7 @@ function unlock(current) {
       break;
     case "dilation":
       if (!player.reality.automatorCommands.has(63)) return false
-      if (buyDilationStudy(1, 5000, true)) return true
+      if (TimeStudy.dilation.purchase(true)) return true;
       else return false
       break;
   }
@@ -382,6 +381,17 @@ function loadScript(num) {
     automatorIdx = 0
     GameUI.notify.info(`Automator script ${num} loaded`);
   }
+}
+
+function importAutomatorScript(script) {
+  var outputString = JSON.parse(script).join("\n")
+  document.getElementById("automator").value = outputString
+  updateAutomatorState()
+}
+
+function updateAutomatorState() {
+  automatorRows = $("#automator").val().toLowerCase().split("\n").filter(function(row) { return row !== "" })
+  automatorIdx = 0
 }
 
 function buyAutomatorInstruction(id) {

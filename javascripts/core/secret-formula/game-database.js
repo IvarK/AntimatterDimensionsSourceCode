@@ -1,3 +1,5 @@
+"use strict";
+
 const GameDatabase = {
   achievements: {},
   challenges: {},

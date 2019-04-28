@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("options-button-grid", {
   components: {
     "options-button": {
@@ -44,7 +46,7 @@ Vue.component("options-button-grid", {
   methods: {
     hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
-        hardReset();
+        GameStorage.hardReset();
       }
     }
   },
@@ -75,7 +77,7 @@ Vue.component("options-button-grid", {
         />
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.export()"
+          onclick="GameStorage.export()"
         >Export</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -89,7 +91,7 @@ Vue.component("options-button-grid", {
         >Confirmations</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.save()"
+          onclick="GameStorage.save()"
         >Save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"

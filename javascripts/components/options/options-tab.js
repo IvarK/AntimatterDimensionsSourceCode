@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("options-tab", {
   template:
     `<div class="l-options-tab">

@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.timeStudies.ec = [
   {
     id: 1,

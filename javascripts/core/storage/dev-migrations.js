@@ -64,7 +64,7 @@ GameStorage.devMigrations = {
       for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         const glyph = player.reality.glyphs.active[i];
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined;
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10;
         }
       }
@@ -72,7 +72,7 @@ GameStorage.devMigrations = {
       for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
         const glyph = player.reality.glyphs.inventory[i];
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined;
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10;
         }
       }
@@ -98,7 +98,8 @@ GameStorage.devMigrations = {
         infinity: 0,
         time: 0,
         replication: 0,
-        dilation: 0
+        dilation: 0,
+        effarig: 0,
       };
     },
     player => {

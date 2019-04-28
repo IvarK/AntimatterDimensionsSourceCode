@@ -333,7 +333,7 @@ GameStorage.migrations = {
         player.autobuyers[i].bulk = 1;
       }
     }
-    if (typeof player.autobuyers[9].bulk !== "number") {
+    if (typeof player.autobuyers[9] !== "number" && typeof player.autobuyers[9].bulk !== "number") {
       player.autobuyers[9].bulk = 1;
     }
     if (

@@ -1,7 +1,5 @@
-/* eslint-disable complexity */
-/* eslint-disable max-params */
 /* eslint-disable no-console */
-// Disabling complexity/max-params/no-console here seems
+// Disabling no-console here seems
 // reasonable, since these are the devtools after all
 const dev = {};
 const specialGlyphSymbols = {
@@ -161,6 +159,9 @@ dev.resetDilation = function() {
   player.dilation.freeGalaxies = 0;
 };
 
+// We want to give a large degree of options
+// when making a special glyph, so no max-params
+// eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;

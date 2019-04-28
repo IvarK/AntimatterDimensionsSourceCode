@@ -153,18 +153,18 @@ Object.defineProperty(NormalChallenge, "isRunning", {
   get: () => NormalChallenge.current !== undefined,
 });
 
-NormalChallenge.clearCompletions = function() {
-  player.challenge.normal.completedBits = 0;
+const NormalChallenges = {
+  all: NormalChallengeState.all.compact(),
+  completeAll() {
+    for (const challenge of NormalChallenges.all) challenge.complete();
+  },
+  clearCompletions() {
+    player.challenge.normal.completedBits = 0;
+  },
+  get completed() {
+    return NormalChallenges.all.filter(c => c.isCompleted);
+  }
 };
-
-NormalChallenge.completeAll = function() {
-  for (const challenge of NormalChallenge.all) challenge.complete();
-};
-
-/**
- * @type {NormalChallengeState[]}
- */
-NormalChallenge.all = Array.range(1, 12).map(NormalChallenge);
 
 class InfinityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {

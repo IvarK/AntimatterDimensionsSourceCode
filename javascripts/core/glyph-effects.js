@@ -327,7 +327,7 @@ GameDatabase.reality.glyphEffects = [
     genericDesc: "\"Buy 10\" bonus increase",
     effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => shorten(x, 2, 2),
-    combine: GlyphCombiner.add,
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],

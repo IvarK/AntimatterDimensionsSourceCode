@@ -33,6 +33,6 @@ const GameIntervals = (function() {
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
-    save: interval(() => save_game(), 30000)
+    save: interval(() => GameStorage.save(), 30000)
   };
 }());

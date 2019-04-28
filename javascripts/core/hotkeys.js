@@ -49,7 +49,11 @@ GameKeyboard.bindHotkey("?", () => {
 });
 
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameOptions.save();
+  GameStorage.save();
+  return false;
+});
+GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {
+  GameStorage.export();
   return false;
 });
 

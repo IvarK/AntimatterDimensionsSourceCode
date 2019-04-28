@@ -112,5 +112,25 @@ const Teresa = {
   },
   get isRunning() {
     return player.celestials.teresa.run;
+  },
+  checkPPShopValidity() {
+    let totalPPSpent = 0;
+    if (Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05) > 12) {
+      totalPPSpent += Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)) - 4096;
+      player.celestials.teresa.glyphLevelMult = Math.pow(1.05, 12);
+    }
+    if (player.celestials.teresa.rmMult > 2096) {
+      totalPPSpent += player.celestials.teresa.rmMult - 4096;
+      player.celestials.teresa.rmMult = 4096;
+    }
+    if (player.celestials.teresa.dtBulk > 32) {
+      totalPPSpent += player.celestials.teresa.rdtBulk * 100 - 3200;
+      player.celestials.teresa.dtBulk = 32;
+    }
+    if (totalPPSpent > 0) {
+      player.reality.pp += totalPPSpent;
+      Modal.message.show("You had too many PP shop purchases, " +
+        "your PP shop purchases have been capped and your perk points refunded.");
+    }
   }
 };

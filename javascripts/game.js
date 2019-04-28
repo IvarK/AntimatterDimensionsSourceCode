@@ -4,8 +4,6 @@ if (crashed) {
   throw "Initialization failed";
 }
 
-var defaultStart = deepmerge.all([{}, player]);
-
 let kongIPMult = 1
 let kongDimMult = 1
 let kongAllDimMult = 1
@@ -413,7 +411,7 @@ setInterval(function() {
 }());
 
 function updateRefresh() {
-  save_game(false, true);
+  GameStorage.save(true);
   location.reload(true);
 }
 
@@ -1043,7 +1041,7 @@ function init() {
       showTab('celestials');
     };
     Tab.dimensions.normal.show();
-    load_game();
+    GameStorage.load();
     kong.init();
     TLN.append_line_numbers("automator") // Automator line numbers
 

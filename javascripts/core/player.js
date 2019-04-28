@@ -481,14 +481,12 @@ let player = {
       eternity: true,
       dilation: true,
       reality: true
-    },
-    // TODO: remove before test ends
-    testVersion: 33,
+    }
   }
 };
 
-
 const Player = {
+  defaultStart: deepmerge.all([{}, player]),
 
   get totalInfinitied() {
     return player.infinitied.plus(player.infinitiedBank).clampMin(0);

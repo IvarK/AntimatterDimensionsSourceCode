@@ -186,6 +186,12 @@ GameStorage.migrations = {
     // In this case, player.secretAchievements should be an empty set
     player.achievements = new Set();
     for (const oldId of old) {
+      const achByName = GameDatabase.achievements.normal.find(a => a.name === oldId);
+      if (achByName !== undefined) {
+        // Legacy format
+        player.achievements.add(achByName.id);
+        continue;
+      }
       const newId = parseInt(oldId.slice(1), 10);
       if (isNaN(newId)) throw crash(`Could not parse achievement id ${oldId}`);
       if (oldId.startsWith("r")) {

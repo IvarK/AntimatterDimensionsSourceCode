@@ -1,6 +1,8 @@
 "use strict";
-
-var dev = {};
+/* eslint-disable no-console */
+// Disabling no-console here seems
+// reasonable, since these are the devtools after all
+const dev = {};
 const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
   key2606: "☆", key2607: "☇", key2608: "☈", key2609: "☉", key260a: "☊", key260b: "☋",
@@ -44,7 +46,7 @@ const specialGlyphSymbols = {
   key26ee: "⛮", key26ef: "⛯", key26f0: "⛰", key26f1: "⛱", key26f2: "⛲", key26f3: "⛳",
   key26f4: "⛴", key26f5: "⛵", key26f6: "⛶", key26f7: "⛷", key26f8: "⛸", key26f9: "⛹",
   key26fa: "⛺", key26fb: "⛻", key26fc: "⛼", key26fd: "⛽", key26fe: "⛾", key26ff: "⛿"
-}
+};
 
 dev.giveAllAchievements = function() {
   const allAchievements = Achievements.list.concat(SecretAchievements.list);
@@ -52,27 +54,28 @@ dev.giveAllAchievements = function() {
 };
 
 dev.doubleEverything = function() {
-    Object.keys(player).forEach( function(key) {
+    Object.keys(player).forEach(key => {
         if (typeof player[key] === "number") player[key] *= 2;
         if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
         if (typeof player[key] === "object" && !isFinite(player[key])) {
-            Object.keys(player[key]).forEach( function(key2) {
-                if (typeof player[key][key2] === "number") player[key][key2] *= 2
-                if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object) player[key][key2] = player[key][key2].times(2)
-            })
+            Object.keys(player[key]).forEach(key2 => {
+                if (typeof player[key][key2] === "number") player[key][key2] *= 2;
+                if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
+                  player[key][key2] = player[key][key2].times(2);
+            });
         }
-    })
-}
+    });
+};
 
 dev.spin3d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite"
-    else document.body.style.animation = ""
-}
+    if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+    else document.body.style.animation = "";
+};
 
 dev.spin4d = function() {
-    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite"
-    else document.body.style.animation = ""
-}
+    if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+    else document.body.style.animation = "";
+};
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
@@ -100,47 +103,46 @@ dev.fixSave = function() {
 
 dev.implode = function() {
     document.body.style.animation = "implode 2s 1";
-    setTimeout(function(){ document.body.style.animation = ""; }, 2000)
-}
+    setTimeout(() => document.body.style.animation = "", 2000);
+};
 
 dev.updateTDCosts = function() {
-    for (var i=1; i<9; i++) {
-        var dim = player["timeDimension"+i]
+    for (let i = 1; i < 9; i++) {
+        const dim = player[`timeDimension${i}`];
         if (dim.cost.gte(Decimal.MAX_NUMBER)) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*1.5, dim.bought).times(timeDimStartCosts[i])
+            dim.cost = Decimal.pow(timeDimCostMults[i] * 1.5, dim.bought).times(timeDimStartCosts[i]);
         }
         if (dim.cost.gte("1e1300")) {
-            dim.cost = Decimal.pow(timeDimCostMults[i]*2.2, dim.bought).times(timeDimStartCosts[i])
+            dim.cost = Decimal.pow(timeDimCostMults[i] * 2.2, dim.bought).times(timeDimStartCosts[i]);
         }
         if (i > 4) {
-          dim.cost = Decimal.pow(timeDimCostMults[i]*100, dim.bought).times(timeDimStartCosts[i])
+          dim.cost = Decimal.pow(timeDimCostMults[i] * 100, dim.bought).times(timeDimStartCosts[i]);
         }
     }
-}
+};
 
 dev.refundTimeDims = function() {
-    for (var i=1; i<9; i++) {
-        var dim = player["timeDimension"+i]
+    for (let i = 1; i < 9; i++) {
+        const dim = player[`timeDimension${i}`];
         dim.bought = 0;
         dim.power = new Decimal(1);
     }
-    dev.updateTDCosts()
-}
+    dev.updateTDCosts();
+};
 
 dev.refundEPMult = function() {
   player.epmultUpgrades = 0;
-}
+};
 
 dev.refundDilStudies = function() {
-    for (var i=0; i<6; i++) {
-        if (player.dilation.studies.includes(i+1)) {
-            player.dilation.studies.splice(player.dilation.studies.indexOf(i+1), 1);
-            console.log(document.getElementById("dilstudy"+(i+1)))
-            let refund = parseInt(document.getElementById("dilstudy"+(i+1)).textContent.split("Cost: ")[1].replace(/[, ]+/g, ""));
-            player.timestudy.theorem = player.timestudy.theorem.plus(refund);
+    for (const study of GameDatabase.eternity.timeStudies.dilation) {
+        if (player.dilation.studies.includes(study.id)) {
+            player.dilation.studies.splice(player.dilation.studies.indexOf(study.id), 1);
+            console.log(document.getElementById(`removed dilstudy${study.id}`));
+            player.timestudy.theorem = player.timestudy.theorem.plus(study.cost);
         }
     }
-}
+};
 
 dev.resetDilation = function() {
   player.dilation.dilatedTime = new Decimal(0);
@@ -151,59 +153,62 @@ dev.resetDilation = function() {
   player.dilation.rebuyables[3] = 0;
   player.dilation.baseFreeGalaxies = 0;
   player.dilation.freeGalaxies = 0;
-}
+};
 
-dev.giveSpecialGlyph = function (color, symbol, level, rawLevel = level) {
-  symbol = "key" + symbol;
+// We want to give a large degree of options
+// when making a special glyph, so no max-params
+// eslint-disable-next-line max-params
+dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
   if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
   if (!Player.hasFreeInventorySpace) return;
-  let glyph = GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false);
+  const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false);
   glyph.symbol = symbol;
   glyph.color = color;
   Glyphs.addToInventory(glyph);
-}
+};
 
 dev.giveMusicGlyph = function() {
-  dev.giveSpecialGlyph("#FF80AB", "266b", 1, 1)
-}
+  dev.giveSpecialGlyph("#FF80AB", "key266b", 1, 1);
+};
 
-dev.giveGlyph = function (level, rawLevel = level) {
+dev.giveGlyph = function(level, rawLevel = level) {
   if (!Player.hasFreeInventorySpace) return;
-  Glyphs.addToInventory(GlyphGenerator.randomGlyph({actualLevel: level, rawLevel: rawLevel}, false));
-}
+  Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false));
+};
 
-dev.decriminalize = function () {
+dev.decriminalize = function() {
   player.secretAchievements.delete(23);
   EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-}
+};
 
-dev.removeAch = function (name) {
+dev.removeAch = function(name) {
   if (typeof (name) === "number") return player.achievements.delete(name);
-  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1)));
-  else if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1)));
-}
+  if (name.startsWith("r")) return player.achievements.delete(parseInt(name.slice(1), 10));
+  if (name.startsWith("s")) return player.achievements.delete(parseInt(name.slice(1), 10));
+  return "failed to delete achievement";
+};
 
 dev.realize = function() {
     document.getElementById("container").style.animation = "realize 10s 1";
     document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
-    setTimeout(function(){
+    setTimeout(() => {
         document.getElementById("realityanimbg").play();
         document.getElementById("realityanimbg").currentTime = 0;
         document.getElementById("realityanimbg").play();
-    }, 2000)
-    setTimeout(function(){
+    }, 2000);
+    setTimeout(() => {
         document.getElementById("container").style.animation = "";
         document.getElementById("realityanimbg").style.animation = "";
-    }, 10000)
-}
+    }, 10000);
+};
 
 dev.respecPerks = function() {
     player.reality.pp += player.reality.perks.size;
     player.reality.perks = new Set();
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    drawPerkNetwork()
-}
+    drawPerkNetwork();
+};
 
 function isDevEnvironment() {
   const href = window.location.href;
@@ -215,24 +220,29 @@ function isLocalEnvironment() {
   return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
-// Still WIP
+// Still WIP (appears to be slightly broken on "endgame" saves)
 dev.showProductionBreakdown = function() {
   let NDComponent = new Decimal(1);
   GameCache.normalDimensionCommonMultiplier.invalidate();
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }
-  let tickComponent = player.tickspeed.reciprocal().pow(8);
-  let NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
-  let tickPercent = 100 - NDPercent;
+  const tickspeed = player.tickspeed;
+  const tickComponent = tickspeed.reciprocal().pow(8);
+  const NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
+  const tickPercent = 100 - NDPercent;
   
-  let totalTickspeedUpgrades = player.tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
-  let freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
-  let purchasedTickPercent = 100 - freeTickPercent;
+  const totalTickspeedUpgrades = tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
+  const freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
+  const purchasedTickPercent = 100 - freeTickPercent;
+
+  const powerpow = getAdjustedGlyphEffect("powerpow");
+  const infinitypow = getAdjustedGlyphEffect("infinitypow");
+  const timepow = getAdjustedGlyphEffect("timepow");
   
   // Assumes >= 3 galaxies
-  let effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
-  let AGCount = player.galaxies
+  const effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
+  const AGCount = player.galaxies;
   let RGCount = player.replicanti.galaxies;
   RGCount += Effects.sum(
     TimeStudy(133),
@@ -240,25 +250,34 @@ dev.showProductionBreakdown = function() {
     TimeStudy(225),
     TimeStudy(226)
   );
-  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 * EternityChallenge(8).completions) - 1, 0);
-  let FGCount = player.dilation.freeGalaxies;
-  let totalCount = AGCount + RGCount + FGCount;
+  RGCount += Math.min(player.replicanti.galaxies, player.replicanti.gal) *
+    Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10() + 1), 0.03 *
+    EternityChallenge(8).completions) - 1, 0);
+  const FGCount = player.dilation.freeGalaxies;
+  const totalCount = AGCount + RGCount + FGCount;
   
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
-  let IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
-  let DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
+  const IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
+  const DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
   }
   buyTenComponent = buyTenComponent.pow(IC4pow);
   let sacrificeComponent = new Decimal(1);
-  if (player.timestudy.studies.includes(71)) sacrificeComponent = sacrificeComponent.times(Sacrifice.totalBoost.pow(0.25).min("1e210000")).pow(7);
-  if (player.timestudy.studies.includes(234)) sacrificeComponent = sacrificeComponent.times(Sacrifice.totalBoost);
-  if (player.timestudy.studies.includes(214)) sacrificeComponent = sacrificeComponent.times((Sacrifice.totalBoost.pow(8)).min("1e46000").times(Sacrifice.totalBoost.pow(1.1).min(new Decimal("1e125000"))));
+  if (player.timestudy.studies.includes(71))
+    sacrificeComponent = sacrificeComponent
+      .times(Sacrifice.totalBoost.pow(0.25).min("1e210000")).pow(7);
+  if (player.timestudy.studies.includes(234))
+    sacrificeComponent = sacrificeComponent
+      .times(Sacrifice.totalBoost);
+  if (player.timestudy.studies.includes(214))
+    sacrificeComponent = sacrificeComponent
+      .times((Sacrifice.totalBoost.pow(8)).min("1e46000")
+      .times(Sacrifice.totalBoost.pow(1.1).min(new Decimal("1e125000"))));
   sacrificeComponent = sacrificeComponent.pow(IC4pow);
-  let IC8Component = mult18.pow(6).pow(IC4pow);
-  let NDPowComponent = getAdjustedGlyphEffect("powerpow") == 0 ? 0 : (getAdjustedGlyphEffect("powerpow") - 1) / getAdjustedGlyphEffect("powerpow");
+  const IC8Component = mult18.pow(6).pow(IC4pow);
+  const NDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / powerpow;
   
   let totalIDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
@@ -266,14 +285,16 @@ dev.showProductionBreakdown = function() {
   }
   let boughtIDComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    boughtIDComponent = boughtIDComponent.times(player["infinityDimension" + i].power);
+    boughtIDComponent = boughtIDComponent.times(player[`infinityDimension${i}`].power);
   }
-  let replicantiComponent = replicantiMult().pow(8);
+  const replicantiComponent = replicantiMult().pow(8);
   let TSmultToIDComponent = new Decimal(1);
-  if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent.times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"))
-  if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
-  let EU1Component = player.eternityPoints.plus(1).pow(8);
-  let IDPowComponent = getAdjustedGlyphEffect("infinitypow") == 0 ? 0 : (getAdjustedGlyphEffect("infinitypow") - 1) / getAdjustedGlyphEffect("infinitypow");
+  if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent
+    .times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"));
+  if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent
+    .times(Decimal.pow(1.0000109, Math.pow(player.resets, 2)));
+  const EU1Component = player.eternityPoints.plus(1).pow(8);
+  const IDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / infinitypow;
   
   let totalTDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
@@ -281,58 +302,73 @@ dev.showProductionBreakdown = function() {
   }
   let boughtTDComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    boughtTDComponent = boughtTDComponent.times(player["timeDimension" + i].power);
+    boughtTDComponent = boughtTDComponent.times(player[`timeDimension${i}`].power);
   }
-  let tickspeedToTDComponent = Achievement(105).isEnabled ? player.tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
+  let tickspeedToTDComponent = Achievement(105).isEnabled ? tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);
-  if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent.times(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, 2500)))
-  if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent.times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")))
-  if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent.times(Decimal.pow(1.0025, player.resets)).pow(8)
-  if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent.times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1))
-  let TDPowComponent = getAdjustedGlyphEffect("timepow") == 0 ? 0 : (getAdjustedGlyphEffect("timepow") - 1) / getAdjustedGlyphEffect("timepow");
+  if (player.timestudy.studies.includes(11)) tickspeedToTDComponent = tickspeedToTDComponent
+    .times(tickspeed
+      .dividedBy(1000)
+      .pow(0.005)
+      .times(0.95)
+      .plus(tickspeed.dividedBy(1000).pow(0.0003).times(0.05))
+      .max(Decimal.fromMantissaExponent(1, 2500))
+    );
+  if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent
+    .times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")));
+  if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent
+    .times(Decimal.pow(1.0025, player.resets)).pow(8);
+  if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent
+    .times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
+  const TDPowComponent = timepow === 0 ? 0 : (timepow - 1) / timepow;
   
-  let productionText = ""
-  productionText += tickPercent.toFixed(2) + "% from tickspeed (" + totalTickspeedUpgrades.toFixed(0) + " upgrades + " + effectiveGalaxyCount.toFixed(2) + " effective galaxies)\n";
-  productionText += "  Tickspeed upgrades\n"
-  productionText += "    " + purchasedTickPercent.toFixed(2) + "% purchased\n"
-  productionText += "    " + freeTickPercent.toFixed(2) + "% from TDs\n"
-  productionText += "  Galaxies\n"
-  productionText += "    " + (100*AGCount/totalCount).toFixed(2) + "% Antimatter Galaxies\n"
-  productionText += "    " + (100*RGCount/totalCount).toFixed(2) + "% Replicanti Galaxies\n"
-  productionText += "    " + (100*FGCount/totalCount).toFixed(2) + "% Dilation Galaxies\n"
-  productionText += NDPercent.toFixed(2) + "% from Normal Dimensions\n";
-  productionText += "  " + (100*IDComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Infinity Dimensions\n"
-  productionText += "  " + (100*DBComponent.log10()/NDComponent.log10()).toFixed(2) + "% from Dimension Boosts\n"
-  productionText += "  " + (100*buyTenComponent.log10()/NDComponent.log10()).toFixed(2) + "% from \"Buy 10\"\n"
-  productionText += "  " + (100*sacrificeComponent.log10()/NDComponent.log10()).toFixed(2) + "% from sacrifice\n"
-  productionText += "  " + (100*IC8Component.log10()/NDComponent.log10()).toFixed(2) + "% from IC8\n"
-  productionText += "  " + (100*NDPowComponent).toFixed(2) + "% from ND power glyphs\n"
-  productionText += "\nInfinity Dimension Multipliers:\n"
-  productionText += "  " + (100*boughtIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% purchased\n"
-  productionText += "  " + (100*replicantiComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from replicanti\n"
-  productionText += "  " + (100*TSmultToIDComponent.log10()/totalIDMults.log10()).toFixed(2) + "% from time studies\n"
-  productionText += "  " + (100*EU1Component.log10()/totalIDMults.log10()).toFixed(2) + "% from EU1\n"
-  productionText += "  " + (100*IDPowComponent).toFixed(2) + "% from ID power glyphs\n"
-  productionText += "\nTime Dimension Multipliers:\n"
-  productionText += "  " + (100*boughtTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% purchased\n"
-  productionText += "  " + (100*tickspeedToTDComponent.log10()/totalTDMults.log10()).toFixed(2) + "% from tickspeed\n"
-  productionText += "  " + (player.dilation.upgrades.has(5) ?
-    10 * replicantiComponent.log10() / totalTDMults.log10() : 0).toFixed(2) + "% from replicanti\n";
-  productionText += "  " + (100 * TSmultToTDComponent.log10() / totalTDMults.log10()).toFixed(2) +
-    "% from other time studies\n";
-  productionText += "  " + (100*TDPowComponent).toFixed(2) + "% from TD power glyphs\n"
+  const productionText = 
+`Tickspeed:
+  ${tickPercent.toFixed(2)}% from tickspeed
+  Tickspeed upgrades:
+    ${purchasedTickPercent.toFixed(2)}% purchased
+    ${freeTickPercent.toFixed(2)}% from TDs
+    ${formatWithCommas(totalTickspeedUpgrades)} upgrades
+  Galaxies:
+    ${(100 * AGCount / totalCount).toFixed(2)}% Antimatter Galaxies
+    ${(100 * RGCount / totalCount).toFixed(2)}% Replicanti Galaxies
+    ${(100 * FGCount / totalCount).toFixed(2)}% Dilation Galaxies
+    ${formatWithCommas(effectiveGalaxyCount)} effective galaxies
+Dimensions:
+  ${NDPercent.toFixed(2)}% from Normal Dimensions
+  ${(100 * IDComponent.log10() / NDComponent.log10()).toFixed(2)}% from Infinity Dimensions
+  ${(100 * DBComponent.log10() / NDComponent.log10()).toFixed(2)}% from Dimension Boosts
+  ${(100 * buyTenComponent.log10() / NDComponent.log10()).toFixed(2)}% from "Buy 10"
+  ${(100 * sacrificeComponent.log10() / NDComponent.log10()).toFixed(2)}% from sacrifice
+  ${(100 * IC8Component.log10() / NDComponent.log10()).toFixed(2)}% from IC8
+  ${(100 * NDPowComponent).toFixed(2)}% from ND power glyphs
+Infinity Dimension Multipliers:
+  ${(100 * boughtIDComponent.log10() / totalIDMults.log10()).toFixed(2)}% purchased
+  ${(100 * replicantiComponent.log10() / totalIDMults.log10()).toFixed(2)}% from replicanti
+  ${(100 * TSmultToIDComponent.log10() / totalIDMults.log10()).toFixed(2)}% from time studies
+  ${(100 * EU1Component.log10() / totalIDMults.log10()).toFixed(2)}% from EU1
+  ${(100 * IDPowComponent).toFixed(2)}% from ID power glyphs
+Time Dimension Multipliers:
+  ${(100 * boughtTDComponent.log10() / totalTDMults.log10()).toFixed(2)}% purchased
+  ${(100 * tickspeedToTDComponent.log10() / totalTDMults.log10()).toFixed(2)}% from tickspeed
+  ${(player.dilation.upgrades.has(5)
+          ? 10 * replicantiComponent.log10() / totalTDMults.log10()
+          : 0).toFixed(2)}% from replicanti
+  ${(100 * TSmultToTDComponent.log10() / totalTDMults.log10()).toFixed(2)}% from other time studies
+  ${(100 * TDPowComponent).toFixed(2)}% from TD power glyphs`;
 
   console.log(productionText);
-}
+};
 
 let tempSpeedupToggle = false;
 let tempSpeedupFactor = 500;
-dev.goFast = function(speed) {   // Speeds up game, intentionally doesn't persist between refreshes
+// Speeds up game, intentionally doesn't persist between refreshes
+// With no arguments, toggles on/off
+dev.goFast = function(speed) {
   if (speed !== undefined && speed > 0) {
-    tempSpeedupToggle = true
-    tempSpeedupFactor = speed
-  }
-  else {  // With no arguments, toggles on/off
+    tempSpeedupToggle = true;
+    tempSpeedupFactor = speed;
+  } else {
     tempSpeedupToggle = !tempSpeedupToggle;
   }
 };

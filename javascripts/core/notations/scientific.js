@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.scientific = new class ScientificNotation extends Notation {
   formatDecimal(value, places) {
     const fixedValue = this.fixMantissaOverflow(value, places, 10, 1);

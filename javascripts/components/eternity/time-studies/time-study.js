@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-study", {
   mixins: [remMixin],
   data() {

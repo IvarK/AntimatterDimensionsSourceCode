@@ -1,3 +1,5 @@
+"use strict";
+
 class TimeStudyRow {
   constructor(layout, items, isWide) {
     this.layout = layout;

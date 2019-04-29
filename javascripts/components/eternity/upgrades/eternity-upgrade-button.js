@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-upgrade-button", {
   props: {
     upgrade: Object

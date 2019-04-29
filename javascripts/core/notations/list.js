@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Explicit array declaration instead of Object.values for sorting purposes
  * (Object.values doesn't guarantee any order)

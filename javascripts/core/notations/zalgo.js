@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.zalgo = new class ZalgoNotation extends Notation {
   constructor() {
     super("Zalgo");

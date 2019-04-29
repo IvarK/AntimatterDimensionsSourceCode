@@ -1,3 +1,5 @@
+"use strict";
+
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
@@ -33,7 +35,6 @@ function sacrificeBtnClick() {
     }
   }
 
-  auto = false;
   return sacrificeReset();
 }
 

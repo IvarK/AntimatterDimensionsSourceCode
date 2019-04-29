@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("black-hole-tab", {
   data() {
     return {

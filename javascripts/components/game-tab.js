@@ -1,3 +1,5 @@
+"use strict";
+
 // So this one looks different. What we achieve here is basically
 // <div class="l-game-tab">
 //   <div class="l-game-tab__inner">

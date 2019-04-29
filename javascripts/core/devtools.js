@@ -1,3 +1,5 @@
+"use strict";
+
 var dev = {};
 const specialGlyphSymbols = {
   key2600: "☀", key2601: "☁", key2602: "☂", key2603: "☃", key2604: "☄", key2605: "★",
@@ -82,7 +84,7 @@ dev.fixSave = function() {
   
     var fixed = save.replace(/NaN/gi, "10")
     var stillToDo = JSON.parse(fixed)
-    for (var i=0; i<stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
+    for (let i = 0; i < stillToDo.autobuyers.length; i++) stillToDo.autobuyers[i].isOn = false
     console.log(stillToDo)
     
     var save_data = stillToDo
@@ -233,7 +235,7 @@ dev.updateTestSave = function() {
         else player.bestEternity *= 100;
         if (player.bestReality === 9999999999) player.bestReality = 999999999999;
         else player.bestReality *= 100;
-        for (var i=0; i<10; i++) {
+        for (let i=0; i<10; i++) {
             player.lastTenRealities[i][0] *= 100;
             player.lastTenEternities[i][0] *= 100;
             player.lastTenRuns[i][0] *= 100;
@@ -257,7 +259,7 @@ dev.updateTestSave = function() {
     }
     if (player.options.testVersion == 4) {
         player.reality.rebuyables = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0,}
-        for (var i=1; i<6; i++) {
+        for (let i=1; i<6; i++) {
             if (RealityUpgrade(i).isBought) {
               player.reality.rebuyables[i] = 1
               RealityUpgrade(i).remove();
@@ -305,18 +307,18 @@ dev.updateTestSave = function() {
     }
 
     if (player.options.testVersion == 11) {
-      for (i = 0; i < player.reality.glyphs.active.length; i++) {
+      for (let i = 0; i < player.reality.glyphs.active.length; i++) {
         let glyph = player.reality.glyphs.active[i]
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         }
       }
 
-      for (i = 0; i < player.reality.glyphs.inventory.length; i++) {
+      for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
         let glyph = player.reality.glyphs.inventory[i]
         if (glyph.effects.autochall !== undefined) {
-          glyph.effects.autochall = undefined
+          delete glyph.effects.autochall;
           glyph.effects.buy10 = 1 + Math.pow(glyph.level * glyph.strength, 0.8) / 10
         }
       }
@@ -348,7 +350,8 @@ dev.updateTestSave = function() {
       infinity: 0,
       time: 0,
       replication: 0,
-      dilation: 0
+      dilation: 0,
+      effarig: 0,
     }
     player.options.testVersion = 15
   }
@@ -413,7 +416,7 @@ dev.updateTestSave = function() {
   }
 
   if (player.options.testVersion === 22) {
-      for (i in player.celestials.effarig.glyphWeights) {
+      for (const i in player.celestials.effarig.glyphWeights) {
           player.celestials.effarig.glyphWeights[i] *= 100
       }
     player.options.testVersion = 23;
@@ -421,7 +424,7 @@ dev.updateTestSave = function() {
 
   //the above line of code didn't work if loading a test save before celestials were added, whoops
   if (player.options.testVersion === 23) {
-    for (i in player.celestials.effarig.glyphWeights) {
+    for (const i in player.celestials.effarig.glyphWeights) {
         player.celestials.effarig.glyphWeights[i] = 25
     }
     player.options.testVersion = 24;
@@ -429,11 +432,11 @@ dev.updateTestSave = function() {
 
   if (player.options.testVersion === 24) {
     // following logic from autobuyers (before the addition of wall clock time stats)
-    var speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
+    let speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
     player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
     player.thisEternityRealTime = Time.thisEternity.totalSeconds / speedup;
     player.thisRealityRealTime = Time.thisReality.totalSeconds / speedup;
-    for (var i=0; i<10; i++) {
+    for (let i = 0; i < 10; i++) {
       player.lastTenRuns[i][2] = undefined;
       player.lastTenEternities[i][2] = undefined;
       player.lastTenRealities[i][3] = undefined;
@@ -457,14 +460,14 @@ dev.updateTestSave = function() {
     player.celestials.effarig = player.celestials.teresa
     player.celestials.teresa = temp
     
-    for (i in player.reality.glyphs.active) {
+    for (const i in player.reality.glyphs.active) {
       let g = player.reality.glyphs.active[i]
       if (g.type == 'teresa') {
         g.type = 'effarig'
       }
     }
 
-    for (i in player.reality.glyphs.inventory) {
+    for (const i in player.reality.glyphs.inventory) {
       let g = player.reality.glyphs.inventory[i]
       if (g.type == 'teresa') {
         g.type = 'effarig'

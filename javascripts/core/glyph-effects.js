@@ -1,3 +1,4 @@
+"use strict";
 
 // There is a little too much stuff about glyph effects to put in constants.
 
@@ -154,12 +155,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply game speed by {value}",
     totalDesc: "Game runs × {value} faster ",
     genericDesc: "Game speed multiplier",
-    effect: (level, strength) => {
-      const value = 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100;
-      return Enslaved.has(ENSLAVED_UNLOCKS.TIME_EFFECT_MULT)
-        ? value * Math.max(Math.sqrt(Enslaved.totalInfinities.pLog10()), 1)
-        : value;
-    },
+    effect: (level, strength) => 1 + Math.pow(level, 0.3) * Math.pow(strength, 0.65) * 5 / 100,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
   }, {
@@ -326,12 +322,12 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "powerbuy10",
     glyphTypes: ["power"],
-    singleDesc: "Multiplies the bonus gained from buying 10 Dimensions by {value}",
+    singleDesc: "Increase the bonus from buying 10 dimensions by ×{value}",
     totalDesc: "Multiplier from \"Buy 10\" ×{value}",
-    genericDesc: "\"Buy 10\" bonus multiplier",
-    effect: (level, strength) => 1 + Math.pow(level * strength, 0.8) / 10,
+    genericDesc: "\"Buy 10\" bonus increase",
+    effect: (level, strength) => 1 + level * strength / 12,
     formatEffect: x => shorten(x, 2, 2),
-    combine: GlyphCombiner.add,
+    combine: GlyphCombiner.addExponents,
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],

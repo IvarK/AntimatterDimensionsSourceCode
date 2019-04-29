@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {

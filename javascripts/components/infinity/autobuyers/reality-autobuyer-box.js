@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-autobuyer-box", {
   computed: {
     boxSetup() {

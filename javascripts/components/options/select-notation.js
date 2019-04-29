@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("select-notation", {
   computed: {
     notations: () => Notations.list,

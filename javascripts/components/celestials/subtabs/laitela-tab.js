@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('laitela-tab', {
   data: function() {
     return {

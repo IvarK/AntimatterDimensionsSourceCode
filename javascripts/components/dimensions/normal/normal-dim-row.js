@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-row", {
   props: {
     floatingText: Array,
@@ -38,7 +40,7 @@ Vue.component("normal-dim-row", {
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = canBuyDimension(tier);
+      const isUnlocked = NormalDimension(tier).isAvailable;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const dimension = NormalDimension(tier);

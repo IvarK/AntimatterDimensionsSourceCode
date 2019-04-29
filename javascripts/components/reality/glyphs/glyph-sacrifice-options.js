@@ -1,3 +1,5 @@
+"use strict";
+
 const AutoSacTypeTab = {
   props: {
     glyphType: String,
@@ -37,7 +39,7 @@ const AutoSacTypeTab = {
   methods: {
     update() {
       this.scoreThreshold = this.autoSacrificeSettings.scoreThreshold;
-      for (e of this.effects) {
+      for (const e of this.effects) {
         this.effectScores[e.id] = this.autoSacrificeSettings.effectScores[e.id];
       }
     },

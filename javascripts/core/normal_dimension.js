@@ -1,3 +1,5 @@
+"use strict";
+
 // Multiplier applied to all normal dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
 function normalDimensionCommonMultiplier() {
@@ -169,20 +171,6 @@ function multiplyPC5Costs(cost, tier) {
   }
 }
 
-function isTickspeedPurchaseUnlocked() {
-  return player.secondAmount.gt(0) || player.eternities >= 30;
-}
-
-function canBuyDimension(tier) {
-  if (tier === 9) {
-    return !player.secondAmount.equals(0);
-  }
-  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return false;
-  if (tier > player.resets + 4) return false;
-  if (tier > 1 && NormalDimension(tier - 1).amount.eq(0) && player.eternities < 30) return false;
-  return tier < 7 || !NormalChallenge(10).isRunning;
-}
-
 function getBuyTenMultiplier() {
   let dimMult = 2;
 
@@ -207,17 +195,14 @@ function getBuyTenMultiplier() {
   return dimMult;
 }
 
-function clearDimensions(amount) {
-  for (let i = 1; i <= amount; i++) {
+function clearDimensions(maxTier) {
+  for (let i = 1; i <= maxTier; i++) {
     NormalDimension(i).amount = new Decimal(0);
   }
 }
 
 function getDimensionCostMultiplier(tier) {
-
-  const multiplier2 = [new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4), new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)];
-  if (NormalChallenge(6).isRunning) return multiplier2[tier - 1];
-  else return player.costMultipliers[tier - 1];
+  return player.costMultipliers[tier - 1];
 }
 
 function onBuyDimension(tier) {
@@ -232,7 +217,8 @@ function onBuyDimension(tier) {
   player.postC4Tier = tier;
   postc8Mult = new Decimal(1);
   if (tier !== 8) player.dimlife = false;
-  if (tier !== 1) player.dead = false
+  if (tier !== 1) player.dead = false;
+  if (tier === 8) player.noEighthDimensions = false;
 }
 
 function getCostIncreaseThreshold() {
@@ -241,30 +227,9 @@ function getCostIncreaseThreshold() {
 
 function buyOneDimension(tier) {
   const dimension = NormalDimension(tier);
+  if (!dimension.isAvailable || !dimension.isAffordable) return false;
+
   const cost = dimension.cost;
-  auto = false;
-
-  if (!NormalChallenge(6).isRunning) {
-    if (!canBuyDimension(tier)) {
-      return false;
-    }
-  } else {
-    if (tier >= 3) {
-      if (NormalDimension(tier - 2).amount.lt(cost)) return false
-    }
-    else if (!canBuyDimension(tier)) {
-      return false;
-    } else if (tier < 3 && !canAfford(cost)) {
-      return false;
-    }
-  }
-
-
-  if (!NormalChallenge(6).isRunning) {
-    if (!canAfford(cost)) {
-      return false;
-    }
-  }
 
   if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
 
@@ -286,9 +251,6 @@ function buyOneDimension(tier) {
     floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
   }
 
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (NormalChallenge(4).isRunning) clearDimensions(tier - 1);
-
   onBuyDimension(tier);
 
 
@@ -297,33 +259,8 @@ function buyOneDimension(tier) {
 
 function buyManyDimension(tier) {
   const dimension = NormalDimension(tier);
-  const cost = dimension.cost.times(dimension.remainingUntil10);
-
-  auto = false;
-
-  if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
-  if (!NormalChallenge(6).isRunning) {
-    if (!canBuyDimension(tier)) {
-      return false;
-    }
-  } else {
-    if (tier >= 3) {
-      if (!canBuyDimension(tier)) return false;
-      if (NormalDimension(tier - 2).amount.lt(cost)) return false
-    }
-    else if (!canBuyDimension(tier)) {
-      return false;
-    } else if (tier < 3 && !canAfford(cost)) {
-      return false;
-    }
-  }
-
-
-  if (!NormalChallenge(6).isRunning) {
-    if (!canAfford(cost)) {
-      return false;
-    }
-  }
+  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return false;
+  const cost = dimension.costUntil10;
 
   if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
 
@@ -340,8 +277,7 @@ function buyManyDimension(tier) {
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
   if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (NormalChallenge(4).isRunning) clearDimensions(tier - 1);
+
   floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
   onBuyDimension(tier);
 
@@ -353,11 +289,11 @@ const initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new
 const costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
 
 function buyManyDimensionAutobuyer(tier, bulk) {
-  if (!canBuyDimension(tier)) return false;
+  const dimension = NormalDimension(tier);
+  if (!dimension.isAvailable) return false;
   let money = new Decimal(player.money);
   if (money.eq(0)) return false;
   if (tier === 8 && Enslaved.isRunning) return buyManyDimension(8);
-  const dimension = NormalDimension(tier);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = player.costMultipliers[tier - 1];
@@ -484,7 +420,6 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     flushValues();
   }
   if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) player.matter = new Decimal(1);
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   if (InfinityChallenge(1).isRunning) clearDimensions(tier - 1);
   onBuyDimension(tier);
 }
@@ -677,25 +612,36 @@ class NormalDimensionState {
   }
 
   /**
+   * @returns {Decimal}
+   */
+
+  get currencyAmount() {
+    return this._tier >= 3 && NormalChallenge(6).isRunning
+      ? NormalDimension(this._tier - 2).amount
+      : player.money;
+  }
+
+   /**
    * @returns {boolean}
    */
   get isAffordable() {
-    if (this._tier >= 3 && NormalChallenge(6).isRunning) {
-      return NormalDimension(this._tier - 2).amount.gte(this.cost);
-    } else {
-      return canAfford(this.cost);
-    }
+    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    return this.cost.lte(this.currencyAmount);
   }
 
   /**
    * @returns {boolean}
    */
   get isAffordableUntil10() {
-    if (this._tier >= 3 && NormalChallenge(6).isRunning) {
-      return NormalDimension(this._tier - 2).amount.gte(this.costUntil10);
-    } else {
-      return canAfford(this.costUntil10);
-    }
+    if (!player.break && this.cost.gt(Decimal.MAX_NUMBER)) return false;
+    return this.costUntil10.lte(this.currencyAmount);
+  }
+
+  get isAvailable() {
+    if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return false;
+    if (this._tier > player.resets + 4) return false;
+    if (this._tier > 1 && NormalDimension(this._tier - 1).amount.eq(0) && player.eternities < 30) return false;
+    return this._tier < 7 || !NormalChallenge(10).isRunning;
   }
 }
 

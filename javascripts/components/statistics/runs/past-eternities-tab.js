@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("past-eternities-tab", {
   mixins: [pastRunsMixin],
   data() {

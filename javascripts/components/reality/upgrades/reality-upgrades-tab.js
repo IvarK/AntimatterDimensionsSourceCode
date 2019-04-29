@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-upgrades-tab", {
   computed: {
     upgrades: () => RealityUpgrades.list

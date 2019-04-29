@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.timeStudies.normal = (function() {
   const thisInfinityMult = () => {
     // All "this inf time" or "best inf time" mults are * 10

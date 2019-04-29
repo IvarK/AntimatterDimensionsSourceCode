@@ -1,3 +1,5 @@
+"use strict";
+
 function canEternity() {
   const challenge = EternityChallenge.current;
   if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
@@ -133,8 +135,6 @@ function initializeResourcesAfterEternity() {
   player.totalTickGained = 0;
   player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
   player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-  player.autoIP = new Decimal(0);
-  player.autoTime = 1e300;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
   if (player.eternities < 20) {
@@ -144,6 +144,7 @@ function initializeResourcesAfterEternity() {
   }
   player.dimlife = true;
   player.dead = true;
+  player.noEighthDimensions = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {
     player.autoSacrifice = 1;

@@ -1,3 +1,5 @@
+"use strict";
+
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
 // GameKeyboard.bindRepeatable for repeatable combinations

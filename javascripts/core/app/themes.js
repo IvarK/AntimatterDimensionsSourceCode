@@ -1,3 +1,5 @@
+"use strict";
+
 const Theme = function Theme(name, colors) {
     this.name = name;
 

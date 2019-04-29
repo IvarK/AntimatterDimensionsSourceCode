@@ -1,3 +1,5 @@
+"use strict";
+
 class PerkState extends PurchasableMechanicState {
   constructor(config) {
     super(config, Currency.perkPoints, () => player.reality.perks);

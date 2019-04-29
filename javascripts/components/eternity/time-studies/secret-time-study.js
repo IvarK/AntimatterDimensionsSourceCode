@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("secret-time-study", {
   mixins: [remMixin],
   props: {

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-shift-row", {
   data() {
     return {

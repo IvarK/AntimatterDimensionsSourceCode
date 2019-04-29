@@ -1,3 +1,5 @@
+"use strict";
+
 const pastRunsMixin = {
   methods: {
     runGain(run) {

@@ -1,3 +1,5 @@
+"use strict";
+
 const teresaQuotes = [
   "We've been observing you",
   "You have shown promise with your bending of the reality",

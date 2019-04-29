@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-animation-options", {
   mixins: [modalOptionsMixin],
   data() {

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-cloud-conflict-record", {
   props: {
     saveId: Number,

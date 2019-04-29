@@ -1,3 +1,5 @@
+"use strict";
+
 var currentSave = 0;
 var saves = {
   0: null,
@@ -47,12 +49,12 @@ function onLoad() {
   IPminpeak = new Decimal(0)
   EPminpeak = new Decimal(0)
 
-  if (typeof player.autobuyers[9].bulk !== "number") {
+  if (typeof player.autobuyers[9] !== "number" && typeof player.autobuyers[9].bulk !== "number") {
       player.autobuyers[9].bulk = 1
   }
 
   if (player.version === undefined) { // value will need to be adjusted when update goes live
-      for (var i = 0; i < player.autobuyers.length; i++) {
+      for (let i = 0; i < player.autobuyers.length; i++) {
           if (player.autobuyers[i]%1 !== 0) player.infinityPoints = player.infinityPoints + player.autobuyers[i].cost - 1
       }
       player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -105,7 +107,7 @@ function onLoad() {
   if (player.version < 10) {
       player.version = 10
       if (player.timestudy.studies.includes(72)) {
-          for (i=4; i<8; i++) {
+        for (let i = 4; i < 8; i++) {
               player["infinityDimension"+i].amount = player["infinityDimension"+i].amount.div(Sacrifice.totalBoost.pow(0.02))
           }
       }
@@ -113,7 +115,7 @@ function onLoad() {
   //updates TD costs to harsher scaling
   if (player.version < 12) {
       player.version = 12
-      for (i=1; i<5; i++) {
+    for (let i = 1; i < 5; i++) {
         if (player["timeDimension"+i].cost.gte("1e1300")) {
             player["timeDimension"+i].cost = Decimal.pow(timeDimCostMults[i]*2.2, player["timeDimension"+i].bought).times(timeDimStartCosts[i])
           }
@@ -174,6 +176,8 @@ function onLoad() {
     moveSavedStudyTrees();
     delete player.challengeTarget;
     moveChallengeInfo();
+    delete player.autoIP;
+    delete player.autoTime;
   }
 
   //TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST (although it won't really do anything?)
@@ -469,14 +473,18 @@ function transformSaveToDecimal() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
     let glyph = player.reality.glyphs.active[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      const newValue = new Decimal(glyph.effects.mult);
+      delete glyph.effects.mult;
+      glyph.effects.mult = newValue;
     }
   }
 
   for (let i = 0; i < player.reality.glyphs.inventory.length; i++) {
     let glyph = player.reality.glyphs.inventory[i]
     if (glyph.type == "power" && glyph.effects.mult !== undefined) {
-      glyph.effects.mult = new Decimal(glyph.effects.mult)
+      const newValue = new Decimal(glyph.effects.mult);
+      delete glyph.effects.mult;
+      glyph.effects.mult = newValue;
     }
   }
 }

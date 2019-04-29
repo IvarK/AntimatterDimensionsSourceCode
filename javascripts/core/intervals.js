@@ -1,3 +1,5 @@
+"use strict";
+
 const GameIntervals = (function() {
   const interval = (handler, timeout) => {
     let id;

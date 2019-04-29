@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('matter-dimension-row', {
   props: {
     dimension: Object

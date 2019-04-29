@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("sacrifice-autobuyer-box", {
   computed: {
     autobuyer() {

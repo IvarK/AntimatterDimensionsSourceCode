@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-autobuyer-box", {
   data() {
     return {

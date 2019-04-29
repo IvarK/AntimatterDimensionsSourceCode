@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("normal-dim-tab-progress-bar", {
   data() {
     return {
@@ -27,7 +29,7 @@ Vue.component("normal-dim-tab-progress-bar", {
       } else if (!player.break) {
         setProgress(player.money, Decimal.MAX_NUMBER, "Percentage to Infinity");
       } else if (player.infDimensionsUnlocked.includes(false)) {
-        setProgress(player.money, InfinityDimension.next().requirement, "Percentage to next dimension unlock");
+        setProgress(player.money, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
       } else if (EternityChallenge.isRunning) {
         setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
       } else {

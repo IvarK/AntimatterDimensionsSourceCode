@@ -1,5 +1,7 @@
+"use strict";
+
 function canBuyTickSpeed() {
-  return canBuyDimension(3) && !EternityChallenge(9).isRunning;
+  return NormalDimension(3).isAvailable && !EternityChallenge(9).isRunning;
 }
 
 function getTickSpeedMultiplier() {

@@ -13,10 +13,10 @@ function timeDimensionCostMult(tier) {
 
 function timeDimensionCost(tier, bought) {
   if (tier > 4) {
-    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier])
-   // if (cost.gte("1e6000")) {
-      //cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
-    //}
+    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier]);
+    if (cost.gte("1e6000")) {
+      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
+    }
     return cost;
   }
   let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
@@ -26,9 +26,9 @@ function timeDimensionCost(tier, bought) {
   if (cost.gte("1e1300")) {
     cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
   }
-//  if (cost.gte("1e6000")) {
-    //cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3)).times(timeDimStartCosts[tier])
-  //}
+  if (cost.gte("1e6000")) {
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
+  }
   return cost;
 }
 

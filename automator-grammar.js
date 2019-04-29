@@ -16,8 +16,9 @@ const myParser = (function() {
       categories: category,
       longer_alt: Identifier,
     });
-    if (tokenLists[category.name] === undefined) tokenLists[category.name] = [];
-    tokenLists[category.name].push(token);
+    const categoryName = Array.isArray(category) ? category[0].name : category.name;
+    if (tokenLists[categoryName] === undefined) tokenLists[categoryName] = [];
+    tokenLists[categoryName].push(token);
     return token;
   };
 
@@ -50,10 +51,22 @@ const myParser = (function() {
     longer_alt: Identifier,
   });
 
-  const Infinity = createInCategory(PrestigeEvent, "Infinity", /infinity/i);
+  const StudyPath = createToken({
+    name: "StudyPath",
+    pattern: Lexer.NA,
+    longer_alt: Identifier,
+  });
+
+  const Infinity = createInCategory([PrestigeEvent, StudyPath], "Infinity", /infinity/i);
   const Eternity = createInCategory(PrestigeEvent, "Eternity", /eternity/i);
   const Reality = createInCategory(PrestigeEvent, "Reality", /reality/i);
 
+  const Idle = createInCategory(StudyPath, "Idle", /idle/i);
+  const Passive = createInCategory(StudyPath, "Passive", /passive/i);
+  const Active = createInCategory(StudyPath, "Active", /active/i);
+  const Normal = createInCategory(StudyPath, "Normal", /normal/i);
+  const Time = createInCategory(StudyPath, "Time", /time/i);
+  
   const Keyword = createToken({
     name: "Keyword",
     pattern: Lexer.NA,
@@ -79,6 +92,7 @@ const myParser = (function() {
   const While = createKeyword("While", /while/i);
   const Unlock = createKeyword("Unlock", /unlock/i);
   const Start = createKeyword("Start", /start/i);
+  const Define = createKeyword("Define", /define/i);
   const Buy = createKeyword("Buy", /buy/i);
   const Max = createKeyword("Max", /max/i);
   const Set = createKeyword("Set", /set/i);
@@ -88,10 +102,13 @@ const myParser = (function() {
   const Autobuyer = createKeyword("Autobuyer", /autobuyer +/i);
   const On = createKeyword("On", /on/i);
   const Off = createKeyword("Off", /off/i);
-  const TS = createKeyword("TS", /ts/i);
+  const Study = createKeyword("Study", /study/i);
+  const Studies = createKeyword("Studies", /studies/i);
   const Preset = createKeyword("Preset", /preset/i);
   const Import = createKeyword("Import", /import/i);
   const Load = createKeyword("Load", /load/i);
+  const Nowait = createKeyword("Nowait", /nowait/i);
+  const Restart = createKeyword("Restart", /restart/i);
 
   const TimeUnit = createToken({
     name: "TimeUnit",
@@ -137,6 +154,10 @@ const myParser = (function() {
 
   const LCurly = createToken({name: "LCurly", pattern: /[ \t]*{/});
   const RCurly = createToken({name: "RCurly", pattern: /[ \t]*}/});
+  const Comma = createToken({name: "Comma", pattern: /,/});
+  const EqualSign = createToken({name: "EqualSign", pattern: /=/, label: "=" });
+  const Ellipsis = createToken({ name: "Ellipsis", pattern: /\.\.\./, label: "..." });
+
   const DurationLiteral = createToken({
     name: "DurationLiteral",
     pattern: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/
@@ -149,12 +170,13 @@ const myParser = (function() {
 
   const jsonTokens = [
     HSpace, Comment, EOL,
-    LCurly, RCurly,
+    LCurly, RCurly, Comma, Ellipsis, EqualSign,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     NumberLiteral,
     Keyword, ...keywords,
     Dilation, EC,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
+    StudyPath, ...tokenLists.StudyPath,
     Currency, ...tokenLists.Currency,
     TimeUnit, ...tokenLists.TimeUnit,
     DurationLiteral,
@@ -175,7 +197,8 @@ const myParser = (function() {
   OpGTE.LABEL = "≥";
   OpLTE.LABEL = "≤";
   NumberLiteral.LABEL = "Number";
-
+  Comma.LABEL = "❟";
+  // ----------------- parser -----------------
   // ----------------- parser -----------------
   const Parser = chevrotain.Parser;
 
@@ -197,10 +220,12 @@ const myParser = (function() {
             { ALT: () => $.SUBRULE($.badCommand) },
 
             { ALT: () => $.SUBRULE($.auto) },
+            { ALT: () => $.SUBRULE($.define) },
             { ALT: () => $.SUBRULE($.ifBlock) },
             { ALT: () => $.SUBRULE($.pause) },
+            { ALT: () => $.CONSUME(Restart) },
             { ALT: () => $.SUBRULE($.start) },
-            { ALT: () => $.SUBRULE($.ts) },
+            { ALT: () => $.SUBRULE($.studies) },
             { ALT: () => $.SUBRULE($.tt) },
             { ALT: () => $.SUBRULE($.unlock) },
             { ALT: () => $.SUBRULE($.untilLoop) },
@@ -231,6 +256,16 @@ const myParser = (function() {
         ]);
       });
 
+      $.RULE("define", () => {
+        $.CONSUME(Define);
+        $.CONSUME(Identifier);
+        $.CONSUME(EqualSign);
+        $.OR([
+          { ALT: () => $.CONSUME(NumberLiteral) },
+          { ALT: () => $.SUBRULE($.studyList) },
+        ]);
+      });
+
       $.RULE("ifBlock", () => {
         $.CONSUME(If);
         $.SUBRULE($.comparison);
@@ -242,7 +277,7 @@ const myParser = (function() {
 
       $.RULE("pause", () => {
         $.CONSUME(Pause);
-        $.SUBRULE($.duration);
+        $.OPTION(() => $.SUBRULE($.duration));
       });
       
       $.RULE("start", () => {
@@ -253,8 +288,8 @@ const myParser = (function() {
         ]);
       });
 
-      $.RULE("ts", () => {
-        $.CONSUME(TS);
+      $.RULE("studies", () => {
+        $.CONSUME(Studies);
         $.OR([
           {ALT: () => {
             $.CONSUME(Load);
@@ -264,12 +299,13 @@ const myParser = (function() {
               { ALT: () => $.CONSUME(Identifier) },
             ]);
           }},
-          {ALT: () => $.CONSUME(AM) },
-          {ALT: () => $.CONSUME(EP) },
-          {ALT: () => $.CONSUME(IP) },
+          {ALT: () => {
+            $.OPTION(() => $.CONSUME(Nowait));
+            $.SUBRULE($.studyList);
+          }},
         ]);
       });
-      
+
       $.RULE("tt", () => {
         $.OPTION(() => $.CONSUME(Buy));
         $.CONSUME(TT);
@@ -355,6 +391,16 @@ const myParser = (function() {
         $.CONSUME(NumberLiteral);
       });
           
+      $.RULE("studyList", () => {
+        $.AT_LEAST_ONE(() => {
+          $.OPTION(() => $.CONSUME(Ellipsis));
+          $.OR([
+            { ALT: () => $.CONSUME(NumberLiteral) },
+            { ALT: () => $.CONSUME(StudyPath) },
+          ]);
+          $.OPTION1(() => $.CONSUME(Comma));
+        });
+      });
       // very important to call this after all the rules have been setup.
       // otherwise the parser may not work correctly as it will lack information
       // derived from the self analysis.

@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.standard = new class StandardNotation extends EngineeringNotation {
   constructor() {
     super("Standard");

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("challenge-grid", {
   props: {
     count: Number,

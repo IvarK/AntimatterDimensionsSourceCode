@@ -1,3 +1,5 @@
+"use strict";
+
 let crashed = false;
 
 function crash(message) {

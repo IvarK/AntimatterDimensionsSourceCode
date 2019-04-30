@@ -1,3 +1,5 @@
+"use strict";
+
 const PerformanceStats = {
   container: document.getElementById("performance-stats"),
   samplePeriod: 10 * 1000,

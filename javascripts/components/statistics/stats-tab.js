@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("stats-tab", {
   data() {
     return {

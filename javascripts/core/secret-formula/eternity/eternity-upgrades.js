@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.upgrades = {
   idMultEP: {
     id: 1,

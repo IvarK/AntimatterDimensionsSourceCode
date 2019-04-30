@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("hint-text", {
   computed: {
     isVisible() {

@@ -1,3 +1,5 @@
+"use strict";
+
 var canvas4 = document.getElementById("automatorTreeCanvas");
 var ctx4 = canvas4.getContext("2d");
 

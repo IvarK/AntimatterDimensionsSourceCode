@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('challenges-tab', {
   data: function() {
     return {

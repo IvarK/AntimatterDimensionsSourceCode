@@ -1,3 +1,5 @@
+"use strict";
+
 Notation.dots = new class DotsNotation extends Notation {
   formatUnder1000(value) {
     return this.dotify(value * 254);

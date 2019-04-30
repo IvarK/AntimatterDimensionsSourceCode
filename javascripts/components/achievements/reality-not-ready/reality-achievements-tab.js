@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-achievements-tab", {
   template:
     `<div class="l-achievement-grid">

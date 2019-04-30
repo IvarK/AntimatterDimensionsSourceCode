@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-milestones-tab", {
   data() {
     return {

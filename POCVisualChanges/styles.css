@@ -13,6 +13,10 @@
   outline: none;
 }
 
+body {
+  position: relative
+}
+
 :root {
   --color-light: #FFFFFF;
   --color-medium: #AEAEAE;
@@ -56,6 +60,7 @@
   color: var(--color-accent-2);
   font-size: 1.3em;
   padding-left: 10px;
+  z-index: 1;
 }
 
 .resource-information {
@@ -74,7 +79,7 @@
 }
 
 .resource-name {
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 #ip { color: #B67F33 }
@@ -157,8 +162,7 @@
 }
 
 .dimensions-container {
-  padding: 20px 50px;
-  padding-left: 90px;
+  padding: 5px 50px 5px 90px; /* TOP RIGHT BOTTOM LEFT */
 }
 
 .dimension-row {
@@ -241,7 +245,7 @@
 .modes-container {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: 0 50px;
 }
 
@@ -260,4 +264,37 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.tickspeed-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 50px 5px 90px;
+}
+
+.tickspeed-labels {
+  display: flex;
+}
+
+.tickspeed-btn {
+  padding: 5px;
+  width: 100px;
+  height: 30px;
+}
+
+.tickspeed-labels span {
+  color: white;
+  height: 30px;
+  padding: 5px 10px;
+}
+
+.particle {
+  position: absolute;
+  color: white;
+  height: 10px;
+  width: 10px;
+  background-image: url("../icon.png");
+  background-position: center;
+  background-size: cover;
+  z-index: 0;
 }

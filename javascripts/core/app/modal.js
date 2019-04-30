@@ -1,3 +1,5 @@
+"use strict";
+
 class Modal {
   constructor(component) {
     this._component = component;

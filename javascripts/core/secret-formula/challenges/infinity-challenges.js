@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.challenges.infinity = [
   {
     id: 1,

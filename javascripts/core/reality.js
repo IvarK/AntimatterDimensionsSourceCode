@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Object that manages the selection of glyphs offered to the player
  */
@@ -236,10 +238,10 @@ function completeReality(force, reset, auto = false) {
 
   player.sacrificed = new Decimal(0);
 
-  NormalChallenge.clearCompletions();
+  NormalChallenges.clearCompletions();
   InfinityChallenge.clearCompletions();
   const isRUPG10Bought = RealityUpgrade(10).isBought;
-  if (isRUPG10Bought) NormalChallenge.completeAll();
+  if (isRUPG10Bought) NormalChallenges.completeAll();
 
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
@@ -298,8 +300,6 @@ function completeReality(force, reset, auto = false) {
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
-  player.autoIP = new Decimal(0);
-  player.autoTime = 1e300;
   player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
   if (!isRUPG10Bought) {
     player.autoCrunchMode = AutoCrunchMode.AMOUNT;
@@ -309,6 +309,7 @@ function completeReality(force, reset, auto = false) {
   player.eterc8repl = 40;
   player.dimlife = true;
   player.dead = true;
+  player.noEighthDimensions = true;
   if (!reset) player.realities = player.realities + 1;
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;
@@ -403,40 +404,32 @@ function completeReality(force, reset, auto = false) {
 
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
-    player.celestials.teresa.run = false
+    player.celestials.teresa.run = false;
     if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
   }
   if (Effarig.isRunning) {
-    player.celestials.effarig.run = false
+    player.celestials.effarig.run = false;
     if (!force && !EffarigUnlock.reality.isUnlocked) {
       EffarigUnlock.reality.unlock();
     }
   }
   if (Enslaved.isRunning) {
-    player.celestials.enslaved.run = false
+    player.celestials.enslaved.run = false;
+    if (!force) {
+      Enslaved.completeRun();
+    }
   }
 
   if (V.isRunning) {
-    player.celestials.v.run = false
+    player.celestials.v.run = false;
   }
 
   if (Ra.isRunning) {
-    player.celestials.ra.run = false
+    player.celestials.ra.run = false;
   }
 
   if (Laitela.isRunning) {
-    player.celestials.laitela.run = false
-  }
-}
-
-function fullResetTimeDimensions() {
-  const cost = [1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
-  for (let i = 0; i < 8; i++) {
-    let dimension = player["timeDimension" + (i + 1)];
-    dimension.cost = new Decimal(cost[i]);
-    dimension.amount = new Decimal(0);
-    dimension.bought = 0;
-    dimension.power = new Decimal(1);
+    player.celestials.laitela.run = false;
   }
 }
 

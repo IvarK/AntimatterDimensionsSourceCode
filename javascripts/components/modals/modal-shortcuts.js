@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("modal-shortcuts", {
   computed: {
     shortcuts: () => [
@@ -13,6 +15,7 @@ Vue.component("modal-shortcuts", {
       { name: "Eternity", keys: ["e"] },
       { name: "Toggle Black Hole", keys: ["b"] },
       { name: "Save game", keys: ["ctrl", "s"] },
+      { name: "Export game", keys: ["ctrl", "e"] },
       { name: "Close pop-up or open options", keys: ["esc"] }
     ]
   },

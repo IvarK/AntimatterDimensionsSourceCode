@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("break-infinity-button", {
   data() {
     return {

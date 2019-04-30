@@ -1,8 +1,8 @@
+"use strict";
+
 if (crashed) {
   throw "Initialization failed";
 }
-
-var defaultStart = deepmerge.all([{}, player]);
 
 let kongIPMult = 1
 let kongDimMult = 1
@@ -58,8 +58,8 @@ function maxAll() {
 }
 
 function maxDimension(tier) {
-  if (!canBuyDimension(tier)) return;
   const dimension = NormalDimension(tier);
+  if (!dimension.isAvailable) return;
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.pow;
 
@@ -130,7 +130,7 @@ function buyUntilTen(tier) {
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
   else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
-  
+
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
     player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
   }
@@ -198,7 +198,6 @@ function gainedRealityMachines() {
     ret = ret.times(Teresa.rmMultiplier)
     ret = ret.times(player.celestials.teresa.rmMult)
     ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
-    if (Enslaved.has(ENSLAVED_UNLOCKS.RM_MULT)) ret = ret.times(Decimal.pow(getGameSpeedupFactor(), 0.1))
     ret = ret.plusEffectOf(Perk.realityMachineGain)
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(Ra.rmMult)
@@ -412,7 +411,7 @@ setInterval(function() {
 }());
 
 function updateRefresh() {
-  save_game(false, true);
+  GameStorage.save(true);
   location.reload(true);
 }
 
@@ -578,8 +577,6 @@ function gameLoop(diff, options = {}) {
     }
 
     DeltaTimeState.update(realDiff, diff);
-
-    if (diff/100 > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times((diff/100)/player.autoTime))
 
     updateNormalAndInfinityChallenges(diff);
 
@@ -904,9 +901,9 @@ function simulateTime(seconds, real, fast) {
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
       if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
     }
-    popupString = `${offlineIncreases.join(", <br>")}.`;
+    let popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {
-        popupString += ".. Nothing happened."
+      popupString += ".. Nothing happened.";
         SecretAchievement(36).unlock();
     }
 
@@ -1044,7 +1041,7 @@ function init() {
       showTab('celestials');
     };
     Tab.dimensions.normal.show();
-    load_game();
+    GameStorage.load();
     kong.init();
     TLN.append_line_numbers("automator") // Automator line numbers
 

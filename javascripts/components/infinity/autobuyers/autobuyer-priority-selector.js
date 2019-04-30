@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("autobuyer-priority-selector", {
   props: {
     autobuyer: Object

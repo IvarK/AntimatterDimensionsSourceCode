@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("description-display", {
   props: {
     config: Object,

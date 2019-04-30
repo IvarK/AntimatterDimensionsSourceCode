@@ -1,3 +1,5 @@
+"use strict";
+
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
@@ -176,25 +178,6 @@ const AchievementTimers = {
   pain: new AchievementTimer(),
   stats: new AchievementTimer()
 };
-
-function clearOldAchieves() {
-  const oldIdMatch = /^[rs][1-9][0-9]+/u;
-  for (const achId of player.achievements) {
-    // Numeric ID's are the new thing, leave them alone
-    if (!isNaN(parseInt(achId, 10))) continue;
-    // ID's like r123 and s123 are pre-version 13; we let the version update code handle them
-    if (oldIdMatch.test(achId)) continue;
-    const achByName = Achievements.byName[achId];
-    if (achByName !== undefined) {
-      player.achievements.delete(achByName.name);
-      player.achievements.add(achByName.id);
-      continue;
-    }
-    if (Achievement(achId) === undefined) {
-      player.achievements.delete(achId);
-    }
-  }
-}
 
 function isAchEnabled(achId) {
   if (!player.achievements.has(achId)) return false;

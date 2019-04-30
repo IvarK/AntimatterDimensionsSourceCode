@@ -1,3 +1,5 @@
+"use strict";
+
 class KeySpin {
   constructor(key, action) {
     this.key = key;

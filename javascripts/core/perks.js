@@ -1,3 +1,5 @@
+"use strict";
+
 class PerkState extends PurchasableMechanicState {
   constructor(config) {
     super(config, Currency.perkPoints, () => player.reality.perks);
@@ -118,3 +120,9 @@ const Perk = (function() {
   }
   return perks;
 }());
+
+function checkPerkValidity() {
+  if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
+  dev.respecPerks();
+  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("autobuyer-interval-button", {
   props: {
     autobuyer: Object

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("ip-multiplier-button", {
   data() {
     return {

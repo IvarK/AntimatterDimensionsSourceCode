@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-dilation-tab", {
   data() {
     return {

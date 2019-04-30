@@ -1,3 +1,5 @@
+"use strict";
+
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
 // GameKeyboard.bindRepeatable for repeatable combinations
@@ -47,7 +49,11 @@ GameKeyboard.bindHotkey("?", () => {
 });
 
 GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
-  GameOptions.save();
+  GameStorage.save();
+  return false;
+});
+GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {
+  GameStorage.export();
   return false;
 });
 

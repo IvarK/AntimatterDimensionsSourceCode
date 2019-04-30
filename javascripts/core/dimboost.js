@@ -1,3 +1,5 @@
+"use strict";
+
 class DimBoostRequirement {
   constructor(tier, amount) {
     this.tier = tier;
@@ -105,16 +107,18 @@ function softReset(bulk) {
 }
 
 function applyChallengeModifiers() {
-    if (NormalChallenge(6).isRunning) {
-        player.thirdCost = new Decimal(100);
-        player.fourthCost = new Decimal(500);
-        player.fifthCost = new Decimal(2500);
-        player.sixthCost = new Decimal(2e4);
-        player.seventhCost = new Decimal(2e5);
-        player.eightCost = new Decimal(4e6);
-    }
-    if (InfinityChallenge(1).isRunning)
-        player.costMultipliers = [new Decimal(1e3),new Decimal(5e3),new Decimal(1e4),new Decimal(1.2e4),new Decimal(1.8e4),new Decimal(2.6e4),new Decimal(3.2e4),new Decimal(4.2e4)];
+  if (NormalChallenge(6).isRunning) {
+    player.thirdCost = new Decimal(100);
+    player.fourthCost = new Decimal(500);
+    player.fifthCost = new Decimal(2500);
+    player.sixthCost = new Decimal(2e4);
+    player.seventhCost = new Decimal(2e5);
+    player.eightCost = new Decimal(4e6);
+    player.costMultipliers = [
+      new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4),
+      new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)
+    ];
+  }
 }
 
 function skipResetsIfPossible() {
@@ -133,7 +137,6 @@ function skipResetsIfPossible() {
 function softResetBtnClick() {
   if ((!player.break && player.money.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
   if (Ra.isRunning) return;
-  auto = false;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1)
   

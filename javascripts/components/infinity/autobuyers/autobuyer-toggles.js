@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("autobuyer-toggles", {
   data() {
     return {

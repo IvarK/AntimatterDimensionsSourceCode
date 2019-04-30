@@ -117,7 +117,7 @@ function maxDimension(tier) {
     player.matter = new Decimal(1);
   }
   onBuyDimension(tier);
-  floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
+  if (dimension.pow.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
 }
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
@@ -128,7 +128,7 @@ function buyUntilTen(tier) {
   dimension.pow = dimension.pow.times(getBuyTenMultiplier())
 
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-  else if (NormalChallenge(9)) multiplySameCosts(dimension.cost);
+  else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
   else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
   
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {

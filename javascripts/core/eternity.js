@@ -101,10 +101,10 @@ function eternity(force, auto, switchingDilation) {
 }
 
 function initializeChallengeCompletions() {
-  NormalChallenge.clearCompletions();
+  NormalChallenges.clearCompletions();
   InfinityChallenge.clearCompletions();
   if (EternityMilestone.keepAutobuyers.isReached) {
-    NormalChallenge.completeAll();
+    NormalChallenges.completeAll();
   }
   if (Achievement(133).isEnabled) {
     InfinityChallenge.completeAll();

@@ -120,3 +120,9 @@ const Perk = (function() {
   }
   return perks;
 }());
+
+function checkPerkValidity() {
+  if (player.reality.perks.every(id => Perk.find(id) !== undefined)) return;
+  dev.respecPerks();
+  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}

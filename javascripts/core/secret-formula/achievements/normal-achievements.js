@@ -223,14 +223,14 @@ GameDatabase.achievements.normal = [
     id: 47,
     name: "Daredevil",
     tooltip: "Complete 2 challenges.",
-    checkRequirement: () => NormalChallenge.completed.length === 2,
+    checkRequirement: () => NormalChallenges.completed.length === 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
-    checkRequirement: () => NormalChallenge.completed.length === 12,
+    checkRequirement: () => NormalChallenges.completed.length === 12,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1

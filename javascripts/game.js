@@ -4,8 +4,6 @@ if (crashed) {
   throw "Initialization failed";
 }
 
-var defaultStart = deepmerge.all([{}, player]);
-
 let kongIPMult = 1
 let kongDimMult = 1
 let kongAllDimMult = 1
@@ -119,7 +117,7 @@ function maxDimension(tier) {
     player.matter = new Decimal(1);
   }
   onBuyDimension(tier);
-  floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
+  if (dimension.pow.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
 }
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
@@ -130,7 +128,7 @@ function buyUntilTen(tier) {
   dimension.pow = dimension.pow.times(getBuyTenMultiplier())
 
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
-  else if (NormalChallenge(9)) multiplySameCosts(dimension.cost);
+  else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
   else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
 
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
@@ -413,7 +411,7 @@ setInterval(function() {
 }());
 
 function updateRefresh() {
-  save_game(false, true);
+  GameStorage.save(true);
   location.reload(true);
 }
 
@@ -1043,7 +1041,7 @@ function init() {
       showTab('celestials');
     };
     Tab.dimensions.normal.show();
-    load_game();
+    GameStorage.load();
     kong.init();
     TLN.append_line_numbers("automator") // Automator line numbers
 

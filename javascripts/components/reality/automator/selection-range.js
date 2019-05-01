@@ -1,7 +1,9 @@
+"use strict";
+
 function setSelectionRange(el, pos) {
   const setSelection = pos.end && pos.end !== pos.start;
   let length = 0;
-  let range = document.createRange();
+  const range = document.createRange();
   const it = domIterator(el)
     .select(Node.TEXT_NODE)
     .revisit(false);
@@ -11,11 +13,9 @@ function setSelectionRange(el, pos) {
     pos.start > el.textContent.length ? el.textContent.length : pos.start;
   const end = pos.end > el.textContent.length ? el.textContent.length : pos.end;
   const atStart = pos.atStart;
-
   while ((next = it.next())) {
     const olen = length;
     length += next.textContent.length;
-
     // Set start point of selection
     const atLength = atStart ? length > start : length >= start;
     if (!startindex && atLength) {

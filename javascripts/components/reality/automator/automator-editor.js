@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("automator-editor", {
   data() {
     return {
@@ -90,6 +92,8 @@ Vue.component("automator-editor", {
       }
     },
     updateContent(plain) {
+      console.log("------------- updateContent ----------------- ")
+      console.log(parseAutomatorScript(plain));
       Automator.parse(plain);
       AutomatorEditor.updateLines(Automator.lines);
       this.lines = Automator.lines

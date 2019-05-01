@@ -1,17 +1,5 @@
 "use strict";
 
-const TimeStudyPath = {
-  NONE: 0,
-  NORMAL_DIM: 1,
-  INFINITY_DIM: 2,
-  TIME_DIM: 3,
-  ACTIVE: 4,
-  PASSIVE: 5,
-  IDLE: 6,
-  LIGHT: 7,
-  DARK: 8
-};
-
 const NormalTimeStudies = {};
 
 NormalTimeStudies.pathList = [

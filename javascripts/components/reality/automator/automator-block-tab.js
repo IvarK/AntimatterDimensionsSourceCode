@@ -1,4 +1,6 @@
-Vue.component("automator-tab", {
+"use strict";
+
+Vue.component("automator-block-tab", {
   data: function() {
     return {
       lines: []

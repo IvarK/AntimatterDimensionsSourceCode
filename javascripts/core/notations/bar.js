@@ -19,7 +19,6 @@ Notation.bar = new class BarNotation extends Notation {
     const parts = [
       this.BARS[decimalLog64 % 8],
       this.BARS[Math.floor(decimalLog64 / 8)],
-      "."
     ];
     while (wholeLog >= 8) {
       const remainder = wholeLog % 8;

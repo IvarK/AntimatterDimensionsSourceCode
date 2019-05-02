@@ -216,8 +216,10 @@ const FreeTickspeed = {
     const f = x => a * Math.pow(Math.max(x, 0), b) + x;
     const df = x => b * a * Math.pow(Math.max(x, 0), b - 1) + 1;
     const newtonsMethod = (x0, c) => x0 - (f(x0) - c) / df(x0);
+    let oldApproximation = -1;
     let approximation = Math.pow(tempC / a, 1 / b);
-    for (let i = 0; i < 50; i++) {
+    while (Math.abs(approximation - oldApproximation) >= 1e-9) {
+      oldApproximation = approximation;
       approximation = newtonsMethod(approximation, tempC);
     }
     const purchases = Math.floor(approximation);

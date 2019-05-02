@@ -208,29 +208,23 @@ const FreeTickspeed = {
         nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
       };
     }
-    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
-    // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
-    // reports continue to be accurate.
-    const fixedIncrease = 1 / TS171_MULTIPLIER;
-    const softcapFactor = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
-    const tmpC = (logShards - priceToCap) / logTickmult;
+    const tempC = (logShards - priceToCap) / logTickmult;
     const a = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
     const b = FreeTickspeed.GROWTH_EXP;
-    const apx = c => Math.pow(c / a + Math.pow(a * b, -b / (b - 1)), 1 / b) - Math.pow(a * b, -1 / (b - 1));
-    const newfun = (x0, c) => ((b - 1) * a * Math.pow(Math.max(x0,0), b) + c) / (b * a * Math.pow(Math.max(x0,0), b - 1) + 1)
-    const ap1 = apx(tmpC)
-    const ap2 = newfun(ap1, tmpC)
-    const ap3 = newfun(ap2, tmpC)
-    const ap4 = newfun(ap3, tmpC)
-    //console.log(`${ap1} ${ap2} ${ap3} ${ap4}`)
-    //console.log(a * Math.pow(ap4, b) + ap4 - tmpC)
-    const purchases = Math.floor(ap4);
-    const next = 1;//scaling.logTotalMultiplierAfterPurchases(purchases + 1);
+    const f = x => a * Math.pow(Math.max(x, 0), b) + x;
+    const df = x => b * a * Math.pow(Math.max(x, 0), b - 1) + 1;
+    const newtonsMethod = (x0, c) => x0 - (f(x0) - c) / df(x0);
+    let approximation = Math.pow(tempC / a, 1 / b);
+    for (let i = 0; i < 50; i++) {
+      approximation = newtonsMethod(approximation, tempC);
+    }
+    const purchases = Math.floor(approximation);
+    const next = Decimal.exp(priceToCap + f(purchases + 1) * logTickmult);
     return {
       newAmount: purchases + FreeTickspeed.SOFTCAP,
-      nextShards: Decimal.exp(priceToCap + next),
+      nextShards: next,
     }
   }
 }

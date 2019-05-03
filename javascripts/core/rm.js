@@ -91,16 +91,17 @@ const GlyphGenerator = {
 
   startingGlyph(level) {
     player.reality.glyphs.last = "power";
+    const initialStrength = 1.5;
     return {
       id: Date.now(),
       idx: null,
       type: "power",
       // The initial strength is very slightly above average.
-      strength: 1.5,
+      strength: initialStrength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
       effects: {
-        pow: GameDatabase.reality.glyphEffects.powerpow.effect(level.actualLevel, strength),
+        pow: GameDatabase.reality.glyphEffects.powerpow.effect(level.actualLevel, initialStrength),
       },
     };
   },

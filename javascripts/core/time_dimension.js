@@ -15,7 +15,8 @@ function timeDimensionCost(tier, bought) {
   if (tier > 4) {
     let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier]);
     if (cost.gte("1e6000")) {
-      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
+      cost = Decimal.pow(timeDimensionCostMult(tier) * 100,
+        timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
     }
     return cost;
   }
@@ -27,7 +28,8 @@ function timeDimensionCost(tier, bought) {
     cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
   }
   if (cost.gte("1e6000")) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
+    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2,
+      timeDimIncScalingAmts[tier] + (bought - timeDimIncScalingAmts[tier]) * 4).times(timeDimStartCosts[tier]);
   }
   return cost;
 }

@@ -1064,7 +1064,7 @@ window.onload = function() {
         else {
             document.getElementById("shopbtn").style.display = "none";
         }
-        document.getElementById("container").style.display = "flex"
+        //document.getElementById("container").style.display = "flex"
         document.getElementById("loading").style.display = "none"
     }, 1000)
 

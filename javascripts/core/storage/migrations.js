@@ -54,6 +54,8 @@ GameStorage.migrations = {
       }
     },
     12: player => {
+      const timeDimStartCosts = [null, 1, 5, 100, 1000];
+      const timeDimCostMults = [null, 3, 9, 27, 81];
       // Updates TD costs to harsher scaling
       for (let i = 1; i < 5; i++) {
         if (player[`timeDimension${i}`].cost.gte("1e1300")) {

@@ -210,8 +210,15 @@ const FreeTickspeed = {
     }
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
+    // In the following we're implicitly applying the function (ln(x) - priceToCap) / logTickmult to all costs,
+    // so, for example, if the cost is 1 that means it's actually exp(priceToCap) * tickmult.
     const desiredCost = (logShards - priceToCap) / logTickmult;
     const costFormulaCoefficient = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
+    // In the following we're implicitly subtracting FreeTickspeed.SOFTCAP from bought,
+    // so, for example, if bought is 1 that means it's actually FreeTickspeed.SOFTCAP + 1.
+    // The first term (the big one) is the asymptotically more important term (since FreeTickspeed.GROWTH_EXP > 1),
+    // but is small initially. The second term allows us to continue the pre-cap free tickspeed upgrade scaling
+    // of tickmult per upgrade.
     const boughtToCost = bought => costFormulaCoefficient * Math.pow(
       Math.max(bought, 0), FreeTickspeed.GROWTH_EXP) + bought;
     const derivativeOfBoughtToCost = x => FreeTickspeed.GROWTH_EXP * costFormulaCoefficient * Math.pow(
@@ -224,10 +231,12 @@ const FreeTickspeed = {
       approximation = newtonsMethod(approximation);
     }
     const purchases = Math.floor(approximation);
+    // This undoes the function we're implicitly applying to costs (the "+ 1") is because we want
+    // the cost of the next upgrade.
     const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
     return {
       newAmount: purchases + FreeTickspeed.SOFTCAP,
       nextShards: next,
-    }
+    };
   }
 }

@@ -19,6 +19,7 @@ function eternity(force, auto, switchingDilation) {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    RealityUpgrades.tryUnlock([6, 10]);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
@@ -47,8 +48,6 @@ function eternity(force, auto, switchingDilation) {
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
       player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
   }
-
-  RealityUpgrades.tryUnlock([6, 10]);
 
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();

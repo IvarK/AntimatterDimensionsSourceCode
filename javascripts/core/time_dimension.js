@@ -139,9 +139,9 @@ class TimeDimensionState {
   constructor(tier) {
     this._propsName = `timeDimension${tier}`;
     this._tier = tier;
-    const BASE_COSTS = [null, 1, 5, 100, 1000,
+    const BASE_COSTS = [null, new Decimal(1), new Decimal(5), new Decimal(100), new Decimal(1000),
       new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];
-    this._baseCost = new Decimal(BASE_COSTS[tier]);
+    this._baseCost = BASE_COSTS[tier];
     const COST_MULTS = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
     this._costMultiplier = COST_MULTS[tier];
     const E6000_SCALING_AMOUNTS = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
@@ -150,10 +150,6 @@ class TimeDimensionState {
 
   get props() {
     return player[this._propsName];
-  }
-
-  get tier() {
-    return this._tier;
   }
 
   get cost() {
@@ -262,7 +258,9 @@ class TimeDimensionState {
   }
 
   get costMultiplier() {
-    return this._costMultiplier;
+    let costMult = this._costMultiplier;
+    if (Laitela.has(LAITELA_UNLOCKS.TD)) costMult *= 0.8;
+    return costMult;
   }
 
   get e6000ScalingAmount() {

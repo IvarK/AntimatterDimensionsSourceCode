@@ -52,10 +52,10 @@ Vue.component('new-dimension-row', {
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.remainingUntil10 = dimension.remainingUntil10
-      this.howManyCanBuy = dimension.howManyCanBuy
+      this.howManyCanBuy = until_10_setting ? dimension.howManyCanBuy : 1
     },
     buy() {
-      if (true) { // TODO: Buy Until is on
+      if (until_10_setting) { // TODO: Buy Until is on
         buyAsManyAsYouCanBuyBtnClick(this.tier);
       } else {
         buyOneDimensionBtnClick(this.tier);

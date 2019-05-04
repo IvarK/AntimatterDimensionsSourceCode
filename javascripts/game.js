@@ -9,6 +9,8 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
+let until_10_setting = true;
+
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);

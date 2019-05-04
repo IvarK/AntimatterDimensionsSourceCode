@@ -108,14 +108,14 @@ dev.implode = function() {
 
 dev.updateTDCosts = function() {
     for (let tier = 1; tier < 9; tier++) {
-        const dim = player[`timeDimension${tier}`];
+        const dim = TimeDimension(tier);
         dim.cost = timeDimensionCost(tier, dim.bought);
     }
 };
 
 dev.refundTimeDims = function() {
     for (let i = 1; i < 9; i++) {
-        const dim = player[`timeDimension${i}`];
+        const dim = TimeDimension(i);
         dim.bought = 0;
         dim.power = new Decimal(1);
     }
@@ -294,7 +294,7 @@ dev.showProductionBreakdown = function() {
   }
   let boughtTDComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
-    boughtTDComponent = boughtTDComponent.times(player[`timeDimension${i}`].power);
+    boughtTDComponent = boughtTDComponent.times(TimeDimension(i).power);
   }
   let tickspeedToTDComponent = Achievement(105).isEnabled ? tickspeed.div(1000).pow(0.000005).reciprocal().pow(8) : 0;
   let TSmultToTDComponent = new Decimal(1);

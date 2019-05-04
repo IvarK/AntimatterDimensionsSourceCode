@@ -210,20 +210,21 @@ const FreeTickspeed = {
     }
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
-    const tempC = (logShards - priceToCap) / logTickmult;
-    const a = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
-    const b = FreeTickspeed.GROWTH_EXP;
-    const f = x => a * Math.pow(Math.max(x, 0), b) + x;
-    const df = x => b * a * Math.pow(Math.max(x, 0), b - 1) + 1;
-    const newtonsMethod = (x0, c) => x0 - (f(x0) - c) / df(x0);
+    const desiredCost = (logShards - priceToCap) / logTickmult;
+    const costFormulaCoefficient = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
+    const boughtToCost = bought => costFormulaCoefficient * Math.pow(
+      Math.max(bought, 0), FreeTickspeed.GROWTH_EXP) + bought;
+    const derivativeOfBoughtToCost = x => FreeTickspeed.GROWTH_EXP * costFormulaCoefficient * Math.pow(
+      Math.max(x, 0), FreeTickspeed.GROWTH_EXP - 1) + 1;
+    const newtonsMethod = bought => bought - (boughtToCost(bought) - desiredCost) / derivativeOfBoughtToCost(bought);
     let oldApproximation = -1;
-    let approximation = Math.pow(tempC / a, 1 / b);
+    let approximation = Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP);
     while (Math.abs(approximation - oldApproximation) >= 1e-9) {
       oldApproximation = approximation;
-      approximation = newtonsMethod(approximation, tempC);
+      approximation = newtonsMethod(approximation);
     }
     const purchases = Math.floor(approximation);
-    const next = Decimal.exp(priceToCap + f(purchases + 1) * logTickmult);
+    const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
     return {
       newAmount: purchases + FreeTickspeed.SOFTCAP,
       nextShards: next,

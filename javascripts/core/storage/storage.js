@@ -143,6 +143,7 @@ const GameStorage = {
     Autobuyer.tryUnlockAny();
     Autobuyer.checkIntervalAchievements();
     Autobuyer.checkBulkAchievements();
+    Autobuyer.convertPropertiesToDecimal();
     resizeCanvas();
     updateAutomatorRows();
     checkPerkValidity();

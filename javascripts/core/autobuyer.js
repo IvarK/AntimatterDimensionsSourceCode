@@ -834,6 +834,17 @@ Autobuyer.checkBulkAchievements = function() {
   SecretAchievement(38).tryUnlock();
 };
 
+Autobuyer.convertPropertiesToDecimal = function() {
+  if (
+    player.autobuyers[11] % 1 !== 0 &&
+    player.autobuyers[11].priority !== undefined &&
+    player.autobuyers[11].priority !== null &&
+    player.autobuyers[11].priority !== "undefined"
+  ) {
+    player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
+  }
+}
+
 function toggleAutobuyers() {
   const isOn = Autobuyer.dim(1).isOn;
   const autobuyers = Autobuyer.allDims

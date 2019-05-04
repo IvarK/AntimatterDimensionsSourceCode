@@ -251,6 +251,7 @@ const ReplicantiUpgrade = {
 
     get cost() { return player.replicanti.intervalCost; }
 
+    get baseCost() { return this.cost; }
     set baseCost(value) { player.replicanti.intervalCost = value; }
 
     get costIncrease() { return 1e10; }

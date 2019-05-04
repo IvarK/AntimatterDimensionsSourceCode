@@ -47,15 +47,17 @@ GameStorage.migrations = {
     },
     10: player => {
       if (player.timestudy.studies.includes(72)) {
-        for (i = 4; i < 8; i++) {
+        for (let i = 4; i < 8; i++) {
           player[`infinityDimension${i}`].amount = player[`infinityDimension${i}`].amount
             .div(Sacrifice.totalBoost.pow(0.02));
         }
       }
     },
     12: player => {
+      const timeDimStartCosts = [null, 1, 5, 100, 1000];
+      const timeDimCostMults = [null, 3, 9, 27, 81];
       // Updates TD costs to harsher scaling
-      for (i = 1; i < 5; i++) {
+      for (let i = 1; i < 5; i++) {
         if (player[`timeDimension${i}`].cost.gte("1e1300")) {
           player[`timeDimension${i}`].cost = Decimal.pow(
             timeDimCostMults[i] * 2.2,

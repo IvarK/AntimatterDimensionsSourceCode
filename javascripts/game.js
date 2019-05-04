@@ -98,14 +98,14 @@ function maxDimension(tier) {
       const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
       if (buying <= 0) return;
       dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
-      preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
-      postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
-      postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
+      const preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
+      const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
+      const postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
       dimension.bought += 10 * buying;
       dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying));
-      newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy))
+      const newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy))
         .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
+      const newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
       dimension.cost = newCost;
       player.costMultipliers[tier - 1] = newMult;
       if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost);

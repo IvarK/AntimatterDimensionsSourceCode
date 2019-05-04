@@ -10,9 +10,7 @@ Vue.component('sidebar', {
       <sidebar-am></sidebar-am>
       <sidebar-ip></sidebar-ip>
       <sidebar-ep></sidebar-ep>
-      <div class="resource">
-
-      </div>
+      <sidebar-rm></sidebar-rm>
     </div>
     <div class="tab-buttons">
       <div class="tab-button active" @click="switchTo('dimensions')"><h3>Dimensions</h3></div>

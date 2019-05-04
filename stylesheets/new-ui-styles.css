@@ -58,9 +58,10 @@ body {
 .resource h2 {
   margin: 0;
   color: var(--color-accent-2);
-  font-size: 1.3em;
+  font-size: 2em;
   padding-left: 10px;
   z-index: 1;
+  text-align: left;
 }
 
 .resource-information {
@@ -69,7 +70,7 @@ body {
   color: white;
   justify-content: space-between;
   padding: 0 5px;
-  font-size: 0.9em;
+  font-size: 1.5em;
 }
 
 .resource-per-second {
@@ -102,13 +103,24 @@ body {
   font-size: 1.6em;
 }
 
+.tab-button h3 {
+  color: white;
+  margin: auto;
+}
+
 .tab-button.infinity {
   background-color: black;
+}
+
+.tab-button.infinity h3 {
   color: #B67F33;
 }
 
 .tab-button.eternity {
   background-color: black;
+}
+
+.tab-button.eternity h3 {
   color: #B341E0;
 }
 
@@ -180,10 +192,11 @@ body {
 }
 
 .dimension-row h3 {
-  font-size: 1.8em;
+  font-size: 2em;
   display: flex;
   align-items: center;
   margin: 0;
+  color: white;
 }
 
 .dimension-row h3 .mult {
@@ -193,6 +206,7 @@ body {
 
 .dimension-row span {
   font-weight: bold;
+  font-size: 1.8rem;
 }
 
 
@@ -206,6 +220,14 @@ body {
   position: relative;
   width: 175px;
   height: 47px;
+}
+
+.storebtn:hover {
+  background: #50b55d6b;
+}
+
+.storebtn-unavailable {
+  background: rgba(160, 42, 42, 0.534) !important;
 }
 
 .button-content {
@@ -245,7 +267,7 @@ body {
 .modes-container {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 0 50px;
 }
 
@@ -257,6 +279,8 @@ body {
 
 .reset-container h4 {
   margin: 0;
+  font-size: 1.4rem;
+  color: white;
 }
 
 .reset-container {
@@ -277,6 +301,13 @@ body {
 }
 
 .tickspeed-btn {
+  padding: 5px;
+  width: 150px;
+  height: 30px;
+  font-size: 1.1rem;
+}
+
+.tickspeed-max-btn {
   padding: 5px;
   width: 100px;
   height: 30px;

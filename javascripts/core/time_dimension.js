@@ -151,6 +151,10 @@ class TimeDimensionState {
     return player[this._propsName];
   }
 
+  get tier() {
+    return this._tier;
+  }
+
   get cost() {
     return this.props.cost;
   }

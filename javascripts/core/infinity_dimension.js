@@ -322,6 +322,10 @@ class InfinityDimensionState {
     return mult;
   }
 
+  get baseCost() {
+    return this._baseCost;
+  }
+
   get costMultiplier() {
     let costMult = this._costMultiplier;
     EternityChallenge(12).reward.applyEffect(v => costMult = Math.pow(costMult, v));

@@ -107,17 +107,9 @@ dev.implode = function() {
 };
 
 dev.updateTDCosts = function() {
-    for (let i = 1; i < 9; i++) {
-        const dim = player[`timeDimension${i}`];
-        if (dim.cost.gte(Decimal.MAX_NUMBER)) {
-            dim.cost = Decimal.pow(timeDimCostMults[i] * 1.5, dim.bought).times(timeDimStartCosts[i]);
-        }
-        if (dim.cost.gte("1e1300")) {
-            dim.cost = Decimal.pow(timeDimCostMults[i] * 2.2, dim.bought).times(timeDimStartCosts[i]);
-        }
-        if (i > 4) {
-          dim.cost = Decimal.pow(timeDimCostMults[i] * 100, dim.bought).times(timeDimStartCosts[i]);
-        }
+    for (let tier = 1; tier < 9; tier++) {
+        const dim = TimeDimension(tier);
+        dim.cost = timeDimensionCost(tier, dim.bought);
     }
 };
 

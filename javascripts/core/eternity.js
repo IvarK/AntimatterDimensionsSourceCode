@@ -183,10 +183,9 @@ function eternityResetReplicanti() {
 }
 
 function fullResetInfDimensions() {
-    const cost = [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
-    for (let i = 0; i < 8; i++) {
-        let dimension = player["infinityDimension" + (i + 1)];
-        dimension.cost = new Decimal(cost[i]);
+    for (let i = 1; i < 9; i++) {
+        const dimension = InfinityDimension(i);
+        dimension.cost = new Decimal(dimension.baseCost);
         dimension.amount = new Decimal(0);
         dimension.bought = 0;
         dimension.power = new Decimal(1);

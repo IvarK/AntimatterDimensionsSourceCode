@@ -1,33 +1,27 @@
 "use strict";
 
-const timeDimCostMults = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
-const timeDimStartCosts = [null, 1, 5, 100, 1000,
-  new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];
-const timeDimIncScalingAmts = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
-
-function timeDimensionCostMult(tier) {
-  let base = timeDimCostMults[tier];
-  if (Laitela.has(LAITELA_UNLOCKS.TD)) base *= 0.8;
-  return base;
-}
-
 function timeDimensionCost(tier, bought) {
+  const dimension = TimeDimension(tier);
   if (tier > 4) {
-    let cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought).times(timeDimStartCosts[tier])
+    let cost = Decimal.pow(dimension.costMultiplier * 100, bought).times(dimension.baseCost);
     if (cost.gte("1e6000")) {
-      cost = Decimal.pow(timeDimensionCostMult(tier) * 100, bought + Math.pow(bought - timeDimIncScalingAmts[tier], 1.3)).times(timeDimStartCosts[tier])
+      const base = dimension.costMultiplier * 100;
+      const exponent = bought + Math.pow(bought - dimension.e6000ScalingAmount, 1.3);
+      cost = Decimal.pow(base, exponent).times(dimension.baseCost);
     }
     return cost;
   }
-  let cost = Decimal.pow(timeDimensionCostMult(tier), bought).times(timeDimStartCosts[tier])
+  let cost = Decimal.pow(dimension.costMultiplier, bought).times(dimension.baseCost);
   if (cost.gte(Decimal.MAX_NUMBER)) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 1.5, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(dimension.costMultiplier * 1.5, bought).times(dimension.baseCost);
   }
   if (cost.gte("1e1300")) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought).times(timeDimStartCosts[tier])
+    cost = Decimal.pow(dimension.costMultiplier * 2.2, bought).times(dimension.baseCost);
   }
   if (cost.gte("1e6000")) {
-    cost = Decimal.pow(timeDimensionCostMult(tier) * 2.2, bought + Math.pow(bought - timeDimIncScalingAmts[tier], Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3)).times(timeDimStartCosts[tier])
+    const base = dimension.costMultiplier * 2.2;
+    const exponent = bought + Math.pow(dimension.e6000ScalingAmount, Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3);
+    cost = Decimal.pow(base, exponent).times(dimension.baseCost);
   }
   return cost;
 }
@@ -56,7 +50,7 @@ function resetTimeDimensions() {
 
 function fullResetTimeDimensions() {
   for (const dim of TimeDimensions.all) {
-    dim.cost = new Decimal(timeDimStartCosts[dim.tier]);
+    dim.cost = new Decimal(dim.baseCost);
     dim.amount = new Decimal(0);
     dim.bought = 0;
     dim.power = new Decimal(1);
@@ -145,6 +139,13 @@ class TimeDimensionState {
   constructor(tier) {
     this._propsName = `timeDimension${tier}`;
     this._tier = tier;
+    const BASE_COSTS = [null, new Decimal(1), new Decimal(5), new Decimal(100), new Decimal(1000),
+      new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];
+    this._baseCost = BASE_COSTS[tier];
+    const COST_MULTS = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
+    this._costMultiplier = COST_MULTS[tier];
+    const E6000_SCALING_AMOUNTS = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
+    this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
   }
 
   get props() {
@@ -250,6 +251,20 @@ class TimeDimensionState {
     const toGain = TimeDimension(tier + 1).productionPerSecond;
     const current = Decimal.max(this.amount, 1);
     return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+  }
+
+  get baseCost() {
+    return this._baseCost;
+  }
+
+  get costMultiplier() {
+    let costMult = this._costMultiplier;
+    if (Laitela.has(LAITELA_UNLOCKS.TD)) costMult *= 0.8;
+    return costMult;
+  }
+
+  get e6000ScalingAmount() {
+    return this._e6000ScalingAmount;
   }
 }
 

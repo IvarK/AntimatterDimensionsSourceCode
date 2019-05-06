@@ -183,9 +183,12 @@ const Tickspeed = {
   }
 };
 
+
 const FreeTickspeed = {
-  SOFTCAP: 300000,
-  GROWTH_RATE: 2e-5,
+  SOFTCAP: 400000,
+  GROWTH_RATE: 4e-3,
+  GROWTH_EXP: 1.5,
+
   get amount() {
     return player.totalTickGained;
   },
@@ -205,21 +208,35 @@ const FreeTickspeed = {
         nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
       };
     }
-    // Threshold gets +1 after softcap, can be reduced to +0.8 with glyphs. The 0.8:1 ratio is the same as the
-    // 1:1.25 ratio (which is how glyphs affect pre-softcap purchases with TS171); this makes the rato the glyph
-    // reports continue to be accurate.
-    const fixedIncrease = 1 / TS171_MULTIPLIER;
-    const softcapFactor = fixedIncrease + (1 - fixedIncrease) * multFromGlyph;
     // Log of (cost - cost up to SOFTCAP)
     const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
-    const tmpC = logShards - priceToCap;
-    const kGrowth = FreeTickspeed.GROWTH_RATE * softcapFactor
-    const scaling = new LinearMultiplierScaling(tickmult, kGrowth);
-    const purchases = Math.floor(scaling.purchasesForLogTotalMultiplier(tmpC));
-    const next = scaling.logTotalMultiplierAfterPurchases(purchases + 1);
+    // In the following we're implicitly applying the function (ln(x) - priceToCap) / logTickmult to all costs,
+    // so, for example, if the cost is 1 that means it's actually exp(priceToCap) * tickmult.
+    const desiredCost = (logShards - priceToCap) / logTickmult;
+    const costFormulaCoefficient = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
+    // In the following we're implicitly subtracting FreeTickspeed.SOFTCAP from bought,
+    // so, for example, if bought is 1 that means it's actually FreeTickspeed.SOFTCAP + 1.
+    // The first term (the big one) is the asymptotically more important term (since FreeTickspeed.GROWTH_EXP > 1),
+    // but is small initially. The second term allows us to continue the pre-cap free tickspeed upgrade scaling
+    // of tickmult per upgrade.
+    const boughtToCost = bought => costFormulaCoefficient * Math.pow(
+      Math.max(bought, 0), FreeTickspeed.GROWTH_EXP) + bought;
+    const derivativeOfBoughtToCost = x => FreeTickspeed.GROWTH_EXP * costFormulaCoefficient * Math.pow(
+      Math.max(x, 0), FreeTickspeed.GROWTH_EXP - 1) + 1;
+    const newtonsMethod = bought => bought - (boughtToCost(bought) - desiredCost) / derivativeOfBoughtToCost(bought);
+    let oldApproximation = -1;
+    let approximation = Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP);
+    while (Math.abs(approximation - oldApproximation) >= 1e-9) {
+      oldApproximation = approximation;
+      approximation = newtonsMethod(approximation);
+    }
+    const purchases = Math.floor(approximation);
+    // This undoes the function we're implicitly applying to costs (the "+ 1") is because we want
+    // the cost of the next upgrade.
+    const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
     return {
       newAmount: purchases + FreeTickspeed.SOFTCAP,
-      nextShards: Decimal.exp(priceToCap + next),
-    }
+      nextShards: next,
+    };
   }
 }

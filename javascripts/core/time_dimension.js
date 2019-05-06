@@ -1,12 +1,13 @@
 "use strict";
 
 function timeDimensionCost(tier, bought) {
+  const scalingPast1e6000 = TimeDimensions.scalingPast1e6000;
   const dimension = TimeDimension(tier);
   if (tier > 4) {
     let cost = Decimal.pow(dimension.costMultiplier * 100, bought).times(dimension.baseCost);
     if (cost.gte("1e6000")) {
       const base = dimension.costMultiplier * 100;
-      const exponent = bought + Math.pow(bought - dimension.e6000ScalingAmount, 1.3);
+      const exponent = dimension.e6000ScalingAmount + (bought - dimension.e6000ScalingAmount) * scalingPast1e6000;
       cost = Decimal.pow(base, exponent).times(dimension.baseCost);
     }
     return cost;
@@ -20,7 +21,7 @@ function timeDimensionCost(tier, bought) {
   }
   if (cost.gte("1e6000")) {
     const base = dimension.costMultiplier * 2.2;
-    const exponent = bought + Math.pow(dimension.e6000ScalingAmount, Laitela.has(LAITELA_UNLOCKS.TD) ? 1.25 : 1.3);
+    const exponent = dimension.e6000ScalingAmount + (bought - dimension.e6000ScalingAmount) * scalingPast1e6000;
     cost = Decimal.pow(base, exponent).times(dimension.baseCost);
   }
   return cost;
@@ -276,4 +277,7 @@ const TimeDimensions = {
   get all() {
     return TimeDimensionState.all;
   },
+  get scalingPast1e6000() {
+    return Laitela.has(LAITELA_UNLOCKS.TD2) ? 3 : 4;
+  }
 };

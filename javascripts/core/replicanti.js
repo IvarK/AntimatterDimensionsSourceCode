@@ -289,12 +289,16 @@ const ReplicantiUpgrade = {
 
     get costIncrease() {
       const galaxies = this.value;
-      let increase = EternityChallenge(6).isRunning ?
-        Decimal.pow(1e2, galaxies).times(1e2) :
-        Decimal.pow(1e5, galaxies).times(1e25);
+      let increase = EternityChallenge(6).isRunning
+        ? Decimal.pow(1e2, galaxies).times(1e2)
+        : Decimal.pow(1e5, galaxies).times(1e25);
       const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
       if (galaxies >= distantReplicatedGalaxyStart) {
         increase = increase.times(Decimal.pow(1e50, galaxies - distantReplicatedGalaxyStart + 5));
+      }
+      const remoteReplicatedGalaxyStart = 1000 + Effects.sum(GlyphSacrifice.replication);
+      if (galaxies >= remoteReplicatedGalaxyStart) {
+        increase = increase.times(Decimal.pow(1e5, Math.pow(galaxies - remoteReplicatedGalaxyStart + 1, 2)));
       }
       return increase;
     }
@@ -327,6 +331,7 @@ const ReplicantiUpgrade = {
       const logBaseIncrease = EternityChallenge(6).isRunning ? 2 : 25;
       const logCostScaling = EternityChallenge(6).isRunning ? 2 : 5;
       const distantReplicatedGalaxyStart = 100 + Effects.sum(GlyphSacrifice.replication);
+      const remoteReplicatedGalaxyStart = 1000 + Effects.sum(GlyphSacrifice.replication);
       let logCost = logBase + count * logBaseIncrease + (count * (count - 1) / 2) * logCostScaling;
       if (count > distantReplicatedGalaxyStart) {
         const logDistantScaling = 50;
@@ -335,6 +340,12 @@ const ReplicantiUpgrade = {
         const extraIncrements = 5;
         const numDistant = count - distantReplicatedGalaxyStart;
         logCost += logDistantScaling * numDistant * (numDistant + 2 * extraIncrements - 1) / 2;
+      }
+      if (count > remoteReplicatedGalaxyStart) {
+        const logRemoteScaling = 5;
+        const numRemote = count - remoteReplicatedGalaxyStart;
+        // The formula x * (x + 1) * (2 * x + 1) / 6 is the sum of the first n squares.
+        logCost += logRemoteScaling * numRemote * (numRemote + 1) * (2 * numRemote + 1) / 6;
       }
       return Decimal.pow10(logCost);
     }

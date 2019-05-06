@@ -219,7 +219,6 @@ function completeReality(force, reset, auto = false) {
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    RealityUpgrades.tryUnlock([9, 16, 17, 18, 19, 23, 24]);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
       Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))

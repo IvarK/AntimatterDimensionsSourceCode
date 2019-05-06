@@ -19,7 +19,6 @@ function eternity(force, auto, switchingDilation) {
     if (!canEternity()) return false;
     if (!auto && !askEternityConfirmation()) return false;
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
-    RealityUpgrades.tryUnlock([6, 10]);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
@@ -92,7 +91,7 @@ function eternity(force, auto, switchingDilation) {
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  checkAndApplyRealityUpgrades();
+  applyRealityUpgrades();
   resetMoney();
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
@@ -150,8 +149,7 @@ function initializeResourcesAfterEternity() {
   }
 }
 
-function checkAndApplyRealityUpgrades() {
-  RealityUpgrades.tryUnlock([11, 12, 13, 14, 15, 25]);
+function applyRealityUpgrades() {
   if (RealityUpgrade(13).isBought) {
       if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
       for (let i = 1; i < 9; i++) {

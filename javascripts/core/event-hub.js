@@ -36,6 +36,29 @@ class EventHub {
     GameUI.dispatch(event, a1, a2, a3);
   }
 
+  static registerStateEvents(states, getEvent, callback) {
+    const events = new Set();
+    for (const state of states) {
+      const event = getEvent(state);
+      if (event === undefined) continue;
+      for (const e of event instanceof Array ? event : [event]) {
+        events.add(e);
+      }
+    }
+    function isCheckedOnEvent(state, event) {
+      const stateEvent = getEvent(state);
+      return stateEvent instanceof Array
+        ? stateEvent.includes(event)
+        : stateEvent === event;
+    }
+    for (const event of events) {
+      const statesWithEvent = states.filter(s => isCheckedOnEvent(s, event));
+      EventHub.logic.on(event, (a1, a2, a3) => {
+        for (const state of statesWithEvent) callback(state, a1, a2, a3);
+      });
+    }
+  }
+
   static get stats() {
     // For debug/profiling purposes
     function countHandlers(eventHub) {

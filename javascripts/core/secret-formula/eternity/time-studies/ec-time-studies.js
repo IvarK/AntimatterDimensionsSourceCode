@@ -7,7 +7,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Eternities",
       current: () => player.eternities,
-      required: completions => 20000 + completions * 20000
+      required: completions => 20000 + completions * 20000,
+      formatValue: value => value.toString()
     }
   },
   {
@@ -16,7 +17,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Tickspeed upgrades gained from time dimensions",
       current: () => player.totalTickGained,
-      required: completions => 1300 + completions * 150
+      required: completions => 1300 + completions * 150,
+      formatValue: value => value.toString()
     }
   },
   {
@@ -25,7 +27,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "8th dimensions",
       current: () => player.eightAmount,
-      required: completions => 17300 + completions * 1250
+      required: completions => new Decimal(17300 + completions * 1250),
+      formatValue: value => Math.floor(value.toNumber()).toString()
     }
   },
   {
@@ -34,7 +37,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "infinities",
       current: () => Player.totalInfinitied,
-      required: completions => 1e8 + completions * 5e7
+      required: completions => new Decimal(1e8 + completions * 5e7),
+      formatValue: value => formatWithCommas(Math.floor(value.toNumber()))
     }
   },
   {
@@ -43,7 +47,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "antimatter galaxies",
       current: () => player.galaxies,
-      required: completions => 160 + completions * 14
+      required: completions => 160 + completions * 14,
+      formatValue: value => value.toString()
     }
   },
   {
@@ -52,7 +57,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "replicanti galaxies",
       current: () => player.replicanti.galaxies,
-      required: completions => 40 + completions * 5
+      required: completions => 40 + completions * 5,
+      formatValue: value => value.toString()
     }
   },
   {
@@ -61,7 +67,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "antimatter",
       current: () => player.money,
-      required: completions => new Decimal("1e300000").pow(completions).times("1e500000")
+      required: completions => new Decimal("1e300000").pow(completions).times("1e500000"),
+      formatValue: value => shorten(value, 0, 0)
     }
   },
   {
@@ -70,7 +77,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "IP",
       current: () => player.infinityPoints,
-      required: completions => new Decimal("1e1000").pow(completions).times("1e4000")
+      required: completions => new Decimal("1e1000").pow(completions).times("1e4000"),
+      formatValue: value => shorten(value, 0, 0)
     }
   },
   {
@@ -79,7 +87,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "infinity power",
       current: () => player.infinityPower,
-      required: completions => new Decimal("1e2000").pow(completions).times("1e17500")
+      required: completions => new Decimal("1e2000").pow(completions).times("1e17500"),
+      formatValue: value => shorten(value, 0, 0)
     }
   },
   {
@@ -88,7 +97,8 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "EP",
       current: () => player.eternityPoints,
-      required: completions => new Decimal("1e20").pow(completions).times("1e100")
+      required: completions => new Decimal("1e20").pow(completions).times("1e100"),
+      formatValue: value => shorten(value, 0, 0)
     }
   },
   {

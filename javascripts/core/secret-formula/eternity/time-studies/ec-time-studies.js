@@ -28,7 +28,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "8th dimensions",
       current: () => player.eightAmount,
       required: completions => new Decimal(17300 + completions * 1250),
-      formatValue: value => Math.round(value.toNumber()).toString()
+      formatValue: value => Math.floor(value.toNumber()).toString()
     }
   },
   {
@@ -38,7 +38,7 @@ GameDatabase.eternity.timeStudies.ec = [
       resource: "infinities",
       current: () => Player.totalInfinitied,
       required: completions => new Decimal(1e8 + completions * 5e7),
-      formatValue: value => formatWithCommas(Math.round(value.toNumber()))
+      formatValue: value => formatWithCommas(Math.floor(value.toNumber()))
     }
   },
   {

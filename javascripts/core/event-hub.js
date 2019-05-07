@@ -36,26 +36,19 @@ class EventHub {
     GameUI.dispatch(event, a1, a2, a3);
   }
 
-  static registerStateEvents(states, getEvent, callback) {
-    const events = new Set();
-    for (const state of states) {
-      const event = getEvent(state);
-      if (event === undefined) continue;
-      for (const e of event instanceof Array ? event : [event]) {
-        events.add(e);
-      }
-    }
-    function isCheckedOnEvent(state, event) {
-      const stateEvent = getEvent(state);
-      return stateEvent instanceof Array
-        ? stateEvent.includes(event)
-        : stateEvent === event;
-    }
-    for (const event of events) {
-      const statesWithEvent = states.filter(s => isCheckedOnEvent(s, event));
+  static registerStateEvents(state, getEvents, callback) {
+    const events = getEvents(state);
+    if (events === undefined) return;
+    for (const event of events instanceof Array ? events : [events]) {
       EventHub.logic.on(event, (a1, a2, a3) => {
-        for (const state of statesWithEvent) callback(state, a1, a2, a3);
+        callback(state, a1, a2, a3);
       });
+    }
+  }
+
+  static registerStateCollectionEvents(states, getEvents, callback) {
+    for (const state of states) {
+      EventHub.registerStateEvents(state, getEvents, callback);
     }
   }
 

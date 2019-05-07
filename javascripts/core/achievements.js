@@ -126,7 +126,7 @@ const SecretAchievements = {
 
 setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
 
-EventHub.registerStateEvents(
+EventHub.registerStateCollectionEvents(
   Achievements.list.concat(SecretAchievements.list),
   achievement => achievement.config.checkEvent,
   // eslint-disable-next-line max-params

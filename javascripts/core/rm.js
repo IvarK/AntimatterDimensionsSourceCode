@@ -761,7 +761,7 @@ const RealityUpgrades = {
   }
 };
 
-EventHub.registerStateEvents(
+EventHub.registerStateCollectionEvents(
   RealityUpgrades.all,
   rupg => rupg.config.checkEvent,
   // eslint-disable-next-line max-params

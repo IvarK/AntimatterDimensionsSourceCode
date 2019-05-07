@@ -52,7 +52,7 @@ Vue.component('new-dimension-row', {
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
       this.remainingUntil10 = dimension.remainingUntil10
-      this.howManyCanBuy = until_10_setting ? dimension.howManyCanBuy : 1
+      this.howManyCanBuy = until_10_setting ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1)
     },
     buy() {
       if (until_10_setting) { // TODO: Buy Until is on

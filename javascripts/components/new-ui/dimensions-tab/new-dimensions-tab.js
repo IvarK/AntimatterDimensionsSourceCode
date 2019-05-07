@@ -1,12 +1,27 @@
 Vue.component('new-dimensions-tab', {
   data() {
     return {
-      until_10_setting: true
+      until_10_setting: true,
+      isSacrificeUnlocked: false,
+      isSacrificeAffordable: false,
+      sacrificeBoost: new Decimal(0),
+      options: player.options
     }
+  },
+  computed: {
+    sacrificeBoostDisplay() {
+      return this.shortenRateOfChange(this.sacrificeBoost);
+    },
+    sacrificeTooltip() {
+      return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
+    },
   },
   methods: {
     maxAll() {
       maxAll();
+    },
+    sacrifice() {
+      sacrificeBtnClick();
     },
     toggleUntil10() {
       until_10_setting = !until_10_setting
@@ -16,12 +31,24 @@ Vue.component('new-dimensions-tab', {
     },
     update() {
       this.until_10_setting = until_10_setting
+      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
+      this.isSacrificeUnlocked = isSacrificeUnlocked;
+      if (!isSacrificeUnlocked) return;
+      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     }
   },
   template:
   `<div>
   <div class="modes-container">
     <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>
+    <primary-button
+        v-show="isSacrificeUnlocked"
+        v-tooltip="sacrificeTooltip"
+        :enabled="isSacrificeAffordable"
+        class="storebtn sacrifice-btn"
+        @click="sacrifice"
+      >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
     <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
   </div>
   <new-tickspeed-row></new-tickspeed-row>

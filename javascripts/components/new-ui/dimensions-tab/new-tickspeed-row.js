@@ -76,7 +76,7 @@ Vue.component('new-tickspeed-row', {
     }
   },
   template:
-  `<div class="tickspeed-container">
+  `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
         <span>{{ tickspeedDisplay }}</span>
         <span>{{ multiplierDisplay }}</span>

@@ -39,11 +39,11 @@ body {
 }
 
 .sidebar {
-  width: 250px;
+  min-width: 200px;
 }
 
 .resource {
-  height: 58px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
@@ -86,21 +86,35 @@ body {
 #ip { color: #B67F33 }
 #ep { color: #B341E0 }
 
-.tab-buttons {
-  position: relative;
-}
-
 .tab-button {
-  height: 52px;
-  display: flex;
-  flex-direction: column;
+  height: 46px;
   background-color: var(--color-dark);
   border-right: 1px solid var(--color-accent-2);
   border-bottom: 1px solid var(--color-accent-2);
-  justify-content: center;
-  align-items: center;
   color: white;
   font-size: 1.6em;
+  position: relative;
+  transition-duration: 0.12s;
+}
+
+.tab-button-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tab-button:hover {
+  background-color: rgb(74, 70, 84);
+}
+
+.tab-button:hover .subtabs {
+  opacity: 1;
+  pointer-events: all;
+  transition-delay: 0s;
 }
 
 .tab-button h3 {
@@ -124,12 +138,25 @@ body {
   color: #B341E0;
 }
 
+.tab-button.reality h3 {
+  color: #0b600e;
+}
+
+.tab-button.celestials {
+  background-color: #5151ec;
+}
+
+.tab-button.celestials h3 {
+  color: #d0d0d0;
+}
+
 .tab-button.shop {
   background-color: #bba11b;
 }
 
 .game-container {
-  width: 100%
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .quote {
@@ -141,11 +168,19 @@ body {
   padding: 8px 0;
 }
 
+.quote > #news {
+  color: white;
+}
+
 .subtabs {
+  opacity: 0;
+  pointer-events: none;
   position: absolute;
-  top: -1;
-  right: -52px;
+  top: -1px;
+  right: -53px;
   margin-right: 1px;
+  transition-delay: 0.3s;
+  transition-duration: 0.12s;
 }
 
 .subtab {
@@ -159,6 +194,12 @@ body {
   align-items: center;
   color: white;
   font-size: 1.6em;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.subtab:hover {
+  background-color: rgb(74, 70, 84);
 }
 
 .subtab:not(:first-child) {
@@ -220,6 +261,7 @@ body {
   position: relative;
   width: 175px;
   height: 47px;
+  cursor: pointer;
 }
 
 .storebtn:hover {
@@ -228,6 +270,7 @@ body {
 
 .storebtn-unavailable {
   background: rgba(160, 42, 42, 0.534) !important;
+  cursor: default;
 }
 
 .button-content {
@@ -328,4 +371,10 @@ body {
   background-position: center;
   background-size: cover;
   z-index: 0;
+}
+
+.sacrifice-btn {
+  width: 350px;
+  height: 30px;
+  padding: 0;
 }

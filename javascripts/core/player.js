@@ -461,6 +461,7 @@ let player = {
     theme: "Normal",
     commas: true,
     updateRate: 50,
+    newUI: true,
     chart: {
       updateRate: 1000,
       duration: 10,

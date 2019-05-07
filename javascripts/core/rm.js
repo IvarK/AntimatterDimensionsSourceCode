@@ -711,11 +711,10 @@ class RealityUpgradeState extends GameMechanicState {
   }
 
   tryUnlock() {
-    if (!this.isUnlocked && this.config.checkRequirement()) {
-      player.reality.upgReqs[this.id] = true;
-      if (player.realities > 0 || TimeStudy.reality.isBought) {
-        GameUI.notify.success("You've unlocked a Reality upgrade!");
-      }
+    if (this.isUnlocked || !this.config.checkRequirement()) return;
+    player.reality.upgReqs[this.id] = true;
+    if (player.realities > 0 || TimeStudy.reality.isBought) {
+      GameUI.notify.success("You've unlocked a Reality upgrade!");
     }
   }
 }
@@ -755,18 +754,16 @@ function RealityUpgrade(id) {
 }
 
 const RealityUpgrades = {
-  get list() {
-    return RealityUpgradeState.list;
-  },
-
+  all: RealityUpgradeState.list.compact(),
   get allBought() {
     // eslint-disable-next-line no-bitwise
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
-  },
-
-  tryUnlock(ids) {
-    for (const id of ids) {
-      RealityUpgrade(id).tryUnlock();
-    }
   }
 };
+
+EventHub.registerStateCollectionEvents(
+  RealityUpgrades.all,
+  rupg => rupg.config.checkEvent,
+  // eslint-disable-next-line max-params
+  (rupg, a1, a2, a3) => rupg.tryUnlock(a1, a2, a3)
+);

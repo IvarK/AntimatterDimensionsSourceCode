@@ -48,8 +48,6 @@ function eternity(force, auto, switchingDilation) {
       player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
   }
 
-  RealityUpgrades.tryUnlock([6, 10]);
-
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
 
@@ -93,7 +91,7 @@ function eternity(force, auto, switchingDilation) {
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
-  checkAndApplyRealityUpgrades();
+  applyRealityUpgrades();
   resetMoney();
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
@@ -151,8 +149,7 @@ function initializeResourcesAfterEternity() {
   }
 }
 
-function checkAndApplyRealityUpgrades() {
-  RealityUpgrades.tryUnlock([11, 12, 13, 14, 15, 25]);
+function applyRealityUpgrades() {
   if (RealityUpgrade(13).isBought) {
       if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
       for (let i = 1; i < 9; i++) {

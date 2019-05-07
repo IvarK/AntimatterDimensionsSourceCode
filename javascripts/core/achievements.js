@@ -126,28 +126,12 @@ const SecretAchievements = {
 
 setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
 
-(function() {
-  const events = new Set();
-  const allAchievements = Achievements.list.concat(SecretAchievements.list);
-  for (const achievement of allAchievements) {
-    const event = achievement.config.checkEvent;
-    if (event === undefined) continue;
-    for (const e of event instanceof Array ? event : [event]) {
-      events.add(e);
-    }
-  }
-  function isCheckedOnEvent(achievement, event) {
-    return achievement.config.checkEvent instanceof Array
-      ? achievement.config.checkEvent.includes(event)
-      : achievement.config.checkEvent === event;
-  }
-  for (const event of events) {
-    const achievements = allAchievements.filter(a => isCheckedOnEvent(a, event));
-    EventHub.logic.on(event, (a1, a2, a3) => {
-      for (const achievement of achievements) achievement.tryUnlock(a1, a2, a3);
-    }, Achievements);
-  }
-}());
+EventHub.registerStateCollectionEvents(
+  Achievements.list.concat(SecretAchievements.list),
+  achievement => achievement.config.checkEvent,
+  // eslint-disable-next-line max-params
+  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
+);
 
 class AchievementTimer {
   constructor() {

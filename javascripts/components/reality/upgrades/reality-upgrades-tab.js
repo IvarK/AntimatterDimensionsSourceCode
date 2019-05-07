@@ -2,7 +2,7 @@
 
 Vue.component("reality-upgrades-tab", {
   computed: {
-    upgrades: () => RealityUpgrades.list
+    upgrades: () => RealityUpgrades.all
   },
   methods: {
     id(row, column) {

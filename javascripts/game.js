@@ -449,7 +449,6 @@ setInterval(function() {
         $(".automator-container").hide()
     }
 
-    RealityUpgrades.tryUnlock([20, 21, 22]);
     ttMaxTimer++;
     if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 

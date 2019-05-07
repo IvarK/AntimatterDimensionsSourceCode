@@ -36,6 +36,22 @@ class EventHub {
     GameUI.dispatch(event, a1, a2, a3);
   }
 
+  static registerStateEvents(state, getEvents, callback) {
+    const events = getEvents(state);
+    if (events === undefined) return;
+    for (const event of events instanceof Array ? events : [events]) {
+      EventHub.logic.on(event, (a1, a2, a3) => {
+        callback(state, a1, a2, a3);
+      });
+    }
+  }
+
+  static registerStateCollectionEvents(states, getEvents, callback) {
+    for (const state of states) {
+      EventHub.registerStateEvents(state, getEvents, callback);
+    }
+  }
+
   static get stats() {
     // For debug/profiling purposes
     function countHandlers(eventHub) {

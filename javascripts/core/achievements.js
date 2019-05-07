@@ -55,10 +55,7 @@ class AchievementState extends GameMechanicState {
   }
 }
 
-/**
- * @type {AchievementState[]}
- */
-AchievementState.list = mapGameData(
+AchievementState.index = mapGameData(
   GameDatabase.achievements.normal,
   data => new AchievementState(data)
 );
@@ -67,17 +64,12 @@ AchievementState.list = mapGameData(
  * @param {number} id
  * @returns {AchievementState}
  */
-function Achievement(id) {
-  return AchievementState.list[id];
-}
+const Achievement = id => AchievementState.index[id];
 
 const Achievements = {
-  /**
-   * @type {AchievementState[]}
-   */
-  list: AchievementState.list.compact(),
-  byName: AchievementState.list.compact().mapToObject(ach => ach.name, ach => ach),
-  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
+  /** @type {AchievementState[]} */
+  all: AchievementState.index.compact(),
+  row: row => Array.range(row * 10 + 1, 8).map(Achievement)
 };
 
 class SecretAchievementState extends GameMechanicState {
@@ -104,7 +96,7 @@ class SecretAchievementState extends GameMechanicState {
   }
 }
 
-SecretAchievementState.list = mapGameData(
+SecretAchievementState.index = mapGameData(
   GameDatabase.achievements.secret,
   data => new SecretAchievementState(data)
 );
@@ -113,21 +105,17 @@ SecretAchievementState.list = mapGameData(
  * @param {number} id
  * @returns {SecretAchievementState}
  */
-function SecretAchievement(id) {
-  return SecretAchievementState.list[id];
-}
+const SecretAchievement = id => SecretAchievementState.index[id];
 
 const SecretAchievements = {
-  /**
-   * @type {SecretAchievementState[]}
-   */
-  list: SecretAchievementState.list.compact()
+  /** @type {SecretAchievementState[]} */
+  all: SecretAchievementState.index.compact()
 };
 
 setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
 
 EventHub.registerStateCollectionEvents(
-  Achievements.list.concat(SecretAchievements.list),
+  Achievements.all.concat(SecretAchievements.all),
   achievement => achievement.config.checkEvent,
   // eslint-disable-next-line max-params
   (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)

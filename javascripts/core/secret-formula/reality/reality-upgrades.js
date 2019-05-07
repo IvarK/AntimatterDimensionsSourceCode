@@ -81,8 +81,8 @@ GameDatabase.reality.upgrades = (function() {
         isFirstInfinity() &&
         nextAchIn() === 0 &&
         Array.range(1, 13)
-          .map(row => Achievements.row(row))
-          .every(row => row.every(ach => ach.isUnlocked)),
+          .map(Achievements.row)
+          .every(row => row.every(ach => ach.isEnabled)),
       checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
       description: "Tachyon Particle gain is multiplied based on achievement multiplier",
       effect: () => Player.achievementPower.sqrt(),

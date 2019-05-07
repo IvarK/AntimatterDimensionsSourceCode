@@ -49,7 +49,7 @@ const specialGlyphSymbols = {
 };
 
 dev.giveAllAchievements = function() {
-  const allAchievements = Achievements.list.concat(SecretAchievements.list);
+  const allAchievements = Achievements.all.concat(SecretAchievements.all);
   for (const achievement of allAchievements) achievement.unlock();
 };
 

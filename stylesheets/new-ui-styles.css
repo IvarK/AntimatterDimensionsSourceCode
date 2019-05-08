@@ -14,7 +14,8 @@
 }
 
 body {
-  position: relative
+  position: relative;
+  color: white;
 }
 
 :root {
@@ -92,7 +93,7 @@ body {
   border-right: 1px solid var(--color-accent-2);
   border-bottom: 1px solid var(--color-accent-2);
   color: white;
-  font-size: 1.6em;
+  font-size: 1.3em;
   position: relative;
   transition-duration: 0.12s;
 }
@@ -159,6 +160,15 @@ body {
   overflow-x: hidden;
 }
 
+.game-container h1, 
+.game-container h2, 
+.game-container h3, 
+.game-container h4, 
+.game-container h5,
+.game-container h6 {
+  color: white;
+}
+
 .quote {
   width: 100%;
   margin-bottom: 10px;
@@ -181,6 +191,7 @@ body {
   margin-right: 1px;
   transition-delay: 0.3s;
   transition-duration: 0.12s;
+  transition: pointer-events 0s linear 0.3s;
 }
 
 .subtab {
@@ -378,3 +389,21 @@ body {
   height: 30px;
   padding: 0;
 }
+
+.btn-big-crunch {
+  padding: 20px;
+  font-size: 3em;
+  border-radius: 5px;
+  border: 2px solid #B67F33;
+  background-color: black;
+  color: #B67F33;
+  font-family: Typewriter;
+  transition-duration: 0.12s;
+  cursor: pointer;
+}
+
+.btn-big-crunch:hover {
+  background-color: #B67F33;
+  color: black;
+}
+

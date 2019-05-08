@@ -365,6 +365,19 @@ dev.goFast = function(speed) {
   }
 };
 
+let tempAmplifyToggle = false;
+let tempAmplifyFactor = 100;
+// Amplifies every reality you do, intentionally doesn't persist between refreshes
+// With no arguments, toggles on/off
+dev.amplify = function(amplification) {
+  if (amplification !== undefined && amplification > 0) {
+    tempAmplifyToggle = true;
+    tempAmplifyFactor = amplification;
+  } else {
+    tempAmplifyToggle = !tempAmplifyToggle;
+  }
+};
+
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
 };

@@ -27,7 +27,7 @@ GameDatabase.celestials.v = {
       id: 2,
       name: "Se7en deadly matters",
       description: value => `Get ${shorten(value)} IP in Eternity Challenge 7.`,
-      values: ["1e600000", "1e680000", "1e760000", "1e840000", "1e920000", "1e1000000"].map(v => new Decimal(v)),
+      values: ["1e600000", "1e700000", "1e800000", "1e900000", "1e1000000", "1e1100000"].map(v => new Decimal(v)),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x)
     },
     {
@@ -41,7 +41,7 @@ GameDatabase.celestials.v = {
       id: 4,
       name: "Eternal Sunshine",
       description: value => `Get ${shorten(value)} EP.`,
-      values: ["1e6000", "1e6400", "1e6800", "1e7200", "1e7500", "1e8000"].map(v => new Decimal(v)),
+      values: ["1e6000", "1e6600", "1e7200", "1e7800", "1e8400", "1e9000"].map(v => new Decimal(v)),
       condition: x => player.eternityPoints.gte(x)
     },
     {

@@ -138,7 +138,8 @@ const Enslaved = {
     if (player.celestials.enslaved.quoteIdx < this.maxQuoteIdx) player.celestials.enslaved.quoteIdx++;
   },
   get realityBoostRatio() {
-    return Math.max(1, Math.floor(player.celestials.enslaved.storedReal /
+    const baseRealityBoostRatio = tempAmplifyToggle ? tempAmplifyFactor : 1;
+    return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
   storedTimeInsideEnslaved(stored) {

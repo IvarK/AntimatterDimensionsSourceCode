@@ -113,7 +113,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (let unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlockState.all) {
         unlock.tryComplete();
       }
     }
@@ -128,13 +128,13 @@ const V = {
     return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
   },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()
+    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
   },
   get isRunning() {
     return player.celestials.v.run;
   },
   get totalAdditionalStudies() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3)
-    else return Math.floor(this.totalRunUnlocks / 6)
+    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3);
+    return Math.floor(this.totalRunUnlocks / 6);
   }
 };

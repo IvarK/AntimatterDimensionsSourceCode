@@ -31,13 +31,13 @@ Vue.component("game-header", {
       this.updateCelestial();
       this.updateChallengeDisplay();
     },
-    updateCelestial: function() {
+    updateCelestial() {
       if (Teresa.isRunning) this.currCelestial = "Teresa's";
       else if (Effarig.isRunning) this.currCelestial = "Effarig's";
       else if (Enslaved.isRunning) this.currCelestial = "The Enslaved Ones'";
-      else if (V.isRunning) this.currCelestial = "V'";
-      else if (Ra.isRunning) this.currCelestial = "Ra'";
-      else if (Laitela.isRunning) this.currCelestial = "Lai'tela"
+      else if (V.isRunning) this.currCelestial = "V's";
+      else if (Ra.isRunning) this.currCelestial = "Ra's";
+      else if (Laitela.isRunning) this.currCelestial = "Lai'tela's";
       else this.currCelestial = "";
     },
     updateChallengeDisplay() {

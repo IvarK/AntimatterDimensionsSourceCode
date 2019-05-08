@@ -48,7 +48,7 @@ GameDatabase.celestials.v = {
       id: 5,
       name: "Matterception",
       description: value => `Get ${value} Dimensional Boosts while dilating time, inside EC5.`,
-      values: [45, 48, 51, 54, 57, 60],
+      values: [50, 52, 54, 56, 58, 60],
       condition: x => player.dilation.active && EternityChallenge(5).isRunning && player.resets >= x
     }
   ]

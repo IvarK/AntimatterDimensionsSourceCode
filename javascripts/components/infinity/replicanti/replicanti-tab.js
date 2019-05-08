@@ -10,7 +10,7 @@ Vue.component("replicanti-tab", {
       amount: new Decimal(0),
       mult: new Decimal(0),
       hasRaisedCap: false,
-      replicantiCap: new Decimal(Decimal.MAX_NUMBER),
+      replicantiCap: Decimal.MAX_NUMBER,
       effarigInfinityBonusRG: 0,
       nextEffarigRGThreshold: 0
     };

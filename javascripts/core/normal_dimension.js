@@ -222,7 +222,7 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  return new Decimal(Decimal.MAX_NUMBER);
+  return Decimal.MAX_NUMBER;
 }
 
 function buyOneDimension(tier) {

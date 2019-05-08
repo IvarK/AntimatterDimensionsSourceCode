@@ -134,15 +134,16 @@ GameStorage.migrations = {
   convertAutobuyerMode(player) {
     for (let i = 0; i < 8; i++) {
       const autobuyer = player.autobuyers[i];
-      if (autobuyer % 1 === 0) continue;
-      if (autobuyer.target < 10) {
-        autobuyer.target = AutobuyerMode.BUY_SINGLE;
-      } else {
-        autobuyer.target = AutobuyerMode.BUY_10;
+      if (autobuyer % 1 !== 0) {
+        if (autobuyer.target < 10) {
+          autobuyer.target = AutobuyerMode.BUY_SINGLE;
+        } else {
+          autobuyer.target = AutobuyerMode.BUY_10;
+        }
       }
     }
     const tickspeedAutobuyer = player.autobuyers[8];
-    if (tickspeedAutobuyer % 1 === 0) {
+    if (tickspeedAutobuyer % 1 !== 0) {
       if (tickspeedAutobuyer.target < 10) {
         tickspeedAutobuyer.target = AutobuyerMode.BUY_SINGLE;
       } else {

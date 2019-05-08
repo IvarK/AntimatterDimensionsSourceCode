@@ -348,7 +348,7 @@ function exitChallenge() {
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   } else if (EternityChallenge.isRunning) {
     player.challenge.eternity.current = 0;
-    player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
+    player.eternityChallGoal = Decimal.MAX_NUMBER;
     eternity(true);
   }
 }

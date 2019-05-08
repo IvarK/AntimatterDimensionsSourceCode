@@ -253,7 +253,7 @@ let player = {
     }),
   },
   eternityChalls: {},
-  eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
+  eternityChallGoal: Decimal.MAX_NUMBER,
   etercreq: 0,
   infMultBuyer: false,
   autoCrunchMode: AutoCrunchMode.AMOUNT,

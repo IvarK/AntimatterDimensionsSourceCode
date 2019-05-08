@@ -6,7 +6,7 @@ Vue.component("reality-upgrades-tab", {
   },
   methods: {
     id(row, column) {
-      return (row - 1) * 5 + column;
+      return (row - 1) * 5 + column - 1;
     }
   },
   template: `

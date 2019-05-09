@@ -397,7 +397,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.money.gte("9.9999e9999"),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00002).clampMin(1)
+    effect: () => player.money.pow(0.00002).plus(1)
   },
   {
     id: 74,
@@ -483,7 +483,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.money.exponent >= 35000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00004).clampMin(1)
+    effect: () => player.money.pow(0.00004).plus(1)
   },
   {
     id: 85,

@@ -7,7 +7,7 @@ Vue.component("dilation-button", {
       hasGain: false,
       requiredForGain: new Decimal(0),
       canEternity: false,
-      eternityChallGoal: new Decimal(Decimal.MAX_NUMBER),
+      eternityChallGoal: new Decimal(0),
       tachyonGain: new Decimal(0)
     };
   },

@@ -3,10 +3,10 @@
 GameDatabase.celestials.v = {
   mainUnlock: {
     realities: 10000,
-    eternities: 1e65,
-    infinities: 1e150,
-    dilatedTime: 1e300,
-    replicanti: new Decimal("1e280000")
+    eternities: 1e70,
+    infinities: 1e160,
+    dilatedTime: new Decimal("1e320"),
+    replicanti: new Decimal("1e320000")
   },
   runUnlocks: [
     {

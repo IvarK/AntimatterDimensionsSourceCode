@@ -318,6 +318,7 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
+  player.celestials.v.additionalStudies = 0;
   if (!RealityUpgrade(10).isBought) {
     player.eternityBuyer.isOn = false;
   }

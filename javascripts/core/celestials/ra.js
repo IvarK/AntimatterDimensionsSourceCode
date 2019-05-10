@@ -21,9 +21,9 @@ const RA_UNLOCKS = {
   },
   UNNAMED_UNLOCK: {
     id: 3,
-    description: "Get Teresa to level 25",
-    reward: "Unlock Lai'tela, the Celestial of Dimensions (and perhaps some other thing)",
-    requirement: () => player.celestials.ra.level >= 25
+    description: "Get Teresa to level 30",
+    reward: "Unlock Lai'tela, the Celestial of Dimensions",
+    requirement: () => player.celestials.ra.level >= 30
   }
 };
 

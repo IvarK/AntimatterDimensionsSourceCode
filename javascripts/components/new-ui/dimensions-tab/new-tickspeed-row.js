@@ -35,7 +35,6 @@ Vue.component('new-tickspeed-row', {
       }
       else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        console.log(oom)
         displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shortenRateOfChange(oom)}`;
       }
       return `Tickspeed: ${displayValue}`;

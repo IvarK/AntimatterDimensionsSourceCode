@@ -191,7 +191,7 @@ body {
   margin-right: 1px;
   transition-delay: 0.3s;
   transition-duration: 0.12s;
-  transition: pointer-events 0s linear 0.3s;
+  z-index: 1;
 }
 
 .subtab {
@@ -407,3 +407,10 @@ body {
   color: black;
 }
 
+/* FIXING OLD TABS */
+
+.o-achievement {
+  height: 8.6rem;
+  width: 8.6rem;
+  background-size: contain;
+}

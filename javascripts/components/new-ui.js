@@ -8,7 +8,6 @@ Vue.component('new-ui', {
   methods: {
     update() {
       this.showCrunch = !player.break && player.bestInfinityTime > 60 * 1000 && player.money.gte(Number.MAX_VALUE)
-      console.log(this.showCrunch)
     },
     infinity() {
       bigCrunchReset()

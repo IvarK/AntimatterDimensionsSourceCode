@@ -15,7 +15,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "Normal Dimensions gain a power effect based on time played and Teresa level",
         effect: () => 1 +
           Math.log10(Math.log10(Time.totalTimePlayed.totalMilliseconds)) *
-          Math.pow(player.celestials.ra.level, 0.8) / 150,
+          Math.pow(player.celestials.ra.level, 0.5) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -28,7 +28,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.pow(player.celestials.ra.level, 0.8) / 150,
+        Math.sqrt(player.celestials.ra.level) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -41,7 +41,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Second and Seventh Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.pow(player.celestials.ra.level, 0.8) / 150,
+        Math.sqrt(player.celestials.ra.level) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -54,7 +54,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Third and Sixth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.pow(player.celestials.ra.level, 0.8) / 150,
+        Math.sqrt(player.celestials.ra.level) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -67,7 +67,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Fourth and Fifth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.pow(player.celestials.ra.level, 0.8) / 150,
+        Math.sqrt(player.celestials.ra.level) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -102,7 +102,7 @@ GameDatabase.infinity.upgrades = (function() {
       effect: 2,
       charged: {
         description: "Galaxies are more effective based on Teresa level",
-        effect: () => 2 + player.celestials.ra.level / 100,
+        effect: () => 2 + Math.sqrt(player.celestials.ra.level) / 100,
         formatEffect: value => `+${Math.round((value - 1) * 100)}%`
       }
     },
@@ -116,7 +116,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "Normal Dimensions gain a power effect based on time spent in current infinity and Teresa level",
         effect: () => 1 +
           Math.log10(Math.log10(Time.thisInfinity.totalMilliseconds + 100)) *
-          Math.pow(player.celestials.ra.level, 0.8) / 150,
+          Math.sqrt(player.celestials.ra.level) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -128,7 +128,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2),
       charged: {
         description: "Multiplier for unspent Infinity Points on 1st Dimension, powered by Teresa level",
-        effect: () => player.infinityPoints.dividedBy(2).pow(Math.pow(player.celestials.ra.level, 0.5) * 1.5).plus(1),
+        effect: () => player.infinityPoints.dividedBy(2).pow(Math.sqrt(player.celestials.ra.level) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
     },

@@ -27,7 +27,7 @@ GameDatabase.celestials.v = {
       id: 2,
       name: "Se7en deadly matters",
       description: value => `Get ${shorten(value)} IP in Eternity Challenge 7.`,
-      values: ["1e600000", "1e700000", "1e800000", "1e900000", "1e1000000", "1e1100000"].map(v => new Decimal(v)),
+      values: [6e5, 7.2e5, 8.4e5, 9.6e5, 1.08e6, 1.2e6].map(Decimal.pow10),
       condition: x => EternityChallenge(7).isRunning && player.infinityPoints.gte(x)
     },
     {

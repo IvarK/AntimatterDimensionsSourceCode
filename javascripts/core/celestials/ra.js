@@ -32,7 +32,7 @@ const Ra = {
     return this.realityReward;
   },
   giveExp(amount) {
-    player.celestials.ra.exp += amount * this.expMultiplier;
+    player.celestials.ra.exp += amount;
     while (this.percentageToNextLevel >= 1) {
       player.celestials.ra.exp -= this.requiredExp;
       player.celestials.ra.level++;
@@ -41,12 +41,12 @@ const Ra = {
     }
   },
   gainedExp(level, auto = false) {
-    let gain = Math.ceil(Math.pow(2, level / 500 - 10));
+    let gain = Math.pow(2, level / 500 - 10);
     if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
       if (player.celestials.ra.activeMode && !auto) gain *= 4;
       else if (!player.celestials.ra.activeMode && auto) gain *= 2;
     }
-    return gain;
+    return Math.ceil(gain * this.expMultiplier);
   },
   checkForUnlocks() {
     for (const i in RA_UNLOCKS) {

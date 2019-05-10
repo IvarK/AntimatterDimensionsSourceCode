@@ -32,7 +32,7 @@ const Ra = {
     return this.realityReward;
   },
   giveExp(amount) {
-    player.celestials.ra.exp += amount * this.expMultiplier * InfinityUpgrade.ipGen.chargedEffect;
+    player.celestials.ra.exp += amount * this.expMultiplier;
     while (this.percentageToNextLevel >= 1) {
       player.celestials.ra.exp -= this.requiredExp;
       player.celestials.ra.level++;
@@ -43,8 +43,8 @@ const Ra = {
   gainedExp(level, auto = false) {
     let gain = Math.ceil(Math.pow(2, level / 500 - 10));
     if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-      if (player.celestials.ra.activeMode) gain *= 4;
-      else if (auto) gain *= 2;
+      if (player.celestials.ra.activeMode && !auto) gain *= 4;
+      else if (!player.celestials.ra.activeMode && auto) gain *= 2;
     }
     return gain;
   },

@@ -28,7 +28,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
-        Math.pow(player.celestials.ra.level, 0.8) / 10,
+        Math.pow(player.celestials.ra.level, 0.8) / 150,
         formatEffect: value => formatPow(value, 2, 2)
       }
     },
@@ -128,7 +128,7 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: value => formatX(value, 2, 2),
       charged: {
         description: "Multiplier for unspent Infinity Points on 1st Dimension, powered by Teresa level",
-        effect: () => player.infinityPoints.dividedBy(2).pow(Math.pow(player.celestials.ra.level, 0.8) * 1.5).plus(1),
+        effect: () => player.infinityPoints.dividedBy(2).pow(Math.pow(player.celestials.ra.level, 0.5) * 1.5).plus(1),
         formatEffect: value => formatX(value, 2, 2)
       }
     },
@@ -160,11 +160,7 @@ GameDatabase.infinity.upgrades = (function() {
           : Time.bestInfinity.times(10);
         return `${income} every ${period}`;
       },
-      charged: {
-        description: "Teresa memory gain multiplier based on fastest reality and Teresa level",
-        effect: () => 1 + player.celestials.ra.level * Math.clamp(1 / Time.bestReality.totalSeconds, 1, 100) / 20,
-        formatEffect: value => formatX(value, 2, 2)
-      }
+      bannedFromCharging: true
     },
     skipReset1: {
       id: "skipReset1",

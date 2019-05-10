@@ -71,7 +71,7 @@ const Ra = {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
   },
   get requiredExp() {
-    return Math.floor(1000 * Math.pow(1.2, player.celestials.ra.level - 1));
+    return Math.floor(5000 * Math.pow(1.2, player.celestials.ra.level - 1));
   },
   get percentageToNextLevel() {
     return player.celestials.ra.exp / this.requiredExp;

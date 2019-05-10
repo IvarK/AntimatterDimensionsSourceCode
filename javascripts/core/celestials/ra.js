@@ -24,22 +24,15 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 25",
     reward: "Unlock Lai'tela, the Celestial of Dimensions (and perhaps some other thing)",
     requirement: () => player.celestials.ra.level >= 25
-  },
-  RM_GLYPH_BOOST: {
-    id: 4,
-    description: "Get Teresa to level 50",
-    reward: "Gain a multiplier to RM and glyph level based on Teresa level",
-    requirement: () => player.celestials.ra.level >= 50
   }
-}
+};
 
 const Ra = {
-
   get expMultiplier() {
     return this.realityReward;
   },
   giveExp(amount) {
-    player.celestials.ra.exp += amount * this.expMultiplier;
+    player.celestials.ra.exp += amount * this.expMultiplier * InfinityUpgrade.ipGen.chargedEffect;
     while (this.percentageToNextLevel >= 1) {
       player.celestials.ra.exp -= this.requiredExp;
       player.celestials.ra.level++;
@@ -89,14 +82,6 @@ const Ra = {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && player.celestials.ra.level > 1;
   },
   get realityReward() {
-    return Math.max(Math.pow(2, player.celestials.ra.maxEpGained.e / 1e4 - 1), 1);
-  },
-  get glyphMult() {  // NOTE: These WILL fuck up if you cheat the unlocks before Teresa is at least level 47
-    if (!this.has(RA_UNLOCKS.RM_GLYPH_BOOST)) return 1
-    return Math.pow((player.celestials.ra.level - 47) / 2, 0.2)
-  },
-  get rmMult() {
-    if (!this.has(RA_UNLOCKS.RM_GLYPH_BOOST)) return 1
-    return Math.pow((player.celestials.ra.level - 47) / 2, 1.5)
+    return Math.max(player.celestials.ra.maxEpGained.e / 1e4, 1);
   }
-}
+};

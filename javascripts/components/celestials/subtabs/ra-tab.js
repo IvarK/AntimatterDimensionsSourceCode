@@ -1,7 +1,7 @@
 "use strict";
 
-Vue.component('ra-tab', {
-  data: function() {
+Vue.component("ra-tab", {
+  data() {
     return {
       fillPercentage: "",
       exp: 0,
@@ -10,37 +10,33 @@ Vue.component('ra-tab', {
       totalCharges: 0,
       unlocks: [],
       realityReward: 0,
-      activeMode: false,
-      glyphMult: 0,
-      rmMult: 0
+      activeMode: false
     };
   },
   methods: {
     update() {
-      this.fillPercentage = Ra.percentageToNextLevel*100 + "%"
-      this.exp = player.celestials.ra.exp
-      this.expRequired = Ra.requiredExp
-      this.level = player.celestials.ra.level
-      this.totalCharges = Ra.totalCharges
-      this.unlocks = player.celestials.ra.unlocks
-      this.realityReward = Ra.realityReward
-      this.activeMode = player.celestials.ra.activeMode
-      this.glyphMult = Ra.glyphMult
-      this.rmMult = Ra.rmMult
+      this.fillPercentage = `${Ra.percentageToNextLevel * 100}%`;
+      this.exp = player.celestials.ra.exp;
+      this.expRequired = Ra.requiredExp;
+      this.level = player.celestials.ra.level;
+      this.totalCharges = Ra.totalCharges;
+      this.unlocks = player.celestials.ra.unlocks;
+      this.realityReward = Ra.realityReward;
+      this.activeMode = player.celestials.ra.activeMode;
     },
     has(id) {
-      return this.unlocks.includes(id)
+      return this.unlocks.includes(id);
     },
     startRun() {
-      Ra.startRun()
+      Ra.startRun();
     },
     toggleMode() {
-      Ra.toggleMode()
+      Ra.toggleMode();
     }
   },
   computed: {
     raUnlocks() {
-      return RA_UNLOCKS
+      return RA_UNLOCKS;
     }
   },
   template:
@@ -66,7 +62,6 @@ Vue.component('ra-tab', {
           <p>Reward: {{ unlock.reward }}</p>
         </div>
       </div>
-      <div v-if="has(4)">{{ shorten(glyphMult, 2, 2) }}x to glyph level<br>{{ shorten(rmMult, 2, 2) }}x to RM gain</div>
       <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
         Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
         <br><br>

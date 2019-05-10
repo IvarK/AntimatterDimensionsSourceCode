@@ -415,7 +415,6 @@ let player = {
       unlocks: [],
       run: false,
       completed: false,
-      quoteIdx: 0,
       maxQuotes: 6
     },
     v: {
@@ -433,7 +432,8 @@ let player = {
       charged: new Set(),
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
-      activeMode: false, // false if idle, true if active
+      // False if idle, true if active
+      activeMode: false,
       disCharge: false,
     },
     laitela: {

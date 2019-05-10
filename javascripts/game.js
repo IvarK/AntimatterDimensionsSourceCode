@@ -193,15 +193,15 @@ function gainedEternityPoints() {
   return ep.floor();
 }
 
+function getRealityMachineMultiplier() {
+  return Teresa.rmMultiplier * player.celestials.teresa.rmMult * getAdjustedGlyphEffect("effarigrm");
+}
+
 function gainedRealityMachines() {
-    var ret = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e/4000 -1)
-    ret = ret.times(Teresa.rmMultiplier)
-    ret = ret.times(player.celestials.teresa.rmMult)
-    ret = ret.times(getAdjustedGlyphEffect("effarigrm"))
-    ret = ret.plusEffectOf(Perk.realityMachineGain)
-      .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
-      .times(Ra.rmMult)
-    return Decimal.floor(ret)
+    let rmGain = Decimal.pow(1000, player.eternityPoints.plus(gainedEternityPoints()).e / 4000 - 1);
+    rmGain = rmGain.times(getRealityMachineMultiplier());
+    rmGain = rmGain.plusEffectOf(Perk.realityMachineGain);
+    return Decimal.floor(rmGain);
 }
 
 function gainedGlyphLevel(round) {

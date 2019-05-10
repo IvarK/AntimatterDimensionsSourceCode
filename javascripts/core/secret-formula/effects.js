@@ -85,6 +85,26 @@ Decimal.prototype.plusEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
+Decimal.prototype.minusEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
+  let result = this;
+  effectSource.applyEffect(v => result = result.minus(v));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.minusEffectsOf = function(...effectSources) {
+  // eslint-disable-next-line consistent-this
+  let result = this;
+  applyEffectsOf(effectSources, v => result = result.minus(v));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
 Decimal.prototype.timesEffectOf = function(effectSource) {
   // eslint-disable-next-line consistent-this
   let result = this;

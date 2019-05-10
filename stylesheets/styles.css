@@ -1713,6 +1713,22 @@ screen and (max-width: 480px) {
   cursor: default;
 }
 
+.o-primary-btn--discharge-options {
+  width: 15rem;
+  height: 4rem;
+  font-size: 1rem;
+}
+
+.o-primary-btn--discharge-active {
+  background-color: #5ac467;
+}
+
+.o-primary-btn--discharge-active:hover {
+  background-color: #5ac467;
+  color: black;
+  cursor: default;
+}
+
 /*#endregion modifiers*/
 
 /*#region themes*/
@@ -1739,6 +1755,10 @@ screen and (max-width: 480px) {
 }
 
 .t-dark .o-primary-btn--respec-active {
+  background-color: #1b5e20;
+}
+
+.t-dark .o-primary-btn--discharge-active {
   background-color: #1b5e20;
 }
 
@@ -1866,6 +1886,10 @@ screen and (max-width: 480px) {
   background-color: #1b5e20;
 }
 
+.t-s6 .o-primary-btn--discharge-active {
+  background-color: #1b5e20;
+}
+
 /* FFS */
 .t-metro .o-primary-btn--respec-active,
 .t-dark .o-primary-btn--respec-active,
@@ -1882,6 +1906,25 @@ screen and (max-width: 480px) {
 .t-s1 .o-primary-btn--respec-active:hover,
 .t-s6 .o-primary-btn--respec-active:hover,
 .t-s8 .o-primary-btn--respec-active:hover {
+  background-color: #673ab7;
+  color: black;
+}
+
+.t-metro .o-primary-btn--discharge-active,
+.t-dark .o-primary-btn--discharge-active,
+.t-dark-metro .o-primary-btn--discharge-active,
+.t-s1 .o-primary-btn--discharge-active,
+.t-s6 .o-primary-btn--discharge-active,
+.t-s8 .o-primary-btn--discharge-active {
+  background-color: #673ab7;
+}
+
+.t-metro .o-primary-btn--discharge-active:hover,
+.t-dark .o-primary-btn--discharge-active:hover,
+.t-dark-metro .o-primary-btn--discharge-active:hover,
+.t-s1 .o-primary-btn--discharge-active:hover,
+.t-s6 .o-primary-btn--discharge-active:hover,
+.t-s8 .o-primary-btn--discharge-active:hover {
   background-color: #673ab7;
   color: black;
 }

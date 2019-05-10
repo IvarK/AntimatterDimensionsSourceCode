@@ -73,9 +73,9 @@ GameDatabase.infinity.upgrades = (function() {
       description: "Decrease the number of Dimensions needed for Dimension Boosts and Antimatter Galaxies by 9",
       effect: 9,
       charged: {
-        description: "Decrease Dimension Boost requirement scaling based on Teresa level",
-        effect: () => Math.floor(1 + player.celestials.ra.level / 50),
-        formatEffect: value => value
+        description: "Decrease Dimension Boost requirement based on Teresa level",
+        effect: () => 1 / (1 + Math.sqrt(player.celestials.ra.level) / 10),
+        formatEffect: value => `${shorten(value, 3, 3)}x`
       }
     },
     buy10Mult: {

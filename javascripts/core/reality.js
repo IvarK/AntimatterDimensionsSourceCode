@@ -350,6 +350,7 @@ function completeReality(force, reset, auto = false) {
   resetChallengeStuff();
   resetDimensions();
   secondSoftReset();
+  if (player.celestials.ra.disCharge) disChargeAll();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {

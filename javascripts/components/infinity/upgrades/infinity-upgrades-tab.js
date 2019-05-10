@@ -4,8 +4,14 @@ Vue.component("infinity-upgrades-tab", {
   data() {
     return {
       chargeUnlocked: false,
-      chargesLeft: 0
+      chargesLeft: 0,
+      disCharge: false,
     };
+  },
+  watch: {
+    disCharge(newValue) {
+      player.celestials.ra.disCharge = newValue;
+    }
   },
   computed: {
     grid() {
@@ -35,12 +41,19 @@ Vue.component("infinity-upgrades-tab", {
           InfinityUpgrade.skipResetGalaxy
         ]
       ];
+    },
+    disChargeClassObject() {
+      return {
+        "o-primary-btn--discharge-options": true,
+        "o-primary-btn--discharge-active": this.disCharge
+      };
     }
   },
   methods: {
     update() {
-      this.chargeUnlocked = Ra.superChargeUnlocked;
+      this.chargeUnlocked = Ra.chargeUnlocked;
       this.chargesLeft = Ra.chargesLeft;
+      this.disCharge = player.celestials.ra.disCharge;
     },
     btnClassObject(column) {
       const classObject = {
@@ -55,7 +68,13 @@ Vue.component("infinity-upgrades-tab", {
   },
   template:
     `<div class="l-infinity-upgrades-tab">
-      <div v-if="chargeUnlocked">You can Supercharge {{ chargesLeft }} {{ "upgrade" | pluralize(chargesLeft) }}</div>
+      <div v-if="chargeUnlocked">
+          <div>You can charge {{ chargesLeft }} {{ "upgrade" | pluralize(chargesLeft) }}.</div>
+          <primary-button
+          :class="disChargeClassObject"
+          @click="disCharge = !disCharge"
+        >Un-charge all upgrades on next Reality</primary-button>
+      </div>
       <div class="l-infinity-upgrade-grid l-infinity-upgrades-tab__grid">
         <div v-for="(column, columnId) in grid" class="l-infinity-upgrade-grid__column">
           <infinity-upgrade-button

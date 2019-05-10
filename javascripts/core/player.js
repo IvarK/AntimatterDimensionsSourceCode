@@ -434,6 +434,7 @@ let player = {
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
       activeMode: false, // false if idle, true if active
+      disCharge: false,
     },
     laitela: {
       matter: 0,

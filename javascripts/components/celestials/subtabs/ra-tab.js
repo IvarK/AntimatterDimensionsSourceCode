@@ -50,7 +50,7 @@ Vue.component('ra-tab', {
         <p>Level {{ level }}</p>
         <div class="c-ra-teresa-experience">
           <div class="c-ra-teresa-experience-inner" :style="{ 'width': fillPercentage }">
-            <b class="o-ra-exp-display">{{ shorten(exp, 2) }}/{{ shorten(expRequired, 2) }}</b>
+            <b class="o-ra-exp-display">{{ shortenSmallInteger(exp) }}/{{ shortenSmallInteger(expRequired) }}</b>
           </div>
         </div>
         <div class="c-ra-teresa-switch-container" @click="toggleMode()" v-if="has(2)">
@@ -59,7 +59,7 @@ Vue.component('ra-tab', {
         </div>
         <div v-if="has(2)">{{ activeMode ? "You gain 4x memories from manual realities" : "You gain 2x memories from automatic realities"}}</div>
       </div>
-      <div>You can supercharge {{ totalCharges }} Infinity Upgrades.</div>
+      <div>You can charge {{ totalCharges }} Infinity {{ "Upgrade" | pluralize(totalCharges) }}.</div>
       <div class="l-ra-unlocks-container">
         <div class="c-ra-unlock" v-for="unlock in raUnlocks" :class="{'c-ra-unlock-unlocked': has(unlock.id)}">
           <b>{{ unlock.description }}</b>

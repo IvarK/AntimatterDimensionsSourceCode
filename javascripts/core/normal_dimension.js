@@ -65,6 +65,7 @@ function getDimensionFinalMultiplier(tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
+  const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     dimension.infinityUpgrade,
@@ -108,7 +109,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * laitelaPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));

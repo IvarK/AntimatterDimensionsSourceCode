@@ -208,7 +208,9 @@ class TimeDimensionState {
 
     mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("timepow"));
 
-    mult = mult.clampMin(0).pow(getAdjustedGlyphEffect("effarigdimensions"));
+    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
+
+    mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);
@@ -255,9 +257,7 @@ class TimeDimensionState {
   }
 
   get costMultiplier() {
-    let costMult = this._costMultiplier;
-    if (Laitela.has(LAITELA_UNLOCKS.TD)) costMult *= 0.8;
-    return costMult;
+    return this._costMultiplier;
   }
 
   get e6000ScalingAmount() {
@@ -274,6 +274,6 @@ const TimeDimensions = {
     return TimeDimensionState.all;
   },
   get scalingPast1e6000() {
-    return Laitela.has(LAITELA_UNLOCKS.TD2) ? 3 : 4;
+    return 4;
   }
 };

@@ -197,8 +197,9 @@ const FreeTickspeed = {
       newAmount: 0,
       nextShards: new Decimal(1),
     };
-    const multFromGlyph = getAdjustedGlyphEffect("timefreeTickMult");
-    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * multFromGlyph;
+    let freeTickspeedMultiplier = getAdjustedGlyphEffect("timefreeTickMult");
+    if (Laitela.has(LAITELA_UNLOCKS.TD)) freeTickspeedMultiplier *= Laitela.freeTickspeedMultEffect;
+    const tickmult = 1 + (Effects.min(1.33, TimeStudy(171)) - 1) * freeTickspeedMultiplier;
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;

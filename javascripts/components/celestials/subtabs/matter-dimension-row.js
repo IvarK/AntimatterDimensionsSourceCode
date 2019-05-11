@@ -7,12 +7,12 @@ Vue.component("matter-dimension-row", {
   data() {
     return {
       chance: 0,
-      interval: 0,
-      power: 0,
+      interval: new Decimal(0),
+      power: new Decimal(0),
       chanceCost: 0,
       intervalCost: 0,
       powerCost: 0,
-      amount: 0,
+      amount: new Decimal(0),
       canBuyChance: false,
       canBuyInterval: false,
       canBuyPower: false
@@ -27,9 +27,9 @@ Vue.component("matter-dimension-row", {
       this.intervalCost = this.dimension.intervalCost;
       this.powerCost = this.dimension.powerCost;
       this.amount = this.dimension.amount;
-      this.canBuyChance = player.celestials.laitela.matter >= this.chanceCost;
-      this.canBuyInterval = player.celestials.laitela.matter >= this.intervalCost;
-      this.canBuyPower = player.celestials.laitela.matter >= this.powerCost;
+      this.canBuyChance = player.celestials.laitela.matter.gte(this.chanceCost);
+      this.canBuyInterval = player.celestials.laitela.matter.gte(this.intervalCost);
+      this.canBuyPower = player.celestials.laitela.matter.gte(this.powerCost);
     }
   },
   template:

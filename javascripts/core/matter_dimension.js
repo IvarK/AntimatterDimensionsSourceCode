@@ -28,23 +28,26 @@ class MatterDimensionState {
 
   // In milliseconds
   get interval() {
-    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.pow(2, this._tier) * 1000;
+    return Decimal.pow(0.89, this.dimension.intervalUpgrades).times(Decimal.pow(2, this._tier)).times(1000);
   }
 
   get power() {
-    return Math.pow(1.1, this.dimension.powerUpgrades) * Laitela.realityReward;
+    return Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
   }
 
   get chanceCost() {
-    return Math.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * CHANCE_START_COST;
+    return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
   }
 
   get intervalCost() {
-    return Math.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * INTERVAL_START_COST;
+    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
   }
 
   get powerCost() {
-    return Math.pow(POWER_COST_MULT, this.dimension.powerUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * POWER_START_COST;
+    return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
   }
 
 
@@ -64,23 +67,25 @@ class MatterDimensionState {
     this.dimension.timeSinceLastUpdate = ms;
   }
 
-
   buyChance() {
-    if (this.chanceCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.chanceCost
+    if (this.chanceCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
     this.dimension.chanceUpgrades++;
+    return true;
   }
 
   buyInterval() {
-    if (this.intervalCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.intervalCost
+    if (this.intervalCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.intervalCost);
     this.dimension.intervalUpgrades++;
+    return true;
   }
 
   buyPower() {
-    if (this.powerCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.powerCost
+    if (this.powerCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerCost);
     this.dimension.powerUpgrades++;
+    return true;
   }
 
 }
@@ -102,21 +107,22 @@ function MatterDimension(tier) {
  * if interval < updaterate it will be called with diff each update
  */
 function getMatterDimensionProduction(tier, ticks) {
-  const d = MatterDimension(tier)
+  const d = MatterDimension(tier);
   // The multiple ticks act just like more binomial samples
-  const produced = binomialDistribution(d.amount * ticks, d.chance / 100);
-  return Math.round(produced * d.power);
+  const produced = binomialDistribution(d.amount.times(ticks), d.chance / 100);
+  return Decimal.round(produced.times(d.power));
 }
 
 function matterDimensionLoop(realDiff) {
   for (let i = 1; i <= 4; i++) {
     const d = MatterDimension(i);
     d.timeSinceLastUpdate += realDiff;
-    if (d.timeSinceLastUpdate > d.interval) {
-      const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
-      if (i === 1) player.celestials.laitela.matter += getMatterDimensionProduction(i, ticks);
-      else MatterDimension(i - 1).amount += getMatterDimensionProduction(i, ticks);
-      d.timeSinceLastUpdate %= d.interval;
+    if (d.interval.lt(d.timeSinceLastUpdate)) {
+      const ticks = Decimal.floor(Decimal.div(d.timeSinceLastUpdate, d.interval));
+      const production = getMatterDimensionProduction(i, ticks);
+      if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(production);
+      else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(production);
+      d.timeSinceLastUpdate = Decimal.minus(d.timeSinceLastUpdate, d.interval.times(ticks)).toNumber();
     }
   }
 

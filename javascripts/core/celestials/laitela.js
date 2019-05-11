@@ -1,28 +1,39 @@
 "use strict";
 
 const LAITELA_UNLOCKS = {
-  PELLE: {
+  RM_POW: {
     id: 0,
-    price: 1e150,
-    description: "Unlock Pelle, the Celestial of Antimatter",
-  },
-  TD: {
-    id: 1,
-    price: 1e200,
-    description: "Reduce Time Dimension cost multipliers by 20%"
-  },
-  TD2: {
-    id: 2,
-    price: 1e250,
-    description: "Reduce Time Dimension cost scaling past 1e6000 EP"
+    price: 1e60,
+    description: "Boost La'itela reward based on RM",
+    value: () => Laitela.rmRewardPowEffect,
+    format: x => `x^${x.toFixed(2)}`
   },
   ID: {
-    id: 3,
-    price: 1e300,
-    description: "Increase Infinity Dimensions conversion amount",
+    id: 1,
+    price: 1e120,
+    description: "Increase Infinity Dimensions conversion amount based on matter",
     value: () => Laitela.idConversionEffect,
     format: x => `+${x.toFixed(2)}`
-  }
+  },
+  TD: {
+    id: 2,
+    price: 1e180,
+    description: "Decrease free tickspeed cost multiplier based on matter",
+    value: () => Laitela.freeTickspeedMultEffect,
+    format: x => `x${x.toFixed(2)}`
+  },
+  DIM_POW: {
+    id: 3,
+    price: 1e240,
+    description: "Power all dimension multipliers based on matter",
+    value: () => Laitela.dimensionMultPowerEffect,
+    format: x => `x^${x.toFixed(2)}`
+  },
+  PELLE: {
+    id: 4,
+    price: Number.MAX_VALUE,
+    description: "Unlock Pelle, the Celestial of Antimatter",
+  },
 };
 
 // How much the starting matter dimension costs increase per tier
@@ -34,8 +45,8 @@ const Laitela = {
   handleMatterDimensionUnlocks() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount === 0 && this.matter >= laitelaMatterUnlockThresholds[i - 1]) {
-        d.amount++;
+      if (d.amount.eq(0) && this.matter.gte(laitelaMatterUnlockThresholds[i - 1])) {
+        d.amount = d.amount.plus(1);
         d.timeSinceLastUpdate = 0;
       }
     } 
@@ -45,12 +56,12 @@ const Laitela = {
     return player.celestials.laitela.unlocks.includes(info.id);
   },
   canBuyUnlock(info) {
-    if (this.matter < info.price) return false;
+    if (this.matter.lt(info.price)) return false;
     return !this.has(info);
   },
   buyUnlock(info) {
     if (!this.canBuyUnlock) return false;
-    this.matter -= info.price;
+    this.matter = this.matter.minus(info.price);
     player.celestials.laitela.unlocks.push(info.id);
     return true;
   },
@@ -63,24 +74,37 @@ const Laitela = {
   get nextMatterDimensionThreshold() {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
-      if (d.amount === 0) return `Next dimension at ${shorten(laitelaMatterUnlockThresholds[i - 1])} matter`;
+      if (d.amount.eq(0)) return `Next dimension at ${shorten(laitelaMatterUnlockThresholds[i - 1])} matter`;
     }
     return "";
   },
   get matterEffectToDimensionMultDecrease() {
-    return Math.pow(0.99, Math.log10(Math.max(this.matter, 1)));
+    return 1 / (1 + Decimal.pLog10(this.matter) / 100);
   },
   get matterEffectPercentage() {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
   },
+  get rmRewardPowEffect() {
+    return Math.log(1 + Decimal.pLog10(player.reality.realityMachines) / Math.log10(Number.MAX_VALUE));
+  },
   get idConversionEffect() {
-    return Math.sqrt(Math.log10(Math.max(this.matter, 1)));
+    return Math.sqrt(Decimal.pLog10(this.matter)) / 10;
+  },
+  get freeTickspeedMultEffect() {
+    return 1 / (1 + Math.sqrt(Decimal.pLog10(this.matter)) / 100);
+  },
+  get dimensionMultPowerEffect() {
+    return 1 + Decimal.pLog10(this.matter) / 2000;
   },
   get dimMultNerf() {
-    return Math.min(1, Math.log2(Math.max(this.matter, 1)) / 1024);
+    return Math.min(1, Decimal.pLog10(this.matter) / Math.log10(Number.MAX_VALUE));
   },
   get realityReward() {
-    return Math.pow(2, Math.sqrt(player.celestials.laitela.maxAmGained.e / 1e7));
+    let matterDimMult = Math.pow(2, Math.sqrt(player.celestials.laitela.maxAmGained.e / 1e7));
+    if (this.has(LAITELA_UNLOCKS.RM_POW)) {
+      matterDimMult = Math.pow(matterDimMult, this.rmRewardPow);
+    }
+    return matterDimMult;
   },
   get matter() {
     return player.celestials.laitela.matter;

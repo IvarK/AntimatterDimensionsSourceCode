@@ -307,6 +307,8 @@ class InfinityDimensionState {
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
+    if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
+
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {

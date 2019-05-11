@@ -3,7 +3,7 @@
 Vue.component("laitela-tab", {
   data() {
     return {
-      matter: 0,
+      matter: new Decimal(0),
       nextUnlock: "",
       matterEffectPercentage: "",
       dimMultNerf: 0,
@@ -41,7 +41,7 @@ Vue.component("laitela-tab", {
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
     unlocksInfo: () => LAITELA_UNLOCKS,
     activeDimensions() {
-      return this.dimensions.filter(d => d.amount !== 0)
+      return this.dimensions.filter(d => d.amount.neq(0));
     }
   },
   template:
@@ -64,7 +64,7 @@ Vue.component("laitela-tab", {
           class="o-laitela-shop-button"
           :class="unlockClassObject(unlock)"
           @click="buyUnlock(unlock)"> 
-            {{ unlock.description }} <br/> Costs: {{ shorten(unlock.price) }} 
+            {{ unlock.description }} <br/> Costs: {{ shorten(unlock.price, 2, 2) }} matter 
             <span v-if="unlock.value"><br/>Currently: {{ unlock.format(unlock.value()) }}</span>
         </button>
       </div>

@@ -140,9 +140,9 @@ GameDatabase.infinity.upgrades = (function() {
       formatEffect: () => "2x ➜ 2.5x",
       staticEffect: true,
       charged: {
-        description: "Dimension Boost multiplier power effect",
-        effect: () => 1 + player.celestials.ra.level / 100,
-        formatEffect: value => formatX(value, 2, 2)
+        description: "Dimension Boost multiplier gains a power effect based on Teresa level",
+        effect: () => 1 + player.celestials.ra.level / 200,
+        formatEffect: value => formatPow(value, 2, 2)
       }
     },
     ipGen: {

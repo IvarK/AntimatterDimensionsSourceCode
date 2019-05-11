@@ -7,6 +7,7 @@ Vue.component("laitela-tab", {
       nextUnlock: "",
       matterEffectPercentage: "",
       dimMultNerf: 0,
+      activeDimensions: [],
     };
   },
   methods: {
@@ -16,6 +17,7 @@ Vue.component("laitela-tab", {
       this.matterEffectPercentage = Laitela.matterEffectPercentage;
       this.dimMultNerf = Laitela.dimMultNerf;
       this.realityReward = Laitela.realityReward;
+      this.activeDimensions = this.dimensions.filter(d => d.amount.neq(0));
     },
     startRun() {
       Laitela.startRun();
@@ -39,14 +41,11 @@ Vue.component("laitela-tab", {
   computed: {
     dimensions: () => MatterDimensionState.list,
     runUnlockThresholds: () => laitelaRunUnlockThresholds,
-    unlocksInfo: () => LAITELA_UNLOCKS,
-    activeDimensions() {
-      return this.dimensions.filter(d => d.amount.neq(0));
-    }
+    unlocksInfo: () => LAITELA_UNLOCKS
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <button class="o-laitela-run-button" @click="startRun">Start La'itela's Reality, tickspeed is disabled and all dimension multipliers are decreased based on matter, currently x^{{ shorten(dimMultNerf, 3, 3) }}
+      <button class="o-laitela-run-button" @click="startRun">Start Lai'tela's Reality, tickspeed is disabled and all dimension multipliers are decreased based on matter, currently x^{{ shorten(dimMultNerf, 3, 3) }}
       <br>
       Multiply all matter dimensions based on highest AM reached, Currently: {{ shorten(realityReward, 2, 2)}}x</button>
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Matter</div>

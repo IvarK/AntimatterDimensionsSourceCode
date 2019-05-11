@@ -4,7 +4,7 @@ const LAITELA_UNLOCKS = {
   RM_POW: {
     id: 0,
     price: 1e60,
-    description: "Boost La'itela reward based on RM",
+    description: "Boost Lai'tela reward based on RM",
     value: () => Laitela.rmRewardPowEffect,
     format: x => `x^${x.toFixed(2)}`
   },
@@ -102,7 +102,7 @@ const Laitela = {
   get realityReward() {
     let matterDimMult = Math.pow(2, Math.sqrt(player.celestials.laitela.maxAmGained.e / 1e7));
     if (this.has(LAITELA_UNLOCKS.RM_POW)) {
-      matterDimMult = Math.pow(matterDimMult, this.rmRewardPow);
+      matterDimMult = Math.pow(matterDimMult, this.rmRewardPowEffect);
     }
     return matterDimMult;
   },

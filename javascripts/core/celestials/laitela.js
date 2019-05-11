@@ -94,7 +94,7 @@ const Laitela = {
     return 1 / (1 + Math.sqrt(Decimal.pLog10(this.matter)) / 100);
   },
   get dimensionMultPowerEffect() {
-    return 1 + Decimal.pLog10(this.matter) / 2000;
+    return 1 + Decimal.pLog10(this.matter) / 5000;
   },
   get dimMultNerf() {
     return Math.min(1, Decimal.pLog10(this.matter) / Math.log10(Number.MAX_VALUE));

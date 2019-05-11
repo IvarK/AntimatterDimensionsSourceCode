@@ -414,3 +414,36 @@ body {
   width: 8.6rem;
   background-size: contain;
 }
+
+.o-infinity-upgrade-btn--unavailable {
+  background: #525252;
+  color: white;
+  border: 1px solid var(--color-accent-2);
+  cursor: default;
+}
+
+.o-infinity-upgrade-btn--unavailable:hover {
+  background: #525252;
+  color: white;
+}
+
+.o-infinity-upgrade-btn--bought {
+  border: 1px solid var(--color-accent-2);
+  background: var(--color-good);
+}
+
+.o-primary-btn--option, .c-select-theme__item, .c-select-notation__item {
+  background: var(--color-dark);
+  color: white;
+  border: 1px solid var(--color-accent-2);
+}
+
+.o-primary-btn:hover {
+  background: #414141;
+}
+
+.l-challenge-box {
+  background: var(--color-dark);
+  color: white;
+  border: 1px solid var(--color-accent-2);
+}

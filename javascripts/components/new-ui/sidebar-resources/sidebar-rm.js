@@ -10,7 +10,7 @@ Vue.component('sidebar-rm', {
   },
   methods: {
     update() {
-      this.rm = player.reality.realityMachines
+      this.rm.copyFrom(player.reality.realityMachines)
     }
   },
   template:`

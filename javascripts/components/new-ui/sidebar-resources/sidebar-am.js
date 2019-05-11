@@ -7,7 +7,7 @@ Vue.component('sidebar-am', {
   },
   methods: {
     update() {
-      this.am = player.money
+      this.am.copyFrom(player.money)
       this.perSecond.copyFrom(Player.antimatterPerSecond)
     }
   },

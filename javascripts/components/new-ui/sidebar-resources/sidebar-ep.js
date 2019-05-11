@@ -10,7 +10,7 @@ Vue.component('sidebar-ep', {
   },
   methods: {
     update() {
-      this.ep = player.eternityPoints
+      this.ep.copyFrom(player.eternityPoints)
     }
   },
   template:`

@@ -46,7 +46,7 @@ const Laitela = {
     for (let i = 1; i <= 3; i++) {
       const d = MatterDimension(i + 1);
       if (d.amount.eq(0) && this.matter.gte(laitelaMatterUnlockThresholds[i - 1])) {
-        d.amount = d.amount.plus(1);
+        d.amount = new Decimal(1);
         d.timeSinceLastUpdate = 0;
       }
     } 
@@ -85,7 +85,7 @@ const Laitela = {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
   },
   get rmRewardPowEffect() {
-    return Math.log(1 + Decimal.pLog10(player.reality.realityMachines) / Math.log10(Number.MAX_VALUE));
+    return 1 + Math.max(0, Math.log(Decimal.pLog10(player.reality.realityMachines) / Math.log10(Number.MAX_VALUE)));
   },
   get idConversionEffect() {
     return Math.sqrt(Decimal.pLog10(this.matter)) / 10;

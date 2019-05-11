@@ -24,7 +24,7 @@ const RA_UNLOCKS = {
     description: "Get Teresa to level 30",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
     requirement: () => player.celestials.ra.level >= 30,
-    onObtaining: () => MatterDimension(1).amount++,
+    onObtaining: () => MatterDimension(1).amount = new Decimal(1),
   }
 };
 

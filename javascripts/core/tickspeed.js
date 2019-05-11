@@ -5,8 +5,8 @@ function canBuyTickSpeed() {
 }
 
 function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning) return new Decimal(1);
-  if (Ra.isRunning) return new Decimal(0.89)
+  if (InfinityChallenge(3).isRunning || Laitela.isRunning) return new Decimal(1);
+  if (Ra.isRunning) return new Decimal(0.89);
   let replicantiGalaxies = player.replicanti.galaxies;
   replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),

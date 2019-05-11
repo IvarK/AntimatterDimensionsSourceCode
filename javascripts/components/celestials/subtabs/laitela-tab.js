@@ -1,36 +1,39 @@
 "use strict";
 
-Vue.component('laitela-tab', {
-  data: function() {
+Vue.component("laitela-tab", {
+  data() {
     return {
       matter: 0,
       nextUnlock: "",
-      matterEffectPercentage: ""
+      matterEffectPercentage: "",
+      dimMultNerf: 0,
     };
   },
   methods: {
     update() {
-      this.matter = player.celestials.laitela.matter
-      this.nextUnlock = Laitela.nextMatterDimensionThreshold
-      this.matterEffectPercentage = Laitela.matterEffectPercentage
+      this.matter = player.celestials.laitela.matter;
+      this.nextUnlock = Laitela.nextMatterDimensionThreshold;
+      this.matterEffectPercentage = Laitela.matterEffectPercentage;
+      this.dimMultNerf = Laitela.dimMultNerf;
+      this.realityReward = Laitela.realityReward;
     },
     startRun() {
-      Laitela.startRun()
+      Laitela.startRun();
     },
     buyUnlock(info) {
-      Laitela.buyUnlock(info)
+      Laitela.buyUnlock(info);
     },
     hasUnlock(info) {
-      return Laitela.has(info)
+      return Laitela.has(info);
     },
     canBuyUnlock(info) {
-      return Laitela.canBuyUnlock(info)
+      return Laitela.canBuyUnlock(info);
     },
     unlockClassObject(info) {
       return {
-        'o-laitela-shop-button-bought': this.hasUnlock(info), 
-        'o-laitela-shop-button-available': this.canBuyUnlock(info)
-      }
+        "o-laitela-shop-button-bought": this.hasUnlock(info), 
+        "o-laitela-shop-button-available": this.canBuyUnlock(info)
+      };
     }
   },
   computed: {
@@ -43,10 +46,12 @@ Vue.component('laitela-tab', {
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <button class="o-laitela-run-button" @click="startRun">Start a new reality, only the first dimension of all types produce anything. You will unlock more matter dimensions at specific thresholds</button>
+      <button class="o-laitela-run-button" @click="startRun">Start La'itela's Reality, tickspeed is disabled and all dimension multipliers are decreased based on matter, currently x^{{ shorten(dimMultNerf, 3, 3) }}
+      <br>
+      Multiply all matter dimensions based on highest AM reached, Currently: {{ shorten(realityReward, 2, 2)}}x</button>
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Matter</div>
-      <div>Matter causes your dimension cost multipliers to raise {{ matterEffectPercentage }} slower</div>
-      <matter-dimension-row 
+      <div>Matter causes your dimension cost multipliers to increase {{ matterEffectPercentage }} slower</div>
+      <matter-dimension-row
         v-for="(dimension, i) in activeDimensions"
         :key="i"
         :dimension="dimension"

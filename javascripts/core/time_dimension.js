@@ -196,10 +196,6 @@ class TimeDimensionState {
   get multiplier() {
     const tier = this._tier;
 
-    if (Laitela.isRunning && tier > 1) {
-      return new Decimal(0)
-    }
-
     if (EternityChallenge(11).isRunning) return new Decimal(1);
     let mult = this.power
       .pow(2)
@@ -221,9 +217,9 @@ class TimeDimensionState {
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     } else if (V.isRunning) {
-      mult = mult.pow(0.5)
+      mult = mult.pow(0.5);
     } else if (Laitela.isRunning) {
-      mult = mult.pow(0.01)
+      mult = mult.pow(Laitela.dimMultNerf);
     }
 
     return mult;

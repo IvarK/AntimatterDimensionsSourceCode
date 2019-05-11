@@ -415,48 +415,54 @@ function updateRefresh() {
   location.reload(true);
 }
 
-setInterval(function() {
-    kong.submitStats('Log10 of total antimatter', player.totalmoney.e);
-    kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);
-    kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
-}, 10000)
+function kongLog10StatSubmission() {
+  kong.submitStats('Log10 of total antimatter', player.totalmoney.e);
+  kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);
+  kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
+}
 
-var ttMaxTimer = 0
-setInterval(function() {
-    document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
-    document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
-    document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
-    document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
+setInterval(kongLog10StatSubmission, 10000)
 
-    if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
-    else document.getElementById("eternitystorebtn").style.display = "none"
+var ttMaxTimer = 0;
 
-    if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
-        failChallenge();
-    }
+function randomStuffThatShouldBeRefactored() {
+  document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
+  document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
+  document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
+  document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
 
-    if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
-    else $("#realitybtn").hide()
+  if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
+  else document.getElementById("eternitystorebtn").style.display = "none"
 
-    if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
-    else $("#celestialsbtn").hide()
+  if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
+      failChallenge();
+  }
 
-    if (player.realities > 3) {
-        $("#automatorUnlock").hide()
-        $(".automator-container").show()
-    } else {
-        $("#automatorUnlock").show()
-        $(".automator-container").hide()
-    }
+  if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
+  else $("#realitybtn").hide()
 
-    ttMaxTimer++;
-    if (autoBuyMaxTheorems()) ttMaxTimer = 0;
+  if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
+  else $("#celestialsbtn").hide()
 
-    EternityChallenge.autoCompleteTick()
-    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
+  if (player.realities > 3) {
+      $("#automatorUnlock").hide()
+      $(".automator-container").show()
+  } else {
+      $("#automatorUnlock").show()
+      $(".automator-container").hide()
+  }
 
-    if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints
-}, 1000)
+  ttMaxTimer++;
+  if (autoBuyMaxTheorems()) ttMaxTimer = 0;
+
+  EternityChallenge.autoCompleteTick()
+  if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
+
+  if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints;
+  if (Laitela.isRunning && player.money.gte(player.celestials.laitela.maxAmGained)) player.celestials.laitela.maxAmGained = player.money;
+}
+
+setInterval(randomStuffThatShouldBeRefactored, 1000);
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)
@@ -808,9 +814,9 @@ function gameLoop(diff, options = {}) {
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  V.checkForUnlocks()
-  Laitela.handleRunUnlocks()
-  matterDimensionLoop()
+  V.checkForUnlocks();
+  Laitela.handleMatterDimensionUnlocks();
+  matterDimensionLoop(realDiff);
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();

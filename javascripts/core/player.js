@@ -446,8 +446,9 @@ let player = {
         chanceUpgrades: 0,
         intervalUpgrades: 0,
         powerUpgrades: 0,
-        lastUpdate: 0
-      }))
+        timeSinceLastUpdate: 0
+      })),
+      maxAmGained: new Decimal(0)
     }
   },
   autoEcIsOn: true,

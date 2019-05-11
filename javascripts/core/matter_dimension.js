@@ -4,17 +4,13 @@
  * Constants for easily adjusting values
  */
 
-const CHANCE_COST_MULT = 1.5
-const INTERVAL_COST_MULT = 2.5
-const POWER_COST_MULT = 3
+const CHANCE_COST_MULT = 1.5;
+const INTERVAL_COST_MULT = 2.5;
+const POWER_COST_MULT = 3;
 
-const CHANCE_START_COST = 20
-const INTERVAL_START_COST = 5
-const POWER_START_COST = 10
-
-
-// How much the starting costs increase per tier
-const COST_MULT_PER_TIER = 100
+const CHANCE_START_COST = 20;
+const INTERVAL_START_COST = 5;
+const POWER_START_COST = 10;
 
 class MatterDimensionState {
   constructor(tier) {
@@ -27,16 +23,16 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 5 - this._tier + this.dimension.chanceUpgrades
+    return 5 - this._tier + this.dimension.chanceUpgrades;
   }
 
   // In milliseconds
   get interval() {
-    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.pow(2, this._tier) * 1000
+    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.pow(2, this._tier) * 1000;
   }
 
   get power() {
-    return Math.pow(1.1, this.dimension.powerUpgrades)
+    return Math.pow(1.1, this.dimension.powerUpgrades) * Laitela.realityReward;
   }
 
   get chanceCost() {
@@ -60,12 +56,12 @@ class MatterDimensionState {
     this.dimension.amount = value;
   }
 
-  get lastUpdate() {
-    return this.dimension.lastUpdate
+  get timeSinceLastUpdate() {
+    return this.dimension.timeSinceLastUpdate;
   }
 
-  set lastUpdate(ms) {
-    this.dimension.lastUpdate = ms
+  set timeSinceLastUpdate(ms) {
+    this.dimension.timeSinceLastUpdate = ms;
   }
 
 
@@ -112,19 +108,16 @@ function getMatterDimensionProduction(tier, ticks) {
   return Math.round(produced * d.power);
 }
 
-function matterDimensionLoop() {
-
+function matterDimensionLoop(realDiff) {
   for (let i = 1; i <= 4; i++) {
-    let d = MatterDimension(i)
-
-    if (d.lastUpdate + d.interval < player.realTimePlayed) {
-      let ticks = Math.floor((player.realTimePlayed - d.lastUpdate) / d.interval)
-      if (i == 1) player.celestials.laitela.matter += getMatterDimensionProduction(i, ticks)
-      else MatterDimension(i - 1).amount += getMatterDimensionProduction(i, ticks)
-
-      d.lastUpdate += ticks * d.interval
+    const d = MatterDimension(i);
+    d.timeSinceLastUpdate += realDiff;
+    if (d.timeSinceLastUpdate > d.interval) {
+      const ticks = Math.floor(d.timeSinceLastUpdate / d.interval);
+      if (i === 1) player.celestials.laitela.matter += getMatterDimensionProduction(i, ticks);
+      else MatterDimension(i - 1).amount += getMatterDimensionProduction(i, ticks);
+      d.timeSinceLastUpdate %= d.interval;
     }
-
   }
 
 }

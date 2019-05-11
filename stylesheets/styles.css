@@ -5814,7 +5814,7 @@ kbd {
 .c-matter-dimension-container {
   border: .2rem solid gainsboro;
   background: whitesmoke;
-  width: 40rem;
+  width: 45rem;
   margin: auto;
   padding: 2rem;
   border-radius: .5rem;
@@ -5829,7 +5829,7 @@ kbd {
 
 .c-matter-dimension-buttons button {
   padding: 1rem;
-  width: 10rem;
+  width: 12rem;
   font-family: Typewriter;
   background: antiquewhite;
   border: .1rem solid grey;

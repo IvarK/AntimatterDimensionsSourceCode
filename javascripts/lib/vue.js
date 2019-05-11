@@ -11939,6 +11939,9 @@
 
   Vue.compile = compileToFunctions;
 
+  Vue.pushTarget = pushTarget;
+  Vue.popTarget = popTarget;
+
   return Vue;
 
 }));

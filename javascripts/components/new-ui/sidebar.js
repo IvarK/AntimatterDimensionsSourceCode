@@ -1,0 +1,213 @@
+const MAIN_TAB_BUTTONS = [
+  {
+    id: "dimensions",
+    label: "Dimensions",
+    class: "",
+    component: "new-dimensions-tab",
+    condition: () => true,
+    subtabs: [
+      {
+        label: "Ω",
+        component: player.options.newUI ? "new-dimensions-tab" : "normal-dim-tab",
+        condition: () => true
+      },
+      {
+        label: "∞",
+        component: "infinity-dim-tab",
+        condition: () => player.eternities > 0 || player.infDimensionsUnlocked.includes(true),
+      },
+      {
+        label: "Δ",
+        component: "time-dim-tab",
+        condition: () => player.eternities > 0
+      }
+    ]
+  },
+  {
+    id: "challenges",
+    label: "Challenges",
+    class: "",
+    component: "normal-challenges-tab",
+    condition: () => player.infinitied.gt(0),
+    subtabs: [
+      {
+        label: "Ω",
+        component: "normal-challenges-tab",
+        condition: () => player.infinitied.gt(0)
+      },
+      {
+        label: "∞",
+        component: "infinity-challenges-tab",
+        condition: () => (player.challenge.eternity.unlocked !== 0 ||
+        Object.keys(player.eternityChalls).length > 0) ||
+        player.money.gte(new Decimal("1e2000")) ||
+        player.postChallUnlocked > 0,
+      },
+      {
+        label: "Δ",
+        component: "eternity-challenges-tab",
+        condition: () => player.challenge.eternity.unlocked !== 0 ||
+        Object.keys(player.eternityChalls).length > 0
+      }
+    ]
+  },
+  {
+    id: "infinity",
+    label: "Infinity",
+    class: "infinity",
+    component: "infinity-upgrades-tab",
+    condition: () => player.infinitied.gt(0),
+    subtabs: [
+      {
+        label: "U",
+        component: "infinity-upgrades-tab",
+        condition: () => player.infinitied.gt(0)
+      },
+      {
+        label: "A",
+        component: "autobuyers-tab",
+        condition: () => player.infinitied.gt(0)
+      },
+      {
+        label: "B",
+        component: "break-infinity-tab",
+        condition: () => player.infinitied.gt(0)
+      },
+      {
+        label: "R",
+        component: "replicanti-tab",
+        condition: () => player.infinitied.gt(0)
+      }
+    ]
+  },
+  {
+    id: "eternity",
+    label: "Eternity",
+    class: "eternity",
+    component: "eternity-upgrades-tab",
+    condition: () => player.eternities > 0,
+  },
+  {
+    id: "reality",
+    label: "Reality",
+    class: "reality",
+    component: "reality-upgrades-tab",
+    condition: () => player.realities > 0,
+  },
+  {
+    id: "celestials",
+    label: "Celestials",
+    class: "celestials",
+    component: "teresa-tab",
+    condition: () => RealityUpgrades && RealityUpgrades.allBought, // Because RealityUpgrades is defined later
+  },
+  {
+    id: "achievements",
+    label: "Achievements",
+    class: "",
+    component: "normal-achievements-tab",
+    condition: () => player.achievements.size > 0,
+    subtabs: [
+      {
+        label: "A",
+        component: "normal-achievements-tab",
+        condition: () => true
+      },
+      {
+        label: "SA",
+        component: "secret-achievements-tab",
+        condition: () => true
+      }
+    ]
+  },
+  {
+    id: "statistics",
+    label: "Statistics",
+    class: "",
+    component: "statistics-tab",
+    condition: () => player.achievements.size > 1,
+    subtabs: [
+      {
+        label: "S",
+        component: "statistics-tab",
+        condition: () => true
+      },
+      {
+        label: "C",
+        component: "challenge-records-tab",
+        condition: () => player.infinitied.gt(0)
+      },
+      {
+        label: "∞",
+        component: "past-infinities-tab",
+        condition: () => player.infinitied.gt(0),
+      },
+      {
+        label: "Δ",
+        component: "past-eternities-tab",
+        condition: () => player.eternities > 0
+      },
+      {
+        label: "R",
+        component: "past-realities-tab",
+        condition: () => player.realities > 0
+      }
+    ]
+  },
+  {
+    id: "options",
+    label: "Options",
+    class: "",
+    component: "options-tab",
+    condition: () => true,
+  },
+  {
+    id: "shop",
+    label: "Shop",
+    class: "shop",
+    component: "achievements-tab",
+    condition: () => true,
+  }
+]
+
+
+
+Vue.component('sidebar', {
+  data() {
+    return {
+      ipVisible: false,
+      epVisible: false,
+      rmVisible: false
+    }
+  },
+  methods: {
+    switchTo(tab) {
+      showTab(tab)
+    },
+    update() {
+      this.ipVisible = player.infinitied.gt(0)
+      this.epVisible = player.eternities > 0
+      this.rmVisible = player.realities > 0
+    }
+  },
+  computed: {
+    tabs() {
+      return MAIN_TAB_BUTTONS
+    }
+  },
+  template:
+  `<div class="sidebar">
+    <div class="resource-container">
+      <sidebar-am></sidebar-am>
+      <sidebar-ip :cond="ipVisible"></sidebar-ip>
+      <sidebar-ep :cond="epVisible"></sidebar-ep>
+      <sidebar-rm :cond="rmVisible"></sidebar-rm>
+    </div>
+    <div class="tab-buttons">
+      <tab-button 
+        v-for="tab in tabs"
+        :key="tab.id"
+        :tab="tab"></tab-button>
+    </div>
+  </div>`
+})

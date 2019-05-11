@@ -146,6 +146,9 @@ ui = new Vue({
     },
     scrollWindow() {
       return this.view.scrollWindow;
+    },
+    newUI() {
+      return this.view.newUI;
     }
   },
   methods: {
@@ -155,7 +158,7 @@ ui = new Vue({
         window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
         setTimeout(() => this.scroll(now), 20);
       }
-    },
+    }
   },
   watch: {
     currentGlyphTooltip(newVal) {

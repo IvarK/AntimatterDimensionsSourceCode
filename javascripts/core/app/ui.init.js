@@ -1,5 +1,6 @@
 "use strict";
 
+
 let ui = {
   view: {
     modal: {
@@ -48,6 +49,8 @@ let ui = {
     scrollWindow: 0,
     draggingUIID: -1,
     currentContextMenu: null,
+    page: player.options.newUI ? "new-dimensions-tab" : "normal-dim-tab",
+    newUI: player.options.newUI
   },
   notationName: "",
 };

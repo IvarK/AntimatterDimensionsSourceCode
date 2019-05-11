@@ -9,6 +9,8 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
+let until_10_setting = true;
+
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);
@@ -1063,7 +1065,7 @@ window.onload = function() {
         else {
             document.getElementById("shopbtn").style.display = "none";
         }
-        document.getElementById("container").style.display = "flex"
+        //document.getElementById("container").style.display = "flex"
         document.getElementById("loading").style.display = "none"
     }, 1000)
 

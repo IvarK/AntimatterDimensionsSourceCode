@@ -28,8 +28,7 @@ Vue.component("cost-display", {
         this.isVisible = true;
         this.formatCost = this.config.formatCost;
         if (typeof cost !== "function") {
-          const isNumber = typeof cost === "number";
-          this.cost = isNumber ? cost : Decimal.fromDecimal(cost);
+          this.cost = typeof cost === "number" ? cost : Decimal.fromDecimal(cost);
           return;
         }
         const costValue = cost();

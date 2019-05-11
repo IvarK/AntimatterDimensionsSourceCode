@@ -76,10 +76,6 @@ Vue.filter("pluralize", pluralize);
 
 const ReactivityComplainer = {
   path: "",
-  // FIXME: DON'T add new entries here, these should be fixed and never become reactive
-  ignore: [
-    "player.options"
-  ],
   addDep() {
     throw crash(`Boi you fukked up - ${this.path} became REACTIVE (oh shite)`);
   },
@@ -95,7 +91,8 @@ const ReactivityComplainer = {
     for (const key in obj) {
       if (!obj.hasOwnProperty(key)) continue;
       this.path = `${path}.${key}`;
-      if (this.ignore.includes(this.path)) continue;
+      // FIXME: DON'T add new exceptions here, player.options should be fixed and never become reactive
+      if (this.path === "player.options") continue;
       const prop = obj[key];
       if (typeof prop === "object") {
         this.checkReactivity(prop, this.path);

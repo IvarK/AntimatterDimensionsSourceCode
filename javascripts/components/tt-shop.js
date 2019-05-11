@@ -78,7 +78,7 @@ Vue.component("tt-shop", {
       TimeTheorems.buyMax();
     },
     update() {
-      this.theoremAmount = player.timestudy.theorem;
+      this.theoremAmount.copyFrom(player.timestudy.theorem);
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;

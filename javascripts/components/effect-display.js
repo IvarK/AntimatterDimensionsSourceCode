@@ -35,8 +35,8 @@ Vue.component("effect-display", {
           return;
         }
         const effectValue = effect();
-        this.effectValue = effectValue;
         const isNumber = typeof effectValue === "number";
+        this.effectValue = isNumber ? effectValue : Decimal.fromDecimal(effectValue);
         this.updateFn = isNumber
           ? () => this.effectValue = effect()
           : () => this.effectValue.copyFrom(effect());
@@ -47,7 +47,7 @@ Vue.component("effect-display", {
           : () => this.effectValue.gte(this.cap);
         if (typeof cap !== "function") {
           this.hasCap = true;
-          this.cap = isNumber ? cap : new Decimal(cap);
+          this.cap = isNumber ? cap : Decimal.fromDecimal(cap);
           return;
         }
         const updateCap = () => {

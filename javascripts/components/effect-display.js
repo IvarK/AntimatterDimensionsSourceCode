@@ -31,7 +31,8 @@ Vue.component("effect-display", {
         this.isVisible = true;
         this.formatEffect = formatEffect;
         if (typeof effect !== "function") {
-          this.effectValue = effect;
+          const isNumber = typeof effect === "number";
+          this.effectValue = isNumber ? effect : Decimal.fromDecimal(effect);
           return;
         }
         const effectValue = effect();

@@ -12,12 +12,12 @@ Vue.component("laitela-tab", {
   },
   methods: {
     update() {
-      this.matter = player.celestials.laitela.matter;
+      this.matter.copyFrom(player.celestials.laitela.matter);
       this.nextUnlock = Laitela.nextMatterDimensionThreshold;
       this.matterEffectPercentage = Laitela.matterEffectPercentage;
       this.dimMultNerf = Laitela.dimMultNerf;
       this.realityReward = Laitela.realityReward;
-      this.activeDimensions = this.dimensions.filter(d => d.amount.neq(0));
+      this.activeDimensions = Array.range(0, 4).filter(i => MatterDimension(i + 1).amount.neq(0));
     },
     startRun() {
       Laitela.startRun();
@@ -51,9 +51,9 @@ Vue.component("laitela-tab", {
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Matter</div>
       <div>Matter causes your dimension cost multipliers to increase {{ matterEffectPercentage }} slower</div>
       <matter-dimension-row
-        v-for="(dimension, i) in activeDimensions"
+        v-for="i in activeDimensions"
         :key="i"
-        :dimension="dimension"
+        :dimension="dimensions[i]"
       />
       <div>{{ nextUnlock }}</div>
       <div class="l-laitela-unlocks-container">

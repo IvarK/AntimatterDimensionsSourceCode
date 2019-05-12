@@ -21,12 +21,12 @@ Vue.component("matter-dimension-row", {
   methods: {
     update() {
       this.chance = this.dimension.chance;
-      this.interval = this.dimension.interval;
-      this.power = this.dimension.power;
+      this.interval.copyFrom(this.dimension.interval);
+      this.power.copyFrom(this.dimension.power);
       this.chanceCost = this.dimension.chanceCost;
       this.intervalCost = this.dimension.intervalCost;
       this.powerCost = this.dimension.powerCost;
-      this.amount = this.dimension.amount;
+      this.amount.copyFrom(this.dimension.amount);
       this.canBuyChance = player.celestials.laitela.matter.gte(this.chanceCost);
       this.canBuyInterval = player.celestials.laitela.matter.gte(this.intervalCost);
       this.canBuyPower = player.celestials.laitela.matter.gte(this.powerCost);

@@ -74,6 +74,33 @@ function pluralize(value, amount, plural) {
 
 Vue.filter("pluralize", pluralize);
 
+const ReactivityComplainer = {
+  path: "",
+  addDep() {
+    throw crash(`Boi you fukked up - ${this.path} became REACTIVE (oh shite)`);
+  },
+  complain() {
+    Vue.pushTarget(this);
+    try {
+      this.checkReactivity(player, "player");
+    } finally {
+      Vue.popTarget();
+    }
+  },
+  checkReactivity(obj, path) {
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) continue;
+      this.path = `${path}.${key}`;
+      // FIXME: DON'T add new exceptions here, player.options should be fixed and never become reactive
+      if (this.path === "player.options") continue;
+      const prop = obj[key];
+      if (typeof prop === "object") {
+        this.checkReactivity(prop, this.path);
+      }
+    }
+  }
+};
+
 const GameUI = {
   events: [],
   flushPromise: undefined,
@@ -104,6 +131,7 @@ const GameUI = {
       EventHub.ui.dispatch(event);
     }
     EventHub.ui.dispatch(GameEvent.UPDATE);
+    ReactivityComplainer.complain();
     if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
       Vue.nextTick(() => {

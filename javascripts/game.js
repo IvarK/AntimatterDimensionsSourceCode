@@ -315,7 +315,7 @@ function resetEternityRuns() {
 
 function addRealityTime(time, realTime, rm, level) {
   player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, level, realTime]);
+  player.lastTenRealities.unshift([time, rm, realTime, level]);
 }
 
 function gainedInfinities() {

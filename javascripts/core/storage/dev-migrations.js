@@ -317,6 +317,11 @@ GameStorage.devMigrations = {
     GameStorage.migrations.migrateNotation,
     GameStorage.migrations.fixAutobuyers,
     GameStorage.migrations.removeAutoIPProperties,
+    player => {
+      // Swapping glyph level with reality real time
+      player.lastTenRealities = player.lastTenRealities
+        .map(a => [a[0], a[1], a[3], a[2]]);
+    }
   ],
 
   patch(player) {

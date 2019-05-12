@@ -10,21 +10,21 @@ const LAITELA_UNLOCKS = {
   },
   ID: {
     id: 1,
-    price: 1e120,
+    price: 1e150,
     description: "Increase Infinity Dimensions conversion amount based on matter",
     value: () => Laitela.idConversionEffect,
     format: x => `+${x.toFixed(2)}`
   },
   TD: {
     id: 2,
-    price: 1e180,
+    price: 1e200,
     description: "Decrease free tickspeed cost multiplier based on matter",
     value: () => Laitela.freeTickspeedMultEffect,
     format: x => `x${x.toFixed(2)}`
   },
   DIM_POW: {
     id: 3,
-    price: 1e240,
+    price: 1e250,
     description: "Power all dimension multipliers based on matter",
     value: () => Laitela.dimensionMultPowerEffect,
     format: x => `x^${x.toFixed(2)}`
@@ -79,7 +79,11 @@ const Laitela = {
     return "";
   },
   get matterEffectToDimensionMultDecrease() {
-    return 1 / (1 + Decimal.pLog10(this.matter) / 100);
+    let matterEffect = 1 / (1 + Decimal.pLog10(this.matter) / 100);
+    if (matterEffect < 0.5) {
+      matterEffect = Math.sqrt(matterEffect * 2) / 2;
+    }
+    return matterEffect;
   },
   get matterEffectPercentage() {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
@@ -88,7 +92,7 @@ const Laitela = {
     return 1 + Math.max(0, Math.log(Decimal.pLog10(player.reality.realityMachines) / Math.log10(Number.MAX_VALUE)));
   },
   get idConversionEffect() {
-    return Math.sqrt(Decimal.pLog10(this.matter)) / 10;
+    return Math.sqrt(Decimal.pLog10(this.matter)) / 50;
   },
   get freeTickspeedMultEffect() {
     return 1 / (1 + Math.sqrt(Decimal.pLog10(this.matter)) / 100);
@@ -100,7 +104,9 @@ const Laitela = {
     return Math.min(1, Decimal.pLog10(this.matter) / Math.log10(Number.MAX_VALUE));
   },
   get realityReward() {
-    let matterDimMult = Math.pow(2, Math.sqrt(player.celestials.laitela.maxAmGained.e / 1e7));
+    const amExponent = player.celestials.laitela.maxAmGained.e;
+    const realityRewardExponent = Math.clamp(Math.log(amExponent / 1e6), 1, Math.sqrt(amExponent / 1e7));
+    let matterDimMult = Math.pow(2, realityRewardExponent);
     if (this.has(LAITELA_UNLOCKS.RM_POW)) {
       matterDimMult = Math.pow(matterDimMult, this.rmRewardPowEffect);
     }

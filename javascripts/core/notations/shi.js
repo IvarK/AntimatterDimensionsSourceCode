@@ -11,7 +11,7 @@ Notation.shi = new class ShiNotation extends Notation {
   }
 
   formatInfinite() {
-    return this.shi(Decimal.MAX_VALUE);
+    return this.shi(Decimal.MAX_NUMBER);
   }
 
   formatUnder1000(value) {

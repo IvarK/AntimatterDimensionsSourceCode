@@ -81,10 +81,10 @@ const V_UNLOCKS = {
     {
     id: 2,
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
-    description: "Have 23 V-achievements",
+    description: "Have 30 V-achievements",
     effect: () => Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement")),
     format: x => formatX(x),
-    requirement: () => V.totalRunUnlocks >= 23
+    requirement: () => V.totalRunUnlocks >= 30
     },
     {
     id: 3,
@@ -113,7 +113,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (let unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlockState.all) {
         unlock.tryComplete();
       }
     }
@@ -128,13 +128,13 @@ const V = {
     return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
   },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()
+    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
   },
   get isRunning() {
     return player.celestials.v.run;
   },
   get totalAdditionalStudies() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3)
-    else return Math.floor(this.totalRunUnlocks / 6)
+    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3);
+    return Math.floor(this.totalRunUnlocks / 6);
   }
 };

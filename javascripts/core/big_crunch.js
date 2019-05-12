@@ -159,10 +159,6 @@ class InfinityUpgrade extends PurchasableMechanicState {
 
   purchase() {
     if (super.purchase()) return true;
-    if (this.isCharged) {
-      this.disCharge();
-      return true;
-    }
     if (this.canCharge) {
       this.charge();
       return true;
@@ -185,6 +181,29 @@ class InfinityUpgrade extends PurchasableMechanicState {
   disCharge() {
     player.celestials.ra.charged.delete(this.id);
   }
+}
+
+function disChargeAll() {
+  const upgrades = [
+    InfinityUpgrade.totalTimeMult,
+    InfinityUpgrade.dim18mult,
+    InfinityUpgrade.dim36mult,
+    InfinityUpgrade.resetBoost,
+    InfinityUpgrade.buy10Mult,
+    InfinityUpgrade.dim27mult,
+    InfinityUpgrade.dim45mult,
+    InfinityUpgrade.galaxyBoost,
+    InfinityUpgrade.thisInfinityTimeMult,
+    InfinityUpgrade.unspentIPMult,
+    InfinityUpgrade.dimboostMult,
+    InfinityUpgrade.ipGen
+  ];
+  for (const upgrade of upgrades) {
+    if (upgrade.isCharged) {
+      upgrade.disCharge();
+    }
+  }
+  player.celestials.ra.disCharge = false;
 }
 
 (function() {

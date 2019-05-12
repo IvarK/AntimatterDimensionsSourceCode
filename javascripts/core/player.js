@@ -415,7 +415,6 @@ let player = {
       unlocks: [],
       run: false,
       completed: false,
-      quoteIdx: 0,
       maxQuotes: 6
     },
     v: {
@@ -433,20 +432,23 @@ let player = {
       charged: new Set(),
       quoteIdx: 0,
       maxEpGained: new Decimal(0),
-      activeMode: false, // false if idle, true if active
+      // False if idle, true if active
+      activeMode: false,
+      disCharge: false,
     },
     laitela: {
-      matter: 0,
+      matter: new Decimal(0),
       run: false,
       unlocks: [],
       dimensions: Array.range(0, 4).map(() =>
       ({
-        amount: 0,
+        amount: new Decimal(0),
         chanceUpgrades: 0,
         intervalUpgrades: 0,
         powerUpgrades: 0,
-        lastUpdate: 0
-      }))
+        timeSinceLastUpdate: 0
+      })),
+      maxAmGained: new Decimal(0)
     }
   },
   autoEcIsOn: true,

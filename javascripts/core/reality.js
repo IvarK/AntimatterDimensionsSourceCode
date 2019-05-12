@@ -318,6 +318,7 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.ipcost = new Decimal(1);
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
+  player.celestials.v.additionalStudies = 0;
   if (!RealityUpgrade(10).isBought) {
     player.eternityBuyer.isOn = false;
   }
@@ -349,6 +350,7 @@ function completeReality(force, reset, auto = false) {
   resetChallengeStuff();
   resetDimensions();
   secondSoftReset();
+  if (player.celestials.ra.disCharge) disChargeAll();
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {

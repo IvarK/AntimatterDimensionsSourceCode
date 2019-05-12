@@ -52,10 +52,6 @@ function getDimensionFinalMultiplier(tier) {
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const dimension = NormalDimension(tier);
 
-  if (Laitela.isRunning && tier > 1) {
-    return new Decimal(0)
-  }
-
   let multiplier = new Decimal(dimension.pow);
 
   if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
@@ -69,6 +65,7 @@ function getDimensionFinalMultiplier(tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
+  const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
     dimension.infinityUpgrade,
@@ -112,7 +109,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
 
-  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier);
+  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * laitelaPowMultiplier);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
@@ -131,9 +128,9 @@ function getDimensionFinalMultiplier(tier) {
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
-    multiplier = multiplier.pow(0.5)
+    multiplier = multiplier.pow(0.5);
   } else if (Laitela.isRunning) {
-    multiplier = multiplier.pow(0.01)
+    multiplier = multiplier.pow(Laitela.dimMultNerf);
   }
 
   return multiplier;

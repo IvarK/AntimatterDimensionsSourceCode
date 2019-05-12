@@ -48,7 +48,7 @@ Vue.component("reality-button", {
         return;
       }
       function EPforRM(rm) {
-        const adjusted = Decimal.divide(rm, Teresa.rmMultiplier * player.celestials.teresa.rmMult);
+        const adjusted = Decimal.divide(rm.minusEffectOf(Perk.realityMachineGain), getRealityMachineMultiplier());
         if (adjusted.lte(1)) return Decimal.pow10(4000);
         return Decimal.pow10(Math.ceil(4000 * (adjusted.log10() / 3 + 1)));
       }

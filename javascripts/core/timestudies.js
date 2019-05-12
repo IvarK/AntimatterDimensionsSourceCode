@@ -367,7 +367,7 @@ function respecTimeStudies() {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.additionalStudies = 0
+  player.celestials.v.additionalStudies = 0;
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -535,7 +535,7 @@ class ECTimeStudyState extends TimeStudyState {
     // For EC 11 and 12, we can't choose between light and dark, but we can buy the
     // pair of row 21 things
     if (this.id === 11) {
-      TimeStudy(211).pirchase();
+      TimeStudy(211).purchase();
     } else if (this.id === 12) {
       TimeStudy(213).purchase();
     }

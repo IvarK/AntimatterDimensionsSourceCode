@@ -44,7 +44,7 @@ Vue.component('v-tab', {
             <p class="o-v-unlock-amount">{{ unlock.completions }}/{{unlock.config.values.length}} done</p>
           </div>
         </div>
-        <div>You have {{ totalUnlocks }} V-achievements done. You can pick {{ totalAdditionalStudies }} studies from locked paths.</div>
+        <div>You have {{ totalUnlocks }} V-achievements done. You can pick {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }} from locked paths.</div>
         <br>
         <div class="l-v-milestones-container">
           <div class="o-v-milestone" v-for="milestone in runMilestones" :class="{'o-v-milestone-unlocked': has(milestone)}">

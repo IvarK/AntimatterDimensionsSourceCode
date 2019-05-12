@@ -73,7 +73,9 @@ function getReplicantiInterval(noMod, intervalIn) {
     RealityUpgrade(23)
   );
   if (V.isRunning) {
-    interval = interval > 1 ? Math.pow(interval, 2) : Math.sqrt(interval);
+    // This is a boost if interval < 1, but that only happens in EC12
+    // and handling it would make the replicanti code a lot more complicated.
+    interval = Math.pow(interval, 2);
   }
   return interval;
 }
@@ -95,12 +97,16 @@ function replicantiLoop(diff) {
     PerformanceStats.start("Replicanti");
     EventHub.dispatch(GameEvent.REPLICANTI_TICK_BEFORE);
     const interval = getReplicantiInterval();
-    const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && (!TimeStudy(131).isBought || Achievement(138).isEnabled)
+    const isActivePathDisablingRGAutobuyer = TimeStudy(131).isBought && !Achievement(138).isEnabled;
+    const isRGAutobuyerEnabled = player.replicanti.galaxybuyer && !isActivePathDisablingRGAutobuyer;
     const logReplicanti = player.replicanti.amount.clampMin(1).ln();
     const isUncapped = TimeStudy(192).isBought;
     if (player.replicanti.unl && (diff > 500 || interval < 50 || isUncapped)) {
       // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
-      const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
+      let postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
+      if (V.isRunning) {
+        postScale *= 2;
+      }
       const logGainFactorPerTick = diff / 1000 * (Math.log(player.replicanti.chance + 1) * 1000 / interval);
       if (isUncapped) {
         player.replicanti.amount =

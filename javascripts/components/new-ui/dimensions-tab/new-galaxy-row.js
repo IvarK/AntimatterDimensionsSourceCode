@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("normal-dim-galaxy-row", {
+Vue.component('new-galaxy-row', {
   data() {
     return {
       type: GalaxyType.NORMAL,
@@ -77,17 +77,15 @@ Vue.component("normal-dim-galaxy-row", {
     }
   },
   template:
-    `<div class="c-normal-dim-row">
-      <div
-        class="c-normal-dim-row__label c-normal-dim-row__label--growable"
-      >{{typeName}} ({{sumText}}):
-        requires {{shortenSmallInteger(requirement.amount)}} {{dimName}} Dimensions
-        <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
-      </div>
-      <primary-button
-        :enabled="canBeBought"
-        class="o-primary-btn--galaxy c-normal-dim-row__buy-button c-normal-dim-row__buy-button--right-offset"
-        onclick="galaxyResetBtnClick()"
-      >{{buttonText}}</primary-button>
-    </div>`
-});
+  `<div class="reset-container galaxy">
+    <h4>{{typeName}} ({{sumText}})</h4>
+    <span>Requires: {{shortenSmallInteger(requirement.amount)}} {{dimName}} D</span>
+    <div v-if="hasIncreasedScaling">{{costScalingText}}</div>
+    <button 
+      class="storebtn" style="height: 56px; font-size: 1rem;"
+      :class="{ 'storebtn-unavailable': !canBeBought }"
+      onclick="galaxyResetBtnClick()"
+      :enabled="canBeBought"
+    >{{buttonText}}</button>
+  </div>`
+})

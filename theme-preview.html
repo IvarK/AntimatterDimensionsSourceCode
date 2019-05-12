@@ -801,6 +801,7 @@
     }
   }
   let current = "Normal";
+  let newUI = true;
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme) {
     setTheme(savedTheme);
@@ -823,6 +824,11 @@
     }
     classList.add(`t-${theme.replace(/\s+/g, '-').toLowerCase()}`);
     document.getElementById(theme).disabled = false;
+  }
+
+  function toggleNewUI() {
+    document.getElementById("new-ui").disabled = newUI
+    newUI = !newUI
   }
 
   Array.prototype.nextSiblingIndex = function(current) {

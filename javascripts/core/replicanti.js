@@ -81,9 +81,9 @@ function getReplicantiInterval(noMod, intervalIn) {
 }
 
 function replicantiCap() {
-  return EffarigUnlock.infinity.isUnlocked ?
-    player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER) :
-    new Decimal(Decimal.MAX_NUMBER);
+  return EffarigUnlock.infinity.isUnlocked
+    ? player.infinitied.plus(player.infinitiedBank).pow(TimeStudy(31).isBought ? 120 : 30).times(Decimal.MAX_NUMBER)
+    : Decimal.MAX_NUMBER;
 }
 
 function replicantiLoop(diff) {

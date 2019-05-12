@@ -28,11 +28,13 @@ Vue.component("cost-display", {
         this.isVisible = true;
         this.formatCost = this.config.formatCost;
         if (typeof cost !== "function") {
-          this.cost = cost;
+          this.cost = typeof cost === "number" ? cost : Decimal.fromDecimal(cost);
           return;
         }
-        this.cost = cost();
-        this.updateFn = typeof this.cost === "number"
+        const costValue = cost();
+        const isNumber = typeof costValue === "number";
+        this.cost = isNumber ? costValue : Decimal.fromDecimal(costValue);
+        this.updateFn = isNumber
           ? () => this.cost = cost()
           : () => this.cost.copyFrom(cost());
       }

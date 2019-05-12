@@ -46,7 +46,7 @@ Vue.component('teresa-tab', {
       this.rmUpg = player.celestials.teresa.rmMult;
       this.dtBulk = player.celestials.teresa.dtBulk;
       this.pp = player.reality.pp;
-      this.rm = player.reality.realityMachines;
+      this.rm.copyFrom(player.reality.realityMachines);
       this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1 / 60));
     },
     nextQuote() {

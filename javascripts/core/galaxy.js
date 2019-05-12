@@ -1,9 +1,9 @@
 "use strict";
 
 const GalaxyType = {
-  NORMAL: "Antimatter Galaxies",
-  DISTANT: "Distant Antimatter Galaxies",
-  REMOTE: "Remote Antimatter Galaxies"
+  NORMAL: 0,
+  DISTANT: 1,
+  REMOTE: 2
 };
 
 class GalaxyRequirement {
@@ -19,7 +19,7 @@ class GalaxyRequirement {
 
 class Galaxy {
   static get requirement() {
-    return this.requirementAt(player.galaxies)
+    return this.requirementAt(player.galaxies);
   }
 
   /**
@@ -108,10 +108,9 @@ class Galaxy {
   }
 
   static get canBeBought() {
-    return !((EternityChallenge(6).isRunning && !Enslaved.isRunning) ||
-      NormalChallenge(8).isRunning ||
-      InfinityChallenge(7).isRunning ||
-      (!player.break && player.money.gt(Decimal.MAX_NUMBER)));
+    if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
+    if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
+    return player.break || player.money.lt(Decimal.MAX_NUMBER);
   }
 
   static get costScalingStart() {

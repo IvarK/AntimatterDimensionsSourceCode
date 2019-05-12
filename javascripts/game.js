@@ -9,6 +9,8 @@ let kongDimMult = 1
 let kongAllDimMult = 1
 let kongEPMult = 1
 
+let until_10_setting = true;
+
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);
@@ -313,7 +315,7 @@ function resetEternityRuns() {
 
 function addRealityTime(time, realTime, rm, level) {
   player.lastTenRealities.pop();
-  player.lastTenRealities.unshift([time, rm, level, realTime]);
+  player.lastTenRealities.unshift([time, rm, realTime, level]);
 }
 
 function gainedInfinities() {
@@ -348,7 +350,7 @@ function exitChallenge() {
     if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   } else if (EternityChallenge.isRunning) {
     player.challenge.eternity.current = 0;
-    player.eternityChallGoal = new Decimal(Decimal.MAX_NUMBER);
+    player.eternityChallGoal = Decimal.MAX_NUMBER;
     eternity(true);
   }
 }
@@ -1069,7 +1071,7 @@ window.onload = function() {
         else {
             document.getElementById("shopbtn").style.display = "none";
         }
-        document.getElementById("container").style.display = "flex"
+        //document.getElementById("container").style.display = "flex"
         document.getElementById("loading").style.display = "none"
     }, 1000)
 

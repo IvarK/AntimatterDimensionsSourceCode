@@ -38,7 +38,9 @@
 <div id="snow" style="display: none; "></div>
 <body>
 <div id="ui" style="height: 100%; width: 100%">
-    <div id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
+    <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
+    <new-ui v-show="newUI"></new-ui>
+    <div v-show="!newUI" id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
         <div id='game' style="flex: 0 0 auto">
             <div id='news'>.</div>
         </div>
@@ -414,6 +416,7 @@
 <script type="text/javascript" src="javascripts/core/intervals.js"></script>
 <script type="text/javascript" src="javascripts/core/keyboard.js"></script>
 <script type="text/javascript" src="javascripts/core/hotkeys.js"></script>
+<script type="text/javascript" src="javascripts/core/galaxy.js"></script>
 
 <script type="text/javascript" src="javascripts/core/storage/serializer.js"></script>
 <script type="text/javascript" src="javascripts/core/storage/storage.js"></script>
@@ -474,6 +477,7 @@
 <script type="text/javascript" src="javascripts/components/ad-slider-component.js"></script>
 <script type="text/javascript" src="javascripts/components/expanding-control-box.js"></script>
 <script type="text/javascript" src="javascripts/components/hover-menu.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui.js"></script>
 
 <script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>
@@ -621,6 +625,18 @@
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-load-conflict.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/cloud/modal-cloud-save-conflict.js"></script>
 
+<script type="text/javascript" src="javascripts/components/new-ui/sidebar.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/tab-button.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimensions-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimension-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-tickspeed-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dim-shift-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-galaxy-row.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-am.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-ip.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-ep.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-rm.js"></script>
+
 
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
@@ -641,7 +657,6 @@
 <script type="text/javascript" src="javascripts/core/matter_dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimboost.js"></script>
 <script type="text/javascript" src="javascripts/core/sacrifice.js"></script>
-<script type="text/javascript" src="javascripts/core/galaxy.js"></script>
 <script type="text/javascript" src="javascripts/core/big_crunch.js"></script>
 <script type="text/javascript" src="javascripts/core/challenge.js"></script>
 <script type="text/javascript" src="javascripts/core/eternity.js"></script>

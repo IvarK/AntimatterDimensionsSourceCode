@@ -86,6 +86,28 @@ const MAIN_TAB_BUTTONS = [
     class: "eternity",
     component: "eternity-upgrades-tab",
     condition: () => player.eternities > 0,
+    subtabs: [
+      {
+        label: "TS",
+        component: "time-studies-tab",
+        condition: () => player.eternities > 0
+      },
+      {
+        label: "U",
+        component: "eternity-upgrades-tab",
+        condition: () => player.eternities > 0
+      },
+      {
+        label: "M",
+        component: "eternity-milestones-tab",
+        condition: () => player.eternities > 0
+      },
+      {
+        label: "TD",
+        component: "time-dilation-tab",
+        condition: () => TimeStudy.dilation.isBought
+      }
+    ]
   },
   {
     id: "reality",
@@ -100,6 +122,43 @@ const MAIN_TAB_BUTTONS = [
     class: "celestials",
     component: "teresa-tab",
     condition: () => RealityUpgrades && RealityUpgrades.allBought, // Because RealityUpgrades is defined later
+    subtabs: [
+      {
+        label: "T",
+        component: "teresa-tab",
+        condition: () => true
+      },
+      {
+        label: "E",
+        component: "effarig-tab",
+        condition: () => Teresa.has(TERESA_UNLOCKS.EFFARIG)
+      },
+      {
+        label: "EO",
+        component: "enslaved-tab",
+        condition: () => EffarigUnlock.eternity.isUnlocked
+      },
+      {
+        label: "V",
+        component: "v-tab",
+        condition: () => Achievement(151).isEnabled
+      },
+      {
+        label: "R",
+        component: "ra-tab",
+        condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
+      },
+      {
+        label: "L",
+        component: "laitela-tab",
+        condition: () => Ra.has(RA_UNLOCKS.UNNAMED_UNLOCK)
+      },
+      {
+        label: "P",
+        component: "pelle-tab",
+        condition: () => Laitela.has(LAITELA_UNLOCKS.PELLE)
+      }
+    ]
   },
   {
     id: "achievements",

@@ -163,7 +163,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 73,
       description: "Dimension Boosts gain a multiplier based on tick upgrades gained from TDs",
       effect: () => Decimal.pow(1.0004, player.totalTickGained),
-      cap: 1e30,
+      cap: new Decimal(1e30),
       formatEffect: value => formatX(value, 2, 1)
     },
     {

@@ -47,7 +47,7 @@ Vue.component("infinity-challenges-tab", {
           </template>
           <div slot="bottom" class="l-challenge-box__bottom--infinity">
             <span>Goal: {{shorten(config.goal, 0, 0)}} antimatter</span>
-            <span>Reward: <description-display :config="config.reward" /></span>
+            <description-display :config="config.reward" title="Reward:"/>
             <effect-display v-if="isCompleted" :config="config.reward" />
           </div>
         </challenge-box>`

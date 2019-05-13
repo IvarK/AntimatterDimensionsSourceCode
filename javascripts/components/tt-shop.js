@@ -174,7 +174,7 @@ Vue.component("tt-save-load-button", {
     edit() {
       const newValue = prompt("Edit time study list", this.preset.studies);
       this.hideContextMenu();
-      this.preset.studies = newValue;
+      if (newValue !== null) this.preset.studies = newValue;
     }
   },
   template: `

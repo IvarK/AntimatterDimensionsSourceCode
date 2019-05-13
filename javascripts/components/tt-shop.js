@@ -161,7 +161,11 @@ Vue.component("tt-save-load-button", {
     },
     load() {
       this.hideContextMenu();
-      if (this.preset.studies !== "") importStudyTree(this.preset.studies);
+      if (this.preset.studies) {
+        importStudyTree(this.preset.studies);
+      } else {
+        alert("This prsent is currently null or empty");
+      }
     },
     handleExport() {
       this.hideContextMenu();

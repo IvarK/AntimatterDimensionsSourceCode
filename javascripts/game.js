@@ -610,7 +610,6 @@ function gameLoop(diff, options = {}) {
       }
       infGen = infGen.plus(player.partInfinitied);
       player.infinitied = player.infinitied.plus(infGen.floor());
-      Enslaved.trackInfinityGeneration(infGen.floor());
       player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
     }
     

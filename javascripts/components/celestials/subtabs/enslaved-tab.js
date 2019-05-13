@@ -10,7 +10,6 @@ Vue.component("enslaved-tab", {
     storedReal: 0,
     storedRealEffiency: 0,
     storedRealCap: 0,
-    enslavedInfinities: 0,
     unlocks: [],
     quote: "",
     quoteIdx: 0,
@@ -44,7 +43,6 @@ Vue.component("enslaved-tab", {
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
-      this.enslavedInfinities = Enslaved.totalInfinities;
       this.unlocks = player.celestials.enslaved.unlocks;
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;

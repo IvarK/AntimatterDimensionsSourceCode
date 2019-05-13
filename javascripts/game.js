@@ -61,7 +61,7 @@ function maxAll() {
 
 function maxDimension(tier) {
   const dimension = NormalDimension(tier);
-  if (!dimension.isAvailable) return;
+  if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.pow;
 

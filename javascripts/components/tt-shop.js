@@ -164,7 +164,7 @@ Vue.component("tt-save-load-button", {
       if (this.preset.studies) {
         importStudyTree(this.preset.studies);
       } else {
-        alert("This prsent is currently null or empty");
+        alert("This time study list currently contains no studies.");
       }
     },
     handleExport() {

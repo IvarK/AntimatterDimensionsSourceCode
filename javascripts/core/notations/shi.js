@@ -31,7 +31,7 @@ Notation.shi = new class ShiNotation extends Notation {
    * @return {string}
    */
   shi(value) {
-    const scaled = Math.pow(value.pLog10() * 1000, 0.1);
+    const scaled = Math.pow(value.plus(1).log10() * 1000, 0.1);
     return Array.range(0, 4).map(i => this.getShiCharacter(scaled * Math.pow(this._shiChars.length, i))).join("");
   }
 }();

@@ -26,8 +26,6 @@ class GameOptions {
       SecretAchievement(31).unlock();
     }
     GameIntervals.gameLoop.restart();
-    Enslaved.infinityTracking = []
-    Enslaved.totalInfinities = new Decimal(0);
   }
 }
 

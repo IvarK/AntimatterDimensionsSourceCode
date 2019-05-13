@@ -38,8 +38,6 @@ const Enslaved = {
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
-  infinityTracking: [],
-  totalInfinities: new Decimal(0),
   ec6c10hintGiven: false,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
@@ -116,17 +114,6 @@ const Enslaved = {
   },
   get isUnlocked() {
     return EffarigUnlock.eternity.isUnlocked;
-  },
-  get adjustedDilationMultiplier() {
-    return this.totalInfinities.div(1e100);
-  },
-  trackInfinityGeneration(infinities) {
-    const ticksNeeded = 10 * 1000 / player.options.updateRate;
-    this.infinityTracking.push(infinities.floor());
-    this.totalInfinities = this.totalInfinities.plus(infinities.floor());
-    if (this.infinityTracking.length - 1 > ticksNeeded) {
-      this.totalInfinities = this.totalInfinities.minus(this.infinityTracking.shift());
-    }
   },
   get maxQuoteIdx() {
     return player.celestials.enslaved.maxQuotes;

@@ -161,7 +161,11 @@ Vue.component("tt-save-load-button", {
     },
     load() {
       this.hideContextMenu();
-      if (this.preset.studies !== "") importStudyTree(this.preset.studies);
+      if (this.preset.studies) {
+        importStudyTree(this.preset.studies);
+      } else {
+        alert("This time study list currently contains no studies.");
+      }
     },
     handleExport() {
       this.hideContextMenu();
@@ -170,7 +174,7 @@ Vue.component("tt-save-load-button", {
     edit() {
       const newValue = prompt("Edit time study list", this.preset.studies);
       this.hideContextMenu();
-      this.preset.studies = newValue;
+      if (newValue !== null) this.preset.studies = newValue;
     }
   },
   template: `

@@ -355,10 +355,10 @@ function exitChallenge() {
   }
 }
 
-function unlockEChall(idx) {
+function unlockEChall(idx, auto) {
   if (player.challenge.eternity.unlocked === 0) {
     player.challenge.eternity.unlocked = idx;
-    if (!justImported) {
+    if (!auto) {
       Tab.challenges.eternity.show();
     }
     if (idx !== 12 && idx !== 13) player.etercreq = idx;

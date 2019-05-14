@@ -243,7 +243,7 @@ function studiesUntil(id) {
   }
 }
 
-function studyPath(mode, args) {
+function studyPath(mode, args, auto) {
     if (!(mode === 'none' || mode === 'all')) return false;
     if (args === undefined) args = [];
     args = args.map(function (x) { if (!isNaN(x)) return parseInt(x); else return x; });
@@ -354,11 +354,11 @@ function studyPath(mode, args) {
     }, '');
     string = string.slice(0, -1);
     string += '|0';
-    importStudyTree(string);
+    importStudyTree(string, auto);
 }
 
 
-function respecTimeStudies() {
+function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
@@ -373,7 +373,7 @@ function respecTimeStudies() {
     ecStudy.refund();
     player.challenge.eternity.unlocked = 0;
   }
-  if (!justImported) {
+  if (!auto) {
     Tab.eternity.timeStudies.show();
   }
 }
@@ -386,7 +386,7 @@ function exportStudyTree() {
   copyToClipboardAndNotify(studyTreeExportString());
 }
 
-function importStudyTree(input) {
+function importStudyTree(input, auto) {
   const splitOnEC = input.split("|");
   splitOnEC[0].split(",")
     .map(id => parseInt(id, 10))
@@ -398,11 +398,7 @@ function importStudyTree(input) {
   if (splitOnEC.length === 2) {
     const ecNumber = parseInt(splitOnEC[1], 10);
     if (ecNumber !== 0 && !isNaN(ecNumber)) {
-      justImported = true;
-      TimeStudy.eternityChallenge(ecNumber).purchase();
-      setTimeout(() => {
-        justImported = false;
-      }, 100);
+      TimeStudy.eternityChallenge(ecNumber).purchase(auto);
     }
   }
 }
@@ -516,9 +512,9 @@ class ECTimeStudyState extends TimeStudyState {
     return player.challenge.eternity.unlocked === this.id;
   }
 
-  purchase() {
+  purchase(auto) {
     if (!this.canBeBought) return false;
-    unlockEChall(this.id);
+    unlockEChall(this.id, auto);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;
   }

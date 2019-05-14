@@ -1,24 +1,34 @@
 "use strict";
 
-Vue.component('v-tab', {
-  data: function() {
+Vue.component("v-tab", {
+  data() {
     return {
       mainUnlock: false,
       totalUnlocks: 0,
-      totalAdditionalStudies: 0
+      totalAdditionalStudies: 0,
+      realities: 0,
+      infinities: new Decimal(0),
+      eternities: 0,
+      dilatedTime: new Decimal(0),
+      replicanti: new Decimal(0)
     };
   },
   methods: {
     update() {
-      this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK)
-      this.totalUnlocks = V.totalRunUnlocks
-      this.totalAdditionalStudies = V.totalAdditionalStudies
+      this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
+      this.totalUnlocks = V.totalRunUnlocks;
+      this.totalAdditionalStudies = V.totalAdditionalStudies;
+      this.realities = player.realities;
+      this.infinities.copyFrom(player.infinitied);
+      this.eternities = player.eternities;
+      this.dilatedTime.copyFrom(player.dilation.dilatedTime);
+      this.replicanti.copyFrom(player.replicanti.amount);
     },
     startRun() {
-      V.startRun()
+      V.startRun();
     },
     has(info) {
-      return V.has(info)
+      return V.has(info);
     }
   },
   computed: {
@@ -29,11 +39,12 @@ Vue.component('v-tab', {
   template:
     `<div class="l-v-celestial-tab">
       <div v-if="!mainUnlock">
-        You need {{ shorten(db.mainUnlock.realities) }} realities,<br>
-        {{ shorten(db.mainUnlock.eternities) }} eternities,<br>
-        {{ shorten(db.mainUnlock.infinities) }} infinities,<br>
-        {{ shorten(db.mainUnlock.dilatedTime) }} dilated time<br>
-        and {{ shorten(db.mainUnlock.replicanti) }} replicanti to unlock V, The Celestial of Achievements
+        You need {{ shorten(db.mainUnlock.realities, 2, 0) }} realities (currently {{ shorten(realities, 2, 0) }}),<br>
+        {{ shorten(db.mainUnlock.eternities, 2, 0) }} eternities (currently {{ shorten(eternities, 2, 0) }}),<br>
+        {{ shorten(db.mainUnlock.infinities, 2, 0) }} infinities (currently {{ shorten(infinities, 2, 0) }}),<br>
+        {{ shorten(db.mainUnlock.dilatedTime, 2, 0) }} dilated time (currently {{ shorten(dilatedTime, 2, 0) }}),<br>
+        and {{ shorten(db.mainUnlock.replicanti, 2, 0) }} replicanti (currently {{ shorten(replicanti, 2, 0) }})
+        to unlock V, The Celestial of Achievements
       </div>
       <div v-else>
         <button @click="startRun()" class="o-v-run-button">Start V's Reality, All dimension production, EP gain, IP gain, dilated time gain and Replicanti gain are nerfed.</button>

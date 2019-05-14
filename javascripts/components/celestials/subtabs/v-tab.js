@@ -47,7 +47,10 @@ Vue.component("v-tab", {
         to unlock V, The Celestial of Achievements
       </div>
       <div v-else>
-        <button @click="startRun()" class="o-v-run-button">Start V's Reality, All dimension production, EP gain, IP gain, dilated time gain and Replicanti gain are nerfed.</button>
+        <button @click="startRun()" class="o-v-run-button">
+          Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and dilated time gain per second
+          are square-rooted, and Replicanti interval is squared.
+        </button>
         <div class="l-v-unlocks-container">
           <div v-for="unlock in runUnlocks" class="c-v-unlock" :class="{ 'c-v-unlock-completed': unlock.completions == 6 }">
             <h2>{{ unlock.config.name }}</h2>

@@ -160,7 +160,7 @@ function maxBuyGalaxies(manual) {
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
-  const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(NormalDimension(req.tier).amount.toNumber()));
+  const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(Math.round(NormalDimension(req.tier).amount.toNumber())));
   if (Notation.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
   // galaxyReset increments galaxies, so we add one less than we should:
   player.galaxies = newGalaxies - 1;

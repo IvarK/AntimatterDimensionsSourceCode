@@ -7,8 +7,8 @@ function canEternity() {
   return true;
 }
 
-function eternity(force, auto, switchingDilation) {
-  if (switchingDilation && !canEternity()) {
+function eternity(force, auto, specialConditions = {}) {
+  if (specialConditions.switchingDilation && !canEternity()) {
     force = true;
   }
   
@@ -58,7 +58,9 @@ function eternity(force, auto, switchingDilation) {
   
   player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.challenge.eternity.current = 0;
-  player.dilation.active = false;
+  if (!specialConditions.enteringEC) {
+    player.dilation.active = false;
+  }
   resetInfinityRuns();
   fullResetInfDimensions();
   eternityResetReplicanti();

@@ -126,7 +126,10 @@ class EternityChallengeState extends GameMechanicState {
         "You need to reach a set IP with special conditions.";
       if (!confirm(confirmation)) return false;
     }
-    if (canEternity()) eternity(false, false);
+    // If dilation is active, the { enteringEC: true } parameter will cause
+    // dilation to not be disabled. We still don't force-eternity, though;
+    // this causes TP to still be gained.
+    if (canEternity()) eternity(false, false, { enteringEC: true });
     player.eternityChallGoal = this.currentGoal;
     player.challenge.eternity.current = this.id;
     return startEternityChallenge();

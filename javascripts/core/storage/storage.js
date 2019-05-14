@@ -162,6 +162,11 @@ const GameStorage = {
     if (automatorOn) $("#automatorOn")[0].checked = true;
     automatorIdx = player.reality.automatorCurrentRow;
 
+    if (player.options.newUI) {
+      ui.view.newUI = true;
+      ui.view.page = "new-dimensions-tab"
+    }
+
     Lazy.invalidateAll();
 
     let diff = Date.now() - player.lastUpdate;

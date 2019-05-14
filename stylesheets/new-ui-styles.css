@@ -59,7 +59,7 @@ body {
 .resource h2 {
   margin: 0;
   color: var(--color-accent-2);
-  font-size: 2em;
+  font-size: 1.7em;
   padding-left: 10px;
   z-index: 1;
   text-align: left;
@@ -171,7 +171,6 @@ body {
 
 .quote {
   width: 100%;
-  margin-bottom: 10px;
   border-bottom: 1px solid var(--color-accent-2);
   color: white;
   text-align: center;
@@ -271,7 +270,7 @@ body {
   border-radius: 5px;
   position: relative;
   width: 175px;
-  height: 47px;
+  height: 44px;
   cursor: pointer;
 }
 
@@ -323,6 +322,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 0 50px;
+  margin-top: 10px;
 }
 
 .resets-container {
@@ -405,6 +405,12 @@ body {
 .btn-big-crunch:hover {
   background-color: #B67F33;
   color: black;
+}
+
+.information-header {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 1.1em;
 }
 
 /* FIXING OLD TABS */

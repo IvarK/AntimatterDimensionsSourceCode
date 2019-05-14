@@ -1,7 +1,6 @@
 "use strict";
 
 GameUI.notify = (function() {
-  const container = document.getElementById("notification-container");
   const template = document.createElement("div");
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
@@ -10,6 +9,7 @@ GameUI.notify = (function() {
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);
+    const container = document.getElementById("notification-container");
     container.appendChild(el);
     let entered = false;
     function stopEnter() {

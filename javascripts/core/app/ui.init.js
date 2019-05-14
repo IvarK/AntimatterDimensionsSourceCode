@@ -49,8 +49,8 @@ let ui = {
     scrollWindow: 0,
     draggingUIID: -1,
     currentContextMenu: null,
-    page: player.options.newUI ? "new-dimensions-tab" : "normal-dim-tab",
-    newUI: player.options.newUI
+    page: "normal-dim-tab",
+    newUI: false
   },
   notationName: "",
 };

@@ -37,7 +37,7 @@
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
 <body>
-<div id="ui" style="height: 100%; width: 100%">
+<div id="ui" style="height: 100%; width: 100%;">
     <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
     <new-ui v-show="newUI"></new-ui>
     <div v-show="!newUI" id="container" class="container" style="display:none; flex-direction: column; min-height: 100%; padding: 9px 15px; box-sizing: border-box;">
@@ -358,12 +358,12 @@
                 </div>
             </div>
         </div>
-        <div id="notification-container" class="l-notification-container"></div>
     </div>
     <modal-popup v-if="view.modal.current"></modal-popup>
     <modal-glyph-selection v-if="view.modal.glyphSelection"></modal-glyph-selection>
     <link v-if="view.theme !== 'Normal'" type="text/css" rel="stylesheet" :href="themeCss">
 </div>
+<div v-if="!newUI" id="notification-container" class="l-notification-container"></div>
 </body>
 <div class="videocontainer">
     <video autoplay muted loop id="stars">

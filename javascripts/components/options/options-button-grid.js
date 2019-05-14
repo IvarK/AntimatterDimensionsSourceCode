@@ -55,6 +55,8 @@ Vue.component("options-button-grid", {
     switchUI() {
       player.options.newUI = !player.options.newUI
       this.$viewModel.newUI = !this.$viewModel.newUI
+      this.$viewModel.page = "options-tab";
+      showTab("options");
     }
   },
   template: `

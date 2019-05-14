@@ -269,6 +269,7 @@ let player = {
   dimlife: true,
   dead: true,
   noEighthDimensions: false,
+  dropout: true,
   dilation: {
     studies: [],
     active: false,

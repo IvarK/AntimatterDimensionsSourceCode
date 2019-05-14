@@ -309,6 +309,7 @@ function completeReality(force, reset, auto = false) {
   player.dimlife = true;
   player.dead = true;
   player.noEighthDimensions = true;
+  player.dropout = true;
   if (!reset) player.realities = player.realities + 1;
   if (!reset) player.bestReality = Math.min(player.thisReality, player.bestReality);
   player.thisReality = 0;

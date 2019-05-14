@@ -321,7 +321,13 @@ GameStorage.devMigrations = {
       // Swapping glyph level with reality real time
       player.lastTenRealities = player.lastTenRealities
         .map(a => [a[0], a[1], a[3], a[2]]);
-    }
+    },
+    player => {
+      player.achievements.delete(157);
+      player.achievements.delete(156);
+      player.achievements.delete(155);
+      player.achievements.delete(153);
+    },
   ],
 
   patch(player) {

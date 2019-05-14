@@ -879,7 +879,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Make a new Reality.",
     checkRequirement: () => true,
     checkEvent: GameEvent.REALITY_RESET_BEFORE,
-    reward: "4x IP gain and boost from buying 10 Dimensions +0.1",
+    reward: "4x IP gain and boost from buying 10 Dimensions +0.1.",
     effect: 4,
     secondaryEffect: () => 0.1
   },
@@ -910,33 +910,33 @@ GameDatabase.achievements.normal = [
   {
     id: 144,
     name: "Is this an Interstellar reference?",
-    tooltip: "Unlock the Black Hole"
+    tooltip: "Unlock the Black Hole."
   },
   {
     id: 145,
     name: "Are you sure these are the right way around?",
-    tooltip: "Have the Black Hole interval smaller than the duration",
+    tooltip: "Have the Black Hole interval smaller than the duration.",
     checkRequirement: () => BlackHoles.list.some(bh => bh.interval < bh.duration),
     checkEvent: GameEvent.BLACK_HOLE_UPGRADE_BOUGHT
   },
   {
     id: 146,
     name: "Perks of living",
-    tooltip: "Have all perks bought",
+    tooltip: "Have all perks bought.",
     checkRequirement: () => player.reality.perks.size === Perk.all.length,
     checkEvent: GameEvent.PERK_BOUGHT
   },
   {
     id: 147,
     name: "Master of Reality",
-    tooltip: "Have all Reality upgrades bought",
+    tooltip: "Have all Reality upgrades bought.",
     checkRequirement: () => RealityUpgrades.allBought,
     checkEvent: GameEvent.REALITY_UPGRADE_BOUGHT
   },
   {
     id: 148,
     name: "Royal Flush",
-    tooltip: "Reality with one of each glyph type",
+    tooltip: "Reality with one of each glyph type.",
     checkRequirement: () => GLYPH_TYPES
       .filter(type => type !== "effarig")
       .every(type => Glyphs.activeList.some(g => g.type === type)),
@@ -952,45 +952,54 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 152,
-    name: "Personal Space",
-    tooltip: "Have 100 glyphs in your inventory",
+    name: "Y'all got any more of them glyphs?",
+    tooltip: "Have 100 glyphs in your inventory.",
     checkRequirement: () => Glyphs.inventoryList.length === 100,
     checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 153,
-    name: "Do I really have to do this?",
-    tooltip: "Have 0 glyphs in your inventory and 100 or more realities",
-    checkRequirement: () => Glyphs.inventoryList.length === 0 && player.realities >= 100,
+    name: "The god is delighted",
+    tooltip: "Sacrifice every glyph type at least once.",
+    checkRequirement: () => {
+      for (const type in player.reality.glyphs.sac) {
+        if (player.reality.glyphs.sac[type] === 0) return false;
+      }
+      return true;
+    },
     checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
     id: 154,
     name: "I didn't even realize how fast you are",
-    tooltip: "Reality in under 5 seconds",
+    tooltip: "Reality in under 5 seconds.",
     checkRequirement: () => Time.thisReality.totalSeconds <= 5,
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },
   {
     id: 155,
-    name: "Why did you have to add RNG to the game?",
-    tooltip: "Get a Celestial glyph",
-    checkRequirement: () => Glyphs.inventoryList.some(g => g.strength >= 3.5),
-    checkEvent: GameEvent.GLYPHS_CHANGED
+    name: "Achievement #15983",
+    tooltip: "Play for 13.7 billion years.",
+    checkRequirement: () => Time.totalTimePlayed.totalMilliseconds > 432043200000000000000,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 156,
-    name: "True Sacrifice",
-    tooltip: "Sacrifice a Celestial glyph",
-    checkRequirement: glyph => glyph.strength >= 3.5,
-    checkEvent: GameEvent.GLYPH_SACRIFICED
+    name: "College Dropout",
+    tooltip: "Reality without buying time theorems.",
+    checkRequirement: () => player.dropout,
+    checkEvent: GameEvent.REALITY_RESET_BEFORE
   },
   {
     id: 157,
-    name: "I'm up all night to get lucky",
-    tooltip: "Have 100 rare or better glyphs",
-    checkRequirement: () => Glyphs.inventoryList.length === 100 && Glyphs.inventoryList.every(g => g.strength >= 2),
-    checkEvent: GameEvent.GLYPHS_CHANGED
+    name: "Perfectly Balanced",
+    tooltip: "Have the same number of all 3 types of galaxy, with 1000 or more of each type.",
+    checkRequirement: () => player.galaxies === player.replicanti.galaxies &&
+      player.galaxies === player.dilation.freeGalaxies &&
+      player.galaxies >= 1000 &&
+      player.replicanti.galaxies >= 1000 &&
+      player.dilation.freeGalaxies >= 1000,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 158,

@@ -636,7 +636,7 @@ GameDatabase.achievements.normal = [
     id: 106,
     name: "The swarm",
     tooltip: "Get 10 Replicanti galaxies in 15 seconds.",
-    checkRequirement: () => player.replicanti.galaxies >= 10 && Time.thisInfinity.totalSeconds <= 15,
+    checkRequirement: () => Replicanti.galaxies.total >= 10 && Time.thisInfinity.totalSeconds <= 15,
     checkEvent: GameEvent.REPLICANTI_TICK_AFTER
   },
   {
@@ -782,7 +782,7 @@ GameDatabase.achievements.normal = [
     id: 126,
     name: "Popular music",
     tooltip: "Have 180 times more Replicanti Galaxies than Antimatter Galaxies.",
-    checkRequirement: () => player.replicanti.galaxies >= 180 * player.galaxies && player.galaxies > 0,
+    checkRequirement: () => Replicanti.galaxies.total >= 180 * player.galaxies && player.galaxies > 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: () => "Replicanti galaxies divide your Replicanti by " +
       `${shorten(Decimal.MAX_NUMBER, 1, 0)} instead of resetting them to 1.`,
@@ -994,10 +994,10 @@ GameDatabase.achievements.normal = [
     id: 157,
     name: "Perfectly Balanced",
     tooltip: "Have the same number of all 3 types of galaxy, with 1000 or more of each type.",
-    checkRequirement: () => player.galaxies === player.replicanti.galaxies &&
+    checkRequirement: () => player.galaxies === Replicanti.galaxies.total &&
       player.galaxies === player.dilation.freeGalaxies &&
       player.galaxies >= 1000 &&
-      player.replicanti.galaxies >= 1000 &&
+      Replicanti.galaxies.total >= 1000 &&
       player.dilation.freeGalaxies >= 1000,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },

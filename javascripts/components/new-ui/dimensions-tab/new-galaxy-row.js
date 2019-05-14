@@ -31,7 +31,11 @@ Vue.component('new-galaxy-row', {
       const parts = [this.galaxies.normal];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
-      return parts.map(shortenSmallInteger).join(" + ");
+      const sum = parts.map(shortenSmallInteger).join(" + ");
+      if (parts.length >= 2) {
+        return `${sum} = ${parts.sum()}`;
+      }
+      return sum;
     },
     typeName() {
       switch (this.type) {

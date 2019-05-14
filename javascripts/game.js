@@ -319,7 +319,10 @@ function gainedInfinities() {
 
 function failChallenge() {
     Modal.message.show("You failed the challenge, you have now exited it.");
-    exitChallenge();
+    // If we're in a normal challenge or IC, don't just exit it.
+    while (EternityChallenge.isRunning) {
+      exitChallenge();
+    }
     EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
 }
 

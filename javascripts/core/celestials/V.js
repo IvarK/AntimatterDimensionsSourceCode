@@ -75,7 +75,7 @@ const V_UNLOCKS = {
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
     effect: () => Player.achievementPower.toNumber(),
-    format: x => formatX(x),
+    format: x => formatX(x, 2, 2),
     requirement: () => V.totalRunUnlocks >= 10
     },
     {
@@ -83,7 +83,7 @@ const V_UNLOCKS = {
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 30 V-achievements",
     effect: () => Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement")),
-    format: x => formatX(x),
+    format: x => formatX(x, 2, 0),
     requirement: () => V.totalRunUnlocks >= 30
     },
     {
@@ -133,8 +133,11 @@ const V = {
   get isRunning() {
     return player.celestials.v.run;
   },
+  get achievementsPerAdditionalStudy() {
+    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return 3;
+    return 6;
+  },
   get totalAdditionalStudies() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3);
-    return Math.floor(this.totalRunUnlocks / 6);
+    return Math.floor(this.totalRunUnlocks / this.achievementsPerAdditionalStudy);
   }
 };

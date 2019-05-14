@@ -6,11 +6,12 @@ Vue.component("v-tab", {
       mainUnlock: false,
       totalUnlocks: 0,
       totalAdditionalStudies: 0,
+      achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
       eternities: 0,
       dilatedTime: new Decimal(0),
-      replicanti: new Decimal(0)
+      replicanti: new Decimal(0),
     };
   },
   methods: {
@@ -18,6 +19,7 @@ Vue.component("v-tab", {
       this.mainUnlock = V.has(V_UNLOCKS.MAIN_UNLOCK);
       this.totalUnlocks = V.totalRunUnlocks;
       this.totalAdditionalStudies = V.totalAdditionalStudies;
+      this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
       this.eternities = player.eternities;
@@ -58,7 +60,12 @@ Vue.component("v-tab", {
             <p class="o-v-unlock-amount">{{ unlock.completions }}/{{unlock.config.values.length}} done</p>
           </div>
         </div>
-        <div>You have {{ totalUnlocks }} V-achievements done. You can pick {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }} from locked paths.</div>
+        <div>
+          You have {{ totalUnlocks }} V-achievements done. You can pick
+          {{ totalAdditionalStudies }} {{ "study" | pluralize(totalAdditionalStudies, "studies") }}
+          on other paths you normally can't buy.
+        </div>
+        <div>(You get one additional study per {{ achievementsPerAdditionalStudy }} V-achievements, rounded down.)</div>
         <br>
         <div class="l-v-milestones-container">
           <div class="o-v-milestone" v-for="milestone in runMilestones" :class="{'o-v-milestone-unlocked': has(milestone)}">

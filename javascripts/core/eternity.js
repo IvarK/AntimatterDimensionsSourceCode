@@ -35,7 +35,7 @@ function eternity(force, auto, switchingDilation) {
       }
     }
     player.etercreq = 0;
-    respecTimeStudies();
+    respecTimeStudies(auto);
   }
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
@@ -65,7 +65,7 @@ function eternity(force, auto, switchingDilation) {
   resetChallengeStuff();
   resetDimensions();
 
-  if (player.respec) respecTimeStudies();
+  if (player.respec) respecTimeStudies(auto);
   player.respec = false;
   if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
     Tab.dimensions.time.show();

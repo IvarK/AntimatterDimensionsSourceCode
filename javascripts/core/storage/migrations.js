@@ -90,6 +90,7 @@ GameStorage.migrations = {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
+      if (player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(1)) player.dropout = false;
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);

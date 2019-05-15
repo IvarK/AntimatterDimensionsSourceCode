@@ -100,7 +100,7 @@ Vue.component('new-dimensions-tab', {
     }
   },
   template:
-  `<div>
+  `<div class="l-normal-dim-tab">
   <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span> <span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
   <div class="modes-container">
     <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>

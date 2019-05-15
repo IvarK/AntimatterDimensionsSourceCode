@@ -256,17 +256,13 @@ Vue.component('sidebar', {
   },
   template:
   `<div class="sidebar">
-    <div class="resource-container">
-      <sidebar-am></sidebar-am>
-      <sidebar-ip :cond="ipVisible"></sidebar-ip>
-      <sidebar-ep :cond="epVisible"></sidebar-ep>
-      <sidebar-rm :cond="rmVisible"></sidebar-rm>
-    </div>
-    <div class="tab-buttons">
-      <tab-button 
-        v-for="tab in tabs"
-        :key="tab.id"
-        :tab="tab"></tab-button>
-    </div>
+    <sidebar-am></sidebar-am>
+    <sidebar-ip :cond="ipVisible"></sidebar-ip>
+    <sidebar-ep :cond="epVisible"></sidebar-ep>
+    <sidebar-rm :cond="rmVisible"></sidebar-rm>
+    <tab-button 
+      v-for="tab in tabs"
+      :key="tab.id"
+      :tab="tab"></tab-button>
   </div>`
 })

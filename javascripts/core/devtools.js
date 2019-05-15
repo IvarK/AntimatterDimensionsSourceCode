@@ -394,3 +394,16 @@ dev.buyAllPerks = function() {
     perk.purchase();
   }
 };
+
+dev.kongTest = function() {
+  const page = document.getElementById("page");
+  if (document.getElementById("page").style.width === "") {
+    page.style.width = "1050px";
+    page.style.height = "700px";
+    page.style.marginTop = "100px";
+  } else {
+    page.style.width = "";
+    page.style.height = "";
+    page.style.marginTop = "";
+  }
+};

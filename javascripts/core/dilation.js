@@ -4,7 +4,7 @@ function startDilatedEternity() {
   if (!TimeStudy.dilation.isBought) return false
   GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
-      eternity(false, false, true)
+      eternity(false, false, { switchingDilation: true });
       setTimeout(function() {
         GameIntervals.gameLoop.start();
       }, 250)
@@ -17,7 +17,7 @@ function startDilatedEternity() {
       return false
   }
   Achievement(136).unlock();
-  eternity(false, false, true)
+  eternity(false, false, { switchingDilation: true });
   player.dilation.active = true;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)

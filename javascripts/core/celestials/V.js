@@ -134,8 +134,7 @@ const V = {
     return player.celestials.v.run;
   },
   get achievementsPerAdditionalStudy() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return 3;
-    return 6;
+    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) ? 3 : 6;
   },
   get totalAdditionalStudies() {
     return Math.floor(this.totalRunUnlocks / this.achievementsPerAdditionalStudy);

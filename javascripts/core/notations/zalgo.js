@@ -34,7 +34,7 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
    */
   heComes(value) {
     // Eternity seems to happen around e66666 antimatter, who would've thought? Scaled down to 1000.
-    const scaled = value.pLog10() / 66666 * 1000;
+    const scaled = value.plus(1).log10() / 66666 * 1000;
     const displayPart = scaled.toFixed(2);
     const zalgoPart = Math.floor(Math.abs(Math.pow(2, 30) * (scaled - displayPart)));
 

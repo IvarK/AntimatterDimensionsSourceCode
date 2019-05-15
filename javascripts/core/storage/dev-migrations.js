@@ -327,8 +327,7 @@ GameStorage.devMigrations = {
       player.achievements.delete(156);
       player.achievements.delete(155);
       player.achievements.delete(153);
-      if (player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(1)) player.noTheoremPurchases = false;
-      if (Sacrifice.totalBoost.gt(1)) player.noSacrifices = false;
+      GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustAchievementVars(player);
     },
   ],

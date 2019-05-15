@@ -961,12 +961,7 @@ GameDatabase.achievements.normal = [
     id: 153,
     name: "The god is delighted",
     tooltip: "Sacrifice every glyph type at least once.",
-    checkRequirement: () => {
-      for (const type in player.reality.glyphs.sac) {
-        if (player.reality.glyphs.sac[type] === 0) return false;
-      }
-      return true;
-    },
+    checkRequirement: () => Object.values(player.reality.glyphs.sac).every(s => s > 0),
     checkEvent: GameEvent.GLYPHS_CHANGED
   },
   {
@@ -980,7 +975,7 @@ GameDatabase.achievements.normal = [
     id: 155,
     name: "Achievement #15983",
     tooltip: "Play for 13.7 billion years.",
-    checkRequirement: () => Time.totalTimePlayed.totalMilliseconds > 432043200000000000000,
+    checkRequirement: () => Time.totalTimePlayed.totalYears > 13.7e9,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -996,9 +991,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have the same number of all 3 types of galaxy, with 1000 or more of each type.",
     checkRequirement: () => player.galaxies === Replicanti.galaxies.total &&
       player.galaxies === player.dilation.freeGalaxies &&
-      player.galaxies >= 1000 &&
-      Replicanti.galaxies.total >= 1000 &&
-      player.dilation.freeGalaxies >= 1000,
+      player.galaxies >= 1000,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {

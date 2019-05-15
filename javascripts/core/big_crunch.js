@@ -96,6 +96,7 @@ function secondSoftReset() {
     player.thisInfinityTime = 0;
     player.thisInfinityRealTime = 0;
     player.noEighthDimensions = true;
+    player.noSacrifices = true;
     AchievementTimers.marathon2.reset();
 }
 

@@ -182,7 +182,7 @@ function timeForAllAchievements() {
 
 function nextAchIn() {
   updateRealityAchievementModifiers();
-  let currentSeconds = player.thisReality / 1000;
+  const currentSeconds = player.thisReality / 1000;
   if (currentSeconds > timeForAllAchievements()) return 0;
   const baseAchTime = realityAchievementModifiers.baseAchTime;
   const rowModifier = realityAchievementModifiers.rowModifier;
@@ -204,7 +204,7 @@ function nextAchIn() {
   while (currentSeconds > timeReq) {
     timeReq += achTime();
   }
-  return (timeReq - currentSeconds) * 1000
+  return (timeReq - currentSeconds) * 1000;
 }
 
 function timeUntilAch(achId) {
@@ -272,9 +272,9 @@ function updateRealityAchievementModifiers() {
   const secondsForAllAchs = DEFAULT_SECONDS_FOR_ALL_ACHS * requiredTimeModifier;
   realityAchievementModifiers = {
     realities: player.realities,
-    // how much it takes for row 7 achievement to get
+    // How much it takes for row 7 achievement to get
     baseAchTime: secondsForAllAchs / TOTAL_PRE_REALITY_ACHS,
     rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
-    secondsForAllAchs: secondsForAllAchs
+    secondsForAllAchs
   };
 }

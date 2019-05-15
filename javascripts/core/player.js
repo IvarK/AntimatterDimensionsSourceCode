@@ -265,9 +265,11 @@ let player = {
   },
   eterc8ids: 50,
   eterc8repl: 40,
-  dimlife: true,
-  dead: true,
-  noEighthDimensions: false,
+  noSacrifices: true,
+  onlyEighthDimensons: true,
+  onlyFirstDimensions: true,
+  noEighthDimensions: true,
+  noTheoremPurchases: true,
   dilation: {
     studies: [],
     active: false,
@@ -283,7 +285,6 @@ let player = {
       3: 0,
     }
   },
-  why: 0,
   realities: 0,
   thisReality: 0,
   thisRealityRealTime: 0,

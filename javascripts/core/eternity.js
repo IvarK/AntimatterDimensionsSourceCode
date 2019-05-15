@@ -142,8 +142,9 @@ function initializeResourcesAfterEternity() {
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }
-  player.dimlife = true;
-  player.dead = true;
+  player.noSacrifices = true;
+  player.onlyEighthDimensons = true;
+  player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {

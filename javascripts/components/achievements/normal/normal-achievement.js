@@ -54,12 +54,12 @@ Vue.component("normal-achievement", {
         return `(Locked: ${floored} ${floored === 1 ? "second" : "seconds"})`;
       }
       if (remainingTime < 3600) {
-        return "(Locked: " + (remainingTime / 60).toFixed(1) + " minutes)";
+        return `(Locked: ${(remainingTime / 60).toFixed(1)} minutes)`;
       }
       if (remainingTime < 86400) {
-        return "(Locked: " + (remainingTime / 3600).toFixed(1) + " hours)";
+        return `(Locked: ${(remainingTime / 3600).toFixed(1)} hours)`;
       }
-      return "(Locked: " + (remainingTime / 86400).toFixed(1) + " days)";
+      return `(Locked: ${(remainingTime / 86400).toFixed(1)} days)`;
     },
     tooltip() {
       if (this.isUnlocked && !this.isEnabled && this.isMouseOver) {

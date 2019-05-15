@@ -185,13 +185,22 @@ const Tickspeed = {
 
 
 const FreeTickspeed = {
-  SOFTCAP: 300000,
+  BASE_SOFTCAP: 300000,
   GROWTH_RATE: 4e-3,
   GROWTH_EXP: 1.5,
 
   get amount() {
     return player.totalTickGained;
   },
+  
+  get softcap() {
+    let softcap = FreeTickspeed.BASE_SOFTCAP;
+    if (Enslaved.isCompleted) {
+      softcap += 100000;
+    }
+    return softcap;
+  },
+
   fromShards(shards) {
     if (!shards.gt(0)) return {
       newAmount: 0,
@@ -203,18 +212,14 @@ const FreeTickspeed = {
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;
-    if (uncapped <= FreeTickspeed.SOFTCAP) {
+    if (uncapped <= FreeTickspeed.softcap) {
       return {
         newAmount: Math.ceil(uncapped),
         nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
       };
     }
-    let softcap = FreeTickspeed.SOFTCAP;
-    if (Enslaved.isCompleted) {
-      softcap += 100000;
-    }
     // Log of (cost - cost up to softcap)
-    const priceToCap = softcap * logTickmult;
+    const priceToCap = FreeTickspeed.softcap * logTickmult;
     // In the following we're implicitly applying the function (ln(x) - priceToCap) / logTickmult to all costs,
     // so, for example, if the cost is 1 that means it's actually exp(priceToCap) * tickmult.
     const desiredCost = (logShards - priceToCap) / logTickmult;
@@ -240,7 +245,7 @@ const FreeTickspeed = {
     // the cost of the next upgrade.
     const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
     return {
-      newAmount: purchases + softcap,
+      newAmount: purchases + FreeTickspeed.softcap,
       nextShards: next,
     };
   }

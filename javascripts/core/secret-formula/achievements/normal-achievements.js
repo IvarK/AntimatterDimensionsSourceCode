@@ -167,7 +167,7 @@ GameDatabase.achievements.normal = [
     id: 38,
     name: "I don't believe in Gods",
     tooltip: "Buy an Antimatter Galaxy without Sacrificing.",
-    checkRequirement: () => player.sacrificed.eq(0),
+    checkRequirement: () => player.noSacrifices,
     checkEvent: GameEvent.GALAXY_RESET_BEFORE
   },
   {
@@ -720,7 +720,7 @@ GameDatabase.achievements.normal = [
     id: 117,
     name: "8 nobody got time for that",
     tooltip: "Eternity without buying Dimensions 1-7.",
-    checkRequirement: () => player.dimlife,
+    checkRequirement: () => player.onlyEighthDimensons,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
@@ -742,7 +742,7 @@ GameDatabase.achievements.normal = [
     id: 122,
     name: "You're already dead.",
     tooltip: "Eternity without buying Dimensions 2-8.",
-    checkRequirement: () => player.dead,
+    checkRequirement: () => player.onlyFirstDimensions,
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE
   },
   {
@@ -987,7 +987,7 @@ GameDatabase.achievements.normal = [
     id: 156,
     name: "College Dropout",
     tooltip: "Reality without buying time theorems.",
-    checkRequirement: () => player.dropout,
+    checkRequirement: () => player.noTheoremPurchases,
     checkEvent: GameEvent.REALITY_RESET_BEFORE
   },
   {

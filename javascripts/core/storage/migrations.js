@@ -90,7 +90,8 @@ GameStorage.migrations = {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
-      if (player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(1)) player.dropout = false;
+      if (player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(1)) player.noTheoremPurchases = false;
+      if (Sacrifice.totalBoost.gt(1)) player.noSacrifices = false;
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);
@@ -101,7 +102,7 @@ GameStorage.migrations = {
       GameStorage.migrations.moveSavedStudyTrees(player);
       GameStorage.migrations.convertEPMult(player);
       GameStorage.migrations.moveChallengeInfo(player);
-      GameStorage.migrations.adjustWhy(player);
+      GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
       GameStorage.migrations.adjustSacrificeConfirmation(player);
@@ -290,10 +291,19 @@ GameStorage.migrations = {
     delete player.challengeTarget;
   },
 
-  adjustWhy(player) {
-    if (player.why === undefined) return;
-    player.secretUnlocks.why = player.why;
-    delete player.why;
+  adjustAchievementVars(player) {
+    if (player.why !== undefined) {
+      player.secretUnlocks.why = player.why;
+      delete player.why;
+    }
+    if (player.dead !== undefined) {
+      player.onlyFirstDimensions = player.dead;
+      delete player.dead;
+    }
+    if (player.dimlife !== undefined) {
+      player.onlyEighthDimensons = player.dimlife;
+      delete player.dimlife;
+    }
   },
 
   adjustThemes(player) {

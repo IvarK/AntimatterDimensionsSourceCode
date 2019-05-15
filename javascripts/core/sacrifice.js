@@ -25,6 +25,7 @@ function sacrificeReset(auto) {
   } else if (!isAch118Enabled) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
+  player.noSacrifices = false;
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_AFTER);
 }
 

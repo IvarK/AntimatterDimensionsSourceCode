@@ -39,7 +39,7 @@ const TimeTheorems = {
     player.money = player.money.minus(player.timestudy.amcost);
     player.timestudy.amcost = player.timestudy.amcost.times(TimeTheorems.costMultipliers.AM);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.dropout = false;
+    player.noTheoremPurchases = false;
     return true;
   },
 
@@ -48,7 +48,7 @@ const TimeTheorems = {
     player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost);
     player.timestudy.ipcost = player.timestudy.ipcost.times(TimeTheorems.costMultipliers.IP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.dropout = false;
+    player.noTheoremPurchases = false;
     return true;
   },
 
@@ -61,7 +61,7 @@ const TimeTheorems = {
     player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost);
     player.timestudy.epcost = player.timestudy.epcost.times(TimeTheorems.costMultipliers.EP);
     player.timestudy.theorem = player.timestudy.theorem.plus(1);
-    player.dropout = false;
+    player.noTheoremPurchases = false;
     return true;
   },
 
@@ -71,7 +71,7 @@ const TimeTheorems = {
       player.timestudy.amcost.e = Math.floor(player.money.e / 20000 + 1) * 20000;
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.money.e / 20000) - AMowned);
       player.money = player.money.minus(Decimal.fromMantissaExponent(1, Math.floor(player.money.e / 20000) * 20000));
-      player.dropout = false;
+      player.noTheoremPurchases = false;
     }
     const IPowned = player.timestudy.ipcost.e / 100;
     if (player.infinityPoints.gte(player.timestudy.ipcost)) {
@@ -79,7 +79,7 @@ const TimeTheorems = {
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.floor(player.infinityPoints.e / 100 + 1) - IPowned);
       player.infinityPoints =
         player.infinityPoints.minus(Decimal.fromMantissaExponent(1, Math.floor(player.infinityPoints.e / 100) * 100));
-      player.dropout = false;
+      player.noTheoremPurchases = false;
     }
     if (player.eternityPoints.gte(player.timestudy.epcost)) {
       const EPowned = Math.round(player.timestudy.epcost.log2());
@@ -88,7 +88,7 @@ const TimeTheorems = {
       player.timestudy.epcost = finalEPCost;
       player.eternityPoints = player.eternityPoints.minus(totalEPCost);
       player.timestudy.theorem = player.timestudy.theorem.plus(Math.round(player.timestudy.epcost.log2()) - EPowned);
-      player.dropout = false;
+      player.noTheoremPurchases = false;
       // The above code block will sometimes buy one too few TT, but it never over-buys
       TimeTheorems.buyWithEP();
     }

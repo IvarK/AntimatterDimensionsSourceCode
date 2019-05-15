@@ -144,6 +144,7 @@ function galaxyReset() {
   player.resets = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
+  player.noSacrifices = true;
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
 

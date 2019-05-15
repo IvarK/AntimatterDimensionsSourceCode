@@ -661,7 +661,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => {
       const infinities = player.lastTenRuns.map(run => run[1]);
       for (let i = 0; i < infinities.length - 1; i++) {
-        if (infinities[i].lt(infinities[i + 1].times(Decimal.MAX_NUMBER))) return false;
+        if (infinities[i].lt(infinities[i + 1].times(Decimal.MAX_NUMBER)) || infinities[i].eq(0)) return false;
       }
       return true;
     },
@@ -900,7 +900,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => {
       const eternities = player.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {
-        if (eternities[i].lt(eternities[i + 1].times(Decimal.MAX_NUMBER))) return false;
+        if (eternities[i].lt(eternities[i + 1].times(Decimal.MAX_NUMBER)) || eternities[i].eq(0)) return false;
       }
       return true;
     },

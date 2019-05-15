@@ -939,7 +939,6 @@ function autoBuyDilationUpgrades() {
     const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(
       upgrade => upgrade.isAutobuyerOn);
     for (const upgrade of upgrades) {
-      // buy bulk
       upgrade.purchase(true);
     }
   }

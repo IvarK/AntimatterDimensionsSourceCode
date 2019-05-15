@@ -101,13 +101,13 @@ GameStorage.migrations = {
       GameStorage.migrations.convertEPMult(player);
       GameStorage.migrations.moveChallengeInfo(player);
       GameStorage.migrations.adjustWhy(player);
-      GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
       GameStorage.migrations.adjustSacrificeConfirmation(player);
       GameStorage.migrations.migrateNotation(player);
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
+      GameStorage.migrations.adjustAchievementVars(player);
     }
   },
 
@@ -291,23 +291,20 @@ GameStorage.migrations = {
   },
 
   adjustWhy(player) {
-    if (player.why !== undefined) {
-      player.secretUnlocks.why = player.why;
-      delete player.why;
-    }
+    delete player.why;
   },
 
   adjustAchievementVars(player) {
-    if (player.dead !== undefined) {
-      player.onlyFirstDimensions = player.dead;
-      delete player.dead;
-    }
-    if (player.dimlife !== undefined) {
-      player.onlyEighthDimensons = player.dimlife;
-      delete player.dimlife;
-    }
-    if (player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(1)) player.noTheoremPurchases = false;
-    if (Sacrifice.totalBoost.gt(1)) player.noSacrifices = false;
+    player.onlyFirstDimensions = player.dead;
+    delete player.dead;
+    player.onlyEighthDimensons = player.dimlife;
+    delete player.dimlife;
+    if (
+      player.timestudy.theorem.gt(0) ||
+      player.timestudy.studies.length > 0 ||
+      player.challenge.eternity.unlocked !== 0
+    ) player.noTheoremPurchases = false;
+    if (player.sacrificed.gt(0)) player.noSacrifices = false;
   },
 
   adjustThemes(player) {

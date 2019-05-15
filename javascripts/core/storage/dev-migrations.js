@@ -327,6 +327,7 @@ GameStorage.devMigrations = {
       player.achievements.delete(156);
       player.achievements.delete(155);
       player.achievements.delete(153);
+      // Have to call this a second time, as player.why wasn't removed from the player.js the first time
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustAchievementVars(player);
     },

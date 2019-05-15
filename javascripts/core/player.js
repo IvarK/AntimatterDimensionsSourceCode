@@ -283,7 +283,8 @@ let player = {
       1: 0,
       2: 0,
       3: 0,
-    }
+    },
+    auto: [false, false, false]
   },
   realities: 0,
   thisReality: 0,

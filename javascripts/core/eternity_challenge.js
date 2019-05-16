@@ -117,7 +117,7 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
-  start() {
+  start(auto) {
     if (!this.isUnlocked) return false;
     if (player.options.confirmations.challenges) {
       const confirmation =
@@ -129,7 +129,7 @@ class EternityChallengeState extends GameMechanicState {
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
-    if (canEternity()) eternity(false, false, { enteringEC: true });
+    if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.eternityChallGoal = this.currentGoal;
     player.challenge.eternity.current = this.id;
     return startEternityChallenge();

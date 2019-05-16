@@ -2893,9 +2893,11 @@ screen and (max-width: 480px) {
 /*#region t-metro t-inverted-metro t-s8*/
 
 .t-metro .o-achievement,
+.t-dark-metro .o-achievement,
 .t-inverted-metro .o-achievement,
 .t-s8 .o-achievement {
   border-width: 1px;
+  border-radius: 0;
 }
 
 .t-metro .o-achievement--unlocked,
@@ -3018,6 +3020,7 @@ screen and (max-width: 480px) {
 .t-inverted-metro .c-achievement-grid__row--completed,
 .t-s8 .c-achievement-grid__row--completed {
   background-color: #1b5e20;
+  border-radius: 0px;
 }
 
 .t-s1 .c-achievement-grid__row--completed {

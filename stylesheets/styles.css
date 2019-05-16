@@ -1686,6 +1686,10 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
+.o-primary-btn--dilation-upgrade-toggle {
+  font-size: 1rem;
+}
+
 .o-primary-btn--replicanti-galaxy {
   width: 20rem;
   height: 7rem;

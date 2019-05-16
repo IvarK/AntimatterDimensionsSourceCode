@@ -11,8 +11,15 @@ Vue.component("dilation-upgrade", {
   data() {
     return {
       isBought: false,
-      isAffordable: false
+      isAffordable: false,
+      isAutoUnlocked: false,
+      isAutobuyerOn: false,
     };
+  },
+  watch: {
+    isAutobuyerOn(newValue) {
+      this.upgrade.isAutobuyerOn = newValue;
+    }
   },
   computed: {
     classObject() {
@@ -35,21 +42,31 @@ Vue.component("dilation-upgrade", {
           this.isAffordable = this.upgrade.isAffordable;
         }
       }
+      this.isAutoUnlocked = Perk.autobuyerDilation.isBought;
+      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
     }
   },
   template:
-    `<button :class="classObject" @click="upgrade.purchase()">
-      <description-display 
-        :config="upgrade.config"
-        :length="70"
-        name="o-dilation-upgrade__description"
+    `<div class="l-spoon-btn-group">
+      <button :class="classObject" @click="upgrade.purchase()">
+        <description-display 
+          :config="upgrade.config"
+          :length="70"
+          name="o-dilation-upgrade__description"
+        />
+        <effect-display br :config="upgrade.config" />
+        <cost-display br
+          v-if="!isBought"
+          :config="upgrade.config"
+          singular="Dilated Time"
+          plural="Dilated Time"
+        />
+      </button>
+      <primary-button-on-off
+        v-if="isRebuyable && isAutoUnlocked"
+        v-model="isAutobuyerOn"
+        text="Auto:"
+        class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
       />
-      <effect-display br :config="upgrade.config" />
-      <cost-display br
-        v-if="!isBought"
-        :config="upgrade.config"
-        singular="Dilated Time"
-        plural="Dilated Time"
-      />
-    </button>`
+    </div>`
 });

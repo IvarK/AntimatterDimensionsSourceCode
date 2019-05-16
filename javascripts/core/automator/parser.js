@@ -1,7 +1,7 @@
 /**
  * @type {TokenTester[][]}
  */
-const AutomatorGrammar = (function() {
+const AutomatorGrammarX = (function() {
   class TokenTester {
     /**
      * @param {AutomatorToken} token

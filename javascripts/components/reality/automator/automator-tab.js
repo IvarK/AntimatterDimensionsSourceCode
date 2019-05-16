@@ -1,13 +1,38 @@
 "use strict";
 
+const AutomatorUI = {
+  wrapper: null,
+  editor: null,
+};
+
 Vue.component("automator-tab", {
+  data() {
+    return {
+      code: null,
+    };
+  },
+  created() {
+    if (!AutomatorUI.wrapper) {
+      AutomatorUI.wrapper = document.createElement("div");
+      AutomatorUI.wrapper.className = "l-automator-editor__wrapper c-automator-editor__wrapper";
+      const textArea = document.createElement("textarea");
+      AutomatorUI.wrapper.appendChild(textArea);
+      AutomatorUI.editor = CodeMirror.fromTextArea(textArea, {
+        mode: "automato",
+        lint: "automato",
+        lineNumbers: true,
+        theme: "liquibyte",
+      });
+    }
+  },
+  mounted() {
+    this.$el.appendChild(AutomatorUI.wrapper);
+    this.$nextTick(() => AutomatorUI.editor.refresh());
+  },
+  beforeDestroy() {
+    this.$el.removeChild(AutomatorUI.wrapper);
+  },
   template:
     `<div class="c-automator l-automator l-automator-tab__automator">
-      <split-pane :min-percent="20" :default-percent="40" split="vertical" class="_-automator-split-pane-fix" v-if="true">
-        <automator-editor slot="paneL" />
-        <automator-docs slot="paneR" />
-      </split-pane>
-
-      <automator-block-tab v-else />
     </div>`
 });

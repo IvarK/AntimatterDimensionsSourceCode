@@ -211,3 +211,15 @@ ui = new Vue({
 });
 
 GameUI.initialized = true;
+
+var myCodeMirror = CodeMirror(document.body, {
+  mode: "automato",
+  lint: "automato",
+});
+
+myCodeMirror.on("keyup", (editor, event) => {
+  if (editor.state.completionActive) return;
+  const key = event.key;
+  if (!/^[a-zA-Z0-9 \t]$/u.test(key)) return;
+  CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
+});

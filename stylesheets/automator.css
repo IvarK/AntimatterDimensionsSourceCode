@@ -13,6 +13,16 @@
   /*width: 100rem;*/
 }
 
+.l-automator-editor__wrapper {
+  height: 100%;
+}
+
+.c-automator-editor__wrapper {
+  font-family: Typewriter;
+  font-size: 1.4rem;
+  text-align: left;
+}
+
 .c-automator-editor {
   overflow-y: scroll;
   height: 100%;
@@ -26,6 +36,7 @@
   padding: .5rem;
   tab-size: 1.5em;
   -moz-tab-size: 1.5em;
+  text-align: unset;
 }
 
 .l-automator-editor {

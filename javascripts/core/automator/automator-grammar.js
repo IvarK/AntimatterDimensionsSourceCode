@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 "use strict";
 
-const automatorGrammar = (function () {
+const AutomatorGrammar = (function() {
   const createToken = chevrotain.createToken;
   const Lexer = chevrotain.Lexer;
   const Parser = chevrotain.Parser;
@@ -20,6 +20,8 @@ const automatorGrammar = (function () {
     const categoryName = Array.isArray(category) ? category[0].name : category.name;
     if (tokenLists[categoryName] === undefined) tokenLists[categoryName] = [];
     tokenLists[categoryName].push(token);
+    const patternWord = pattern.toString().match(/^\/([a-zA-Z0-9]*)\/[a-zA-Z]*$/ui);
+    if (patternWord && patternWord[1]) token.$autocomplete = patternWord[1];
     return token;
   };
 
@@ -35,6 +37,7 @@ const automatorGrammar = (function () {
     name: "EOL",
     line_breaks: true,
     pattern: /[ \t\r]*\n\s*/,
+    label: "End of line",
   });
 
   const Comment = createToken({
@@ -44,7 +47,8 @@ const automatorGrammar = (function () {
 
   const DurationLiteral = createToken({
     name: "DurationLiteral",
-    pattern: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/
+    pattern: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/,
+    label: "Duration",
   });
 
   const NumberLiteral = createToken({
@@ -77,6 +81,7 @@ const automatorGrammar = (function () {
   const IP = createInCategory(Currency, "IP", /ip/i);
   const AM = createInCategory(Currency, "AM", /am/i);
   const TT = createInCategory(Currency, "TT", /(tt|time theorems?)/i);
+  TT.$autocomplete = "tt";
 
   createInCategory([PrestigeEvent, StudyPath], "Infinity", /infinity/i).studyPath = TimeStudyPath.INFINITY_DIM;
   createInCategory(PrestigeEvent, "Eternity", /eternity/i);
@@ -88,9 +93,9 @@ const automatorGrammar = (function () {
   createInCategory(StudyPath, "Normal", /normal/i).studyPath = TimeStudyPath.NORMAL_DIM;
   createInCategory(StudyPath, "Time", /time/i).studyPath = TimeStudyPath.TIME_DIM;
 
-  createInCategory(TimeUnit, "Seconds", /s(ec(onds?)?)?/i);
-  createInCategory(TimeUnit, "Minutes", /m(in(utes?)?)?/i);
-  createInCategory(TimeUnit, "Hours", /h(ours?)?/i);
+  createInCategory(TimeUnit, "Seconds", /s(ec(onds?)?)?/i).$autocomplete = "sec";
+  createInCategory(TimeUnit, "Minutes", /m(in(utes?)?)?/i).$autocomplete = "min";
+  createInCategory(TimeUnit, "Hours", /h(ours?)?/i).$autocomplete = "hours";
 
   const Keyword = createToken({
     name: "Keyword",
@@ -106,6 +111,7 @@ const automatorGrammar = (function () {
       categories: Keyword,
       longer_alt: Identifier,
     });
+    token.$autocomplete = name.toLocaleLowerCase();
     keywordTokens.push(token);
     return token;
   };
@@ -124,24 +130,17 @@ const automatorGrammar = (function () {
   // So, we consume the label at the same time as we consume the preset. In order to report
   // errors, we also match just the word preset. And, we have to not match comments.
   const Preset = createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\s#/])*)?/i);
+  const Respec = createKeyword("Respec", /respec/i);
   const Restart = createKeyword("Restart", /restart/i);
   const Start = createKeyword("Start", /start/i);
   const Studies = createKeyword("Studies", /studies/i);
-  const Unlock = createKeyword("Unlock", /nlock/i);
-  const Until = createKeyword("Until", /ntil/i);
+  const Unlock = createKeyword("Unlock", /unlock/i);
+  const Until = createKeyword("Until", /until/i);
   const Wait = createKeyword("Wait", /wait/i);
   const While = createKeyword("While", /while/i);
 
-  const Dilation = createToken({
-    name: "Dilation",
-    pattern: /dilation/i,
-    longer_alt: Identifier,
-  });
-
-  const EC = createToken({
-    name: "EC",
-    pattern: /ec/i,
-  });
+  const Dilation = createKeyword("Dilation", /dilation/i);
+  const EC = createKeyword("EC", /ec/i);
 
   const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*\{/ });
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*\}/ });
@@ -150,34 +149,18 @@ const automatorGrammar = (function () {
   const Ellipsis = createToken({ name: "Ellipsis", pattern: /\.\.\./, label: "..." });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
 
-
-  // For matching \S, we have to manually create the starting character hint table for
-  // chervotain.
-  const nonSpaceChars = new Array(65536);
-  const nonSpacePattern = new RegExp(/[^\s#]/u);
-  for (let i = 0; i <= 65535; i++) {
-    if (nonSpacePattern.test(String.fromCharCode(i))) nonSpaceChars.push(i);
-  }
-  const Garbage = createToken({
-    name: "Garbage",
-    pattern: /\S+/,
-    start_chars_hint: nonSpaceChars,
-  });
-
   const automatorTokens = [
     HSpace, Comment, EOL,
     LCurly, RCurly, Comma, Ellipsis, EqualSign, Pipe,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     NumberLiteral,
     Keyword, ...keywordTokens,
-    Dilation, EC,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
     Currency, ...tokenLists.Currency,
     TimeUnit, ...tokenLists.TimeUnit,
     DurationLiteral,
     Identifier,
-    //    Garbage,
   ];
 
   const automatorLexer = new Lexer(automatorTokens, {
@@ -219,6 +202,7 @@ const automatorGrammar = (function () {
             { ALT: () => $.SUBRULE($.define) },
             { ALT: () => $.SUBRULE($.ifBlock) },
             { ALT: () => $.SUBRULE($.pause) },
+            { ALT: () => $.SUBRULE($.prestige) },
             { ALT: () => $.CONSUME(Restart) },
             { ALT: () => $.SUBRULE($.start) },
             { ALT: () => $.SUBRULE($.studies) },
@@ -229,11 +213,15 @@ const automatorGrammar = (function () {
             { ALT: () => $.SUBRULE($.whileLoop) },
           ]));
         $.OPTION(() => $.CONSUME1(Comment));
+        $.SUBRULE($.commandEnd);
+      });
+
+      $.RULE("commandEnd", () => {
         $.OR1([
           { ALT: () => $.CONSUME(EOL) },
           { ALT: () => $.CONSUME(chevrotain.EOF) },
         ]);
-      });
+      }, { resyncEnabled: false, });
 
       $.RULE("badCommand", () => $.AT_LEAST_ONE(() => $.SUBRULE($.badCommandToken)),
         { resyncEnabled: false, }
@@ -244,7 +232,6 @@ const automatorGrammar = (function () {
         { ALT: () => $.CONSUME(DurationLiteral) },
         { ALT: () => $.CONSUME(NumberLiteral) },
         { ALT: () => $.CONSUME(ComparisonOperator) },
-        //{ ALT: () => $.CONSUME(Garbage) },
       ]), { resyncEnabled: false, });
 
       $.RULE("auto", () => {
@@ -278,6 +265,10 @@ const automatorGrammar = (function () {
         $.OPTION(() => $.SUBRULE($.duration));
       });
 
+      $.RULE("prestige", () => {
+        $.CONSUME(PrestigeEvent);
+      });
+
       $.RULE("start", () => {
         $.CONSUME(Start);
         $.OR([
@@ -304,6 +295,7 @@ const automatorGrammar = (function () {
               ]);
             }
           },
+          { ALT: () => $.CONSUME(Respec) },
         ]);
       });
 
@@ -424,15 +416,19 @@ const automatorGrammar = (function () {
     }
 
   }
-
+  const tokenMap = [];
+  for (const token of automatorLexer.lexerDefinition) {
+    tokenMap[token.tokenTypeIdx] = token;
+  }
   return {
     lexer: automatorLexer,
     parser: new AutomatorParser(),
-    defaultRule: "script"
+    defaultRule: "script",
+    tokenMap
   };
 }());
 
-const BaseVisitor = automatorGrammar.parser.getBaseCstVisitorConstructorWithDefaults();
+const BaseVisitor = AutomatorGrammar.parser.getBaseCstVisitorConstructorWithDefaults();
 
 class ValidationVisitor extends BaseVisitor {
   constructor() {
@@ -488,7 +484,7 @@ class ValidationVisitor extends BaseVisitor {
       if (s.children.NumberLiteral) {
         const tsNumber = parseFloat(s.children.NumberLiteral[0].image);
         if (!TimeStudy(tsNumber)) {
-          this.addError(s, `Invalid time study identifier ${tsNumber}`);
+          this.addError(s.children.NumberLiteral[0], `Invalid time study identifier ${tsNumber}`);
         }
       }
     }
@@ -592,57 +588,12 @@ function postProcessLexerErrors(errors, input) {
     err.image = input.substr(err.offset, err.length);
     err.startOffset = err.offset;
     err.endOffset = err.offset + err.length;
+    err.startLine = err.line;
+    err.startColumn = err.column;
     err.$combinedErrors = [
       `Unexpected characters "${err.image}"`
     ];
   }
-}
-
-function parseAutomatorScript(input) {
-  const t0 = Date.now();
-  const lexResult = automatorGrammar.lexer.tokenize(input);
-  const t1 = Date.now();
-  const tokens = lexResult.tokens;
-  console.log(tokens);
-  postProcessTokens(tokens);
-  postProcessLexerErrors(lexResult.errors, input);
-  automatorGrammar.parser.input = tokens;
-  const t2 = Date.now();
-  const parseResult = automatorGrammar.parser.script();
-  const t3 = Date.now();
-  const check = new ValidationVisitor();
-  check.visit(parseResult);
-  const t4 = Date.now();
-  const outputTokens = createOutputTokenArray(input, tokens, lexResult.errors);
-  const t5 = Date.now();
-  console.log(automatorGrammar.parser.errors);
-  for (const parseError of automatorGrammar.parser.errors) {
-    let message = parseError.message;
-    if (parseError.name === "NoViableAltException") {
-      message = `Unexpected input ${parseError.token.image}`;
-      check.addError(parseError.token, message);
-    } else if (parseError.name === "MismatchedTokenException") {
-      if (parseError.token.tokenType.name === "EOF" || parseError.token.tokenType.name === "EOL") {
-        check.addError(parseError.previousToken, message);
-      } else {
-        check.addError(parseError.token, message);
-      }
-    } else if (parseError.name === "EarlyExitException") {
-      message = "Unexpected end of command";
-      check.addError(parseError.previousToken, message);
-    } else if (parseError.token.tokenType.name === "EOL" && parseError.previousToken &&
-      parseError.previousToken.image && parseError.previousToken.image.length > 0) {
-      // If the error occured on EOL, it's nicer to add the message to whatever the last
-      // token was, if possible
-      check.addError(parseError.previousToken, message);
-    } else {
-      check.addError(parseError.token, message);
-    }
-  }
-  const t6 = Date.now();
-  console.log(`lex time = ${t1 - t0}, post process tokens = ${t2 - t1}, parse time = ${t3 - t2} ` +
-    `validation visit time = ${t4 - t3}, outputTokens time = ${t5 - t4}, parse error time = ${t6-t5}`);
-  return outputTokens;
 }
 
 function createOutputTokenArray(input, tokens, lexErrors) {
@@ -671,6 +622,64 @@ function createOutputTokenArray(input, tokens, lexErrors) {
   return outputTokens;
 }
 
+function parseAutomatorScript(input) {
+  const t0 = Date.now();
+  const lexResult = AutomatorGrammar.lexer.tokenize(input);
+  const t1 = Date.now();
+  const tokens = lexResult.tokens;
+  console.log(tokens);
+  postProcessTokens(tokens);
+  postProcessLexerErrors(lexResult.errors, input);
+  AutomatorGrammar.parser.input = tokens;
+  const t2 = Date.now();
+  const parseResult = AutomatorGrammar.parser.script();
+  const t3 = Date.now();
+  const check = new ValidationVisitor();
+  check.visit(parseResult);
+  const t4 = Date.now();
+  const outputTokens = createOutputTokenArray(input, tokens, lexResult.errors);
+  const t5 = Date.now();
+  console.log(AutomatorGrammar.parser.errors);
+  for (const parseError of AutomatorGrammar.parser.errors) {
+    let message = parseError.message;
+    // Deal with literal EOL in error message:
+    message = message.replace(/'\n\s*'/ui, "End of line");
+    if (parseError.name === "NoViableAltException") {
+      if (parseError.token.tokenType.name === "EOF" || parseError.token.tokenType.name === "EOL") {
+        check.addError(parseError.previousToken, message);
+      } else {
+        message = `Unexpected input ${parseError.token.image}`;
+        check.addError(parseError.token, message);
+      }
+    } else if (parseError.name === "MismatchedTokenException") {
+      let targetToken = parseError.token;
+      if (parseError.token.tokenType.name === "EOF" || parseError.token.tokenType.name === "EOL") {
+        // In some cases, both objects can point at EOF
+        if (parseError.previousToken.tokenType.name === "EOF") {
+          targetToken = outputTokens[outputTokens.length - 1];
+        } else {
+          targetToken = parseError.previousToken;
+        }
+      }
+      check.addError(targetToken, message);
+    } else if (parseError.name === "EarlyExitException") {
+      message = "Unexpected end of command";
+      check.addError(parseError.previousToken, message);
+    } else if (parseError.token.tokenType.name === "EOL" && parseError.previousToken &&
+      parseError.previousToken.image && parseError.previousToken.image.length > 0) {
+      // If the error occured on EOL, it's nicer to add the message to whatever the last
+      // token was, if possible
+      check.addError(parseError.previousToken, message);
+    } else {
+      check.addError(parseError.token, message);
+    }
+  }
+  const t6 = Date.now();
+  console.log(`lex time = ${t1 - t0}, post process tokens = ${t2 - t1}, parse time = ${t3 - t2} ` +
+    `validation visit time = ${t4 - t3}, outputTokens time = ${t5 - t4}, parse error time = ${t6-t5}`);
+  return outputTokens;
+}
+
 /*
 const input = `~ ~ ~
 pause
@@ -680,10 +689,10 @@ $(document).ready(() => {
   for (let repeat = 0; repeat < 2; ++repeat) {
 
 });
-if (automatorGrammar.parser.errors.length > 0) {
+if (AutomatorGrammar.parser.errors.length > 0) {
   throw Error(
     "Sad sad panda, parsing errors detected!\n" +
-    automatorGrammar.parser.errors[0].message
+    AutomatorGrammar.parser.errors[0].message
   )
 }
 */

@@ -35,6 +35,7 @@ GameDatabase.celestials.effarig = {
       label: "Eternity",
       description: "Eternitied stat generates infinitied stat\n" +
         "You have unlocked The Enslaved Ones\n" +
+        "Free tickspeed upgrade softcap is 100,000 larger\n" +
         "IP mults are no longer limited in Effarig Reality"
     },
     reality: {

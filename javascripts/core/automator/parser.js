@@ -1,131 +1,151 @@
-/**
- * @type {TokenTester[][]}
- */
-const AutomatorGrammarX = (function() {
-  class TokenTester {
-    /**
-     * @param {AutomatorToken} token
-     * @return {string}
-     */
-    test(token) { return false; }
-  }
-  class KeywordTokenTester extends TokenTester {
-    constructor(keyword) {
-      super();
-      this._keyword = keyword;
-    }
+"use strict";
 
-    test(token) {
-      return token.type === AutomatorTokenType.KEYWORD &&
-        token.value.toLowerCase() === this._keyword.toLowerCase();
-    }
-  }
-  const keyword = keyword => new KeywordTokenTester(keyword);
-  return [
-    [keyword(AutomatorKeyword.BUY), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.WAIT), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.IF), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.TT), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.ANTIMATTER), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.IP), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.EP), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.REPLICANTI), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.RG), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.UNLOCK), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.START), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.CHANGE), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.TOGGLE), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.RESPEC), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.ETERNITY), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.STOP), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.NOTIFY), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.NUMBER), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.TREE), keyword(AutomatorKeyword.STUDY)],
-    [keyword(AutomatorKeyword.GOTO), keyword(AutomatorKeyword.STUDY)],
-  ];
-})();
+const AutomatorGrammar = (function() {
+  const Parser = chevrotain.Parser;
+  const T = AutomatorLexer.tokenMap;
 
-const AutomatorLineType = {
-  CODE: 0,
-  COMMENT: 1,
-  ERROR: 2,
-  DECLARATION: 3
-};
+  // ----------------- parser -----------------
+  class AutomatorParser extends Parser {
+    constructor() {
+      super(AutomatorLexer.tokens, {
+        recoveryEnabled: true,
+        outputCst: true,
+      });
 
-class AutomatorLine {
-  constructor(type, tokens, codeLine) {
-    this.type = type;
-    this.tokens = tokens;
-    this.codeLine = codeLine;
-  }
+      // eslint-disable-next-line consistent-this
+      const $ = this;
 
-  viewModel() {
-    return {
-      type: this.type,
-      codeLine : this.codeLine
-    };
-  }
-}
+      $.RULE("script", () => $.SUBRULE($.block));
 
-class AutomatorParser {
-  /**
-   * @param {AutomatorToken[]} tokens
-   */
-  constructor(tokens) {
-    this._tokens = tokens;
-    this._position = 0;
-    this._codeLines = 0;
-    this._length = tokens.length;
-  }
+      $.RULE("block", () => $.MANY_SEP({
+        SEP: T.EOL,
+        DEF: () => $.SUBRULE($.command),
+      }));
 
-  /**
-   * @return {AutomatorLine|undefined}
-   */
-  nextLine() {
-    if (this._position >= this._length) return undefined;
-    const tokens = [];
-    let token;
-    do {
-      token = this._tokens[this._position++];
-      tokens.push(token);
-    }
-    while (token.type !== AutomatorTokenType.LINE_END && this._position < this._length);
-    if (tokens.every(t => t.type !== AutomatorTokenType.ERROR)) {
-      const meaningfulTokens = tokens.filter(t =>
-        t.type !== AutomatorTokenType.WHITESPACE &&
-        t.type !== AutomatorTokenType.LINE_END &&
-        t.type !== AutomatorTokenType.COMMENT
-      );
-      if (meaningfulTokens.length > 0) {
-        this.validate(meaningfulTokens, this._codeLines + 1);
+      // This is a bit ugly looking. Chevrotain uses Function.toString() to do crazy
+      // optimizations. That clashes with our desire to build our list of commands dynamically.
+      // We are creating a function body like this one:
+      //      $.RULE("command", () => {
+      //          $.OR(
+      //            $.c1 || ($.c1 = [
+      //              { ALT: () => $.SUBRULE($.badCommand) },
+      //              { ALT: () => $.SUBRULE($.auto) },
+      //              { ALT: () => $.SUBRULE($.define) },
+      //              { ALT: () => $.SUBRULE($.ifBlock) },
+
+      const commandAlts = [
+        "$.SUBRULE($.badCommand)",
+        "$.CONSUME(chevrotain.EOF)",
+      ];
+
+      for (const cmd of AutomatorCommands) {
+        $.RULE(cmd.id, cmd.rule($));
+        commandAlts.push(`$.SUBRULE($.${cmd.id})`);
       }
+
+      const commandOr = window.Function("$", `
+        return () => $.OR($.c1 || ($.c1 = [
+          ${commandAlts.map(e => `{ ALT: () => ${e} },`).join("\n")}]));
+      `);
+
+      $.RULE("command", commandOr($));
+
+      $.RULE("badCommand", () => $.AT_LEAST_ONE(() => $.SUBRULE($.badCommandToken)),
+        { resyncEnabled: false, }
+      );
+
+      $.RULE("badCommandToken", () => $.OR([
+        { ALT: () => $.CONSUME(T.Identifier) },
+        { ALT: () => $.CONSUME(T.NumberLiteral) },
+        { ALT: () => $.CONSUME(T.ComparisonOperator) },
+      ]), { resyncEnabled: false, });
+
+      $.RULE("comparison", () => {
+        $.OR([
+          {
+            ALT: () => {
+              $.CONSUME(T.Currency);
+              $.CONSUME(T.ComparisonOperator);
+              $.SUBRULE($.compareValue);
+            }
+          },
+          {
+            ALT: () => {
+              $.SUBRULE1($.compareValue);
+              $.CONSUME1(T.ComparisonOperator);
+              $.CONSUME1(T.Currency);
+            }
+          },
+        ]);
+      });
+
+      $.RULE("compareValue", () => $.OR([
+        { ALT: () => $.CONSUME(T.NumberLiteral) },
+        { ALT: () => $.CONSUME(T.Identifier) },
+      ]));
+
+      $.RULE("duration", () => {
+        $.CONSUME(T.NumberLiteral);
+        $.CONSUME(T.TimeUnit);
+      });
+
+      $.RULE("eternityChallenge", () => $.OR([
+        {
+          ALT: () => {
+            $.CONSUME(T.EC);
+            $.CONSUME(T.NumberLiteral);
+          }
+        },
+        { ALT: () => $.CONSUME(T.ECLiteral) }
+      ]));
+
+      $.RULE("studyList", () => {
+        $.AT_LEAST_ONE(() => $.SUBRULE($.studyListEntry));
+        // Support the |3 export format for EC number
+        $.OPTION2(() => {
+          $.CONSUME(T.Pipe);
+          $.CONSUME1(T.NumberLiteral);
+        });
+      }, { resyncEnabled: false });
+
+      $.RULE("studyListEntry", () => {
+        $.OPTION(() => $.CONSUME(T.Ellipsis));
+        $.OR([
+          { ALT: () => $.CONSUME(T.NumberLiteral) },
+          { ALT: () => $.CONSUME(T.StudyPath) },
+        ]);
+        $.OPTION1(() => $.CONSUME(T.Comma));
+      });
+      // Very important to call this after all the rules have been setup.
+      // otherwise the parser may not work correctly as it will lack information
+      // derived from the self analysis.
+      $.performSelfAnalysis();
     }
-    return new AutomatorLine(AutomatorLineType.CODE, tokens, ++this._codeLines);
   }
 
-  /**
-   * @param {AutomatorToken[]} tokens
-   */
-  validate(tokens) {
-    const rules = this.testRules(AutomatorGrammar, tokens[0], 0);
-    if (rules.length === 0) {
-      tokens[0].error = "Unexpected";
-    }
-  }
+  const parser = new AutomatorParser();
 
-  testRules(rules, token, index) {
-    return rules.filter(rule => rule[index].test(token));
-  }
+  return {
+    parser,
+    // This field is filled in by automator-validate.js
+    validate: null,
+  };
+}());
 
-  /**
-   * @return {AutomatorLine[]}
-   */
-  remainingLines() {
-    const lines = [];
-    let line;
-    while ((line = this.nextLine()) !== undefined) {
-      lines.push(line);
-    }
-    return lines;
-  }
+
+/*
+const input = `~ ~ ~
+pause
+`;
+
+$(document).ready(() => {
+  for (let repeat = 0; repeat < 2; ++repeat) {
+
+});
+if (AutomatorGrammar.parser.errors.length > 0) {
+  throw Error(
+    "Sad sad panda, parsing errors detected!\n" +
+    AutomatorGrammar.parser.errors[0].message
+  )
 }
+*/

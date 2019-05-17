@@ -36,6 +36,13 @@ const AutomatorCommandStatus = Object.freeze({
   SAME_INSTRUCTION: 3,
 });
 
+const AutomatorVarTypes = {
+  NUMBER: { id: 0, name: "number" },
+  STUDIES: { id: 1, name: "studies" },
+  DURATION: { id: 2, name: "duration" },
+  UNKNOWN: { id: -1, name: "unknown" },
+};
+
 /**
  * Object that manages script execution.
  * From the perspective of the backend, scripts are uninterrupted sequences of commands.

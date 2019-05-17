@@ -23,6 +23,12 @@ Vue.component("automator-tab", {
         lineNumbers: true,
         theme: "liquibyte",
       });
+      AutomatorUI.editor.on("keyup", (editor, event) => {
+        if (editor.state.completionActive) return;
+        const key = event.key;
+        if (!/^[a-zA-Z0-9 \t]$/u.test(key)) return;
+        CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
+      });
     }
   },
   mounted() {

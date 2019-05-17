@@ -44,6 +44,17 @@
   flex-direction: row;
 }
 
+.CodeMirror-hint {
+  font-size: 1rem;
+  font-family: Typewriter;
+}
+
+.cm-s-liquibyte.CodeMirror {
+  font-size: 1.4rem;
+  font-family: Typewriter;
+	line-height: 1.6rem;
+}
+
 .l-automator-editor__line-numbers {
   flex-shrink: 0;
 }

@@ -1,317 +1,238 @@
-const AutomatorKeyword = {
-  BUY: "BUY",
-  STUDY: "STUDY",
-  STUDYUNTIL: "STUDYUNTIL",
-  STUDYPATH: "STUDYPATH",
-  STUDYIMPORT: "STUDYIMPORT",
-  TTIP: "TTIP",
-  TTEP: "TTEP",
-  TTAM: "TTAM",
-  TTMAX: "TTMAX",
-  TTGEN: "TTGEN",
-  WAIT: "WAIT",
-  TIME: "TIME",
-  IF: "IF",
-  RG: "RG",
-  MAX: "MAX",
-  TT: "TT",
-  ANTIMATTER: "ANTIMATTER",
-  IP: "IP",
-  EP: "EP",
-  REPLICANTI: "REPLICANTI",
-  UNLOCK: "UNLOCK",
-  START: "START",
-  EC: "EC",
-  DILATION: "DILATION",
-  CHANGE: "CHANGE",
-  IPAUTOBUYER: "IPAUTOBUYER",
-  EPAUTOBUYER: "EPAUTOBUYER",
-  TOGGLE: "TOGGLE",
-  ON: "ON",
-  OFF: "OFF",
-  D1: "D1",
-  D2: "D2",
-  D3: "D3",
-  D4: "D4",
-  D5: "D5",
-  D6: "D6",
-  D7: "D7",
-  D8: "D8",
-  TICKSPEED: "TICKSPEED",
-  DIMBOOST: "DIMBOOST",
-  GALAXY: "GALAXY",
-  INFINITY: "INFINITY",
-  SACRIFICE: "SACRIFICE",
-  ETERNITY: "ETERNITY",
-  RESPEC: "RESPEC",
-  STOP: "STOP",
-  NOTIFY: "NOTIFY",
-  STRING: "STRING",
-  NUMBER: "NUMBER",
-  PATH: "PATH",
-  TREE: "TREE",
-  ALL: "ALL",
-  NONE: "NONE",
-  NORMAL: "NORMAL",
-  ND: "ND",
-  ID: "ID",
-  TD: "TD",
-  ACTIVE: "ACTIVE",
-  PASSIVE: "PASSIVE",
-  IDLE: "IDLE",
-  GOTO: "GOTO",
-};
+// Note: chevrotain doesn't play well with unicode regex
+/* eslint-disable require-unicode-regexp */
+/* eslint-disable camelcase */
+"use strict";
 
-const AutomatorTokenType = {
-  COMMENT: "COMMENT",
-  LINE_END: "LINE_END",
-  WHITESPACE: "WHITESPACE",
-  OPERATOR: "OPERATOR",
-  KEYWORD: "KEYWORD",
-  IDENTIFIER: "IDENTIFIER",
-  NUMBER: "NUMBER",
-  ERROR: "ERROR",
-  LABEL: "LABEL"
-};
+const AutomatorLexer = ((() => {
+  const createToken = chevrotain.createToken;
+  const Lexer = chevrotain.Lexer;
 
-class AutomatorToken {
-  /**
-   * @param {string} type
-   * @param {string} value
-   * @param {number} position
-   * @param {string?} error
-   */
-  constructor(type, value, position, error) {
-    this.type = type;
-    this.value = value;
-    this.position = position;
-    this.error = error;
-  }
-}
+  const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
 
-class AutomatorLexer {
-  /**
-   * @param {string} program
-   */
-  constructor(program) {
-    this._program = program.replace("\r\n", "\n");
-    this._position = 0;
-    this._length = program.length;
-  }
-
-  /**
-   * @return {AutomatorToken|undefined}
-   */
-  nextToken() {
-    if (this._position === this._length) return undefined;
-    const char = this.currentChar;
-    if (this.isAlpha(char)) {
-      return this.lexIdentifierKeywordLabel();
-    }
-    if (this.isWhiteSpace(char)) {
-      return this.lexWhiteSpace();
-    }
-    if (this.isDigit(char)) {
-      return this.lexNumber();
-    }
-    let nextChar = this.nextChar;
-    if (char === "/" && nextChar === "/") {
-      return this.lexComment();
-    }
-    if (this.isLineEnd(char)) {
-      return this.makeToken(AutomatorTokenType.LINE_END, this._position + 1);
-    }
-    if (["!=", ">=", "<="].includes(char + nextChar)) {
-      if (!this.isLexemeSeparator(this.charAt(this._position + 2))) return this.lexError();
-      return this.makeToken(AutomatorTokenType.OPERATOR, this._position + 2);
-    }
-    if (["=", ">", "<"].includes(char)) {
-      if (!this.isLexemeSeparator(this.charAt(this._position + 1))) return this.lexError();
-      return this.makeToken(AutomatorTokenType.OPERATOR, this._position + 1);
-    }
-    return this.lexError();
-  }
-
-  lexIdentifierKeywordLabel() {
-    const end = this.takeWhile(this._position + 1, c => this.isAlphaNumeric(c));
-    const isLabel = this.charAt(end) === ":" && this.isLexemeSeparator(this.charAt(end + 1));
-    const lexeme = this._program.substring(this._position, end);
-    let keyword = AutomatorKeyword[lexeme];
-    if (keyword === undefined) {
-      const isLowerCase = lexeme === lexeme.toLowerCase();
-      if (isLowerCase) {
-        keyword = AutomatorKeyword[lexeme.toUpperCase()];
-      }
-    }
-    if (isLabel) {
-      if (keyword !== undefined) {
-        return this.lexError("Keywords cannot be used as labels");
-      }
-      return this.makeToken(AutomatorTokenType.LABEL, end + 1);
-    }
-    if (!this.isLexemeSeparator(this.charAt(end))) return this.lexError();
-    const type = keyword !== undefined ?
-      AutomatorTokenType.KEYWORD :
-      AutomatorTokenType.IDENTIFIER;
-    return this.makeToken(type, end);
-  }
-
-  /**
-   * @private
-   * @return {AutomatorToken}
-   */
-  lexNumber() {
-    let end = this.takeWhile(this._position + 1, c => this.isDigit(c));
-    if (this.charAt(end) === "e") {
-      end = this.takeWhile(end + 1, c => this.isDigit(c));
-    }
-    if (!this.isLexemeSeparator(this.charAt(end))) return this.lexError();
-    return this.makeToken(AutomatorTokenType.NUMBER, end);
-  }
-
-  /**
-   * @private
-   * @return {AutomatorToken}
-   */
-  lexWhiteSpace() {
-    const end = this.takeWhile(this._position + 1, c => this.isWhiteSpace(c));
-    return this.makeToken(AutomatorTokenType.WHITESPACE, end);
-  }
-
-  /**
-   * @private
-   * @return {AutomatorToken}
-   */
-  lexComment() {
-    const end = this.takeWhile(this._position + 2, c => !this.isLineEnd(c));
-    return this.makeToken(AutomatorTokenType.COMMENT, end);
-  }
-
-  /**
-   * @private
-   * @return {AutomatorToken}
-   */
-  lexError(errorMessage) {
-    const end = this.takeWhile(this._position + 1, c => !this.isWhiteSpace(c) && !this.isLineEnd(c));
-    return this.makeToken(AutomatorTokenType.ERROR, end, errorMessage || "Invalid token");
-  }
-
-  /**
-   * @private
-   * @param {number} start
-   * @param {function} predicate
-   */
-  takeWhile(start, predicate) {
-    let end = start;
-    while (end < this._length && predicate(this.charAt(end))) {
-      end++;
-    }
-    return end;
-  }
-
-  /**
-   * @private
-   * @param {string} type
-   * @param {number} endPosition
-   * @param {string?} error
-   * @return {AutomatorToken}
-   */
-  makeToken(type, endPosition, error) {
-    const token = new AutomatorToken(
-      type,
-      this._program.substring(this._position, endPosition),
-      this._position,
-      error
-    );
-    this._position = endPosition;
+  // Shorthand for creating tokens and adding them to a list
+  const tokenLists = {};
+  // eslint-disable-next-line max-params
+  const createInCategory = (category, name, pattern, props = {}) => {
+    const token = createToken({
+      name,
+      pattern,
+      categories: category,
+      longer_alt: Identifier,
+    });
+    const categoryName = Array.isArray(category) ? category[0].name : category.name;
+    if (tokenLists[categoryName] === undefined) tokenLists[categoryName] = [];
+    tokenLists[categoryName].push(token);
+    const patternWord = pattern.toString().match(/^\/([a-zA-Z0-9]*)\/[a-zA-Z]*$/ui);
+    if (patternWord && patternWord[1]) token.$autocomplete = patternWord[1];
+    Object.assign(token, props);
     return token;
+  };
+
+  const HSpace = createToken({
+    name: "HSpace",
+    pattern: /[ \t]+/,
+    group: Lexer.SKIPPED
+  });
+
+  const EOL = createToken({
+    name: "EOL",
+    line_breaks: true,
+    pattern: /[ \t\r]*\n\s*/,
+    label: "End of line",
+  });
+
+  const Comment = createToken({
+    name: "Comment",
+    pattern: /(#|\/\/)[^\n]*/,
+    group: Lexer.SKIPPED
+  });
+
+  const NumberLiteral = createToken({
+    name: "NumberLiteral",
+    pattern: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/,
+  });
+
+  const Identifier = createToken({
+    name: "Identifier",
+    pattern: /[a-zA-Z_][a-zA-Z_0-9]*/,
+  });
+
+  const ComparisonOperator = createToken({
+    name: "ComparisonOperator",
+    pattern: Lexer.NA,
+  });
+
+  const Currency = createCategory("Currency");
+  const PrestigeEvent = createCategory("PrestigeEvent");
+  const StudyPath = createCategory("StudyPath");
+  const TimeUnit = createCategory("TimeUnit");
+
+  createInCategory(ComparisonOperator, "OpGTE", />=/, {
+    $autocomplete: ">=",
+    $compare: (a, b) => Decimal.gte(a, b),
+  });
+  createInCategory(ComparisonOperator, "OpLTE", /<=/, {
+    $autocomplete: "<=",
+    $compare: (a, b) => Decimal.lte(a, b),
+  });
+  createInCategory(ComparisonOperator, "OpGT", />/, {
+    $autocomplete: ">",
+    $compare: (a, b) => Decimal.gt(a, b),
+  });
+  createInCategory(ComparisonOperator, "OpLT", /</, {
+    $autocomplete: "<",
+    $compare: (a, b) => Decimal.lt(a, b),
+  });
+
+  createInCategory(Currency, "EP", /ep/i, { $getter: () => player.eternityPoints });
+  createInCategory(Currency, "IP", /ip/i, { $getter: () => player.infinityPoints });
+  createInCategory(Currency, "AM", /am/i, { $getter: () => player.money });
+  createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
+  createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
+  createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
+  createInCategory(Currency, "Rep", /rep(licanti)?/i, {
+    $autocomplete: "rep",
+    $getter: () => player.replicanti.amount,
+  });
+  createInCategory(Currency, "TT", /(tt|time theorems?)/i, {
+    $autocomplete: "tt",
+    $getter: () => player.timestudy.theorem,
+  });
+
+  createInCategory([PrestigeEvent, StudyPath], "Infinity", /infinity/i, {
+    $studyPath: TimeStudyPath.INFINITY_DIM,
+    $autobuyer: Autobuyer.infinity,
+    $autobuyerDurationMode: AutoCrunchMode.TIME,
+  });
+  createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
+    $autobuyer: Autobuyer.eternity,
+    $autobuyerDurationMode: AutoEternityMode.TIME,
+  });
+  createInCategory(PrestigeEvent, "Reality", /reality/i, {
+    $autobuyer: Autobuyer.reality,
+  });
+
+  createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TimeStudyPath.IDLE });
+  createInCategory(StudyPath, "Passive", /passive/i, { $studyPath: TimeStudyPath.PASSIVE });
+  createInCategory(StudyPath, "Active", /active/i, { $studyPath: TimeStudyPath.ACTIVE });
+  createInCategory(StudyPath, "Normal", /normal/i, { $studyPath: TimeStudyPath.NORMAL_DIM });
+  createInCategory(StudyPath, "Time", /time/i, { $studyPath: TimeStudyPath.TIME_DIM });
+
+  createInCategory(TimeUnit, "Milliseconds", /ms/i, {
+    $autocomplete: "ms",
+    $scale: 1,
+  });
+  createInCategory(TimeUnit, "Seconds", /s(ec(onds?)?)?/i, {
+    $autocomplete: "sec",
+    $scale: 1000,
+  });
+  createInCategory(TimeUnit, "Minutes", /m(in(utes?)?)?/i, {
+    $autocomplete: "min",
+    $scale: 60 * 1000,
+  });
+  createInCategory(TimeUnit, "Hours", /h(ours?)?/i, {
+    $autocomplete: "hours",
+    $scale: 3600 * 1000,
+  });
+
+  const Keyword = createToken({
+    name: "Keyword",
+    pattern: Lexer.NA,
+    longer_alt: Identifier,
+  });
+
+  const keywordTokens = [];
+  const createKeyword = (name, pattern) => {
+    const token = createToken({
+      name,
+      pattern,
+      categories: Keyword,
+      longer_alt: Identifier,
+    });
+    token.$autocomplete = name.toLocaleLowerCase();
+    keywordTokens.push(token);
+    return token;
+  };
+
+  createKeyword("Auto", /auto/i);
+  createKeyword("Buy", /buy/i);
+  createKeyword("Define", /define/i);
+  createKeyword("If", /if/i);
+  createKeyword("Load", /load/i);
+  createKeyword("Max", /max/i);
+  createKeyword("Nowait", /nowait/i);
+  createKeyword("Off", /off/i);
+  createKeyword("On", /on/i);
+  createKeyword("Pause", /pause/i);
+  // Presets are a little special, because they can be named anything (like ec12 or wait)
+  // So, we consume the label at the same time as we consume the preset. In order to report
+  // errors, we also match just the word preset. And, we have to not match comments.
+  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\s#/])*)?/i);
+  createKeyword("Respec", /respec/i);
+  createKeyword("Restart", /restart/i);
+  createKeyword("Start", /start/i);
+  createKeyword("Studies", /studies/i);
+  createKeyword("Unlock", /unlock/i);
+  createKeyword("Until", /until/i);
+  createKeyword("Wait", /wait/i);
+  createKeyword("While", /while/i);
+
+  createKeyword("Dilation", /dilation/i);
+  createKeyword("EC", /ec/i);
+  // We allow ECLiteral to consume lots of digits because that makes error reporting more
+  // clear (it's nice to say ec123 is an invalid ec)
+  const ECLiteral = createToken({
+    name: "ECLiteral",
+    pattern: /ec[1-9][0-9]*/i,
+    longer_alt: Identifier,
+  });
+
+  const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*\{/ });
+  const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*\}/ });
+  const Comma = createToken({ name: "Comma", pattern: /,/ });
+  const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
+  const Ellipsis = createToken({ name: "Ellipsis", pattern: /\.\.\./, label: "..." });
+  const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
+
+  // The order here is the order the lexer looks for tokens in.
+  const automatorTokens = [
+    HSpace, Comment, EOL,
+    LCurly, RCurly, Comma, Ellipsis, EqualSign, Pipe,
+    ComparisonOperator, ...tokenLists.ComparisonOperator,
+    NumberLiteral,
+    ECLiteral,
+    Keyword, ...keywordTokens,
+    PrestigeEvent, ...tokenLists.PrestigeEvent,
+    StudyPath, ...tokenLists.StudyPath,
+    Currency, ...tokenLists.Currency,
+    TimeUnit, ...tokenLists.TimeUnit,
+    Identifier,
+  ];
+
+  // Labels only affect error messages and Diagrams.
+  LCurly.LABEL = "'{'";
+  RCurly.LABEL = "'}'";
+  NumberLiteral.LABEL = "Number";
+  Comma.LABEL = "❟";
+
+  const lexer = new Lexer(automatorTokens, {
+    positionTracking: "full",
+    ensureOptimizations: true
+  });
+
+  // The lexer uses an ID system that's separate from indices into the token array
+  const tokenIds = [];
+  for (const token of lexer.lexerDefinition) {
+    tokenIds[token.tokenTypeIdx] = token;
   }
 
-  /**
-   * @private
-   * @return {string}
-   */
-  get currentChar() {
-    return this.charAt(this._position);
-  }
+  // We use this while building up the grammar
+  const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
 
-  /**
-   * @private
-   * @return {string}
-   */
-  get nextChar() {
-    return this.charAt(this._position + 1);
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isLexemeSeparator(char) {
-    return this.isWhiteSpace(char) || this.isLineEnd(char);
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isWhiteSpace(char) {
-    return char === " " || char === "\t";
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isLineEnd(char) {
-    return char === "\n" || char === "";
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isAlphaNumeric(char) {
-    return this.isAlpha(char) || this.isDigit(char);
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isDigit(char) {
-    return char >= "0" && char <= "9";
-  }
-
-  /**
-   * @private
-   * @param {string} char
-   * @return {boolean}
-   */
-  isAlpha(char) {
-    return (char >= "a" && char <= "z") ||
-      (char >= "A" && char <= "Z") ||
-      char === "_" || char === "$";
-  }
-
-  charAt(position) {
-    return this._program.charAt(position);
-  }
-
-  /**
-   * @return {AutomatorToken[]}
-   */
-  remainingTokens() {
-    const tokens = [];
-    let token;
-    while ((token = this.nextToken()) !== undefined) {
-      tokens.push(token);
-    }
-    return tokens;
-  }
-}
+  return {
+    lexer,
+    tokens: automatorTokens,
+    tokenIds,
+    tokenMap,
+  };
+})());

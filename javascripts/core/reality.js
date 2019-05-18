@@ -116,6 +116,8 @@ function requestManualReality() {
     if (Enslaved.lockedInBoostRatio > 1) {
       Enslaved.lockedInGlyphLevel = level;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      Enslaved.lockedInShardsGained = Effarig.shardsGained;
+      Enslaved.lockedInExpGained = Ra.gainedExp(level.actualLevel, auto);
       manualReality();
       return;
     }
@@ -184,6 +186,8 @@ function autoReality() {
     if (Enslaved.lockedInBoostRatio > 1) {
       Enslaved.lockedInGlyphLevel = gainedLevel;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      Enslaved.lockedInShardsGained = Effarig.shardsGained;
+      Enslaved.lockedInExpGained = Ra.gainedExp(gainedLevel.actualLevel, auto);
       completeReality(false, false, true);
       return;
     }
@@ -203,6 +207,12 @@ function boostedRealityRewards() {
   }
   player.realities += ratio;
   player.reality.pp += ratio;
+  if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
+    player.celestials.effarig.relicShards += Enslaved.lockedInShardsGained * ratio;
+  }
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+    Ra.giveExp(Enslaved.lockedInExpGained * ratio);
+  }
   player.celestials.enslaved.storedReal = 0;
   Enslaved.lockedInBoostRatio = 1;
   Enslaved.boostReality = false;
@@ -215,13 +225,13 @@ function completeReality(force, reset, auto = false) {
       boostedRealityRewards();
     }
     if (player.thisReality < player.bestReality) {
-      player.bestReality = player.thisReality
+      player.bestReality = player.thisReality;
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
+    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
+      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto));
     }
   }
 

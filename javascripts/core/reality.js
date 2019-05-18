@@ -117,7 +117,7 @@ function requestManualReality() {
       Enslaved.lockedInGlyphLevel = level;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
       Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      Enslaved.lockedInExpGained = Ra.gainedExp(level.actualLevel, auto);
+      Enslaved.lockedInExpGained = Ra.gainedExp(level.actualLevel, false);
       manualReality();
       return;
     }
@@ -187,7 +187,7 @@ function autoReality() {
       Enslaved.lockedInGlyphLevel = gainedLevel;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
       Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      Enslaved.lockedInExpGained = Ra.gainedExp(gainedLevel.actualLevel, auto);
+      Enslaved.lockedInExpGained = Ra.gainedExp(gainedLevel.actualLevel, true);
       completeReality(false, false, true);
       return;
     }

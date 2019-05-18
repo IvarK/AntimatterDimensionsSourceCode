@@ -5609,6 +5609,15 @@ kbd {
   font-family: Typewriter;
 }
 
+.o-enslaved-shop-button-available {
+  background: aquamarine;
+  cursor: pointer;
+}
+
+.o-enslaved-shop-button-bought {
+  background: #16c55e;
+}
+
 .o-enslaved-run-button {
   width: 35rem;
   padding: 2rem;

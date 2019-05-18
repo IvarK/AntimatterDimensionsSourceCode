@@ -195,7 +195,7 @@ const FreeTickspeed = {
   
   get softcap() {
     let softcap = FreeTickspeed.BASE_SOFTCAP;
-    if (EffarigUnlock.eternity.isUnlocked) {
+    if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
       softcap += 100000;
     }
     return softcap;

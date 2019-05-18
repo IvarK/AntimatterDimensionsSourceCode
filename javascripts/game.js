@@ -457,7 +457,6 @@ function randomStuffThatShouldBeRefactored() {
   ttMaxTimer++;
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
-  EternityChallenge.autoCompleteTick()
   if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
 
   if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints;
@@ -730,7 +729,9 @@ function gameLoop(diff, options = {}) {
 
     tryUnlockInfinityChallenges();
 
-    replicantiLoop(diff)
+    EternityChallenge.autoCompleteTick();
+
+    replicantiLoop(diff);
 
     if (player.infMultBuyer) {
       InfinityUpgrade.ipMult.autobuyerTick();

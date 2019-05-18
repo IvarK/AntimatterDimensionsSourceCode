@@ -16,7 +16,7 @@ GameDatabase.infinity.upgrades = (function() {
         effect: () => 1 +
           Math.log10(Math.log10(Time.totalTimePlayed.totalMilliseconds)) *
           Math.pow(player.celestials.ra.level, 0.5) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim18mult: {
@@ -29,7 +29,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "First and Eighth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(player.celestials.ra.level) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim27mult: {
@@ -42,7 +42,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "Second and Seventh Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(player.celestials.ra.level) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim36mult: {
@@ -55,7 +55,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "Third and Sixth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(player.celestials.ra.level) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     dim45mult: {
@@ -68,7 +68,7 @@ GameDatabase.infinity.upgrades = (function() {
         description: "Fourth and Fifth Dimensions gain a power effect based on infinitied stat and Teresa level",
         effect: () => 1 + Math.log10(Math.max(1, player.infinitied.pLog10())) *
         Math.sqrt(player.celestials.ra.level) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     resetBoost: {
@@ -79,7 +79,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Decrease Dimension Boost requirement based on Teresa level",
         effect: () => 1 / (1 + Math.sqrt(player.celestials.ra.level) / 10),
-        formatEffect: value => `${shorten(value, 3, 3)}x`
+        formatEffect: value => `${shorten(value, 4, 4)}x`
       }
     },
     buy10Mult: {
@@ -92,7 +92,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Multiplier for buying 10 Dimensions gains a power effect based on Teresa level",
         effect: () => 1 + player.celestials.ra.level / 200,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 3, 3)
       }
     },
     galaxyBoost: {
@@ -103,7 +103,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Galaxies are more effective based on Teresa level",
         effect: () => 2 + Math.sqrt(player.celestials.ra.level) / 100,
-        formatEffect: value => `+${Math.round((value - 1) * 100)}%`
+        formatEffect: value => `+${((value - 1) * 100).toFixed(2)}%`
       }
     },
     thisInfinityTimeMult: {
@@ -117,7 +117,7 @@ GameDatabase.infinity.upgrades = (function() {
         effect: () => 1 +
           Math.log10(Math.log10(Time.thisInfinity.totalMilliseconds + 100)) *
           Math.sqrt(player.celestials.ra.level) / 150,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 4, 4)
       }
     },
     unspentIPMult: {
@@ -142,7 +142,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Dimension Boost multiplier gains a power effect based on Teresa level",
         effect: () => 1 + player.celestials.ra.level / 200,
-        formatEffect: value => formatPow(value, 2, 2)
+        formatEffect: value => formatPow(value, 3, 3)
       }
     },
     ipGen: {

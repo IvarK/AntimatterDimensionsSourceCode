@@ -42,16 +42,15 @@ function shortenPostBreak(value, places, placesUnder1000) {
 }
 
 function formatX(value, places, placesUnder1000) {
-  return shorten(value, places, placesUnder1000) + "x";
+  return `${shorten(value, places, placesUnder1000)}x`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return "^" + shorten(value, places, placesUnder1000);
+  return `^${shorten(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  const placesOOM = Math.pow(10, places);
-  return Math.round(value * 100 * placesOOM) / placesOOM + "%";
+  return `${(value * 100).toFixed(places)}%`;
 }
 
 function timeDisplay(ms) {
@@ -66,7 +65,7 @@ function timeDisplayShort(ms) {
   return TimeSpan.fromMilliseconds(ms).toStringShort();
 }
 
-const commaRegexp = /\B(?=(\d{3})+(?!\d))/g;
+const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
 function formatWithCommas(value) {
   return value.toString().replace(commaRegexp, ",");
 }

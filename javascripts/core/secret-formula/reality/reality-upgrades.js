@@ -91,7 +91,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 9,
       cost: 15,
-      requirement: "Reality with only a single glyph with a level 3 or higher equipped.",
+      requirement: "Reality using only a single level 3+ glyph.",
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",

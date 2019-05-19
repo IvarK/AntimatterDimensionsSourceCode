@@ -331,7 +331,7 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigblackhole",
     glyphTypes: ["effarig"],
-    singleDesc: "Time modifier raised to the power of ^{value}",
+    singleDesc: "Game speed ^{value}",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 75,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
@@ -352,8 +352,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigachievement",
     glyphTypes: ["effarig"],
-    singleDesc: "Raise all achievement related effects to a power of ^{value}",
-    genericDesc: "Achievement effect increase",
+    singleDesc: "All achievement related effects ^{value}",
+    genericDesc: "Achievement effects power",
     effect: (level, strength) => 1 + Math.pow(level, 0.4) * Math.pow(strength, 0.6) / 50,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
@@ -376,7 +376,8 @@ GameDatabase.reality.glyphEffects = [
   }, {
     id: "effarigantimatter",
     glyphTypes: ["effarig"],
-    singleDesc: "Power to antimatter production exponent of ^{value}",
+    singleDesc: "Antimatter production: 10^x -> 10^(x^{value})",
+    genericDesc: "Antimatter production exponent",
     effect: (level, strength) => 1 + Math.pow(level, 0.25) * Math.pow(strength, 0.4) / 5000,
     formatEffect: x => shorten(x, 4, 4),
     combine: GlyphCombiner.multiply,

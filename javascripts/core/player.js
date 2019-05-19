@@ -432,7 +432,7 @@ const Player = {
 
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
-  },z
+  },
 };
 
 function guardFromNaNValues(obj) {

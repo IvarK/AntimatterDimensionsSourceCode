@@ -132,7 +132,7 @@ GameDatabase.reality.upgrades = (function() {
       cost: 50,
       requirement: () => `${shorten("1e4000")} EP without TD5-8`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
-        Array.range(5, 9).every(TimeDimension(i).amount.equals(0)),
+        Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "More Eternity autobuyer options, EP multiplier and Time Dimension autobuyers"
     },

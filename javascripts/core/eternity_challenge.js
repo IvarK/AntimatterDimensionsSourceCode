@@ -203,7 +203,7 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
 };
 
 EternityChallenge.autoCompleteNext = function() {
-  const next = EternityChallenge.all.find(ec => !ec.isFullyCompleted);
+  const next = EternityChallenge.all.compact().find(ec => !ec.isFullyCompleted);
   if (next === undefined) return false;
   next.addCompletion();
   return true;

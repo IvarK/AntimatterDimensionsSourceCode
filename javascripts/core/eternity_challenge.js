@@ -203,19 +203,16 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
 };
 
 EternityChallenge.autoCompleteNext = function() {
-  for (let i = 1; i <= 12; i++) {
-    const c = EternityChallenge(i);
-    if (!c.isFullyCompleted) {
-      c.addCompletion();
-      return true;
-    }
-  }
-  return false;
+  const next = EternityChallenge.all.find(ec => !ec.isFullyCompleted);
+  if (next === undefined) return false;
+  next.addCompletion();
+  return true;
 };
 
 EternityChallenge.autoCompleteTick = function() {
+  if (!player.autoEcIsOn) return;
   const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
-  if (!isPostEc || !player.autoEcIsOn) return;
+  if (!isPostEc) return;
   const threshold = this.currentAutoCompleteThreshold();
   while (player.reality.lastAutoEC - threshold > 0 && this.autoCompleteNext()) {
     player.reality.lastAutoEC -= threshold;

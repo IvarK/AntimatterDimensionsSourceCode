@@ -5609,12 +5609,12 @@ kbd {
   font-family: Typewriter;
 }
 
-.o-enslaved-shop-button-available {
+.o-enslaved-shop-button--available {
   background: aquamarine;
   cursor: pointer;
 }
 
-.o-enslaved-shop-button-bought {
+.o-enslaved-shop-button--bought {
   background: #16c55e;
 }
 
@@ -5849,7 +5849,7 @@ kbd {
   border-radius: .5rem;
 }
 
-.o-matter-dimension-button-available {
+.o-matter-dimension-button--available {
   background: aquamarine;
   cursor: pointer;
 }
@@ -5870,12 +5870,12 @@ kbd {
   font-family: Typewriter;
 }
 
-.o-laitela-shop-button-available {
+.o-laitela-shop-button--available {
   background: aquamarine;
   cursor: pointer;
 }
 
-.o-laitela-shop-button-bought {
+.o-laitela-shop-button--bought {
   background: #16c55e;
 }
 

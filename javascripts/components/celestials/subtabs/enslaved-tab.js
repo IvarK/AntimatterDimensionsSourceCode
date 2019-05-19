@@ -82,8 +82,8 @@ Vue.component("enslaved-tab", {
     },
     unlockClassObject(info) {
       return {
-        "o-enslaved-shop-button-bought": this.hasUnlock(info), 
-        "o-enslaved-shop-button-available": this.canBuyUnlock(info)
+        "o-enslaved-shop-button--bought": this.hasUnlock(info), 
+        "o-enslaved-shop-button--available": this.canBuyUnlock(info)
       };
     }
   },

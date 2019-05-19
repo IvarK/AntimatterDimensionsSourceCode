@@ -125,6 +125,12 @@ class NormalChallengeState extends GameMechanicState {
       setChallengeTime(this.id - 2, player.thisInfinityTime);
     }
   }
+
+  exit() {
+    player.challenge.normal.current = 0;
+    secondSoftReset();
+    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
+  }
 }
 
 NormalChallengeState.all = mapGameData(
@@ -241,6 +247,12 @@ class InfinityChallengeState extends GameMechanicState {
     if (player.challenge.infinity.bestTimes[this.id - 1] > player.thisInfinityTime) {
       setInfChallengeTime(this.id - 1, player.thisInfinityTime);
     }
+  }
+
+  exit() {
+    player.challenge.infinity.current = 0;
+    secondSoftReset();
+    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
   }
 }
 

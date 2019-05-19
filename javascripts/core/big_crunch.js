@@ -36,10 +36,9 @@ function bigCrunchReset(disableAnimation = false) {
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
-    failChallenge();
-    return;
-  }
+
+  if (EternityChallenge(4).tryFail()) return;
+
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
     Autobuyer.tryUnlockAny();

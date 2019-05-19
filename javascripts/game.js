@@ -317,38 +317,6 @@ function gainedInfinities() {
     return infGain;
 }
 
-function failChallenge() {
-    Modal.message.show("You failed the challenge, you have now exited it.");
-    // If we're in a normal challenge or IC, don't just exit it.
-    while (EternityChallenge.isRunning) {
-      exitChallenge();
-    }
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
-}
-
-function exitChallenge() {
-  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
-    secondSoftReset();
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
-  } else if (EternityChallenge.isRunning) {
-    player.challenge.eternity.current = 0;
-    player.eternityChallGoal = Decimal.MAX_NUMBER;
-    eternity(true);
-  }
-}
-
-function unlockEChall(idx, auto) {
-  if (player.challenge.eternity.unlocked === 0) {
-    player.challenge.eternity.unlocked = idx;
-    if (!auto) {
-      Tab.challenges.eternity.show();
-    }
-    if (idx !== 12 && idx !== 13) player.etercreq = idx;
-  }
-}
-
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -654,9 +622,7 @@ function gameLoop(diff, options = {}) {
     player.thisReality += diff;
     player.thisRealityRealTime += realDiff;
 
-    if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
-      failChallenge();
-    }
+    EternityChallenge(12).tryFail();
 
     GameCache.achievementPower.invalidate();
 

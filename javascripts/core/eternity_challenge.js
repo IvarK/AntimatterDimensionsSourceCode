@@ -146,6 +146,30 @@ class EternityChallengeState extends GameMechanicState {
     return this.config.restriction === undefined ||
       this.config.checkRestriction(this.config.restriction(this.completions));
   }
+
+  exit() {
+    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
+    if (nestedChallenge !== undefined) {
+      nestedChallenge.exit();
+    }
+    player.challenge.eternity.current = 0;
+    player.eternityChallGoal = Decimal.MAX_NUMBER;
+    eternity(true);
+  }
+
+  fail() {
+    this.exit();
+    Modal.message.show("You failed the challenge, you have now exited it.");
+    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
+  }
+
+  tryFail() {
+    if (this.isRunning && !this.isWithinRestriction) {
+      this.fail();
+      return true;
+    }
+    return false;
+  }
 }
 
 EternityChallengeState.all = mapGameData(

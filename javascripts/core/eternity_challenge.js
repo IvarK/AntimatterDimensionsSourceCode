@@ -200,25 +200,22 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
   );
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect()
   return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
-}
+};
 
 EternityChallenge.autoCompleteNext = function() {
-  for (let i=1; i<=12; i++) {
-    let c = EternityChallenge(i)
-    if (!c.isFullyCompleted) {
-      c.addCompletion()
-      return true
-    }
-  }
-  return false
-}
+  const next = EternityChallenge.all.find(ec => !ec.isFullyCompleted);
+  if (next === undefined) return false;
+  next.addCompletion();
+  return true;
+};
 
-EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
-  if (!isPostEc || !player.autoEcIsOn) return
-  let threshold = this.currentAutoCompleteThreshold()
-  while (player.reality.lastAutoEC - threshold > 0) {
-    this.autoCompleteNext()
-    player.reality.lastAutoEC -= threshold
+EternityChallenge.autoCompleteTick = function() {
+  if (!player.autoEcIsOn) return;
+  const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
+  if (!isPostEc) return;
+  const threshold = this.currentAutoCompleteThreshold();
+  while (player.reality.lastAutoEC - threshold > 0 && this.autoCompleteNext()) {
+    player.reality.lastAutoEC -= threshold;
   }
-}
+  player.reality.lastAutoEC %= threshold;
+};

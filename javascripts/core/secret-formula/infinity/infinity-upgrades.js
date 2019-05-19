@@ -103,7 +103,7 @@ GameDatabase.infinity.upgrades = (function() {
       charged: {
         description: "Galaxies are more effective based on Teresa level",
         effect: () => 2 + Math.sqrt(player.celestials.ra.level) / 100,
-        formatEffect: value => `+${((value - 1) * 100).toFixed(2)}%`
+        formatEffect: value => `+${formatPercents(value - 1)}`
       }
     },
     thisInfinityTimeMult: {

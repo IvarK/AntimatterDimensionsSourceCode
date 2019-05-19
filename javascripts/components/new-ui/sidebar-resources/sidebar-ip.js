@@ -17,7 +17,7 @@ Vue.component('sidebar-ip', {
     },
     infinity() {
       if (this.showCrunch) {
-        bigCrunchReset()
+        bigCrunchResetRequest();
       }
     }
   },

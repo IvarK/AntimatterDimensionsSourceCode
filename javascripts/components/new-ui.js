@@ -20,7 +20,7 @@ Vue.component('new-ui', {
       <component :is="$viewModel.page" v-if="!showCrunch"></component>
       <div v-else>
         <h3>The world has collapsed due to excess antimatter.</h3>
-        <button class="btn-big-crunch" onclick="bigCrunchReset()">Big Crunch</button>
+        <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
       </div>
     </div>
     <div v-if="view.newUI" id="notification-container" class="l-notification-container"></div>

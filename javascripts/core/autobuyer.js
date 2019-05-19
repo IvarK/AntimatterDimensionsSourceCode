@@ -605,7 +605,7 @@ class InfinityAutobuyerState extends AutobuyerState {
       }
     }
     if (proc) {
-      bigCrunchReset();
+      bigCrunchResetRequest();
     }
     this.resetTicks();
   }

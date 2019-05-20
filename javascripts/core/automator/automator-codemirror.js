@@ -13,14 +13,13 @@
 
   CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
     const doc = editor.getDoc();
-    const errors = AutomatorGrammar.validate(contents).errors;
     console.log("automato lint");
-    console.log(errors);
+    const errors = AutomatorGrammar.compile(contents).errors;
     return errors.map(e => ({
       message: e.info,
       severity: "error",
       from: doc.posFromIndex(e.startOffset),
-      to: doc.posFromIndex(e.endOffset),
+      to: doc.posFromIndex(e.endOffset + 1),
     }));
   });
 

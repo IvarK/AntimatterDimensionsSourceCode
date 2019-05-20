@@ -13,10 +13,12 @@ const AutomatorLexer = ((() => {
   const tokenLists = {};
   // eslint-disable-next-line max-params
   const createInCategory = (category, name, pattern, props = {}) => {
+    const categories = [category];
+    if (props.extraCategories) categories.push(...props.extraCategories);
     const token = createToken({
       name,
       pattern,
-      categories: category,
+      categories,
       longer_alt: Identifier,
     });
     const categoryName = Array.isArray(category) ? category[0].name : category.name;
@@ -66,6 +68,7 @@ const AutomatorLexer = ((() => {
   const PrestigeEvent = createCategory("PrestigeEvent");
   const StudyPath = createCategory("StudyPath");
   const TimeUnit = createCategory("TimeUnit");
+  const TTCurrency = createCategory("TTCurrency");
 
   createInCategory(ComparisonOperator, "OpGTE", />=/, {
     $autocomplete: ">=",
@@ -84,9 +87,21 @@ const AutomatorLexer = ((() => {
     $compare: (a, b) => Decimal.lt(a, b),
   });
 
-  createInCategory(Currency, "EP", /ep/i, { $getter: () => player.eternityPoints });
-  createInCategory(Currency, "IP", /ip/i, { $getter: () => player.infinityPoints });
-  createInCategory(Currency, "AM", /am/i, { $getter: () => player.money });
+  createInCategory(Currency, "EP", /ep/i, {
+    extraCategories: [TTCurrency],
+    $buyTT: () => TimeTheorems.buyWithEP(),
+    $getter: () => player.eternityPoints
+  });
+  createInCategory(Currency, "IP", /ip/i, {
+    extraCategories: [TTCurrency],
+    $buyTT: () => TimeTheorems.buyWithIP(),
+    $getter: () => player.infinityPoints
+  });
+  createInCategory(Currency, "AM", /am/i, {
+    extraCategories: [TTCurrency],
+    $buyTT: () => TimeTheorems.buyWithAntimatter(),
+    $getter: () => player.money
+  });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
@@ -99,17 +114,29 @@ const AutomatorLexer = ((() => {
     $getter: () => player.timestudy.theorem,
   });
 
-  createInCategory([PrestigeEvent, StudyPath], "Infinity", /infinity/i, {
-    $studyPath: TimeStudyPath.INFINITY_DIM,
+  // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
+  // eternity will be triggered by something waiting for reality, for example.
+  createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
+    extraCategories: [StudyPath],
     $autobuyer: Autobuyer.infinity,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
+    $prestigeAvailable: () => canCrunch(),
+    $prestige: () => bigCrunchResetRequest(true),
+    $prestigeLevel: 1,
+    $studyPath: TimeStudyPath.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AutoEternityMode.TIME,
+    $prestigeAvailable: () => canEternity(),
+    $prestigeLevel: 2,
+    $prestige: () => eternity(false, true),
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
+    $prestigeAvailable: () => isRealityAvailable(),
+    $prestigeLevel: 3,
+    $prestige: () => autoReality(),
   });
 
   createInCategory(StudyPath, "Idle", /idle/i, { $studyPath: TimeStudyPath.IDLE });
@@ -142,15 +169,18 @@ const AutomatorLexer = ((() => {
   });
 
   const keywordTokens = [];
-  const createKeyword = (name, pattern) => {
+  const createKeyword = (name, pattern, props = {}) => {
+    const categories = [Keyword];
+    if (props.extraCategories) categories.push(...props.extraCategories);
     const token = createToken({
       name,
       pattern,
-      categories: Keyword,
+      categories,
       longer_alt: Identifier,
     });
     token.$autocomplete = name.toLocaleLowerCase();
     keywordTokens.push(token);
+    Object.assign(token, props);
     return token;
   };
 
@@ -159,7 +189,10 @@ const AutomatorLexer = ((() => {
   createKeyword("Define", /define/i);
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
-  createKeyword("Max", /max/i);
+  createKeyword("Max", /max/i, {
+    extraCategories: [TTCurrency],
+    $buyTT: () => TimeTheorems.buyMax(),
+  });
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
@@ -191,13 +224,13 @@ const AutomatorLexer = ((() => {
   const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*\}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
   const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
-  const Ellipsis = createToken({ name: "Ellipsis", pattern: /\.\.\./, label: "..." });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
+  const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
     HSpace, Comment, EOL,
-    LCurly, RCurly, Comma, Ellipsis, EqualSign, Pipe,
+    LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     NumberLiteral,
     ECLiteral,
@@ -205,6 +238,7 @@ const AutomatorLexer = ((() => {
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
     Currency, ...tokenLists.Currency,
+    TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,
   ];

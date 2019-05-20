@@ -19,7 +19,7 @@ const AutomatorGrammar = (function() {
 
       $.RULE("block", () => $.MANY_SEP({
         SEP: T.EOL,
-        DEF: () => $.SUBRULE($.command),
+        DEF: () => $.OPTION(() => $.SUBRULE($.command)),
       }));
 
       // This is a bit ugly looking. Chevrotain uses Function.toString() to do crazy
@@ -102,20 +102,27 @@ const AutomatorGrammar = (function() {
       $.RULE("studyList", () => {
         $.AT_LEAST_ONE(() => $.SUBRULE($.studyListEntry));
         // Support the |3 export format for EC number
-        $.OPTION2(() => {
+        $.OPTION(() => {
           $.CONSUME(T.Pipe);
-          $.CONSUME1(T.NumberLiteral);
+          $.CONSUME1(T.NumberLiteral, { LABEL: "ECNumber" });
         });
       }, { resyncEnabled: false });
 
       $.RULE("studyListEntry", () => {
-        $.OPTION(() => $.CONSUME(T.Ellipsis));
         $.OR([
+          { ALT: () => $.SUBRULE($.studyRange) },
           { ALT: () => $.CONSUME(T.NumberLiteral) },
           { ALT: () => $.CONSUME(T.StudyPath) },
         ]);
-        $.OPTION1(() => $.CONSUME(T.Comma));
+        $.OPTION(() => $.CONSUME(T.Comma));
       });
+
+      $.RULE("studyRange", () => {
+        $.CONSUME(T.NumberLiteral, { LABEL: "firstStudy" });
+        $.CONSUME(T.Dash);
+        $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
+      });
+
       // Very important to call this after all the rules have been setup.
       // otherwise the parser may not work correctly as it will lack information
       // derived from the self analysis.

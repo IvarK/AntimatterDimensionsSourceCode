@@ -5,11 +5,27 @@ const AutomatorUI = {
   editor: null,
 };
 
+let borkbork = 0
+
 Vue.component("automator-tab", {
   data() {
     return {
       code: null,
+      activeLine: 0,
     };
+  },
+  watch: {
+    activeLine(newVal, oldVal) {
+      if (newVal > 0) AutomatorUI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
+      if (oldVal > 0) AutomatorUI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
+    }
+  },
+  methods: {
+    update() {
+      this.activeLine = AutomatorBackend.stack.isEmpty
+        ? 0 : AutomatorBackend.stack.top.lineNumber;
+      this.activeLine = borkbork;
+    }
   },
   created() {
     if (!AutomatorUI.wrapper) {
@@ -21,6 +37,7 @@ Vue.component("automator-tab", {
         mode: "automato",
         lint: "automato",
         lineNumbers: true,
+        styleActiveLine: true,
         theme: "liquibyte",
       });
       AutomatorUI.editor.on("keyup", (editor, event) => {

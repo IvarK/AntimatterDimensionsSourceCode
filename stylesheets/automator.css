@@ -13,6 +13,10 @@
   /*width: 100rem;*/
 }
 
+.c-automator-editor__active-line {
+  background: rgb(25, 10, 44);
+}
+
 .l-automator-editor__wrapper {
   height: 100%;
 }

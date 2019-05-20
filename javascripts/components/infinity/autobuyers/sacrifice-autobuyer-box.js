@@ -10,7 +10,7 @@ Vue.component("sacrifice-autobuyer-box", {
     },
     limitInputSetup() {
       return new AutobuyerInputSetup(
-        AutobuyerInputType.FLOAT,
+        AutobuyerInputType.DECIMAL,
         () => this.autobuyer.limit,
         value => this.autobuyer.limit = value
       );

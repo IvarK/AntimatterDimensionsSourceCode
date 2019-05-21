@@ -54,8 +54,8 @@ Vue.component("reality-button", {
       }
       this.canReality = true;
       function boostedGain(x) {
-        if (Enslaved.lockedInBoostRatio > 1) {
-          return Decimal.times(x, Enslaved.lockedInBoostRatio + 1);
+        if (Enslaved.realityBoostRatio > 1) {
+          return Decimal.times(x, Enslaved.realityBoostRatio + 1);
         }
         return x;
       }
@@ -100,8 +100,8 @@ Vue.component("reality-button", {
       <div class="infotooltiptext">
         <template v-if="canReality">
           <div>Other resources gained:</div>
-          <div>{{ppGained}} Perk Point</div>
-          <div v-if="shardsGained !== 0"></div>
+          <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
+          <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
           <div v-if="raUnlocked">{{ expGained }} Teresa  {{ "memory" | pluralize(expGained, "memories") }} (Ra)</div>
         </template>
         <template v-else>

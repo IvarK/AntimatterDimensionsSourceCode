@@ -23,8 +23,13 @@ const enslavedQuotes = [
 
 
 const ENSLAVED_UNLOCKS = {
-  RUN: {
+  FREE_TICKSPEED_SOFTCAP: {
     id: 0,
+    price: TimeSpan.fromYears(1e35).totalMilliseconds,
+    description: "Increase the free tickspeed upgrade softcap by 100,000",
+  },
+  RUN: {
+    id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
     description: "Unlock The Enslaved One's reality.",
   }
@@ -91,9 +96,11 @@ const Enslaved = {
   has(info) {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
+  canBuy(info) {
+    return player.celestials.enslaved.stored >= info.price && !this.has(info);
+  },
   buyUnlock(info) {
-    if (player.celestials.enslaved.stored < info.price) return false;
-    if (this.has(info)) return false;
+    if (!this.canBuy(info)) return false;
     if (info.id === 3) player.blackHole[2].unlocked = true;
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);

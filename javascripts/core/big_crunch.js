@@ -9,16 +9,15 @@ function bigCrunchAnimation() {
 }
 
 function canCrunch() {
-  if (player.money.lt(Decimal.MAX_NUMBER)) return false;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  if (challenge && player.money.lt(challenge.goal)) return false;
+  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+  if (player.money.lt(goal)) return false;
   return true;
 }
 
 function handleChallengeCompletion() {
   if (!NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
-    Autobuyer.tryUnlockAny();
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;

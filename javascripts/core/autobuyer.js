@@ -626,7 +626,7 @@ Autobuyer.unlockables = Autobuyer.allDims
   ]);
 
 Autobuyer.tryUnlockAny = function() {
-  for (let autobuyer of this.unlockables) {
+  for (const autobuyer of this.unlockables) {
     autobuyer.tryUnlock();
   }
 };

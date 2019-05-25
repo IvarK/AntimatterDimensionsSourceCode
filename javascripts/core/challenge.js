@@ -111,6 +111,7 @@ class NormalChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
+    Autobuyer.tryUnlockAny();
   }
 
   get goal() {

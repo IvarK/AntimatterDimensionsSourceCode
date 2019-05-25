@@ -345,8 +345,9 @@ let player = {
         topLevelScript: "default",
         stack: [],
       },
-      scripts: [
-      ]
+      scripts: {
+      },
+      lastID: 0,
     }
   },
   blackHole: [{

@@ -14,7 +14,7 @@
   CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
     const doc = editor.getDoc();
     console.log("automato lint");
-    const errors = AutomatorGrammar.compile(contents).errors;
+    const errors = AutomatorGrammar.compile(contents, true).errors;
     return errors.map(e => ({
       message: e.info,
       severity: "error",

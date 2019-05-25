@@ -104,8 +104,45 @@ class AutomatorStackEntry {
   }
 }
 
+class AutomatorScript {
+  constructor(id) {
+    this._id = id;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get name() {
+    return this.persistent.name;
+  }
+
+  set name(value) {
+    this.persistent.name = value;
+  }
+
+  get persistent() {
+    return player.reality.automator.scripts[this._id];
+  }
+
+  save(content) {
+    this.persistent.content = content;
+  }
+
+  static create(name) {
+    const id = (++player.reality.automator.lastID).toString();
+    player.reality.automator.scripts[newId] = {
+      id,
+      name,
+      content: "",
+    };
+    return new AutomatorScript(id);
+  }
+}
+
 const AutomatorBackend = {
   MAX_COMMANDS_PER_UPDATE: 100,
+  _scripts: [],
 
   get state() {
     return player.reality.automator.state;
@@ -202,7 +239,13 @@ const AutomatorBackend = {
     this.stack.push(commands);
   },
 
-  initializeFromSave(commands) {
+  initializeFromSave() {
+    const scriptIds = Object.keys(player.reality.automator.scripts);
+    if (scriptIds.length === 0) {
+      const defaultScript = AutomatorScript.create("Untitled");
+      this._scripts = [defaultScript];
+    }
+
     if (!this.stack.initializeFromSave(commands)) this.reset(commands);
   },
 

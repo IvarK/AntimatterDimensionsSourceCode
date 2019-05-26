@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 "use strict";
 
-const AutomatorLexer = ((() => {
+const AutomatorLexer = (() => {
   const createToken = chevrotain.createToken;
   const Lexer = chevrotain.Lexer;
 
@@ -220,8 +220,8 @@ const AutomatorLexer = ((() => {
     longer_alt: Identifier,
   });
 
-  const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*\{/ });
-  const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*\}/ });
+  const LCurly = createToken({ name: "LCurly", pattern: /[ \t]*{/ });
+  const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
   const Comma = createToken({ name: "Comma", pattern: /,/ });
   const EqualSign = createToken({ name: "EqualSign", pattern: /=/, label: "=" });
   const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
@@ -269,4 +269,4 @@ const AutomatorLexer = ((() => {
     tokenIds,
     tokenMap,
   };
-})());
+})();

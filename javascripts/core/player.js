@@ -570,7 +570,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice") continue;
+    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

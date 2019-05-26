@@ -138,21 +138,3 @@ const AutomatorGrammar = (function() {
     validate: null,
   };
 }());
-
-
-/*
-const input = `~ ~ ~
-pause
-`;
-
-$(document).ready(() => {
-  for (let repeat = 0; repeat < 2; ++repeat) {
-
-});
-if (AutomatorGrammar.parser.errors.length > 0) {
-  throw Error(
-    "Sad sad panda, parsing errors detected!\n" +
-    AutomatorGrammar.parser.errors[0].message
-  )
-}
-*/

@@ -153,9 +153,10 @@ const GameStorage = {
 
     if (player.options.newUI) {
       ui.view.newUI = true;
-      ui.view.page = "new-dimensions-tab"
+      ui.view.page = "new-dimensions-tab";
     }
 
+    AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
     let diff = Date.now() - player.lastUpdate;

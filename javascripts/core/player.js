@@ -342,7 +342,7 @@ let player = {
     automator: {
       state: {
         mode: AutomatorMode.STOP,
-        topLevelScript: "default",
+        topLevelScript: 0,
         stack: [],
       },
       scripts: {

@@ -106,7 +106,9 @@ class AutomatorStackEntry {
 
 class AutomatorScript {
   constructor(id) {
+    if (!id) throw crash("Invalid script ID");
     this._id = id;
+    this._compiled = AutomatorGrammar.compile(this.text).compiled;
   }
 
   get id() {
@@ -125,13 +127,21 @@ class AutomatorScript {
     return player.reality.automator.scripts[this._id];
   }
 
+  get commands() {
+    return this._compiled.compiled;
+  }
+
+  get text() {
+    return this.persistent.content;
+  }
+
   save(content) {
     this.persistent.content = content;
   }
 
   static create(name) {
-    const id = (++player.reality.automator.lastID).toString();
-    player.reality.automator.scripts[newId] = {
+    const id = ++player.reality.automator.lastID;
+    player.reality.automator.scripts[id] = {
       id,
       name,
       content: "",
@@ -244,9 +254,16 @@ const AutomatorBackend = {
     if (scriptIds.length === 0) {
       const defaultScript = AutomatorScript.create("Untitled");
       this._scripts = [defaultScript];
+      scriptIds.push(defaultScript.id);
+    } else {
+      this._scripts = scriptIds.map(s => new AutomatorScript(s));
     }
-
-    if (!this.stack.initializeFromSave(commands)) this.reset(commands);
+    if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
+    const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
+    if (currentScript.compiled) {
+      const commands = currentScript.compiled;
+      if (!this.stack.initializeFromSave(commands)) this.reset(commands);
+    }
   },
 
   reset(commands) {

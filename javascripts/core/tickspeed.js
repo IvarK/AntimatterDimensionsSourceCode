@@ -185,13 +185,22 @@ const Tickspeed = {
 
 
 const FreeTickspeed = {
-  SOFTCAP: 400000,
+  BASE_SOFTCAP: 300000,
   GROWTH_RATE: 4e-3,
   GROWTH_EXP: 1.5,
 
   get amount() {
     return player.totalTickGained;
   },
+  
+  get softcap() {
+    let softcap = FreeTickspeed.BASE_SOFTCAP;
+    if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
+      softcap += 100000;
+    }
+    return softcap;
+  },
+
   fromShards(shards) {
     if (!shards.gt(0)) return {
       newAmount: 0,
@@ -203,20 +212,20 @@ const FreeTickspeed = {
     const logTickmult = Math.log(tickmult);
     const logShards = shards.ln();
     const uncapped = logShards / logTickmult;
-    if (uncapped <= FreeTickspeed.SOFTCAP) {
+    if (uncapped <= FreeTickspeed.softcap) {
       return {
         newAmount: Math.ceil(uncapped),
         nextShards: Decimal.pow(tickmult, Math.ceil(uncapped))
       };
     }
-    // Log of (cost - cost up to SOFTCAP)
-    const priceToCap = FreeTickspeed.SOFTCAP * logTickmult;
+    // Log of (cost - cost up to softcap)
+    const priceToCap = FreeTickspeed.softcap * logTickmult;
     // In the following we're implicitly applying the function (ln(x) - priceToCap) / logTickmult to all costs,
     // so, for example, if the cost is 1 that means it's actually exp(priceToCap) * tickmult.
     const desiredCost = (logShards - priceToCap) / logTickmult;
     const costFormulaCoefficient = FreeTickspeed.GROWTH_RATE / FreeTickspeed.GROWTH_EXP / logTickmult;
-    // In the following we're implicitly subtracting FreeTickspeed.SOFTCAP from bought,
-    // so, for example, if bought is 1 that means it's actually FreeTickspeed.SOFTCAP + 1.
+    // In the following we're implicitly subtracting softcap from bought,
+    // so, for example, if bought is 1 that means it's actually softcap + 1.
     // The first term (the big one) is the asymptotically more important term (since FreeTickspeed.GROWTH_EXP > 1),
     // but is small initially. The second term allows us to continue the pre-cap free tickspeed upgrade scaling
     // of tickmult per upgrade.
@@ -236,7 +245,7 @@ const FreeTickspeed = {
     // the cost of the next upgrade.
     const next = Decimal.exp(priceToCap + boughtToCost(purchases + 1) * logTickmult);
     return {
-      newAmount: purchases + FreeTickspeed.SOFTCAP,
+      newAmount: purchases + FreeTickspeed.softcap,
       nextShards: next,
     };
   }

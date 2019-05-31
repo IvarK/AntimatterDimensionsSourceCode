@@ -107,6 +107,7 @@ GameStorage.migrations = {
       GameStorage.migrations.migrateNotation(player);
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
+      GameStorage.migrations.adjustAchievementVars(player);
     }
   },
 
@@ -290,9 +291,20 @@ GameStorage.migrations = {
   },
 
   adjustWhy(player) {
-    if (player.why === undefined) return;
-    player.secretUnlocks.why = player.why;
     delete player.why;
+  },
+
+  adjustAchievementVars(player) {
+    player.onlyFirstDimensions = player.dead;
+    delete player.dead;
+    player.onlyEighthDimensons = player.dimlife;
+    delete player.dimlife;
+    if (
+      player.timestudy.theorem.gt(0) ||
+      player.timestudy.studies.length > 0 ||
+      player.challenge.eternity.unlocked !== 0
+    ) player.noTheoremPurchases = false;
+    if (player.sacrificed.gt(0)) player.noSacrifices = false;
   },
 
   adjustThemes(player) {

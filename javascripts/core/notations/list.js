@@ -25,5 +25,6 @@ const Notations = {
     Notation.clock,
     Notation.prime,
     Notation.bar,
+    Notation.shi,
   ]
 };

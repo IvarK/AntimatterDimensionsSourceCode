@@ -126,9 +126,7 @@ function mainIteration() {
         break;
       case "eternity":
         if (!player.reality.automatorCommands.has(62)) return false
-        justImported = true;
         if (eternity(false, true) || cont) automatorIdx+=1
-        justImported = false;
         break;
       case "stop":
         if (!player.reality.automatorCommands.has(72)) return false
@@ -163,13 +161,13 @@ function mainIteration() {
 }
 
 function buy(current) {
-  switch(current.target) {
+  let id;
+  switch (current.target) {
     case "study":
       id = parseInt(current.id)
       if (TimeStudy(id).isBought) return true;
       if (TimeStudy(id).purchase()) return true;
       return false;
-      break;
       case "studyuntil":
           id = parseInt(current.id);
           if (!TimeStudy(id).isBought) {
@@ -179,12 +177,12 @@ function buy(current) {
           break;
       case "studypath":
           if (!player.reality.automatorCommands.has(26)) return false;
-          studyPath(current.id, current.args);
+          studyPath(current.id, current.args, true);
           return true;
           break;
       case "studyimport":
           if (!player.reality.automatorCommands.has(36)) return false;
-          importStudyTree(current.id);
+          importStudyTree(current.id, true);
           return true;
           break;
     case "ttmax":
@@ -243,13 +241,7 @@ function unlock(current) {
     case "ec":
       if (!player.reality.automatorCommands.has(64)) return false
       if (player.challenge.eternity.unlocked === parseInt(current.id, 10)) return true;
-      justImported = true;
-      if (TimeStudy.eternityChallenge(current.id).purchase()) {
-        justImported = false;
-        return true;
-      }
-      else return false
-      break;
+      return TimeStudy.eternityChallenge(current.id).purchase(true);
     case "dilation":
       if (!player.reality.automatorCommands.has(63)) return false
       if (TimeStudy.dilation.purchase(true)) return true;
@@ -314,18 +306,17 @@ function wait(current) {
 }
 
 function start(current) {
-  if (!player.reality.automatorCommands.has(73)) return false
-  switch(current.target) {
+  if (!player.reality.automatorCommands.has(73)) return false;
+  let ec;
+  switch (current.target) {
     case "ec":
       if (!player.reality.automatorCommands.has(84)) return false;
-      const ec = EternityChallenge(current.id);
+      ec = EternityChallenge(current.id);
       if (ec.isRunning) return true;
-      return ec.start();
+      return ec.start(true);
     case "dilation":
-      if (!player.reality.automatorCommands.has(83)) return false
-      if (startDilatedEternity()) return true
-      else return false
-      break;
+      if (!player.reality.automatorCommands.has(83)) return false;
+      return startDilatedEternity(true);
   }
 }
 

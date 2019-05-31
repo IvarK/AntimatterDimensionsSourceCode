@@ -185,6 +185,16 @@ body.t-dark {
 #ep { color: var(--color-eternity) }
 #rm { color: var(--color-reality) }
 
+.resource-infinity-canreset {
+  background-color: black;
+  cursor: pointer;
+  transition-duration: 0.12s;
+}
+
+.resource-infinity-canreset:hover {
+  background-color: rgb(49, 49, 49)
+}
+
 .tab-button {
   height: 46px;
   background-color: var(--color-dark);

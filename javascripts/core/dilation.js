@@ -1,10 +1,10 @@
 "use strict";
 
-function startDilatedEternity() {
+function startDilatedEternity(auto) {
   if (!TimeStudy.dilation.isBought) return false
   GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
-      eternity(false, false, true)
+      eternity(false, auto, { switchingDilation: true });
       setTimeout(function() {
         GameIntervals.gameLoop.start();
       }, 250)
@@ -17,7 +17,7 @@ function startDilatedEternity() {
       return false
   }
   Achievement(136).unlock();
-  eternity(false, false, true)
+  eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
   postc8Mult = new Decimal(0)
   mult18 = new Decimal(1)
@@ -46,8 +46,8 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                                         1e15];
 
 
-function buyDilationUpgrade(id) {
-  // Upgrades 1-3 are rebuyable
+function buyDilationUpgrade(id, bulk) {
+  // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   if (id > 3) {
     if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
     if (player.dilation.upgrades.has(id)) return false;
@@ -62,6 +62,9 @@ function buyDilationUpgrade(id) {
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
     buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    if (!bulk) {
+      buying = Math.min(buying, 1);
+    }
     const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
@@ -180,8 +183,13 @@ class RebuyableDilationUpgradeState extends GameMechanicState {
     return true;
   }
 
-  purchase() {
-    buyDilationUpgrade(this.config.id);
+  get autobuyerId() { return this.config.id - 1; }
+
+  get isAutobuyerOn() { return player.dilation.auto[this.autobuyerId]; }
+  set isAutobuyerOn(value) { player.dilation.auto[this.autobuyerId] = value; }
+
+  purchase(bulk) {
+    buyDilationUpgrade(this.config.id, bulk);
   }
 }
 

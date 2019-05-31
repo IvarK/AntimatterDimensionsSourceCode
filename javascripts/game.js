@@ -355,10 +355,10 @@ function exitChallenge() {
   }
 }
 
-function unlockEChall(idx) {
+function unlockEChall(idx, auto) {
   if (player.challenge.eternity.unlocked === 0) {
     player.challenge.eternity.unlocked = idx;
-    if (!justImported) {
+    if (!auto) {
       Tab.challenges.eternity.show();
     }
     if (idx !== 12 && idx !== 13) player.etercreq = idx;
@@ -457,7 +457,6 @@ function randomStuffThatShouldBeRefactored() {
   ttMaxTimer++;
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
-  EternityChallenge.autoCompleteTick()
   if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
 
   if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints;
@@ -730,7 +729,9 @@ function gameLoop(diff, options = {}) {
 
     tryUnlockInfinityChallenges();
 
-    replicantiLoop(diff)
+    EternityChallenge.autoCompleteTick();
+
+    replicantiLoop(diff);
 
     if (player.infMultBuyer) {
       InfinityUpgrade.ipMult.autobuyerTick();
@@ -936,9 +937,11 @@ updateChart(true);
 
 function autoBuyDilationUpgrades() {
   if (Perk.autobuyerDilation.isBought) {
-    DilationUpgrade.dtGain.purchase();
-    DilationUpgrade.galaxyThreshold.purchase();
-    DilationUpgrade.tachyonGain.purchase();
+    const upgrades = [DilationUpgrade.dtGain, DilationUpgrade.galaxyThreshold, DilationUpgrade.tachyonGain].filter(
+      upgrade => upgrade.isAutobuyerOn);
+    for (const upgrade of upgrades) {
+      upgrade.purchase(true);
+    }
   }
 }
 

@@ -7,8 +7,8 @@ function canEternity() {
   return true;
 }
 
-function eternity(force, auto, switchingDilation) {
-  if (switchingDilation && !canEternity()) {
+function eternity(force, auto, specialConditions = {}) {
+  if (specialConditions.switchingDilation && !canEternity()) {
     force = true;
   }
   
@@ -35,7 +35,7 @@ function eternity(force, auto, switchingDilation) {
       }
     }
     player.etercreq = 0;
-    respecTimeStudies();
+    respecTimeStudies(auto);
   }
 
   player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
@@ -58,14 +58,16 @@ function eternity(force, auto, switchingDilation) {
   
   player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.challenge.eternity.current = 0;
-  player.dilation.active = false;
+  if (!specialConditions.enteringEC) {
+    player.dilation.active = false;
+  }
   resetInfinityRuns();
   fullResetInfDimensions();
   eternityResetReplicanti();
   resetChallengeStuff();
   resetDimensions();
 
-  if (player.respec) respecTimeStudies();
+  if (player.respec) respecTimeStudies(auto);
   player.respec = false;
   if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
     Tab.dimensions.time.show();
@@ -140,8 +142,9 @@ function initializeResourcesAfterEternity() {
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
   }
-  player.dimlife = true;
-  player.dead = true;
+  player.noSacrifices = true;
+  player.onlyEighthDimensons = true;
+  player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {

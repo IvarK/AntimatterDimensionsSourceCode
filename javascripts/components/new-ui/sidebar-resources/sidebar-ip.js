@@ -15,10 +15,10 @@ Vue.component("sidebar-ip", {
     update() {
       this.ip.copyFrom(player.infinityPoints);
       this.gained.copyFrom(gainedInfinityPoints());
-      this.showCrunch = player.money.gte(Number.MAX_VALUE) && (player.break || player.bestInfinityTime <= 60 * 1000);
+      this.showCrunch = player.money.gte(Number.MAX_VALUE) && player.break;
     },
     infinity() {
-      if (showCrunch) {
+      if (this.showCrunch) {
         bigCrunchReset();
       }
     }

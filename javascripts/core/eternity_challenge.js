@@ -117,7 +117,7 @@ class EternityChallengeState extends GameMechanicState {
     }
   }
 
-  start() {
+  start(auto) {
     if (!this.isUnlocked) return false;
     if (player.options.confirmations.challenges) {
       const confirmation =
@@ -126,7 +126,10 @@ class EternityChallengeState extends GameMechanicState {
         "You need to reach a set IP with special conditions.";
       if (!confirm(confirmation)) return false;
     }
-    if (canEternity()) eternity(false, false);
+    // If dilation is active, the { enteringEC: true } parameter will cause
+    // dilation to not be disabled. We still don't force-eternity, though;
+    // this causes TP to still be gained.
+    if (canEternity()) eternity(false, auto, { enteringEC: true });
     player.eternityChallGoal = this.currentGoal;
     player.challenge.eternity.current = this.id;
     return startEternityChallenge();
@@ -197,25 +200,22 @@ EternityChallenge.currentAutoCompleteThreshold = function() {
   );
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0])) hours /= V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[0].effect()
   return hours === Number.MAX_VALUE ? Infinity : TimeSpan.fromHours(hours).totalMilliseconds;
-}
+};
 
 EternityChallenge.autoCompleteNext = function() {
-  for (let i=1; i<=12; i++) {
-    let c = EternityChallenge(i)
-    if (!c.isFullyCompleted) {
-      c.addCompletion()
-      return true
-    }
-  }
-  return false
-}
+  const next = EternityChallenge.all.compact().find(ec => !ec.isFullyCompleted);
+  if (next === undefined) return false;
+  next.addCompletion();
+  return true;
+};
 
-EternityChallenge.autoCompleteTick  = function() {
-  let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
-  if (!isPostEc || !player.autoEcIsOn) return
-  let threshold = this.currentAutoCompleteThreshold()
-  while (player.reality.lastAutoEC - threshold > 0) {
-    this.autoCompleteNext()
-    player.reality.lastAutoEC -= threshold
+EternityChallenge.autoCompleteTick = function() {
+  if (!player.autoEcIsOn) return;
+  const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
+  if (!isPostEc) return;
+  const threshold = this.currentAutoCompleteThreshold();
+  while (player.reality.lastAutoEC - threshold > 0 && this.autoCompleteNext()) {
+    player.reality.lastAutoEC -= threshold;
   }
-}
+  player.reality.lastAutoEC %= threshold;
+};

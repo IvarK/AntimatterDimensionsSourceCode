@@ -91,7 +91,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 9,
       cost: 15,
-      requirement: "Reality with only a single glyph with a level 3 or higher equipped.",
+      requirement: "Reality using only a single level 3+ glyph.",
       checkRequirement: () => Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "Gain another glyph slot",
@@ -130,8 +130,9 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: () => `${shorten("1e4000")} EP without TD5`,
-      checkRequirement: () => player.eternityPoints.exponent >= 4000 && TimeDimension(5).amount.equals(0),
+      requirement: () => `${shorten("1e4000")} EP without TD5-8`,
+      checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
+        Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "More Eternity autobuyer options, EP multiplier and Time Dimension autobuyers"
     },

@@ -1696,6 +1696,10 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
+.o-primary-btn--dilation-upgrade-toggle {
+  font-size: 1rem;
+}
+
 .o-primary-btn--replicanti-galaxy {
   width: 20rem;
   height: 7rem;
@@ -5610,6 +5614,15 @@ kbd {
   font-family: Typewriter;
 }
 
+.o-enslaved-shop-button--available {
+  background: aquamarine;
+  cursor: pointer;
+}
+
+.o-enslaved-shop-button--bought {
+  background: #16c55e;
+}
+
 .o-enslaved-run-button {
   width: 35rem;
   padding: 2rem;
@@ -5841,7 +5854,7 @@ kbd {
   border-radius: .5rem;
 }
 
-.o-matter-dimension-button-available {
+.o-matter-dimension-button--available {
   background: aquamarine;
   cursor: pointer;
 }
@@ -5862,12 +5875,12 @@ kbd {
   font-family: Typewriter;
 }
 
-.o-laitela-shop-button-available {
+.o-laitela-shop-button--available {
   background: aquamarine;
   cursor: pointer;
 }
 
-.o-laitela-shop-button-bought {
+.o-laitela-shop-button--bought {
   background: #16c55e;
 }
 

@@ -1,7 +1,6 @@
 "use strict";
 
 var shiftDown = false;
-var justImported = false;
 var saved = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
@@ -266,9 +265,11 @@ let player = {
   },
   eterc8ids: 50,
   eterc8repl: 40,
-  dimlife: true,
-  dead: true,
-  noEighthDimensions: false,
+  noSacrifices: true,
+  onlyEighthDimensons: true,
+  onlyFirstDimensions: true,
+  noEighthDimensions: true,
+  noTheoremPurchases: true,
   dilation: {
     studies: [],
     active: false,
@@ -282,9 +283,9 @@ let player = {
       1: 0,
       2: 0,
       3: 0,
-    }
+    },
+    auto: [false, false, false]
   },
-  why: 0,
   realities: 0,
   thisReality: 0,
   thisRealityRealTime: 0,

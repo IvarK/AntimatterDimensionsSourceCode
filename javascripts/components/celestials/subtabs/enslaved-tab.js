@@ -71,11 +71,20 @@ Vue.component("enslaved-tab", {
     hasUnlock(info) {
       return Enslaved.has(info);
     },
+    canBuyUnlock(info) {
+      return Enslaved.canBuy(info);
+    },
     nextQuote() {
       Enslaved.nextQuote();
     },
     hasNextQuote() {
       return this.quoteIdx < Enslaved.maxQuoteIdx;
+    },
+    unlockClassObject(info) {
+      return {
+        "o-enslaved-shop-button--bought": this.hasUnlock(info), 
+        "o-enslaved-shop-button--available": this.canBuyUnlock(info)
+      };
     }
   },
   template:
@@ -116,6 +125,7 @@ Vue.component("enslaved-tab", {
           v-for="unlock in unlocksInfo"
           :key="unlock.id"
           class="o-enslaved-shop-button"
+          :class="unlockClassObject(unlock)"
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">

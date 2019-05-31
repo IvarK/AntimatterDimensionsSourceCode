@@ -16,7 +16,7 @@ Vue.component('new-ui', {
   `<div id="page">
     <sidebar></sidebar>
     <div class="game-container">
-      <div class="quote" v-show="showTicker"><div id="news">.</div></div>
+      <div class="quote" v-show="showTicker"><div id="newNews">.</div></div>
       <div class="tab-container">
         <component :is="$viewModel.page" v-if="!showCrunch"></component>
         <div v-else>

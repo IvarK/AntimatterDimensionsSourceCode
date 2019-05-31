@@ -59,7 +59,7 @@
 }
 
 .t-dark-metro #ui {
-  --color-text: white;
+  --color-text: #e0e0e0;
   --color-light: #FFFFFF;
   --color-medium: #AEAEAE;
   --color-dark: #455a64;
@@ -74,6 +74,15 @@
   --color-reality: #0b600e;
   --color-celestials: #00bcd4;
   --color-celestials-accent: #00838f;
+}
+
+.t-s6 #ui {
+  --color-text: white;
+  --color-light: black;
+  --color-medium: black;
+  --color-dark: black;
+  --color-accent-1: #1565C0;
+  --color-accent-2: #1565C0;
 }
 
 body {
@@ -117,8 +126,16 @@ body.t-dark {
   width: 200px;
 }
 
+.sidebar:hover .subtabs,
+.sidebar:hover .tab-button,
+.sidebar:hover .tab-button::after,
+.sidebar:hover .tab-button h3 {
+  transition-delay: 0s;
+}
+
 .resource {
   height: 60px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   background-color: var(--color-dark);
@@ -177,6 +194,7 @@ body.t-dark {
   font-size: 1.3em;
   position: relative;
   transition-duration: 0.15s;
+  transition-delay: 0.2s;
 }
 
 .tab-button-inner {
@@ -193,25 +211,18 @@ body.t-dark {
   background-color: rgb(74, 70, 84);
 }
 
-.tab-button:hover::after {
-  animation: arrow-expand 0.15s 1;
-}
-
-.t-metro .tab-button:hover {
-  background-color: var(--color-accent-1);
-}
-
-.t-dark .tab-button:hover {
+.tab-button:hover {
   background-color: var(--color-accent-1);
 }
 
 .tab-button:hover .subtabs {
   opacity: 1;
   pointer-events: all;
-  animation: sidebar-move 0.15s 1;
+
+  left: 223px;
 }
 
-.tab-button:hover::after {
+.tab-button::after {
   content: '';
   position: absolute;
   left: 100%;
@@ -219,29 +230,37 @@ body.t-dark {
   width: 0;
   height: 0;
   border-bottom: 23px solid transparent;
-  border-left: 23px solid var(--color-accent-1);
+  border-left: 0px solid var(--color-accent-1);
   border-top: 23px solid transparent;
+  z-index: 4;
+  transition-duration: 0.15s;
+  transition-delay: 0.2s;
 }
 
-.tab-button.infinity:hover::after {
+.tab-button:hover::after {
+  border-left-width: 23px;
+}
+
+.tab-button.infinity::after {
   border-left-color: var(--color-infinity);
 }
 
-.tab-button.eternity:hover::after {
+.tab-button.eternity::after {
   border-left-color: var(--color-eternity);
 }
 
-.tab-button.reality:hover::after {
+.tab-button.reality::after {
   border-left-color: var(--color-reality);
 }
 
-.tab-button.celestials:hover::after {
+.tab-button.celestials::after {
   border-left-color: var(--color-celestials);
 }
 
 .tab-button h3 {
   color: var(--color-text);
   margin: auto;
+  transition-delay: 0.2s;
 }
 
 .t-metro .tab-button:hover h3 {
@@ -389,6 +408,7 @@ body.t-dark {
 }
 
 .quote {
+  display: flex;
   width: 100%;
   border-bottom: 1px solid var(--color-accent-1);
   color: var(--color-text);;
@@ -406,8 +426,10 @@ body.t-dark {
   pointer-events: none;
   position: absolute;
   top: -1px;
-  left: 223px;
+  left: 200px;
   z-index: 4;
+  transition-duration: 0.15s;
+  transition-delay: 0.2s;
 }
 
 .subtab {
@@ -430,13 +452,21 @@ body.t-dark {
   background-color: rgb(74, 70, 84);
 }
 
-.t-metro .subtab:hover {
+.t-metro .subtab:hover,
+.t-inverted-metro .subtab:hover,
+.t-s6 .subtab:hover,
+.t-s8 .subtab:hover  {
   color: white;
   background-color: var(--color-accent-1);
 }
 
 .t-dark .subtab:hover {
   color: black;
+  background-color: var(--color-accent-1);
+}
+
+.t-dark-metro .subtab:hover {
+  color: white;
   background-color: var(--color-accent-1);
 }
 
@@ -773,18 +803,4 @@ body.t-dark {
   background-color: black;
   border: .3rem solid var(--color-eternity);
   border-radius: 1rem;
-}
-
-@keyframes arrow-expand {
-  from {
-    border-left-width: 0px;
-  }
-  to {
-    border-left-width: 23px;
-  }
-}
-
-@keyframes sidebar-move {
-  from {left: 200px}
-  to {left: 223px}
 }

@@ -360,7 +360,7 @@ button {
 
 /*#endregion TT shop*/
 
-#news {
+#news, #newNews {
     color: #000000;
     /*transition: transform 1s;*/
     position: relative;
@@ -371,7 +371,7 @@ button {
     font-weight: bold
 }
 
-#news a {
+#news a, #newNews a {
   text-decoration: underline;
 }
 

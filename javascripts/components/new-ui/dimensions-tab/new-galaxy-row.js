@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component('new-galaxy-row', {
+Vue.component("new-galaxy-row", {
   data() {
     return {
       type: GalaxyType.NORMAL,
@@ -92,4 +92,4 @@ Vue.component('new-galaxy-row', {
       :enabled="canBeBought"
     >{{buttonText}}</button>
   </div>`
-})
+});

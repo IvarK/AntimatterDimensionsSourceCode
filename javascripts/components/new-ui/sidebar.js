@@ -1,3 +1,5 @@
+"use strict";
+
 const MAIN_TAB_BUTTONS = [
   {
     id: "dimensions",
@@ -121,7 +123,8 @@ const MAIN_TAB_BUTTONS = [
     label: "Celestials",
     class: "celestials",
     component: "teresa-tab",
-    condition: () => RealityUpgrades && RealityUpgrades.allBought, // Because RealityUpgrades is defined later
+    // Because RealityUpgrades is defined later
+    condition: () => RealityUpgrades && RealityUpgrades.allBought,
     subtabs: [
       {
         label: "T",
@@ -227,31 +230,29 @@ const MAIN_TAB_BUTTONS = [
     component: "achievements-tab",
     condition: () => true,
   }
-]
+];
 
-
-
-Vue.component('sidebar', {
+Vue.component("sidebar", {
   data() {
     return {
       ipVisible: false,
       epVisible: false,
       rmVisible: false
-    }
+    };
   },
   methods: {
     switchTo(tab) {
-      showTab(tab)
+      showTab(tab);
     },
     update() {
-      this.ipVisible = player.infinitied.gt(0)
-      this.epVisible = player.eternities > 0
-      this.rmVisible = player.realities > 0
+      this.ipVisible = player.infinitied.gt(0);
+      this.epVisible = player.eternities > 0;
+      this.rmVisible = player.realities > 0;
     }
   },
   computed: {
     tabs() {
-      return MAIN_TAB_BUTTONS
+      return MAIN_TAB_BUTTONS;
     }
   },
   template:
@@ -265,4 +266,4 @@ Vue.component('sidebar', {
       :key="tab.id"
       :tab="tab"></tab-button>
   </div>`
-})
+});

@@ -1,4 +1,6 @@
-Vue.component('new-ui', {
+"use strict";
+
+Vue.component("new-ui", {
   data() {
     return {
       view: ui.view,
@@ -8,8 +10,8 @@ Vue.component('new-ui', {
   },
   methods: {
     update() {
-      this.showCrunch = !player.break && player.bestInfinityTime > 60 * 1000 && player.money.gte(Number.MAX_VALUE)
-      this.showTicker = !player.options.newsHidden
+      this.showCrunch = !player.break && player.bestInfinityTime > 60 * 1000 && player.money.gte(Number.MAX_VALUE);
+      this.showTicker = !player.options.newsHidden;
     }
   },
   template:

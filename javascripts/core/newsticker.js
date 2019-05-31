@@ -301,14 +301,12 @@ function scrollNextMessage() {
     // Change this value to change the scroll speed
     const scrollSpeed = 100;
     const transformDuration = dist / scrollSpeed;
-    console.log(dist)
 
     if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][1])) {
         player.newsArray.push(newsArray[nextMsgIndex][1]);
         if (player.newsArray.length >= 50) Achievement(22).unlock();
     }
 
-    console.log(newsDiv.clientWidth)
     // Set the transition duration
     newsDiv.style.transition = `transform ${transformDuration}s linear`;
     // We need to move it to -(width+parent padding) before it won't be visible

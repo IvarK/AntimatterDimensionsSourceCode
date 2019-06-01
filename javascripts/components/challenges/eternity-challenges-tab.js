@@ -139,7 +139,7 @@ Vue.component("eternity-challenges-tab", {
     }
   },
   template:
-    `<div>
+    `<div class="l-eternity-challenge-tab">
       <div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.</div>
       <div>(You have unlocked {{unlockedCount}} out of 12 Eternity Challenges)</div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">

@@ -1,5 +1,7 @@
-Vue.component('new-tickspeed-row', {
-  data: function() {
+"use strict";
+
+Vue.component("new-tickspeed-row", {
+  data() {
     return {
       isVisible: false,
       mult: new Decimal(0),
@@ -10,7 +12,7 @@ Vue.component('new-tickspeed-row', {
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "c-game-header__tickspeed-row": true,
         "c-game-header__tickspeed-row--hidden": !this.isVisible
@@ -20,45 +22,43 @@ Vue.component('new-tickspeed-row', {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
         return `${this.shortenDimensions(tickmult.reciprocal())}x faster / upgrade.`;
-      } else {
-        const asNumber = tickmult.toNumber();
-        let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-        if (player.galaxies === 1) places = Math.max(places, 1);
-        return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
       }
+      const asNumber = tickmult.toNumber();
+      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
+      if (player.galaxies === 1) places = Math.max(places, 1);
+      return `-${((1 - asNumber) * 100).toFixed(places)}% / upgrade`;
     },
-    tickspeedDisplay: function() {
+    tickspeedDisplay() {
       const tickspeed = this.tickspeed;
       let displayValue;
       if (tickspeed.exponent > 1) {
         displayValue = tickspeed.toFixed(0);
-      }
-      else {
+      } else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
         displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shortenRateOfChange(oom)}`;
       }
       return `Tickspeed: ${displayValue}`;
     },
-    isGameSpeedNormal: function() {
+    isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
     },
-    isGameSpeedSlow: function() {
+    isGameSpeedSlow() {
       return this.gameSpeedMult < 1;
     },
-    formattedFastSpeed: function() {
+    formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
     },
-    gammaDisplay: function() {
+    gammaDisplay() {
       const displayValue = this.isGameSpeedSlow ? this.gameSpeedMult.toFixed(3) : this.formattedFastSpeed;
       return `(γ = ${displayValue})`;
     },
-    tooltip: function() {
+    tooltip() {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
       return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
     },
-    showCostTitle: function() {
+    showCostTitle() {
       return this.cost.exponent < 1000000;
     }
   },
@@ -95,4 +95,4 @@ Vue.component('new-tickspeed-row', {
           >Buy Max</button>
       </div>
     </div>`
-})
+});

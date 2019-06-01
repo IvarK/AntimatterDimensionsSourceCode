@@ -1,7 +1,9 @@
-Vue.component('new-dimensions-tab', {
+"use strict";
+
+Vue.component("new-dimensions-tab", {
   data() {
     return {
-      until_10_setting: true,
+      until10Setting: true,
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       sacrificeBoost: new Decimal(0),
@@ -12,7 +14,7 @@ Vue.component('new-dimensions-tab', {
       isChallengePowerVisible: false,
       challengePower: "",
       isQuickResetAvailable: false
-    }
+    };
   },
   computed: {
     sacrificeBoostDisplay() {
@@ -30,13 +32,13 @@ Vue.component('new-dimensions-tab', {
       sacrificeBtnClick();
     },
     toggleUntil10() {
-      until_10_setting = !until_10_setting
+      until10Setting = !until10Setting;
     },
     getUntil10Display() {
-      return this.until_10_setting ? "Until 10" : "Buy 1";
+      return this.until10Setting ? "Until 10" : "Buy 1";
     },
     update() {
-      this.until_10_setting = until_10_setting
+      this.until10Setting = until10Setting;
       this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       const isC2Running = NormalChallenge(2).isRunning;
       const isC3Running = NormalChallenge(3).isRunning;
@@ -80,7 +82,7 @@ Vue.component('new-dimensions-tab', {
       let displayValue = "";
 
       const inCelestialReality = this.currCelestial.length !== 0;
-      if (inCelestialReality) displayValue += " + " + this.currCelestial + " Reality";
+      if (inCelestialReality) displayValue += ` + ${this.currCelestial} Reality`;
 
       const inDilation = player.dilation.active;
       if (inDilation) displayValue += " + Time Dilation";
@@ -94,41 +96,40 @@ Vue.component('new-dimensions-tab', {
       const eternityChallenge = EternityChallenge.current;
       if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
 
-      if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
+      if (displayValue.length !== 0) this.challengeDisplay = displayValue.substring(3);
       else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      else  this.challengeDisplay = "";
+      else this.challengeDisplay = "";
     }
   },
   template:
-  `<div>
-  <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span> <span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
-  <div class="modes-container">
-    <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>
-    <primary-button
-        v-show="isSacrificeUnlocked"
-        v-tooltip="sacrificeTooltip"
-        :enabled="isSacrificeAffordable"
-        class="storebtn sacrifice-btn"
-        @click="sacrifice"
-      >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
-    <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
-  </div>
-  <new-tickspeed-row></new-tickspeed-row>
-  <div class="dimensions-container">
-    <new-dimension-row 
-      v-for="tier in 8"
-      :key="tier"
-      :tier="tier"></new-dimension-row>
-  </div>
-  <div class="resets-container">
-    <new-dim-shift-row></new-dim-shift-row>
-    <primary-button
-        v-if="isQuickResetAvailable"
-        class="o-primary-btn--quick-reset"
-        onclick="softReset(0)"
-      >Lose a reset, returning to the start of the reset</primary-button>
-    <new-galaxy-row></new-galaxy-row>
-  </div>
-</div>
-  `
-})
+  `<div class="l-normal-dim-tab">
+    <div class="information-header" ><span v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</span> <span v-if="isChallengePowerVisible">{{challengePower}}</span></div>
+    <div class="modes-container">
+      <button class="storebtn" @click="toggleUntil10" style="width: 100px; height: 30px; padding: 0;">{{ getUntil10Display() }}</button>
+      <primary-button
+          v-show="isSacrificeUnlocked"
+          v-tooltip="sacrificeTooltip"
+          :enabled="isSacrificeAffordable"
+          class="storebtn sacrifice-btn"
+          @click="sacrifice"
+        >Dimensional Sacrifice ({{sacrificeBoostDisplay}}x)</primary-button>
+      <button class="storebtn" @click="maxAll" style="width: 100px; height: 30px; padding: 0;">Max All (M)</button>
+    </div>
+    <new-tickspeed-row></new-tickspeed-row>
+    <div class="dimensions-container">
+      <new-dimension-row 
+        v-for="tier in 8"
+        :key="tier"
+        :tier="tier"></new-dimension-row>
+    </div>
+    <div class="resets-container">
+      <new-dim-shift-row></new-dim-shift-row>
+      <primary-button
+          v-if="isQuickResetAvailable"
+          class="o-primary-btn--quick-reset"
+          onclick="softReset(0)"
+        >Lose a reset, returning to the start of the reset</primary-button>
+      <new-galaxy-row></new-galaxy-row>
+    </div>
+  </div>`
+});

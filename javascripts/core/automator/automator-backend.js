@@ -234,7 +234,11 @@ const AutomatorBackend = {
     const S = this.stack.top;
     if (S.commandIndex >= S.commands.length - 1) {
       this.stack.pop();
-      if (this.stack.isEmpty) this.stop();
+      if (this.stack.isEmpty) {
+        console.log(`program end : ${this.state.repeat}`)
+        if (this.state.repeat) this.start();
+        else this.stop();
+      }
     } else {
       S.commandState = null;
       ++S.commandIndex;
@@ -267,6 +271,10 @@ const AutomatorBackend = {
     }
   },
 
+  toggleRepeat() {
+    this.state.repeat = !this.state.repeat;
+  },
+
   reset(commands) {
     this.stack.clear();
     this.push(commands);
@@ -281,7 +289,7 @@ const AutomatorBackend = {
     this.state.mode = AutomatorMode.PAUSE;
   },
 
-  start(scriptID, initialMode = AutomatorMode.RUN) {
+  start(scriptID = this.state.topLevelScript, initialMode = AutomatorMode.RUN) {
     this.state.topLevelScript = scriptID;
     const scriptObject = this._scripts.find(s => s.id === scriptID);
     scriptObject.compile();

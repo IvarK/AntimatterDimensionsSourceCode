@@ -71,9 +71,7 @@ Vue.component("automator-tab", {
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.SINGLE_STEP;
       else AutomatorBackend.start(this.currentScriptID, AutomatorMode.SINGLE_STEP);
     },
-    repeat() {
-      // TODO add repeat support
-    },
+    repeat: () => AutomatorBackend.toggleRepeat(),
   },
   created() {
     if (!AutomatorUI.wrapper) {

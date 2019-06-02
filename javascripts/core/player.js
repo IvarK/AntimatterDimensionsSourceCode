@@ -344,6 +344,7 @@ let player = {
         mode: AutomatorMode.STOP,
         topLevelScript: 0,
         editorScript: 0,
+        repeat: false,
         stack: [],
       },
       scripts: {

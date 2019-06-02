@@ -4,7 +4,7 @@
   function walkSuggestion(suggestion, prefix, output) {
     if (suggestion.$autocomplete &&
       suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix) {
-      output.push(suggestion.$autocomplete);
+      output.add(suggestion.$autocomplete);
     }
     for (const s of suggestion.categoryMatches) {
       walkSuggestion(AutomatorLexer.tokenIds[s], prefix, output);
@@ -34,13 +34,14 @@
     const lineLex = AutomatorLexer.lexer.tokenize(lineStart);
     if (lineLex.errors.length > 0) return undefined;
     const rawSuggestions = AutomatorGrammar.parser.computeContentAssist("command", lineLex.tokens);
-    const suggestions = [];
+    console.log(rawSuggestions)
+    const suggestions = new Set();
     for (const s of rawSuggestions) {
       if (s.ruleStack[1] === "badCommand") continue;
       walkSuggestion(s.nextTokenType, currentPrefix, suggestions);
     }
     return {
-      list: suggestions,
+      list: Array.from(suggestions),
       from: CodeMirror.Pos(cursor.line, start),
       to: CodeMirror.Pos(cursor.line, end)
     };

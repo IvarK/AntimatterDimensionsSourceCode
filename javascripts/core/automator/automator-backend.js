@@ -26,11 +26,9 @@ const AutomatorCommandStatus = Object.freeze({
 });
 
 const AutomatorMode = Object.freeze({
-  STOP: 0,
   PAUSE: 1,
   RUN: 2,
   SINGLE_STEP: 3,
-  RESTART: 4,
 });
 
 
@@ -55,7 +53,7 @@ class AutomatorStackEntry {
   // This is used when a new thing is put on the stack (rather than us creating objects
   // when loading a game)
   initializeNew(commands) {
-    this.commands = commands;
+    this._commands = commands;
     this._commandIndex = 0;
     this.persistent = {
       lineNumber: commands[0].lineNumber,
@@ -69,7 +67,7 @@ class AutomatorStackEntry {
 
   set commandIndex(value) {
     this._commandIndex = value;
-    this.lineNumber = this.commands[value].lineNumber;
+    this.lineNumber = this._commands[value].lineNumber;
   }
 
   get lineNumber() {
@@ -100,7 +98,11 @@ class AutomatorStackEntry {
   }
 
   get commands() {
-    return this.commands;
+    return this._commands;
+  }
+
+  set commands(value) {
+    this._commands = value;
   }
 }
 
@@ -108,7 +110,7 @@ class AutomatorScript {
   constructor(id) {
     if (!id) throw crash("Invalid script ID");
     this._id = id;
-    this._compiled = AutomatorGrammar.compile(this.text).compiled;
+    this.compile();
   }
 
   get id() {
@@ -128,7 +130,7 @@ class AutomatorScript {
   }
 
   get commands() {
-    return this._compiled.compiled;
+    return this._compiled;
   }
 
   get text() {
@@ -137,10 +139,15 @@ class AutomatorScript {
 
   save(content) {
     this.persistent.content = content;
+    this.compile();
+  }
+
+  compile() {
+    this._compiled = AutomatorGrammar.compile(this.text).compiled;
   }
 
   static create(name) {
-    const id = ++player.reality.automator.lastID;
+    const id = (++player.reality.automator.lastID).toString();
     player.reality.automator.scripts[id] = {
       id,
       name,
@@ -158,6 +165,11 @@ const AutomatorBackend = {
     return player.reality.automator.state;
   },
 
+  // The automator may be paused at some instruction, but still be on.
+  get isOn() {
+    return !this.stack.isEmpty;
+  },
+
   /**
   * @returns {AutomatorMode}
   */
@@ -165,42 +177,23 @@ const AutomatorBackend = {
     return this.state.mode;
   },
 
-  /**
-   * @param {AutomatorMode} value
-   */
-  set mode(value) {
-    this.state.mode = value;
-  },
-
-  get isPaused() {
-    return this.state.paused;
-  },
-
   get isRunning() {
-    return this.mode === AutomatorMode.RUN;
+    return this.isOn && this.mode === AutomatorMode.RUN;
   },
 
   update() {
-    if (this.stack.isEmpty) this.mode = AutomatorMode.STOP;
+    if (!this.isOn) return;
     switch (this.mode) {
-      case AutomatorMode.STOP:
-        this.restart();
-        this.mode = AutomatorMode.PAUSE;
-        return;
       case AutomatorMode.PAUSE:
         return;
       case AutomatorMode.SINGLE_STEP:
         this.step();
-        this.mode = AutomatorMode.PAUSE;
+        this.state.mode = AutomatorMode.PAUSE;
         return;
-      case AutomatorMode.RESTART:
-        this.restart();
-        this.mode = AutomatorMode.RUN;
-        break;
       case AutomatorMode.RUN:
         break;
       default:
-        this.mode = AutomatorMode.STOP;
+        this.stop();
         return;
     }
     for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
@@ -240,6 +233,7 @@ const AutomatorBackend = {
       if (this.stack.isEmpty) this.stop();
     } else {
       S.commandState = null;
+      ++S.commandIndex;
     }
   },
 
@@ -250,6 +244,7 @@ const AutomatorBackend = {
   },
 
   initializeFromSave() {
+    console.log("Initialize from save")
     const scriptIds = Object.keys(player.reality.automator.scripts);
     if (scriptIds.length === 0) {
       const defaultScript = AutomatorScript.create("Untitled");
@@ -260,8 +255,10 @@ const AutomatorBackend = {
     }
     if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
     const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
-    if (currentScript.compiled) {
-      const commands = currentScript.compiled;
+    console.log("currentScript")
+    console.log(currentScript)
+    if (currentScript.commands) {
+      const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
     }
   },
@@ -272,7 +269,18 @@ const AutomatorBackend = {
   },
 
   stop() {
-    this.state.paused = true;
+    this.stack.clear();
+    this.state.mode = AutomatorMode.PAUSE;
+  },
+
+  start(scriptID, initialMode = AutomatorMode.RUN) {
+    this.state.topLevelScript = scriptID;
+    const scriptObject = this._scripts.find(s => s.id === scriptID);
+    scriptObject.compile();
+    if (scriptObject.commands) {
+      this.reset(scriptObject.commands);
+      this.state.mode = initialMode;
+    }
   },
 
   restart() {
@@ -288,7 +296,7 @@ const AutomatorBackend = {
       this._data.push(newEntry);
     },
     pop() {
-      if (_data.length === 0) return;
+      if (this._data.length === 0) return;
       player.reality.automator.state.stack.pop();
       this._data.pop();
     },
@@ -297,6 +305,8 @@ const AutomatorBackend = {
       player.reality.automator.state.stack.length = 0;
     },
     initializeFromSave(commands) {
+      console.log("stack nitialize from save")
+      console.log(commands);
       this._data = [];
       const playerStack = player.reality.automator.state.stack;
       let currentCommands = commands;

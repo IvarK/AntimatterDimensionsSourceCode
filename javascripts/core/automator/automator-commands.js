@@ -12,8 +12,9 @@ const AutomatorCommands = ((() => {
   const presetSplitter = new RegExp(/preset[ \t]+(?:([1-6]$)|(.+$))/ui);
 
   function prestigeNotify(flag) {
+    if (!AutomatorBackend.isOn) return;
     const state = AutomatorBackend.stack.top.commandState;
-    if (state !== undefined && state.prestigeLevel !== undefined) {
+    if (state && state.prestigeLevel !== undefined) {
       state.prestigeLevel = Math.max(state.prestigeLevel, flag);
     }
   }

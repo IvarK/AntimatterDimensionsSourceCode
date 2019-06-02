@@ -35,8 +35,29 @@
   border-radius: .5rem;
 }
 
+.l-automator__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.8rem 0.3rem 0.8rem;
+}
+
 .c-automator__button {
   margin: 0.4rem;
+  background: black;
+  border: .1rem solid #0b600e;
+  border-radius: 0.3rem;
+  color: #0b600e;
+}
+
+.c-automator__button-play--active {
+  border-color: #d5ffd7;
+  color: #d5ffd7;
+}
+
+.c-automator__button-repeat--active {
+  border-color: #d5ffd7;
+  color: #d5ffd7;
 }
 
 .c-automator-editor__active-line {

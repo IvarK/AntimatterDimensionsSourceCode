@@ -19,6 +19,8 @@ Vue.component("automator-tab", {
       code: null,
       activeLine: 0,
       currentScriptID: "",
+      isRunning: false,
+      repeatOn: false,
     };
   },
   watch: {
@@ -29,6 +31,8 @@ Vue.component("automator-tab", {
   },
   methods: {
     update() {
+      this.isRunning = AutomatorBackend.isRunning;
+      this.repeatOn = AutomatorBackend.state.repeat;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
         return;
@@ -101,6 +105,10 @@ Vue.component("automator-tab", {
     this.$nextTick(() => AutomatorUI.editor.refresh());
   },
   beforeDestroy() {
+    if (this.activeLine > 0) {
+      // This will stick around, otherwise
+      AutomatorUI.editor.removeLineClass(this.activeLine - 1, "background", "c-automator-editor__active-line");
+    }
     this.$el.removeChild(AutomatorUI.wrapper);
     EventHub.logic.offAll(this);
   },
@@ -109,11 +117,15 @@ Vue.component("automator-tab", {
       <div class="l-automator__top-row">
         <div class="c-automator__controls l-automator__controls">
           <button class="c-automator__button l-automator__button fas fa-fast-backward" @click="rewind" />
-          <button class="c-automator__button l-automator__button fas fa-play" @click="play" />
+          <button class="c-automator__button l-automator__button fas fa-play"
+                  :class="{ 'c-automator__button-play--active' : isRunning }"
+                  @click="play" />
           <button class="c-automator__button l-automator__button fas fa-pause" @click="pause" />
           <button class="c-automator__button l-automator__button fas fa-stop" @click="stop" />
           <button class="c-automator__button l-automator__button fas fa-step-forward" @click="step" />
-          <button class="c-automator__button l-automator__button fas fa-sync-alt" @click="repeat" />
+          <button class="c-automator__button l-automator__button fas fa-sync-alt"
+                  :class="{ 'c-automator__button-repeat--active' : repeatOn }"
+                  @click="repeat" />
         </div>
       </div>
     </div>`

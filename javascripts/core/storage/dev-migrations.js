@@ -331,6 +331,7 @@ GameStorage.devMigrations = {
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustAchievementVars(player);
     },
+    GameStorage.migrations.uniformDimensions
   ],
 
   patch(player) {

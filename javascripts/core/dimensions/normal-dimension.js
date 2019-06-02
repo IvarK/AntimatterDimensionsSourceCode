@@ -83,7 +83,7 @@ function getDimensionFinalMultiplier(tier) {
         Achievement(31),
         Achievement(68),
         Achievement(71),
-        TimeStudy(234),
+        TimeStudy(234)
       );
   }
 
@@ -153,16 +153,16 @@ function multiplyPC5Costs(cost, tier) {
     for (let i = 1; i < 9; i++) {
       const dimension = NormalDimension(i);
       if (dimension.cost.e <= cost.e) {
-        dimension.cost = dimension.cost.times(player.costMultipliers[i - 1]);
-        if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+        dimension.cost = dimension.cost.times(dimension.costMultiplier);
+        if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10)
       }
     }
   } else {
     for (let i = 1; i < 9; i++) {
       const dimension = NormalDimension(i);
       if (dimension.cost.e >= cost.e) {
-        dimension.cost = dimension.cost.times(player.costMultipliers[i - 1]);
-        if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[i - 1] = player.costMultipliers[i - 1].times(10)
+        dimension.cost = dimension.cost.times(dimension.costMultiplier);
+        if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(10)
       }
     }
   }
@@ -198,10 +198,6 @@ function clearDimensions(maxTier) {
   }
 }
 
-function getDimensionCostMultiplier(tier) {
-  return player.costMultipliers[tier - 1];
-}
-
 function onBuyDimension(tier) {
   if (!player.break) {
     Achievement(10 + tier).unlock();
@@ -219,6 +215,7 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
+  JSON.stringify()
   return Decimal.MAX_NUMBER;
 }
 
@@ -228,7 +225,7 @@ function buyOneDimension(tier) {
 
   const cost = dimension.cost;
 
-  if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -241,10 +238,10 @@ function buyOneDimension(tier) {
 
   if (dimension.boughtBefore10 === 0) {
     dimension.pow = dimension.pow.times(getBuyTenMultiplier());
-    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
+    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(cost);
-    if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
     floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()))
   }
 
@@ -259,7 +256,7 @@ function buyManyDimension(tier) {
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
-  if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -270,10 +267,10 @@ function buyManyDimension(tier) {
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
   dimension.bought += dimension.remainingUntil10;
   dimension.pow = dimension.pow.times(getBuyTenMultiplier());
-  if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
+  if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
   else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else multiplySameCosts(dimension.cost);
-  if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+  if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
 
   floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
   onBuyDimension(tier);
@@ -287,7 +284,7 @@ function buyAsManyAsYouCanBuy(tier) {
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
-  if (tier === 8 && Enslaved.isRunning && player.eightBought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -300,10 +297,10 @@ function buyAsManyAsYouCanBuy(tier) {
 
   if (dimension.boughtBefore10 === 0) {
     dimension.pow = dimension.pow.times(getBuyTenMultiplier());
-    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times((getDimensionCostMultiplier(tier)));
+    if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) dimension.cost = dimension.cost.times(dimension.costMultiplier);
     else if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
     else multiplySameCosts(dimension.cost);
-    if (dimension.cost.gte(getCostIncreaseThreshold())) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    if (dimension.cost.gte(getCostIncreaseThreshold())) dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
 
     floatText(tier, "x" + shortenMoney(getBuyTenMultiplier()));
   }
@@ -313,10 +310,6 @@ function buyAsManyAsYouCanBuy(tier) {
   return true;
 }
 
-
-const initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)];
-const costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
-
 function buyManyDimensionAutobuyer(tier, bulk) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailable) return false;
@@ -325,9 +318,8 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (tier === 8 && Enslaved.isRunning) return buyManyDimension(8);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
-  const costMultiplier = player.costMultipliers[tier - 1];
+  const costMultiplier = dimension.costMultiplier;
   const buyTenMultiplier = getBuyTenMultiplier();
-  const dimensionCostMultiplier = getDimensionCostMultiplier(tier);
   const dimensionMultDecrease = Player.dimensionMultDecrease;
   const costUntil10 = dimension.cost.times(remainingUntil10);
 
@@ -339,12 +331,12 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
       dimension.bought += remainingUntil10;
       dimension.pow = dimension.pow.times(buyTenMultiplier);
-      dimension.cost = dimension.cost.times(dimensionCostMultiplier)
+      dimension.cost = dimension.cost.times(costMultiplier)
     }
     let x = bulk;
     while (lowerDimension.amount.gt(dimension.cost.times(10)) && x > 0) {
       lowerDimension.amount = lowerDimension.amount.minus(dimension.cost.times(10));
-      dimension.cost = dimension.cost.times(dimensionCostMultiplier);
+      dimension.cost = dimension.cost.times(costMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
       dimension.pow = dimension.pow.times(buyTenMultiplier);
@@ -359,7 +351,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
     dimension.amount = Decimal.round(dimension.amount.plus(remainingUntil10));
     dimension.bought += remainingUntil10;
     dimension.pow = dimension.pow.times(buyTenMultiplier);
-    dimension.cost = dimension.cost.times(dimensionCostMultiplier)
+    dimension.cost = dimension.cost.times(costMultiplier)
   }
   if (player.money.lt(dimension.cost.times(10))) return false;
   let x = bulk;
@@ -369,7 +361,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       player.money = player.money.minus(dimension.cost.times(10));
       if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
       else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-      else dimension.cost = dimension.cost.times(dimensionCostMultiplier);
+      else dimension.cost = dimension.cost.times(costMultiplier);
       dimension.amount = Decimal.round(dimension.amount.plus(10));
       dimension.bought += 10;
       dimension.pow = dimension.pow.times(buyTenMultiplier);
@@ -395,7 +387,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
         money = money.minus(cost.times(10));
         if (InfinityChallenge(5).isRunning) multiplyPC5Costs(cost, tier);
         else if (NormalChallenge(9).isRunning) multiplySameCosts(cost);
-        else cost = cost.times(dimensionCostMultiplier);
+        else cost = cost.times(costMultiplier);
         amount = amount.plus(10).round();
         bought += 10;
         pow.fromDecimal(pow.times(buyTenMultiplier));
@@ -421,9 +413,9 @@ function buyManyDimensionAutobuyer(tier, bulk) {
       }
       if (buying > bulk) buying = bulk;
       amount = amount.plus(10 * buying).round();
-      let preInfBuy = Math.floor(1 + (getCostIncreaseThreshold().e - initCost[tier].log10()) / costMults[tier].log10());
+      let preInfBuy = Math.floor(1 + (getCostIncreaseThreshold().e - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
       let postInfBuy = bought / 10 + buying - preInfBuy - 1;
-      let postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
+      let postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
       bought += 10 * buying;
       pow = pow.times(Decimal.pow(buyTenMultiplier, buying));
 
@@ -433,7 +425,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
 
       do {
         postInfBuy--;
-        newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
+        newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy)).times(Decimal.pow(dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
       }
       while (newCost.gt(money) && postInfBuy >= 0);
 
@@ -441,7 +433,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
         console.log("Had to decrease postInfBuy. Tier = " + tier + ", a = " + a + ", b = " + b + ", c = " + c + ", discriminant = " + discriminant + ", buying = " + buying + ", amount = " + amount + ", preInfBuy = " + preInfBuy + ", postInfBuy = " + postInfBuy + ", postInfBuyOriginal = " + postInfBuyOriginal + ", postInfInitCost = ", + postInfInitCost.toString() + " , bought = " + bought + ", newCost = " + newCost.toString() + ", money = " + money.toString() + ".");
       }
 
-      costMultiplier.fromDecimal(costMults[tier].times(Decimal.pow(dimensionMultDecrease, postInfBuy + 1)));
+      costMultiplier.fromDecimal(dimension.baseCostMultiplier.times(Decimal.pow(dimensionMultDecrease, postInfBuy + 1)));
       money = money.minus(newCost).max(0);
       cost = newCost.times(costMultiplier);
       costMultiplier.fromDecimal(costMultiplier.times(dimensionMultDecrease));
@@ -519,51 +511,76 @@ function getDimensionProductionPerSecond(tier) {
 }
 
 class NormalDimensionState {
-  constructor(tier, props) {
+  constructor(tier) {
     this._tier = tier;
-    this._props = props;
+    const BASE_COSTS = [null, 10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24];
+    this._baseCost = new Decimal(BASE_COSTS[tier]);
+    const BASE_COST_MULTIPLIERS = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15];
+    this._baseCostMultiplier = new Decimal(BASE_COST_MULTIPLIERS[tier]);
+    const C6_BASE_COSTS = [null, 10, 100, 100, 500, 2500, 2e4, 2e5, 4e6];
+    this._c6BaseCost = new Decimal(C6_BASE_COSTS[tier]);
+    const C6_BASE_COST_MULTIPLIERS = [null, 1e3, 5e3, 1e4, 1.2e4, 1.8e4, 2.6e4, 3.2e4, 4.2e4];
+    this._c6BaseCostMultiplier = new Decimal(C6_BASE_COST_MULTIPLIERS[tier]);
+  }
+
+  get data() {
+    return player.dimensions.normal[this._tier - 1];
   }
 
   /**
    * @returns {Decimal}
    */
   get cost() {
-    return player[this._props.cost];
+    return this.data.cost;
   }
 
   /**
    * @param {Decimal} value
    */
   set cost(value) {
-    player[this._props.cost] = value;
+    this.data.cost = value;
+  }
+
+  /**
+   * @returns {Decimal}
+   */
+  get costMultiplier() {
+    return this.data.costMultiplier;
+  }
+
+  /**
+   * @param {Decimal} value
+   */
+  set costMultiplier(value) {
+    this.data.costMultiplier = value;
   }
 
   /**
    * @returns {Decimal}
    */
   get amount() {
-    return player[this._props.amount];
+    return this.data.amount;
   }
 
   /**
    * @param {Decimal} value
    */
   set amount(value) {
-    player[this._props.amount] = value;
+    this.data.amount = value;
   }
 
   /**
    * @returns {number}
    */
   get bought() {
-    return player[this._props.bought];
+    return this.data.bought;
   }
 
   /**
    * @param {number} value
    */
   set bought(value) {
-    player[this._props.bought] = value;
+    this.data.bought = value;
   }
 
   /**
@@ -597,14 +614,14 @@ class NormalDimensionState {
    * @returns {Decimal}
    */
   get pow() {
-    return player[this._props.pow];
+    return this.data.pow;
   }
 
   /**
    * @param {Decimal} value
    */
   set pow(value) {
-    player[this._props.pow] = value;
+    this.data.pow = value;
   }
 
   /**
@@ -683,19 +700,32 @@ class NormalDimensionState {
     if (this._tier > 1 && NormalDimension(this._tier - 1).amount.eq(0) && player.eternities < 30) return false;
     return this._tier < 7 || !NormalChallenge(10).isRunning;
   }
+
+  get baseCost() {
+    return this._baseCost;
+  }
+
+  get baseCostMultiplier() {
+    return this._baseCostMultiplier;
+  }
+
+  reset() {
+    this.amount = new Decimal(0);
+    this.pow = new Decimal(1);
+    this.bought = 0;
+    const cost = NormalChallenge(6).isRunning
+      ? this._c6BaseCost
+      : this._baseCost;
+    this.cost = new Decimal(cost);
+    const costMultiplier = NormalChallenge(6).isRunning
+      ? this._c6BaseCostMultiplier
+      : this._baseCostMultiplier;
+    this.costMultiplier = new Decimal(costMultiplier);
+  }
 }
 
-NormalDimensionState.all = Array.dimensionTiers
-  .map(tier => {
-    const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
-    const props = {
-      cost: name + "Cost",
-      amount: name + "Amount",
-      bought: name + "Bought",
-      pow: name + "Pow",
-    };
-    return new NormalDimensionState(tier, props);
-  });
+NormalDimensionState.all = Array.range(1, 8)
+  .map(tier => new NormalDimensionState(tier));
 
 /**
  * @param {number} tier

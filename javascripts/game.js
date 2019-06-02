@@ -93,26 +93,26 @@ function maxDimension(tier) {
     if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
         BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
       const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
-      const b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
+      const b = dimension.costMultiplier.dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
       const c = dimension.cost.dividedBy(player.money).log10();
       const discriminant = Math.pow(b, 2) - (c * a * 4);
       if (discriminant < 0) return;
       const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
       if (buying <= 0) return;
       dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
-      const preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
+      const preInfBuy = Math.floor(1 + (308 - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
       const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
-      const postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
+      const postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
       dimension.bought += 10 * buying;
       dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying));
-      const newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy))
+      const newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy))
         .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      const newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
+      const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
       dimension.cost = newCost;
-      player.costMultipliers[tier - 1] = newMult;
+      dimension.costMultiplier = newMult;
       if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost);
-      dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1]);
-      player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+      dimension.cost = dimension.cost.times(dimension.costMultiplier);
+      dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
     }
   }
   if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
@@ -131,10 +131,10 @@ function buyUntilTen(tier) {
 
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-  else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
+  else dimension.cost = dimension.cost.times(dimension.costMultiplier);
 
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-    player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
   }
 }
 
@@ -234,21 +234,10 @@ function percentToNextGlyphLevel() {
 }
 
 function resetDimensions() {
-  for (let dimension of NormalDimension.all) {
-    dimension.amount = new Decimal(0)
-    dimension.pow = new Decimal(1)
-    dimension.bought = 0
+  for (const dimension of NormalDimension.all) {
+    dimension.reset();
   }
-  player.firstCost = new Decimal(10)
-  player.secondCost = new Decimal(100)
-  player.thirdCost = new Decimal(10000)
-  player.fourthCost = new Decimal(1e6)
-  player.fifthCost = new Decimal(1e9)
-  player.sixthCost = new Decimal(1e13)
-  player.seventhCost = new Decimal(1e18)
-  player.eightCost = new Decimal(1e24)
-  player.eightPow = new Decimal(player.chall11Pow)
-  player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+  NormalDimension(8).pow = new Decimal(player.chall11Pow)
   GameCache.dimensionMultDecrease.invalidate();
 }
 
@@ -690,7 +679,7 @@ function gameLoop(diff, options = {}) {
     const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
     if (EternityChallenge(7).isRunning) {
       if (!NormalChallenge(10).isRunning) {
-        player.seventhAmount = player.seventhAmount.plus(ID1ProductionThisTick)
+        NormalDimension(7).amount = NormalDimension(7).amount.plus(ID1ProductionThisTick)
       }
     }
     else {

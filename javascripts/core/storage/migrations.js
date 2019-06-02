@@ -108,6 +108,7 @@ GameStorage.migrations = {
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
       GameStorage.migrations.adjustAchievementVars(player);
+      GameStorage.migrations.uniformDimensions(player);
     }
   },
 
@@ -370,6 +371,29 @@ GameStorage.migrations = {
   removeAutoIPProperties(player) {
     delete player.autoIP;
     delete player.autoTime;
+  },
+  
+  uniformDimensions(player) {
+    for (let tier = 1; tier <= 8; tier++) {
+      const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
+      const props = {
+        cost: `${name}Cost`,
+        amount: `${name}Amount`,
+        bought: `${name}Bought`,
+        pow: `${name}Pow`
+      };
+      const dimension = player.dimensions.normal[tier - 1];
+      dimension.cost = new Decimal(player[props.cost]);
+      dimension.amount = new Decimal(player[props.amount]);
+      dimension.bought = player[props.bought];
+      dimension.pow = new Decimal(player[props.pow]);
+      dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
+      delete player[props.cost];
+      delete player[props.amount];
+      delete player[props.bought];
+      delete player[props.pow];
+    }
+    delete player.costMultipliers;
   },
   
   prePatch(saveData) {

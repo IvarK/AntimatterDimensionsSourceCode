@@ -39,7 +39,7 @@ function tryUnlockInfinityChallenges() {
 
 function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
-    if (player.secondAmount.neq(0)) {
+    if (NormalDimension(2).amount.neq(0)) {
       player.matter = player.matter
         .times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
     }
@@ -62,7 +62,7 @@ function updateNormalAndInfinityChallenges(diff) {
 
   if (InfinityChallenge(2).isRunning) {
     if (postC2Count >= 8 || diff > 8000) {
-      if (player.eightAmount.gt(0)) {
+      if (NormalDimension(8).amount.gt(0)) {
         sacrificeReset();
       }
       postC2Count = 0;

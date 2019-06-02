@@ -99,7 +99,6 @@ function softReset(bulk) {
     resetChallengeStuff();
     resetDimensions();
     applyDimensionBoost();
-    applyChallengeModifiers();
     skipResetsIfPossible();
     resetTickspeed();
     const currentMoney = player.money;
@@ -108,21 +107,6 @@ function softReset(bulk) {
         player.money = player.money.max(currentMoney);
     }
     EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
-}
-
-function applyChallengeModifiers() {
-  if (NormalChallenge(6).isRunning) {
-    player.thirdCost = new Decimal(100);
-    player.fourthCost = new Decimal(500);
-    player.fifthCost = new Decimal(2500);
-    player.sixthCost = new Decimal(2e4);
-    player.seventhCost = new Decimal(2e5);
-    player.eightCost = new Decimal(4e6);
-    player.costMultipliers = [
-      new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4),
-      new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)
-    ];
-  }
 }
 
 function skipResetsIfPossible() {

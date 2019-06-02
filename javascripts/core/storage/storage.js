@@ -156,6 +156,7 @@ const GameStorage = {
       ui.view.page = "new-dimensions-tab";
     }
 
+    EventHub.dispatch(GameEvent.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 

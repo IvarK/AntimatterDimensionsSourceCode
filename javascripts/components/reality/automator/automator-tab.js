@@ -60,6 +60,20 @@ Vue.component("automator-tab", {
       }
       AutomatorUI.editor.swapDoc(AutomatorUI.documents[this.currentScriptID]);
     },
+    rewind: () => AutomatorBackend.restart(),
+    play() {
+      if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.RUN;
+      else AutomatorBackend.start(this.currentScriptID);
+    },
+    pause: () => AutomatorBackend.pause(),
+    stop: () => AutomatorBackend.stop(),
+    step() {
+      if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.SINGLE_STEP;
+      else AutomatorBackend.start(this.currentScriptID, AutomatorMode.SINGLE_STEP);
+    },
+    repeat() {
+      // TODO add repeat support
+    },
   },
   created() {
     if (!AutomatorUI.wrapper) {
@@ -94,5 +108,15 @@ Vue.component("automator-tab", {
   },
   template:
     `<div class="c-automator l-automator l-automator-tab__automator">
+      <div class="l-automator__top-row">
+        <div class="c-automator__controls l-automator__controls">
+          <button class="c-automator__button l-automator__button fas fa-fast-backward" @click="rewind" />
+          <button class="c-automator__button l-automator__button fas fa-play" @click="play" />
+          <button class="c-automator__button l-automator__button fas fa-pause" @click="pause" />
+          <button class="c-automator__button l-automator__button fas fa-stop" @click="stop" />
+          <button class="c-automator__button l-automator__button fas fa-step-forward" @click="step" />
+          <button class="c-automator__button l-automator__button fas fa-sync-alt" @click="repeat" />
+        </div>
+      </div>
     </div>`
 });

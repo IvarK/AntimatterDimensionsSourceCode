@@ -13,6 +13,32 @@
   /*width: 100rem;*/
 }
 
+.l-automator__top-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.l-automator__controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.c-automator__controls {
+  background-color: black;
+  border: .2rem solid #0b600e;
+  border-radius: .5rem;
+}
+
+.c-automator__button {
+  margin: 0.4rem;
+}
+
 .c-automator-editor__active-line {
   background: rgb(25, 10, 44);
 }
@@ -46,6 +72,14 @@
 .l-automator-editor {
   display: flex;
   flex-direction: row;
+}
+
+.CodeMirror {
+  border-radius: 0.5rem;
+}
+
+.t-metro .CodeMirror, .t-dark-metro .CodeMirror, .t-inverted-metro .CodeMirror, .t-s8 .CodeMirror {
+  border-radius: 0.5rem;
 }
 
 .CodeMirror-hint {

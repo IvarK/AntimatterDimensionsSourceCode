@@ -177,6 +177,10 @@ const AutomatorBackend = {
     return this.state.mode;
   },
 
+  set mode(value) {
+    this.state.mode = value;
+  },
+
   get isRunning() {
     return this.isOn && this.mode === AutomatorMode.RUN;
   },
@@ -270,6 +274,10 @@ const AutomatorBackend = {
 
   stop() {
     this.stack.clear();
+    this.state.mode = AutomatorMode.PAUSE;
+  },
+
+  pause() {
     this.state.mode = AutomatorMode.PAUSE;
   },
 

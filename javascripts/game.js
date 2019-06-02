@@ -810,6 +810,7 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);
+  AutomatorBackend.update();
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();

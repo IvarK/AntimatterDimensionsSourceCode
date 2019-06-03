@@ -4,13 +4,13 @@ function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
   resetInfinityRuns();
-  fullResetInfDimensions();
+  InfinityDimensions.fullReset();
   eternityResetReplicanti();
   resetChallengeStuff();
   resetDimensions();
   player.replicanti.galaxies = 0;
   resetInfinityPointsOnEternity();
-  resetInfDimensions();
+  InfinityDimensions.resetAmount();
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();

@@ -35,7 +35,7 @@ Vue.component("dimensions-tab", {
   },
   methods: {
     update() {
-      this.isIDTabUnlocked = player.eternities > 0 || player.infDimensionsUnlocked.includes(true);
+      this.isIDTabUnlocked = player.eternities > 0 || InfinityDimension(1).isUnlocked;
       this.isTDTabUnlocked = player.eternities > 0;
       this.isProductionTabUnlocked = player.eternities > 0 || player.infinities > 0;
     }

@@ -15,7 +15,15 @@ let player = {
       pow: new Decimal(1),
       cost: [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier].toDecimal(),
       costMultiplier: [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier].toDecimal()
-    }))
+    })),
+    infinity: Array.range(0, 8).map(tier => ({
+      isUnlocked: false,
+      bought: 0,
+      amount: new Decimal(0),
+      power: new Decimal(1),
+      cost: [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier].toDecimal(),
+      baseAmount: 0
+    })),
   },
   sacrificed: new Decimal(0),
   achievements: new Set(),
@@ -79,7 +87,6 @@ let player = {
   infMultCost: new Decimal(10),
   overXGalaxies: 10,
   version: 13,
-  infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
   postChallUnlocked: 0,
@@ -92,62 +99,6 @@ let player = {
   bestEternity: 999999999999,
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
-  infinityDimension1: {
-    cost: new Decimal(1e8),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension2: {
-    cost: new Decimal(1e9),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension3: {
-    cost: new Decimal(1e10),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension4: {
-    cost: new Decimal(1e20),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension5: {
-    cost: new Decimal(1e140),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension6: {
-    cost: new Decimal(1e200),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension7: {
-    cost: new Decimal(1e250),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension8: {
-    cost: new Decimal(1e280),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
   infDimBuyers: [false, false, false, false, false, false, false, false],
   timeShards: new Decimal(0),
   tickThreshold: new Decimal(1),

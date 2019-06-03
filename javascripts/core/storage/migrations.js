@@ -376,24 +376,38 @@ GameStorage.migrations = {
   uniformDimensions(player) {
     for (let tier = 1; tier <= 8; tier++) {
       const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
-      const props = {
+      const oldProps = {
         cost: `${name}Cost`,
         amount: `${name}Amount`,
         bought: `${name}Bought`,
         pow: `${name}Pow`
       };
       const dimension = player.dimensions.normal[tier - 1];
-      dimension.cost = new Decimal(player[props.cost]);
-      dimension.amount = new Decimal(player[props.amount]);
-      dimension.bought = player[props.bought];
-      dimension.pow = new Decimal(player[props.pow]);
+      dimension.cost = new Decimal(player[oldProps.cost]);
+      dimension.amount = new Decimal(player[oldProps.amount]);
+      dimension.bought = player[oldProps.bought];
+      dimension.pow = new Decimal(player[oldProps.pow]);
       dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
-      delete player[props.cost];
-      delete player[props.amount];
-      delete player[props.bought];
-      delete player[props.pow];
+      delete player[oldProps.cost];
+      delete player[oldProps.amount];
+      delete player[oldProps.bought];
+      delete player[oldProps.pow];
     }
     delete player.costMultipliers;
+
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimension = player.dimensions.infinity[tier - 1];
+      const oldName = `infinityDimension${tier}`;
+      const old = player[oldName];
+      dimension.cost = new Decimal(old.cost);
+      dimension.amount = new Decimal(old.amount);
+      dimension.power = new Decimal(old.power);
+      dimension.bought = old.bought;
+      dimension.baseAmount = old.baseAmount;
+      dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
+      delete player[oldName];
+    }
+    delete player.infDimensionsUnlocked;
   },
   
   prePatch(saveData) {

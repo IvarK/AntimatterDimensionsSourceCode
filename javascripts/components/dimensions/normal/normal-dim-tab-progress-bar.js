@@ -28,7 +28,7 @@ Vue.component("normal-dim-tab-progress-bar", {
         setProgress(player.money, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
         setProgress(player.money, Decimal.MAX_NUMBER, "Percentage to Infinity");
-      } else if (player.infDimensionsUnlocked.includes(false)) {
+      } else if (!InfinityDimension(8).isUnlocked) {
         setProgress(player.money, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
       } else if (EternityChallenge.isRunning) {
         setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");

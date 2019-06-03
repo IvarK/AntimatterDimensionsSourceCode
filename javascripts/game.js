@@ -666,7 +666,7 @@ function gameLoop(diff, options = {}) {
     GameCache.achievementPower.invalidate();
 
     for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
+      if (tier !== 8 && (InfinityDimension(tier).isUnlocked || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);
         dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
@@ -689,7 +689,7 @@ function gameLoop(diff, options = {}) {
     const TD1Production = TimeDimension(1).productionPerSecond;
     const TD1ProductionThisTick = TD1Production.times(diff/1000);
     if (EternityChallenge(7).isRunning) {
-      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
+      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(TD1ProductionThisTick);
     }
     else {
       player.timeShards = player.timeShards.plus(TD1ProductionThisTick)

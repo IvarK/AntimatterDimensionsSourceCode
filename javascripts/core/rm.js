@@ -548,7 +548,10 @@ function sacrificeGlyph(glyph, force = false) {
     player.timeDimension8.power = Decimal.pow(2 * Effects.product(GlyphSacrifice.time), player.timeDimension8.bought)
   }
   if (glyph.type === "infinity") {
-    player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
+    InfinityDimension(8).power = Decimal.pow(
+      5 * Effects.product(GlyphSacrifice.infinity),
+      IDAmountToIDPurchases(InfinityDimension(8).baseAmount)
+    );
   }
   Glyphs.removeFromInventory(glyph);
   EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);

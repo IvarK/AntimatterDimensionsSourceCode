@@ -175,7 +175,8 @@
       }
       // We don't visit studyList because it might actually be just a number in this case
       const studies = ctx.studyList[0].children.studyListEntry;
-      if (studies.length > 1 || studies[0].studyRange || studies[0].StudyPath || studies[0].Comma) {
+      if (studies.length > 1 || studies[0].children.studyRange ||
+        studies[0].children.StudyPath || studies[0].children.Comma) {
         def.type = AutomatorVarTypes.STUDIES;
         def.value = this.visit(ctx.studyList);
         return;
@@ -291,12 +292,16 @@
     }
 
     checkBlock(ctx, commandToken) {
+      let hadError = false;
       if (!ctx.RCurly || ctx.RCurly[0].isInsertedInRecovery) {
         this.addError(commandToken[0], "Missing closing }");
+        hadError = true;
       }
       if (!ctx.LCurly || ctx.LCurly[0].isInsertedInRecovery) {
         this.addError(commandToken[0], "Missing opening {");
+        hadError = true;
       }
+      return !hadError;
     }
 
     script(ctx) {
@@ -339,7 +344,7 @@
 
     block(ctx) {
       const output = [];
-      for (const cmd of ctx.command) this.visit(cmd, output);
+      if (ctx.command) for (const cmd of ctx.command) this.visit(cmd, output);
       return output;
     }
 

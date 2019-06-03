@@ -84,10 +84,11 @@ Vue.component("automator-tab", {
       const textArea = document.createElement("textarea");
       AutomatorUI.wrapper.appendChild(textArea);
       AutomatorUI.editor = CodeMirror.fromTextArea(textArea, AutomatorUI.mode);
-      AutomatorUI.editor.on("keyup", (editor, event) => {
+      AutomatorUI.editor.on("keydown", (editor, event) => {
         if (editor.state.completionActive) return;
         const key = event.key;
-        if (!/^[a-zA-Z0-9 \t]$/u.test(key)) return;
+        console.log(event);
+        if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
         CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
       });
       AutomatorUI.editor.on("change", (editor, changes) => {

@@ -201,7 +201,6 @@ const AutomatorBackend = {
         return;
     }
     for (let count = 0; count < AutomatorBackend.MAX_COMMANDS_PER_UPDATE && this.isRunning; ++count) {
-      console.log(this.stack);
       if (!this.step()) break;
     }
   },
@@ -226,7 +225,6 @@ const AutomatorBackend = {
   runCurrentCommand() {
     const S = this.stack.top;
     const cmdState = S.commands[S.commandIndex].run(S);
-    console.log(`command returned ${cmdState}`);
     return cmdState;
   },
 

@@ -113,6 +113,14 @@ const AutomatorLexer = (() => {
     $autocomplete: "tt",
     $getter: () => player.timestudy.theorem,
   });
+  createInCategory(Currency, "Completions", /completions/i, {
+    $getter: () => {
+      // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
+      // completions returns true
+      if (!EternityChallenge.isRunning) return Decimal.MAX_NUMBER;
+      return EternityChallenge.gainedCompletionStatus().totalCompletions;
+    }
+  });
 
   // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
   // eternity will be triggered by something waiting for reality, for example.

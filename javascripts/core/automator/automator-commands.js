@@ -27,7 +27,7 @@ const AutomatorCommands = ((() => {
   function compileConditionLoop(evalComparison, commands) {
     return {
       run: () => {
-        if (!evalComparison()) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        if (!evalComparison()) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
         AutomatorBackend.push(commands);
         return AutomatorCommandStatus.SAME_INSTRUCTION;
       },
@@ -217,7 +217,7 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: ctx => {
-        const ecNumber = ctx.$ecNumber;
+        const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
         return () => {
           const ec = EternityChallenge(ecNumber);
           if (ec.isRunning) return AutomatorCommandStatus.NEXT_INSTRUCTION;
@@ -251,7 +251,10 @@ const AutomatorCommands = ((() => {
         if (ctx.Nowait === undefined) return () => {
           for (const tsNumber of studies.normal) {
             if (TimeStudy(tsNumber).isBought) continue;
-            if (!TimeStudy(tsNumber).purchase()) return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            if (!TimeStudy(tsNumber).purchase()) {
+              if (tsNumber === 201 && DilationUpgrade.timeStudySplit.isBought) continue;
+              return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            }
           }
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
             return AutomatorCommandStatus.NEXT_INSTRUCTION;

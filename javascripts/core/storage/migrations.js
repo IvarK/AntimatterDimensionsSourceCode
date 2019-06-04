@@ -408,6 +408,17 @@ GameStorage.migrations = {
       delete player[oldName];
     }
     delete player.infDimensionsUnlocked;
+
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimension = player.dimensions.time[tier - 1];
+      const oldName = `timeDimension${tier}`;
+      const old = player[oldName];
+      dimension.cost = new Decimal(old.cost);
+      dimension.amount = new Decimal(old.amount);
+      dimension.power = new Decimal(old.power);
+      dimension.bought = old.bought;
+      delete player[oldName];
+    }
   },
   
   prePatch(saveData) {

@@ -1,7 +1,6 @@
 "use strict";
 
 var shiftDown = false;
-var saved = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
@@ -13,17 +12,23 @@ let player = {
       bought: 0,
       amount: new Decimal(0),
       pow: new Decimal(1),
-      cost: [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier].toDecimal(),
-      costMultiplier: [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier].toDecimal()
+      cost: new Decimal([10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier]),
+      costMultiplier: new Decimal([1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier])
     })),
     infinity: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
       bought: 0,
       amount: new Decimal(0),
       power: new Decimal(1),
-      cost: [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier].toDecimal(),
+      cost: new Decimal([1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier]),
       baseAmount: 0
     })),
+    time: Array.range(0, 8).map(tier => ({
+      cost: new Decimal([1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"][tier]),
+      amount: new Decimal(0),
+      power: new Decimal(1),
+      bought: 0
+    }))
   },
   sacrificed: new Decimal(0),
   achievements: new Set(),
@@ -103,54 +108,6 @@ let player = {
   timeShards: new Decimal(0),
   tickThreshold: new Decimal(1),
   totalTickGained: 0,
-  timeDimension1: {
-    cost: new Decimal(1),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension2: {
-    cost: new Decimal(5),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension3: {
-    cost: new Decimal(100),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension4: {
-    cost: new Decimal(1000),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension5: {
-    cost: new Decimal("1e2350"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension6: {
-    cost: new Decimal("1e2650"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension7: {
-    cost: new Decimal("1e3000"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension8: {
-    cost: new Decimal("1e3350"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
   offlineProd: 0,
   offlineProdCost: 1e7,
   autoSacrifice: 1,

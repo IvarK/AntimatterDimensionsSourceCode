@@ -140,49 +140,48 @@ class TimeDimensionState {
   constructor(tier) {
     this._propsName = `timeDimension${tier}`;
     this._tier = tier;
-    const BASE_COSTS = [null, new Decimal(1), new Decimal(5), new Decimal(100), new Decimal(1000),
-      new Decimal("1e2350"), new Decimal("1e2650"), new Decimal("1e3000"), new Decimal("1e3350")];
-    this._baseCost = BASE_COSTS[tier];
+    const BASE_COSTS = [null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"];
+    this._baseCost = new Decimal(BASE_COSTS[tier]);
     const COST_MULTS = [null, 3, 9, 27, 81, 243, 729, 2187, 6561];
     this._costMultiplier = COST_MULTS[tier];
     const E6000_SCALING_AMOUNTS = [null, 7322, 4627, 3382, 2665, 833, 689, 562, 456];
     this._e6000ScalingAmount = E6000_SCALING_AMOUNTS[tier];
   }
 
-  get props() {
-    return player[this._propsName];
+  get data() {
+    return player.dimensions.time[this._tier - 1];
   }
 
   get cost() {
-    return this.props.cost;
+    return this.data.cost;
   }
 
   set cost(value) {
-    this.props.cost = value;
+    this.data.cost = value;
   }
 
   get amount() {
-    return this.props.amount;
+    return this.data.amount;
   }
 
   set amount(value) {
-    this.props.amount = value;
+    this.data.amount = value;
   }
 
   get power() {
-    return this.props.power;
+    return this.data.power;
   }
 
   set power(value) {
-    this.props.power = value;
+    this.data.power = value;
   }
 
   get bought() {
-    return this.props.bought;
+    return this.data.bought;
   }
 
   set bought(value) {
-    this.props.bought = value;
+    this.data.bought = value;
   }
 
   get isUnlocked() {
@@ -267,6 +266,10 @@ class TimeDimensionState {
 
 TimeDimensionState.all = Array.dimensionTiers.map(tier => new TimeDimensionState(tier));
 
+/**
+ * @param {number} tier
+ * @return {TimeDimensionState}
+ */
 const TimeDimension = tier => TimeDimensionState.all[tier - 1];
 
 const TimeDimensions = {

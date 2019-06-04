@@ -956,7 +956,7 @@ function autoBuyTimeDims() {
 }
 
 function autoBuyExtraTimeDims() {
-  if (player.timeDimension8.bought === 0 && Perk.autounlockTD.isBought) {
+  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
 }

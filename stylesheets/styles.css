@@ -360,18 +360,17 @@ button {
 
 /*#endregion TT shop*/
 
-#news, #newNews {
-    color: #000000;
-    /*transition: transform 1s;*/
-    position: relative;
-    display: inline-block;
-    font-family: Typewriter;
-    font-size: 15px;
-    white-space: nowrap;
-    font-weight: bold
+#news {
+  color: #000000;
+  position: relative;
+  display: inline-block;
+  font-family: Typewriter;
+  font-size: 15px;
+  white-space: nowrap;
+  font-weight: bold
 }
 
-#news a, #newNews a {
+#news a {
   text-decoration: underline;
 }
 

@@ -3,13 +3,13 @@
 class GameOptions {
 
   static toggleNews() {
-    if (!player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
-      player.options.newsHidden = true;
-    } else {
+    if (player.options.newsHidden) {
       document.getElementById("game").style.display = "block";
       player.options.newsHidden = false;
       scrollNextMessage();
+    } else {
+      document.getElementById("game").style.display = "none";
+      player.options.newsHidden = true;
     }
   }
 

@@ -38,6 +38,11 @@ let ui = {
         subtab: "",
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
+        automator: {
+          fullScreen: false,
+          // TODO: enum
+          mode: true
+        }
       },
       celestials: {
         subtab: ""

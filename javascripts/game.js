@@ -63,7 +63,7 @@ function maxDimension(tier) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.cost.times(dimension.remainingUntil10);
-  const multBefore = dimension.pow;
+  const multBefore = dimension.power;
 
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {
@@ -104,7 +104,7 @@ function maxDimension(tier) {
       const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
       const postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
       dimension.bought += 10 * buying;
-      dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying));
+      dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
       const newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy))
         .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
       const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
@@ -119,7 +119,7 @@ function maxDimension(tier) {
     player.matter = new Decimal(1);
   }
   onBuyDimension(tier);
-  if (dimension.pow.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
+  if (dimension.power.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
 }
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
@@ -127,7 +127,7 @@ function buyUntilTen(tier) {
   const dimension = NormalDimension(tier);
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
   dimension.bought += dimension.remainingUntil10;
-  dimension.pow = dimension.pow.times(getBuyTenMultiplier())
+  dimension.power = dimension.power.times(getBuyTenMultiplier())
 
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
@@ -231,14 +231,6 @@ function percentToNextGlyphLevel() {
     }
     if (ret == Infinity || isNaN(ret)) return 0
     return Math.min(((ret - Math.floor(ret)-retOffset) * 100), 99.9).toFixed(1)
-}
-
-function resetDimensions() {
-  for (const dimension of NormalDimension.all) {
-    dimension.reset();
-  }
-  NormalDimension(8).pow = new Decimal(player.chall11Pow)
-  GameCache.dimensionMultDecrease.invalidate();
 }
 
 function resetChallengeStuff() {

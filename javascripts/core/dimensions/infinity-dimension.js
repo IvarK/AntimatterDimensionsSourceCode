@@ -91,9 +91,9 @@ function toggleAllInfDims() {
   }
 }
 
-class InfinityDimensionState {
+class InfinityDimensionState extends DimensionState {
   constructor(tier) {
-    this._tier = tier;
+    super(() => player.dimensions.infinity, tier);
     this._purchaseCap = tier === 8 ? Number.MAX_VALUE : HARDCAP_ID_PURCHASES;
     const UNLOCK_REQUIREMENTS = [
       undefined,
@@ -113,46 +113,6 @@ class InfinityDimensionState {
     this._powerMultiplier = POWER_MULTS[tier];
     const BASE_COSTS = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
     this._baseCost = new Decimal(BASE_COSTS[tier]);
-  }
-
-  get data() {
-    return player.dimensions.infinity[this._tier - 1];
-  }
-
-  get tier() {
-    return this._tier;
-  }
-
-  get cost() {
-    return this.data.cost;
-  }
-
-  set cost(value) {
-    this.data.cost = value;
-  }
-
-  get amount() {
-    return this.data.amount;
-  }
-
-  set amount(value) {
-    this.data.amount = value;
-  }
-
-  get bought() {
-    return this.data.bought;
-  }
-
-  set bought(value) {
-    this.data.bought = value;
-  }
-
-  get power() {
-    return this.data.power;
-  }
-
-  set power(value) {
-    this.data.power = value;
   }
 
   get baseAmount() {
@@ -176,7 +136,7 @@ class InfinityDimensionState {
   }
 
   get isAutobuyerUnlocked() {
-    return player.eternities >= 10 + this._tier;
+    return player.eternities >= 10 + this.tier;
   }
 
   get isAvailableForPuchase() {
@@ -188,11 +148,11 @@ class InfinityDimensionState {
   }
 
   get hasRateOfChange() {
-    return this._tier < 8 || EternityChallenge(7).completions > 0;
+    return this.tier < 8 || EternityChallenge(7).completions > 0;
   }
 
   get rateOfChange() {
-    const tier = this._tier;
+    const tier = this.tier;
     let toGain = new Decimal(0);
     if (tier === 8) {
       EternityChallenge(7).reward.applyEffect(v => toGain = v);
@@ -220,7 +180,7 @@ class InfinityDimensionState {
   }
 
   get multiplier() {
-    const tier = this._tier;
+    const tier = this.tier;
 
     if (EternityChallenge(2).isRunning) {
       return new Decimal(0);
@@ -309,13 +269,13 @@ class InfinityDimensionState {
   }
 }
 
-InfinityDimensionState.index = Array.range(1, 8).map(tier => new InfinityDimensionState(tier));
+InfinityDimensionState.index = DimensionState.createIndex(InfinityDimensionState);
 
 /**
  * @param {number} tier
  * @return {InfinityDimensionState}
  */
-const InfinityDimension = tier => InfinityDimensionState.index[tier - 1];
+const InfinityDimension = tier => InfinityDimensionState.index[tier];
 
 const InfinityDimensions = {
   /**

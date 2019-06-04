@@ -65,7 +65,7 @@ function eternity(force, auto, specialConditions = {}) {
   InfinityDimensions.fullReset();
   eternityResetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
 
   if (player.respec) respecTimeStudies(auto);
   player.respec = false;

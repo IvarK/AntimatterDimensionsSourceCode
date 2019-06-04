@@ -82,7 +82,7 @@ class DimBoost {
 function applyDimensionBoost() {
     const power = DimBoost.power;
     for (let tier = 1; tier <= 8; tier++) {
-        NormalDimension(tier).pow = power.pow(player.resets + 1 - tier).max(1);
+        NormalDimension(tier).power = power.pow(player.resets + 1 - tier).max(1);
     }
 }
 
@@ -97,7 +97,7 @@ function softReset(bulk) {
      */
     player.sacrificed = new Decimal(0);
     resetChallengeStuff();
-    resetDimensions();
+    NormalDimensions.reset();
     applyDimensionBoost();
     skipResetsIfPossible();
     resetTickspeed();

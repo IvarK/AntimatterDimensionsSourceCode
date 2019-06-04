@@ -108,7 +108,7 @@ GameDatabase.achievements.normal = [
     id: 31,
     name: "I forgot to nerf that",
     tooltip: () => `Get any Dimension multiplier over ${shorten(1e31, 0, 0)}`,
-    checkRequirement: () => NormalDimension(1).pow.exponent >= 31,
+    checkRequirement: () => NormalDimension(1).power.exponent >= 31,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "1st Dimensions are 5% stronger.",
     effect: 1.05

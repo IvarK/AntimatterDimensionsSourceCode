@@ -7,7 +7,7 @@ function startEternityChallenge() {
   InfinityDimensions.fullReset();
   eternityResetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
   player.replicanti.galaxies = 0;
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();

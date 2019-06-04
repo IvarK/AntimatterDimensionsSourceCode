@@ -386,7 +386,7 @@ GameStorage.migrations = {
       dimension.cost = new Decimal(player[oldProps.cost]);
       dimension.amount = new Decimal(player[oldProps.amount]);
       dimension.bought = player[oldProps.bought];
-      dimension.pow = new Decimal(player[oldProps.pow]);
+      dimension.power = new Decimal(player[oldProps.pow]);
       dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
       delete player[oldProps.cost];
       delete player[oldProps.amount];

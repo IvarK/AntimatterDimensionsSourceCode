@@ -15,12 +15,12 @@ function sacrificeReset(auto) {
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, "x" + shortenMoney(nextBoost));
-  NormalDimension(8).pow = NormalDimension(8).pow.times(nextBoost);
+  NormalDimension(8).power = NormalDimension(8).power.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
   if (NormalChallenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
-    if (!isAch118Enabled) resetDimensions();
+    if (!isAch118Enabled) NormalDimensions.reset();
     player.money = new Decimal(100);
   } else if (!isAch118Enabled) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);

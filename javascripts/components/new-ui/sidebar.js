@@ -154,7 +154,7 @@ const MAIN_TAB_BUTTONS = [
       {
         label: "L",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_UNLOCKS.UNNAMED_UNLOCK)
+        condition: () => Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
       },
       {
         label: "P",

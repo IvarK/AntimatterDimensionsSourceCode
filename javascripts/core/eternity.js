@@ -56,7 +56,6 @@ function eternity(force, auto, specialConditions = {}) {
     player.break = false;
   }
   
-  player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.challenge.eternity.current = 0;
   if (!specialConditions.enteringEC) {
     player.dilation.active = false;

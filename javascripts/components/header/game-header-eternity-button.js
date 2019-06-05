@@ -24,7 +24,7 @@ Vue.component("game-header-eternity-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.infinityPoints.gte(player.eternityChallGoal) && InfinityDimension(8).isUnlocked;
+      this.isVisible = player.infinityPoints.gte(Player.eternityGoal) && InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
       if (player.eternities === 0) {
         this.type = EPButtonDisplayType.FIRST_TIME;

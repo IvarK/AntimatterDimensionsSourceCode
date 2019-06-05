@@ -317,35 +317,6 @@ function gainedInfinities() {
     return infGain;
 }
 
-function failChallenge() {
-    Modal.message.show("You failed the challenge, you will now exit it.");
-    setTimeout(exitChallenge, 500);
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
-}
-
-function exitChallenge() {
-  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
-    secondSoftReset();
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
-  } else if (EternityChallenge.isRunning) {
-    player.challenge.eternity.current = 0;
-    player.eternityChallGoal = Decimal.MAX_NUMBER;
-    eternity(true);
-  }
-}
-
-function unlockEChall(idx, auto) {
-  if (player.challenge.eternity.unlocked === 0) {
-    player.challenge.eternity.unlocked = idx;
-    if (!auto) {
-      Tab.challenges.eternity.show();
-    }
-    if (idx !== 12 && idx !== 13) player.etercreq = idx;
-  }
-}
-
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -416,10 +387,6 @@ function randomStuffThatShouldBeRefactored() {
 
   if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
   else document.getElementById("eternitystorebtn").style.display = "none"
-
-  if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
-      failChallenge();
-  }
 
   if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
   else $("#realitybtn").hide()
@@ -647,13 +614,15 @@ function gameLoop(diff, options = {}) {
 
     player.realTimePlayed += realDiff;
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
-    player.totalTimePlayed += diff
-    player.thisInfinityTime += diff
+    player.totalTimePlayed += diff;
+    player.thisInfinityTime += diff;
     player.thisInfinityRealTime += realDiff;
-    player.thisEternity += diff
+    player.thisEternity += diff;
     player.thisEternityRealTime += realDiff;
-    player.thisReality += diff
+    player.thisReality += diff;
     player.thisRealityRealTime += realDiff;
+
+    EternityChallenge(12).tryFail();
 
     GameCache.achievementPower.invalidate();
 

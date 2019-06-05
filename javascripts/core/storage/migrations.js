@@ -109,6 +109,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removeAutoIPProperties(player);
       GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.uniformDimensions(player);
+      GameStorage.migrations.removeEternityChallGoal(player);
     }
   },
 
@@ -372,7 +373,11 @@ GameStorage.migrations = {
     delete player.autoIP;
     delete player.autoTime;
   },
-  
+
+  removeEternityChallGoal(player) {
+    delete player.eternityChallGoal;
+  },
+
   uniformDimensions(player) {
     for (let tier = 1; tier <= 8; tier++) {
       const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
@@ -420,7 +425,7 @@ GameStorage.migrations = {
       delete player[oldName];
     }
   },
-  
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge

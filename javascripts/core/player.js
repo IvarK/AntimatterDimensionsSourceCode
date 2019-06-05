@@ -136,7 +136,6 @@ let player = {
     }),
   },
   eternityChalls: {},
-  eternityChallGoal: Decimal.MAX_NUMBER,
   etercreq: 0,
   infMultBuyer: false,
   autoCrunchMode: AutoCrunchMode.AMOUNT,
@@ -433,6 +432,11 @@ const Player = {
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },
+
+  get eternityGoal() {
+    const ec = EternityChallenge.current;
+    return ec === undefined ? Decimal.MAX_NUMBER : ec.currentGoal;
+  }
 };
 
 function guardFromNaNValues(obj) {

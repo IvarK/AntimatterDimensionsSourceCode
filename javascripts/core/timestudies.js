@@ -520,7 +520,13 @@ class ECTimeStudyState extends TimeStudyState {
 
   purchase(auto) {
     if (!this.canBeBought) return false;
-    unlockEChall(this.id, auto);
+    if (player.challenge.eternity.unlocked === 0) {
+      player.challenge.eternity.unlocked = this.id;
+      if (!auto) {
+        Tab.challenges.eternity.show();
+      }
+      if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+    }
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);
     return true;
   }

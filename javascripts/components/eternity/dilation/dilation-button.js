@@ -7,7 +7,7 @@ Vue.component("dilation-button", {
       hasGain: false,
       requiredForGain: new Decimal(0),
       canEternity: false,
-      eternityChallGoal: new Decimal(0),
+      eternityGoal: new Decimal(0),
       tachyonGain: new Decimal(0)
     };
   },
@@ -15,12 +15,12 @@ Vue.component("dilation-button", {
     update() {
       this.isRunning = player.dilation.active;
       if (!this.isRunning) return;
-      this.canEternity = player.infinityPoints.gte(player.eternityChallGoal);
+      this.canEternity = player.infinityPoints.gte(Player.eternityGoal);
       this.hasGain = getTachyonGain().gt(0);
       if (this.canEternity && this.hasGain) {
         this.tachyonGain.copyFrom(getTachyonGain());
       } else if (this.hasGain) {
-        this.eternityChallGoal.copyFrom(player.eternityChallGoal);
+        this.eternityGoal.copyFrom(Player.eternityGoal);
       } else {
         this.requiredForGain.copyFrom(getTachyonReq());
       }
@@ -37,7 +37,7 @@ Vue.component("dilation-button", {
       <span v-else-if="hasGain">
         Disable dilation.
         <br>
-        Reach {{shorten(eternityChallGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
+        Reach {{shorten(eternityGoal, 1, 0)}} IP to eternity and gain Tachyon Particles.
       </span>
       <span v-else>
         Disable dilation.

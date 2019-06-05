@@ -10,44 +10,24 @@ class DimensionState {
 
   get data() { return this._getData()[this.tier - 1]; }
 
-  /**
-   * @returns {Decimal}
-   */
+  /** @returns {Decimal} */
   get cost() { return this.data.cost; }
-
-  /**
-   * @param {Decimal} value
-   */
+  /** @param {Decimal} value */
   set cost(value) { this.data.cost = value; }
 
-  /**
-   * @returns {Decimal}
-   */
+  /** @returns {Decimal} */
   get amount() { return this.data.amount; }
-
-  /**
-   * @param {Decimal} value
-   */
+  /** @param {Decimal} value */
   set amount(value) { this.data.amount = value; }
 
-  /**
-   * @returns {Decimal}
-   */
+  /** @returns {Decimal} */
   get power() { return this.data.power; }
-
-  /**
-   * @param {Decimal} value
-   */
+  /** @param {Decimal} value */
   set power(value) { this.data.power = value; }
 
-  /**
-   * @returns {number}
-   */
+  /** @returns {number} */
   get bought() { return this.data.bought; }
-
-  /**
-   * @param {number} value
-   */
+  /** @param {number} value */
   set bought(value) { this.data.bought = value; }
 
   static createIndex($class) {

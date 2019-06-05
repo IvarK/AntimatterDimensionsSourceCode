@@ -88,7 +88,7 @@ function secondSoftReset() {
     player.tickDecrease = 0.9;
     resetMoney();
     softReset(0);
-    resetInfDimensions();
+    InfinityDimensions.resetAmount();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);

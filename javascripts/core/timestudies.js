@@ -53,7 +53,7 @@ const TimeTheorems = {
   },
 
   buyWithEP() {
-    if (player.timeDimension1.bought < 1 && player.realities === 0) {
+    if (TimeDimension(1).bought < 1 && player.realities === 0) {
       alert("You need to buy at least 1 Time Dimension before you can purchase theorems with Eternity points.");
       return false;
     }

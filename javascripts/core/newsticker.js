@@ -182,9 +182,9 @@ const newsArray = [
 // Basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],
   ["Nerf the galaxies please.", "b2", () => player.galaxies === 2 || player.infinitied.gt(0)],
-  ["What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.", "b3", () => player.thirdAmount.gt(0) || player.resets > 0],
-  ["How much is Infinity? -literally everyone at least once", "b4", () => player.eightAmount.eq(190) || player.infinitied.gt(0)],
-  ["Eh, the Fourth Dimension is alright...", "b5", () => player.fourthAmount.gt(0) && player.fifthAmount.eq(0)],
+  ["What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.", "b3", () => NormalDimension(3).amount.gt(0) || player.resets > 0],
+  ["How much is Infinity? -literally everyone at least once", "b4", () => NormalDimension(8).amount.eq(190) || player.infinitied.gt(0)],
+  ["Eh, the Fourth Dimension is alright...", "b5", () => NormalDimension(4).amount.gt(0) && NormalDimension(5).amount.eq(0)],
   ["Antimatter people seem to be even more afraid of 13 then we are. They destroyed entire galaxies just to remove 13 from their percents.", "b6", () => player.galaxies > 0 || player.infinitied.gt(0)],
   ["To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!", "b7", () => player.sacrificed.e >= 10 || player.resets >= 6],
   ["A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.", "b8", () => player.spreadingCancer > 0],

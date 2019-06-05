@@ -16,7 +16,7 @@ const MAIN_TAB_BUTTONS = [
       {
         label: "∞",
         component: "infinity-dim-tab",
-        condition: () => player.eternities > 0 || player.infDimensionsUnlocked.includes(true),
+        condition: () => player.eternities > 0 || InfinityDimension(1).isUnlocked,
       },
       {
         label: "Δ",

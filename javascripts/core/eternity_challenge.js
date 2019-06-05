@@ -130,7 +130,6 @@ class EternityChallengeState extends GameMechanicState {
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
     if (canEternity()) eternity(false, auto, { enteringEC: true });
-    player.eternityChallGoal = this.currentGoal;
     player.challenge.eternity.current = this.id;
     return startEternityChallenge();
   }
@@ -153,7 +152,6 @@ class EternityChallengeState extends GameMechanicState {
       nestedChallenge.exit();
     }
     player.challenge.eternity.current = 0;
-    player.eternityChallGoal = Decimal.MAX_NUMBER;
     eternity(true);
   }
 

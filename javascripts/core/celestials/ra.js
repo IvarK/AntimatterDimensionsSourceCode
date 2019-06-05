@@ -41,12 +41,15 @@ const Ra = {
       this.checkForUnlocks();
     }
   },
-  gainedExp(level, auto = false) {
-    let gain = Math.pow(2, level / 500 - 10);
+  expMult(auto) {
     if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-      if (player.celestials.ra.activeMode && !auto) gain *= 4;
-      else if (!player.celestials.ra.activeMode && auto) gain *= 2;
+      if (player.celestials.ra.activeMode && !auto) return 4;
+      if (!player.celestials.ra.activeMode && auto) return 2;
     }
+    return 1;
+  },
+  gainedExp(level, auto = false) {
+    const gain = Math.pow(2, level / 500 - 10) * this.expMult(auto);
     return Math.ceil(gain * this.expMultiplier);
   },
   checkForUnlocks() {

@@ -26,16 +26,6 @@
     border: 1px solid #2196F3;
 }
 
-.t-metro .storebtn {
-    background: #EEEEEE;
-    border: 1px solid #66BB6A;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
-}
-
-.t-metro .storebtn:hover {
-    background: #66BB6A;
-}
-
 .t-metro .unavailablebtn {
     background: #9E9E9E;
     border: 1px solid #EF5350;

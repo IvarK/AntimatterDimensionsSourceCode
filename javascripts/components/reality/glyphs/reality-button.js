@@ -36,7 +36,7 @@ Vue.component("reality-button", {
       return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`;
     },
     shardsGainedText() {
-      return `${this.shorten(this.shardsGained, 2)} Relic Shards (Effarig)`;
+      return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)} (Effarig)`;
     }
   },
   methods: {
@@ -53,7 +53,13 @@ Vue.component("reality-button", {
         return Decimal.pow10(Math.ceil(4000 * (adjusted.log10() / 3 + 1)));
       }
       this.canReality = true;
-      this.machinesGained = gainedRealityMachines();
+      function boostedGain(x) {
+        if (Enslaved.realityBoostRatio > 1) {
+          return Decimal.times(x, Enslaved.realityBoostRatio + 1);
+        }
+        return x;
+      }
+      this.machinesGained = boostedGain(gainedRealityMachines());
       if (Enslaved.boostReality) {
         this.machinesGained = this.machinesGained.times(Enslaved.realityBoostRatio);
       }
@@ -61,8 +67,9 @@ Vue.component("reality-button", {
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
-      this.shardsGained = Effarig.shardsGained;
-      this.expGained = Ra.gainedExp(this.glyphLevel);
+      this.ppGained = boostedGain(1);
+      this.shardsGained = boostedGain(Effarig.shardsGained);
+      this.expGained = boostedGain(Ra.gainedExp(this.glyphLevel));
       this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]);
     },
     handleClick() {
@@ -93,9 +100,9 @@ Vue.component("reality-button", {
       <div class="infotooltiptext">
         <template v-if="canReality">
           <div>Other resources gained:</div>
-          <div>1 Perk Point</div>
+          <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="raUnlocked">{{ expGained }} Teresa memories (Ra)</div>
+          <div v-if="raUnlocked">{{ expGained }} Teresa  {{ "memory" | pluralize(expGained, "memories") }} (Ra)</div>
         </template>
         <template v-else>
           No resources gained

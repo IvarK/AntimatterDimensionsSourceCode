@@ -1,4 +1,6 @@
-Vue.component('new-dimension-row', {
+"use strict";
+
+Vue.component("new-dimension-row", {
   props: {
     floatingText: Array,
     tier: Number
@@ -51,11 +53,12 @@ Vue.component('new-dimension-row', {
       this.until10Cost.copyFrom(dimension.costUntil10.times(dimension.howManyCanBuy));
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
-      this.remainingUntil10 = dimension.remainingUntil10
-      this.howManyCanBuy = until_10_setting ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1)
+      this.remainingUntil10 = dimension.remainingUntil10;
+      this.howManyCanBuy = until10Setting ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
     },
     buy() {
-      if (until_10_setting) { // TODO: Buy Until is on
+      // TODO: Buy Until is on
+      if (until10Setting) {
         buyAsManyAsYouCanBuyBtnClick(this.tier);
       } else {
         buyOneDimensionBtnClick(this.tier);
@@ -65,8 +68,8 @@ Vue.component('new-dimension-row', {
       return value.exponent < 1000000;
     }
   },
-  template:`
-  <div v-show="isUnlocked" class="dimension-row">
+  template:
+  `<div v-show="isUnlocked" class="dimension-row">
     <h3>{{name}} D<span class="mult">x{{ shortenMultiplier(multiplier) }}</span></h3>
     <span>{{amountDisplay}}</span>
     <button class="storebtn" @click="buy" :class="{ 'storebtn-unavailable': !isAffordable }">
@@ -85,6 +88,5 @@ Vue.component('new-dimension-row', {
       :key="text.key"
       class='c-normal-dim-row__floating-text'
     >{{text.text}}</div>
-  </div>
-  `
-})
+  </div>`
+});

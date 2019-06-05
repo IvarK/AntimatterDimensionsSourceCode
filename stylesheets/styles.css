@@ -91,9 +91,19 @@ button {
   vertical-align: top;
 }
 
+.t-metro .storebtn {
+  background: #EEEEEE;
+  border: 1px solid #66BB6A;
+  box-shadow: 1px 1px 1px 0px #9E9E9E;
+}
+
 .storebtn:hover {
   color: #FFF;
   background: #5AC467;
+}
+
+.t-metro .storebtn:hover {
+  background: #66BB6A;
 }
 
 .unavailablebtn {
@@ -351,14 +361,13 @@ button {
 /*#endregion TT shop*/
 
 #news {
-    color: #000000;
-    /*transition: transform 1s;*/
-    position: relative;
-    display: inline-block;
-    font-family: Typewriter;
-    font-size: 15px;
-    white-space: nowrap;
-    font-weight: bold
+  color: #000000;
+  position: relative;
+  display: inline-block;
+  font-family: Typewriter;
+  font-size: 15px;
+  white-space: nowrap;
+  font-weight: bold
 }
 
 #news a {
@@ -2327,14 +2336,6 @@ screen and (max-width: 480px) {
 
 /*#region l-normal-dim-tab*/
 
-.l-normal-dim-tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 0;
-  margin-top: .5rem;
-}
-
 .l-normal-dim-tab > * {
   flex-shrink: 0;
 }
@@ -2895,9 +2896,11 @@ screen and (max-width: 480px) {
 /*#region t-metro t-inverted-metro t-s8*/
 
 .t-metro .o-achievement,
+.t-dark-metro .o-achievement,
 .t-inverted-metro .o-achievement,
 .t-s8 .o-achievement {
   border-width: 1px;
+  border-radius: 0;
 }
 
 .t-metro .o-achievement--unlocked,
@@ -3020,6 +3023,7 @@ screen and (max-width: 480px) {
 .t-inverted-metro .c-achievement-grid__row--completed,
 .t-s8 .c-achievement-grid__row--completed {
   background-color: #1b5e20;
+  border-radius: 0px;
 }
 
 .t-s1 .c-achievement-grid__row--completed {
@@ -5609,6 +5613,15 @@ kbd {
   font-family: Typewriter;
 }
 
+.o-enslaved-shop-button--available {
+  background: aquamarine;
+  cursor: pointer;
+}
+
+.o-enslaved-shop-button--bought {
+  background: #16c55e;
+}
+
 .o-enslaved-run-button {
   width: 35rem;
   padding: 2rem;
@@ -5840,7 +5853,7 @@ kbd {
   border-radius: .5rem;
 }
 
-.o-matter-dimension-button-available {
+.o-matter-dimension-button--available {
   background: aquamarine;
   cursor: pointer;
 }
@@ -5861,12 +5874,12 @@ kbd {
   font-family: Typewriter;
 }
 
-.o-laitela-shop-button-available {
+.o-laitela-shop-button--available {
   background: aquamarine;
   cursor: pointer;
 }
 
-.o-laitela-shop-button-bought {
+.o-laitela-shop-button--bought {
   background: #16c55e;
 }
 

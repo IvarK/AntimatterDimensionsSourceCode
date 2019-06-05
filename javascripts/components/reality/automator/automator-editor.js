@@ -106,7 +106,6 @@ Vue.component("automator-editor", {
       AutomatorUI.editor.on("keydown", (editor, event) => {
         if (editor.state.completionActive) return;
         const key = event.key;
-        console.log(event);
         if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
         CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
       });

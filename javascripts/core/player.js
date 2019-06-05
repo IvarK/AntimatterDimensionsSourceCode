@@ -426,15 +426,22 @@ let player = {
       additionalStudies: 0
     },
     ra: {
-      level: 1,
-      exp: 0,
+      teresaLevel: 1,
+      effarigLevel: 0,
+      enslavedLevel: 0,
+      vLevel: 0,
+      teresaExp: 0,
+      effarigExp: 0,
+      enslavedExp: 0,
+      vExp: 0,
       unlocks: [],
       run: false,
       charged: new Set(),
       quoteIdx: 0,
-      maxEpGained: new Decimal(0),
-      // False if idle, true if active
-      activeMode: false,
+      lastEPGained: new Decimal(0),
+      lastGlyphCount: 5,
+      lastTimeTaken: new Decimal(1e100),
+      lastTTPurchased: new Decimal(0),
       disCharge: false,
     },
     laitela: {

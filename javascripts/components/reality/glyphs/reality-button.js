@@ -54,7 +54,7 @@ Vue.component("reality-button", {
       }
       this.canReality = true;
       function boostedGain(x) {
-        if (Enslaved.realityBoostRatio > 1) {
+        if (Enslaved.boostReality && Enslaved.realityBoostRatio > 1) {
           return Decimal.times(x, Enslaved.realityBoostRatio + 1);
         }
         return x;
@@ -69,7 +69,7 @@ Vue.component("reality-button", {
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = boostedGain(1);
       this.shardsGained = boostedGain(Effarig.shardsGained);
-      this.expGained = boostedGain(Ra.gainedExp(this.glyphLevel));
+      this.expGained = boostedGain(Ra.gainedTeresaExp);
       this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]);
     },
     handleClick() {

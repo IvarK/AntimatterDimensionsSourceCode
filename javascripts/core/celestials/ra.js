@@ -17,7 +17,8 @@ const RA_UNLOCKS = {
     id: 2,
     description: "Get Teresa to level 5",
     reward: "Unlock Effarig memories",
-    requirement: () => player.celestials.ra.teresaLevel >= 5
+    requirement: () => player.celestials.ra.teresaLevel >= 5,
+    onObtaining: () => player.celestials.ra.effarigLevel = 1
   },
   AUTO_TP: {
     id: 3,
@@ -53,7 +54,8 @@ const RA_UNLOCKS = {
     id: 8,
     description: "Get Effarig to level 5",
     reward: "Unlock Enslaved memories",
-    requirement: () => player.celestials.ra.effarigLevel >= 5
+    requirement: () => player.celestials.ra.effarigLevel >= 5,
+    onObtaining: () => player.celestials.ra.enslavedLevel = 1
   },
   GLYPH_EFFECT_COUNT: {
     id: 9,
@@ -89,7 +91,8 @@ const RA_UNLOCKS = {
     id: 14,
     description: "Get Enslaved to level 5",
     reward: "Unlock V memories",
-    requirement: () => player.celestials.ra.enslavedLevel >= 5
+    requirement: () => player.celestials.ra.enslavedLevel >= 5,
+    onObtaining: () => player.celestials.ra.vLevel = 1
   },
   ADJUSTABLE_STORED_TIME: {
     id: 15,
@@ -156,28 +159,38 @@ const RA_UNLOCKS = {
 };
 
 const Ra = {
-  get expMultiplier() {
-    return this.realityReward;
-  },
-  giveExp(amount) {
-    player.celestials.ra.exp += amount;
-    while (this.percentageToNextLevel >= 1) {
-      player.celestials.ra.exp -= this.requiredExp;
+  /**
+   * There is no checking for unlocks because all multipliers should be 1x before the boost is unlocked and
+   * 0x before the celestial is unlocked.
+   */ 
+  giveExp() {
+    const amplificationFactor = Enslaved.lockedInBoostRatio;
+    player.celestials.ra.teresaExp += this.gainedTeresaExp * amplificationFactor;
+    player.celestials.ra.effarigExp += this.gainedEffarigExp * amplificationFactor;
+    player.celestials.ra.enslavedExp += this.gainedEnslavedExp * amplificationFactor;
+    player.celestials.ra.vExp += this.gainedVExp * amplificationFactor;
+
+    while (player.celestials.ra.teresaExp > this.requiredExp(player.celestials.ra.teresaLevel)) {
+      player.celestials.ra.teresaExp -= this.requiredExp(player.celestials.ra.teresaLevel);
       player.celestials.ra.teresaLevel++;
       GameUI.notify.success(`Teresa has leveled up to level ${player.celestials.ra.teresaLevel}!`);
-      this.checkForUnlocks();
     }
-  },
-  expMult(auto) {
-    if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-      if (player.celestials.ra.activeMode && !auto) return 4;
-      if (!player.celestials.ra.activeMode && auto) return 2;
+    while (player.celestials.ra.effarigExp > this.requiredExp(player.celestials.ra.effarigLevel)) {
+      player.celestials.ra.effarigExp -= this.requiredExp(player.celestials.ra.effarigLevel);
+      player.celestials.ra.effarigLevel++;
+      GameUI.notify.success(`Effarig has leveled up to level ${player.celestials.ra.effarigLevel}!`);
     }
-    return 1;
-  },
-  gainedExp(level, auto = false) {
-    const gain = Math.pow(2, level / 500 - 10) * this.expMult(auto);
-    return Math.ceil(gain * this.expMultiplier);
+    while (player.celestials.ra.enslavedExp > this.requiredExp(player.celestials.ra.enslavedLevel)) {
+      player.celestials.ra.enslavedExp -= this.requiredExp(player.celestials.ra.enslavedLevel);
+      player.celestials.ra.enslavedLevel++;
+      GameUI.notify.success(`Enslaved has leveled up to level ${player.celestials.ra.enslavedLevel}!`);
+    }
+    while (player.celestials.ra.vExp > this.requiredExp(player.celestials.ra.vLevel)) {
+      player.celestials.ra.vExp -= this.requiredExp(player.celestials.ra.vLevel);
+      player.celestials.ra.vLevel++;
+      GameUI.notify.success(`V has leveled up to level ${player.celestials.ra.vLevel}!`);
+    }
+    this.checkForUnlocks();
   },
   checkForUnlocks() {
     for (const i in RA_UNLOCKS) {
@@ -197,11 +210,21 @@ const Ra = {
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
   },
-  get requiredExp() {
-    return Math.floor(5000 * Math.pow(1.2, player.celestials.ra.teresaLevel - 1));
+  updateExpBoosts() {
+    player.celestials.ra.lastEPGained = player.eternityPoints;
+    if (this.has(RA_UNLOCKS.EFFARIG_XP)) {
+      player.celestials.ra.lastGlyphCount = Glyphs.activeList.length;
+    }
+    if (this.has(RA_UNLOCKS.ENSLAVED_XP)) {
+      player.celestials.ra.lastTimeTaken = player.thisReality;
+    }
+    if (this.has(RA_UNLOCKS.V_XP)) {
+      player.celestials.ra.lastTTPurchased = Math.floor(player.timestudy.amcost.e / 20000) +
+        Math.floor(player.timestudy.ipcost.e / 100 + 1) + Math.round(player.timestudy.epcost.log2());
+    }
   },
-  get percentageToNextLevel() {
-    return player.celestials.ra.exp / this.requiredExp;
+  requiredExp(level) {
+    return Math.floor(5000 * Math.pow(1.2, level - 1));
   },
   get isRunning() {
     return player.celestials.ra.run;
@@ -215,7 +238,37 @@ const Ra = {
   get chargeUnlocked() {
     return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && player.celestials.ra.teresaLevel > 1;
   },
-  get realityReward() {
-    return Math.max(player.celestials.ra.maxEpGained.e / 1e4, 1);
-  }
+  get baseExp() {
+    return Math.pow(2, gainedGlyphLevel().actualLevel / 500 - 10);
+  },
+  get gainedTeresaExp() {
+    return Math.ceil(this.baseExp * this.teresaExpBoost);
+  },
+  get gainedEffarigExp() {
+    return Math.ceil(this.baseExp * this.effarigExpBoost);
+  },
+  get gainedEnslavedExp() {
+    return Math.ceil(this.baseExp * this.enslavedExpBoost);
+  },
+  get gainedVExp() {
+    return Math.ceil(this.baseExp * this.vExpBoost);
+  },
+  get teresaExpBoost() {
+    return Math.max(player.celestials.ra.lastEPGained.e / 1e4, 1);
+  },
+  get effarigExpBoost() {
+    if (!this.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return 0;
+    return Math.pow(2, 5 - player.celestials.ra.lastGlyphCount);
+  },
+  // This curve should be 2x at 100 seconds (1e5 ms), very steep below that (up to 50x) and very shallow out to 1e100 
+  get enslavedExpBoost() {
+    if (!this.has(RA_UNLOCKS.ENSLAVED_UNLOCK)) return 0;
+    return player.celestials.ra.lastTimeTaken < 1e5
+      ? Math.min(50, 100 / (2 + 1.5 * Math.max(1, Math.log10(player.celestials.ra.lastTimeTaken / 1e3))))
+      : Math.max(1, 2 - Math.log10(player.celestials.ra.lastTimeTaken / 1e5) / 95);
+  },
+  get vExpBoost() {
+    if (!this.has(RA_UNLOCKS.V_UNLOCK)) return 0;
+    return Math.max(1, Math.pow(player.celestials.ra.lastTTPurchased / 50000, 2.5))
+  },
 };

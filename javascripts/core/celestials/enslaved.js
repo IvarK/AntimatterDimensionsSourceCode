@@ -43,7 +43,6 @@ const Enslaved = {
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
   lockedInShardsGained: 0,
-  lockedInExpGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   toggleStoreBlackHole() {

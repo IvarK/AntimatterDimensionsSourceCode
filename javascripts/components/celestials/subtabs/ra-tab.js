@@ -15,9 +15,10 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
-      this.fillPercentage = `${Ra.percentageToNextLevel * 100}%`;
-      this.exp = player.celestials.ra.exp;
-      this.expRequired = Ra.requiredExp;
+      // Placeholder for now, I'll update the UI next commit probably
+      this.fillPercentage = `${69}%`;
+      this.exp = player.celestials.ra.teresaExp;
+      this.expRequired = Ra.requiredExp(1);
       this.level = player.celestials.ra.teresaLevel;
       this.totalCharges = Ra.totalCharges;
       this.unlocks = player.celestials.ra.unlocks;

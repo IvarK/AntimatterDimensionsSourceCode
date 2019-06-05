@@ -215,7 +215,6 @@ function onBuyDimension(tier) {
 }
 
 function getCostIncreaseThreshold() {
-  JSON.stringify()
   return Decimal.MAX_NUMBER;
 }
 

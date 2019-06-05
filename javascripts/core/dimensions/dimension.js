@@ -41,12 +41,12 @@ class DimensionState {
   set power(value) { this.data.power = value; }
 
   /**
-   * @returns {Decimal}
+   * @returns {number}
    */
   get bought() { return this.data.bought; }
 
   /**
-   * @param {Decimal} value
+   * @param {number} value
    */
   set bought(value) { this.data.bought = value; }
 

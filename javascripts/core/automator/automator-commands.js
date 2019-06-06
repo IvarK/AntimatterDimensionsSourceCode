@@ -56,16 +56,17 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: ctx => {
-        const on = ctx.On || ctx.duration;
-        const duration = ctx.duration ? ctx.duration.children.$value : undefined;
+        const on = Boolean(ctx.On || ctx.duration);
+        const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
           autobuyer.isOn = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
-            autobuyer.limit = 1e-3 * duration;
+            autobuyer.limit = new Decimal(1e-3 * duration);
           }
+          return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
       },
     },

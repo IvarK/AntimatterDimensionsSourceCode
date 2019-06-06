@@ -211,8 +211,7 @@ const AutomatorBackend = {
       case AutomatorCommandStatus.SAME_INSTRUCTION:
         return true;
       case AutomatorCommandStatus.NEXT_INSTRUCTION:
-        this.nextCommand();
-        return true;
+        return this.nextCommand();
       case AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION:
         return false;
       case AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION:
@@ -233,14 +232,20 @@ const AutomatorBackend = {
     if (S.commandIndex >= S.commands.length - 1) {
       this.stack.pop();
       if (this.stack.isEmpty) {
-        console.log(`program end : ${this.state.repeat}`)
-        if (this.state.repeat) this.start();
-        else this.stop();
+        console.log(`program end : ${this.state.repeat}`);
+        // With the debug output on, running short scripts gets very spammy, working around that
+        // return false here makes sure that a single instruction script executes one tick at a time
+        if (this.state.repeat) {
+          this.start(this.state.topLevelScript, AutomatorMode.RUN, false);
+          return false;
+        }
+        this.stop();
       }
     } else {
       S.commandState = null;
       ++S.commandIndex;
     }
+    return true;
   },
 
   push(commands) {
@@ -287,10 +292,10 @@ const AutomatorBackend = {
     this.state.mode = AutomatorMode.PAUSE;
   },
 
-  start(scriptID = this.state.topLevelScript, initialMode = AutomatorMode.RUN) {
+  start(scriptID = this.state.topLevelScript, initialMode = AutomatorMode.RUN, compile = true) {
     this.state.topLevelScript = scriptID;
     const scriptObject = this._scripts.find(s => s.id === scriptID);
-    scriptObject.compile();
+    if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);
       this.state.mode = initialMode;

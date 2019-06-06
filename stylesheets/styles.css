@@ -5741,12 +5741,13 @@ kbd {
   padding: 1rem;
   border-radius: .5rem;
   margin: 2rem auto;
+  float: left;
 }
 
 .l-ra-unlocks-container {
   display: flex;
   flex-wrap: wrap;
-  width: 80rem;
+  width: 180rem;
   margin: auto;
   justify-content: center;
   margin-top: 2rem;

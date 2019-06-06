@@ -260,12 +260,13 @@ const Ra = {
     if (!this.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return 0;
     return Math.pow(2, 5 - player.celestials.ra.lastGlyphCount);
   },
-  // This curve should be 2x at 100 seconds (1e5 ms), very steep below that (up to 50x) and very shallow out to 1e100 
+  // This curve is 2x at 100 sec, very steep below that (up to 50x at 1 sec) and very shallow to 1x at 1e102 sec
   get enslavedExpBoost() {
     if (!this.has(RA_UNLOCKS.ENSLAVED_UNLOCK)) return 0;
-    return player.celestials.ra.lastTimeTaken < 1e5
-      ? Math.min(50, 100 / (2 + 1.5 * Math.max(1, Math.log10(player.celestials.ra.lastTimeTaken / 1e3))))
-      : Math.max(1, 2 - Math.log10(player.celestials.ra.lastTimeTaken / 1e5) / 95);
+    const timeInSeconds = player.celestials.ra.lastTimeTaken / 1e3;
+    return timeInSeconds < 100
+      ? 100 / (2 + 1.5 * Math.max(0, Math.pow(Math.log10(timeInSeconds), 5)))
+      : Math.max(1, 2.02 - Math.log10(timeInSeconds) / 100);
   },
   get vExpBoost() {
     if (!this.has(RA_UNLOCKS.V_UNLOCK)) return 0;

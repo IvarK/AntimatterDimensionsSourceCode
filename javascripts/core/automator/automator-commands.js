@@ -137,7 +137,7 @@ const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Pause[0].startLine;
         ctx.$duration = ctx.Identifier
-          ? V.lookupVar(ctx.Identifier[0], AutomatorVarTypes.DURATION)
+          ? V.lookupVar(ctx.Identifier[0], AutomatorVarTypes.DURATION).value
           : V.visit(ctx.duration);
         return ctx.$duration !== undefined;
       },
@@ -164,7 +164,10 @@ const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Pause[0].startLine;
         return true;
       },
-      compile: () => () => AutomatorBackend.pause(),
+      compile: () => () => {
+        AutomatorBackend.pause();
+        return AutomatorCommandStatus.NEXT_INSTRUCTION;
+      },
     },
     {
       id: "prestige",

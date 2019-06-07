@@ -5654,10 +5654,6 @@ kbd {
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 70%;
-  -o-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -ms-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -5665,8 +5661,8 @@ kbd {
 .l-v-unlocks-container li {
   position: relative;
   float: left;
-  width: 27.85714285714286%;
-  padding: 0 0 32.16760145166612% 0;
+  width: 18rem;
+  padding: 0 0 20.8rem 0;
   list-style-type: none;
   transform: rotate(-60deg) skewY(30deg);
   overflow: hidden;
@@ -5677,13 +5673,14 @@ kbd {
   visibility: visible;
 }
 
+/* required for hex structure */
 .l-v-unlocks-container li:nth-child(3n+2) {
   margin: 0 1%;
 }
 
 .l-v-unlocks-container li:nth-child(6n+4), .l-v-unlocks-container li:nth-child(6n+5), .l-v-unlocks-container li:nth-child(6n+6) {
-  margin-top: -6.9285714285%;
-  margin-bottom: -6.9285714285%;
+  margin-top: -7%;
+  margin-bottom: -7%;
 }
 
 .l-v-unlocks-container li:nth-child(6n+1), .l-v-unlocks-container li:nth-child(6n+2), .l-v-unlocks-container li:nth-child(6n+3) {

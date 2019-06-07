@@ -5673,7 +5673,7 @@ kbd {
   visibility: hidden;
 }
 
-.l-v-unlocks-container li * {
+.l-v-unlocks-container li {
   visibility: visible;
 }
 

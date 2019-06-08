@@ -44,8 +44,7 @@ function eternity(force, auto, specialConditions = {}) {
   );
 
   if (player.dilation.active && !force) {
-      player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
-      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
+    rewardTP();
   }
 
   initializeChallengeCompletions();

@@ -275,7 +275,6 @@ let player = {
     active: false,
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
-    totalTachyonParticles: new Decimal(0),
     nextThreshold: new Decimal(1000),
     freeGalaxies: 0,
     upgrades: new Set(),
@@ -440,8 +439,8 @@ let player = {
       quoteIdx: 0,
       lastEPGained: new Decimal(0),
       lastGlyphCount: 5,
-      lastTimeTaken: new Decimal(1e100),
-      lastTTPurchased: new Decimal(0),
+      lastTimeTaken: 1e100,
+      lastTTPurchased: 0,
       disCharge: false,
     },
     laitela: {

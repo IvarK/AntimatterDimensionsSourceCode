@@ -814,6 +814,8 @@ function gameLoop(diff, options = {}) {
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
+  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
+
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);

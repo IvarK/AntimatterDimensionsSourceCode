@@ -45,6 +45,10 @@ class GameMechanicState {
       applyFn(effectValue);
     }
   }
+
+  static createIndex($class, gameData) {
+    $class.index = mapGameData(gameData, config => new $class(config));
+  }
 }
 
 class PurchasableMechanicState extends GameMechanicState {

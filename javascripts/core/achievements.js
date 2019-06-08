@@ -55,10 +55,7 @@ class AchievementState extends GameMechanicState {
   }
 }
 
-AchievementState.index = mapGameData(
-  GameDatabase.achievements.normal,
-  data => new AchievementState(data)
-);
+GameMechanicState.createIndex(AchievementState, GameDatabase.achievements.normal);
 
 /**
  * @param {number} id
@@ -96,10 +93,7 @@ class SecretAchievementState extends GameMechanicState {
   }
 }
 
-SecretAchievementState.index = mapGameData(
-  GameDatabase.achievements.secret,
-  data => new SecretAchievementState(data)
-);
+GameMechanicState.createIndex(SecretAchievementState, GameDatabase.achievements.secret);
 
 /**
  * @param {number} id

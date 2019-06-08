@@ -253,7 +253,7 @@ function completeReality(force, reset, auto = false) {
   player.sacrificed = new Decimal(0);
 
   NormalChallenges.clearCompletions();
-  InfinityChallenge.clearCompletions();
+  InfinityChallenges.clearCompletions();
   const isRUPG10Bought = RealityUpgrade(10).isBought;
   if (isRUPG10Bought) NormalChallenges.completeAll();
 

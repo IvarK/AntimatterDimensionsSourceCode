@@ -99,12 +99,12 @@ function eternity(force, auto, specialConditions = {}) {
 
 function initializeChallengeCompletions() {
   NormalChallenges.clearCompletions();
-  InfinityChallenge.clearCompletions();
+  InfinityChallenges.clearCompletions();
   if (EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
   if (Achievement(133).isEnabled) {
-    InfinityChallenge.completeAll();
+    InfinityChallenges.completeAll();
   }
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;

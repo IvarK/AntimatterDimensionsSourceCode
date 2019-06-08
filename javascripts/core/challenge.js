@@ -134,18 +134,13 @@ class NormalChallengeState extends GameMechanicState {
   }
 }
 
-NormalChallengeState.all = mapGameData(
-  GameDatabase.challenges.normal,
-  data => new NormalChallengeState(data)
-);
+GameMechanicState.createIndex(NormalChallengeState, GameDatabase.challenges.normal);
 
 /**
  * @param {number} id
  * @return {NormalChallengeState}
  */
-function NormalChallenge(id) {
-  return NormalChallengeState.all[id];
-}
+const NormalChallenge = id => NormalChallengeState.index[id];
 
 /**
  * @returns {NormalChallengeState}
@@ -157,19 +152,25 @@ Object.defineProperty(NormalChallenge, "current", {
 });
 
 Object.defineProperty(NormalChallenge, "isRunning", {
-  get: () => NormalChallenge.current !== undefined,
+  get: () => player.challenge.normal.current !== 0,
 });
 
 const NormalChallenges = {
-  all: NormalChallengeState.all.compact(),
+  /**
+   * @type {NormalChallengeState[]}
+   */
+  all: NormalChallengeState.index.compact(),
+  /**
+   * @returns {NormalChallengeState[]}
+   */
+  get completed() {
+    return NormalChallenges.all.filter(c => c.isCompleted);
+  },
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },
   clearCompletions() {
     player.challenge.normal.completedBits = 0;
-  },
-  get completed() {
-    return NormalChallenges.all.filter(c => c.isCompleted);
   }
 };
 
@@ -257,18 +258,13 @@ class InfinityChallengeState extends GameMechanicState {
   }
 }
 
-InfinityChallengeState.all = mapGameData(
-  GameDatabase.challenges.infinity,
-  data => new InfinityChallengeState(data)
-);
+GameMechanicState.createIndex(InfinityChallengeState, GameDatabase.challenges.infinity);
 
 /**
  * @param {number} id
  * @return {InfinityChallengeState}
  */
-function InfinityChallenge(id) {
-  return InfinityChallengeState.all[id];
-}
+const InfinityChallenge = id => InfinityChallengeState.index[id];
 
 /**
  * @returns {InfinityChallengeState}
@@ -279,30 +275,25 @@ Object.defineProperty(InfinityChallenge, "current", {
     : undefined),
 });
 
-/**
- * @return {boolean}
- */
 Object.defineProperty(InfinityChallenge, "isRunning", {
   get: () => InfinityChallenge.current !== undefined,
 });
 
-/**
- * @type {InfinityChallengeState[]}
- */
-InfinityChallenge.all = Array.range(1, 8).map(InfinityChallenge);
-
-/**
- * @return {InfinityChallengeState[]}
- */
-InfinityChallenge.completed = function() {
-  return InfinityChallenge.all
-    .filter(ic => ic.isCompleted);
-};
-
-InfinityChallenge.clearCompletions = function() {
-  player.challenge.infinity.completedBits = 0;
-};
-
-InfinityChallenge.completeAll = function() {
-  for (const challenge of InfinityChallenge.all) challenge.complete();
+const InfinityChallenges = {
+  /**
+   * @type {InfinityChallengeState[]}
+   */
+  all: InfinityChallengeState.index.compact(),
+  completeAll() {
+    for (const challenge of InfinityChallenges.all) challenge.complete();
+  },
+  clearCompletions() {
+    player.challenge.infinity.completedBits = 0;
+  },
+  /**
+   * @returns {InfinityChallengeState[]}
+   */
+  get completed() {
+    return InfinityChallenges.all.filter(ic => ic.isCompleted);
+  }
 };

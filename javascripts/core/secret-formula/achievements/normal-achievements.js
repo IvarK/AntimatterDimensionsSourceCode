@@ -354,7 +354,7 @@ GameDatabase.achievements.normal = [
     id: 67,
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
-    checkRequirement: () => InfinityChallenge.completed.length > 0,
+    checkRequirement: () => InfinityChallenges.completed.length > 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -464,7 +464,7 @@ GameDatabase.achievements.normal = [
     id: 82,
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
-    checkRequirement: () => InfinityChallenge.completed.length === 8,
+    checkRequirement: () => InfinityChallenges.completed.length === 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {

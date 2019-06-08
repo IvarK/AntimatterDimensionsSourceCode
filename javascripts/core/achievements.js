@@ -64,7 +64,9 @@ GameMechanicState.createIndex(AchievementState, GameDatabase.achievements.normal
 const Achievement = id => AchievementState.index[id];
 
 const Achievements = {
-  /** @type {AchievementState[]} */
+  /**
+   * @type {AchievementState[]}
+   */
   all: AchievementState.index.compact(),
   row: row => Array.range(row * 10 + 1, 8).map(Achievement)
 };
@@ -102,7 +104,9 @@ GameMechanicState.createIndex(SecretAchievementState, GameDatabase.achievements.
 const SecretAchievement = id => SecretAchievementState.index[id];
 
 const SecretAchievements = {
-  /** @type {SecretAchievementState[]} */
+  /**
+   * @type {SecretAchievementState[]}
+   */
   all: SecretAchievementState.index.compact()
 };
 

@@ -239,7 +239,9 @@ Object.defineProperty(EternityChallenge, "isRunning", {
 });
 
 const EternityChallenges = {
-  /** @type {EternityChallengeState[]} */
+  /**
+   * @type {EternityChallengeState[]}
+   */
   all: EternityChallengeState.index.compact(),
 
   get completions() {

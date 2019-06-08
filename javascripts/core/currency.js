@@ -1,42 +1,47 @@
+"use strict";
+
+/**
+ * @abstract
+ */
 class Currency {
-  constructor(get, set) {
-    this._get = get;
-    this._set = set;
-  }
-
-  get value() {
-    return this._get();
-  }
-
-  set value(value) {
-    this._set(value);
-  }
+  /**
+   * @abstract
+   */
+  get value() { throw NotImplementedCrash(); }
 
   /**
    * @abstract
    */
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this, no-empty-function
-  add(amount) { }
+  set value(value) { throw NotImplementedCrash(); }
 
   /**
    * @abstract
    */
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this, no-empty-function
-  integrate(perSecond, deltaTime) { }
+  // eslint-disable-next-line no-unused-vars
+  add(amount) { throw NotImplementedCrash(); }
 
   /**
    * @abstract
    */
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this, no-empty-function
-  subtract(amount) { }
+  // eslint-disable-next-line no-unused-vars
+  integrate(perSecond, deltaTime) { throw NotImplementedCrash(); }
 
   /**
    * @abstract
    */
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this, no-empty-function
-  isAffordable(cost) { }
+  // eslint-disable-next-line no-unused-vars
+  subtract(amount) { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  isAffordable(cost) { throw NotImplementedCrash(); }
 }
 
+/**
+ * @abstract
+ */
 class NumberCurrency extends Currency {
   add(amount) {
     this.value += amount;
@@ -55,6 +60,9 @@ class NumberCurrency extends Currency {
   }
 }
 
+/**
+ * @abstract
+ */
 class DecimalCurrency extends Currency {
   add(amount) {
     this.value = this.value.plus(amount);
@@ -73,22 +81,22 @@ class DecimalCurrency extends Currency {
   }
 }
 
-Currency.infinityPoints = new DecimalCurrency(
-  () => player.infinityPoints,
-  ep => player.infinityPoints = ep
-);
+Currency.infinityPoints = new class extends DecimalCurrency {
+  get value() { return player.infinityPoints; }
+  set value(value) { player.infinityPoints = value; }
+}();
 
-Currency.eternityPoints = new DecimalCurrency(
-  () => player.eternityPoints,
-  ep => player.eternityPoints = ep
-);
+Currency.eternityPoints = new class extends DecimalCurrency {
+  get value() { return player.eternityPoints; }
+  set value(value) { player.eternityPoints = value; }
+}();
 
-Currency.dilatedTime = new DecimalCurrency(
-  () => player.dilation.dilatedTime,
-  dt => player.dilation.dilatedTime = dt
-);
+Currency.dilatedTime = new class extends DecimalCurrency {
+  get value() { return player.dilation.dilatedTime; }
+  set value(value) { player.dilation.dilatedTime = value; }
+}();
 
-Currency.perkPoints = new NumberCurrency(
-  () => player.reality.pp,
-  pp => player.reality.pp = pp
-);
+Currency.perkPoints = new class extends NumberCurrency {
+  get value() { return player.reality.pp; }
+  set value(value) { player.reality.pp = value; }
+}();

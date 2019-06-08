@@ -11,11 +11,12 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    return Effects.max(
+    const baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
+    return baseChoices + Math.floor(Ra.effarigLevel / 5);
   },
 
   /**

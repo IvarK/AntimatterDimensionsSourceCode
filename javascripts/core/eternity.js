@@ -1,10 +1,9 @@
 "use strict";
 
 function canEternity() {
-  const challenge = EternityChallenge.current;
-  if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
-  if (challenge !== undefined && !challenge.canBeCompleted) return false;
-  return true;
+  return EternityChallenge.isRunning
+    ? EternityChallenge.current.canBeCompleted
+    : player.infinityPoints.gte(Decimal.MAX_NUMBER);
 }
 
 function eternity(force, auto, specialConditions = {}) {

@@ -444,8 +444,9 @@ const Player = {
   },
 
   get eternityGoal() {
-    const ec = EternityChallenge.current;
-    return ec === undefined ? Decimal.MAX_NUMBER : ec.currentGoal;
+    return EternityChallenge.isRunning
+      ? EternityChallenge.current.currentGoal
+      : Decimal.MAX_NUMBER;
   }
 };
 

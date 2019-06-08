@@ -38,7 +38,7 @@ Vue.component("eternity-challenges-tab", {
           return this.goalAtCompletions(0);
         },
         lastGoal() {
-          const goal = this.goalAtCompletions(TIERS_PER_EC - 1);
+          const goal = this.goalAtCompletions(this.challenge.maxCompletions - 1);
           if (this.enslavedSpanOverride) {
             // Fuck up the text
             let mangled = "";

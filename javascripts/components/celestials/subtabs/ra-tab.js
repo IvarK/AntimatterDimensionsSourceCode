@@ -6,6 +6,7 @@ Vue.component("ra-tab", {
       celestialNames: ["Teresa", "Effarig", "Enslaved", "V"],
       fillPercentage: ["", "", "", ""],
       exp: [0, 0, 0, 0],
+      expMults: [1, 1, 1, 1],
       expRequired: [0, 0, 0, 0],
       level: [0, 0, 0, 0],
       unlocks: [],
@@ -16,6 +17,7 @@ Vue.component("ra-tab", {
   methods: {
     update() {
       this.exp = [Ra.teresaExp, Ra.effarigExp, Ra.enslavedExp, Ra.vExp];
+      this.expMults = [Ra.teresaExpBoost, Ra.effarigExpBoost, Ra.enslavedExpBoost, Ra.vExpBoost];
       this.level = [Ra.teresaLevel, Ra.effarigLevel, Ra.enslavedLevel, Ra.vLevel];
       this.expRequired = this.level.map(level => Ra.requiredExp(level));
       this.fillPercentage = [];
@@ -69,6 +71,7 @@ Vue.component("ra-tab", {
           </div>
         </div>
         <div>{{ scalingUpgradeText()[index] }}</div>
+        <div>Memory gain: {{ expMults[index].toFixed(2) }}x </div>
       </div>
       <div class="l-ra-unlocks-container">
         <div class="c-ra-unlock" v-for="unlock in raUnlocks" :class="{'c-ra-unlock-unlocked': has(unlock.id)}">

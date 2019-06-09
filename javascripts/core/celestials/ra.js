@@ -1,6 +1,28 @@
 "use strict";
 
 const Ra = {
+  // Dev/debug function for easier testing
+  reset() {
+    player.celestials.ra = {
+      teresaLevel: 1,
+      effarigLevel: 0,
+      enslavedLevel: 0,
+      vLevel: 0,
+      teresaExp: 0,
+      effarigExp: 0,
+      enslavedExp: 0,
+      vExp: 0,
+      unlocks: [],
+      run: false,
+      charged: new Set(),
+      quoteIdx: 0,
+      lastEPGained: new Decimal(0),
+      lastGlyphCount: 5,
+      lastTimeTaken: 1e100,
+      lastTTPurchased: 0,
+      disCharge: false,
+    }
+  },
   /**
    * There is no checking for unlocks because all multipliers should be 1x before the boost is unlocked and
    * 0x before the celestial is unlocked.
@@ -193,7 +215,11 @@ const RA_UNLOCKS = {
     id: 6,
     description: "Get Effarig to level 2",
     reward: "Glyph rarity is increased and you gain more glyph choices, based on Effarig level",
-    requirement: () => Ra.effarigLevel >= 2
+    requirement: () => Ra.effarigLevel >= 2,
+    effect: {
+      rarity: () => Ra.effarigLevel,
+      choice: () => Math.floor(Ra.effarigLevel / 5),
+    }
   },
   EFFARIG_XP: {
     id: 7,
@@ -231,7 +257,12 @@ const RA_UNLOCKS = {
     id: 12,
     description: "Get Enslaved to level 2",
     reward: "Stored game time is amplified and stored real time is more efficient",
-    requirement: () => Ra.enslavedLevel >= 2
+    requirement: () => Ra.enslavedLevel >= 2,
+    effect: {
+      gameTimeAmplification: () => 1 + Ra.enslavedLevel / 100,
+      realTimeEfficiency: () => Ra.enslavedLevel / 100,
+      realTimeCap: () => 1000 * 3600 * Ra.enslavedLevel / 2,
+    }
   },
   ENSLAVED_XP: {
     id: 13,

@@ -572,7 +572,10 @@ function gameLoop(diff, options = {}) {
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
-        player.celestials.enslaved.stored += diff * timeStoredFactor;
+        const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
+          ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
+          : 1;
+        player.celestials.enslaved.stored += diff * Math.pow(timeStoredFactor, amplification);
         speedFactor = baseSpeedFactor;
       }
       diff *= speedFactor;

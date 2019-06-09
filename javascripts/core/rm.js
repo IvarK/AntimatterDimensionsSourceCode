@@ -145,7 +145,8 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
-    const increasedRarity = Effects.sum(GlyphSacrifice.effarig) + Ra.effarigLevel;
+    const increasedRarity = Effects.sum(GlyphSacrifice.effarig) +
+      (Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS) ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.rarity() : 0);
     // Each rarity% is 0.025 strength.
     result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));

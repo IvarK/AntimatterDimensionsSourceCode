@@ -70,7 +70,7 @@ Vue.component("ra-tab", {
             <b class="o-ra-exp-display">{{ shortenSmallInteger(exp[index]) }}/{{ shortenSmallInteger(expRequired[index]) }}</b>
           </div>
         </div>
-        <div>{{ scalingUpgradeText()[index] }}</div>
+        <div v-if="level[index] >= 2">{{ scalingUpgradeText()[index] }}</div>
         <div>Memory gain: {{ expMults[index].toFixed(2) }}x </div>
       </div>
       <div class="l-ra-unlocks-container">

@@ -464,7 +464,6 @@ class GalaxyAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
-    if (Ra.isRunning) return;
     if (!Galaxy.requirement.isSatisfied) return;
     if (this.limit <= player.galaxies) return;
     if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {

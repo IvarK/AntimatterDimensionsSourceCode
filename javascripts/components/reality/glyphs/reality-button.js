@@ -83,10 +83,10 @@ Vue.component("reality-button", {
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
         Ra.has(RA_UNLOCKS.V_UNLOCK)];
       this.inTeresaReality = Teresa.isRunning;
-      this.raExpBoosts = [Ra.has(RA_UNLOCKS.TERESA_XP),
-        Ra.has(RA_UNLOCKS.EFFARIG_XP),
-        Ra.has(RA_UNLOCKS.ENSLAVED_XP),
-        Ra.has(RA_UNLOCKS.V_XP)];
+      this.raExpBoosts = [Ra.isRunning && Ra.has(RA_UNLOCKS.TERESA_XP),
+        Ra.isRunning && Ra.has(RA_UNLOCKS.EFFARIG_XP),
+        Ra.isRunning && Ra.has(RA_UNLOCKS.ENSLAVED_XP),
+        Ra.isRunning && Ra.has(RA_UNLOCKS.V_XP)];
       const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.money)));

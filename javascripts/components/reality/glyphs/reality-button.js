@@ -5,14 +5,15 @@ Vue.component("reality-button", {
     return {
       canReality: false,
       hasRealityStudy: false,
+      inCelestialRunWithScalingReward: false,
       machinesGained: new Decimal(0),
       realityTime: 0,
       glyphLevel: 0,
       nextGlyphPercent: 0,
       nextMachineEP: 0,
       shardsGained: 0,
-      expGained: 0,
-      raUnlocked: false
+      expGained: [0, 0, 0, 0],
+      raUnlocks: [false, false, false, false]
     };
   },
   computed: {
@@ -36,7 +37,31 @@ Vue.component("reality-button", {
       return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`;
     },
     shardsGainedText() {
-      return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)} (Effarig)`;
+      return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
+    },
+    celestialRunText() {
+      if (Teresa.isRunning) {
+        return `Glyph sacrifice ${shorten(Teresa.runRewardMultiplier, 2)}x` +
+          ` ➜ ${shorten(Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.money)), 2)}x`;
+      }
+      if (Ra.isRunning) {
+        const boostList = [`Teresa memories ${shortenRateOfChange(Ra.teresaExpBoost)}x ` +
+          `➜ ${shortenRateOfChange(Ra.teresaExpFormula(player.eternityPoints))}x`];
+        if (Ra.has(RA_UNLOCKS.EFFARIG_XP)) {
+          boostList.push(`Effarig memories ${shortenRateOfChange(Ra.effarigExpBoost)}x ` +
+            `➜ ${shortenRateOfChange(Ra.effarigExpFormula(Glyphs.activeList.length))}x`);
+        }
+        if (Ra.has(RA_UNLOCKS.ENSLAVED_XP)) {
+          boostList.push(`Enslaved memories ${shortenRateOfChange(Ra.enslavedExpBoost)}x ` +
+            `➜ ${shortenRateOfChange(Ra.enslavedExpFormula(player.thisReality))}x`);
+        }
+        if (Ra.has(RA_UNLOCKS.V_XP)) {
+          boostList.push(`V memories ${shortenRateOfChange(Ra.vExpBoost)}x ` +
+            `➜ ${shortenRateOfChange(Ra.vExpFormula(TimeTheorems.totalPurchased()), 2)}x`);
+        }
+        return boostList.filter(str => str !== "").join("<br>");
+      }
+      return `Invalid celestial reward`;
     }
   },
   methods: {
@@ -68,9 +93,18 @@ Vue.component("reality-button", {
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = boostedGain(1);
-      this.shardsGained = boostedGain(Effarig.shardsGained);
-      this.expGained = boostedGain(Ra.gainedTeresaExp);
-      this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]);
+      this.shardsGained = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST)
+        ? 0
+        : boostedGain(Effarig.shardsGained);
+      this.expGained = [boostedGain(Ra.gainedTeresaExp),
+        boostedGain(Ra.gainedEffarigExp),
+        boostedGain(Ra.gainedEnslavedExp),
+        boostedGain(Ra.gainedVExp)];
+      this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
+        Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
+        Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
+        Ra.has(RA_UNLOCKS.V_UNLOCK)];
+      this.inCelestialRunWithScalingReward = Teresa.isRunning || Ra.isRunning;
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -102,7 +136,11 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="raUnlocked">{{ expGained }} Teresa  {{ "memory" | pluralize(expGained, "memories") }} (Ra)</div>
+          <div v-if="raUnlocks[0]">{{ expGained[0] }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}</div>
+          <div v-if="raUnlocks[1]">{{ expGained[1] }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}</div>
+          <div v-if="raUnlocks[2]">{{ expGained[2] }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}</div>
+          <div v-if="raUnlocks[3]">{{ expGained[3] }} V {{ "memory" | pluralize(expGained[3], "memories") }}</div>
+          <div v-if="inCelestialRunWithScalingReward">{{ celestialRunText }}</div>
         </template>
         <template v-else>
           No resources gained

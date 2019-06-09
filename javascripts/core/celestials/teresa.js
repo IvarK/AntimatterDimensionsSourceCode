@@ -90,6 +90,9 @@ const Teresa = {
     player.reality.pp -= cost;
     return true;
   },
+  rewardMultiplier(antimatter) {
+    return Decimal.max(Decimal.pow(antimatter.log10() / 1.5e8, 12), 1).toNumber();
+  },
   get rmStore() {
     return player.celestials.teresa.rmStore;
   },
@@ -103,7 +106,7 @@ const Teresa = {
     return Math.max(Math.pow(this.rmStore, 0.1), 1);
   },
   get runRewardMultiplier() {
-    return Decimal.max(Decimal.pow(player.celestials.teresa.bestRunAM.e / 1.5e8, 12), 1).toNumber();
+    return this.rewardMultiplier(player.celestials.teresa.bestRunAM);
   },
   get quote() {
     return teresaQuotes[player.celestials.teresa.quoteIdx];

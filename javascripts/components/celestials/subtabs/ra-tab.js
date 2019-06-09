@@ -15,10 +15,8 @@ Vue.component("ra-tab", {
   },
   methods: {
     update() {
-      this.exp = [player.celestials.ra.teresaExp, player.celestials.ra.effarigExp,
-        player.celestials.ra.enslavedExp, player.celestials.ra.vExp];
-      this.level = [player.celestials.ra.teresaLevel, player.celestials.ra.effarigLevel,
-        player.celestials.ra.enslavedLevel, player.celestials.ra.vLevel];
+      this.exp = [Ra.teresaExp, Ra.effarigExp, Ra.enslavedExp, Ra.vExp];
+      this.level = [Ra.teresaLevel, Ra.effarigLevel, Ra.enslavedLevel, Ra.vLevel];
       this.expRequired = this.level.map(level => Ra.requiredExp(level));
       this.fillPercentage = [];
       for (let i = 0; i < 4; i++) {

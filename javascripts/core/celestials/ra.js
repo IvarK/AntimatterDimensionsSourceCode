@@ -7,31 +7,10 @@ const Ra = {
    */ 
   giveExp() {
     const amplificationFactor = Enslaved.lockedInBoostRatio;
-    player.celestials.ra.teresaExp += this.gainedTeresaExp * amplificationFactor;
-    player.celestials.ra.effarigExp += this.gainedEffarigExp * amplificationFactor;
-    player.celestials.ra.enslavedExp += this.gainedEnslavedExp * amplificationFactor;
-    player.celestials.ra.vExp += this.gainedVExp * amplificationFactor;
-
-    while (player.celestials.ra.teresaExp > this.requiredExp(this.teresaLevel)) {
-      player.celestials.ra.teresaExp -= this.requiredExp(this.teresaLevel);
-      player.celestials.ra.teresaLevel++;
-      GameUI.notify.success(`Teresa has leveled up to level ${this.teresaLevel}!`);
-    }
-    while (player.celestials.ra.effarigExp > this.requiredExp(this.effarigLevel)) {
-      player.celestials.ra.effarigExp -= this.requiredExp(this.effarigLevel);
-      player.celestials.ra.effarigLevel++;
-      GameUI.notify.success(`Effarig has leveled up to level ${this.effarigLevel}!`);
-    }
-    while (player.celestials.ra.enslavedExp > this.requiredExp(this.enslavedLevel)) {
-      player.celestials.ra.enslavedExp -= this.requiredExp(this.enslavedLevel);
-      player.celestials.ra.enslavedLevel++;
-      GameUI.notify.success(`Enslaved has leveled up to level ${this.enslavedLevel}!`);
-    }
-    while (player.celestials.ra.vExp > this.requiredExp(this.vLevel)) {
-      player.celestials.ra.vExp -= this.requiredExp(this.vLevel);
-      player.celestials.ra.vLevel++;
-      GameUI.notify.success(`V has leveled up to level ${this.vLevel}!`);
-    }
+    this.addTeresaExp(this.gainedTeresaExp * amplificationFactor);
+    this.addEffarigExp(this.gainedEffarigExp * amplificationFactor);
+    this.addEnslavedExp(this.gainedEnslavedExp * amplificationFactor);
+    this.addVExp(this.gainedVExp * amplificationFactor);
     this.checkForUnlocks();
   },
   checkForUnlocks() {
@@ -68,6 +47,38 @@ const Ra = {
   requiredExp(level) {
     return Math.floor(5000 * Math.pow(1.2, level - 1));
   },
+  addTeresaExp(exp) {
+    player.celestials.ra.teresaExp += exp;
+    while (this.teresaExp > this.requiredExp(this.teresaLevel)) {
+      player.celestials.ra.teresaExp -= this.requiredExp(this.teresaLevel);
+      player.celestials.ra.teresaLevel++;
+      GameUI.notify.success(`Teresa has leveled up to level ${this.teresaLevel}!`);
+    }
+  },
+  addEffarigExp(exp) {
+    player.celestials.ra.effarigExp += exp;
+    while (this.effarigExp > this.requiredExp(this.effarigLevel)) {
+      player.celestials.ra.effarigExp -= this.requiredExp(this.effarigLevel);
+      player.celestials.ra.effarigLevel++;
+      GameUI.notify.success(`Effarig has leveled up to level ${this.effarigLevel}!`);
+    }
+  },
+  addEnslavedExp(exp) {
+    player.celestials.ra.enslavedExp += exp;
+    while (this.enslavedExp > this.requiredExp(this.enslavedLevel)) {
+      player.celestials.ra.enslavedExp -= this.requiredExp(this.enslavedLevel);
+      player.celestials.ra.enslavedLevel++;
+      GameUI.notify.success(`Enslaved has leveled up to level ${this.enslavedLevel}!`);
+    }
+  },
+  addVExp(exp) {
+    player.celestials.ra.vExp += exp;
+    while (this.vExp > this.requiredExp(this.vLevel)) {
+      player.celestials.ra.vExp -= this.requiredExp(this.vLevel);
+      player.celestials.ra.vLevel++;
+      GameUI.notify.success(`V has leveled up to level ${this.vLevel}!`);
+    }
+  },
   get isRunning() {
     return player.celestials.ra.run;
   },
@@ -82,6 +93,18 @@ const Ra = {
   },
   get vLevel() {
     return player.celestials.ra.vLevel;
+  },
+  get teresaExp() {
+    return player.celestials.ra.teresaExp;
+  },
+  get effarigExp() {
+    return player.celestials.ra.effarigExp;
+  },
+  get enslavedExp() {
+    return player.celestials.ra.enslavedExp;
+  },
+  get vExp() {
+    return player.celestials.ra.vExp;
   },
   get totalCharges() {
     return Math.floor(this.teresaLevel / 2);
@@ -196,7 +219,7 @@ const RA_UNLOCKS = {
     description: "Get Effarig to level 15",
     reward: "Glyph level is increased based on relic shards gained",
     requirement: () => Ra.effarigLevel >= 15,
-    effect: () => Math.pow(Math.log10(Effarig.shardsGained), 2)
+    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2)
   },
   GLYPH_ALCHEMY: {
     id: 11,

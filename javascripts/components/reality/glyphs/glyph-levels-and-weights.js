@@ -92,7 +92,7 @@ Vue.component("glyph-levels-and-weights", {
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.perkVisible = glyphFactors.perkFactor > 0;
-      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST);
+      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();

@@ -626,6 +626,13 @@ function gameLoop(diff, options = {}) {
       }
     }
 
+    if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
+      const addedRM = gainedRealityMachines()
+        .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
+        .times(realDiff / 1000);
+      player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
+    }
+
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     if (player.money.lte(Decimal.MAX_NUMBER) ||
         (player.break && !challenge) || (challenge && player.money.lte(challenge.goal))) {

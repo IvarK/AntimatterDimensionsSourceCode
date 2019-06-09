@@ -161,40 +161,47 @@ function dilatedValueOf(value) {
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 
-class DilationUpgradeState extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.dilatedTime, () => player.dilation.upgrades);
+class DilationUpgradeState extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.dilatedTime;
+  }
+
+  get set() {
+    return player.dilation.upgrades;
   }
 
   purchase() {
-    const purchaseSucceeded = super.purchase();
-    if (purchaseSucceeded && this.id === 4) {
+    if (!super.purchase()) return;
+    if (this.id === 4) {
       player.dilation.freeGalaxies *= 2;
     }
   }
 }
 
-class RebuyableDilationUpgradeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
+class RebuyableDilationUpgradeState extends RebuyableMechanicState {
+  get currency() {
+    return Currency.dilatedTime;
   }
 
-  get cost() {
-    return this.config.cost();
+  get boughtAmount() {
+    return player.dilation.rebuyables[this.id];
   }
 
-  get isAffordable() {
-    return player.dilation.dilatedTime.gte(this.cost);
+  set boughtAmount(value) {
+    player.dilation.rebuyables[this.id] = value;
   }
 
-  get canBeApplied() {
-    return true;
+  get autobuyerId() {
+    return this.config.id - 1;
   }
 
-  get autobuyerId() { return this.config.id - 1; }
+  get isAutobuyerOn() {
+    return player.dilation.auto[this.autobuyerId];
+  }
 
-  get isAutobuyerOn() { return player.dilation.auto[this.autobuyerId]; }
-  set isAutobuyerOn(value) { player.dilation.auto[this.autobuyerId] = value; }
+  set isAutobuyerOn(value) {
+    player.dilation.auto[this.autobuyerId] = value;
+  }
 
   purchase(bulk) {
     buyDilationUpgrade(this.config.id, bulk);

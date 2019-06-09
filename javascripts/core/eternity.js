@@ -235,9 +235,13 @@ const EternityMilestone = function() {
   };
 }();
 
-class EternityUpgradeState extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.eternityPoints, () => player.eternityUpgrades);
+class EternityUpgradeState extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.eternityPoints;
+  }
+
+  get set() {
+    return player.eternityUpgrades;
   }
 }
 

@@ -73,15 +73,6 @@ function updateNormalAndInfinityChallenges(diff) {
 }
 
 class NormalChallengeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    this._fullId = `challenge${this.id}`;
-  }
-
-  get fullId() {
-    return this._fullId;
-  }
-
   get isQuickResettable() {
     return this.config.isQuickResettable;
   }
@@ -188,12 +179,7 @@ class InfinityChallengeRewardState extends GameMechanicState {
 class InfinityChallengeState extends GameMechanicState {
   constructor(config) {
     super(config);
-    this._fullId = `postc${this.id}`;
     this._reward = new InfinityChallengeRewardState(config.reward, this);
-  }
-
-  get fullId() {
-    return this._fullId;
   }
 
   get isUnlocked() {

@@ -22,9 +22,13 @@ function crash(message) {
   crashed = true;
   // eslint-disable-next-line no-debugger
   debugger;
-  return Error("Fatal Error: " + message);
+  return Error(`Fatal Error: ${message}`);
 }
 
 function NotImplementedCrash() {
   return crash("The method is not implemented.");
+}
+
+function NotSupportedCrash() {
+  return crash("The method is not supported.");
 }

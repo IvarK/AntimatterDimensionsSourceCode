@@ -418,6 +418,10 @@ class TimeStudyState extends GameMechanicState {
     this.incomingConnections = [];
   }
 
+  get cost() {
+    return this.config.cost;
+  }
+
   refund() {
     player.timestudy.theorem = player.timestudy.theorem.plus(this.cost);
   }

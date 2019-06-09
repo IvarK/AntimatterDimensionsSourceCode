@@ -1,12 +1,20 @@
 "use strict";
 
-class PerkState extends PurchasableMechanicState {
+class PerkState extends SetPurchasableMechanicState {
   constructor(config) {
-    super(config, Currency.perkPoints, () => player.reality.perks);
+    super(config);
     /**
      * @type {PerkState[]}
      */
     this.connectedPerks = [];
+  }
+
+  get currency() {
+    return Currency.perkPoints;
+  }
+
+  get set() {
+    return player.reality.perks;
   }
 
   get cost() {

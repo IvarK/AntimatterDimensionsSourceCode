@@ -677,81 +677,61 @@ const GlyphEffect = {
   })
 };
 
-class RealityUpgradeState extends GameMechanicState {
-  get isAffordable() {
-    return player.reality.realityMachines.gte(this.cost);
+class RealityUpgradeState extends BitPurchasableMechanicState {
+  get currency() {
+    return Currency.realityMachines;
   }
 
-  get isBought() {
-    // eslint-disable-next-line no-bitwise
-    return (player.reality.upgradeBits & (1 << this.id)) !== 0;
+  get bitIndex() {
+    return this.id;
   }
 
-  get canBeBought() {
-    return !this.isBought && this.isAffordable && this.isUnlocked;
+  get bits() {
+    return player.reality.upgradeBits;
   }
 
-  get canBeApplied() {
-    return this.isBought;
+  set bits(value) {
+    player.reality.upgradeBits = value;
   }
 
-  purchase() {
-    const id = this.id;
-    if (!this.canBeBought) return false;
-    player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
-    if (id < 6) {
-      player.reality.rebuyables[id]++;
-    } else {
-      // eslint-disable-next-line no-bitwise
-      player.reality.upgradeBits |= (1 << id);
-    }
-
-    if (id === 9 || id === 24) {
-      Glyphs.refreshActive();
-    }
-
-    if (id === 20) {
-      if (!player.blackHole[0].unlocked) return true;
-      player.blackHole[1].unlocked = true;
-    }
-
-    EventHub.dispatch(GameEvent.REALITY_UPGRADE_BOUGHT);
-    return true;
-  }
-
-  remove() {
-    // eslint-disable-next-line no-bitwise
-    player.reality.upgradeBits &= ~(1 << this.id);
-  }
-
-  get isUnlocked() {
+  get isAvailable() {
     return player.reality.upgReqs[this.id];
   }
 
   tryUnlock() {
-    if (this.isUnlocked || !this.config.checkRequirement()) return;
+    if (this.isAvailable || !this.config.checkRequirement()) return;
     player.reality.upgReqs[this.id] = true;
     if (player.realities > 0 || TimeStudy.reality.isBought) {
       GameUI.notify.success("You've unlocked a Reality upgrade!");
     }
   }
-}
 
-class RebuyableRealityUpgradeState extends RealityUpgradeState {
-  get cost() {
-    return this.config.cost();
-  }
-
-  get isBought() {
-    return false;
-  }
-
-  get canBeApplied() {
+  purchase() {
+    if (!super.purchase()) return false;
+    EventHub.dispatch(GameEvent.REALITY_UPGRADE_BOUGHT);
+    const id = this.id;
+    if (id === 9 || id === 24) {
+      Glyphs.refreshActive();
+    }
+    if (id === 20) {
+      if (!player.blackHole[0].unlocked) return true;
+      player.blackHole[1].unlocked = true;
+    }
     return true;
   }
+}
 
-  get canBeBought() {
-    return this.isAffordable;
+class RebuyableRealityUpgradeState extends RebuyableMechanicState {
+  get currency() {
+    return Currency.realityMachines;
+  }
+
+  get boughtAmount() {
+    return player.reality.rebuyables[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.reality.rebuyables[this.id] = value;
   }
 }
 
@@ -765,7 +745,7 @@ RealityUpgradeState.list = mapGameData(
 /**
  *
  * @param {number} id
- * @return {RealityUpgradeState}
+ * @return {RealityUpgradeState|RebuyableRealityUpgradeState}
  */
 function RealityUpgrade(id) {
   return RealityUpgradeState.list[id];

@@ -50,6 +50,9 @@ let player = {
       unlocked: 0,
     }
   },
+  infinity: {
+    upgradeBits: 0
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),

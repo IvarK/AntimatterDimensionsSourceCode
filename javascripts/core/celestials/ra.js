@@ -18,7 +18,7 @@ const Ra = {
       quoteIdx: 0,
       lastEPGained: new Decimal(0),
       lastGlyphCount: 5,
-      lastTimeTaken: 1e100,
+      lastTimeTaken: 1e105,
       lastTTPurchased: 0,
       disCharge: false,
     };
@@ -176,11 +176,11 @@ const Ra = {
   get enslavedExpBoost() {
     if (!this.has(RA_UNLOCKS.ENSLAVED_UNLOCK)) return 0;
     const timeInSeconds = player.celestials.ra.lastTimeTaken / 1e3;
-    return enslavedExpFormula(timeInSeconds);
+    return this.enslavedExpFormula(timeInSeconds);
   },
   get vExpBoost() {
     if (!this.has(RA_UNLOCKS.V_UNLOCK)) return 0;
-    return vExpFormula(player.celestials.ra.lastTTPurchased);
+    return this.vExpFormula(player.celestials.ra.lastTTPurchased);
   },
 };
 

@@ -77,13 +77,13 @@ Vue.component("statistics-tab", {
       this.matterScale = MatterScale.estimate(player.money);
     },
     formatAmount(value) { 
-      return value > 1e18 ? shorten(value, 6, 0) : formatWithCommas(value);
+      return value > 1e18 ? shorten(value, 3, 0) : formatWithCommas(value);
     },
     formatResetAmount(value) {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
     },
     formatDecimalAmount(value) {
-      return value.gt(1e9) ? shorten(value, 6, 0) : formatWithCommas(value.toNumber());
+      return value.gt(1e9) ? shorten(value, 3, 0) : formatWithCommas(value.toNumber());
     },
     formatDecimalResetAmount(value) {
       return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");

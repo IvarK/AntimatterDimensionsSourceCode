@@ -213,7 +213,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: 93,
       description: "Time dimensions gain a multiplier equal to replicanti galaxy amount",
       effect: () => Math.max(player.replicanti.galaxies, 1),
-      formatEffect: value => formatX(value, 0, 0)
+      formatEffect: value => formatX(value, 2, 0)
     },
     {
       id: 111,

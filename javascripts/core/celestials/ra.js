@@ -120,9 +120,9 @@ const Ra = {
   },
   // In some sense we're cheating here for the sake of balance since gamespeed has historically been hard to keep
   // under wraps.  So the way we buff gamespeed in a relatively controlled way here is by manually calculating a
-  // sensible "maximum possible gamespeed" based on level 10k celestial glyphs and adjusting the formula so that
-  // for the most part it will always take nearly a day for the gamespeed buff to build up to an eventual built-in
-  // hardcap.  For reference, glyphs will probably be around 9k at the time of unlocking.
+  // sensible "maximum possible gamespeed" based on level 10k celestial glyphs on top of the CURRENT black hole
+  // power, which means that it should be a lot harder for this to cause an unchecked runaway since black hole
+  // scaling won't feed into this upgrade's scaling.  There is also an eventual hardcap of 1e10.
   gamespeedStoredTimeMult() {
     let assumedBlackHoleBoost = 1;
     for (const blackHole of BlackHoles.list) {
@@ -132,6 +132,9 @@ const Ra = {
     const assumedTimeGlyphBoost = Math.pow(2.79, 4);
     const baselineGamespeed = Math.pow(assumedBlackHoleBoost * assumedTimeGlyphBoost, 1.22);
     const baselineStoredTime = Math.pow(baselineGamespeed, 1.25);
+    // Right now the 1e17 is a fudge factor just to test what it looks like at somewhat less progression. Tthe formula
+    // on this upgrade will need to be revisited later on after some earlier Ra testing, and I'll remove this comment
+    // once I properly do that.
     const scaledStoredTime = 1e17 * player.celestials.enslaved.stored / baselineStoredTime;
     if (player.celestials.enslaved.stored === 0) return 1;
     return Math.max(10, Math.min(scaledStoredTime, 1e10));

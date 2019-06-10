@@ -82,7 +82,7 @@ Vue.component("ra-tab", {
       <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
         Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
         <br><br>
-        Multiply Teresa memory gain based on highest EP reached, Currently: {{ shorten(realityReward, 2, 2)}}x
+        Reward: Increased memories based on values reached in your most recent completion of Ra's Reality.
       </button>
     </div>`
 });

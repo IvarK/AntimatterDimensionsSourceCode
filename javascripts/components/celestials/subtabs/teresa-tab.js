@@ -87,7 +87,7 @@ Vue.component('teresa-tab', {
       <div>You have {{shortenRateOfChange(rm)}} {{"Reality Machine" | pluralize(rm)}}.</div>
       <div class="l-mechanics-container">
         <div class="l-teresa-unlocks l-teresa-mechanic-container">
-          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x.</div>
+          <div class="c-teresa-unlock c-teresa-run-button" v-if="unlocks[0]" @click="startRun()">Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6). The more antimatter you reach, the better the reward.<br><br>Multiplies power gained from glyph sacrifice by {{ shortenRateOfChange(runReward) }}x.</div>
           <div class="c-teresa-unlock" v-if="unlocks[1]">You gain 1% of your peaked EP/min every second.</div>
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">

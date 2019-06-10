@@ -347,7 +347,7 @@ const RA_UNLOCKS = {
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
-    reward: "Eternity Challenges autocomplete instantly",
+    reward: "Eternity Challenges autocomplete instantly and Eternity upgrades are given immediately",
     requirement: () => Ra.vLevel >= 5
   },
   TT_BOOST: {

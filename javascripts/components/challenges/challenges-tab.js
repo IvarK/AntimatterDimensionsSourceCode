@@ -46,7 +46,8 @@ Vue.component('challenges-tab', {
     update() {
       this.showAllChallenges = player.options.showAllChallenges;
       const isECTabUnlocked = player.challenge.eternity.unlocked !== 0 ||
-        Object.keys(player.eternityChalls).length > 0;
+        Object.keys(player.eternityChalls).length > 0 ||
+        player.reality.autoEC;
       this.isECTabUnlocked = isECTabUnlocked;
       const isICTabUnlocked = isECTabUnlocked ||
         player.money.gte(new Decimal("1e2000")) ||

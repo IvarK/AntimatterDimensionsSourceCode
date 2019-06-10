@@ -418,6 +418,11 @@ function completeReality(force, reset, auto = false) {
 
   Lazy.invalidateAll();
   EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+
+  // This immediately gives eternity upgrades and autobuys TDs/5xEP
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+    applyRealityUpgrades();
+  }
 }
 
 function handleCelestialRuns(force) {

@@ -205,7 +205,7 @@ const newsArray = [
   ["Anti Emoji Movie a huge hit", "b18", () => player.spreadingCancer >= 5],
   ["If this game was made by Valve, Zero Deaths would be impossible.", "b22", () => Achievement(43).isUnlocked],
   ["Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.", "b23", () => Achievement(43).isUnlocked],
-  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => player.achievements.size >= 40],
+  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => currentAchievementCount() >= GameDatabase.achievements.normal.length / 2],
 // Basic (post-rep)
   ["Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi has a fully powered eternity gauntlet", "b25", () => player.eternities > 0 || player.realities > 0],
   ["New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.", "b26", () => player.replicanti.unl && player.replicanti.chance === 0.01],
@@ -228,7 +228,7 @@ const newsArray = [
   ["You do know that you won't reach Infinity in -1 seconds, right?", "c1", () => player.bestInfinityTime === 0.1],
   ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
-  ["Achievement Unlocked!", "c4", () => player.achievements.size === 88],
+  ["Achievement Unlocked!", "c4", () => currentAchievementCount() >= GameDatabase.achievements.normal.length],
   ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)],

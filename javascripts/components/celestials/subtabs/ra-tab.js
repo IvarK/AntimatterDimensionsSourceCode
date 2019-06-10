@@ -42,8 +42,7 @@ Vue.component("ra-tab", {
       const effarigScale = `Glyph rarity +${this.level[1]}% and +${Math.floor(this.level[1] / 5)} additional choices.`;
       const enslavedScale = `Stored game time ^${(1 + 0.01 * Math.floor(this.level[2])).toFixed(2)}, ` +
         `stored real time efficiency +${this.level[2]}% and +${this.level[2] / 2} hours maximum.`;
-      const vScale = `+${Math.floor(this.level[3] / 5)} additional EC completions available ` + 
-        `(next at Level ${5 * (1 + Math.floor(this.level[3] / 5))})`;
+      const vScale = `+${Math.floor(this.level[3])} free achievements.`;
       return [teresaScale, effarigScale, enslavedScale, vScale];
     }
   },

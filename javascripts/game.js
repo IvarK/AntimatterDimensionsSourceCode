@@ -823,7 +823,8 @@ function gameLoop(diff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  // Reality unlock and TTgen perk autobuy
+  // TD5-8/Reality unlock and TTgen perk autobuy
+  autoBuyExtraTimeDims();
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
@@ -1000,8 +1001,6 @@ setInterval(function() {
     if (!Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
     if (!Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
     autoBuyTimeDims()
-
-    autoBuyExtraTimeDims()
   }
 }, 333)
 

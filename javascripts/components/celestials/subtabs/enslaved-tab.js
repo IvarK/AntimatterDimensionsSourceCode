@@ -6,6 +6,8 @@ Vue.component("enslaved-tab", {
     isStoringReal: false,
     autoStoreReal: false,
     amplifyStoredReal: false,
+    storedTimeSpeedBoost: false,
+    storedTimeSpeedValue: 1,
     inEnslaved: false,
     storedBlackHole: 0,
     storedReal: 0,
@@ -18,6 +20,9 @@ Vue.component("enslaved-tab", {
   computed: {
     amplifiedGameDesc() {
       return `^${RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification().toFixed(2)}`;
+    },
+    storedTimeBoostDesc() {
+      return `x${shortenRateOfChange(this.storedTimeSpeedValue)}`;
     },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
@@ -44,6 +49,8 @@ Vue.component("enslaved-tab", {
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.amplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
+      this.storedTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
+      this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
@@ -109,6 +116,7 @@ Vue.component("enslaved-tab", {
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
           <div v-if="amplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
+          <div v-if="amplifyStoredReal"> Game speed: {{ storedTimeBoostDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',

@@ -501,7 +501,11 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
       }
     }
   }
-  
+
+  if (Ra.has(RA_UNLOCKS.GAMESPEED_BOOST)) {
+    factor *= Ra.gamespeedStoredTimeMult();
+  }
+
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
   }
@@ -582,6 +586,7 @@ function gameLoop(diff, options = {}) {
     } else {
       diff = options.gameDiff;
     }
+    player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
 
     DeltaTimeState.update(realDiff, diff);
 

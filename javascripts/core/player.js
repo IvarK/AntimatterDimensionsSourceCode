@@ -442,6 +442,7 @@ let player = {
       lastTimeTaken: 1e105,
       lastTTPurchased: 0,
       disCharge: false,
+      peakGamespeed: 1,
     },
     laitela: {
       matter: new Decimal(0),

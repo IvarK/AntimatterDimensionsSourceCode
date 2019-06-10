@@ -93,7 +93,7 @@ Vue.component("reality-button", {
       this.celestialRunText = [teresaReward,
         this.formatScalingMultiplier("Teresa memories", Ra.teresaExpBoost, Ra.teresaExpFormula(player.eternityPoints)),
         this.formatScalingMultiplier("Effarig memories", Ra.effarigExpBoost, Ra.effarigExpFormula(Glyphs.activeList.length)),
-        this.formatScalingMultiplier("Enslaved memories", Ra.enslavedExpBoost, Ra.enslavedExpFormula(player.thisReality)),
+        this.formatScalingMultiplier("Enslaved memories", Ra.enslavedExpBoost, Ra.enslavedExpFormula(player.thisReality / 1000)),
         this.formatScalingMultiplier("V memories", Ra.vExpBoost, Ra.vExpFormula(TimeTheorems.totalPurchased()))];
     },
     handleClick() {

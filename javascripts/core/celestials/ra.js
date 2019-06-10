@@ -21,12 +21,11 @@ const Ra = {
       lastTimeTaken: 1e105,
       lastTTPurchased: 0,
       disCharge: false,
+      peakGamespeed: 1,
     };
   },
-  /**
-   * There is no checking for unlocks because all multipliers should be 1x before the boost is unlocked and
-   * 0x before the celestial is unlocked.
-   */ 
+  // There is no checking for unlocks because all multipliers should be 1x before the boost is unlocked and
+  // 0x before the celestial is unlocked.
   giveExp() {
     const amplificationFactor = Enslaved.lockedInBoostRatio;
     this.addTeresaExp(this.gainedTeresaExp * amplificationFactor);
@@ -115,6 +114,28 @@ const Ra = {
   vExpFormula(val) {
     return Math.max(1, Math.pow(val / 50000, 2.5));
   },
+  gamespeedDTMult() {
+    if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
+    return Math.max(Math.pow(Math.log10(player.celestials.ra.peakGamespeed) - 90, 3), 1);
+  },
+  // In some sense we're cheating here for the sake of balance since gamespeed has historically been hard to keep
+  // under wraps.  So the way we buff gamespeed in a relatively controlled way here is by manually calculating a
+  // sensible "maximum possible gamespeed" based on level 10k celestial glyphs and adjusting the formula so that
+  // for the most part it will always take nearly a day for the gamespeed buff to build up to an eventual built-in
+  // hardcap.  For reference, glyphs will probably be around 9k at the time of unlocking.
+  gamespeedStoredTimeMult() {
+    let assumedBlackHoleBoost = 1;
+    for (const blackHole of BlackHoles.list) {
+      assumedBlackHoleBoost *= blackHole.power;
+      assumedBlackHoleBoost *= Math.pow(GameDatabase.achievements.normal.length + 10, 2.69);
+    }
+    const assumedTimeGlyphBoost = Math.pow(2.79, 4);
+    const baselineGamespeed = Math.pow(assumedBlackHoleBoost * assumedTimeGlyphBoost, 1.22);
+    const baselineStoredTime = Math.pow(baselineGamespeed, 1.25);
+    const scaledStoredTime = 1e17 * player.celestials.enslaved.stored / baselineStoredTime;
+    if (player.celestials.enslaved.stored === 0) return 1;
+    return Math.max(10, Math.min(scaledStoredTime, 1e10));
+  },
   get isRunning() {
     return player.celestials.ra.run;
   },
@@ -181,7 +202,7 @@ const Ra = {
   get vExpBoost() {
     if (!this.has(RA_UNLOCKS.V_UNLOCK)) return 0;
     return this.vExpFormula(player.celestials.ra.lastTTPurchased);
-  },
+  }
 };
 
 const RA_UNLOCKS = {
@@ -297,7 +318,7 @@ const RA_UNLOCKS = {
   PEAK_GAMESPEED: {
     id: 16,
     description: "Get Enslaved to level 15",
-    reward: "[some boost] based on peak game speed in each Reality",
+    reward: "Gain more dilated time based on peak game speed in each Reality",
     requirement: () => Ra.enslavedLevel >= 15
   },
   GAMESPEED_BOOST: {
@@ -309,7 +330,7 @@ const RA_UNLOCKS = {
   MORE_EC_COMPLETION: {
     id: 18,
     description: "Get V to level 2",
-    reward: "Eternity Challenges can be completed additional times based on V level",
+    reward: "V level gives extra achievements for free",
     requirement: () => Ra.vLevel >= 2
   },
   V_XP: {
@@ -318,28 +339,28 @@ const RA_UNLOCKS = {
     reward: "Gain a boost to V memories based on purchased TT in Ra's Reality",
     requirement: () => Ra.vLevel >= 3
   },
-  V_LV5: {
+  INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
-    reward: "[placeholder, I missed the fact that V needs one more upgrade than the others]",
+    reward: "Eternity Challenges autocomplete instantly",
     requirement: () => Ra.vLevel >= 5
   },
-  INSTANT_AUTOEC: {
+  TT_BOOST: {
     id: 21,
     description: "Get V to level 10",
-    reward: "Eternity Challenges autocomplete instantly",
+    reward: "[TT boosts something]",
     requirement: () => Ra.vLevel >= 10
   },
   IMPROVED_EC: {
     id: 22,
     description: "Get V to level 15",
-    reward: "Eternity Challenge rewards are improved",
+    reward: "[needs an idea]",
     requirement: () => Ra.vLevel >= 15
   },
   UNCAPPED_EC: {
     id: 23,
     description: "Get V to level 20",
-    reward: "Eternity Challenges can be completed in dilation with disabled IP multipliers for unlimited completions.",
+    reward: "[also needs an idea, something really powerful]",
     /**
      * This has a "hidden" requirement of Matterception 6/6 because it affects dilated ECs in a way that can probably
      * make it impossible to complete if it isn't already.  Realistically it should already be done at this point.

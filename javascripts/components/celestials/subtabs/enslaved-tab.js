@@ -116,7 +116,7 @@ Vue.component("enslaved-tab", {
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
           <div v-if="amplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
-          <div v-if="amplifyStoredReal"> Game speed: {{ storedTimeBoostDesc }} </div>
+          <div v-if="storedTimeSpeedBoost"> Game speed: {{ storedTimeBoostDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',

@@ -65,7 +65,7 @@ const Ra = {
     }
   },
   requiredExp(level) {
-    return Math.floor(5000 * Math.pow(1.2, level - 1));
+    return Math.floor(8000 * Math.pow(1.15, level - 1));
   },
   addTeresaExp(exp) {
     player.celestials.ra.teresaExp += exp;
@@ -120,24 +120,26 @@ const Ra = {
   },
   // In some sense we're cheating here for the sake of balance since gamespeed has historically been hard to keep
   // under wraps.  So the way we buff gamespeed in a relatively controlled way here is by manually calculating a
-  // sensible "maximum possible gamespeed" based on level 10k celestial glyphs on top of the CURRENT black hole
-  // power, which means that it should be a lot harder for this to cause an unchecked runaway since black hole
-  // scaling won't feed into this upgrade's scaling.  There is also an eventual hardcap of 1e10.
+  // sensible "maximum possible gamespeed" on top of the CURRENT black hole power based on a game state which is
+  // slightly farther than the player will be when first unlocking this upgrade (hence the "magic numbers").  The
+  // state in question is one with a glyph set with two time glyphs and effarig gamespeed pow + achievement pow
+  // (due to V), all level 10k with celestial rarity, and Lv20 Enslaved + all achievements.  The boost is simply 2x
+  // for any stored time at all if it's below this threshold, but will start scaling up at gamespeeds higher than this.
+  // It should be a lot harder for this to cause an unchecked runaway since black hole scaling won't feed into this
+  // upgrade's scaling.  There is also an eventual hardcap of 1e10 just in case.  If I did the math correctly, the
+  // speed boost should scale with (real time)^(effarig gamespeed pow).
   gamespeedStoredTimeMult() {
     let assumedBlackHoleBoost = 1;
     for (const blackHole of BlackHoles.list) {
       assumedBlackHoleBoost *= blackHole.power;
-      assumedBlackHoleBoost *= Math.pow(GameDatabase.achievements.normal.length + 10, 2.69);
+      assumedBlackHoleBoost *= Math.pow(GameDatabase.achievements.normal.length, 2.69);
     }
-    const assumedTimeGlyphBoost = Math.pow(2.79, 4);
+    const assumedTimeGlyphBoost = Math.pow(2.79, 2);
     const baselineGamespeed = Math.pow(assumedBlackHoleBoost * assumedTimeGlyphBoost, 1.22);
-    const baselineStoredTime = Math.pow(baselineGamespeed, 1.25);
-    // Right now the 1e17 is a fudge factor just to test what it looks like at somewhat less progression. Tthe formula
-    // on this upgrade will need to be revisited later on after some earlier Ra testing, and I'll remove this comment
-    // once I properly do that.
-    const scaledStoredTime = 1e17 * player.celestials.enslaved.stored / baselineStoredTime;
+    const baselineStoredTime = Math.pow(baselineGamespeed, 1.2);
+    const scaledStoredTime = player.celestials.enslaved.stored / baselineStoredTime;
     if (player.celestials.enslaved.stored === 0) return 1;
-    return Math.max(10, Math.min(scaledStoredTime, 1e10));
+    return Math.max(2, Math.min(scaledStoredTime, 1e10));
   },
   get isRunning() {
     return player.celestials.ra.run;

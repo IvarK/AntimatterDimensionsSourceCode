@@ -735,7 +735,7 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   }
 }
 
-RealityUpgradeState.list = mapGameData(
+RealityUpgradeState.index = mapGameData(
   GameDatabase.reality.upgrades,
   config => (config.id < 6
       ? new RebuyableRealityUpgradeState(config)
@@ -743,16 +743,16 @@ RealityUpgradeState.list = mapGameData(
 );
 
 /**
- *
  * @param {number} id
  * @return {RealityUpgradeState|RebuyableRealityUpgradeState}
  */
-function RealityUpgrade(id) {
-  return RealityUpgradeState.list[id];
-}
+const RealityUpgrade = id => RealityUpgradeState.index[id];
 
 const RealityUpgrades = {
-  all: RealityUpgradeState.list.compact(),
+  /**
+   * @type {(RealityUpgradeState|RebuyableRealityUpgradeState)[]}
+   */
+  all: RealityUpgradeState.index.compact(),
   get allBought() {
     // eslint-disable-next-line no-bitwise
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);

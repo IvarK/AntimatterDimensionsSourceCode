@@ -281,7 +281,6 @@ function completeReality(force, reset, auto = false) {
     player.infinityRebuyables = [0, 0];
   }
   player.postChallUnlocked = 0;
-  player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = isRUPG10Bought ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
   player.timeShards = new Decimal(0);
@@ -309,7 +308,6 @@ function completeReality(force, reset, auto = false) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
-  player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
@@ -360,11 +358,11 @@ function completeReality(force, reset, auto = false) {
 
   resetInfinityRuns();
   resetEternityRuns();
-  fullResetInfDimensions();
+  InfinityDimensions.fullReset();
   fullResetTimeDimensions();
   resetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
   player.celestials.ra.peakGamespeed = 1;
@@ -376,7 +374,7 @@ function completeReality(force, reset, auto = false) {
   Autobuyer.tryUnlockAny()
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
-  resetInfDimensions();
+  InfinityDimensions.resetAmount();
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();

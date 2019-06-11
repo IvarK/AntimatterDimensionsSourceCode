@@ -1,45 +1,35 @@
 "use strict";
 
 var shiftDown = false;
-var saved = 0;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
   tickspeed: new Decimal(1000),
-  firstCost: new Decimal(10),
-  secondCost: new Decimal(100),
-  thirdCost: new Decimal(10000),
-  fourthCost: new Decimal(1000000),
-  fifthCost: new Decimal(1e9),
-  sixthCost: new Decimal(1e13),
-  seventhCost: new Decimal(1e18),
-  eightCost: new Decimal(1e24),
-  firstAmount: new Decimal(0),
-  secondAmount: new Decimal(0),
-  thirdAmount: new Decimal(0),
-  fourthAmount: new Decimal(0),
-  firstBought: 0,
-  secondBought: 0,
-  thirdBought: 0,
-  fourthBought: 0,
-  fifthAmount: new Decimal(0),
-  sixthAmount: new Decimal(0),
-  seventhAmount: new Decimal(0),
-  eightAmount: new Decimal(0),
-  fifthBought: 0,
-  sixthBought: 0,
-  seventhBought: 0,
-  eightBought: 0,
-  firstPow: new Decimal(1),
-  secondPow: new Decimal(1),
-  thirdPow: new Decimal(1),
-  fourthPow: new Decimal(1),
-  fifthPow: new Decimal(1),
-  sixthPow: new Decimal(1),
-  seventhPow: new Decimal(1),
-  eightPow: new Decimal(1),
+  dimensions: {
+    normal: Array.range(0, 8).map(tier => ({
+      bought: 0,
+      amount: new Decimal(0),
+      power: new Decimal(1),
+      cost: new Decimal([10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24][tier]),
+      costMultiplier: new Decimal([1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15][tier])
+    })),
+    infinity: Array.range(0, 8).map(tier => ({
+      isUnlocked: false,
+      bought: 0,
+      amount: new Decimal(0),
+      power: new Decimal(1),
+      cost: new Decimal([1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280][tier]),
+      baseAmount: 0
+    })),
+    time: Array.range(0, 8).map(tier => ({
+      cost: new Decimal([1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"][tier]),
+      amount: new Decimal(0),
+      power: new Decimal(1),
+      bought: 0
+    }))
+  },
   sacrificed: new Decimal(0),
   achievements: new Set(),
   secretAchievements: new Set(),
@@ -80,7 +70,6 @@ let player = {
   interval: null,
   lastUpdate: new Date().getTime(),
   autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  costMultipliers: [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)],
   tickspeedMultiplier: new Decimal(10),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -103,7 +92,6 @@ let player = {
   infMultCost: new Decimal(10),
   overXGalaxies: 10,
   version: 13,
-  infDimensionsUnlocked: [false, false, false, false, false, false, false, false],
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
   postChallUnlocked: 0,
@@ -116,114 +104,10 @@ let player = {
   bestEternity: 999999999999,
   eternityUpgrades: new Set(),
   epmultUpgrades: 0,
-  infinityDimension1: {
-    cost: new Decimal(1e8),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension2: {
-    cost: new Decimal(1e9),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension3: {
-    cost: new Decimal(1e10),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension4: {
-    cost: new Decimal(1e20),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension5: {
-    cost: new Decimal(1e140),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension6: {
-    cost: new Decimal(1e200),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension7: {
-    cost: new Decimal(1e250),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
-  infinityDimension8: {
-    cost: new Decimal(1e280),
-    amount: new Decimal(0),
-    bought: 0,
-    power: new Decimal(1),
-    baseAmount: 0
-  },
   infDimBuyers: [false, false, false, false, false, false, false, false],
   timeShards: new Decimal(0),
   tickThreshold: new Decimal(1),
   totalTickGained: 0,
-  timeDimension1: {
-    cost: new Decimal(1),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension2: {
-    cost: new Decimal(5),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension3: {
-    cost: new Decimal(100),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension4: {
-    cost: new Decimal(1000),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension5: {
-    cost: new Decimal("1e2350"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension6: {
-    cost: new Decimal("1e2650"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension7: {
-    cost: new Decimal("1e3000"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
-  timeDimension8: {
-    cost: new Decimal("1e3350"),
-    amount: new Decimal(0),
-    power: new Decimal(1),
-    bought: 0
-  },
   offlineProd: 0,
   offlineProdCost: 1e7,
   autoSacrifice: 1,
@@ -252,7 +136,6 @@ let player = {
     }),
   },
   eternityChalls: {},
-  eternityChallGoal: Decimal.MAX_NUMBER,
   etercreq: 0,
   infMultBuyer: false,
   autoCrunchMode: AutoCrunchMode.AMOUNT,
@@ -556,6 +439,11 @@ const Player = {
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
   },
+
+  get eternityGoal() {
+    const ec = EternityChallenge.current;
+    return ec === undefined ? Decimal.MAX_NUMBER : ec.currentGoal;
+  }
 };
 
 function guardFromNaNValues(obj) {

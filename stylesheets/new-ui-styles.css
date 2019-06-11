@@ -430,6 +430,19 @@ body.t-dark {
   color: var(--color-text);;
 }
 
+#newNews {
+  position: relative;
+  display: inline-block;
+  font-family: Typewriter;
+  font-size: 15px;
+  white-space: nowrap;
+  font-weight: bold
+}
+
+#newNews a {
+  text-decoration: underline;
+}
+
 .subtabs {
   display: flex;
   opacity: 0;

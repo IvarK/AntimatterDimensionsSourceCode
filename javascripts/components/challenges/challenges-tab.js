@@ -65,6 +65,14 @@ Vue.component('challenges-tab', {
         this.untilNextEC.setFrom(untilNextEC);
         this.untilAllEC.setFrom(untilNextEC + (autoECPeriod * (remainingTiers - 1)));
       }
+    },
+    exitChallenge() {
+      const current = NormalChallenge.current ||
+        InfinityChallenge.current ||
+        EternityChallenge.current;
+      if (current !== undefined) {
+        current.exit();
+      }
     }
   },
   template:
@@ -77,7 +85,7 @@ Vue.component('challenges-tab', {
         <primary-button
           v-if="isInChallenge"
           class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
-          onclick="exitChallenge()"
+          @click="exitChallenge"
         >Exit Challenge</primary-button>
         <template v-if="isShowAllVisible">
           <b>Show all:</b>

@@ -63,7 +63,7 @@ function maxDimension(tier) {
   const dimension = NormalDimension(tier);
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return;
   const cost = dimension.cost.times(dimension.remainingUntil10);
-  const multBefore = dimension.pow;
+  const multBefore = dimension.power;
 
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {
@@ -93,33 +93,33 @@ function maxDimension(tier) {
     if (dimension.cost.gte(Decimal.MAX_NUMBER) &&
         BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
       const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
-      const b = player.costMultipliers[tier - 1].dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
+      const b = dimension.costMultiplier.dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
       const c = dimension.cost.dividedBy(player.money).log10();
       const discriminant = Math.pow(b, 2) - (c * a * 4);
       if (discriminant < 0) return;
       const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
       if (buying <= 0) return;
       dimension.amount = Decimal.round(dimension.amount.plus(10 * buying));
-      const preInfBuy = Math.floor(1 + (308 - initCost[tier].log10()) / costMults[tier].log10());
+      const preInfBuy = Math.floor(1 + (308 - dimension.baseCost.log10()) / dimension.baseCostMultiplier.log10());
       const postInfBuy = dimension.bought / 10 + buying - preInfBuy - 1;
-      const postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy));
+      const postInfInitCost = dimension.baseCost.times(Decimal.pow(dimension.baseCostMultiplier, preInfBuy));
       dimension.bought += 10 * buying;
-      dimension.pow = dimension.pow.times(Decimal.pow(getBuyTenMultiplier(), buying));
-      const newCost = postInfInitCost.times(Decimal.pow(costMults[tier], postInfBuy))
+      dimension.power = dimension.power.times(Decimal.pow(getBuyTenMultiplier(), buying));
+      const newCost = postInfInitCost.times(Decimal.pow(dimension.baseCostMultiplier, postInfBuy))
         .times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy * (postInfBuy + 1) / 2));
-      const newMult = costMults[tier].times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
+      const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
       dimension.cost = newCost;
-      player.costMultipliers[tier - 1] = newMult;
+      dimension.costMultiplier = newMult;
       if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost);
-      dimension.cost = dimension.cost.times(player.costMultipliers[tier - 1]);
-      player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+      dimension.cost = dimension.cost.times(dimension.costMultiplier);
+      dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
     }
   }
   if ((NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) && player.matter.equals(0)) {
     player.matter = new Decimal(1);
   }
   onBuyDimension(tier);
-  if (dimension.pow.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.pow.dividedBy(multBefore))}`);
+  if (dimension.power.neq(multBefore)) floatText(tier, `x${shortenMoney(dimension.power.dividedBy(multBefore))}`);
 }
 
 // This function doesn't do cost checking as challenges generally modify costs, it just buys and updates dimensions
@@ -127,14 +127,14 @@ function buyUntilTen(tier) {
   const dimension = NormalDimension(tier);
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10))
   dimension.bought += dimension.remainingUntil10;
-  dimension.pow = dimension.pow.times(getBuyTenMultiplier())
+  dimension.power = dimension.power.times(getBuyTenMultiplier())
 
   if (InfinityChallenge(5).isRunning) multiplyPC5Costs(dimension.cost, tier);
   else if (NormalChallenge(9).isRunning) multiplySameCosts(dimension.cost);
-  else dimension.cost = dimension.cost.times(getDimensionCostMultiplier(tier));
+  else dimension.cost = dimension.cost.times(dimension.costMultiplier);
 
   if (dimension.cost.gte(Decimal.MAX_NUMBER)) {
-    player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(Player.dimensionMultDecrease);
+    dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
   }
 }
 
@@ -233,25 +233,6 @@ function percentToNextGlyphLevel() {
     return Math.min(((ret - Math.floor(ret)-retOffset) * 100), 99.9).toFixed(1)
 }
 
-function resetDimensions() {
-  for (let dimension of NormalDimension.all) {
-    dimension.amount = new Decimal(0)
-    dimension.pow = new Decimal(1)
-    dimension.bought = 0
-  }
-  player.firstCost = new Decimal(10)
-  player.secondCost = new Decimal(100)
-  player.thirdCost = new Decimal(10000)
-  player.fourthCost = new Decimal(1e6)
-  player.fifthCost = new Decimal(1e9)
-  player.sixthCost = new Decimal(1e13)
-  player.seventhCost = new Decimal(1e18)
-  player.eightCost = new Decimal(1e24)
-  player.eightPow = new Decimal(player.chall11Pow)
-  player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-  GameCache.dimensionMultDecrease.invalidate();
-}
-
 function resetChallengeStuff() {
     player.chall2Pow = 1;
     player.chall3Pow = new Decimal(0.01)
@@ -336,35 +317,6 @@ function gainedInfinities() {
     return infGain;
 }
 
-function failChallenge() {
-    Modal.message.show("You failed the challenge, you will now exit it.");
-    setTimeout(exitChallenge, 500);
-    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
-}
-
-function exitChallenge() {
-  if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
-    secondSoftReset();
-    if (!Enslaved.isRunning) Tab.dimensions.normal.show();
-  } else if (EternityChallenge.isRunning) {
-    player.challenge.eternity.current = 0;
-    player.eternityChallGoal = Decimal.MAX_NUMBER;
-    eternity(true);
-  }
-}
-
-function unlockEChall(idx, auto) {
-  if (player.challenge.eternity.unlocked === 0) {
-    player.challenge.eternity.unlocked = idx;
-    if (!auto) {
-      Tab.challenges.eternity.show();
-    }
-    if (idx !== 12 && idx !== 13) player.etercreq = idx;
-  }
-}
-
 setInterval(function() {
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
@@ -435,10 +387,6 @@ function randomStuffThatShouldBeRefactored() {
 
   if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
   else document.getElementById("eternitystorebtn").style.display = "none"
-
-  if (EternityChallenge(12).isRunning && !EternityChallenge(12).isWithinRestriction) {
-      failChallenge();
-  }
 
   if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
   else $("#realitybtn").hide()
@@ -679,18 +627,20 @@ function gameLoop(diff, options = {}) {
 
     player.realTimePlayed += realDiff;
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
-    player.totalTimePlayed += diff
-    player.thisInfinityTime += diff
+    player.totalTimePlayed += diff;
+    player.thisInfinityTime += diff;
     player.thisInfinityRealTime += realDiff;
-    player.thisEternity += diff
+    player.thisEternity += diff;
     player.thisEternityRealTime += realDiff;
-    player.thisReality += diff
+    player.thisReality += diff;
     player.thisRealityRealTime += realDiff;
+
+    EternityChallenge(12).tryFail();
 
     GameCache.achievementPower.invalidate();
 
     for (let tier = 1; tier < 9; tier++) {
-      if (tier !== 8 && (player.infDimensionsUnlocked[tier - 1] || EternityChallenge(7).completions > 0)) {
+      if (tier !== 8 && (InfinityDimension(tier).isUnlocked || EternityChallenge(7).completions > 0)) {
         const dimension = InfinityDimension(tier);
         dimension.amount = dimension.amount.plus(InfinityDimension(tier + 1).productionPerSecond.times(diff / 10000));
       }
@@ -703,7 +653,7 @@ function gameLoop(diff, options = {}) {
     const ID1ProductionThisTick = InfinityDimension(1).productionPerSecond.times(diff / 1000);
     if (EternityChallenge(7).isRunning) {
       if (!NormalChallenge(10).isRunning) {
-        player.seventhAmount = player.seventhAmount.plus(ID1ProductionThisTick)
+        NormalDimension(7).amount = NormalDimension(7).amount.plus(ID1ProductionThisTick)
       }
     }
     else {
@@ -713,7 +663,7 @@ function gameLoop(diff, options = {}) {
     const TD1Production = TimeDimension(1).productionPerSecond;
     const TD1ProductionThisTick = TD1Production.times(diff/1000);
     if (EternityChallenge(7).isRunning) {
-      player.infinityDimension8.amount = player.infinityDimension8.amount.plus(TD1ProductionThisTick)
+      InfinityDimension(8).amount = InfinityDimension(8).amount.plus(TD1ProductionThisTick);
     }
     else {
       player.timeShards = player.timeShards.plus(TD1ProductionThisTick)
@@ -988,7 +938,7 @@ function autoBuyTimeDims() {
 }
 
 function autoBuyExtraTimeDims() {
-  if (player.timeDimension8.bought === 0 && Perk.autounlockTD.isBought) {
+  if (TimeDimension(8).bought === 0 && Perk.autounlockTD.isBought) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
 }

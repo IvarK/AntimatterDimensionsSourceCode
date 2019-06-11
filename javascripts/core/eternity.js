@@ -55,16 +55,15 @@ function eternity(force, auto, specialConditions = {}) {
     player.break = false;
   }
   
-  player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.challenge.eternity.current = 0;
   if (!specialConditions.enteringEC) {
     player.dilation.active = false;
   }
   resetInfinityRuns();
-  fullResetInfDimensions();
+  InfinityDimensions.fullReset();
   eternityResetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
 
   if (player.respec) respecTimeStudies(auto);
   player.respec = false;
@@ -80,7 +79,7 @@ function eternity(force, auto, specialConditions = {}) {
   }
   
   resetInfinityPointsOnEternity();
-  resetInfDimensions();
+  InfinityDimensions.resetAmount();
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
@@ -125,7 +124,6 @@ function initializeResourcesAfterEternity() {
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);
   player.infMultCost = new Decimal(10);
-  player.infDimensionsUnlocked = Array.repeat(false, 8);
   player.infinityPower = new Decimal(1);
   player.timeShards = new Decimal(0);
   player.tickThreshold = new Decimal(1);
@@ -179,17 +177,6 @@ function eternityResetReplicanti() {
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
   if (player.eternities >= 3 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-}
-
-function fullResetInfDimensions() {
-    for (let i = 1; i < 9; i++) {
-        const dimension = InfinityDimension(i);
-        dimension.cost = new Decimal(dimension.baseCost);
-        dimension.amount = new Decimal(0);
-        dimension.bought = 0;
-        dimension.power = new Decimal(1);
-        dimension.baseAmount = 0;
-    }
 }
 
 function askEternityConfirmation() {

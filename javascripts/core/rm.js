@@ -550,10 +550,16 @@ function sacrificeGlyph(glyph, force = false) {
   if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type === "time") {
-    player.timeDimension8.power = Decimal.pow(2 * Effects.product(GlyphSacrifice.time), player.timeDimension8.bought)
+    TimeDimension(8).power = Decimal.pow(
+      2 * Effects.product(GlyphSacrifice.time),
+      TimeDimension(8).bought
+    );
   }
   if (glyph.type === "infinity") {
-    player.infinityDimension8.power = Decimal.pow(5 * Effects.product(GlyphSacrifice.infinity), IDAmountToIDPurchases(player.infinityDimension8.baseAmount))
+    InfinityDimension(8).power = Decimal.pow(
+      5 * Effects.product(GlyphSacrifice.infinity),
+      IDAmountToIDPurchases(InfinityDimension(8).baseAmount)
+    );
   }
   Glyphs.removeFromInventory(glyph);
   EventHub.dispatch(GameEvent.GLYPH_SACRIFICED, glyph);

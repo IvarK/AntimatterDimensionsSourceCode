@@ -72,7 +72,7 @@ function getNodeColor(perk) {
 }
 
 function updatePerkColors() {
-  const data = Perk.all
+  const data = Perks.all
     .map(perk => ({ id: perk.id, color: getNodeColor(perk) }));
   nodes.update(data);
 }
@@ -90,11 +90,11 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
-    nodes = Perk.all.map(perk => ({ id: perk.id, label: perk.config.label, title: perk.config.description }));
+    nodes = Perks.all.map(perk => ({ id: perk.id, label: perk.config.label, title: perk.config.description }));
     nodes = new vis.DataSet(nodes);
 
     edges = [];
-    for (const perk of Perk.all) {
+    for (const perk of Perks.all) {
       for (const connectedPerk of perk.connectedPerks) {
         const from = Math.min(perk.id, connectedPerk.id);
         const to = Math.max(perk.id, connectedPerk.id);
@@ -139,7 +139,7 @@ function drawPerkNetwork() {
     network.on("click", params => {
       const id = params.nodes[0];
       if (!isFinite(id)) return;
-      Perk.find(id).purchase();
+      Perks.find(id).purchase();
       updatePerkColors();
     });
     // Hide tooltips on drag

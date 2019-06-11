@@ -83,7 +83,7 @@ const GameCache = {
     );
   }),
 
-  buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+  buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
   normalDimensionCommonMultiplier: new Lazy(() => {
     // The effect is defined in normal_dimensions.js because that's where the non-cached

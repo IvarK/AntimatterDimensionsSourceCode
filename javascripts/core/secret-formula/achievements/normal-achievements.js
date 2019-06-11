@@ -921,7 +921,7 @@ GameDatabase.achievements.normal = [
     id: 146,
     name: "Perks of living",
     tooltip: "Have all perks bought.",
-    checkRequirement: () => player.reality.perks.size === Perk.all.length,
+    checkRequirement: () => player.reality.perks.size === Perks.all.length,
     checkEvent: GameEvent.PERK_BOUGHT
   },
   {

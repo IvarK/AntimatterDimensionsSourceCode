@@ -75,6 +75,7 @@ function getReplicantiInterval(noMod, intervalIn) {
     // and handling it would make the replicanti code a lot more complicated.
     interval = Math.pow(interval, 2);
   }
+  interval /= RA_UNLOCKS.TT_BOOST.effect.replicanti();
   return interval;
 }
 

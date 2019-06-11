@@ -611,7 +611,7 @@ function gameLoop(diff, options = {}) {
         infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
       }
       if (EffarigUnlock.eternity.isUnlocked) {
-        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.infinity()));
       }
       infGen = infGen.plus(player.partInfinitied);
       player.infinitied = player.infinitied.plus(infGen.floor());
@@ -630,7 +630,7 @@ function gameLoop(diff, options = {}) {
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
       let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
-        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
+        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()))
       }
     }
 
@@ -776,7 +776,7 @@ function gameLoop(diff, options = {}) {
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
       if (Enslaved.isRunning) ttGain *= 1e-3;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain * RA_UNLOCKS.TT_BOOST.effect.ttGen());
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -816,7 +816,7 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     DilationUpgrade.ttGenerator.applyEffect(gen =>
-      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime))
+      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.ttGen()))
     );
 
   document.getElementById("rm-amount").textContent = shortenDimensions(player.reality.realityMachines);

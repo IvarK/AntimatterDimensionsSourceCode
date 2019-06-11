@@ -347,7 +347,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
           (EternityChallenge(2).completions > 0 || Perk.bypassEC2Lock.isBought) &&
           (EternityChallenge(3).completions > 0 || Perk.bypassEC3Lock.isBought),
       description: "You gain 1% of your IP gained on crunch each second",
-      effect: () => gainedInfinityPoints().times(Time.deltaTime / 100)
+      effect: () => gainedInfinityPoints().times(Time.deltaTime / 100).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige())
     },
     {
       id: 191,

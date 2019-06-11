@@ -141,6 +141,15 @@ const Ra = {
     if (player.celestials.enslaved.stored === 0) return 1;
     return Math.max(2, Math.min(scaledStoredTime, 1e10));
   },
+  // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
+  // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
+  // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
+  // removing the hardcap of 10 may cause runaways.
+  // It's almost certainly going to need to be rebalanced here after testing earlier Ra.
+  theoremBoostFactor() {
+    if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
+    return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 40);
+  },
   get isRunning() {
     return player.celestials.ra.run;
   },
@@ -353,8 +362,16 @@ const RA_UNLOCKS = {
   TT_BOOST: {
     id: 21,
     description: "Get V to level 10",
-    reward: "[TT boosts something]",
-    requirement: () => Ra.vLevel >= 10
+    reward: "Time Theorems boost all forms of continuous non-dimension production",
+    requirement: () => Ra.vLevel >= 10,
+    effect: {
+      ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
+      eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
+      infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
+      replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
+      dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
+      autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
+    }
   },
   IMPROVED_EC: {
     id: 22,

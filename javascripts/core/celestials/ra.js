@@ -254,7 +254,7 @@ const RA_UNLOCKS = {
   LATER_DILATION: {
     id: 5,
     description: "Get Teresa to level 20",
-    reward: "Unlock more dilation upgrades",
+    reward: "Unlock more dilation upgrades [unimplemented]",
     requirement: () => Ra.teresaLevel >= 20
   },
   IMPROVED_GLYPHS: {
@@ -296,7 +296,7 @@ const RA_UNLOCKS = {
   GLYPH_ALCHEMY: {
     id: 11,
     description: "Get Effarig to level 20",
-    reward: "Unlock Glyph Alchemy",
+    reward: "Unlock Glyph Alchemy [unimplemented]",
     requirement: () => Ra.effarigLevel >= 20
   },
   IMPROVED_STORED_TIME: {
@@ -326,7 +326,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 15,
     description: "Get Enslaved to level 10",
-    reward: "Rate of stored game time can be configured",
+    reward: "Rate of stored game time can be configured [unimplemented]",
     requirement: () => Ra.enslavedLevel >= 10
   },
   PEAK_GAMESPEED: {
@@ -378,13 +378,13 @@ const RA_UNLOCKS = {
   IMPROVED_EC: {
     id: 22,
     description: "Get V to level 15",
-    reward: "[needs an idea]",
+    reward: "??? [unimplemented]",
     requirement: () => Ra.vLevel >= 15
   },
   UNCAPPED_EC: {
     id: 23,
     description: "Get V to level 20",
-    reward: "[also needs an idea, something really powerful]",
+    reward: "??? [unimplemented]",
     /**
      * This has a "hidden" requirement of Matterception 6/6 because it affects dilated ECs in a way that can probably
      * make it impossible to complete if it isn't already.  Realistically it should already be done at this point.

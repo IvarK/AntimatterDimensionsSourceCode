@@ -18,7 +18,7 @@ const Ra = {
       quoteIdx: 0,
       lastEPGained: new Decimal(0),
       lastGlyphCount: 5,
-      lastTimeTaken: 1e105,
+      lastTimeTaken: 1e155,
       lastTTPurchased: 0,
       disCharge: false,
       peakGamespeed: 1,
@@ -65,7 +65,7 @@ const Ra = {
     }
   },
   requiredExp(level) {
-    return Math.floor(8000 * Math.pow(1.15, level - 1));
+    return Math.floor(10000 * Math.pow(1.12, level - 1));
   },
   addTeresaExp(exp) {
     player.celestials.ra.teresaExp += exp;
@@ -105,14 +105,14 @@ const Ra = {
   effarigExpFormula(val) {
     return Math.pow(2, 5 - val);
   },
-  // This curve is 2x at 100, very steep below that (up to 50x at 1) and very shallow to 1x at 1e102
+  // This curve is 4x at 100, very steep below that (up to 50x at 1) and very shallow to 1x at 1e152
   enslavedExpFormula(val) {
     return val < 100
-      ? 100 / (2 + 1.5 * Math.max(0, Math.pow(Math.log10(val), 5)))
-      : Math.max(1, 2.02 - Math.log10(val) / 100);
+      ? 100 / (2 + 1.4375 * Math.max(0, Math.pow(Math.log10(val), 4)))
+      : Math.max(1, 4.04 - Math.log10(val) / 50);
   },
   vExpFormula(val) {
-    return Math.max(1, Math.pow(val / 50000, 2.5));
+    return Math.max(1, Math.pow(val / 50000, 1.6));
   },
   gamespeedDTMult() {
     if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
@@ -302,7 +302,7 @@ const RA_UNLOCKS = {
   IMPROVED_STORED_TIME: {
     id: 12,
     description: "Get Enslaved to level 2",
-    reward: "Stored game time is amplified and stored real time is more efficient",
+    reward: "Stored game time is amplified and stored real time is more efficient based on Enslaved level",
     requirement: () => Ra.enslavedLevel >= 2,
     effect: {
       gameTimeAmplification: () => 1 + Ra.enslavedLevel / 100,
@@ -356,7 +356,9 @@ const RA_UNLOCKS = {
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
-    reward: "Eternity Challenges autocomplete instantly and Eternity upgrades are given immediately",
+    // This upgrade also starts the player off with Eternity upgrades immediately instead of after one eternity
+    reward: "Eternity Challenge auto-completion happens instantly " +
+      "and dilation is automatically unlocked when you can buy all studies",
     requirement: () => Ra.vLevel >= 5
   },
   TT_BOOST: {

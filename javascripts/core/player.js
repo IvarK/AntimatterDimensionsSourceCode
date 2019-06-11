@@ -439,7 +439,7 @@ let player = {
       quoteIdx: 0,
       lastEPGained: new Decimal(0),
       lastGlyphCount: 5,
-      lastTimeTaken: 1e105,
+      lastTimeTaken: 1e155,
       lastTTPurchased: 0,
       disCharge: false,
       peakGamespeed: 1,

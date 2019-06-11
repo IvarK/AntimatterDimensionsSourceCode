@@ -823,6 +823,11 @@ function gameLoop(diff, options = {}) {
 
   BlackHoles.updatePhases(blackHoleDiff);
 
+  // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(16617)) {
+    TimeStudy.dilation.purchase(true);
+  }
+
   // TD5-8/Reality unlock and TTgen perk autobuy
   autoBuyExtraTimeDims();
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);

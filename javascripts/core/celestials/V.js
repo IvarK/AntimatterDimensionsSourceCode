@@ -37,22 +37,20 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-/**
- * @type {VRunUnlockState[]}
- */
-VRunUnlockState.all = mapGameData(
-  GameDatabase.celestials.v.runUnlocks,
-  config => new VRunUnlockState(config)
-);
+GameMechanicState.createIndex(VRunUnlockState, GameDatabase.celestials.v.runUnlocks);
 
 /**
  * @param {number} id
  * @return {VRunUnlockState}
  */
-function VRunUnlock(id) {
-  return VRunUnlockState.all[id];
-}
+const VRunUnlock = id => VRunUnlockState.index[id];
 
+const VRunUnlocks = {
+  /**
+   * @type {VRunUnlockState[]}
+   */
+  all: VRunUnlockState.index.compact(),
+};
 
 const V_UNLOCKS = {
   MAIN_UNLOCK: {
@@ -113,7 +111,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (const unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
     }

@@ -71,6 +71,31 @@ const AutomatorCommands = ((() => {
       },
     },
     {
+      id: "blackHole",
+      rule: $ => () => {
+        $.CONSUME(T.BlackHole);
+        $.OR([
+          { ALT: () => $.CONSUME(T.On) },
+          { ALT: () => $.CONSUME(T.Off) },
+        ]);
+      },
+      validate: (ctx, V) => {
+        ctx.startLine = ctx.BlackHole[0].startLine;
+        if (!BlackHole(1).isUnlocked) {
+          V.addError(ctx.BlackHole[0], "black hole is not unlocked");
+          return false;
+        }
+        return true;
+      },
+      compile: ctx => {
+        const on = Boolean(ctx.On);
+        return () => {
+          if (on === BlackHoles.arePaused) BlackHoles.togglePause();
+          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        };
+      },
+    },
+    {
       id: "define",
       rule: $ => () => {
         $.CONSUME(T.Define);
@@ -225,10 +250,40 @@ const AutomatorCommands = ((() => {
         return () => {
           const ec = EternityChallenge(ecNumber);
           if (ec.isRunning) return AutomatorCommandStatus.NEXT_INSTRUCTION;
+          if (!EternityChallenge(ecNumber).isUnlocked) {
+            if (!TimeStudy.eternityChallenge(ecNumber).purchase(true)) {
+              return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+            }
+          }
           if (ec.start(true)) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
           return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
       }
+    },
+    {
+      id: "storeTime",
+      rule: $ => () => {
+        $.CONSUME(T.StoreTime);
+        $.OR([
+          { ALT: () => $.CONSUME(T.On) },
+          { ALT: () => $.CONSUME(T.Off) },
+        ]);
+      },
+      validate: (ctx, V) => {
+        ctx.startLine = ctx.StoreTime[0].startLine;
+        if (!Enslaved.isUnlocked) {
+          V.addError(ctx.StoreTime[0], "Enslaved is not unlocked");
+          return false;
+        }
+        return true;
+      },
+      compile: ctx => {
+        const on = Boolean(ctx.On);
+        return () => {
+          if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
+          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        };
+      },
     },
     {
       id: "studiesBuy",

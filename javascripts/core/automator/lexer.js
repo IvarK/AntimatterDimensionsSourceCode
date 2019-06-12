@@ -217,6 +217,12 @@ const AutomatorLexer = (() => {
   createKeyword("Until", /until/i);
   createKeyword("Wait", /wait/i);
   createKeyword("While", /while/i);
+  createKeyword("BlackHole", /black[ \t]+hole/i, {
+    $autocomplete: "black hole",
+  });
+  createKeyword("StoreTime", /stored?[ \t]+time/i, {
+    $autocomplete: "store time",
+  });
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);

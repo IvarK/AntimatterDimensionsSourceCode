@@ -54,7 +54,7 @@
     start: [
       commentRule,
       {
-        regex: /auto\s|define\s|if\s|pause\s|start\s|studies\s|tt\s|time theorems\s|unlock\s|until\s|wait\s|while\s/ui,
+        regex: /auto\s|define\s|if\s|pause\s|start\s|studies\s|tt\s|time theorems\s|unlock\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s/ui,
         token: "keyword",
         next: "commandArgs"
       },

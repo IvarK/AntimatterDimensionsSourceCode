@@ -21,6 +21,8 @@ Vue.component("automator-editor", {
       currentScriptID: "",
       isRunning: false,
       repeatOn: false,
+      editingName: false,
+      scripts: [],
     };
   },
   watch: {
@@ -66,6 +68,13 @@ Vue.component("automator-editor", {
     onGameLoad() {
       AutomatorUI.documents = {};
       this.updateCurrentScriptID();
+      this.updateScriptList();
+    },
+    updateScriptList() {
+      this.scripts = Object.values(player.reality.automator.scripts).map(script => ({
+        id: script.id,
+        name: script.name,
+      }));
     },
     updateCurrentScriptID() {
       const storedScripts = player.reality.automator.scripts;
@@ -95,6 +104,32 @@ Vue.component("automator-editor", {
       else AutomatorBackend.start(this.currentScriptID, AutomatorMode.SINGLE_STEP);
     },
     repeat: () => AutomatorBackend.toggleRepeat(),
+    rename() {
+      this.editingName = true;
+      this.$nextTick(() => {
+        this.$refs.renameInput.value = player.reality.automator.scripts[this.currentScriptID].name;
+        this.$refs.renameInput.focus();
+      });
+    },
+    selectedScriptAttribute(id) {
+      return id === this.currentScriptID ? { selected: "selected" } : {};
+    },
+    onScriptDropdown(event) {
+      const menu = event.target;
+      if (menu.selectedIndex === menu.length - 1) this.createNewScript();
+      else player.reality.automator.state.editorScript = this.scripts[menu.selectedIndex].id;
+      this.updateCurrentScriptID();
+    },
+    nameEdited() {
+      console.log("name edited");
+      // Trim off leading and trailing whitespace
+      const trimmed = this.$refs.renameInput.value.match(/^\s*(.*?)\s*$/u);
+      if (trimmed.length === 2 && trimmed[1].length > 0) {
+        player.reality.automator.scripts[this.currentScriptID].name = trimmed[1];
+        this.updateScriptList();
+      }
+      this.editingName = false;
+    }
   },
   created() {
     if (!AutomatorUI.container) {
@@ -115,9 +150,11 @@ Vue.component("automator-editor", {
           AutomatorBackend.stop();
         }
       });
+      EventHub.logic.on(GameEvent.GAME_LOAD, () => AutomatorUI.documents = {});
     }
     EventHub.logic.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
+    this.updateScriptList();
   },
   mounted() {
     this.$refs.container.appendChild(AutomatorUI.container);
@@ -148,6 +185,19 @@ Vue.component("automator-editor", {
                 :class="{ 'c-automator__button-repeat--active' : repeatOn }"
           @click="repeat"
         />
+        <div class="l-automator__script-names">
+          <select v-if="!editingName" @input="onScriptDropdown">
+            <option v-for="script in scripts"
+                    v-bind="selectedScriptAttribute(script.id)"
+                    :value="script.id">{{script.name}}</option>
+            <option value="createNewScript">Create new...</option>
+          </select>
+          <input v-else ref="renameInput"
+                        class="l-automator__rename-input"
+                        @blur="nameEdited"
+                        @keyup.enter="$refs.renameInput.blur()"/>
+        </div>
+        <automator-button class="far fa-edit" @click="rename"/>
         <automator-button
           class="l-automator__button--corner"
           :class="modeIconClass"

@@ -82,6 +82,14 @@
   color: #d5ffd7;
 }
 
+.l-automator__script-names {
+  width: 10rem;
+}
+
+.l-automator__rename-input {
+  width: 90%;
+}
+
 .c-automator-editor__active-line {
   background: rgb(25, 10, 44);
 }

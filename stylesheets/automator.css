@@ -77,17 +77,29 @@
   color: #d5ffd7;
 }
 
-.c-automator__button-repeat--active {
+.c-automator__button--active {
   border-color: #d5ffd7;
   color: #d5ffd7;
 }
 
 .l-automator__script-names {
-  width: 10rem;
+  width: 15rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.l-automator__scripts-dropdown {
+  width: 90%;
+  height: 90%;
+  padding: 0.1rem;
 }
 
 .l-automator__rename-input {
   width: 90%;
+  height: 90%;
+  padding: 0.1rem;
 }
 
 .c-automator-editor__active-line {

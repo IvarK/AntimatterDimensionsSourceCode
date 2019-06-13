@@ -128,7 +128,7 @@ Vue.component("automator-editor", {
         player.reality.automator.scripts[this.currentScriptID].name = trimmed[1];
         this.updateScriptList();
       }
-      this.editingName = false;
+      this.$nextTick(() => this.editingName = false);
     }
   },
   created() {
@@ -182,22 +182,25 @@ Vue.component("automator-editor", {
         <automator-button class="fa-step-forward" @click="step"/>
         <automator-button
           class="fa-sync-alt"
-                :class="{ 'c-automator__button-repeat--active' : repeatOn }"
+                :class="{ 'c-automator__button--active' : repeatOn }"
           @click="repeat"
         />
         <div class="l-automator__script-names">
-          <select v-if="!editingName" @input="onScriptDropdown">
-            <option v-for="script in scripts"
-                    v-bind="selectedScriptAttribute(script.id)"
-                    :value="script.id">{{script.name}}</option>
-            <option value="createNewScript">Create new...</option>
-          </select>
+          <template v-if="!editingName">
+            <select class="l-automator__scripts-dropdown"
+                    @input="onScriptDropdown">
+              <option v-for="script in scripts"
+                      v-bind="selectedScriptAttribute(script.id)"
+                      :value="script.id">{{script.name}}</option>
+              <option value="createNewScript">Create new...</option>
+            </select>
+            <automator-button class="far fa-edit" @click="rename"/>
+          </template>
           <input v-else ref="renameInput"
                         class="l-automator__rename-input"
                         @blur="nameEdited"
                         @keyup.enter="$refs.renameInput.blur()"/>
         </div>
-        <automator-button class="far fa-edit" @click="rename"/>
         <automator-button
           class="l-automator__button--corner"
           :class="modeIconClass"

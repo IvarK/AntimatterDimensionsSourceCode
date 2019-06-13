@@ -267,11 +267,8 @@ GameStorage.devMigrations = {
         delete player.blackHole[i].duration;
       }
     },
-    player => {
-      player.blackHole = player.wormhole;
-      player.blackHolePause = player.wormholePause;
-      delete player.wormhole;
-      delete player.wormholePause;
+    () => {
+      // This migration was created by a mistake
     },
     GameStorage.migrations.convertAchivementsToNumbers,
     GameStorage.migrations.adjustGameCreatedTime,

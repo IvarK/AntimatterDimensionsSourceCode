@@ -113,11 +113,11 @@ Vue.component("tt-shop", {
           <tt-buy-button :budget="budget.ip" :cost="costs.ip" :format="formatIP" :action="buyWithIP"/>
           <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"/>
           <div class="l-tt-buy-max-vbox">
-            <button v-if="!minimized && hasTTAutobuyer" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
+            <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
               @click="buyMaxTheorems">
               Buy max
             </button>
-            <button v-if="!minimized" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+            <button v-if="!minimized && hasTTAutobuyer" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
               @click="toggleTTAutobuyer">
               Auto: {{autobuyerText}}
             </button>

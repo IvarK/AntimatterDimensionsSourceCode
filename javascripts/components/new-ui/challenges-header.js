@@ -1,6 +1,4 @@
-"use strict";
-
-Vue.component('challenges-tab', {
+Vue.component('challenges-header', {
   data: function() {
     return {
       isICTabUnlocked: false,
@@ -13,25 +11,6 @@ Vue.component('challenges-tab', {
       remainingECTiers: 0,
       untilNextEC: TimeSpan.zero,
       untilAllEC: TimeSpan.zero,
-      tabs: [
-        {
-          name: "Challenges",
-          id: "Challenges",
-          component: "normal-challenges-tab"
-        },
-        {
-          name: "Infinity Challenges",
-          id: "Infinity Challenges",
-          component: "infinity-challenges-tab",
-          condition: function() { return this.isICTabUnlocked; }.bind(this)
-        },
-        {
-          name: "Eternity Challenges",
-          id: "Eternity Challenges",
-          component: "eternity-challenges-tab",
-          condition: function() { return this.isECTabUnlocked; }.bind(this)
-        }
-      ]
     };
   },
   watch: {
@@ -74,11 +53,39 @@ Vue.component('challenges-tab', {
       }
     }
   },
-  template:
-    `<game-tab-with-subtabs
-      v-model="$viewModel.tabs.challenges.subtab"
-      :tabs="tabs"
-      class="l-challenges-tab"
+  template: 
+  `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
+    <primary-button
+      v-if="isInChallenge"
+      class="o-primary-btn--exit-challenge l-challenges-tab__exit-btn"
+      @click="exitChallenge"
+    >Exit Challenge</primary-button>
+    <template v-if="isShowAllVisible">
+      <b>Show all:</b>
+      <input
+        v-model="showAllChallenges"
+        type="checkbox"
+        class="o-big-checkbox"
+      />
+    </template>
+    <template v-if="isAutoECVisible">
+      <b>Auto EC completion:</b>
+      <input
+        v-model="autoEC"
+        type="checkbox"
+        class="o-big-checkbox"
+      >
+    </template>
+    <div
+      v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
+      class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
     >
-    </game-tab-with-subtabs>`
-});
+      <span>Until</span>
+      <div class="l-challenges-tab__auto-ec-timers">
+        <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC.toString()}}</span>
+        <span>all auto EC completions: {{untilAllEC.toString()}}</span>
+      </div>
+    </div>
+  </div>
+  `
+})

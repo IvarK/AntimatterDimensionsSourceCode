@@ -50,6 +50,12 @@ document.getElementById("news").onclick = function () {
     }
 };
 
+document.getElementById("newNews").onclick = function () {
+  if (document.getElementById("newNews").textContent === "Click this to unlock a secret achievement.") {
+    SecretAchievement(24).unlock();
+  }
+};
+
 function maxAll() {
   if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
   buyMaxTickSpeed();

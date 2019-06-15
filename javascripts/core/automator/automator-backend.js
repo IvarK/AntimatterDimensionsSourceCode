@@ -254,6 +254,10 @@ const AutomatorBackend = {
     this.stack.push(commands);
   },
 
+  findScript(id) {
+    return this._scripts.find(e => e.id === id);
+  },
+
   initializeFromSave() {
     console.log("Initialize from save")
     const scriptIds = Object.keys(player.reality.automator.scripts);
@@ -272,6 +276,17 @@ const AutomatorBackend = {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
     }
+  },
+
+  saveScript(id, data) {
+    this.findScript(id).save(data);
+    if (id === this.state.topLevelScript) this.stop();
+  },
+
+  newScript() {
+    const newScript = AutomatorScript.create("Untitled");
+    this._scripts.push(newScript);
+    return newScript;
   },
 
   toggleRepeat() {

@@ -11,6 +11,25 @@ const AutomatorUI = {
     theme: "liquibyte",
   },
   documents: {},
+  initialize() {
+    if (this.container) return;
+    this.container = document.createElement("div");
+    this.container.className = "l-automator-editor__codemirror-container";
+    const textArea = document.createElement("textarea");
+    this.container.appendChild(textArea);
+    this.editor = CodeMirror.fromTextArea(textArea, this.mode);
+    this.editor.on("keydown", (editor, event) => {
+      if (editor.state.completionActive) return;
+      const key = event.key;
+      if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
+      CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
+    });
+    this.editor.on("change", editor => {
+      const scriptID = ui.view.tabs.reality.automator.editorScriptID;
+      AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
+    });
+    EventHub.logic.on(GameEvent.GAME_LOAD, () => this.documents = {});
+  }
 };
 
 Vue.component("automator-editor", {
@@ -18,7 +37,6 @@ Vue.component("automator-editor", {
     return {
       code: null,
       activeLine: 0,
-      currentScriptID: "",
       isRunning: false,
       repeatOn: false,
       editingName: false,
@@ -37,6 +55,14 @@ Vue.component("automator-editor", {
   computed: {
     fullScreen() {
       return this.$viewModel.tabs.reality.automator.fullScreen;
+    },
+    currentScriptID: {
+      get() {
+        return this.$viewModel.tabs.reality.automator.editorScriptID;
+      },
+      set(value) {
+        this.$viewModel.tabs.reality.automator.editorScriptID = value;
+      }
     },
     mode: {
       get() {
@@ -114,6 +140,12 @@ Vue.component("automator-editor", {
     selectedScriptAttribute(id) {
       return id === this.currentScriptID ? { selected: "selected" } : {};
     },
+    createNewScript() {
+      const newScript = AutomatorBackend.newScript();
+      player.reality.automator.state.editorScript = newScript.id;
+      this.updateScriptList();
+      this.rename();
+    },
     onScriptDropdown(event) {
       const menu = event.target;
       if (menu.selectedIndex === menu.length - 1) this.createNewScript();
@@ -121,7 +153,6 @@ Vue.component("automator-editor", {
       this.updateCurrentScriptID();
     },
     nameEdited() {
-      console.log("name edited");
       // Trim off leading and trailing whitespace
       const trimmed = this.$refs.renameInput.value.match(/^\s*(.*?)\s*$/u);
       if (trimmed.length === 2 && trimmed[1].length > 0) {
@@ -132,26 +163,7 @@ Vue.component("automator-editor", {
     }
   },
   created() {
-    if (!AutomatorUI.container) {
-      AutomatorUI.container = document.createElement("div");
-      AutomatorUI.container.className = "l-automator-editor__codemirror-container";
-      const textArea = document.createElement("textarea");
-      AutomatorUI.container.appendChild(textArea);
-      AutomatorUI.editor = CodeMirror.fromTextArea(textArea, AutomatorUI.mode);
-      AutomatorUI.editor.on("keydown", (editor, event) => {
-        if (editor.state.completionActive) return;
-        const key = event.key;
-        if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
-        CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
-      });
-      AutomatorUI.editor.on("change", editor => {
-        player.reality.automator.scripts[this.currentScriptID].content = editor.getDoc().getValue();
-        if (this.currentScriptID === player.reality.automator.state.topLevelScript) {
-          AutomatorBackend.stop();
-        }
-      });
-      EventHub.logic.on(GameEvent.GAME_LOAD, () => AutomatorUI.documents = {});
-    }
+    AutomatorUI.initialize();
     EventHub.logic.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();

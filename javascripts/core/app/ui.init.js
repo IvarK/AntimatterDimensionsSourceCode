@@ -40,6 +40,7 @@ let ui = {
         currentGlyphTooltip: -1,
         automator: {
           fullScreen: false,
+          editorScriptID: "",
           // TODO: enum
           mode: true
         }

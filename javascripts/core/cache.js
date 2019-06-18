@@ -59,7 +59,6 @@ const GameCache = {
   }),
 
   dimensionMultDecrease: new Lazy(() => {
-    if (Enslaved.isRunning && !NormalChallenge(10).isRunning) return 10;
     return 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward

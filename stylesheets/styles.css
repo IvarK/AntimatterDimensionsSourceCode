@@ -5531,23 +5531,59 @@ kbd {
   background: #16c55e;
 }
 
-.o-enslaved-run-button {
+.o-enslaved-run-box {
   width: 35rem;
   padding: 2rem;
   border-radius: .5rem;
   border: 2px solid #cd945c;
-  background: #ead584;
+  background: none;
   font-family: Typewriter;
   font-size: 1.2rem;
   cursor: pointer;
   margin-bottom: 1rem;
   margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.o-enslaved-run-button__title {
+.o-enslaved-run-box__title {
   font-weight: bold;
   font-size: larger;
   margin-bottom: 0.5rem;
+}
+
+.o-enslaved-run-button {
+  border-radius: 50%;
+  background: #ead584;
+  width: 15rem;
+  height: 15rem;
+  margin: 1.5rem;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.o-enslaved-run-button:hover {
+  color: #bebdb8;
+  background: black;
+}
+
+.o-enslaved-run-button__sigil {
+  font-size: 12rem;
+  transform: rotate(45deg);
+}
+
+.o-enslaved-run-button__glitch {
+  position: absolute;
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0,0,0,0) 100%);
+  /*background: black;*/
+  border: none;
+  width: 1px;
 }
 
 /* #endregion enslaved tab*/

@@ -126,6 +126,17 @@ Vue.component("enslaved-tab", {
     toggleAutoRelease() {
       player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
     },
+    glitchStyle(x) {
+      const xScale = 15 / 27;
+      const yScale = 5;
+      const dx = (x - 13) * xScale + (Math.random() * 2 - 1) * 0.85;
+      const dy = (Math.random() * 2 - 1) * yScale;
+      const height = (Math.pow(Math.random(), 1.5) + 0.25) * 3 * yScale;
+      return {
+        transform: `translate(${dx}rem, ${dy}rem)`,
+        height: `${height}rem`,
+      };
+    }
   },
   template:
     `<div class="l-enslaved-celestial-tab">
@@ -188,8 +199,13 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
-        <button class="o-enslaved-run-button" @click="startRun">
-          <div class="o-enslaved-run-button__title">{{realityTitle}}</div>
+        <div class="o-enslaved-run-box">
+          <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
+          <div class="o-enslaved-run-button" @click="startRun">
+            <div class="o-enslaved-run-button__sigil fas fa-link" />
+            <div v-for="x in 25" class="o-enslaved-run-button__glitch"
+                                :style="glitchStyle(x)"/>
+          </div>
           <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
           <p>Normal dimension multipliers are always dilated (the glyph effect still only
              applies in actual dilation)</p>
@@ -199,8 +215,8 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is much slower</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
-          <p>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</p>
-        </button>
+          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</b>
         </div>
+      </div>
     </div>`
 });

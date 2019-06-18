@@ -105,30 +105,7 @@
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
-              <div class="l-glyphs-tab">
-                <div class="l-reality-button-column">
-                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
-                    <reality-button></reality-button>
-                    <reality-amplify-button></reality-amplify-button>
-                    <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'" label="Glyph level factors"
-                        container-class="c-glyph-level-factors-dropdown-header">
-                      <glyph-levels-and-weights slot="dropdown" />
-                    </expanding-control-box>
-                    <glyph-sacrifice-options></glyph-sacrifice-options>
-                    <glyph-auto-pick-options></glyph-auto-pick-options>
-                    <sacrificed-glyphs></sacrificed-glyphs>
-                  </template>
-                </div>
-                <div class="l-player-glyphs-column">
-                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
-                    <div class="l-equipped-glyphs-wrapper">
-                      <equipped-glyphs></equipped-glyphs>
-                      <current-glyph-effects></current-glyph-effects>
-                    </div>
-                    <glyph-inventory></glyph-inventory>
-                  </template>
-                </div>
-              </div>
+              <glyphs-tab></glyphs-tab>
             </div>
             <div id="upgrades" class="realitytab" style="display: none;">
               <reality-upgrades-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'upgrades'"></reality-upgrades-tab>
@@ -598,6 +575,7 @@
 <script type="text/javascript" src="javascripts/components/reality/pp-label.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-component.js"></script>

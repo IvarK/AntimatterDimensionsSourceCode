@@ -870,10 +870,15 @@ function simulateTime(seconds, real, fast) {
     // Linear increase
     const linearVarNames = ["infinitied", "eternities"];
     const linearResourceNames = ["infinities", "eternities"];
+    const prestigeReset = ["eternitied", "realitied"];
     for (let i = 0; i < linearVarNames.length; i++) {
       const varName = linearVarNames[i];
       const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-      if (!Decimal.eq(player[varName], playerStart[varName])) {
+      if (linearIncrease.lessThan(0)) {
+        // This happens when a prestige autobuyer triggers offline and resets the value
+        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` + 
+          `${shorten(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
+      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
         offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
       }
     }
@@ -883,7 +888,9 @@ function simulateTime(seconds, real, fast) {
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      if (activationsDiff > 0) {
+        offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      }
     }
     let popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {

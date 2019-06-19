@@ -11,11 +11,15 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    return Effects.max(
+    const baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
+    const raChoices = Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS)
+      ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.choice()
+      : 0;
+    return baseChoices + raChoices;
   },
 
   /**
@@ -117,7 +121,6 @@ function requestManualReality() {
       Enslaved.lockedInGlyphLevel = level;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
       Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      Enslaved.lockedInExpGained = Ra.gainedExp(level.actualLevel, false);
       manualReality();
       return;
     }
@@ -187,7 +190,6 @@ function autoReality() {
       Enslaved.lockedInGlyphLevel = gainedLevel;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
       Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      Enslaved.lockedInExpGained = Ra.gainedExp(gainedLevel.actualLevel, true);
       completeReality(false, false, true);
       return;
     }
@@ -211,7 +213,7 @@ function boostedRealityRewards() {
     player.celestials.effarig.relicShards += Enslaved.lockedInShardsGained * ratio;
   }
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-    Ra.giveExp(Enslaved.lockedInExpGained * ratio);
+    Ra.giveExp();
   }
   player.celestials.enslaved.storedReal = 0;
   Enslaved.lockedInBoostRatio = 1;
@@ -231,7 +233,10 @@ function completeReality(force, reset, auto = false) {
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto));
+      Ra.giveExp();
+    }
+    if (Ra.isRunning) {
+      Ra.updateExpBoosts();
     }
   }
 
@@ -336,7 +341,6 @@ function completeReality(force, reset, auto = false) {
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
   player.dilation.dilatedTime = new Decimal(0);
-  player.dilation.totalTachyonParticles = new Decimal(0);
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseFreeGalaxies = 0;
   player.dilation.freeGalaxies = 0;
@@ -361,6 +365,7 @@ function completeReality(force, reset, auto = false) {
   NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
+  player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
@@ -411,6 +416,11 @@ function completeReality(force, reset, auto = false) {
 
   Lazy.invalidateAll();
   EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+
+  // This immediately gives eternity upgrades and autobuys TDs/5xEP
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+    applyRealityUpgrades();
+  }
 }
 
 function handleCelestialRuns(force) {

@@ -5757,7 +5757,7 @@ kbd {
 
 /* #startregion ra tab */
 
-.c-ra-teresa-experience {
+.c-ra-pet-experience {
   width: 30rem;
   display: inline-block;
   height: 1.5rem;
@@ -5765,34 +5765,34 @@ kbd {
   position: relative;
 }
 
-.c-ra-teresa-experience-inner {
+.c-ra-pet-experience-inner {
   height: 100%;
   background-color: #35d035;
 }
 
-.o-ra-exp-display {
+.o-ra-pet-exp-display {
   vertical-align: super;
   position: absolute;
   top: 0;
   left: calc(50% - 1.6rem);
 }
 
-.l-ra-teresa-container {
+.l-ra-pet-container {
   border: .2rem solid gainsboro;
   background: whitesmoke;
   width: 35rem;
   padding: 1rem;
   border-radius: .5rem;
   margin: 2rem auto;
+  float: left;
 }
 
 .l-ra-unlocks-container {
   display: flex;
   flex-wrap: wrap;
-  width: 80rem;
-  margin: auto;
+  width: 180rem;
   justify-content: center;
-  margin-top: 2rem;
+  margin: 2rem auto auto;
 }
 
 .c-ra-unlock {

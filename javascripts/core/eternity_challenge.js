@@ -232,9 +232,11 @@ EternityChallenge.autoCompleteNext = function() {
 };
 
 EternityChallenge.autoCompleteTick = function() {
-  if (!player.autoEcIsOn) return;
-  const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
-  if (!isPostEc) return;
+  if (!player.reality.autoEC) return;
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+    while (this.autoCompleteNext());
+    return;
+  }
   const threshold = this.currentAutoCompleteThreshold();
   while (player.reality.lastAutoEC - threshold > 0 && this.autoCompleteNext()) {
     player.reality.lastAutoEC -= threshold;

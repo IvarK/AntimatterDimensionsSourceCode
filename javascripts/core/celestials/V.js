@@ -82,7 +82,7 @@ const V_UNLOCKS = {
     id: 2,
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 30 V-achievements",
-    effect: () => Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => Math.pow(currentAchievementCount(), getAdjustedGlyphEffect("effarigachievement")),
     format: x => formatX(x, 2, 0),
     requirement: () => V.totalRunUnlocks >= 30
     },

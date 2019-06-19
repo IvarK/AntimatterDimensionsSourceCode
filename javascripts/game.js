@@ -412,8 +412,6 @@ function randomStuffThatShouldBeRefactored() {
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
   if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
-
-  if (Ra.isRunning && player.eternityPoints.gte(player.celestials.ra.maxEpGained)) player.celestials.ra.maxEpGained = player.eternityPoints;
   if (Laitela.isRunning && player.money.gte(player.celestials.laitela.maxAmGained)) player.celestials.laitela.maxAmGained = player.money;
 }
 
@@ -457,7 +455,11 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
       }
     }
   }
-  
+
+  if (Ra.has(RA_UNLOCKS.GAMESPEED_BOOST)) {
+    factor *= Ra.gamespeedStoredTimeMult();
+  }
+
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
   }
@@ -528,13 +530,17 @@ function gameLoop(diff, options = {}) {
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
         // but if it starts happening in other cases this will have to be reconsidered.
-        player.celestials.enslaved.stored += diff * timeStoredFactor;
+        const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
+          ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
+          : 1;
+        player.celestials.enslaved.stored += diff * Math.pow(timeStoredFactor, amplification);
         speedFactor = baseSpeedFactor;
       }
       diff *= speedFactor;
     } else {
       diff = options.gameDiff;
     }
+    player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
 
     DeltaTimeState.update(realDiff, diff);
 
@@ -559,7 +565,7 @@ function gameLoop(diff, options = {}) {
         infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
       }
       if (EffarigUnlock.eternity.isUnlocked) {
-        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
+        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.infinity()));
       }
       infGen = infGen.plus(player.partInfinitied);
       player.infinitied = player.infinitied.plus(infGen.floor());
@@ -578,8 +584,15 @@ function gameLoop(diff, options = {}) {
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
       let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
       if (isPostEc) {
-        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000))
+        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()))
       }
+    }
+
+    if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
+      const addedRM = gainedRealityMachines()
+        .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
+        .times(realDiff / 1000);
+      player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
     }
 
     const challenge = NormalChallenge.current || InfinityChallenge.current;
@@ -719,7 +732,7 @@ function gameLoop(diff, options = {}) {
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
       if (Enslaved.isRunning) ttGain *= 1e-3;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain * RA_UNLOCKS.TT_BOOST.effect.ttGen());
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -759,18 +772,26 @@ function gameLoop(diff, options = {}) {
 
     player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
     DilationUpgrade.ttGenerator.applyEffect(gen =>
-      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime))
+      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.ttGen()))
     );
 
   document.getElementById("rm-amount").textContent = shortenDimensions(player.reality.realityMachines);
 
   BlackHoles.updatePhases(blackHoleDiff);
 
-  // Reality unlock and TTgen perk autobuy
+  // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC) && player.timestudy.theorem.plus(calculateTimeStudiesCost()).gte(16617)) {
+    TimeStudy.dilation.purchase(true);
+  }
+
+  // TD5-8/Reality unlock and TTgen perk autobuy
+  autoBuyExtraTimeDims();
   if (Perk.autounlockDilation3.isBought && player.dilation.dilatedTime.gte(1e15))  buyDilationUpgrade(10);
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
 
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
+
+  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();
@@ -941,8 +962,6 @@ setInterval(function() {
     if (!Perk.autobuyerFasterReplicanti.isBought) autoBuyReplicantiUpgrades()
     if (!Perk.autobuyerFasterDilation.isBought) autoBuyDilationUpgrades()
     autoBuyTimeDims()
-
-    autoBuyExtraTimeDims()
   }
 }, 333)
 

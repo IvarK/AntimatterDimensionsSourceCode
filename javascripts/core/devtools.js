@@ -139,7 +139,6 @@ dev.refundDilStudies = function() {
 dev.resetDilation = function() {
   player.dilation.dilatedTime = new Decimal(0);
   player.dilation.tachyonParticles = new Decimal(0);
-  player.dilation.totalTachyonParticles = new Decimal(0);
   player.dilation.rebuyables[1] = 0;
   player.dilation.rebuyables[2] = 0;
   player.dilation.rebuyables[3] = 0;

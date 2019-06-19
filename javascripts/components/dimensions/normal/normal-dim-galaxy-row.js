@@ -33,7 +33,7 @@ Vue.component("normal-dim-galaxy-row", {
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
       const sum = parts.map(shortenSmallInteger).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${parts.sum()}`;
+        return `${sum} = ${shortenSmallInteger(parts.sum())}`;
       }
       return sum;
     },

@@ -1,56 +1,185 @@
 "use strict";
 
-const RA_UNLOCKS = {
-  CHARGE: {
-    id: 0,
-    description: "Get Teresa to level 2",
-    reward: "Unlock charging of Infinity upgrades",
-    requirement: () => player.celestials.ra.level >= 2
-  },
-  REALITY: {
-    id: 1,
-    description: "Get Teresa to level 5",
-    reward: "Unlock Ra's Reality",
-    requirement: () => player.celestials.ra.level >= 5
-  },
-  XP_BOOST: {
-    id: 2,
-    description: "Get Teresa to level 10",
-    reward: "Unlock Idle and Active modifiers for Teresa",
-    requirement: () => player.celestials.ra.level >= 10
-  },
-  UNNAMED_UNLOCK: {
-    id: 3,
-    description: "Get Teresa to level 30",
-    reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    requirement: () => player.celestials.ra.level >= 30,
-    onObtaining: () => MatterDimension(1).amount = new Decimal(1),
+class RaPetState {
+  /**
+   * @abstract
+   */
+  get data() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  get name() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  get requiredUnlock() { throw NotImplementedCrash(); }
+
+  get isUnlocked() {
+    return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
   }
-};
+  
+  get level() {
+    return this.data.level;
+  }
+
+  set level(value) {
+    this.data.level = value;
+  }
+  
+  get exp() {
+    return this.data.exp;
+  }
+
+  set exp(value) {
+    this.data.exp = value;
+  }
+
+  get requiredExp() {
+    return Math.floor(10000 * Math.pow(1.12, this.level - 1));
+  }
+
+  addGainedExp() {
+    if (!this.isUnlocked) return;
+    this.addExp(this.gainedExp * Enslaved.lockedInBoostRatio);
+  }
+
+  get gainedExp() {
+    const baseExp = Math.pow(2, gainedGlyphLevel().actualLevel / 500 - 10);
+    return baseExp * this.expBoost;
+  }
+
+  get expBoost() {
+    if (!this.isUnlocked) return 0;
+    return this.expFormula(this.expBoostFactor);
+  }
+
+  get nextExpBoost() {
+    if (!this.isUnlocked) return 0;
+    return this.expFormula(this.nextExpBoostFactor);
+  }
+
+  /**
+   * @abstract
+   */
+  get expBoostFactor() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set expBoostFactor(value) { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  get defaultBoostFactor() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  get nextExpBoostFactor() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  // eslint-disable-next-line no-unused-vars
+  expFormula(factor) { throw NotImplementedCrash(); }
+
+  updateExpBoost() {
+    if (!this.isUnlocked) return;
+    this.expBoostFactor = this.nextExpBoostFactor;
+  }
+
+  addExp(exp) {
+    this.exp += exp;
+    while (this.exp > this.requiredExp) {
+      this.exp -= this.requiredExp;
+      this.level++;
+      GameUI.notify.success(`${this.name} has leveled up to level ${this.level}!`);
+    }
+  }
+  
+  reset() {
+    this.data.level = 1;
+    this.data.exp = 0;
+    this.expBoostFactor = this.defaultBoostFactor;
+  }
+}
 
 const Ra = {
-  get expMultiplier() {
-    return this.realityReward;
+  pets: {
+    teresa: new class TeresaRaPetState extends RaPetState {
+      get name() { return "Teresa"; }
+      get data() { return player.celestials.ra.pets.teresa; }
+      get requiredUnlock() { return undefined; }
+      get expBoostFactor() { return this.data.lastEPGained; }
+      set expBoostFactor(value) { this.data.lastEPGained = value; }
+      get defaultBoostFactor() { return new Decimal(0); }
+      get nextExpBoostFactor() { return new Decimal(player.eternityPoints); }
+
+      expFormula(ep) {
+        return Math.max(ep.log10() / 1e4, 1);
+      }
+    }(),
+    effarig: new class EffarigRaPetState extends RaPetState {
+      get name() { return "Effarig"; }
+      get data() { return player.celestials.ra.pets.effarig; }
+      get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
+      get expBoostFactor() { return this.data.lastGlyphCount; }
+      set expBoostFactor(value) { this.data.lastGlyphCount = value; }
+      get defaultBoostFactor() { return 5; }
+      get nextExpBoostFactor() { return Glyphs.activeList.length; }
+
+      expFormula(glyphCount) {
+        return Math.pow(2, 5 - glyphCount);
+      }
+    }(),
+    enslaved: new class EnslavedRaPetState extends RaPetState {
+      get name() { return "Enslaved"; }
+      get data() { return player.celestials.ra.pets.enslaved; }
+      get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
+      get expBoostFactor() { return this.data.lastTimeTaken; }
+      set expBoostFactor(value) { this.data.lastTimeTaken = value; }
+      get defaultBoostFactor() { return 1e155; }
+      get nextExpBoostFactor() { return player.thisReality; }
+
+      expFormula(milliseconds) {
+        const seconds = TimeSpan.fromMilliseconds(milliseconds).totalSeconds;
+        // This curve is 4x at 100, very steep below that (up to 50x at 1) and very shallow to 1x at 1e152
+        return seconds < 100
+          ? 100 / (2 + 1.4375 * Math.max(0, Math.pow(Math.log10(seconds), 4)))
+          : Math.max(1, 4.04 - Math.log10(seconds) / 50);
+      }
+    }(),
+    v: new class VRaPetState extends RaPetState {
+      get name() { return "V"; }
+      get data() { return player.celestials.ra.pets.v; }
+      get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
+      get expBoostFactor() { return this.data.lastTTPurchased; }
+      set expBoostFactor(value) { this.data.lastTTPurchased = value; }
+      get defaultBoostFactor() { return 0; }
+      get nextExpBoostFactor() { return TimeTheorems.totalPurchased(); }
+
+      expFormula(theoremCount) {
+        return Math.max(1, Math.pow(theoremCount / 50000, 1.6));
+      }
+    }()
   },
-  giveExp(amount) {
-    player.celestials.ra.exp += amount;
-    while (this.percentageToNextLevel >= 1) {
-      player.celestials.ra.exp -= this.requiredExp;
-      player.celestials.ra.level++;
-      GameUI.notify.success(`Teresa has leveled up to level ${player.celestials.ra.level}!`);
-      this.checkForUnlocks();
-    }
+  // Dev/debug function for easier testing
+  reset() {
+    const data = player.celestials.ra;
+    data.unlocks = [];
+    data.run = false;
+    data.charged = new Set();
+    data.quoteIdx = 0;
+    data.disCharge = false;
+    data.peakGamespeed = 1;
+    for (const pet of Ra.petList) pet.reset();
   },
-  expMult(auto) {
-    if (Ra.has(RA_UNLOCKS.XP_BOOST)) {
-      if (player.celestials.ra.activeMode && !auto) return 4;
-      if (!player.celestials.ra.activeMode && auto) return 2;
-    }
-    return 1;
-  },
-  gainedExp(level, auto = false) {
-    const gain = Math.pow(2, level / 500 - 10) * this.expMult(auto);
-    return Math.ceil(gain * this.expMultiplier);
+  giveExp() {
+    for (const pet of Ra.petList) pet.addGainedExp();
+    this.checkForUnlocks();
   },
   checkForUnlocks() {
     for (const i in RA_UNLOCKS) {
@@ -70,25 +199,238 @@ const Ra = {
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
   },
-  get requiredExp() {
-    return Math.floor(5000 * Math.pow(1.2, player.celestials.ra.level - 1));
+  updateExpBoosts() {
+    for (const pet of Ra.petList) pet.updateExpBoost();
   },
-  get percentageToNextLevel() {
-    return player.celestials.ra.exp / this.requiredExp;
+  gamespeedDTMult() {
+    if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
+    return Math.max(Math.pow(Math.log10(player.celestials.ra.peakGamespeed) - 90, 3), 1);
+  },
+  // In some sense we're cheating here for the sake of balance since gamespeed has historically been hard to keep
+  // under wraps.  So the way we buff gamespeed in a relatively controlled way here is by manually calculating a
+  // sensible "maximum possible gamespeed" on top of the CURRENT black hole power based on a game state which is
+  // slightly farther than the player will be when first unlocking this upgrade (hence the "magic numbers").  The
+  // state in question is one with a glyph set with two time glyphs and effarig gamespeed pow + achievement pow
+  // (due to V), all level 10k with celestial rarity, and Lv20 Enslaved + all achievements.  The boost is simply 2x
+  // for any stored time at all if it's below this threshold, but will start scaling up at gamespeeds higher than this.
+  // It should be a lot harder for this to cause an unchecked runaway since black hole scaling won't feed into this
+  // upgrade's scaling.  There is also an eventual hardcap of 1e10 just in case.  If I did the math correctly, the
+  // speed boost should scale with (real time)^(effarig gamespeed pow).
+  gamespeedStoredTimeMult() {
+    let assumedBlackHoleBoost = 1;
+    for (const blackHole of BlackHoles.list) {
+      assumedBlackHoleBoost *= blackHole.power;
+      assumedBlackHoleBoost *= Math.pow(GameDatabase.achievements.normal.length, 2.69);
+    }
+    const assumedTimeGlyphBoost = Math.pow(2.79, 2);
+    const baselineGamespeed = Math.pow(assumedBlackHoleBoost * assumedTimeGlyphBoost, 1.22);
+    const baselineStoredTime = Math.pow(baselineGamespeed, 1.2);
+    const scaledStoredTime = player.celestials.enslaved.stored / baselineStoredTime;
+    if (player.celestials.enslaved.stored === 0) return 1;
+    return Math.max(2, Math.min(scaledStoredTime, 1e10));
+  },
+  // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
+  // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
+  // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
+  // removing the hardcap of 10 may cause runaways.
+  // It's almost certainly going to need to be rebalanced here after testing earlier Ra.
+  theoremBoostFactor() {
+    if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
+    return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 40);
   },
   get isRunning() {
     return player.celestials.ra.run;
   },
   get totalCharges() {
-    return Math.floor((player.celestials.ra.level + 1) / 3);
+    return Math.floor(Ra.pets.teresa.level / 2);
   },
   get chargesLeft() {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
   get chargeUnlocked() {
-    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && player.celestials.ra.level > 1;
+    return V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]) && Ra.pets.teresa.level > 1;
+  }
+};
+
+/**
+ * @type {RaPetState[]}
+ */
+Ra.petList = Object.values(Ra.pets);
+
+const RA_UNLOCKS = {
+  CHARGE: {
+    id: 0,
+    description: "Get Teresa to level 2",
+    reward: "Unlock charging of Infinity upgrades",
+    requirement: () => Ra.pets.teresa.level >= 2
   },
-  get realityReward() {
-    return Math.max(player.celestials.ra.maxEpGained.e / 1e4, 1);
+  TERESA_XP: {
+    id: 1,
+    description: "Get Teresa to level 3",
+    reward: "Unlock Ra's Reality, gain a boost to Teresa memories based on EP reached",
+    requirement: () => Ra.pets.teresa.level >= 3
+  },
+  EFFARIG_UNLOCK: {
+    id: 2,
+    description: "Get Teresa to level 5",
+    reward: "Unlock Effarig memories",
+    requirement: () => Ra.pets.teresa.level >= 5
+  },
+  AUTO_TP: {
+    id: 3,
+    description: "Get Teresa to level 10",
+    reward: "Tachyon Particles are given immediately during dilation",
+    requirement: () => Ra.pets.teresa.level >= 10
+  },
+  PERK_SHOP_INCREASE: {
+    id: 4,
+    description: "Get Teresa to level 15",
+    reward: "Perk shop caps are raised",
+    requirement: () => Ra.pets.teresa.level >= 15
+  },
+  LATER_DILATION: {
+    id: 5,
+    description: "Get Teresa to level 20",
+    reward: "Unlock more dilation upgrades [unimplemented]",
+    requirement: () => Ra.pets.teresa.level >= 20
+  },
+  IMPROVED_GLYPHS: {
+    id: 6,
+    description: "Get Effarig to level 2",
+    reward: "Glyph rarity is increased and you gain more glyph choices, based on Effarig level",
+    requirement: () => Ra.pets.effarig.level >= 2,
+    effect: {
+      rarity: () => Ra.pets.effarig.level,
+      choice: () => Math.floor(Ra.pets.effarig.level / 5),
+    }
+  },
+  EFFARIG_XP: {
+    id: 7,
+    description: "Get Effarig to level 3",
+    reward: "Gain a boost to Effarig memories based on number of glyphs used in Ra's Reality",
+    requirement: () => Ra.pets.effarig.level >= 3
+  },
+  ENSLAVED_UNLOCK: {
+    id: 8,
+    description: "Get Effarig to level 5",
+    reward: "Unlock Enslaved memories",
+    requirement: () => Ra.pets.effarig.level >= 5
+  },
+  GLYPH_EFFECT_COUNT: {
+    id: 9,
+    description: "Get Effarig to level 10",
+    reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
+    requirement: () => Ra.pets.effarig.level >= 10
+  },
+  SHARD_LEVEL_BOOST: {
+    id: 10,
+    description: "Get Effarig to level 15",
+    reward: "Glyph level is increased based on relic shards gained",
+    requirement: () => Ra.pets.effarig.level >= 15,
+    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2)
+  },
+  GLYPH_ALCHEMY: {
+    id: 11,
+    description: "Get Effarig to level 20",
+    reward: "Unlock Glyph Alchemy [unimplemented]",
+    requirement: () => Ra.pets.effarig.level >= 20
+  },
+  IMPROVED_STORED_TIME: {
+    id: 12,
+    description: "Get Enslaved to level 2",
+    reward: "Stored game time is amplified and stored real time is more efficient based on Enslaved level",
+    requirement: () => Ra.pets.enslaved.level >= 2,
+    effect: {
+      gameTimeAmplification: () => 1 + Ra.pets.enslaved.level / 100,
+      realTimeEfficiency: () => Ra.pets.enslaved.level / 100,
+      realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level / 2,
+    }
+  },
+  ENSLAVED_XP: {
+    id: 13,
+    description: "Get Enslaved to level 3",
+    reward: "Gain a boost to Enslaved memories based on game time spent in Ra's Reality",
+    requirement: () => Ra.pets.enslaved.level >= 3
+  },
+  V_UNLOCK: {
+    id: 14,
+    description: "Get Enslaved to level 5",
+    reward: "Unlock V memories",
+    requirement: () => Ra.pets.enslaved.level >= 5
+  },
+  ADJUSTABLE_STORED_TIME: {
+    id: 15,
+    description: "Get Enslaved to level 10",
+    reward: "Rate of stored game time can be configured [unimplemented]",
+    requirement: () => Ra.pets.enslaved.level >= 10
+  },
+  PEAK_GAMESPEED: {
+    id: 16,
+    description: "Get Enslaved to level 15",
+    reward: "Gain more dilated time based on peak game speed in each Reality",
+    requirement: () => Ra.pets.enslaved.level >= 15
+  },
+  GAMESPEED_BOOST: {
+    id: 17,
+    description: "Get Enslaved to level 20",
+    reward: "Game speed increases based on current stored time",
+    requirement: () => Ra.pets.enslaved.level >= 20
+  },
+  MORE_EC_COMPLETION: {
+    id: 18,
+    description: "Get V to level 2",
+    reward: "V level gives extra achievements for free",
+    requirement: () => Ra.pets.v.level >= 2
+  },
+  V_XP: {
+    id: 19,
+    description: "Get V to level 3",
+    reward: "Gain a boost to V memories based on purchased TT in Ra's Reality",
+    requirement: () => Ra.pets.v.level >= 3
+  },
+  INSTANT_AUTOEC: {
+    id: 20,
+    description: "Get V to level 5",
+    // This upgrade also starts the player off with Eternity upgrades immediately instead of after one eternity
+    reward: "Eternity Challenge auto-completion happens instantly " +
+      "and dilation is automatically unlocked when you can buy all studies",
+    requirement: () => Ra.pets.v.level >= 5
+  },
+  TT_BOOST: {
+    id: 21,
+    description: "Get V to level 10",
+    reward: "Time Theorems boost all forms of continuous non-dimension production",
+    requirement: () => Ra.pets.v.level >= 10,
+    effect: {
+      ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
+      eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
+      infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
+      replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
+      dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
+      autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
+    }
+  },
+  IMPROVED_EC: {
+    id: 22,
+    description: "Get V to level 15",
+    reward: "??? [unimplemented]",
+    requirement: () => Ra.pets.v.level >= 15
+  },
+  UNCAPPED_EC: {
+    id: 23,
+    description: "Get V to level 20",
+    reward: "??? [unimplemented]",
+    /**
+     * This has a "hidden" requirement of Matterception 6/6 because it affects dilated ECs in a way that can probably
+     * make it impossible to complete if it isn't already.  Realistically it should already be done at this point.
+     */ 
+    requirement: () => Ra.pets.v.level >= 20 && player.celestials.v.runUnlocks[5] === 6,
+  },
+  LAITELA_UNLOCK: {
+    id: 24,
+    description: "Get all celestials to level 25",
+    reward: "Unlock Lai'tela, the Celestial of Dimensions",
+    requirement: () => Ra.petList.every(pet => pet.level >= 25),
+    onObtaining: () => MatterDimension(1).amount = new Decimal(1),
   }
 };

@@ -158,7 +158,6 @@ let player = {
     active: false,
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
-    totalTachyonParticles: new Decimal(0),
     nextThreshold: new Decimal(1000),
     freeGalaxies: 0,
     upgrades: new Set(),
@@ -223,8 +222,8 @@ let player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  blackHole: [{
-    id: 0,
+  blackHole: Array.range(0, 2).map(id => ({
+    id,
     intervalUpgrades: 0,
     powerUpgrades: 0,
     durationUpgrades: 0,
@@ -232,27 +231,7 @@ let player = {
     active: false,
     unlocked: false,
     activations: 0
-  },
-  {
-    id: 1,
-    intervalUpgrades: 0,
-    powerUpgrades: 0,
-    durationUpgrades: 0,
-    phase: 0,
-    active: false,
-    unlocked: false,
-    activations: 0
-  },
-  {
-    id: 2,
-    intervalUpgrades: 0,
-    powerUpgrades: 0,
-    durationUpgrades: 0,
-    phase: 0,
-    active: false,
-    unlocked: false,
-    activations: 0
-  }],
+  })),
   blackHolePause: false,
   ttbuyer: false,
   celestials: {
@@ -309,16 +288,34 @@ let player = {
       additionalStudies: 0
     },
     ra: {
-      level: 1,
-      exp: 0,
+      pets: {
+        teresa: {
+          level: 1,
+          exp: 0,
+          lastEPGained: new Decimal(0)
+        },
+        effarig: {
+          level: 1,
+          exp: 0,
+          lastGlyphCount: 5
+        },
+        enslaved: {
+          level: 1,
+          exp: 0,
+          lastTimeTaken: 1e155
+        },
+        v: {
+          level: 1,
+          exp: 0,
+          lastTTPurchased: 0
+        }
+      },
       unlocks: [],
       run: false,
       charged: new Set(),
       quoteIdx: 0,
-      maxEpGained: new Decimal(0),
-      // False if idle, true if active
-      activeMode: false,
       disCharge: false,
+      peakGamespeed: 1,
     },
     laitela: {
       matter: new Decimal(0),

@@ -182,7 +182,7 @@ class BlackHoleState {
   }
 }
 
-BlackHoleState.list = Array.range(0, 3).map(id => new BlackHoleState(id));
+BlackHoleState.list = Array.range(0, 2).map(id => new BlackHoleState(id));
 
 /**
  * @param {number} id

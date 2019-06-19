@@ -109,7 +109,8 @@ const GlyphGenerator = {
   randomGlyph(level, fake) {
     const strength = this.randomStrength(fake);
     const type = this.randomType(fake);
-    const numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+    let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
+    if (type !== "effarig" && numEffects > 4) numEffects = 4;
     const effects = this.generateEffects(type, numEffects, fake);
     // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
     // abbreviated.
@@ -144,15 +145,19 @@ const GlyphGenerator = {
       result = GlyphGenerator.gaussianBellCurve(this.getRNG(fake));
     } while (result <= minimumValue);
     result *= GlyphGenerator.strengthMultiplier;
+    const increasedRarity = Effects.sum(GlyphSacrifice.effarig) +
+      (Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS) ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.rarity() : 0);
     // Each rarity% is 0.025 strength.
-    result += Effects.sum(GlyphSacrifice.effarig) / 40;
+    result += increasedRarity / 40;
     return Math.min(result, rarityToStrength(100));
   },
 
   randomNumberOfEffects(strength, level, fake) {
     const rng = this.getRNG(fake);
-    let num = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), 4)
-    if (RealityUpgrade(17).isBought && rng() > 0.5) num = Math.min(num + 1, 4)
+    const maxEffects = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT) ? 7 : 4;
+    let num = Math.min(Math.floor(Math.pow(rng(), 1 - (Math.pow(level * strength, 0.5)) / 100) * 1.5 + 1), maxEffects);
+    if (RealityUpgrade(17).isBought && rng() > 0.5) num = Math.min(num + 1, maxEffects);
+    if (Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT)) num = Math.max(num, 4);
     return num;
   },
 
@@ -625,6 +630,8 @@ function getGlyphLevelInputs() {
     Perk.glyphLevelIncrease1,
     Perk.glyphLevelIncrease2
   );
+  const shardFactor = RA_UNLOCKS.SHARD_LEVEL_BOOST.effect();
+  const postInstabilityFactors = perkFactor + shardFactor;
   return {
     epEffect: epEffect,
     replEffect: replEffect,
@@ -633,8 +640,9 @@ function getGlyphLevelInputs() {
     perkShop: player.celestials.teresa.glyphLevelMult,
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
-    rawLevel: baseLevel + perkFactor,
-    actualLevel: scaledLevel + perkFactor,
+    shardFactor: shardFactor,
+    rawLevel: baseLevel + postInstabilityFactors,
+    actualLevel: scaledLevel + postInstabilityFactors,
   };
 }
 

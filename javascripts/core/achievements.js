@@ -278,3 +278,10 @@ function updateRealityAchievementModifiers() {
     secondsForAllAchs
   };
 }
+
+function currentAchievementCount() {
+  const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
+    ? Ra.pets.v.level
+    : 0;
+  return player.achievements.size + additionalAchievements;
+}

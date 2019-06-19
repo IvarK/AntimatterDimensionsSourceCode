@@ -711,9 +711,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.infinitied.lte(1),
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to IP based on Infinities.",
-    // Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()) can be rewritten as
-    // a single pow
-    effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), 0.30102999566398114),
+    effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), Math.log10(2) / 4).powEffectOf(TimeStudy(31)),
     cap: () => Effarig.eternityCap
   },
   {

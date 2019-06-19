@@ -157,7 +157,7 @@ button {
 /*#region TT shop*/
 
 #TTbuttons {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   font-family: Typewriter, serif;
   display: flex;

@@ -43,6 +43,12 @@ Vue.component("reality-button", {
     }
   },
   methods: {
+    boostedGain: x => {
+      if (Enslaved.boostReality && Enslaved.realityBoostRatio >= 1) {
+        return Decimal.times(x, Enslaved.realityBoostRatio + 1);
+      }
+      return x;
+    },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
       if (!this.hasRealityStudy || player.eternityPoints.lt("1e4000")) {
@@ -56,28 +62,20 @@ Vue.component("reality-button", {
         return Decimal.pow10(Math.ceil(4000 * (adjusted.log10() / 3 + 1)));
       }
       this.canReality = true;
-      function boostedGain(x) {
-        if (Enslaved.boostReality && Enslaved.realityBoostRatio > 1) {
-          return Decimal.times(x, Enslaved.realityBoostRatio + 1);
-        }
-        return x;
-      }
-      this.machinesGained = boostedGain(gainedRealityMachines());
-      if (Enslaved.boostReality) {
-        this.machinesGained = this.machinesGained.times(Enslaved.realityBoostRatio);
-      }
+
+      this.machinesGained = this.boostedGain(gainedRealityMachines());
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
-      this.ppGained = boostedGain(1);
+      this.ppGained = this.boostedGain(1);
       this.shardsGained = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST)
         ? 0
-        : boostedGain(Effarig.shardsGained);
-      this.expGained = [boostedGain(Ra.pets.teresa.gainedExp),
-        boostedGain(Ra.pets.effarig.gainedExp),
-        boostedGain(Ra.pets.enslaved.gainedExp),
-        boostedGain(Ra.pets.v.gainedExp)];
+        : this.boostedGain(Effarig.shardsGained);
+      this.expGained = [this.boostedGain(Ra.pets.teresa.gainedExp),
+        this.boostedGain(Ra.pets.effarig.gainedExp),
+        this.boostedGain(Ra.pets.enslaved.gainedExp),
+        this.boostedGain(Ra.pets.v.gainedExp)];
       this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
         Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),

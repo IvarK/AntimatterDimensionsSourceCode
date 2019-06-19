@@ -76,7 +76,7 @@ const MAIN_TAB_BUTTONS = [
         condition: () => player.infinitied.gt(0)
       },
       {
-        label: "R",
+        label: "Ξ",
         component: "replicanti-tab",
         condition: () => player.infinitied.gt(0)
       }

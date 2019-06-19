@@ -167,6 +167,18 @@ const GameStorage = {
       ui.view.page = "new-dimensions-tab"
     }
 
+    // Do a bit of glyph ID changing; first find the lowest ID out of all glyphs and subtract that from every ID.
+    // Then, find the highest ID and start the new unique IDs right after that.  Since this is run on-load every time,
+    // this should in principle always keep glyph IDs relatively small and gradually shrink IDs in existing saves.
+    const minInv = player.reality.glyphs.inventory.reduce((max, glyph) => Math.min(max, glyph.id), Number.MAX_VALUE);
+    const minActive = player.reality.glyphs.active.reduce((max, glyph) => Math.min(max, glyph.id), Number.MAX_VALUE);
+    const minAll = Math.min(minInv, minActive);
+    player.reality.glyphs.inventory.forEach(glyph => glyph.id -= minAll);
+    player.reality.glyphs.active.forEach(glyph => glyph.id -= minAll);
+    const maxInv = player.reality.glyphs.inventory.reduce((max, glyph) => Math.max(max, glyph.id), 0);
+    const maxActive = player.reality.glyphs.active.reduce((max, glyph) => Math.max(max, glyph.id), 0);
+    nextUniqueGlyphID = Math.max(maxInv, maxActive) + 1;
+
     Lazy.invalidateAll();
 
     let diff = Date.now() - player.lastUpdate;

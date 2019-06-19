@@ -333,6 +333,10 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.uniformDimensions,
     GameStorage.migrations.removeEternityChallGoal,
+    player => {
+      // There were 3 black holes in player object
+      delete player.blackHole.pop();
+    }
   ],
 
   patch(player) {

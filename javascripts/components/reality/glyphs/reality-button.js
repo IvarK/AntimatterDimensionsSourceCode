@@ -74,10 +74,10 @@ Vue.component("reality-button", {
       this.shardsGained = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST)
         ? 0
         : boostedGain(Effarig.shardsGained);
-      this.expGained = [boostedGain(Ra.gainedTeresaExp),
-        boostedGain(Ra.gainedEffarigExp),
-        boostedGain(Ra.gainedEnslavedExp),
-        boostedGain(Ra.gainedVExp)];
+      this.expGained = [boostedGain(Ra.pets.teresa.gainedExp),
+        boostedGain(Ra.pets.effarig.gainedExp),
+        boostedGain(Ra.pets.enslaved.gainedExp),
+        boostedGain(Ra.pets.v.gainedExp)];
       this.raUnlocks = [V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
         Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK),
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
@@ -91,10 +91,11 @@ Vue.component("reality-button", {
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.money)));
       this.celestialRunText = [teresaReward,
-        this.formatScalingMultiplier("Teresa memories", Ra.teresaExpBoost, Ra.teresaExpFormula(player.eternityPoints)),
-        this.formatScalingMultiplier("Effarig memories", Ra.effarigExpBoost, Ra.effarigExpFormula(Glyphs.activeList.length)),
-        this.formatScalingMultiplier("Enslaved memories", Ra.enslavedExpBoost, Ra.enslavedExpFormula(player.thisReality / 1000)),
-        this.formatScalingMultiplier("V memories", Ra.vExpBoost, Ra.vExpFormula(TimeTheorems.totalPurchased()))];
+        this.formatPetMemories(Ra.pets.teresa),
+        this.formatPetMemories(Ra.pets.effarig),
+        this.formatPetMemories(Ra.pets.enslaved),
+        this.formatPetMemories(Ra.pets.v)
+      ];
     },
     handleClick() {
       if (!TimeStudy.reality.isBought || player.eternityPoints.lt("1e4000")) {
@@ -102,6 +103,9 @@ Vue.component("reality-button", {
       } else {
         requestManualReality();
       }
+    },
+    formatPetMemories(pet) {
+      return this.formatScalingMultiplier(`${pet.name} memories`, pet.expBoost, pet.nextExpBoost);
     },
     formatScalingMultiplier(resource, before, after) {
       return `${resource} ${shortenRateOfChange(before)}x ➜ ${shortenRateOfChange(after)}x`;

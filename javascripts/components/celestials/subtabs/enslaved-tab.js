@@ -5,8 +5,8 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
-    amplifyStoredReal: false,
-    storedTimeSpeedBoost: false,
+    hasAmplifyStoredReal: false,
+    hasStoredTimeSpeedBoost: false,
     storedTimeSpeedValue: 1,
     inEnslaved: false,
     storedBlackHole: 0,
@@ -22,7 +22,7 @@ Vue.component("enslaved-tab", {
       return `^${RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification().toFixed(2)}`;
     },
     storedTimeBoostDesc() {
-      return `x${shortenRateOfChange(this.storedTimeSpeedValue)}`;
+      return formatX(this.storedTimeSpeedValue, 2, 2);
     },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
@@ -48,8 +48,8 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
-      this.amplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
-      this.storedTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
+      this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
+      this.hasStoredTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
       this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -115,8 +115,8 @@ Vue.component("enslaved-tab", {
             Use stored black hole time
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
-          <div v-if="amplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
-          <div v-if="storedTimeSpeedBoost"> Game speed: {{ storedTimeBoostDesc }} </div>
+          <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
+          <div v-if="hasStoredTimeSpeedBoost"> Game speed: {{ storedTimeBoostDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',

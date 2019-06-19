@@ -222,8 +222,8 @@ let player = {
     lastAutoEC: 0,
     partEternitied: 0
   },
-  blackHole: [{
-    id: 0,
+  blackHole: Array.range(0, 2).map(id => ({
+    id,
     intervalUpgrades: 0,
     powerUpgrades: 0,
     durationUpgrades: 0,
@@ -231,27 +231,7 @@ let player = {
     active: false,
     unlocked: false,
     activations: 0
-  },
-  {
-    id: 1,
-    intervalUpgrades: 0,
-    powerUpgrades: 0,
-    durationUpgrades: 0,
-    phase: 0,
-    active: false,
-    unlocked: false,
-    activations: 0
-  },
-  {
-    id: 2,
-    intervalUpgrades: 0,
-    powerUpgrades: 0,
-    durationUpgrades: 0,
-    phase: 0,
-    active: false,
-    unlocked: false,
-    activations: 0
-  }],
+  })),
   blackHolePause: false,
   ttbuyer: false,
   celestials: {
@@ -308,22 +288,32 @@ let player = {
       additionalStudies: 0
     },
     ra: {
-      teresaLevel: 1,
-      effarigLevel: 0,
-      enslavedLevel: 0,
-      vLevel: 0,
-      teresaExp: 0,
-      effarigExp: 0,
-      enslavedExp: 0,
-      vExp: 0,
+      pets: {
+        teresa: {
+          level: 1,
+          exp: 0,
+          lastEPGained: new Decimal(0)
+        },
+        effarig: {
+          level: 1,
+          exp: 0,
+          lastGlyphCount: 5
+        },
+        enslaved: {
+          level: 1,
+          exp: 0,
+          lastTimeTaken: 1e155
+        },
+        v: {
+          level: 1,
+          exp: 0,
+          lastTTPurchased: 0
+        }
+      },
       unlocks: [],
       run: false,
       charged: new Set(),
       quoteIdx: 0,
-      lastEPGained: new Decimal(0),
-      lastGlyphCount: 5,
-      lastTimeTaken: 1e155,
-      lastTTPurchased: 0,
       disCharge: false,
       peakGamespeed: 1,
     },

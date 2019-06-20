@@ -1,7 +1,7 @@
 "use strict";
 
 const newsArray = [
-//always true
+// Always visible
   ["The cookie is a lie.", "a1"],
   ["Antimatter ghosts do not exist. Just like matter ghosts. They don't have any matter, for that matter.", "a2"],
   ["Nuclear power plants have been abandoned in favor of antimatter power.", "a3"],
@@ -139,7 +139,7 @@ const newsArray = [
   ["Ahhh I love the smell of particle annihilation in the morning.", "a134"],
   ["The person who said ghosts don't exist obviously doesn't have a Discord.", "a135"],
   ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAntimatter Dimensions was made by some dude from Finland", "a136"],
-  ['The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift . EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.', "a137"],
+  ["The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were blessings so powerful, Hevi restricted their power. He said, “ I will give you a choice of three paths” and then humanity chose. The short, cheap route of Normal Dimensions, giving instant gratification, the powerful choice of Infinity Dimensions, which were a fast, middle ground path, or Time Dimension, the long wait, and struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and sneered to humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all Unhevi. Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well, and smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest gift . EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times. Use them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.", "a137"],
   ["We have updated our Antimatter Privacy Policy.", "a138"],
   ["Attention all Antimatter Dimensions Gamers, Hevipelle is in great danger, and he needs YOUR help to wipe out all the bad memes in #news-ticker-suggestions. To do this, he needs a dozen new dank memes and a couple of discord bots. To help him, all he needs is your Antimatter card number, the three numbers on the back, and the expiration month and date. But you gotta be quick so that Hevipelle can secure the good memes, and achieve the epic meme R O Y A L.", "a139"],
   ["If each Trimp was a plank volume, and each piece of resource was a plank volume, how many universes would you fill up before you realized you were playing the wrong game?", "a140"],
@@ -179,18 +179,18 @@ const newsArray = [
 // Patreon ones
   ["Is this a jojo reference?", "pat1", () => true],
 
-//basic (pre-inf)
+// Basic (pre-inf)
   ["You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken", "b1", () => player.money.e === 15],
   ["Nerf the galaxies please.", "b2", () => player.galaxies === 2 || player.infinitied.gt(0)],
-  ["What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.", "b3", () => player.thirdAmount.gt(0) || player.resets > 0],
-  ["How much is Infinity? -literally everyone at least once", "b4", () => player.eightAmount.eq(190) || player.infinitied.gt(0)],
-  ["Eh, the Fourth Dimension is alright...", "b5", () => player.fourthAmount.gt(0) && player.fifthAmount.eq(0)],
+  ["What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.", "b3", () => NormalDimension(3).amount.gt(0) || player.resets > 0],
+  ["How much is Infinity? -literally everyone at least once", "b4", () => NormalDimension(8).amount.eq(190) || player.infinitied.gt(0)],
+  ["Eh, the Fourth Dimension is alright...", "b5", () => NormalDimension(4).amount.gt(0) && NormalDimension(5).amount.eq(0)],
   ["Antimatter people seem to be even more afraid of 13 then we are. They destroyed entire galaxies just to remove 13 from their percents.", "b6", () => player.galaxies > 0 || player.infinitied.gt(0)],
   ["To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!", "b7", () => player.sacrificed.e >= 10 || player.resets >= 6],
   ["A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.", "b8", () => player.spreadingCancer > 0],
   ["Antimatter ice cream stand has recently opened- they have octillions of flavors!", "b9", () => player.totalmoney.e >= 27],
   ["The Heavenly Pelle has generated too much antimatter and needed to create another galaxy. This one can be seen in the southwestern sky.", "b10", () => player.galaxies > 0 || player.infinitied.gt(0)],
-//9th dim
+// 9th dim
   ["9th Dimension is a lie.", "b12", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["The square root of 9 is 3, therefore the 9th dimension can't exist.", "b13", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["You got assimilated by the 9th dimension? Just call your doctor for mental illness!", "b14", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
@@ -199,18 +199,18 @@ const newsArray = [
   ["If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through before you encounter bad things, so you should be fine", "b17", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["Conditions must be met for Hevipelle to sleep. First, it needs to be a blue moon. Second, a specific town in the arctic must have not seen light for a month. Third, he needs to release an AD update. And finally, no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up forcefully to avoid getting the offline achievement.", "b18", () => (player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0) && Achievement(22).isUnlocked],
   ["If the 9th dimension is all evil, then is 3 the root of all evil?", "b19", () => player.resets >= 5 || player.galaxies > 0 || player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
-//basic (post-inf pre-rep)
+// Basic (post-inf pre-rep)
   ["Infinity: the one thing that's supposed to break.", "b20", () => player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0],
   ["I've got 1.79e308 problems, but none of them antimatters", "b21", () => player.infinitied.gt(0) && !player.break],
   ["Anti Emoji Movie a huge hit", "b18", () => player.spreadingCancer >= 5],
   ["If this game was made by Valve, Zero Deaths would be impossible.", "b22", () => Achievement(43).isUnlocked],
   ["Florida man attempts to get Zero Deaths on first run, is stopped by heat death of the universe.", "b23", () => Achievement(43).isUnlocked],
-  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => player.achievements.size >= 40],
-//basic (post-rep)
+  ["Having done half the achievements isn't much of an achievement -Boo", "b24", () => currentAchievementCount() >= GameDatabase.achievements.normal.length / 2],
+// Basic (post-rep)
   ["Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi has a fully powered eternity gauntlet", "b25", () => player.eternities > 0 || player.realities > 0],
   ["New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.", "b26", () => player.replicanti.unl && player.replicanti.chance === 0.01],
   ["It seems this \"replicanti\" stuff won't be growing any faster now.", "b27", () => player.replicanti.chance === 1 && player.replicanti.interval === 1],
-//newsarray
+// Newsarray
   ["Does Hevi just pick quotes to put into the game?", "n1", () => player.newsArray.length >= 30],
   ["New news company has become rivals with us. They are made entirely of antimatter.", "n2", () => player.newsArray.length >= 80],
   ["How many times can we use \"Anti\" in a row before people stop listening?", "n3", () => player.newsArray.length >= 100],
@@ -224,11 +224,11 @@ const newsArray = [
   ["I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen, We should have listened.", "n11", () => player.newsArray.includes("b22")],
   ["I thought the update was 5 hours away... -new players after more than 5 hours of gameplay", "n12", () => player.newsArray.includes("a91") && Time.totalTimePlayed.totalHours >= 5],
   ["Somebody told me to wait five hours for the update yesterday but it's today and it still hasn't come! What do I do?", "n13", () => player.newsArray.includes("a91") && Time.totalTimePlayed.totalHours >= 5],
-//hard
+// Hard
   ["You do know that you won't reach Infinity in -1 seconds, right?", "c1", () => player.bestInfinityTime === 0.1],
-  ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],  //might not be poss?
+  ["Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.", "c2", () => player.totalmoney.e >= 3e6],
   ["Anti Emoji Movie MMMCMXCIX is a major hit!", "c3", () => player.spreadingCancer >= 3999],
-  ["Achievement Unlocked!", "c4", () => player.achievements.size === 88],
+  ["Achievement Unlocked!", "c4", () => currentAchievementCount() >= GameDatabase.achievements.normal.length],
   ["Did you use an autoclicker for that?", "c5", () => TimeStudy(131).isBought && Time.thisInfinity.totalMinutes <= 1 && player.replicanti.galaxies >= 50],
   ["Timing is key.", "c6", () => player.thisEternity < 1],
   ["If you want to farm infinitied, why don't you just get the time study?", "c7", () => !TimeStudy(32).isBought && player.infinitied.gt(72000 * 168)],
@@ -238,7 +238,7 @@ const newsArray = [
   ["You can probably stop farming for eternities now...", "c11", () => player.eternities > 2000000],
   ["Are you serious?", "c12", () => Time.worstChallenge.totalSeconds <= 1],
   ["The amazing speedster", "c13", () => Time.infinityChallengeSum.totalMilliseconds <= 80],
-//luck
+// Luck
   ["This news message is 1000x rarer than all the others.", "l1", () => Math.random() < 0.001],
   ["You just won a small prize in the lottery.", "l2", () => Math.random() < 1e-4],
   ["You just won a moderate prize in the lottery.", "l3", () => Math.random() < 1e-5],
@@ -249,7 +249,7 @@ const newsArray = [
   ["You just won the lottery.", "l8", () => Math.random() < 1e-10],
   ["Just how lucky are you?", "l9", () => Math.random() < 1e-11],
   ["This news message is 1000000000000x rarer than all the others.", "l10", () => Math.random() <= 1e-12],
-//missable / pay req
+// Missable / pay req
   ["How dare you actually get zero deaths on a first run?", "s1", () => Achievement(43).isUnlocked && player.infinitied.eq(1) && player.eternities === 0],
   ["Legend says the ninth dimension is supposed to be found here, but I don't see anything.", "s2", () => player.money.e >= 41900 && !player.replicanti.unl && player.eternities === 0],
   ["Person with money likes to support this game.", "s3", () => kongDimMult > 1 || kongIPMult > 1],
@@ -258,14 +258,16 @@ const newsArray = [
   ["Whale complains that their buying isn't doing anything.", "s6", () => kongIPMult > 1.8e16]
 ];
 
-var s = document.getElementById('news');
-document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
-var scrollTimeouts = [];
-var nextMsgIndex;
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) scrollNextMessage();
+}, false);
+let scrollTimeouts = [];
+let nextMsgIndex;
 function scrollNextMessage() {
-  //don't run if hidden to save performance
-  if (player.options.newsHidden) return false
-  //select a message at random
+  // Don't run if hidden to save performance
+  if (player.options.newsHidden) return;
+  const newsDiv = player.options.newUI ? document.getElementById("newNews") : document.getElementById("news");
+  // Select a message at random
 
   function isUnlocked(index) {
     const line = newsArray[index];
@@ -279,38 +281,38 @@ function scrollNextMessage() {
   scrollTimeouts.forEach(clearTimeout);
   scrollTimeouts = [];
 
-  //set the text
-  s.innerHTML = newsArray[nextMsgIndex][0];
+  // Set the text
+  newsDiv.innerHTML = newsArray[nextMsgIndex][0];
 
-  //get the parent width so we can start the message beyond it
-  let parentWidth = s.parentElement.clientWidth;
+  // Get the parent width so we can start the message beyond it
+  const parentWidth = newsDiv.parentElement.clientWidth;
 
-  //set the transition to blank so the move happens immediately
-  s.style.transition = '';
-  //move div_text to the right, beyond the edge of the div_container
-  s.style.transform = 'translateX('+parentWidth+'px)';
+  // Set the transition to blank so the move happens immediately
+  newsDiv.style.transition = "";
+  // Move div_text to the right, beyond the edge of the div_container
+  newsDiv.style.transform = `translateX(${parentWidth}px)`;
 
-  //we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
-  scrollTimeouts.push(setTimeout( function() {
-    //distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
-    //we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
-    let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
-    let rate = 100; //change this value to change the scroll speed
-    let transformDuration = dist / rate;
+  // We need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
+  scrollTimeouts.push(setTimeout(() => {
+    // Distance to travel is newsDiv.parentElement.clientWidth + newsDiv.clientWidth + parent padding
+    // We want to travel at scrollSpeed pixels per second so we need to travel for (distance / scrollSpeed) seconds
+    // 20 is div_container padding
+    const dist = newsDiv.parentElement.clientWidth + newsDiv.clientWidth + 20;
+    // Change this value to change the scroll speed
+    const scrollSpeed = 100;
+    const transformDuration = dist / scrollSpeed;
 
     if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][1])) {
         player.newsArray.push(newsArray[nextMsgIndex][1]);
         if (player.newsArray.length >= 50) Achievement(22).unlock();
     }
 
-
-    //set the transition duration
-    s.style.transition = 'transform '+transformDuration+'s linear';
-    let textWidth = s.clientWidth;
-    //we need to move it to -(width+parent padding) before it won't be visible
-    s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
-    //automatically start the next message scrolling after this one finishes
-    //you could add more time to this timeout if you wanted to have some time between messages
+    // Set the transition duration
+    newsDiv.style.transition = `transform ${transformDuration}s linear`;
+    // We need to move it to -(width+parent padding) before it won't be visible
+    newsDiv.style.transform = `translateX(-${newsDiv.clientWidth + 5}px)`;
+    // Automatically start the next message scrolling after this one finishes
+    // You could add more time to this timeout if you wanted to have some time between messages
     scrollTimeouts.push(setTimeout(scrollNextMessage, Math.ceil(transformDuration * 1000)));
   }, 100));
 }

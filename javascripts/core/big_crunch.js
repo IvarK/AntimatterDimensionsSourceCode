@@ -59,20 +59,19 @@ function bigCrunchReset() {
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
-  if (EternityChallenge(4).isRunning && !EternityChallenge(4).isWithinRestriction) {
-    failChallenge();
-  }
+
+  if (EternityChallenge(4).tryFail()) return;
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
   //kong.submitStats('Infinitied', Player.totalInfinitied);
   kong.submitStats('Fastest Infinity time (ms)', Math.floor(player.bestInfinityTime));
 
-  const currenReplicanti = player.replicanti.amount;
+  const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   secondSoftReset();
 
   if (Achievement(95).isEnabled) {
-    player.replicanti.amount = currenReplicanti;
+    player.replicanti.amount = currentReplicanti;
   }
   if (TimeStudy(33).isBought) {
     player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
@@ -103,7 +102,7 @@ function secondSoftReset() {
     player.tickDecrease = 0.9;
     resetMoney();
     softReset(0);
-    resetInfDimensions();
+    InfinityDimensions.resetAmount();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);

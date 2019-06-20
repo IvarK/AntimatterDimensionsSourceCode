@@ -33,8 +33,8 @@ Vue.component("laitela-tab", {
     },
     unlockClassObject(info) {
       return {
-        "o-laitela-shop-button-bought": this.hasUnlock(info), 
-        "o-laitela-shop-button-available": this.canBuyUnlock(info)
+        "o-laitela-shop-button--bought": this.hasUnlock(info), 
+        "o-laitela-shop-button--available": this.canBuyUnlock(info)
       };
     }
   },

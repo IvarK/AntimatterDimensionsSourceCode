@@ -36,9 +36,9 @@ Vue.component("matter-dimension-row", {
   `<div class="c-matter-dimension-container">
     <div class="o-matter-dimension-amount"> {{ shorten(amount, 2, 0) }}</div>
     <div class="c-matter-dimension-buttons">
-      <button @click="dimension.buyChance()" :class="{ 'o-matter-dimension-button-available': canBuyChance }"> {{ chance }}% <br>Cost: {{ shorten(chanceCost, 2, 0) }}</button>
-      <button @click="dimension.buyInterval()" :class="{ 'o-matter-dimension-button-available': canBuyInterval }"> {{ interval.toFixed(2) }}ms <br>Cost: {{ shorten(intervalCost, 2, 0) }}</button>
-      <button @click="dimension.buyPower()" :class="{ 'o-matter-dimension-button-available': canBuyPower }"> {{ shorten(power, 2, 2) }}x <br>Cost: {{ shorten(powerCost, 2, 0) }}</button>
+      <button @click="dimension.buyChance()" :class="{ 'o-matter-dimension-button--available': canBuyChance }"> {{ chance }}% <br>Cost: {{ shorten(chanceCost, 2, 0) }}</button>
+      <button @click="dimension.buyInterval()" :class="{ 'o-matter-dimension-button--available': canBuyInterval }"> {{ interval.toFixed(2) }}ms <br>Cost: {{ shorten(intervalCost, 2, 0) }}</button>
+      <button @click="dimension.buyPower()" :class="{ 'o-matter-dimension-button--available': canBuyPower }"> {{ shorten(power, 2, 2) }}x <br>Cost: {{ shorten(powerCost, 2, 0) }}</button>
     </div>
   </div>
   

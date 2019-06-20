@@ -42,9 +42,7 @@ function fastReplicantiBelow308(gainFactor, isAutobuyerActive) {
     return;
   }
   const replicantiExponent = gainFactor.log10() + player.replicanti.amount.log10();
-  const toBuy = Ra.isRunning
-    ? 0
-    : Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
+  const toBuy = Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
   player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow10(replicantiExponent - 308 * toBuy));
   player.replicanti.galaxies += toBuy;
 }
@@ -77,6 +75,7 @@ function getReplicantiInterval(noMod, intervalIn) {
     // and handling it would make the replicanti code a lot more complicated.
     interval = Math.pow(interval, 2);
   }
+  interval /= RA_UNLOCKS.TT_BOOST.effect.replicanti();
   return interval;
 }
 
@@ -391,7 +390,6 @@ const Replicanti = {
       return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
     },
     get canBuyMore() {
-      if (Ra.isRunning) return false
       if (!Replicanti.amount.gte(Decimal.MAX_NUMBER)) return false;
       return this.bought < this.max;
     },

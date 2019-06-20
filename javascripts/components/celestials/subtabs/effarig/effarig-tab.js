@@ -70,9 +70,9 @@ Vue.component('effarig-tab', {
     runDescription() {
       return this.isRunning
         ? "You are in Effarig's Reality - give up?"
-        : `Start a new reality, all production and gamespeed is severely lowered,
-          infinity and time dimensions reduce the production penalty.
-          Glyph levels are temporarily capped.`
+        : `Start Effarig's Reality, all production and gamespeed is severely lowered,
+          infinity power and timeshards reduce the production penalty.
+          Glyph levels are temporarily capped.`;
     }
   },
   methods: {

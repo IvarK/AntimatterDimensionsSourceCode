@@ -108,6 +108,8 @@ GameStorage.migrations = {
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
       GameStorage.migrations.adjustAchievementVars(player);
+      GameStorage.migrations.uniformDimensions(player);
+      GameStorage.migrations.removeEternityChallGoal(player);
     }
   },
 
@@ -371,7 +373,59 @@ GameStorage.migrations = {
     delete player.autoIP;
     delete player.autoTime;
   },
-  
+
+  removeEternityChallGoal(player) {
+    delete player.eternityChallGoal;
+  },
+
+  uniformDimensions(player) {
+    for (let tier = 1; tier <= 8; tier++) {
+      const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
+      const oldProps = {
+        cost: `${name}Cost`,
+        amount: `${name}Amount`,
+        bought: `${name}Bought`,
+        pow: `${name}Pow`
+      };
+      const dimension = player.dimensions.normal[tier - 1];
+      dimension.cost = new Decimal(player[oldProps.cost]);
+      dimension.amount = new Decimal(player[oldProps.amount]);
+      dimension.bought = player[oldProps.bought];
+      dimension.power = new Decimal(player[oldProps.pow]);
+      dimension.costMultiplier = new Decimal(player.costMultipliers[tier - 1]);
+      delete player[oldProps.cost];
+      delete player[oldProps.amount];
+      delete player[oldProps.bought];
+      delete player[oldProps.pow];
+    }
+    delete player.costMultipliers;
+
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimension = player.dimensions.infinity[tier - 1];
+      const oldName = `infinityDimension${tier}`;
+      const old = player[oldName];
+      dimension.cost = new Decimal(old.cost);
+      dimension.amount = new Decimal(old.amount);
+      dimension.power = new Decimal(old.power);
+      dimension.bought = old.bought;
+      dimension.baseAmount = old.baseAmount;
+      dimension.isUnlocked = player.infDimensionsUnlocked[tier - 1];
+      delete player[oldName];
+    }
+    delete player.infDimensionsUnlocked;
+
+    for (let tier = 1; tier <= 8; tier++) {
+      const dimension = player.dimensions.time[tier - 1];
+      const oldName = `timeDimension${tier}`;
+      const old = player[oldName];
+      dimension.cost = new Decimal(old.cost);
+      dimension.amount = new Decimal(old.amount);
+      dimension.power = new Decimal(old.power);
+      dimension.bought = old.bought;
+      delete player[oldName];
+    }
+  },
+
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge

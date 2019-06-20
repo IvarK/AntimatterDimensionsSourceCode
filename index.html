@@ -111,30 +111,7 @@
                 </tr>
             </table>
             <div id="glyphstab" class="realitytab">
-              <div class="l-glyphs-tab">
-                <div class="l-reality-button-column">
-                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
-                    <reality-button></reality-button>
-                    <reality-amplify-button></reality-amplify-button>
-                    <expanding-control-box v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'" label="Glyph level factors"
-                        container-class="c-glyph-level-factors-dropdown-header">
-                      <glyph-levels-and-weights slot="dropdown" />
-                    </expanding-control-box>
-                    <glyph-sacrifice-options></glyph-sacrifice-options>
-                    <glyph-auto-pick-options></glyph-auto-pick-options>
-                    <sacrificed-glyphs></sacrificed-glyphs>
-                  </template>
-                </div>
-                <div class="l-player-glyphs-column">
-                  <template v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'glyphstab'">
-                    <div class="l-equipped-glyphs-wrapper">
-                      <equipped-glyphs></equipped-glyphs>
-                      <current-glyph-effects></current-glyph-effects>
-                    </div>
-                    <glyph-inventory></glyph-inventory>
-                  </template>
-                </div>
-              </div>
+              <glyphs-tab></glyphs-tab>
             </div>
             <div id="upgrades" class="realitytab" style="display: none;">
               <reality-upgrades-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'upgrades'"></reality-upgrades-tab>
@@ -211,6 +188,7 @@
 <script type="text/javascript" src="javascripts/core/player.js"></script>
 <script type="text/javascript" src="javascripts/core/autobuyer.js"></script>
 <script type="text/javascript" src="javascripts/core/performance-stats.js"></script>
+<script type="text/javascript" src="javascripts/core/currency.js"></script>
 <script type="text/javascript" src="javascripts/core/game-mechanic.js"></script>
 <script type="text/javascript" src="javascripts/core/event-hub.js"></script>
 <script type="text/javascript" src="javascripts/core/cache.js"></script>
@@ -330,7 +308,8 @@
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/effarig/effarig-unlock-button.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/v-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/enslaved-tab.js"></script>
-<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/celestials/subtabs/ra/ra-pet.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/laitela-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/pelle-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/celestials/subtabs/matter-dimension-row.js"></script>
@@ -398,6 +377,7 @@
 <script type="text/javascript" src="javascripts/components/reality/pp-label.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/reality-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-levels-and-weights.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyph-component.js"></script>
@@ -441,6 +421,7 @@
 
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/tab-button.js"></script>
+<script type="text/javascript" src="javascripts/components/new-ui/challenges-header.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimensions-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-dimension-row.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/dimensions-tab/new-tickspeed-row.js"></script>
@@ -470,9 +451,10 @@
 <script type="text/javascript" src="javascripts/core/achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/chart.js"></script>
 <script type="text/javascript" src="javascripts/core/tickspeed.js"></script>
-<script type="text/javascript" src="javascripts/core/normal_dimension.js"></script>
-<script type="text/javascript" src="javascripts/core/infinity_dimension.js"></script>
-<script type="text/javascript" src="javascripts/core/time_dimension.js"></script>
+<script type="text/javascript" src="javascripts/core/dimensions/dimension.js"></script>
+<script type="text/javascript" src="javascripts/core/dimensions/normal-dimension.js"></script>
+<script type="text/javascript" src="javascripts/core/dimensions/infinity-dimension.js"></script>
+<script type="text/javascript" src="javascripts/core/dimensions/time-dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/matter_dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/dimboost.js"></script>
 <script type="text/javascript" src="javascripts/core/sacrifice.js"></script>

@@ -1,19 +1,21 @@
-Vue.component('sidebar-ip', {
+"use strict";
+
+Vue.component("sidebar-ip", {
   data() {
     return {
       ip: new Decimal(0),
       gained: new Decimal(0),
       showCrunch: false
-    }
+    };
   },
   props: {
     cond: Boolean
   },
   methods: {
     update() {
-      this.ip.copyFrom(player.infinityPoints)
-      this.gained.copyFrom(gainedInfinityPoints())
-      this.showCrunch = player.money.gte(Number.MAX_VALUE) && player.break
+      this.ip.copyFrom(player.infinityPoints);
+      this.gained.copyFrom(gainedInfinityPoints());
+      this.showCrunch = player.money.gte(Number.MAX_VALUE) && player.break;
     },
     infinity() {
       if (this.showCrunch) {
@@ -21,8 +23,8 @@ Vue.component('sidebar-ip', {
       }
     }
   },
-  template:`
-  <div class="resource" @click="infinity" :class=" { 'resource-infinity-canreset': showCrunch }">
+  template:
+  `<div class="resource" @click="infinity" :class=" { 'resource-infinity-canreset': showCrunch }">
     <div v-if="cond">
       <h2 id="ip">{{ shorten(ip, 2, 0) }}</h2>
       <div class="resource-information">
@@ -31,4 +33,4 @@ Vue.component('sidebar-ip', {
       </div>
     </div>
   </div>`
-})
+});

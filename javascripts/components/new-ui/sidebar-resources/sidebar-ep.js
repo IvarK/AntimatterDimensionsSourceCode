@@ -1,20 +1,22 @@
-Vue.component('sidebar-ep', {
+"use strict";
+
+Vue.component("sidebar-ep", {
   data() {
     return {
       ep: new Decimal(0),
       gained: new Decimal(0)
-    }
+    };
   },
   props: {
     cond: Boolean
   },
   methods: {
     update() {
-      this.ep.copyFrom(player.eternityPoints)
+      this.ep.copyFrom(player.eternityPoints);
     }
   },
-  template:`
-  <div class="resource">
+  template:
+  `<div class="resource">
     <div v-if="cond">
       <h2 id="ep">{{ shorten(ep, 2, 0) }}</h2>
       <div class="resource-information">
@@ -23,4 +25,4 @@ Vue.component('sidebar-ep', {
       </div>
     </div>
   </div>`
-})
+});

@@ -4,13 +4,13 @@ function startEternityChallenge() {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
   resetInfinityRuns();
-  fullResetInfDimensions();
+  InfinityDimensions.fullReset();
   eternityResetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
   player.replicanti.galaxies = 0;
   resetInfinityPointsOnEternity();
-  resetInfDimensions();
+  InfinityDimensions.resetAmount();
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
@@ -136,7 +136,6 @@ class EternityChallengeState extends GameMechanicState {
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
     if (canEternity()) eternity(false, auto, { enteringEC: true });
-    player.eternityChallGoal = this.currentGoal;
     player.challenge.eternity.current = this.id;
     return startEternityChallenge();
   }
@@ -151,6 +150,29 @@ class EternityChallengeState extends GameMechanicState {
   get isWithinRestriction() {
     return this.config.restriction === undefined ||
       this.config.checkRestriction(this.config.restriction(this.completions));
+  }
+
+  exit() {
+    const nestedChallenge = NormalChallenge.current || InfinityChallenge.current;
+    if (nestedChallenge !== undefined) {
+      nestedChallenge.exit();
+    }
+    player.challenge.eternity.current = 0;
+    eternity(true);
+  }
+
+  fail() {
+    this.exit();
+    Modal.message.show("You failed the challenge, you have now exited it.");
+    EventHub.dispatch(GameEvent.CHALLENGE_FAILED);
+  }
+
+  tryFail() {
+    if (this.isRunning && !this.isWithinRestriction) {
+      this.fail();
+      return true;
+    }
+    return false;
   }
 }
 
@@ -216,9 +238,11 @@ EternityChallenge.autoCompleteNext = function() {
 };
 
 EternityChallenge.autoCompleteTick = function() {
-  if (!player.autoEcIsOn) return;
-  const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
-  if (!isPostEc) return;
+  if (!player.reality.autoEC) return;
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+    while (this.autoCompleteNext());
+    return;
+  }
   const threshold = this.currentAutoCompleteThreshold();
   while (player.reality.lastAutoEC - threshold > 0 && this.autoCompleteNext()) {
     player.reality.lastAutoEC -= threshold;

@@ -117,7 +117,7 @@ Vue.component("tt-shop", {
               @click="buyMaxTheorems">
               Buy max
             </button>
-            <button v-if="!minimized" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+            <button v-if="!minimized && hasTTAutobuyer" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
               @click="toggleTTAutobuyer">
               Auto: {{autobuyerText}}
             </button>

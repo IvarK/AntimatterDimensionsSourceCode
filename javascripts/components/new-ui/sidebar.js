@@ -1,3 +1,5 @@
+"use strict";
+
 const MAIN_TAB_BUTTONS = [
   {
     id: "dimensions",
@@ -14,7 +16,7 @@ const MAIN_TAB_BUTTONS = [
       {
         label: "∞",
         component: "infinity-dim-tab",
-        condition: () => player.eternities > 0 || player.infDimensionsUnlocked.includes(true),
+        condition: () => player.eternities > 0 || InfinityDimension(1).isUnlocked,
       },
       {
         label: "Δ",
@@ -74,7 +76,7 @@ const MAIN_TAB_BUTTONS = [
         condition: () => player.infinitied.gt(0)
       },
       {
-        label: "R",
+        label: "Ξ",
         component: "replicanti-tab",
         condition: () => player.infinitied.gt(0)
       }
@@ -121,7 +123,8 @@ const MAIN_TAB_BUTTONS = [
     label: "Celestials",
     class: "celestials",
     component: "teresa-tab",
-    condition: () => RealityUpgrades && RealityUpgrades.allBought, // Because RealityUpgrades is defined later
+    // Because RealityUpgrades is defined later
+    condition: () => RealityUpgrades && RealityUpgrades.allBought,
     subtabs: [
       {
         label: "T",
@@ -151,7 +154,7 @@ const MAIN_TAB_BUTTONS = [
       {
         label: "L",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_UNLOCKS.UNNAMED_UNLOCK)
+        condition: () => Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
       },
       {
         label: "P",
@@ -165,7 +168,7 @@ const MAIN_TAB_BUTTONS = [
     label: "Achievements",
     class: "",
     component: "normal-achievements-tab",
-    condition: () => player.achievements.size > 0,
+    condition: () => currentAchievementCount() > 0,
     subtabs: [
       {
         label: "A",
@@ -184,7 +187,7 @@ const MAIN_TAB_BUTTONS = [
     label: "Statistics",
     class: "",
     component: "statistics-tab",
-    condition: () => player.achievements.size > 1,
+    condition: () => currentAchievementCount() > 1,
     subtabs: [
       {
         label: "S",
@@ -227,46 +230,40 @@ const MAIN_TAB_BUTTONS = [
     component: "achievements-tab",
     condition: () => true,
   }
-]
+];
 
-
-
-Vue.component('sidebar', {
+Vue.component("sidebar", {
   data() {
     return {
       ipVisible: false,
       epVisible: false,
       rmVisible: false
-    }
+    };
   },
   methods: {
     switchTo(tab) {
-      showTab(tab)
+      showTab(tab);
     },
     update() {
-      this.ipVisible = player.infinitied.gt(0)
-      this.epVisible = player.eternities > 0
-      this.rmVisible = player.realities > 0
+      this.ipVisible = player.infinitied.gt(0);
+      this.epVisible = player.eternities > 0;
+      this.rmVisible = player.realities > 0;
     }
   },
   computed: {
     tabs() {
-      return MAIN_TAB_BUTTONS
+      return MAIN_TAB_BUTTONS;
     }
   },
   template:
   `<div class="sidebar">
-    <div class="resource-container">
-      <sidebar-am></sidebar-am>
-      <sidebar-ip :cond="ipVisible"></sidebar-ip>
-      <sidebar-ep :cond="epVisible"></sidebar-ep>
-      <sidebar-rm :cond="rmVisible"></sidebar-rm>
-    </div>
-    <div class="tab-buttons">
-      <tab-button 
-        v-for="tab in tabs"
-        :key="tab.id"
-        :tab="tab"></tab-button>
-    </div>
+    <sidebar-am></sidebar-am>
+    <sidebar-ip :cond="ipVisible"></sidebar-ip>
+    <sidebar-ep :cond="epVisible"></sidebar-ep>
+    <sidebar-rm :cond="rmVisible"></sidebar-rm>
+    <tab-button 
+      v-for="tab in tabs"
+      :key="tab.id"
+      :tab="tab"></tab-button>
   </div>`
-})
+});

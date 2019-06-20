@@ -170,7 +170,7 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return player.secondAmount.gt(0) || player.eternities >= 30;
+    return NormalDimension(2).amount.gt(0) || player.eternities >= 30;
   },
 
   get multiplier() {
@@ -195,7 +195,7 @@ const FreeTickspeed = {
   
   get softcap() {
     let softcap = FreeTickspeed.BASE_SOFTCAP;
-    if (Enslaved.isCompleted) {
+    if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
       softcap += 100000;
     }
     return softcap;

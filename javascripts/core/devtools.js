@@ -139,7 +139,6 @@ dev.refundDilStudies = function() {
 dev.resetDilation = function() {
   player.dilation.dilatedTime = new Decimal(0);
   player.dilation.tachyonParticles = new Decimal(0);
-  player.dilation.totalTachyonParticles = new Decimal(0);
   player.dilation.rebuyables[1] = 0;
   player.dilation.rebuyables[2] = 0;
   player.dilation.rebuyables[3] = 0;
@@ -392,5 +391,18 @@ dev.buyAllPerks = function() {
     visited.push(perk);
     toVisit.push(...perk.connectedPerks.filter(p => !visited.includes(p)));
     perk.purchase();
+  }
+};
+
+dev.kongTest = function() {
+  const page = document.getElementById("page");
+  if (document.getElementById("page").style.width === "") {
+    page.style.width = "1050px";
+    page.style.height = "700px";
+    page.style.marginTop = "100px";
+  } else {
+    page.style.width = "";
+    page.style.height = "";
+    page.style.marginTop = "";
   }
 };

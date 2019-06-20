@@ -11,6 +11,7 @@ Vue.component("glyph-levels-and-weights", {
       perkShopVisible: false,
       penaltyVisible: false,
       perkVisible: false,
+      shardVisible: false,
       factors: getGlyphLevelInputs(),
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
       rows: 3,
@@ -55,6 +56,10 @@ Vue.component("glyph-levels-and-weights", {
     rowStylePerk() {
       return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible);
     },
+    rowStyleShard() {
+      return this.makeRowStyle(4 + this.eternityVisible + this.perkShopVisible + this.penaltyVisible +
+        this.perkVisible);
+    },
     formatPerkShop() {
       return (100 * (this.factors.perkShop - 1)).toFixed(1) + "%";
     },
@@ -87,6 +92,7 @@ Vue.component("glyph-levels-and-weights", {
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.perkVisible = glyphFactors.perkFactor > 0;
+      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();
@@ -195,6 +201,13 @@ Vue.component("glyph-levels-and-weights", {
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__operator">+</div>
         <div :style="rowStylePerk" class="l-glyph-levels-and-weights__factor-val">
           {{factors.perkFactor}}&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+      </template>
+      <template v-if="shardVisible">
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor">Shards</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__operator">+</div>
+        <div :style="rowStyleShard" class="l-glyph-levels-and-weights__factor-val">
+          {{formatFactor(factors.shardFactor)}}
         </div>
       </template>
       <template v-if="adjustVisible">

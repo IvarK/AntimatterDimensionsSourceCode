@@ -1,4 +1,6 @@
-Vue.component('new-dim-shift-row', {
+"use strict";
+
+Vue.component("new-dim-shift-row", {
   data() {
     return {
       requirement: {
@@ -45,4 +47,4 @@ Vue.component('new-dim-shift-row', {
       @click="softReset"
       >{{buttonText}}</button>
   </div>`
-})
+});

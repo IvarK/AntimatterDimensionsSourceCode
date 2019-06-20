@@ -34,7 +34,17 @@ Vue.component("v-tab", {
     }
   },
   computed: {
-    runUnlocks: () => VRunUnlockState.all,
+    hexGrid: () => [
+      VRunUnlockState.all[0],
+      VRunUnlockState.all[1],
+      {},
+      VRunUnlockState.all[2],
+      { isRunButton: true },
+      VRunUnlockState.all[3],
+      VRunUnlockState.all[4],
+      VRunUnlockState.all[5],
+      {}
+    ],
     runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,
     db: () => GameDatabase.celestials.v,
   },
@@ -49,16 +59,23 @@ Vue.component("v-tab", {
         to unlock V, The Celestial of Achievements
       </div>
       <div v-else>
-        <button @click="startRun()" class="o-v-run-button">
-          Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and dilated time gain per second
-          are square-rooted, and Replicanti interval is squared.
-        </button>
         <div class="l-v-unlocks-container">
-          <div v-for="unlock in runUnlocks" class="c-v-unlock" :class="{ 'c-v-unlock-completed': unlock.completions == 6 }">
-            <h2>{{ unlock.config.name }}</h2>
-            <p class="o-v-unlock-desc">{{ unlock.formattedDescription }}</p>
-            <p class="o-v-unlock-amount">{{ unlock.completions }}/{{unlock.config.values.length}} done</p>
-          </div>
+          <li v-for="hex in hexGrid">
+            <div v-if="hex.config" class="l-v-hexagon c-v-unlock" :class="{ 'c-v-unlock-completed': hex.completions == 6 }">
+              <h2>{{ hex.config.name }}</h2>
+              <p class="o-v-unlock-desc">{{ hex.formattedDescription }}</p>
+              <p class="o-v-unlock-amount">{{ hex.completions }}/{{hex.config.values.length}} done</p>
+            </div>
+            <div v-else-if="hex.isRunButton" @click="startRun()" class="l-v-hexagon o-v-run-button">
+              <p>
+              Start V's Reality.<br/>All dimension multipliers, EP gain, IP gain, and dilated time gain per second
+              are square-rooted, and Replicanti interval is squared.
+              </p>
+            </div>
+            <div v-else>
+              <div style="opacity: 0" class="l-v-hexagon"></div>
+            </div>
+          </li>
         </div>
         <div>
           You have {{ totalUnlocks }} V-achievements done. You can pick

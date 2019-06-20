@@ -91,9 +91,19 @@ button {
   vertical-align: top;
 }
 
+.t-metro .storebtn {
+  background: #EEEEEE;
+  border: 1px solid #66BB6A;
+  box-shadow: 1px 1px 1px 0px #9E9E9E;
+}
+
 .storebtn:hover {
   color: #FFF;
   background: #5AC467;
+}
+
+.t-metro .storebtn:hover {
+  background: #66BB6A;
 }
 
 .unavailablebtn {
@@ -147,7 +157,7 @@ button {
 /*#region TT shop*/
 
 #TTbuttons {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   font-family: Typewriter, serif;
   display: flex;
@@ -351,14 +361,13 @@ button {
 /*#endregion TT shop*/
 
 #news {
-    color: #000000;
-    /*transition: transform 1s;*/
-    position: relative;
-    display: inline-block;
-    font-family: Typewriter;
-    font-size: 15px;
-    white-space: nowrap;
-    font-weight: bold
+  color: #000000;
+  position: relative;
+  display: inline-block;
+  font-family: Typewriter;
+  font-size: 15px;
+  white-space: nowrap;
+  font-weight: bold
 }
 
 #news a {
@@ -2307,14 +2316,6 @@ screen and (max-width: 480px) {
 
 /*#region l-normal-dim-tab*/
 
-.l-normal-dim-tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 0;
-  margin-top: .5rem;
-}
-
 .l-normal-dim-tab > * {
   flex-shrink: 0;
 }
@@ -2875,9 +2876,11 @@ screen and (max-width: 480px) {
 /*#region t-metro t-inverted-metro t-s8*/
 
 .t-metro .o-achievement,
+.t-dark-metro .o-achievement,
 .t-inverted-metro .o-achievement,
 .t-s8 .o-achievement {
   border-width: 1px;
+  border-radius: 0;
 }
 
 .t-metro .o-achievement--unlocked,
@@ -3000,6 +3003,7 @@ screen and (max-width: 480px) {
 .t-inverted-metro .c-achievement-grid__row--completed,
 .t-s8 .c-achievement-grid__row--completed {
   background-color: #1b5e20;
+  border-radius: 0px;
 }
 
 .t-s1 .c-achievement-grid__row--completed {
@@ -5589,6 +5593,15 @@ kbd {
   font-family: Typewriter;
 }
 
+.o-enslaved-shop-button--available {
+  background: aquamarine;
+  cursor: pointer;
+}
+
+.o-enslaved-shop-button--bought {
+  background: #16c55e;
+}
+
 .o-enslaved-run-button {
   width: 35rem;
   padding: 2rem;
@@ -5616,22 +5629,50 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 110rem;
+  max-width: 65rem;
   margin: auto;
   margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 70%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.l-v-unlocks-container li {
+  position: relative;
+  float: left;
+  width: 18rem;
+  padding: 0 0 20.8rem 0;
+  list-style-type: none;
+  transform: rotate(-60deg) skewY(30deg);
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.l-v-unlocks-container li {
+  visibility: visible;
+}
+
+/* required for hex structure */
+.l-v-unlocks-container li:nth-child(3n+2) {
+  margin: 0 1%;
+}
+
+.l-v-unlocks-container li:nth-child(6n+4), .l-v-unlocks-container li:nth-child(6n+5), .l-v-unlocks-container li:nth-child(6n+6) {
+  margin-top: -7%;
+  margin-bottom: -7%;
+}
+
+.l-v-unlocks-container li:nth-child(6n+1), .l-v-unlocks-container li:nth-child(6n+2), .l-v-unlocks-container li:nth-child(6n+3) {
+  transform: translateX(50%) rotate(-60deg) skewY(30deg);
+}
+
+.l-v-unlocks-container li:nth-child(6n+1) { 
+  margin-left: 1%;
 }
 
 .c-v-unlock {
-  width: 30rem;
-  border: 0.2rem solid gainsboro;
-  border-radius: .5rem;
   background: whitesmoke;
-  padding: 1.5rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .c-v-unlock-completed {
@@ -5641,17 +5682,6 @@ kbd {
 .o-v-unlock-amount {
   font-weight: bold;
   font-size: 1.3rem;
-}
-
-.o-v-run-button {
-  width: 25rem;
-  padding: 2rem;
-  border-radius: .5rem;
-  border: 2px solid indianred;
-  background: #f1aa7f;
-  font-family: Typewriter;
-  font-size: 1.2rem;
-  cursor: pointer;
 }
 
 .l-v-milestones-container {
@@ -5676,11 +5706,38 @@ kbd {
   background: lightgreen;
 }
 
+.l-v-hexagon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transform: skewY(-30deg) rotate(60deg);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.o-v-run-button {
+  color: black;
+  background: #f1aa7f;
+  font-family: Typewriter;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.o-v-run-button:hover {
+  background: indianred;
+}
+
 /* #endregion v tab*/
 
 /* #startregion ra tab */
 
-.c-ra-teresa-experience {
+.c-ra-pet-experience {
   width: 30rem;
   display: inline-block;
   height: 1.5rem;
@@ -5688,34 +5745,34 @@ kbd {
   position: relative;
 }
 
-.c-ra-teresa-experience-inner {
+.c-ra-pet-experience-inner {
   height: 100%;
   background-color: #35d035;
 }
 
-.o-ra-exp-display {
+.o-ra-pet-exp-display {
   vertical-align: super;
   position: absolute;
   top: 0;
   left: calc(50% - 1.6rem);
 }
 
-.l-ra-teresa-container {
+.l-ra-pet-container {
   border: .2rem solid gainsboro;
   background: whitesmoke;
   width: 35rem;
   padding: 1rem;
   border-radius: .5rem;
   margin: 2rem auto;
+  float: left;
 }
 
 .l-ra-unlocks-container {
   display: flex;
   flex-wrap: wrap;
-  width: 80rem;
-  margin: auto;
+  width: 180rem;
   justify-content: center;
-  margin-top: 2rem;
+  margin: 2rem auto auto;
 }
 
 .c-ra-unlock {
@@ -5820,7 +5877,7 @@ kbd {
   border-radius: .5rem;
 }
 
-.o-matter-dimension-button-available {
+.o-matter-dimension-button--available {
   background: aquamarine;
   cursor: pointer;
 }
@@ -5841,12 +5898,12 @@ kbd {
   font-family: Typewriter;
 }
 
-.o-laitela-shop-button-available {
+.o-laitela-shop-button--available {
   background: aquamarine;
   cursor: pointer;
 }
 
-.o-laitela-shop-button-bought {
+.o-laitela-shop-button--bought {
   background: #16c55e;
 }
 

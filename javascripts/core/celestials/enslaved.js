@@ -23,8 +23,13 @@ const enslavedQuotes = [
 
 
 const ENSLAVED_UNLOCKS = {
-  RUN: {
+  FREE_TICKSPEED_SOFTCAP: {
     id: 0,
+    price: TimeSpan.fromYears(1e35).totalMilliseconds,
+    description: "Increase the free tickspeed upgrade softcap by 100,000",
+  },
+  RUN: {
+    id: 1,
     price: TimeSpan.fromYears(1e40).totalMilliseconds,
     description: "Unlock The Enslaved One's reality.",
   }
@@ -37,6 +42,7 @@ const Enslaved = {
   lockedInBoostRatio: 1,
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
+  lockedInShardsGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   toggleStoreBlackHole() {
@@ -55,10 +61,16 @@ const Enslaved = {
     return player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    return 1 / 3;
+    const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
+      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
+      : 0;
+    return 0.33 + addedEff;
   },
   get storedRealTimeCap() {
-    return 1000 * 3600 * 4;
+    const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
+      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
+      : 0;
+    return 1000 * 3600 * 4 + addedCap;
   },
   storeRealTime() {
     const thisUpdate = Date.now();
@@ -84,14 +96,19 @@ const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     gameLoop(0, { gameDiff: release });
+    // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
+    const effectiveGamespeed = release / 50;
+    player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
     player.celestials.enslaved.stored = 0;
   },
   has(info) {
     return player.celestials.enslaved.unlocks.includes(info.id);
   },
+  canBuy(info) {
+    return player.celestials.enslaved.stored >= info.price && !this.has(info);
+  },
   buyUnlock(info) {
-    if (player.celestials.enslaved.stored < info.price) return false;
-    if (this.has(info)) return false;
+    if (!this.canBuy(info)) return false;
     if (info.id === 3) player.blackHole[2].unlocked = true;
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);

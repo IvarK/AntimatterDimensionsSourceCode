@@ -84,7 +84,6 @@ function buyDilationUpgrade(id, bulk) {
         Perk.retroactiveTP4
       );
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
-      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
   return true
@@ -106,9 +105,11 @@ function getDilationGainPerSecond() {
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning) {
     dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
   }
+  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime())
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
@@ -123,25 +124,32 @@ function tachyonGainMultiplier() {
   );
 }
 
-function getTachyonGain() {
-  const mult = tachyonGainMultiplier();
-
-  let newTotal = Decimal
-    .pow(Decimal.log10(player.money) / 400, 1.5)
-    .times(mult);
-  if (Enslaved.isRunning) newTotal = newTotal.pow(0.25);
-  return newTotal.minus(player.dilation.totalTachyonParticles).clampMin(0);
+function rewardTP() {
+  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP());
 }
 
-function getTachyonReq() {
-  const mult = tachyonGainMultiplier();
+// Returns the TP that would be gained this run
+function getTP() {
+  let tachyon = Decimal
+    .pow(Decimal.log10(player.money) / 400, 1.5)
+    .times(tachyonGainMultiplier());
+  if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
+  return tachyon;
+}
 
-  let effectiveTP = player.dilation.totalTachyonParticles;
+// Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
+function getTachyonGain() {
+  return getTP().minus(player.dilation.tachyonParticles).clampMin(0);
+}
+
+// Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
+function getTachyonReq() {
+  let effectiveTP = player.dilation.tachyonParticles;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))
-      .dividedBy(mult)
+      .dividedBy(tachyonGainMultiplier())
       .pow(2 / 3)
       .toNumber()
   );

@@ -5,6 +5,9 @@ Vue.component("enslaved-tab", {
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
+    hasAmplifyStoredReal: false,
+    hasStoredTimeSpeedBoost: false,
+    storedTimeSpeedValue: 1,
     inEnslaved: false,
     storedBlackHole: 0,
     storedReal: 0,
@@ -15,8 +18,14 @@ Vue.component("enslaved-tab", {
     quoteIdx: 0,
   }),
   computed: {
+    amplifiedGameDesc() {
+      return `^${RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification().toFixed(2)}`;
+    },
+    storedTimeBoostDesc() {
+      return formatX(this.storedTimeSpeedValue, 2, 2);
+    },
     storedRealEfficiencyDesc() {
-      return Math.round((this.storedRealEffiency * 100)).toString() + "%";
+      return formatPercents(this.storedRealEffiency);
     },
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
@@ -39,6 +48,9 @@ Vue.component("enslaved-tab", {
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
+      this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
+      this.hasStoredTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
+      this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
@@ -71,11 +83,20 @@ Vue.component("enslaved-tab", {
     hasUnlock(info) {
       return Enslaved.has(info);
     },
+    canBuyUnlock(info) {
+      return Enslaved.canBuy(info);
+    },
     nextQuote() {
       Enslaved.nextQuote();
     },
     hasNextQuote() {
       return this.quoteIdx < Enslaved.maxQuoteIdx;
+    },
+    unlockClassObject(info) {
+      return {
+        "o-enslaved-shop-button--bought": this.hasUnlock(info), 
+        "o-enslaved-shop-button--available": this.canBuyUnlock(info)
+      };
     }
   },
   template:
@@ -94,6 +115,8 @@ Vue.component("enslaved-tab", {
             Use stored black hole time
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
+          <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
+          <div v-if="hasStoredTimeSpeedBoost"> Game speed: {{ storedTimeBoostDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',
@@ -116,6 +139,7 @@ Vue.component("enslaved-tab", {
           v-for="unlock in unlocksInfo"
           :key="unlock.id"
           class="o-enslaved-shop-button"
+          :class="unlockClassObject(unlock)"
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
@@ -130,9 +154,7 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is much slower</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
-          <p>Rewards:</p>
-          <p>Free tickspeed upgrade softcap is 100000 higher</p>
-          <p>ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</p>
+          <p>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</p>
         </button>
         </div>
     </div>`

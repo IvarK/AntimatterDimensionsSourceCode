@@ -15,12 +15,12 @@ function sacrificeReset(auto) {
   EventHub.dispatch(GameEvent.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   if (!auto) floatText(8, "x" + shortenMoney(nextBoost));
-  NormalDimension(8).pow = NormalDimension(8).pow.times(nextBoost);
+  NormalDimension(8).power = NormalDimension(8).power.times(nextBoost);
   player.sacrificed = player.sacrificed.plus(NormalDimension(1).amount);
   const isAch118Enabled = Achievement(118).isEnabled;
   if (NormalChallenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
-    if (!isAch118Enabled) resetDimensions();
+    if (!isAch118Enabled) NormalDimensions.reset();
     player.money = new Decimal(100);
   } else if (!isAch118Enabled) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
@@ -45,19 +45,19 @@ class Sacrifice {
   }
 
   static get isAffordable() {
-    return player.eightAmount.gt(0) && !EternityChallenge(3).isRunning;
+    return NormalDimension(8).amount.gt(0) && !EternityChallenge(3).isRunning;
   }
 
   static get nextBoost() {
-    if (player.firstAmount.eq(0)) return new Decimal(1);
-
+    const nd1Amount = NormalDimension(1).amount;
+    if (nd1Amount.eq(0)) return new Decimal(1);
     if (InfinityChallenge(2).isCompleted) {
       const scale = Effects.max(
         0.01,
         Achievement(88),
         TimeStudy(228)
       );
-      return player.firstAmount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
+      return nd1Amount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
     }
 
     if (!NormalChallenge(8).isRunning) {
@@ -65,10 +65,10 @@ class Sacrifice {
         Achievement(32),
         Achievement(57)
       );
-      return Decimal.pow((player.firstAmount.e/10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
+      return Decimal.pow((nd1Amount.e/10.0), sacrificePow).dividedBy(((Decimal.max(player.sacrificed.e, 1)).dividedBy(10.0)).pow(sacrificePow).max(1)).max(1);
     }
 
-    return player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
+    return nd1Amount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
   }
 
   static get totalBoost() {

@@ -11,11 +11,15 @@ const GlyphSelection = {
   },
 
   get choiceCount() {
-    return Effects.max(
+    const baseChoices = Effects.max(
       1,
       Perk.glyphChoice4,
       Perk.glyphChoice3
     );
+    const raChoices = Ra.has(RA_UNLOCKS.IMPROVED_GLYPHS)
+      ? RA_UNLOCKS.IMPROVED_GLYPHS.effect.choice()
+      : 0;
+    return baseChoices + raChoices;
   },
 
   /**
@@ -116,6 +120,7 @@ function requestManualReality() {
     if (Enslaved.lockedInBoostRatio > 1) {
       Enslaved.lockedInGlyphLevel = level;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      Enslaved.lockedInShardsGained = Effarig.shardsGained;
       manualReality();
       return;
     }
@@ -184,6 +189,7 @@ function autoReality() {
     if (Enslaved.lockedInBoostRatio > 1) {
       Enslaved.lockedInGlyphLevel = gainedLevel;
       Enslaved.lockedInRealityMachines = gainedRealityMachines();
+      Enslaved.lockedInShardsGained = Effarig.shardsGained;
       completeReality(false, false, true);
       return;
     }
@@ -203,6 +209,12 @@ function boostedRealityRewards() {
   }
   player.realities += ratio;
   player.reality.pp += ratio;
+  if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
+    player.celestials.effarig.relicShards += Enslaved.lockedInShardsGained * ratio;
+  }
+  if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
+    Ra.giveExp();
+  }
   player.celestials.enslaved.storedReal = 0;
   Enslaved.lockedInBoostRatio = 1;
   Enslaved.boostReality = false;
@@ -215,13 +227,16 @@ function completeReality(force, reset, auto = false) {
       boostedRealityRewards();
     }
     if (player.thisReality < player.bestReality) {
-      player.bestReality = player.thisReality
+      player.bestReality = player.thisReality;
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
-    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained
+    if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
-      Ra.giveExp(Ra.gainedExp(gainedGlyphLevel().actualLevel, auto))
+      Ra.giveExp();
+    }
+    if (Ra.isRunning) {
+      Ra.updateExpBoosts();
     }
   }
 
@@ -266,7 +281,6 @@ function completeReality(force, reset, auto = false) {
     player.infinityRebuyables = [0, 0];
   }
   player.postChallUnlocked = 0;
-  player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
   player.infinityPower = new Decimal(1);
   player.infDimBuyers = isRUPG10Bought ? player.infDimBuyers : [false, false, false, false, false, false, false, false];
   player.timeShards = new Decimal(0);
@@ -294,7 +308,6 @@ function completeReality(force, reset, auto = false) {
     player.autoSacrifice = 1;
   }
   player.eternityChalls = {};
-  player.eternityChallGoal = Decimal.MAX_NUMBER;
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
@@ -328,7 +341,6 @@ function completeReality(force, reset, auto = false) {
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
   player.dilation.dilatedTime = new Decimal(0);
-  player.dilation.totalTachyonParticles = new Decimal(0);
   player.dilation.nextThreshold = new Decimal(1000);
   player.dilation.baseFreeGalaxies = 0;
   player.dilation.freeGalaxies = 0;
@@ -346,13 +358,14 @@ function completeReality(force, reset, auto = false) {
 
   resetInfinityRuns();
   resetEternityRuns();
-  fullResetInfDimensions();
+  InfinityDimensions.fullReset();
   fullResetTimeDimensions();
   resetReplicanti();
   resetChallengeStuff();
-  resetDimensions();
+  NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
+  player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) player.eternities = 100;
   if (!reset) player.reality.pp++;
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
@@ -361,7 +374,7 @@ function completeReality(force, reset, auto = false) {
   Autobuyer.tryUnlockAny()
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
-  resetInfDimensions();
+  InfinityDimensions.resetAmount();
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
@@ -402,6 +415,11 @@ function completeReality(force, reset, auto = false) {
 
   Lazy.invalidateAll();
   EventHub.dispatch(GameEvent.REALITY_RESET_AFTER);
+
+  // This immediately gives eternity upgrades and autobuys TDs/5xEP
+  if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
+    applyRealityUpgrades();
+  }
 }
 
 function handleCelestialRuns(force) {

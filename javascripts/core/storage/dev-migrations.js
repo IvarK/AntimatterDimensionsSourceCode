@@ -267,11 +267,8 @@ GameStorage.devMigrations = {
         delete player.blackHole[i].duration;
       }
     },
-    player => {
-      player.blackHole = player.wormhole;
-      player.blackHolePause = player.wormholePause;
-      delete player.wormhole;
-      delete player.wormholePause;
+    () => {
+      // This migration was created by a mistake
     },
     GameStorage.migrations.convertAchivementsToNumbers,
     GameStorage.migrations.adjustGameCreatedTime,
@@ -331,6 +328,12 @@ GameStorage.devMigrations = {
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustAchievementVars(player);
     },
+    GameStorage.migrations.uniformDimensions,
+    GameStorage.migrations.removeEternityChallGoal,
+    player => {
+      // There were 3 black holes in player object
+      delete player.blackHole.pop();
+    }
   ],
 
   patch(player) {

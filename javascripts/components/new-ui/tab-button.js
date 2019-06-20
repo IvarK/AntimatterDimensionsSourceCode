@@ -1,20 +1,22 @@
-Vue.component('tab-button', {
+"use strict";
+
+Vue.component("tab-button", {
   data() {
     return {
       visible: false,
       subtabVisibilities: []
-    }
+    };
   },
   props: {
     tab: Object
   },
   methods: {
     changeTab(tab) {
-      this.$viewModel.page = tab
+      this.$viewModel.page = tab;
     },
     update() {
-      this.visible = this.tab.condition()
-      if (this.tab.subtabs) this.subtabVisibilities = this.tab.subtabs.map(x => x.condition())
+      this.visible = this.tab.condition();
+      if (this.tab.subtabs) this.subtabVisibilities = this.tab.subtabs.map(x => x.condition());
     }
   },
   template:
@@ -30,9 +32,9 @@ Vue.component('tab-button', {
       <div v-for="(subtab, index) in tab.subtabs">
         <div 
           v-if="subtabVisibilities[index]"
-          class="subtab"
+          class="subtab" :class="tab.class"
           @click="changeTab(subtab.component)">{{ subtab.label }}</div>
       </div>
     </div>
   </div>`
-})
+});

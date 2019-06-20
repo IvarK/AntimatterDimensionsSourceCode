@@ -31,11 +31,11 @@ Vue.component("replicanti-tab", {
         }
         return upgrade.isCapped
           ? TimeSpan.fromMilliseconds(actualInterval).toString()
-          : `${Math.floor(actualInterval)}ms`;
+          : `${Math.floor(actualInterval).toPrecision(3)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${this.shortenCosts(cost)} IP`
       );
     },
     maxGalaxySetup() {

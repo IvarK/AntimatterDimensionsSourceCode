@@ -108,7 +108,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 11,
       cost: 50,
-      requirement: `${shorten(1e12)} banked Infinities`,
+      requirement: () => `${shorten(1e12)} banked Infinities`,
       checkRequirement: () => player.infinitiedBank.exponent >= 12,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
@@ -139,7 +139,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 14,
       cost: 50,
-      requirement: `${shorten(2e6)} Eternities`,
+      requirement: () => `${shorten(2e6)} Eternities`,
       checkRequirement: () => player.eternities >= 2e6,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",

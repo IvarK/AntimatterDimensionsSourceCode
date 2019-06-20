@@ -87,7 +87,7 @@ class RaPetState {
   expFormula(factor) { throw NotImplementedCrash(); }
 
   updateExpBoost() {
-    if (!this.isUnlocked) return;
+    if (!this.level < 3) return;
     this.expBoostFactor = this.nextExpBoostFactor;
   }
 

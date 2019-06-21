@@ -35,6 +35,18 @@ const TERESA_UNLOCKS = {
   },
 };
 
+const PERK_SHOP = {
+  GLYPH_LEVEL: {
+    id: 0
+  },
+  RM_MULT: {
+    id: 1
+  },
+  DILATION_BULK: {
+    id: 2
+  }
+}
+
 const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
@@ -65,8 +77,7 @@ const Teresa = {
   },
   buyGlyphLevelPower() {
     const cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));
-    const hardcap = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-    if (cost > hardcap) return false;
+    if (cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL)) return false;
     if (player.reality.pp < cost) return false;
     player.celestials.teresa.glyphLevelMult *= 1.05;
     player.reality.pp -= cost;
@@ -74,8 +85,7 @@ const Teresa = {
   },
   buyRmMult() {
     const cost = player.celestials.teresa.rmMult;
-    const hardcap = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
-    if (cost > hardcap) return false;
+    if (cost > Teresa.perkShopCap(PERK_SHOP.RM_MULT)) return false;
     if (player.reality.pp < cost) return false;
     player.celestials.teresa.rmMult *= 2;
     player.reality.pp -= cost;
@@ -83,8 +93,7 @@ const Teresa = {
   },
   buyDtBulk() {
     const cost = player.celestials.teresa.dtBulk * 100;
-    const hardcap = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 812900 : 1600;
-    if (cost > hardcap) return false;
+    if (cost > Teresa.perkShopCap(PERK_SHOP.DILATION_BULK)) return false;
     if (player.reality.pp < cost) return false;
     player.celestials.teresa.dtBulk *= 2;
     player.reality.pp -= cost;
@@ -92,6 +101,18 @@ const Teresa = {
   },
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.log10() / 1.5e8, 12), 1).toNumber();
+  },
+  perkShopCap(upgrade) {
+    switch (upgrade.id) {
+      case PERK_SHOP.GLYPH_LEVEL.id:
+        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
+      case PERK_SHOP.RM_MULT.id:
+        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048;
+      case PERK_SHOP.DILATION_BULK.id:
+        return Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 812900 : 1600;
+      default:
+        return 0;
+    }
   },
   get rmStore() {
     return player.celestials.teresa.rmStore;

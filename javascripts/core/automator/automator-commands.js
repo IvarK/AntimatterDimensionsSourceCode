@@ -267,6 +267,7 @@ const AutomatorCommands = ((() => {
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
+          { ALT: () => $.CONSUME(T.Use) },
         ]);
       },
       validate: (ctx, V) => {
@@ -278,6 +279,10 @@ const AutomatorCommands = ((() => {
         return true;
       },
       compile: ctx => {
+        if (ctx.Use) return () => {
+          Enslaved.useStoredTime();
+          return AutomatorCommandStatus.NEXT_INSTRUCTION;
+        };
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();

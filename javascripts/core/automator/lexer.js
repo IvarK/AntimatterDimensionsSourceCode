@@ -215,6 +215,7 @@ const AutomatorLexer = (() => {
   createKeyword("Studies", /studies/i);
   createKeyword("Unlock", /unlock/i);
   createKeyword("Until", /until/i);
+  createKeyword("Use", /use/i);
   createKeyword("Wait", /wait/i);
   createKeyword("While", /while/i);
   createKeyword("BlackHole", /black[ \t]+hole/i, {

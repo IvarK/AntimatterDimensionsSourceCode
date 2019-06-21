@@ -73,7 +73,7 @@ const Teresa = {
     return player.celestials.teresa.unlocks.includes(info.id);
   },
   startRun() {
-    player.celestials.teresa.run = startRealityOver();
+    player.celestials.teresa.run = startRealityOver() || player.celestials.teresa.run;
   },
   buyGlyphLevelPower() {
     const cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));

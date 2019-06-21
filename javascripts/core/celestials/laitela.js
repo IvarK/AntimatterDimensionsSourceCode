@@ -66,7 +66,7 @@ const Laitela = {
     return true;
   },
   startRun() {
-    player.celestials.laitela.run = startRealityOver();
+    player.celestials.laitela.run = startRealityOver() || player.celestials.laitela.run;
   },
   get isRunning() {
     return player.celestials.laitela.run;

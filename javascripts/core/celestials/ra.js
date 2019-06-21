@@ -194,7 +194,7 @@ const Ra = {
     return player.celestials.ra.unlocks.includes(info.id);
   },
   startRun() {
-    player.celestials.ra.run = startRealityOver();
+    player.celestials.ra.run = startRealityOver() || player.celestials.ra.run;
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;

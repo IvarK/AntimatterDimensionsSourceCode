@@ -119,7 +119,7 @@ const Ra = {
       get nextExpBoostFactor() { return new Decimal(player.eternityPoints); }
 
       expFormula(ep) {
-        return Math.max(ep.log10() / 1e4, 1);
+        return Math.max(ep.log10() / 7e3, 1);
       }
     }(),
     effarig: new class EffarigRaPetState extends RaPetState {
@@ -132,7 +132,7 @@ const Ra = {
       get nextExpBoostFactor() { return Glyphs.activeList.length; }
 
       expFormula(glyphCount) {
-        return Math.pow(2, 5 - glyphCount);
+        return Math.pow(1.5, 5 - glyphCount);
       }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
@@ -141,15 +141,15 @@ const Ra = {
       get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
       get expBoostFactor() { return this.data.lastTimeTaken; }
       set expBoostFactor(value) { this.data.lastTimeTaken = value; }
-      get defaultBoostFactor() { return 1e155; }
+      get defaultBoostFactor() { return Number.MAX_VALUE; }
       get nextExpBoostFactor() { return player.thisReality; }
 
       expFormula(milliseconds) {
         const seconds = TimeSpan.fromMilliseconds(milliseconds).totalSeconds;
-        // This curve is 4x at 100, very steep below that (up to 50x at 1) and very shallow to 1x at 1e152
+        // This curve is 2x at 100, very steep below that (up to 10x at 1) and very shallow to 1x at 1e102
         return seconds < 100
-          ? 100 / (2 + 1.4375 * Math.max(0, Math.pow(Math.log10(seconds), 4)))
-          : Math.max(1, 4.04 - Math.log10(seconds) / 50);
+          ? 40 / (4 + Math.max(0, Math.pow(Math.log10(seconds), 4)))
+          : Math.max(1, 2.02 - Math.log10(seconds) / 100);
       }
     }(),
     v: new class VRaPetState extends RaPetState {
@@ -162,7 +162,7 @@ const Ra = {
       get nextExpBoostFactor() { return TimeTheorems.totalPurchased(); }
 
       expFormula(theoremCount) {
-        return Math.max(1, Math.pow(theoremCount / 50000, 1.6));
+        return Math.max(1, Math.pow(theoremCount / 50000, 0.9));
       }
     }()
   },
@@ -214,8 +214,8 @@ const Ra = {
   // (due to V), all level 10k with celestial rarity, and Lv20 Enslaved + all achievements.  The boost is simply 2x
   // for any stored time at all if it's below this threshold, but will start scaling up at gamespeeds higher than this.
   // It should be a lot harder for this to cause an unchecked runaway since black hole scaling won't feed into this
-  // upgrade's scaling.  There is also an eventual hardcap of 1e10 just in case.  If I did the math correctly, the
-  // speed boost should scale with (real time)^(effarig gamespeed pow).
+  // upgrade's scaling.  There is also an eventual softcap of 1e10 just in case.  If I did the math correctly, the
+  // speed boost should scale with (real time)^(effarig gamespeed pow) before the softcap and worse than that after.
   gamespeedStoredTimeMult() {
     let assumedBlackHoleBoost = 1;
     for (const blackHole of BlackHoles.list) {
@@ -227,7 +227,11 @@ const Ra = {
     const baselineStoredTime = Math.pow(baselineGamespeed, 1.2);
     const scaledStoredTime = player.celestials.enslaved.stored / baselineStoredTime;
     if (player.celestials.enslaved.stored === 0) return 1;
-    return Math.max(2, Math.min(scaledStoredTime, 1e10));
+    const softcap = 1e10;
+    if (scaledStoredTime > softcap) {
+      return softcap * Math.pow(10, Math.pow(Math.log10(scaledStoredTime / softcap), 0.4));
+    }
+    return Math.max(2, scaledStoredTime);
   },
   // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
   // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
@@ -236,13 +240,13 @@ const Ra = {
   // It's almost certainly going to need to be rebalanced here after testing earlier Ra.
   theoremBoostFactor() {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
-    return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 40);
+    return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
   },
   get isRunning() {
     return player.celestials.ra.run;
   },
   get totalCharges() {
-    return Math.floor(Ra.pets.teresa.level / 2);
+    return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));
   },
   get chargesLeft() {
     return this.totalCharges - player.celestials.ra.charged.size;
@@ -267,7 +271,7 @@ const RA_UNLOCKS = {
   TERESA_XP: {
     id: 1,
     description: "Get Teresa to level 3",
-    reward: "Unlock Ra's Reality, gain a boost to Teresa memories based on EP reached",
+    reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached",
     requirement: () => Ra.pets.teresa.level >= 3
   },
   EFFARIG_UNLOCK: {
@@ -297,7 +301,7 @@ const RA_UNLOCKS = {
   IMPROVED_GLYPHS: {
     id: 6,
     description: "Get Effarig to level 2",
-    reward: "Glyph rarity is increased and you gain more glyph choices, based on Effarig level",
+    reward: "Glyph rarity is increased and you gain more glyph choices",
     requirement: () => Ra.pets.effarig.level >= 2,
     effect: {
       rarity: () => Ra.pets.effarig.level,
@@ -307,7 +311,7 @@ const RA_UNLOCKS = {
   EFFARIG_XP: {
     id: 7,
     description: "Get Effarig to level 3",
-    reward: "Gain a boost to Effarig memories based on number of glyphs used in Ra's Reality",
+    reward: "Boost Effarig memory gain based on glyph count in Ra's Reality",
     requirement: () => Ra.pets.effarig.level >= 3
   },
   ENSLAVED_UNLOCK: {
@@ -338,7 +342,7 @@ const RA_UNLOCKS = {
   IMPROVED_STORED_TIME: {
     id: 12,
     description: "Get Enslaved to level 2",
-    reward: "Stored game time is amplified and stored real time is more efficient based on Enslaved level",
+    reward: "Stored game time is amplified and stored real time is more efficient",
     requirement: () => Ra.pets.enslaved.level >= 2,
     effect: {
       gameTimeAmplification: () => 1 + Ra.pets.enslaved.level / 100,
@@ -349,7 +353,7 @@ const RA_UNLOCKS = {
   ENSLAVED_XP: {
     id: 13,
     description: "Get Enslaved to level 3",
-    reward: "Gain a boost to Enslaved memories based on game time spent in Ra's Reality",
+    reward: "Boost Enslaved memory gain based on game time in Ra's Reality",
     requirement: () => Ra.pets.enslaved.level >= 3
   },
   V_UNLOCK: {
@@ -379,21 +383,20 @@ const RA_UNLOCKS = {
   MORE_EC_COMPLETION: {
     id: 18,
     description: "Get V to level 2",
-    reward: "V level gives extra achievements for free",
+    reward: "Gain extra achievements for free (based on V level)",
     requirement: () => Ra.pets.v.level >= 2
   },
   V_XP: {
     id: 19,
     description: "Get V to level 3",
-    reward: "Gain a boost to V memories based on purchased TT in Ra's Reality",
+    reward: "Boost V memory gain based on purchased TT in Ra's Reality",
     requirement: () => Ra.pets.v.level >= 3
   },
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
     // This upgrade also starts the player off with Eternity upgrades immediately instead of after one eternity
-    reward: "Eternity Challenge auto-completion happens instantly " +
-      "and dilation is automatically unlocked when you can buy all studies",
+    reward: "Auto-EC happens instantly and dilation is auto-unlocked at 17000 TT",
     requirement: () => Ra.pets.v.level >= 5
   },
   TT_BOOST: {

@@ -302,7 +302,7 @@ let player = {
         enslaved: {
           level: 1,
           exp: 0,
-          lastTimeTaken: 1e155
+          lastTimeTaken: Number.MAX_VALUE
         },
         v: {
           level: 1,

@@ -38,6 +38,11 @@ body {
 	unicode-range: U+F420-F430;
 }
 
+@font-face {
+  font-family: Runescape;
+  src: url('Runescape.ttf');
+}
+
 *:focus {
     outline: none;
 }
@@ -1360,6 +1365,23 @@ screen and (max-width: 480px) {
     70% {opacity: 1;}
     80% {opacity: 0;}
     100% {opacity: 0;}
+}
+
+@keyframes text-grow {
+  0% {font-size: 1.3rem;}
+  50% {font-size: 1.8rem;}
+  100% {font-size: 1.3rem;}
+}
+
+@keyframes text-shrink {
+  0% {font-size: 1.8rem;}
+  50% {font-size: 1.3rem;}
+  100% {font-size: 1.8rem;}
+}
+
+@keyframes text-flash {
+  0% {color: yellow;}
+  50% {color: red;}
 }
 
 .infotooltip {

@@ -365,7 +365,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 15,
     description: "Get Enslaved to level 10",
-    reward: "Rate of stored game time can be configured [unimplemented]",
+    reward: "Rate of stored game time can be configured",
     requirement: () => Ra.pets.enslaved.level >= 10
   },
   PEAK_GAMESPEED: {
@@ -413,21 +413,17 @@ const RA_UNLOCKS = {
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     }
   },
-  IMPROVED_EC: {
+  MORE_EC: {
     id: 22,
     description: "Get V to level 15",
-    reward: "??? [unimplemented]",
+    reward: "ECs can now be completed up to 7 times [unimplemented, needs balancing?]",
     requirement: () => Ra.pets.v.level >= 15
   },
-  UNCAPPED_EC: {
+  SPACE_THEOREMS: {
     id: 23,
     description: "Get V to level 20",
-    reward: "??? [unimplemented]",
-    /**
-     * This has a "hidden" requirement of Matterception 6/6 because it affects dilated ECs in a way that can probably
-     * make it impossible to complete if it isn't already.  Realistically it should already be done at this point.
-     */ 
-    requirement: () => Ra.pets.v.level >= 20 && player.celestials.v.runUnlocks[5] === 6,
+    reward: "Unlock Space Theorems [unimplemented]",
+    requirement: () => Ra.pets.v.level >= 20,
   },
   LAITELA_UNLOCK: {
     id: 24,

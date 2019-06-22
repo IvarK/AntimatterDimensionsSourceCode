@@ -460,14 +460,38 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     factor *= Ra.gamespeedStoredTimeMult();
   }
 
+  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
   }
-  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))
   if (tempSpeedupToggle) {
     factor *= tempSpeedupFactor;
   }
   return factor;
+}
+
+function getGameSpeedupText() {
+  if (player.celestials.enslaved.isStoringReal) {
+    return "(γ = 0 | storing real time)";
+  }
+  let speedMod = getGameSpeedupFactor();
+  let storedTimeText = "";
+  if (player.celestials.enslaved.isStoring) {
+    if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+      const storedTimeWeight = player.celestials.enslaved.storedFraction;
+      speedMod = Math.pow(speedMod, 1 - storedTimeWeight);
+      if (storedTimeWeight !== 0) {
+        storedTimeText = ` | storing ${(100 * storedTimeWeight).toFixed(1)}% game time`;
+      }
+    } else {
+      speedMod = 1;
+      storedTimeText = ` | storing game time`;
+    }
+  }
+  if (speedMod < 10000 && speedMod !== 1) {
+    return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
+  }
+  return `(γ = ${shortenDimensions(speedMod)}${storedTimeText})`;
 }
 
 let autobuyerOnGameLoop = true;
@@ -521,11 +545,14 @@ function gameLoop(diff, options = {}) {
         speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
       if (player.celestials.enslaved.isStoring) {
-        const baseSpeedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12]);
-        // Note that in EC12, timeStoredFactor is 0, so it's not an issue there.
-        const timeStoredFactor = speedFactor / baseSpeedFactor - 1;
-        // If you're storing time, you're also storing the time produced by time glyphs,
-        // so the black hole diff is just the real diff.
+        // Explicitly disable storing game time in EC12
+        let timeFactor;
+        if (EternityChallenge(12).isRunning) {
+          timeFactor = 0;
+        } else {
+          timeFactor = speedFactor - 1;
+        }
+        // If you're storing time, time glyphs won't affect black holes
         blackHoleDiff = realDiff;
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
@@ -533,8 +560,10 @@ function gameLoop(diff, options = {}) {
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
-        player.celestials.enslaved.stored += diff * Math.pow(timeStoredFactor, amplification);
-        speedFactor = baseSpeedFactor;
+        const amplifiedTimeFactor = Math.pow(timeFactor, amplification);
+        const storedTimeWeight = player.celestials.enslaved.storedFraction;
+        player.celestials.enslaved.stored += diff * Math.pow(amplifiedTimeFactor, storedTimeWeight);
+        speedFactor = Math.pow(timeFactor, 1 - storedTimeWeight);
       }
       diff *= speedFactor;
     } else {

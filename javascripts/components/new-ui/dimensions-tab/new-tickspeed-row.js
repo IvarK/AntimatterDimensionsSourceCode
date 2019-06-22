@@ -8,7 +8,8 @@ Vue.component("new-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1
+      gameSpeedMult: 1,
+      gammaText: ""
     };
   },
   computed: {
@@ -50,8 +51,7 @@ Vue.component("new-tickspeed-row", {
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
     },
     gammaDisplay() {
-      const displayValue = this.isGameSpeedSlow ? this.gameSpeedMult.toFixed(3) : this.formattedFastSpeed;
-      return `(γ = ${displayValue})`;
+      return this.gammaText;
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
@@ -72,6 +72,7 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupFactor();
+      this.gammaText = getGameSpeedupText();
     }
   },
   template:

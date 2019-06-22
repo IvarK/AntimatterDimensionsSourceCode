@@ -182,6 +182,9 @@ const GameStorage = {
     Lazy.invalidateAll();
 
     let diff = Date.now() - player.lastUpdate;
+    if (player.celestials.enslaved.storedFraction === undefined) {
+      player.celestials.enslaved.storedFraction = 1;
+    }
     if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
       diff = Enslaved.autoStoreRealTime(diff);
     }

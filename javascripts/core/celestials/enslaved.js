@@ -49,6 +49,9 @@ const Enslaved = {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
+    if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+      player.celestials.enslaved.storedFraction = 1;
+    }
   },
   toggleStoreReal() {
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;

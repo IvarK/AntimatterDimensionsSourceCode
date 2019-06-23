@@ -84,7 +84,6 @@ const AutoGlyphPicker = {
   }
 };
 
-let nextUniqueGlyphID = 0;
 const GlyphGenerator = {
   lastFake: "power",
 

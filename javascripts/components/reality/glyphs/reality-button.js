@@ -131,10 +131,10 @@ Vue.component("reality-button", {
           <div>Other resources gained:</div>
           <div>{{ppGained}} Perk {{ "point" | pluralize(ppGained) }}</div>
           <div v-if="shardsGained !== 0">{{shardsGainedText}}</div>
-          <div v-if="raUnlocks[0]">{{ expGained[0] }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}</div>
-          <div v-if="raUnlocks[1]">{{ expGained[1] }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}</div>
-          <div v-if="raUnlocks[2]">{{ expGained[2] }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}</div>
-          <div v-if="raUnlocks[3]">{{ expGained[3] }} V {{ "memory" | pluralize(expGained[3], "memories") }}</div>
+          <div v-if="raUnlocks[0]">{{ shorten(expGained[0], 2, 2) }} Teresa {{ "memory" | pluralize(expGained[0], "memories") }}</div>
+          <div v-if="raUnlocks[1]">{{ shorten(expGained[1], 2, 2) }} Effarig {{ "memory" | pluralize(expGained[1], "memories") }}</div>
+          <div v-if="raUnlocks[2]">{{ shorten(expGained[2], 2, 2) }} Enslaved {{ "memory" | pluralize(expGained[2], "memories") }}</div>
+          <div v-if="raUnlocks[3]">{{ shorten(expGained[3], 2, 2) }} V {{ "memory" | pluralize(expGained[3], "memories") }}</div>
           <div v-if="inTeresaReality">{{ celestialRunText[0] }}</div>
           <div v-if="raExpBoosts[0]">{{ celestialRunText[1] }}</div>
           <div v-if="raExpBoosts[1]">{{ celestialRunText[2] }}</div>

@@ -49,10 +49,6 @@ Vue.component("new-tickspeed-row", {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
     },
-    gammaDisplay() {
-      const displayValue = this.isGameSpeedSlow ? this.gameSpeedMult.toFixed(3) : this.formattedFastSpeed;
-      return `(γ = ${displayValue})`;
-    },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;

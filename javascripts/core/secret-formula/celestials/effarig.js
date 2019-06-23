@@ -20,7 +20,7 @@ GameDatabase.celestials.effarig = {
     run: {
       id: 3,
       description: "Effarig's reality",
-      cost: 1e12
+      cost: 5e11
     },
     infinity: {
       id: 4,

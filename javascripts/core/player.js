@@ -274,6 +274,7 @@ let player = {
       isStoringReal: false,
       storedReal: 0,
       autoStoreReal: false,
+      storedFraction: 1,
       quoteIdx: 0,
       unlocks: [],
       run: false,
@@ -302,7 +303,7 @@ let player = {
         enslaved: {
           level: 1,
           exp: 0,
-          lastTimeTaken: 1e155
+          lastTimeTaken: Number.MAX_VALUE
         },
         v: {
           level: 1,

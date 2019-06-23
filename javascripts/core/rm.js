@@ -1,14 +1,12 @@
 "use strict";
 
-// TODO, add more types
-//TODO, add more effects for time and effects for dilation and replication and infinity
-
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityipgain", "timeeternity",
   "dilationdilationMult", "replicationdtgain", "replicationspeed", "timespeed",
   "timefreeTickMult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
-  "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement", "effarigforgotten", "effarigdimensions", "effarigantimatter"];
+  "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
+  "effarigforgotten", "effarigdimensions", "effarigantimatter"];
 
 const GlyphEffectOrder = orderedEffectList.mapToObject(e => e, (e, idx) => idx);
 
@@ -116,7 +114,7 @@ const GlyphGenerator = {
     // abbreviated.
     const abbreviateEffect = e => (e.startsWith(type) ? e.substr(type.length) : e);
     return {
-      id: this.makeId(fake),
+      id: this.makeID(),
       idx: null,
       type: type,
       strength: strength,
@@ -127,9 +125,15 @@ const GlyphGenerator = {
     };
   },
 
-  makeId(fake) {
-    const rng = this.getRNG(fake);
-    return parseInt(Date.now().toString(10).slice(-11) + rng().toFixed(2).slice(2), 10);
+  // Generates a unique ID for glyphs, used for deletion and drag-and-drop.  Non-unique IDs can cause buggy behavior.
+  makeID() {
+    return this.maxID + 1;
+  },
+
+  get maxID() {
+    return player.reality.glyphs.active
+      .concat(player.reality.glyphs.inventory)
+      .reduce((max, glyph) => Math.max(max, glyph.id), 0);
   },
 
   get strengthMultiplier() {

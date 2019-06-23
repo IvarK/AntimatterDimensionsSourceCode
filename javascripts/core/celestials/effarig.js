@@ -100,7 +100,7 @@ const Effarig = {
         return 1500;
       case EFFARIG_STAGES.REALITY:
       default:
-        return 10000;
+        return 2000;
     }
   },
 
@@ -125,7 +125,7 @@ const Effarig = {
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
-        c = 1000;
+        c = 1500;
         break;
       case EFFARIG_STAGES.ETERNITY: 
         c = 30;

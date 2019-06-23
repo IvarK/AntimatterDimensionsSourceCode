@@ -19,8 +19,7 @@ Vue.component("replicanti-gain-text", {
         const gainFactorPerSecond = logGainFactorPerTick
           .times(postScale)
           .plus(1)
-          .pow(ticksPerSecond / postScale)
-        );
+          .pow(ticksPerSecond / postScale);
         // The calculations to estimate time to next thousand OOM (eg. e18000, e19000, etc.) assumes that uncapped
         // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
         const nextThousandOOM = Decimal.pow10(1000 * Math.floor(replicantiAmount.log10() / 1000 + 1));

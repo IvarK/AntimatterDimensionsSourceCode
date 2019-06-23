@@ -25,7 +25,7 @@ Vue.component("black-hole-state-row", {
       const { blackHole } = this;
       this.isUnlocked = blackHole.isUnlocked;
       if (!this.isUnlocked) return;
-      this.isPermanent = blackHole.interval === 0;
+      this.isPermanent = blackHole.isPermanent;
       this.isActive = blackHole.isActive;
       this.isCharged = blackHole.isCharged;
       this.duration = blackHole.duration;

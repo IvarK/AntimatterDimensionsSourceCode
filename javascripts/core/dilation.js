@@ -99,10 +99,10 @@ function getFreeGalaxyMult() {
 function getDilationGainPerSecond() {
   let dtRate = new Decimal(player.dilation.tachyonParticles)
     .timesEffectsOf(
+      DilationUpgrade.dtGain,
       Achievement(132),
       RealityUpgrade(1)
     );
-  dtRate = dtRate.times(DilationUpgrade.dtGain.effectValue);
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
   dtRate = dtRate.times(Ra.gamespeedDTMult());

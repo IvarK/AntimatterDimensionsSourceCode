@@ -89,7 +89,7 @@ const Laitela = {
     return `${((1 - this.matterEffectToDimensionMultDecrease) * 100).toFixed(2)}%`;
   },
   get rmRewardPowEffect() {
-    return 1 + Math.max(0, Math.log(Decimal.pLog10(player.reality.realityMachines) / Math.log10(Number.MAX_VALUE)));
+    return 1 + Math.max(0, Math.log(Decimal.pLog10(player.reality.realityMachines) / LOG10_MAX_VALUE));
   },
   get idConversionEffect() {
     return Math.sqrt(Decimal.pLog10(this.matter)) / 50;
@@ -101,7 +101,7 @@ const Laitela = {
     return 1 + Decimal.pLog10(this.matter) / 5000;
   },
   get dimMultNerf() {
-    return Math.min(1, Decimal.pLog10(this.matter) / Math.log10(Number.MAX_VALUE));
+    return Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
   },
   get realityReward() {
     const amExponent = player.celestials.laitela.maxAmGained.e;

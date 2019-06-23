@@ -8,6 +8,7 @@ Vue.component("enslaved-tab", {
     hasAmplifyStoredReal: false,
     hasStoredTimeSpeedBoost: false,
     canAdjustStoredTime: false,
+    storedFraction: 0,
     storedTimeSpeedValue: 1,
     inEnslaved: false,
     storedBlackHole: 0,
@@ -70,6 +71,7 @@ Vue.component("enslaved-tab", {
       this.unlocks = player.celestials.enslaved.unlocks;
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
+      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -111,6 +113,7 @@ Vue.component("enslaved-tab", {
       };
     },
     adjustSlider(value) {
+      this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
     },
   },
@@ -152,6 +155,7 @@ Vue.component("enslaved-tab", {
       <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
         <ad-slider-component
             v-bind="sliderProps"
+            :value="storedFraction"
             @input="adjustSlider($event)"
           />
       </div>

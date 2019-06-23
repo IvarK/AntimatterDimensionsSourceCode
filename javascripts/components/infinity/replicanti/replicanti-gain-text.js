@@ -11,35 +11,40 @@ Vue.component("replicanti-gain-text", {
       const updateRateMs = player.options.updateRate;
       const ticksPerSecond = 1000 / updateRateMs;
       const logGainFactorPerTick = Decimal.divide(getGameSpeedupFactor() * updateRateMs *
-        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval()).toNumber();
-      const log10GainFactorPerTick = logGainFactorPerTick / Math.LN10;
-      if (TimeStudy(192).isBought && player.replicanti.amount.log10() > 308) {
+        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
+      const log10GainFactorPerTick = logGainFactorPerTick.toNumber() / Math.LN10;
+      const currReplicanti = player.replicanti.amount;
+      if (TimeStudy(192).isBought && currReplicanti.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
         const gainFactorPerSecond = Decimal.pow(
-          logGainFactorPerTick * postScale + 1,
+          logGainFactorPerTick.times(postScale).plus(1),
           ticksPerSecond / postScale
         );
         // The calculations to estimate time to next thousand OOM (eg. e18000, e19000, etc.) assumes that uncapped
         // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
-        const nextThousandOOM = Decimal.pow10(1000 * Math.floor(player.replicanti.amount.log10() / 1000 + 1));
+        const nextThousandOOM = Decimal.pow10(1000 * Math.floor(currReplicanti.log10() / 1000 + 1));
         const coeff = Decimal.divide(updateRateMs / 1000, Decimal.exp(logGainFactorPerTick).pow(postScale).minus(1));
-        const timeToThousand = coeff.times(nextThousandOOM.divide(player.replicanti.amount).pow(postScale).minus(1));
-        this.text = `You are gaining x${shorten(gainFactorPerSecond, 2, 1)} Replicanti per second` +
+        const timeToThousand = coeff.times(nextThousandOOM.divide(currReplicanti).pow(postScale).minus(1));
+        this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${TimeSpan.fromSeconds(timeToThousand.toNumber())} until ${shorten(nextThousandOOM)})`;
         return;
       }
       if (log10GainFactorPerTick > 308) {
         const galaxiesPerSecond = ticksPerSecond * log10GainFactorPerTick / 308;
-        const baseGalaxiesPerSecond = galaxiesPerSecond / RealityUpgrade(6).effectValue;
-        const effectiveMaxRG = RealityUpgrade(6).isBought
-          ? 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5)
-          : Replicanti.galaxies.max;
+        let baseGalaxiesPerSecond, effectiveMaxRG;
+        if (RealityUpgrade(6).isBought) {
+          baseGalaxiesPerSecond = galaxiesPerSecond / RealityUpgrade(6).effectValue;
+          effectiveMaxRG = 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5);
+        } else {
+          baseGalaxiesPerSecond = galaxiesPerSecond;
+          effectiveMaxRG = Replicanti.galaxies.max;
+        }
         this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
           ` (all galaxies within ${TimeSpan.fromSeconds(effectiveMaxRG / baseGalaxiesPerSecond)})`;
         return;
       }
-      const totalTime = Math.log10(Number.MAX_VALUE) / (ticksPerSecond * log10GainFactorPerTick);
-      let remainingTime = (Math.log10(Number.MAX_VALUE) - player.replicanti.amount.log10()) /
+      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick);
+      let remainingTime = (LOG10_MAX_VALUE - currReplicanti.log10()) /
         (ticksPerSecond * log10GainFactorPerTick);
       if (remainingTime < 0) {
         // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number

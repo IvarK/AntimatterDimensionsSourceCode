@@ -148,7 +148,7 @@ const Effarig = {
   },
   get bonusRG() {
     // Will return 0 if Effarig Infinity is uncompleted
-    return Math.floor(replicantiCap().pLog10() / Math.log10(Number.MAX_VALUE) - 1);
+    return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
   get maxQuoteIdx() {
     const base = 5;

@@ -40,10 +40,7 @@ class BlackHoleState {
       setAmount: amount => this._data.intervalUpgrades = amount,
       calculateValue: amount => {
         const baseAmount = (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount);
-        if (baseAmount < 0.1) {
-          return 0;
-        }
-        return baseAmount;
+        return baseAmount < 0.1 ? 0 : baseAmount;
       },
       initialCost: 15 * wormholeCostMultipliers[id],
       costMult: 3.5
@@ -104,6 +101,10 @@ class BlackHoleState {
 
   get isActive() {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
+  }
+
+  get isPermanent() {
+    return this.interval === 0;
   }
 
   /**

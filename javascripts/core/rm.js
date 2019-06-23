@@ -115,7 +115,7 @@ const GlyphGenerator = {
     // abbreviated.
     const abbreviateEffect = e => (e.startsWith(type) ? e.substr(type.length) : e);
     return {
-      id: this.makeId(),
+      id: this.makeID(),
       idx: null,
       type: type,
       strength: strength,
@@ -127,8 +127,14 @@ const GlyphGenerator = {
   },
 
   // Generates a unique ID for glyphs, used for deletion and drag-and-drop.  Non-unique IDs can cause buggy behavior.
-  makeId() {
-    return nextUniqueGlyphID++;
+  makeID() {
+    return this.maxID + 1;
+  },
+
+  get maxID() {
+    return player.reality.glyphs.active
+      .concat(player.reality.glyphs.inventory)
+      .reduce((max, glyph) => Math.max(max, glyph.id), 0);
   },
 
   get strengthMultiplier() {

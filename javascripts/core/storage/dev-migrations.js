@@ -339,9 +339,6 @@ GameStorage.devMigrations = {
       for (let i = 0; i < allGlyphs.length; i++) {
         allGlyphs[i].id = i;
       }
-      if (player.celestials.enslaved.storedFraction === undefined) {
-        player.celestials.enslaved.storedFraction = 1;
-      }
     }
   ],
 

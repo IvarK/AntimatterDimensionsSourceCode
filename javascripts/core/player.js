@@ -274,6 +274,7 @@ let player = {
       isStoringReal: false,
       storedReal: 0,
       autoStoreReal: false,
+      storedFraction: 1,
       quoteIdx: 0,
       unlocks: [],
       run: false,

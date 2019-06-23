@@ -97,7 +97,7 @@ Vue.component("game-header-tickspeed-row", {
       if (speedMod < 10000 && speedMod !== 1) {
         return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
       }
-      return `(γ = ${shortenDimensions(speedMod)}${storedTimeText})`;
+      return `(γ = ${shorten(speedMod, 2)}${storedTimeText})`;
     }
   },
   template:

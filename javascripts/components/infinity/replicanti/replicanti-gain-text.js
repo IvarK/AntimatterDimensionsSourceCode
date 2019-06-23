@@ -12,19 +12,20 @@ Vue.component("replicanti-gain-text", {
       const ticksPerSecond = 1000 / updateRateMs;
       const logGainFactorPerTick = Decimal.divide(getGameSpeedupFactor() * updateRateMs *
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
-      const log10GainFactorPerTick = logGainFactorPerTick.toNumber() / Math.LN10;
-      const currReplicanti = player.replicanti.amount;
-      if (TimeStudy(192).isBought && currReplicanti.log10() > 308) {
+      const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10).toNumber();
+      const replicantiAmount = player.replicanti.amount;
+      if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
-        const gainFactorPerSecond = Decimal.pow(
-          logGainFactorPerTick.times(postScale).plus(1),
-          ticksPerSecond / postScale
+        const gainFactorPerSecond = logGainFactorPerTick
+          .times(postScale)
+          .plus(1)
+          .pow(ticksPerSecond / postScale)
         );
         // The calculations to estimate time to next thousand OOM (eg. e18000, e19000, etc.) assumes that uncapped
         // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
-        const nextThousandOOM = Decimal.pow10(1000 * Math.floor(currReplicanti.log10() / 1000 + 1));
-        const coeff = Decimal.divide(updateRateMs / 1000, Decimal.exp(logGainFactorPerTick).pow(postScale).minus(1));
-        const timeToThousand = coeff.times(nextThousandOOM.divide(currReplicanti).pow(postScale).minus(1));
+        const nextThousandOOM = Decimal.pow10(1000 * Math.floor(replicantiAmount.log10() / 1000 + 1));
+        const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.exp().pow(postScale).minus(1));
+        const timeToThousand = coeff.times(nextThousandOOM.divide(replicantiAmount).pow(postScale).minus(1));
         this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
           ` (${TimeSpan.fromSeconds(timeToThousand.toNumber())} until ${shorten(nextThousandOOM)})`;
         return;
@@ -44,7 +45,7 @@ Vue.component("replicanti-gain-text", {
         return;
       }
       const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick);
-      let remainingTime = (LOG10_MAX_VALUE - currReplicanti.log10()) /
+      let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
         (ticksPerSecond * log10GainFactorPerTick);
       if (remainingTime < 0) {
         // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number

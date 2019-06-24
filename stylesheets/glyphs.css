@@ -122,7 +122,8 @@
   box-shadow: 0 0 0.4rem 0.1rem #d5ffd7;
 }
 
-.c-auto-sac-type-tab__input::-webkit-outer-spin-button, .c-auto-sac-type-tab__input::-webkit-inner-spin-button {
+.c-auto-sac-type-tab__input::-webkit-outer-spin-button,
+.c-auto-sac-type-tab__input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   margin: 0;
@@ -400,8 +401,23 @@
 }
 
 .l-current-glyph-effects {
-  overflow-y: auto;
-  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: initial;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar {
+  width: 10px;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar-thumb {
+  background: #08450b;
+  border-radius: 5px;
 }
 
 .c-current-glyph-effects {

@@ -7,7 +7,7 @@ GameDatabase.reality.automator = {
       keyword: "wait",
       name: "<b>wait</b> - wait for something",
       syntax: "<b>wait</b> condition",
-      description: "Forces automator to wait for some condition or specified amount of time",
+      description: "Forces automator to wait for some condition or event",
       sections: [
         {
           name: "CONDITIONS",
@@ -23,6 +23,13 @@ GameDatabase.reality.automator = {
               `
             },
             {
+              header: "<i>completions</i> <i>comparison</i> <i>number</i>",
+              description: `
+                Wait for a certain <b>total</b> number of EC completions that you'd get at eternity.<br>
+                <b>Comparisons</b>: >, >=
+              `
+            },
+            {
               header: "<i>prestige</i>",
               description: `
                 Wait until certain prestige has been triggered.<br>
@@ -34,7 +41,8 @@ GameDatabase.reality.automator = {
       ],
       examples: [
         "wait infinity",
-        "wait am >= 1e308"
+        "wait am >= 1e308",
+        "wait completions >= 5",
       ]
     },
     {
@@ -53,7 +61,7 @@ GameDatabase.reality.automator = {
       name: "<b>infinity|eternity|reality</b> - triggers Infinity, Eternity, or Reality",
       syntax: "<b>infinity</b>,<br> <b>eternity</b>,<br> <b>reality</b>",
       examples: [
-        "infinity", 
+        "infinity",
         "reality",
       ]
     },
@@ -61,7 +69,7 @@ GameDatabase.reality.automator = {
       id: 3,
       keyword: "tt",
       name: "<b>tt</b> - purchases Time Theorems with a resource or buys the maximum possible",
-      syntax: 
+      syntax:
         "<b>tt</b> action",
       sections: [
         {
@@ -104,8 +112,8 @@ GameDatabase.reality.automator = {
           name: "ACTIONS",
           items: [
             {
-            header: "<i>on/off</i>",
-            description: `
+              header: "<i>on/off</i>",
+              description: `
             Turns storing time on or off.
             `
             },
@@ -145,7 +153,7 @@ GameDatabase.reality.automator = {
       id: 8,
       keyword: "if",
       name: "<b>if</b> - compares your amount to the game's amount of something, such as a currency",
-      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt] (comparison) [number]",
+      syntax: "<b>if</b> [am|ip|ep|dt|tp|rg|rep|tt|completions] (comparison) [number]",
       examples: [
         "if ep <= 1e3000",
         "if dt >= 1e50",
@@ -163,5 +171,91 @@ GameDatabase.reality.automator = {
         "pause 34 seconds"
       ]
     },
+    {
+      id: 10,
+      keyword: "until",
+      name: "<b>until</b> - repeats commands until a condition or event",
+      syntax: `<b>until</b> [condition | event] {<br>
+        <blockquote>commands</blockquote>
+      }<br>
+      <b>condition</b>: [quantity] (comparison) [number]<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|completions]<br>
+      <b>event</b>: [infinity|eternity|reality] (can happen at any time after loop starts)`,
+      description: `Commands are repeated; the condition is checked at the start and every
+      time the loop repeats. If an event is specified, then the loop will repeat until the
+      event occurs. (The event has to happen after the loop begins).<br>
+      A variable name may be used in place of <b>number</b>, see <b>define</b>`,
+      examples: [
+        `until ep > 1e500 {<br>
+          <blockquote>
+          tt max<br>
+          studies nowait 11-62</blockquote>
+        }`,
+      ]
+    },
+    {
+      id: 11,
+      keyword: "while",
+      name: "<b>while</b> - repeats commands while a condition is met",
+      syntax: `<b>while</b> [quantity] (comparison) [number]{<br>
+        <blockquote>commands</blockquote>
+      }<br>
+      <b>quantity</b>: [am|ip|ep|dt|tp|rg|rep|tt|completions]<br>
+      <b>comparison</b>: [<|<=|>=|>]<br>
+      <b>number</b>: Number in normal or scientific notation`,
+      description: `Commands are repeated; the condition is checked at the start and every
+      time the loop repeats.<br>
+      A variable name may be used in place of <b>number</b>, see <b>define</b>`,
+      examples: [
+        `while ep < 1e500 {<br>
+          <blockquote>
+          tt max<br>
+          studies nowait 11-62</blockquote>
+        }`,
+        `while myThreshold > am { ...`,
+      ]
+    },
+    {
+      id: 12,
+      keyword: "studies respec",
+      name: "<b>studies respec</b> - respec time studies on next eternity",
+      syntax: `<b>studies respec</b>`,
+      examples: [
+        `studies respec`,
+      ]
+    },
+    {
+      id: 13,
+      keyword: "studies load preset",
+      name: "<b>studies load preset</b> - Load a saved study preset",
+      syntax: `<b>studies load preset [name | number]</b>`,
+      description: `Loads a study preset, as if you'd clicked on the button in the time
+        study tab. Number is 1 to 6 (corresponding to slot). The given name can also be used.`,
+      examples: [
+        `studies load preset 2`,
+        `studies load preset dil`,
+      ]
+    },
+    {
+      id: 14,
+      keyword: "studies",
+      name: "<b>studies</b> - Purchase time studies",
+      syntax: `<b>studies [nowait] <i>[study list]</i></b>`,
+      description: `Purchase time studies specified. If <b>nowait</b> is present, then
+        the automator will purchase as many studies as possible at the moment, and move on
+        to the next command.<br>
+        If <b>nowait</b> is <i>not</i> present, then the automator will buy the studies in order,
+        waiting for them to become available/affordable if necessary.<br>
+        The study list can consist of study numbers, separated by spaces or commas, ranges of
+        studies (for example, <i>11-62</i>) and the following aliases:<br>
+        <blockquote><b>normal, infinity, time, active, passive, idle</b></blockquote>
+        A variable name may be used in place of study list, see <b>define</b>
+        The string produced by "export" in the time study tab can be used with this command.`,
+      examples: [
+        "studies nowait 11,21,31",
+        "studies 11-62, normal, 111, idle",
+        "studies nowait ec6Studies",
+      ]
+    },
   ]
-}
+};

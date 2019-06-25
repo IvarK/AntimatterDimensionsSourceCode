@@ -65,13 +65,19 @@ Vue.component('teresa-tab', {
       Teresa.buyDtBulk();
     },
     glyphMultCostDisplay() {
-      return this.glyphUpg.cost > 2048 ? "Capped!" : `Costs: ${this.shorten(this.glyphUpg.cost, 2, 0)} PP`;
+      return this.glyphUpg.cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL)
+        ? "Capped!"
+        : `Costs: ${this.shorten(this.glyphUpg.cost, 2, 0)} PP`;
     },
     rmMultCostDisplay() {
-      return this.rmUpg > 2048 ? "Capped!" : `Costs: ${this.shorten(this.rmUpg, 2, 0)} PP`;
+      return this.rmUpg > Teresa.perkShopCap(PERK_SHOP.RM_MULT)
+        ? "Capped!"
+        : `Costs: ${this.shorten(this.rmUpg, 2, 0)} PP`;
     },
     dtBulkCostDisplay() {
-      return this.dtBulk > 16 ? "Capped!" : `Costs: ${this.shorten(this.dtBulk * 100, 2, 0)} PP`;
+      return this.dtBulk > 100 * Teresa.perkShopCap(PERK_SHOP.DILATION_BULK)
+        ? "Capped!"
+        : `Costs: ${this.shorten(this.dtBulk * 100, 2, 0)} PP`;
     },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;

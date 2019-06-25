@@ -21,7 +21,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: "Double Dilated Time gain.",
-      effect: bought => Math.pow(2, bought),
+      effect: bought => Decimal.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0)
     }),

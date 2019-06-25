@@ -335,6 +335,12 @@ GameStorage.devMigrations = {
       delete player.blackHole.pop();
     },
     player => {
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      for (let i = 0; i < allGlyphs.length; i++) {
+        allGlyphs[i].id = i;
+      }
+    },
+    player => {
       GameStorage.migrations.clearNewsArray(player);
     }
   ],

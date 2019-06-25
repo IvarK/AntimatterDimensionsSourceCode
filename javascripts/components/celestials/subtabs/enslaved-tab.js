@@ -7,6 +7,8 @@ Vue.component("enslaved-tab", {
     autoStoreReal: false,
     hasAmplifyStoredReal: false,
     hasStoredTimeSpeedBoost: false,
+    canAdjustStoredTime: false,
+    storedFraction: 0,
     storedTimeSpeedValue: 1,
     inEnslaved: false,
     storedBlackHole: 0,
@@ -41,6 +43,16 @@ Vue.component("enslaved-tab", {
         ? "You're inside Enslaved Ones' Reality"
         : "Start Enslaved One's Reality";
     },
+    sliderProps() {
+      return {
+        min: 0,
+        max: 1000,
+        interval: 1,
+        show: true,
+        width: "60rem",
+        tooltip: false
+      };
+    },
   },
   methods: {
     update() {
@@ -50,6 +62,7 @@ Vue.component("enslaved-tab", {
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
       this.hasStoredTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
+      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -58,6 +71,7 @@ Vue.component("enslaved-tab", {
       this.unlocks = player.celestials.enslaved.unlocks;
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
+      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -97,7 +111,11 @@ Vue.component("enslaved-tab", {
         "o-enslaved-shop-button--bought": this.hasUnlock(info), 
         "o-enslaved-shop-button--available": this.canBuyUnlock(info)
       };
-    }
+    },
+    adjustSlider(value) {
+      this.storedFraction = value;
+      player.celestials.enslaved.storedFraction = value / 1000;
+    },
   },
   template:
     `<div class="l-enslaved-celestial-tab">
@@ -133,6 +151,13 @@ Vue.component("enslaved-tab", {
           <div> Efficiency: {{ storedRealEfficiencyDesc }} </div>
           <div> Maximum: {{ storedRealCapDesc }} </div>
         </div>
+      </div>
+      <div v-if="canAdjustStoredTime" class="l-enslaved-shop-container">
+        <ad-slider-component
+            v-bind="sliderProps"
+            :value="storedFraction"
+            @input="adjustSlider($event)"
+          />
       </div>
       <div class="l-enslaved-shop-container">
         <button

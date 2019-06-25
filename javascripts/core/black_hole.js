@@ -21,7 +21,7 @@ class BlackHoleUpgradeState {
   }
 
   purchase() {
-    if (!this.isAffordable) return;
+    if (!this.isAffordable || this.value === 0) return;
     player.reality.realityMachines = player.reality.realityMachines.minus(this.cost);
     this.incrementAmount();
     this._lazyValue.invalidate();
@@ -38,7 +38,10 @@ class BlackHoleState {
     this.intervalUpgrade = new BlackHoleUpgradeState({
       getAmount: () => this._data.intervalUpgrades,
       setAmount: amount => this._data.intervalUpgrades = amount,
-      calculateValue: amount => (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount),
+      calculateValue: amount => {
+        const baseAmount = (3600 / (Math.pow(10, id))) * Math.pow(0.8, amount);
+        return baseAmount < 0.1 ? 0 : baseAmount;
+      },
       initialCost: 15 * wormholeCostMultipliers[id],
       costMult: 3.5
     });
@@ -98,6 +101,10 @@ class BlackHoleState {
 
   get isActive() {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive);
+  }
+
+  get isPermanent() {
+    return this.interval === 0;
   }
 
   /**

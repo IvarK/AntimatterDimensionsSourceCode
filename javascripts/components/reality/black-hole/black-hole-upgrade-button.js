@@ -14,7 +14,9 @@ Vue.component("black-hole-upgrade-button", {
       const { config } = this;
       return {
         effect: () => config.upgrade.value,
-        formatEffect: value => shorten(value, 2, 0)
+        formatEffect: value => (value === 0
+          ? "Permanent"
+          : shorten(value, 2, 0))
       };
     },
     costConfig() {
@@ -32,7 +34,7 @@ Vue.component("black-hole-upgrade-button", {
   },
   methods: {
     update() {
-      this.isAffordable = this.config.upgrade.isAffordable;
+      this.isAffordable = this.config.upgrade.isAffordable && this.config.upgrade.value !== 0;
     },
   },
   template: `

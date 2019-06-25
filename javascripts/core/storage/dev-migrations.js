@@ -339,6 +339,9 @@ GameStorage.devMigrations = {
       for (let i = 0; i < allGlyphs.length; i++) {
         allGlyphs[i].id = i;
       }
+    },
+    player => {
+      GameStorage.migrations.clearNewsArray(player);
     }
   ],
 

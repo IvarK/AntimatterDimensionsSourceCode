@@ -3,27 +3,27 @@
 const Theme = function Theme(name, colors) {
     this.name = name;
 
-    this.isDefault = function () {
+    this.isDefault = function() {
         return name === "Normal";
     };
 
-    this.isSecret = function () {
+    this.isSecret = function() {
         return !this.isDefault() && name.length === 2;
     };
 
-    this.isAvailable = function () {
+    this.isAvailable = function() {
         if (!this.isSecret()) return true;
         return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
     };
-    this.isAnimated = function () {
-        const list = ["S6"];
+    this.isAnimated = function() {
+        const list = ["S1", "S6"];
         return list.includes(this.name);
     };
 
-    this.displayName = function () {
+    this.displayName = function() {
         if (!this.isSecret()) return name;
         if (!this.isAvailable()) {
-            console.warn("Secret theme " + name + " is not unlocked yet!");
+            console.warn(`Secret theme ${name} is not unlocked yet!`);
             return name;
         }
         // Secret themes are stored as "S9Whatever", so we need to strip the SN part
@@ -40,9 +40,9 @@ const Theme = function Theme(name, colors) {
             document.body.classList.add(this.cssClass());
         }
         if (this.isAnimated() && player.options.animations.background) {
-            document.getElementById("animated-bg").style.display = "block";
+            document.getElementById("background-animations").style.display = "block";
         } else {
-            document.getElementById("animated-bg").style.display = "none";
+            document.getElementById("background-animations").style.display = "none";
         }
         player.options.theme = name;
         ui.view.theme = name;
@@ -51,22 +51,22 @@ const Theme = function Theme(name, colors) {
         normalDimChart.data.datasets[0].borderColor = colors.chartBorder;
     };
 
-    this.cssClass = function () {
-        return "t-" + this.name.replace(/\s+/gu, "-").toLowerCase();
+    this.cssClass = function() {
+        return `t-${this.name.replace(/\s+/gu, "-").toLowerCase()}`;
     };
 };
 
-Theme.current = function () {
+Theme.current = function() {
     return Themes.find(player.options.theme);
 };
 
-Theme.set = function (name) {
+Theme.set = function(name) {
     const theme = Themes.find(name);
     theme.set();
     return theme;
 };
 
-Theme.secretThemeIndex = function (name) {
+Theme.secretThemeIndex = function(name) {
     const secretThemes = [
         "ef853879b60fa6755d9599fd756c94d112f987c0cd596abf48b08f33af5ff537",
         "078570d37e6ffbf06e079e07c3c7987814e03436d00a17230ef5f24b1cb93290",
@@ -81,16 +81,16 @@ Theme.secretThemeIndex = function (name) {
     return secretThemes.indexOf(sha);
 };
 
-Theme.isSecretTheme = function (name) {
+Theme.isSecretTheme = function(name) {
     return Theme.secretThemeIndex(name) !== -1;
 };
 
-Theme.tryUnlock = function (name) {
+Theme.tryUnlock = function(name) {
     const index = Theme.secretThemeIndex(name);
     if (index === -1) {
         return false;
     }
-    const prefix = "S" + (index + 1);
+    const prefix = `S${index + 1}`;
     const fullName = prefix + name.capitalize();
     player.secretUnlocks.themes.add(fullName);
     Theme.set(prefix);
@@ -98,7 +98,7 @@ Theme.tryUnlock = function (name) {
     return true;
 };
 
-Theme.light = function (name) {
+Theme.light = function(name) {
     const colors = {
         chartFont: "#000",
         chartBorder: "#000"
@@ -106,7 +106,7 @@ Theme.light = function (name) {
     return new Theme(name, colors);
 };
 
-Theme.dark = function (name) {
+Theme.dark = function(name) {
     const colors = {
         chartFont: "#888",
         chartBorder: "#888"

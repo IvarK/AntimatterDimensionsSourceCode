@@ -35,7 +35,6 @@
     </script>
 </head>
 <img id="loading" src="images/Loading.png">
-<div id="snow" style="display: none; "></div>
 <body>
 <div id="ui" style="height: 100%; width: 100%;">
     <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
@@ -342,10 +341,13 @@
 </div>
 <div v-if="!newUI" id="notification-container" class="l-notification-container"></div>
 </body>
-<div class="videocontainer">
-    <video autoplay muted loop id="animated-bg">
-        <source src="images/s6-bg.webm" type="video/webm">
-    </video>
+<div id="background-animations">
+  <div id="snow" style="display: none; "></div>
+  <div class="videocontainer">
+      <video autoplay muted loop id="stars">
+          <source src="images/s6-bg.webm" type="video/webm">
+      </video>
+  </div>
 </div>
 <div class="videocontainer">
     <video preload muted id="realityanimbg" style="opacity: 0; display: none; ">

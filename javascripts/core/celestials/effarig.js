@@ -72,7 +72,8 @@ const Effarig = {
     player.celestials.effarig.run = true
     recalculateAllGlyphs()
     showRealityTab("glyphstab");
-    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.`);
+    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
+      "Infinity power reduces the nerf to multipliers and game speed, and time shards reduce the nerf to tickspeed.");
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -100,7 +101,7 @@ const Effarig = {
         return 1500;
       case EFFARIG_STAGES.REALITY:
       default:
-        return 10000;
+        return 2000;
     }
   },
 
@@ -125,10 +126,10 @@ const Effarig = {
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
-        c = 1000;
+        c = 1500;
         break;
       case EFFARIG_STAGES.ETERNITY: 
-        c = 30;
+        c = 29;
         break;
       case EFFARIG_STAGES.REALITY:
         c = 25;
@@ -148,7 +149,7 @@ const Effarig = {
   },
   get bonusRG() {
     // Will return 0 if Effarig Infinity is uncompleted
-    return Math.floor(replicantiCap().pLog10() / Math.log10(Number.MAX_VALUE) - 1);
+    return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
   get maxQuoteIdx() {
     const base = 5;

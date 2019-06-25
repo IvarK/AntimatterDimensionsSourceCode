@@ -3,7 +3,7 @@
 Notation.infinity = new class InfinityNotation extends Notation {
   constructor() {
     super("Infinity");
-    this._infLog10 = Math.log10(Number.MAX_VALUE);
+    this._infLog10 = LOG10_MAX_VALUE;
   }
 
   formatDecimal(value, places) {

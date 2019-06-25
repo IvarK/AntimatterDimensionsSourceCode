@@ -43,7 +43,7 @@ Notation.zalgo = new class ZalgoNotation extends Notation {
 
     for (let i = 0; i < zalgoIndices.length; i++) {
       const zalgoIndex = parseInt(zalgoIndices[i], 10);
-      const displayIndex = 7 * i % displayChars.length;
+      const displayIndex = 37 * i % displayChars.length;
       displayChars[displayIndex] += this._zalgoChars[zalgoIndex];
     }
 

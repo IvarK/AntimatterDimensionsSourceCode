@@ -26,16 +26,16 @@ Vue.component("replicanti-tab", {
       const upgrade = ReplicantiUpgrade.interval;
       function formatInterval(interval) {
         const actualInterval = upgrade.applyModifiers(interval);
-        if (actualInterval < 1000) {
-          return `${actualInterval.toPrecision(3)}ms`;
+        const intervalNum = actualInterval.toNumber();
+        if (Number.isFinite(intervalNum) && intervalNum > 1 && upgrade.isCapped) {
+          // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
+          return TimeSpan.fromMilliseconds(intervalNum).toString();
         }
-        return upgrade.isCapped
-          ? TimeSpan.fromMilliseconds(actualInterval).toString()
-          : `${Math.floor(actualInterval)}ms`;
+        return `${shorten(actualInterval, 2, 2)}ms`;
       }
       return new ReplicantiUpgradeButtonSetup(upgrade,
         value => `Interval: ${formatInterval(value)}`,
-        cost => `➜ ${formatInterval(upgrade.next)} Costs: ${this.shortenCosts(cost)} IP`
+        cost => `➜ ${formatInterval(upgrade.nextValue)} Costs: ${this.shortenCosts(cost)} IP`
       );
     },
     maxGalaxySetup() {

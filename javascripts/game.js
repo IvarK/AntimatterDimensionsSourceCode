@@ -460,10 +460,10 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     factor *= Ra.gamespeedStoredTimeMult();
   }
 
+  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
   }
-  factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"))
   if (tempSpeedupToggle) {
     factor *= tempSpeedupFactor;
   }
@@ -521,11 +521,9 @@ function gameLoop(diff, options = {}) {
         speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
       if (player.celestials.enslaved.isStoring) {
-        const baseSpeedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12]);
-        // Note that in EC12, timeStoredFactor is 0, so it's not an issue there.
-        const timeStoredFactor = speedFactor / baseSpeedFactor - 1;
-        // If you're storing time, you're also storing the time produced by time glyphs,
-        // so the black hole diff is just the real diff.
+        // Explicitly disable storing game time in EC12
+        const timeFactor = EternityChallenge(12).isRunning ? 0 : speedFactor - 1;
+        // If you're storing time, time glyphs won't affect black holes
         blackHoleDiff = realDiff;
         // Note that if gameDiff is specified, we don't store enslaved time.
         // Currently gameDiff is only specified in a tick where we're using all the enslaved time,
@@ -533,8 +531,10 @@ function gameLoop(diff, options = {}) {
         const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
           ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
           : 1;
-        player.celestials.enslaved.stored += diff * Math.pow(timeStoredFactor, amplification);
-        speedFactor = baseSpeedFactor;
+        const amplifiedTimeFactor = Math.pow(timeFactor, amplification);
+        const storedTimeWeight = player.celestials.enslaved.storedFraction;
+        player.celestials.enslaved.stored += diff * Math.pow(amplifiedTimeFactor, storedTimeWeight);
+        speedFactor = Math.pow(timeFactor, 1 - storedTimeWeight);
       }
       diff *= speedFactor;
     } else {
@@ -870,10 +870,15 @@ function simulateTime(seconds, real, fast) {
     // Linear increase
     const linearVarNames = ["infinitied", "eternities"];
     const linearResourceNames = ["infinities", "eternities"];
+    const prestigeReset = ["eternitied", "realitied"];
     for (let i = 0; i < linearVarNames.length; i++) {
       const varName = linearVarNames[i];
       const linearIncrease = Decimal.sub(player[varName], playerStart[varName]);
-      if (!Decimal.eq(player[varName], playerStart[varName])) {
+      if (linearIncrease.lessThan(0)) {
+        // This happens when a prestige autobuyer triggers offline and resets the value
+        offlineIncreases.push(`you ${prestigeReset[i]} and then generated ` + 
+          `${shorten(player[varName], 2, 0)} more ${linearResourceNames[i]}`);
+      } else if (!Decimal.eq(player[varName], playerStart[varName])) {
         offlineIncreases.push(`you generated ${shorten(linearIncrease, 2, 0)} ${linearResourceNames[i]}`);
       }
     }
@@ -883,7 +888,9 @@ function simulateTime(seconds, real, fast) {
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0) offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      if (activationsDiff > 0) {
+        offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
+      }
     }
     let popupString = `${offlineIncreases.join(", <br>")}.`;
     if (popupString === "While you were away.") {

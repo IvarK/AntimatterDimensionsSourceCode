@@ -59,7 +59,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reach first Eternity without getting any RGs during that Eternity",
       checkRequirement: () => player.reality.upgReqChecks[0] && isFirstEternity(),
       checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
-      description: "Replicanti gain is boosted from RGs",
+      description: "Replicanti gain is boosted from RG count",
       effect: () => 1 + (player.replicanti.galaxies / 50),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -69,7 +69,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reach first Infinity with just 1 galaxy",
       checkRequirement: () => player.galaxies <= 1 && isFirstInfinity(),
       checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-      description: "Infinitied stat gain is boosted from Antimatter Galaxies",
+      description: "Infinitied stat gain is boosted from Antimatter Galaxy count",
       effect: () => 1 + (player.galaxies / 30),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -108,8 +108,8 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 11,
       cost: 50,
-      requirement: "1,000,000,000,000 banked Infinities",
-      checkRequirement: () => player.realities > 0 && player.infinitiedBank.exponent >= 12,
+      requirement: () => `${shorten(1e12)} banked Infinities`,
+      checkRequirement: () => player.infinitiedBank.exponent >= 12,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain 10% of the Infinities you would gain by Infinitying each second.",
       effect: () => gainedInfinities().times(0.1),
@@ -118,7 +118,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 12,
       cost: 50,
-      requirement: () => `${shorten(1e70)} EP without EC1`,
+      requirement: () => `Reach ${shorten(1e70)} EP without EC1`,
       checkRequirement: () => player.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "EP mult based on Realities and TT",
@@ -130,7 +130,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 13,
       cost: 50,
-      requirement: () => `${shorten("1e4000")} EP without TD5-8`,
+      requirement: () => `Reach ${shorten("1e4000")} EP without TD5-8`,
       checkRequirement: () => player.eternityPoints.exponent >= 4000 &&
         Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
@@ -139,8 +139,8 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 14,
       cost: 50,
-      requirement: "1,000,000 Eternities",
-      checkRequirement: () => player.realities > 0 && player.eternities >= 1e6,
+      requirement: () => `${shorten(2e6)} Eternities`,
+      checkRequirement: () => player.eternities >= 2e6,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",
       effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
@@ -152,7 +152,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: () => `Reach ${shorten(1e10)} EP without purchasing the 5xEP upgrade`,
       checkRequirement: () => player.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
-      description: "Multiply TP gain based on EP mult",
+      description: "Multiply TP gain based on 5xEP mult",
       effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
       formatEffect: value => formatX(value, 2, 2)
     },
@@ -227,7 +227,7 @@ GameDatabase.reality.upgrades = (function() {
       requirement: "Reality in under 15 minutes",
       checkRequirement: () => Time.thisReality.totalMinutes < 15,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
-      description: "Replicanti gain is boosted from your fastest reality",
+      description: "Replicanti gain is boosted based on your fastest reality",
       effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1 / 12, 15),
       cap: 900,
       formatEffect: value => formatX(value, 2, 2)
@@ -244,7 +244,7 @@ GameDatabase.reality.upgrades = (function() {
     {
       id: 25,
       cost: 100000,
-      requirement: () => `${shorten("1e10500")} EP`,
+      requirement: () => `Reach ${shorten("1e10500")} EP`,
       checkRequirement: () => player.eternityPoints.exponent >= 10500,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Reality autobuyer"

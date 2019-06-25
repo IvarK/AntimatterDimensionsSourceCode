@@ -110,6 +110,7 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustAchievementVars(player);
       GameStorage.migrations.uniformDimensions(player);
       GameStorage.migrations.removeEternityChallGoal(player);
+      GameStorage.migrations.clearNewsArray(player);
     }
   },
 
@@ -376,6 +377,10 @@ GameStorage.migrations = {
 
   removeEternityChallGoal(player) {
     delete player.eternityChallGoal;
+  },
+
+  clearNewsArray(player) {
+    player.newsArray = [];
   },
 
   uniformDimensions(player) {

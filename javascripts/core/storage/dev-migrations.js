@@ -333,6 +333,9 @@ GameStorage.devMigrations = {
     player => {
       // There were 3 black holes in player object
       delete player.blackHole.pop();
+    },
+    player => {
+      GameStorage.migrations.clearNewsArray(player);
     }
   ],
 

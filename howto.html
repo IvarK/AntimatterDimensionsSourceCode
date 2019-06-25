@@ -1,6 +1,6 @@
 <html>
   <head>
-  <title>How to play - Antimatter Dimensions</title>
+  <title>How to play</title>
   <link rel='stylesheet' type='text/css' href='stylesheets/howto.css'>
   <link rel="icon" type="image/png" href="icon.png">
   </head>
@@ -235,10 +235,12 @@
     <hr id='div20hr'>
     <button onclick='changestate(21)' id='div21btn' class="storebtn">Glyphs</button>
     <div style="text-align: left" id='div21' class="hidden">
-          A glyph is an equippable item that can have multiple types. Each type has four effects. There are also different levels of rarity for glyphs. <br>
-      The five types are as follows: Normal, Infinity, Replicanti, Time, and Dilation. <br>
+          A glyph is an equippable item that can have multiple types. Each type has four effects.<br>
+          To equip the Glyph, drag a Glyph icon from your Glyph "inventory" into one of the circles in the middle of the screen. This should apply the glyph. If you look to the right of the glyph menu, you should see the glyph effects that are applied.<br>
+      The five basic Glyph types are as follows: <font color="#22aa48">Power</font>, <font color="#b67f33">Infinity</font>, <font color="#03a9f4">Replication</font>, <font color="#b241e3">Time</font>, and <font color="#64dd17">Dilation</font>. <br>
+      The eight rarities are as follows: <font color="white", span style="text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, rgb(255, 255, 255) 0px 0px 3px;">Common</font>, <font color="#43a047">Uncommon</font>, <font color="#2196f3">Rare</font>, <font color="#9c27b0">Epic</font>, <font color="#ff9800">Legendary</font>, <font color="#d50000">Mythical</font>, <font color="#03ffec">Trancendent</font>, and <font color="#5151ec">Celestial.</font><br>
       Each glyph can have up to 4 effects at once. You can find the full glyph effect list and their corresponding type <a href="https://pastebin.com/raw/TyQbs4vX">here</a><br>
-      When you reach 1,500 RM and have a total of 30 glyphs, you unlock "Glyph Sacrificing". You can now sacrifice power and time glyphs for boosts to parts of the game corresponding to that glyph type.<br>
+      When you reach 1,500 RM, have a total of 30 glyphs, and have bought the Reality upgrade, you unlock "Glyph Sacrificing". You can now sacrifice power and time glyphs for boosts to parts of the game corresponding to that glyph type.<br>
       At 100,000 RM, you unlock the ability to sacrifice all glyph types.<br>
     </div>
       <hr id='div21hr'>
@@ -270,9 +272,67 @@
           <div style="text-align: left" id='div25' class="hidden">
       Once you get all of the Reality Upgrades, the first Celestial is unlocked. This opens up a new tab to the right of Reality. <br>
       Each Celestial has unique mechanics and upgrades, and you need to defeat all seven. <br>
-      To defeat a Celestial, you must enter into that Celestial's Reality, and reach Reality. Afterwards, you can begin unlocking features within the Celestial interface, and you will be able to unlock the next Celestial.
+      To defeat a Celestial, you must enter into that Celestial's Reality, and reach Reality. <br>
+      There are unlocks within each Celestial's screen that you can unlock, usually before unlocking the Celestial itself, but there are also unlocks after.<br>
+      <hr id='div25hr'>
+      <button onclick='changestate(251)' id='div251btn' class="storebtn">Teresa</button>   
+      <div style="text-align: left" id='div251' class="hidden">
+        Teresa is the first Celestial. It is unlocked by obtaining all of the Reality Upgrades.<br>
+        On the main screen, you see a bar with a button above it that says "Pour RM". This allows you to put your RM into the container for a Reality Machine multiplier.<br>
+        The container loses RM over time, which means that the RM multiplier decreases over time.<br>
+        When you reach 1e14 RM inside of the container, you permanately unlock Teresa's Reality. In game, it is described as the following:<br>
+        <div style="text-align: center">
+        <i>"Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6). The more antimatter you reach, the better the reward."</i>
+        </div><br>
+        At 1e18 RM, you unlock Teresa's Eternity Point generator. This works like Time Study 181, in the sense that you gain 1% of your peaked EP/Min per second.<br>
+        Once you are at 1e21 RM in the container, you unlock Effarig, the second Celestial. As a side unlock, Teresa's container stops leaking RM.<br>
+        Teresa's final unlock is at 1e24 RM, at which you unlock the Perk Shop, where you can spend spare Perk points on three upgrades that boost effeciency. 
       </div>
-            <hr id='div25hr'>
+      <hr id='div251hr'>
+      <button onclick='changestate(252)' id='div252btn' class="storebtn">Effarig</button>   
+      <div style="text-align: left" id='div252' class="hidden">
+        Effarig is the second Celestial you encounter. It is unlocked by Teresa at 1e21 RM.<br>
+        Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of glyph effects and EP. This is the currency for Effarig's unlocks.<br>
+        You can buy the first unlock, called Glyph level Adjustment, at 1e7 Relic Shards. This allows you to change the power of the resources that are taken into account for during the glyph level equation.<br>
+        Next, at 2e8 RS, you can buy the next unlock, Automatic Glyph Sacrifice. This does exactly what you'd expect it to: sacrifice your glyphs. This checks, on an automatic reality (not a manual reality), if it fits within your requirements.<br>
+        At 3e9 RS, the third unlock, the Automatic Glyph Picker, is unlocked. You can configure it to do what it has been doing every time (random), to pick the rarest glyph, or to pick the farthest above Advanced Mode's (auto sacrifice setting) thresholds.<br>
+        Effarig's final unlock is of his own Reality at 5e11 RS. His Reality is divided into three sections: Infinity, Eternity, and Reality. His Reality's description in game is:<br>
+        <div style="text-align: center">
+        <i>"Start Effarig's Reality; all production, gamespeed, and tickspeed are severely lowered, infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels are temporarily capped."</i>
+        </div><br>
+        Each tier of his reality has different rewards. Some are to help during his Reality, and others are there to help outside. The main rewards are for Eternity and Reality.<br>
+        His Eternity unlocks the next Celestial, The Enslaved Ones. It also allows Eternities to generate Infinities, and disables the Infinity Point multiplier cap in his Reality.<br>
+        Completing his Reality unlocks a new mechanic known as <font color="#e21717">Effarig</font> Glyphs. These are a new Glyph type.<br>
+        On an Effarig Glyph, you have an equal chance of getting each effect. There are 7 different possible effects on an Effarig Glyph, which can be found <a href="https://pastebin.com/992cYUY3">here.</a><br>
+        You can only have one Effarig equipped at a time.
+        </div>
+        <hr id='div252hr'>
+        <button onclick='changestate(253)' id='div253btn' class="storebtn">The Enslaved Ones</button>   
+      <div style="text-align: left" id='div253' class="hidden">
+
+        </div>
+        <hr id='div253hr'>
+        <button onclick='changestate(254)' id='div254btn' class="storebtn">V</button>   
+        <div style="text-align: left" id='div254' class="hidden">
+          
+          </div>
+          <hr id='div254hr'>
+          <button onclick='changestate(255)' id='div255btn' class="storebtn">Ra</button>   
+          <div style="text-align: left" id='div255' class="hidden">
+            
+            </div>
+            <hr id='div255hr'>
+            <button onclick='changestate(256)' id='div256btn' class="storebtn">Lai'tela</button>   
+            <div style="text-align: left" id='div256' class="hidden">
+              
+              </div>
+              <hr id='div256hr'>
+              <button onclick='changestate(257)' id='div257btn' class="storebtn">Pelle</button>   
+              <div style="text-align: left" id='div257' class="hidden">
+                
+                </div>
+                <hr id='div257hr'>
+    </div>
             <a href="http://antimatter-dimensions.wikia.com/wiki/Guide">Strategy Guide</a>
   </body>
   <script src='javascripts/howto.js'></script>

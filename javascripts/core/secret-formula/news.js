@@ -998,6 +998,10 @@ GameDatabase.news = [
       "work environment I want to be in! I quit!"
   },
   {
+    id: "a194",
+    text: "<a href='https://www.youtube.com/watch?v=agxG5K38g1c' target='_blank'>THIS LINK IS NOT A RICK ROLL.</a></a>"
+  },
+  {
     id: "c1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
     condition: () => player.money.e = 15

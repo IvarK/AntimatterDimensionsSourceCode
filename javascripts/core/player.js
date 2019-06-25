@@ -83,7 +83,7 @@ let player = {
     fixed: "notyetfixed",
     dragging: 0,
     themes: new Set(),
-    secretTS: 0,    // incremented every time secret time study toggles
+    secretTS: 0, // incremented every time secret time study toggles
   },
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
@@ -203,11 +203,12 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false],
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false,
+      false, false, false, false, false
+    ],
     upgReqChecks: [false],
     automatorOn: false,
     automatorCurrentRow: 0,
@@ -323,13 +324,13 @@ let player = {
       run: false,
       unlocks: [],
       dimensions: Array.range(0, 4).map(() =>
-      ({
-        amount: new Decimal(0),
-        chanceUpgrades: 0,
-        intervalUpgrades: 0,
-        powerUpgrades: 0,
-        timeSinceLastUpdate: 0
-      })),
+        ({
+          amount: new Decimal(0),
+          chanceUpgrades: 0,
+          intervalUpgrades: 0,
+          powerUpgrades: 0,
+          timeSinceLastUpdate: 0
+        })),
       maxAmGained: new Decimal(0)
     }
   },
@@ -358,7 +359,8 @@ let player = {
       bigCrunch: true,
       eternity: true,
       tachyonParticles: true,
-      reality: true
+      reality: true,
+      background: true
     },
     confirmations: {
       sacrifice: true,
@@ -438,7 +440,7 @@ const Player = {
 };
 
 function guardFromNaNValues(obj) {
-  function isObject (obj) {
+  function isObject(obj) {
     return obj !== null && typeof obj === "object" && !(obj instanceof Decimal);
   }
 

@@ -1,4 +1,4 @@
-.t-s6 #stars {
+.t-s6 #animated-bg {
     display: block;
     position: fixed;
     /* Make video to at least 100% wide and tall */
@@ -14,16 +14,18 @@
     top: 50%;
     left: 50%;
     z-index: -1000;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 body.t-s6 {
-    background: black;
+    background-image: url('../images/s6-bg.png');
+    background-size: 100%;
+    background-position: center;
 }
 
 .t-s6 .popup {
     color: #E0E0E0;
-    background-color: black!important;
+    background-color: black !important;
     border: 1px solid #1B5E20;
     box-shadow: 0 0 15px 0 black;
 }
@@ -104,31 +106,33 @@ strong {
     text-shadow: 0 0 7px #64DD17;
 }
 
-.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
+.t-s6 #timetheorems,
+.t-s6 .c-ttshop__save-load-text,
+.t-s6 #minimizeArrow {
     color: grey;
 }
 
 .t-s6 .c-tt-buy-button--unlocked {
-  color: #3AACD6;
-  background: black;
-  border: 1px solid #3AACD6;
+    color: #3AACD6;
+    background: black;
+    border: 1px solid #3AACD6;
 }
 
 .t-s6 .c-tt-buy-button--unlocked:hover {
-  color: black;
-  background: #3AACD6;
+    color: black;
+    background: #3AACD6;
 }
 
 .t-s6 .c-tt-buy-button--locked {
-  color: grey;
-  background: black;
-  border: 1px solid grey;
+    color: grey;
+    background: black;
+    border: 1px solid grey;
 }
 
 .t-s6 .c-tt-buy-button--locked:hover {
-  color: black;
-  background: #B84B5F;
-  border: 1px solid #B84B5F;
+    color: black;
+    background: #B84B5F;
+    border: 1px solid #B84B5F;
 }
 
 .t-s6 #theorembuybackground {
@@ -146,13 +150,13 @@ strong {
 }
 
 .t-s6 .realitytabbtn {
-  color: #0b600e;
-  background-color: white;
-  border: 2px solid #0b600e;
+    color: #0b600e;
+    background-color: white;
+    border: 2px solid #0b600e;
 }
 
 .t-s6 .realitytabbtn:hover {
-    color: white ;
+    color: white;
     background-color: #0b600e;
     border: 2px solid #0b600e;
 }
@@ -162,8 +166,8 @@ strong {
 }
 
 .t-s6 .c-rm-amount {
-  color: #0b600e;
-  text-shadow: 0 0 7px #0b600e;
+    color: #0b600e;
+    text-shadow: 0 0 7px #0b600e;
 }
 
 .t-s6 .automatorinstruction.command {

@@ -12,7 +12,7 @@ Vue.component("modal-animation-options", {
       <on-off-button v-if="bigCrunchUnlocked" v-model="options.bigCrunch" text="Big crunch:"/>
       <on-off-button v-if="dilationUnlocked" v-model="options.tachyonParticles" text="Tachyon particles:"/>
       <on-off-button v-if="realityUnlocked" v-model="options.reality" text="Reality:"/>
-      <on-off-button v-if="animatedThemeUnlocked" 
+      <on-off-button v-if="animatedThemeUnlocked"
         v-model="options.background"
         onclick="Themes.find(player.options.theme).set();"
       text="Background:" />

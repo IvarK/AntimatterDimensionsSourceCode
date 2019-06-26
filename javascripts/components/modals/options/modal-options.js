@@ -2,9 +2,8 @@
 
 Vue.component("modal-options", {
   template: `<div class="c-modal-options l-modal-options">
-      <modal-close-button @click="emitClose"/>
-      <slot/>
-    </div>`
+    <modal-close-button @click="emitClose"/><slot/>
+  </div>`
 });
 
 const modalOptionsMixin = {
@@ -30,12 +29,7 @@ const modalOptionsMixin = {
   components: {
     "on-off-button": {
       props: ["value", "text"],
-      template: `<primary-button-on-off
-          :value="value"
-          :text="text"
-          @input="emitInput"
-          class="o-primary-btn--option"
-        />`
+      template: `<primary-button-on-off :value="value" :text="text" @input="emitInput" class="o-primary-btn--option"/>`
     }
   }
 };

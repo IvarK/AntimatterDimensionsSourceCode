@@ -218,7 +218,7 @@ dev.showProductionBreakdown = function() {
   for (let i = 1; i <= 8; i++) {
     NDComponent = NDComponent.times(getDimensionFinalMultiplier(i));
   }
-  const tickspeed = player.tickspeed;
+  const tickspeed = Tickspeed.current;
   const tickComponent = tickspeed.reciprocal().pow(8);
   const NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
   const tickPercent = 100 - NDPercent;

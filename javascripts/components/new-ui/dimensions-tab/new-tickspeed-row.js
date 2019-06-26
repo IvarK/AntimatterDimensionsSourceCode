@@ -8,7 +8,8 @@ Vue.component("new-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1
+      gameSpeedMult: 1,
+      gammaText: ""
     };
   },
   computed: {
@@ -49,6 +50,9 @@ Vue.component("new-tickspeed-row", {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
     },
+    gammaDisplay() {
+      return this.gammaText;
+    },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
@@ -68,12 +72,36 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupFactor();
+      this.gammaText = this.getGameSpeedupText();
+    },
+    getGameSpeedupText() {
+      if (player.celestials.enslaved.isStoringReal) {
+        return "(γ = 0 | storing real time)";
+      }
+      let speedMod = getGameSpeedupFactor();
+      let storedTimeText = "";
+      if (player.celestials.enslaved.isStoring) {
+        if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+          const storedTimeWeight = player.celestials.enslaved.storedFraction;
+          speedMod = Math.pow(speedMod, 1 - storedTimeWeight);
+          if (storedTimeWeight !== 0) {
+            storedTimeText = ` | storing ${(100 * storedTimeWeight).toFixed(1)}% game time`;
+          }
+        } else {
+          speedMod = 1;
+          storedTimeText = ` | storing game time`;
+        }
+      }
+      if (speedMod < 10000 && speedMod !== 1) {
+        return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
+      }
+      return `(γ = ${shorten(speedMod, 2)}${storedTimeText})`;
     }
   },
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }}</span>
+        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <span v-if="!isGameSpeedNormal">{{ gammaDisplay }}</span></div>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

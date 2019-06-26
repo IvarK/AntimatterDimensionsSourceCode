@@ -68,30 +68,34 @@ function buyTickSpeed() {
   else multiplySameCosts(player.tickSpeedCost)
   if (player.tickSpeedCost.gte(Decimal.MAX_NUMBER)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0
-  player.tickspeed = player.tickspeed.times(getTickSpeedMultiplier());
   if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) player.postC3Reward = player.postC3Reward.times(1.05+(player.galaxies*0.005))
+  player.totalTickBought++;
   postc8Mult = new Decimal(1)
-  player.secretUnlocks.why++
+  player.secretUnlocks.why++;
   GameUI.update();
   return true;
 }
 
 function buyMaxTickSpeed() {
-  if (!canBuyTickSpeed()) return false;
+  if (!canBuyTickSpeed()) return;
   let money = new Decimal(player.money);
-  if (money.eq(0)) return false;
-  const mult = getTickSpeedMultiplier();
+  if (money.eq(0)) return;
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
   let tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
-  let tickspeed = new Decimal(player.tickspeed);
+  let totalTickBought = player.totalTickBought;
   let postC3Reward = new Decimal(player.postC3Reward);
   function flushValues() {
     player.money.fromDecimal(money);
     player.tickSpeedCost.fromDecimal(tickSpeedCost);
     player.tickspeedMultiplier.fromDecimal(tickspeedMultiplier);
-    player.tickspeed.fromDecimal(tickspeed);
+    player.totalTickBought = totalTickBought;
     player.postC3Reward.fromDecimal(postC3Reward);
+  }
+  function increaseTickSpeedCost(n) {
+    const multDec = new Decimal(tickSpeedMultDecrease);
+    tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier.pow(n)).times(multDec.pow(n * (n - 1) / 2));
+    tickspeedMultiplier = tickspeedMultiplier.times(multDec.pow(n));
   }
 
   const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
@@ -108,7 +112,7 @@ function buyMaxTickSpeed() {
       if (tickSpeedCost.gte(Decimal.MAX_NUMBER)) {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
-      tickspeed = tickspeed.times(mult);
+      totalTickBought++;
       if (underIC3Effect) {
         postC3Reward = postC3Reward.times(1.05 + (player.galaxies * 0.005));
       }
@@ -122,14 +126,14 @@ function buyMaxTickSpeed() {
     const discriminant = Math.pow(b, 2) - (c * a * 4);
     if (discriminant < 0) {
       flushValues();
-      return false;
+      return;
     }
-    const buying = Math.floor((Math.sqrt(Math.pow(b, 2) - (c * a * 4)) - b) / (2 * a)) + 1;
+    const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
     if (buying <= 0) {
       flushValues();
-      return false;
+      return;
     }
-    tickspeed = tickspeed.times(Decimal.pow(mult, buying));
+    totalTickBought += buying;
     if (underIC3Effect) {
       postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying))
     }
@@ -137,17 +141,6 @@ function buyMaxTickSpeed() {
     money = money.minus(tickSpeedCost).max(0);
     tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier);
     tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
-
-    function increaseTickSpeedCost(n) {
-      // Unoptimized version
-      // for (var i = 0; i < n; i++) {
-      //    cost *= mult;
-      //    mult *= multDec;
-      // }
-      const multDec = new Decimal(tickSpeedMultDecrease);
-      tickSpeedCost = tickSpeedCost.times(tickspeedMultiplier.pow(n)).times(multDec.pow(n * (n - 1) / 2));
-      tickspeedMultiplier = tickspeedMultiplier.times(multDec.pow(n));
-    }
   }
 
   flushValues();
@@ -156,15 +149,6 @@ function buyMaxTickSpeed() {
 function resetTickspeed() {
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
-    let tickspeed = new Decimal(1000)
-      .timesEffectsOf(
-        Achievement(36),
-        Achievement(45),
-        Achievement(66),
-        Achievement(83)
-      );
-    tickspeed = tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), player.totalTickGained));
-    player.tickspeed = tickspeed;
 }
 
 const Tickspeed = {
@@ -178,7 +162,16 @@ const Tickspeed = {
   },
 
   get current() {
-    const tickspeed = Effarig.isRunning ? Effarig.tickspeed : player.tickspeed;
+    const tickspeed = Effarig.isRunning
+      ? Effarig.tickspeed
+      : new Decimal(1000)
+          .timesEffectsOf(
+            Achievement(36),
+            Achievement(45),
+            Achievement(66),
+            Achievement(83)
+          )
+          .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
     return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
   }
 };

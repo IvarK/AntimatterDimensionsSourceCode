@@ -683,7 +683,6 @@ function gameLoop(diff, options = {}) {
   const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
   let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
   player.totalTickGained += gain;
-  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
   player.tickThreshold = freeTickspeed.nextShards;
 
     if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {

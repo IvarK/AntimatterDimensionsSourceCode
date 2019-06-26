@@ -138,7 +138,7 @@ const Effarig = {
     return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {
-    const base = 3 + player.tickspeed.reciprocal().log10();
+    const base = 3 + Tickspeed.current.reciprocal().log10();
     const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
     return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },

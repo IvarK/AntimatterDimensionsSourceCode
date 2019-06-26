@@ -342,6 +342,9 @@ GameStorage.devMigrations = {
     },
     player => {
       GameStorage.migrations.clearNewsArray(player);
+    },
+    player => {
+      GameStorage.migrations.deleteTickspeed(player);
     }
   ],
 

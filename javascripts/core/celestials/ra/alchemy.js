@@ -10,7 +10,6 @@ class AlchemyResourceState extends GameMechanicState {
   }
 
   get isBaseResource() {
-    // Non-base resources have isBaseResource === undefined
     return this.config.isBaseResource === true;
   }
 

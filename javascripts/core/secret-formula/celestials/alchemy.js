@@ -68,6 +68,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.CARDINALITY]: {
       name: "Cardinality",
       symbol: "α",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Uncapped replicanti slowdown ${formatX(1.2)} ➜ ` +
         `${formatX(value)} per ${shorten(Number.MAX_VALUE)}`,
@@ -85,8 +86,9 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.ETERNITY]: {
       name: "Eternity",
       symbol: "τ",
+      isBaseResource: false,
       effect: 1,
-      formatEffect: value => `Eternitied stat gain ^${formatX(value)}`,
+      formatEffect: value => `Eternitied stat gain ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.TIME,
@@ -101,6 +103,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.DIMENSIONALITY]: {
       name: "Dimensionality",
       symbol: "ρ",
+      isBaseResource: false,
       effect: new Decimal(1),
       formatEffect: value => `All dimensions ${formatX(value)}`,
       reagents: [
@@ -117,6 +120,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.INFLATION]: {
       name: "Inflation",
       symbol: "λ",
+      isBaseResource: false,
       effect: new Decimal(1),
       formatEffect: value => `^1.002 for multipliers above ${shorten(value)}`,
       reagents: [
@@ -133,6 +137,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.ALTERNATION]: {
       name: "Alternation",
       symbol: "ω",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Dilation penalty reduced by ${formatPercents(value)} ` +
         `per ${shorten("1e1000000")} replicanti`,
@@ -159,6 +164,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.SYNERGISM]: {
       name: "Synergism",
       symbol: "π",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Alchemy reaction efficiency 30% ➜ ${formatPercents(value)}`,
       reagents: [
@@ -179,6 +185,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.MOMENTUM]: {
       name: "Momentum",
       symbol: "μ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Game speed ${formatX(value)} for every real-time minute ` +
         "spent in your current reality",
@@ -200,6 +207,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.DECOHERENCE]: {
       name: "Decoherence",
       symbol: "ξ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Alchemy decay reduced by ${formatPercents(value)}`,
       reagents: [
@@ -218,8 +226,9 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.EXPONENTIAL]: {
       name: "Exponential",
       symbol: "Γ",
+      isBaseResource: false,
       effect: 1,
-      formatEffect: value => `IP gain multiplied by replicanti^${formatPercents(value)}`,
+      formatEffect: value => `IP gain multiplied by replicanti${formatPow(value, 2, 2)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFLATION,
@@ -234,8 +243,9 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.FORCE]: {
       name: "Force",
       symbol: "ξ",
+      isBaseResource: false,
       effect: 1,
-      formatEffect: value => `Multiply normal dimensions by RM^${shorten(value)}`,
+      formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.DIMENSIONALITY,
@@ -250,6 +260,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.UNCOUNTABILITY]: {
       name: "Uncountability",
       symbol: "Θ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Generate ${shorten(value)} realities and perk points per second`,
       reagents: [
@@ -270,6 +281,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.BOUNDLESS]: {
       name: "Boundless",
       symbol: "Π",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Glyph level cap increased by ${shortenSmallInteger(value)}`,
       reagents: [
@@ -286,6 +298,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.MULTIVERSAL]: {
       name: "Multiversal",
       symbol: "Σ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Each reality simulates ${shortenSmallInteger(value)} additional realities`,
       reagents: [
@@ -302,6 +315,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.UNPREDICTABILITY]: {
       name: "Unpredictability",
       symbol: "Λ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => (Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
         ? "?????"
@@ -326,6 +340,7 @@ GameDatabase.celestials.alchemy = {
     [ALCHEMY_RESOURCE.REALITY]: {
       name: "Reality",
       symbol: "Ϟ",
+      isBaseResource: false,
       effect: 1,
       formatEffect: value => `Can be used to create a level ${shortenSmallInteger(value)} Reality glyph`,
       reagents: [

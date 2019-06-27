@@ -217,6 +217,131 @@ function getCostWithLinearCostScaling(amountOfPurchases, costScalingStart, initi
   return preScalingCost * postScalingCost;
 }
 
+/**
+* ExponentialCostScaling provides both a max quantity and a price
+* @typedef {Object} QuantityAndPrice
+* @property {number} quantity The new amount that can be bought
+* @property {number} logPrice The logarithm (base 10) of the price
+*/
+ 
+/**
+ * This is a a helper class to deal with the more common case of a cost that
+ * grows exponentially (past some threshold). NOTE: this assumes that you only
+ * have to pay for the highest tier when buying in bulk. That's a little bit cheaper,
+ * but for the use cases this encounters, it's not a big deal.
+ */
+class ExponentialCostScaling {
+  /**
+   * @param {Object} param configuration object with the following fields
+   * @param {number|Decimal} param.baseCost the cost of the first purchase
+   * @param {number} param.baseIncrease the baseline increase in price
+   * @param {number} param.costScale the amount by which the cost scaling increases;
+   *  e.g. if it is 10, then the ratio between successive prices goes up by 10
+   * @param {number} [param.purchasesBeforeScaling] the number of purchases that can
+   *  be made before scaling begins. If baseCost is B, baseIncrease is C, and costScale is S,
+   *  and purchasesBeforeScaling is 0, the prices will go: B, B C, B C^2 S, B C^3 S^3, etc.
+   * @param {number|Decimal} [param.scalingCostThreshold] an alternative way of specifying
+   *  when scaling begins; once the cost is >= this threshold, scaling applies. Using the same
+   *  notation: B BC BC^2 .... BC^n <threshold> BC^(n+1) BC^(n+2)S BC^(n+3)S^3 etc. So, the first
+   *  price past the threshold has no costScale in it, but everything past that does.
+   */
+  constructor(param) {
+    this._baseCost = new Decimal(param.baseCost);
+    this._baseIncrease = param.baseIncrease;
+    if (typeof this._baseIncrease !== "number") throw crash("baseIncrease must be a number");
+    this._costScale = param.costScale;
+    if (typeof this._costScale !== "number") throw crash("costScale must be a number");
+    this._logBaseCost = ExponentialCostScaling.log10(param.baseCost);
+    this._logBaseIncrease = ExponentialCostScaling.log10(param.baseIncrease);
+    this._logCostScale = ExponentialCostScaling.log10(param.costScale);
+    if (param.purchasesBeforeScaling !== undefined) {
+      this._purchasesBeforeScaling = param.purchasesBeforeScaling;
+    } else if (param.scalingCostThreshold !== undefined) {
+      this._purchasesBeforeScaling = Math.ceil(
+        (ExponentialCostScaling.log10(param.scalingCostThreshold) - this._logBaseCost) / this._logBaseIncrease);
+    } else throw crash("Must specify either scalingCostThreshold or purchasesBeforeScaling");
+    this.updateCostScale();
+  }
+ 
+  get costScale() {
+    return this._costScale;
+  }
+ 
+  /**
+   * @param {number} value
+   */
+  set costScale(value) {
+    this._logCostScale = ExponentialCostScaling.log10(value);
+    this._costScale = value;
+    this.updateCostScale();
+  }
+ 
+  updateCostScale() {
+    this._precalcDiscriminant = Math.pow((2 * this._logBaseIncrease + this._logCostScale), 2) -
+      8 * this._logCostScale * (this._purchasesBeforeScaling * this._logBaseIncrease + this._logBaseCost);
+    this._precalcCenter = -this._logBaseIncrease / this._logCostScale + this._purchasesBeforeScaling + 0.5;
+  }
+ 
+  /**
+   * Calculates the cost of the next purchase
+   * @param {number} currentPurchases
+   */
+  calculateCost(currentPurchases) {
+    const logMult = this._logBaseIncrease;
+    const logBase = this._logBaseCost;
+    const excess = currentPurchases - this._purchasesBeforeScaling;
+    const logCost = excess > 0
+      ? currentPurchases * logMult + logBase + 0.5 * excess * (excess + 1) * this._logCostScale
+      : currentPurchases * logMult + logBase;
+    return Decimal.pow(10, logCost);
+  }
+ 
+  /**
+   * Figure out how much of this can be bought.
+   * This returns the maximum new number of this thing; If you have 51 and can
+   * afford to buy 10 more, this will return 61. NOTE! this assumes you only
+   * have to pay for the most expensive thing you get when you buy in bulk. This
+   * means it's not suitable for accurate caclulation of cumulative prices if the
+   * multiplier is small.
+   * @param {number} currentPurchases amount already possessed
+   * @param {Decimal} money
+   * @returns {QuantityAndPrice|null} maximum value of bought that money can buy up to
+   */
+  getMaxBought(currentPurchases, money) {
+    const logMoney = money.log10();
+    const logMult = this._logBaseIncrease;
+    const logBase = this._logBaseCost;
+    // The 1 + is because the multiplier isn't applied to the first purchase
+    let newPurchases = Math.floor(1 + (logMoney - logBase) / logMult);
+    // We can use the linear method up to one purchase past the threshold, because the first purchase
+    // past the threshold doesn't have cost scaling in it yet.
+    if (newPurchases > this._purchasesBeforeScaling) {
+      const discrim = this._precalcDiscriminant + 8 * this._logCostScale * logMoney;
+      if (discrim < 0) {
+        return null;
+      }
+      newPurchases = Math.floor(this._precalcCenter + Math.sqrt(discrim) / (2 * this._logCostScale));
+    }
+    if (newPurchases <= currentPurchases) return null;
+    // There's a narrow edge case where the linear method returns > this._purchasesBeforeScaling + 1
+    // but the quadratic method returns less than that. Having this be a separate check covers that
+    // case:
+    let logPrice;
+    if (newPurchases <= this._purchasesBeforeScaling + 1) {
+      logPrice = (newPurchases - 1) * logMult + logBase;
+    } else {
+      const pExcess = newPurchases - this._purchasesBeforeScaling;
+      logPrice = (newPurchases - 1) * logMult + logBase + 0.5 * pExcess * (pExcess - 1) * this._logCostScale;
+    }
+    return { quantity: newPurchases - currentPurchases, logPrice };
+  }
+ 
+  static log10(value) {
+    if (value instanceof Decimal) return value.log10();
+    return Math.log10(value);
+  }
+}
+
 const logFactorial = (function() {
   const LOGS = Array.range(1, 11).map(Math.log);
   const TABLE = [0];

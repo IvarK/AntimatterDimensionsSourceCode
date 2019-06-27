@@ -8,8 +8,7 @@ Vue.component("new-tickspeed-row", {
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1,
-      gammaText: ""
+      gameSpeedMult: 1
     };
   },
   computed: {
@@ -22,7 +21,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.shortenDimensions(tickmult.reciprocal())}x faster / upgrade.`;
+        return `${this.shorten(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -36,7 +35,7 @@ Vue.component("new-tickspeed-row", {
         displayValue = tickspeed.toFixed(0);
       } else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shortenRateOfChange(oom)}`;
+        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
       }
       return `Tickspeed: ${displayValue}`;
     },
@@ -49,9 +48,6 @@ Vue.component("new-tickspeed-row", {
     formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
-    },
-    gammaDisplay() {
-      return this.gammaText;
     },
     tooltip() {
       if (this.isGameSpeedNormal) return undefined;
@@ -72,36 +68,12 @@ Vue.component("new-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupFactor();
-      this.gammaText = this.getGameSpeedupText();
-    },
-    getGameSpeedupText() {
-      if (player.celestials.enslaved.isStoringReal) {
-        return "(γ = 0 | storing real time)";
-      }
-      let speedMod = getGameSpeedupFactor();
-      let storedTimeText = "";
-      if (player.celestials.enslaved.isStoring) {
-        if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
-          const storedTimeWeight = player.celestials.enslaved.storedFraction;
-          speedMod = Math.pow(speedMod, 1 - storedTimeWeight);
-          if (storedTimeWeight !== 0) {
-            storedTimeText = ` | storing ${(100 * storedTimeWeight).toFixed(1)}% game time`;
-          }
-        } else {
-          speedMod = 1;
-          storedTimeText = ` | storing game time`;
-        }
-      }
-      if (speedMod < 10000 && speedMod !== 1) {
-        return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
-      }
-      return `(γ = ${shorten(speedMod, 2)}${storedTimeText})`;
     }
   },
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <span v-if="!isGameSpeedNormal">{{ gammaDisplay }}</span></div>
+        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

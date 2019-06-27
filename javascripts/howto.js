@@ -56,7 +56,7 @@ function updateSpoilers() {
 			if (i === 5 && (player.resets >= 4 || player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 6 && (player.galaxies >= 1 || player.infinitied.gte(1) || player.eternities >= 1)) {
+			if (i === 7 && (player.galaxies >= 1 || player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i === 8 && (player.infinitied.gte(1) || player.eternities >= 1)) {

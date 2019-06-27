@@ -38,6 +38,7 @@ Vue.component("automator-editor", {
       code: null,
       activeLine: 0,
       isRunning: false,
+      isPaused: false,
       repeatOn: false,
       editingName: false,
       scripts: [],
@@ -74,11 +75,17 @@ Vue.component("automator-editor", {
     },
     modeIconClass() {
       return this.mode ? "fa-cubes" : "fa-code";
+    },
+    playTooltip() {
+      if (this.isRunning) return undefined;
+      if (this.isPaused) return "Resume automator execution";
+      return "Start automator";
     }
   },
   methods: {
     update() {
       this.isRunning = AutomatorBackend.isRunning;
+      this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.repeatOn = AutomatorBackend.state.repeat;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
@@ -183,19 +190,30 @@ Vue.component("automator-editor", {
   template:
     `<div class="l-automator-pane">
       <div class="c-automator__controls l-automator__controls l-automator-pane__controls">
-        <automator-button class="fa-fast-backward" @click="rewind"/>
+        <automator-button class="fa-fast-backward"
+          @click="rewind"
+          v-tooltip="'rewind automator to the first command'"/>
         <automator-button
           class="fa-play"
           :class="{ 'c-automator__button-play--active' : isRunning }"
           @click="play"
+          v-tooltip="playTooltip"
         />
-        <automator-button class="fa-pause" @click="pause"/>
-        <automator-button class="fa-stop" @click="stop"/>
-        <automator-button class="fa-step-forward" @click="step"/>
+        <automator-button class="fa-pause"
+          :class="{ 'c-automator__button--active': isPaused }"
+          @click="pause"
+          v-tooltip="'Pause automator on current command'"/>
+        <automator-button class="fa-stop"
+          @click="stop"
+          v-tooltip="'Stop automator and reset position'"/>
+        <automator-button class="fa-step-forward"
+          @click="step"
+          v-tooltip="'Step forward one line'"/>
         <automator-button
           class="fa-sync-alt"
-                :class="{ 'c-automator__button--active' : repeatOn }"
+          :class="{ 'c-automator__button--active' : repeatOn }"
           @click="repeat"
+          v-tooltip="'Restart script automatically when it completes'"
         />
         <div class="l-automator__script-names">
           <template v-if="!editingName">

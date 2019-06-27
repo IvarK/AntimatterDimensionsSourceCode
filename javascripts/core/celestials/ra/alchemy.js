@@ -29,6 +29,10 @@ class AlchemyResourceState extends GameMechanicState {
   get decayRate() {
     return AlchemyResource.decoherence.effectValue;
   }
+
+  get reaction() {
+    return AlchemyReactions.all[this.id];
+  }
 }
 
 // Note: Base reaction efficiency should be 30% (or something like that?)
@@ -120,7 +124,6 @@ const AlchemyReactions = (function() {
   }
   return {
     all: AlchemyResources.all
-      .filter(r => !r.isBaseResource)
-      .map(r => new AlchemyReaction(r, mapReagents(r)))
+      .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))))
   };
 }());

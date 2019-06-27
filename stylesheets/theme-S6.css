@@ -19,6 +19,9 @@
 
 body.t-s6 {
     background: black;
+    background-image: url('../images/s6-bg.png');
+    background-size: 100%;
+    background-position: center;
 }
 
 .t-s6 .popup {

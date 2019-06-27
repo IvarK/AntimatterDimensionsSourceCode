@@ -203,10 +203,10 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
               false, false, false, false, false],
     upgReqChecks: [false],
     automatorOn: false,
@@ -358,7 +358,8 @@ let player = {
       bigCrunch: true,
       eternity: true,
       tachyonParticles: true,
-      reality: true
+      reality: true,
+      background: true
     },
     confirmations: {
       sacrifice: true,

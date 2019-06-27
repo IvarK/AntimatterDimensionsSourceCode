@@ -16,6 +16,11 @@ const Theme = function Theme(name, colors) {
         return player.secretUnlocks.themes.countWhere(theme => theme.includes(name)) !== 0;
     };
 
+    this.isAnimated = function() {
+        const list = ["S1", "S6"];
+        return list.includes(this.name);
+    };
+
     this.displayName = function() {
         if (!this.isSecret()) return name;
         if (!this.isAvailable()) {
@@ -34,6 +39,11 @@ const Theme = function Theme(name, colors) {
         }
         if (!this.isDefault()) {
           document.body.classList.add(this.cssClass());
+        }
+        if (this.isAnimated() && player.options.animations.background) {
+            document.getElementById("background-animations").style.display = "block";
+        } else {
+            document.getElementById("background-animations").style.display = "none";
         }
         player.options.theme = name;
         ui.view.theme = name;

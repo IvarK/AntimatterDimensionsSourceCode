@@ -112,6 +112,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removeEternityChallGoal(player);
       GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
+      GameStorage.migrations.removePostC3Reward(player);
     }
   },
 
@@ -388,6 +389,10 @@ GameStorage.migrations = {
     delete player.tickspeed;
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
+  },
+
+  removePostC3Reward(player) {
+    delete player.postC3Reward;
   },
 
   uniformDimensions(player) {

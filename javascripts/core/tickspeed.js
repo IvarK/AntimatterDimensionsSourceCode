@@ -72,9 +72,6 @@ function buyTickSpeed() {
     player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
   }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
-  if (InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning) {
-    player.postC3Reward = player.postC3Reward.times(1.05 + (player.galaxies * 0.005));
-  }
   player.totalTickBought++;
   postc8Mult = new Decimal(1);
   player.secretUnlocks.why++;
@@ -90,20 +87,17 @@ function buyMaxTickSpeed() {
   const tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let totalTickBought = player.totalTickBought;
-  let postC3Reward = new Decimal(player.postC3Reward);
   function flushValues() {
     player.money.fromDecimal(money);
     player.tickSpeedCost.fromDecimal(tickSpeedCost);
     player.tickspeedMultiplier.fromDecimal(tickspeedMultiplier);
     player.totalTickBought = totalTickBought;
-    player.postC3Reward.fromDecimal(postC3Reward);
   }
   function increaseTickSpeedCost(n) {
     const multDec = new Decimal(tickSpeedMultDecrease);
     tickspeedMultiplier = tickspeedMultiplier.times(multDec.pow(n));
   }
 
-  const underIC3Effect = InfinityChallenge(3).isCompleted || InfinityChallenge(3).isRunning;
   if (NormalChallenge(9).isRunning ||
     InfinityChallenge(5).isRunning ||
     tickSpeedCost.lt(Decimal.MAX_NUMBER) ||
@@ -124,9 +118,6 @@ function buyMaxTickSpeed() {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
       totalTickBought++;
-      if (underIC3Effect) {
-        postC3Reward = postC3Reward.times(1.05 + (player.galaxies * 0.005));
-      }
       postc8Mult = new Decimal(1);
     }
   }
@@ -143,9 +134,6 @@ function buyMaxTickSpeed() {
     }
     totalTickBought += purchases.quantity;
     const nextCost = costScale.calculateCost(totalTickBought);
-    if (underIC3Effect) {
-      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), purchases.quantity));
-    }
     increaseTickSpeedCost(purchases.quantity - 1);
     money = money.minus(Decimal.pow10(purchases.logPrice)).max(0);
     tickSpeedCost = nextCost;

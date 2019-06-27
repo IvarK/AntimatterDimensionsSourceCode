@@ -95,7 +95,6 @@ let player = {
   spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
-  postC3Reward: new Decimal(1),
   eternityPoints: new Decimal(0),
   eternities: 0,
   thisEternity: 0,

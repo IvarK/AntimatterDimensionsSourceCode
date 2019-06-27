@@ -345,6 +345,7 @@ GameStorage.devMigrations = {
     },
     player => {
       GameStorage.migrations.removeTickspeed(player);
+      GameStorage.migrations.removePostC3Reward(player);
     }
   ],
 

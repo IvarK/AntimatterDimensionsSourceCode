@@ -245,7 +245,6 @@ function resetChallengeStuff() {
     player.matter = new Decimal(0)
     player.chall11Pow = new Decimal(1)
     player.postC4Tier = 1
-    player.postC3Reward = new Decimal(1)
 }
 
 function resetMoney() {

@@ -144,7 +144,7 @@ function buyMaxTickSpeed() {
     totalTickBought += purchases.quantity;
     const nextCost = costScale.calculateCost(totalTickBought);
     if (underIC3Effect) {
-      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), buying));
+      postC3Reward = postC3Reward.times(Decimal.pow(1.05 + (player.galaxies * 0.005), purchases.quantity));
     }
     increaseTickSpeedCost(purchases.quantity - 1);
     money = money.minus(Decimal.pow10(purchases.logPrice)).max(0);

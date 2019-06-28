@@ -41,6 +41,7 @@ Vue.component("automator-editor", {
       isPaused: false,
       repeatOn: false,
       editingName: false,
+      runningScriptID: 0,
       scripts: [],
     };
   },
@@ -87,6 +88,7 @@ Vue.component("automator-editor", {
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !this.isRunning;
       this.repeatOn = AutomatorBackend.state.repeat;
+      this.runningScriptID = AutomatorBackend.state.topLevelScript;
       if (AutomatorBackend.state.topLevelScript !== this.currentScriptID || !AutomatorBackend.isOn) {
         this.activeLine = 0;
         return;
@@ -167,6 +169,14 @@ Vue.component("automator-editor", {
         this.updateScriptList();
       }
       this.$nextTick(() => this.editingName = false);
+    },
+    dropdownLabel(script) {
+      let label = script.name;
+      if (script.id === this.runningScriptID) {
+        if (this.isRunning) label += " (Running)";
+        else if (this.isPaused) label += " (Paused)";
+      }
+      return label;
     }
   },
   created() {
@@ -221,7 +231,7 @@ Vue.component("automator-editor", {
                     @input="onScriptDropdown">
               <option v-for="script in scripts"
                       v-bind="selectedScriptAttribute(script.id)"
-                      :value="script.id">{{script.name}}</option>
+                      :value="script.id">{{dropdownLabel(script)}}</option>
               <option value="createNewScript">Create new...</option>
             </select>
             <automator-button class="far fa-edit" @click="rename"/>

@@ -1,3 +1,5 @@
+"use strict";
+
 function parseBlock(block, indentation = 0) {
   let ret = "\t".repeat(indentation) + block.cmd
 

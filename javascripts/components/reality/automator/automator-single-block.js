@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("automator-single-block", {
   data() {
     return {

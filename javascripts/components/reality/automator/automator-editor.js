@@ -116,12 +116,10 @@ Vue.component("automator-editor", {
       this.currentScriptID = player.reality.automator.state.editorScript;
       // This shouldn't happen if things are loaded in the right order, but might as well be sure.
       if (storedScripts[this.currentScriptID] === undefined) {
-        console.log(`Could not find currentScriptID ${this.currentScriptID} in player`);
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
       if (AutomatorUI.documents[this.currentScriptID] === undefined) {
-        console.log(`Could not find currentScriptID ${this.currentScriptID} in documents`);
         AutomatorUI.documents[this.currentScriptID] =
           CodeMirror.Doc(storedScripts[this.currentScriptID].content, "automato");
       }

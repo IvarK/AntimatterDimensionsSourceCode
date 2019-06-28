@@ -487,16 +487,6 @@ button {
     color: white;
 }
 
-.automator-save-load-btn {
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.2rem;
-  display: block;
-  cursor: pointer;
-  border-radius: .4rem;
-  margin-left: .5rem;
-}
-
 .celestialtabbtn {
   background-color: #5151ec;
   border: 2px solid #d0d0d0;
@@ -596,13 +586,6 @@ button {
     cursor: pointer;
     background-color: #9E913A;
 
-}
-
-#automatorTreeCanvas {
-    top: 0;
-    left: 0;
-    position: absolute;
-    z-index: -999;
 }
 
 #loading {
@@ -1112,113 +1095,6 @@ br {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-}
-
-#automator {
-    height: 300px;
-    width: 400px;
-    overflow-y: scroll;
-    resize: none;
-    font-family: 'PT Mono', monospace;
-    color: #66ff66;
-    background-color: black;
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-    #automator::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    #automator::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px grey;
-        border-radius: 10px;
-    }
-
-    #automator::-webkit-scrollbar-thumb {
-        background: #08450b;
-        border-radius: 5px;
-    }
-
-#automator::selection {
-    color: red;
-}
-
-.automatorinstruction.command {
-    background-color: black;
-    border: 2px solid #0b600e;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: pointer;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstruction.target {
-    background-color: black;
-    border: 2px solid #2196F3;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: pointer;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstruction.command:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-.automatorinstruction.target:hover {
-    color: black;
-    background-color: #BBDEFB;
-}
-
-.automatorinstructionbought.command {
-    background-color: #0b600e;
-    border: 2px solid #08450b;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionbought.target {
-    background-color: #2196F3;
-    border: 2px solid #1976D2;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionlocked.command {
-    background-color: #656565;
-    border: 2px solid #0b600e;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionlocked.target {
-    background-color: #656565;
-    border: 2px solid #2196F3;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
 }
 
 #perks {

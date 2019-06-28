@@ -203,10 +203,10 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
               false, false, false, false, false],
     upgReqChecks: [false],
     automatorOn: false,
@@ -286,6 +286,7 @@ let player = {
       isStoringReal: false,
       storedReal: 0,
       autoStoreReal: false,
+      storedFraction: 1,
       quoteIdx: 0,
       unlocks: [],
       run: false,
@@ -314,7 +315,7 @@ let player = {
         enslaved: {
           level: 1,
           exp: 0,
-          lastTimeTaken: 1e155
+          lastTimeTaken: Number.MAX_VALUE
         },
         v: {
           level: 1,
@@ -369,7 +370,8 @@ let player = {
       bigCrunch: true,
       eternity: true,
       tachyonParticles: true,
-      reality: true
+      reality: true,
+      background: true
     },
     confirmations: {
       sacrifice: true,

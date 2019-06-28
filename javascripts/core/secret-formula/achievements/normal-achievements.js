@@ -711,9 +711,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.infinitied.lte(1),
     checkEvent: GameEvent.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to IP based on Infinities.",
-    // Decimal.pow(2, Player.totalInfinitied.clampMin(1).log10()) can be rewritten as
-    // a single pow
-    effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), 0.30102999566398114),
+    effect: () => Decimal.pow(Player.totalInfinitied.clampMin(1), LOG10_2 / 4).powEffectOf(TimeStudy(31)),
     cap: () => Effarig.eternityCap
   },
   {
@@ -945,7 +943,7 @@ GameDatabase.achievements.normal = [
   {
     id: 151,
     name: "You really didn't need it anyway",
-    tooltip: () => "Get 800 galaxies without buying 8th dimensions in your current infinity.",
+    tooltip: () => "Get 800 antimatter galaxies without buying 8th dimensions in your current infinity.",
     checkRequirement: () => player.galaxies >= 800 && player.noEighthDimensions,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
     reward: "Unlock V, the Celestial of Achievements."

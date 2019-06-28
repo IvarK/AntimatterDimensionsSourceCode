@@ -122,7 +122,7 @@ const V = {
     return player.celestials.v.unlocks.includes(info.id);
   },
   startRun() {
-    player.celestials.v.run = startRealityOver();
+    player.celestials.v.run = startRealityOver() || player.celestials.v.run;
   },
   canBuyLockedPath() {
     return player.celestials.v.additionalStudies < this.totalAdditionalStudies;

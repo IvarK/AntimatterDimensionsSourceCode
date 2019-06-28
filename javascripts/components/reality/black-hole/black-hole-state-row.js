@@ -7,6 +7,7 @@ Vue.component("black-hole-state-row", {
   data() {
     return {
       isUnlocked: false,
+      isPermanent: false,
       isActive: false,
       isCharged: false,
       duration: 0,
@@ -24,6 +25,7 @@ Vue.component("black-hole-state-row", {
       const { blackHole } = this;
       this.isUnlocked = blackHole.isUnlocked;
       if (!this.isUnlocked) return;
+      this.isPermanent = blackHole.isPermanent;
       this.isActive = blackHole.isActive;
       this.isCharged = blackHole.isCharged;
       this.duration = blackHole.duration;
@@ -34,7 +36,10 @@ Vue.component("black-hole-state-row", {
   template: `
     <h3 v-if="isUnlocked">
       Black hole {{ id }}
-      <template v-if="isActive">
+      <template v-if="isPermanent">
+        is active permanently.
+      </template>
+      <template v-else-if="isActive">
         is active for {{ (duration - phase).toFixed(1) }} more seconds.
       </template>
       <template v-else-if="isCharged">

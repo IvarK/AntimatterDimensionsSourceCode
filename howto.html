@@ -235,11 +235,14 @@
     <hr id='div20hr'>
     <button onclick='changestate(21)' id='div21btn' class="storebtn">Glyphs</button>
     <div style="text-align: left" id='div21' class="hidden">
-          A glyph is an equippable item that can have multiple types. Each type has four effects. There are also different levels of rarity for glyphs. <br>
-      The five types are as follows: Normal, Infinity, Replicanti, Time, and Dilation. <br>
+          A glyph is an equippable item that can have multiple types. Each type has four effects.<br>
+          To equip the Glyph, drag a Glyph icon from your Glyph "inventory" into one of the circles in the middle of the screen. This should apply the glyph. If you look to the right of the glyph menu, you should see the glyph effects that are applied.<br>
+      The five basic Glyph types are as follows: <font color="#22aa48">Power</font>, <font color="#b67f33">Infinity</font>, <font color="#03a9f4">Replication</font>, <font color="#b241e3">Time</font>, and <font color="#64dd17">Dilation</font>. <br>
+      The eight rarities are as follows: <font color="white", span style="text-shadow: black -1px 1px 1px, black 1px 1px 1px, black -1px -1px 1px, black 1px -1px 1px, rgb(255, 255, 255) 0px 0px 3px;">Common</font>, <font color="#43a047">Uncommon</font>, <font color="#2196f3">Rare</font>, <font color="#9c27b0">Epic</font>, <font color="#ff9800">Legendary</font>, <font color="#d50000">Mythical</font>, <font color="#03ffec">Trancendent</font>, and <font color="#5151ec">Celestial.</font><br>
       Each glyph can have up to 4 effects at once. You can find the full glyph effect list and their corresponding type <a href="https://pastebin.com/raw/TyQbs4vX">here</a><br>
-      When you reach 1,500 RM and have a total of 30 glyphs, you unlock "Glyph Sacrificing". You can now sacrifice power and time glyphs for boosts to parts of the game corresponding to that glyph type.<br>
+      When you reach 1,500 RM, have a total of 30 glyphs, and have bought the Reality upgrade, you unlock "Glyph Sacrificing". You can now sacrifice power and time glyphs for boosts to parts of the game corresponding to that glyph type.<br>
       At 100,000 RM, you unlock the ability to sacrifice all glyph types.<br>
+      To sacrifice a glyph, simply shift+click on top of a glyph. This should create a pop-up that confirms if you want to sacrifice it. To speed up the sacrificing process, ctrl+shift+click to skip the confirmation.<br>
     </div>
       <hr id='div21hr'>
       <button onclick='changestate(22)' id='div22btn' class="storebtn">Perks</button>
@@ -270,9 +273,91 @@
           <div style="text-align: left" id='div25' class="hidden">
       Once you get all of the Reality Upgrades, the first Celestial is unlocked. This opens up a new tab to the right of Reality. <br>
       Each Celestial has unique mechanics and upgrades, and you need to defeat all seven. <br>
-      To defeat a Celestial, you must enter into that Celestial's Reality, and reach Reality. Afterwards, you can begin unlocking features within the Celestial interface, and you will be able to unlock the next Celestial.
+      To defeat a Celestial, you must enter into that Celestial's Reality, and reach Reality. <br>
+      There are unlocks within each Celestial's screen that you can unlock, usually before unlocking the Celestial itself, but there are also unlocks after.<br>
+      <hr id='div25hr'>
+      <button onclick='changestate(251)' id='div251btn' class="storebtn">Teresa, Celestial of Reality</button>   
+      <div style="text-align: left" id='div251' class="hidden">
+        Teresa is the first Celestial. It is unlocked by obtaining all of the Reality Upgrades.<br>
+        On the main screen, you see a bar with a button above it that says "Pour RM". This allows you to put your RM into the container for a Reality Machine multiplier.<br>
+        The container loses RM over time, which means that the RM multiplier decreases over time.<br>
+        When you reach 1e14 RM inside of the container, you permanately unlock Teresa's Reality. In game, it is described as the following:<br>
+        <div style="text-align: center">
+        <i>"Start Teresa's Reality. Glyph TT generation is disabled and you gain less IP and EP (x^0.6). The more antimatter you reach, the better the reward."</i>
+        </div>
+        The reward for beating Teresa is multiplying the power gained from glyph sacrifices.<br>
+        At 1e18 RM, you unlock Teresa's Eternity Point generator. This works like Time Study 181, in the sense that you gain 1% of your peaked EP/Min per second.<br>
+        Once you are at 1e21 RM in the container, you unlock Effarig, the second Celestial. As a side unlock, Teresa's container stops leaking RM.<br>
+        Teresa's final unlock is at 1e24 RM, at which you unlock the Perk Shop, where you can spend spare Perk points on three upgrades that boost effeciency. 
       </div>
-            <hr id='div25hr'>
+      <hr id='div251hr'>
+      <button onclick='changestate(252)' id='div252btn' class="storebtn">Effarig, Celestial of Ancient Relics</button>   
+      <div style="text-align: left" id='div252' class="hidden">
+        Effarig is the second Celestial you encounter. It is unlocked by Teresa at 1e21 RM.<br>
+        Effarig introduces a currency called Relic Shards, which are obtained by using different kinds of glyph effects and EP. This is the currency for Effarig's unlocks.<br>
+        You can buy the first unlock, called Glyph level Adjustment, at 1e7 Relic Shards. This allows you to change the power of the resources that are taken into account for during the glyph level equation.<br>
+        Next, at 2e8 RS, you can buy the next unlock, Automatic Glyph Sacrifice. This does exactly what you'd expect it to: sacrifice your glyphs. This checks, on an automatic reality (not a manual reality), if it fits within your requirements.<br>
+        At 3e9 RS, the third unlock, the Automatic Glyph Picker, is unlocked. You can configure it to do what it has been doing every time (random), to pick the rarest glyph, or to pick the farthest above Advanced Mode's (auto sacrifice setting) thresholds.<br>
+        Effarig's final unlock is of his own Reality at 5e11 RS. His Reality is divided into three sections: Infinity, Eternity, and Reality. His Reality's description in game is:<br>
+        <div style="text-align: center">
+        <i>"Start Effarig's Reality; all production, gamespeed, and tickspeed are severely lowered, infinity power reduces the production and gamespeed penalties and time shards reduce the tickspeed penalty. Glyph levels are temporarily capped."</i>
+        </div>
+        Each tier of his reality has different rewards. Some are to help during his Reality, and others are there to help outside. The main rewards are for Eternity and Reality.<br>
+        His Eternity unlocks the next Celestial, The Enslaved Ones. It also allows Eternities to generate Infinities, and disables the Infinity Point multiplier cap in his Reality.<br>
+        Completing his Reality unlocks a new mechanic known as <font color="#e21717">Effarig</font> Glyphs. These are a new Glyph type.<br>
+        On an Effarig Glyph, you have an equal chance of getting each effect. There are 7 different possible effects on an Effarig Glyph, which can be found <a href="https://pastebin.com/992cYUY3">here.</a><br>
+        You can only have one Effarig glyph equipped at a time.
+        </div>
+        <hr id='div252hr'>
+        <button onclick='changestate(253)' id='div253btn' class="storebtn">The Enslaved Ones</button>   
+      <div style="text-align: left" id='div253' class="hidden">
+        The Enslaved Ones are the third Celestial, unlocked at Effarig's Eternity.<br>
+        The interface for The Enslaved Ones has a few buttons on it. The top left button should say <i>"0.000 seconds"</i>, and then <i>"Store black hole time"</i>. This button allows you to store the time that you are advancing through due to your black hole. The button directly below it allows you to use the time you are storing through the black hole.<br>
+        To store black hole time, simply click on the "store black hole time" button. This should initiate the timer at the top. To use stored black hole time, click the button below.<br>
+        On the right hand side, there are another two buttons. The top right button isn't actually a button. It is used to display info about the amount of <i><b>REAL</b></i> time you have stored, not black hole time. The button below is the real time storage settings. By default, it says "Offline time used for production", but clicking on it toggles the other setting: "Offline time stored". This allows you to switch between storing your offline time at a 33% effeciency by default, and using offline time for producing Antimatter and other resources.<br>
+        To use stored real time, go to the Reality screen, and look under the Glyphs tab. There should be a button that says <i>"Amplify using stored real time"</i>, with a number next to it. If you click the button, it should change to a yellow color. Now, upon Reality, you will get ×x Glyphs, Realities, and RM.<br>
+        Amplifying a reality in this way effectively uses your real time to complete that particular reality over and over, so you should try to be quick in order to increase the number of times its repeated.<br>
+        Purchasing any of The Enslaved Ones unlocks required having years saved up in stored Black Hole time.<br>
+        Their first unlock is for 1e35 years, which increases the free tickspeed softcap by 100,000 upgrades.<br>
+        Soon after, at 1e40 years, you are able to finally unlock their Reality, which is described as:<br>
+        <div style="text-align: center">
+        <i>"Start Enslaved Ones Reality. ID, TD, and 8th dimension purchases are limited to 1 each, Normal dimension multipliers are always dilated (the glyph effect still only applies in actual dilation), Time study 192 is locked, The black hole is disabled, Tachyon production and dilated time production are severely reduced, Time theorem generation from dilation glyphs is much slower, Certain challenge goals have been increased, and Stored time is much less effective."</i>
+        </div>
+        In their Reality, it has some aspects about it that make it seem like a puzzle. There are clues throughout a few different pages of the game.<br>
+        The reward for defeating The Enslaved Ones is that the Infinity Dimension purchase caps are increased by 1000 for every 1000 free tickspeed upgrades.<br>
+        </div>
+        <hr id='div253hr'>
+        <button onclick='changestate(254)' id='div254btn' class="storebtn">V, Celestial of Achievements</button>   
+        <div style="text-align: left" id='div254' class="hidden">
+          V is a special Celestial in the sense that it is not unlocked by another Celestial, but by an achievement. She is unlocked by completing achievement r151 (row 15, column 1, "You really didn't need it anyway") which requires you to get 800 Antimatter Galaxies without buying 8th Dimensions in your current infinity.<br>
+          After being unlocked, you are met with another set of requirements to fully unlock V. You are required to reach 1e4 (10,000) Realities, 1e70 Eternities, 1e160 Infinities, 1e320 Dilated Time, and 1e320,000 Replicanti, all in the same run.<br>
+          When you meet those requirements, you are now in the V interface. On the screen, you should see six white hexagons surrounding one orange hexagon. The six white hexagons represent what are known as "V-achievements", which are unlocked by reaching their requirements inside of V's Reality. The orange hexagon in the middle is the button to enter into the Reality, which contains the nerfs to V's reality, which are as follows:<br>
+          <div style="text-align: center">
+          <i>"Start V's Reality. All dimension multipliers, EP gain, IP gain, and dilated time gain per second are square-rooted, and Replicanti interval is squared."</i>
+          </div>
+          When you reach the requirements for a V-Achievement in her Reality, you are awarded with that achievement. V-achievements go to two different things: unlocking rewards and being able to add more studies to your tree.<br>
+          V has three rewards unlockable with the V-Achievements. The first one requires you to have ten V-Achievements, and increases the speed of the Auto-EC perk by your Achievement multiplier.<br>
+          The second unlockable needs thirty V-Achievements to unlock, and it multiplies black hole power by your achievement count. It also unlocks Ra, the next Celestial.<br>
+          The final unlockable takes all thirty-six V-Achievements to unlock, and doubles the amount of locked studies you can buy.<br>
+          One of V's passive unlocks is the ability to buy studies that you are not normally able to buy. This requires six (three with the final unlock) V-Achievements to be completed to buy one locked study.<br> 
+        </div>
+          <hr id='div254hr'>
+          <button onclick='changestate(255)' id='div255btn' class="storebtn">Ra, Celestial of the Forgotten</button>   
+          <div style="text-align: left" id='div255' class="hidden">
+            
+            </div>
+            <hr id='div255hr'>
+            <button onclick='changestate(256)' id='div256btn' class="storebtn">Lai'tela, Celestial of Matter</button>   
+            <div style="text-align: left" id='div256' class="hidden">
+              
+              </div>
+              <hr id='div256hr'>
+              <button onclick='changestate(257)' id='div257btn' class="storebtn">Pelle, Celestial of Antimatter</button>   
+              <div style="text-align: left" id='div257' class="hidden">
+                
+                </div>
+                <hr id='div257hr'>
+    </div>
             <a href="http://antimatter-dimensions.wikia.com/wiki/Guide">Strategy Guide</a>
   </body>
   <script src='javascripts/howto.js'></script>

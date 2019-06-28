@@ -232,7 +232,6 @@ const AutomatorBackend = {
     if (S.commandIndex >= S.commands.length - 1) {
       this.stack.pop();
       if (this.stack.isEmpty) {
-        console.log(`program end : ${this.state.repeat}`);
         // With the debug output on, running short scripts gets very spammy, working around that
         // return false here makes sure that a single instruction script executes one tick at a time
         if (this.state.repeat) {
@@ -259,7 +258,6 @@ const AutomatorBackend = {
   },
 
   initializeFromSave() {
-    console.log("Initialize from save")
     const scriptIds = Object.keys(player.reality.automator.scripts);
     if (scriptIds.length === 0) {
       const defaultScript = AutomatorScript.create("Untitled");
@@ -270,8 +268,6 @@ const AutomatorBackend = {
     }
     if (!scriptIds.includes(this.state.topLevelScript)) this.state.topLevelScript = scriptIds[0];
     const currentScript = this._scripts.find(e => e.id === this.state.topLevelScript);
-    console.log("currentScript")
-    console.log(currentScript)
     if (currentScript.commands) {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
@@ -339,8 +335,6 @@ const AutomatorBackend = {
       player.reality.automator.state.stack.length = 0;
     },
     initializeFromSave(commands) {
-      console.log("stack nitialize from save")
-      console.log(commands);
       this._data = [];
       const playerStack = player.reality.automator.state.stack;
       let currentCommands = commands;
@@ -350,7 +344,6 @@ const AutomatorBackend = {
         newEntry.commands = currentCommands;
         const foundIndex = currentCommands.findIndex(e => e.lineNumber === playerEntry.lineNumber);
         if (foundIndex === -1) {
-          console.log(`Line number ${playerEntry.lineNumber} not found`);
           // Could not match stack state to script, have to reset automato
           return false;
         }
@@ -359,7 +352,6 @@ const AutomatorBackend = {
         // Are we inside a code block?
         if (depth !== playerStack.length - 1) {
           if (currentCommands[foundIndex].blockCommands === undefined) {
-            console.log(`No code block found at line ${playerEntry.lineNumber}`);
             return false;
           }
           currentCommands = currentCommands[foundIndex].blockCommands;

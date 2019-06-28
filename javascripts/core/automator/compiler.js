@@ -374,10 +374,6 @@
       compiled = new Compiler().visit(parseResult);
     }
     const t4 = Date.now();
-    console.log(tokens);
-    console.log(parser.errors);
-    console.log(lexResult.errors);
-    console.log(validator.errors);
     console.log(`time: lex = ${t1 - t0}, parse = ${t2 - t1} validation = ${t3 - t2}, compile = ${t4 - t3}`);
     return {
       errors: validator.errors,

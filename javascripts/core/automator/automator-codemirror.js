@@ -13,7 +13,6 @@
 
   CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
     const doc = editor.getDoc();
-    console.log("automato lint");
     const errors = AutomatorGrammar.compile(contents, true).errors;
     return errors.map(e => ({
       message: e.info,
@@ -34,7 +33,6 @@
     const lineLex = AutomatorLexer.lexer.tokenize(lineStart);
     if (lineLex.errors.length > 0) return undefined;
     const rawSuggestions = AutomatorGrammar.parser.computeContentAssist("command", lineLex.tokens);
-    console.log(rawSuggestions)
     const suggestions = new Set();
     for (const s of rawSuggestions) {
       if (s.ruleStack[1] === "badCommand") continue;

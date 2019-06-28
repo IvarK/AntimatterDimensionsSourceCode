@@ -11,6 +11,7 @@
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
     const doc = editor.getDoc();
     const errors = AutomatorGrammar.compile(contents, true).errors;

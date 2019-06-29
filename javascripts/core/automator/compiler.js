@@ -357,24 +357,18 @@
   }
 
   function compile(input, validateOnly = false) {
-    const t0 = Date.now();
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
-    parser.input = tokens;
-    const t1 = Date.now();
+    parser.input = tokens;    const t1 = Date.now();
     const parseResult = parser.script();
-    const t2 = Date.now();
     const validator = new Validator();
     validator.visit(parseResult);
     validator.addLexerErrors(lexResult.errors, input);
     validator.addParserErrors(parser.errors, tokens);
-    const t3 = Date.now();
     let compiled;
     if (validator.errors.length === 0 && !validateOnly) {
       compiled = new Compiler().visit(parseResult);
     }
-    const t4 = Date.now();
-    console.log(`time: lex = ${t1 - t0}, parse = ${t2 - t1} validation = ${t3 - t2}, compile = ${t4 - t3}`);
     return {
       errors: validator.errors,
       compiled,

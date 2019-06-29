@@ -28,7 +28,7 @@ const AutomatorUI = {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       AutomatorBackend.saveScript(scriptID, editor.getDoc().getValue());
     });
-    EventHub.logic.on(GameEvent.GAME_LOAD, () => this.documents = {});
+    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.documents = {});
   }
 };
 
@@ -47,8 +47,14 @@ Vue.component("automator-editor", {
   },
   watch: {
     activeLine(newVal, oldVal) {
-      if (oldVal > 0) AutomatorUI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
-      if (newVal > 0) AutomatorUI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
+      if (oldVal > 0) {
+        AutomatorUI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
+        AutomatorUI.editor.removeLineClass(oldVal - 1, "gutter", "c-automator-editor__active-line-gutter");
+      }
+      if (newVal > 0) {
+        AutomatorUI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
+        AutomatorUI.editor.addLineClass(newVal - 1, "gutter", "c-automator-editor__active-line-gutter");
+      }
     },
     fullScreen() {
       this.$nextTick(() => AutomatorUI.editor.refresh());
@@ -179,7 +185,7 @@ Vue.component("automator-editor", {
   },
   created() {
     AutomatorUI.initialize();
-    EventHub.logic.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
+    EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
     this.updateCurrentScriptID();
     this.updateScriptList();
   },
@@ -193,7 +199,7 @@ Vue.component("automator-editor", {
       AutomatorUI.editor.removeLineClass(this.activeLine - 1, "background", "c-automator-editor__active-line");
     }
     this.$refs.container.removeChild(AutomatorUI.container);
-    EventHub.logic.offAll(this);
+    EventHub.ui.offAll(this);
   },
   template:
     `<div class="l-automator-pane">

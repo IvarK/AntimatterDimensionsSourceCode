@@ -106,6 +106,12 @@
   background: rgb(25, 10, 44);
 }
 
+.c-automator-editor__active-line-gutter {
+  font-weight: bold;
+  background: rgb(25, 10, 44);
+  filter: brightness(200%);
+}
+
 .c-automator-editor {
   font-family: Typewriter, serif;
   font-size: 1.4rem;

@@ -63,10 +63,10 @@ function buyTickSpeed() {
   }
 
   player.money = player.money.minus(player.tickSpeedCost);
-  if (!NormalChallenge(9).isRunning && !InfinityChallenge(5).isRunning) {
-    player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
-  } else {
+  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     multiplySameCosts(player.tickSpeedCost);
+  } else {
+    player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   }
   if (player.tickSpeedCost.gte(Decimal.MAX_NUMBER)) {
     player.tickspeedMultiplier = player.tickspeedMultiplier.times(Player.tickSpeedMultDecrease);
@@ -97,19 +97,14 @@ function buyMaxTickSpeed() {
     const multDec = new Decimal(tickSpeedMultDecrease);
     tickspeedMultiplier = tickspeedMultiplier.times(multDec.pow(n));
   }
+  const inCostScalingChallenge = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
+  const tickspeedMultDecreaseMaxed = BreakInfinityUpgrade.tickspeedCostMult.isMaxed;
 
-  if (NormalChallenge(9).isRunning ||
-    InfinityChallenge(5).isRunning ||
-    tickSpeedCost.lt(Decimal.MAX_NUMBER) ||
-    !BreakInfinityUpgrade.tickspeedCostMult.isMaxed) {
-
-    while (money.gt(tickSpeedCost) &&
-      (tickSpeedCost.lt(Decimal.MAX_NUMBER) ||
-      !BreakInfinityUpgrade.tickspeedCostMult.isMaxed ||
-      InfinityChallenge(5).isRunning)) {
-
+  if (tickSpeedCost.lt(Decimal.MAX_NUMBER) || inCostScalingChallenge || !tickspeedMultDecreaseMaxed) {
+    let shouldContinue = true;
+    while (money.gt(tickSpeedCost) && shouldContinue) {
       money = money.minus(tickSpeedCost);
-      if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+      if (inCostScalingChallenge) {
         multiplySameCosts(tickSpeedCost);
       }
       if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
@@ -119,6 +114,9 @@ function buyMaxTickSpeed() {
       }
       totalTickBought++;
       postc8Mult = new Decimal(1);
+      if (tickSpeedCost.gte(Decimal.MAX_NUMBER) && !inCostScalingChallenge && tickspeedMultDecreaseMaxed) {
+        shouldContinue = false;
+      }
     }
   }
   if (tickSpeedCost.gte(Decimal.MAX_NUMBER)) {
@@ -130,6 +128,7 @@ function buyMaxTickSpeed() {
     });
     const purchases = costScale.getMaxBought(totalTickBought, money);
     if (purchases === null) {
+      flushValues();
       return;
     }
     totalTickBought += purchases.quantity;

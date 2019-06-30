@@ -69,16 +69,16 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   set completions(value) {
-    if (Enslaved.isRunning && this.id === 1) {
-      player.eternityChalls[this.fullId] = Math.min(1000, value);
-      return;
-    }
-    player.eternityChalls[this.fullId] = Math.min(value, TIERS_PER_EC);
+    player.eternityChalls[this.fullId] = Math.min(value, this.maxCompletions);
   }
 
   get isFullyCompleted() {
-    if (Enslaved.isRunning && this.id === 1) return this.completions === 1000;
-    return this.completions === TIERS_PER_EC;
+    return this.completions === this.maxCompletions;
+  }
+
+  get maxCompletions() {
+    if (Enslaved.isRunning && this.id === 1) return 1000;
+    return TIERS_PER_EC;
   }
 
   get initialGoal() {
@@ -102,9 +102,15 @@ class EternityChallengeState extends GameMechanicState {
   }
 
   goalAtCompletions(completions) {
-    return completions > 0 ?
-      this.initialGoal.times(this.goalIncrease.pow(completions)) :
-      this.initialGoal;
+    return completions > 0
+      ? this.initialGoal.times(this.goalIncrease.pow(completions))
+      : this.initialGoal;
+  }
+
+  completionsAtIP(ip) {
+    if (ip.lt(this.initialGoal)) return 0;
+    const completions = (ip.dividedBy(this.initialGoal)).log10() / this.goalIncrease.log10();
+    return Math.min(Math.floor(completions), this.maxCompletions);
   }
 
   addCompletion() {
@@ -242,4 +248,41 @@ EternityChallenge.autoCompleteTick = function() {
     player.reality.lastAutoEC -= threshold;
   }
   player.reality.lastAutoEC %= threshold;
+};
+
+EternityChallenge.gainedCompletionStatus = function() {
+  const currentEC = EternityChallenge.current;
+  const currentCompletions = currentEC.completions;
+  const status = {
+    fullyCompleted: currentEC.isFullyCompleted,
+    gainedCompletions: 0,
+    totalCompletions: currentCompletions,
+  };
+  if (status.fullyCompleted) return status;
+  if (!Perk.studyECBulk.isBought) {
+    if (currentEC.canBeCompleted) {
+      ++status.totalCompletions;
+      status.gainedCompletions = 1;
+    }
+    return status;
+  }
+  status.totalCompletions = currentEC.completionsAtIP(player.infinityPoints);
+
+  if (EternityChallenge(4).isRunning) {
+    const maxEC4Valid = player.infinitied.lte(16) ? 5 - Math.ceil(player.infinitied.toNumber() / 4) : 0;
+    if (status.totalCompletions >= maxEC4Valid && status.gainedCompletions > 1) {
+      status.totalCompletions = Math.min(status.totalCompletions, maxEC4Valid);
+      status.failedCondition = "(Too many infinities for more)";
+    }
+  } else if (EternityChallenge(12).isRunning) {
+    const maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
+    if (status.totalCompletions >= maxEC12Valid && status.gainedCompletions > 1) {
+      status.totalCompletions = Math.min(status.totalCompletions, maxEC12Valid);
+      status.failedCondition = "(Too slow for more)";
+    }
+  }
+  status.gainedCompletions = status.totalCompletions - currentCompletions;
+  status.hasMoreCompletions = status.gainedCompletions < currentEC.maxCompletions;
+  status.nextGoalAt = currentEC.goalAtCompletions(status.totalCompletions);
+  return status;
 };

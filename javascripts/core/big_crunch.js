@@ -5,31 +5,54 @@ function bigCrunchAnimation() {
   setTimeout(() => {
       document.body.style.animation = "";
   }, 2000);
-  setTimeout(bigCrunchReset(true), 1000);
+  setTimeout(bigCrunchReset(), 1000);
 }
 
-function bigCrunchReset(disableAnimation = false) {
+function canCrunch() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
-  if (player.money.lt(Decimal.MAX_NUMBER) || (challenge && player.money.lt(challenge.goal))) {
-    return;
+  const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
+  if (player.money.lt(goal)) return false;
+  return true;
+}
+
+function handleChallengeCompletion() {
+  if (!NormalChallenge(1).isCompleted) {
+    NormalChallenge(1).complete();
   }
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
+  if (!challenge) return;
+  if (!challenge.isCompleted) {
+    challenge.complete();
+    Autobuyer.tryUnlockAny();
+  }
+  challenge.updateChallengeTime();
+  if (NormalChallenge(9).isRunning) {
+    kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.thisInfinityTime));
+  }
+  if (!player.options.retryChallenge) {
+    player.challenge.normal.current = 0;
+    player.challenge.infinity.current = 0;
+  }
+}
+
+function bigCrunchResetRequest(disableAnimation = false) {
+  if (!canCrunch()) return;
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   if (earlyGame && !disableAnimation && player.options.animations.bigCrunch) {
     bigCrunchAnimation();
-    return;
+  } else {
+    bigCrunchReset();
   }
+}
+
+function bigCrunchReset() {
+  if (!canCrunch()) return;
+  const earlyGame = player.bestInfinityTime > 60000 && !player.break;
+  const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
-  if (challenge) {
-    if (!challenge.isCompleted) {
-      challenge.complete();
-      Autobuyer.tryUnlockAny();
-    }
-    challenge.updateChallengeTime();
-  }
+  handleChallengeCompletion();
+
   if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
-  if (NormalChallenge(9).isRunning) {
-    kong.submitStats('NormalChallenge 9 time record (ms)', Math.floor(player.thisInfinityTime));
-  }
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
@@ -38,15 +61,6 @@ function bigCrunchReset(disableAnimation = false) {
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
 
   if (EternityChallenge(4).tryFail()) return;
-
-  if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
-    NormalChallenge(1).complete();
-    Autobuyer.tryUnlockAny();
-  }
-  if (!player.options.retryChallenge) {
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = 0;
-  }
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
   //kong.submitStats('Infinitied', Player.totalInfinitied);
@@ -100,7 +114,7 @@ function secondSoftReset() {
     AchievementTimers.marathon2.reset();
 }
 
-document.getElementById("bigcrunch").onclick = bigCrunchReset;
+document.getElementById("bigcrunch").onclick = bigCrunchResetRequest;
 
 function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {

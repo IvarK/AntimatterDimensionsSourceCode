@@ -76,12 +76,10 @@ const GameStorage = {
   verifyPlayerObject(save) {
     return save !== undefined && save !== null && save.money !== undefined;
   },
-  
+
   save(silent = false) {
     if (GlyphSelection.active) return;
     if (++this.saved > 99) SecretAchievement(12).unlock();
-    player.reality.automatorOn = automatorOn;
-    player.reality.automatorCurrentRow = automatorIdx;
     const root = {
       current: this.currentSlot,
       saves: this.saves
@@ -89,7 +87,7 @@ const GameStorage = {
     localStorage.setItem(this.localStorageKey, GameSaveSerializer.serialize(root));
     if (!silent) GameUI.notify.info("Game saved");
   },
-  
+
   export() {
     const save = GameSaveSerializer.serialize(player);
     copyToClipboardAndNotify(save);
@@ -144,8 +142,6 @@ const GameStorage = {
     Autobuyer.checkIntervalAchievements();
     Autobuyer.checkBulkAchievements();
     Autobuyer.convertPropertiesToDecimal();
-    resizeCanvas();
-    updateAutomatorRows();
     checkPerkValidity();
     Teresa.checkPPShopValidity();
     drawPerkNetwork();
@@ -155,18 +151,13 @@ const GameStorage = {
     Theme.set(player.options.theme);
     Notation.find(player.options.notation).setCurrent();
 
-    if (localStorage.getItem("automatorScript1") !== null) {
-      importAutomatorScript(localStorage.getItem("automatorScript1"));
-    }
-    automatorOn = player.reality.automatorOn;
-    if (automatorOn) $("#automatorOn")[0].checked = true;
-    automatorIdx = player.reality.automatorCurrentRow;
-
     if (player.options.newUI) {
       ui.view.newUI = true;
-      ui.view.page = "new-dimensions-tab"
+      ui.view.page = "new-dimensions-tab";
     }
 
+    EventHub.dispatch(GameEvent.GAME_LOAD);
+    AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
     let diff = Date.now() - player.lastUpdate;

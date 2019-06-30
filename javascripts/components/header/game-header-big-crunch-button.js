@@ -34,7 +34,7 @@ Vue.component("game-header-big-crunch-button", {
     `<button
       v-if="isVisible"
       class="o-prestige-btn o-prestige-btn--big-crunch l-game-header__big-crunch-btn"
-      onclick="bigCrunchReset()"
+      onclick="bigCrunchResetRequest()"
     >
       <b>Big Crunch for {{shortenDimensions(gainedIP)}} Infinity {{ "point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">

@@ -604,7 +604,7 @@ class InfinityAutobuyerState extends AutobuyerState {
       }
     }
     if (proc) {
-      bigCrunchReset();
+      bigCrunchResetRequest();
     }
     this.resetTicks();
   }
@@ -625,7 +625,7 @@ Autobuyer.unlockables = Autobuyer.allDims
   ]);
 
 Autobuyer.tryUnlockAny = function() {
-  for (let autobuyer of this.unlockables) {
+  for (const autobuyer of this.unlockables) {
     autobuyer.tryUnlock();
   }
 };

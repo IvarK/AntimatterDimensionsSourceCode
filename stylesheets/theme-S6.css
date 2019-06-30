@@ -169,38 +169,6 @@ strong {
   text-shadow: 0 0 7px #0b600e;
 }
 
-.t-s6 .automatorinstruction.command {
-    background-color: black;
-}
-
-.t-s6 .automatorinstruction.target {
-    background-color: black;
-}
-
-.t-s6 .automatorinstruction.command:hover {
-    background-color: #d5ffd7;
-}
-
-.t-s6 .automatorinstruction.target:hover {
-    background-color: #BBDEFB;
-}
-
-.t-s6 .automatorinstructionbought.command {
-    background-color: #0b600e;
-}
-
-.t-s6 .automatorinstructionbought.target {
-    background-color: #2196F3;
-}
-
-.t-s6 .automatorinstructionlocked.command {
-    background-color: #656565;
-}
-
-.t-s6 .automatorinstructionlocked.target {
-    background-color: #656565;
-}
-
 .t-s6 #realityanimbg {
     filter: invert(1);
 }

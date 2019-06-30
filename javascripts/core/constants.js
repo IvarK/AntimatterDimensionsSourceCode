@@ -83,7 +83,19 @@ const AutoGlyphPickMode = {
   RANDOM: 0,
   RARITY: 1,
   ABOVE_SACRIFICE_THRESHOLD: 2,
-}
+};
+
+const TimeStudyPath = {
+  NONE: 0,
+  NORMAL_DIM: 1,
+  INFINITY_DIM: 2,
+  TIME_DIM: 3,
+  ACTIVE: 4,
+  PASSIVE: 5,
+  IDLE: 6,
+  LIGHT: 7,
+  DARK: 8
+};
 
 // Use through Automator.Instructions; here to support creation of index by ID
 const _AutomatorInstructions = Object.freeze({
@@ -321,7 +333,7 @@ function _makeAutomatorInstructionsById() {
   return ret;
 }
 
-const Automator = Object.freeze({
+const AutomatorInstructions = Object.freeze({
   Instructions: _AutomatorInstructions,
   InstructionsById: _makeAutomatorInstructionsById(),
 });

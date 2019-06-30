@@ -391,7 +391,6 @@ function completeReality(force, reset, auto = false) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();
-  updateAutomatorRows();
   drawPerkNetwork();
 
   resetInfinityPoints();

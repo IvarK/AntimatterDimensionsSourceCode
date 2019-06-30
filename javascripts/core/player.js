@@ -220,7 +220,19 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0
+    partEternitied: 0,
+    automator: {
+      state: {
+        mode: AutomatorMode.STOP,
+        topLevelScript: 0,
+        editorScript: 0,
+        repeat: false,
+        stack: [],
+      },
+      scripts: {
+      },
+      lastID: 0,
+    }
   },
   blackHole: Array.range(0, 2).map(id => ({
     id,
@@ -447,7 +459,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice") continue;
+    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

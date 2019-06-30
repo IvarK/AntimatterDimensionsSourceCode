@@ -125,7 +125,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(NormalChallengeState, GameDatabase.challenges.normal);
+NormalChallengeState.createIndex(GameDatabase.challenges.normal);
 
 /**
  * @param {number} id
@@ -244,7 +244,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(InfinityChallengeState, GameDatabase.challenges.infinity);
+InfinityChallengeState.createIndex(GameDatabase.challenges.infinity);
 
 /**
  * @param {number} id

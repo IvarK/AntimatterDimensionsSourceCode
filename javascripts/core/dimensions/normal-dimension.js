@@ -663,7 +663,7 @@ class NormalDimensionState extends DimensionState {
   }
 }
 
-NormalDimensionState.index = DimensionState.createIndex(NormalDimensionState);
+NormalDimensionState.createIndex();
 
 /**
  * @param {number} tier

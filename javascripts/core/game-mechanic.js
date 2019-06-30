@@ -45,8 +45,8 @@ class GameMechanicState {
     }
   }
 
-  static createIndex($class, gameData) {
-    $class.index = mapGameData(gameData, config => new $class(config));
+  static createIndex(gameData) {
+    this.index = mapGameData(gameData, config => new this(config));
   }
 }
 

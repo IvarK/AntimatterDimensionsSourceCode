@@ -37,7 +37,7 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(VRunUnlockState, GameDatabase.celestials.v.runUnlocks);
+VRunUnlockState.createIndex(GameDatabase.celestials.v.runUnlocks);
 
 /**
  * @param {number} id

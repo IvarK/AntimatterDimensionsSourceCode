@@ -55,7 +55,7 @@ class AchievementState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(AchievementState, GameDatabase.achievements.normal);
+AchievementState.createIndex(GameDatabase.achievements.normal);
 
 /**
  * @param {number} id
@@ -95,7 +95,7 @@ class SecretAchievementState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(SecretAchievementState, GameDatabase.achievements.secret);
+SecretAchievementState.createIndex(GameDatabase.achievements.secret);
 
 /**
  * @param {number} id

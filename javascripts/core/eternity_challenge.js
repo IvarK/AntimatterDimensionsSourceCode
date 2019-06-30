@@ -217,7 +217,7 @@ class EternityChallengeState extends GameMechanicState {
   }
 }
 
-GameMechanicState.createIndex(EternityChallengeState, GameDatabase.challenges.eternity);
+EternityChallengeState.createIndex(GameDatabase.challenges.eternity);
 
 /**
  * @param id

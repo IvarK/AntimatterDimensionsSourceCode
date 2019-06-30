@@ -6,7 +6,6 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 let player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
-  tickspeed: new Decimal(1000),
   dimensions: {
     normal: Array.range(0, 8).map(tier => ({
       bought: 0,
@@ -96,7 +95,6 @@ let player = {
   spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
-  postC3Reward: new Decimal(1),
   eternityPoints: new Decimal(0),
   eternities: 0,
   thisEternity: 0,
@@ -108,6 +106,7 @@ let player = {
   timeShards: new Decimal(0),
   tickThreshold: new Decimal(1),
   totalTickGained: 0,
+  totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
   autoSacrifice: 1,

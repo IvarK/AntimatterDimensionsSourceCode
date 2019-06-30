@@ -342,6 +342,10 @@ GameStorage.devMigrations = {
     },
     player => {
       GameStorage.migrations.clearNewsArray(player);
+    },
+    player => {
+      GameStorage.migrations.removeTickspeed(player);
+      GameStorage.migrations.removePostC3Reward(player);
     }
   ],
 

@@ -29,11 +29,11 @@ GameDatabase.challenges.infinity = [
       "you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
-    effect: () => player.postC3Reward,
+    effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
       description: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies",
-      effect: () => player.postC3Reward,
+      effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
       formatEffect: value => formatX(value, 2, 2),
     },
     unlockAM: new Decimal("1e12000"),

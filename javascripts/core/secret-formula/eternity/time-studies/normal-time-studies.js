@@ -14,7 +14,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => true,
       description: "Tickspeed affects 1st Time Dimension with reduced effect",
       effect: () => {
-        const tickspeed = player.tickspeed.dividedBy(1000);
+        const tickspeed = Tickspeed.current.dividedBy(1000);
         const firstPart = tickspeed.pow(0.005).times(0.95);
         const secondPart = tickspeed.pow(0.0003).times(0.05);
         return firstPart.plus(secondPart).reciprocate();

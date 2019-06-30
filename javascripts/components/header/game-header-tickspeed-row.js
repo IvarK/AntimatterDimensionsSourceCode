@@ -1,19 +1,18 @@
 "use strict";
 
 Vue.component("game-header-tickspeed-row", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       mult: new Decimal(0),
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
-      gameSpeedMult: 1,
-      gammaText: ""
+      gameSpeedMult: 1
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "c-game-header__tickspeed-row": true,
         "c-game-header__tickspeed-row--hidden": !this.isVisible
@@ -21,46 +20,40 @@ Vue.component("game-header-tickspeed-row", {
     },
     multiplierDisplay() {
       const tickmult = this.mult;
-      if (tickmult.lte(1e-9)) {
-        return `Divide the tick interval by ${this.shortenDimensions(tickmult.reciprocal())}.`;
-      } else {
-        const asNumber = tickmult.toNumber();
-        let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
-        if (player.galaxies === 1) places = Math.max(places, 1);
-        return `Reduce the tick interval by ${((1 - asNumber) * 100).toFixed(places)}%.`;
-      }
+      if (tickmult.lte(1e-9)) return `Divide the tick interval by ${this.shorten(tickmult.reciprocal(), 2, 0)}.`;
+
+      const asNumber = tickmult.toNumber();
+      let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
+      if (player.galaxies === 1) places = Math.max(places, 1);
+      return `Reduce the tick interval by ${formatPercents(1 - asNumber, places)}.`;
     },
-    tickspeedDisplay: function() {
+    tickspeedDisplay() {
       const tickspeed = this.tickspeed;
       let displayValue;
       if (tickspeed.exponent > 1) {
         displayValue = tickspeed.toFixed(0);
-      }
-      else {
+      } else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shortenRateOfChange(oom)}`;
+        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
       }
       return `Tickspeed: ${displayValue}`;
     },
-    isGameSpeedNormal: function() {
+    isGameSpeedNormal() {
       return this.gameSpeedMult === 1;
     },
-    isGameSpeedSlow: function() {
+    isGameSpeedSlow() {
       return this.gameSpeedMult < 1;
     },
-    formattedFastSpeed: function() {
+    formattedFastSpeed() {
       const gameSpeedMult = this.gameSpeedMult;
       return gameSpeedMult < 10000 ? gameSpeedMult.toFixed(3) : this.shortenDimensions(gameSpeedMult);
     },
-    gammaDisplay: function() {
-      return this.gammaText;
-    },
-    tooltip: function() {
+    tooltip() {
       if (this.isGameSpeedNormal) return undefined;
       const displayValue = this.isGameSpeedSlow ? (1 / this.gameSpeedMult).toFixed(0) : this.formattedFastSpeed;
       return `The game is running ${displayValue}x ${this.isGameSpeedSlow ? "slower." : "faster."}`;
     },
-    showCostTitle: function() {
+    showCostTitle() {
       return this.cost.exponent < 1000000;
     }
   },
@@ -74,7 +67,6 @@ Vue.component("game-header-tickspeed-row", {
       this.isAffordable = !isEC9Running && canAfford(player.tickSpeedCost);
       this.tickspeed.copyFrom(Tickspeed.current);
       this.gameSpeedMult = getGameSpeedupFactor();
-      this.gammaText = this.getGameSpeedupText();
     },
     getGameSpeedupText() {
       if (player.celestials.enslaved.isStoringReal) {
@@ -87,7 +79,7 @@ Vue.component("game-header-tickspeed-row", {
           const storedTimeWeight = player.celestials.enslaved.storedFraction;
           speedMod = Math.pow(speedMod, 1 - storedTimeWeight);
           if (storedTimeWeight !== 0) {
-            storedTimeText = ` | storing ${(100 * storedTimeWeight).toFixed(1)}% game time`;
+            storedTimeText = ` | storing ${formatPercents(storedTimeWeight)} game time`;
           }
         } else {
           speedMod = 1;
@@ -115,6 +107,6 @@ Vue.component("game-header-tickspeed-row", {
           onclick="buyMaxTickSpeed()"
         >Buy Max</primary-button>
       </div>
-      <div v-tooltip="tooltip">{{tickspeedDisplay}} <span v-if="!isGameSpeedNormal">{{gammaDisplay}}</span></div>
+      <div v-tooltip="tooltip">{{tickspeedDisplay}} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
     </div>`
 });

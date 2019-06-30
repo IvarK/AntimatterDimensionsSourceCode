@@ -24,7 +24,7 @@ kong.submitStats = function(name, value) {
 };
 
 kong.submitAchievements = function() {
-  kong.submitStats("Achievements", currentAchievementCount() + player.secretAchievements.size);
+  kong.submitStats("Achievements", Achievements.effectiveCount + player.secretAchievements.size);
 };
 
 kong.purchaseIP = function() {

@@ -10,6 +10,17 @@ class AchievementState extends GameMechanicState {
       };
       this._secondaryState = new AchievementState(secondaryConfig);
     }
+    this._row = Math.floor(this.id / 10);
+    this._column = this.id % 10;
+    this._totalDisabledTime = new Lazy(() => {
+      if (!this.hasLockedTime) return 0;
+      const perkAdjustedRow = Math.clamp(this.row - GameCache.achSkipPerkCount.value, 1, this.row);
+      const currentRowAchTime = Achievements.rowDisabledTime(perkAdjustedRow) / 8;
+      if (this.id === 11) return currentRowAchTime;
+      return currentRowAchTime + this.previousAchievement.totalDisabledTime;
+    });
+    EventHub.logic.on(GameEvent.REALITY_RESET_AFTER, () => this._totalDisabledTime.invalidate());
+    EventHub.logic.on(GameEvent.PERK_BOUGHT, () => this._totalDisabledTime.invalidate());
   }
 
   get name() {
@@ -18,6 +29,24 @@ class AchievementState extends GameMechanicState {
 
   get isUnlocked() {
     return player.achievements.has(this.id);
+  }
+
+  get previousAchievement() {
+    const previousAchColumn = Math.wrap(this.column - 1, 1, 8);
+    const previousAchRow = previousAchColumn === 8 ? this.row - 1 : this.row;
+    return Achievement(previousAchRow * 10 + previousAchColumn);
+  }
+
+  get row() {
+    return this._row;
+  }
+
+  get column() {
+    return this._column;
+  }
+
+  get isPreReality() {
+    return this.row < 14;
   }
   
   tryUnlock(a1, a2, a3) {
@@ -39,7 +68,25 @@ class AchievementState extends GameMechanicState {
   }
 
   get isEnabled() {
-    return isAchEnabled(this.id);
+    if (!this.isUnlocked) return false;
+    if (!this.hasLockedTime) return true;
+    // Keep player.thisReality instead of Time.thisReality here because this is a hot path
+    return this.totalDisabledTime <= player.thisReality;
+  }
+
+  get remainingDisabledTime() {
+    if (!this.isUnlocked || !this.hasLockedTime) return NaN;
+    return Math.clampMin(this.totalDisabledTime - player.thisReality, 0);
+  }
+
+  get hasLockedTime() {
+    return player.realities !== 0 &&
+      this.isPreReality &&
+      this.row > GameCache.achSkipPerkCount.value;
+  }
+
+  get totalDisabledTime() {
+    return this._totalDisabledTime.value;
   }
 
   get isEffectConditionSatisfied() {
@@ -68,8 +115,47 @@ const Achievements = {
    * @type {AchievementState[]}
    */
   all: AchievementState.index.compact(),
-  row: row => Array.range(row * 10 + 1, 8).map(Achievement)
+
+  get effectiveCount() {
+    const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
+      ? Ra.pets.v.level
+      : 0;
+    return player.achievements.size + additionalAchievements;
+  },
+
+  row: row => Array.range(row * 10 + 1, 8).map(Achievement),
+
+  rows: (start, count) => Array.range(start, count).map(Achievements.row),
+
+  get totalDisabledTime() {
+    return Achievement(138).totalDisabledTime;
+  },
+
+  get remainingDisabledTime() {
+    return Achievement(138).remainingDisabledTime;
+  },
+
+  get timeUntilNext() {
+    const firstDisabled = Achievements.all.find(a => !a.isEnabled);
+    return firstDisabled === undefined ? 0 : firstDisabled.remainingDisabledTime;
+  },
+
+  rowDisabledTime(row) {
+    const baseTimeForAllAchs = GameCache.baseTimeForAllAchs.value;
+    const PRE_REALITY_ACH_ROWS = 13;
+    const baseRowTime = baseTimeForAllAchs / PRE_REALITY_ACH_ROWS;
+    const realityModifier = GameCache.realityAchTimeModifier.value;
+    const rowModifier = realityModifier * TimeSpan.fromSeconds(1600).totalMilliseconds;
+    return Math.clampMin(baseRowTime + (row - 7) * rowModifier, 0);
+  }
 };
+
+EventHub.registerStateCollectionEvents(
+  Achievements.all,
+  achievement => achievement.config.checkEvent,
+  // eslint-disable-next-line max-params
+  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
+);
 
 class SecretAchievementState extends GameMechanicState {
   get name() {
@@ -110,10 +196,12 @@ const SecretAchievements = {
   all: SecretAchievementState.index.compact()
 };
 
-setInterval(() => Math.random() < 0.00001 && SecretAchievement(18).unlock(), 1000);
+setInterval(() => {
+  if (Math.random() < 0.00001) SecretAchievement(18).unlock();
+}, 1000);
 
 EventHub.registerStateCollectionEvents(
-  Achievements.all.concat(SecretAchievements.all),
+  SecretAchievements.all,
   achievement => achievement.config.checkEvent,
   // eslint-disable-next-line max-params
   (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
@@ -129,7 +217,7 @@ class AchievementTimer {
   }
   
   advance() {
-    this.time += player.options.updateRate / 1000;
+    this.time += Time.deltaTime;
   }
   
   check(condition, duration) {
@@ -138,7 +226,7 @@ class AchievementTimer {
       return false;
     }
     this.advance();
-    return this.time >= duration;    
+    return this.time >= duration;
   }
 }
 
@@ -148,126 +236,3 @@ const AchievementTimers = {
   pain: new AchievementTimer(),
   stats: new AchievementTimer()
 };
-
-function isAchEnabled(achId) {
-  if (!player.achievements.has(achId)) return false;
-  if (player.realities === 0) return true;
-  if (achId > 140) return true;
-  const row = Math.floor(achId / 10);
-  if (row <= GameCache.achSkipPerkCount.value) return true;
-  const currentSeconds = player.thisReality / 1000;
-  return timeRequiredForAchievement(achId) <= currentSeconds;
-}
-
-function timeForAllAchievements() {
-  if (GameCache.achSkipPerkCount.value === TOTAL_PRE_REALITY_ACH_ROWS) {
-    return 0;
-  }
-  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - GameCache.achSkipPerkCount.value);
-}
-
-function nextAchIn() {
-  updateRealityAchievementModifiers();
-  const currentSeconds = player.thisReality / 1000;
-  if (currentSeconds > timeForAllAchievements()) return 0;
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-  let timeReq = 0;
-
-  let row = 1;
-  function achTime() {
-    return baseAchTime + ((row - 7) * rowModifier);
-  }
-  function rowTime() {
-    return achTime() * ACH_PER_ROW;
-  }
-
-  while (currentSeconds > timeReq + rowTime()) {
-    timeReq += rowTime();
-    row++;
-  }
-
-  while (currentSeconds > timeReq) {
-    timeReq += achTime();
-  }
-  return (timeReq - currentSeconds) * 1000;
-}
-
-function timeUntilAch(achId) {
-  if (achId > 140 || isNaN(achId)) return NaN;
-  if (!player.achievements.has(achId)) return NaN;
-  const row = Math.floor(achId / 10);
-  if (row <= GameCache.achSkipPerkCount.value) return NaN;
-  const currentSeconds = player.thisReality / 1000;
-  return timeRequiredForAchievement(achId) - currentSeconds;
-}
-
-function timeRequiredForAchievement(achId) {
-  updateRealityAchievementModifiers();
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-
-  const row = Math.floor(achId / 10);
-  const perkAdjustedRow = Math.clamp(row - GameCache.achSkipPerkCount.value, 1, row);
-  const previousRowCount = perkAdjustedRow - 1;
-  const previousRowsTime = totalAchRowTime(previousRowCount);
-  const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;
-  const column = achId % 10;
-  const currentRowTime = currentRowAchTime * column;
-  return previousRowsTime + currentRowTime;
-}
-
-// Total time required for a row count if we go from the first perk-adjusted row
-function totalAchRowTime(rowCount) {
-  updateRealityAchievementModifiers();
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-  const achCount = rowCount * ACH_PER_ROW;
-  // Unoptimized version
-  // const achTime = row => baseAchTime + (row - 7) * rowModifier;
-  // totalTime = 0;
-  // for (let i = 1; i < row; i++) {
-  //   totalTime += achTime(i) * 8
-  // }
-  return achCount * (baseAchTime + (rowCount - 13) * rowModifier / 2);
-}
-
-let realityAchievementModifiers = {
-  realities: -1,
-  baseAchTime: -1,
-  rowModifier: -1,
-  secondsForAllAchs: -1
-};
-
-const SECONDS_IN_DAY = TimeSpan.fromDays(1).totalSeconds;
-const DAYS_FOR_ALL_ACHS = 2;
-const DEFAULT_SECONDS_FOR_ALL_ACHS = SECONDS_IN_DAY * DAYS_FOR_ALL_ACHS;
-const ACH_PER_ROW = 8;
-const TOTAL_ACH_ROWS = 14;
-const TOTAL_PRE_REALITY_ACH_ROWS = 13;
-const TOTAL_PRE_REALITY_ACHS = TOTAL_PRE_REALITY_ACH_ROWS * ACH_PER_ROW;
-const REDUCTION_PER_REALITY = 0.9;
-
-// TODO: further optimization:
-// pre-generate ach times on reality
-function updateRealityAchievementModifiers() {
-  if (realityAchievementModifiers.realities === player.realities) {
-    return;
-  }
-  const requiredTimeModifier = Math.pow(REDUCTION_PER_REALITY, Math.max(player.realities - 1, 0));
-  const secondsForAllAchs = DEFAULT_SECONDS_FOR_ALL_ACHS * requiredTimeModifier;
-  realityAchievementModifiers = {
-    realities: player.realities,
-    // How much it takes for row 7 achievement to get
-    baseAchTime: secondsForAllAchs / TOTAL_PRE_REALITY_ACHS,
-    rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
-    secondsForAllAchs
-  };
-}
-
-function currentAchievementCount() {
-  const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
-    ? Ra.pets.v.level
-    : 0;
-  return player.achievements.size + additionalAchievements;
-}

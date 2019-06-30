@@ -1,10 +1,9 @@
 "use strict";
 
 function canEternity() {
-  const challenge = EternityChallenge.current;
-  if (challenge === undefined && player.infinityPoints.lt(Decimal.MAX_NUMBER)) return false;
-  if (challenge !== undefined && !challenge.canBeCompleted) return false;
-  return true;
+  return EternityChallenge.isRunning
+    ? EternityChallenge.current.canBeCompleted
+    : player.infinityPoints.gte(Decimal.MAX_NUMBER);
 }
 
 function eternity(force, auto, specialConditions = {}) {
@@ -100,12 +99,12 @@ function eternity(force, auto, specialConditions = {}) {
 
 function initializeChallengeCompletions() {
   NormalChallenges.clearCompletions();
-  InfinityChallenge.clearCompletions();
+  InfinityChallenges.clearCompletions();
   if (EternityMilestone.keepAutobuyers.isReached) {
     NormalChallenges.completeAll();
   }
   if (Achievement(133).isEnabled) {
-    InfinityChallenge.completeAll();
+    InfinityChallenges.completeAll();
   }
   player.challenge.normal.current = 0;
   player.challenge.infinity.current = 0;
@@ -236,9 +235,13 @@ const EternityMilestone = function() {
   };
 }();
 
-class EternityUpgradeState extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.eternityPoints, () => player.eternityUpgrades);
+class EternityUpgradeState extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.eternityPoints;
+  }
+
+  get set() {
+    return player.eternityUpgrades;
   }
 }
 

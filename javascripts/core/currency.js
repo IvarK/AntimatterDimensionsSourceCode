@@ -96,6 +96,11 @@ Currency.dilatedTime = new class extends DecimalCurrency {
   set value(value) { player.dilation.dilatedTime = value; }
 }();
 
+Currency.realityMachines = new class extends DecimalCurrency {
+  get value() { return player.reality.realityMachines; }
+  set value(value) { player.reality.realityMachines = value; }
+}();
+
 Currency.perkPoints = new class extends NumberCurrency {
   get value() { return player.reality.pp; }
   set value(value) { player.reality.pp = value; }

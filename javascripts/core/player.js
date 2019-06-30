@@ -50,6 +50,9 @@ let player = {
       unlocked: 0,
     }
   },
+  infinity: {
+    upgradeBits: 0
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
@@ -444,8 +447,9 @@ const Player = {
   },
 
   get eternityGoal() {
-    const ec = EternityChallenge.current;
-    return ec === undefined ? Decimal.MAX_NUMBER : ec.currentGoal;
+    return EternityChallenge.isRunning
+      ? EternityChallenge.current.currentGoal
+      : Decimal.MAX_NUMBER;
   }
 };
 

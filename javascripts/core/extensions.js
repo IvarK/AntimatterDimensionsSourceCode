@@ -7,13 +7,21 @@ Array.prototype.distinct = function() {
 };
 
 Math.wrap = function(number, min, max) {
-    let range = max - min + 1;
-    number = ((number - min) % range);
-    return number < 0 ? min + 1 + number : min + number;
+  const range = max - min + 1;
+  const offset = ((number - min) % range);
+  return offset < 0 ? max + 1 + offset : min + offset;
 };
 
 Math.clamp = function(value, min, max) {
-    return (value < min) ? min : (value > max ? max : value);
+  return Math.clampMax(Math.clampMin(value, min), max);
+};
+
+Math.clampMin = function(value, min) {
+  return Math.max(value, min);
+};
+
+Math.clampMax = function(value, max) {
+  return Math.min(value, max);
 };
 
 Array.prototype.nextSiblingIndex = function(current) {

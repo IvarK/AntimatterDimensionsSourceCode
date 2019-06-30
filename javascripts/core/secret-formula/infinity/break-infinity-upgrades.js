@@ -48,7 +48,7 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: "Normal dimensions gain a multiplier based on achievements completed",
       effect: () => Math.max(
         Math.pow(
-          Math.pow((currentAchievementCount() - 30), 3) / 40,
+          Math.pow((Achievements.effectiveCount - 30), 3) / 40,
           getAdjustedGlyphEffect("effarigachievement")
         ),
         1

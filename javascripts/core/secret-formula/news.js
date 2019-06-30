@@ -1179,7 +1179,7 @@ GameDatabase.news = [
   {
     id: "c25",
     text: "Having done half the achievements isn't much of an achievement -Boo",
-    condition: () => currentAchievementCount() >= GameDatabase.achievements.normal.length / 2
+    condition: () => Achievements.effectiveCount >= GameDatabase.achievements.normal.length / 2
   },
   {
     id: "c26",
@@ -1294,7 +1294,7 @@ GameDatabase.news = [
   {
     id: "c46",
     text: "Achievement Unlocked!",
-    condition: () => currentAchievementCount() >= GameDatabase.achievements.normal.length
+    condition: () => Achievements.effectiveCount >= GameDatabase.achievements.normal.length
   },
   {
     id: "c47",

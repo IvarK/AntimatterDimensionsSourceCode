@@ -37,22 +37,20 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-/**
- * @type {VRunUnlockState[]}
- */
-VRunUnlockState.all = mapGameData(
-  GameDatabase.celestials.v.runUnlocks,
-  config => new VRunUnlockState(config)
-);
+VRunUnlockState.createIndex(GameDatabase.celestials.v.runUnlocks);
 
 /**
  * @param {number} id
  * @return {VRunUnlockState}
  */
-function VRunUnlock(id) {
-  return VRunUnlockState.all[id];
-}
+const VRunUnlock = id => VRunUnlockState.index[id];
 
+const VRunUnlocks = {
+  /**
+   * @type {VRunUnlockState[]}
+   */
+  all: VRunUnlockState.index.compact(),
+};
 
 const V_UNLOCKS = {
   MAIN_UNLOCK: {
@@ -82,7 +80,7 @@ const V_UNLOCKS = {
     id: 2,
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
     description: "Have 30 V-achievements",
-    effect: () => Math.pow(currentAchievementCount(), getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => Math.pow(Achievements.effectiveCount, getAdjustedGlyphEffect("effarigachievement")),
     format: x => formatX(x, 2, 0),
     requirement: () => V.totalRunUnlocks >= 30
     },
@@ -113,7 +111,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (const unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
     }

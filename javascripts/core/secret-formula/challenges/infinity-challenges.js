@@ -8,7 +8,7 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: true,
     reward: {
       description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",
-      effect: () => Math.pow(1.3, InfinityChallenge.completed().length),
+      effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
     },
     unlockAM: new Decimal("1e2000"),

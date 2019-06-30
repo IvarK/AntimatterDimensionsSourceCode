@@ -151,13 +151,21 @@ class ChargedInfinityUpgradeState extends GameMechanicState {
   }
 }
 
-class InfinityUpgrade extends PurchasableMechanicState {
+class InfinityUpgrade extends SetPurchasableMechanicState {
   constructor(config, requirement) {
-    super(config, Currency.infinityPoints, () => player.infinityUpgrades);
+    super(config);
     this._requirement = requirement;
     if (config.charged) {
       this._chargedEffect = new ChargedInfinityUpgradeState(config.charged, this);
     }
+  }
+
+  get currency() {
+    return Currency.infinityPoints;
+  }
+
+  get set() {
+    return player.infinityUpgrades;
   }
 
   get isAvailable() {
@@ -246,10 +254,6 @@ function disChargeAll() {
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
   get cost() {
     return this.config.cost();
   }
@@ -325,9 +329,13 @@ class InfinityIPMultUpgrade extends GameMechanicState {
 
 InfinityUpgrade.ipMult = new InfinityIPMultUpgrade(GameDatabase.infinity.upgrades.ipMult);
 
-class BreakInfinityUpgrade extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.infinityPoints, () => player.infinityUpgrades);
+class BreakInfinityUpgrade extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.infinityPoints;
+  }
+
+  get set() {
+    return player.infinityUpgrades;
   }
 }
 
@@ -347,42 +355,32 @@ class BreakInfinityUpgrade extends PurchasableMechanicState {
   BreakInfinityUpgrade.autobuyerSpeed = upgrade(db.autobuyerSpeed);
 })();
 
-class BreakInfinityMultiplierCostUpgrade extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
-  get cost() {
-    return this.config.cost();
-  }
-
-  get canBeApplied() {
-    return this.boughtAmount > 0;
+class BreakInfinityMultiplierCostUpgrade extends RebuyableMechanicState {
+  get currency() {
+    return Currency.infinityPoints;
   }
 
   get boughtAmount() {
-    return this.effectValue;
+    return player.infinityRebuyables[this.id];
+  }
+
+  set boughtAmount(value) {
+    player.infinityRebuyables[this.id] = value;
   }
 
   get isMaxed() {
     return this.boughtAmount === this.config.maxUpgrades;
   }
 
-  get isAffordable() {
-    return player.infinityPoints.gte(this.cost);
-  }
-
-  get canBeBought() {
-    return !this.isMaxed && this.isAffordable;
+  get isAvailable() {
+    return !this.isMaxed;
   }
 
   purchase() {
-    if (!this.canBeBought) return;
-    player.infinityPoints = player.infinityPoints.minus(this.cost);
-    player.infinityRebuyables[this.config.id]++;
+    if (!super.purchase()) return false;
     GameCache.dimensionMultDecrease.invalidate();
     GameCache.tickSpeedMultDecrease.invalidate();
-    GameUI.update();
+    return true;
   }
 }
 
@@ -395,10 +393,6 @@ BreakInfinityUpgrade.dimCostMult = new BreakInfinityMultiplierCostUpgrade(
 );
 
 class BreakInfinityIPGenUpgrade extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
   get cost() {
     return this.config.cost();
   }

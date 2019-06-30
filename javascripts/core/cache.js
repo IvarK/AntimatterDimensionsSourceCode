@@ -83,7 +83,7 @@ const GameCache = {
     );
   }),
 
-  buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+  buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
   normalDimensionCommonMultiplier: new Lazy(() => {
     // The effect is defined in normal_dimensions.js because that's where the non-cached
@@ -105,7 +105,7 @@ const GameCache = {
 
   achievementPower: new Lazy(() => Decimal.pow(
     1.5,
-    Array.range(1, TOTAL_ACH_ROWS)
+    Array.range(1, 14)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
   )),
@@ -113,6 +113,10 @@ const GameCache = {
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
+  
+  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0))),
+  
+  baseTimeForAllAchs: new Lazy(() => TimeSpan.fromDays(2).totalMilliseconds * GameCache.realityAchTimeModifier.value)
 };
 
 EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {

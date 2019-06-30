@@ -28,8 +28,8 @@ const EFFARIG_STAGES = {
 }
 
 class EffarigUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
+  get cost() {
+    return this.config.cost;
   }
 
   get isUnlocked() {

@@ -43,6 +43,7 @@ GameDatabase.challenges.eternity = [
     restriction: completions => Math.max(16 - 4 * completions, 0),
     checkRestriction: restriction => player.infinitied.lte(restriction),
     formatRestriction: restriction => `in ${restriction} infinities or less`,
+    failedRestriction: "(Too many infinities for more)",
     reward: {
       description: "Infinity Dimension multiplier based on unspent IP",
       effect: completions => player.infinityPoints.pow(0.003 + completions * 0.002),
@@ -167,6 +168,7 @@ GameDatabase.challenges.eternity = [
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
     formatRestriction: restriction => `in ${restriction} in-game ${restriction === 1 ? "second" : "seconds"} or less.`,
+    failedRestriction: "(Too slow for more)",
     reward: {
       description: "Infinity Dimension cost multipliers are reduced",
       effect: completions => 1 - completions * 0.008,

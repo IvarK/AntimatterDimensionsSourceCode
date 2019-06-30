@@ -168,7 +168,7 @@ const MAIN_TAB_BUTTONS = [
     label: "Achievements",
     class: "",
     component: "normal-achievements-tab",
-    condition: () => currentAchievementCount() > 0,
+    condition: () => Achievements.effectiveCount > 0,
     subtabs: [
       {
         label: "A",
@@ -187,7 +187,7 @@ const MAIN_TAB_BUTTONS = [
     label: "Statistics",
     class: "",
     component: "statistics-tab",
-    condition: () => currentAchievementCount() > 1,
+    condition: () => Achievements.effectiveCount > 1,
     subtabs: [
       {
         label: "S",

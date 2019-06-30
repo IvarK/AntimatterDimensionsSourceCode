@@ -354,7 +354,7 @@ GameDatabase.achievements.normal = [
     id: 67,
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
-    checkRequirement: () => InfinityChallenge.completed.length > 0,
+    checkRequirement: () => InfinityChallenges.completed.length > 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -464,7 +464,7 @@ GameDatabase.achievements.normal = [
     id: 82,
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
-    checkRequirement: () => InfinityChallenge.completed.length === 8,
+    checkRequirement: () => InfinityChallenges.completed.length === 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -747,7 +747,7 @@ GameDatabase.achievements.normal = [
     id: 123,
     name: "5 more eternities until the update",
     tooltip: "Complete 50 unique Eternity Challenge tiers.",
-    checkRequirement: () => EternityChallenge.completedTiers() >= 50,
+    checkRequirement: () => EternityChallenges.completions >= 50,
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
@@ -921,7 +921,7 @@ GameDatabase.achievements.normal = [
     id: 146,
     name: "Perks of living",
     tooltip: "Have all perks bought.",
-    checkRequirement: () => player.reality.perks.size === Perk.all.length,
+    checkRequirement: () => player.reality.perks.size === Perks.all.length,
     checkEvent: GameEvent.PERK_BOUGHT
   },
   {

@@ -687,7 +687,7 @@ function gameLoop(diff, options = {}) {
 
     tryUnlockInfinityChallenges();
 
-    EternityChallenge.autoCompleteTick();
+    EternityChallenges.autoComplete.tick();
 
     replicantiLoop(diff);
 

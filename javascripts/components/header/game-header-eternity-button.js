@@ -12,7 +12,7 @@ Vue.component("game-header-eternity-button", {
       challengeCompletions: 0,
       gainedCompletions: 0,
       fullyCompleted: false,
-      failedCondition: undefined,
+      failedRestriction: undefined,
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0)
     };
@@ -31,7 +31,7 @@ Vue.component("game-header-eternity-button", {
         return;
       }
 
-      if (EternityChallenge.current !== undefined) {
+      if (EternityChallenge.isRunning) {
         if (!Perk.studyECBulk.isBought) {
           this.type = EPButtonDisplayType.CHALLENGE;
           return;
@@ -63,11 +63,12 @@ Vue.component("game-header-eternity-button", {
       this.peakEPPM.copyFrom(EPminpeak);
     },
     updateChallengeWithRUPG() {
-      const status = EternityChallenge.gainedCompletionStatus();
-      this.fullyCompleted = status.fullyCompleted;
+      const ec = EternityChallenge.current;
+      this.fullyCompleted = ec.isFullyCompleted;
       if (this.fullyCompleted) return;
+      const status = ec.gainedCompletionStatus;
       this.gainedCompletions = status.gainedCompletions;
-      this.failedCondition = status.failedCondition;
+      this.failedRestriction = status.failedRestriction;
       this.hasMoreCompletions = status.hasMoreCompletions;
       this.nextGoalAt.copyFrom(status.nextGoalAt);
     }
@@ -130,9 +131,9 @@ Vue.component("game-header-eternity-button", {
         <template v-else>
           <br>
           {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
-          <template v-if="failedCondition">
+          <template v-if="failedRestriction">
             <br>
-            {{failedCondition}}
+            {{failedRestriction}}
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>

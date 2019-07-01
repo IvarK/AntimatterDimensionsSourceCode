@@ -14,6 +14,11 @@ Vue.component("stats-tab", {
           component: "statistics-tab"
         },
         {
+        name: "Multipliers",
+        id: "Multipliers",
+        component: "multipliers-tab",
+        },
+        {
           name: "Challenge records",
           id: "Challenge records",
           component: "challenge-records-tab",

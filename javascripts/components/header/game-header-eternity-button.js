@@ -12,7 +12,7 @@ Vue.component("game-header-eternity-button", {
       challengeCompletions: 0,
       gainedCompletions: 0,
       fullyCompleted: false,
-      failedCondition: undefined,
+      failedRestriction: undefined,
       hasMoreCompletions: false,
       nextGoalAt: new Decimal(0)
     };
@@ -31,7 +31,7 @@ Vue.component("game-header-eternity-button", {
         return;
       }
 
-      if (EternityChallenge.current !== undefined) {
+      if (EternityChallenge.isRunning) {
         if (!Perk.studyECBulk.isBought) {
           this.type = EPButtonDisplayType.CHALLENGE;
           return;
@@ -63,37 +63,14 @@ Vue.component("game-header-eternity-button", {
       this.peakEPPM.copyFrom(EPminpeak);
     },
     updateChallengeWithRUPG() {
-      const currentEC = EternityChallenge.current;
-      const currentCompletions = currentEC.completions;
-      this.fullyCompleted = currentCompletions === 5;
+      const ec = EternityChallenge.current;
+      this.fullyCompleted = ec.isFullyCompleted;
       if (this.fullyCompleted) return;
-      let gainedCompletions = 1;
-      while (
-        player.infinityPoints.gte(currentEC.goalAtCompletions(currentCompletions + gainedCompletions)) &&
-        gainedCompletions < 5 - currentCompletions
-      ) {
-        gainedCompletions++;
-      }
-      const totalCompletions = currentCompletions + gainedCompletions;
-      let maxEC4Valid = 0;
-      if(player.infinitied.lte(16)) maxEC4Valid = 5 - Math.ceil(player.infinitied.toNumber() / 4);
-      if (EternityChallenge(4).isRunning && totalCompletions >= maxEC4Valid && gainedCompletions > 1) {
-        this.gainedCompletions = Math.min(totalCompletions, maxEC4Valid) - currentCompletions;
-        this.failedCondition = "(Too many infinities for more)";
-        return;
-      }
-
-      const maxEC12Valid = 5 - Math.floor(player.thisEternity / 200);
-      if (EternityChallenge(12).isRunning && totalCompletions >= maxEC12Valid && gainedCompletions > 1) {
-        this.gainedCompletions = Math.min(totalCompletions, maxEC12Valid) - currentCompletions;
-        this.failedCondition = "(Too slow for more)";
-        return;
-      }
-
-      this.gainedCompletions = gainedCompletions;
-      this.failedCondition = undefined;
-      this.hasMoreCompletions = totalCompletions < 5;
-      this.nextGoalAt.copyFrom(currentEC.goalAtCompletions(totalCompletions));
+      const status = ec.gainedCompletionStatus;
+      this.gainedCompletions = status.gainedCompletions;
+      this.failedRestriction = status.failedRestriction;
+      this.hasMoreCompletions = status.hasMoreCompletions;
+      this.nextGoalAt.copyFrom(status.nextGoalAt);
     }
   },
   template:
@@ -154,9 +131,9 @@ Vue.component("game-header-eternity-button", {
         <template v-else>
           <br>
           {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
-          <template v-if="failedCondition">
+          <template v-if="failedRestriction">
             <br>
-            {{failedCondition}}
+            {{failedRestriction}}
           </template>
           <template v-else-if="hasMoreCompletions">
             <br>

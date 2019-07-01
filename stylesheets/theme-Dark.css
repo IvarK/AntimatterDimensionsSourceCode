@@ -137,42 +137,6 @@ input.t-dark {
     color: #757575;
 }
 
-.t-dark .automatorinstruction.command {
-    background-color: black;
-}
-
-.t-dark .automatorinstruction.target {
-    background-color: black;
-}
-
-.t-dark .automatorinstruction.command:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-.t-dark .automatorinstruction.target:hover {
-    color: black;
-    background-color: #BBDEFB;
-}
-
-.t-dark .automatorinstructionbought.command {
-    background-color: #0b600e;
-    border: 2px solid #08450b;
-}
-
-.t-dark .automatorinstructionbought.target {
-    background-color: #2196F3;
-    border: 2px solid #1976D2;
-}
-
-.t-dark .automatorinstructionlocked.command {
-    background-color: #656565;
-}
-
-.t-dark .automatorinstructionlocked.target {
-    background-color: #656565;
-}
-
 .t-dark #realityanimbg {
     filter: invert(1);
 }

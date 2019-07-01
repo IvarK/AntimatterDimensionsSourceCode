@@ -35,14 +35,14 @@ Vue.component("v-tab", {
   },
   computed: {
     hexGrid: () => [
-      VRunUnlockState.all[0],
-      VRunUnlockState.all[1],
+      VRunUnlocks.all[0],
+      VRunUnlocks.all[1],
       {},
-      VRunUnlockState.all[2],
+      VRunUnlocks.all[2],
       { isRunButton: true },
-      VRunUnlockState.all[3],
-      VRunUnlockState.all[4],
-      VRunUnlockState.all[5],
+      VRunUnlocks.all[3],
+      VRunUnlocks.all[4],
+      VRunUnlocks.all[5],
       {}
     ],
     runMilestones: () => V_UNLOCKS.RUN_UNLOCK_THRESHOLDS,

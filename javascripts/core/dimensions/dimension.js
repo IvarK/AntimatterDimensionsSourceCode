@@ -30,9 +30,8 @@ class DimensionState {
   /** @param {number} value */
   set bought(value) { this.data.bought = value; }
 
-  static createIndex($class) {
-    const index = Array.range(1, 8).map(tier => new $class(tier));
-    index.unshift(null);
-    return index;
+  static createIndex() {
+    this.index = Array.range(1, 8).map(tier => new this(tier));
+    this.index.unshift(null);
   }
 }

@@ -6,7 +6,6 @@ const defaultMaxTime = 60000 * 60 * 24 * 31;
 let player = {
   money: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
-  tickspeed: new Decimal(1000),
   dimensions: {
     normal: Array.range(0, 8).map(tier => ({
       bought: 0,
@@ -50,6 +49,9 @@ let player = {
       current: 0,
       unlocked: 0,
     }
+  },
+  infinity: {
+    upgradeBits: 0
   },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
@@ -96,7 +98,6 @@ let player = {
   spreadingCancer: 0,
   postChallUnlocked: 0,
   postC4Tier: 0,
-  postC3Reward: new Decimal(1),
   eternityPoints: new Decimal(0),
   eternities: 0,
   thisEternity: 0,
@@ -108,6 +109,7 @@ let player = {
   timeShards: new Decimal(0),
   tickThreshold: new Decimal(1),
   totalTickGained: 0,
+  totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
   autoSacrifice: 1,
@@ -203,10 +205,10 @@ let player = {
     },
     upgradeBits: 0,
     upgReqs: [null, true, true, true, true, true,
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
-              false, false, false, false, false, 
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
+              false, false, false, false, false,
               false, false, false, false, false],
     upgReqChecks: [false],
     automatorOn: false,
@@ -220,7 +222,19 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0
+    partEternitied: 0,
+    automator: {
+      state: {
+        mode: AutomatorMode.STOP,
+        topLevelScript: 0,
+        editorScript: 0,
+        repeat: false,
+        stack: [],
+      },
+      scripts: {
+      },
+      lastID: 0,
+    }
   },
   blackHole: Array.range(0, 2).map(id => ({
     id,
@@ -359,7 +373,8 @@ let player = {
       bigCrunch: true,
       eternity: true,
       tachyonParticles: true,
-      reality: true
+      reality: true,
+      background: true
     },
     confirmations: {
       sacrifice: true,
@@ -433,8 +448,9 @@ const Player = {
   },
 
   get eternityGoal() {
-    const ec = EternityChallenge.current;
-    return ec === undefined ? Decimal.MAX_NUMBER : ec.currentGoal;
+    return EternityChallenge.isRunning
+      ? EternityChallenge.current.currentGoal
+      : Decimal.MAX_NUMBER;
   }
 };
 
@@ -447,7 +463,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice") continue;
+    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

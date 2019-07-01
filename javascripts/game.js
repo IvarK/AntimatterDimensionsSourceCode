@@ -14,7 +14,6 @@ let until10Setting = true;
 function showTab(tabName) {
     tryShowtab(tabName);
     hideLegacyTabs(tabName);
-    resizeCanvas();
     Modal.hide();
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
@@ -245,7 +244,6 @@ function resetChallengeStuff() {
     player.matter = new Decimal(0)
     player.chall11Pow = new Decimal(1)
     player.postC4Tier = 1
-    player.postC3Reward = new Decimal(1)
 }
 
 function resetMoney() {
@@ -399,14 +397,6 @@ function randomStuffThatShouldBeRefactored() {
 
   if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
   else $("#celestialsbtn").hide()
-
-  if (player.realities > 3) {
-      $("#automatorUnlock").hide()
-      $(".automator-container").show()
-  } else {
-      $("#automatorUnlock").show()
-      $(".automator-container").hide()
-  }
 
   ttMaxTimer++;
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
@@ -683,7 +673,6 @@ function gameLoop(diff, options = {}) {
   const freeTickspeed = FreeTickspeed.fromShards(player.timeShards);
   let gain = Math.max(0, freeTickspeed.newAmount - player.totalTickGained);
   player.totalTickGained += gain;
-  player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
   player.tickThreshold = freeTickspeed.nextShards;
 
     if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {
@@ -698,7 +687,7 @@ function gameLoop(diff, options = {}) {
 
     tryUnlockInfinityChallenges();
 
-    EternityChallenge.autoCompleteTick();
+    EternityChallenges.autoComplete.tick();
 
     replicantiLoop(diff);
 
@@ -796,6 +785,7 @@ function gameLoop(diff, options = {}) {
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);
+  AutomatorBackend.update();
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
   GameUI.update();
@@ -993,7 +983,6 @@ function showRealityTab(tabName) {
             tab.style.display = 'none';
         }
     }
-    resizeCanvas()
     if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
@@ -1034,7 +1023,6 @@ function init() {
     Tab.dimensions.normal.show();
     GameStorage.load();
     kong.init();
-    TLN.append_line_numbers("automator") // Automator line numbers
 
     //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
 }
@@ -1063,7 +1051,6 @@ window.onload = function() {
 
 window.onfocus = function() {
     setShiftKey(false);
-    drawAutomatorTree();
 };
 
 window.onblur = function() {
@@ -1073,7 +1060,6 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  document.getElementById("automatorloadsavetext").textContent = isDown ? "save:" : "load:";
   if (isDown) showPerkLabels()
   else hidePerkLabels()
 }

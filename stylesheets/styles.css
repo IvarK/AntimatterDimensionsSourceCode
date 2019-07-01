@@ -487,16 +487,6 @@ button {
     color: white;
 }
 
-.automator-save-load-btn {
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.2rem;
-  display: block;
-  cursor: pointer;
-  border-radius: .4rem;
-  margin-left: .5rem;
-}
-
 .celestialtabbtn {
   background-color: #5151ec;
   border: 2px solid #d0d0d0;
@@ -596,13 +586,6 @@ button {
     cursor: pointer;
     background-color: #9E913A;
 
-}
-
-#automatorTreeCanvas {
-    top: 0;
-    left: 0;
-    position: absolute;
-    z-index: -999;
 }
 
 #loading {
@@ -915,7 +898,6 @@ p,
 ul,
 ol,
 table,
-pre,
 dl {
     margin: 0 0 3px;
 }
@@ -971,21 +953,6 @@ blockquote {
     margin: 0;
     padding: 0 0 0 20px;
     font-style: italic;
-}
-
-code,
-pre {
-    font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, Consolas, Liberation Mono, DejaVu Sans Mono, Courier New, monospace;
-    color: #333;
-    font-size: 12px;
-}
-
-pre {
-    padding: 8px 15px;
-    background: #f8f8f8;
-    border-radius: 5px;
-    border: 1px solid #e5e5e5;
-    overflow-x: auto;
 }
 
 table {
@@ -1130,113 +1097,6 @@ br {
     transform: translate(-50%,-50%);
 }
 
-#automator {
-    height: 300px;
-    width: 400px;
-    overflow-y: scroll;
-    resize: none;
-    font-family: 'PT Mono', monospace;
-    color: #66ff66;
-    background-color: black;
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-    #automator::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    #automator::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px grey;
-        border-radius: 10px;
-    }
-
-    #automator::-webkit-scrollbar-thumb {
-        background: #08450b;
-        border-radius: 5px;
-    }
-
-#automator::selection {
-    color: red;
-}
-
-.automatorinstruction.command {
-    background-color: black;
-    border: 2px solid #0b600e;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: pointer;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstruction.target {
-    background-color: black;
-    border: 2px solid #2196F3;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: pointer;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstruction.command:hover {
-    color: black;
-    background-color: #d5ffd7;
-}
-
-.automatorinstruction.target:hover {
-    color: black;
-    background-color: #BBDEFB;
-}
-
-.automatorinstructionbought.command {
-    background-color: #0b600e;
-    border: 2px solid #08450b;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionbought.target {
-    background-color: #2196F3;
-    border: 2px solid #1976D2;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionlocked.command {
-    background-color: #656565;
-    border: 2px solid #0b600e;
-    border-radius: 5px;
-    color: #d5ffd7;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
-.automatorinstructionlocked.target {
-    background-color: #656565;
-    border: 2px solid #2196F3;
-    border-radius: 5px;
-    color: #BBDEFB;
-    cursor: default;
-    transition-duration: 0.12s;
-    width: 150px;
-    height: 50px;
-}
-
 #perks {
     width: 900px;
     height: 500px;
@@ -1293,10 +1153,6 @@ screen and (max-width: 720px) {
     header ul,
     header p.view {
         position: static;
-    }
-    pre,
-    code {
-        word-wrap: normal;
     }
 }
 
@@ -6334,4 +6190,79 @@ kbd {
 .c-rm-amount__desc {
   color: black;
   font-size: 1.5rem;
+}
+
+
+.c-automator-blocks {
+  width: 100%;
+}
+
+.o-automator-command {
+  border: 1px solid gainsboro;
+  padding: .5rem;
+  display: inline-block;
+  background: #de8787;
+  border-radius: .5rem;
+  width: 6rem;
+  user-select: none;
+  cursor: grab;
+}
+
+.c-automator-command-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-automator-block-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.c-automator-block-row > * {
+  margin-right: .5rem
+}
+
+.c-automator-block-editor {
+  overflow-y: scroll;
+  height: 100%;
+  background-color: black;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  box-sizing: border-box;
+  padding: .5rem;
+  tab-size: 1.5em;
+  -moz-tab-size: 1.5em;
+}
+
+.o-automator-block-input {
+  border: 1px solid gainsboro;
+  padding: .5rem;
+  display: inline-block;
+  background: burlywood;
+  border-radius: .5rem;
+  color: #4F5957;
+  font-size: 1.1rem;
+  font-family: Typewriter, serif;
+}
+
+.o-automator-linenumber {
+  color: #55ff55;
+  font-size: 1.4rem;
+}
+
+.l-automator-nested-block {
+  width: fit-content;
+  padding: 1rem;
+  border: 2px dotted #55ff55;
+  margin-left: 3rem;
+  margin-top: .5rem;
+  min-widtH: 30rem;
+}
+
+.o-automator-block-delete {
+  color: #ff3333;
+  font-size: 1.7rem;
+  cursor: pointer;
 }

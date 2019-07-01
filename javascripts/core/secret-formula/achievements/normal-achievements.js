@@ -207,7 +207,7 @@ GameDatabase.achievements.normal = [
     id: 45,
     name: "Faster than a potato",
     tooltip: () => `Get more than ${shorten(1e29, 0, 0)} ticks per second.`,
-    checkRequirement: () => player.tickspeed.exponent <= -26,
+    checkRequirement: () => Tickspeed.current.exponent <= -26,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
@@ -345,7 +345,7 @@ GameDatabase.achievements.normal = [
     id: 66,
     name: "Faster than a squared potato",
     tooltip: () => `Get more than ${shorten(1e58, 0, 0)} ticks per second.`,
-    checkRequirement: () => player.tickspeed.exponent <= -55,
+    checkRequirement: () => Tickspeed.current.exponent <= -55,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Reduces starting tick interval by 2%.",
     effect: 0.98
@@ -354,7 +354,7 @@ GameDatabase.achievements.normal = [
     id: 67,
     name: "Infinitely Challenging",
     tooltip: "Complete an Infinity Challenge.",
-    checkRequirement: () => InfinityChallenge.completed.length > 0,
+    checkRequirement: () => InfinityChallenges.completed.length > 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -464,7 +464,7 @@ GameDatabase.achievements.normal = [
     id: 82,
     name: "Anti-antichallenged",
     tooltip: "Complete 8 Infinity Challenges.",
-    checkRequirement: () => InfinityChallenge.completed.length === 8,
+    checkRequirement: () => InfinityChallenges.completed.length === 8,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
@@ -630,7 +630,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Time Dimensions are affected slightly by tickspeed.",
-    effect: () => player.tickspeed.div(1000).pow(0.000005).reciprocate()
+    effect: () => Tickspeed.current.div(1000).pow(0.000005).reciprocate()
   },
   {
     id: 106,
@@ -747,7 +747,7 @@ GameDatabase.achievements.normal = [
     id: 123,
     name: "5 more eternities until the update",
     tooltip: "Complete 50 unique Eternity Challenge tiers.",
-    checkRequirement: () => EternityChallenge.completedTiers() >= 50,
+    checkRequirement: () => EternityChallenges.completions >= 50,
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
@@ -842,7 +842,7 @@ GameDatabase.achievements.normal = [
     id: 135,
     name: "Faster than a potato^286078",
     tooltip: () => `Get more than ${shorten("1e8296262", 0, 0)} ticks per second.`,
-    checkRequirement: () => player.tickspeed.exponent <= -8296262,
+    checkRequirement: () => Tickspeed.current.exponent <= -8296262,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -921,7 +921,7 @@ GameDatabase.achievements.normal = [
     id: 146,
     name: "Perks of living",
     tooltip: "Have all perks bought.",
-    checkRequirement: () => player.reality.perks.size === Perk.all.length,
+    checkRequirement: () => player.reality.perks.size === Perks.all.length,
     checkEvent: GameEvent.PERK_BOUGHT
   },
   {

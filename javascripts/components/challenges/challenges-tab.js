@@ -57,13 +57,13 @@ Vue.component('challenges-tab', {
       this.isShowAllVisible = PlayerProgress.realityUnlocked && (isECTabUnlocked || isICTabUnlocked);
       this.isAutoECVisible = Perk.autocompleteEC1.isBought;
       this.autoEC = player.reality.autoEC;
-      const remainingTiers = EternityChallenge.remainingTiers();
-      this.remainingECTiers = remainingTiers;
-      if (remainingTiers !== 0) {
-        const autoECPeriod = EternityChallenge.currentAutoCompleteThreshold();
+      const remainingCompletions = EternityChallenges.remainingCompletions;
+      this.remainingECTiers = remainingCompletions;
+      if (remainingCompletions !== 0) {
+        const autoECPeriod = EternityChallenges.autoComplete.interval;
         const untilNextEC = Math.max(autoECPeriod - player.reality.lastAutoEC, 0);
         this.untilNextEC.setFrom(untilNextEC);
-        this.untilAllEC.setFrom(untilNextEC + (autoECPeriod * (remainingTiers - 1)));
+        this.untilAllEC.setFrom(untilNextEC + (autoECPeriod * (remainingCompletions - 1)));
       }
     },
     exitChallenge() {

@@ -227,7 +227,7 @@ class TimeDimensionState extends DimensionState {
   }
 }
 
-TimeDimensionState.index = DimensionState.createIndex(TimeDimensionState);
+TimeDimensionState.createIndex();
 
 /**
  * @param {number} tier

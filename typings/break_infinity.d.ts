@@ -1,4 +1,7 @@
-declare type DecimalSource = Decimal | number | string;
+export declare type DecimalSource = Decimal | number | string;
+/**
+ * The Decimal's value is simply mantissa * 10^exponent.
+ */
 export default class Decimal {
     m: number;
     e: number;
@@ -104,12 +107,18 @@ export default class Decimal {
      */
     static efficiencyOfPurchase(cost: DecimalSource, currentRpS: DecimalSource, deltaRpS: DecimalSource): Decimal;
     static randomDecimalForTesting(absMaxExponent: number): Decimal;
-    private static affordGeometricSeries_core;
-    private static sumGeometricSeries_core;
-    private static affordArithmeticSeries_core;
-    private static sumArithmeticSeries_core;
-    private static efficiencyOfPurchase_core;
+    /**
+     * A number (double) with absolute value between [1, 10) OR exactly 0.
+     * If mantissa is ever 10 or greater, it should be normalized
+     * (divide by 10 and add 1 to exponent until it is less than 10,
+     * or multiply by 10 and subtract 1 from exponent until it is 1 or greater).
+     * Infinity/-Infinity/NaN will cause bad things to happen.
+     */
     mantissa: number;
+    /**
+     * A number (integer) between -EXP_LIMIT and EXP_LIMIT.
+     * Non-integral/out of bounds will cause bad things to happen.
+     */
     exponent: number;
     constructor(value?: DecimalSource);
     /**
@@ -226,4 +235,3 @@ export default class Decimal {
     greaterThanOrEqualTo(other: DecimalSource): boolean;
     greaterThan(other: DecimalSource): boolean;
 }
-export {};

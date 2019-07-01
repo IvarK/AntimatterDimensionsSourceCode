@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * @abstract
+ */
 class GameMechanicState {
   constructor(config) {
     if (!config) throw crash("Must specify config for GameMechanicState");
@@ -17,10 +20,6 @@ class GameMechanicState {
     return this.config.id;
   }
 
-  get cost() {
-    return this.config.cost;
-  }
-
   get effectValue() {
     return this.config.effect();
   }
@@ -33,50 +32,54 @@ class GameMechanicState {
     if (this.canBeApplied) {
       let effectValue = this.effectValue;
       if (this.config.cap !== undefined) {
-        const cap = typeof this.config.cap === "function" ?
-         this.config.cap() :
-         this.config.cap;
+        const cap = typeof this.config.cap === "function"
+         ? this.config.cap()
+         : this.config.cap;
         if (cap !== undefined) {
-          effectValue = typeof effectValue === "number" ?
-            Math.min(effectValue, cap) :
-            Decimal.min(effectValue, cap);
+          effectValue = typeof effectValue === "number"
+            ? Math.min(effectValue, cap)
+            : Decimal.min(effectValue, cap);
         }
       }
       applyFn(effectValue);
     }
   }
+
+  static createIndex(gameData) {
+    this.index = mapGameData(gameData, config => new this(config));
+  }
 }
 
+/**
+ * @abstract
+ */
 class PurchasableMechanicState extends GameMechanicState {
-  constructor(config, currency, getCollection) {
-    super(config);
-    this._currency = currency;
-    this._getCollection = getCollection;
-  }
-
-  get collection() {
-    return this._getCollection();
-  }
+  /**
+   * @abstract
+   */
+  get currency() { throw NotImplementedCrash(); }
 
   get isAffordable() {
-    return this._currency.isAffordable(this.cost);
+    return this.currency.isAffordable(this.cost);
   }
 
   get isAvailable() {
     return true;
   }
 
-  get isBought() {
-    return this.collection.has(this.id);
+  get cost() {
+    return this.config.cost;
   }
 
-  set isBought(value) {
-    if (value) {
-      this.collection.add(this.id);
-    } else {
-      this.collection.delete(this.id);
-    }
-  }
+  /**
+   * @abstract
+   */
+  get isBought() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set isBought(value) { throw NotImplementedCrash(); }
 
   get canBeBought() {
     return !this.isBought && this.isAffordable && this.isAvailable;
@@ -85,12 +88,117 @@ class PurchasableMechanicState extends GameMechanicState {
   purchase() {
     if (!this.canBeBought) return false;
     this.isBought = true;
-    this._currency.subtract(this.cost);
+    this.currency.subtract(this.cost);
     GameUI.update();
     return true;
   }
 
   get canBeApplied() {
     return this.isBought;
+  }
+}
+
+/**
+ * @abstract
+ */
+class SetPurchasableMechanicState extends PurchasableMechanicState {
+  /**
+   * @abstract
+   */
+  get set() { throw NotImplementedCrash(); }
+
+  get isBought() {
+    return this.set.has(this.id);
+  }
+
+  set isBought(value) {
+    if (value) {
+      this.set.add(this.id);
+    } else {
+      this.set.delete(this.id);
+    }
+  }
+}
+
+/**
+ * @abstract
+ */
+class BitPurchasableMechanicState extends PurchasableMechanicState {
+  /**
+   * @abstract
+   */
+  get bits() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set bits(value) { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  get bitIndex() { throw NotImplementedCrash(); }
+
+  get isBought() {
+    // eslint-disable-next-line no-bitwise
+    return (this.bits & (1 << this.bitIndex)) !== 0;
+  }
+
+  set isBought(value) {
+    if (value) {
+      // eslint-disable-next-line no-bitwise
+      this.bits |= (1 << this.bitIndex);
+    } else {
+      // eslint-disable-next-line no-bitwise
+      this.bits &= ~(1 << this.bitIndex);
+    }
+  }
+}
+
+/**
+ * @abstract
+ */
+class RebuyableMechanicState extends GameMechanicState {
+  /**
+   * @abstract
+   */
+  get currency() { throw NotImplementedCrash(); }
+
+  get isAffordable() {
+    return this.currency.isAffordable(this.cost);
+  }
+
+  get cost() {
+    return this.config.cost();
+  }
+
+  get isAvailable() {
+    return true;
+  }
+
+  /**
+   * @abstract
+   */
+  get boughtAmount() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set boughtAmount(value) { throw NotImplementedCrash(); }
+
+  get canBeApplied() {
+    return this.boughtAmount > 0;
+  }
+
+  get canBeBought() {
+    return this.isAffordable && this.isAvailable;
+  }
+
+  purchase() {
+    if (!this.canBeBought) return false;
+    this.boughtAmount++;
+    this.currency.subtract(this.cost);
+    GameUI.update();
+    return true;
   }
 }

@@ -8,14 +8,20 @@
     <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
     <script type="text/javascript" src="javascripts/lib/jquery-3.2.1.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/components.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+    <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/vis.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/tln.css">
     <script>
         (function(i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -35,7 +41,6 @@
     </script>
 </head>
 <img id="loading" src="images/Loading.png">
-<div id="snow" style="display: none; "></div>
 <body>
 <div id="ui" style="height: 100%; width: 100%;">
     <link :disabled="!$viewModel.newUI" id="new-ui" rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
@@ -111,219 +116,7 @@
               <reality-upgrades-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'upgrades'"></reality-upgrades-tab>
             </div>
             <div id="automation" class="realitytab" style="display: none;">
-                <span id="automatorUnlock"><br><br><br>You need to get 4 Realities to unlock the automator</span>
-                <div class="automator-container">
-                    <div id="rowsAvailable">Your automator can use 4 rows; next row at 9 realities.</div>
-                    <canvas id="automatorTreeCanvas"></canvas>
-                    <div>
-                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom: 3px;">
-                            <p id="automatorloadsavetext">load:</p>
-                            <automator-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></automator-save-load-button>
-                            <label for="automatorOn" style="margin-left: 40px;">on:</label>
-                            <input type="checkbox" name="automatorOn" id="automatorOn" onChange="automatorOnOff()">
-                        </div>
-                        <textarea name="automator" id="automator" cols="30" spellcheck="false" onChange="updateAutomatorState()"></textarea>
-                    </div>
-                    <table class="table" id="studytable">
-                      <tr>
-                        <td>
-                          <automator-shop-button name="WAIT">
-                            <template slot="button-content">
-                              WAIT<br>
-                              Cost: 1 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              WAIT [target] [amount]
-                            </template>
-                            <template slot="tooltip-content">
-                              Waits for something to pass a certain point, "Wait EP 1e2000" waits until you have 1e2000 ep. "Wait time 10"
-                              waits 10 seconds.
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
-                        <td>
-                          <automator-shop-button name="BUY">
-                            <template slot="button-content">
-                              BUY<br>
-                            </template>
-                            <template slot="tooltip-header">
-                              BUY [target] [amount/ID]
-                            </template>
-                            <template slot="tooltip-content">
-                              Buys stuff, "Buy study 11" buys the first timestudy. Hold shift to see study IDs.</template>
-                          </automator-shop-button>
-                        </td>
-                      </tr>
-                    </table>
-                    <br>
-                    <table class="table" id="studytable">
-                      <tr>
-                        <td><automator-shop-button name="IF">
-                        </automator-shop-button></td>
-                        <td><automator-shop-button name="ANTIMATTER"></automator-shop-button></td>
-                        <td><automator-shop-button name="EP"></automator-shop-button></td>
-                        <td><automator-shop-button name="STUDY"></automator-shop-button></td>
-                        <td><automator-shop-button name="STUDYUNTIL"></automator-shop-button></td>
-                        <td>
-                          <automator-shop-button name="STUDYPATH">
-                            <template slot="button-content">
-                              STUDYPATH<br>Cost: 50 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              BUY STUDYPATH [all/none] [study ids and path names]
-                            </template>
-                            <template slot="tooltip-content">
-                              Buys studies top-down using arguments after the mode specification. The 2 modes specify to buy "all" or
-                              "none" of the studies on non-locked splits (incl. 62 and 33). Locked paths must be specified by ID # or split
-                              name.
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                      </tr>
-                    </table>
-                    <table class="table" id="studytable">
-                      <tr>
-                          <td><automator-shop-button name="GOTO"></automator-shop-button></td>
-                          <td><automator-shop-button name="IP"></automator-shop-button></td>
-                          <td><automator-shop-button name="REPLICANTI"></automator-shop-button></td>
-                          <td><automator-shop-button name="TTEP"></automator-shop-button></td>
-                          <td><automator-shop-button name="TTIP"></automator-shop-button></td>
-                          <td><automator-shop-button name="STUDYIMPORT"></automator-shop-button></td>
-                      </tr>
-                    </table>
-                    <table class="table" id="studytable">
-                      <tr>
-                          <td><automator-shop-button name="TIME"></automator-shop-button></td>
-                          <td><automator-shop-button name="RG"></automator-shop-button></td>
-                          <td><automator-shop-button name="TTAM"></automator-shop-button></td>
-                          <td><automator-shop-button name="TTMAX"></automator-shop-button></td>
-                      </tr>
-                    </table>
-                    <table class="table" id="studytable">
-                      <tr>
-                        <td>
-                          <automator-shop-button name="LOAD">
-                            <template slot="button-content">
-                              LOAD<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              LOAD [automatorscriptnumber]
-                            </template>
-                            <template slot="tooltip-content">
-                              You can load different automatorscripts with this, "Load 2" loads the second script
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td><automator-shop-button name="MAX"></automator-shop-button></td>
-                        <td>
-                          <automator-shop-button name="TOGGLE">
-                            <template slot="button-content">
-                              TOGGLE<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              TOGGLE [autobuyer]
-                            </template>
-                            <template slot="tooltip-content">
-                              Toggles autobuyers on and off, "Toggle D1" for example. Targets include: DX, Tickspeed, Galaxy, Dimboost,
-                              Infinity, Eternity, Sacrifice, and RG
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td>
-                          <automator-shop-button name="UNLOCK">
-                            <template slot="button-content">
-                              UNLOCK<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              UNLOCK [target] [(id)]
-                            </template>
-                            <template slot="tooltip-content">
-                              Unlocks either ECs "Unlock EC 3", or dilation "Unlock dilation"
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <automator-shop-button name="RESPEC">
-                            <template slot="button-content">
-                              RESPEC<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              RESPEC
-                            </template>
-                            <template slot="tooltip-content">
-                              Toggles respec on, so next eternity your time studies will reset.
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td>
-                          <automator-shop-button name="ETERNITY">
-                            <template slot="button-content">
-                              ETERNITY<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              ETERNITY
-                            </template>
-                            <template slot="tooltip-content">
-                              Does an eternity if able, if not it waits until it can eternity.
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td><automator-shop-button name="UNLOCK_DILATION"></automator-shop-button></td>
-                        <td><automator-shop-button name="UNLOCK_EC"></automator-shop-button></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <automator-shop-button name="CHANGE">
-                            <template slot="button-content">
-                              CHANGE<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              CHANGE [IPAUTOBUYER/EPAUTOBUYER] [amount]
-                            </template>
-                            <template slot="tooltip-content">
-                              You can change the amount in your autobuyers "CHANGE IPAUTOBUYER 1e2000" for example
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td>
-                          <automator-shop-button name="STOP">
-                            <template slot="button-content">
-                              STOP<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              STOP
-                            </template>
-                            <template slot="tooltip-content">
-                              Stops the whole automator.
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                        <td><button class="automatorinstruction" style="opacity: 0;"></button></td>
-                        <td>
-                          <automator-shop-button name="START">
-                            <template slot="button-content">
-                              START<br>Cost: 30 RM
-                            </template>
-                            <template slot="tooltip-header">
-                              START [target] [(id)]
-                            </template>
-                            <template slot="tooltip-content">
-                              Starts either ECs "Start EC 3", or dilation "Start dilation"
-                            </template>
-                          </automator-shop-button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><automator-shop-button name="IPAUTOBUYER"></automator-shop-button></td>
-                        <td><automator-shop-button name="EPAUTOBUYER"></automator-shop-button></td>
-                        <td><automator-shop-button name="START_DILATION"></automator-shop-button></td>
-                        <td><automator-shop-button name="START_EC"></automator-shop-button></td>
-                      </tr>
-                    </table>
-                </div>
+              <automator-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'automation'"></automator-tab>
             </div>
             <div id="blackhole" class="realitytab" style="display: none;">
               <black-hole-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'blackhole'"></black-hole-tab>
@@ -342,10 +135,13 @@
 </div>
 <div v-if="!newUI" id="notification-container" class="l-notification-container"></div>
 </body>
-<div class="videocontainer">
-    <video autoplay muted loop id="stars">
-        <source src="images/s6-bg.webm" type="video/webm">
-    </video>
+<div id="background-animations">
+  <div class="videocontainer">
+      <video autoplay muted loop id="stars">
+          <source src="images/s6-bg.webm" type="video/webm">
+      </video>
+  </div>
+  <div id="snow" style="display: none; "></div>
 </div>
 <div class="videocontainer">
     <video preload muted id="realityanimbg" style="opacity: 0; display: none; ">
@@ -365,12 +161,18 @@
 <script type="text/javascript" src="javascripts/lib/sha512.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/deepmerge.js"></script>
 <script type="text/javascript" src="javascripts/lib/Sortable.min.js"></script>
-<script type="text/javascript" src="javascripts/lib/vuedraggable.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/vuedraggable.umd.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/Tween.min.js"></script>
 <script type="text/javascript" src="javascripts/lib/gamma.js"></script>
+<script type="text/javascript" src="javascripts/lib/vue-split-pane.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/chevrotain.min.js"></script>
+<script type="text/javascript" src="javascripts/lib/codemirror.js"></script>
+<script type="text/javascript" src="javascripts/lib/simple.js"></script>
+<script type="text/javascript" src="javascripts/lib/show-hint.js"></script>
+<script type="text/javascript" src="javascripts/lib/lint.js"></script>
+<script type="text/javascript" src="javascripts/lib/active-line.js"></script>
 <script type="text/javascript" src="PlayFab/PlayFabClientApi.js"></script>
 <script type="text/javascript" src="javascripts/DragDropTouch.js"></script>
-<script type="text/javascript" src="javascripts/tln.js"></script>
 <script type="text/javascript" src="javascripts/longpress.js"></script>
 
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
@@ -381,6 +183,7 @@
 <script type="text/javascript" src="javascripts/core/constants.js"></script>
 <script type="text/javascript" src="javascripts/core/math.js"></script>
 
+<script type="text/javascript" src="javascripts/core/automator/automator-backend.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/effects.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/game-database.js"></script>
 <script type="text/javascript" src="javascripts/core/glyph-effects.js"></script>
@@ -437,6 +240,7 @@
 <script type="text/javascript" src="javascripts/core/secret-formula/eternity/dilation-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/reality-upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/perks.js"></script>
+<script type="text/javascript" src="javascripts/core/secret-formula/reality/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/reality/glyph-sacrifices.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/celestials/effarig.js"></script>
 <script type="text/javascript" src="javascripts/core/secret-formula/celestials/v.js"></script>
@@ -463,6 +267,7 @@
 <script type="text/javascript" src="javascripts/components/header/game-header.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-amounts-line.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-tickspeed-row.js"></script>
+<script type="text/javascript" src="javascripts/components/header/game-header-gamma-display.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-big-crunch-button.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-new-dim-button.js"></script>
 <script type="text/javascript" src="javascripts/components/header/game-header-eternity-button.js"></script>
@@ -598,6 +403,17 @@
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/black-hole/black-hole-upgrade-row.js"></script>
 
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-button.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-editor.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-docs-main-page.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/docs/automator-man-page.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-blocks.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-block-editor.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-block-tab.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/automator/automator-single-block.js"></script>
+
 <script type="text/javascript" src="javascripts/components/modals/modal-popup.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-shortcuts.js"></script>
 <script type="text/javascript" src="javascripts/components/modals/modal-message.js"></script>
@@ -623,6 +439,11 @@
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-ep.js"></script>
 <script type="text/javascript" src="javascripts/components/new-ui/sidebar-resources/sidebar-rm.js"></script>
 
+<script type="text/javascript" src="javascripts/core/automator/automator-codemirror.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/lexer.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/automator-commands.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/parser.js"></script>
+<script type="text/javascript" src="javascripts/core/automator/compiler.js"></script>
 
 <script type="text/javascript" src="javascripts/core/app/ui.init.js"></script>
 <script type="text/javascript" src="javascripts/core/app/player-progress.js"></script>
@@ -652,7 +473,6 @@
 <script type="text/javascript" src="javascripts/core/replicanti.js"></script>
 <script type="text/javascript" src="javascripts/core/timestudies.js"></script>
 <script type="text/javascript" src="javascripts/core/rm.js"></script>
-<script type="text/javascript" src="javascripts/core/automator.js"></script>
 <script type="text/javascript" src="javascripts/core/perks.js"></script>
 <script type="text/javascript" src="javascripts/core/canvases.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>

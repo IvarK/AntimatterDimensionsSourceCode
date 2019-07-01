@@ -15,7 +15,7 @@ class EventHub {
   }
 
   offAll(target) {
-    for (const handlers in this._handlers) {
+    for (const handlers of Object.keys(this._handlers)) {
       this._handlers[handlers] = this._handlers[handlers]
         .filter(handler => handler.target !== target);
     }
@@ -103,6 +103,7 @@ const GameEvent = {
   REALITY_UPGRADE_BOUGHT: "REALITY_UPGRADE_BOUGHT",
   PERK_BOUGHT: "PERK_BOUGHT",
   BLACK_HOLE_UPGRADE_BOUGHT: "BLACK_HOLE_UPGRADE_BOUGHT",
+  GAME_LOAD: "GAME_LOAD",
 
   // UI Events
   UPDATE: "UPDATE",

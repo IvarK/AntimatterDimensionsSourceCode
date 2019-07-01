@@ -19,6 +19,9 @@
 
 body.t-s6 {
     background: black;
+    background-image: url('../images/s6-bg.png');
+    background-size: 100%;
+    background-position: center;
 }
 
 .t-s6 .popup {
@@ -164,38 +167,6 @@ strong {
 .t-s6 .c-rm-amount {
   color: #0b600e;
   text-shadow: 0 0 7px #0b600e;
-}
-
-.t-s6 .automatorinstruction.command {
-    background-color: black;
-}
-
-.t-s6 .automatorinstruction.target {
-    background-color: black;
-}
-
-.t-s6 .automatorinstruction.command:hover {
-    background-color: #d5ffd7;
-}
-
-.t-s6 .automatorinstruction.target:hover {
-    background-color: #BBDEFB;
-}
-
-.t-s6 .automatorinstructionbought.command {
-    background-color: #0b600e;
-}
-
-.t-s6 .automatorinstructionbought.target {
-    background-color: #2196F3;
-}
-
-.t-s6 .automatorinstructionlocked.command {
-    background-color: #656565;
-}
-
-.t-s6 .automatorinstructionlocked.target {
-    background-color: #656565;
 }
 
 .t-s6 #realityanimbg {

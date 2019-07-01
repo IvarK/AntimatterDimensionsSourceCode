@@ -4,24 +4,26 @@ Vue.component("normal-achievements-tab", {
   data() {
     return {
       achPower: new Decimal(0),
-      nextAchIn: 0,
-      timeForAchs: 0,
-      allAchIn: 0
+      timeUntilNext: 0,
+      totalDisabledTime: 0,
+      remainingDisabledTime: 0
     };
+  },
+  computed: {
+    rows: () => Achievements.rows(1, 15)
   },
   methods: {
     update() {
       this.achPower.copyFrom(GameCache.achievementPower.value);
       if (player.realities === 0) {
-        this.nextAchAt = 0;
-        this.timeForAchs = 0;
-        this.allAchAt = 0;
+        this.timeUntilNext = 0;
+        this.totalDisabledTime = 0;
+        this.remainingDisabledTime = 0;
         return;
       }
-      this.nextAchIn = nextAchIn();
-      const totalAchTime = timeForAllAchievements() * 1000;
-      this.timeForAchs = totalAchTime;
-      this.allAchIn = totalAchTime - player.thisReality;
+      this.timeUntilNext = Achievements.timeUntilNext;
+      this.totalDisabledTime = Achievements.totalDisabledTime;
+      this.remainingDisabledTime = Achievements.remainingDisabledTime;
     },
     timeDisplay(value) {
       return timeDisplay(value);
@@ -36,18 +38,18 @@ Vue.component("normal-achievements-tab", {
         class="c-achievements-tab__header"
       >Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
       <div
-        v-if="nextAchIn > 0"
+        v-if="timeUntilNext > 0"
         class="c-achievements-tab__header"
-      >Next achievement in {{timeDisplayNoDecimals(nextAchIn)}}</div>
+      >Next achievement in {{timeDisplayNoDecimals(timeUntilNext)}}</div>
       <br>
       <div
-        v-if="timeForAchs > 0"
+        v-if="totalDisabledTime > 0"
         id="timeForAchievements"
         class="c-achievements-tab__timer"
-      >You will gain your achievements back over the span of {{timeDisplay(timeForAchs)}}.</div>
-      <div v-if="allAchIn > 0">(Remaining: {{timeDisplay(allAchIn)}})</div>
+      >You will gain your achievements back over the span of {{timeDisplay(totalDisabledTime)}}.</div>
+      <div v-if="remainingDisabledTime > 0">(Remaining: {{timeDisplay(remainingDisabledTime)}})</div>
       <div class="l-achievement-grid">
-        <normal-achievement-row v-for="row in 15" :key="row" :row="row" />
+        <normal-achievement-row v-for="(row, i) in rows" :key="i" :row="row" />
       </div>
     </div>`
 });

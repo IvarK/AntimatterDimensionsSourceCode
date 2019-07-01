@@ -269,7 +269,7 @@ class InfinityDimensionState extends DimensionState {
   }
 }
 
-InfinityDimensionState.index = DimensionState.createIndex(InfinityDimensionState);
+InfinityDimensionState.createIndex();
 
 /**
  * @param {number} tier

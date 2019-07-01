@@ -21,7 +21,7 @@ Vue.component("new-tickspeed-row", {
     multiplierDisplay() {
       const tickmult = this.mult;
       if (tickmult.lte(1e-9)) {
-        return `${this.shortenDimensions(tickmult.reciprocal())}x faster / upgrade.`;
+        return `${this.shorten(tickmult.reciprocal(), 2, 0)}x faster / upgrade.`;
       }
       const asNumber = tickmult.toNumber();
       let places = asNumber >= 0.2 ? 0 : Math.floor(Math.log10(Math.round(1 / asNumber)));
@@ -35,7 +35,7 @@ Vue.component("new-tickspeed-row", {
         displayValue = tickspeed.toFixed(0);
       } else {
         const oom = Decimal.divide(100, Decimal.pow10(tickspeed.exponent));
-        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shortenRateOfChange(oom)}`;
+        displayValue = `${tickspeed.times(oom).toFixed(0)} / ${shorten(oom, 2, 2)}`;
       }
       return `Tickspeed: ${displayValue}`;
     },
@@ -73,7 +73,7 @@ Vue.component("new-tickspeed-row", {
   template:
   `<div class="tickspeed-container" v-show="isVisible">
       <div class="tickspeed-labels">
-        <span>{{ tickspeedDisplay }}</span>
+        <div v-tooltip="tooltip">{{ tickspeedDisplay }} <game-header-gamma-display v-if="!isGameSpeedNormal"/></div>
         <span>{{ multiplierDisplay }}</span>
       </div>
       <div class="tickspeed-buttons">

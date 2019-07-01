@@ -43,6 +43,7 @@ Tab.dimensions.infinity = new Subtab("Infinity Dimensions", Tab.dimensions, ui.v
 Tab.dimensions.time = new Subtab("Time Dimensions", Tab.dimensions, ui.view.tabs.dimensions);
 Tab.options = new Tab("options-tab");
 Tab.statistics = new Tab("stats-tab");
+Tab.statistics.multiplier = new Subtab("Multipliers", Tab.statistics, ui.view.tabs.statistics)
 Tab.achievements = new Tab("achievements-tab");
 Tab.challenges = new Tab("challenges-tab");
 Tab.challenges.normal = new Subtab("Challenges", Tab.challenges, ui.view.tabs.challenges, true);

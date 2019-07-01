@@ -30,6 +30,17 @@ class AlchemyResourceState extends GameMechanicState {
     return AlchemyResource.decoherence.effectValue;
   }
 
+  get reactionText() {
+    if (this.reaction === null) return "Base Resource";
+    const isReality = this.reaction._product.id === ALCHEMY_RESOURCE.REALITY;
+    const reagentStrings = [];
+    for (const reagent of this.reaction._reagents) {
+      reagentStrings.push(`${isReality ? "" : reagent.cost}${reagent.resource.symbol}`);
+    }
+    const produced = `${Math.floor(100 * this.reaction.baseProduction * this.reaction.reactionEfficiency) / 100}`;
+    return `${reagentStrings.join(" + ")} ➜ ${isReality ? "" : produced}${this.reaction._product.symbol}`;
+  }
+
   get reaction() {
     return AlchemyReactions.all[this.id];
   }
@@ -42,20 +53,26 @@ class AlchemyReaction {
     this._reagents = reagents;
   }
 
-  // Returns a percentage of a reaction that can be done, accounting for limiting reagents
+  // Returns a percentage of a reaction that can be done, accounting for limiting reagents and capping at 100%
   get reactionYield() {
-    return this._reagents
+    const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
+      return Math.min(totalYield, 1);
   }
 
-  // Reactions are per-10 products because that avoids decimals in the UI for reactions
+  get isReality() {
+    return this._product.id === ALCHEMY_RESOURCE.REALITY;
+  }
+
+  // Reactions are per-10 products because that avoids decimals in the UI for reagents, but efficiency losses can make
+  // products have decimal coefficients.
   get baseProduction() {
-    return 10;
+    return this.isReality ? 1 : 10;
   }
 
   get reactionEfficiency() {
-    return AlchemyResource.synergism.effectValue;
+    return this.isReality ? 1 : AlchemyResource.synergism.effectValue;
   }
 
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not
@@ -70,10 +87,14 @@ class AlchemyReaction {
     const adjustedYield = maxFromReaction > maxFromCap
       ? this.reactionYield * (maxFromCap / maxFromReaction)
       : this.reactionYield;
+    const reagentStrings = [];
     for (const reagent of this._reagents) {
       reagent.resource.amount -= adjustedYield * reagent.cost;
+      reagentStrings.push(`${adjustedYield * reagent.cost}${reagent.resource.symbol}`);
     }
     this._product.amount += this.baseProduction * adjustedYield * this.reactionEfficiency;
+    console.log(`${reagentStrings.join(" + ")} ➜ ` +
+      `${this.baseProduction * adjustedYield * this.reactionEfficiency}${this._product.symbol}`);
   }
 }
 

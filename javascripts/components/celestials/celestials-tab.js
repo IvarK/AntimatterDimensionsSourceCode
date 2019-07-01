@@ -40,6 +40,12 @@ Vue.component('celestials-tab', {
           condition: function() { return this.raUnlocked }.bind(this)
         },
         {
+          name: "Glyph Alchemy",
+          id: "Alchemy",
+          component: "alchemy-tab",
+          condition: function() { return true }.bind(this)
+        },
+        {
           name: "Lai'tela",
           id: "Lai'tela",
           component: "laitela-tab",

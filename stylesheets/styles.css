@@ -5833,6 +5833,29 @@ kbd {
   justify-content: space-around;
 }
 
+.l-ra-alchemy-container {
+  width: 180rem;
+  justify-content: center;
+  margin: 2rem auto auto;
+}
+
+.alchemy-tooltip .alchemy-tooltip-text {
+  visibility: hidden;
+  width: 180px;
+  background-color: black;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  bottom: 100%;
+  left: 50%; 
+  margin-left: -90px;
+}
+
+.alchemy-tooltip:hover .alchemy-tooltip-text {
+  visibility: visible;
+}
+
 .c-ra-unlock-unlocked {
   background: lightgreen;
 }

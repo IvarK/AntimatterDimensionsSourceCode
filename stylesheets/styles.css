@@ -5695,7 +5695,7 @@ kbd {
   margin: 2rem auto auto;
 }
 
-.alchemy-tooltip .alchemy-tooltip-text {
+.alchemy-node .alchemy-tooltip {
   visibility: hidden;
   width: 180px;
   background-color: black;
@@ -5703,12 +5703,11 @@ kbd {
   position: relative;
   z-index: 1;
   text-align: center;
-  bottom: 100%;
   left: 50%; 
   margin-left: -90px;
 }
 
-.alchemy-tooltip:hover .alchemy-tooltip-text {
+.alchemy-node:hover .alchemy-tooltip {
   visibility: visible;
 }
 

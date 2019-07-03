@@ -17,12 +17,16 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.formatEffect(this.effectValue);
   }
 
-  get amount() {
+  get data() {
     return player.celestials.ra.alchemy[this.id];
   }
 
+  get amount() {
+    return this.data.amount;
+  }
+
   set amount(value) {
-    player.celestials.ra.alchemy[this.id] = value;
+    this.data.amount = value;
   }
 
   // Base decay for now, will add player-controllable stuff later
@@ -53,12 +57,24 @@ class AlchemyReaction {
     this._reagents = reagents;
   }
 
+  get reagents() {
+    return this._reagents;
+  }
+
   // Returns a percentage of a reaction that can be done, accounting for limiting reagents and capping at 100%
   get reactionYield() {
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
       return Math.min(totalYield, 1);
+  }
+
+  get isActive() {
+    return this._product.data.reaction;
+  }
+
+  set isActive(value) {
+    this._product.data.reaction = value;
   }
 
   get isReality() {
@@ -73,6 +89,10 @@ class AlchemyReaction {
 
   get reactionEfficiency() {
     return this.isReality ? 1 : AlchemyResource.synergism.effectValue;
+  }
+
+  get production() {
+    return Math.floor(100 * this.baseProduction * this.reactionEfficiency) / 100;
   }
 
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not

@@ -3,12 +3,16 @@
 Vue.component("alchemy-tab", {
   data() {
     return {
-      resources: []
+      resources: [],
+      selectedResourceId: 0
     };
   },
   computed: {
     layout: () => new AlchemyCircleLayout(),
     sizeMultiplier: () => 5,
+    selectedResource() {
+      return AlchemyResources.all[this.selectedResourceId];
+    },
     circleStyle() {
       const size = this.layout.size * this.sizeMultiplier;
       return {
@@ -21,10 +25,24 @@ Vue.component("alchemy-tab", {
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
       return `${(orbit.radius / maxRadius * 50)}%`;
+    },
+    handleHover(node) {
+      this.selectedResourceId = node.resource.id;
+    },
+    handleClick(node) {
+      const resource = node.resource;
+      if (this.selectedResourceId !== resource.id) {
+        this.selectedResourceId = resource.id;
+        return;
+      }
+      if (resource.isBaseResource) return;
+      resource.reaction.isActive = !resource.reaction.isActive;
+      GameUI.update();
     }
   },
   template:
     `<div class="l-ra-alchemy-tab">
+      <alchemy-resource-info :resource="selectedResource" />
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg height="100%" width="100%" overflow="visible">
           <circle
@@ -41,43 +59,11 @@ Vue.component("alchemy-tab", {
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
+          @hover="handleHover(node)"
+          @click="handleClick(node)"
         />
       </div>
     </div>`
-});
-
-Vue.component("alchemy-circle-node", {
-  props: {
-    node: Object
-  },
-  computed: {
-    resource() {
-      return this.node.resource;
-    },
-    amount() {
-      const resource = this.resource;
-      return `${resource.name} (${resource.amount} ${resource.symbol})`;
-    },
-    reaction() {
-      return `${this.resource.reactionText}`;
-    },
-    layoutStyle() {
-      return {
-        left: `${this.node.x}%`,
-        top: `${this.node.y}%`,
-      };
-    }
-  },
-  template: `
-    <div class="c-alchemy-node" :style="layoutStyle">
-      {{ resource.symbol }}
-      <div class="alchemy-tooltip">
-        {{ amount }}
-        <br><br>
-        {{ reaction }}
-      </div>
-    </div>
-  `
 });
 
 class AlchemyOrbitLayout {

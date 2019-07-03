@@ -325,7 +325,11 @@ let player = {
           lastTTPurchased: 0
         }
       },
-      alchemy: Array.repeat(0, 21),
+      alchemy: Array.repeat(0, 21)
+        .map(() => ({
+          amount: 0,
+          reaction: false
+        })),
       unlocks: [],
       run: false,
       charged: new Set(),

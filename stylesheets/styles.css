@@ -5690,10 +5690,21 @@ kbd {
 }
 
 .l-ra-alchemy-tab {
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+}
+
+.c-alchemy-resource-info {
+  display: flex;
+  flex-direction: column;
+  border: 0.1rem solid black;
+  padding: 0.25rem 1rem;
+  width: 60rem;
+  font-size: 1.2rem;
+  text-align: left;
 }
 
 .l-alchemy-circle {
@@ -5708,26 +5719,18 @@ kbd {
   margin-left: -1rem;
   margin-top: -1rem;
   user-select: none;
-  font-size: 1.5rem;
-  border: 0.1rem solid #000;
+  font-size: 1.4rem;
+  border: 0.1rem solid black;
   border-radius: 50%;
   background-color: white;
 }
 
-.c-alchemy-node .alchemy-tooltip {
-  visibility: hidden;
-  width: 180px;
-  background-color: black;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  left: 50%; 
-  margin-left: -90px;
+.c-alchemy-node--base {
+  background-color: lightblue;
 }
 
-.c-alchemy-node:hover .alchemy-tooltip {
-  visibility: visible;
+.c-alchemy-node--active {
+  background-color: lightgreen;
 }
 
 .c-ra-unlock-unlocked {

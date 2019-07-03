@@ -5732,6 +5732,7 @@ kbd {
   stroke: black;
   stroke-width: 1;
   fill: none;
+  transition-duration: 0.2s;
 }
 
 .o-alchemy-orbit--unfocused {

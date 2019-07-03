@@ -3,15 +3,16 @@
 Vue.component("alchemy-tab", {
   data() {
     return {
-      resources: [],
-      selectedResourceId: 0
+      infoResourceId: 0,
+      focusedResourceId: -1
     };
   },
   computed: {
+    resources: () => AlchemyResources.all,
     layout: () => new AlchemyCircleLayout(),
     sizeMultiplier: () => 5,
-    selectedResource() {
-      return AlchemyResources.all[this.selectedResourceId];
+    infoResource() {
+      return this.resources[this.infoResourceId];
     },
     circleStyle() {
       const size = this.layout.size * this.sizeMultiplier;
@@ -19,6 +20,9 @@ Vue.component("alchemy-tab", {
         width: `${size}rem`,
         height: `${size}rem`
       };
+    },
+    orbitClass() {
+      return this.focusedResourceId === -1 ? undefined : "o-alchemy-orbit--unfocused";
     }
   },
   methods: {
@@ -26,42 +30,77 @@ Vue.component("alchemy-tab", {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
       return `${(orbit.radius / maxRadius * 50)}%`;
     },
-    handleHover(node) {
-      this.selectedResourceId = node.resource.id;
+    handleMouseEnter(node) {
+      this.infoResourceId = node.resource.id;
+      this.focusedResourceId = node.resource.id;
+    },
+    handleMouseLeave() {
+      this.focusedResourceId = -1;
     },
     handleClick(node) {
       const resource = node.resource;
-      if (this.selectedResourceId !== resource.id) {
-        this.selectedResourceId = resource.id;
+      if (this.infoResourceId !== resource.id) {
+        this.infoResourceId = resource.id;
+        this.focusedResourceId = resource.id;
         return;
       }
       if (resource.isBaseResource) return;
       resource.reaction.isActive = !resource.reaction.isActive;
       GameUI.update();
+    },
+    isFocused(node) {
+      if (this.focusedResourceId === -1) return true;
+      const focusedResource = this.resources[this.focusedResourceId];
+      if (focusedResource === node.resource) return true;
+      if (focusedResource.isBaseResource) return false;
+      return focusedResource.reaction.reagents
+        .some(r => r.resource === node.resource);
+    },
+    reactionArrowPositions(reactionArrow) {
+      return {
+        x1: `${reactionArrow.x1}%`,
+        y1: `${reactionArrow.y1}%`,
+        x2: `${reactionArrow.x2}%`,
+        y2: `${reactionArrow.y2}%`,
+      };
+    },
+    reactionArrowClass(reactionArrow) {
+      return reactionArrow.reaction.product.id === this.focusedResourceId
+        ? undefined
+        : "o-alchemy-reaction-arrow--unfocused";
     }
   },
   template:
     `<div class="l-ra-alchemy-tab">
-      <alchemy-resource-info :resource="selectedResource" />
+      <alchemy-resource-info :resource="infoResource" />
       <div class="l-alchemy-circle" :style="circleStyle">
-        <svg height="100%" width="100%" overflow="visible">
+        <svg class="l-alchemy-orbit-canvas">
           <circle
             v-for="orbit in layout.orbits"
-            :r="orbitSize(orbit)"
             cx="50%"
             cy="50%"
-            stroke="black"
-            stroke-width="1"
-            fill="none"
+            class="o-alchemy-orbit"
+            :r="orbitSize(orbit)"
+            :class="orbitClass"
           />
         </svg> 
         <alchemy-circle-node 
           v-for="(node, i) in layout.nodes"
           :key="i"
           :node="node"
-          @hover="handleHover(node)"
+          :isFocused="isFocused(node)"
+          @mouseenter="handleMouseEnter(node)"
+          @mouseleave="handleMouseLeave"
           @click="handleClick(node)"
         />
+        <svg class="l-alchemy-arrow-canvas">
+          <line
+            v-for="reactionArrow in layout.reactionArrows"
+            v-bind="reactionArrowPositions(reactionArrow)"
+            :class="reactionArrowClass(reactionArrow)"
+            class="o-alchemy-reaction-arrow"
+          />
+        </svg> 
       </div>
     </div>`
 });
@@ -114,6 +153,23 @@ class AlchemyCircleLayout {
       node.x = (node.x / size + 0.5) * 100;
       node.y = (node.y / size + 0.5) * 100;
     }
+    const reactionArrows = [];
+    for (const reaction of AlchemyReactions.all.compact()) {
+      const productNode = nodes
+        .find(n => n.resource === reaction.product);
+      const reagentNodes = reaction.reagents
+        .map(r => nodes.find(n => n.resource === r.resource));
+      for (const reagentNode of reagentNodes) {
+        reactionArrows.push({
+          reaction,
+          x1: reagentNode.x,
+          y1: reagentNode.y,
+          x2: productNode.x,
+          y2: productNode.y,
+        });
+      }
+    }
+    this.reactionArrows = reactionArrows;
     this.nodes = nodes;
     this.size = size;
   }

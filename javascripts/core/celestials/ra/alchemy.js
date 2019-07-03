@@ -57,6 +57,10 @@ class AlchemyReaction {
     this._reagents = reagents;
   }
 
+  get product() {
+    return this._product;
+  }
+
   get reagents() {
     return this._reagents;
   }

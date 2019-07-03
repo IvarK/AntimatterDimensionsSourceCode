@@ -2,7 +2,8 @@
 
 Vue.component("alchemy-circle-node", {
   props: {
-    node: Object
+    node: Object,
+    isFocused: false
   },
   data() {
     return {
@@ -22,14 +23,12 @@ Vue.component("alchemy-circle-node", {
         top: `${this.node.y}%`,
       };
     },
-    reactionClass() {
-      if (this.isBaseResource) {
-        return "c-alchemy-node--base";
-      }
-      if (this.isReactionActive) {
-        return "c-alchemy-node--active";
-      }
-      return undefined;
+    classObject() {
+      return {
+        "o-alchemy-node--base": this.isBaseResource,
+        "o-alchemy-node--active": this.isReactionActive,
+        "o-alchemy-node--unfocused": !this.isFocused,
+      };
     }
   },
   methods: {
@@ -38,13 +37,12 @@ Vue.component("alchemy-circle-node", {
     }
   },
   template: `
-    <div class="c-alchemy-node"
-      :class="reactionClass"
+    <div class="o-alchemy-node"
+      :class="classObject"
       :style="layoutStyle"
-      @mouseenter="$emit('hover')"
+      @mouseenter="$emit('mouseenter')"
+      @mouseleave="$emit('mouseleave')"
       @click="emitClick"
-    >
-      {{ resource.symbol }}
-    </div>
+    >{{resource.symbol}}</div>
   `
 });

@@ -134,12 +134,14 @@ class AlchemyOrbitLayout {
 
 class AlchemyCircleLayout {
   constructor() {
+    const sortFun = (x, y) => x.config.uiOrder - y.config.uiOrder;
+    const tierFilt = x => AlchemyResources.all.filter(y => y.config.tier === x);
     this.orbits = [
-      new AlchemyOrbitLayout(AlchemyResources.all.slice(0, 5), 4),
-      new AlchemyOrbitLayout(AlchemyResources.all.slice(5, 10), 3, Math.PI / 5),
-      new AlchemyOrbitLayout(AlchemyResources.all.slice(10, 14), 2),
-      new AlchemyOrbitLayout(AlchemyResources.all.slice(14, 20), 1),
-      new AlchemyOrbitLayout(AlchemyResources.all.slice(20, 21), 0)
+      new AlchemyOrbitLayout(tierFilt(1).sort(sortFun), 4, -Math.PI / 5),
+      new AlchemyOrbitLayout(tierFilt(2).sort(sortFun), 3),
+      new AlchemyOrbitLayout(tierFilt(3).sort(sortFun), 2, Math.PI / 3),
+      new AlchemyOrbitLayout(tierFilt(4).sort(sortFun), 1),
+      new AlchemyOrbitLayout(tierFilt(5), 0)
     ];
     const nodes = [];
     for (const orbitNodes of this.orbits.map(o => o.nodes)) {

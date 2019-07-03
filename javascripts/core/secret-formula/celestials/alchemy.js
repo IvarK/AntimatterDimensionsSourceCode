@@ -33,6 +33,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Ω",
       isBaseResource: true,
       effect: 1,
+      tier: 1,
+      uiOrder: 1,
       formatEffect: value => `Normal dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.INFINITY]: {
@@ -40,6 +42,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "∞",
       isBaseResource: true,
       effect: 1,
+      tier: 1,
+      uiOrder: 2,
       formatEffect: value => `Infinity dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.TIME]: {
@@ -47,6 +51,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Δ",
       isBaseResource: true,
       effect: 1,
+      tier: 1,
+      uiOrder: 3,
       formatEffect: value => `Time dimensions ${formatPow(value, 4, 4)}`
     },
     [ALCHEMY_RESOURCE.REPLICATION]: {
@@ -54,6 +60,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Ξ",
       isBaseResource: true,
       effect: new Decimal(1),
+      tier: 1,
+      uiOrder: 4,
       formatEffect: value => `Replication speed ${formatX(value)}`
     },
     [ALCHEMY_RESOURCE.DILATION]: {
@@ -61,6 +69,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Ψ",
       isBaseResource: true,
       effect: new Decimal(1),
+      tier: 1,
+      uiOrder: 5,
       formatEffect: value => `Dilated Time ${formatX(value)}`
     },
 
@@ -70,6 +80,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "α",
       isBaseResource: false,
       effect: 1,
+      tier: 2,
+      uiOrder: 3,
       formatEffect: value => `Uncapped replicanti slowdown ${formatX(1.2)} ➜ ` +
         `${formatX(value)} per ${shorten(Number.MAX_VALUE)}`,
       reagents: [
@@ -88,6 +100,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "τ",
       isBaseResource: false,
       effect: 1,
+      tier: 2,
+      uiOrder: 2,
       formatEffect: value => `Eternitied stat gain ${formatPow(value, 4, 4)}`,
       reagents: [
         {
@@ -105,6 +119,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "ρ",
       isBaseResource: false,
       effect: new Decimal(1),
+      tier: 2,
+      uiOrder: 1,
       formatEffect: value => `All dimensions ${formatX(value)}`,
       reagents: [
         {
@@ -122,6 +138,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "λ",
       isBaseResource: false,
       effect: new Decimal(1),
+      tier: 2,
+      uiOrder: 5,
       formatEffect: value => `^1.002 for multipliers above ${shorten(value)}`,
       reagents: [
         {
@@ -139,6 +157,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "ω",
       isBaseResource: false,
       effect: 1,
+      tier: 2,
+      uiOrder: 4,
       formatEffect: value => `Dilation penalty reduced by ${formatPercents(value)} ` +
         `per ${shorten("1e1000000")} replicanti`,
       reagents: [
@@ -159,6 +179,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Ϙ",
       isBaseResource: true,
       effect: new Decimal(1),
+      tier: 2,
+      uiOrder: 3.5,
       formatEffect: value => `Relic Shards ${formatX(value)}`
     },
     [ALCHEMY_RESOURCE.SYNERGISM]: {
@@ -166,6 +188,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "π",
       isBaseResource: false,
       effect: 1,
+      tier: 3,
+      uiOrder: 2,
       formatEffect: value => `Alchemy reaction efficiency 30% ➜ ${formatPercents(value)}`,
       reagents: [
         {
@@ -187,6 +211,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "μ",
       isBaseResource: false,
       effect: 1,
+      tier: 3,
+      uiOrder: 3,
       formatEffect: value => `Game speed ${formatX(value)} for every real-time minute ` +
         "spent in your current reality",
       reagents: [
@@ -209,6 +235,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "ξ",
       isBaseResource: false,
       effect: 1,
+      tier: 3,
+      uiOrder: 4,
       formatEffect: value => `Alchemy decay reduced by ${formatPercents(value)}`,
       reagents: [
         {
@@ -228,6 +256,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Γ",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 2,
       formatEffect: value => `IP gain multiplied by replicanti${formatPow(value, 2, 2)}`,
       reagents: [
         {
@@ -245,6 +275,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Φ",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 2,
       formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}}`,
       reagents: [
         {
@@ -262,6 +294,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Θ",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 3,
       formatEffect: value => `Generate ${shorten(value)} realities and perk points per second`,
       reagents: [
         {
@@ -283,6 +317,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Π",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 1,
       formatEffect: value => `Glyph level cap increased by ${shortenSmallInteger(value)}`,
       reagents: [
         {
@@ -300,6 +336,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Σ",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 5,
       formatEffect: value => `Each reality simulates ${shortenSmallInteger(value)} additional realities`,
       reagents: [
         {
@@ -317,6 +355,8 @@ GameDatabase.celestials.alchemy = {
       symbol: "Λ",
       isBaseResource: false,
       effect: 1,
+      tier: 4,
+      uiOrder: 4,
       formatEffect: value => (Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
         ? "?????"
         : `Boost matter dimension generation chance by +${formatPercents(value)}`),
@@ -342,6 +382,7 @@ GameDatabase.celestials.alchemy = {
       symbol: "Ϟ",
       isBaseResource: false,
       effect: 1,
+      tier: 5,
       formatEffect: value => `Can be used to create a level ${shortenSmallInteger(value)} Reality glyph`,
       reagents: [
         {

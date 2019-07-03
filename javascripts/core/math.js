@@ -3,6 +3,9 @@
 const LOG10_MAX_VALUE = Math.log10(Number.MAX_VALUE);
 const LN_SQRT_2_PI = 0.5 * Math.log(2 * Math.PI);
 const LOG10_2 = Math.log10(2);
+
+Math.PI_2 = Math.PI * 2;
+
 /**
  * This is a file for general math utilities that can be used by many mechanics
  */

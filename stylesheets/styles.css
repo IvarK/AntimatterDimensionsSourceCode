@@ -5689,13 +5689,32 @@ kbd {
   justify-content: space-around;
 }
 
-.l-ra-alchemy-container {
-  width: 180rem;
-  justify-content: center;
-  margin: 2rem auto auto;
+.l-ra-alchemy-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
-.alchemy-node .alchemy-tooltip {
+.l-alchemy-circle {
+  position: relative;
+  margin: 3rem;
+}
+
+.c-alchemy-node {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  margin-left: -1rem;
+  margin-top: -1rem;
+  user-select: none;
+  font-size: 1.5rem;
+  border: 0.1rem solid #000;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.c-alchemy-node .alchemy-tooltip {
   visibility: hidden;
   width: 180px;
   background-color: black;
@@ -5707,7 +5726,7 @@ kbd {
   margin-left: -90px;
 }
 
-.alchemy-node:hover .alchemy-tooltip {
+.c-alchemy-node:hover .alchemy-tooltip {
   visibility: visible;
 }
 

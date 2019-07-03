@@ -98,34 +98,6 @@ class AlchemyReaction {
   }
 }
 
-// The three arrays in the beginning are a declaration for a list of concentric circles with equally-spaced
-// points along its circumference.  The number of points are effectively taken from the starting indices, as
-// each circle will have the number of points equal to the difference between adjacent entries.
-//    circleStart: id value to start a circle
-//    circleRadii: radius of the circle
-//    angleOffset: the first node is by default at the top; this array specifies where to put the first node
-// All angles are in radians to avoid unnecessary factors in trig functions.
-function getNodePlacement(id) {
-  const circleStart = [0, 5, 10, 14, 20];
-  const circleRadii = [4, 3, 2, 1, 0];
-  const angleOffset = [0, Math.PI / 5, 0, 0, 0];
-
-  const circleIndex = circleStart.filter(num => num <= id).length - 1;
-  const numPointsInCircle = circleIndex === circleStart.length - 1
-    ? 1
-    : circleStart[circleIndex + 1] - circleStart[circleIndex];
-  
-  const radius = circleRadii[circleIndex];
-  const angle = 2 * Math.PI * (id - circleStart[circleIndex]) / numPointsInCircle + angleOffset[circleIndex];
-
-  const xOffset = 0;
-  const yOffset = 0;
-  return {
-    x: radius * Math.sin(angle) + xOffset,
-    y: radius * Math.cos(angle) + yOffset
-  }
-}
-
 const AlchemyResource = (function() {
   function createResource(resource) {
     const config = GameDatabase.celestials.alchemy.resources[resource];

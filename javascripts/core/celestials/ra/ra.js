@@ -177,6 +177,17 @@ const Ra = {
     data.peakGamespeed = 1;
     for (const pet of Ra.petList) pet.reset();
   },
+  // Scans through all glyphs and fills base resources to the maximum allowed by the cap
+  fillAlchemyResources() {
+    const maxLevel = player.reality.glyphs.active
+      .concat(player.reality.glyphs.inventory)
+      .reduce((max, glyph) => Math.max(max, glyph.level), 0);
+    const resourcesToFill = ["power", "infinity", "time", "replication", "dilation", "effarig"];
+    for (let i = 0; i < resourcesToFill.length; i++) {
+      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === resourcesToFill[i])[0];
+      resource.amount = maxLevel;
+    }
+  },
   giveExp() {
     for (const pet of Ra.petList) pet.addGainedExp();
     this.checkForUnlocks();

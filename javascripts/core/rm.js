@@ -555,7 +555,7 @@ function glyphRefinementGain(glyph) {
   if (!canSacrifice()) return 0;
   const glyphMaxValue = glyph.level * strengthToRarity(glyph.strength) / 100;
   const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
-  return Math.min(glyphMaxValue - alchemyResource.amount, 0.01 * glyphMaxValue);
+  return Math.min(Math.max(glyphMaxValue - alchemyResource.amount, 0), 0.01 * glyphMaxValue);
 }
 
 function sacrificeGlyph(glyph, force = false) {

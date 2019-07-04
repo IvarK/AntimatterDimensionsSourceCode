@@ -275,7 +275,7 @@ GameDatabase.celestials.alchemy = {
       name: "Force",
       symbol: "Φ",
       isBaseResource: false,
-      effect: amount => 1 + 2.5 * amount,
+      effect: amount => 2.5 * amount,
       tier: 4,
       uiOrder: 2,
       formatEffect: value => `Multiply normal dimensions by RM${formatPow(value, 2, 2)}`,
@@ -382,7 +382,7 @@ GameDatabase.celestials.alchemy = {
       name: "Reality",
       symbol: "Ϟ",
       isBaseResource: false,
-      effect: amount => 1.5 * amount,
+      effect: amount => Math.floor(1.5 * amount),
       tier: 5,
       formatEffect: value => `Can be used to create a level ${shortenSmallInteger(value)} Reality glyph`,
       reagents: [

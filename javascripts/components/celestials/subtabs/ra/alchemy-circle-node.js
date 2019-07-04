@@ -7,7 +7,8 @@ Vue.component("alchemy-circle-node", {
   },
   data() {
     return {
-      isReactionActive: false
+      isReactionActive: false,
+      amount: 0
     };
   },
   computed: {
@@ -34,6 +35,7 @@ Vue.component("alchemy-circle-node", {
   methods: {
     update() {
       this.isReactionActive = !this.isBaseResource && this.node.resource.reaction.isActive;
+      this.amount = this.resource.amount;
     }
   },
   template: `
@@ -44,7 +46,12 @@ Vue.component("alchemy-circle-node", {
       @mouseleave="$emit('mouseleave')"
       @click="emitClick"
     >{{resource.symbol}}
-    <hint-text class="l-hint-text--achievement">{{resource.amount.toFixed(0)}}</hint-text>
+    <hint-text
+      v-if="isFocused"
+      class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
+    >
+      {{amount.toFixed(0)}}
+    </hint-text>
     </div>
   `
 });

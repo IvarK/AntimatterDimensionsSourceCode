@@ -13,10 +13,6 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.isBaseResource === true;
   }
 
-  get formattedEffect() {
-    return this.config.formatEffect(this.effectValue);
-  }
-
   get data() {
     return player.celestials.ra.alchemy[this.id];
   }
@@ -27,6 +23,10 @@ class AlchemyResourceState extends GameMechanicState {
 
   set amount(value) {
     this.data.amount = value;
+  }
+
+  get effectValue() {
+    return this.config.effect(this.amount);
   }
 
   // Base decay for now, will add player-controllable stuff later
@@ -165,6 +165,7 @@ const AlchemyReactions = (function() {
       }));
   }
   return {
+    // TODO: `all` sould be the one that is `compact()`ed
     all: AlchemyResources.all
       .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))))
   };

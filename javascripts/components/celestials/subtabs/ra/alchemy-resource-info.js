@@ -30,11 +30,18 @@ Vue.component("alchemy-resource-info", {
         .map(r => r.resource.symbol)
         .join(" + ");
       return `${reagents} ➜ ${this.resource.symbol}`;
+    },
+    effectConfig() {
+      const resource = this.resource;
+      return {
+        effect: () => resource.config.effect(resource.amount),
+        formatEffect: resource.config.formatEffect
+      };
     }
   },
   methods: {
     update() {
-      this.amount = shorten(this.resource.amount, 2, 2);
+      this.amount = this.resource.amount;
       if (!this.isBaseResource) {
         this.isReactionActive = this.reaction.isActive;
         this.reactionProduction = this.reaction.production;
@@ -44,10 +51,10 @@ Vue.component("alchemy-resource-info", {
   template: `
     <div class="c-alchemy-resource-info">
       <span>{{resource.symbol}} {{resource.name}}</span>
-      <span>Current: {{amount}}</span>
+      <span>Current: {{shorten(amount, 2, 2)}}</span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{reactionText}})</span>
-      <effect-display :key="resource.id" title="Effect" :config="resource.config" />
+      <effect-display title="Effect" :config="effectConfig" />
     </div>
   `
 });

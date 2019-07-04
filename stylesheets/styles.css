@@ -2064,6 +2064,18 @@ screen and (max-width: 480px) {
   z-index: 1;
 }
 
+.o-hint-text--alchemy-node {
+  color: #4f5957;
+  text-shadow: none;
+  font-size: 1.2rem;
+}
+
+.l-hint-text--alchemy-node {
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
 /*#endregion hint-text*/
 
 /*#region Header*/

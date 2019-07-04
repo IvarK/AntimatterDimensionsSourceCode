@@ -72,7 +72,7 @@ Vue.component("alchemy-tab", {
   },
   template:
     `<div class="l-ra-alchemy-tab">
-      <alchemy-resource-info :resource="infoResource" />
+      <alchemy-resource-info :key="infoResourceId" :resource="infoResource" />
       <div class="l-alchemy-circle" :style="circleStyle">
         <svg class="l-alchemy-orbit-canvas">
           <circle

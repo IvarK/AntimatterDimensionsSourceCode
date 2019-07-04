@@ -427,11 +427,8 @@ function completeReality(force, reset, auto = false) {
   }
 
   if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) {
-    for (let reactionIndex = 0; reactionIndex < AlchemyReactions.all.length; reactionIndex++) {
-      const reaction = AlchemyReactions.all[reactionIndex];
-      if (reaction !== null) {
-        reaction.combineReagents();
-      }
+    for (const reaction of AlchemyReactions.all.compact()) {
+      reaction.combineReagents();
     }
   }
 }

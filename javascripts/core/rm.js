@@ -29,12 +29,12 @@ const AutoGlyphSacrifice = {
     return player.celestials.effarig.autoGlyphSac.types;
   },
   comparedToThreshold(glyph) {
-    let typeCfg = AutoGlyphSacrifice.types[glyph.type];
+    const typeCfg = AutoGlyphSacrifice.types[glyph.type];
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.RARITY_THRESHOLDS) {
       return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     }
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
-      let glyphScore = strengthToRarity(glyph.strength) +
+      const glyphScore = strengthToRarity(glyph.strength) +
         Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
       return glyphScore - typeCfg.scoreThreshold;
     }
@@ -43,7 +43,9 @@ const AutoGlyphSacrifice = {
   wouldSacrifice(glyph) {
     switch (AutoGlyphSacrifice.mode) {
       case AutoGlyphSacMode.NONE: return false;
-      case AutoGlyphSacMode.ALL: return true;
+      case AutoGlyphSacMode.ALL:
+      case AutoGlyphSacMode.ALCHEMY:
+        return true;
       case AutoGlyphSacMode.RARITY_THRESHOLDS:
       case AutoGlyphSacMode.ADVANCED:
         return this.comparedToThreshold(glyph) < 0;
@@ -540,7 +542,7 @@ function respecGlyphs() {
   player.reality.respec = false;
 }
 
-function canSacrifice(glyph) {
+function canSacrifice() {
   return RealityUpgrade(19).isBought;
 }
 
@@ -549,9 +551,26 @@ function glyphSacrificeGain(glyph) {
   return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
 }
 
+function glyphRefinementGain(glyph) {
+  if (!canSacrifice()) return 0;
+  const glyphMaxValue = glyph.level * strengthToRarity(glyph.strength) / 100;
+  const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
+  return Math.min(glyphMaxValue - alchemyResource.amount, 0.01 * glyphMaxValue);
+}
+
 function sacrificeGlyph(glyph, force = false) {
-  let toGain = glyphSacrificeGain(glyph);
-  if (!force && !confirm("Do you really want to sacrifice this glyph? Your total power of sacrificed " + glyph.type + " glyphs will increase to " + (player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2))) return
+  if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
+    const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
+    alchemyResource.amount += glyphRefinementGain(glyph);
+    Glyphs.removeFromInventory(glyph);
+    return;
+  }
+
+  const toGain = glyphSacrificeGain(glyph);
+  if (!force && !confirm(`Do you really want to sacrifice this glyph? Your total power of sacrificed ${glyph.type}` +
+                          `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
+    return;
+  }
   player.reality.glyphs.sac[glyph.type] += toGain
   if (glyph.type === "time") {
     TimeDimension(8).power = Decimal.pow(

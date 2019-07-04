@@ -103,6 +103,7 @@ class AlchemyReaction {
   // bring ω above 200.  This only checks for reagent totals before the reaction and not after, so reagents being
   // used up during a reaction may make the cap appear to be slightly too generous.
   combineReagents() {
+    if (!this.isActive) return;
     const maxFromReaction = this.baseProduction * this.reactionYield * this.reactionEfficiency;
     const productCap = this._reagents
       .map(r => r.resource.amount)
@@ -111,14 +112,10 @@ class AlchemyReaction {
     const adjustedYield = maxFromReaction > maxFromCap
       ? this.reactionYield * (maxFromCap / maxFromReaction)
       : this.reactionYield;
-    const reagentStrings = [];
     for (const reagent of this._reagents) {
       reagent.resource.amount -= adjustedYield * reagent.cost;
-      reagentStrings.push(`${adjustedYield * reagent.cost}${reagent.resource.symbol}`);
     }
     this._product.amount += this.baseProduction * adjustedYield * this.reactionEfficiency;
-    console.log(`${reagentStrings.join(" + ")} ➜ ` +
-      `${this.baseProduction * adjustedYield * this.reactionEfficiency}${this._product.symbol}`);
   }
 }
 

@@ -34,7 +34,7 @@ Vue.component("alchemy-resource-info", {
   },
   methods: {
     update() {
-      this.amount = this.resource.amount;
+      this.amount = shorten(this.resource.amount, 2, 2);
       if (!this.isBaseResource) {
         this.isReactionActive = this.reaction.isActive;
         this.reactionProduction = this.reaction.production;

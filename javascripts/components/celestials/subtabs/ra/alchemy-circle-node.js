@@ -43,6 +43,8 @@ Vue.component("alchemy-circle-node", {
       @mouseenter="$emit('mouseenter')"
       @mouseleave="$emit('mouseleave')"
       @click="emitClick"
-    >{{resource.symbol}}</div>
+    >{{resource.symbol}}
+    <hint-text class="l-hint-text--achievement">{{resource.amount.toFixed(0)}}</hint-text>
+    </div>
   `
 });

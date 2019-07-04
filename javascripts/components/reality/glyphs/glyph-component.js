@@ -96,6 +96,11 @@ const GlyphTooltipComponent = {
       return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
     },
     sacrificeText() {
+      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
+        return this.onTouchDevice
+        ? `Refine for ${shorten(this.sacrificeReward, 2, 2)}`
+        : `Can be refined for ${shorten(this.sacrificeReward, 2, 2)}`;
+      }
       return this.onTouchDevice
         ? `Sacrifice for ${shorten(this.sacrificeReward, 2, 2)} power`
         : `Can be sacrificed for ${shorten(this.sacrificeReward, 2, 2)} power`;
@@ -281,7 +286,9 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = glyphSacrificeGain(this.glyph);
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+        ? glyphRefinementGain(this.glyph)
+        : glyphSacrificeGain(this.glyph);
       this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
     },
     moveTooltipTo(x, y) {

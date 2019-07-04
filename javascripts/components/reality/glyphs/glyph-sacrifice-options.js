@@ -188,6 +188,9 @@ Vue.component("glyph-sacrifice-options", {
     <div :class="optionClass(modes.ADVANCED)" @click="setMode(modes.ADVANCED)">
     ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
+    <div :class="optionClass(modes.ALCHEMY)" @click="setMode(modes.ALCHEMY)">
+    🜁 🜄 Alchemy mode 🜃 🜂
+    </div>
     <div v-if="mode === 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">
       <div v-for="type in glyphTypes" :key="type.id" class="l-glyph-sacrifice-options__rarity-slider-div">
         <glyph-component :glyph="{type: type.id, strength: strengthThreshold(type.id) }" v-bind="glyphIconProps"/>
@@ -204,6 +207,11 @@ Vue.component("glyph-sacrifice-options", {
       <template v-for="type in glyphTypes">
         <auto-sac-type-tab v-show="type.id === advancedType" :glyph-type="type.id"/>
       </template>
+    </div>
+    <div v-if="mode === 4">
+      <br> All sacrificed glyphs will be
+      <br> refined into alchemy resources.
+      <br> (New glyphs will be sacrificed.)
     </div>
   </div>
   `

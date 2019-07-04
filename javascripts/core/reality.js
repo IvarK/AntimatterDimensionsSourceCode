@@ -425,6 +425,15 @@ function completeReality(force, reset, auto = false) {
   if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
     applyRealityUpgrades();
   }
+
+  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) {
+    for (let reactionIndex = 0; reactionIndex < AlchemyReactions.all.length; reactionIndex++) {
+      const reaction = AlchemyReactions.all[reactionIndex];
+      if (reaction !== null) {
+        reaction.combineReagents();
+      }
+    }
+  }
 }
 
 function handleCelestialRuns(force) {

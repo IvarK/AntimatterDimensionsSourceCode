@@ -77,6 +77,7 @@ const AutoGlyphSacMode = {
   ALL: 1,
   RARITY_THRESHOLDS: 2,
   ADVANCED: 3,
+  ALCHEMY: 4  
 }
 
 const AutoGlyphPickMode = {

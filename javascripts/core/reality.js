@@ -430,6 +430,7 @@ function completeReality(force, reset, auto = false) {
     for (const reaction of AlchemyReactions.all.compact()) {
       reaction.combineReagents();
     }
+    Ra.applyAlchemyBoosts();
   }
 }
 

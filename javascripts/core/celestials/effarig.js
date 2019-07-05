@@ -115,7 +115,8 @@ const Effarig = {
 
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount));
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+        AlchemyResource.effarig.effectValue;
     }
     return 0;
   },

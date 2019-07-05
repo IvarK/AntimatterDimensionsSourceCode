@@ -562,6 +562,12 @@ function sacrificeGlyph(glyph, force = false) {
   if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
     const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
     alchemyResource.amount += glyphRefinementGain(glyph);
+    for (let i = 0; i < GLYPH_TYPES.length; i++) {
+      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === GLYPH_TYPES[i])[0];
+      if (glyph.type !== GLYPH_TYPES[i]) {
+        resource.amount += glyphRefinementGain(glyph) * AlchemyResource.decoherence.effectValue;
+      }
+    }
     Glyphs.removeFromInventory(glyph);
     return;
   }

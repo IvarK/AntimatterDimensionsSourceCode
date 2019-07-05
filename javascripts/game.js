@@ -450,6 +450,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     factor *= Ra.gamespeedStoredTimeMult();
   }
 
+  factor *= Math.pow(AlchemyResource.momentum.effectValue, player.thisRealityRealTime / 1000 / 60);
+
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();

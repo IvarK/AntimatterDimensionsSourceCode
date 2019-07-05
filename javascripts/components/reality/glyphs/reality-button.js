@@ -69,9 +69,7 @@ Vue.component("reality-button", {
       this.nextGlyphPercent = percentToNextGlyphLevel();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = this.boostedGain(1);
-      this.shardsGained = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST)
-        ? 0
-        : this.boostedGain(Effarig.shardsGained);
+      this.shardsGained = this.boostedGain(Effarig.shardsGained);
       this.expGained = [this.boostedGain(Ra.pets.teresa.gainedExp),
         this.boostedGain(Ra.pets.effarig.gainedExp),
         this.boostedGain(Ra.pets.enslaved.gainedExp),

@@ -138,7 +138,8 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => player.eternities >= 2e6,
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",
-      effect: () => player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
+      effect: () => Math.pow(player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
+        AlchemyResource.eternity.effectValue),
       formatEffect: value => `${shorten(value)} per second`
     },
     {

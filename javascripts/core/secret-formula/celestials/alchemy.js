@@ -99,10 +99,10 @@ GameDatabase.celestials.alchemy = {
       name: "Eternity",
       symbol: "τ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 50000,
+      effect: amount => 1 + amount / 5000,
       tier: 2,
       uiOrder: 2,
-      formatEffect: value => `Eternitied stat gain ${formatPow(value, 4, 4)}`,
+      formatEffect: value => `Eternitied stat generation ${formatPow(value, 4, 4)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.TIME,
@@ -140,7 +140,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Decimal.pow10(1e9 - 3e4 * amount),
       tier: 2,
       uiOrder: 5,
-      formatEffect: value => `${formatPow(1.05, 2, 2)} for multipliers above ${shorten(value)}`,
+      formatEffect: value => `${formatPow(1.05, 2, 2)} for normal dimension multipliers above ${shorten(value)}`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.POWER,
@@ -178,7 +178,7 @@ GameDatabase.celestials.alchemy = {
       name: "Effarig",
       symbol: "Ϙ",
       isBaseResource: true,
-      effect: amount => Decimal.pow10(amount / 2500),
+      effect: amount => Math.pow(10, amount / 2500),
       tier: 2,
       uiOrder: 3.5,
       formatEffect: value => `Relic Shards ${formatX(value, 2, 2)}`
@@ -210,7 +210,7 @@ GameDatabase.celestials.alchemy = {
       name: "Momentum",
       symbol: "μ",
       isBaseResource: false,
-      effect: amount => 1 + amount / 1000000,
+      effect: amount => 1 + amount / 500000,
       tier: 3,
       uiOrder: 3,
       formatEffect: value => `Game speed ${formatX(value, 4, 4)} for every real-time minute ` +
@@ -238,7 +238,7 @@ GameDatabase.celestials.alchemy = {
       tier: 3,
       uiOrder: 4,
       formatEffect: value => `Refined glyphs also give ${formatPercents(value, 2)} of their value ` +
-        "to all base resources",
+        "to all other base resources",
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

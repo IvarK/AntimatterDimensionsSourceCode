@@ -102,6 +102,8 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.clampMin(1);
 
+  multiplier = multiplier.times(AlchemyResource.dimensionality.effectValue);
+
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }
@@ -111,6 +113,15 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * laitelaPowMultiplier);
 
+  multiplier = multiplier
+    .powEffectsOf(
+      dimension.infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
+    );
+  
+  multiplier = multiplier.pow(AlchemyResource.power.effectValue);
+
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
@@ -118,19 +129,17 @@ function getDimensionFinalMultiplier(tier) {
   }
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
-  multiplier = multiplier
-    .powEffectsOf(
-      dimension.infinityUpgrade.chargedEffect,
-      InfinityUpgrade.totalTimeMult.chargedEffect,
-      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
-    )
-
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5);
   } else if (Laitela.isRunning) {
     multiplier = multiplier.pow(Laitela.dimMultNerf);
+  }
+
+  // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
+  if (multiplier.gte(AlchemyResource.inflation.effectValue)) {
+    multiplier = multiplier.pow(1.05);
   }
 
   return multiplier;

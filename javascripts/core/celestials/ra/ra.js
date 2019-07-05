@@ -182,11 +182,15 @@ const Ra = {
     const maxLevel = player.reality.glyphs.active
       .concat(player.reality.glyphs.inventory)
       .reduce((max, glyph) => Math.max(max, glyph.level), 0);
-    const resourcesToFill = ["power", "infinity", "time", "replication", "dilation", "effarig"];
-    for (let i = 0; i < resourcesToFill.length; i++) {
-      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === resourcesToFill[i])[0];
+    for (let i = 0; i < GLYPH_TYPES.length; i++) {
+      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === GLYPH_TYPES[i])[0];
       resource.amount = maxLevel;
     }
+  },
+  applyAlchemyBoosts() {
+    ReplicantiGrowth.SCALE_FACTOR = AlchemyResource.cardinality.effectValue;
+
+
   },
   giveExp() {
     for (const pet of Ra.petList) pet.addGainedExp();

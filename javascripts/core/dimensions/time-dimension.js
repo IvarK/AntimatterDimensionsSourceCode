@@ -130,6 +130,7 @@ function timeDimensionCommonMultiplier() {
       player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
       RealityUpgrade(22)
     );
+  mult = mult.times(AlchemyResource.dimensionality.effectValue);
   if (EternityChallenge(9).isRunning) {
     mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
   }
@@ -173,6 +174,8 @@ class TimeDimensionState extends DimensionState {
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
+
+    mult = mult.pow(AlchemyResource.time.effectValue);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);

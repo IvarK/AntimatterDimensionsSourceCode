@@ -102,6 +102,18 @@ function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
+// Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
+// with false for checking and true for actual usage, and only "used" once per reality.
+function simulatedRealityCount(advancePartSimCounters) {
+  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio : 0;
+  const multiversalSim = AlchemyResource.multiversal.effectValue;
+  const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
+  if (advancePartSimCounters) {
+    player.partSimulatedReality = simCount - Math.floor(simCount);
+  }
+  return Math.floor(simCount);
+}
+
 /**
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
@@ -115,15 +127,12 @@ function requestManualReality() {
     return;
   }
   const level = gainedGlyphLevel();
-  if (Enslaved.boostReality) {
-    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
-    if (Enslaved.lockedInBoostRatio > 1) {
-      Enslaved.lockedInGlyphLevel = level;
-      Enslaved.lockedInRealityMachines = gainedRealityMachines();
-      Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      manualReality();
-      return;
-    }
+  if (simulatedRealityCount(false) > 0) {
+    Enslaved.lockedInGlyphLevel = level;
+    Enslaved.lockedInRealityMachines = gainedRealityMachines();
+    Enslaved.lockedInShardsGained = Effarig.shardsGained;
+    manualReality();
+    return;
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
@@ -184,23 +193,19 @@ function processAutoGlyph(gainedLevel) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   const gainedLevel = gainedGlyphLevel();
-  if (Enslaved.boostReality) {
-    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
-    if (Enslaved.lockedInBoostRatio > 1) {
-      Enslaved.lockedInGlyphLevel = gainedLevel;
-      Enslaved.lockedInRealityMachines = gainedRealityMachines();
-      Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      completeReality(false, false, true);
-      return;
-    }
+  if (simulatedRealityCount(false) > 0) {
+    Enslaved.lockedInGlyphLevel = gainedLevel;
+    Enslaved.lockedInRealityMachines = gainedRealityMachines();
+    Enslaved.lockedInShardsGained = Effarig.shardsGained;
+    completeReality(false, false, true);
+    return;
   }
   processAutoGlyph(gainedLevel);
   completeReality(false, false, true);
 }
 
-function boostedRealityRewards() {
-  // The ratio is the amount on top of the regular reality amount.
-  const ratio = Enslaved.lockedInBoostRatio;
+// The ratio is the amount on top of the regular reality amount.
+function boostedRealityRewards(ratio) {
   player.reality.realityMachines = player.reality.realityMachines
     .plus(Enslaved.lockedInRealityMachines.times(ratio));
   // No glyph reward was given earlier
@@ -215,16 +220,18 @@ function boostedRealityRewards() {
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
     Ra.giveExp();
   }
-  player.celestials.enslaved.storedReal = 0;
-  Enslaved.lockedInBoostRatio = 1;
-  Enslaved.boostReality = false;
+  if (Enslaved.boostReality) {
+    player.celestials.enslaved.storedReal = 0;
+    Enslaved.boostReality = false;
+  }
 }
 
 function completeReality(force, reset, auto = false) {
   if (!reset) {
     EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
-    if (Enslaved.lockedInBoostRatio > 1) {
-      boostedRealityRewards();
+    const simulatedRealities = simulatedRealityCount(true);
+    if (simulatedRealities > 0) {
+      boostedRealityRewards(simulatedRealities);
     }
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality;
@@ -430,7 +437,7 @@ function completeReality(force, reset, auto = false) {
     for (const reaction of AlchemyReactions.all.compact()) {
       reaction.combineReagents();
     }
-    Ra.applyAlchemyBoosts();
+    ReplicantiGrowth.SCALE_FACTOR = AlchemyResource.cardinality.effectValue;
   }
 }
 

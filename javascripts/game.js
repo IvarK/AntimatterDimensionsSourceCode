@@ -497,9 +497,9 @@ function gameLoop(diff, options = {}) {
         // If we're in EC12, time shouldn't speed up at all, but options.blackHoleSpeedup will be 1 so we're fine.
         speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
-      if (player.celestials.enslaved.isStoring) {
+      if (player.celestials.enslaved.isStoring && !EternityChallenge(12).isRunning) {
         // Explicitly disable storing game time in EC12
-        const timeFactor = EternityChallenge(12).isRunning ? 0 : speedFactor - 1;
+        const timeFactor = speedFactor - 1;
         // If you're storing time, time glyphs won't affect black holes
         blackHoleDiff = realDiff;
         // Note that if gameDiff is specified, we don't store enslaved time.
@@ -510,8 +510,9 @@ function gameLoop(diff, options = {}) {
           : 1;
         const amplifiedTimeFactor = Math.pow(timeFactor, amplification);
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
-        player.celestials.enslaved.stored += diff * Math.pow(amplifiedTimeFactor, storedTimeWeight);
-        speedFactor = Math.pow(timeFactor, 1 - storedTimeWeight);
+        console.log(storedTimeWeight);
+        player.celestials.enslaved.stored += diff * ((1 - storedTimeWeight) + amplifiedTimeFactor * storedTimeWeight);
+        speedFactor = timeFactor * (1 - storedTimeWeight) + storedTimeWeight;
       }
       diff *= speedFactor;
     } else {

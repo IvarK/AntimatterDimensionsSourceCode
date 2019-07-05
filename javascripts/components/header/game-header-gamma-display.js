@@ -24,7 +24,7 @@ Vue.component("game-header-gamma-display", {
       if (player.celestials.enslaved.isStoring) {
         if (Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
           const storedTimeWeight = player.celestials.enslaved.storedFraction;
-          speedMod = Math.pow(speedMod, 1 - storedTimeWeight);
+          speedMod = speedMod * (1 - storedTimeWeight) + storedTimeWeight;
           if (storedTimeWeight !== 0) {
             storedTimeText = ` | storing ${formatPercents(storedTimeWeight)} game time`;
           }

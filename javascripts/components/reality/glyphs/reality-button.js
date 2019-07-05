@@ -44,8 +44,8 @@ Vue.component("reality-button", {
   },
   methods: {
     boostedGain: x => {
-      if (Enslaved.boostReality && Enslaved.realityBoostRatio >= 1) {
-        return Decimal.times(x, Enslaved.realityBoostRatio + 1);
+      if (simulatedRealityCount(false) > 0) {
+        return Decimal.times(x, simulatedRealityCount(false) + 1);
       }
       return x;
     },

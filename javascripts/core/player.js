@@ -171,6 +171,7 @@ let player = {
     auto: [false, false, false]
   },
   realities: 0,
+  partSimulatedReality: 0,
   thisReality: 0,
   thisRealityRealTime: 0,
   bestReality: 999999999999,

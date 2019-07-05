@@ -42,7 +42,7 @@ class RaPetState {
 
   addGainedExp() {
     if (!this.isUnlocked) return;
-    this.addExp(this.gainedExp * Enslaved.lockedInBoostRatio);
+    this.addExp(this.gainedExp * simulatedRealityCount(false));
   }
 
   get gainedExp() {
@@ -186,11 +186,6 @@ const Ra = {
       const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === GLYPH_TYPES[i])[0];
       resource.amount = maxLevel;
     }
-  },
-  applyAlchemyBoosts() {
-    ReplicantiGrowth.SCALE_FACTOR = AlchemyResource.cardinality.effectValue;
-
-
   },
   giveExp() {
     for (const pet of Ra.petList) pet.addGainedExp();

@@ -37,9 +37,6 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   boostReality: false,
-  // When the player hits the reality button, we don't want their boost decaying if we are showing
-  // the animation. So, the ratio at the time of click is stored here:
-  lockedInBoostRatio: 1,
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
   lockedInShardsGained: 0,

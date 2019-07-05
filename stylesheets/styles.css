@@ -508,7 +508,7 @@ button {
   border-color: #00838f;
   color: white;
 }
-    
+
 .t-metro .celestialtabbtn:hover,
 .t-dark-metro .celestialtabbtn:hover,
 .t-inverted-metro .celestialtabbtn:hover,
@@ -524,7 +524,7 @@ button {
   border-color: #d0d0d0;
   color: white;
 }
-  
+
 .t-dark .celestialtabbtn:hover,
 .s6 .celestialtabbtn:hover {
   background-color: #d0d0d0;
@@ -5567,7 +5567,7 @@ kbd {
   transform: translateX(50%) rotate(-60deg) skewY(30deg);
 }
 
-.l-v-unlocks-container li:nth-child(6n+1) { 
+.l-v-unlocks-container li:nth-child(6n+1) {
   margin-left: 1%;
 }
 
@@ -6235,11 +6235,26 @@ kbd {
   border: 2px dotted #55ff55;
   margin-left: 3rem;
   margin-top: .5rem;
-  min-widtH: 30rem;
+  min-width: 30rem;
 }
 
 .o-automator-block-delete {
   color: #ff3333;
   font-size: 1.7rem;
   cursor: pointer;
+}
+
+.multiplier-tab {
+  user-select: none;
+}
+
+.multiplier-tab .total {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.multiplier-tab .title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }

@@ -13,14 +13,17 @@ Vue.component("multipliers-subtab", {
   methods: {
     setActive() {
       this.active = !this.active;
+    },
+    update() {
+      this.dataObject = Object.create(Multiplier.find(this.name));
     }
   },
   template: `<div>
-    <button @click="setActive()" class="tabbtn" style="align:center">{{this.name}}</button>
+    <button @click="setActive()" class="tabbtn" style="margin:10px">{{this.name}}</button>
     <div v-if="this.active">
-      <h3> {{dataObject.infoText}} </h3>
-      <div v-for="effect in dataObject.effects">
-        <b> {{effect.name}}: </b> {{effect.total()}}
+      <div class="title"> {{dataObject.infoText}} </div>
+      <div v-for="effect in dataObject.effects.list">
+        <multipliers-breakdown :parentName="name" :effectName="effect.name" />
       </div>
     </div>
   </div>

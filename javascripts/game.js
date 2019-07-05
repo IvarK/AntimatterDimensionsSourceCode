@@ -211,31 +211,16 @@ function gainedRealityMachines() {
     return Decimal.floor(rmGain);
 }
 
-function gainedGlyphLevel(round) {
-    if (round === undefined) round = true
-    const glyphState = getGlyphLevelInputs();
-    let rawLevel = glyphState.rawLevel;
-    if (round) rawLevel = Math.round(rawLevel)
-    if (rawLevel == Infinity || isNaN(rawLevel)) rawLevel = 0;
-    let actualLevel = glyphState.actualLevel;
-    if (round) actualLevel = Math.round(actualLevel)
-    if (actualLevel == Infinity || isNaN(actualLevel)) actualLevel = 0
-    return {
-      rawLevel: rawLevel,
-      actualLevel: actualLevel
-    }
-}
-
-function percentToNextGlyphLevel() {
-    var ret = gainedGlyphLevel(false).actualLevel
-    var retOffset = 0;
-    if (Math.round(ret) > ret) {
-        retOffset = 0.5;
-    } else {
-        retOffset = -0.5;
-    }
-    if (ret == Infinity || isNaN(ret)) return 0
-    return Math.min(((ret - Math.floor(ret)-retOffset) * 100), 99.9).toFixed(1)
+function gainedGlyphLevel() {
+  const glyphState = getGlyphLevelInputs();
+  let rawLevel = Math.floor(glyphState.rawLevel);
+  if (!isFinite(rawLevel)) rawLevel = 0;
+  let actualLevel = Math.floor(glyphState.actualLevel);
+  if (!isFinite(actualLevel)) actualLevel = 0;
+  return {
+    rawLevel: rawLevel,
+    actualLevel: actualLevel
+  };
 }
 
 function resetChallengeStuff() {
@@ -579,6 +564,9 @@ function gameLoop(diff, options = {}) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()))
       }
     }
+
+    player.realities += AlchemyResource.uncountability.effectValue * (realDiff / 1000);
+    player.reality.pp += AlchemyResource.uncountability.effectValue * (realDiff / 1000);
 
     if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
       const addedRM = gainedRealityMachines()

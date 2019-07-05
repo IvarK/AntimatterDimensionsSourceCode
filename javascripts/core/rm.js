@@ -638,7 +638,7 @@ function getGlyphLevelInputs() {
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
   const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
-  const baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
+  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
@@ -661,6 +661,11 @@ function getGlyphLevelInputs() {
   );
   const shardFactor = RA_UNLOCKS.SHARD_LEVEL_BOOST.effect();
   const postInstabilityFactors = perkFactor + shardFactor;
+  baseLevel += postInstabilityFactors;
+  scaledLevel += postInstabilityFactors;
+  const levelHardcap = 10000 + AlchemyResource.boundless.effectValue;
+  const levelCapped = scaledLevel > levelHardcap;
+  scaledLevel = Math.min(scaledLevel, levelHardcap);
   return {
     epEffect: epEffect,
     replEffect: replEffect,
@@ -670,8 +675,9 @@ function getGlyphLevelInputs() {
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
     shardFactor: shardFactor,
-    rawLevel: baseLevel + postInstabilityFactors,
-    actualLevel: scaledLevel + postInstabilityFactors,
+    rawLevel: baseLevel,
+    actualLevel: scaledLevel,
+    capped: levelCapped
   };
 }
 

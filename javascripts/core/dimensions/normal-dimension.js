@@ -103,6 +103,7 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = multiplier.clampMin(1);
 
   multiplier = multiplier.times(AlchemyResource.dimensionality.effectValue);
+  multiplier = multiplier.times(player.reality.realityMachines.pow(AlchemyResource.force.effectValue));
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);

@@ -25,6 +25,10 @@ class AlchemyResourceState extends GameMechanicState {
     this.data.amount = value;
   }
 
+  get canBeApplied() {
+    return true;
+  }
+
   get effectValue() {
     return this.config.effect(this.amount);
   }
@@ -154,7 +158,8 @@ const AlchemyResource = (function() {
 }());
 
 const AlchemyResources = {
-  all: Object.values(AlchemyResource)
+  all: Object.values(AlchemyResource),
+  base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
 };
 
 const AlchemyReactions = (function() {

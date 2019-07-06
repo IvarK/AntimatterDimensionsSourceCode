@@ -93,17 +93,17 @@ function getDimensionFinalMultiplier(tier) {
     tier <= 4 ? Achievement(43) : null,
     tier !== 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null,
+    AlchemyResource.dimensionality
   );
   if (Achievement(77).isEnabled) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
 
-  multiplier = multiplier.clampMin(1);
+  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
 
-  multiplier = multiplier.times(AlchemyResource.dimensionality.effectValue);
-  multiplier = multiplier.times(player.reality.realityMachines.pow(AlchemyResource.force.effectValue));
+  multiplier = multiplier.clampMin(1);
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
@@ -118,10 +118,9 @@ function getDimensionFinalMultiplier(tier) {
     .powEffectsOf(
       dimension.infinityUpgrade.chargedEffect,
       InfinityUpgrade.totalTimeMult.chargedEffect,
-      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
+      AlchemyResource.power
     );
-  
-  multiplier = multiplier.pow(AlchemyResource.power.effectValue);
 
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));

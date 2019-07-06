@@ -181,9 +181,9 @@ const Ra = {
   fillAlchemyResources() {
     const maxLevel = player.reality.glyphs.active
       .concat(player.reality.glyphs.inventory)
-      .reduce((max, glyph) => Math.max(max, glyph.level), 0);
-    for (let i = 0; i < GLYPH_TYPES.length; i++) {
-      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === GLYPH_TYPES[i])[0];
+      .map(g => g.level)
+      .max();
+    for (const resource of AlchemyResources.base) {
       resource.amount = maxLevel;
     }
   },

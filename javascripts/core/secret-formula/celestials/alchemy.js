@@ -187,7 +187,7 @@ GameDatabase.celestials.alchemy = {
       name: "Synergism",
       symbol: "π",
       isBaseResource: false,
-      effect: amount => Math.min(1, 0.3 + amount / 10000),
+      effect: amount => Math.clampMax(0.3 + amount / 10000, 1),
       tier: 3,
       uiOrder: 2,
       formatEffect: value => `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`,

@@ -435,7 +435,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     factor *= Ra.gamespeedStoredTimeMult();
   }
 
-  factor *= Math.pow(AlchemyResource.momentum.effectValue, player.thisRealityRealTime / 1000 / 60);
+  factor *= Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes);
 
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   if (Effarig.isRunning) {
@@ -510,7 +510,6 @@ function gameLoop(diff, options = {}) {
           : 1;
         const amplifiedTimeFactor = Math.pow(timeFactor, amplification);
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
-        console.log(storedTimeWeight);
         player.celestials.enslaved.stored += diff * ((1 - storedTimeWeight) + amplifiedTimeFactor * storedTimeWeight);
         speedFactor = timeFactor * (1 - storedTimeWeight) + storedTimeWeight;
       }
@@ -566,8 +565,9 @@ function gameLoop(diff, options = {}) {
       }
     }
 
-    player.realities += AlchemyResource.uncountability.effectValue * (realDiff / 1000);
-    player.reality.pp += AlchemyResource.uncountability.effectValue * (realDiff / 1000);
+    const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+    player.realities += uncountabilityGain;
+    player.reality.pp += uncountabilityGain;
 
     if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
       const addedRM = gainedRealityMachines()

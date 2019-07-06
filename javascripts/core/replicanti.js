@@ -2,11 +2,15 @@
 
 var repMs = 0;
 
-// Slowdown parameters for replicanti growth, interval will increase by SCALE_FACTOR for every SCALE_LOG10
+// Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap(default is 308, 1.2, Number.MAX_VALUE)
 const ReplicantiGrowth = {
-  SCALE_LOG10: 308,
-  SCALE_FACTOR: 1.2,
+  get scaleLog10() {
+    return 308;
+  },
+  get scaleFactor() {
+    return AlchemyResource.cardinality.effectValue;
+  }
 };
 
 // Rounding errors suck
@@ -67,12 +71,12 @@ function getReplicantiInterval(noMod, intervalIn) {
   if (player.replicanti.amount.lte(replicantiCap()) || noMod) {
     if (Achievement(134).isEnabled) interval = interval.divide(2);
   } else {
-    const increases = (player.replicanti.amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.SCALE_LOG10;
-    interval = interval.times(Decimal.pow(ReplicantiGrowth.SCALE_FACTOR, increases));
+    const increases = (player.replicanti.amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
+    interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
-  interval = interval.divide(AlchemyResource.replication.effectValue);
+  interval = interval.dividedByEffectOf(AlchemyResource.replication);
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.
@@ -98,7 +102,7 @@ function replicantiLoop(diff) {
   const isUncapped = TimeStudy(192).isBought;
   if (diff > 500 || interval.lessThan(player.options.updateRate) || isUncapped) {
     // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
-    let postScale = Math.log10(ReplicantiGrowth.SCALE_FACTOR) / ReplicantiGrowth.SCALE_LOG10;
+    let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
      if (V.isRunning) {
       postScale *= 2;
     }

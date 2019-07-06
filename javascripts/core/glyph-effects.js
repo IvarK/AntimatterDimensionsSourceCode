@@ -456,18 +456,21 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("time"),
     color: "#b241e3",
     primaryEffect: "timepow",
+    alchemyResource: ALCHEMY_RESOURCE.TIME
   }),
   dilation: new GlyphType({
     id: "dilation",
     symbol: GLYPH_SYMBOLS.dilation,
     effects: findGlyphTypeEffects("dilation"),
     color: "#64dd17",
+    alchemyResource: ALCHEMY_RESOURCE.DILATION
   }),
   replication: new GlyphType({
     id: "replication",
     symbol: GLYPH_SYMBOLS.replication,
     effects: findGlyphTypeEffects("replication"),
     color: "#03a9f4",
+    alchemyResource: ALCHEMY_RESOURCE.REPLICATION
   }),
   infinity: new GlyphType({
     id: "infinity",
@@ -475,6 +478,7 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("infinity"),
     color: "#b67f33",
     primaryEffect: "infinitypow",
+    alchemyResource: ALCHEMY_RESOURCE.INFINITY
   }),
   power: new GlyphType({
     id: "power",
@@ -482,6 +486,7 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("power"),
     color: "#22aa48",
     primaryEffect: "powerpow",
+    alchemyResource: ALCHEMY_RESOURCE.POWER
   }),
   effarig: new GlyphType({
     id: "effarig",
@@ -489,6 +494,7 @@ const GlyphTypes = {
     effects: findGlyphTypeEffects("effarig"),
     color: "#e21717",
     unlockedFn: () => EffarigUnlock.reality.isUnlocked,
+    alchemyResource: ALCHEMY_RESOURCE.EFFARIG
     // Effarig glyphs have no primary effect; all are equially likely
   }),
   /**

@@ -551,22 +551,29 @@ function glyphSacrificeGain(glyph) {
   return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
 }
 
+function glyphAlchemyResource(glyph) {
+  const type = GlyphTypes[glyph.type];
+  return AlchemyResources.all[type.alchemyResource];
+}
+
 function glyphRefinementGain(glyph) {
   if (!canSacrifice()) return 0;
   const glyphMaxValue = glyph.level * strengthToRarity(glyph.strength) / 100;
-  const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
-  return Math.min(Math.max(glyphMaxValue - alchemyResource.amount, 0), 0.01 * glyphMaxValue);
+  const alchemyResource = glyphAlchemyResource(glyph);
+  return Math.clamp(glyphMaxValue - alchemyResource.amount, 0, 0.01 * glyphMaxValue);
 }
 
 function sacrificeGlyph(glyph, force = false) {
   if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
-    const alchemyResource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === glyph.type)[0];
-    alchemyResource.amount += glyphRefinementGain(glyph);
-    for (let i = 0; i < GLYPH_TYPES.length; i++) {
-      const resource = AlchemyResources.all.filter(resource => resource.name.toLowerCase() === GLYPH_TYPES[i])[0];
-      if (glyph.type !== GLYPH_TYPES[i]) {
-        resource.amount += glyphRefinementGain(glyph) * AlchemyResource.decoherence.effectValue;
-      }
+    const resource = glyphAlchemyResource(glyph);
+    const refinementGain = glyphRefinementGain(glyph);
+    resource.amount += refinementGain;
+    if (AlchemyResource.decoherence.amount === 0) return;
+    const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
+    const otherGlyphTypes = GlyphTypes.list
+      .filter(t => t !== GlyphTypes[glyph.type]);
+    for (const glyphType of otherGlyphTypes) {
+      AlchemyResources.all[glyphType.alchemyResource] += decoherenceGain;
     }
     Glyphs.removeFromInventory(glyph);
     return;

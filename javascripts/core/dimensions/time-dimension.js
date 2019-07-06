@@ -128,9 +128,9 @@ function timeDimensionCommonMultiplier() {
       EternityUpgrade.tdMultTheorems,
       EternityUpgrade.tdMultRealTime,
       player.replicanti.unl && player.replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
-      RealityUpgrade(22)
+      RealityUpgrade(22),
+      AlchemyResource.dimensionality
     );
-  mult = mult.times(AlchemyResource.dimensionality.effectValue);
   if (EternityChallenge(9).isRunning) {
     mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
   }
@@ -175,7 +175,7 @@ class TimeDimensionState extends DimensionState {
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
-    mult = mult.pow(AlchemyResource.time.effectValue);
+    mult = mult.powEffectOf(AlchemyResource.time);
 
     if (player.dilation.active) {
       mult = dilatedValueOf(mult);

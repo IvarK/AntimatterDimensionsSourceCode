@@ -12,9 +12,9 @@ function infinityDimensionCommonMultiplier() {
       EternityChallenge(9).reward,
       EternityUpgrade.idMultEP,
       EternityUpgrade.idMultEternities,
-      EternityUpgrade.idMultICRecords
+      EternityUpgrade.idMultICRecords,
+      AlchemyResource.dimensionality
     );
-  mult = mult.times(AlchemyResource.dimensionality.effectValue);
 
   if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
@@ -207,7 +207,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
 
-    mult = mult.pow(AlchemyResource.infinity.effectValue);
+    mult = mult.powEffectOf(AlchemyResource.infinity);
 
     if (Laitela.has(LAITELA_UNLOCKS.DIM_POW)) mult = mult.pow(Laitela.dimensionMultPowerEffect);
 

@@ -437,7 +437,6 @@ function completeReality(force, reset, auto = false) {
     for (const reaction of AlchemyReactions.all.compact()) {
       reaction.combineReagents();
     }
-    ReplicantiGrowth.SCALE_FACTOR = AlchemyResource.cardinality.effectValue;
   }
 }
 

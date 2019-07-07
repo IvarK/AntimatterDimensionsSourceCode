@@ -67,6 +67,10 @@ class PurchasableMechanicState extends GameMechanicState {
     return true;
   }
 
+  get isRebuyable() {
+    return false;
+  }
+
   get cost() {
     return this.config.cost;
   }
@@ -87,8 +91,8 @@ class PurchasableMechanicState extends GameMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
-    this.isBought = true;
     this.currency.subtract(this.cost);
+    this.isBought = true;
     GameUI.update();
     return true;
   }
@@ -176,6 +180,10 @@ class RebuyableMechanicState extends GameMechanicState {
     return true;
   }
 
+  get isRebuyable() {
+    return true;
+  }
+
   /**
    * @abstract
    */
@@ -196,8 +204,8 @@ class RebuyableMechanicState extends GameMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
-    this.boughtAmount++;
     this.currency.subtract(this.cost);
+    this.boughtAmount++;
     GameUI.update();
     return true;
   }

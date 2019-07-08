@@ -166,7 +166,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 17,
       cost: 1500,
       requirement: "Reality with 4 glyphs, with each having at least 2 effects",
-      checkRequirement: () => Glyphs.activeList.countWhere(g => Object.keys(g.effects).length >= 2) === 4,
+      checkRequirement: () => Glyphs.activeList.countWhere(g => countEffectsFromBitmask(g.effects) >= 2) === 4,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "50% chance to get +1 effect on glyphs",
       formatCost: value => shorten(value, 1, 0)

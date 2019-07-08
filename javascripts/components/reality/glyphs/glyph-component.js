@@ -46,7 +46,7 @@ const GlyphTooltipComponent = {
     type: String,
     strength: Number,
     level: Number,
-    effects: Object,
+    effects: Number,
     id: Number,
     sacrificeReward: {
       type: Number,
@@ -62,10 +62,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     sortedEffects() {
-      return Object.keys(this.effects).map(e => ({
-        id: this.type + e,
-        value: this.effects[e],
-      })).sort((a, b) => GlyphEffectOrder[a.id] - GlyphEffectOrder[b.id]);
+      return getGlyphEffectsFromBitmask(this.effects, this.level, this.strength);
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -209,7 +206,7 @@ Vue.component("glyph-component", {
   },
   computed: {
     hasTooltip() {
-      return this.glyph.effects !== undefined;
+      return this.glyph.effects !== 0;
     },
     typeConfig() {
       return GlyphTypes[this.glyph.type];

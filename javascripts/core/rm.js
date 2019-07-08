@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 "use strict";
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
@@ -34,8 +35,9 @@ const AutoGlyphSacrifice = {
       return strengthToRarity(glyph.strength) - typeCfg.rarityThreshold;
     }
     if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ADVANCED) {
+      const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0).map(effect => effect.id);
       const glyphScore = strengthToRarity(glyph.strength) +
-        Object.keys(glyph.effects).map(e => typeCfg.effectScores[glyph.type + e]).sum();
+        effectList.map(e => typeCfg.effectScores[e]).sum();
       return glyphScore - typeCfg.scoreThreshold;
     }
     return strengthToRarity(glyph.strength)
@@ -112,9 +114,7 @@ const GlyphGenerator = {
     let numEffects = this.randomNumberOfEffects(strength, level.actualLevel, fake);
     if (type !== "effarig" && numEffects > 4) numEffects = 4;
     const effects = this.generateEffects(type, numEffects, fake);
-    // Effects come out as powerpow, powerdimboost, etc. Glyphs store them
-    // abbreviated.
-    const abbreviateEffect = e => (e.startsWith(type) ? e.substr(type.length) : e);
+    const effectBitmask = this.makeEffectBitmask(effects);
     return {
       id: this.makeID(),
       idx: null,
@@ -122,8 +122,23 @@ const GlyphGenerator = {
       strength: strength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
-      effects: effects.mapToObject(e => abbreviateEffect(e),
-        e => GameDatabase.reality.glyphEffects[e].effect(level.actualLevel, strength)),
+      effects: effectBitmask,
+    };
+  },
+
+  realityGlyph(level, chosenEffects) {
+    const str = rarityToStrength(100);
+    const maxEffects = 4;
+    const effects = this.generateRealityEffects(maxEffects, chosenEffects);
+    const effectBitmask = this.makeEffectBitmask(effects);
+    return {
+      id: this.makeID(),
+      idx: null,
+      type: "reality",
+      strength: str,
+      level: level.actualLevel,
+      rawLevel: level.rawLevel,
+      effects: effectBitmask,
     };
   },
 
@@ -167,6 +182,23 @@ const GlyphGenerator = {
     return num;
   },
 
+  // "count" specifies the total number of effects in the glyph. However, this won't remove effects if chosenEffects
+  // is larer than count.
+  generateRealityEffects(count, chosenEffects) {
+    const rng = this.getRNG();
+    let possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*"));
+    for (let i = 0; i < chosenEffects.length; i++) {
+      possibleEffects = possibleEffects.filter(effect => !effect.match(chosenEffects[i]));
+    }
+    const randomEffects = [];
+    for (let i = chosenEffects.length; i < count && possibleEffects.length > 0; i++) {
+      const nextEffect = possibleEffects[Math.floor(rng() * possibleEffects.length)];
+      possibleEffects = possibleEffects.filter(effect => !effect.match(nextEffect));
+      randomEffects.push(nextEffect);
+    }
+    return randomEffects.concat(chosenEffects);
+  },
+
   generateEffects(type, count, fake) {
     const rng = this.getRNG(fake);
     const effects = [];
@@ -177,6 +209,10 @@ const GlyphGenerator = {
       effects.push(effect);
     }
     return effects;
+  },
+
+  makeEffectBitmask(effectList) {
+    return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
   },
 
   randomType(fake) {
@@ -417,6 +453,7 @@ const GlyphSacrifice = (function() {
     infinity: new GlyphSacrificeState(db.infinity),
     power: new GlyphSacrificeState(db.power),
     effarig: new GlyphSacrificeState(db.effarig),
+    reality: new GlyphSacrificeState(db.reality),
   };
 }());
 
@@ -445,16 +482,12 @@ function getAdjustedGlyphEffect(effectKey) {
  * @returns {number[]}
  */
 function getGlyphEffectValues(effectKey) {
-  let separated = separateEffectKey(effectKey);
-  let type = separated[0];
-  let effect = separated[1];
-  let effectDef = GameDatabase.reality.glyphEffects[effectKey];
-  if (effectDef === undefined) {
-    throw crash(`Unknown glyph effect requested "${effectKey}"'`)
+  if (orderedEffectList.filter(effect => effect === effectKey).length === 0) {
+    throw crash(`Unknown glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
-    .filter(glyph => glyph.type === type && glyph.effects[effect] !== undefined)
-    .map(glyph => glyph.effects[effect]);
+    .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
+    .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
 }
 
 // Combines all specified glyph effects, reduces some boilerplate
@@ -487,14 +520,6 @@ function calculateGlyph(glyph) {
 
     if (glyph.strength === 1) glyph.strength = gaussianBellCurve();
     glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
-
-    const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
-    for (const effect in glyph.effects) {
-      if (glyph.effects.hasOwnProperty(effect)) {
-        const effectConfig = GameDatabase.reality.glyphEffects[glyph.type + effect];
-        glyph.effects[effect] = effectConfig.effect(level, glyph.strength);
-      }
-    }
   }
 }
 
@@ -507,7 +532,7 @@ function getRarity(x) {
  */
 function separateEffectKey(effectKey) {
   let type = "";
-  let effect = ""
+  let effect = "";
   for (let i = 0; i < GLYPH_TYPES.length; i++) {
     if (effectKey.substring(0, GLYPH_TYPES[i].length) === GLYPH_TYPES[i]) {
       type = GLYPH_TYPES[i];
@@ -515,7 +540,41 @@ function separateEffectKey(effectKey) {
       break;
     }
   }
-  return [type, effect]
+  return [type, effect];
+}
+
+// Turns a glyph effect bitmask into an effect list and corresponding values
+function getGlyphEffectsFromBitmask(bitmask, level, strength) {
+  const effectValues = [];
+  for (let e = 0; e < orderedEffectList.length; e++) {
+    const effect = orderedEffectList[e];
+    if ((bitmask & (1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex)) !== 0) {
+      effectValues.push({
+        id: effect,
+        value: GameDatabase.reality.glyphEffects[effect].effect(level, strength)
+      });
+    }
+  }
+  return effectValues;
+}
+
+// Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
+// eslint-disable-next-line consistent-return
+function getSingleGlyphEffectFromBitmask(effect, glyph) {
+  if ((glyph.effects & (1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex)) !== 0) {
+    const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
+    return GameDatabase.reality.glyphEffects[effect].effect(level, glyph.strength);
+  }
+}
+
+function countEffectsFromBitmask(bitmask) {
+  let numEffects = 0;
+  let bits = bitmask;
+  while (bits !== 0) {
+    numEffects += bits & 1;
+    bits >>= 1;
+  }
+  return numEffects;
 }
 
 // Returns both effect value and softcap status

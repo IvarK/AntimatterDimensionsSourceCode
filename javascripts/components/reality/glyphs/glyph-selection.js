@@ -14,9 +14,7 @@ Vue.component("modal-glyph-selection", {
         const newGlyph = GlyphSelection.glyphs[i];
         if (currentGlyph.level === newGlyph.level) continue;
         currentGlyph.level = newGlyph.level;
-        for (const e of Object.keys(currentGlyph.effects)) {
-          currentGlyph.effects[e] = newGlyph.effects[e];
-        }
+        currentGlyph.effects = newGlyph.effects;
       }
     },
     select(index) {

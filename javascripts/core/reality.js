@@ -31,15 +31,16 @@ const GlyphSelection = {
    * glyph if the score exceeds the specified threshold for every glyph already in the list.
    * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
    */
-  checkUniqueGlyph(toCheck) {
-    const sameTypeGlyphs = this.glyphs.filter(glyph => glyph.type === toCheck.type);
+  checkUniqueGlyph(glyphToCheck) {
     const uniquenessThreshold = 3;
-    const checkEffects = Object.keys(toCheck.effects);
-    for (const currGlyph of sameTypeGlyphs) {
-      const currEffects = Object.keys(currGlyph.effects);
-      const union = new Set([...checkEffects, ...currEffects]);
-      const intersection = new Set(checkEffects.filter(x => new Set(currEffects).has(x)));
-      if (union.size - intersection.size < uniquenessThreshold) return false;
+    const checkEffects = glyphToCheck.effects;
+    for (const currGlyph of this.glyphs) {
+      const currEffects = currGlyph.effects;
+      // eslint-disable-next-line no-bitwise
+      const union = checkEffects | currEffects;
+      // eslint-disable-next-line no-bitwise
+      const intersection = checkEffects & currEffects;
+      if (countEffectsFromBitmask(union - intersection) < uniquenessThreshold) return false;
     }
     return true;
   },

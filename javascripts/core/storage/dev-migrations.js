@@ -346,6 +346,21 @@ GameStorage.devMigrations = {
     player => {
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
+    },
+    player => {
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      for (let g = 0; g < allGlyphs.length; g++) {
+        const glyph = allGlyphs[g];
+        let effectBitmask = 0;
+        for (let e = 0; e < orderedEffectList.length; e++) {
+          const effect = orderedEffectList[e];
+          const typeEffect = separateEffectKey(effect);
+          if (glyph.type === typeEffect[0] && glyph.effects[typeEffect[1]] !== undefined) {
+            effectBitmask += 1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex;
+          }
+        }
+        glyph.effects = effectBitmask;
+      }
     }
   ],
 

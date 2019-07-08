@@ -363,6 +363,7 @@ function completeReality(force, reset, auto = false) {
     Perk.startAM1,
     Perk.startAM2
   ).toDecimal();
+  Enslaved.autoReleaseTick = 0;
 
   resetInfinityRuns();
   resetEternityRuns();

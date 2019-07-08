@@ -773,6 +773,15 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
+  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  if (Enslaved.isAutoReleasing && options.gameDiff === undefined) {
+    Enslaved.autoReleaseTick++;
+    if (Enslaved.autoReleaseTick >= 5) {
+      Enslaved.autoReleaseTick = 0;
+      Enslaved.useStoredTime(true);
+    }
+  }
+
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();
   matterDimensionLoop(realDiff);

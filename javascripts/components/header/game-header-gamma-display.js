@@ -33,6 +33,9 @@ Vue.component("game-header-gamma-display", {
           storedTimeText = ` | storing game time`;
         }
       }
+      if (Enslaved.isAutoReleasing) {
+        storedTimeText += ` | auto-releasing`;
+      }
       if (speedMod < 10000 && speedMod !== 1) {
         return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
       }

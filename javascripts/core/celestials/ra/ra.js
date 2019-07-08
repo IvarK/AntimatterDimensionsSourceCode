@@ -36,8 +36,13 @@ class RaPetState {
     this.data.exp = value;
   }
 
+  // The point of adjustedLevel is to effectively make the level used for the exp calculation scale upward like
+  //  1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, etc.
+  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.
   get requiredExp() {
-    return Math.floor(10000 * Math.pow(1.12, this.level - 1));
+    const floor5 = Math.floor(this.level / 5);
+    const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
+    return Math.floor(10000 * Math.pow(1.12, adjustedLevel - 1));
   }
 
   addGainedExp() {
@@ -304,9 +309,9 @@ const RA_UNLOCKS = {
   },
   LATER_DILATION: {
     id: 5,
-    description: "Get Teresa to level 20",
+    description: "Get Teresa to level 25",
     reward: "Unlock more dilation upgrades [unimplemented]",
-    requirement: () => Ra.pets.teresa.level >= 20
+    requirement: () => Ra.pets.teresa.level >= 25
   },
   IMPROVED_GLYPHS: {
     id: 6,
@@ -345,9 +350,9 @@ const RA_UNLOCKS = {
   },
   GLYPH_ALCHEMY: {
     id: 11,
-    description: "Get Effarig to level 20",
-    reward: "Unlock Glyph Alchemy [unimplemented]",
-    requirement: () => Ra.pets.effarig.level >= 20
+    description: "Get Effarig to level 25",
+    reward: "Unlock Glyph Alchemy",
+    requirement: () => Ra.pets.effarig.level >= 25
   },
   IMPROVED_STORED_TIME: {
     id: 12,
@@ -355,9 +360,9 @@ const RA_UNLOCKS = {
     reward: "Stored game time is amplified and stored real time is more efficient",
     requirement: () => Ra.pets.enslaved.level >= 2,
     effect: {
-      gameTimeAmplification: () => 1 + Ra.pets.enslaved.level / 100,
-      realTimeEfficiency: () => Ra.pets.enslaved.level / 100,
-      realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level / 2,
+      gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
+      realTimeEfficiency: () => (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 100,
+      realTimeCap: () => 1000 * 3600 * (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 2,
     }
   },
   ENSLAVED_XP: {
@@ -375,7 +380,7 @@ const RA_UNLOCKS = {
   ADJUSTABLE_STORED_TIME: {
     id: 15,
     description: "Get Enslaved to level 10",
-    reward: "Rate of stored game time can be configured",
+    reward: "Stored game time can be rate-adjusted and automatically released",
     requirement: () => Ra.pets.enslaved.level >= 10
   },
   PEAK_GAMESPEED: {
@@ -386,9 +391,9 @@ const RA_UNLOCKS = {
   },
   GAMESPEED_BOOST: {
     id: 17,
-    description: "Get Enslaved to level 20",
+    description: "Get Enslaved to level 25",
     reward: "Game speed increases based on current stored time",
-    requirement: () => Ra.pets.enslaved.level >= 20
+    requirement: () => Ra.pets.enslaved.level >= 25
   },
   MORE_EC_COMPLETION: {
     id: 18,
@@ -431,15 +436,15 @@ const RA_UNLOCKS = {
   },
   SPACE_THEOREMS: {
     id: 23,
-    description: "Get V to level 20",
+    description: "Get V to level 25",
     reward: "Unlock Space Theorems [unimplemented]",
-    requirement: () => Ra.pets.v.level >= 20,
+    requirement: () => Ra.pets.v.level >= 25,
   },
   LAITELA_UNLOCK: {
     id: 24,
-    description: "Get all celestials to level 25",
+    description: "Get all celestials to level 20",
     reward: "Unlock Lai'tela, the Celestial of Dimensions",
-    requirement: () => Ra.petList.every(pet => pet.level >= 25),
+    requirement: () => Ra.petList.every(pet => pet.level >= 20),
     onObtaining: () => MatterDimension(1).amount = new Decimal(1),
   }
 };

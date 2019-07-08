@@ -64,7 +64,7 @@ const Enslaved = {
     const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
       : 0;
-    return 0.33 + addedEff;
+    return Math.min(0.33 + addedEff, 1);
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)

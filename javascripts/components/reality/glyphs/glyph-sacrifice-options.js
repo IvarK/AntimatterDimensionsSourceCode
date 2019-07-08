@@ -95,6 +95,7 @@ Vue.component("glyph-sacrifice-options", {
       mode: AutoGlyphSacMode.NONE,
       lockedTypes: GlyphTypes.locked.map(e => e.id),
       advancedType: GLYPH_TYPES[0],
+      alchemyUnlocked: false,
       // Note: there are two units at play: strength is from 1..3.5+; rarity is 0..100
       rarityThresholds: GLYPH_TYPES.mapToObject(e => e, () => 0),
     };
@@ -163,6 +164,7 @@ Vue.component("glyph-sacrifice-options", {
         this.rarityThresholds[type] = AutoGlyphSacrifice.types[type].rarityThreshold;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
+      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
     },
     setMode(m) {
       AutoGlyphSacrifice.mode = m;
@@ -188,7 +190,7 @@ Vue.component("glyph-sacrifice-options", {
     <div :class="optionClass(modes.ADVANCED)" @click="setMode(modes.ADVANCED)">
     ❃.✮:▹ Advanced mode ◃:✮.❃
     </div>
-    <div :class="optionClass(modes.ALCHEMY)" @click="setMode(modes.ALCHEMY)">
+    <div v-if="alchemyUnlocked" :class="optionClass(modes.ALCHEMY)" @click="setMode(modes.ALCHEMY)">
     🜁 🜄 Alchemy mode 🜃 🜂
     </div>
     <div v-if="mode === 2" class="l-glyph-sacrifice-options__rarity-sliders c-glyph-sacrifice-options__rarity-sliders">

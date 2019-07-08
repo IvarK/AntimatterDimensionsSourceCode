@@ -607,6 +607,7 @@ function canSacrifice() {
 
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
+  if (glyph.type === "reality") return 0.01 * glyph.level;
   return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
 }
 
@@ -623,16 +624,19 @@ function glyphRefinementGain(glyph) {
 }
 
 function sacrificeGlyph(glyph, force = false) {
-  if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
+  if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && glyph.type !== "reality") {
     const resource = glyphAlchemyResource(glyph);
     const refinementGain = glyphRefinementGain(glyph);
     resource.amount += refinementGain;
-    if (AlchemyResource.decoherence.amount === 0) return;
     const decoherenceGain = refinementGain * AlchemyResource.decoherence.effectValue;
     const otherGlyphTypes = GlyphTypes.list
       .filter(t => t !== GlyphTypes[glyph.type]);
     for (const glyphType of otherGlyphTypes) {
-      AlchemyResources.all[glyphType.alchemyResource] += decoherenceGain;
+      if (glyphType.id !== "reality") {
+        const currAmount = AlchemyResources.all[glyphType.alchemyResource].amount;
+        const gainedResource = Math.clamp(decoherenceGain - currAmount, 0, 100 * refinementGain);
+        AlchemyResources.all[glyphType.alchemyResource].amount += gainedResource;
+      }
     }
     Glyphs.removeFromInventory(glyph);
     return;
@@ -643,7 +647,7 @@ function sacrificeGlyph(glyph, force = false) {
                           `glyphs will increase to ${(player.reality.glyphs.sac[glyph.type] + toGain).toFixed(2)}`)) {
     return;
   }
-  player.reality.glyphs.sac[glyph.type] += toGain
+  player.reality.glyphs.sac[glyph.type] += toGain;
   if (glyph.type === "time") {
     TimeDimension(8).power = Decimal.pow(
       2 * Effects.product(GlyphSacrifice.time),

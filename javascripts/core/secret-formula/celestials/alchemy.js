@@ -275,7 +275,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.sqrt(amount),
       tier: 4,
       uiOrder: 3,
-      formatEffect: value => `Generate ${shorten(value)} realities and perk points per second`,
+      formatEffect: value => `Generate ${shorten(value, 2, 2)} realities and perk points per second`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.INFINITY,
@@ -298,7 +298,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.floor(amount / 10),
       tier: 4,
       uiOrder: 1,
-      formatEffect: value => `Glyph level cap increased by ${shortenSmallInteger(value)} ` +
+      formatEffect: value => `Basic glyph level cap increased by ${shortenSmallInteger(value)} ` +
         `(to ${shortenSmallInteger(value + 10000)})`,
       reagents: [
         {
@@ -318,7 +318,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => amount / 1000,
       tier: 4,
       uiOrder: 5,
-      formatEffect: value => `Each reality simulates ${shortenSmallInteger(value)} additional realities`,
+      formatEffect: value => `Each reality simulates ${shorten(value, 2, 2)} additional realities`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.ALTERNATION,
@@ -361,9 +361,9 @@ GameDatabase.celestials.alchemy = {
       name: "Reality",
       symbol: "Ϟ",
       isBaseResource: false,
-      effect: amount => Math.floor(1.5 * amount),
+      effect: amount => Math.floor(1.2 * amount),
       tier: 5,
-      formatEffect: value => `Can be used to create a level ${shortenSmallInteger(value)} Reality glyph`,
+      formatEffect: value => `Use all resources to create a level ${shortenSmallInteger(value)} Reality glyph`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EXPONENTIAL,

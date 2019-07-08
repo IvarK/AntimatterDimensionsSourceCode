@@ -42,7 +42,7 @@ class RaPetState {
 
   addGainedExp() {
     if (!this.isUnlocked) return;
-    this.addExp(this.gainedExp * simulatedRealityCount(false));
+    this.addExp(this.gainedExp * (1 + simulatedRealityCount(false)));
   }
 
   get gainedExp() {

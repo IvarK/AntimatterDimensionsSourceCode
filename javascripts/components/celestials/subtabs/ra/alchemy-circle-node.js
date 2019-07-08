@@ -50,7 +50,7 @@ Vue.component("alchemy-circle-node", {
       v-if="isFocused"
       class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
     >
-      {{amount.toFixed(0)}}
+      {{ amount.toFixed(1) }}
     </hint-text>
     </div>
   `

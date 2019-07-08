@@ -93,14 +93,22 @@ const GlyphTooltipComponent = {
       return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
     },
     sacrificeText() {
-      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) {
+      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
+        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+        const limitText = this.sacrificeReward === 0
+          ? ` (limit reached)`
+          : ``;
         return this.onTouchDevice
-        ? `Refine for ${shorten(this.sacrificeReward, 2, 2)}`
-        : `Can be refined for ${shorten(this.sacrificeReward, 2, 2)}`;
+          ? `Refine for ${refinementText}${limitText}`
+          : `Can be refined for ${refinementText}${limitText}`;
       }
+      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
       return this.onTouchDevice
-        ? `Sacrifice for ${shorten(this.sacrificeReward, 2, 2)} power`
-        : `Can be sacrificed for ${shorten(this.sacrificeReward, 2, 2)} power`;
+        ? `Sacrifice for ${powerText}`
+        : `Can be sacrificed for ${powerText}`;
+    },
+    showDeletionText() {
+      return (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) || this.sacrificeReward > 0;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -149,7 +157,7 @@ const GlyphTooltipComponent = {
                    :effect="e.id"
                    :value="e.value"/>
     </div>
-    <div v-if="sacrificeReward > 0"
+    <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
          v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
       {{sacrificeText}}

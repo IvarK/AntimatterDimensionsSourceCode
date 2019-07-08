@@ -63,12 +63,17 @@ class AlchemyReaction {
     return this._reagents;
   }
 
-  // Returns a percentage of a reaction that can be done, accounting for limiting reagents and capping at 100%
+  // Returns a percentage of a reaction that can be done, accounting for limiting reagents.  This normally caps at
+  // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
+  // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
+    const forcingFactor = this._reagents
+    .map(r => r.resource.amount / 1000)
+    .min() - this._product.amount;
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
-    return Math.min(totalYield, 1);
+    return Math.min(totalYield, Math.max(forcingFactor, 1));
   }
 
   get isActive() {
@@ -116,6 +121,7 @@ class AlchemyReaction {
       const diffAfter = reagentAfter - prodAfter;
       cappedYield = Math.min(cappedYield, this.reactionYield * diffBefore / (diffBefore - diffAfter));
     }
+    cappedYield = Math.clampMin(cappedYield, 0);
 
     // Perform the reaction with potentially reduced yield due to the cap
     for (const reagent of this._reagents) {

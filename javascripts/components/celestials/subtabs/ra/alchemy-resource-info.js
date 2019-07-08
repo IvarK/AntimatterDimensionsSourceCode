@@ -51,7 +51,7 @@ Vue.component("alchemy-resource-info", {
   template: `
     <div class="c-alchemy-resource-info">
       <span>{{resource.symbol}} {{resource.name}}</span>
-      <span>Current: {{shorten(amount, 2, 2)}}</span>
+      <span>Current: {{ amount.toFixed(2) }}</span>
       <span v-if="isBaseResource">Base Resource</span>
       <span v-else>Reaction: {{isReactionActive ? "Active" : "Inactive"}} ({{reactionText}})</span>
       <effect-display title="Effect" :config="effectConfig" />

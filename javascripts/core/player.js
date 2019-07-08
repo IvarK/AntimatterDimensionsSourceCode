@@ -193,7 +193,8 @@ let player = {
         time: 0,
         replication: 0,
         dilation: 0,
-        effarig: 0
+        effarig: 0,
+        reality: 0
       },
     },
     seed: Math.floor(Date.now() * Math.random() + 1),

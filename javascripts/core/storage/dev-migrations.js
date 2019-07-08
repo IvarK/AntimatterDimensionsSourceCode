@@ -349,13 +349,12 @@ GameStorage.devMigrations = {
     },
     player => {
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
-      for (let g = 0; g < allGlyphs.length; g++) {
-        const glyph = allGlyphs[g];
+      for (const glyph of allGlyphs) {
         let effectBitmask = 0;
-        for (let e = 0; e < orderedEffectList.length; e++) {
-          const effect = orderedEffectList[e];
+        for (const effect of orderedEffectList) {
           const typeEffect = separateEffectKey(effect);
           if (glyph.type === typeEffect[0] && glyph.effects[typeEffect[1]] !== undefined) {
+            // eslint-disable-next-line no-bitwise
             effectBitmask += 1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex;
           }
         }

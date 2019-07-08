@@ -543,8 +543,7 @@ const GlyphTypes = {
     * @returns {string | null}
     */
   random(rng, blacklist = []) {
-    const available = GLYPH_TYPES.filter(id => !blacklist.includes(id) &&
-      GlyphTypes[id].isUnlocked && id !== "reality");
+    const available = GLYPH_TYPES.filter(id => !blacklist.includes(id) && GlyphTypes[id].isUnlocked);
     if (available.length === 0) return null;
     return available[Math.floor(rng() * available.length)];
   },

@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 "use strict";
 
 const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
@@ -187,8 +186,8 @@ const GlyphGenerator = {
   generateRealityEffects(count, chosenEffects) {
     const rng = this.getRNG();
     let possibleEffects = orderedEffectList.filter(effect => !effect.match("effarig*"));
-    for (let i = 0; i < chosenEffects.length; i++) {
-      possibleEffects = possibleEffects.filter(effect => !effect.match(chosenEffects[i]));
+    for (const chosenEffect of chosenEffects) {
+      possibleEffects = possibleEffects.filter(effect => !effect.match(chosenEffect));
     }
     const randomEffects = [];
     for (let i = chosenEffects.length; i < count && possibleEffects.length > 0; i++) {
@@ -212,6 +211,7 @@ const GlyphGenerator = {
   },
 
   makeEffectBitmask(effectList) {
+    // eslint-disable-next-line no-bitwise
     return effectList.reduce((mask, eff) => mask + (1 << GameDatabase.reality.glyphEffects[eff].bitmaskIndex), 0);
   },
 
@@ -486,6 +486,7 @@ function getGlyphEffectValues(effectKey) {
     throw crash(`Unknown glyph effect requested "${effectKey}"'`);
   }
   return player.reality.glyphs.active
+  // eslint-disable-next-line no-bitwise
     .filter(glyph => ((1 << GameDatabase.reality.glyphEffects[effectKey].bitmaskIndex) & glyph.effects) !== 0)
     .map(glyph => getSingleGlyphEffectFromBitmask(effectKey, glyph));
 }
@@ -545,33 +546,34 @@ function separateEffectKey(effectKey) {
 
 // Turns a glyph effect bitmask into an effect list and corresponding values
 function getGlyphEffectsFromBitmask(bitmask, level, strength) {
-  const effectValues = [];
-  for (let e = 0; e < orderedEffectList.length; e++) {
-    const effect = orderedEffectList[e];
-    if ((bitmask & (1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex)) !== 0) {
-      effectValues.push({
-        id: effect,
-        value: GameDatabase.reality.glyphEffects[effect].effect(level, strength)
-      });
-    }
-  }
-  return effectValues;
+  return orderedEffectList
+    .map(effectName => GameDatabase.reality.glyphEffects[effectName])
+    // eslint-disable-next-line no-bitwise
+    .filter(effect => (bitmask & (1 << effect.bitmaskIndex)) !== 0)
+    .map(effect => ({
+      id: effect.id,
+      value: effect.effect(level, strength)
+    }));
 }
 
 // Pulls out a single effect value from a glyph's bitmask, returning just the value (nothing for missing effects)
-// eslint-disable-next-line consistent-return
-function getSingleGlyphEffectFromBitmask(effect, glyph) {
-  if ((glyph.effects & (1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex)) !== 0) {
-    const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
-    return GameDatabase.reality.glyphEffects[effect].effect(level, glyph.strength);
+function getSingleGlyphEffectFromBitmask(effectName, glyph) {
+  const glyphEffect = GameDatabase.reality.glyphEffects[effectName];
+  // eslint-disable-next-line no-bitwise
+  if ((glyph.effects & (1 << glyphEffect.bitmaskIndex)) === 0) {
+    return undefined;
   }
+  const level = Effarig.isRunning ? Math.min(glyph.level, Effarig.glyphLevelCap) : glyph.level;
+  return glyphEffect.effect(level, glyph.strength);
 }
 
 function countEffectsFromBitmask(bitmask) {
   let numEffects = 0;
   let bits = bitmask;
   while (bits !== 0) {
+    // eslint-disable-next-line no-bitwise
     numEffects += bits & 1;
+    // eslint-disable-next-line no-bitwise
     bits >>= 1;
   }
   return numEffects;

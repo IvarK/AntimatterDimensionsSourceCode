@@ -106,11 +106,8 @@ const Effarig = {
   },
 
   get glyphEffectAmount() {
-    let allEffectBitmask = 0;
-    for (const g of Glyphs.activeList) {
-      // eslint-disable-next-line no-bitwise
-      allEffectBitmask |= g.effects;
-    }
+    // eslint-disable-next-line no-bitwise
+    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr, 0);
     return countEffectsFromBitmask(allEffectBitmask);
   },
 

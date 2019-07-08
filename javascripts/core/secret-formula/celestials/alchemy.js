@@ -165,10 +165,14 @@ GameDatabase.celestials.alchemy = {
       effect: amount => Math.clampMax(0.3 + amount / 10000, 1),
       tier: 3,
       uiOrder: 2,
-      formatEffect: value => (player.reality.glyphs.sac.reality === 0
-        ? `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`
-        : `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)} ` + 
-          `(${formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2)} after glyph sacrifice)`),
+      formatEffect(value) {
+        const baseEffect = `Alchemy reaction efficiency 30% ➜ ${formatPercents(value, 2, 2)}`;
+        if (player.reality.glyphs.sac.reality === 0) {
+          return baseEffect;
+        }
+        const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
+        return `${baseEffect} (${increasedYield} after glyph sacrifice)`;
+      },
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

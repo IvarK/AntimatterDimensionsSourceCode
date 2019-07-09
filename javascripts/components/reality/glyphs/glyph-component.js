@@ -86,8 +86,8 @@ const GlyphTooltipComponent = {
     },
     levelText() {
       return this.isLevelCapped
-        ? `Level: ▼${this.levelCap}▼`
-        : `Level: ${this.level}`;
+        ? `Level: ▼${shortenSmallInteger(this.levelCap)}▼`
+        : `Level: ${shortenSmallInteger(this.level)}`;
     },
     levelStyle() {
       return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };

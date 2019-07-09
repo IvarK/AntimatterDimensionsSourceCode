@@ -4,7 +4,8 @@ Vue.component("alchemy-tab", {
   data() {
     return {
       infoResourceId: 0,
-      focusedResourceId: -1
+      focusedResourceId: -1,
+      realityCreationAvailable: false
     };
   },
   computed: {
@@ -26,6 +27,9 @@ Vue.component("alchemy-tab", {
     }
   },
   methods: {
+    update() {
+      this.realityCreationAvailable = AlchemyResource.reality.amount !== 0;
+    },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
       return `${(orbit.radius / maxRadius * 50)}%`;
@@ -102,6 +106,7 @@ Vue.component("alchemy-tab", {
           />
         </svg> 
       </div>
+      <reality-glyph-creation v-if="realityCreationAvailable" />
     </div>`
 });
 

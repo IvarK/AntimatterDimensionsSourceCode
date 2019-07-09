@@ -107,7 +107,7 @@ const Effarig = {
 
   get glyphEffectAmount() {
     // eslint-disable-next-line no-bitwise
-    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr, 0);
+    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
     return countEffectsFromBitmask(allEffectBitmask);
   },
 

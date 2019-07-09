@@ -19,43 +19,43 @@ Vue.component('celestials-tab', {
           name: "Effarig",
           id: "Effarig",
           component: "effarig-tab",
-          condition: function() { return this.effarigUnlocked }.bind(this)
+          condition: function() { return this.effarigUnlocked; }.bind(this)
         },
         {
           name: "The Enslaved Ones",
           id: "Enslaved",
           component: "enslaved-tab",
-          condition: function() { return this.enslavedUnlocked }.bind(this)
+          condition: function() { return this.enslavedUnlocked; }.bind(this)
         },
         {
           name: "V",
           id: "V",
           component: "v-tab",
-          condition: function() { return this.vUnlocked }.bind(this)
+          condition: function() { return this.vUnlocked; }.bind(this)
         },
         {
           name: "Ra",
           id: "Ra",
           component: "ra-tab",
-          condition: function() { return this.raUnlocked }.bind(this)
+          condition: function() { return this.raUnlocked; }.bind(this)
         },
         {
           name: "Glyph Alchemy",
           id: "Alchemy",
           component: "alchemy-tab",
-          condition: function() { return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) }.bind(this)
+          condition: function() { return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY); }.bind(this)
         },
         {
           name: "Lai'tela",
           id: "Lai'tela",
           component: "laitela-tab",
-          condition: function() { return this.laitelaUnlocked }.bind(this)
+          condition: function() { return this.laitelaUnlocked; }.bind(this)
         },
         {
           name: "The Pelle",
           id: "pelle",
           component: "pelle-tab",
-          condition: function() { return this.pelleUnlocked }.bind(this)
+          condition: function() { return this.pelleUnlocked; }.bind(this)
         },
         // Leave these for future references
         /*{

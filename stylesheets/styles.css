@@ -5773,6 +5773,7 @@ kbd {
   background-color: white;
   transition: all 0.2s, z-index 0s;
   z-index: 1;
+  line-height: 2rem;
 }
 
 .o-alchemy-node--unfocused {

@@ -360,6 +360,17 @@ GameStorage.devMigrations = {
         }
         glyph.effects = effectBitmask;
       }
+    },
+    // Ra exp formula changed
+    player => {
+      for (const pet of Ra.petList) {
+        const oldExp = pet.exp + 10000 * (Math.pow(1.12, pet.level - 1) - 1) / (0.12);
+        pet.level = 1;
+        pet.exp = 0;
+        pet.addExp(Math.clampMin(oldExp, 0));
+      }
+      player.celestials.ra.unlocks = [];
+      Ra.checkForUnlocks();
     }
   ],
 

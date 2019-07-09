@@ -18,9 +18,9 @@ Vue.component("normal-achievement", {
       return this.achievement.id;
     },
     styleObject() {
-      return {
-        "background-image": `url(images/r${this.id}.png)`,
-      };
+      const id = this.id;
+      if (Theme.current().cssClass() === "t-s4") return { "background-image": `url(images/c${this.id}.png)` };
+      return { "background-position": `-${id % 10 * 105}px -${(Math.floor(id / 10) - 1) * 104}px` };
     },
     classObject() {
       return {

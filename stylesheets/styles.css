@@ -2706,6 +2706,7 @@ screen and (max-width: 480px) {
   margin: 0 auto;
   text-align: center;
   font-family: TypeWriter, serif;
+  background-image: url("../images/achievements.png");
   color: black;
   font-size: .8rem;
   user-select: none;

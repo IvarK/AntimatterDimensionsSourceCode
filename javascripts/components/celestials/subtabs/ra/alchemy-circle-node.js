@@ -30,6 +30,9 @@ Vue.component("alchemy-circle-node", {
         "o-alchemy-node--active": this.isReactionActive,
         "o-alchemy-node--unfocused": !this.isFocused,
       };
+    },
+    hintClassObject() {
+      return this.isFocused ? undefined : "o-hint-text--alchemy-node--unfocused";
     }
   },
   methods: {
@@ -47,7 +50,7 @@ Vue.component("alchemy-circle-node", {
       @click="emitClick"
     >{{resource.symbol}}
     <hint-text
-      v-if="isFocused"
+      :class="hintClassObject"
       class="o-hint-text--alchemy-node l-hint-text--alchemy-node"
     >
       {{ amount.toFixed(1) }}

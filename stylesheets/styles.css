@@ -2068,6 +2068,11 @@ screen and (max-width: 480px) {
   color: #4f5957;
   text-shadow: none;
   font-size: 1.2rem;
+  transition: opacity 0.2s;
+}
+
+.o-hint-text--alchemy-node--unfocused {
+  opacity: 0;
 }
 
 .l-hint-text--alchemy-node {

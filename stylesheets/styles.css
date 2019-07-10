@@ -2064,6 +2064,23 @@ screen and (max-width: 480px) {
   z-index: 1;
 }
 
+.o-hint-text--alchemy-node {
+  color: #4f5957;
+  text-shadow: none;
+  font-size: 1.2rem;
+  transition: opacity 0.2s;
+}
+
+.o-hint-text--alchemy-node--unfocused {
+  opacity: 0;
+}
+
+.l-hint-text--alchemy-node {
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
 /*#endregion hint-text*/
 
 /*#region Header*/
@@ -5687,6 +5704,103 @@ kbd {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.l-ra-alchemy-tab {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.c-alchemy-resource-info {
+  display: flex;
+  flex-direction: column;
+  border: 0.1rem solid black;
+  padding: 0.25rem 1rem;
+  width: 60rem;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+.l-alchemy-orbit-canvas {
+  position: absolute;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+  left: 0;
+}
+
+.l-alchemy-arrow-canvas {
+  position: absolute;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+  left: 0;
+}
+
+.l-alchemy-circle {
+  position: relative;
+  margin: 3rem;
+}
+
+.o-alchemy-orbit {
+  stroke: black;
+  stroke-width: 1;
+  fill: none;
+  transition-duration: 0.2s;
+}
+
+.o-alchemy-orbit--unfocused {
+  stroke: lightgray;
+}
+
+.o-alchemy-reaction-arrow {
+  stroke: black;
+  transition-duration: 0.2s;
+}
+
+.o-alchemy-reaction-arrow--unfocused {
+  opacity: 0;
+}
+
+.o-alchemy-node {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  margin-left: -1rem;
+  margin-top: -1rem;
+  user-select: none;
+  font-size: 1.4rem;
+  border: 0.1rem solid black;
+  border-radius: 50%;
+  background-color: white;
+  transition: all 0.2s, z-index 0s;
+  z-index: 1;
+  line-height: 2rem;
+}
+
+.o-alchemy-node--unfocused {
+  color: lightgray;
+  border-color: lightgray;
+  z-index: 0;
+}
+
+.o-alchemy-node--base {
+  background-color: lightblue;
+}
+
+.o-alchemy-node--unfocused.o-alchemy-node--base {
+  background-color: #ebf6f9;
+}
+
+.o-alchemy-node--active {
+  background-color: lightgreen;
+}
+
+.o-alchemy-node--unfocused.o-alchemy-node--active {
+  background-color: #e9fce9;
 }
 
 .c-ra-unlock-unlocked {

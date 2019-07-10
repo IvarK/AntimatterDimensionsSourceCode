@@ -31,15 +31,16 @@ const GlyphSelection = {
    * glyph if the score exceeds the specified threshold for every glyph already in the list.
    * This uniqueness score is equal to the number of effects that exactly one of the glyphs has.
    */
-  checkUniqueGlyph(toCheck) {
-    const sameTypeGlyphs = this.glyphs.filter(glyph => glyph.type === toCheck.type);
+  checkUniqueGlyph(glyphToCheck) {
     const uniquenessThreshold = 3;
-    const checkEffects = Object.keys(toCheck.effects);
-    for (const currGlyph of sameTypeGlyphs) {
-      const currEffects = Object.keys(currGlyph.effects);
-      const union = new Set([...checkEffects, ...currEffects]);
-      const intersection = new Set(checkEffects.filter(x => new Set(currEffects).has(x)));
-      if (union.size - intersection.size < uniquenessThreshold) return false;
+    const checkEffects = glyphToCheck.effects;
+    for (const currGlyph of this.glyphs) {
+      const currEffects = currGlyph.effects;
+      // eslint-disable-next-line no-bitwise
+      const union = checkEffects | currEffects;
+      // eslint-disable-next-line no-bitwise
+      const intersection = checkEffects & currEffects;
+      if (countEffectsFromBitmask(union - intersection) < uniquenessThreshold) return false;
     }
     return true;
   },
@@ -102,6 +103,18 @@ function isRealityAvailable() {
   return player.eternityPoints.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
+// Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
+// with false for checking and true for actual usage, and only "used" once per reality.
+function simulatedRealityCount(advancePartSimCounters) {
+  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio : 0;
+  const multiversalSim = AlchemyResource.multiversal.effectValue;
+  const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
+  if (advancePartSimCounters) {
+    player.partSimulatedReality = simCount - Math.floor(simCount);
+  }
+  return Math.floor(simCount);
+}
+
 /**
  * Triggered when the user clicks the reality button. This triggers the glyph selection
  * process, if applicable. Auto sacrifice is never triggered.
@@ -115,15 +128,12 @@ function requestManualReality() {
     return;
   }
   const level = gainedGlyphLevel();
-  if (Enslaved.boostReality) {
-    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
-    if (Enslaved.lockedInBoostRatio > 1) {
-      Enslaved.lockedInGlyphLevel = level;
-      Enslaved.lockedInRealityMachines = gainedRealityMachines();
-      Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      manualReality();
-      return;
-    }
+  if (simulatedRealityCount(false) > 0) {
+    Enslaved.lockedInGlyphLevel = level;
+    Enslaved.lockedInRealityMachines = gainedRealityMachines();
+    Enslaved.lockedInShardsGained = Effarig.shardsGained;
+    manualReality();
+    return;
   }
   // If there is no glyph selection, proceed with reality immediately. Otherwise,
   // we generate a glyph selection, and keep the game going while the user dithers over it.
@@ -184,23 +194,19 @@ function processAutoGlyph(gainedLevel) {
 function autoReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   const gainedLevel = gainedGlyphLevel();
-  if (Enslaved.boostReality) {
-    Enslaved.lockedInBoostRatio = Enslaved.realityBoostRatio;
-    if (Enslaved.lockedInBoostRatio > 1) {
-      Enslaved.lockedInGlyphLevel = gainedLevel;
-      Enslaved.lockedInRealityMachines = gainedRealityMachines();
-      Enslaved.lockedInShardsGained = Effarig.shardsGained;
-      completeReality(false, false, true);
-      return;
-    }
+  if (simulatedRealityCount(false) > 0) {
+    Enslaved.lockedInGlyphLevel = gainedLevel;
+    Enslaved.lockedInRealityMachines = gainedRealityMachines();
+    Enslaved.lockedInShardsGained = Effarig.shardsGained;
+    completeReality(false, false, true);
+    return;
   }
   processAutoGlyph(gainedLevel);
   completeReality(false, false, true);
 }
 
-function boostedRealityRewards() {
-  // The ratio is the amount on top of the regular reality amount.
-  const ratio = Enslaved.lockedInBoostRatio;
+// The ratio is the amount on top of the regular reality amount.
+function boostedRealityRewards(ratio) {
   player.reality.realityMachines = player.reality.realityMachines
     .plus(Enslaved.lockedInRealityMachines.times(ratio));
   // No glyph reward was given earlier
@@ -215,16 +221,24 @@ function boostedRealityRewards() {
   if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
     Ra.giveExp();
   }
-  player.celestials.enslaved.storedReal = 0;
-  Enslaved.lockedInBoostRatio = 1;
-  Enslaved.boostReality = false;
+  if (Enslaved.boostReality) {
+    // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
+    // be wasteful. Being faster than 1 second will only use as much time as needed to get the 1-second factor instead.
+    if (Time.thisRealityRealTime.totalSeconds < 1) {
+      player.celestials.enslaved.storedReal *= 1 - Time.thisRealityRealTime.totalSeconds;
+    } else {
+      player.celestials.enslaved.storedReal = 0;
+    }
+    Enslaved.boostReality = false;
+  }
 }
 
 function completeReality(force, reset, auto = false) {
   if (!reset) {
     EventHub.dispatch(GameEvent.REALITY_RESET_BEFORE);
-    if (Enslaved.lockedInBoostRatio > 1) {
-      boostedRealityRewards();
+    const simulatedRealities = simulatedRealityCount(true);
+    if (simulatedRealities > 0) {
+      boostedRealityRewards(simulatedRealities);
     }
     if (player.thisReality < player.bestReality) {
       player.bestReality = player.thisReality;
@@ -355,6 +369,7 @@ function completeReality(force, reset, auto = false) {
     Perk.startAM1,
     Perk.startAM2
   ).toDecimal();
+  Enslaved.autoReleaseTick = 0;
 
   resetInfinityRuns();
   resetEternityRuns();
@@ -424,6 +439,12 @@ function completeReality(force, reset, auto = false) {
   // This immediately gives eternity upgrades and autobuys TDs/5xEP
   if (Ra.has(RA_UNLOCKS.INSTANT_AUTOEC)) {
     applyRealityUpgrades();
+  }
+
+  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) {
+    for (const reaction of AlchemyReactions.all.compact()) {
+      reaction.combineReagents();
+    }
   }
 }
 

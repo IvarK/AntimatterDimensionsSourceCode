@@ -77,6 +77,7 @@ const AutoGlyphSacMode = {
   ALL: 1,
   RARITY_THRESHOLDS: 2,
   ADVANCED: 3,
+  ALCHEMY: 4  
 }
 
 const AutoGlyphPickMode = {
@@ -337,3 +338,27 @@ const AutomatorInstructions = Object.freeze({
   Instructions: _AutomatorInstructions,
   InstructionsById: _makeAutomatorInstructionsById(),
 });
+
+const ALCHEMY_RESOURCE = {
+  POWER: 0,
+  INFINITY: 1,
+  TIME: 2,
+  REPLICATION: 3,
+  DILATION: 4,
+  CARDINALITY: 5,
+  ETERNITY: 6,
+  DIMENSIONALITY: 7,
+  INFLATION: 8,
+  ALTERNATION: 9,
+  EFFARIG: 10,
+  SYNERGISM: 11,
+  MOMENTUM: 12,
+  DECOHERENCE: 13,
+  EXPONENTIAL: 14,
+  FORCE: 15,
+  UNCOUNTABILITY: 16,
+  BOUNDLESS: 17,
+  MULTIVERSAL: 18,
+  UNPREDICTABILITY: 19,
+  REALITY: 20,
+};

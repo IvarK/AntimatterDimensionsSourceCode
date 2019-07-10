@@ -137,6 +137,7 @@ function totalIPMult() {
       DilationUpgrade.ipMultDT,
       GlyphEffect.ipMult
     );
+  ipMult = ipMult.times(player.replicanti.amount.powEffectOf(AlchemyResource.exponential));
   return ipMult;
 }
 

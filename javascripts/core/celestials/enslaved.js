@@ -37,14 +37,12 @@ const ENSLAVED_UNLOCKS = {
 
 const Enslaved = {
   boostReality: false,
-  // When the player hits the reality button, we don't want their boost decaying if we are showing
-  // the animation. So, the ratio at the time of click is stored here:
-  lockedInBoostRatio: 1,
   lockedInGlyphLevel: 0,
   lockedInRealityMachines: new Decimal(0),
   lockedInShardsGained: 0,
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
+  autoReleaseTick: 0,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
@@ -67,13 +65,16 @@ const Enslaved = {
     const addedEff = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeEfficiency()
       : 0;
-    return 0.33 + addedEff;
+    return Math.min(0.35 + addedEff, 1);
   },
   get storedRealTimeCap() {
     const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
       ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
       : 0;
     return 1000 * 3600 * 4 + addedCap;
+  },
+  get isAutoReleasing() {
+    return player.celestials.enslaved.isAutoReleasing;
   },
   storeRealTime() {
     const thisUpdate = Date.now();
@@ -94,15 +95,17 @@ const Enslaved = {
     player.lastUpdate += used;
     return diffMs - used;
   },
-  useStoredTime() {
+  // "autoRelease" should only be true when called with the Ra upgrade
+  useStoredTime(autoRelease) {
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
+    if (autoRelease) release *= 0.01;
     gameLoop(0, { gameDiff: release });
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
-    player.celestials.enslaved.stored = 0;
+    player.celestials.enslaved.stored *= autoRelease ? 0.99 : 0;
   },
   has(info) {
     return player.celestials.enslaved.unlocks.includes(info.id);

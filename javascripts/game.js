@@ -211,31 +211,16 @@ function gainedRealityMachines() {
     return Decimal.floor(rmGain);
 }
 
-function gainedGlyphLevel(round) {
-    if (round === undefined) round = true
-    const glyphState = getGlyphLevelInputs();
-    let rawLevel = glyphState.rawLevel;
-    if (round) rawLevel = Math.round(rawLevel)
-    if (rawLevel == Infinity || isNaN(rawLevel)) rawLevel = 0;
-    let actualLevel = glyphState.actualLevel;
-    if (round) actualLevel = Math.round(actualLevel)
-    if (actualLevel == Infinity || isNaN(actualLevel)) actualLevel = 0
-    return {
-      rawLevel: rawLevel,
-      actualLevel: actualLevel
-    }
-}
-
-function percentToNextGlyphLevel() {
-    var ret = gainedGlyphLevel(false).actualLevel
-    var retOffset = 0;
-    if (Math.round(ret) > ret) {
-        retOffset = 0.5;
-    } else {
-        retOffset = -0.5;
-    }
-    if (ret == Infinity || isNaN(ret)) return 0
-    return Math.min(((ret - Math.floor(ret)-retOffset) * 100), 99.9).toFixed(1)
+function gainedGlyphLevel() {
+  const glyphState = getGlyphLevelInputs();
+  let rawLevel = Math.floor(glyphState.rawLevel);
+  if (!isFinite(rawLevel)) rawLevel = 0;
+  let actualLevel = Math.floor(glyphState.actualLevel);
+  if (!isFinite(actualLevel)) actualLevel = 0;
+  return {
+    rawLevel: rawLevel,
+    actualLevel: actualLevel
+  };
 }
 
 function resetChallengeStuff() {
@@ -450,6 +435,8 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     factor *= Ra.gamespeedStoredTimeMult();
   }
 
+  factor *= Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes);
+
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   if (Effarig.isRunning) {
     factor = Effarig.multiplier(factor).toNumber();
@@ -510,9 +497,9 @@ function gameLoop(diff, options = {}) {
         // If we're in EC12, time shouldn't speed up at all, but options.blackHoleSpeedup will be 1 so we're fine.
         speedFactor = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH], 1) * options.blackHoleSpeedup;
       }
-      if (player.celestials.enslaved.isStoring) {
+      if (player.celestials.enslaved.isStoring && !EternityChallenge(12).isRunning) {
         // Explicitly disable storing game time in EC12
-        const timeFactor = EternityChallenge(12).isRunning ? 0 : speedFactor - 1;
+        const timeFactor = speedFactor - 1;
         // If you're storing time, time glyphs won't affect black holes
         blackHoleDiff = realDiff;
         // Note that if gameDiff is specified, we don't store enslaved time.
@@ -523,8 +510,8 @@ function gameLoop(diff, options = {}) {
           : 1;
         const amplifiedTimeFactor = Math.pow(timeFactor, amplification);
         const storedTimeWeight = player.celestials.enslaved.storedFraction;
-        player.celestials.enslaved.stored += diff * Math.pow(amplifiedTimeFactor, storedTimeWeight);
-        speedFactor = Math.pow(timeFactor, 1 - storedTimeWeight);
+        player.celestials.enslaved.stored += diff * ((1 - storedTimeWeight) + amplifiedTimeFactor * storedTimeWeight);
+        speedFactor = timeFactor * (1 - storedTimeWeight) + storedTimeWeight;
       }
       diff *= speedFactor;
     } else {
@@ -577,6 +564,10 @@ function gameLoop(diff, options = {}) {
         player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()))
       }
     }
+
+    const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
+    player.realities += uncountabilityGain;
+    player.reality.pp += uncountabilityGain;
 
     if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
       const addedRM = gainedRealityMachines()
@@ -781,6 +772,15 @@ function gameLoop(diff, options = {}) {
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
+
+  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  if (Enslaved.isAutoReleasing && options.gameDiff === undefined) {
+    Enslaved.autoReleaseTick++;
+    if (Enslaved.autoReleaseTick >= 5) {
+      Enslaved.autoReleaseTick = 0;
+      Enslaved.useStoredTime(true);
+    }
+  }
 
   V.checkForUnlocks();
   Laitela.handleMatterDimensionUnlocks();

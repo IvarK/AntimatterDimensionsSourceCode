@@ -93,12 +93,15 @@ function getDimensionFinalMultiplier(tier) {
     tier <= 4 ? Achievement(43) : null,
     tier !== 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
-    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
+    tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null,
+    AlchemyResource.dimensionality
   );
   if (Achievement(77).isEnabled) {
     // Welp, this effect is too complex for Effects system
     multiplier = multiplier.times(1 + tier / 100);
   }
+
+  multiplier = multiplier.times(player.reality.realityMachines.powEffectOf(AlchemyResource.force));
 
   multiplier = multiplier.clampMin(1);
 
@@ -111,6 +114,14 @@ function getDimensionFinalMultiplier(tier) {
 
   multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * laitelaPowMultiplier);
 
+  multiplier = multiplier
+    .powEffectsOf(
+      dimension.infinityUpgrade.chargedEffect,
+      InfinityUpgrade.totalTimeMult.chargedEffect,
+      InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
+      AlchemyResource.power
+    );
+
   if (player.dilation.active) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
@@ -118,19 +129,17 @@ function getDimensionFinalMultiplier(tier) {
   }
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
-  multiplier = multiplier
-    .powEffectsOf(
-      dimension.infinityUpgrade.chargedEffect,
-      InfinityUpgrade.totalTimeMult.chargedEffect,
-      InfinityUpgrade.thisInfinityTimeMult.chargedEffect
-    )
-
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
   } else if (V.isRunning) {
     multiplier = multiplier.pow(0.5);
   } else if (Laitela.isRunning) {
     multiplier = multiplier.pow(Laitela.dimMultNerf);
+  }
+
+  // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
+  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+    multiplier = multiplier.pow(1.05);
   }
 
   return multiplier;

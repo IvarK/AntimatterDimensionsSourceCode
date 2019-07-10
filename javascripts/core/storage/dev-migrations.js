@@ -163,7 +163,7 @@ GameStorage.devMigrations = {
       // The following patch is deeply incompatible with current player object:
       // Patch that changes wormhole => black hole will be applied later in this patch chain
       // (see the warning at the top of this file)
-    
+
       // Following logic from autobuyers (before the addition of wall clock time stats)
       // const speedup = getGameSpeedupFactor([GameSpeedEffect.EC12, GameSpeedEffect.WORMHOLE]);
       // player.thisInfinityRealTime = Time.thisInfinity.totalSeconds / speedup;
@@ -363,14 +363,15 @@ GameStorage.devMigrations = {
     },
     // Ra exp formula changed
     player => {
-      for (const pet of Ra.petList) {
+      const pets = player.celestials.ra.pets;
+      for (const prop in pets) {
+        if (!pets.hasOwnProperty(prop)) continue;
+        const pet = pets[prop];
         const oldExp = pet.exp + 10000 * (Math.pow(1.12, pet.level - 1) - 1) / (0.12);
         pet.level = 1;
-        pet.exp = 0;
-        pet.addExp(Math.clampMin(oldExp, 0));
+        pet.exp = Math.clampMin(oldExp, 0);
       }
       player.celestials.ra.unlocks = [];
-      Ra.checkForUnlocks();
     }
   ],
 
@@ -383,7 +384,7 @@ GameStorage.devMigrations = {
     }
     this.setLatestTestVersion(player);
   },
-  
+
   setLatestTestVersion(player) {
     player.options.testVersion = this.patches.length;
   }

@@ -205,11 +205,6 @@ const Ra = {
       }
     }
   },
-  resetAlchemyResources() {
-    for (const res of AlchemyResources.all) {
-      res.amount = 0;
-    }
-  },
   has(info) {
     return player.celestials.ra.unlocks.includes(info.id);
   },

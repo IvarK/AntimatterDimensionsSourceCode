@@ -21,6 +21,14 @@ Vue.component("reality-glyph-creation", {
       return this.effectCriteriaList().filter(c => c.value).length;
     },
     effectCriteriaList() {
+      const sumOfOtherAlchemyResources = AlchemyResources.all
+        .filter(r => r !== AlchemyResource.reality)
+        .map(r => r.amount)
+        .sum();
+      const highestLevelGlyph = player.reality.glyphs.active
+        .concat(player.reality.glyphs.inventory)
+        .map(glyph => glyph.level)
+        .max();
       return [
         {
           desc: `At least ${shortenSmallInteger(5000)} Reality consumed for this glyph (Currently ` +
@@ -29,8 +37,8 @@ Vue.component("reality-glyph-creation", {
         },
         {
           desc: `${shortenSmallInteger(150000)} total of all other alchemy resources (Currently ` +
-            `${this.sumOfOtherAlchemyResources().toFixed(1)})`,
-          value: this.sumOfOtherAlchemyResources() >= 150000
+            `${sumOfOtherAlchemyResources.toFixed(1)})`,
+          value: sumOfOtherAlchemyResources >= 150000
         },
         {
           desc: `${shorten(1e30, 0, 0)} relic shards (Currently ` +
@@ -39,31 +47,19 @@ Vue.component("reality-glyph-creation", {
         },
         {
           desc: `A glyph with a level of at least ${shortenSmallInteger(12000)}, which is not consumed (highest: ` +
-            `${shortenSmallInteger(this.highestLevelGlyph())})`,
-          value: this.highestLevelGlyph() >= 12000
+            `${shortenSmallInteger(highestLevelGlyph)})`,
+          value: highestLevelGlyph >= 12000
         }
       ];
     },
-    sumOfOtherAlchemyResources() {
-      return AlchemyResources.all
-        .filter(r => r.name !== "Reality")
-        .map(r => r.amount)
-        .sum();
-    },
-    highestLevelGlyph() {
-      return player.reality.glyphs.active
-        .concat(player.reality.glyphs.inventory)
-        .map(glyph => glyph.level)
-        .max();
-    },
     createRealityGlyph() {
       if (!Player.hasFreeInventorySpace) {
-        alert("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
+        Modal.message.show("Inventory is full. Delete/sacrifice (shift-click) some glyphs.");
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(
         { actualLevel: this.realityGlyphLevel, rawLevel: this.realityGlyphLevel }, this.selectedEffects));
-      Ra.resetAlchemyResources();
+      AlchemyResources.resetAmount();
       if (player.celestials.effarig.relicShards >= 1e30) {
         player.celestials.effarig.relicShards -= 1e30;
       }

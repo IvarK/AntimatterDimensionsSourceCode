@@ -165,7 +165,12 @@ const AlchemyResource = (function() {
 
 const AlchemyResources = {
   all: Object.values(AlchemyResource),
-  base: Object.values(AlchemyResource).filter(r => r.isBaseResource)
+  base: Object.values(AlchemyResource).filter(r => r.isBaseResource),
+  resetAmount() {
+    for (const resource of AlchemyResources.all) {
+      resource.amount = 0;
+    }
+  }
 };
 
 const AlchemyReactions = (function() {

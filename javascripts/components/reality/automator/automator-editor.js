@@ -251,6 +251,7 @@ Vue.component("automator-editor", {
           @click="mode = !mode"
         />
       </div>
-      <div class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
+      <div v-show="mode" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
+      <automator-block-editor v-show="!mode" />
     </div>`
 });

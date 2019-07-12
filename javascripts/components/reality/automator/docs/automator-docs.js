@@ -18,6 +18,9 @@ Vue.component("automator-docs", {
         this.$viewModel.tabs.reality.automator.fullScreen = value;
       }
     },
+    mode() {
+      return this.$viewModel.tabs.reality.automator.mode;
+    },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
     }
@@ -37,13 +40,14 @@ Vue.component("automator-docs", {
           @click="fullScreen = !fullScreen"
         />
       </div>
-      <div class="c-automator-docs l-automator-pane__content">
+      <div v-if="mode" class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
           v-if="command === undefined"
           @select="changeCommand"
         />
         <automator-man-page v-else :command="command" />
       </div>
+      <automator-blocks v-else/>
     </div>
   `
 });

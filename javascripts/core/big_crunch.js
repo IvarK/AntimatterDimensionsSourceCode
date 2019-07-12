@@ -49,7 +49,7 @@ function bigCrunchReset() {
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
-  if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
+  if (earlyGame || (challenge && !player.options.retryChallenge)) displayTab("normal-dim-tab");
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);

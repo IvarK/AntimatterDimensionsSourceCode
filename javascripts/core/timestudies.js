@@ -644,7 +644,7 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
-      showRealityTab("glyphstab");
+      displayTab("glyphs-tab");
     }
     player.dilation.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);

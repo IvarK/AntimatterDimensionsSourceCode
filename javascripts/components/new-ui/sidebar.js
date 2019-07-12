@@ -117,6 +117,33 @@ const MAIN_TAB_BUTTONS = [
     class: "reality",
     component: "reality-upgrades-tab",
     condition: () => player.realities > 0,
+    subtabs: [
+      {
+        label: "G",
+        component: "glyphs-tab",
+        condition: () => true
+      },
+      {
+        label: "U",
+        component: "reality-upgrades-tab",
+        condition: () => true
+      },
+      {
+        label: "P",
+        component: "perks-tab",
+        condition: () => true
+      },
+      {
+        label: "A",
+        component: "automator-tab",
+        condition: () => true
+      },
+      {
+        label: "BH",
+        component: "black-hole-tab",
+        condition: () => true
+      }
+    ]
   },
   {
     id: "celestials",
@@ -241,9 +268,6 @@ Vue.component("sidebar", {
     };
   },
   methods: {
-    switchTo(tab) {
-      showTab(tab);
-    },
     update() {
       this.ipVisible = player.infinitied.gt(0);
       this.epVisible = player.eternities > 0;

@@ -65,12 +65,12 @@
             <button id="celestialsbtn" class="tabbtn celestialtabbtn">Celestials</button>
             <button id="shopbtn" class="tabbtn">Shop</button>
         </div>
-        <div id="emptiness" class="tab" style="font-size: 150%">
+        <div id="emptiness" class="tab" style="font-size: 150%; display: none">
             <br> The world has collapsed on itself due to excess of antimatter.
             <br>
             <br>
         </div>
-        <div id="shop" class="tab" style="font-size: 15px" >
+        <div id="shop" class="tab" style="font-size: 15px; display: none" >
             <div align="center">
                 <br>
                 <span id="kongip"> Double your IP gain from all sources. Forever. </span><br>
@@ -91,43 +91,9 @@
                 <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
             </div>
         </div>
-        <game-tab v-show="view.tabs.current && view.tabs.current !== 'reality-tab'" style="flex: 1 0">
+        <game-tab v-show="view.tabs.current" style="flex: 1 0">
             <component :is="view.tabs.current"></component>
         </game-tab>
-        <div id="reality" class="tab" align="center" style="margin-top: 10px;">
-            <br>
-            <div class="l-rm-amount__desc c-rm-amount__desc">
-              You have <span id="rm-amount" class="c-rm-amount">x</span> Reality Machines.
-            </div>
-            <br>
-            <table class="table" align="center" style="margin: auto">
-                <tr>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('glyphstab')">Glyphs</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('upgrades')">Upgrades</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('perks')">Perks</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('automation')">Automation</button></td>
-                    <td><button class="secondarytabbtn" onclick="showRealityTab('blackhole')">Black Hole</button></td>
-                </tr>
-            </table>
-            <div id="glyphstab" class="realitytab">
-              <glyphs-tab></glyphs-tab>
-            </div>
-            <div id="upgrades" class="realitytab" style="display: none;">
-              <reality-upgrades-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'upgrades'"></reality-upgrades-tab>
-            </div>
-            <div id="automation" class="realitytab" style="display: none;">
-              <automator-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'automation'"></automator-tab>
-            </div>
-            <div id="blackhole" class="realitytab" style="display: none;">
-              <black-hole-tab v-if="view.tabs.current === 'reality-tab' && view.tabs.reality.subtab === 'blackhole'"></black-hole-tab>
-            </div>
-            <div id="perks" class="realitytab" style="display: none;">
-                <pp-label></pp-label>
-                <div class="vis-network" tabindex="900" style="position: relative; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
-                    <canvas width="800" height="800" style="position: relative; touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;"></canvas>
-                </div>
-            </div>
-        </div>
     </div>
     <modal-popup v-if="view.modal.current"></modal-popup>
     <modal-glyph-selection v-if="view.modal.glyphSelection"></modal-glyph-selection>
@@ -398,6 +364,7 @@
 
 <script type="text/javascript" src="javascripts/components/reality/reality-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/pp-label.js"></script>
+<script type="text/javascript" src="javascripts/components/reality/perks-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrades-tab.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/upgrades/reality-upgrade-button.js"></script>
 <script type="text/javascript" src="javascripts/components/reality/glyphs/glyphs-tab.js"></script>

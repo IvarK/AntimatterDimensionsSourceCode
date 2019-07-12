@@ -13,27 +13,8 @@ let until10Setting = true;
 
 function showTab(tabName) {
     tryShowtab(tabName);
-    hideLegacyTabs(tabName);
     Modal.hide();
-    if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
-}
-
-function hideLegacyTabs(tabName) {
-  var tabs = document.getElementsByClassName('tab');
-  var tab;
-  for (var i = 0; i < tabs.length; i++) {
-    tab = tabs.item(i);
-    if (tab.id === tabName) {
-      tab.style.display = 'block';
-    } else {
-      tab.style.display = 'none';
-    }
-  }
-  // workaround for Vue mounted issues until reality tab is vue'd
-  if (tabName === "reality") {
-    if (!ui.view.tabs.reality.subtab) ui.view.tabs.reality.subtab = "glyphstab";
-    ui.view.tabs.current = "reality-tab";
-  }
+    if (tabName == "perks-tab") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
 function floatText(tier, text) {
@@ -748,8 +729,6 @@ function gameLoop(diff, options = {}) {
       player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.ttGen()))
     );
 
-  document.getElementById("rm-amount").textContent = shortenDimensions(player.reality.realityMachines);
-
   BlackHoles.updatePhases(blackHoleDiff);
 
   // Code to auto-unlock dilation; 16617 is the cost for buying literally all time studies and unlocking dilation
@@ -960,26 +939,6 @@ setInterval(function() {
 //start scrolling
 scrollNextMessage();
 
-function showRealityTab(tabName) {
-  if (ui.view.tabs.current !== "reality-tab") {
-    showTab("reality")
-    ui.view.tabs.current = "reality-tab";
-  }
-  ui.view.tabs.reality.subtab = tabName;
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('realitytab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-    if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
-}
-
 function init() {
     console.log('init');
 
@@ -1054,8 +1013,10 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  if (isDown) showPerkLabels()
-  else hidePerkLabels()
+  if (ui.view.tabs.reality.subtab == "perks-tab") {
+    if (isDown) showPerkLabels()
+    else hidePerkLabels()
+  }
 }
 
 init();

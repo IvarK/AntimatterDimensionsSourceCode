@@ -2,7 +2,6 @@
 
 let nodes = [];
 let edges = [];
-const nodeContainer = $(".vis-network")[0];
 let nodeData = {};
 let nodeOptions = {};
 let network = null;
@@ -90,6 +89,8 @@ function drawPerkNetwork() {
       updatePerkColors();
       return;
     }
+    console.log('asd')
+    const nodeContainer = $(".vis-network")[0];
     nodes = Perks.all.map(perk => ({ id: perk.id, label: perk.config.label, title: perk.config.description }));
     nodes = new vis.DataSet(nodes);
 

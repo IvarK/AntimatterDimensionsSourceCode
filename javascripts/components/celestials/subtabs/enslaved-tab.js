@@ -16,6 +16,7 @@ Vue.component("enslaved-tab", {
     storedRealEffiency: 0,
     storedRealCap: 0,
     autoRelease: false,
+    autoReleaseSpeed: 0,
     unlocks: [],
     quote: "",
     quoteIdx: 0,
@@ -32,6 +33,9 @@ Vue.component("enslaved-tab", {
     },
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
+    },
+    autoReleaseSpeedup() {
+      return Enslaved.isAutoReleasing ? formatX(this.autoReleaseSpeed, 2, 2) : formatX(0);
     },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
@@ -74,6 +78,7 @@ Vue.component("enslaved-tab", {
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
+      this.autoReleaseSpeed = Enslaved.autoReleaseSpeed;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -172,6 +177,7 @@ Vue.component("enslaved-tab", {
           :value="autoRelease"
           @input="toggleAutoRelease()">
         <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
+        <div>Effective game speed of last auto-released tick: {{ autoReleaseSpeedup }}</div>
       </div>
       <div class="l-enslaved-shop-container">
         <button

@@ -43,6 +43,7 @@ const Enslaved = {
   IMPOSSIBLE_CHALLENGE_EXEMPTIONS: [1, 6, 9],
   ec6c10hintGiven: false,
   autoReleaseTick: 0,
+  autoReleaseSpeed: 0,
   toggleStoreBlackHole() {
     if (this.maxQuoteIdx === 6) player.celestials.enslaved.maxQuotes += 3;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
@@ -105,6 +106,7 @@ const Enslaved = {
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
+    this.autoReleaseSpeed = release / player.options.updateRate / 5;
     player.celestials.enslaved.stored *= autoRelease ? 0.99 : 0;
   },
   has(info) {

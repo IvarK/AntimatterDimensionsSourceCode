@@ -104,8 +104,10 @@ const Laitela = {
     return Math.min(1, Decimal.pLog10(this.matter) / LOG10_MAX_VALUE);
   },
   get realityReward() {
-    const amExponent = player.celestials.laitela.maxAmGained.e;
-    const realityRewardExponent = Math.clamp(Math.log(amExponent / 1e6), 1, Math.sqrt(amExponent / 1e7));
+    return this.rewardMultiplier(player.celestials.laitela.maxAmGained);
+  },
+  rewardMultiplier(num) {
+    const realityRewardExponent = Math.clamp(Math.log(num.log10() / 1e6), 1, Math.sqrt(num.log10() / 1e7));
     let matterDimMult = Math.pow(2, realityRewardExponent);
     if (this.has(LAITELA_UNLOCKS.RM_POW)) {
       matterDimMult = Math.pow(matterDimMult, this.rmRewardPowEffect);

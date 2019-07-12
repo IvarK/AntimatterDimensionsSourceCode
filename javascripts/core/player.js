@@ -352,7 +352,7 @@ let player = {
         powerUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(0)
+      maxAmGained: new Decimal(1)
     }
   },
   autoEcIsOn: true,

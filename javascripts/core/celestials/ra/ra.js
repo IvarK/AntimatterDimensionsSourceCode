@@ -37,12 +37,16 @@ class RaPetState {
   }
 
   // The point of adjustedLevel is to effectively make the level used for the exp calculation scale upward like
-  //  1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, etc.
-  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.
+  //    1, 2, 3, 4, 5, 7, 9, 11, 13, 15, 18, 21, ... , 50
+  // or in other words, every 5 levels the increase-per-level in effective level increases by +1.  This increase
+  // in scaling stops at level 20 because memories effectively get hardcapped via the glyph level hardcap there.
   get requiredExp() {
-    const floor5 = Math.floor(this.level / 5);
-    const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
-    return Math.floor(10000 * Math.pow(1.12, adjustedLevel - 1));
+    if (this.level < 20) {
+      const floor5 = Math.floor(this.level / 5);
+      const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
+      return Math.floor(4000 * Math.pow(1.18, adjustedLevel - 1));
+    }
+    return Math.floor(4000 * Math.pow(1.18, 4 * this.level - 30));
   }
 
   addGainedExp() {
@@ -137,7 +141,7 @@ const Ra = {
       get nextExpBoostFactor() { return Glyphs.activeList.length; }
 
       expFormula(glyphCount) {
-        return Math.pow(1.5, 5 - glyphCount);
+        return Math.pow(1.3, 5 - glyphCount);
       }
     }(),
     enslaved: new class EnslavedRaPetState extends RaPetState {
@@ -361,7 +365,7 @@ const RA_UNLOCKS = {
     requirement: () => Ra.pets.enslaved.level >= 2,
     effect: {
       gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
-      realTimeEfficiency: () => (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 100,
+      realTimeEfficiency: () => Ra.pets.enslaved.level / 50,
       realTimeCap: () => 1000 * 3600 * (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 2,
     }
   },

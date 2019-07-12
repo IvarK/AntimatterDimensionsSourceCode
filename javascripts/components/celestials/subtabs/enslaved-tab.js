@@ -165,7 +165,7 @@ Vue.component("enslaved-tab", {
           />
       </div>
       <br>
-      <div>
+      <div v-if="canAdjustStoredTime">
         <input type="checkbox"
           id="autoReleaseBox"
           v-model="autoRelease"

@@ -67,9 +67,9 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
-    const forcingFactor = this._reagents
-    .map(r => r.resource.amount / 1000)
-    .min() - this._product.amount;
+    const forcingFactor = (this._reagents
+    .map(r => r.resource.amount)
+    .min() - this._product.amount) / 1000;
     const totalYield = this._reagents
       .map(r => r.resource.amount / r.cost)
       .min();
@@ -96,10 +96,6 @@ class AlchemyReaction {
 
   get reactionEfficiency() {
     return this.isReality ? 1 : AlchemyResource.synergism.effectValue;
-  }
-
-  get production() {
-    return Math.floor(100 * this.baseProduction * this.reactionEfficiency) / 100;
   }
 
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not bring

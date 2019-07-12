@@ -372,6 +372,23 @@ GameStorage.devMigrations = {
         pet.exp = Math.clampMin(oldExp, 0);
       }
       player.celestials.ra.unlocks = [];
+    },
+    // Ra exp formula changed again
+    player => {
+      const pets = player.celestials.ra.pets;
+      for (const prop in pets) {
+        if (!pets.hasOwnProperty(prop)) continue;
+        const pet = pets[prop];
+        let oldExp = pet.exp;
+        for (let lv = 1; lv < pet.level; lv++) {
+          const floor5 = Math.floor(lv / 5);
+          const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (lv % 5) * (floor5 + 1);
+          oldExp += Math.floor(10000 * Math.pow(1.12, adjustedLevel - 1));
+        }
+        pet.level = 1;
+        pet.exp = Math.clampMin(oldExp, 0);
+      }
+      player.celestials.ra.unlocks = [];
     }
   ],
 

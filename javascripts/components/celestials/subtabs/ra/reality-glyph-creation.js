@@ -41,9 +41,9 @@ Vue.component("reality-glyph-creation", {
           value: sumOfOtherAlchemyResources >= 150000
         },
         {
-          desc: `${shorten(1e30, 0, 0)} relic shards (Currently ` +
+          desc: `${shorten(1e40, 0, 0)} relic shards (Currently ` +
             `${shorten(player.celestials.effarig.relicShards, 2, 2)})`,
-          value: player.celestials.effarig.relicShards >= 1e30
+          value: player.celestials.effarig.relicShards >= 1e40
         },
         {
           desc: `A glyph with a level of at least ${shortenSmallInteger(12000)}, which is not consumed (highest: ` +

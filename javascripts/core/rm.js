@@ -201,8 +201,11 @@ const GlyphGenerator = {
   generateEffects(type, count, fake) {
     const rng = this.getRNG(fake);
     const effects = [];
-    if (GlyphTypes[type].primaryEffect) effects.push(GlyphTypes[type].primaryEffect);
     const blacklist = [];
+    if (GlyphTypes[type].primaryEffect) {
+      effects.push(GlyphTypes[type].primaryEffect);
+      blacklist.push(GlyphTypes[type].primaryEffect);
+    }
     for (let i = effects.length; i < count; ++i) {
       const effect = GlyphTypes[type].randomEffect(rng, blacklist);
       if (!effect) break;

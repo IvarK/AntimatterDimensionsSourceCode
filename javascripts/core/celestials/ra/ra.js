@@ -399,7 +399,7 @@ const RA_UNLOCKS = {
     reward: "Game speed increases based on current stored time",
     requirement: () => Ra.pets.enslaved.level >= 25
   },
-  MORE_EC_COMPLETION: {
+  MORE_ACHIEVEMENT: {
     id: 18,
     description: "Get V to level 2",
     reward: "Gain extra achievements for free (based on V level)",
@@ -432,11 +432,12 @@ const RA_UNLOCKS = {
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
     }
   },
-  MORE_EC: {
+  TT_ACHIEVEMENT: {
     id: 22,
     description: "Get V to level 15",
-    reward: "ECs can now be completed up to 7 times [unimplemented, needs balancing?]",
-    requirement: () => Ra.pets.v.level >= 15
+    reward: "Achievement multiplier applies to Time Theorem generation",
+    requirement: () => Ra.pets.v.level >= 15,
+    effect: () => Player.achievementPower.toNumber()
   },
   SPACE_THEOREMS: {
     id: 23,

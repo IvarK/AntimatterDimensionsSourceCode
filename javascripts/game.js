@@ -712,7 +712,9 @@ function gameLoop(diff, options = {}) {
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
       if (Enslaved.isRunning) ttGain *= 1e-3;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain * RA_UNLOCKS.TT_BOOST.effect.ttGen());
+      ttGain *= RA_UNLOCKS.TT_BOOST.effect.ttGen();
+      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";

@@ -103,12 +103,13 @@ const GameCache = {
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
+  // This seemingly-random number is in order to match the per-row value of achievements to pre-update values
   achievementPower: new Lazy(() => Decimal.pow(
-    1.5,
+    1.1841138514709035,
     Array.range(1, 14)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
-  )),
+  ).times(Math.pow(1.03, Achievements.effectiveCount))),
 
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 

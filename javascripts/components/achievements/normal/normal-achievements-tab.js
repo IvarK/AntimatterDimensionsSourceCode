@@ -14,7 +14,7 @@ Vue.component("normal-achievements-tab", {
   },
   methods: {
     update() {
-      this.achPower.copyFrom(GameCache.achievementPower.value);
+      this.achPower.copyFrom(GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement")));
       if (player.realities === 0) {
         this.timeUntilNext = 0;
         this.totalDisabledTime = 0;
@@ -36,7 +36,7 @@ Vue.component("normal-achievements-tab", {
     `<div>
       <div
         class="c-achievements-tab__header"
-      >Current achievement multiplier on each Dimension: {{achPower.toFixed(1)}}x</div>
+      >Current achievement multiplier on each Dimension: {{ shorten(achPower, 2, 3) }}x</div>
       <div
         v-if="timeUntilNext > 0"
         class="c-achievements-tab__header"

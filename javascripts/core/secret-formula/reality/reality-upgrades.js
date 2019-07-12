@@ -2,12 +2,15 @@
 
 GameDatabase.reality.upgrades = (function() {
   const rebuyable = props => {
-    props.cost = () => getCostWithLinearCostScaling(
+    props.cost = () => getHybridCostScaling(
       player.reality.rebuyables[props.id],
       1e30,
       props.initialCost,
       props.costMult,
-      props.costMult / 10
+      props.costMult / 10,
+      new Decimal("1e309"),
+      1e3,
+      props.initialCost * props.costMult
     );
     const { effect } = props;
     props.effect = () => Math.pow(effect, player.reality.rebuyables[props.id]);

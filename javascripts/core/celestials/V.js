@@ -63,6 +63,7 @@ const V_UNLOCKS = {
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;
+      if (player.reality.realityMachines.lt(db.rm)) return false;
   
       return true;
     }

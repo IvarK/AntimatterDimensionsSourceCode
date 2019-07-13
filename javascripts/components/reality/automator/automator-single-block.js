@@ -10,7 +10,7 @@ Vue.component("automator-single-block", {
     block: Object,
     updateBlock: Function,
     deleteBlock: Function,
-    lineNumber: Number
+    lineNumber: Number,
   },
   mounted() {
     this.b = this.block

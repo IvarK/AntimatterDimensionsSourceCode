@@ -86,7 +86,7 @@ Vue.component("automator-blocks", {
         id: UIID.next()
       }
 
-      if (block.nested) b.nest = []
+      if (block.nested && !block.nest) b.nest = []
       if (block.targets) b.target = ""
       if (block.hasInput) b.inputValue = ""
       if (block.secondaryTargets) b.secondaryTarget = ""

@@ -368,8 +368,9 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
+        console.log(ctx)
         return {
-          inputValue: ctx.studyList[0],
+          inputValue: ctx.$studies.image,
           ...findAutomatorBlockByName("STUDIES")
         }
       }
@@ -497,7 +498,6 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
-        console.log(ecNumber)
         return () => {
           if (EternityChallenge(ecNumber).isUnlocked) return AutomatorCommandStatus.NEXT_INSTRUCTION;
           return TimeStudy.eternityChallenge(ecNumber).purchase(true)
@@ -506,7 +506,6 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        console.log(ctx)
         return { 
           target: 'EC',
           inputValue: ctx.eternityChallenge[0].children.$ecNumber,

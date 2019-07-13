@@ -360,6 +360,62 @@
     }
   }
 
+  class Blockifier extends BaseVisitor {
+    constructor() {
+      super();
+      for (const cmd of AutomatorCommands) {
+        const blockify = cmd.blockify ? cmd.blockify : ctx => this.defaultBlockify(ctx);
+        const ownMethod = this[cmd.id];
+        // eslint-disable-next-line no-loop-func
+        this[cmd.id] = (ctx, output) => {
+          if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
+          let block = blockify(ctx, this);
+          output.push(block);
+        };
+      }
+      this.validateVisitor();
+    }
+  
+    defaultBlockify(ctx) {
+  
+    }
+  
+    comparison(ctx) {
+      const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
+      const valueChildren = ctx.compareValue[0].children
+      const isDecimalValue = Boolean(valueChildren.$value)
+      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image
+      let operator = ctx.ComparisonOperator[0].image
+      if (flipped) {
+        switch (operator) {
+          case ">": operator = "<"; break;
+          case "<": operator = ">"; break;
+          case ">=": operator = "<="; break;
+          case "<=": operator = ">="; break;
+        }
+      }
+      return {
+        target: ctx.Currency[0].image,
+        secondaryTarget: operator,
+        inputValue: value,
+      }
+    }
+  
+    script(ctx) {
+      const output = [];
+      if (ctx.block) this.visit(ctx.block, output);
+      return output;
+    }
+  
+    block(ctx, output) {
+      if (ctx.command) {
+        for (const cmd of ctx.command) {
+          this.visit(cmd, output);
+        }
+      }
+    }
+  }
+
   function compile(input, validateOnly = false) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
@@ -379,63 +435,21 @@
     };
   }
   AutomatorGrammar.compile = compile;
+
+  function blockifyTextAutomator() {
+    const validator = new Validator();
+    const input = AutomatorUI.documents[ui.view.tabs.reality.automator.editorScriptID].getValue()
+    const lexResult = AutomatorLexer.lexer.tokenize(input);
+    const tokens = lexResult.tokens;
+
+    AutomatorGrammar.parser.input = tokens;
+    const parseResult = AutomatorGrammar.parser.script()
+    validator.visit(parseResult, input)
+    if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
+      const b = new Blockifier()
+      let blocks = b.visit(parseResult)
+      block_automator_lines = blocks
+    }
+  }
+  AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator
 }());
-
-const parser = AutomatorGrammar.parser;
-const BaseVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
-
-class Blockifier extends BaseVisitor {
-  constructor() {
-    super();
-    for (const cmd of AutomatorCommands) {
-      const blockify = cmd.blockify ? cmd.blockify : ctx => this.defaultBlockify(ctx);
-      const ownMethod = this[cmd.id];
-      // eslint-disable-next-line no-loop-func
-      this[cmd.id] = (ctx, output) => {
-        if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
-        let block = blockify(ctx, this);
-        output.push(block);
-      };
-    }
-    this.validateVisitor();
-  }
-
-  defaultBlockify(ctx) {
-
-  }
-
-  comparison(ctx) {
-    const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
-    const valueChildren = ctx.compareValue[0].children
-    const isDecimalValue = Boolean(valueChildren.$value)
-    const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image
-    let operator = ctx.ComparisonOperator[0].image
-    if (flipped) {
-      switch (operator) {
-        case ">": operator = "<"; break;
-        case "<": operator = ">"; break;
-        case ">=": operator = "<="; break;
-        case "<=": operator = ">="; break;
-      }
-    }
-    return {
-      target: ctx.Currency[0].image,
-      secondaryTarget: operator,
-      inputValue: value,
-    }
-  }
-
-  script(ctx) {
-    const output = [];
-    if (ctx.block) this.visit(ctx.block, output);
-    return output;
-  }
-
-  block(ctx, output) {
-    if (ctx.command) {
-      for (const cmd of ctx.command) {
-        this.visit(cmd, output);
-      }
-    }
-  }
-}

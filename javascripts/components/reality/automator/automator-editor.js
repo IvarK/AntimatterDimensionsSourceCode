@@ -187,10 +187,12 @@ Vue.component("automator-editor", {
       this.mode = !this.mode
       if (this.mode) { // Switched to text
         const content = parseLines(block_automator_lines).join("\n")
-        AutomatorBackend.saveScript(ui.view.tabs.reality.automator.editorScriptID, content)
-        AutomatorUI.documents[1].setValue(content)
+        console.log(content)
+        const automatorID = ui.view.tabs.reality.automator.editorScriptID
+        AutomatorBackend.saveScript(automatorID, content)
+        AutomatorUI.documents[automatorID].setValue(content)
       } else {
-        block_automator_lines = blockAutomatorParseFromText(AutomatorUI.documents[1].getValue())
+        AutomatorGrammar.blockifyTextAutomator()
       }
     }
   },

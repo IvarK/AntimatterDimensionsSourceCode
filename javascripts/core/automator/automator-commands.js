@@ -69,6 +69,13 @@ const AutomatorCommands = ((() => {
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          inputValue: ctx.duration ? ctx.duration[0].children.$value : undefined,
+          ...findAutomatorBlockByName('AUTO')
+        }
+      }
     },
     {
       id: "blackHole",
@@ -94,9 +101,16 @@ const AutomatorCommands = ((() => {
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          target: Boolean(ctx.On) ? 'ON' : 'OFF',
+          ...findAutomatorBlockByName('BLACK HOLE')
+        }
+      }
     },
     {
       id: "define",
+      block: null,
       rule: $ => () => {
         $.CONSUME(T.Define);
         $.CONSUME(T.Identifier);
@@ -147,6 +161,15 @@ const AutomatorCommands = ((() => {
           },
           blockCommands: commands,
         };
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        return {
+          nest: commands,
+          ...findAutomatorBlockByName('IF'),
+          ...B.visit(ctx.comparison)
+        }
       }
     },
     {
@@ -178,21 +201,8 @@ const AutomatorCommands = ((() => {
             ? AutomatorCommandStatus.NEXT_INSTRUCTION
             : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
-      }
-    },
-    {
-      id: "pause",
-      rule: $ => () => {
-        $.CONSUME(T.Pause);
       },
-      validate: ctx => {
-        ctx.startLine = ctx.Pause[0].startLine;
-        return true;
-      },
-      compile: () => () => {
-        AutomatorBackend.pause();
-        return AutomatorCommandStatus.NEXT_INSTRUCTION;
-      },
+      blockify: ctx => findAutomatorBlockByName('PAUSE')
     },
     {
       id: "prestige",
@@ -217,6 +227,11 @@ const AutomatorCommands = ((() => {
           prestigeToken.$prestige();
           return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return findAutomatorBlockByName(
+          ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
+        )
       }
     },
     {
@@ -233,6 +248,9 @@ const AutomatorCommands = ((() => {
         if (player.dilation.active) return AutomatorCommandStatus.NEXT_INSTRUCTION;
         if (startDilatedEternity(true)) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
         return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+      }, 
+      blockify: ctx => {
+        return { target: 'DILATION', ...findAutomatorBlockByName('START') }
       }
     },
     {
@@ -258,6 +276,13 @@ const AutomatorCommands = ((() => {
           if (ec.start(true)) return AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION;
           return AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return { 
+          target: 'EC',
+          inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+          ...findAutomatorBlockByName('START') 
+        }
       }
     },
     {
@@ -289,6 +314,12 @@ const AutomatorCommands = ((() => {
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          target: ctx.Use ? "USE" : ( Boolean(ctx.On) ? 'ON' : 'OFF'),
+          ...findAutomatorBlockByName("STORE TIME")
+        }
+      }
     },
     {
       id: "studiesBuy",
@@ -336,6 +367,12 @@ const AutomatorCommands = ((() => {
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
       },
+      blockify: ctx => {
+        return {
+          inputValue: ctx.studyList[0],
+          ...findAutomatorBlockByName("STUDIES")
+        }
+      }
     },
     {
       id: "studiesLoad",
@@ -377,6 +414,12 @@ const AutomatorCommands = ((() => {
           importStudyTree(player.timestudy.presets[presetIndex - 1].studies);
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        return {
+          inputValue: ctx.$presetIndex,
+          ...findAutomatorBlockByName("LOAD")
+        }
       }
     },
     {
@@ -392,7 +435,8 @@ const AutomatorCommands = ((() => {
       compile: () => () => {
         player.respec = true;
         return AutomatorCommandStatus.NEXT_INSTRUCTION;
-      }
+      },
+      blockify: ctx => findAutomatorBlockByName("RESPEC")
     },
     {
       id: "tt",
@@ -410,6 +454,12 @@ const AutomatorCommands = ((() => {
         return () => (buyFunction()
           ? AutomatorCommandStatus.NEXT_INSTRUCTION
           : AutomatorCommandStatus.NEXT_TICK_NEXT_INSTRUCTION);
+      },
+      blockify: ctx => {
+        return {
+          target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
+          ...findAutomatorBlockByName("TT")
+        }
       }
     },
     {
@@ -427,6 +477,12 @@ const AutomatorCommands = ((() => {
         return TimeStudy.dilation.purchase(true)
           ? AutomatorCommandStatus.NEXT_INSTRUCTION
           : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
+      },
+      blockify: ctx => {
+        return { 
+          target: 'DILATION',
+          ...findAutomatorBlockByName('UNLOCK') 
+        }
       }
     },
     {
@@ -441,12 +497,21 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         const ecNumber = ctx.eternityChallenge[0].children.$ecNumber;
+        console.log(ecNumber)
         return () => {
           if (EternityChallenge(ecNumber).isUnlocked) return AutomatorCommandStatus.NEXT_INSTRUCTION;
           return TimeStudy.eternityChallenge(ecNumber).purchase(true)
             ? AutomatorCommandStatus.NEXT_INSTRUCTION
             : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: ctx => {
+        console.log(ctx)
+        return { 
+          target: 'EC',
+          inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+          ...findAutomatorBlockByName('UNLOCK') 
+        }
       }
     },
     {
@@ -484,6 +549,22 @@ const AutomatorCommands = ((() => {
           },
           blockCommands: commands
         };
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        if (ctx.comparison) {
+          return {
+            nest: commands,
+            ...findAutomatorBlockByName('UNTIL'),
+            ...B.visit(ctx.comparison)
+          }
+        }
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          nest: commands,
+          ...findAutomatorBlockByName('UNTIL')
+        }
       }
     },
     {
@@ -501,6 +582,15 @@ const AutomatorCommands = ((() => {
         return () => (evalComparison()
           ? AutomatorCommandStatus.NEXT_INSTRUCTION
           : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION);
+      },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        return {
+          nest: commands,
+          ...findAutomatorBlockByName('WAIT'),
+          ...B.visit(ctx.comparison)
+        }
       }
     },
     {
@@ -523,6 +613,12 @@ const AutomatorCommands = ((() => {
             ? AutomatorCommandStatus.NEXT_INSTRUCTION
             : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
+      },
+      blockify: (ctx, B) => {
+        return {
+          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          ...findAutomatorBlockByName('WAIT')
+        }
       }
     },
     {
@@ -540,6 +636,15 @@ const AutomatorCommands = ((() => {
         return V.checkBlock(ctx, ctx.While);
       },
       compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block)),
-    },
+      blockify: (ctx, B) => {
+        const commands = []
+        B.visit(ctx.block, commands)
+        return {
+          nest: commands,
+          ...findAutomatorBlockByName('WHILE'),
+          ...B.visit(ctx.comparison)
+        }
+      }
+    }
   ];
 })());

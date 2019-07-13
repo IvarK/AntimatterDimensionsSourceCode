@@ -1,27 +1,31 @@
 const automator_blocks = [
   { 
     cmd: 'WAIT',
-    targets: ['IP', 'EP', 'AM', 'TIME', 'REPLICANTI', 'RG', 'TT'],
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP', 'INFINITY', 'ETERNITY', 'REALITY'],
+    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    targetsWithoutInput: ['INFINITY', 'ETERNITY', 'REALITY'],
     hasInput: true
-  } , { 
-    cmd: 'BUY',
-    targets: ['STUDY', 'STUDYUNTIL', 'TTIP', 'TTEP', 'TTAM', 'TTMAX'],
-    hasInput: true,
-    targetsWithoutInput: ['TTMAX']
   }, {
     cmd: 'IF',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'],
     secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
     hasInput: true,
     nested: true
   }, {
     cmd: 'WHILE',
-    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT'],
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP'],
     secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
     hasInput: true,
     nested: true
   }, {
-    cmd: 'GOTO',
+    cmd: 'UNTIL',
+    targets: ['IP', 'EP', 'AM', 'REPLICANTI', 'RG', 'TT', 'DT', 'COMPLETIONS', 'TP', 'INFINITY', 'ETERNITY', 'REALITY'],
+    secondaryTargets: ['=', '<', '>', '>=', '<=', '!='],
+    hasInput: true,
+    targetsWithoutInput: ['INFINITY', 'ETERNITY', 'REALITY'],
+    nested: true
+  }, {
+    cmd: "STUDIES",
     hasInput: true
   }, {
     cmd: 'UNLOCK',
@@ -34,25 +38,39 @@ const automator_blocks = [
     hasInput: true,
     targetsWithoutInput: ['DILATION']
   }, {
-    cmd: 'CHANGE',
-    targets: ['IP-autobuyer', 'EP-autobuyer'],
+    cmd: 'AUTO',
+    targets: ['INFINITY', 'ETERNITY'],
+    hasInput: true
+  }, {
+    cmd: 'TT',
+    targets: ['AM', 'IP', 'EP', 'MAX'],
+  }, {
+    cmd: 'BLACK HOLE',
+    targets: ['ON', 'OFF'],
+  }, {
+    cmd: 'STORE TIME',
+    targets: ['ON', 'OFF', 'USE'],
+  }, {
+    cmd: 'PAUSE',
     hasInput: true
   }, {
     cmd: 'RESPEC'
   }, {
+    cmd: 'INFINITY'
+  }, {
     cmd: 'ETERNITY'
   }, {
-    cmd: 'STOP'
+    cmd: 'REALITY'
   }, {
     cmd: 'LOAD',
     hasInput: true
-  }, {
-    cmd: 'BLOCK',
-    getTargets: () => [], // TODO
-    targets: []
-  },
+  }
 
 ]
+
+function findAutomatorBlockByName(name) {
+  return automator_blocks.find( b => b.cmd == name)
+}
 
 
 Vue.component("automator-blocks", {

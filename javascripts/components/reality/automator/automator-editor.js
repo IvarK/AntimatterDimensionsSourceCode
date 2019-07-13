@@ -32,6 +32,7 @@ const AutomatorUI = {
   }
 };
 
+
 Vue.component("automator-editor", {
   data() {
     return {
@@ -181,6 +182,16 @@ Vue.component("automator-editor", {
         else if (this.isPaused) label += " (Paused)";
       }
       return label;
+    },
+    toggleAutomatorMode() {
+      this.mode = !this.mode
+      if (this.mode) { // Switched to text
+        const content = parseLines(block_automator_lines).join("\n")
+        AutomatorBackend.saveScript(ui.view.tabs.reality.automator.editorScriptID, content)
+        AutomatorUI.documents[1].setValue(content)
+      } else {
+        block_automator_lines = blockAutomatorParseFromText(AutomatorUI.documents[1].getValue())
+      }
     }
   },
   created() {
@@ -248,7 +259,7 @@ Vue.component("automator-editor", {
         <automator-button
           class="l-automator__button--corner"
           :class="modeIconClass"
-          @click="mode = !mode"
+          @click="toggleAutomatorMode()"
         />
       </div>
       <div v-show="mode" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />

@@ -24,6 +24,9 @@ Vue.component("automator-single-block", {
   computed: {
     hasInput() {
       return this.b.hasInput && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
+    },
+    hasSecondaryTargets() {
+      return this.b.hasSecondaryTargets && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
     }
   },
   template:
@@ -34,7 +37,7 @@ Vue.component("automator-single-block", {
         <select v-if="b.targets" @change="updateBlock(block, b.id)" v-model="b.target" class="o-automator-block-input">
           <option v-for="target in b.targets" :value="target">{{ target }}</option>
         </select>
-        <select v-if="b.secondaryTargets" @change="updateBlock(block, b.id)" v-model="b.secondaryTarget" class="o-automator-block-input">
+        <select v-if="hasSecondaryTargets" @change="updateBlock(block, b.id)" v-model="b.secondaryTarget" class="o-automator-block-input">
           <option v-for="target in b.secondaryTargets" :value="target">{{ target }}</option>
         </select>
         <input v-if="hasInput" v-model="b.inputValue" @change="updateBlock(b, b.id)" class="o-automator-block-input"/>

@@ -13,6 +13,7 @@
       super();
       this.validateVisitor();
       this.reset();
+      this.rawText = "";
       // Commands can provide validation hooks; we might also have some here
       for (const cmd of AutomatorCommands) {
         if (!cmd.validate) continue;
@@ -229,8 +230,10 @@
       if (ctx.$cached !== undefined) return ctx.$cached;
       const studiesOut = [];
       for (const sle of ctx.studyListEntry) this.visit(sle, studiesOut);
+      const positionRange = Validator.getPositionRange(ctx);
       ctx.$cached = {
         normal: studiesOut,
+        image: this.rawText.substr(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
         ec: 0
       };
       if (ctx.ECNumber) {
@@ -304,8 +307,9 @@
       return !hadError;
     }
 
-    script(ctx) {
+    script(ctx, rawText) {
       this.reset();
+      this.rawText = rawText;
       if (ctx.block) this.visit(ctx.block);
       ctx.variables = this.variables;
     }
@@ -362,7 +366,7 @@
     parser.input = tokens;    const t1 = Date.now();
     const parseResult = parser.script();
     const validator = new Validator();
-    validator.visit(parseResult);
+    validator.visit(parseResult, input);
     validator.addLexerErrors(lexResult.errors, input);
     validator.addParserErrors(parser.errors, tokens);
     let compiled;
@@ -376,3 +380,62 @@
   }
   AutomatorGrammar.compile = compile;
 }());
+
+const parser = AutomatorGrammar.parser;
+const BaseVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
+
+class Blockifier extends BaseVisitor {
+  constructor() {
+    super();
+    for (const cmd of AutomatorCommands) {
+      const blockify = cmd.blockify ? cmd.blockify : ctx => this.defaultBlockify(ctx);
+      const ownMethod = this[cmd.id];
+      // eslint-disable-next-line no-loop-func
+      this[cmd.id] = (ctx, output) => {
+        if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
+        let block = blockify(ctx, this);
+        output.push(block);
+      };
+    }
+    this.validateVisitor();
+  }
+
+  defaultBlockify(ctx) {
+
+  }
+
+  comparison(ctx) {
+    const flipped = ctx.Currency[0].startOffset > ctx.ComparisonOperator[0].startOffset;
+    const valueChildren = ctx.compareValue[0].children
+    const isDecimalValue = Boolean(valueChildren.$value)
+    const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image
+    let operator = ctx.ComparisonOperator[0].image
+    if (flipped) {
+      switch (operator) {
+        case ">": operator = "<"; break;
+        case "<": operator = ">"; break;
+        case ">=": operator = "<="; break;
+        case "<=": operator = ">="; break;
+      }
+    }
+    return {
+      target: ctx.Currency[0].image,
+      secondaryTarget: operator,
+      inputValue: value,
+    }
+  }
+
+  script(ctx) {
+    const output = [];
+    if (ctx.block) this.visit(ctx.block, output);
+    return output;
+  }
+
+  block(ctx, output) {
+    if (ctx.command) {
+      for (const cmd of ctx.command) {
+        this.visit(cmd, output);
+      }
+    }
+  }
+}

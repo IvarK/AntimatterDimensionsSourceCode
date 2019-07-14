@@ -5,6 +5,10 @@ let block_automator_lines = []
 function parseBlock(block, indentation = 0) {
   let ret = "\t".repeat(indentation) + block.cmd
 
+  ret = ret
+    .replace("LOAD", "STUDIES LOAD PRESET")
+    .replace("RESPEC", "STUDIES RESPEC")
+
   if (block.target) ret += " " + block.target
   if (block.secondaryTarget) ret += " " + block.secondaryTarget
   if (block.inputValue) ret += " " + block.inputValue

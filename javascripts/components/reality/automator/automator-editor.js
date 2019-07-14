@@ -187,10 +187,10 @@ Vue.component("automator-editor", {
       this.mode = !this.mode
       if (this.mode) { // Switched to text
         const content = parseLines(block_automator_lines).join("\n")
-        console.log(content)
         const automatorID = ui.view.tabs.reality.automator.editorScriptID
         AutomatorBackend.saveScript(automatorID, content)
         AutomatorUI.documents[automatorID].setValue(content)
+        AutomatorUI.editor.refresh()
       } else {
         AutomatorGrammar.blockifyTextAutomator()
       }

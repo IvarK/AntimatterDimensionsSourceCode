@@ -370,7 +370,10 @@
         this[cmd.id] = (ctx, output) => {
           if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
           let block = blockify(ctx, this);
-          output.push(block);
+          output.push({
+            ...block,
+            id: UIID.next()
+          });
         };
       }
       this.validateVisitor();

@@ -98,7 +98,7 @@ GameDatabase.challenges.infinity = [
     effect: () => postc8Mult,
     reward: {
       description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
-      effect: () => mult18,
+      effect: () => getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },
     unlockAM: new Decimal("1e28000"),

@@ -262,7 +262,6 @@ function completeReality(force, reset, auto = false) {
 
   //reset global values to avoid a tick of unupdated production
   postc8Mult = new Decimal(0);
-  mult18 = new Decimal(1);
 
   player.sacrificed = new Decimal(0);
 

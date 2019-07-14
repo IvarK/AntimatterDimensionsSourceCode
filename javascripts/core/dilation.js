@@ -19,8 +19,7 @@ function startDilatedEternity(auto) {
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
+  postc8Mult = new Decimal(0);
   setTimeout(function() {
     GameIntervals.gameLoop.start();
   }, 250)

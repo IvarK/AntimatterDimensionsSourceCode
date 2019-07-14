@@ -6286,23 +6286,34 @@ kbd {
 
 .c-automator-blocks {
   width: 100%;
+  padding-bottom: 50px;
 }
 
 .o-automator-command {
-  border: 1px solid gainsboro;
+  border: 1px solid #353535;
   padding: .5rem;
   display: inline-block;
-  background: #de8787;
+  background: #000115;
+  color: #c080ff;
   border-radius: .5rem;
-  width: 6rem;
+  width: 8.5rem;
   user-select: none;
   cursor: grab;
 }
 
+.c-automator-docs .o-automator-command {
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.o-automator-command--ghost {
+  color: red;
+}
+
 .c-automator-command-list {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .c-automator-block-row {
@@ -6328,14 +6339,18 @@ kbd {
 }
 
 .o-automator-block-input {
-  border: 1px solid gainsboro;
+  border: 1px solid #353535;
   padding: .5rem;
   display: inline-block;
-  background: burlywood;
+  background: #000115;
+  color: #007f7f;
   border-radius: .5rem;
-  color: #4F5957;
   font-size: 1.1rem;
   font-family: Typewriter, serif;
+}
+
+input.o-automator-block-input {
+  color: #0f0;
 }
 
 .o-automator-linenumber {

@@ -40,9 +40,8 @@ Vue.component("automator-block-editor", {
   },
   methods: {
     updateBlock(block, id) {
+      this.$set(this.lines, this.lines.findIndex( x => x.id == id), block)
       block_automator_lines = this.lines
-      console.log(this.lines)
-      this.lines[this.lines.findIndex( x => x.id == id)] = block
     },
     deleteBlock(id) {
       let idx = this.lines.findIndex( x => x.id == id)

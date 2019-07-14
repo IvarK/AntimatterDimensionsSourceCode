@@ -19,14 +19,17 @@ Vue.component("automator-single-block", {
     deleteBlockFromNest(id) {
       let idx = this.b.nest.findIndex( x => x.id == id)
       this.b.nest.splice(idx, 1)
-    }
+    },
+    updateBlockFromNest(block, id) {
+      this.$set(this.b.nest, this.b.nest.findIndex( x => x.id == id), block)
+    },
   },
   computed: {
     hasInput() {
       return this.b.hasInput && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
     },
     hasSecondaryTargets() {
-      return this.b.hasSecondaryTargets && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
+      return this.b.secondaryTargets && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
     }
   },
   template:
@@ -49,7 +52,7 @@ Vue.component("automator-single-block", {
             :key="block.id"
             :lineNumber="index"
             :block="block"
-            :updateBlock="updateBlock"
+            :updateBlock="updateBlockFromNest"
             :deleteBlock="deleteBlockFromNest"></automator-single-block>
         </draggable>
     </div>`

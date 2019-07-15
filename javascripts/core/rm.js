@@ -101,9 +101,7 @@ const GlyphGenerator = {
       strength: initialStrength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
-      effects: {
-        pow: GameDatabase.reality.glyphEffects.powerpow.effect(level.actualLevel, initialStrength),
-      },
+      effects: this.makeEffectBitmask(["powerpow"]),
     };
   },
 

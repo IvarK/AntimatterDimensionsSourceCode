@@ -86,6 +86,7 @@ GameStorage.migrations = {
       player.thisInfinityRealTime = player.thisInfinityTime * 100;
       player.thisEternityRealTime = player.thisEternity * 100;
       player.thisRealityRealTime = player.thisReality * 100;
+      player.thisInfinityLastBuyTime = player.thisInfinityTime * 100;
       for (let i = 0; i < 10; i++) {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];

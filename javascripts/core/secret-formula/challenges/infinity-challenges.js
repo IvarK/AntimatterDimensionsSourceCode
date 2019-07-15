@@ -95,7 +95,8 @@ GameDatabase.challenges.infinity = [
     description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
-    effect: () => postc8Mult,
+    effect: () => Decimal.pow(0.8446303389034288,
+      Math.max(0, player.thisInfinityLastBuyTime - player.thisInfinityTime)),
     reward: {
       description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
       effect: () => getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02),

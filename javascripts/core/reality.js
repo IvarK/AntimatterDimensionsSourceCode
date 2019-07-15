@@ -261,7 +261,6 @@ function completeReality(force, reset, auto = false) {
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
-  postc8Mult = new Decimal(0);
 
   player.sacrificed = new Decimal(0);
 
@@ -277,6 +276,7 @@ function completeReality(force, reset, auto = false) {
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
   player.resets = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;

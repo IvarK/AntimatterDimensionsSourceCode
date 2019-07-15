@@ -1063,8 +1063,6 @@ function setShiftKey(isDown) {
   else hidePerkLabels()
 }
 
-var postc8Mult = new Decimal(0)
-
 init();
 
 let tweenTime = 0;

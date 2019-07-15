@@ -223,7 +223,7 @@ function onBuyDimension(tier) {
   if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
 
   player.postC4Tier = tier;
-  postc8Mult = new Decimal(1);
+  player.thisInfinityLastBuyTime = player.thisInfinityTime;
   if (tier !== 8) player.onlyEighthDimensons = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;

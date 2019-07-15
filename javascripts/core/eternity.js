@@ -115,6 +115,7 @@ function initializeResourcesAfterEternity() {
   player.infinitied = new Decimal(0);
   player.bestInfinityTime = 9999999999;
   player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
   player.resets = (player.eternities >= 4) ? 4 : 0;
   player.galaxies = (player.eternities >= 4) ? 1 : 0;

@@ -145,10 +145,20 @@
       }
       const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
       if (isNaN(value)) {
-        this.addError(ctx, "Error parsing time unit");
+        this.addError(ctx, "Error parsing duration");
         return undefined;
       }
       ctx.$value = value;
+      return ctx.$value;
+    }
+
+    xLast(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing multiplier");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
     }
 

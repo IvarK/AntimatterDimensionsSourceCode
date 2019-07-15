@@ -88,7 +88,7 @@ Vue.component("automator-editor", {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
       return "Start automator";
-    }
+    },
   },
   methods: {
     update() {
@@ -134,6 +134,9 @@ Vue.component("automator-editor", {
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
+      if (!this.mode) {
+        this.parseTextFromBlocks()
+      }
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },
@@ -183,14 +186,20 @@ Vue.component("automator-editor", {
       }
       return label;
     },
+    parseTextFromBlocks() {
+      const content = parseLines(block_automator_lines).join("\n")
+      const automatorID = ui.view.tabs.reality.automator.editorScriptID
+      AutomatorBackend.saveScript(automatorID, content)
+      AutomatorUI.documents[automatorID].setValue(content)
+      setTimeout( () => AutomatorUI.editor.refresh(), 10 )
+    },
+    showTextAutomator() {
+      return this.mode || AutomatorBackend.mode == AutomatorMode.RUN
+    },
     toggleAutomatorMode() {
       this.mode = !this.mode
       if (this.mode) { // Switched to text
-        const content = parseLines(block_automator_lines).join("\n")
-        const automatorID = ui.view.tabs.reality.automator.editorScriptID
-        AutomatorBackend.saveScript(automatorID, content)
-        AutomatorUI.documents[automatorID].setValue(content)
-        AutomatorUI.editor.refresh()
+        this.parseTextFromBlocks()
       } else {
         AutomatorGrammar.blockifyTextAutomator()
       }
@@ -264,7 +273,7 @@ Vue.component("automator-editor", {
           @click="toggleAutomatorMode()"
         />
       </div>
-      <div v-show="mode" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
-      <automator-block-editor v-show="!mode" />
+      <div v-show="showTextAutomator()" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
+      <automator-block-editor v-show="!showTextAutomator()" />
     </div>`
 });

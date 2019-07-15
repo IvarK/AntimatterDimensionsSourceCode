@@ -128,6 +128,7 @@ const AutomatorLexer = (() => {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.infinity,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
+    $autobuyerXLastMode: AutoCrunchMode.RELATIVE,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
@@ -136,6 +137,7 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AutoEternityMode.TIME,
+    $autobuyerXLastMode: AutoEternityMode.RELATIVE,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,
     $prestige: () => eternity(false, true),
@@ -227,6 +229,9 @@ const AutomatorLexer = (() => {
 
   createKeyword("Dilation", /dilation/i);
   createKeyword("EC", /ec/i);
+  createKeyword("CharX", /x/i);
+  createKeyword("Last", /last/i);
+
   // We allow ECLiteral to consume lots of digits because that makes error reporting more
   // clear (it's nice to say ec123 is an invalid ec)
   const ECLiteral = createToken({

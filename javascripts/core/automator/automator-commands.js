@@ -44,27 +44,36 @@ const AutomatorCommands = ((() => {
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
-          { ALT: () => $.SUBRULE($.duration) },
+          { ALT: () => $.OR1([
+            { ALT: () => $.SUBRULE($.duration) },
+            { ALT: () => $.SUBRULE($.xLast) },
+          ]) },
         ]);
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && ctx.duration) {
-          V.addError(ctx.duration[0], "auto reality cannot be set to a duration");
+        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xLast)) {
+          V.addError((ctx.duration || ctx.xLast)[0],
+            "auto reality cannot be set to a duration or x last");
           return false;
         }
         return true;
       },
       compile: ctx => {
-        const on = Boolean(ctx.On || ctx.duration);
+        const on = Boolean(ctx.On || ctx.duration || ctx.xLast);
         const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
+        const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
+        const xLastMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXLastMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
           autobuyer.isOn = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
             autobuyer.limit = new Decimal(1e-3 * duration);
+          } else if (xLast !== undefined) {
+            autobuyer.mode = xLastMode;
+            autobuyer.limit = new Decimal(xLast);
           }
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };

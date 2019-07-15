@@ -46,7 +46,10 @@ class RaPetState {
       const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
       return Math.floor(4000 * Math.pow(1.18, adjustedLevel - 1));
     }
-    return Math.floor(4000 * Math.pow(1.18, this.level + 30));
+    if (this.level < 25) {
+      return Math.floor(4000 * Math.pow(1.18, this.level + 30));
+    }
+    return Math.floor(4000 * Math.pow(1.18, 3 * this.level - 20));
   }
 
   addGainedExp() {

@@ -32,9 +32,11 @@ Vue.component("reality-button", {
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
         return `Next at ${shorten(this.nextMachineEP, 0)} EP`;
-      } 
+      }
+      if (this.machinesGained.lt(1e100)) {
         return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
-      
+      }
+      return "";
     },
     formatGlyphLevel() {
       return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent})`;

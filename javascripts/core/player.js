@@ -256,7 +256,7 @@ let player = {
       quoteIdx: 0,
       unlocks: [],
       run: false,
-      bestRunAM: new Decimal(0),
+      bestRunAM: new Decimal(1),
       glyphLevelMult: 1,
       rmMult: 1,
       dtBulk: 1

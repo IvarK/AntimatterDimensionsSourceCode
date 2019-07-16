@@ -106,16 +106,15 @@ const Effarig = {
   },
 
   get glyphEffectAmount() {
-    const counted = new Set();
-    for (const g of Glyphs.activeList) {
-      for (const e in g.effects) counted.add(g.type + e);
-    }
-    return counted.size;
+    // eslint-disable-next-line no-bitwise
+    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
+    return countEffectsFromBitmask(allEffectBitmask);
   },
 
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount));
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+        AlchemyResource.effarig.effectValue;
     }
     return 0;
   },

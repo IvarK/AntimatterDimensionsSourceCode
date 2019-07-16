@@ -65,7 +65,7 @@ Vue.component("statistics-tab", {
       const reality = this.reality;
       reality.isUnlocked = isRealityUnlocked;
       if (isRealityUnlocked) {
-        reality.count = player.realities;
+        reality.count = Math.floor(player.realities);
         reality.best.setFrom(player.bestReality);
         reality.this.setFrom(player.thisReality);
         reality.totalTimePlayed.setFrom(player.totalTimePlayed);

@@ -36,5 +36,9 @@ GameDatabase.reality.glyphSacrifice = [
     id: "effarig",
     effect: () => 2 * Math.log10(player.reality.glyphs.sac.effarig / 1e20 + 1),
     description: amount => `${amount.toFixed(2)}% additional glyph rarity`,
+  }, {
+    id: "reality",
+    effect: () => 1 + Math.sqrt(player.reality.glyphs.sac.reality) / 25,
+    description: amount => `${formatPercents(amount - 1, 2)} increased alchemy yield`,
   }
 ].mapToObject(g => g.id, g => g);

@@ -46,7 +46,7 @@ const GlyphTooltipComponent = {
     type: String,
     strength: Number,
     level: Number,
-    effects: Object,
+    effects: Number,
     id: Number,
     sacrificeReward: {
       type: Number,
@@ -62,10 +62,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     sortedEffects() {
-      return Object.keys(this.effects).map(e => ({
-        id: this.type + e,
-        value: this.effects[e],
-      })).sort((a, b) => GlyphEffectOrder[a.id] - GlyphEffectOrder[b.id]);
+      return getGlyphEffectsFromBitmask(this.effects, this.level, this.strength);
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -89,16 +86,29 @@ const GlyphTooltipComponent = {
     },
     levelText() {
       return this.isLevelCapped
-        ? `Level: ▼${this.levelCap}▼`
-        : `Level: ${this.level}`;
+        ? `Level: ▼${shortenSmallInteger(this.levelCap)}▼`
+        : `Level: ${shortenSmallInteger(this.level)}`;
     },
     levelStyle() {
       return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
     },
     sacrificeText() {
+      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
+        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+        const limitText = this.sacrificeReward === 0
+          ? ` (limit reached)`
+          : ``;
+        return this.onTouchDevice
+          ? `Refine for ${refinementText}${limitText}`
+          : `Can be refined for ${refinementText}${limitText}`;
+      }
+      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
       return this.onTouchDevice
-        ? `Sacrifice for ${shorten(this.sacrificeReward, 2, 2)} power`
-        : `Can be sacrificed for ${shorten(this.sacrificeReward, 2, 2)} power`;
+        ? `Sacrifice for ${powerText}`
+        : `Can be sacrificed for ${powerText}`;
+    },
+    showDeletionText() {
+      return (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) || this.sacrificeReward > 0;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -147,7 +157,7 @@ const GlyphTooltipComponent = {
                    :effect="e.id"
                    :value="e.value"/>
     </div>
-    <div v-if="sacrificeReward > 0"
+    <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
          v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
       {{sacrificeText}}
@@ -204,7 +214,7 @@ Vue.component("glyph-component", {
   },
   computed: {
     hasTooltip() {
-      return this.glyph.effects !== undefined;
+      return this.glyph.effects !== 0;
     },
     typeConfig() {
       return GlyphTypes[this.glyph.type];
@@ -281,7 +291,9 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = glyphSacrificeGain(this.glyph);
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+        ? glyphRefinementGain(this.glyph)
+        : glyphSacrificeGain(this.glyph);
       this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
     },
     moveTooltipTo(x, y) {

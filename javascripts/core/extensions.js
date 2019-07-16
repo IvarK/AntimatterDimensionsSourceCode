@@ -191,6 +191,14 @@ Array.prototype.max = function() {
 };
 
 /**
+ * @returns {number}
+ */
+Array.prototype.min = function() {
+  if (this.length === 0) return 0;
+  return this.reduce((a, b) => Math.min(a, b));
+};
+
+/**
  * @param {function} predicate
  * @returns {number}
  */

@@ -167,6 +167,11 @@ dev.giveGlyph = function(level, rawLevel = level) {
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }, false));
 };
 
+dev.giveRealityGlyph = function(level, rawLevel = level) {
+  if (!Player.hasFreeInventorySpace) return;
+  Glyphs.addToInventory(GlyphGenerator.realityGlyph({ actualLevel: level, rawLevel }, []));
+};
+
 dev.decriminalize = function() {
   player.secretAchievements.delete(23);
   EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);

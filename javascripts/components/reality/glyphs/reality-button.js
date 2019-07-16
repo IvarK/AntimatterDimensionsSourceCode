@@ -36,7 +36,7 @@ Vue.component("reality-button", {
       
     },
     formatGlyphLevel() {
-      return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent}%)`;
+      return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent})`;
     },
     shardsGainedText() {
       return `${this.shorten(this.shardsGained, 2)} Relic ${pluralize("Shard", this.shardsGained)}`;
@@ -44,10 +44,18 @@ Vue.component("reality-button", {
   },
   methods: {
     boostedGain: x => {
-      if (Enslaved.boostReality && Enslaved.realityBoostRatio >= 1) {
-        return Decimal.times(x, Enslaved.realityBoostRatio + 1);
+      if (simulatedRealityCount(false) > 0) {
+        return Decimal.times(x, simulatedRealityCount(false) + 1);
       }
       return x;
+    },
+    percentToNextGlyphLevelText() {
+      const glyphState = getGlyphLevelInputs();
+      let level = glyphState.actualLevel;
+      if (!isFinite(level)) level = 0;
+      return glyphState.capped
+        ? "Capped"
+        : `${Math.min(((level - Math.floor(level)) * 100), 99.9).toFixed(1)}%`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
@@ -66,12 +74,10 @@ Vue.component("reality-button", {
       this.machinesGained = this.boostedGain(gainedRealityMachines());
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
-      this.nextGlyphPercent = percentToNextGlyphLevel();
+      this.nextGlyphPercent = this.percentToNextGlyphLevelText();
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = this.boostedGain(1);
-      this.shardsGained = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST)
-        ? 0
-        : this.boostedGain(Effarig.shardsGained);
+      this.shardsGained = this.boostedGain(Effarig.shardsGained);
       this.expGained = [this.boostedGain(Ra.pets.teresa.gainedExp),
         this.boostedGain(Ra.pets.effarig.gainedExp),
         this.boostedGain(Ra.pets.enslaved.gainedExp),

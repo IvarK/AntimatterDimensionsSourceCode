@@ -280,7 +280,7 @@ const AutomatorCommands = ((() => {
       },
       compile: ctx => {
         if (ctx.Use) return () => {
-          Enslaved.useStoredTime();
+          Enslaved.useStoredTime(false);
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };
         const on = Boolean(ctx.On);

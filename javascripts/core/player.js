@@ -171,6 +171,7 @@ let player = {
     auto: [false, false, false]
   },
   realities: 0,
+  partSimulatedReality: 0,
   thisReality: 0,
   thisRealityRealTime: 0,
   bestReality: 999999999999,
@@ -192,7 +193,8 @@ let player = {
         time: 0,
         replication: 0,
         dilation: 0,
-        effarig: 0
+        effarig: 0,
+        reality: 0
       },
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
@@ -288,6 +290,7 @@ let player = {
       isStoringReal: false,
       storedReal: 0,
       autoStoreReal: false,
+      isAutoReleasing: false,
       storedFraction: 1,
       quoteIdx: 0,
       unlocks: [],
@@ -325,6 +328,11 @@ let player = {
           lastTTPurchased: 0
         }
       },
+      alchemy: Array.repeat(0, 21)
+        .map(() => ({
+          amount: 0,
+          reaction: false
+        })),
       unlocks: [],
       run: false,
       charged: new Set(),

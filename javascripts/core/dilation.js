@@ -101,7 +101,8 @@ function getDilationGainPerSecond() {
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
-      RealityUpgrade(1)
+      RealityUpgrade(1),
+      AlchemyResource.dilation
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
   dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
@@ -157,7 +158,9 @@ function getTachyonReq() {
 
 function dilatedValueOf(value) {
   const log10 = value.log10();
-  const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
+  const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 

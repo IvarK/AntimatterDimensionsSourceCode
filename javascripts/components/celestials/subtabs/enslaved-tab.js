@@ -15,6 +15,7 @@ Vue.component("enslaved-tab", {
     storedReal: 0,
     storedRealEffiency: 0,
     storedRealCap: 0,
+    autoRelease: false,
     unlocks: [],
     quote: "",
     quoteIdx: 0,
@@ -72,6 +73,7 @@ Vue.component("enslaved-tab", {
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
+      this.autoRelease = player.celestials.enslaved.isAutoReleasing;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -83,7 +85,7 @@ Vue.component("enslaved-tab", {
       Enslaved.toggleAutoStoreReal();
     },
     useStored() {
-      Enslaved.useStoredTime();
+      Enslaved.useStoredTime(false);
     },
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
@@ -115,6 +117,9 @@ Vue.component("enslaved-tab", {
     adjustSlider(value) {
       this.storedFraction = value;
       player.celestials.enslaved.storedFraction = value / 1000;
+    },
+    toggleAutoRelease() {
+      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
     },
   },
   template:
@@ -158,6 +163,15 @@ Vue.component("enslaved-tab", {
             :value="storedFraction"
             @input="adjustSlider($event)"
           />
+      </div>
+      <br>
+      <div v-if="canAdjustStoredTime">
+        <input type="checkbox"
+          id="autoReleaseBox"
+          v-model="autoRelease"
+          :value="autoRelease"
+          @input="toggleAutoRelease()">
+        <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
       </div>
       <div class="l-enslaved-shop-container">
         <button

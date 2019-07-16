@@ -19,9 +19,7 @@ Vue.component("secret-achievement", {
     },
     styleObject() {
       if (this.isUnlocked) {
-        return {
-          "background-image": `url(images/s${this.achId}.png)`,
-        };
+        return { "background-position": `-${(this.column - 1) * 104}px -${(this.row - 1) * 104}px` };
       }
       return {};
     },
@@ -29,7 +27,8 @@ Vue.component("secret-achievement", {
       return {
         "o-achievement": true,
         "o-achievement--hidden": !this.isUnlocked,
-        "o-achievement--unlocked": this.isUnlocked
+        "o-achievement--unlocked": this.isUnlocked,
+        "o-achievement--secret": true
       };
     },
     tooltip() {

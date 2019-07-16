@@ -2729,6 +2729,18 @@ screen and (max-width: 480px) {
   border: .2rem solid;
 }
 
+.o-achievement--normal {
+  background-image: url("../images/normal achievements.png");
+}
+
+.o-achievement--cancer {
+  background-image: url("../images/cancer achievements.png");
+}
+
+.o-achievement--secret {
+  background-image: url("../images/secret achievements.png");
+}
+
 .o-achievement--locked {
   background-color: #a3a3a3;
   border-color: #b84b5f;

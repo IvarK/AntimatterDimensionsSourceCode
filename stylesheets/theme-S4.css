@@ -39,6 +39,10 @@ body {
     cursor: url(cursor2.cur), auto !important;
 }
 
+.o-achievement {
+    border-radius: .8rem !important;
+}
+
 * {
 	box-shadow: 1px 1px 1px 0px #9E9E9E;
 }

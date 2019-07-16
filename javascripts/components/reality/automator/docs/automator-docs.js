@@ -23,9 +23,6 @@ Vue.component("automator-docs", {
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
-    },
-    showTextAutomator() {
-      return this.mode || AutomatorBackend.mode == AutomatorMode.RUN
     }
   },
   methods: {
@@ -43,7 +40,7 @@ Vue.component("automator-docs", {
           @click="fullScreen = !fullScreen"
         />
       </div>
-      <div v-if="showTextAutomator" class="c-automator-docs l-automator-pane__content">
+      <div v-if="this.mode" class="c-automator-docs l-automator-pane__content">
         <automator-docs-main-page
           v-if="command === undefined"
           @select="changeCommand"

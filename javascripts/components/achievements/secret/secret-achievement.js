@@ -19,7 +19,7 @@ Vue.component("secret-achievement", {
     },
     styleObject() {
       if (this.isUnlocked) {
-        return { "background-position": `-${(this.column - 1) * 104}px -${3120 + (this.row - 1) * 104}px` };
+        return { "background-position": `-${(this.column - 1) * 104}px -${(this.row - 1) * 104}px` };
       }
       return {};
     },

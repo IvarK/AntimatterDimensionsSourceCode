@@ -6,6 +6,7 @@ Vue.component("reality-button", {
       canReality: false,
       hasRealityStudy: false,
       inTeresaReality: false,
+      inLaitelaReality: false,
       machinesGained: new Decimal(0),
       realityTime: 0,
       glyphLevel: 0,
@@ -31,9 +32,11 @@ Vue.component("reality-button", {
     formatMachineStats() {
       if (this.machinesGained.lt(100)) {
         return `Next at ${shorten(this.nextMachineEP, 0)} EP`;
-      } 
+      }
+      if (this.machinesGained.lt(1e100)) {
         return `${shorten(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
-      
+      }
+      return "";
     },
     formatGlyphLevel() {
       return `Glyph level: ${this.glyphLevel}  (${this.nextGlyphPercent})`;
@@ -87,6 +90,7 @@ Vue.component("reality-button", {
         Ra.has(RA_UNLOCKS.ENSLAVED_UNLOCK),
         Ra.has(RA_UNLOCKS.V_UNLOCK)];
       this.inTeresaReality = Teresa.isRunning;
+      this.inLaitelaReality = Laitela.isRunning;
       this.raExpBoosts = [Ra.isRunning && Ra.has(RA_UNLOCKS.TERESA_XP),
         Ra.isRunning && Ra.has(RA_UNLOCKS.EFFARIG_XP),
         Ra.isRunning && Ra.has(RA_UNLOCKS.ENSLAVED_XP),
@@ -94,11 +98,15 @@ Vue.component("reality-button", {
       const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
         Teresa.runRewardMultiplier,
         Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.money)));
+      const laitelaReward = this.formatScalingMultiplier("Matter dimensions",
+        Laitela.realityReward,
+        Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.money)));
       this.celestialRunText = [teresaReward,
         this.formatPetMemories(Ra.pets.teresa),
         this.formatPetMemories(Ra.pets.effarig),
         this.formatPetMemories(Ra.pets.enslaved),
-        this.formatPetMemories(Ra.pets.v)
+        this.formatPetMemories(Ra.pets.v),
+        laitelaReward
       ];
     },
     handleClick() {
@@ -146,6 +154,7 @@ Vue.component("reality-button", {
           <div v-if="raExpBoosts[1]">{{ celestialRunText[2] }}</div>
           <div v-if="raExpBoosts[2]">{{ celestialRunText[3] }}</div>
           <div v-if="raExpBoosts[3]">{{ celestialRunText[4] }}</div>
+          <div v-if="inLaitelaReality">{{ celestialRunText[5] }}</div>
         </template>
         <template v-else>
           No resources gained

@@ -387,7 +387,6 @@ function randomStuffThatShouldBeRefactored() {
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
   if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
-  if (Laitela.isRunning && player.money.gte(player.celestials.laitela.maxAmGained)) player.celestials.laitela.maxAmGained = player.money;
 }
 
 setInterval(randomStuffThatShouldBeRefactored, 1000);
@@ -711,7 +710,9 @@ function gameLoop(diff, options = {}) {
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
       if (Enslaved.isRunning) ttGain *= 1e-3;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain * RA_UNLOCKS.TT_BOOST.effect.ttGen());
+      ttGain *= RA_UNLOCKS.TT_BOOST.effect.ttGen();
+      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -851,7 +852,8 @@ function simulateTime(seconds, real, fast) {
     for (let i = 0; i < oomVarNames.length; i++) {
       const varName = oomVarNames[i];
       const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      if (player[varName].gt(playerStart[varName])) {
+      // Needs an isFinite check in case it's zero before or afterwards
+      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
         offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` + 
           `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
       }
@@ -877,7 +879,7 @@ function simulateTime(seconds, real, fast) {
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0) {
+      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
         offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
       }
     }

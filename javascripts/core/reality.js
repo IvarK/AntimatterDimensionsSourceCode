@@ -450,7 +450,9 @@ function completeReality(force, reset, auto = false) {
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
     player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) {
+      player.celestials.teresa.bestRunAM = player.money;
+    }
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false;
@@ -475,6 +477,9 @@ function handleCelestialRuns(force) {
 
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
+    if (!force && player.money.gte(player.celestials.laitela.maxAmGained)) {
+      player.celestials.laitela.maxAmGained = player.money;
+    }
   }
 }
 

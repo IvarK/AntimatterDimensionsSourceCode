@@ -161,15 +161,19 @@ const Tickspeed = {
   get current() {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
-      : new Decimal(1000)
-          .timesEffectsOf(
-            Achievement(36),
-            Achievement(45),
-            Achievement(66),
-            Achievement(83)
-          )
-          .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
+      : this.baseValue;
     return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
+  },
+
+  get baseValue() {
+    return new Decimal(1000)
+      .timesEffectsOf(
+        Achievement(36),
+        Achievement(45),
+        Achievement(66),
+        Achievement(83)
+      )
+      .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
   }
 };
 

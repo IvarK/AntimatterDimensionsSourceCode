@@ -83,7 +83,7 @@ Vue.component("statistics-tab", {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
     },
     formatDecimalAmount(value) {
-      return value.gt(1e9) ? shorten(value, 3, 0) : formatWithCommas(value.toNumber());
+      return value.gt(1e9) ? shorten(value, 3, 0) : shortenSmallInteger(value.toNumber());
     },
     formatDecimalResetAmount(value) {
       return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");

@@ -11,7 +11,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   computed: {
     peakIPPMThreshold: function() {
-      return new Decimal("1e100000");
+      return new Decimal("1e100");
     },
     isPeakIPPMVisible: function() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);

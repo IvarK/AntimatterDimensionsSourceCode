@@ -1,7 +1,7 @@
 "use strict";
 
 Vue.component("game-header-eternity-button", {
-  data: function() {
+  data() {
     return {
       isVisible: false,
       type: EPButtonDisplayType.FIRST_TIME,
@@ -18,8 +18,12 @@ Vue.component("game-header-eternity-button", {
     };
   },
   computed: {
-    isGainedEPAmountSmall: function() {
+    isGainedEPAmountSmall() {
       return this.gainedEP.lt(1e6);
+    },
+    peakEPPMThreshold: () => new Decimal("1e100"),
+    isPeakEPPMVisible() {
+      return this.currentEPPM.lte(this.peakEPPMThreshold);
     }
   },
   methods: {
@@ -49,16 +53,16 @@ Vue.component("game-header-eternity-button", {
         player.replicanti.amount.exponent > 20000;
 
       if (player.dilation.active) {
-        this.type = hasNewContent ?
-          EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT :
-          EPButtonDisplayType.DILATION;
+        this.type = hasNewContent
+          ? EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT
+          : EPButtonDisplayType.DILATION;
         this.gainedTachyons.copyFrom(getTachyonGain());
         return;
       }
 
-      this.type = hasNewContent ?
-        EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT :
-        EPButtonDisplayType.NORMAL;
+      this.type = hasNewContent
+        ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
+        : EPButtonDisplayType.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(Time.thisEternity.totalMinutes));
       this.peakEPPM.copyFrom(EPminpeak);
     },
@@ -90,11 +94,13 @@ Vue.component("game-header-eternity-button", {
           <b>I need to become Eternal.</b>
           <br>
         </template>
-        Gain <b>{{shortenDimensions(gainedEP)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b>{{shorten(gainedEP, 2, 0)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
-        {{shortenDimensions(currentEPPM)}} EP/min
-        <br>
-        Peaked at {{shortenDimensions(peakEPPM)}} EP/min
+        <template v-if="isPeakEPPMVisible">
+          {{shorten(currentEPPM, 2, 2)}} EP/min
+          <br>
+          Peaked at {{shorten(peakEPPM, 2, 2)}} EP/min
+        </template>
       </template>
       
       <!-- Challenge -->
@@ -104,7 +110,7 @@ Vue.component("game-header-eternity-button", {
       
       <!-- Dilation -->
       <template v-else-if="type === 3">
-        Gain <b>{{shortenDimensions(gainedEP)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
+        Gain <b>{{shorten(gainedEP, 2, 2)}}</b> Eternity {{ "point" | pluralize(gainedEP) }}.
         <br>
         +{{shortenMoney(gainedTachyons)}} Tachyon {{ "particle" | pluralize(gainedTachyons) }}.
       </template>
@@ -112,7 +118,7 @@ Vue.component("game-header-eternity-button", {
       <!-- New content available -->
       <template v-else-if="type === 4 || type === 5">
         <template v-if="type === 4">
-          Gain <b>{{shortenDimensions(gainedEP)}}</b> EP
+          Gain <b>{{shorten(gainedEP, 2, 2)}}</b> EP
         </template>
         <template v-else>
           Gain <b>{{shortenMoney(gainedTachyons)}}</b> Tachyon {{ "particle" | pluralize(gainedTachyons) }}

@@ -17,7 +17,7 @@ Vue.component("game-header-gamma-display", {
     },
     getGameSpeedupText() {
       if (player.celestials.enslaved.isStoringReal) {
-        return "(γ = 0 | storing real time)";
+        return "Stopped (storing real time)";
       }
       let speedMod = getGameSpeedupFactor();
       let storedTimeText = "";
@@ -26,22 +26,19 @@ Vue.component("game-header-gamma-display", {
           const storedTimeWeight = player.celestials.enslaved.storedFraction;
           speedMod = speedMod * (1 - storedTimeWeight) + storedTimeWeight;
           if (storedTimeWeight !== 0) {
-            storedTimeText = ` | storing ${formatPercents(storedTimeWeight)} game time`;
+            storedTimeText = ` (storing ${formatPercents(storedTimeWeight)})`;
           }
         } else {
           speedMod = 1;
-          storedTimeText = ` | storing game time`;
+          storedTimeText = ` (storing all game time)`;
         }
       }
-      if (Enslaved.isAutoReleasing) {
-        storedTimeText += ` | auto-releasing`;
-      }
       if (speedMod < 10000 && speedMod !== 1) {
-        return `(γ = ${speedMod.toFixed(3)}${storedTimeText})`;
+        return `${speedMod.toFixed(3)}${storedTimeText}`;
       }
-      return `(γ = ${shorten(speedMod, 2)}${storedTimeText})`;
+      return `${shorten(speedMod, 2)}${storedTimeText}`;
     }
   },
   template:
-    `<span>{{gammaDisplay}}</span>`
+    `<span>| Game speed: {{ gammaDisplay }}</span>`
 });

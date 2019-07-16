@@ -23,7 +23,8 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 5 - this._tier + this.dimension.chanceUpgrades + AlchemyResource.unpredictability.effectValue / 100;
+    return 5 - this._tier + this.dimension.chanceUpgrades +
+      Math.floor(100 * AlchemyResource.unpredictability.effectValue);
   }
 
   // In milliseconds

@@ -76,7 +76,7 @@
       { regex: /on(\s|$)|off(\s|$)|dilation(\s|$)|load(\s|$)|respec(\s|$)|nowait(\s|$)/ui, token: "variable-2" },
       { regex: /preset(\s|$)|infinity(\s|$)|eternity(\s|$)|reality(\s|$)|use(\s|$)/ui, token: "variable-2" },
       { regex: /x[\t ]+last(\s|$)/ui, token: "variable-2" },
-      { regex: /am|ip|ep|tt|sec(onds?)?|min(utes?)?|hours?/ui, token: "attribute" },
+      { regex: /am|ip|ep|rm|rg|dt|tp|tt|sec(onds?)?|min(utes?)?|hours?/ui, token: "attribute" },
       { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?\s/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },

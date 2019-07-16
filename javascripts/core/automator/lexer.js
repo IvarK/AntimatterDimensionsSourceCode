@@ -105,6 +105,7 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });
   createInCategory(Currency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
+  createInCategory(Currency, "RM", /rm/i, { $getter: () => player.reality.realityMachines });
   createInCategory(Currency, "Rep", /rep(licanti)?/i, {
     $autocomplete: "rep",
     $getter: () => player.replicanti.amount,

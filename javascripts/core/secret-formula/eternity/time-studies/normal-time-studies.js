@@ -281,7 +281,9 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: () => TimeStudy(123).isBought && !TimeStudy(131).isBought && !TimeStudy(132).isBought,
       requirementV: () => TimeStudy(123).isBought && (TimeStudy(131).isBought || TimeStudy(132).isBought),
-      description: "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger",
+      description: () => (Achievement(138).isEnabled
+      ? "Replicanti galaxies are 50% stronger"
+      : "Replicanti are 10x slower until infinity, but their galaxies are 50% stronger"),
       effect: 0.5
     },
     {

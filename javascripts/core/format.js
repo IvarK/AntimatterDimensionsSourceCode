@@ -63,5 +63,7 @@ function timeDisplayShort(ms) {
 
 const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
 function formatWithCommas(value) {
-  return value.toString().replace(commaRegexp, ",");
+  const decimalPointSplit = value.toString().split(".");
+  decimalPointSplit[0] = decimalPointSplit[0].replace(commaRegexp, ",");
+  return decimalPointSplit.join(".");
 }

@@ -32,12 +32,12 @@ Vue.component("reality-glyph-creation", {
       return [
         {
           desc: `At least ${shortenSmallInteger(5000)} Reality consumed for this glyph (Currently ` +
-            `${AlchemyResource.reality.amount.toFixed(1)})`,
+            `${shortenSmallInteger(AlchemyResource.reality.amount)})`,
           value: AlchemyResource.reality.amount >= 5000
         },
         {
           desc: `${shortenSmallInteger(150000)} total of all other alchemy resources (Currently ` +
-            `${sumOfOtherAlchemyResources.toFixed(1)})`,
+            `${shortenSmallInteger(sumOfOtherAlchemyResources)})`,
           value: sumOfOtherAlchemyResources >= 150000
         },
         {
@@ -60,7 +60,8 @@ Vue.component("reality-glyph-creation", {
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(
         { actualLevel: this.realityGlyphLevel, rawLevel: this.realityGlyphLevel }, this.selectedEffects));
       AlchemyResources.resetAmount();
-      if (player.celestials.effarig.relicShards >= 1e30) {
+      // If the player leaves a choice open, don't spend shards
+      if (player.celestials.effarig.relicShards >= 1e30 && (this.selectedEffects === this.calculateMaxEffects())) {
         player.celestials.effarig.relicShards -= 1e30;
       }
     },

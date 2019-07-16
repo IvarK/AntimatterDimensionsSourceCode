@@ -19,17 +19,7 @@ Vue.component("alchemy-resource-info", {
       return this.resource.isBaseResource;
     },
     reactionText() {
-      if (this.resource === AlchemyResource.reality) return this.realityReactionText;
-      const reagents = this.reaction.reagents
-        .map(r => `${r.cost}${r.resource.symbol}`)
-        .join(" + ");
-      return `${reagents} ➜ ${this.reactionProduction}${this.resource.symbol}`;
-    },
-    realityReactionText() {
-      const reagents = this.reaction.reagents
-        .map(r => r.resource.symbol)
-        .join(" + ");
-      return `${reagents} ➜ ${this.resource.symbol}`;
+      return this.resource.reactionText;
     },
     effectConfig() {
       const resource = this.resource;

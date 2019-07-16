@@ -70,9 +70,13 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
+        const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
+        const on = Boolean(ctx.On);
+        const input = (duration !== undefined) ? duration : (on ? "ON" : "OFF")
+        console.log(ctx)
         return {
           target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
-          inputValue: ctx.duration ? ctx.duration[0].children.$value : undefined,
+          inputValue: input,
           ...findAutomatorBlockByName('AUTO')
         }
       }
@@ -368,7 +372,6 @@ const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        console.log(ctx)
         return {
           inputValue: ctx.$studies.image,
           ...findAutomatorBlockByName("STUDIES")

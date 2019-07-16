@@ -201,7 +201,10 @@ Vue.component("automator-editor", {
       if (this.mode) { // Switched to text
         this.parseTextFromBlocks()
       } else {
-        AutomatorGrammar.blockifyTextAutomator()
+        if (!AutomatorGrammar.blockifyTextAutomator()) {
+          this.mode = !this.mode
+          alert("Automator script has errors, cannot convert to blocks.")
+        }
       }
     }
   },

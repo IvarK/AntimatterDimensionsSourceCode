@@ -2723,11 +2723,22 @@ screen and (max-width: 480px) {
   margin: 0 auto;
   text-align: center;
   font-family: TypeWriter, serif;
-  background-image: url("../images/achievements.png");
   color: black;
   font-size: .8rem;
   user-select: none;
   border: .2rem solid;
+}
+
+.o-achievement--normal {
+  background-image: url("../images/normal achievements.png");
+}
+
+.o-achievement--cancer {
+  background-image: url("../images/cancer achievements.png");
+}
+
+.o-achievement--secret {
+  background-image: url("../images/secret achievements.png");
 }
 
 .o-achievement--locked {

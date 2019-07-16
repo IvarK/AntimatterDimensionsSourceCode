@@ -19,11 +19,6 @@ Vue.component("normal-achievement", {
     },
     styleObject() {
       const id = this.id;
-      if (Theme.current().name === "S4") {
-        return {
-          "background-position": `-${(id % 10 - 1) * 104}px -${1560 + (Math.floor(id / 10) - 1) * 104}px`
-        };
-      }
       return { "background-position": `-${(id % 10 - 1) * 104}px -${(Math.floor(id / 10) - 1) * 104}px` };
     },
     classObject() {
@@ -32,7 +27,9 @@ Vue.component("normal-achievement", {
         "o-achievement--locked": !this.isUnlocked,
         "o-achievement--unlocked": this.isUnlocked && this.isEnabled,
         "o-achievement--disabled": this.isUnlocked && !this.isEnabled,
-        "o-achievement--blink": this.id === 78 && !this.isUnlocked
+        "o-achievement--blink": this.id === 78 && !this.isUnlocked,
+        "o-achievement--normal": Theme.current().name !== "S4",
+        "o-achievement--cancer": Theme.current().name === "S4"
       };
     },
     detailsTooltip() {

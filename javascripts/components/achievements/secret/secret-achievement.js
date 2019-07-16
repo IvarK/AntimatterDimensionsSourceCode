@@ -27,7 +27,8 @@ Vue.component("secret-achievement", {
       return {
         "o-achievement": true,
         "o-achievement--hidden": !this.isUnlocked,
-        "o-achievement--unlocked": this.isUnlocked
+        "o-achievement--unlocked": this.isUnlocked,
+        "o-achievement--secret": true
       };
     },
     tooltip() {

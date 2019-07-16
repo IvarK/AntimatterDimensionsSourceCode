@@ -853,7 +853,8 @@ function simulateTime(seconds, real, fast) {
     for (let i = 0; i < oomVarNames.length; i++) {
       const varName = oomVarNames[i];
       const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      if (player[varName].gt(playerStart[varName])) {
+      // Needs an isFinite check in case it's zero before or afterwards
+      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
         offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` + 
           `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
       }
@@ -879,7 +880,7 @@ function simulateTime(seconds, real, fast) {
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0) {
+      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
         offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
       }
     }

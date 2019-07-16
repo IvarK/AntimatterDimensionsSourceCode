@@ -230,9 +230,10 @@ class TimeSpan {
   }
 
   /**
+   * @param {boolean} useHMS If true, will display times as HH:MM:SS in between a minute and 100 hours.
    * @returns {String}
    */
-  toStringShort() {
+  toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
     if (totalSeconds <= 10) {
       return `${totalSeconds.toFixed(3)} seconds`;
@@ -240,13 +241,21 @@ class TimeSpan {
     if (totalSeconds <= 60) {
       return `${totalSeconds.toFixed(2)} seconds`;
     }
-    if (this.totalHours < 10000) {
-      return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+    if (this.totalHours < 100) {
+      if (useHMS) {
+        return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+      }
+      if (this.totalMinutes < 60) {
+        return `${this.totalMinutes.toFixed(2)} minutes`;
+      }
+      if (this.totalHours < 24) {
+        return `${this.totalHours.toFixed(2)} hours`;
+      }
     }
-    if (this.totalDays < 10000) {
+    if (this.totalDays < 500) {
       return `${this.totalDays.toFixed(2)} days`;
     }
-    return `${shorten(this.totalYears, 3, 0)} years`;
+    return `${shorten(this.totalYears, 3, 2)} years`;
     
     function format(value) {
       const s = value.toString();

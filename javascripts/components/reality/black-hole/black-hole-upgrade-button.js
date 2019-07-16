@@ -14,9 +14,7 @@ Vue.component("black-hole-upgrade-button", {
       const { config } = this;
       return {
         effect: () => config.upgrade.value,
-        formatEffect: value => (value === 0
-          ? "Permanent"
-          : shorten(value, 2, 0))
+        formatEffect: value => this.displayString(value)
       };
     },
     costConfig() {
@@ -36,6 +34,17 @@ Vue.component("black-hole-upgrade-button", {
     update() {
       this.isAffordable = this.config.upgrade.isAffordable && this.config.upgrade.value !== 0;
     },
+    displayString(value) {
+      switch (this.config.upgrade.attribute) {
+        case BlackHoleUpgradeType.power:
+          return `${formatX(value, 2, 2)}`;
+        case BlackHoleUpgradeType.interval:
+        case BlackHoleUpgradeType.duration:
+          return `${TimeSpan.fromSeconds(value).toStringShort(false)}`;
+        default:
+          throw crash("Invalid Black hole attribute");
+      }
+    },
   },
   template: `
     <button
@@ -45,7 +54,7 @@ Vue.component("black-hole-upgrade-button", {
     >
       <description-display :config="config" />
       <effect-display :config="effectConfig" :title="config.effectTitle" />
-      <cost-display :config="costConfig" singular="RM" plural="RM" />
+      <cost-display v-if="config.upgrade.value !== 0" :config="costConfig" singular="RM" plural="RM" />
     </button>
   `
 });

@@ -14,7 +14,7 @@ Vue.component("normal-achievements-tab", {
   },
   methods: {
     update() {
-      this.achPower.copyFrom(GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement")));
+      this.achPower.copyFrom(Player.achievementPower);
       if (player.realities === 0) {
         this.timeUntilNext = 0;
         this.totalDisabledTime = 0;

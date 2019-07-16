@@ -35,7 +35,7 @@ Vue.component("enslaved-tab", {
       return timeDisplayShort(this.storedRealCap);
     },
     autoReleaseSpeedup() {
-      return Enslaved.isAutoReleasing ? formatX(this.autoReleaseSpeed, 2, 2) : formatX(0);
+      return formatX(this.autoReleaseSpeed, 2, 2);
     },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
@@ -78,7 +78,7 @@ Vue.component("enslaved-tab", {
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
-      this.autoReleaseSpeed = Enslaved.autoReleaseSpeed;
+      this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();

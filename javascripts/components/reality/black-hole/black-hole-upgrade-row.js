@@ -15,7 +15,7 @@ Vue.component("black-hole-upgrade-row", {
         upgrade: this.blackHole.intervalUpgrade,
         description: "Reduce the black hole inactive time by 20%",
         effectTitle: "Current interval",
-        formatEffect: value => `${value.toFixed(1)} seconds`
+        formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
     },
     powerConfig() {
@@ -23,7 +23,7 @@ Vue.component("black-hole-upgrade-row", {
         upgrade: this.blackHole.powerUpgrade,
         description: "Make the black hole 35% more powerful",
         effectTitle: "Current power",
-        formatEffect: value => `${value.toFixed(1)}x`
+        formatEffect: value => `${formatX(value, 2, 2)}`
       };
     },
     durationConfig() {
@@ -31,7 +31,7 @@ Vue.component("black-hole-upgrade-row", {
         upgrade: this.blackHole.durationUpgrade,
         description: "Extend the black hole duration by 30%",
         effectTitle: "Current duration",
-        formatEffect: value => `${value.toFixed(1)} seconds`
+        formatEffect: value => `${TimeSpan.fromSeconds(value).toStringShort(false)}`
       };
     }
   },

@@ -580,6 +580,8 @@ GameDatabase.achievements.normal = [
   {
     id: 97,
     name: "Yes. This is hell.",
+    checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     tooltip: "Get the sum of Infinity Challenge times under 6.66 seconds."
   },
   {

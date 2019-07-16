@@ -7,6 +7,7 @@ Vue.component("black-hole-upgrade-button", {
   data() {
     return {
       isAffordable: false,
+      isCapped: false
     };
   },
   computed: {
@@ -14,7 +15,7 @@ Vue.component("black-hole-upgrade-button", {
       const { config } = this;
       return {
         effect: () => config.upgrade.value,
-        formatEffect: value => this.displayString(value)
+        formatEffect: () => config.formatEffect(config.upgrade.value)
       };
     },
     costConfig() {
@@ -33,18 +34,8 @@ Vue.component("black-hole-upgrade-button", {
   methods: {
     update() {
       this.isAffordable = this.config.upgrade.isAffordable && this.config.upgrade.value !== 0;
-    },
-    displayString(value) {
-      switch (this.config.upgrade.attribute) {
-        case BlackHoleUpgradeType.power:
-          return `${formatX(value, 2, 2)}`;
-        case BlackHoleUpgradeType.interval:
-        case BlackHoleUpgradeType.duration:
-          return `${TimeSpan.fromSeconds(value).toStringShort(false)}`;
-        default:
-          throw crash("Invalid Black hole attribute");
-      }
-    },
+      this.isCapped = this.config.upgrade.value === 0;
+    }
   },
   template: `
     <button
@@ -54,7 +45,7 @@ Vue.component("black-hole-upgrade-button", {
     >
       <description-display :config="config" />
       <effect-display :config="effectConfig" :title="config.effectTitle" />
-      <cost-display v-if="config.upgrade.value !== 0" :config="costConfig" singular="RM" plural="RM" />
+      <cost-display v-if="!isCapped" :config="costConfig" singular="RM" plural="RM" />
     </button>
   `
 });

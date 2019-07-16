@@ -480,6 +480,7 @@ function gameLoop(diff, options = {}) {
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
     GameCache.normalDimensionCommonMultiplier.invalidate();
+    GameCache.normalDimensionFinalMultipliers.invalidate();
     GameCache.infinityDimensionCommonMultiplier.invalidate();
     GameCache.timeDimensionCommonMultiplier.invalidate();
     GameCache.totalIPMult.invalidate();
@@ -691,8 +692,6 @@ function gameLoop(diff, options = {}) {
 	// Text on Eternity button
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin;
-
-    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 
     if (TimeStudy.dilation.isBought) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
@@ -1063,9 +1062,6 @@ function setShiftKey(isDown) {
   if (isDown) showPerkLabels()
   else hidePerkLabels()
 }
-
-var postc8Mult = new Decimal(0)
-var mult18 = 1
 
 init();
 

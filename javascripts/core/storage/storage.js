@@ -102,8 +102,6 @@ const GameStorage = {
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
-    postc8Mult = new Decimal(0);
-    mult18 = new Decimal(1);
     IPminpeak = new Decimal(0);
     EPminpeak = new Decimal(0);
 

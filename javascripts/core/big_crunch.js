@@ -108,6 +108,7 @@ function secondSoftReset() {
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
+    player.thisInfinityLastBuyTime = 0;
     player.thisInfinityRealTime = 0;
     player.noEighthDimensions = true;
     player.noSacrifices = true;

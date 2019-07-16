@@ -91,6 +91,10 @@ const GameCache = {
     return normalDimensionCommonMultiplier();
   }),
 
+  // 0 will cause a crash if invoked; this way the tier can be used as an index
+  normalDimensionFinalMultipliers: Array.range(0, 9)
+    .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
+
   infinityDimensionCommonMultiplier: new Lazy(() => {
     return infinityDimensionCommonMultiplier();
   }),
@@ -113,12 +117,16 @@ const GameCache = {
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
-  
+
   realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0))),
-  
+
   baseTimeForAllAchs: new Lazy(() => TimeSpan.fromDays(2).totalMilliseconds * GameCache.realityAchTimeModifier.value)
 };
 
 EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
+
+GameCache.normalDimensionFinalMultipliers.invalidate = function() {
+  for (const x of this) x.invalidate();
+};

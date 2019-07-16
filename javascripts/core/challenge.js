@@ -50,8 +50,6 @@ function updateNormalAndInfinityChallenges(diff) {
     }
   }
 
-  if (InfinityChallenge(8).isRunning) postc8Mult = postc8Mult.times(Math.pow(0.000000046416, diff / 100));
-
   if (NormalChallenge(3).isRunning) {
     player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff / 100)).clampMax(Decimal.MAX_NUMBER);
   }

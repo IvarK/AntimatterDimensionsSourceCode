@@ -49,6 +49,12 @@ function normalDimensionCommonMultiplier() {
 }
 
 function getDimensionFinalMultiplier(tier) {
+  return GameCache.normalDimensionFinalMultipliers[tier].value;
+}
+
+function getDimensionFinalMultiplierUncached(tier) {
+  if (tier < 1 || tier > 8) throw crash(`Invalid tier ${tier}`);
+  if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
   //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
   const dimension = NormalDimension(tier);
 
@@ -217,7 +223,7 @@ function onBuyDimension(tier) {
   if (NormalChallenge(4).isRunning) clearDimensions(tier - 1)
 
   player.postC4Tier = tier;
-  postc8Mult = new Decimal(1);
+  player.thisInfinityLastBuyTime = player.thisInfinityTime;
   if (tier !== 8) player.onlyEighthDimensons = false;
   if (tier !== 1) player.onlyFirstDimensions = false;
   if (tier === 8) player.noEighthDimensions = false;

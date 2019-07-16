@@ -62,6 +62,7 @@ let player = {
   bestInfinityTime: 999999999999,
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
+  thisInfinityLastBuyTime: 0,
   resets: 0,
   galaxies: 0,
   tickDecrease: 0.9,

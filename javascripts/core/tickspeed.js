@@ -73,7 +73,7 @@ function buyTickSpeed() {
   }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   player.totalTickBought++;
-  postc8Mult = new Decimal(1);
+  player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
   GameUI.update();
   return true;
@@ -113,7 +113,7 @@ function buyMaxTickSpeed() {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
       totalTickBought++;
-      postc8Mult = new Decimal(1);
+      player.thisInfinityLastBuyTime = player.thisInfinityTime;
       if (tickSpeedCost.gte(Decimal.MAX_NUMBER) && !inCostScalingChallenge && tickspeedMultDecreaseMaxed) {
         shouldContinue = false;
       }

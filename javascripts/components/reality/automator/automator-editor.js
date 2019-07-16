@@ -194,7 +194,7 @@ Vue.component("automator-editor", {
       setTimeout( () => AutomatorUI.editor.refresh(), 10 )
     },
     showTextAutomator() {
-      return this.mode || AutomatorBackend.mode == AutomatorMode.RUN
+      return this.mode || AutomatorBackend.mode == AutomatorMode.RUN || AutomatorBackend.mode == AutomatorMode.PAUSE
     },
     toggleAutomatorMode() {
       this.mode = !this.mode

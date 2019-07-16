@@ -30,6 +30,15 @@ function parseLines(l, indentation = 0) {
   return lines
 }
 
+function blockIdArray(blocks) {
+  let output = []
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i]
+    output.push(b.id)
+    if (b.nested) output.push(...blockIdArray(b.nest))
+  }
+  return output;
+}
 
 Vue.component("automator-block-editor", {
   data() {

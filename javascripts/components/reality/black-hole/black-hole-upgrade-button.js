@@ -15,7 +15,7 @@ Vue.component("black-hole-upgrade-button", {
       const { config } = this;
       return {
         effect: () => config.upgrade.value,
-        formatEffect: () => config.formatEffect(config.upgrade.value)
+        formatEffect: value => config.formatEffect(value)
       };
     },
     costConfig() {

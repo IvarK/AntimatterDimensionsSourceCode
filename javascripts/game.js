@@ -387,10 +387,6 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
     }
   }
 
-  if (Ra.has(RA_UNLOCKS.GAMESPEED_BOOST)) {
-    factor *= Ra.gamespeedStoredTimeMult();
-  }
-
   factor *= Math.pow(AlchemyResource.momentum.effectValue, Time.thisRealityRealTime.totalMinutes);
 
   factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));

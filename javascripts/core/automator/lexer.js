@@ -130,23 +130,29 @@ const AutomatorLexer = (() => {
     $autobuyer: Autobuyer.infinity,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
     $autobuyerXLastMode: AutoCrunchMode.RELATIVE,
+    $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
     $prestigeLevel: 1,
+    $prestigeCurrency: "IP",
     $studyPath: TimeStudyPath.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AutoEternityMode.TIME,
     $autobuyerXLastMode: AutoEternityMode.RELATIVE,
+    $autobuyerCurrencyMode: AutoEternityMode.AMOUNT,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,
+    $prestigeCurrency: "EP",
     $prestige: () => eternity(false, true),
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
     $autobuyer: Autobuyer.reality,
+    $autobuyerCurrencyMode: AutoRealityMode.RM,
     $prestigeAvailable: () => isRealityAvailable(),
     $prestigeLevel: 3,
+    $prestigeCurrency: "RM",
     $prestige: () => autoReality(),
   });
 

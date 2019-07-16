@@ -162,6 +162,16 @@
       return ctx.$value;
     }
 
+    currencyAmount(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing amount");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
+      return ctx.$value;
+    }
+
     define(ctx) {
       const varName = ctx.Identifier[0].image;
       if (this.variables[varName] !== undefined) {

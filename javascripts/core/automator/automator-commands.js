@@ -47,6 +47,7 @@ const AutomatorCommands = ((() => {
           { ALT: () => $.OR1([
             { ALT: () => $.SUBRULE($.duration) },
             { ALT: () => $.SUBRULE($.xLast) },
+            { ALT: () => $.SUBRULE($.currencyAmount) },
           ]) },
         ]);
       },
@@ -57,14 +58,25 @@ const AutomatorCommands = ((() => {
             "auto reality cannot be set to a duration or x last");
           return false;
         }
+        if (ctx.PrestigeEvent && ctx.currencyAmount) {
+          const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
+          const specified$ = ctx.currencyAmount[0].children.Currency[0].tokenType.name;
+          if (desired$ !== specified$) {
+            V.addError(ctx.currencyAmount, `Currency doesn't match prestige (${desired$} vs ${specified$})`);
+            return false;
+          }
+        }
         return true;
       },
       compile: ctx => {
-        const on = Boolean(ctx.On || ctx.duration || ctx.xLast);
+        const isReality = ctx.PrestigeEvent[0].tokenType === T.Reality;
+        const on = Boolean(ctx.On || ctx.duration || ctx.xLast || ctx.currencyAmount);
         const duration = ctx.duration ? ctx.duration[0].children.$value : undefined;
         const xLast = ctx.xLast ? ctx.xLast[0].children.$value : undefined;
+        const fixedAmount = ctx.currencyAmount ? ctx.currencyAmount[0].children.$value : undefined;
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
         const xLastMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXLastMode;
+        const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
           autobuyer.isOn = on;
@@ -74,6 +86,13 @@ const AutomatorCommands = ((() => {
           } else if (xLast !== undefined) {
             autobuyer.mode = xLastMode;
             autobuyer.limit = new Decimal(xLast);
+          } else if (fixedAmount !== undefined) {
+            autobuyer.mode = fixedMode;
+            if (isReality) {
+              autobuyer.rm = new Decimal(fixedAmount);
+            } else {
+              autobuyer.limit = new Decimal(fixedAmount);
+            }
           }
           return AutomatorCommandStatus.NEXT_INSTRUCTION;
         };

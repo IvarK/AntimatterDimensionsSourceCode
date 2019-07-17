@@ -70,7 +70,7 @@ function maxDimension(tier) {
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.power;
 
-  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return;
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {

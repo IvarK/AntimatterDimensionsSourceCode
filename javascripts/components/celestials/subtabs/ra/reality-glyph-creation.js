@@ -61,8 +61,8 @@ Vue.component("reality-glyph-creation", {
         { actualLevel: this.realityGlyphLevel, rawLevel: this.realityGlyphLevel }, this.selectedEffects));
       AlchemyResources.resetAmount();
       // If the player leaves a choice open, don't spend shards
-      if (player.celestials.effarig.relicShards >= 1e30 && (this.selectedEffects === this.calculateMaxEffects())) {
-        player.celestials.effarig.relicShards -= 1e30;
+      if (player.celestials.effarig.relicShards >= 1e40 && (this.selectedEffects === this.calculateMaxEffects())) {
+        player.celestials.effarig.relicShards -= 1e40;
       }
     },
     formatGlyphEffect(effect) {

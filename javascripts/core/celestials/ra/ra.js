@@ -246,8 +246,17 @@ const Ra = {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
   },
+  entanglementValue(value) {
+    return 100 * Math.clamp((Math.sqrt(value.log10() / 3e8) - 1) / 10, 0, 1);
+  },
   get isRunning() {
     return player.celestials.ra.run;
+  },
+  get isCompressed() {
+    return player.celestials.ra.compression;
+  },
+  get compressionDepth() {
+    return 2;
   },
   get totalCharges() {
     return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));

@@ -154,12 +154,28 @@ function getTachyonReq() {
   );
 }
 
-function dilatedValueOf(value) {
+function dilatedValueOf(value, depth) {
+  if (depth !== undefined) {
+    return recursiveDilation(value, depth);
+  }
+  if (player.dilation.active) {
+    return recursiveDilation(value, 1);
+  }
+  if (Ra.isCompressed) {
+    return recursiveDilation(value, Ra.compressionDepth);
+  }
+  throw crash("Invald dilation depth");
+}
+
+function recursiveDilation(value, depth) {
+  if (depth === 0) {
+    return value;
+  }
   const log10 = value.log10();
   const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
   const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
   const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
-  return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
+  return recursiveDilation(Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty)), depth - 1);
 }
 
 class DilationUpgradeState extends SetPurchasableMechanicState {

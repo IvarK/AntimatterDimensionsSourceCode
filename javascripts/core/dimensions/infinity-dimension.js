@@ -199,7 +199,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active) {
+    if (player.dilation.active || Ra.isCompressed) {
       mult = dilatedValueOf(mult);
     }
 

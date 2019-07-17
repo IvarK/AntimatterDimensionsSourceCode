@@ -120,7 +120,8 @@ const Achievements = {
     const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
       ? Ra.pets.v.level
       : 0;
-    return player.achievements.size + additionalAchievements;
+    const enabledAchievements = Achievements.all.filter(a => a.isEnabled).length;
+    return enabledAchievements + additionalAchievements;
   },
 
   row: row => Array.range(row * 10 + 1, 8).map(Achievement),

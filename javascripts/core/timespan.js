@@ -224,7 +224,7 @@ class TimeSpan {
     addCheckedComponent(this.days, "day");
     addCheckedComponent(this.hours, "hour");
     addCheckedComponent(this.minutes, "minute");
-    addComponent(this.seconds, "second");
+    addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
     return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }

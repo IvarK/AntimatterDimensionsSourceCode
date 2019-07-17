@@ -18,9 +18,11 @@ class AchievementState extends GameMechanicState {
       const currentRowAchTime = Achievements.rowDisabledTime(perkAdjustedRow) / 8;
       if (this.id === 11) return currentRowAchTime;
       return currentRowAchTime + this.previousAchievement.totalDisabledTime;
-    });
-    EventHub.logic.on(GameEvent.REALITY_RESET_AFTER, () => this._totalDisabledTime.invalidate());
-    EventHub.logic.on(GameEvent.PERK_BOUGHT, () => this._totalDisabledTime.invalidate());
+      })
+      .invalidateOn(
+        GameEvent.REALITY_RESET_AFTER,
+        GameEvent.PERK_BOUGHT
+      );
   }
 
   get name() {
@@ -127,8 +129,19 @@ const Achievements = {
 
   rows: (start, count) => Array.range(start, count).map(Achievements.row),
 
+  get defaultDisabledTime() {
+    return TimeSpan.fromDays(2);
+  },
+
   get totalDisabledTime() {
     return Achievement(138).totalDisabledTime;
+  },
+
+  get nextTotalDisabledTime() {
+    if (player.realities === 0) {
+      return Achievements.defaultDisabledTime;
+    }
+    return GameCache.baseTimeForAllAchs.value.times(0.9);
   },
 
   get remainingDisabledTime() {
@@ -141,7 +154,7 @@ const Achievements = {
   },
 
   rowDisabledTime(row) {
-    const baseTimeForAllAchs = GameCache.baseTimeForAllAchs.value;
+    const baseTimeForAllAchs = GameCache.baseTimeForAllAchs.value.totalMilliseconds;
     const PRE_REALITY_ACH_ROWS = 13;
     const baseRowTime = baseTimeForAllAchs / PRE_REALITY_ACH_ROWS;
     const realityModifier = GameCache.realityAchTimeModifier.value;

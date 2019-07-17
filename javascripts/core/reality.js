@@ -91,9 +91,8 @@ const GlyphSelection = {
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records, and will lock your achievements," +
-      " which you will regain over the course of " +
-      `${timeDisplay(Achievements.totalDisabledTime * 0.9)}. ` +
+    confirm("Reality will reset everything except challenge records, and will lock your achievements, " +
+      `which you will regain over the course of ${Achievements.nextTotalDisabledTime}. ` +
       "You will also gain reality machines based on your EP, a glyph with a power level " +
       "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");

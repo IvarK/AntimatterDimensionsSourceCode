@@ -309,6 +309,7 @@ function gainedInfinities() {
 }
 
 setInterval(function() {
+  if (isLocalEnvironment()) return;
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
         //do whatever you need with it

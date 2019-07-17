@@ -239,7 +239,7 @@ function buyOneDimension(tier) {
 
   const cost = dimension.cost;
 
-  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return false;
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -270,7 +270,7 @@ function buyManyDimension(tier) {
   if (!dimension.isAvailable || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
-  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
@@ -298,14 +298,14 @@ function buyAsManyAsYouCanBuy(tier) {
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
 
-  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 10) return false;
+  if (tier === 8 && Enslaved.isRunning && NormalDimension(8).bought >= 1) return buyOneDimension(8);
 
   if (tier < 3 || !NormalChallenge(6).isRunning) {
     player.money = player.money.minus(cost);
   } else {
     NormalDimension(tier - 2).amount = NormalDimension(tier - 2).amount.minus(cost)
   }
-  
+
   dimension.amount = dimension.amount.plus(howMany);
   dimension.bought += howMany;
 
@@ -329,7 +329,7 @@ function buyManyDimensionAutobuyer(tier, bulk) {
   if (!dimension.isAvailable) return false;
   let money = new Decimal(player.money);
   if (money.eq(0)) return false;
-  if (tier === 8 && Enslaved.isRunning) return buyManyDimension(8);
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
   const boughtBefore10 = dimension.boughtBefore10;
   const remainingUntil10 = 10 - boughtBefore10;
   const costMultiplier = dimension.costMultiplier;

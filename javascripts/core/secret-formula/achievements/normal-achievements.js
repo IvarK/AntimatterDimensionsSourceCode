@@ -871,7 +871,7 @@ GameDatabase.achievements.normal = [
       player.dilation.active &&
       player.infinityPoints.exponent >= 28000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: "The active time study path doesn't disable your Replicanti autobuyer."
+    reward: "Removes the downsides from the active and idle time study paths."
   },
   {
     id: 141,

@@ -70,6 +70,8 @@ function maxDimension(tier) {
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.power;
 
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
+
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {
     const lowerTier = NormalDimension(tier - 2);
@@ -307,6 +309,7 @@ function gainedInfinities() {
 }
 
 setInterval(function() {
+  if (isLocalEnvironment()) return;
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
         //do whatever you need with it

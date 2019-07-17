@@ -57,6 +57,7 @@ function replicantiGalaxyAutoToggle(forcestate) {
 
 function getReplicantiInterval(noMod, intervalIn) {
   let interval = intervalIn || player.replicanti.interval;
+  const amount = player.replicanti.amount;
   const preCelestialEffects = Effects.product(
     TimeStudy(62),
     TimeStudy(213),
@@ -65,13 +66,13 @@ function getReplicantiInterval(noMod, intervalIn) {
     RealityUpgrade(23)
   );
   interval = Decimal.divide(interval, preCelestialEffects);
-  if (TimeStudy(133).isBought || (player.replicanti.amount.gt(replicantiCap()) || noMod)) {
+  if ((TimeStudy(133).isBought && !Achievement(138).isEnabled) || (amount.gt(replicantiCap()) || noMod)) {
     interval = interval.times(10);
   }
-  if (player.replicanti.amount.lte(replicantiCap()) || noMod) {
+  if (amount.lte(replicantiCap()) || noMod) {
     if (Achievement(134).isEnabled) interval = interval.divide(2);
   } else {
-    const increases = (player.replicanti.amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
+    const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));

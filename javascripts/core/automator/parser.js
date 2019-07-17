@@ -123,6 +123,17 @@ const AutomatorGrammar = (function() {
         $.CONSUME1(T.NumberLiteral, { LABEL: "lastStudy" });
       });
 
+      $.RULE("xLast", () => {
+        $.CONSUME(T.NumberLiteral);
+        $.CONSUME(T.CharX);
+        $.CONSUME(T.Last);
+      });
+
+      $.RULE("currencyAmount", () => {
+        $.CONSUME(T.NumberLiteral);
+        $.CONSUME(T.Currency);
+      });
+
       // Very important to call this after all the rules have been setup.
       // otherwise the parser may not work correctly as it will lack information
       // derived from the self analysis.

@@ -33,6 +33,16 @@ class Lazy {
   invalidate() {
     this._value = undefined;
   }
+
+  /**
+   * @return {Lazy}
+   */
+  invalidateOn(...events) {
+    for (const event of events) {
+      EventHub.logic.on(event, () => this.invalidate());
+    }
+    return this;
+  }
 }
 
 const GameCache = {
@@ -59,7 +69,6 @@ const GameCache = {
   }),
 
   dimensionMultDecrease: new Lazy(() => {
-    if (Enslaved.isRunning && !NormalChallenge(10).isRunning) return 10;
     return 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward
@@ -119,9 +128,11 @@ const GameCache = {
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
 
-  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0))),
+  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0)))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE),
 
-  baseTimeForAllAchs: new Lazy(() => TimeSpan.fromDays(2).totalMilliseconds * GameCache.realityAchTimeModifier.value)
+  baseTimeForAllAchs: new Lazy(() => Achievements.defaultDisabledTime.times(GameCache.realityAchTimeModifier.value))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE)
 };
 
 EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {

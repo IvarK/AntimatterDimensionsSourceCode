@@ -145,10 +145,30 @@
       }
       const value = parseFloat(ctx.NumberLiteral[0].image) * ctx.TimeUnit[0].tokenType.$scale;
       if (isNaN(value)) {
-        this.addError(ctx, "Error parsing time unit");
+        this.addError(ctx, "Error parsing duration");
         return undefined;
       }
       ctx.$value = value;
+      return ctx.$value;
+    }
+
+    xLast(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing multiplier");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
+      return ctx.$value;
+    }
+
+    currencyAmount(ctx) {
+      if (ctx.$value) return ctx.$value;
+      if (!ctx.NumberLiteral || ctx.NumberLiteral[0].isInsertedInRecovery) {
+        this.addError(ctx, "Missing amount");
+        return undefined;
+      }
+      ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
     }
 
@@ -238,7 +258,7 @@
           this.addError(ctx.Pipe[0], "Missing eternity challenge number");
         }
         const ecNumber = parseFloat(ctx.ECNumber[0].image);
-        if (!Number.isInteger(ecNumber) || ecNumber < 1 || ecNumber > 12) {
+        if (!Number.isInteger(ecNumber) || ecNumber < 0 || ecNumber > 12) {
           this.addError(ctx.ECNumber, `Invalid eternity challenge ID ${ecNumber}`);
         }
         ctx.$cached.ec = ecNumber;
@@ -359,7 +379,7 @@
   function compile(input, validateOnly = false) {
     const lexResult = AutomatorLexer.lexer.tokenize(input);
     const tokens = lexResult.tokens;
-    parser.input = tokens;    const t1 = Date.now();
+    parser.input = tokens;
     const parseResult = parser.script();
     const validator = new Validator();
     validator.visit(parseResult);

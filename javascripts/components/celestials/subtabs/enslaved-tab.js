@@ -11,6 +11,7 @@ Vue.component("enslaved-tab", {
     storedFraction: 0,
     storedTimeSpeedValue: 1,
     inEnslaved: false,
+    completed: false,
     storedBlackHole: 0,
     storedReal: 0,
     storedRealEffiency: 0,
@@ -70,6 +71,7 @@ Vue.component("enslaved-tab", {
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
+      this.completed = Enslaved.isCompleted;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
@@ -201,6 +203,7 @@ Vue.component("enslaved-tab", {
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <div class="o-enslaved-run-box">
           <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
+          <div v-if="completed"><b>(Completed)</b></div>
           <div class="o-enslaved-run-button" @click="startRun">
             <div class="o-enslaved-run-button__sigil fas fa-link" />
             <div v-for="x in 25" class="o-enslaved-run-button__glitch"

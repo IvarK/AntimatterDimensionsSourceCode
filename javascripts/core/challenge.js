@@ -13,19 +13,6 @@ function askChallengeConfirmation(goal) {
   return confirm(message);
 }
 
-function setChallengeTime(id, time) {
-  // Use splice so Vue could track changes
-  player.challenge.normal.bestTimes.splice(id, 1, time);
-  GameCache.challengeTimeSum.invalidate();
-  GameCache.worstChallengeTime.invalidate();
-}
-
-function setInfChallengeTime(id, time) {
-  // Use splice so Vue could track changes
-  player.challenge.infinity.bestTimes.splice(id, 1, time);
-  GameCache.infinityChallengeTimeSum.invalidate();
-}
-
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
     player.money.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
@@ -111,9 +98,14 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.challenge.normal.bestTimes[this.id - 2] > player.thisInfinityTime) {
-      setChallengeTime(this.id - 2, player.thisInfinityTime);
+    const bestTimes = player.challenge.normal.bestTimes;
+    if (bestTimes[this.id - 2] <= player.thisInfinityTime) {
+      return;
     }
+    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
+    bestTimes.splice(this.id - 2, 1, player.thisInfinityTime);
+    GameCache.challengeTimeSum.invalidate();
+    GameCache.worstChallengeTime.invalidate();
   }
 
   exit() {
@@ -230,9 +222,13 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   updateChallengeTime() {
-    if (player.challenge.infinity.bestTimes[this.id - 1] > player.thisInfinityTime) {
-      setInfChallengeTime(this.id - 1, player.thisInfinityTime);
+    const bestTimes = player.challenge.infinity.bestTimes;
+    if (bestTimes[this.id - 1] <= player.thisInfinityTime) {
+      return;
     }
+    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
+    bestTimes.splice(this.id - 1, 1, player.thisInfinityTime);
+    GameCache.infinityChallengeTimeSum.invalidate();
   }
 
   exit() {

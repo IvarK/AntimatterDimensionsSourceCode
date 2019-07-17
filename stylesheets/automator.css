@@ -103,13 +103,15 @@
 }
 
 .c-automator-editor__active-line {
-  background: rgb(25, 10, 44);
+  background: rgb(43, 6, 92);
+  outline: 1px solid rgb(68, 0, 255);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
-  background: rgb(25, 10, 44);
+  background: rgb(43, 6, 92);
   filter: brightness(200%);
+  outline: 1px solid rgb(68, 0, 255);
 }
 
 .c-automator-editor {

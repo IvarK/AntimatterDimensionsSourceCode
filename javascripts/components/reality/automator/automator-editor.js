@@ -7,7 +7,6 @@ const AutomatorUI = {
     mode: "automato",
     lint: "automato",
     lineNumbers: true,
-    styleActiveLine: true,
     theme: "liquibyte",
   },
   documents: {},

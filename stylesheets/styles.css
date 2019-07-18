@@ -508,7 +508,7 @@ button {
   border-color: #00838f;
   color: white;
 }
-    
+
 .t-metro .celestialtabbtn:hover,
 .t-dark-metro .celestialtabbtn:hover,
 .t-inverted-metro .celestialtabbtn:hover,
@@ -524,7 +524,7 @@ button {
   border-color: #d0d0d0;
   color: white;
 }
-  
+
 .t-dark .celestialtabbtn:hover,
 .s6 .celestialtabbtn:hover {
   background-color: #d0d0d0;
@@ -5584,7 +5584,7 @@ kbd {
   transform: translateX(50%) rotate(-60deg) skewY(30deg);
 }
 
-.l-v-unlocks-container li:nth-child(6n+1) { 
+.l-v-unlocks-container li:nth-child(6n+1) {
   margin-left: 1%;
 }
 
@@ -5662,48 +5662,127 @@ kbd {
   position: relative;
 }
 
-.c-ra-pet-experience-inner {
+.l-ra-celestial-tab {
+  display: flex;
+  flex-direction: row;
+  flex-flow: nowrap;
+  justify-content: center;
+}
+
+.c-ra-pet-header {
+  width: 35rem;
+  height: 6rem;
+  padding: 1rem;
+  margin: 2rem auto;
+}
+
+.l-ra-bar-container {
+  margin: 1rem 0 4rem 0;
+  width: 100%;
+  height: 10rem;
+  flex-direction: row;
+  flex-flow: nowrap;
+}
+
+.l-ra-lvl-chevron {
+  position: absolute;
+  top: 0;
+  color: grey;
+}
+
+.c-important-chevron {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: white;
+  z-index: 0;
+}
+
+.l-ra-exp-bar {
+  position: relative;
+  border: 0.2rem solid gainsboro;
+  border-radius: .5rem;
+  width: 80%;
+  margin: 2.5rem 0 2.5rem 0rem;
+  height: 5rem;
+  justify-self: center;
+  z-index: -1;
+}
+
+.l-ra-exp-bar-inner {
+  position: relative;
+  z-index: -1;
   height: 100%;
   background-color: #35d035;
 }
 
-.o-ra-pet-exp-display {
-  vertical-align: super;
-  position: absolute;
-  top: 0;
-  left: calc(50% - 1.6rem);
-}
-
 .l-ra-pet-container {
-  border: .2rem solid gainsboro;
-  background: whitesmoke;
-  width: 35rem;
-  padding: 1rem;
-  border-radius: .5rem;
-  margin: 2rem auto;
-  float: left;
+  flex: 1 1 auto;
 }
 
-.l-ra-unlocks-container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 180rem;
-  justify-content: center;
-  margin: 2rem auto auto;
+.l-ra-non-pets {
+  flex: 0.2 0 30rem;
+  flex-direction: column;
 }
 
-.c-ra-unlock {
-  border: .2rem solid gainsboro;
-  background: whitesmoke;
-  width: 25rem;
-  padding: 1rem;
-  height: 7rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  border-radius: .5rem;
+.l-ra-reality-container {
+  height: 50rem;
+  background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
+  margin: 2.5rem;
+  border-radius: 2rem;
+}
+
+.l-ra-reality-inner {
+  font-family: Typewriter;
+  height: 40rem;
+  margin: 5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  flex: 1 0;
+  justify-content: center;
+}
+
+.l-ra-laitela-unlock {
+  height: 30rem;
+  margin: 2.5rem;
+  background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
+  border-radius: 2rem;
+  flex: 1 0;
+}
+
+.l-ra-laitela-unlock-inner {
+  font-family: Typewriter;
+  height: 20rem;
+  margin: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.l-ra-all-pets-container {
+  flex: 0.7 0 50%;
+  flex-direction: column;
+}
+
+.l-ra-unlock {
+  position: relative;
+  height: 10rem;
+  top: -10rem;
+  left: 82.5%;
+  border: .2rem solid gainsboro;
+  background: #35d035;
+  width: 15%;
+  border-radius: .5rem;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+}
+
+.l-ra-unlock-inner {
+  margin: auto 0.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0;
+  justify-content: center;
 }
 
 .l-ra-alchemy-tab {

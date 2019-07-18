@@ -2,7 +2,7 @@
 
 Vue.component("ra-pet", {
   props: {
-    petConfig: Object
+    petConfig: Object,
   },
   data() {
     return {
@@ -38,19 +38,16 @@ Vue.component("ra-pet", {
       this.level = pet.level;
       this.requiredExp = pet.requiredExp;
       this.expBoost = pet.expBoost;
-    }
+    },
   },
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
-      <h2>{{ pet.name }}</h2>
-      <p>Level {{ level }}</p>
-      <div class="c-ra-pet-experience">
-        <div class="c-ra-pet-experience-inner" :style="styleObject">
-          <b class="o-ra-pet-exp-display">{{ shortenSmallInteger(exp) }}/{{ shortenSmallInteger(requiredExp) }}</b>
-        </div>
+      <div class="c-ra-pet-header">
+        <h2>{{ pet.name }} Lvl. {{ level }}</h2>
+        <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
       </div>
-      <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
-      <div>Memory gain: {{ expBoost.toFixed(2) }}x </div>
+      <ra-bar :petConfig="this.petConfig" />
     </div>
   `
 });
+// <div>Memory gain: {{ expBoost.toFixed(2) }}x </div>

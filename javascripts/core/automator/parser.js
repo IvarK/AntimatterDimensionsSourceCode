@@ -10,6 +10,7 @@ const AutomatorGrammar = (function() {
       super(AutomatorLexer.tokens, {
         recoveryEnabled: true,
         outputCst: true,
+        nodeLocationTracking: "full",
       });
 
       // eslint-disable-next-line consistent-this

@@ -57,4 +57,8 @@ Modal.message.show = function(text, callback, closeButton = false) {
   ui.view.modal.callback = callback;
   ui.view.modal.closeButton = closeButton;
   ui.view.modal.current = "modal-message";
+  // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
+  // TODO: remove this console.log
+  // eslint-disable-next-line no-console
+  console.log(`Modal mesasge: ${text}`);
 };

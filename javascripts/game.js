@@ -155,7 +155,7 @@ function playerInfinityUpgradesOnEternity() {
 }
 
 function breakInfinity() {
-  if (!Autobuyer.infinity.hasMaxedInterval) return false;
+  if (!Autobuyer.bigCrunch.hasMaxedInterval) return false;
   if (InfinityChallenge.isRunning) return false;
   player.break = !player.break;
   EventHub.dispatch(player.break ? GameEvent.FIX_INFINITY : GameEvent.BREAK_INFINITY);
@@ -476,7 +476,7 @@ function gameLoop(diff, options = {}) {
         if (Autobuyer.tickTimer > autobuyerInterval) {
           Autobuyer.tickTimer = autobuyerInterval;
         }
-        Autobuyer.tick();
+        Autobuyers.tick();
       }
     }
     // We do these after autobuyers, since it's possible something there might
@@ -800,7 +800,7 @@ function gameLoop(diff, options = {}) {
 function gameLoopWithAutobuyers(seconds, ticks, real) {
   for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
     gameLoop(1000 * seconds)
-    Autobuyer.tick();
+    Autobuyers.tick();
     if (real)
       console.log(ticksDone)
   }
@@ -839,7 +839,7 @@ function simulateTime(seconds, real, fast) {
         // As in gameLoopWithAutobuyers, we run autoBuyerTick after every game tick
         // (it doesn't run in gameLoop).
         gameLoop(1000 * realTickTime, {blackHoleSpeedup: blackHoleSpeedup});
-        Autobuyer.tick();
+        Autobuyers.tick();
       }
     }
       

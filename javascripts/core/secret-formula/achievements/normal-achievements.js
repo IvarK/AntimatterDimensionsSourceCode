@@ -306,8 +306,7 @@ GameDatabase.achievements.normal = [
     id: 61,
     name: "Bulked up",
     tooltip: "Get all of your Dimension bulk buyers to 512 or higher.",
-    checkRequirement: () => Autobuyer.allDims
-        .countWhere(a => a.isUnlocked && a.bulk >= 512) === DIMENSION_COUNT
+    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.isUnlocked || a.bulk < 512) === 0
   },
   {
     id: 62,

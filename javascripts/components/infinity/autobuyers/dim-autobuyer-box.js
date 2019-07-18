@@ -60,7 +60,7 @@ Vue.component("dim-autobuyer-box", {
   },
   computed: {
     autobuyer() {
-      return Autobuyer.dim(this.tier);
+      return Autobuyer.dimension(this.tier);
     },
     boxSetup() {
       const name = DISPLAY_NAMES[this.tier];

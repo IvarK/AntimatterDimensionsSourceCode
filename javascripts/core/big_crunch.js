@@ -296,7 +296,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
-    Autobuyer.infinity.bumpLimit(mult);
+    Autobuyer.bigCrunch.bumpLimit(mult);
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();

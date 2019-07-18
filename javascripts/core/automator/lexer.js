@@ -127,7 +127,7 @@ const AutomatorLexer = (() => {
   // eternity will be triggered by something waiting for reality, for example.
   createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
     extraCategories: [StudyPath],
-    $autobuyer: Autobuyer.infinity,
+    $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
     $autobuyerXLastMode: AutoCrunchMode.RELATIVE,
     $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,

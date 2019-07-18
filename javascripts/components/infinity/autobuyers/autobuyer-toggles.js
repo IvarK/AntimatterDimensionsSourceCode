@@ -41,8 +41,8 @@ Vue.component("autobuyer-toggles", {
   },
   methods: {
     update() {
-      this.hasAdditionalCrunchModes = Autobuyer.infinity.hasAdditionalModes;
-      this.autoCrunchMode = Autobuyer.infinity.mode;
+      this.hasAdditionalCrunchModes = Autobuyer.bigCrunch.hasAdditionalModes;
+      this.autoCrunchMode = Autobuyer.bigCrunch.mode;
       this.hasAdditionalEternityModes = Autobuyer.eternity.hasAdditionalModes;
       this.autoEternityMode = Autobuyer.eternity.mode;
       this.isAutoRealityUnlocked = Autobuyer.reality.isUnlocked;
@@ -53,7 +53,7 @@ Vue.component("autobuyer-toggles", {
     `<div class="l-autobuyer-toggles">
       <primary-button
         class="o-primary-btn--autobuyer-toggle"
-        onclick="toggleAutobuyers()"
+        onclick="Autobuyers.toggle()"
       >Enable/disable autobuyers</primary-button>
       <primary-button-on-off-custom
         v-model="options.bulkOn"
@@ -64,7 +64,7 @@ Vue.component("autobuyer-toggles", {
       <primary-button
         v-if="hasAdditionalCrunchModes"
         class="o-primary-btn--autobuyer-toggle"
-        onclick="Autobuyer.infinity.toggleMode();"
+        onclick="Autobuyer.bigCrunch.toggleMode();"
       >Auto crunch mode: {{autoCrunchModeDisplay}}</primary-button>
       <primary-button
         v-if="hasAdditionalEternityModes"

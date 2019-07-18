@@ -9,7 +9,7 @@ Vue.component("big-crunch-autobuyer-box", {
   },
   computed: {
     autobuyer() {
-      return Autobuyer.infinity;
+      return Autobuyer.bigCrunch;
     },
     boxSetup() {
       return new AutobuyerBoxSetup("Automatic Big Crunch", this.autobuyer);

@@ -53,6 +53,11 @@ let player = {
   infinity: {
     upgradeBits: 0
   },
+  /*auto: {
+    dimensions: Array.range(0, 8).map(() => ({
+      isUnlocked: false,
+    }))
+  },*/
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),

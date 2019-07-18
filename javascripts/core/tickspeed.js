@@ -186,7 +186,7 @@ const FreeTickspeed = {
   get amount() {
     return player.totalTickGained;
   },
-  
+
   get softcap() {
     let softcap = FreeTickspeed.BASE_SOFTCAP;
     if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
@@ -228,12 +228,19 @@ const FreeTickspeed = {
     const derivativeOfBoughtToCost = x => FreeTickspeed.GROWTH_EXP * costFormulaCoefficient * Math.pow(
       Math.max(x, 0), FreeTickspeed.GROWTH_EXP - 1) + 1;
     const newtonsMethod = bought => bought - (boughtToCost(bought) - desiredCost) / derivativeOfBoughtToCost(bought);
-    let oldApproximation = -1;
-    let approximation = Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP);
-    while (Math.abs(approximation - oldApproximation) >= 1e-9) {
+    let oldApproximation;
+    let approximation = Math.min(
+      desiredCost,
+      Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP)
+    );
+    let counter = 0;
+    // The bought formula is concave upwards. We start with an over-estimate; when using newton's method,
+    // this means that successive iterations are also over-etimates. Thus, we can just check for continued
+    // progress with the approximation < oldApproximation check. The counter is a fallback.
+    do {
       oldApproximation = approximation;
       approximation = newtonsMethod(approximation);
-    }
+    } while (approximation < oldApproximation && ++counter < 100);
     const purchases = Math.floor(approximation);
     // This undoes the function we're implicitly applying to costs (the "+ 1") is because we want
     // the cost of the next upgrade.
@@ -243,4 +250,5 @@ const FreeTickspeed = {
       nextShards: next,
     };
   }
+
 };

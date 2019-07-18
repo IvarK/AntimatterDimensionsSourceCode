@@ -1004,7 +1004,7 @@ GameDatabase.news = [
   {
     id: "c1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
-    condition: () => player.money.e = 15
+    condition: () => player.money.e === 15
   },
   {
     id: "c2",

@@ -190,7 +190,10 @@ Vue.component("automator-editor", {
   },
   mounted() {
     this.$refs.container.appendChild(AutomatorUI.container);
-    this.$nextTick(() => AutomatorUI.editor.refresh());
+    this.$nextTick(() => {
+      AutomatorUI.editor.refresh();
+      AutomatorUI.editor.performLint();
+    });
   },
   beforeDestroy() {
     if (this.activeLine > 0) {

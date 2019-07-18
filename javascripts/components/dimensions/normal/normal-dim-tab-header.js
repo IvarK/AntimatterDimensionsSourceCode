@@ -19,7 +19,7 @@ Vue.component("normal-dim-tab-header", {
   },
   methods: {
     update() {
-      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.isAffordable;

@@ -30,6 +30,7 @@ function sacrificeReset(auto) {
 }
 
 function sacrificeBtnClick() {
+  if (!Sacrifice.isUnlocked || !Sacrifice.isAffordable) return false;
   if (player.options.confirmations.sacrifice) {
     if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
       return false;

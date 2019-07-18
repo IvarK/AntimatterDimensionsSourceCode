@@ -35,7 +35,7 @@ Vue.component("infinity-dim-row", {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
     hardcapPurchases() {
-      return this.shortenCosts(this.hardcap);
+      return this.shorten(this.hardcap, 1, 1);
     },
     capTooltip() {
       return this.isCapped

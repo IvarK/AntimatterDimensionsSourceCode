@@ -5702,7 +5702,7 @@ kbd {
   border: 0.2rem solid gainsboro;
   border-radius: .5rem;
   width: 80%;
-  margin: 2.5rem 0rem 2.5rem 0rem;
+  margin: 2.5rem 0 2.5rem 0;
   height: 5rem;
   justify-self: center;
   z-index: -1;

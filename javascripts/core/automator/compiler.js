@@ -27,11 +27,20 @@
     addLexerErrors(errors, input) {
       for (const err of errors) {
         this.errors.push({
+          startLine: err.line,
           startOffset: err.offset,
           endOffset: err.offset + err.length,
           info: `Unexpected characters "${input.substr(err.offset, err.length)}"`,
         });
       }
+    }
+
+    static combinePositionRanges(r1, r2) {
+      return {
+        startLine: Math.min(r1.startLine, r2.startLine),
+        startOffset: Math.min(r1.startOffset, r2.startOffset),
+        endOffset: Math.max(r1.endOffset, r2.endOffset),
+      };
     }
 
     addParserErrors(errors, tokens) {
@@ -57,26 +66,22 @@
       }
     }
 
-    static combinePositionRanges(r1, r2) {
-      return {
-        startOffset: Math.min(r1.startOffset, r2.startOffset),
-        endOffset: Math.max(r1.endOffset, r2.endOffset),
-      };
-    }
-
-    // Chevrotain doesn't provide position ranges for higher level grammar constructs yet
-    // We have to recursively figure out the range so we can highlight an error
     static getPositionRange(ctx) {
       let pos = {
+        startLine: Number.MAX_VALUE,
         startOffset: Number.MAX_VALUE,
         endOffset: 0,
       };
       if (ctx === undefined || ctx === null) return pos;
       if (ctx.startOffset !== undefined) {
         return {
+          startLine: ctx.startLine,
           startOffset: ctx.startOffset,
           endOffset: ctx.endOffset,
         };
+      }
+      if (ctx.location !== undefined && ctx.location.startOffset !== undefined) {
+        return ctx.location;
       }
       if (ctx.children && !Array.isArray(ctx.children)) return Validator.getPositionRange(ctx.children);
       if (Array.isArray(ctx)) {

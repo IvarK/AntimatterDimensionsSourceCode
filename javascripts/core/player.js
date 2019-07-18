@@ -113,7 +113,7 @@ let player = {
   totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
-  autoSacrifice: 1,
+  autoSacrifice: 5,
   replicanti: {
     amount: new Decimal(0),
     unl: false,

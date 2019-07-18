@@ -317,7 +317,7 @@ function completeReality(force, reset, auto = false) {
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
   if (!isRUPG10Bought) {
-    player.autoSacrifice = 1;
+    player.autoSacrifice = 5;
   }
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;

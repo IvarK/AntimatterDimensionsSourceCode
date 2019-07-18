@@ -145,7 +145,7 @@ function initializeResourcesAfterEternity() {
   player.noEighthDimensions = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
   if (player.eternities < 7 && !Achievement(133).isEnabled) {
-    player.autoSacrifice = 1;
+    player.autoSacrifice = 5;
   }
 }
 

@@ -183,4 +183,8 @@ class AutobuyerState {
     Autobuyer.checkIntervalAchievements();
     GameUI.update();
   }
+
+  get hasInterval() {
+    return true;
+  }
 }

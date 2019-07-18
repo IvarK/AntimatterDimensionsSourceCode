@@ -43,7 +43,7 @@ Vue.component("autobuyer-box", {
       return this.setup.autobuyer;
     },
     hasInterval() {
-      return (this.autobuyer instanceof AutobuyerState);
+      return this.autobuyer.hasInterval;
     }
   },
   methods: {

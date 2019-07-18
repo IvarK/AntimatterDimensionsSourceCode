@@ -53,11 +53,74 @@ let player = {
   infinity: {
     upgradeBits: 0
   },
-  /*auto: {
-    dimensions: Array.range(0, 8).map(() => ({
+  auto: {
+    dimensions: Array.range(0, 8).map(tier => ({
       isUnlocked: false,
-    }))
-  },*/
+      cost: 1,
+      interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
+      bulk: 1,
+      mode: AutobuyerMode.BUY_10,
+      priority: 1,
+      isActive: true,
+      lastTick: 0
+    })),
+    tickspeed: {
+      isUnlocked: false,
+      cost: 1,
+      interval: 5000,
+      mode: AutobuyerMode.BUY_SINGLE,
+      priority: 1,
+      isActive: true,
+      lastTick: 0
+    },
+    dimBoost: {
+      cost: 1,
+      interval: 8000,
+      buyMax: {
+        interval: 1,
+        dimBoosts: 1,
+        galaxies: 10
+      },
+      isActive: false,
+      lastTick: 0
+    },
+    galaxy: {
+      cost: 1,
+      interval: 150000,
+      maxGalaxies: 1,
+      buyMaxInterval: 0,
+      isActive: false,
+      lastTick: 0
+    },
+    bigCrunch: {
+      cost: 1,
+      interval: 300000,
+      mode: AutoCrunchMode.AMOUNT,
+      amount: 1,
+      time: 1,
+      relative: 1,
+      isActive: false,
+      lastTick: 0
+    },
+    sacrifice: {
+      multiplier: 5,
+      isActive: false,
+      lastTick: 0
+    },
+    eternity: {
+      mode: AutoEternityMode.AMOUNT,
+      amount: 1,
+      time: 1,
+      relative: 1,
+      isActive: false
+    },
+    reality: {
+      mode: AutoRealityMode.RM,
+      rm: new Decimal(0),
+      glyph: 0,
+      isActive: false
+    }
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),

@@ -7,8 +7,8 @@ const Autobuyers = (function() {
       Autobuyer.tickspeed,
       Autobuyer.dimboost,
       Autobuyer.galaxy,
-      Autobuyer.sacrifice,
       Autobuyer.bigCrunch,
+      Autobuyer.sacrifice,
       Autobuyer.eternity,
       Autobuyer.reality
     ]);

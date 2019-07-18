@@ -389,6 +389,9 @@ GameStorage.devMigrations = {
         pet.exp = Math.clampMin(oldExp, 0);
       }
       player.celestials.ra.unlocks = [];
+    },
+    player => {
+      GameStorage.migrations.renameMoney(player);
     }
   ],
 

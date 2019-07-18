@@ -97,10 +97,10 @@ Vue.component("reality-button", {
         Ra.isRunning && Ra.has(RA_UNLOCKS.V_XP)];
       const teresaReward = this.formatScalingMultiplier("Glyph sacrifice",
         Teresa.runRewardMultiplier,
-        Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.money)));
+        Math.max(Teresa.runRewardMultiplier, Teresa.rewardMultiplier(player.antimatter)));
       const laitelaReward = this.formatScalingMultiplier("Matter dimensions",
         Laitela.realityReward,
-        Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.money)));
+        Math.max(Laitela.realityReward, Laitela.rewardMultiplier(player.antimatter)));
       this.celestialRunText = [teresaReward,
         this.formatPetMemories(Ra.pets.teresa),
         this.formatPetMemories(Ra.pets.effarig),

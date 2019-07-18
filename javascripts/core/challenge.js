@@ -15,7 +15,7 @@ function askChallengeConfirmation(goal) {
 
 function tryUnlockInfinityChallenges() {
   while (player.postChallUnlocked < 8 &&
-    player.money.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
+    player.antimatter.gte(InfinityChallenge(player.postChallUnlocked + 1).config.unlockAM)) {
     ++player.postChallUnlocked;
     if (player.eternities > 6) {
       InfinityChallenge(player.postChallUnlocked).complete();
@@ -30,8 +30,8 @@ function updateNormalAndInfinityChallenges(diff) {
       player.matter = player.matter
         .times(Decimal.pow((1.03 + player.resets / 200 + player.galaxies / 100), diff / 100));
     }
-    if (player.matter.gt(player.money) && NormalChallenge(11).isRunning) {
-      Modal.message.show(`Your ${shorten(player.money, 2, 2)} antimatter was annhiliated by ` +
+    if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
+      Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +
         `${shorten(player.matter, 2, 2)} matter.`);
       softReset(0);
     }

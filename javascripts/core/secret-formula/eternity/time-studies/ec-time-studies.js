@@ -66,7 +66,7 @@ GameDatabase.eternity.timeStudies.ec = [
     cost: 115,
     requirement: {
       resource: "antimatter",
-      current: () => player.money,
+      current: () => player.antimatter,
       required: completions => new Decimal("1e300000").pow(completions).times("1e500000"),
       formatValue: value => shorten(value, 0, 0)
     }

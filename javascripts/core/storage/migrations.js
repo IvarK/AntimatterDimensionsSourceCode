@@ -114,6 +114,7 @@ GameStorage.migrations = {
       GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
+      GameStorage.migrations.renameMoney(player);
     }
   },
 
@@ -396,6 +397,13 @@ GameStorage.migrations = {
     delete player.postC3Reward;
   },
 
+  renameMoney(player) {
+    player.antimatter = new Decimal(player.money);
+    player.totalAntimatter = new Decimal(player.totalmoney);
+    delete player.money;
+    delete player.totalmoney;
+  },
+
   uniformDimensions(player) {
     for (let tier = 1; tier <= 8; tier++) {
       const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
@@ -449,7 +457,7 @@ GameStorage.migrations = {
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge
-    saveData.totalmoney = saveData.totalmoney || saveData.money;
+    saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
     saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
     saveData.version = saveData.version || 0;
   },

@@ -37,7 +37,7 @@ Vue.component("statistics-tab", {
   },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.totalmoney);
+      this.totalAntimatter.copyFrom(player.totalAntimatter);
       this.resets = player.resets;
       this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
@@ -74,7 +74,7 @@ Vue.component("statistics-tab", {
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
       }
-      this.matterScale = MatterScale.estimate(player.money);
+      this.matterScale = MatterScale.estimate(player.antimatter);
     },
     formatAmount(value) { 
       return value > 1e18 ? shorten(value, 3, 0) : formatWithCommas(value);

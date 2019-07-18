@@ -28,7 +28,7 @@ Vue.component('challenges-header', {
         Object.keys(player.eternityChalls).length > 0;
       this.isECTabUnlocked = isECTabUnlocked;
       const isICTabUnlocked = isECTabUnlocked ||
-        player.money.gte(new Decimal("1e2000")) ||
+        player.antimatter.gte(new Decimal("1e2000")) ||
         player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;

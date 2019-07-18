@@ -91,7 +91,7 @@ function eternity(force, auto, specialConditions = {}) {
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   applyRealityUpgrades();
-  resetMoney();
+  resetAntimatter();
 
   EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
   return true;

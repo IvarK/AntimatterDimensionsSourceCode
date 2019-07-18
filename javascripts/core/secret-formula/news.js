@@ -1004,7 +1004,7 @@ GameDatabase.news = [
   {
     id: "c1",
     text: "You just made your 1,000,000,000,000,000 antimatter. This one tastes like chicken",
-    condition: () => player.money.e === 15
+    condition: () => player.antimatter.e === 15
   },
   {
     id: "c2",
@@ -1046,7 +1046,7 @@ GameDatabase.news = [
   {
     id: "c9",
     text: "Antimatter ice cream stand has recently opened- they have octillions of flavors!",
-    condition: () => player.totalmoney.e >= 27
+    condition: () => player.totalAntimatter.e >= 27
   },
   {
     id: "c10",
@@ -1204,7 +1204,7 @@ GameDatabase.news = [
     text:
       "If you wrote down 3 numbers a second, it would take you less time to write down your antimatter " +
       "amount than it would Hevipelle to update the game",
-    condition: () => player.money.gt("1e100000")
+    condition: () => player.antimatter.gt("1e100000")
   },
   {
     id: "c30",
@@ -1284,7 +1284,7 @@ GameDatabase.news = [
   {
     id: "c44",
     text: "Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.",
-    condition: () => player.totalmoney.e >= 3e6 
+    condition: () => player.totalAntimatter.e >= 3e6 
   },
   {
     id: "c45",
@@ -1399,7 +1399,7 @@ GameDatabase.news = [
     id: "j2",
     text: "Legend says the ninth dimension is supposed to be found here, but I don't see anything.",
     condition: () =>
-      player.money.e >= 41900 &&
+      player.antimatter.e >= 41900 &&
       !player.replicanti.unl &&
       player.eternities === 0 &&
       player.realities === 0

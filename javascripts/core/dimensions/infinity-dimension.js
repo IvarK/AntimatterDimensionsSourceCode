@@ -288,7 +288,7 @@ const InfinityDimensions = {
   unlockNext() {
     if (InfinityDimension(8).isUnlocked) return;
     const next = InfinityDimensions.next();
-    if (!Perk.bypassIDAntimatter.isBought && player.money.lt(next.requirement)) return;
+    if (!Perk.bypassIDAntimatter.isBought && player.antimatter.lt(next.requirement)) return;
     next.isUnlocked = true;
     EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, next.tier);
   },
@@ -315,7 +315,7 @@ function tryUnlockInfinityDimensions() {
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either
-    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.money)) break;
+    if (!Perk.bypassIDAntimatter.isBought && InfinityDimension(tier).requirement.gt(player.antimatter)) break;
     InfinityDimension(tier).isUnlocked = true;
     EventHub.dispatch(GameEvent.INFINITY_DIMENSION_UNLOCKED, tier);
     if (player.infDimBuyers[tier - 1] &&

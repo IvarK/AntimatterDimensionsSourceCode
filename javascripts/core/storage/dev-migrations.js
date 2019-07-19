@@ -390,9 +390,7 @@ GameStorage.devMigrations = {
       }
       player.celestials.ra.unlocks = [];
     },
-    player => {
-      GameStorage.migrations.renameMoney(player);
-    }
+    GameStorage.migrations.renameMoney
   ],
 
   patch(player) {

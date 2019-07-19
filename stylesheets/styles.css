@@ -4667,7 +4667,7 @@ screen and (max-width: 480px) {
 }
 
 .l-modal {
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);

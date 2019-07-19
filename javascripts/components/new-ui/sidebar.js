@@ -42,7 +42,7 @@ const MAIN_TAB_BUTTONS = [
         component: "infinity-challenges-tab",
         condition: () => (player.challenge.eternity.unlocked !== 0 ||
         Object.keys(player.eternityChalls).length > 0) ||
-        player.money.gte(new Decimal("1e2000")) ||
+        player.antimatter.gte(new Decimal("1e2000")) ||
         player.postChallUnlocked > 0,
       },
       {

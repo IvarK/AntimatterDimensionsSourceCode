@@ -362,7 +362,7 @@ function completeReality(force, reset, auto = false) {
     2: 0,
     3: 0
   };
-  player.money = Effects.max(
+  player.antimatter = Effects.max(
     10,
     Perk.startAM1,
     Perk.startAM2
@@ -449,8 +449,8 @@ function completeReality(force, reset, auto = false) {
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
     player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) {
-      player.celestials.teresa.bestRunAM = player.money;
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
+      player.celestials.teresa.bestRunAM = player.antimatter;
     }
   }
   if (Effarig.isRunning) {
@@ -476,8 +476,8 @@ function handleCelestialRuns(force) {
 
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
-    if (!force && player.money.gte(player.celestials.laitela.maxAmGained)) {
-      player.celestials.laitela.maxAmGained = player.money;
+    if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
+      player.celestials.laitela.maxAmGained = player.antimatter;
     }
   }
 }

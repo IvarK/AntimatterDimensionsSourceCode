@@ -130,7 +130,7 @@ function rewardTP() {
 // Returns the TP that would be gained this run
 function getTP() {
   let tachyon = Decimal
-    .pow(Decimal.log10(player.money) / 400, 1.5)
+    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
   if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
   return tachyon;

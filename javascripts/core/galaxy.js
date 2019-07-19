@@ -110,7 +110,7 @@ class Galaxy {
   static get canBeBought() {
     if (EternityChallenge(6).isRunning && !Enslaved.isRunning) return false;
     if (NormalChallenge(8).isRunning || InfinityChallenge(7).isRunning) return false;
-    return player.break || player.money.lt(Decimal.MAX_NUMBER);
+    return player.break || player.antimatter.lt(Decimal.MAX_NUMBER);
   }
 
   static get costScalingStart() {

@@ -25,11 +25,11 @@ Vue.component("normal-dim-tab-progress-bar", {
       };
       const challenge = NormalChallenge.current || InfinityChallenge.current;
       if (challenge) {
-        setProgress(player.money, challenge.goal, "Percentage to challenge goal");
+        setProgress(player.antimatter, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
-        setProgress(player.money, Decimal.MAX_NUMBER, "Percentage to Infinity");
+        setProgress(player.antimatter, Decimal.MAX_NUMBER, "Percentage to Infinity");
       } else if (!InfinityDimension(8).isUnlocked) {
-        setProgress(player.money, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
+        setProgress(player.antimatter, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
       } else {
         setProgress(
           player.infinityPoints,

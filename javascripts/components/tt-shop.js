@@ -84,7 +84,7 @@ Vue.component("tt-shop", {
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
       this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
-      budget.am.copyFrom(player.money);
+      budget.am.copyFrom(player.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
       budget.ep.copyFrom(player.eternityPoints);
       const costs = this.costs;

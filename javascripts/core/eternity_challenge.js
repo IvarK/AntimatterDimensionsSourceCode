@@ -17,7 +17,7 @@ function startEternityChallenge() {
   if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
   kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
-  resetMoney();
+  resetAntimatter();
   playerInfinityUpgradesOnEternity();
   AchievementTimers.marathon2.reset();
   return true;

@@ -9,7 +9,7 @@ Vue.component("sidebar-am", {
   },
   methods: {
     update() {
-      this.am.copyFrom(player.money);
+      this.am.copyFrom(player.antimatter);
       this.perSecond.copyFrom(Player.antimatterPerSecond);
     }
   },

@@ -74,7 +74,7 @@ const GameStorage = {
   },
 
   verifyPlayerObject(save) {
-    return save !== undefined && save !== null && save.money !== undefined;
+    return save !== undefined && save !== null && (save.money !== undefined || save.antimatter !== undefined);
   },
 
   save(silent = false) {

@@ -50,7 +50,7 @@ Vue.component('challenges-tab', {
         player.reality.autoEC;
       this.isECTabUnlocked = isECTabUnlocked;
       const isICTabUnlocked = isECTabUnlocked ||
-        player.money.gte(new Decimal("1e2000")) ||
+        player.antimatter.gte(new Decimal("1e2000")) ||
         player.postChallUnlocked > 0;
       this.isICTabUnlocked = isICTabUnlocked;
       this.isInChallenge = NormalChallenge.isRunning || InfinityChallenge.isRunning || EternityChallenge.isRunning;

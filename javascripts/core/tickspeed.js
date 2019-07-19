@@ -62,7 +62,7 @@ function buyTickSpeed() {
       return false;
   }
 
-  player.money = player.money.minus(player.tickSpeedCost);
+  player.antimatter = player.antimatter.minus(player.tickSpeedCost);
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     multiplySameCosts(player.tickSpeedCost);
   } else {
@@ -81,14 +81,14 @@ function buyTickSpeed() {
 
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return;
-  let money = new Decimal(player.money);
-  if (money.eq(0)) return;
+  let antimatter = new Decimal(player.antimatter);
+  if (antimatter.eq(0)) return;
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
   const tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let totalTickBought = player.totalTickBought;
   function flushValues() {
-    player.money.fromDecimal(money);
+    player.antimatter.fromDecimal(antimatter);
     player.tickSpeedCost.fromDecimal(tickSpeedCost);
     player.tickspeedMultiplier.fromDecimal(tickspeedMultiplier);
     player.totalTickBought = totalTickBought;
@@ -102,8 +102,8 @@ function buyMaxTickSpeed() {
 
   if (tickSpeedCost.lt(Decimal.MAX_NUMBER) || inCostScalingChallenge || !tickspeedMultDecreaseMaxed) {
     let shouldContinue = true;
-    while (money.gt(tickSpeedCost) && shouldContinue) {
-      money = money.minus(tickSpeedCost);
+    while (antimatter.gt(tickSpeedCost) && shouldContinue) {
+      antimatter = antimatter.minus(tickSpeedCost);
       if (inCostScalingChallenge) {
         multiplySameCosts(tickSpeedCost);
       }
@@ -126,7 +126,7 @@ function buyMaxTickSpeed() {
       costScale: Player.tickSpeedMultDecrease,
       scalingCostThreshold: Number.MAX_VALUE
     });
-    const purchases = costScale.getMaxBought(totalTickBought, money);
+    const purchases = costScale.getMaxBought(totalTickBought, antimatter);
     if (purchases === null) {
       flushValues();
       return;
@@ -134,7 +134,7 @@ function buyMaxTickSpeed() {
     totalTickBought += purchases.quantity;
     const nextCost = costScale.calculateCost(totalTickBought);
     increaseTickSpeedCost(purchases.quantity - 1);
-    money = money.minus(Decimal.pow10(purchases.logPrice)).max(0);
+    antimatter = antimatter.minus(Decimal.pow10(purchases.logPrice)).max(0);
     tickSpeedCost = nextCost;
     tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
   }

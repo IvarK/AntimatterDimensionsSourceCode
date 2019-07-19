@@ -100,7 +100,7 @@ const AutomatorLexer = (() => {
   createInCategory(Currency, "AM", /am/i, {
     extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyWithAntimatter(),
-    $getter: () => player.money
+    $getter: () => player.antimatter
   });
   createInCategory(Currency, "DT", /dt/i, { $getter: () => player.dilation.dilatedTime });
   createInCategory(Currency, "TP", /tp/i, { $getter: () => player.dilation.tachyonParticles });

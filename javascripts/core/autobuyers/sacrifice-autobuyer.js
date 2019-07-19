@@ -28,6 +28,10 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
     this.autobuyer.priority = value;
   }
 
+  get hasInterval() {
+    return false;
+  }
+
   tick() {
     if (!this.canTick()) return;
     if (!Sacrifice.nextBoost.gte(this.limit)) return;

@@ -48,14 +48,16 @@ Vue.component("dimboost-autobuyer-box", {
   },
   template:
     `<autobuyer-box :setup="boxSetup">
-      <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
-      <span class="c-autobuyer-box__small-text">Max DimBoosts:</span>
-      <autobuyer-input :setup="limitInputSetup" />
-      <span class="c-autobuyer-box__small-text">Galaxies required to always DimBoost:</span>
-      <autobuyer-input :setup="galaxiesInputSetup" />
       <template v-if="isBulkBuyUnlocked">
         <span class="c-autobuyer-box__small-text">{{bulkBuyModeDisplay}}:</span>
         <autobuyer-input :setup="bulkInputSetup" />
+      </template>
+      <template v-else>
+        <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
+        <span class="c-autobuyer-box__small-text">Max DimBoosts:</span>
+        <autobuyer-input :setup="limitInputSetup" />
+        <span class="c-autobuyer-box__small-text">Galaxies required to always DimBoost:</span>
+        <autobuyer-input :setup="galaxiesInputSetup" />
       </template>
       <br>
     </autobuyer-box>`

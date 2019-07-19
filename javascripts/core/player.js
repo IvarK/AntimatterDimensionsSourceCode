@@ -61,7 +61,7 @@ let player = {
       bulk: 1,
       mode: AutobuyerMode.BUY_10,
       priority: 1,
-      isActive: true,
+      isActive: false,
       lastTick: 0
     })),
     tickspeed: {
@@ -70,12 +70,13 @@ let player = {
       interval: 5000,
       mode: AutobuyerMode.BUY_SINGLE,
       priority: 1,
-      isActive: true,
+      isActive: false,
       lastTick: 0
     },
     dimBoost: {
       cost: 1,
       interval: 8000,
+      bulk: 1,
       buyMax: {
         interval: 1,
         dimBoosts: 1,
@@ -88,6 +89,7 @@ let player = {
       cost: 1,
       interval: 150000,
       maxGalaxies: 1,
+      buyMax: false,
       buyMaxInterval: 0,
       isActive: false,
       lastTick: 0
@@ -104,8 +106,7 @@ let player = {
     },
     sacrifice: {
       multiplier: 5,
-      isActive: false,
-      lastTick: 0
+      isActive: false
     },
     eternity: {
       mode: AutoEternityMode.AMOUNT,

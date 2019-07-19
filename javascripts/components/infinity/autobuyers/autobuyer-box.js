@@ -67,7 +67,9 @@ Vue.component("autobuyer-box", {
         <slot name="beforeInterval" />
         <interval-label :autobuyer="autobuyer"/>
       </template>
-      <slot />
+      <div class="l-autobuyer-box__content">
+        <slot />
+      </div>
       <div class="o-autobuyer-toggle-checkbox" @click="changeActive">
         <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
         <input :checked="isOn" type="checkbox"/>

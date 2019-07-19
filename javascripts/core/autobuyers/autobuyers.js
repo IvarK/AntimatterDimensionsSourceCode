@@ -16,7 +16,7 @@ const Autobuyers = (function() {
   return {
     all,
     dimensions,
-    withPriority: dimensions.concat([Autobuyer.tickspeed]),
+    withPriority: [Autobuyer.tickspeed].concat(dimensions),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked);

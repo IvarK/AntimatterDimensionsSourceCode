@@ -3929,6 +3929,13 @@ screen and (max-width: 480px) {
   align-items: center;
 }
 
+.l-autobuyer-box__content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
+
 .l-autobuyer-box__button {
   flex-shrink: 0;
 }

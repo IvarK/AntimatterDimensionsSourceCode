@@ -62,6 +62,10 @@ Autobuyer.dimboost = new class DimboostAutobuyerState extends AutobuyerState {
     return this.bulk;
   }
 
+  get hasInterval() {
+    return !this.isBuyMaxUnlocked && super.hasInterval;
+  }
+
   /**
    * @param {number} value
    */

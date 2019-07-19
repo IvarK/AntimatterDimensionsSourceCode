@@ -21,7 +21,7 @@ Vue.component("modal-import", {
       <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
-          <div>Antimatter: {{ formatAntimatter(player.antimatter || player.money) }}</div>
+          <div>Antimatter: {{ formatAntimatter(antimatter) }}</div>
           <div v-if="progress.isInfinityUnlocked">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
           <div v-if="progress.isEternityUnlocked">Eternities: {{ shortenDimensions(player.eternities) }}</div>
           <div v-if="progress.isRealityUnlocked">Realities: {{ shortenDimensions(player.realities) }}</div>
@@ -42,6 +42,9 @@ Vue.component("modal-import", {
     },
     progress() {
       return PlayerProgress.of(this.player);
+    },
+    antimatter() {
+      return this.player.antimatter || this.player.money;
     },
     hasInput() {
       return this.input !== "";

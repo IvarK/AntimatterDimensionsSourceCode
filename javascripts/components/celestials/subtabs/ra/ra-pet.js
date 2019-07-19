@@ -6,43 +6,40 @@ Vue.component("ra-pet", {
   },
   data() {
     return {
+      petColors: {
+        Teresa: "#86ea84",
+        Effarig: "#ea8585",
+        Enslaved: "#ead584",
+        V: "#f1aa7f"
+      },
       isUnlocked: false,
       level: 0,
-      exp: 0,
-      requiredExp: 0,
-      expBoost: 0
     };
   },
   computed: {
     pet() {
       return this.petConfig.pet;
     },
-    fillPercentage() {
-      return `${100 * this.exp / this.requiredExp}%`;
-    },
     scalingUpgradeText() {
       return this.petConfig.scalingUpgradeText(this.level);
     },
-    styleObject() {
+    petStyle() {
       return {
-        width: this.fillPercentage
+        color: this.petColors[this.pet.name]
       };
-    }
+    },
   },
   methods: {
     update() {
       const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
-      this.exp = pet.exp;
       this.level = pet.level;
-      this.requiredExp = pet.requiredExp;
-      this.expBoost = pet.expBoost;
     },
   },
   template: `
     <div class="l-ra-pet-container" v-if="isUnlocked">
-      <div class="c-ra-pet-header">
+      <div class="c-ra-pet-header" :style="petStyle">
         <h2>{{ pet.name }} Lvl. {{ level }}</h2>
         <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
       </div>

@@ -14,7 +14,13 @@ Vue.component("ra-bar", {
       expBoost: 0,
       shift: false,
       lastTenGlyphLevls: [],
-      lastTenRunTimers: []
+      lastTenRunTimers: [],
+      petColors: {
+        Teresa: "#86ea84",
+        Effarig: "#ea8585",
+        Enslaved: "#ead584",
+        V: "#f1aa7f"
+      },
     };
   },
   computed: {
@@ -41,6 +47,11 @@ Vue.component("ra-bar", {
     singleLevelStyle() {
       return {
         width: `${this.exp / this.requiredExp * 100}%`
+      };
+    },
+    petStyle() {
+      return {
+        "background-color": this.petColors[this.pet.name]
       };
     },
     currentLevelGoal() {
@@ -109,9 +120,9 @@ Vue.component("ra-bar", {
             {{levelDisplay(lvl)}}
           </span>
         </div>
-        <div class="l-ra-exp-bar-inner" :style="shift ? singleLevelStyle : multiLevelStyle"/>
+        <div class="l-ra-exp-bar-inner" :style="[shift ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>
-        <div class="l-ra-unlock">
+        <div class="l-ra-unlock" :style="petStyle">
           <div class="l-ra-unlock-inner">
             <b>{{ activeUnlock.description }}</b>
             <p>{{ activeUnlock.reward }}</p>

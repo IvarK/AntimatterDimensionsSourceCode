@@ -3,7 +3,6 @@
 Notation.empty = new class EmptyNotation extends Notation {
   constructor() {
     super("Empty");
-    this.EMPTY = [" "];
   }
 
   get isPainful() {
@@ -15,6 +14,6 @@ Notation.empty = new class EmptyNotation extends Notation {
   }
 
   formatDecimal() {
-    return (" ");
+    return " ";
   }
 }();

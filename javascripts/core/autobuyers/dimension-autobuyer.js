@@ -2,7 +2,7 @@
 
 class DimensionAutobuyerState extends IntervaledAutobuyerState {
   constructor(tier) {
-    super(() => player.autobuyers[tier - 1]);
+    super();
     this._tier = tier;
   }
 
@@ -10,72 +10,68 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     return player.auto.dimensions[this._tier - 1];
   }
 
-  initialize() {
-    const baseIntervals = [
-      null,
-      1500,
-      2000,
-      2500,
-      3000,
-      4000,
-      5000,
-      6000,
-      7500,
-    ];
-    player.autobuyers[this._tier - 1] = new Autobuyer(baseIntervals[this._tier]);
+  get baseInterval() {
+    return Player.defaultStart.auto.dimensions[this._tier - 1].interval;
   }
 
-  get challenge() {
-    return NormalChallenge(this._tier);
+  get isUnlocked() {
+    return NormalChallenge(this._tier).isCompleted;
   }
 
-  /**
-   * @returns {boolean}
-   */
+  get bulk() {
+    return this.data.bulk;
+  }
+
   get hasMaxedBulk() {
-    return this.isUnlocked && this.bulk >= 1e100;
+    return this.bulk >= 1e100;
   }
 
-  /**
-   * @returns {AutobuyerMode}
-   */
   get mode() {
-    return this.autobuyer.target;
+    return this.data.mode;
   }
 
-  /**
-   * @param {AutobuyerMode} value
-   */
   set mode(value) {
-    this.autobuyer.target = value;
+    this.data.mode = value;
   }
 
   toggleMode() {
-    this.mode = this.mode === AutobuyerMode.BUY_SINGLE ? AutobuyerMode.BUY_10 : AutobuyerMode.BUY_SINGLE;
+    this.mode = [
+      AutobuyerMode.BUY_SINGLE,
+      AutobuyerMode.BUY_10
+    ]
+      .nextSibling(this.mode);
   }
 
   tick() {
-    if (!this.canTick()) return;
+    super.tick();
     const tier = this._tier;
     if (!NormalDimension(tier).isAvailable) return;
-    if (this.mode === AutobuyerMode.BUY_SINGLE) {
-      buyOneDimension(tier);
+    switch (this.mode) {
+      case AutobuyerMode.BUY_SINGLE:
+        buyOneDimension(tier);
+        break;
+      case AutobuyerMode.BUY_10:
+        buyManyDimensionAutobuyer(tier, player.options.bulkOn ? this.bulk : 1);
+        break;
     }
-    else {
-      const bulk = player.options.bulkOn ? this.bulk : 1;
-      buyManyDimensionAutobuyer(tier, bulk);
-    }
-    this.resetTicks();
   }
 
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
-    if (player.infinityPoints.lt(this.cost)) return;
-    player.infinityPoints = player.infinityPoints.minus(this.cost);
-    this.bulk = Math.min(this.bulk * 2, 1e100);
-    this.cost = Math.ceil(2.4 * this.cost);
-    Autobuyer.checkBulkAchievements();
+    if (Currency.infinityPoints.isAffordable(this.cost)) return;
+    Currency.infinityPoints.subtract(this.cost);
+    this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
+    this.data.cost = Math.ceil(2.4 * this.cost);
+    Achievement(61).tryUnlock();
+    SecretAchievement(38).tryUnlock();
     GameUI.update();
+  }
+
+  reset() {
+    super.reset();
+    if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.isUnlocked = false;
+    this.data.bulk = 1;
   }
 }
 

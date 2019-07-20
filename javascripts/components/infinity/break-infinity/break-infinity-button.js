@@ -25,7 +25,7 @@ Vue.component("break-infinity-button", {
   methods: {
     update() {
       this.isBroken = player.break;
-      this.isUnlocked = Autobuyer.bigCrunch.isUnlocked && Autobuyer.bigCrunch.hasMaxedInterval;
+      this.isUnlocked = Autobuyer.bigCrunch.hasMaxedInterval;
     }
   },
   template:

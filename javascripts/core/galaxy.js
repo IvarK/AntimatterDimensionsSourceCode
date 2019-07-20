@@ -156,7 +156,7 @@ function galaxyResetBtnClick() {
 }
 
 function maxBuyGalaxies(manual) {
-  const limit = manual ? Number.MAX_VALUE : Autobuyer.galaxy.limit;
+  const limit = manual ? Number.MAX_VALUE : Autobuyer.galaxy.maxGalaxies;
   if (player.galaxies >= limit || !Galaxy.canBeBought) return false;
   // Check for ability to buy one galaxy (which is pretty efficient)
   const req = Galaxy.requirement;

@@ -399,8 +399,6 @@ GameStorage.devMigrations = {
       autobuyer.rm = old.rm;
       autobuyer.glyph = old.glyph;
       autobuyer.isActive = old.isOn;
-      // KILLME
-      player.autoRealityMode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
     }
   ],
 

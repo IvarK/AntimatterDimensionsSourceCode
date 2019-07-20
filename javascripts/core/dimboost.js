@@ -141,7 +141,7 @@ function maxBuyDimBoosts(manual) {
     return;
   }
   let availableBoosts = Number.MAX_VALUE;
-  if (player.overXGalaxies > player.galaxies && !manual) {
+  if (Autobuyer.dimboost.galaxies > player.galaxies && !manual) {
     availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets;
   }
   if (availableBoosts <= 0) return;

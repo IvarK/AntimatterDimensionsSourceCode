@@ -1,44 +1,49 @@
 "use strict";
 
-Autobuyer.tickspeed = new class TickspeedAutobuyerState extends AutobuyerState {
-  constructor() {
-    super(() => player.autobuyers[8]);
+Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobuyerState {
+  get data() {
+    return player.auto.tickspeed;
   }
 
-  initialize() {
-    player.autobuyers[8] = new Autobuyer(5000);
+  get isUnlocked() {
+    return NormalChallenge(9).isCompleted;
   }
 
-  get challenge() {
-    return NormalChallenge(9);
+  get baseInterval() {
+    return Player.defaultStart.auto.tickspeed.interval;
   }
 
-  /**
-   * @returns {AutobuyerMode}
-   */
   get mode() {
-    return this.autobuyer.target;
+    return this.data.mode;
   }
 
-  /**
-   * @param {AutobuyerMode} value
-   */
   set mode(value) {
-    this.autobuyer.target = value;
+    this.data.mode = value;
   }
 
   toggleMode() {
-    this.mode = this.mode === AutobuyerMode.BUY_SINGLE ? AutobuyerMode.BUY_MAX : AutobuyerMode.BUY_SINGLE;
+    this.mode = [
+      AutobuyerMode.BUY_SINGLE,
+      AutobuyerMode.BUY_MAX
+    ]
+      .nextSibling(this.mode);
   }
 
   tick() {
-    if (!this.canTick()) return;
-    if (this.mode === AutobuyerMode.BUY_SINGLE) {
-      buyTickSpeed();
+    super.tick();
+    switch (this.mode) {
+      case AutobuyerMode.BUY_SINGLE:
+        buyTickSpeed();
+        break;
+      case AutobuyerMode.BUY_MAX:
+        buyMaxTickSpeed();
+        break;
     }
-    else {
-      buyMaxTickSpeed();
-    }
-    this.resetTicks();
+  }
+
+  reset() {
+    super.reset();
+    if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.isUnlocked = false;
   }
 }();

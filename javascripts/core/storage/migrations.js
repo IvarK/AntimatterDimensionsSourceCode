@@ -494,7 +494,7 @@ GameStorage.migrations = {
       const autobuyer = player.auto.dimBoost;
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
-      autobuyer.dimBoosts = old.priority;
+      autobuyer.maxDimBoosts = old.priority;
       autobuyer.galaxies = player.overXGalaxies;
       autobuyer.bulk = old.bulk;
       autobuyer.buyMaxInterval = old.bulk;
@@ -541,10 +541,6 @@ GameStorage.migrations = {
       autobuyer.xLast = new Decimal(old.limit);
       autobuyer.isActive = old.isOn;
     }
-
-    // KILLME
-    player.autoCrunchMode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
-    player.autoEternityMode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
   },
 
   prePatch(saveData) {

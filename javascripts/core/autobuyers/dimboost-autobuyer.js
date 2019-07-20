@@ -1,100 +1,82 @@
 "use strict";
 
-Autobuyer.dimboost = new class DimboostAutobuyerState extends AutobuyerState {
-  constructor() {
-    super(() => player.autobuyers[9]);
+Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuyerState {
+  get data() {
+    return player.auto.dimBoost;
   }
 
-  initialize() {
-    player.autobuyers[9] = new Autobuyer(8000);
+  get isUnlocked() {
+    return NormalChallenge(10).isCompleted;
   }
 
-  get challenge() {
-    return NormalChallenge(10);
+  get baseInterval() {
+    return Player.defaultStart.auto.dimBoost.interval;
   }
 
-  /**
-   * @returns {number}
-   */
   get maxDimBoosts() {
-    return this.priority;
+    return this.data.maxDimBoosts;
   }
 
-  /**
-   * @param {number} value
-   */
   set maxDimBoosts(value) {
-    this.priority = value;
+    this.data.maxDimBoosts = value;
   }
 
-  /**
-   * @returns {boolean}
-   */
+  get galaxies() {
+    return this.data.galaxies;
+  }
+
+  set galaxies(value) {
+    this.data.galaxies = value;
+  }
+
+  get bulk() {
+    return this.data.bulk;
+  }
+
+  set bulk(value) {
+    this.data.bulk = value;
+  }
+
   get isBulkBuyUnlocked() {
-    return BreakInfinityUpgrade.bulkDimBoost.isBought || this.isBuyMaxUnlocked;
+    return BreakInfinityUpgrade.bulkDimBoost.isBought;
   }
 
-  /**
-   * @returns {boolean}
-   */
+  get buyMaxInterval() {
+    return this.data.buyMaxInterval;
+  }
+
+  set buyMaxInterval(value) {
+    this.data.buyMaxInterval = value;
+  }
+
   get isBuyMaxUnlocked() {
     return EternityMilestone.autobuyMaxDimboosts.isReached;
   }
 
-  /**
-   * @returns {number}
-   */
-  get galaxies() {
-    return player.overXGalaxies;
+  get interval() {
+    return this.isBuyMaxUnlocked ? this.buyMaxInterval : super.interval;
   }
 
-  /**
-   * @param {number} value
-   */
-  set galaxies(value) {
-    player.overXGalaxies = value;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get buyMaxInterval() {
-    return this.bulk;
-  }
-
-  get hasInterval() {
-    return !this.isBuyMaxUnlocked && super.hasInterval;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set buyMaxInterval(value) {
-    this.bulk = value;
+  get canTick() {
+    return !Ra.isRunning && super.canTick;
   }
 
   tick() {
-    if (Ra.isRunning) return;
-    if (!this.canTick()) return;
+    super.tick();
     if (this.isBuyMaxUnlocked) {
-      if (Autobuyer.intervalTimer - Autobuyer.lastDimBoost >= this.buyMaxInterval) {
-        Autobuyer.lastDimBoost = Autobuyer.intervalTimer;
-        maxBuyDimBoosts();
-      }
+      maxBuyDimBoosts();
       return;
     }
-    if (this.maxDimBoosts <= player.resets && this.galaxies > player.galaxies) {
+    if (player.resets >= this.maxDimBoosts && player.galaxies < this.galaxies) {
       return;
     }
     if (this.isBulkBuyUnlocked && !DimBoost.isShift) {
-      var bulk = Math.max(this.bulk, 1);
+      const bulk = Math.clampMin(this.bulk, 1);
       if (!DimBoost.bulkRequirement(bulk).isSatisfied) return;
       softReset(bulk);
+      return;
     }
-    else {
-      if (!DimBoost.requirement.isSatisfied) return;
-      softReset(1);
-    }
-    this.resetTicks();
+    if (!DimBoost.requirement.isSatisfied) return;
+    softReset(1);
   }
 }();

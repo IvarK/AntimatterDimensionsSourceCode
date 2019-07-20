@@ -1,85 +1,84 @@
 "use strict";
 
-Autobuyer.eternity = {
-  /**
-   * @returns {boolean}
-   */
+Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
+  get data() {
+    return player.auto.eternity;
+  }
+
   get isUnlocked() {
     return EternityMilestone.autobuyerEternity.isReached;
-  },
-  /**
-   * @returns {boolean}
-   */
+  }
+
+  get mode() {
+    return this.data.mode;
+  }
+
+  set mode(value) {
+    this.data.mode = value;
+  }
+
+  get amount() {
+    return this.data.amount;
+  }
+
+  set amount(value) {
+    this.data.amount = value;
+  }
+
+  get time() {
+    return this.data.time;
+  }
+
+  set time(value) {
+    this.data.time = value;
+  }
+
+  get xLast() {
+    return this.data.xLast;
+  }
+
+  set xLast(value) {
+    this.data.xLast = value;
+  }
+
   get hasAdditionalModes() {
     return RealityUpgrade(13).isBought;
-  },
-  /**
-   * @returns {boolean}
-   */
-  get isOn() {
-    return player.eternityBuyer.isOn;
-  },
-  /**
-   * @param {boolean} value
-   */
-  set isOn(value) {
-    player.eternityBuyer.isOn = value;
-  },
-  toggle() {
-    this.isOn = !this.isOn;
-  },
-  /**
-   * @returns {boolean}
-   */
-  get isActive() {
-    return this.isUnlocked && this.isOn;
-  },
-  /**
-   * @returns {Decimal}
-   */
-  get limit() {
-    return player.eternityBuyer.limit;
-  },
-  /**
-   * @param {Decimal} value
-   */
-  set limit(value) {
-    player.eternityBuyer.limit = value;
-  },
-  bumpLimit(mult) {
-    if (this.isUnlocked && this.mode === AutoEternityMode.AMOUNT) {
-      this.limit = this.limit.times(mult);
+  }
+
+  bumpAmount(mult) {
+    if (this.isUnlocked) {
+      this.amount = this.amount.times(mult);
     }
-  },
-  /**
-   * @returns {AutoEternityMode}
-   */
-  get mode() {
-    return player.autoEternityMode;
-  },
-  /**
-   * @param {AutoEternityMode} value
-   */
-  set mode(value) {
-    player.autoEternityMode = value;
-  },
+  }
+
   toggleMode() {
-    this.mode = Object.values(AutoEternityMode).nextSibling(this.mode);
-  },
+    this.mode = [
+      AutoEternityMode.AMOUNT,
+      AutoEternityMode.TIME,
+      AutoEternityMode.RELATIVE
+    ]
+      .nextSibling(this.mode);
+  }
+
   tick() {
-    if (!this.isActive) return;
     let proc = false;
     switch (this.mode) {
       case AutoEternityMode.AMOUNT:
-        proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.limit);
+        proc = EternityChallenge.isRunning || gainedEternityPoints().gte(this.amount);
         break;
       case AutoEternityMode.TIME:
-        proc = Decimal.gt(Time.thisEternityRealTime.totalSeconds, this.limit)
+        proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
       case AutoEternityMode.RELATIVE:
-        proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.limit));
+        proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.xLast));
         break;
     }
     if (proc) eternity(false, true);
   }
-};
+
+  reset() {
+    if (!RealityUpgrade(10).isBought) {
+      this.isActive = false;
+    }
+  }
+}();

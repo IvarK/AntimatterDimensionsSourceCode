@@ -467,17 +467,7 @@ function gameLoop(diff, options = {}) {
     if (diff < 0) diff = 1;
 
     if (autobuyerOnGameLoop) {
-      Autobuyer.intervalTimer += diff / 20;
-      Autobuyer.tickTimer += diff;
-      let autobuyerInterval = BreakInfinityUpgrade.autobuyerSpeed.isBought ? 50 : 100;
-      if (Autobuyer.tickTimer >= autobuyerInterval) {
-        Autobuyer.tickTimer -= autobuyerInterval;
-        // failsafe
-        if (Autobuyer.tickTimer > autobuyerInterval) {
-          Autobuyer.tickTimer = autobuyerInterval;
-        }
-        Autobuyers.tick();
-      }
+      Autobuyers.tick();
     }
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.

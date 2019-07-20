@@ -1,84 +1,94 @@
 "use strict";
 
-Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends AutobuyerState {
-  constructor() {
-    super(() => player.autobuyers[11]);
+Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobuyerState {
+  get data() {
+    return player.auto.bigCrunch;
   }
 
-  initialize() {
-    player.autobuyers[11] = new Autobuyer(300000);
-    this.limit = new Decimal(1);
+  get isUnlocked() {
+    return NormalChallenge(12).isCompleted;
   }
 
-  get challenge() {
-    return NormalChallenge(12);
+  get baseInterval() {
+    return Player.defaultStart.auto.bigCrunch.interval;
   }
 
-  /**
-   * @returns {AutoCrunchMode}
-   */
   get mode() {
-    return player.autoCrunchMode;
+    return this.data.mode;
   }
 
-  /**
-   * @param {AutoCrunchMode} value
-   */
   set mode(value) {
-    player.autoCrunchMode = value;
+    this.data.mode = value;
   }
 
-  /**
-   * @returns {boolean}
-   */
   get hasAdditionalModes() {
     return EternityMilestone.bigCrunchModes.isReached;
   }
 
-  /**
-   * @returns {Decimal}
-   */
-  get limit() {
-    return this.autobuyer.priority;
+  get amount() {
+    return this.data.amount;
   }
 
-  /**
-   * @param {Decimal} value
-   */
-  set limit(value) {
-    this.autobuyer.priority = value;
+  set amount(value) {
+    this.data.amount = value;
   }
 
-  bumpLimit(mult) {
-    if (this.isUnlocked && this.mode === AutoCrunchMode.AMOUNT) {
-      this.limit = this.limit.times(mult);
+  get time() {
+    return this.data.time;
+  }
+
+  set time(value) {
+    this.data.time = value;
+  }
+
+  get xLast() {
+    return this.data.xLast;
+  }
+
+  set xLast(value) {
+    this.data.xLast = value;
+  }
+
+  bumpAmount(mult) {
+    if (this.isUnlocked) {
+      this.amount = this.amount.times(mult);
     }
   }
 
   toggleMode() {
-    this.mode = Object.values(AutoCrunchMode).nextSibling(this.mode);
+    this.mode = [
+      AutoCrunchMode.AMOUNT,
+      AutoCrunchMode.TIME,
+      AutoCrunchMode.RELATIVE
+    ]
+      .nextSibling(this.mode);
   }
 
   tick() {
-    if (!this.canTick()) return;
+    super.tick();
     if (!player.antimatter.gte(Decimal.MAX_NUMBER)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {
         case AutoCrunchMode.AMOUNT:
-          proc = gainedInfinityPoints().gte(this.limit);
+          proc = gainedInfinityPoints().gte(this.amount);
           break;
         case AutoCrunchMode.TIME:
-          proc = Decimal.gt(Time.thisInfinityRealTime.totalSeconds, this.limit);
+          proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
         case AutoCrunchMode.RELATIVE:
-          proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.limit));
+          proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
           break;
       }
     }
     if (proc) {
       bigCrunchResetRequest();
     }
-    this.resetTicks();
+  }
+
+  reset() {
+    super.reset();
+    if (EternityMilestone.bigCrunchModes.isReached) return;
+    this.mode = AutoCrunchMode.AMOUNT;
   }
 }();

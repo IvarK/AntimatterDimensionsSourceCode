@@ -14,7 +14,6 @@ function startEternityChallenge() {
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
-  if (player.eternities < 20) Autobuyer.dimboost.buyMaxInterval = 1;
   kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
   resetAntimatter();

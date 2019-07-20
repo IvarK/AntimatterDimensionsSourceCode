@@ -24,7 +24,6 @@ function eternity(force, auto, specialConditions = {}) {
     player.eternities += Effects.product(RealityUpgrade(3));
   }
 
-  if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
     challenge.addCompletion();
@@ -49,8 +48,8 @@ function eternity(force, auto, specialConditions = {}) {
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
 
-  if (player.eternities < 2) {
-    Autobuyer.resetUnlockables();
+  if (!EternityMilestone.keepAutobuyers.isReached) {
+    // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
   }
   
@@ -144,9 +143,6 @@ function initializeResourcesAfterEternity() {
   player.onlyFirstDimensions = true;
   player.noEighthDimensions = true;
   player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
-  if (player.eternities < 7 && !Achievement(133).isEnabled) {
-    player.autoSacrifice = 1;
-  }
 }
 
 function applyRealityUpgrades() {
@@ -285,7 +281,7 @@ class EPMultiplierState extends GameMechanicState {
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
-    Autobuyer.eternity.bumpLimit(Decimal.pow(5, diff));
+    Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
   }
 
   get effectValue() {

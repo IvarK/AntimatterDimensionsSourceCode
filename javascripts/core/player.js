@@ -76,7 +76,7 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 8000,
-      dimBoosts: 1,
+      maxDimBoosts: 1,
       galaxies: 10,
       bulk: 1,
       buyMaxInterval: 0,
@@ -139,7 +139,6 @@ let player = {
   // TODO: Not used, remove
   interval: null,
   lastUpdate: new Date().getTime(),
-  autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   tickspeedMultiplier: new Decimal(10),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -160,7 +159,6 @@ let player = {
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
-  overXGalaxies: 10,
   version: 13,
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
@@ -208,14 +206,7 @@ let player = {
   eternityChalls: {},
   etercreq: 0,
   infMultBuyer: false,
-  autoCrunchMode: AutoCrunchMode.AMOUNT,
-  autoEternityMode: AutoEternityMode.AMOUNT,
-  autoRealityMode: AutoRealityMode.RM,
   respec: false,
-  eternityBuyer: {
-    limit: new Decimal(0),
-    isOn: false
-  },
   eterc8ids: 50,
   eterc8repl: 40,
   noSacrifices: true,
@@ -243,11 +234,6 @@ let player = {
   thisReality: 0,
   thisRealityRealTime: 0,
   bestReality: 999999999999,
-  realityBuyer: {
-    rm: new Decimal(0),
-    glyph: 0,
-    isOn: false
-  },
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {
@@ -537,8 +523,8 @@ function guardFromNaNValues(obj) {
   for (let key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
-    //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
+    // TODO: rework autobuyer saving
+    if (key === "autoSacrifice" || key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

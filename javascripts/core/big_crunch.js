@@ -21,10 +21,7 @@ function handleChallengeCompletion() {
   }
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   if (!challenge) return;
-  if (!challenge.isCompleted) {
-    challenge.complete();
-    Autobuyer.tryUnlockAny();
-  }
+  challenge.complete();
   challenge.updateChallengeTime();
   if (NormalChallenge(9).isRunning) {
     kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.thisInfinityTime));
@@ -296,7 +293,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
     const costIncrease = this.costIncrease;
     const mult = Decimal.pow(2, amount);
     player.infMult = player.infMult.times(mult);
-    Autobuyer.bigCrunch.bumpLimit(mult);
+    Autobuyer.bigCrunch.bumpAmount(mult);
     player.infMultCost = this.cost.times(Decimal.pow(costIncrease, amount));
     player.infinityPoints = player.infinityPoints.minus(this.cost.dividedBy(costIncrease));
     this.adjustToCap();

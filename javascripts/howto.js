@@ -68,7 +68,7 @@ function updateSpoilers() {
 			if (i === 10 && (player.infinitied.gte(1) || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
-			if (i === 11 && (player.autobuyers[11].interval>100 || player.eternities >= 1)) {
+			if (i === 11 && (player.auto.bigCrunch.interval>100 || player.eternities >= 1)) {
 				(displayed === 0) ? displayed = 1 : displayed = 0;
 			}
 			if (i === 12 && (player.infDimensionsUnlocked[0] == true || player.eternities >= 1)) {

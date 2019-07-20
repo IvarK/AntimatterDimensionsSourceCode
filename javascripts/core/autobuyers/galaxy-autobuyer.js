@@ -1,74 +1,55 @@
 "use strict";
 
-Autobuyer.galaxy = new class GalaxyAutobuyerState extends AutobuyerState {
-  constructor() {
-    super(() => player.autobuyers[10]);
+Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerState {
+  get data() {
+    return player.auto.galaxy;
   }
 
-  initialize() {
-    player.autobuyers[10] = new Autobuyer(150000);
+  get isUnlocked() {
+    return NormalChallenge(11).isCompleted;
   }
 
-  get challenge() {
-    return NormalChallenge(11);
+  get baseInterval() {
+    return Player.defaultStart.auto.galaxy.interval;
   }
 
-  /**
-   * @returns {number}
-   */
-  get limit() {
-    return this.priority;
+  get maxGalaxies() {
+    return this.data.maxGalaxies;
   }
 
-  /**
-   * @param {number} value
-   */
-  set limit(value) {
-    this.priority = value;
+  set maxGalaxies(value) {
+    this.data.maxGalaxies = value;
   }
 
-  /**
-   * @returns {boolean}
-   */
+  get buyMaxInterval() {
+    return this.data.buyMaxInterval;
+  }
+
+  set buyMaxInterval(value) {
+    this.data.buyMaxInterval = value;
+  }
+
   get isBuyMaxUnlocked() {
     return EternityMilestone.autobuyMaxGalaxies.isReached;
   }
 
-  /**
-   * @returns {number}
-   */
-  get buyMaxInterval() {
-    return this.bulk;
+  get isBuyMaxActive() {
+    // TODO
+    return this.isBuyMaxUnlocked && this.buyMaxInterval > 0;
   }
 
-  /**
-   * @param {number} value
-   */
-  set buyMaxInterval(value) {
-    this.bulk = value;
+  get interval() {
+    return this.isBuyMaxActive ? this.buyMaxInterval : super.interval;
   }
 
   tick() {
-    if (!this.canTick()) return;
+    super.tick();
     if (!Galaxy.requirement.isSatisfied) return;
-    if (this.limit <= player.galaxies) return;
-    if (this.isBuyMaxUnlocked && this.buyMaxInterval > 0) {
-      this.buyMax();
-    }
-    else {
-      this.buySingle();
-      this.resetTicks();
-    }
-  }
-
-  buyMax() {
-    if (Autobuyer.intervalTimer - Autobuyer.lastGalaxy >= this.buyMaxInterval) {
-      Autobuyer.lastGalaxy = Autobuyer.intervalTimer;
+    if (player.galaxies >= this.maxGalaxies) return;
+    if (this.isBuyMaxActive) {
       maxBuyGalaxies();
+      return;
     }
-  }
-
-  buySingle() {
     galaxyResetBtnClick();
   }
 }();

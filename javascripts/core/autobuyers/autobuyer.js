@@ -1,208 +1,105 @@
 "use strict";
 
-const Autobuyer = function Autobuyer(interval) {
-    this.target = 1;
-    this.cost = 1;
-    this.interval = interval;
-    this.priority = 1;
-    this.ticks = 0;
-    this.isOn = false;
-    this.bulk = 1;
-};
-
-Autobuyer.tickTimer = 0;
-Autobuyer.intervalTimer = 0;
-Autobuyer.lastDimBoost = 0;
-Autobuyer.lastGalaxy = 0;
-
 /**
  * @abstract
  */
 class AutobuyerState {
-  constructor(getAutobuyer) {
-    this._getAutobuyer = getAutobuyer;
-  }
-
   /**
    * @abstract
    */
   get data() { throw NotImplementedCrash(); }
 
   /**
-   * @returns {Autobuyer|undefined}
+   * @abstract
    */
-  get autobuyer() {
-    // What
-    const autobuyer = this._getAutobuyer();
-    return autobuyer % 1 !== 0 ? autobuyer : undefined;
+  get isUnlocked() { throw NotImplementedCrash(); }
+
+  get canTick() {
+    return this.isUnlocked && this.isActive;
   }
 
-  /**
-   * @returns {boolean}
-   */
-  get isUnlocked() {
-    return this.autobuyer !== undefined;
-  }
-
-  tryUnlock() {
-    if (!this.isUnlocked && this.challenge.isCompleted) {
-      this.initialize();
-    }
-  }
-
-  /**
-   * @returns {NormalChallengeState|InfinityChallengeState}
-   */
-  get challenge() {
-    throw "This method should be overridden in inheriting class";
-  }
-
-  initialize() {
-    throw "This method should be overridden in inheriting class";
-  }
-
-  /**
-   * @returns {boolean}
-   */
-  get isOn() {
-    return this.autobuyer.isOn;
-  }
-
-  /**
-   * @param {boolean} value
-   */
-  set isOn(value) {
-    this.autobuyer.isOn = value;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get cost() {
-    return this.autobuyer.cost;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set cost(value) {
-    this.autobuyer.cost = value;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get ticks() {
-    return this.autobuyer.ticks;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set ticks(value) {
-    this.autobuyer.ticks = value;
-  }
-
-  /**
-   * @returns {boolean}
-   */
-  canTick() {
-    if (!this.isUnlocked) return false;
-    if (this.ticks * 100 < this.interval) {
-      this.ticks++;
-      return false;
-    }
-    return this.isOn;
-  }
-
-  resetTicks() {
-    this.ticks = 1;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get priority() {
-    return this.autobuyer.priority;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set priority(value) {
-    this.autobuyer.priority = value;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get interval() {
-    return this.autobuyer.interval;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set interval(value) {
-    this.autobuyer.interval = value;
-  }
-
-  /**
-   * @returns {boolean}
-   */
-  get hasMaxedInterval() {
-    return this.isUnlocked && this.interval <= 100;
-  }
-
-  /**
-   * @returns {number}
-   */
-  get bulk() {
-    return this.autobuyer.bulk;
-  }
-
-  /**
-   * @param {number} value
-   */
-  set bulk(value) {
-    this.autobuyer.bulk = value;
-  }
-
-  /**
-   * @returns {boolean}
-   */
   get isActive() {
-    return this.isUnlocked && this.autobuyer.isOn;
+    return this.data.isActive;
+  }
+
+  set isActive(value) {
+    this.data.isActive = value;
   }
 
   toggle() {
-    this.isOn = !this.isOn;
-  }
-
-  upgradeInterval() {
-    if (this.hasMaxedInterval) return;
-    if (player.infinityPoints.lt(this.cost)) return;
-    player.infinityPoints = player.infinityPoints.minus(this.cost);
-    this.interval = Math.max(this.interval * 0.6, 100);
-    if (this.interval > 120) {
-      // if your last purchase wont be very strong, dont double the cost
-      this.cost *= 2;
-    }
-    Autobuyer.checkIntervalAchievements();
-    GameUI.update();
+    this.isActive = !this.isActive;
   }
 
   get hasInterval() {
-    return true;
+    return false;
   }
+
+  /**
+   * @abstract
+   */
+  tick() { throw NotImplementedCrash(); }
+
+  // eslint-disable-next-line no-empty-function
+  reset() { }
 }
 
 /**
  * @abstract
  */
 class IntervaledAutobuyerState extends AutobuyerState {
+  /**
+   * @abstract
+   */
+  get baseInterval() { throw NotImplementedCrash(); }
+
+  get cost() {
+    return this.data.cost;
+  }
+
+  get interval() {
+    const interval = this.data.interval;
+    return BreakInfinityUpgrade.autobuyerSpeed.isBought ? interval / 2 : interval;
+  }
 
   get hasInterval() {
     return true;
   }
+
+  get hasMaxedInterval() {
+    return this.data.interval <= 100;
+  }
+
+  get canTick() {
+    return super.canTick && this.timeSinceLastTick >= this.interval;
+  }
+
+  get timeSinceLastTick() {
+    return player.realTimePlayed - this.data.lastTick;
+  }
+
+  tick() {
+    this.data.lastTick = player.realTimePlayed;
+  }
+
+  upgradeInterval() {
+    if (this.hasMaxedInterval) return;
+    if (Currency.infinityPoints.isAffordable(this.cost)) return;
+    Currency.infinityPoints.subtract(this.cost);
+    this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
+    if (this.data.interval > 120) {
+      // If your last purchase wont be very strong, dont double the cost
+      this.data.cost *= 2;
+    }
+    Achievement(52).tryUnlock();
+    Achievement(53).tryUnlock();
+    GameUI.update();
+  }
+
+  reset() {
+    if (EternityMilestone.keepAutobuyers.isReached) return;
+    this.data.interval = this.baseInterval;
+    this.data.cost = 1;
+  }
 }
+
+const Autobuyer = {};

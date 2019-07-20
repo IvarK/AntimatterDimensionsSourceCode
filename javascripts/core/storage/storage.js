@@ -136,10 +136,6 @@ const GameStorage = {
     }
 
     recalculateAllGlyphs();
-    Autobuyer.tryUnlockAny();
-    Autobuyer.checkIntervalAchievements();
-    Autobuyer.checkBulkAchievements();
-    Autobuyer.convertPropertiesToDecimal();
     checkPerkValidity();
     Teresa.checkPPShopValidity();
     drawPerkNetwork();

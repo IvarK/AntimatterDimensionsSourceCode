@@ -1,74 +1,53 @@
 "use strict";
 
-Autobuyer.reality = {
-  /**
-   * @returns {boolean}
-   */
+Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
+  get data() {
+    return player.auto.reality;
+  }
+
   get isUnlocked() {
     return RealityUpgrade(25).isBought;
-  },
-  /**
-   * @returns {boolean}
-   */
-  get isOn() {
-    return player.realityBuyer.isOn;
-  },
-  /**
-   * @param {boolean} value
-   */
-  set isOn(value) {
-    player.realityBuyer.isOn = value;
-  },
-  toggle() {
-    this.isOn = !this.isOn;
-  },
-  /**
-   * @returns {boolean}
-   */
-  get isActive() {
-    return this.isUnlocked && this.isOn;
-  },
-  /**
-   * @returns {Decimal}
-   */
-  get rm() {
-    return player.realityBuyer.rm;
-  },
-  /**
-   * @param {Decimal} value
-   */
-  set rm(value) {
-    player.realityBuyer.rm = value;
-  },
-  /**
-   * @returns {number}
-   */
-  get glyph() {
-    return player.realityBuyer.glyph;
-  },
-  /**
-   * @param {number} value
-   */
-  set glyph(value) {
-    player.realityBuyer.glyph = value;
-  },
-  /**
-   * @returns {AutoRealityMode}
-   */
+  }
+
+  get canTick() {
+    return super.canTick && !GlyphSelection.active;
+  }
+
   get mode() {
-    return player.autoRealityMode;
-  },
-  /**
-   * @param {AutoRealityMode} value
-   */
+    return this.data.mode;
+  }
+
   set mode(value) {
-    player.autoRealityMode = value;
-  },
+    this.data.mode = value;
+  }
+
+  get rm() {
+    return this.data.rm;
+  }
+
+  set rm(value) {
+    this.data.rm = value;
+  }
+
+  get glyph() {
+    return this.data.rm;
+  }
+
+  set glyph(value) {
+    this.data.rm = value;
+  }
+
   toggleMode() {
-    this.mode = Object.values(AutoRealityMode).nextSibling(this.mode);
-  },
+    this.mode = [
+      AutoRealityMode.RM,
+      AutoRealityMode.GLYPH,
+      AutoRealityMode.EITHER,
+      AutoRealityMode.BOTH
+    ]
+      .nextSibling(this.mode);
+  }
+
   tick() {
-    if (!this.isActive || GlyphSelection.active) return;
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);
     const glyphProc = gainedGlyphLevel().actualLevel >= this.glyph;
@@ -88,4 +67,4 @@ Autobuyer.reality = {
     }
     if (proc) autoReality();
   }
-};
+}();

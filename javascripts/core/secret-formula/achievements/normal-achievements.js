@@ -246,15 +246,15 @@ GameDatabase.achievements.normal = [
     id: 52,
     name: "Age of Automation",
     tooltip: "Max any 9 autobuyers.",
-    checkRequirement: () => Autobuyer.unlockables
-      .countWhere(a => a.hasMaxedInterval) >= 9
+    checkRequirement: () => Autobuyer.intervaled
+      .countWhere(a => a.hasMaxedInterval) === 9
   },
   {
     id: 53,
     name: "Definitely not worth it",
     tooltip: "Max all the autobuyers.",
-    checkRequirement: () => Autobuyer.unlockables
-      .countWhere(a => a.hasMaxedInterval) >= 12
+    checkRequirement: () => Autobuyer.intervaled
+      .countWhere(a => !a.hasMaxedInterval) === 0
   },
   {
     id: 54,

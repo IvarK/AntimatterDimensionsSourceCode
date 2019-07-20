@@ -1,41 +1,24 @@
 "use strict";
 
 Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
-  constructor() {
-    super(() => player.autoSacrifice);
+  get data() {
+    return player.auto.sacrifice;
   }
 
-  initialize() {
-    player.autoSacrifice = new Autobuyer(100);
-    this.limit = new Decimal(5);
+  get isUnlocked() {
+    return EternityMilestone.autoIC.isReached || InfinityChallenge(2).isCompleted;
   }
 
-  get challenge() {
-    return InfinityChallenge(2);
+  get multiplier() {
+    return this.data.multiplier;
   }
 
-  /**
-   * @returns {Decimal}
-   */
-  get limit() {
-    return this.autobuyer.priority;
-  }
-
-  /**
-   * @param {Decimal} value
-   */
-  set limit(value) {
-    this.autobuyer.priority = value;
-  }
-
-  get hasInterval() {
-    return false;
+  set multiplier(value) {
+    this.data.multiplier = value;
   }
 
   tick() {
-    if (!this.canTick()) return;
-    if (!Sacrifice.nextBoost.gte(this.limit)) return;
+    if (Sacrifice.nextBoost.lt(this.multiplier)) return;
     sacrificeReset(true);
-    this.resetTicks();
   }
 }();

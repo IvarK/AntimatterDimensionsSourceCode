@@ -69,11 +69,6 @@ Vue.component("ra-bar", {
           expPerMin: `${shorten(this.expPerMin, 2)}/min over last 10 realities`
         };
       }
-      // if (this.level >= 25) {
-      //   return {
-      //     description: `Congragulations you unlocked all of Teresa's secrets`,
-      //   };
-      // }
       return this.unlocks.find(unlock => unlock.id % 6 === this.importantLevels.indexOf(this.currentLevelGoal));
     }
   },

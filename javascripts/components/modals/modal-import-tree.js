@@ -90,7 +90,7 @@ Vue.component("modal-import-tree", {
       return text;
     },
     createTree() {
-      if (!this.inputIsValidTree) return;
+      if (!this.inputIsValidTree) return false;
       const formattedInput = this.input.split("|")[0].split(",");
       const eternityChallenge = TimeStudy.eternityChallenge(this.input.split("|")[1]);
       const hasEternityChallenge = eternityChallenge !== undefined;

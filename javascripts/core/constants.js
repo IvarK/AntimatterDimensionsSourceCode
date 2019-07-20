@@ -10,22 +10,22 @@ const AutobuyerMode = {
 };
 
 const AutoCrunchMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
+  AMOUNT: 0,
+  TIME: 1,
+  RELATIVE: 2
 };
 
 const AutoEternityMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
+  AMOUNT: 0,
+  TIME: 1,
+  RELATIVE: 2
 };
 
 const AutoRealityMode = {
-  RM: "rm",
-  GLYPH: "glyph",
-  EITHER: "either",
-  BOTH: "both"
+  RM: 0,
+  GLYPH: 1,
+  EITHER: 2,
+  BOTH: 3
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it

@@ -15,10 +15,18 @@ Autobuyer.intervalTimer = 0;
 Autobuyer.lastDimBoost = 0;
 Autobuyer.lastGalaxy = 0;
 
+/**
+ * @abstract
+ */
 class AutobuyerState {
   constructor(getAutobuyer) {
     this._getAutobuyer = getAutobuyer;
   }
+
+  /**
+   * @abstract
+   */
+  get data() { throw NotImplementedCrash(); }
 
   /**
    * @returns {Autobuyer|undefined}
@@ -183,6 +191,16 @@ class AutobuyerState {
     Autobuyer.checkIntervalAchievements();
     GameUI.update();
   }
+
+  get hasInterval() {
+    return true;
+  }
+}
+
+/**
+ * @abstract
+ */
+class IntervaledAutobuyerState extends AutobuyerState {
 
   get hasInterval() {
     return true;

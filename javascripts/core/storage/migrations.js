@@ -115,6 +115,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
       GameStorage.migrations.renameMoney(player);
+      GameStorage.migrations.moveAutobuyers(player);
     }
   },
 
@@ -452,6 +453,98 @@ GameStorage.migrations = {
         delete player[oldName];
       }
     }
+  },
+
+  moveAutobuyers(player) {
+    if (
+      player.autobuyers[11] % 1 !== 0 &&
+      player.autobuyers[11].priority !== undefined &&
+      player.autobuyers[11].priority !== null &&
+      player.autobuyers[11].priority !== "undefined"
+    ) {
+      player.autobuyers[11].priority = new Decimal(player.autobuyers[11].priority);
+    }
+
+    for (let i = 0; i < 8; i++) {
+      const old = player.autobuyers[i];
+      if (old % 1 === 0) continue;
+      const autobuyer = player.auto.dimensions[i];
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.bulk = old.bulk;
+      autobuyer.mode = old.target;
+      autobuyer.priority = old.priority;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[8] % 1 !== 0) {
+      const old = player.autobuyers[8];
+      const autobuyer = player.auto.tickspeed;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.mode = old.target;
+      autobuyer.priority = old.priority;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[9] % 1 !== 0) {
+      const old = player.autobuyers[9];
+      const autobuyer = player.auto.dimBoost;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.dimBoosts = old.priority;
+      autobuyer.galaxies = player.overXGalaxies;
+      autobuyer.bulk = old.bulk;
+      autobuyer.buyMaxInterval = old.bulk;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[10] % 1 !== 0) {
+      const old = player.autobuyers[10];
+      const autobuyer = player.auto.galaxy;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.maxGalaxies = old.priority;
+      autobuyer.buyMaxInterval = old.bulk;
+      autobuyer.buyMax = old.bulk > 0;
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autobuyers[11] % 1 !== 0) {
+      const old = player.autobuyers[11];
+      const autobuyer = player.auto.bigCrunch;
+      autobuyer.cost = old.cost;
+      autobuyer.interval = old.interval;
+      autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
+      autobuyer.amount = new Decimal(old.priority);
+      autobuyer.xLast = new Decimal(old.priority);
+      autobuyer.isActive = old.isOn;
+      autobuyer.lastTick = player.realTimePlayed;
+    }
+
+    if (player.autoSacrifice % 1 !== 0) {
+      const old = player.autoSacrifice;
+      const autobuyer = player.auto.sacrifice;
+      autobuyer.multiplier = old.priority;
+      autobuyer.isActive = old.isOn;
+    }
+
+    if (player.eternityBuyer !== undefined) {
+      const old = player.eternityBuyer;
+      const autobuyer = player.auto.eternity;
+      autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
+      autobuyer.amount = new Decimal(old.limit);
+      autobuyer.xLast = new Decimal(old.limit);
+      autobuyer.isActive = old.isOn;
+    }
+
+    // KILLME
+    player.autoCrunchMode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
+    player.autoEternityMode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
   },
 
   prePatch(saveData) {

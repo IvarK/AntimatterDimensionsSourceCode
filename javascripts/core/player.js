@@ -76,12 +76,10 @@ let player = {
     dimBoost: {
       cost: 1,
       interval: 8000,
+      dimBoosts: 1,
+      galaxies: 10,
       bulk: 1,
-      buyMax: {
-        interval: 1,
-        dimBoosts: 1,
-        galaxies: 10
-      },
+      buyMaxInterval: 0,
       isActive: false,
       lastTick: 0
     },
@@ -97,10 +95,10 @@ let player = {
     bigCrunch: {
       cost: 1,
       interval: 300000,
-      mode: AutoCrunchMode.AMOUNT,
-      amount: 1,
+      mode: 0,
+      amount: new Decimal(1),
       time: 1,
-      relative: 1,
+      xLast: new Decimal(1),
       isActive: false,
       lastTick: 0
     },
@@ -109,15 +107,15 @@ let player = {
       isActive: false
     },
     eternity: {
-      mode: AutoEternityMode.AMOUNT,
-      amount: 1,
+      mode: 0,
+      amount: new Decimal(1),
       time: 1,
-      relative: 1,
+      xLast: new Decimal(1),
       isActive: false
     },
     reality: {
-      mode: AutoRealityMode.RM,
-      rm: new Decimal(0),
+      mode: 0,
+      rm: new Decimal(1),
       glyph: 0,
       isActive: false
     }

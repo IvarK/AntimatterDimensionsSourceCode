@@ -1,9 +1,13 @@
 "use strict";
 
-class DimensionAutobuyerState extends AutobuyerState {
+class DimensionAutobuyerState extends IntervaledAutobuyerState {
   constructor(tier) {
     super(() => player.autobuyers[tier - 1]);
     this._tier = tier;
+  }
+
+  get data() {
+    return player.auto.dimensions[this._tier - 1];
   }
 
   initialize() {

@@ -142,8 +142,8 @@ GameStorage.devMigrations = {
       player.reality.epmultbuyer = false;
     },
     player => {
-      if (!Object.values(AutoRealityMode).includes(player.autoRealityMode)) {
-        player.autoRealityMode = AutoRealityMode.RM;
+      if (!["rm", "glyph", "either", "both"].includes(player.autoRealityMode)) {
+        player.autoRealityMode = "rm";
       }
     },
     GameStorage.migrations.convertAutobuyerMode,
@@ -390,7 +390,18 @@ GameStorage.devMigrations = {
       }
       player.celestials.ra.unlocks = [];
     },
-    GameStorage.migrations.renameMoney
+    GameStorage.migrations.renameMoney,
+    player => {
+      GameStorage.migrations.moveAutobuyers(player);
+      const old = player.realityBuyer;
+      const autobuyer = player.auto.reality;
+      autobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
+      autobuyer.rm = old.rm;
+      autobuyer.glyph = old.glyph;
+      autobuyer.isActive = old.isOn;
+      // KILLME
+      player.autoRealityMode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
+    }
   ],
 
   patch(player) {

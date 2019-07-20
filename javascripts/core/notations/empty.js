@@ -10,11 +10,11 @@ Notation.empty = new class EmptyNotation extends Notation {
     return true;
   }
 
-  formatUnder1000(value) {
+  formatUnder1000() {
     return " ";
   }
 
-  formatDecimal(value) {
+  formatDecimal() {
     return (" ");
   }
 }();

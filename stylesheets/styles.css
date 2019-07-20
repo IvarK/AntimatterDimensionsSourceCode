@@ -5654,18 +5654,9 @@ kbd {
 
 /* #startregion ra tab */
 
-.c-ra-pet-experience {
-  width: 30rem;
-  display: inline-block;
-  height: 1.5rem;
-  border: .2rem solid grey;
-  position: relative;
-}
-
 .l-ra-celestial-tab {
   display: flex;
-  flex-direction: row;
-  flex-flow: nowrap;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -5674,6 +5665,14 @@ kbd {
   height: 6rem;
   padding: 1rem;
   margin: 2rem auto;
+  text-shadow: -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000;
+}
+
+.c-ra-pet-title {
+  font-size: 2.5rem;
 }
 
 .l-ra-bar-container {
@@ -5687,25 +5686,68 @@ kbd {
 .l-ra-lvl-chevron {
   position: absolute;
   top: 0;
-  color: grey;
+  font-size: 1.2rem;
+  z-index: 2;
+  color: black;
+  height: 1.75rem;
+  border-left: 0.1rem solid black;
+  padding: 0 0.2rem;
+  user-select: none;
+  cursor: default;
+}
+
+.t-dark .l-ra-lvl-chevron,
+.t-dark-metro .l-ra-lvl-chevron,
+.t-s6 .l-ra-lvl-chevron {
+  color: gainsboro;
+  border-left-color: gainsboro;
+}
+
+.l-ra-lvl-chevron.no-bar {
+  border-left: none !important;
 }
 
 .c-important-chevron {
   font-weight: bold;
-  font-size: 1.25rem;
-  color: white;
-  z-index: 0;
+  font-size: 1.5rem;
+  height: 5rem;
+  border-left-width: 0.2rem;
+  cursor: pointer;
+}
+
+.o-ra-unlock-hover-text {
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 3;
+  font-size: 1rem;
+  left: -6.25rem;
+  bottom: 6rem;
+  width: 12.5rem;
+  height: fit-content;
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
 }
 
 .l-ra-exp-bar {
   position: relative;
-  border: 0.2rem solid gainsboro;
+  border: 0.2rem solid black;
   border-radius: .5rem;
   width: 80%;
   margin: 2.5rem 0 2.5rem 0;
   height: 5rem;
   justify-self: center;
-  z-index: -1;
+  z-index: 1;
+}
+
+.t-dark .l-ra-exp-bar,
+.t-dark-metro .l-ra-exp-bar,
+.t-s6 .l-ra-exp-bar {
+  border-color: gainsboro;
 }
 
 .l-ra-exp-bar-inner {
@@ -5717,36 +5759,57 @@ kbd {
 
 .l-ra-pet-container {
   flex: 1 1 auto;
+  margin: 0 0 -5rem 0;
 }
 
 .l-ra-non-pets {
-  flex: 0.2 0 30rem;
-  flex-direction: column;
+  flex: 0.2 0 25rem;
+  justify-content: center;
+  flex-direction: row;
+  display: flex;
 }
 
 .l-ra-reality-container {
-  height: 50rem;
+  height: 30rem;
   background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
-  margin: 2.5rem;
   border-radius: 2rem;
+  flex: none none 50rem;
+  width: 50rem;
+  margin: 2.5rem 5rem;
 }
 
 .l-ra-reality-inner {
   font-family: Typewriter;
-  height: 40rem;
-  margin: 5rem;
+  margin: 2.5rem;
   display: flex;
   flex-direction: column;
-  flex: 1 0;
   justify-content: center;
+}
+
+.c-ra-rewards {
+  font-size: 1.5rem;
+  margin: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.c-ra-rewards span {
+  margin: 0 1rem;
 }
 
 .l-ra-laitela-unlock {
   height: 30rem;
-  margin: 2.5rem;
-  background: radial-gradient(ellipse at center, #35d035 55%, gainsboro);
+  margin: 2.5rem 5rem;
   border-radius: 2rem;
-  flex: 1 0;
+  flex: none none 30rem;
+  animation: ra-color-switch 10s infinite;
+}
+@keyframes ra-color-switch {
+  0% { background-color: #86ea84; }
+  25% { background-color: #ea8585; }
+  50% { background-color: #ead584; }
+  75% { background-color: #f1aa7f; }
+  100% { background-color: #86ea84; }
 }
 
 .l-ra-laitela-unlock-inner {
@@ -5759,8 +5822,9 @@ kbd {
 }
 
 .l-ra-all-pets-container {
-  flex: 0.7 0 50%;
+  flex: 1 0 auto;
   flex-direction: column;
+  display: flex;
 }
 
 .l-ra-unlock {
@@ -5778,6 +5842,7 @@ kbd {
 }
 
 .l-ra-unlock-inner {
+  color: black;
   margin: auto 0.5rem;
   display: flex;
   flex-direction: column;

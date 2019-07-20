@@ -36,7 +36,7 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: level => `You can charge ${Math.floor(level / 2)} Infinity Upgrades.`,
+        scalingUpgradeText: level => `You can charge ${Math.min(Math.floor(level / 2), 12)} Infinity Upgrades.`,
         unlocks: raUnlocks => Object.entries(raUnlocks).filter(([, value]) => value.id <= 5)
           .map(([, value]) => value)
       },
@@ -74,10 +74,14 @@ Vue.component("ra-tab", {
             <br>
             <br>
             <h2> Rewards: </h2>
-            <h3> Teresa: {{this.shorten(expMultis[0], 2, 2)}}x</h3>
-            <h3> Effarig: {{this.shorten(expMultis[1], 2, 2)}}x</h3>
-            <h3> Enslaved: {{this.shorten(expMultis[2], 2, 2)}}x</h3>
-            <h3> V: {{this.shorten(expMultis[3], 2, 2)}}x</h3>
+            <div class="c-ra-rewards">
+              <span> Teresa: {{this.shorten(expMultis[0], 2, 2)}}x </span>
+              <span> Effarig: {{this.shorten(expMultis[1], 2, 2)}}x </span>
+            </div>
+            <div class="c-ra-rewards">
+              <span> Enslaved: {{this.shorten(expMultis[2], 2, 2)}}x </span>
+              <span> V: {{this.shorten(expMultis[3], 2, 2)}}x</h3> </span>
+            </div>
           </div>
         </button>
         <button class="l-ra-laitela-unlock">

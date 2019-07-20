@@ -36,12 +36,9 @@ Vue.component("ra-bar", {
     percentPerLevel() {
       return 100 / (this.currentLevelGoal - 1);
     },
-    fillPercentage() {
-      return `${Math.min((this.level - 1 + this.exp / this.requiredExp) * this.percentPerLevel, 100)}%`;
-    },
     multiLevelStyle() {
       return {
-        width: this.fillPercentage
+        width: `${Math.min((this.level - 1 + this.exp / this.requiredExp) * this.percentPerLevel, 100)}%`
       };
     },
     singleLevelStyle() {
@@ -56,7 +53,7 @@ Vue.component("ra-bar", {
     },
     currentLevelGoal() {
       if (this.shift) return this.level + 1;
-      return this.importantLevels.filter(goal => goal > this.level)[0] || this.level + 1;
+      return this.importantLevels.filter(goal => goal > this.level || goal === 25)[0];
     },
     expPerMin() {
       const avgLvl = this.lastTenGlyphLevls.reduce((acc, value) => acc + value, 0) / 10;
@@ -65,13 +62,18 @@ Vue.component("ra-bar", {
       return Math.round(expGain / (avgTimeMs / 60000));
     },
     activeUnlock() {
-      if (this.shift || this.currentLevelGoal > 25) {
+      if (this.shift) {
         return {
           description: `Get ${this.pet.name} to level ${this.currentLevelGoal}`,
-          reward: `${formatWithCommas(Math.floor(this.exp))}/${formatWithCommas(this.requiredExp)} exp`,
-          expPerMin: `${formatWithCommas(this.expPerMin)}/min over last 10 realities`
+          reward: `${shorten(Math.floor(this.exp), 2)}/${shorten(this.requiredExp, 2)} exp`,
+          expPerMin: `${shorten(this.expPerMin, 2)}/min over last 10 realities`
         };
       }
+      // if (this.level >= 25) {
+      //   return {
+      //     description: `Congragulations you unlocked all of Teresa's secrets`,
+      //   };
+      // }
       return this.unlocks.find(unlock => unlock.id % 6 === this.importantLevels.indexOf(this.currentLevelGoal));
     }
   },
@@ -91,19 +93,6 @@ Vue.component("ra-bar", {
     has(id) {
       return player.celestials.ra.unlocks.includes(id);
     },
-    levelPosition(lvl) {
-      return {
-        left: `${(this.percentPerLevel * (lvl - 1) - (lvl === 1 ? 0 : 1)) -
-          (lvl === this.currentLevelGoal ? Math.floor(Math.log10(lvl)) + 1.1 : 0)}%`,
-      };
-    },
-    levelDisplay(lvl) {
-      if (lvl === 1 || lvl === this.currentLevelGoal) return lvl;
-      return `│ ${lvl}`;
-    },
-    isImportantLevel(lvl) {
-      return this.importantLevels.includes(lvl);
-    },
     findUnlockByLevel(lvl) {
       return this.unlocks.find(unlock => unlock.id === this.importantLevels.indexOf(lvl));
     }
@@ -111,14 +100,14 @@ Vue.component("ra-bar", {
   template: `
     <div class="l-ra-bar-container">
       <div class="l-ra-exp-bar">
-        <div v-for="lvl in (currentLevelGoal - 1)"
-        v-if="!shift"
-        class="l-ra-lvl-chevron"
-        :style="levelPosition(lvl)"
-        :class="isImportantLevel(lvl) ? 'c-important-chevron' : '' ">
-          <span>
-            {{levelDisplay(lvl)}}
-          </span>
+        <div v-if="shift">
+          <ra-lvl-chevron  v-for="lvl in 2"
+          :key="currentLevelGoal - 2 + lvl" :level ="currentLevelGoal - 2 + lvl"
+          :goal="currentLevelGoal" :singleLevel="true" />
+        </div>
+        <div v-else>
+          <ra-lvl-chevron v-for="lvl in (currentLevelGoal - 1)"
+          :key="lvl" :level="lvl" :goal="currentLevelGoal" :unlock="findUnlockByLevel(lvl)" />
         </div>
         <div class="l-ra-exp-bar-inner" :style="[shift ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>
@@ -132,6 +121,3 @@ Vue.component("ra-bar", {
     </div>
   `
 });
-// <span class="infotooltiptext" v-if="isImportantLevel(lvl)">
-//   {{findUnlockByLevel(lvl).reward}}
-// </span>

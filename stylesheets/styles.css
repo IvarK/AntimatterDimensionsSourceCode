@@ -5699,8 +5699,8 @@ kbd {
 .t-dark .l-ra-lvl-chevron,
 .t-dark-metro .l-ra-lvl-chevron,
 .t-s6 .l-ra-lvl-chevron {
-  color: gainsboro;
-  border-left-color: gainsboro;
+  color: white;
+  border-left-color: white;
 }
 
 .l-ra-lvl-chevron.no-bar {
@@ -5746,7 +5746,7 @@ kbd {
 .t-dark .l-ra-exp-bar,
 .t-dark-metro .l-ra-exp-bar,
 .t-s6 .l-ra-exp-bar {
-  border-color: gainsboro;
+  border-color: white;
 }
 
 .l-ra-exp-bar-inner {

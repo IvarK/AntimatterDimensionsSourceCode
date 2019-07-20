@@ -9,8 +9,9 @@ Notation.empty = new class EmptyNotation extends Notation {
   get isPainful() {
     return true;
   }
+
   formatUnder1000(value) {
-    return " "
+    return " ";
   }
 
   formatDecimal(value) {

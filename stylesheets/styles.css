@@ -4812,7 +4812,8 @@ screen and (max-width: 480px) {
   width: 47.5rem;
 }
 
-.c-modal-import__save-info > * {
+.c-modal-import__save-info > *,
+.c-modal-import__tree-info > * {
   margin-top: .2rem;
 }
 

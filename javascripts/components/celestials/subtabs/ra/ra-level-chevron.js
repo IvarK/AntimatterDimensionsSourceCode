@@ -11,12 +11,12 @@ Vue.component("ra-level-chevron", {
   },
   data() {
     return {
-      importantLevels: [2, 3, 5, 10, 15, 25],
       mouseOverInterval: 0,
       isMouseOver: false
     };
   },
   computed: {
+    importantLevels: () => [2, 3, 5, 10, 15, 25],
     percentPerLevel() {
       return this.singleLevel ? 0 : 100 / (this.goal - 1);
     },
@@ -50,12 +50,12 @@ Vue.component("ra-level-chevron", {
   },
   template: `
   <div
-  class="l-ra-lvl-chevron"
-  :style="levelPosition"
-  :class="classList"
-  @mouseenter="onMouseEnter"
-  @click="onMouseEnter"
-  @mouseleave="onMouseLeave">
+    class="l-ra-lvl-chevron"
+    :style="levelPosition"
+    :class="classList"
+    @mouseenter="onMouseEnter"
+    @click="onMouseEnter"
+    @mouseleave="onMouseLeave">
     <div v-if="isMouseOver && isImportantLevel" class="o-ra-unlock-hover-text">
       {{unlock.reward}}
     </div>

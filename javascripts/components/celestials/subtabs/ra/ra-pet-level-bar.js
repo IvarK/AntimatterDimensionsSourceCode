@@ -11,28 +11,23 @@ Vue.component("ra-pet-level-bar", {
       exp: 0,
       requiredExp: 0,
       expBoost: 0,
-      shift: false,
       lastTenGlyphLevls: [],
       lastTenRunTimers: [],
-      petColors: {
-        Teresa: "#86ea84",
-        Effarig: "#ea8585",
-        Enslaved: "#ead584",
-        V: "#f1aa7f"
-      },
     };
   },
   computed: {
     shift() {
-      return this.ui.view.shiftDown;
+      return ui.view.shiftDown;
     },
     importantLevels: () => [2, 3, 5, 10, 15, 25],
-    allUnlocks: () => Object.values(RA_UNLOCKS),
     pet() {
       return this.petConfig.pet;
     },
+    petColor() {
+      return this.pet.color;
+    },
     unlocks() {
-      return this.allUnlocks.filter(unlock => unlock.pet === this.pet.name);
+      return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet.name === this.pet.name);
     },
     percentPerLevel() {
       return 100 / (this.currentLevelGoal - 1);
@@ -49,7 +44,7 @@ Vue.component("ra-pet-level-bar", {
     },
     petStyle() {
       return {
-        "background-color": this.petColors[this.pet.name]
+        "background-color": this.petColor
       };
     },
     currentLevelGoal() {
@@ -93,13 +88,20 @@ Vue.component("ra-pet-level-bar", {
     <div class="l-ra-bar-container">
       <div class="l-ra-exp-bar">
         <div v-if="shift">
-          <ra-level-chevron  v-for="lvl in 2"
-          :key="currentLevelGoal - 2 + lvl" :level ="currentLevelGoal - 2 + lvl"
-          :goal="currentLevelGoal" :singleLevel="true" />
+          <ra-level-chevron v-for="lvl in 2"
+            :key="currentLevelGoal - 2 + lvl"
+            :level ="currentLevelGoal - 2 + lvl"
+            :goal="currentLevelGoal"
+            :singleLevel="true"
+          />
         </div>
         <div v-else>
           <ra-level-chevron v-for="lvl in (currentLevelGoal - 1)"
-          :key="lvl" :level="lvl" :goal="currentLevelGoal" :unlock="findUnlockByLevel(lvl)" />
+            :key="lvl"
+            :level="lvl"
+            :goal="currentLevelGoal"
+            :unlock="findUnlockByLevel(lvl)"
+          />
         </div>
         <div class="l-ra-exp-bar-inner" :style="[shift ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>

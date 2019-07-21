@@ -6,12 +6,6 @@ Vue.component("ra-pet", {
   },
   data() {
     return {
-      petColors: {
-        Teresa: "#86ea84",
-        Effarig: "#ea8585",
-        Enslaved: "#ead584",
-        V: "#f1aa7f"
-      },
       isUnlocked: false,
       level: 0,
     };
@@ -20,12 +14,15 @@ Vue.component("ra-pet", {
     pet() {
       return this.petConfig.pet;
     },
+    petColor() {
+      return this.pet.color;
+    },
     scalingUpgradeText() {
       return this.petConfig.scalingUpgradeText(this.level);
     },
     petStyle() {
       return {
-        color: this.petColors[this.pet.name]
+        color: this.petColor
       };
     },
   },

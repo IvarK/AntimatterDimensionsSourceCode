@@ -19,7 +19,7 @@ Vue.component("ra-tab", {
     }
   },
   computed: {
-    laitelaUnlock: () => RA_UNLOCKS.LAITELA_UNLOCK,
+    laitelaUnlock: () => RA_LAITELA_UNLOCK,
     pets: () => [
       {
         pet: Ra.pets.teresa,

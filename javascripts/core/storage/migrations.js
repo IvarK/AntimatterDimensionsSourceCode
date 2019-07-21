@@ -502,6 +502,8 @@ GameStorage.migrations = {
       autobuyer.lastTick = player.realTimePlayed;
     }
 
+    delete player.overXGalaxies;
+
     if (player.autobuyers[10] % 1 !== 0) {
       const old = player.autobuyers[10];
       const autobuyer = player.auto.galaxy;
@@ -526,12 +528,17 @@ GameStorage.migrations = {
       autobuyer.lastTick = player.realTimePlayed;
     }
 
+    delete player.autoCrunchMode;
+    delete player.autobuyers;
+
     if (player.autoSacrifice % 1 !== 0) {
       const old = player.autoSacrifice;
       const autobuyer = player.auto.sacrifice;
       autobuyer.multiplier = old.priority;
       autobuyer.isActive = old.isOn;
     }
+
+    delete player.autoSacrifice;
 
     if (player.eternityBuyer !== undefined) {
       const old = player.eternityBuyer;
@@ -541,6 +548,9 @@ GameStorage.migrations = {
       autobuyer.xLast = new Decimal(old.limit);
       autobuyer.isActive = old.isOn;
     }
+
+    delete player.eternityBuyer;
+    delete player.autoEternityMode;
   },
 
   prePatch(saveData) {

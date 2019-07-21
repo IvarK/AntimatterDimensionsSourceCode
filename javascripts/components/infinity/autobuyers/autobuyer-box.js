@@ -13,11 +13,7 @@ Vue.component("autobuyer-box", {
       },
       computed: {
         intervalDisplay() {
-          let seconds = TimeSpan.fromMilliseconds(this.interval).totalSeconds;
-          if (BreakInfinityUpgrade.autobuyerSpeed.isBought) {
-            seconds /= 2;
-          }
-          return seconds.toFixed(2);
+          return TimeSpan.fromMilliseconds(this.interval).totalSeconds.toFixed(2);
         }
       },
       methods: {
@@ -30,60 +26,52 @@ Vue.component("autobuyer-box", {
     }
   },
   props: {
-    setup: Object
+    autobuyer: Object,
+    name: String,
+    showInterval: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       isUnlocked: false,
-      isOn: false
+      isActive: false,
+      globalToggle: false
     };
   },
-  computed: {
-    autobuyer() {
-      return this.setup.autobuyer;
-    },
-    hasInterval() {
-      return this.autobuyer.hasInterval;
+  watch: {
+    isActive(newValue) {
+      this.autobuyer.isActive = newValue;
     }
   },
   methods: {
     update() {
-      if (this.setup === undefined) return;
       const autobuyer = this.autobuyer;
       this.isUnlocked = autobuyer.isUnlocked;
-      if (!this.isUnlocked) return;
-      this.isOn = autobuyer.isOn;
+      this.isActive = autobuyer.isActive;
+      this.globalToggle = player.options.autobuyersOn;
     },
-    changeActive() {
-      const newValue = !this.autobuyer.isOn;
-      this.autobuyer.isOn = newValue;
-      this.active = newValue;
+    toggle() {
+      if (!this.globalToggle) return;
+      this.isActive = !this.isActive;
     }
   },
   template:
     `<div v-if="isUnlocked" class="c-autobuyer-box l-autobuyer-box">
-      <div>{{setup.name}}</div>
-      <template v-if="hasInterval">
-        <slot name="beforeInterval" />
-        <interval-label :autobuyer="autobuyer"/>
-      </template>
+      <div class="l-autobuyer-box__header">{{name}}</div>
+      <slot name="beforeInterval" />
+      <interval-label v-if="showInterval" :autobuyer="autobuyer"/>
       <div class="l-autobuyer-box__content">
         <slot />
       </div>
-      <div class="o-autobuyer-toggle-checkbox" @click="changeActive">
+      <div class="o-autobuyer-toggle-checkbox l-autobuyer-box__footer" @click="toggle">
         <span class="o-autobuyer-toggle-checkbox__label">Is active:</span>
-        <input :checked="isOn" type="checkbox"/>
+        <input
+          :checked="isActive && globalToggle"
+          :disabled="!globalToggle"
+          type="checkbox"
+        />
       </div>
     </div>`
 });
-
-class AutobuyerBoxSetup {
-  /**
-   * @param {string} name
-   * @param {AutobuyerState|Autobuyer.eternity|Autobuyer.reality} autobuyer
-   */
-  constructor(name, autobuyer) {
-    this.name = name;
-    this.autobuyer = autobuyer;
-  }
-}

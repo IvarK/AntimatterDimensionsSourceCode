@@ -15,13 +15,13 @@ Vue.component("autobuyers-tab", {
           <big-crunch-autobuyer-box />
         </div>
         <div class="l-autobuyer-grid__row">
-          <dim-autobuyer-box v-for="tier in 3" :key="tier" :tier="tier"/>
+          <dimension-autobuyer-box v-for="tier in 3" :key="tier" :tier="tier"/>
         </div>
         <div class="l-autobuyer-grid__row">
-          <dim-autobuyer-box v-for="tier in 3" :key="tier + 3" :tier="tier + 3"/>
+          <dimension-autobuyer-box v-for="tier in 3" :key="tier + 3" :tier="tier + 3"/>
         </div>
         <div class="l-autobuyer-grid__row">
-          <dim-autobuyer-box v-for="tier in 2" :key="tier + 6" :tier="tier + 6"/>
+          <dimension-autobuyer-box v-for="tier in 2" :key="tier + 6" :tier="tier + 6"/>
           <tickspeed-autobuyer-box />
         </div>
         <div class="l-autobuyer-grid__row">

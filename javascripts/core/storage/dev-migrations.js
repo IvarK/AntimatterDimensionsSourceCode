@@ -399,6 +399,9 @@ GameStorage.devMigrations = {
       autobuyer.rm = old.rm;
       autobuyer.glyph = old.glyph;
       autobuyer.isActive = old.isOn;
+
+      delete player.realityBuyer;
+      delete player.autoRealityMode;
     }
   ],
 

@@ -2,57 +2,78 @@
 
 Vue.component("autobuyer-input", {
   props: {
-    setup: Object
+    autobuyer: Object,
+    property: String,
+    type: String
   },
   data() {
     return {
       isValid: true,
-      actualValue: undefined,
       isFocused: false,
       displayValue: "0"
     };
   },
   computed: {
-    type() {
-      return this.setup.type;
-    },
-    classObject() {
-      return {
-        "o-autobuyer-input": true,
-        "o-autobuyer-input--invalid": !this.isValid,
-      };
-    },
     inputType() {
-      return this.type === AutobuyerInputType.INT ? "number" : "text";
+      return this.type === "int" ? "number" : "text";
+    },
+    typeFunctions() {
+      switch (this.type) {
+        case "decimal": return {
+          areEqual: (value, other) => Decimal.eq(value, other),
+          formatValue: value => Notation.scientific.format(value, 2, 0),
+          copyValue: value => new Decimal(value),
+          tryParse: input => {
+            try {
+              const decimal = Decimal.fromString(input.replace(",", ""));
+              return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
+            } catch (e) {
+              return undefined;
+            }
+          }
+        };
+        case "float": return {
+          areEqual: (value, other) => value === other,
+          formatValue: value => value.toString(),
+          copyValue: value => value,
+          tryParse: input => {
+            const float = parseFloat(input);
+            return isNaN(float) ? undefined : float;
+          }
+        };
+        case "int": return {
+          areEqual: (value, other) => value === other,
+          formatValue: value => value.toString(),
+          copyValue: value => value,
+          tryParse: input => {
+            const int = parseInt(input, 10);
+            return isNaN(int) || !Number.isInteger(int) ? undefined : int;
+          }
+        };
+      }
+      throw crash("Unknown input type");
+    },
+    validityClass() {
+      return this.isValid ? undefined : "o-autobuyer-input--invalid";
     }
   },
   methods: {
     update() {
       if (this.isFocused) return;
-      this.fetchActualValue();
+      this.updateActualValue();
     },
-    fetchActualValue() {
-      const actualValue = this.getValue();
-      if (!this.areEqual(this.actualValue, actualValue)) {
-        this.actualValue = actualValue;
-        this.displayValue = this.formatActualValue();
-      }
+    updateActualValue() {
+      const actualValue = this.autobuyer[this.property];
+      if (this.areEqual(this.actualValue, actualValue)) return;
+      this.actualValue = this.typeFunctions.copyValue(actualValue);
+      this.updateDisplayValue();
     },
     areEqual(value, other) {
       if (other === undefined || value === undefined) return false;
-      switch (this.type) {
-        case AutobuyerInputType.DECIMAL: return Decimal.eq(value, other);
-        case AutobuyerInputType.FLOAT:
-        case AutobuyerInputType.INT: return value === other;
-      }
-      throw "Unknown input type";
+      return this.typeFunctions.areEqual(value, other);
     },
-    getValue() {
-      return this.setup.getValue();
-    },
-    setValue(value) {
-      this.setup.setValue(value);
-      this.displayValue = this.formatActualValue();
+    updateDisplayValue() {
+      this.displayValue = this.typeFunctions.formatValue(this.actualValue);
     },
     handleInput(event) {
       const input = event.target.value;
@@ -61,7 +82,9 @@ Vue.component("autobuyer-input", {
         this.isValid = false;
         return;
       }
-      this.isValid = this.validate(input);
+      const parsedValue = this.typeFunctions.tryParse(input);
+      this.isValid = parsedValue !== undefined;
+      this.actualValue = this.typeFunctions.copyValue(parsedValue);
     },
     handleFocus() {
       this.isFocused = true;
@@ -71,86 +94,23 @@ Vue.component("autobuyer-input", {
         SecretAchievement(28).unlock();
       }
       if (this.isValid) {
-        this.setValue(this.actualValue);
+        this.autobuyer[this.property] = this.typeFunctions.copyValue(this.actualValue);
       } else {
-        this.fetchActualValue();
+        this.updateActualValue();
       }
+      this.updateDisplayValue();
       this.isValid = true;
       this.isFocused = false;
-    },
-    formatActualValue() {
-      return this.formatValue(this.getValue());
-    },
-    validate(input) {
-      switch (this.type) {
-        case AutobuyerInputType.DECIMAL: return this.validateDecimal(input);
-        case AutobuyerInputType.FLOAT: return this.validateFloat(input);
-        case AutobuyerInputType.INT: return this.validateInt(input);
-      }
-      throw "Unknown input type";
-    },
-    validateDecimal(input) {
-      try {
-        const decimal = Decimal.fromString(input);
-        if (isNaN(decimal.mantissa) || isNaN(decimal.exponent)) return false;
-        this.actualValue = decimal;
-      } catch (e) {
-        return false;
-      }
-      return true;
-    },
-    validateFloat(input) {
-      const float = parseFloat(input);
-      if (isNaN(float)) return false;
-      this.actualValue = float;
-      return true;
-    },
-    validateInt(input) {
-      const int = parseInt(input, 10);
-      if (isNaN(int) || !Number.isInteger(int)) return false;
-      this.actualValue = int;
-      return true;
-    },
-    formatValue(value) {
-      switch (this.type) {
-        case AutobuyerInputType.DECIMAL: return shortenAutobuyerInput(value);
-        case AutobuyerInputType.FLOAT:
-        case AutobuyerInputType.INT: return value.toString();
-      }
-      throw "Unknown input type";
     }
   },
   template:
     `<input
       :value="displayValue"
-      :class="classObject"
+      :class="validityClass"
       :type="inputType"
+      class="o-autobuyer-input"
       @blur="handleBlur"
       @focus="handleFocus"
       @input="handleInput"
     />`
 });
-
-class AutobuyerInputSetup {
-  /**
-   * @param {AutobuyerInputType} type
-   * @param {Function} getValue
-   * @param {Function} setValue
-   */
-  constructor(type, getValue, setValue) {
-    this.type = type;
-    if (type === AutobuyerInputType.DECIMAL) {
-      this.getValue = () => new Decimal(getValue());
-      this.setValue = value => setValue(new Decimal(value));
-    } else {
-      this.getValue = getValue;
-      this.setValue = setValue;
-    }
-  }
-}
-
-const AutobuyerInputType = {
-  DECIMAL: 1,
-  FLOAT: 2,
-  INT: 3,
-};

@@ -30,11 +30,11 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
   }
 
   get glyph() {
-    return this.data.rm;
+    return this.data.glyph;
   }
 
   set glyph(value) {
-    this.data.rm = value;
+    this.data.glyph = value;
   }
 
   toggleMode() {

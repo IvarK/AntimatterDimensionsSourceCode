@@ -129,7 +129,7 @@ const AutomatorLexer = (() => {
     extraCategories: [StudyPath],
     $autobuyer: Autobuyer.bigCrunch,
     $autobuyerDurationMode: AutoCrunchMode.TIME,
-    $autobuyerXLastMode: AutoCrunchMode.RELATIVE,
+    $autobuyerXLastMode: AutoCrunchMode.X_LAST,
     $autobuyerCurrencyMode: AutoCrunchMode.AMOUNT,
     $prestigeAvailable: () => canCrunch(),
     $prestige: () => bigCrunchResetRequest(true),
@@ -140,7 +140,7 @@ const AutomatorLexer = (() => {
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
     $autobuyer: Autobuyer.eternity,
     $autobuyerDurationMode: AutoEternityMode.TIME,
-    $autobuyerXLastMode: AutoEternityMode.RELATIVE,
+    $autobuyerXLastMode: AutoEternityMode.X_LAST,
     $autobuyerCurrencyMode: AutoEternityMode.AMOUNT,
     $prestigeAvailable: () => canEternity(),
     $prestigeLevel: 2,

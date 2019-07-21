@@ -54,7 +54,9 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
   }
 
   get interval() {
-    return this.isBuyMaxUnlocked ? this.buyMaxInterval : super.interval;
+    return this.isBuyMaxUnlocked
+      ? TimeSpan.fromSeconds(this.buyMaxInterval).totalMilliseconds
+      : super.interval;
   }
 
   get canTick() {

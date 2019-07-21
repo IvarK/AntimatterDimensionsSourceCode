@@ -13,12 +13,28 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
     return Player.defaultStart.auto.galaxy.interval;
   }
 
+  get limitGalaxies() {
+    return this.data.limitGalaxies;
+  }
+
+  set limitGalaxies(value) {
+    this.data.limitGalaxies = value;
+  }
+
   get maxGalaxies() {
     return this.data.maxGalaxies;
   }
 
   set maxGalaxies(value) {
     this.data.maxGalaxies = value;
+  }
+
+  get buyMax() {
+    return this.data.buyMax;
+  }
+
+  set buyMax(value) {
+    this.data.buyMax = value;
   }
 
   get buyMaxInterval() {
@@ -34,18 +50,19 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends IntervaledAutobuyerSta
   }
 
   get isBuyMaxActive() {
-    // TODO
-    return this.isBuyMaxUnlocked && this.buyMaxInterval > 0;
+    return this.isBuyMaxUnlocked && this.buyMax;
   }
 
   get interval() {
-    return this.isBuyMaxActive ? this.buyMaxInterval : super.interval;
+    return this.isBuyMaxActive
+      ? TimeSpan.fromSeconds(this.buyMaxInterval).totalMilliseconds
+      : super.interval;
   }
 
   tick() {
     super.tick();
     if (!Galaxy.requirement.isSatisfied) return;
-    if (player.galaxies >= this.maxGalaxies) return;
+    if (this.limitGalaxies && player.galaxies >= this.maxGalaxies) return;
     if (this.isBuyMaxActive) {
       maxBuyGalaxies();
       return;

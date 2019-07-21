@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component("dim-autobuyer-box", {
+Vue.component("dimension-autobuyer-box", {
   components: {
     "bulk-button": {
       props: {
@@ -26,7 +26,6 @@ Vue.component("dim-autobuyer-box", {
       methods: {
         update() {
           const autobuyer = this.autobuyer;
-          if (!autobuyer.isUnlocked) return;
           this.hasMaxedInterval = autobuyer.hasMaxedInterval;
           this.hasMaxedBulk = autobuyer.hasMaxedBulk;
           this.bulk = autobuyer.bulk;
@@ -62,9 +61,8 @@ Vue.component("dim-autobuyer-box", {
     autobuyer() {
       return Autobuyer.dimension(this.tier);
     },
-    boxSetup() {
-      const name = DISPLAY_NAMES[this.tier];
-      return new AutobuyerBoxSetup(`${name} Dimension Autobuyer`, this.autobuyer);
+    name() {
+      return `${DISPLAY_NAMES[this.tier]} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {
@@ -76,7 +74,6 @@ Vue.component("dim-autobuyer-box", {
   },
   methods: {
     update() {
-      if (!this.autobuyer.isUnlocked) return;
       this.mode = this.autobuyer.mode;
     },
     toggleMode() {
@@ -85,13 +82,13 @@ Vue.component("dim-autobuyer-box", {
     }
   },
   template:
-    `<autobuyer-box :setup="boxSetup">
+    `<autobuyer-box :autobuyer="autobuyer" :name="name" showInterval>
       <template slot="beforeInterval">
         <bulk-button :autobuyer="autobuyer" />
         <autobuyer-interval-button :autobuyer="autobuyer" />
         <button class="o-autobuyer-btn" @click="toggleMode">{{modeDisplay}}</button>
       </template>
-      <autobuyer-priority-selector :autobuyer="autobuyer"/>
-      <br>
+      <div class="l-autobuyer-box__fill" />
+      <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
     </autobuyer-box>`
 });

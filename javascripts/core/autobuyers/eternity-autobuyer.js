@@ -51,15 +51,6 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
     }
   }
 
-  toggleMode() {
-    this.mode = [
-      AutoEternityMode.AMOUNT,
-      AutoEternityMode.TIME,
-      AutoEternityMode.RELATIVE
-    ]
-      .nextSibling(this.mode);
-  }
-
   tick() {
     let proc = false;
     switch (this.mode) {
@@ -69,7 +60,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
       case AutoEternityMode.TIME:
         proc = Time.thisEternityRealTime.totalSeconds > this.time;
         break;
-      case AutoEternityMode.RELATIVE:
+      case AutoEternityMode.X_LAST:
         proc = gainedEternityPoints().gte(player.lastTenEternities[0][1].times(this.xLast));
         break;
     }

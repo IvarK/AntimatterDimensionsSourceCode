@@ -55,15 +55,6 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
     }
   }
 
-  toggleMode() {
-    this.mode = [
-      AutoCrunchMode.AMOUNT,
-      AutoCrunchMode.TIME,
-      AutoCrunchMode.RELATIVE
-    ]
-      .nextSibling(this.mode);
-  }
-
   tick() {
     super.tick();
     if (!player.antimatter.gte(Decimal.MAX_NUMBER)) return;
@@ -76,7 +67,7 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends IntervaledAutobu
         case AutoCrunchMode.TIME:
           proc = Time.thisInfinityRealTime.totalSeconds > this.time;
           break;
-        case AutoCrunchMode.RELATIVE:
+        case AutoCrunchMode.X_LAST:
           proc = gainedInfinityPoints().gte(player.lastTenRuns[0][1].times(this.xLast));
           break;
       }

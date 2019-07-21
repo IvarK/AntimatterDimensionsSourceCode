@@ -15,7 +15,7 @@ class AutobuyerState {
   get isUnlocked() { throw NotImplementedCrash(); }
 
   get canTick() {
-    return this.isUnlocked && this.isActive;
+    return this.isActive && player.options.autobuyersOn && this.isUnlocked;
   }
 
   get isActive() {
@@ -28,10 +28,6 @@ class AutobuyerState {
 
   toggle() {
     this.isActive = !this.isActive;
-  }
-
-  get hasInterval() {
-    return false;
   }
 
   /**
@@ -59,10 +55,6 @@ class IntervaledAutobuyerState extends AutobuyerState {
   get interval() {
     const interval = this.data.interval;
     return BreakInfinityUpgrade.autobuyerSpeed.isBought ? interval / 2 : interval;
-  }
-
-  get hasInterval() {
-    return true;
   }
 
   get hasMaxedInterval() {

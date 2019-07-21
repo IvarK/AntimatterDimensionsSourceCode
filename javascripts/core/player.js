@@ -86,6 +86,7 @@ let player = {
     galaxy: {
       cost: 1,
       interval: 150000,
+      limitGalaxies: true,
       maxGalaxies: 1,
       buyMax: false,
       buyMaxInterval: 0,
@@ -178,7 +179,6 @@ let player = {
   totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
-  autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
     unl: false,
@@ -416,6 +416,7 @@ let player = {
     retryChallenge: false,
     showAllChallenges: false,
     bulkOn: true,
+    autobuyersOn: true,
     cloud: true,
     hotkeys: true,
     theme: "Normal",
@@ -524,7 +525,7 @@ function guardFromNaNValues(obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
     // TODO: rework autobuyer saving
-    if (key === "autoSacrifice" || key === "automator") continue;
+    if (key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

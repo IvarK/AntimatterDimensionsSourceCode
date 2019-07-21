@@ -30,12 +30,7 @@ const Autobuyers = (function() {
     },
 
     toggle() {
-      const unlocked = Autobuyers.unlocked;
-      if (unlocked.length === 0) return;
-      const isOn = unlocked[0].isOn;
-      for (const autobuyer of unlocked) {
-        autobuyer.isOn = !isOn;
-      }
+      player.options.autobuyersOn = !player.options.autobuyersOn;
     },
 
     tick() {

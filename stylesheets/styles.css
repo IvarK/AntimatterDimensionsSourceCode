@@ -4812,8 +4812,7 @@ screen and (max-width: 480px) {
   width: 47.5rem;
 }
 
-.c-modal-import__save-info > *,
-.c-modal-import__tree-info > * {
+.c-modal-import__save-info > * {
   margin-top: .2rem;
 }
 
@@ -4830,6 +4829,30 @@ screen and (max-width: 480px) {
 }
 
 /*#endregion c-modal-import*/
+
+/*#region c-modal-import-tree*/
+
+.c-modal-import-tree {
+  width: 47.5rem;
+}
+
+.c-modal-import-tree__tree-info > * {
+  margin-top: .2rem;
+}
+
+.c-modal-import-tree__warning {
+  font-size: 1rem;
+}
+
+.c-modal-import-tree__input {
+  width: 45rem;
+}
+
+.c-modal-import-tree__import-btn {
+  margin-top: .3rem;
+}
+
+/*#endregion c-modal-import-tree*/
 
 .c-modal-input {
   border: .1rem solid black;

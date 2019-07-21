@@ -47,6 +47,12 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
       .nextSibling(this.mode);
   }
 
+  bumpAmount(mult) {
+    if (this.isUnlocked) {
+      this.rm = this.rm.times(mult);
+    }
+  }
+
   tick() {
     let proc = false;
     const rmProc = gainedRealityMachines().gte(this.rm);

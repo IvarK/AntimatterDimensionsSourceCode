@@ -89,6 +89,7 @@ const Teresa = {
     if (player.reality.pp < cost) return false;
     player.celestials.teresa.rmMult *= 2;
     player.reality.pp -= cost;
+    Autobuyer.reality.bumpAmount(2);
     return true;
   },
   buyDtBulk() {

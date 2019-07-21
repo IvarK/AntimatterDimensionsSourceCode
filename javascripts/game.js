@@ -268,6 +268,7 @@ function gainedInfinities() {
       RealityUpgrade(7)
     );
     infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
+    infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     return infGain;
 }
 
@@ -485,12 +486,13 @@ function gameLoop(diff, options = {}) {
           RealityUpgrade(7)
         );
         infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
+        infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
       }
       if (RealityUpgrade(11).isBought) {
         infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
       }
       if (EffarigUnlock.eternity.isUnlocked) {
-        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.infinity()));
+        infGen = infGen.plus(gainedInfinities().times(player.eternities).times(Time.deltaTime));
       }
       infGen = infGen.plus(player.partInfinitied);
       player.infinitied = player.infinitied.plus(infGen.floor());

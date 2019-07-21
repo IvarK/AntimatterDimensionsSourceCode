@@ -413,7 +413,7 @@ dev.printResourceTotals = function() {
   console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
   console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
   const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
-  const rGalaxy = 100 * Math.floor(player.replicanti.galaxies / 100 + 0.5);
+  const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
   const dGalaxy = 100 * Math.floor(player.dilation.freeGalaxies / 100 + 0.5);
   console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
   console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);

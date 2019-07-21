@@ -32,14 +32,17 @@ Vue.component("ra-pet-level-bar", {
     percentPerLevel() {
       return 100 / (this.currentLevelGoal - 1);
     },
+    percentToNextLevel() {
+      return this.exp / this.requiredExp;
+    },
     multiLevelStyle() {
       return {
-        width: `${Math.min((this.level - 1 + this.exp / this.requiredExp) * this.percentPerLevel, 100)}%`
+        width: `${Math.min((this.level - 1 + this.percentToNextLevel) * this.percentPerLevel, 100)}%`
       };
     },
     singleLevelStyle() {
       return {
-        width: `${this.exp / this.requiredExp * 100}%`
+        width: `${this.percentToNextLevel * 100}%`
       };
     },
     petStyle() {

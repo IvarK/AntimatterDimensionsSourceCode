@@ -67,7 +67,7 @@ let player = {
     tickspeed: {
       isUnlocked: false,
       cost: 1,
-      interval: 5000,
+      interval: 2500,
       mode: AutobuyerMode.BUY_SINGLE,
       priority: 1,
       isActive: false,
@@ -85,7 +85,7 @@ let player = {
     },
     galaxy: {
       cost: 1,
-      interval: 150000,
+      interval: 75000,
       limitGalaxies: true,
       maxGalaxies: 1,
       buyMax: false,
@@ -95,7 +95,7 @@ let player = {
     },
     bigCrunch: {
       cost: 1,
-      interval: 300000,
+      interval: 150000,
       mode: 0,
       amount: new Decimal(1),
       time: 1,

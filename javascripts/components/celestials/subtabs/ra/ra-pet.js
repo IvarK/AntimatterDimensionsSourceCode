@@ -43,7 +43,7 @@ Vue.component("ra-pet", {
         <div class="c-ra-pet-title">{{ pet.name }} Lvl. {{ level }}</div>
         <div v-if="level >= 2">{{ scalingUpgradeText }}</div>
       </div>
-      <ra-bar :petConfig="this.petConfig" />
+      <ra-pet-level-bar :petConfig="this.petConfig" />
     </div>
   `
 });

@@ -1,12 +1,11 @@
 "use strict";
 
-Vue.component("ra-bar", {
+Vue.component("ra-pet-level-bar", {
   props: {
     petConfig: Object
   },
   data() {
     return {
-      importantLevels: [2, 3, 5, 10, 15, 25],
       isUnlocked: false,
       level: 0,
       exp: 0,
@@ -24,14 +23,16 @@ Vue.component("ra-bar", {
     };
   },
   computed: {
-    allUnlocks() {
-      return RA_UNLOCKS;
+    shift() {
+      return this.ui.view.shiftDown;
     },
+    importantLevels: () => [2, 3, 5, 10, 15, 25],
+    allUnlocks: () => Object.values(RA_UNLOCKS),
     pet() {
       return this.petConfig.pet;
     },
     unlocks() {
-      return this.petConfig.unlocks(this.allUnlocks);
+      return this.allUnlocks.filter(unlock => unlock.pet === this.pet.name);
     },
     percentPerLevel() {
       return 100 / (this.currentLevelGoal - 1);
@@ -53,7 +54,7 @@ Vue.component("ra-bar", {
     },
     currentLevelGoal() {
       if (this.shift) return this.level + 1;
-      return this.importantLevels.filter(goal => goal > this.level || goal === 25)[0];
+      return this.importantLevels.find(goal => goal > this.level || goal === 25);
     },
     expPerMin() {
       const avgLvl = this.lastTenGlyphLevls.reduce((acc, value) => acc + value, 0) / 10;
@@ -69,7 +70,7 @@ Vue.component("ra-bar", {
           expPerMin: `${shorten(this.expPerMin, 2)}/min over last 10 realities`
         };
       }
-      return this.unlocks.find(unlock => unlock.id % 6 === this.importantLevels.indexOf(this.currentLevelGoal));
+      return this.unlocks.find(unlock => unlock.level === this.currentLevelGoal);
     }
   },
   methods: {
@@ -81,27 +82,23 @@ Vue.component("ra-bar", {
       this.expBoost = pet.expBoost;
       this.level = pet.level;
       this.requiredExp = pet.requiredExp;
-      this.shift = shiftDown;
       this.lastTenGlyphLevls = player.lastTenRealities.map(([, , , lvl]) => lvl);
       this.lastTenRunTimers = player.lastTenRealities.map(([, , time]) => time);
     },
-    has(id) {
-      return player.celestials.ra.unlocks.includes(id);
-    },
     findUnlockByLevel(lvl) {
-      return this.unlocks.find(unlock => unlock.id === this.importantLevels.indexOf(lvl));
+      return this.unlocks.find(unlock => unlock.level === lvl);
     }
   },
   template: `
     <div class="l-ra-bar-container">
       <div class="l-ra-exp-bar">
         <div v-if="shift">
-          <ra-lvl-chevron  v-for="lvl in 2"
+          <ra-level-chevron  v-for="lvl in 2"
           :key="currentLevelGoal - 2 + lvl" :level ="currentLevelGoal - 2 + lvl"
           :goal="currentLevelGoal" :singleLevel="true" />
         </div>
         <div v-else>
-          <ra-lvl-chevron v-for="lvl in (currentLevelGoal - 1)"
+          <ra-level-chevron v-for="lvl in (currentLevelGoal - 1)"
           :key="lvl" :level="lvl" :goal="currentLevelGoal" :unlock="findUnlockByLevel(lvl)" />
         </div>
         <div class="l-ra-exp-bar-inner" :style="[shift ? singleLevelStyle : multiLevelStyle, petStyle]" />

@@ -19,7 +19,7 @@ class RaPetState {
   get isUnlocked() {
     return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
   }
-  
+
   get level() {
     return this.data.level;
   }
@@ -27,7 +27,7 @@ class RaPetState {
   set level(value) {
     this.data.level = value;
   }
-  
+
   get exp() {
     return this.data.exp;
   }
@@ -108,7 +108,7 @@ class RaPetState {
       GameUI.notify.success(`${this.name} has leveled up to level ${this.level}!`);
     }
   }
-  
+
   reset() {
     this.data.level = 1;
     this.data.exp = 0;
@@ -285,37 +285,49 @@ const RA_UNLOCKS = {
     id: 0,
     description: "Get Teresa to level 2",
     reward: "Unlock charging of Infinity upgrades",
-    requirement: () => Ra.pets.teresa.level >= 2
+    requirement: () => Ra.pets.teresa.level >= 2,
+    pet: "Teresa",
+    level: 2
   },
   TERESA_XP: {
     id: 1,
     description: "Get Teresa to level 3",
     reward: "Unlock Ra's Reality, boost Teresa memory gain based on EP reached",
-    requirement: () => Ra.pets.teresa.level >= 3
+    requirement: () => Ra.pets.teresa.level >= 3,
+    pet: "Teresa",
+    level: 3
   },
   EFFARIG_UNLOCK: {
     id: 2,
     description: "Get Teresa to level 5",
     reward: "Unlock Effarig memories",
-    requirement: () => Ra.pets.teresa.level >= 5
+    requirement: () => Ra.pets.teresa.level >= 5,
+    pet: "Teresa",
+    level: 2
   },
   AUTO_TP: {
     id: 3,
     description: "Get Teresa to level 10",
     reward: "Tachyon Particles are given immediately during dilation",
-    requirement: () => Ra.pets.teresa.level >= 10
+    requirement: () => Ra.pets.teresa.level >= 10,
+    pet: "Teresa",
+    level: 10
   },
   PERK_SHOP_INCREASE: {
     id: 4,
     description: "Get Teresa to level 15",
     reward: "Perk shop caps are raised",
-    requirement: () => Ra.pets.teresa.level >= 15
+    requirement: () => Ra.pets.teresa.level >= 15,
+    pet: "Teresa",
+    level: 15
   },
   LATER_DILATION: {
     id: 5,
     description: "Get Teresa to level 25",
     reward: "Unlock more dilation upgrades [unimplemented]",
-    requirement: () => Ra.pets.teresa.level >= 25
+    requirement: () => Ra.pets.teresa.level >= 25,
+    pet: "Teresa",
+    level: 25
   },
   IMPROVED_GLYPHS: {
     id: 6,
@@ -325,38 +337,50 @@ const RA_UNLOCKS = {
     effect: {
       rarity: () => Ra.pets.effarig.level,
       choice: () => Math.floor(Ra.pets.effarig.level / 5),
-    }
+    },
+    pet: "Effarig",
+    level: 2
   },
   EFFARIG_XP: {
     id: 7,
     description: "Get Effarig to level 3",
     reward: "Boost Effarig memory gain based on glyph count in Ra's Reality",
-    requirement: () => Ra.pets.effarig.level >= 3
+    requirement: () => Ra.pets.effarig.level >= 3,
+    pet: "Effarig",
+    level: 3
   },
   ENSLAVED_UNLOCK: {
     id: 8,
     description: "Get Effarig to level 5",
     reward: "Unlock Enslaved memories",
-    requirement: () => Ra.pets.effarig.level >= 5
+    requirement: () => Ra.pets.effarig.level >= 5,
+    pet: "Effarig",
+    level: 5
   },
   GLYPH_EFFECT_COUNT: {
     id: 9,
     description: "Get Effarig to level 10",
     reward: "Glyphs always have 4 effects (Effarig glyphs can now have more)",
-    requirement: () => Ra.pets.effarig.level >= 10
+    requirement: () => Ra.pets.effarig.level >= 10,
+    pet: "Effarig",
+    level: 10
   },
   SHARD_LEVEL_BOOST: {
     id: 10,
     description: "Get Effarig to level 15",
     reward: "Glyph level is increased based on relic shards gained",
     requirement: () => Ra.pets.effarig.level >= 15,
-    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2)
+    effect: () => Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
+    pet: "Effarig",
+    level: 15
   },
   GLYPH_ALCHEMY: {
     id: 11,
     description: "Get Effarig to level 25",
     reward: "Unlock Glyph Alchemy",
-    requirement: () => Ra.pets.effarig.level >= 25
+    requirement: () => Ra.pets.effarig.level >= 25,
+    pet: "Effarig",
+    level: 25
   },
   IMPROVED_STORED_TIME: {
     id: 12,
@@ -367,56 +391,74 @@ const RA_UNLOCKS = {
       gameTimeAmplification: () => 1 + Math.clampMax(Ra.pets.enslaved.level, 25) / 100,
       realTimeEfficiency: () => Ra.pets.enslaved.level / 50,
       realTimeCap: () => 1000 * 3600 * (Ra.pets.enslaved.level + Math.clampMin(Ra.pets.enslaved.level - 25, 0)) / 2,
-    }
+    },
+    pet: "Enslaved",
+    level: 2
   },
   ENSLAVED_XP: {
     id: 13,
     description: "Get Enslaved to level 3",
     reward: "Boost Enslaved memory gain based on game time in Ra's Reality",
-    requirement: () => Ra.pets.enslaved.level >= 3
+    requirement: () => Ra.pets.enslaved.level >= 3,
+    pet: "Enslaved",
+    level: 3
   },
   V_UNLOCK: {
     id: 14,
     description: "Get Enslaved to level 5",
     reward: "Unlock V memories",
-    requirement: () => Ra.pets.enslaved.level >= 5
+    requirement: () => Ra.pets.enslaved.level >= 5,
+    pet: "Enslaved",
+    level: 5
   },
   ADJUSTABLE_STORED_TIME: {
     id: 15,
     description: "Get Enslaved to level 10",
     reward: "Stored game time can be rate-adjusted and automatically released",
-    requirement: () => Ra.pets.enslaved.level >= 10
+    requirement: () => Ra.pets.enslaved.level >= 10,
+    pet: "Enslaved",
+    level: 10
   },
   PEAK_GAMESPEED: {
     id: 16,
     description: "Get Enslaved to level 15",
     reward: "Gain more dilated time based on peak game speed in each Reality",
-    requirement: () => Ra.pets.enslaved.level >= 15
+    requirement: () => Ra.pets.enslaved.level >= 15,
+    pet: "Enslaved",
+    level: 15
   },
   GAMESPEED_BOOST: {
     id: 17,
     description: "Get Enslaved to level 25",
     reward: "Game speed increases based on current stored time",
-    requirement: () => Ra.pets.enslaved.level >= 25
+    requirement: () => Ra.pets.enslaved.level >= 25,
+    pet: "Enslaved",
+    level: 25
   },
   MORE_EC_COMPLETION: {
     id: 18,
     description: "Get V to level 2",
     reward: "Gain extra achievements for free (based on V level)",
-    requirement: () => Ra.pets.v.level >= 2
+    requirement: () => Ra.pets.v.level >= 2,
+    pet: "V",
+    level: 2
   },
   V_XP: {
     id: 19,
     description: "Get V to level 3",
     reward: "Boost V memory gain based on purchased TT in Ra's Reality",
-    requirement: () => Ra.pets.v.level >= 3
+    requirement: () => Ra.pets.v.level >= 3,
+    pet: "V",
+    level: 3
   },
   INSTANT_AUTOEC: {
     id: 20,
     description: "Get V to level 5",
     // This upgrade also starts the player off with Eternity upgrades immediately instead of after one eternity
     reward: "Auto-EC happens instantly and dilation is auto-unlocked at 17000 TT",
-    requirement: () => Ra.pets.v.level >= 5
+    requirement: () => Ra.pets.v.level >= 5,
+    pet: "V",
+    level: 5
   },
   TT_BOOST: {
     id: 21,
@@ -430,19 +472,25 @@ const RA_UNLOCKS = {
       replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
       dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
       autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
-    }
+    },
+    pet: "V",
+    level: 10
   },
   MORE_EC: {
     id: 22,
     description: "Get V to level 15",
     reward: "ECs can now be completed up to 7 times [unimplemented, needs balancing?]",
-    requirement: () => Ra.pets.v.level >= 15
+    requirement: () => Ra.pets.v.level >= 15,
+    pet: "V",
+    level: 15
   },
   SPACE_THEOREMS: {
     id: 23,
     description: "Get V to level 25",
     reward: "Unlock Space Theorems [unimplemented]",
     requirement: () => Ra.pets.v.level >= 25,
+    pet: "V",
+    level: 25
   },
   LAITELA_UNLOCK: {
     id: 24,

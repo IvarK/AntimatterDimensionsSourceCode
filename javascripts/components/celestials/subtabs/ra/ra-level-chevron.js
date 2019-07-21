@@ -1,5 +1,5 @@
 "use strict";
-Vue.component("ra-lvl-chevron", {
+Vue.component("ra-level-chevron", {
   props: {
     level: Number,
     goal: Number,
@@ -18,8 +18,7 @@ Vue.component("ra-lvl-chevron", {
   },
   computed: {
     percentPerLevel() {
-      if (this.singleLevel) return 0;
-      return 100 / (this.goal - 1);
+      return this.singleLevel ? 0 : 100 / (this.goal - 1);
     },
     levelPosition() {
       if (this.level === this.goal)

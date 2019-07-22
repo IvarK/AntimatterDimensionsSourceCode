@@ -1,6 +1,6 @@
 "use strict";
 
-const AutomatorUI = {
+const AutomatorTextUI = {
   wrapper: null,
   editor: null,
   mode: {
@@ -75,8 +75,8 @@ Vue.component("automator-text-editor", {
   mounted() {
     this.$refs.container.appendChild(AutomatorTextUI.container);
     this.$nextTick(() => {
-      AutomatorUI.editor.refresh();
-      AutomatorUI.editor.performLint();
+      AutomatorTextUI.editor.refresh();
+      AutomatorTextUI.editor.performLint();
     });
   },
   beforeDestroy() {

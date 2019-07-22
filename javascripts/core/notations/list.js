@@ -26,6 +26,6 @@ const Notations = {
     Notation.prime,
     Notation.bar,
     Notation.shi,
-    Notation.empty,
+    Notation.blind,
   ]
 };

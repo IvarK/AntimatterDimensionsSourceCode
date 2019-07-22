@@ -8,6 +8,7 @@ Vue.component("ra-level-chevron", {
       type: Boolean,
       defualt: false
     },
+    importantLevels: Array
   },
   data() {
     return {
@@ -16,7 +17,6 @@ Vue.component("ra-level-chevron", {
     };
   },
   computed: {
-    importantLevels: () => [2, 3, 5, 10, 15, 25],
     percentPerLevel() {
       return this.singleLevel ? 0 : 100 / (this.goal - 1);
     },
@@ -35,7 +35,7 @@ Vue.component("ra-level-chevron", {
     classList() {
       return [
         this.isImportantLevel ? "c-important-chevron" : "",
-        this.level === 1 || this.level === this.goal || this.singleLevel ? "no-bar" : ""
+        this.level === 1 || this.level === this.goal || this.singleLevel ? "l-ra-lvl-chevron--no-bar" : ""
       ];
     }
   },

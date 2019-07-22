@@ -213,7 +213,7 @@ const Ra = {
     for (const unl of Object.values(RA_UNLOCKS)) {
       if (unl.pet.level >= unl.level && !this.has(unl)) player.celestials.ra.unlocks.push(unl.id);
     }
-    if (this.petList.every(pet => pet.level >= 20) && !this.has(24)) {
+    if (this.petList.every(pet => pet.level >= 20) && !this.has(RA_LAITELA_UNLOCK)) {
       player.celestials.ra.unlocks.push(24);
       MatterDimensions(1).amount = new Decimal(1);
     }

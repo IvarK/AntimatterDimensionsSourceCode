@@ -5703,7 +5703,7 @@ kbd {
   border-left-color: white;
 }
 
-.l-ra-lvl-chevron.no-bar {
+.l-ra-lvl-chevron--no-bar {
   border-left: none !important;
 }
 
@@ -5792,8 +5792,8 @@ kbd {
   flex-direction: row;
   justify-content: center;
 }
-.c-ra-rewards span {
-  margin: 0 1rem;
+.c-ra-rewards-inner {
+  margin: 0rem 1rem;
 }
 
 .l-ra-laitela-unlock {

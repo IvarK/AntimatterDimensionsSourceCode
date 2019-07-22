@@ -2,7 +2,7 @@
 
 Vue.component("ra-pet-level-bar", {
   props: {
-    petConfig: Object
+    pet: Object
   },
   data() {
     return {
@@ -16,18 +16,12 @@ Vue.component("ra-pet-level-bar", {
     };
   },
   computed: {
-    shift() {
+    shiftDown() {
       return ui.view.shiftDown;
     },
     importantLevels: () => [2, 3, 5, 10, 15, 25],
-    pet() {
-      return this.petConfig.pet;
-    },
-    petColor() {
-      return this.pet.color;
-    },
     unlocks() {
-      return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet.name === this.pet.name);
+      return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
     },
     percentPerLevel() {
       return 100 / (this.currentLevelGoal - 1);
@@ -47,11 +41,11 @@ Vue.component("ra-pet-level-bar", {
     },
     petStyle() {
       return {
-        "background-color": this.petColor
+        "background-color": this.pet.color
       };
     },
     currentLevelGoal() {
-      if (this.shift) return this.level + 1;
+      if (this.shiftDown) return this.level + 1;
       return this.importantLevels.find(goal => goal > this.level || goal === 25);
     },
     expPerMin() {
@@ -61,7 +55,7 @@ Vue.component("ra-pet-level-bar", {
       return Math.round(expGain / (avgTimeMs / 60000));
     },
     activeUnlock() {
-      if (this.shift) {
+      if (this.shiftDown) {
         return {
           description: `Get ${this.pet.name} to level ${this.currentLevelGoal}`,
           reward: `${shorten(Math.floor(this.exp), 2)}/${shorten(this.requiredExp, 2)} exp`,
@@ -90,12 +84,13 @@ Vue.component("ra-pet-level-bar", {
   template: `
     <div class="l-ra-bar-container">
       <div class="l-ra-exp-bar">
-        <div v-if="shift">
+        <div v-if="shiftDown">
           <ra-level-chevron v-for="lvl in 2"
             :key="currentLevelGoal - 2 + lvl"
             :level ="currentLevelGoal - 2 + lvl"
             :goal="currentLevelGoal"
             :singleLevel="true"
+            :importantLevels="importantLevels"
           />
         </div>
         <div v-else>
@@ -104,15 +99,16 @@ Vue.component("ra-pet-level-bar", {
             :level="lvl"
             :goal="currentLevelGoal"
             :unlock="findUnlockByLevel(lvl)"
+            :importantLevels="importantLevels"
           />
         </div>
-        <div class="l-ra-exp-bar-inner" :style="[shift ? singleLevelStyle : multiLevelStyle, petStyle]" />
+        <div class="l-ra-exp-bar-inner" :style="[shiftDown ? singleLevelStyle : multiLevelStyle, petStyle]" />
       </div>
         <div class="l-ra-unlock" :style="petStyle">
           <div class="l-ra-unlock-inner">
             <b>{{ activeUnlock.description }}</b>
             <p>{{ activeUnlock.reward }}</p>
-            <p v-if="shift">{{ activeUnlock.expPerMin }} </p>
+            <p v-if="shiftDown">{{ activeUnlock.expPerMin }} </p>
           </div>
         </div>
     </div>

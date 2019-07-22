@@ -46,7 +46,7 @@ Vue.component("ra-tab", {
         <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>
       <div class="l-ra-non-pets">
-        <button @click="startRun()" class="l-ra-reality-container">
+        <button @click="startRun" class="l-ra-reality-container">
           <div class="l-ra-reality-inner">
             <h1> Start Ra's Reality</h1>
             <p> Rules: you can't dimension boost and tick reduction is forced to be 11%. </p>
@@ -54,12 +54,12 @@ Vue.component("ra-tab", {
             <br>
             <h2> Rewards: </h2>
             <div class="c-ra-rewards">
-              <span> Teresa: {{this.shorten(expMultis[0], 2, 2)}}x </span>
-              <span> Effarig: {{this.shorten(expMultis[1], 2, 2)}}x </span>
+              <span class="c-ra-rewards-inner"> Teresa: {{this.shorten(expMultis[0], 2, 2)}}x </span>
+              <span class="c-ra-rewards-inner"> Effarig: {{this.shorten(expMultis[1], 2, 2)}}x </span>
             </div>
             <div class="c-ra-rewards">
-              <span> Enslaved: {{this.shorten(expMultis[2], 2, 2)}}x </span>
-              <span> V: {{this.shorten(expMultis[3], 2, 2)}}x</h3> </span>
+              <span class="c-ra-rewards-inner"> Enslaved: {{this.shorten(expMultis[2], 2, 2)}}x </span>
+              <span class="c-ra-rewards-inner"> V: {{this.shorten(expMultis[3], 2, 2)}}x </span>
             </div>
           </div>
         </button>

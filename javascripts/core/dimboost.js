@@ -88,7 +88,7 @@ function applyDimensionBoost() {
 
 function softReset(bulk) {
     //if (bulk < 1) bulk = 1 (fixing issue 184)
-    if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
+    if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
     player.resets += bulk;
 
@@ -101,10 +101,10 @@ function softReset(bulk) {
     applyDimensionBoost();
     skipResetsIfPossible();
     resetTickspeed();
-    const currentMoney = player.money;
-    resetMoney();
+    const currentAntimatter = player.antimatter;
+    resetAntimatter();
     if (Achievement(111).isEnabled) {
-        player.money = player.money.max(currentMoney);
+        player.antimatter = player.antimatter.max(currentAntimatter);
     }
     EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);
 }
@@ -123,7 +123,7 @@ function skipResetsIfPossible() {
 }
 
 function softResetBtnClick() {
-  if ((!player.break && player.money.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
+  if ((!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) || !DimBoost.requirement.isSatisfied) return;
   if (Ra.isRunning) return;
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1)

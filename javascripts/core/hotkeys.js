@@ -69,8 +69,8 @@ GameKeyboard.bind(
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
   SecretAchievement(17).unlock();
-  if (player.money.lt(30)) {
-    player.money = new Decimal(30);
+  if (player.antimatter.lt(30)) {
+    player.antimatter = new Decimal(30);
   }
 });
 

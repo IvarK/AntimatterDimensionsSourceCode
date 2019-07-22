@@ -588,7 +588,7 @@ class InfinityAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.canTick()) return;
-    if (!player.money.gte(Decimal.MAX_NUMBER)) return;
+    if (!player.antimatter.gte(Decimal.MAX_NUMBER)) return;
     let proc = !player.break || NormalChallenge.isRunning || InfinityChallenge.isRunning;
     if (!proc) {
       switch (this.mode) {

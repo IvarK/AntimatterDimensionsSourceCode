@@ -58,7 +58,7 @@ GameStorage.migrations = {
       const timeDimCostMults = [null, 3, 9, 27, 81];
       // Updates TD costs to harsher scaling
       for (let i = 1; i < 5; i++) {
-        if (player[`timeDimension${i}`].cost.gte("1e1300")) {
+        if (new Decimal("1e300").lt(player[`timeDimension${i}`].cost)) {
           player[`timeDimension${i}`].cost = Decimal.pow(
             timeDimCostMults[i] * 2.2,
             player[`timeDimension${i}`].bought
@@ -81,11 +81,12 @@ GameStorage.migrations = {
       if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
       if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
 
-      player.realTimePlayed = player.totalTimePlayed;
-      player.thisReality = player.totalTimePlayed;
-      player.thisInfinityRealTime = player.thisInfinityTime;
-      player.thisEternityRealTime = player.thisEternity;
-      player.thisRealityRealTime = player.thisReality;
+      player.realTimePlayed = player.totalTimePlayed * 100;
+      player.thisReality = player.totalTimePlayed * 100;
+      player.thisInfinityRealTime = player.thisInfinityTime * 100;
+      player.thisEternityRealTime = player.thisEternity * 100;
+      player.thisRealityRealTime = player.thisReality * 100;
+      player.thisInfinityLastBuyTime = player.thisInfinityTime * 100;
       for (let i = 0; i < 10; i++) {
         player.lastTenEternities[i][2] = player.lastTenEternities[i][0];
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
@@ -113,6 +114,7 @@ GameStorage.migrations = {
       GameStorage.migrations.clearNewsArray(player);
       GameStorage.migrations.removeTickspeed(player);
       GameStorage.migrations.removePostC3Reward(player);
+      GameStorage.migrations.renameMoney(player);
     }
   },
 
@@ -395,6 +397,13 @@ GameStorage.migrations = {
     delete player.postC3Reward;
   },
 
+  renameMoney(player) {
+    player.antimatter = new Decimal(player.money);
+    player.totalAntimatter = new Decimal(player.totalmoney);
+    delete player.money;
+    delete player.totalmoney;
+  },
+
   uniformDimensions(player) {
     for (let tier = 1; tier <= 8; tier++) {
       const name = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"][tier];
@@ -435,18 +444,20 @@ GameStorage.migrations = {
       const dimension = player.dimensions.time[tier - 1];
       const oldName = `timeDimension${tier}`;
       const old = player[oldName];
-      dimension.cost = new Decimal(old.cost);
-      dimension.amount = new Decimal(old.amount);
-      dimension.power = new Decimal(old.power);
-      dimension.bought = old.bought;
-      delete player[oldName];
+      if (old !== undefined) {
+        dimension.cost = new Decimal(old.cost);
+        dimension.amount = new Decimal(old.amount);
+        dimension.power = new Decimal(old.power);
+        dimension.bought = old.bought;
+        delete player[oldName];
+      }
     }
   },
 
   prePatch(saveData) {
     // Initialize all possibly undefined properties that were not present in
     // previous versions and which could be overwritten by deepmerge
-    saveData.totalmoney = saveData.totalmoney || saveData.money;
+    saveData.totalAntimatter = saveData.totalAntimatter || saveData.totalmoney || saveData.money;
     saveData.thisEternity = saveData.thisEternity || saveData.totalTimePlayed;
     saveData.version = saveData.version || 0;
   },

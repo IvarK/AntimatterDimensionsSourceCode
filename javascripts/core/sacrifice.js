@@ -4,7 +4,7 @@ function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
   if (player.resets < 5) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    player.money.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
+    player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
     !Enslaved.isRunning &&
     NormalChallenge(8).isRunning &&
@@ -21,7 +21,7 @@ function sacrificeReset(auto) {
   if (NormalChallenge(8).isRunning) {
     player.chall11Pow = player.chall11Pow.times(nextBoost);
     if (!isAch118Enabled) NormalDimensions.reset();
-    player.money = new Decimal(100);
+    player.antimatter = new Decimal(100);
   } else if (!isAch118Enabled) {
     clearDimensions(NormalChallenge(12).isRunning ? 6 : 7);
   }
@@ -30,6 +30,7 @@ function sacrificeReset(auto) {
 }
 
 function sacrificeBtnClick() {
+  if (!Sacrifice.isUnlocked || !Sacrifice.isAffordable) return false;
   if (player.options.confirmations.sacrifice) {
     if (!confirm("Dimensional Sacrifice will remove all of your first to seventh dimensions (with the cost and multiplier unchanged) for a boost to the Eighth Dimension based on the total amount of first dimensions sacrificed. It will take time to regain production.")) {
       return false;

@@ -61,7 +61,7 @@ Vue.component("new-dimensions-tab", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
       if (!isSacrificeUnlocked) return;

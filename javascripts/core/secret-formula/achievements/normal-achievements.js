@@ -72,7 +72,7 @@ GameDatabase.achievements.normal = [
     id: 24,
     name: "Antimatter Apocalypse",
     tooltip: () => `Get over ${shorten(1e80, 0, 0)} antimatter.`,
-    checkRequirement: () => player.money.exponent >= 80,
+    checkRequirement: () => player.antimatter.exponent >= 80,
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -182,8 +182,8 @@ GameDatabase.achievements.normal = [
     name: "Supersanic",
     tooltip: () => `Have antimatter/sec exceed your current antimatter above ${shorten(1e63, 0, 0)}`,
     checkRequirement: () =>
-      player.money.exponent >= 63 &&
-      getDimensionProductionPerSecond(1).gt(player.money),
+      player.antimatter.exponent >= 63 &&
+      getDimensionProductionPerSecond(1).gt(player.antimatter),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -200,7 +200,7 @@ GameDatabase.achievements.normal = [
     name: "Over in 30 seconds",
     tooltip: "Have antimatter/sec exceed your current antimatter for 30 consecutive seconds.",
     checkRequirement: () => AchievementTimers.marathon1
-      .check(getDimensionProductionPerSecond(1).gt(player.money), 30),
+      .check(getDimensionProductionPerSecond(1).gt(player.antimatter), 30),
     checkEvent: GameEvent.GAME_TICK_AFTER,
   },
   {
@@ -394,10 +394,10 @@ GameDatabase.achievements.normal = [
     id: 73,
     name: "This achievement doesn't exist",
     tooltip: "Get 9.9999e9999 antimatter.",
-    checkRequirement: () => player.money.gte("9.9999e9999"),
+    checkRequirement: () => player.antimatter.gte("9.9999e9999"),
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00002).plus(1)
+    effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
     id: 74,
@@ -480,10 +480,10 @@ GameDatabase.achievements.normal = [
     id: 84,
     name: "I got a few to spare",
     tooltip: () => `Reach ${shorten("1e35000", 0, 0)} antimatter.`,
-    checkRequirement: () => player.money.exponent >= 35000,
+    checkRequirement: () => player.antimatter.exponent >= 35000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
     reward: "Dimensions are more powerful the more unspent antimatter you have.",
-    effect: () => player.money.pow(0.00002).plus(1)
+    effect: () => player.antimatter.pow(0.00002).plus(1)
   },
   {
     id: 85,
@@ -580,6 +580,8 @@ GameDatabase.achievements.normal = [
   {
     id: 97,
     name: "Yes. This is hell.",
+    checkRequirement: () => Time.infinityChallengeSum.totalSeconds < 6.66,
+    checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     tooltip: "Get the sum of Infinity Challenge times under 6.66 seconds."
   },
   {
@@ -869,7 +871,7 @@ GameDatabase.achievements.normal = [
       player.dilation.active &&
       player.infinityPoints.exponent >= 28000,
     checkEvent: GameEvent.GAME_TICK_AFTER,
-    reward: "The active time study path doesn't disable your Replicanti autobuyer."
+    reward: "Removes the downsides from the active and idle time study paths."
   },
   {
     id: 141,

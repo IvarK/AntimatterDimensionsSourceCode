@@ -272,9 +272,9 @@ dev.showProductionBreakdown = function() {
       .times((Sacrifice.totalBoost.pow(8)).min("1e46000")
       .times(Sacrifice.totalBoost.pow(1.1).min(new Decimal("1e125000"))));
   sacrificeComponent = sacrificeComponent.pow(IC4pow);
-  const IC8Component = mult18.pow(6).pow(IC4pow);
+  const IC8Component = InfinityChallenge(8).reward.effectValue.pow(6).pow(IC4pow);
   const NDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / powerpow;
-  
+
   let totalIDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
     totalIDMults = totalIDMults.times(InfinityDimension(tier).multiplier);

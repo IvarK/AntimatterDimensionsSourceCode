@@ -10,7 +10,9 @@ Vue.component("replicanti-gain-text", {
     update() {
       const updateRateMs = player.options.updateRate;
       const ticksPerSecond = 1000 / updateRateMs;
-      const logGainFactorPerTick = Decimal.divide(getGameSpeedupFactor() * updateRateMs *
+      const storedTimeWeight = player.celestials.enslaved.storedFraction;
+      const gamespeedWithStoredTime = getGameSpeedupFactor() * (1 - storedTimeWeight) + storedTimeWeight;
+      const logGainFactorPerTick = Decimal.divide(gamespeedWithStoredTime * updateRateMs *
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10).toNumber();
       const replicantiAmount = player.replicanti.amount;
@@ -25,8 +27,12 @@ Vue.component("replicanti-gain-text", {
         const nextThousandOOM = Decimal.pow10(1000 * Math.floor(replicantiAmount.log10() / 1000 + 1));
         const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.exp().pow(postScale).minus(1));
         const timeToThousand = coeff.times(nextThousandOOM.divide(replicantiAmount).pow(postScale).minus(1));
+        // The calculation seems to choke and return zero if the time is too large, probably because of rounding issues
+        const timeEstimateText = timeToThousand.eq(0)
+          ? "an extremely long time"
+          : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
         this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
-          ` (${TimeSpan.fromSeconds(timeToThousand.toNumber())} until ${shorten(nextThousandOOM)})`;
+          ` (${timeEstimateText} until ${shorten(nextThousandOOM)})`;
         return;
       }
       if (log10GainFactorPerTick > 308) {

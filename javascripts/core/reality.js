@@ -91,9 +91,8 @@ const GlyphSelection = {
 
 function confirmReality() {
   return !player.options.confirmations.reality ||
-    confirm("Reality will reset everything except challenge records, and will lock your achievements," +
-      " which you will regain over the course of " +
-      `${timeDisplay(Achievements.totalDisabledTime * 0.9)}. ` +
+    confirm("Reality will reset everything except challenge records, and will lock your achievements, " +
+      `which you will regain over the course of ${Achievements.nextTotalDisabledTime}. ` +
       "You will also gain reality machines based on your EP, a glyph with a power level " +
       "based on your EP, Replicanti, and Dilated Time, a perk point to spend on quality of " +
       "life upgrades, and unlock various upgrades.");
@@ -261,8 +260,6 @@ function completeReality(force, reset, auto = false) {
   recalculateAllGlyphs()
 
   //reset global values to avoid a tick of unupdated production
-  postc8Mult = new Decimal(0);
-  mult18 = new Decimal(1);
 
   player.sacrificed = new Decimal(0);
 
@@ -278,6 +275,7 @@ function completeReality(force, reset, auto = false) {
   player.infinitiedBank = new Decimal(0);
   player.bestInfinityTime = 999999999999;
   player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
   player.resets = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
@@ -364,7 +362,7 @@ function completeReality(force, reset, auto = false) {
     2: 0,
     3: 0
   };
-  player.money = Effects.max(
+  player.antimatter = Effects.max(
     10,
     Perk.startAM1,
     Perk.startAM2
@@ -451,7 +449,9 @@ function completeReality(force, reset, auto = false) {
 function handleCelestialRuns(force) {
   if (Teresa.isRunning) {
     player.celestials.teresa.run = false;
-    if (!force && player.celestials.teresa.bestRunAM.lt(player.money)) player.celestials.teresa.bestRunAM = player.money
+    if (!force && player.celestials.teresa.bestRunAM.lt(player.antimatter)) {
+      player.celestials.teresa.bestRunAM = player.antimatter;
+    }
   }
   if (Effarig.isRunning) {
     player.celestials.effarig.run = false;
@@ -476,6 +476,9 @@ function handleCelestialRuns(force) {
 
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
+    if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {
+      player.celestials.laitela.maxAmGained = player.antimatter;
+    }
   }
 }
 

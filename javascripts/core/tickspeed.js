@@ -62,7 +62,7 @@ function buyTickSpeed() {
       return false;
   }
 
-  player.money = player.money.minus(player.tickSpeedCost);
+  player.antimatter = player.antimatter.minus(player.tickSpeedCost);
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     multiplySameCosts(player.tickSpeedCost);
   } else {
@@ -73,7 +73,7 @@ function buyTickSpeed() {
   }
   if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
   player.totalTickBought++;
-  postc8Mult = new Decimal(1);
+  player.thisInfinityLastBuyTime = player.thisInfinityTime;
   player.secretUnlocks.why++;
   GameUI.update();
   return true;
@@ -81,14 +81,14 @@ function buyTickSpeed() {
 
 function buyMaxTickSpeed() {
   if (!canBuyTickSpeed()) return;
-  let money = new Decimal(player.money);
-  if (money.eq(0)) return;
+  let antimatter = new Decimal(player.antimatter);
+  if (antimatter.eq(0)) return;
   let tickSpeedCost = new Decimal(player.tickSpeedCost);
   const tickSpeedMultDecrease = Player.tickSpeedMultDecrease;
   let tickspeedMultiplier = new Decimal(player.tickspeedMultiplier);
   let totalTickBought = player.totalTickBought;
   function flushValues() {
-    player.money.fromDecimal(money);
+    player.antimatter.fromDecimal(antimatter);
     player.tickSpeedCost.fromDecimal(tickSpeedCost);
     player.tickspeedMultiplier.fromDecimal(tickspeedMultiplier);
     player.totalTickBought = totalTickBought;
@@ -102,8 +102,8 @@ function buyMaxTickSpeed() {
 
   if (tickSpeedCost.lt(Decimal.MAX_NUMBER) || inCostScalingChallenge || !tickspeedMultDecreaseMaxed) {
     let shouldContinue = true;
-    while (money.gt(tickSpeedCost) && shouldContinue) {
-      money = money.minus(tickSpeedCost);
+    while (antimatter.gt(tickSpeedCost) && shouldContinue) {
+      antimatter = antimatter.minus(tickSpeedCost);
       if (inCostScalingChallenge) {
         multiplySameCosts(tickSpeedCost);
       }
@@ -113,7 +113,7 @@ function buyMaxTickSpeed() {
         tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
       }
       totalTickBought++;
-      postc8Mult = new Decimal(1);
+      player.thisInfinityLastBuyTime = player.thisInfinityTime;
       if (tickSpeedCost.gte(Decimal.MAX_NUMBER) && !inCostScalingChallenge && tickspeedMultDecreaseMaxed) {
         shouldContinue = false;
       }
@@ -126,7 +126,7 @@ function buyMaxTickSpeed() {
       costScale: Player.tickSpeedMultDecrease,
       scalingCostThreshold: Number.MAX_VALUE
     });
-    const purchases = costScale.getMaxBought(totalTickBought, money);
+    const purchases = costScale.getMaxBought(totalTickBought, antimatter);
     if (purchases === null) {
       flushValues();
       return;
@@ -134,7 +134,7 @@ function buyMaxTickSpeed() {
     totalTickBought += purchases.quantity;
     const nextCost = costScale.calculateCost(totalTickBought);
     increaseTickSpeedCost(purchases.quantity - 1);
-    money = money.minus(Decimal.pow10(purchases.logPrice)).max(0);
+    antimatter = antimatter.minus(Decimal.pow10(purchases.logPrice)).max(0);
     tickSpeedCost = nextCost;
     tickspeedMultiplier = tickspeedMultiplier.times(tickSpeedMultDecrease);
   }
@@ -161,15 +161,19 @@ const Tickspeed = {
   get current() {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
-      : new Decimal(1000)
-          .timesEffectsOf(
-            Achievement(36),
-            Achievement(45),
-            Achievement(66),
-            Achievement(83)
-          )
-          .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
+      : this.baseValue;
     return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
+  },
+
+  get baseValue() {
+    return new Decimal(1000)
+      .timesEffectsOf(
+        Achievement(36),
+        Achievement(45),
+        Achievement(66),
+        Achievement(83)
+      )
+      .times(getTickSpeedMultiplier().pow(player.totalTickBought + player.totalTickGained));
   }
 };
 
@@ -182,7 +186,7 @@ const FreeTickspeed = {
   get amount() {
     return player.totalTickGained;
   },
-  
+
   get softcap() {
     let softcap = FreeTickspeed.BASE_SOFTCAP;
     if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
@@ -224,12 +228,19 @@ const FreeTickspeed = {
     const derivativeOfBoughtToCost = x => FreeTickspeed.GROWTH_EXP * costFormulaCoefficient * Math.pow(
       Math.max(x, 0), FreeTickspeed.GROWTH_EXP - 1) + 1;
     const newtonsMethod = bought => bought - (boughtToCost(bought) - desiredCost) / derivativeOfBoughtToCost(bought);
-    let oldApproximation = -1;
-    let approximation = Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP);
-    while (Math.abs(approximation - oldApproximation) >= 1e-9) {
+    let oldApproximation;
+    let approximation = Math.min(
+      desiredCost,
+      Math.pow(desiredCost / costFormulaCoefficient, 1 / FreeTickspeed.GROWTH_EXP)
+    );
+    let counter = 0;
+    // The bought formula is concave upwards. We start with an over-estimate; when using newton's method,
+    // this means that successive iterations are also over-etimates. Thus, we can just check for continued
+    // progress with the approximation < oldApproximation check. The counter is a fallback.
+    do {
       oldApproximation = approximation;
       approximation = newtonsMethod(approximation);
-    }
+    } while (approximation < oldApproximation && ++counter < 100);
     const purchases = Math.floor(approximation);
     // This undoes the function we're implicitly applying to costs (the "+ 1") is because we want
     // the cost of the next upgrade.
@@ -239,4 +250,5 @@ const FreeTickspeed = {
       nextShards: next,
     };
   }
+
 };

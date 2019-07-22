@@ -46,7 +46,10 @@ class RaPetState {
       const adjustedLevel = 2.5 * floor5 * (floor5 + 1) + (this.level % 5) * (floor5 + 1);
       return Math.floor(4000 * Math.pow(1.18, adjustedLevel - 1));
     }
-    return Math.floor(4000 * Math.pow(1.18, 4 * this.level - 30));
+    if (this.level < 25) {
+      return Math.floor(4000 * Math.pow(1.18, this.level + 30));
+    }
+    return Math.floor(4000 * Math.pow(1.18, 3 * this.level - 20));
   }
 
   addGainedExp() {
@@ -426,7 +429,7 @@ const RA_UNLOCKS = {
     pet: Ra.pets.enslaved,
     level: 25
   },
-  MORE_EC_COMPLETION: {
+  MORE_ACHIEVEMENT: {
     id: 18,
     description: "Get V to level 2",
     reward: "Gain extra achievements for free (based on V level)",
@@ -463,10 +466,11 @@ const RA_UNLOCKS = {
     pet: Ra.pets.v,
     level: 10
   },
-  MORE_EC: {
+  TT_ACHIEVEMENT: {
     id: 22,
     description: "Get V to level 15",
-    reward: "ECs can now be completed up to 7 times [unimplemented, needs balancing?]",
+    reward: "Achievement multiplier applies to Time Theorem generation",
+    effect: () => Player.achievementPower.toNumber(),
     pet: Ra.pets.v,
     level: 15
   },

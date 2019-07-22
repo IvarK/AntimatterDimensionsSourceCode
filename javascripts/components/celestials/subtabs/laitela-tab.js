@@ -45,9 +45,9 @@ Vue.component("laitela-tab", {
   },
   template:
     `<div class="l-laitela-celestial-tab">
-      <button class="o-laitela-run-button" @click="startRun">Start Lai'tela's Reality, tickspeed is disabled and all dimension multipliers are decreased based on matter, currently x^{{ shorten(dimMultNerf, 3, 3) }}
+      <button class="o-laitela-run-button" @click="startRun">Start Lai'tela's Reality, tickspeed is disabled and all dimension multipliers are decreased based on matter, currently x^{{ shorten(dimMultNerf, 3, 4) }}
       <br>
-      Multiply all matter dimensions based on highest AM reached, Currently: {{ shorten(realityReward, 2, 2)}}x</button>
+      Multiply all matter dimensions based on highest AM reached, Currently: {{ shorten(realityReward, 2, 3)}}x</button>
       <div class="o-laitela-matter-amount">You have {{ shorten(matter, 2, 0) }} Matter</div>
       <div>Matter causes your dimension cost multipliers to increase {{ matterEffectPercentage }} slower</div>
       <matter-dimension-row

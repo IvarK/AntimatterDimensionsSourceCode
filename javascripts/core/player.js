@@ -4,7 +4,7 @@ var shiftDown = false;
 const defaultMaxTime = 60000 * 60 * 24 * 31;
 
 let player = {
-  money: new Decimal(10),
+  antimatter: new Decimal(10),
   tickSpeedCost: new Decimal(1000),
   dimensions: {
     normal: Array.range(0, 8).map(tier => ({
@@ -62,10 +62,11 @@ let player = {
   bestInfinityTime: 999999999999,
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
+  thisInfinityLastBuyTime: 0,
   resets: 0,
   galaxies: 0,
   tickDecrease: 0.9,
-  totalmoney: new Decimal(0),
+  totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
   newsArray: [],
   // TODO: Not used, remove
@@ -256,7 +257,7 @@ let player = {
       quoteIdx: 0,
       unlocks: [],
       run: false,
-      bestRunAM: new Decimal(0),
+      bestRunAM: new Decimal(1),
       glyphLevelMult: 1,
       rmMult: 1,
       dtBulk: 1
@@ -352,7 +353,7 @@ let player = {
         powerUpgrades: 0,
         timeSinceLastUpdate: 0
       })),
-      maxAmGained: new Decimal(0)
+      maxAmGained: new Decimal(1)
     }
   },
   autoEcIsOn: true,

@@ -11,11 +11,13 @@ Vue.component("enslaved-tab", {
     storedFraction: 0,
     storedTimeSpeedValue: 1,
     inEnslaved: false,
+    completed: false,
     storedBlackHole: 0,
     storedReal: 0,
     storedRealEffiency: 0,
     storedRealCap: 0,
     autoRelease: false,
+    autoReleaseSpeed: 0,
     unlocks: [],
     quote: "",
     quoteIdx: 0,
@@ -32,6 +34,9 @@ Vue.component("enslaved-tab", {
     },
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
+    },
+    autoReleaseSpeedup() {
+      return formatX(this.autoReleaseSpeed, 2, 2);
     },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
@@ -66,6 +71,7 @@ Vue.component("enslaved-tab", {
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
       this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
+      this.completed = Enslaved.isCompleted;
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
@@ -74,6 +80,7 @@ Vue.component("enslaved-tab", {
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
+      this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -121,6 +128,17 @@ Vue.component("enslaved-tab", {
     toggleAutoRelease() {
       player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
     },
+    glitchStyle(x) {
+      const xScale = 15 / 27;
+      const yScale = 5;
+      const dx = (x - 13) * xScale + (Math.random() * 2 - 1) * 0.85;
+      const dy = (Math.random() * 2 - 1) * yScale;
+      const height = (Math.pow(Math.random(), 1.5) + 0.25) * 3 * yScale;
+      return {
+        transform: `translate(${dx}rem, ${dy}rem)`,
+        height: `${height}rem`,
+      };
+    }
   },
   template:
     `<div class="l-enslaved-celestial-tab">
@@ -172,6 +190,7 @@ Vue.component("enslaved-tab", {
           :value="autoRelease"
           @input="toggleAutoRelease()">
         <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
+        <div>Effective game speed of last auto-released tick: {{ autoReleaseSpeedup }}</div>
       </div>
       <div class="l-enslaved-shop-container">
         <button
@@ -182,8 +201,14 @@ Vue.component("enslaved-tab", {
           @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
-        <button class="o-enslaved-run-button" @click="startRun">
-          <div class="o-enslaved-run-button__title">{{realityTitle}}</div>
+        <div class="o-enslaved-run-box">
+          <div class="o-enslaved-run-box__title">{{realityTitle}}</div>
+          <div v-if="completed"><b>(Completed)</b></div>
+          <div class="o-enslaved-run-button" @click="startRun">
+            <div class="o-enslaved-run-button__sigil fas fa-link" />
+            <div v-for="x in 25" class="o-enslaved-run-button__glitch"
+                                :style="glitchStyle(x)"/>
+          </div>
           <p>ID, TD, and 8th dimension purchases are limited to 1 each.</p>
           <p>Normal dimension multipliers are always dilated (the glyph effect still only
              applies in actual dilation)</p>
@@ -193,8 +218,8 @@ Vue.component("enslaved-tab", {
           <p>Time theorem generation from dilation glyphs is much slower</p>
           <p>Certain challenge goals have been increased</p>
           <p>Stored time is much less effective</p>
-          <p>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</p>
-        </button>
+          <b>Reward: ID purchase caps are increased by 1000 for every 1000 free tickspeed upgrades you get</b>
         </div>
+      </div>
     </div>`
 });

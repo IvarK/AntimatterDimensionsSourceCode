@@ -10,7 +10,7 @@ Vue.component("new-ui", {
   },
   methods: {
     update() {
-      this.showCrunch = !player.break && player.money.gte(Number.MAX_VALUE);
+      this.showCrunch = !player.break && player.antimatter.gte(Number.MAX_VALUE);
       this.showTicker = !player.options.newsHidden;
     }
   },

@@ -37,7 +37,7 @@ Vue.component("statistics-tab", {
   },
   methods: {
     update() {
-      this.totalAntimatter.copyFrom(player.totalmoney);
+      this.totalAntimatter.copyFrom(player.totalAntimatter);
       this.resets = player.resets;
       this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
@@ -74,7 +74,7 @@ Vue.component("statistics-tab", {
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
       }
-      this.matterScale = MatterScale.estimate(player.money);
+      this.matterScale = MatterScale.estimate(player.antimatter);
     },
     formatAmount(value) { 
       return value > 1e18 ? shorten(value, 3, 0) : formatWithCommas(value);
@@ -83,7 +83,7 @@ Vue.component("statistics-tab", {
       return this.formatAmount(value) + ((value === 1) ? " time" : " times");
     },
     formatDecimalAmount(value) {
-      return value.gt(1e9) ? shorten(value, 3, 0) : formatWithCommas(value.toNumber());
+      return value.gt(1e9) ? shorten(value, 3, 0) : shortenSmallInteger(value.toNumber());
     },
     formatDecimalResetAmount(value) {
       return this.formatDecimalAmount(value) + ((value.eq(1)) ? " time" : " times");
@@ -96,9 +96,9 @@ Vue.component("statistics-tab", {
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
         <div>You have done {{ resets }} Dimension {{"Boost/Shift" | pluralize(resets, "Boosts/Shifts")}}.</div>
         <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
-        <div>You have played for {{ realTimePlayed.toString() }}.</div>
+        <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
-          Your existence has spanned {{ reality.totalTimePlayed.toString() }} of time.
+          Your existence has spanned {{ reality.totalTimePlayed }} of time.
         </div>
         <div>
           <br>
@@ -115,9 +115,9 @@ Vue.component("statistics-tab", {
             <div v-if="infinity.banked.gt(0)">
               You have {{ formatDecimalAmount(infinity.banked) }} banked infinities.
             </div>
-            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best.toString() }}.</div>
+            <div v-if="infinity.hasBest">Your fastest Infinity was {{ infinity.best }}.</div>
             <div v-else>You have no fastest Infinity<span v-if="eternity.isUnlocked"> this Eternity</span>.</div>
-            <div>You have spent {{ infinity.this.toString() }} in this Infinity.
+            <div>You have spent {{ infinity.this }} in this Infinity.
               <span v-if="reality.isUnlocked">
                 ({{infinity.thisReal.toStringShort()}} real time)
               </span>
@@ -131,9 +131,9 @@ Vue.component("statistics-tab", {
               {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best.toString() }}.</div>
+            <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best }}.</div>
             <div v-else>You have no fastest eternity<span v-if="reality.isUnlocked"> this Reality</span>.</div>
-            <div>You have spent {{ eternity.this.toString() }} in this Eternity.
+            <div>You have spent {{ eternity.this }} in this Eternity.
               <span v-if="reality.isUnlocked">
                 ({{eternity.thisReal.toStringShort()}} real time)
               </span>
@@ -143,10 +143,10 @@ Vue.component("statistics-tab", {
         <div v-if="reality.isUnlocked">
             <h3>Reality</h3>
             <div>You have Realitied {{ formatResetAmount(reality.count) }}.</div>
-            <div>Your fastest Reality was {{ reality.best.toString() }}.</div>
+            <div>Your fastest Reality was {{ reality.best }}.</div>
             <div>
               You have spent
-              {{ reality.this.toString() }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
+              {{ reality.this }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
             </div>
             <br>
         </div>

@@ -11,7 +11,7 @@ function bigCrunchAnimation() {
 function canCrunch() {
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   const goal = challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
-  if (player.money.lt(goal)) return false;
+  if (player.antimatter.lt(goal)) return false;
   return true;
 }
 
@@ -100,7 +100,7 @@ function secondSoftReset() {
     player.resets = 0;
     player.galaxies = 0;
     player.tickDecrease = 0.9;
-    resetMoney();
+    resetAntimatter();
     softReset(0);
     InfinityDimensions.resetAmount();
     IPminpeak = new Decimal(0);
@@ -108,6 +108,7 @@ function secondSoftReset() {
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;
     player.thisInfinityTime = 0;
+    player.thisInfinityLastBuyTime = 0;
     player.thisInfinityRealTime = 0;
     player.noEighthDimensions = true;
     player.noSacrifices = true;

@@ -101,9 +101,7 @@ const GlyphGenerator = {
       strength: initialStrength,
       level: level.actualLevel,
       rawLevel: level.rawLevel,
-      effects: {
-        pow: GameDatabase.reality.glyphEffects.powerpow.effect(level.actualLevel, initialStrength),
-      },
+      effects: this.makeEffectBitmask(["powerpow"]),
     };
   },
 
@@ -201,11 +199,21 @@ const GlyphGenerator = {
   generateEffects(type, count, fake) {
     const rng = this.getRNG(fake);
     const effects = [];
-    if (GlyphTypes[type].primaryEffect) effects.push(GlyphTypes[type].primaryEffect);
+    const blacklist = [];
+    if (GlyphTypes[type].primaryEffect) {
+      effects.push(GlyphTypes[type].primaryEffect);
+      blacklist.push(GlyphTypes[type].primaryEffect);
+    }
     for (let i = effects.length; i < count; ++i) {
-      const effect = GlyphTypes[type].randomEffect(rng, effects);
+      const effect = GlyphTypes[type].randomEffect(rng, blacklist);
       if (!effect) break;
       effects.push(effect);
+      blacklist.push(effect);
+      // Ensure RM/instability are mutually exclusive until more than 4 effects
+      if (type === "effarig" && count <= 4) {
+        if (effect === "effarigrm") blacklist.push("effarigglyph");
+        if (effect === "effarigglyph") blacklist.push("effarigrm");
+      }
     }
     return effects;
   },

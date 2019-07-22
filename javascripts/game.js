@@ -56,7 +56,7 @@ document.getElementById("newNews").onclick = function () {
 };
 
 function maxAll() {
-  if (!player.break && player.money.gt(Decimal.MAX_NUMBER)) return;
+  if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
   buyMaxTickSpeed();
 
   for (let tier = 1; tier < 9; tier++) {
@@ -70,6 +70,8 @@ function maxDimension(tier) {
   const cost = dimension.cost.times(dimension.remainingUntil10);
   const multBefore = dimension.power;
 
+  if (tier === 8 && Enslaved.isRunning) return buyOneDimension(8);
+
   // Challenge 6: Dimensions 3+ cost the dimension two tiers down instead of antimatter
   if (tier >= 3 && NormalChallenge(6).isRunning) {
     const lowerTier = NormalDimension(tier - 2);
@@ -80,17 +82,17 @@ function maxDimension(tier) {
     }
   } else {
     // Buy any remaining until 10 before attempting to bulk-buy
-    if (cost.lt(player.money)) {
-      player.money = player.money.minus(cost);
+    if (cost.lt(player.antimatter)) {
+      player.antimatter = player.antimatter.minus(cost);
       buyUntilTen(tier);
     }
 
     // Buy in a while loop in order to properly trigger abnormal price increases
     const hasAbnormalCostIncrease = NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning;
     // eslint-disable-next-line no-unmodified-loop-condition
-    while (player.money.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
+    while (player.antimatter.gte(dimension.cost.times(10)) && (hasAbnormalCostIncrease ||
             dimension.cost.lte(Decimal.MAX_NUMBER))) {
-      player.money = player.money.minus(dimension.cost.times(10));
+      player.antimatter = player.antimatter.minus(dimension.cost.times(10));
       buyUntilTen(tier);
     }
       
@@ -99,7 +101,7 @@ function maxDimension(tier) {
         BreakInfinityUpgrade.dimCostMult.isMaxed && !hasAbnormalCostIncrease) {
       const a = Math.log10(Math.sqrt(Player.dimensionMultDecrease));
       const b = dimension.costMultiplier.dividedBy(Math.sqrt(Player.dimensionMultDecrease)).log10();
-      const c = dimension.cost.dividedBy(player.money).log10();
+      const c = dimension.cost.dividedBy(player.antimatter).log10();
       const discriminant = Math.pow(b, 2) - (c * a * 4);
       if (discriminant < 0) return;
       const buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1;
@@ -115,7 +117,7 @@ function maxDimension(tier) {
       const newMult = dimension.baseCostMultiplier.times(Decimal.pow(Player.dimensionMultDecrease, postInfBuy + 1));
       dimension.cost = newCost;
       dimension.costMultiplier = newMult;
-      if (player.money.gte(dimension.cost)) player.money = player.money.minus(dimension.cost);
+      if (player.antimatter.gte(dimension.cost)) player.antimatter = player.antimatter.minus(dimension.cost);
       dimension.cost = dimension.cost.times(dimension.costMultiplier);
       dimension.costMultiplier = dimension.costMultiplier.times(Player.dimensionMultDecrease);
     }
@@ -167,7 +169,7 @@ function gainedInfinityPoints() {
     TimeStudy(111)
   );
   let ip = player.break
-    ? Decimal.pow10(player.money.e / div - 0.75)
+    ? Decimal.pow10(player.antimatter.e / div - 0.75)
     : new Decimal(308 / div);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
@@ -231,8 +233,8 @@ function resetChallengeStuff() {
     player.postC4Tier = 1
 }
 
-function resetMoney() {
-    player.money = Effects.max(
+function resetAntimatter() {
+    player.antimatter = Effects.max(
       10,
       Perk.startAM1,
       Achievement(21),
@@ -307,6 +309,7 @@ function gainedInfinities() {
 }
 
 setInterval(function() {
+  if (isLocalEnvironment()) return;
     $.getJSON('version.txt', function(data){
         //data is actual content of version.txt, so
         //do whatever you need with it
@@ -359,7 +362,7 @@ function updateRefresh() {
 }
 
 function kongLog10StatSubmission() {
-  kong.submitStats('Log10 of total antimatter', player.totalmoney.e);
+  kong.submitStats('Log10 of total antimatter', player.totalAntimatter.e);
   kong.submitStats('Log10 of Infinity Points', player.infinityPoints.e);
   kong.submitStats('Log10 of Eternity Points', player.eternityPoints.e);
 }
@@ -387,7 +390,6 @@ function randomStuffThatShouldBeRefactored() {
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
 
   if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.teresa.rmStore *= Math.pow(0.98, 1/60) // Teresa container leak, 2% every minute, only works online.
-  if (Laitela.isRunning && player.money.gte(player.celestials.laitela.maxAmGained)) player.celestials.laitela.maxAmGained = player.money;
 }
 
 setInterval(randomStuffThatShouldBeRefactored, 1000);
@@ -480,6 +482,7 @@ function gameLoop(diff, options = {}) {
     // We do these after autobuyers, since it's possible something there might
     // change a multiplier.
     GameCache.normalDimensionCommonMultiplier.invalidate();
+    GameCache.normalDimensionFinalMultipliers.invalidate();
     GameCache.infinityDimensionCommonMultiplier.invalidate();
     GameCache.timeDimensionCommonMultiplier.invalidate();
     GameCache.totalIPMult.invalidate();
@@ -577,8 +580,8 @@ function gameLoop(diff, options = {}) {
     }
 
     const challenge = NormalChallenge.current || InfinityChallenge.current;
-    if (player.money.lte(Decimal.MAX_NUMBER) ||
-        (player.break && !challenge) || (challenge && player.money.lte(challenge.goal))) {
+    if (player.antimatter.lte(Decimal.MAX_NUMBER) ||
+        (player.break && !challenge) || (challenge && player.antimatter.lte(challenge.goal))) {
 
         let maxTierProduced = 7;
         if (NormalChallenge(12).isRunning) {
@@ -600,15 +603,15 @@ function gameLoop(diff, options = {}) {
         }
 
         if (NormalChallenge(3).isRunning) {
-            player.money = player.money.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
-            player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
+            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
+            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000).times(player.chall3Pow));
         } else {
-            player.money = player.money.plus(getDimensionProductionPerSecond(1).times(diff/1000));
-            player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(1).times(diff/1000));
+            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
+            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(1).times(diff/1000));
         }
         if (NormalChallenge(12).isRunning) {
-            player.money = player.money.plus(getDimensionProductionPerSecond(2).times(diff/1000));
-            player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(2).times(diff/1000))
+            player.antimatter = player.antimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000));
+            player.totalAntimatter = player.totalAntimatter.plus(getDimensionProductionPerSecond(2).times(diff/1000))
         }
     }
 
@@ -666,7 +669,7 @@ function gameLoop(diff, options = {}) {
   player.totalTickGained += gain;
   player.tickThreshold = freeTickspeed.nextShards;
 
-    if (player.money.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.money.gte(challenge.goal)))) {
+    if (player.antimatter.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.antimatter.gte(challenge.goal)))) {
         document.getElementById("bigcrunch").style.display = 'inline-block';
         if ((challenge && !player.options.retryChallenge) || (player.bestInfinityTime > 60000 && !player.break)) {
           showTab("emptiness");
@@ -692,8 +695,6 @@ function gameLoop(diff, options = {}) {
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin;
 
-    mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
-
     if (TimeStudy.dilation.isBought) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
     }
@@ -712,7 +713,9 @@ function gameLoop(diff, options = {}) {
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
       if (Enslaved.isRunning) ttGain *= 1e-3;
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain * RA_UNLOCKS.TT_BOOST.effect.ttGen());
+      ttGain *= RA_UNLOCKS.TT_BOOST.effect.ttGen();
+      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
     if (player.infinityPoints.gt(0) || player.eternities !== 0) {
         document.getElementById("infinitybtn").style.display = "block";
@@ -721,8 +724,8 @@ function gameLoop(diff, options = {}) {
     document.getElementById("infinitybtn").style.display = "none";
     document.getElementById("challengesbtn").style.display = "none";
 
-    if (player.money.gte(Decimal.MAX_NUMBER) &&
-        (((challenge && player.money.gte(challenge.goal)) && !player.options.retryChallenge) ||
+    if (player.antimatter.gte(Decimal.MAX_NUMBER) &&
+        (((challenge && player.antimatter.gte(challenge.goal)) && !player.options.retryChallenge) ||
          (player.bestInfinityTime > 60000 && !player.break))) {
         ui.view.bigCrunch = true;
         document.getElementById("dimensionsbtn").style.display = "none";
@@ -847,12 +850,13 @@ function simulateTime(seconds, real, fast) {
 
     const offlineIncreases = ["While you were away"];
     // OoM increase
-    const oomVarNames = ["money", "infinityPower", "timeShards"];
+    const oomVarNames = ["antimatter", "infinityPower", "timeShards"];
     const oomResourceNames = ["antimatter", "infinity power", "time shards"];
     for (let i = 0; i < oomVarNames.length; i++) {
       const varName = oomVarNames[i];
       const oomIncrease = player[varName].log10() - playerStart[varName].log10();
-      if (player[varName].gt(playerStart[varName])) {
+      // Needs an isFinite check in case it's zero before or afterwards
+      if (player[varName].gt(playerStart[varName]) && Number.isFinite(oomIncrease)) {
         offlineIncreases.push(`your ${oomResourceNames[i]} increased by ` + 
           `${shorten(oomIncrease, 2, 2)} orders of magnitude`);
       }
@@ -878,7 +882,7 @@ function simulateTime(seconds, real, fast) {
       const oldActivations = playerStart.blackHole[i].activations;
       const activationsDiff = currentActivations - oldActivations;
       const pluralSuffix = activationsDiff === 1 ? " time" : " times";
-      if (activationsDiff > 0) {
+      if (activationsDiff > 0 && !BlackHole(i + 1).isPermanent) {
         offlineIncreases.push(`Black hole ${i + 1} activated  ${activationsDiff} ${pluralSuffix}`);
       }
     }
@@ -1063,9 +1067,6 @@ function setShiftKey(isDown) {
   if (isDown) showPerkLabels()
   else hidePerkLabels()
 }
-
-var postc8Mult = new Decimal(0)
-var mult18 = 1
 
 init();
 

@@ -46,7 +46,7 @@
   <b>Max all:</b> Max all will buy max tickspeed (see below), then will buy until 10 of 1st dimension until it can't anymore, then 2nd, and so on. <br>
   <b>Dimension base prices:</b> 10, 100, 10000, 1e6, 1e9, 1e13, 1e18, 1e24 <br>
   <b>Base per 10 bought dimension price increases:</b>1000, 10000, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15 <br>
-  <b>Hotkeys: 1, 2, 3, 4, 5, 6, 7, 8</b> for buy until 10 []th dimension, <b>M</b> for Max all
+  <b>Hotkeys: 1, 2, 3, 4, 5, 6, 7, 8</b> for buy until 10 Xth dimension (you can also hold down shift while buying dimensions, it will only buy 1 instead of 10), <b>M</b> for Max all
   </div>
   <hr id='div1hr'>
   <button onclick='changestate(2)' id='div2btn' class="storebtn">Ticks</button>
@@ -55,7 +55,8 @@
   <b>Interval:</b> The length of time between ticks. This is lowered by purchasing tick interval reductions. <br>
   <b>Cost:</b> The cost of antimatter for reducing the tick interval by the % displayed above (Without Galaxies your base tickspeed decrease is 11% per purchase) <br>
   <b>Buy Max:</b> This will buy the maximum amount of tick interval decreases available with your current amount of Antimatter. <br>
-  Note that the actual tickspeed time is fake and the game always runs at 20 ticks per second.
+  <b>Hotkeys: T</b> will purchase as many tickspeed upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
+  Note that the actual tickspeed time is fake and the game always runs at your update rate in Options.
   </div>
   <hr id='div2hr'>
   <button onclick='changestate(3)' id='div3btn' class="storebtn">Dimension Shift/Boost</button>
@@ -71,15 +72,15 @@
   Purchasing an Antimatter Galaxy will reset your game back to the point where only 4 Dimensions are available, but will increase the effect of your tick speed interval reduction by 2%. <br>
   Though it will have very little impact for the first few purchases, the increase is multiplicative and won’t take long to be visible. <br>
   Your first galaxy will increase your tickspeed interval upgrade as if it were 10% originally, so you will have 12% after 1 galaxy. <br>
-  Galaxies require 80+(galaxies*60) (base) Eighth Dimensions. (80+galaxies*60+(galaxies-99)^2*2 when above 100 non-replicanti galaxies) <br>
+  Galaxies require 80+(galaxies*60) (base) Eighth Dimensions. (80+galaxies*60+(galaxies-99)^2*2 when above 100 non-replicanti galaxies, and an extra 1.002x on top of that past 800 non-replicanti galaxies.) <br>
     <b>Hotkey: G</b>
   </div>
   <hr id='div4hr'>
   <button onclick='changestate(5)' id='div5btn' class="storebtn">Dimensional Sacrifice</button>
   <div style="text-align: left" id='div5' class='hidden'>
-  You unlock Dimensional Sacrifice after your first dimension boost. <br>
+  <b>You unlock Dimensional Sacrifice after your first dimension boost.</b> <br>
   Sacrificing will immediately reduce the owned quantity of dimensions 1 through 7 to zero. This does not reduce the multiplier or the current cost.  In return, it will multiply the Eighth Dimension Multiplier by the shown value. It will take time to get back to the production you previously had, but you will end up with a net increase. <br>
-  <b>When should I Sacrifice?</b> Depends on your percentages (+%/s), but if they are over ~2% and the multiplier is over 2x, I'd say it's worth it. The lower the percentage, the longer it takes to gain back your dimensions. <br>
+  <b>When should I Sacrifice?</b> Depends on your percentages (+%/s), but if they are over ~2% and the multiplier is over 2x, it's usually worth it. The lower the percentage, the longer it takes to gain back your dimensions. <br>
   <b>Dimensional Sacrifice Checkbox:</b> This allows you to complete dimensional sacrifices without having the warning popup. <br><br>
   The dimensional sacrifice formula (where n is the total amount of first dimensions you've had) is: <br>
   Base: (log(n)/10)^m, where m is 2 at base, 2.2 with the "The Gods are pleased" achievement, and 2.5 with the "Gift from the Gods" achievement. <br>
@@ -87,24 +88,26 @@
   After Infinity Challenge 2: n^m, where m is 0.01 at base and 0.011 with the "Yet another infinity reference" achievement. <br>
     <b>Hotkey: S</b>
   </div>
+  <hr>
+  <button onclick='changestate(6)' id='div6btn' class="storebtn">Achievements</button>
+  <div style="text-align: left" id='div6' class='hidden'>
+  Each achievement has conditions that must be met before they are earned.  Some are very simple, and some are significantly trickier.  You may have to infinity or start a challenge before attempting some of the harder ones. <br>
+  You will recieve a x1.5 multiplier to all normal dimensions for each completed row. In addition, most achievements have their own rewards.
+  </div>
+  <hr id='div6hr'>
   <h1 style ="text-align: center">
   Infinity
   </h1>
   <hr id='div5hr'>
-  <button onclick='changestate(6)' id='div6btn' class="storebtn">Infinity</button>
-  <div style="text-align: left" id='div6' class='hidden'>
+  <button onclick='changestate(7)' id='div7btn' class="storebtn">Infinity</button>
+  <div style="text-align: left" id='div7' class='hidden'>
   Once you have too much Antimatter for the world to handle (2^1024, or 1.7976931348623159e308) you’ll reach infinity and be able to perform a “Big Crunch”. <br>
   Each Infinity completed will give an Infinity Point. These can be spent on upgrades in the new infinity tab. You must purchase these upgrades from top to bottom. <br>
   The "x2 IP from all sources" upgrade can be bought multiple times, but each purchase requires 10 times as much IP. You must buy all 16 previous infinity upgrades to buy the first level. <br>
   <b>When should I try to reach Infinity?</b> It's recommend to get 2 galaxies before attempting to reach it. On the way there, you should dimension boost as many times as you can.
-  </div>
+  <b>Hotkey: C</b> Big Crunches.
+</div>
   <hr id='div6hr'>
-  <button onclick='changestate(7)' id='div7btn' class="storebtn">Achievements</button>
-  <div style="text-align: left" id='div7' class='hidden'>
-  Each achievement has conditions that must be met before they are earned.  Some are very simple, and some are significantly trickier.  You may have to infinity or start a challenge before attempting some of the harder ones. <br>
-  You will recieve a x1.5 multiplier to all dimensions for each completed row. In addition, some achievements have their own rewards.
-  </div>
-  <hr id='div7hr'>
   <button onclick='changestate(8)' id='div8btn' class="storebtn">Challenges</button>
   <div style="text-align: left" id='div8' class='hidden'>
   Challenges are unlocked after first infinity; they change in-game mechanics in different ways to create more difficult infinity circumstances. <br>
@@ -127,8 +130,8 @@
   <b>IP on crunch:</b> Once you break Infinity, you can set how many IP you would like to wait for before crunching. It accepts e notation (12.34e5 is 1234000). <br>
   <b>Sacrifice Autobuyer:</b> This autobuyer has a maxed timer from the start. You can set how much multiplier it waits for before sacrificing. It accepts e notation. <br>
   The double autobuyer tick speed upgrade will have all autobuyers buy twice as fast.<br>
-    <b>Toggle All Autobuyers:</b> This button will turn all of your autobuyers on or off. <!--say how it decides which?--> <br>
-    <b>Hotkey: A</b> (for toggle all autobuyers)
+    <b>Toggle All Autobuyers:</b> This button will turn all of your autobuyers on or off. If dimension autobuyer 1-6 are on, but 7, 8, and tickspeed aren't, it will turn on 7, 8, and tickspeed. <br>
+    <b>Hotkey: A</b> (for toggle all autobuyers).
   </div>
   <hr id='div9hr'>
   <h1 style="text-align: center">
@@ -161,7 +164,8 @@
   When replicanti reach infinity, you can buy a galaxy. This will not increase the cost of normal galaxies. The amount of replicanti galaxies you can have is capped (upgradable). Once you reach infinity replicanti, they will not continue growing. <br>
   When offline, in an inactive tab, lagging, or a tickspeed under 50ms, replicanti get calculated with an approximation. This can cause wildly varying results, especially at extremely low numbers (1-5). <br>
   When at low values (100-1000) (when none of the conditions above are true), there may be some minor variances in the expected amount of replicanti gain. <br>
-    <b>Formulas: <br>
+    <b>Hotkey: R</b> will buy a Replicanti Galaxy.
+  <b>Formulas: <br>
     Infinity Dimension power increase:</b> log2(replicanti)^2, plus replicanti^0.032 if you have the relevant time study, times 5^galaxies if you have that time study. <br>
     <b>Chance upgrade cost:</b>x(1e15) per upgrade <br>
     <b>Speed upgrade cost:</b>x(1e10) per upgrade <br>
@@ -176,7 +180,8 @@
   Upon reaching infinity Infinity Points, you can eternity. Eternities will reset everything before this point except challenge times, achievements, and total antimatter. You also unlock a new tab. <br>
   You can pass infinity Infinity Points whenever. You will recieve more Eternity Points the nore Infinity Points you had before going Eternal. <br>
   <b>EP gain formula:</b> floor(5^(floor(log10(IP))/308-0.7)*bonuses. The x10 EP time study gives the bonus before the outer floor.
-  </div>
+  <b>Hotkey: E</b> will Eternity.
+</div>
   <hr id='div14hr'>
   <button onclick='changestate(15)' id='div15btn' class="storebtn">Milestones</button>
   <div style="text-align: left" id='div15' class='hidden'>
@@ -196,6 +201,7 @@
   <div style="text-align: left" id='div17' class='hidden'>
     A Time Study is a powerful post-eternity upgrade, which costs Time Theorems. Time Studies are laid out in a tree-like fashion, where you must buy preresiquites before continuing. There are sometimes choices to make with which Time Study to buy, as you cannot get all of them even if affordable. <br>
     Time Theorems are a limited resource which costs more for each one you buy. They can be bought with antimatter, infinity points, and eternity points. <br>
+    You are able to hold down shift and then click on a time study to buy all studies until that point.<br>
     <b>Respecs:</b> A Respec allows you to reset the upgrades you have in the tree to retreive the Time Theorems spent on them. It can be done for free on eternity. <br>
     <b>Costs:</b> <br>
     <b>Antimatter:</b> 1e20000^times bought <br>
@@ -255,10 +261,11 @@
         <hr id='div22hr'>
         <button onclick='changestate(23)' id='div23btn' class="storebtn">Automator</button>
           <div style="text-align: left" id='div23' class="hidden">
-            The Automator is unlocked upon reaching 4 Realities and grants you an achievement. It is like a scripting language inside the game that allows you to near completely automate the entire game, eventually. <br>
-            To use it, you must buy commands to use. These range from 1-500 Reality Machines. <br>
-            You can also only use a select amount of rows. You can increase that amount by Realitying more or by buying certain Perks. <br>
-            There are also three Automator save slots that work like Time Study save slots. To use, hold shift to save and click to load.
+            The Automator is unlocked upon reaching 4 Realities and grants you an achievement. It is like a scripting language inside the game that allows you to nearly automate the entire game.<br>
+            A good place to start when beginning to use the automator is by reading the documents on the side. They begin to help you understand what each command does.<br>
+            You can use as many rows as you need, and the only thing limiting you is whether you have certain features (like the Black Hole and Stored Time) to be able to use those commands.<br>
+            The Automator automatically saves scripts your scripts in the dropdown, and you are able to create new scripts by clicking on the dropdown, and then create new. To rename a script, click the pencil next to the dropdown.<br>
+            To use the Automator, click the play button. To pause the automator at the current command, press pause. To stop the Automator completely, click stop. To go all the way back to the beginning of your script, click back. If you wish to repeat your script over and over, use the repeat button. If you want a larger workspace, you can press the button in the top right corner of the Automator to expand it to fullscreen.
     </div>
             <hr id='div23hr'>
             <button onclick='changestate(24)' id='div24btn' class="storebtn">Black Hole</button>
@@ -267,7 +274,9 @@
             You can buy upgrades for the Black Hole by using Reality Machines. There are three upgrades for the Black Hole: Cooldown, Intensity, and Duration. <br>
             Once you reach 2 years of playtime (that two years is affected by the Black Hole), you unlock a Reality Upgrade that allows you to have two Black Holes. <br>
             The second Black Hole takes time active from your 1st Black Hole to decrease Cooldown (i.e. if the 1st Black Hole was active for 30 seconds, it would take 30 seconds away from the waiting time until activation of the second Black Hole.)
-            </div>
+            When your Black Hole reaches a 0.1 second interval, that Black Hole becomes permanent.<br>
+            <b>Hotkey: B</b> turns the Black Hole on and off.
+          </div>
             <hr id='div24hr'>
             <button onclick='changestate(25)' id='div25btn' class="storebtn">Celestials</button>
           <div style="text-align: left" id='div25' class="hidden">
@@ -344,7 +353,56 @@
           <hr id='div254hr'>
           <button onclick='changestate(255)' id='div255btn' class="storebtn">Ra, Celestial of the Forgotten</button>   
           <div style="text-align: left" id='div255' class="hidden">
-            
+            Ra begins the back half of the Celestials, being the 5th Celestial you unlock. He is unlocked by reaching 30 V-Achievements.<br>
+            Memories are obtained by Realitying, and are based on the gained glyph level of that Reality.<br>
+            When you reach level 3 of each Celestial, you get a memory boost based on something in Ra's Reality, such as EP reached, or TT bought.<br>
+            At level 5 of each Celestial's unlocks, you unlock the next Celestial to begin gaining memories for, except for V's level 5.<br>
+            <div style="text-align: center">
+            <b>Teresa Level Unlocks:</b><br>
+            </div>
+            Teresa has a few key unlocks that help progress immensely.<br>
+            Her first main unlock allows you to charge infinity upgrades. Charging an upgrade boosts the upgrade to a better upgrade that has some similarities to the old one. It takes two levels to get another upgrade charger.<br>
+            At level 3, you are finally able to enter into Ra's Reality.<br>
+            Level 15 is Teresa's next big unlock, and it raises Perk Shop caps.<br>
+            The next thing she unlocks is her final unlock.<br>
+            <button onclick='changestate(2551)' id='div2551btn' class="storebtn">Dilation 2</button>
+            <div style="text-align: left" id='div2551' class="hidden">
+            This will be completed at a later date.<br>
+            </div>
+            <div style="text-align: center">
+            <b>Effarig Level Unlocks:</b><br>
+            </div>
+            Effarig's unlocks help with boosting glyphs.<br>
+            At level 2, the glyph rarity is increased, and you have more choices for you to choose from upon Reality.<br>
+            His next unlock is moreso a helpful one, but at level 10, it ensures that glyphs always have 4 effects, and Effarig Glyphs can go higher than 4 (up to 7, which is all effects).<br>
+            The second-to-last unlockable goes full circle and boosts glyph level based on Relic Shards, Effarig's currency.<br>
+            Effarig's final unlock adds a new...dimension to the game.<br>
+            <button onclick='changestate(2552)' id='div2552btn' class="storebtn">Glyph Alchemy</button>
+            <div style="text-align: left" id='div2552' class="hidden">
+              At Level 25 Effarig, you unlock Glyph Alchemy. Upon unlocking, you gain a new sacrifice option: "Alchemy Mode", which turns your glyphs into Alchemy resources.<br>
+              You can turn glyphs into alchemical resources. Each alchemical resource additionally gives a buff, based on it’s amount.<br>
+             Reactions spend alchemical resources to produce new alchemical resources, and can be activated by clicking on the alchemical resource you want to produce. These relations occur every reality.<br>
+             The final alchemical resource, ‘Reality’, lets you spend reality to create ‘reality glyphs’.<br>
+             Reality Glyphs allow you to combine effects from the basic Glyph types. You are able to choose up to 4 effects to put on your Reality Glyph, but you might not be able to choose all of them, unless you reach certain requirements.
+            </div>
+            <div style="text-align: center">
+            <b>The Enslaved Ones' Level Unlocks:</b><br>
+            </div>
+            The Enslaved Ones come back to their own Celestial, and have multiple boosts to stored time and time spent<br>
+            Their level 2 unlock amplifies stored game time, and makes stored real time more effecient.<br>
+            At level 10, you become able to adjust stored time, and automatically release it.<br>
+            The next unlock boosts Dilated Time gain based on peak game speed in each Reality.<br>
+            Finally, at level 25, you get a game speed increase based on stored time.<br>
+            <div style="text-align: center">
+            <b>V Level Unlocks:</b><br>
+            </div>
+            V's unlocks help with all around bonuses, including some quality of life.<br>
+            At level 2, you gain extra achievements for free (as in, achievements that count towards different bonuses), based on V level.<br>
+            Her level 5 introduces some quality of life by making Auto-EC perks happen instantly and automatically unlocking Time Dilation when you reach 17,000 TT.<br>
+            V's level 10 makes Time Theorems boost all continous non-dimension production.<br>
+            V15 and V25 will be added at a later date.<br>
+            <br>
+            At level 20 of all Celestials, you finally unlock the next Celestial, Lai'tela.<br>
             </div>
             <hr id='div255hr'>
             <button onclick='changestate(256)' id='div256btn' class="storebtn">Lai'tela, Celestial of Matter</button>   

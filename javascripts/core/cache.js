@@ -33,6 +33,16 @@ class Lazy {
   invalidate() {
     this._value = undefined;
   }
+
+  /**
+   * @return {Lazy}
+   */
+  invalidateOn(...events) {
+    for (const event of events) {
+      EventHub.logic.on(event, () => this.invalidate());
+    }
+    return this;
+  }
 }
 
 const GameCache = {
@@ -59,7 +69,6 @@ const GameCache = {
   }),
 
   dimensionMultDecrease: new Lazy(() => {
-    if (Enslaved.isRunning && !NormalChallenge(10).isRunning) return 10;
     return 10 - Effects.sum(
       BreakInfinityUpgrade.dimCostMult,
       EternityChallenge(6).reward
@@ -91,6 +100,10 @@ const GameCache = {
     return normalDimensionCommonMultiplier();
   }),
 
+  // 0 will cause a crash if invoked; this way the tier can be used as an index
+  normalDimensionFinalMultipliers: Array.range(0, 9)
+    .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
+
   infinityDimensionCommonMultiplier: new Lazy(() => {
     return infinityDimensionCommonMultiplier();
   }),
@@ -103,22 +116,29 @@ const GameCache = {
 
   totalIPMult: new Lazy(() => totalIPMult()),
 
+  // This seemingly-random number is in order to match the per-row value of achievements to pre-update values
   achievementPower: new Lazy(() => Decimal.pow(
-    1.5,
+    1.1841138514709035,
     Array.range(1, 14)
       .map(Achievements.row)
       .countWhere(row => row.every(ach => ach.isEnabled))
-  )),
+  ).times(Math.pow(1.03, Achievements.effectiveCount))),
 
   challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
 
   infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
-  
-  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0))),
-  
-  baseTimeForAllAchs: new Lazy(() => TimeSpan.fromDays(2).totalMilliseconds * GameCache.realityAchTimeModifier.value)
+
+  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0)))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE),
+
+  baseTimeForAllAchs: new Lazy(() => Achievements.defaultDisabledTime.times(GameCache.realityAchTimeModifier.value))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE)
 };
 
 EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
+
+GameCache.normalDimensionFinalMultipliers.invalidate = function() {
+  for (const x of this) x.invalidate();
+};

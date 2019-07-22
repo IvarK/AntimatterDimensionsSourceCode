@@ -19,8 +19,6 @@ function startDilatedEternity(auto) {
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
   setTimeout(function() {
     GameIntervals.gameLoop.start();
   }, 250)
@@ -132,7 +130,7 @@ function rewardTP() {
 // Returns the TP that would be gained this run
 function getTP() {
   let tachyon = Decimal
-    .pow(Decimal.log10(player.money) / 400, 1.5)
+    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
     .times(tachyonGainMultiplier());
   if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
   return tachyon;

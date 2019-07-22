@@ -11,7 +11,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   computed: {
     peakIPPMThreshold: function() {
-      return new Decimal("1e100000");
+      return new Decimal("1e100");
     },
     isPeakIPPMVisible: function() {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
@@ -19,7 +19,7 @@ Vue.component("game-header-big-crunch-button", {
   },
   methods: {
     update() {
-      this.isVisible = player.break && player.money.gte(Decimal.MAX_NUMBER) &&
+      this.isVisible = player.break && player.antimatter.gte(Decimal.MAX_NUMBER) &&
         !NormalChallenge.isRunning && !InfinityChallenge.isRunning;
       if (!this.isVisible) return;
       const gainedIP = gainedInfinityPoints();

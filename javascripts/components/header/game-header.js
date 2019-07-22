@@ -26,7 +26,7 @@ Vue.component("game-header", {
       if (this.isInMatterChallenge) {
         this.matter.copyFrom(Player.effectiveMatterAmount);
       }
-      this.antimatter.copyFrom(player.money);
+      this.antimatter.copyFrom(player.antimatter);
       this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
       this.updateCelestial();
       this.updateChallengeDisplay();

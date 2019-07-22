@@ -6,7 +6,8 @@ GameDatabase.celestials.v = {
     eternities: 1e70,
     infinities: 1e160,
     dilatedTime: new Decimal("1e320"),
-    replicanti: new Decimal("1e320000")
+    replicanti: new Decimal("1e320000"),
+    rm: new Decimal("1e60")
   },
   runUnlocks: [
     {
@@ -35,7 +36,7 @@ GameDatabase.celestials.v = {
       name: "Young Boy",
       description: value => `Get ${shorten(value)} Antimatter in Eternity Challenge 12.`,
       values: [2e9, 2.2e9, 2.4e9, 2.6e9, 2.8e9, 3e9].map(Decimal.pow10),
-      condition: x => EternityChallenge(12).isRunning && player.money.gte(x)
+      condition: x => EternityChallenge(12).isRunning && player.antimatter.gte(x)
     },
     {
       id: 4,

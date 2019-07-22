@@ -393,8 +393,12 @@ let player = {
       quoteIdx: 0,
       disCharge: false,
       peakGamespeed: 1,
-      compression: false,
-      entanglement: 0,
+      compression: {
+        active: false,
+        entanglement: 0,
+        upgrades: new Set(),
+        freeDimboost: 0
+      },
     },
     laitela: {
       matter: new Decimal(0),

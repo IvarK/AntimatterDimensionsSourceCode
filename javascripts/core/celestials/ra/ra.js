@@ -253,7 +253,7 @@ const Ra = {
     return player.celestials.ra.run;
   },
   get isCompressed() {
-    return player.celestials.ra.compression;
+    return player.celestials.ra.compression.active;
   },
   get compressionDepth() {
     return 2;

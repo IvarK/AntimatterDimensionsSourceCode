@@ -81,15 +81,6 @@ GameStorage.devMigrations = {
       player.reality.upgReqs.push(false, false, false, false, false);
     },
     player => {
-      const newCommands = new Set();
-      for (let commandId of player.reality.automatorCommands) {
-        if (Math.floor(commandId / 10) === 2 || Math.floor(commandId / 10) === 3) commandId += 1;
-        newCommands.add(commandId);
-      }
-      player.reality.automatorCommands = newCommands;
-      if (!player.reality.automatorCommands.has(24)) player.reality.automatorCommands.add(24);
-      if (!player.reality.automatorCommands.has(25)) player.reality.automatorCommands.add(25);
-      if (!player.reality.automatorCommands.has(12)) player.reality.automatorCommands.add(12);
       player.reality.realityMachines = new Decimal(player.reality.realityMachines);
     },
     player => {

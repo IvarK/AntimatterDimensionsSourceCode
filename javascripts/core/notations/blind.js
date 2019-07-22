@@ -1,8 +1,8 @@
 "use strict";
 
-Notation.blind = new class BlindNotation extends Notation {
+Notation.empty = new class EmptyNotation extends Notation {
   constructor() {
-    super("Blind");
+    super("Empty");
   }
 
   get isPainful() {

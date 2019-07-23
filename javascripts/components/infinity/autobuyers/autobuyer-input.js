@@ -18,40 +18,11 @@ Vue.component("autobuyer-input", {
       return this.type === "int" ? "number" : "text";
     },
     typeFunctions() {
-      switch (this.type) {
-        case "decimal": return {
-          areEqual: (value, other) => Decimal.eq(value, other),
-          formatValue: value => Notation.scientific.format(value, 2, 0),
-          copyValue: value => new Decimal(value),
-          tryParse: input => {
-            try {
-              const decimal = Decimal.fromString(input.replace(",", ""));
-              return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
-            } catch (e) {
-              return undefined;
-            }
-          }
-        };
-        case "float": return {
-          areEqual: (value, other) => value === other,
-          formatValue: value => value.toString(),
-          copyValue: value => value,
-          tryParse: input => {
-            const float = parseFloat(input);
-            return isNaN(float) ? undefined : float;
-          }
-        };
-        case "int": return {
-          areEqual: (value, other) => value === other,
-          formatValue: value => value.toString(),
-          copyValue: value => value,
-          tryParse: input => {
-            const int = parseInt(input, 10);
-            return isNaN(int) || !Number.isInteger(int) ? undefined : int;
-          }
-        };
+      const functions = AutobuyerInputFunctions[this.type];
+      if (functions === undefined) {
+        throw crash("Unknown autobuyer input type");
       }
-      throw crash("Unknown input type");
+      return functions;
     },
     validityClass() {
       return this.isValid ? undefined : "o-autobuyer-input--invalid";
@@ -114,3 +85,37 @@ Vue.component("autobuyer-input", {
       @input="handleInput"
     />`
 });
+
+const AutobuyerInputFunctions = {
+  decimal: {
+    areEqual: (value, other) => Decimal.eq(value, other),
+    formatValue: value => Notation.scientific.format(value, 2, 0),
+    copyValue: value => new Decimal(value),
+    tryParse: input => {
+      try {
+        const decimal = Decimal.fromString(input.replace(",", ""));
+        return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
+      } catch (e) {
+        return undefined;
+      }
+    }
+  },
+  float: {
+    areEqual: (value, other) => value === other,
+    formatValue: value => value.toString(),
+    copyValue: value => value,
+    tryParse: input => {
+      const float = parseFloat(input);
+      return isNaN(float) ? undefined : float;
+    }
+  },
+  int: {
+    areEqual: (value, other) => value === other,
+    formatValue: value => value.toString(),
+    copyValue: value => value,
+    tryParse: input => {
+      const int = parseInt(input, 10);
+      return isNaN(int) || !Number.isInteger(int) ? undefined : int;
+    }
+  }
+};

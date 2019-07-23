@@ -61,7 +61,7 @@ class AchievementState extends GameMechanicState {
     if (this.isUnlocked) return;
     player.achievements.add(this.id);
     if (this.id === 85 || this.id === 93) {
-      Autobuyer.infinity.bumpLimit(4);
+      Autobuyer.bigCrunch.bumpAmount(4);
     }
     GameUI.notify.success(this.name);
     kong.submitAchievements();

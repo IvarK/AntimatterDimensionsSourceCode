@@ -27,7 +27,7 @@ GameKeyboard.bindRepeatableHotkey("e", () => eternity());
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());
 
-GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
+GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
 GameKeyboard.bindHotkey("u", () => automatorOnOff());
 

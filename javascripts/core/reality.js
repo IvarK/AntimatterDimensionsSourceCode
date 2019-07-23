@@ -281,9 +281,6 @@ function completeReality(force, reset, auto = false) {
   player.galaxies = isRUPG10Bought ? 1 : 0;
   player.tickDecrease = 0.9;
   player.interval = null;
-  if (!isRUPG10Bought) {
-    Autobuyer.resetUnlockables();
-  }
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.break = isRUPG10Bought ? player.break : false;
@@ -316,18 +313,12 @@ function completeReality(force, reset, auto = false) {
   player.totalTickGained = 0;
   player.offlineProd = isRUPG10Bought ? player.offlineProd : 0;
   player.offlineProdCost = isRUPG10Bought ? player.offlineProdCost : 1e7;
-  if (!isRUPG10Bought) {
-    player.autoSacrifice = 1;
-  }
   player.eternityChalls = {};
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   player.challenge.eternity.unlocked = 0;
   player.etercreq = 0;
   player.infMultBuyer = isRUPG10Bought ? player.infMultBuyer : false;
-  if (!isRUPG10Bought) {
-    player.autoCrunchMode = AutoCrunchMode.AMOUNT;
-  }
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -346,9 +337,6 @@ function completeReality(force, reset, auto = false) {
   player.timestudy.epcost = new Decimal(1);
   player.timestudy.studies = [];
   player.celestials.v.additionalStudies = 0;
-  if (!RealityUpgrade(10).isBought) {
-    player.eternityBuyer.isOn = false;
-  }
   player.dilation.studies = [];
   player.dilation.active = false;
   player.dilation.tachyonParticles = new Decimal(0);
@@ -389,7 +377,6 @@ function completeReality(force, reset, auto = false) {
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  Autobuyer.tryUnlockAny()
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();

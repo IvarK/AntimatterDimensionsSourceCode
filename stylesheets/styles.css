@@ -3761,6 +3761,9 @@ screen and (max-width: 480px) {
 .o-autobuyer-input {
   border: .01rem solid #c2c2c2;
   padding: .3rem;
+  height: 2.5rem;
+  width: 20rem;
+  box-sizing: border-box;
 }
 
 .o-autobuyer-input--invalid {
@@ -3781,6 +3784,8 @@ screen and (max-width: 480px) {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  user-select: none;
 }
 
 .o-autobuyer-toggle-checkbox__label {
@@ -3891,7 +3896,7 @@ screen and (max-width: 480px) {
 
 .c-autobuyer-box {
   width: 23rem;
-  height: 15.5rem;
+  height: 17.5rem;
   padding: 1rem;
   border: solid .1rem grey;
   border-radius: .4rem;
@@ -3923,14 +3928,52 @@ screen and (max-width: 480px) {
   font-size: .9rem;
 }
 
+.c-autobuyer-box__mode-select {
+  font-family: Typewriter, serif;
+  font-size: 1.1rem;
+  color: #4f5957;
+  text-align: center;
+  text-align-last: center;
+  height: 2.5rem;
+  width: 20rem;
+}
+
 .l-autobuyer-box {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.l-autobuyer-box__header {
+  height: 1.6rem;
+}
+
+.l-autobuyer-box__content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.l-autobuyer-box__footer {
+  height: 1.6rem;
+}
+
 .l-autobuyer-box__button {
   flex-shrink: 0;
+}
+
+.l-autobuyer-box__mode-select {
+  margin-bottom: 0.5rem
+}
+
+.l-autobuyer-box__fill {
+  flex-grow: 1;
+}
+
+.l-autobuyer-box__priority-selector {
+  margin-bottom: 0.5rem;
 }
 
 /*#endregion autobuyer-box*/

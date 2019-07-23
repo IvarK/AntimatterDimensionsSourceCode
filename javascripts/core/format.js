@@ -20,10 +20,6 @@ function shortenMultiplier(money) {
   return shorten(money, 1, 1);
 }
 
-function shortenAutobuyerInput(value) {
-  return Notation.scientific.format(value, 2, 0);
-}
-
 function shorten(value, places, placesUnder1000) {
   return Notation.current.format(value, places, placesUnder1000);
 }

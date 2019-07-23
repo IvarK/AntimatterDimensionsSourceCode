@@ -142,8 +142,8 @@ GameStorage.devMigrations = {
       player.reality.epmultbuyer = false;
     },
     player => {
-      if (!Object.values(AutoRealityMode).includes(player.autoRealityMode)) {
-        player.autoRealityMode = AutoRealityMode.RM;
+      if (!["rm", "glyph", "either", "both"].includes(player.autoRealityMode)) {
+        player.autoRealityMode = "rm";
       }
     },
     GameStorage.migrations.convertAutobuyerMode,
@@ -390,7 +390,35 @@ GameStorage.devMigrations = {
       }
       player.celestials.ra.unlocks = [];
     },
-    GameStorage.migrations.renameMoney
+    GameStorage.migrations.renameMoney,
+    player => {
+      GameStorage.migrations.moveAutobuyers(player);
+      const old = player.realityBuyer;
+      const realityAutobuyer = player.auto.reality;
+      realityAutobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
+      realityAutobuyer.rm = old.rm;
+      realityAutobuyer.glyph = old.glyph;
+      realityAutobuyer.isActive = old.isOn;
+
+      const eternityAutobuyer = player.auto.eternity;
+      eternityAutobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
+      const condition = new Decimal(old.limit);
+      switch (player.autoEternityMode) {
+        case "amount":
+          eternityAutobuyer.amount = condition;
+          break;
+        case "time":
+          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
+          break;
+        case "relative":
+          eternityAutobuyer.xLast = condition;
+          break;
+      }
+
+      delete player.realityBuyer;
+      delete player.autoRealityMode;
+      delete player.autoEternityMode;
+    }
   ],
 
   patch(player) {

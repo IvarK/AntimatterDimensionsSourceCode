@@ -1,6 +1,5 @@
 "use strict";
 
-const DIMENSION_COUNT = 8;
 const DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
 const SHORT_DISPLAY_NAMES = [null, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
 
@@ -11,22 +10,22 @@ const AutobuyerMode = {
 };
 
 const AutoCrunchMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
+  AMOUNT: 0,
+  TIME: 1,
+  X_LAST: 2
 };
 
 const AutoEternityMode = {
-  AMOUNT: "amount",
-  TIME: "time",
-  RELATIVE: "relative"
+  AMOUNT: 0,
+  TIME: 1,
+  X_LAST: 2
 };
 
 const AutoRealityMode = {
-  RM: "rm",
-  GLYPH: "glyph",
-  EITHER: "either",
-  BOTH: "both"
+  RM: 1,
+  GLYPH: 2,
+  EITHER: 3,
+  BOTH: 4
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it

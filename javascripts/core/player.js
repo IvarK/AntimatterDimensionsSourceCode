@@ -53,6 +53,74 @@ let player = {
   infinity: {
     upgradeBits: 0
   },
+  auto: {
+    dimensions: Array.range(0, 8).map(tier => ({
+      isUnlocked: false,
+      cost: 1,
+      interval: [1500, 2000, 2500, 3000, 4000, 5000, 6000, 7500][tier],
+      bulk: 1,
+      mode: AutobuyerMode.BUY_10,
+      priority: 1,
+      isActive: false,
+      lastTick: 0
+    })),
+    tickspeed: {
+      isUnlocked: false,
+      cost: 1,
+      interval: 2500,
+      mode: AutobuyerMode.BUY_SINGLE,
+      priority: 1,
+      isActive: false,
+      lastTick: 0
+    },
+    dimBoost: {
+      cost: 1,
+      interval: 8000,
+      maxDimBoosts: 1,
+      galaxies: 10,
+      bulk: 1,
+      buyMaxInterval: 0,
+      isActive: false,
+      lastTick: 0
+    },
+    galaxy: {
+      cost: 1,
+      interval: 75000,
+      limitGalaxies: true,
+      maxGalaxies: 1,
+      buyMax: false,
+      buyMaxInterval: 0,
+      isActive: false,
+      lastTick: 0
+    },
+    bigCrunch: {
+      cost: 1,
+      interval: 150000,
+      mode: 0,
+      amount: new Decimal(1),
+      time: 1,
+      xLast: new Decimal(1),
+      isActive: false,
+      lastTick: 0
+    },
+    sacrifice: {
+      multiplier: 5,
+      isActive: false
+    },
+    eternity: {
+      mode: 0,
+      amount: new Decimal(1),
+      time: 1,
+      xLast: new Decimal(1),
+      isActive: false
+    },
+    reality: {
+      mode: 0,
+      rm: new Decimal(1),
+      glyph: 0,
+      isActive: false
+    }
+  },
   infinityPoints: new Decimal(0),
   infinitied: new Decimal(0),
   infinitiedBank: new Decimal(0),
@@ -72,7 +140,6 @@ let player = {
   // TODO: Not used, remove
   interval: null,
   lastUpdate: new Date().getTime(),
-  autobuyers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
   tickspeedMultiplier: new Decimal(10),
   chall2Pow: 1,
   chall3Pow: new Decimal(0.01),
@@ -93,7 +160,6 @@ let player = {
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
-  overXGalaxies: 10,
   version: 13,
   infinityPower: new Decimal(1),
   spreadingCancer: 0,
@@ -113,7 +179,6 @@ let player = {
   totalTickBought: 0,
   offlineProd: 0,
   offlineProdCost: 1e7,
-  autoSacrifice: 1,
   replicanti: {
     amount: new Decimal(0),
     unl: false,
@@ -141,14 +206,7 @@ let player = {
   eternityChalls: {},
   etercreq: 0,
   infMultBuyer: false,
-  autoCrunchMode: AutoCrunchMode.AMOUNT,
-  autoEternityMode: AutoEternityMode.AMOUNT,
-  autoRealityMode: AutoRealityMode.RM,
   respec: false,
-  eternityBuyer: {
-    limit: new Decimal(0),
-    isOn: false
-  },
   eterc8ids: 50,
   eterc8repl: 40,
   noSacrifices: true,
@@ -176,11 +234,6 @@ let player = {
   thisReality: 0,
   thisRealityRealTime: 0,
   bestReality: 999999999999,
-  realityBuyer: {
-    rm: new Decimal(0),
-    glyph: 0,
-    isOn: false
-  },
   reality: {
     realityMachines: new Decimal(0),
     glyphs: {
@@ -363,6 +416,7 @@ let player = {
     retryChallenge: false,
     showAllChallenges: false,
     bulkOn: true,
+    autobuyersOn: true,
     cloud: true,
     hotkeys: true,
     theme: "Normal",
@@ -470,8 +524,8 @@ function guardFromNaNValues(obj) {
   for (let key in obj) {
     if (!obj.hasOwnProperty(key)) continue;
 
-    //TODO: rework autobuyer saving
-    if (key === "autobuyers" || key === "autoSacrifice" || key === "automator") continue;
+    // TODO: rework autobuyer saving
+    if (key === "automator") continue;
 
     let value = obj[key];
     if (isObject(value)) {

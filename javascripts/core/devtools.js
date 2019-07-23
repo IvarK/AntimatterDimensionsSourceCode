@@ -84,15 +84,8 @@ dev.cancerize = function() {
 
 dev.fixSave = function() {
   const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
-
   const fixed = save.replace(/NaN/gui, "10");
-  const stillToDo = JSON.parse(fixed);
-  for (let i = 0; i < stillToDo.autobuyers.length; i++) {
-    stillToDo.autobuyers[i].isOn = false;
-  }
-  console.log(stillToDo);
-
-  const saveData = stillToDo;
+  const saveData = JSON.parse(fixed);
   if (!saveData || !GameStorage.verifyPlayerObject(saveData)) {
     alert("Could not fix the save..");
     return;

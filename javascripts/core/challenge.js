@@ -19,7 +19,6 @@ function tryUnlockInfinityChallenges() {
     ++player.postChallUnlocked;
     if (player.eternities > 6) {
       InfinityChallenge(player.postChallUnlocked).complete();
-      Autobuyer.tryUnlockAny();
     }
   }
 }
@@ -87,7 +86,6 @@ class NormalChallengeState extends GameMechanicState {
   complete() {
     // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
-    Autobuyer.tryUnlockAny();
   }
 
   get goal() {

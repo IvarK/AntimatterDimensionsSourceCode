@@ -2,26 +2,17 @@
 
 Vue.component("sacrifice-autobuyer-box", {
   computed: {
-    autobuyer() {
-      return Autobuyer.sacrifice;
-    },
-    boxSetup() {
-      return new AutobuyerBoxSetup("Automatic Sacrifice", this.autobuyer);
-    },
-    limitInputSetup() {
-      return new AutobuyerInputSetup(
-        AutobuyerInputType.FLOAT,
-        () => this.autobuyer.limit,
-        value => this.autobuyer.limit = value
-      );
-    }
+    autobuyer: () => Autobuyer.sacrifice
   },
   template:
-    `<autobuyer-box :setup="boxSetup">
+    `<autobuyer-box :autobuyer="autobuyer" name="Automatic Sacrifice">
       <div>
-        <span>Sacrifice when the multiplier is over:</span>
-        <autobuyer-input :setup="limitInputSetup" />
+        <span>Sacrifice at X multiplier:</span>
+        <autobuyer-input
+         :autobuyer="autobuyer"
+         type="float"
+         property="multiplier"
+        />
       </div>
-      <br>
     </autobuyer-box>`
 });

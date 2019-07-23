@@ -391,10 +391,7 @@ function completeReality(force, reset, auto = false) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();
-  drawPerkNetwork();
-
   resetInfinityPoints();
-
 
   function resetReplicanti() {
     player.replicanti.amount = isRUPG10Bought ? new Decimal(1) : new Decimal(0);

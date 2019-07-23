@@ -51,7 +51,8 @@ Tab.infinity = new Tab("infinity-tab");
 Tab.eternity = new Tab("eternity-tab");
 Tab.eternity.timeStudies = new Subtab("Time studies", Tab.eternity, ui.view.tabs.eternity, true);
 Tab.eternity.dilation = new Subtab("Time dilation", Tab.eternity, ui.view.tabs.eternity);
-Tab.reality = new Tab("reality-tab")
+Tab.reality = new Tab("reality-tab");
+Tab.reality.glyphs = new Subtab("Glyphs", Tab.reality, ui.view.tabs.reality, true);
 Tab.celestials = new Tab("celestials-tab");
 
 // small hack until Vue migration is complete
@@ -95,9 +96,4 @@ function tryShowtab(tab) {
   ui.view.tabs.current = undefined;
   EventHub.dispatch(GameEvent.TAB_CHANGED);
   return false;
-}
-
-function displayTab(componentName) {
-  ui.view.page = componentName
-  ui.view.tabs.current = componentName
 }

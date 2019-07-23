@@ -43,7 +43,7 @@ Vue.component("options-button-grid", {
       return `Notation: ${this.options.notation} ▼`;
     },
     UILabel() {
-      return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`
+      return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
     }
   },
   methods: {
@@ -53,9 +53,9 @@ Vue.component("options-button-grid", {
       }
     },
     switchUI() {
-      player.options.newUI = !player.options.newUI
-      this.$viewModel.newUI = !this.$viewModel.newUI
-      displayTab('options-tab')
+      player.options.newUI = !player.options.newUI;
+      this.$viewModel.newUI = !this.$viewModel.newUI;
+      Tab.options.show();
     }
   },
   template: `

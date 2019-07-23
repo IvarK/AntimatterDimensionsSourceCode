@@ -43,7 +43,6 @@ class PerkState extends SetPurchasableMechanicState {
     if (!super.purchase()) return;
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    drawPerkNetwork();
     EventHub.dispatch(GameEvent.PERK_BOUGHT);
   }
 }

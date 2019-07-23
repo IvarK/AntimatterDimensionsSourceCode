@@ -14,7 +14,6 @@ let until10Setting = true;
 function showTab(tabName) {
     tryShowtab(tabName);
     Modal.hide();
-    if (tabName == "perks-tab") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
 }
 
 function floatText(tier, text) {
@@ -1013,10 +1012,6 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  if (ui.view.tabs.reality.subtab == "perks-tab") {
-    if (isDown) showPerkLabels()
-    else hidePerkLabels()
-  }
 }
 
 init();

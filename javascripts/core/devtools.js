@@ -196,7 +196,6 @@ dev.respecPerks = function() {
     player.reality.perks = new Set();
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    drawPerkNetwork();
 };
 
 function isDevEnvironment() {

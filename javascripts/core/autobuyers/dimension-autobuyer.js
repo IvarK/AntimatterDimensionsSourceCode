@@ -26,6 +26,14 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
     return this.bulk >= 1e100;
   }
 
+  get priority() {
+    return this.data.priority;
+  }
+
+  set priority(value) {
+    this.data.priority = value;
+  }
+
   get mode() {
     return this.data.mode;
   }

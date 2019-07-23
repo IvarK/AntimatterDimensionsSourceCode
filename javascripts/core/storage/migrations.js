@@ -522,8 +522,17 @@ GameStorage.migrations = {
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
-      autobuyer.amount = new Decimal(old.priority);
-      autobuyer.xLast = new Decimal(old.priority);
+      switch (player.autoCrunchMode) {
+        case "amount":
+          autobuyer.amount = new Decimal(old.priority);
+          break;
+        case "time":
+          autobuyer.time = new Decimal(old.priority).toNumber();
+          break;
+        case "relative":
+          autobuyer.xLast = new Decimal(old.priority);
+          break;
+      }
       autobuyer.isActive = old.isOn;
       autobuyer.lastTick = player.realTimePlayed;
     }
@@ -543,14 +552,14 @@ GameStorage.migrations = {
     if (player.eternityBuyer !== undefined) {
       const old = player.eternityBuyer;
       const autobuyer = player.auto.eternity;
-      autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
-      autobuyer.amount = new Decimal(old.limit);
-      autobuyer.xLast = new Decimal(old.limit);
+      // Development saves have additional modes
+      if (player.autoEternityMode === undefined) {
+        autobuyer.time = Number(old.limit);
+      }
       autobuyer.isActive = old.isOn;
     }
 
     delete player.eternityBuyer;
-    delete player.autoEternityMode;
   },
 
   prePatch(saveData) {

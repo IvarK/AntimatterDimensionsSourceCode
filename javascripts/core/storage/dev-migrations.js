@@ -394,14 +394,29 @@ GameStorage.devMigrations = {
     player => {
       GameStorage.migrations.moveAutobuyers(player);
       const old = player.realityBuyer;
-      const autobuyer = player.auto.reality;
-      autobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
-      autobuyer.rm = old.rm;
-      autobuyer.glyph = old.glyph;
-      autobuyer.isActive = old.isOn;
+      const realityAutobuyer = player.auto.reality;
+      realityAutobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
+      realityAutobuyer.rm = old.rm;
+      realityAutobuyer.glyph = old.glyph;
+      realityAutobuyer.isActive = old.isOn;
+
+      const eternityAutobuyer = player.auto.eternity;
+      eternityAutobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
+      switch (player.autoEternityMode) {
+        case "amount":
+          eternityAutobuyer.amount = new Decimal(old.limit);
+          break;
+        case "time":
+          eternityAutobuyer.time = new Decimal(old.limit).toNumber();
+          break;
+        case "relative":
+          eternityAutobuyer.xLast = new Decimal(old.limit);
+          break;
+      }
 
       delete player.realityBuyer;
       delete player.autoRealityMode;
+      delete player.autoEternityMode;
     }
   ],
 

@@ -13,6 +13,14 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends IntervaledAutobu
     return Player.defaultStart.auto.tickspeed.interval;
   }
 
+  get priority() {
+    return this.data.priority;
+  }
+
+  set priority(value) {
+    this.data.priority = value;
+  }
+
   get mode() {
     return this.data.mode;
   }

@@ -39,7 +39,7 @@ Vue.component("big-crunch-autobuyer-box", {
           },
         };
         case AutoCrunchMode.X_LAST: return {
-          title: "X times last Crunches",
+          title: "X times last Crunch",
           input: {
             property: "xLast",
             type: "decimal"

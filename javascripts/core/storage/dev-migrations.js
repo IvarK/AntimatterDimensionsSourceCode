@@ -402,15 +402,16 @@ GameStorage.devMigrations = {
 
       const eternityAutobuyer = player.auto.eternity;
       eternityAutobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoEternityMode);
+      const condition = new Decimal(old.limit);
       switch (player.autoEternityMode) {
         case "amount":
-          eternityAutobuyer.amount = new Decimal(old.limit);
+          eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = new Decimal(old.limit).toNumber();
+          eternityAutobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : eternityAutobuyer.time;
           break;
         case "relative":
-          eternityAutobuyer.xLast = new Decimal(old.limit);
+          eternityAutobuyer.xLast = condition;
           break;
       }
 

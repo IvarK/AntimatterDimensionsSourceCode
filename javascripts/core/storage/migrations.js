@@ -522,15 +522,16 @@ GameStorage.migrations = {
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.mode = ["amount", "time", "relative"].indexOf(player.autoCrunchMode);
+      const condition = new Decimal(old.priority);
       switch (player.autoCrunchMode) {
         case "amount":
-          autobuyer.amount = new Decimal(old.priority);
+          autobuyer.amount = condition;
           break;
         case "time":
-          autobuyer.time = new Decimal(old.priority).toNumber();
+          autobuyer.time = condition.lt(Decimal.MAX_NUMBER) ? condition.toNumber() : autobuyer.time;
           break;
         case "relative":
-          autobuyer.xLast = new Decimal(old.priority);
+          autobuyer.xLast = condition;
           break;
       }
       autobuyer.isActive = old.isOn;

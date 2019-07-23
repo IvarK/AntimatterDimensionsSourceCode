@@ -10,7 +10,7 @@ class PlayerProgress {
   }
 
   get isEternityUnlocked() {
-    return this._player.eternities > 0 || this.isRealityUnlocked;
+    return this._player.eternities.gt(0) || this.isRealityUnlocked;
   }
 
   get isInfinityUnlocked() {

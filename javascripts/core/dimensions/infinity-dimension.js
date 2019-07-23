@@ -137,7 +137,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get isAutobuyerUnlocked() {
-    return player.eternities >= 10 + this.tier;
+    return player.eternities.gte(10 + this.tier);
   }
 
   get isAvailableForPuchase() {
@@ -311,7 +311,7 @@ const InfinityDimensions = {
 };
 
 function tryUnlockInfinityDimensions() {
-  if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
+  if (player.eternities.lt(25) || InfinityDimension(8).isUnlocked) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either

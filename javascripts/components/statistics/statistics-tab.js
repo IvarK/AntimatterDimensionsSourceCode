@@ -18,7 +18,7 @@ Vue.component("statistics-tab", {
       },
       eternity: {
         isUnlocked: false,
-        count: 0,
+        count: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -56,7 +56,7 @@ Vue.component("statistics-tab", {
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
-        eternity.count = player.eternities;
+        eternity.count.copyFrom(player.eternities);
         eternity.hasBest = player.bestEternity < 999999999999;
         eternity.best.setFrom(player.bestEternity);
         eternity.this.setFrom(player.thisEternity);
@@ -126,9 +126,9 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="eternity.isUnlocked">
             <h3>Eternity</h3>
-            <div v-if="eternity.count > 0">
+            <div v-if="eternity.count.gt(0)">
               You have Eternitied
-              {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
+              {{ formatDecimalResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best }}.</div>

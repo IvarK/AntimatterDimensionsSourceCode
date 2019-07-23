@@ -7,7 +7,7 @@ GameDatabase.eternity.milestones = {
   },
   keepAutobuyers: {
     eternities: 2,
-    reward: "You keep your autobuyers on Eternity"
+    reward: "You start Eternity with all normal autobuyers"
   },
   autobuyerReplicantiGalaxy: {
     eternities: 3,
@@ -15,7 +15,7 @@ GameDatabase.eternity.milestones = {
   },
   keepInfinityUpgrades: {
     eternities: 4,
-    reward: "You keep your infinity upgrades on Eternity"
+    reward: "You start Eternity with all infinity upgrades"
   },
   bigCrunchModes: {
     eternities: 5,

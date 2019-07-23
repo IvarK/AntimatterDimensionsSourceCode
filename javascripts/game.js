@@ -109,8 +109,8 @@ function buyUntilTen(tier) {
 }
 
 function playerInfinityUpgradesOnEternity() {
-  if (player.eternities < 4) player.infinityUpgrades.clear();
-  else if (player.eternities < 20) {
+  if (player.eternities.lt(4)) player.infinityUpgrades.clear();
+  else if (player.eternities.lt(20)) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
       "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]);
@@ -500,19 +500,21 @@ function gameLoop(diff, options = {}) {
     }
     
     if (RealityUpgrade(14).isBought) {
-      player.reality.partEternitied += Time.deltaTime * Effects.product(
-        RealityUpgrade(3),
-        RealityUpgrade(14)
-      );
-      player.eternities += Math.floor(player.reality.partEternitied);
-      player.reality.partEternitied -= Math.floor(player.reality.partEternitied);
+      player.reality.partEternitied = player.reality.partEternitied.plus(
+        new Decimal(Time.deltaTime)
+          .times(Effects.product(
+            RealityUpgrade(3),
+            RealityUpgrade(14)
+            )
+          )
+        );
+      player.eternities = player.eternities.plus(player.reality.partEternitied.floor());
+      player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }
 
     if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
-      let isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0
-      if (isPostEc) {
-        player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01).times(diff/1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()))
-      }
+      player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01)
+        .times(diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
     }
 
     const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
@@ -804,7 +806,7 @@ function simulateTime(seconds, real, fast) {
 }
 
 function updateChart(first) {
-    if (first !== true && (player.infinitied.gte(1) || player.eternities >= 1) && player.options.chart.on === true) {
+    if (first !== true && (player.infinitied.gte(1) || player.eternities.gte(1)) && player.options.chart.on === true) {
         if (NormalChallenge(3).isRunning) {
             addChartData(getDimensionProductionPerSecond(1).times(player.chall3Pow));
         } else {
@@ -830,8 +832,8 @@ function autoBuyDilationUpgrades() {
 }
 
 function autoBuyInfDims() {
-  if (player.eternities > 10 && !EternityChallenge(8).isRunning) {
-    for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
+  if (player.eternities.gt(10) && !EternityChallenge(8).isRunning) {
+    for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)
         buyManyInfinityDimension(i)

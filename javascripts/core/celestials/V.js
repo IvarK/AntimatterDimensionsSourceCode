@@ -59,7 +59,7 @@ const V_UNLOCKS = {
     requirement: () => {
       const db = GameDatabase.celestials.v.mainUnlock;
       if (player.realities < db.realities) return false;
-      if (player.eternities < db.eternities) return false;
+      if (player.eternities.lt(db.eternities)) return false;
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;

@@ -419,7 +419,12 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNewsToSet
+    GameStorage.migrations.convertNewsToSet,
+    // Decimalified eternity count
+    player => {
+      player.eternities = new Decimal(player.eternities);
+      player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+    }
   ],
 
   patch(player) {

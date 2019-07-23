@@ -149,7 +149,7 @@ function galaxyReset() {
 }
 
 function galaxyResetBtnClick() {
-  if (player.eternities >= 7 && !shiftDown) return maxBuyGalaxies(true);
+  if (player.eternities.gte(9) && !shiftDown) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;

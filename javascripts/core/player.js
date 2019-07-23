@@ -166,7 +166,7 @@ let player = {
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
-  eternities: 0,
+  eternities: new Decimal(0),
   thisEternity: 0,
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
@@ -278,7 +278,7 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0,
+    partEternitied: new Decimal(0),
     automator: {
       state: {
         mode: AutomatorMode.STOP,
@@ -462,7 +462,7 @@ const Player = {
   },
 
   get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
+    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
   },
 
   get isInMatterChallenge() {

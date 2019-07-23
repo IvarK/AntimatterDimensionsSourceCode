@@ -436,7 +436,7 @@ dev.printResourceTotals = function() {
   console.log(`Free tickspeed: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
 
   console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
-  console.log(`Eternities: e${Math.round(Math.log10(player.eternities))}`);
+  console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
   console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(player.replicanti.amount.log10() / 1e5 + 0.5))}`);
 
   console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);

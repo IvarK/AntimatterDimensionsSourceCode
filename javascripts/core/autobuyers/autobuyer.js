@@ -75,7 +75,7 @@ class IntervaledAutobuyerState extends AutobuyerState {
 
   upgradeInterval() {
     if (this.hasMaxedInterval) return;
-    if (Currency.infinityPoints.isAffordable(this.cost)) return;
+    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
     Currency.infinityPoints.subtract(this.cost);
     this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
     if (this.data.interval > 120) {

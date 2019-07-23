@@ -23,7 +23,7 @@ Vue.component("ra-tab", {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: level => `You can charge ${Math.min(Math.floor(level / 2), 12)} Infinity Upgrades.`,
+        scalingUpgradeText: level => `You can charge ${Math.clampMax(Math.floor(level / 2), 12)} Infinity Upgrades.`,
       },
       {
         pet: Ra.pets.effarig,

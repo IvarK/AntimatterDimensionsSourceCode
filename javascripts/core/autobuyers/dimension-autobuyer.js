@@ -66,7 +66,7 @@ class DimensionAutobuyerState extends IntervaledAutobuyerState {
 
   upgradeBulk() {
     if (this.hasMaxedBulk) return;
-    if (Currency.infinityPoints.isAffordable(this.cost)) return;
+    if (!Currency.infinityPoints.isAffordable(this.cost)) return;
     Currency.infinityPoints.subtract(this.cost);
     this.data.bulk = Math.clampMax(this.bulk * 2, 1e100);
     this.data.cost = Math.ceil(2.4 * this.cost);

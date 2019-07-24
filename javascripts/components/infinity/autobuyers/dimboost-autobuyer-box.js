@@ -45,8 +45,8 @@ Vue.component("dimboost-autobuyer-box", {
            property="galaxies"
           />
         </div>
-        <div>
-          <span v-if="isBulkBuyUnlocked" class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</span>
+        <div v-if="isBulkBuyUnlocked">
+          <span class="c-autobuyer-box__small-text">Bulk DimBoost Amount:</span>
           <autobuyer-input
            :autobuyer="autobuyer"
            type="int"

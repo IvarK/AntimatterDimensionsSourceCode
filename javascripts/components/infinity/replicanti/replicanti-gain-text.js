@@ -10,9 +10,7 @@ Vue.component("replicanti-gain-text", {
     update() {
       const updateRateMs = player.options.updateRate;
       const ticksPerSecond = 1000 / updateRateMs;
-      const storedTimeWeight = player.celestials.enslaved.storedFraction;
-      const gamespeedWithStoredTime = getGameSpeedupFactor() * (1 - storedTimeWeight) + storedTimeWeight;
-      const logGainFactorPerTick = Decimal.divide(gamespeedWithStoredTime * updateRateMs *
+      const logGainFactorPerTick = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10).toNumber();
       const replicantiAmount = player.replicanti.amount;

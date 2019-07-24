@@ -487,7 +487,7 @@ const Player = {
     if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond.times(getGameSpeedupFactor());
+    return basePerSecond.times(getGameSpeedupForDisplay());
   },
 
   get bestRunIPPM() {

@@ -10,7 +10,8 @@ class PlayerProgress {
   }
 
   get isEternityUnlocked() {
-    return this._player.eternities.gt(0) || this.isRealityUnlocked;
+    // This is some old-save-new-save number-to-Decimal conversion schenanigans (see below)
+    return new Decimal(this._player.eternities).gt(0) || this.isRealityUnlocked;
   }
 
   get isInfinityUnlocked() {

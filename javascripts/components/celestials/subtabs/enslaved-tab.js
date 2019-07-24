@@ -30,9 +30,6 @@ Vue.component("enslaved-tab", {
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
     },
-    autoReleaseSpeedup() {
-      return formatX(this.autoReleaseSpeed, 2, 2);
-    },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
     },
@@ -182,7 +179,6 @@ Vue.component("enslaved-tab", {
           :value="autoRelease"
           @input="toggleAutoRelease()">
         <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
-        <div>Effective game speed of last auto-released tick: {{ autoReleaseSpeedup }}</div>
       </div>
       <div class="l-enslaved-shop-container">
         <button

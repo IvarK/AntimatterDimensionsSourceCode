@@ -648,7 +648,7 @@ class NormalDimensionState extends DimensionState {
     else {
       toGain = getDimensionProductionPerSecond(tier + 1);
     }
-    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
   }
 
   /**

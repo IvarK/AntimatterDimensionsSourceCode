@@ -214,7 +214,7 @@ class TimeDimensionState extends DimensionState {
     }
     const toGain = TimeDimension(tier + 1).productionPerSecond;
     const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
   get baseCost() {

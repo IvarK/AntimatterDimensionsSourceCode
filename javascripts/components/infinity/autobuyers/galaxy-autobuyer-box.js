@@ -5,7 +5,8 @@ Vue.component("galaxy-autobuyer-box", {
     return {
       limitGalaxies: false,
       isBuyMaxUnlocked: false,
-      buyMax: false
+      buyMax: false,
+      showInterval: false
     };
   },
   watch: {
@@ -24,10 +25,11 @@ Vue.component("galaxy-autobuyer-box", {
       this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
       this.limitGalaxies = this.autobuyer.limitGalaxies;
       this.buyMax = this.autobuyer.buyMax;
+      this.showInterval = !this.autobuyer.isBuyMaxActive;
     }
   },
   template:
-    `<autobuyer-box :autobuyer="autobuyer" :showInterval="!buyMax" name="Automatic Galaxies">
+    `<autobuyer-box :autobuyer="autobuyer" :showInterval="showInterval" name="Automatic Galaxies">
       <autobuyer-interval-button slot="beforeInterval" :autobuyer="autobuyer" />
       <div>
         <div class="o-autobuyer-toggle-checkbox" @click="limitGalaxies = !limitGalaxies">

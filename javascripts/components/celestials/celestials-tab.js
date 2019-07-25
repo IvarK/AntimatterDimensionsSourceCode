@@ -1,7 +1,7 @@
 "use strict";
 
-Vue.component('celestials-tab', {
-  data: function() {
+Vue.component("celestials-tab", {
+  data() {
     return {
       effarigUnlocked: false,
       enslavedUnlocked: false,
@@ -85,7 +85,7 @@ Vue.component('celestials-tab', {
       this.enslavedUnlocked = EffarigUnlock.eternity.isUnlocked;
       this.vUnlocked = Achievement(151).isEnabled;
       this.raUnlocked = V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]);
-      this.laitelaUnlocked = Ra.has(RA_UNLOCKS.LAITELA_UNLOCK);
+      this.laitelaUnlocked = Ra.has(RA_LAITELA_UNLOCK);
       this.pelleUnlocked = Laitela.has(LAITELA_UNLOCKS.PELLE);
     }
   },

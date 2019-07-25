@@ -154,7 +154,7 @@ const MAIN_TAB_BUTTONS = [
       {
         label: "L",
         component: "laitela-tab",
-        condition: () => Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
+        condition: () => Ra.has(RA_LAITELA_UNLOCK)
       },
       {
         label: "P",
@@ -261,7 +261,7 @@ Vue.component("sidebar", {
     <sidebar-ip :cond="ipVisible"></sidebar-ip>
     <sidebar-ep :cond="epVisible"></sidebar-ep>
     <sidebar-rm :cond="rmVisible"></sidebar-rm>
-    <tab-button 
+    <tab-button
       v-for="tab in tabs"
       :key="tab.id"
       :tab="tab"></tab-button>

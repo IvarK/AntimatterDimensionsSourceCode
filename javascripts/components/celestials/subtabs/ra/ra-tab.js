@@ -3,19 +3,13 @@
 Vue.component("ra-tab", {
   data() {
     return {
-      unlocks: [],
-      realityReward: 0,
-      activeMode: false
+      expMultis: [0, 0, 0, 0],
     };
   },
   methods: {
     update() {
       this.unlocks = player.celestials.ra.unlocks;
-      this.realityReward = Ra.realityReward;
-      this.activeMode = player.celestials.ra.activeMode;
-    },
-    has(id) {
-      return this.unlocks.includes(id);
+      this.expMultis = this.pets.map(obj => obj.pet.expBoost);
     },
     startRun() {
       Ra.startRun();
@@ -25,42 +19,57 @@ Vue.component("ra-tab", {
     }
   },
   computed: {
-    raUnlocks() {
-      return RA_UNLOCKS;
-    },
+    laitelaUnlock: () => RA_LAITELA_UNLOCK,
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeText: level => `You can charge ${Math.floor(level / 2)} Infinity Upgrades.`
+        scalingUpgradeText: level => `You can charge ${Math.clampMax(Math.floor(level / 2), 12)} Infinity Upgrades.`,
       },
       {
         pet: Ra.pets.effarig,
-        scalingUpgradeText: level => `Glyph rarity +${level}% and +${Math.floor(level / 5)} additional choices.`
+        scalingUpgradeText: level => `Glyph rarity +${level}% and +${Math.floor(level / 5)} additional choices.`,
       },
       {
         pet: Ra.pets.enslaved,
         scalingUpgradeText: level => `Stored game time ^${(1 + 0.01 * Math.floor(level)).toFixed(2)}, ` +
-          `stored real time efficiency +${level}% and +${level / 2} hours maximum.`
+          `stored real time efficiency +${level}% and +${level / 2} hours maximum.`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeText: level => `+${Math.floor(level)} free achievements.`
+        scalingUpgradeText: level => `+${Math.floor(level)} free achievements.`,
       }
     ]
   },
   template:
     `<div class="l-ra-celestial-tab">
-      <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
-      <div class="l-ra-unlocks-container">
-        <div class="c-ra-unlock" v-for="unlock in raUnlocks" :class="{'c-ra-unlock-unlocked': has(unlock.id)}">
-          <b>{{ unlock.description }}</b>
-          <p>Reward: {{ unlock.reward }}</p>
-        </div>
+      <div class="l-ra-all-pets-container">
+        <ra-pet v-for="(pet, i) in pets" :key="i" :petConfig="pet" />
       </div>
-      <button v-if="has(1)" @click="startRun()" class="o-v-run-button">
-        Start Ra's Reality, you can't dimension boost and tick reduction is forced to be 11%.
-        <br><br>
-        Reward: Increased memories based on values reached in your most recent completion of Ra's Reality.
-      </button>
+      <div class="l-ra-non-pets">
+        <button @click="startRun" class="l-ra-reality-container">
+          <div class="l-ra-reality-inner">
+            <h1> Start Ra's Reality</h1>
+            <p> Rules: you can't dimension boost and tick reduction is forced to be 11%. </p>
+            <br>
+            <br>
+            <h2> Rewards: </h2>
+            <div class="c-ra-rewards">
+              <span class="c-ra-rewards-inner"> Teresa: {{formatX(expMultis[0], 2, 2)}} </span>
+              <span class="c-ra-rewards-inner"> Effarig: {{formatX(expMultis[1], 2, 2)}} </span>
+            </div>
+            <div class="c-ra-rewards">
+              <span class="c-ra-rewards-inner"> Enslaved: {{formatX(expMultis[2], 2, 2)}} </span>
+              <span class="c-ra-rewards-inner"> V: {{formatX(expMultis[3], 2, 2)}} </span>
+            </div>
+          </div>
+        </button>
+        <button class="l-ra-laitela-unlock">
+          <div class="l-ra-laitela-unlock-inner">
+            <h1> Lai'tela: </h1>
+            <h2> The Celestial of Matter </h2>
+            <p> Unlocked getting all four celestials to level 20 </p>
+          </div>
+        </button>
+      </div>
     </div>`
 });

@@ -111,7 +111,6 @@ body.t-inverted-metro {
 .t-inverted-metro .realitytabbtn {
     background: white;
     border: 1px solid #0b600e;
-    display: none;
 }
 
 .t-inverted-metro .realitytabbtn:hover {

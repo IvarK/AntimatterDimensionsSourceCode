@@ -118,7 +118,6 @@ body.t-s8 {
 .t-s8 .realitytabbtn {
     background: white;
     border: 1px solid #0b600e;
-    display: none;
 }
 
 .t-s8 .realitytabbtn:hover {

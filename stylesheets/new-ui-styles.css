@@ -3,12 +3,6 @@
   src: url('MonospaceTypewriter.ttf');
 }
 
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 *:focus {
   outline: none;
 }
@@ -417,30 +411,14 @@ body.t-dark {
   width: 100%;
 }
 
-.quote {
-  display: flex;
+.c-news-ticker {
   width: 100%;
-  border-bottom: 1px solid var(--color-accent-1);
-  color: var(--color-text);;
-  text-align: center;
-  padding: 8px 0;
+  border-bottom: .1rem solid var(--color-accent-1);
+  padding: .8rem 0;
 }
 
-.quote > #news {
-  color: var(--color-text);;
-}
-
-#newNews {
-  position: relative;
-  display: inline-block;
-  font-family: Typewriter;
-  font-size: 15px;
-  white-space: nowrap;
-  font-weight: bold
-}
-
-#newNews a {
-  text-decoration: underline;
+.c-news-line {
+  color: var(--color-text);
 }
 
 .subtabs {
@@ -826,4 +804,8 @@ body.t-dark {
   background-color: black;
   border: .3rem solid var(--color-eternity);
   border-radius: 1rem;
+}
+
+.c-stats-tab {
+  color: white;
 }

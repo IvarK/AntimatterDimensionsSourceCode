@@ -374,7 +374,7 @@ function respecTimeStudies(auto) {
     player.challenge.eternity.unlocked = 0;
   }
   if (!auto) {
-    Tab.eternity.timeStudies.show();
+    Tab.eternity.studies.show();
   }
 }
 

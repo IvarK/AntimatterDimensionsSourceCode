@@ -51,11 +51,6 @@ Vue.component("options-button-grid", {
       if (confirm("Do you really want to erase all your progress?")) {
         GameStorage.hardReset();
       }
-    },
-    switchUI() {
-      player.options.newUI = !player.options.newUI;
-      this.$viewModel.newUI = !this.$viewModel.newUI;
-      Tab.options.show();
     }
   },
   template: `
@@ -140,7 +135,7 @@ Vue.component("options-button-grid", {
       <div class="l-options-grid__row">
         <options-button
           class="o-primary-btn--option_font-large"
-          @click="switchUI"
+          onclick="GameOptions.toggleUI()"
         >{{ UILabel }}</options-button>
         <update-rate-slider
           v-model="options.updateRate"

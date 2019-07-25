@@ -4,29 +4,27 @@ Vue.component("new-ui", {
   data() {
     return {
       view: ui.view,
-      showCrunch: false,
-      showTicker: true
-    }
+      showCrunch: false
+    };
   },
   methods: {
     update() {
       this.showCrunch = !player.break && player.antimatter.gte(Number.MAX_VALUE);
-      this.showTicker = !player.options.newsHidden;
     }
   },
   template:
   `<div id="page">
-    <sidebar></sidebar>
+    <link rel="stylesheet" type="text/css" href="stylesheets/new-ui-styles.css">
+    <sidebar />
     <div class="game-container">
-      <div class="quote" v-show="showTicker"><div id="newNews">.</div></div>
+      <news-ticker />
       <div class="tab-container">
-        <component :is="$viewModel.page" v-if="!showCrunch"></component>
-        <div v-else>
+        <div v-if="showCrunch">
           <h3>The world has collapsed due to excess antimatter.</h3>
           <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>
         </div>
+        <slot v-else />
       </div>
     </div>
-    <div v-if="view.newUI" id="notification-container" class="l-notification-container"></div>
   </div>`
-})
+});

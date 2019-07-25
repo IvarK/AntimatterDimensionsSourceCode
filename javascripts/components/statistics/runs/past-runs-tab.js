@@ -44,7 +44,7 @@ Vue.component("past-runs-tab", {
     realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
   },
   template:
-    `<div>
+    `<div class="c-stats-tab">
       <br>
       <div v-for="(run, index) in runs" :key="index">
         <span>

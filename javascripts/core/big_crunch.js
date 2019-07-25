@@ -114,8 +114,6 @@ function secondSoftReset() {
     AchievementTimers.marathon2.reset();
 }
 
-document.getElementById("bigcrunch").onclick = bigCrunchResetRequest;
-
 function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {
     return new Decimal(1);

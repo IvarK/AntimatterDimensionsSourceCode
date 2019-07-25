@@ -90,7 +90,7 @@ Vue.component("statistics-tab", {
     }
   },
   template:
-    `<div>
+    `<div class="c-stats-tab">
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>

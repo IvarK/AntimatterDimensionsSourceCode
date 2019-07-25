@@ -198,7 +198,7 @@ Vue.component("perks-tab", {
     this.$refs.tab.appendChild(PerkNetwork.container);
   },
   template: `
-    <div ref="tab" id="perks">
+    <div ref="tab" class="c-perk-tab">
       <pp-label />
     </div>
   `

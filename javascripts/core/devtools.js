@@ -403,3 +403,43 @@ dev.kongTest = function() {
     page.style.marginTop = "";
   }
 };
+
+// This should help for balancing different glyph types, strong rounding of values is intentional
+dev.printResourceTotals = function() {
+  console.log(`Antimatter: e${player.money.exponent.toPrecision(3)}`);
+  console.log(`RM: e${Math.round(gainedRealityMachines().log10())}`);
+  console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
+
+  console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
+  console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
+  const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
+  const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
+  const dGalaxy = 100 * Math.floor(player.dilation.freeGalaxies / 100 + 0.5);
+  console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
+  console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
+
+  let NDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    NDmults = NDmults.times(getDimensionFinalMultiplier(i));
+  }
+  console.log(`ND mults: e${NDmults.log10().toPrecision(3)}`);
+  let IDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    IDmults = IDmults.times(InfinityDimension(i).multiplier);
+  }
+  console.log(`ID mults: e${IDmults.log10().toPrecision(3)}`);
+  let TDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    TDmults = TDmults.times(TimeDimension(i).multiplier);
+  }
+  console.log(`TD mults: e${TDmults.log10().toPrecision(3)}`);
+  console.log(`Free tickspeed: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
+
+  console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
+  console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
+  console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(player.replicanti.amount.log10() / 1e5 + 0.5))}`);
+
+  console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);
+  console.log(`DT: e${Math.round(player.dilation.dilatedTime.log10())}`);
+  console.log(`TP: e${Math.round(player.dilation.tachyonParticles.log10())}`);
+}

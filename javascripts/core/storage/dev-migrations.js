@@ -174,6 +174,9 @@ GameStorage.devMigrations = {
       //   player.lastTenEternities[i][2] = undefined;
       //   player.lastTenRealities[i][3] = undefined;
       // }
+
+      // For anyone who is looking at this part of the code for debugging purposes, note that GameSpeedEffect.EC12
+      // has been replaced by GameSpeedEffect.FIXEDSPEED since EC12 is no longer the only fixed-speed effect
     },
     GameStorage.migrations.fixChallengeIds,
     GameStorage.migrations.adjustMultCosts,
@@ -419,7 +422,12 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNewsToSet
+    GameStorage.migrations.convertNewsToSet,
+    // Decimalified eternity count
+    player => {
+      player.eternities = new Decimal(player.eternities);
+      player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+    }
   ],
 
   patch(player) {

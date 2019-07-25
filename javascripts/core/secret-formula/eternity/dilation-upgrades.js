@@ -49,7 +49,7 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: "Gain twice as many free galaxies.",
+      description: "Gain twice as many free galaxies, up to 1,000.",
       effect: 2
     },
     tdMultReplicanti: {

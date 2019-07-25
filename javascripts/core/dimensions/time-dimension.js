@@ -193,7 +193,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || Ra.isCompressed) {
       return new Decimal(0);
     }
 
@@ -214,7 +214,7 @@ class TimeDimensionState extends DimensionState {
     }
     const toGain = TimeDimension(tier + 1).productionPerSecond;
     const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
   get baseCost() {

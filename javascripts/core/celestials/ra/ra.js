@@ -237,33 +237,6 @@ const Ra = {
     if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
     return Math.max(Math.pow(Math.log10(player.celestials.ra.peakGamespeed) - 90, 3), 1);
   },
-  // In some sense we're cheating here for the sake of balance since gamespeed has historically been hard to keep
-  // under wraps.  So the way we buff gamespeed in a relatively controlled way here is by manually calculating a
-  // sensible "maximum possible gamespeed" on top of the CURRENT black hole power based on a game state which is
-  // slightly farther than the player will be when first unlocking this upgrade (hence the "magic numbers").  The
-  // state in question is one with a glyph set with two time glyphs and effarig gamespeed pow + achievement pow
-  // (due to V), all level 10k with celestial rarity, and Lv20 Enslaved + all achievements.  The boost is simply 2x
-  // for any stored time at all if it's below this threshold, but will start scaling up at gamespeeds higher than this.
-  // It should be a lot harder for this to cause an unchecked runaway since black hole scaling won't feed into this
-  // upgrade's scaling.  There is also an eventual softcap of 1e10 just in case.  If I did the math correctly, the
-  // speed boost should scale with (real time)^(effarig gamespeed pow) before the softcap and worse than that after.
-  gamespeedStoredTimeMult() {
-    let assumedBlackHoleBoost = 1;
-    for (const blackHole of BlackHoles.list) {
-      assumedBlackHoleBoost *= blackHole.power;
-      assumedBlackHoleBoost *= Math.pow(GameDatabase.achievements.normal.length, 2.69);
-    }
-    const assumedTimeGlyphBoost = Math.pow(2.79, 2);
-    const baselineGamespeed = Math.pow(assumedBlackHoleBoost * assumedTimeGlyphBoost, 1.22);
-    const baselineStoredTime = Math.pow(baselineGamespeed, 1.2);
-    const scaledStoredTime = player.celestials.enslaved.stored / baselineStoredTime;
-    if (player.celestials.enslaved.stored === 0) return 1;
-    const softcap = 1e10;
-    if (scaledStoredTime > softcap) {
-      return softcap * Math.pow(10, Math.pow(Math.log10(scaledStoredTime / softcap), 0.4));
-    }
-    return Math.max(2, scaledStoredTime);
-  },
   // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
   // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
   // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
@@ -273,8 +246,17 @@ const Ra = {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
   },
+  entanglementValue(value) {
+    return 100 * Math.clamp((Math.sqrt(value.log10() / 3e8) - 1) / 10, 0, 1);
+  },
   get isRunning() {
     return player.celestials.ra.run;
+  },
+  get isCompressed() {
+    return player.celestials.ra.compression.active;
+  },
+  get compressionDepth() {
+    return 2;
   },
   get totalCharges() {
     return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));
@@ -422,10 +404,10 @@ const RA_UNLOCKS = {
     pet: Ra.pets.enslaved,
     level: 15
   },
-  GAMESPEED_BOOST: {
+  TIME_COMPRESSION: {
     id: 17,
     description: "Get Enslaved to level 25",
-    reward: "Game speed increases based on current stored time",
+    reward: "Unlock Time Compression",
     pet: Ra.pets.enslaved,
     level: 25
   },

@@ -9,7 +9,7 @@ Vue.component("v-tab", {
       achievementsPerAdditionalStudy: 0,
       realities: 0,
       infinities: new Decimal(0),
-      eternities: 0,
+      eternities: new Decimal(0),
       dilatedTime: new Decimal(0),
       replicanti: new Decimal(0),
       rm: new Decimal(0)
@@ -23,7 +23,7 @@ Vue.component("v-tab", {
       this.achievementsPerAdditionalStudy = V.achievementsPerAdditionalStudy;
       this.realities = player.realities;
       this.infinities.copyFrom(player.infinitied);
-      this.eternities = player.eternities;
+      this.eternities.copyFrom(player.eternities);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
       this.replicanti.copyFrom(player.replicanti.amount);
       this.rm.copyFrom(player.reality.realityMachines);

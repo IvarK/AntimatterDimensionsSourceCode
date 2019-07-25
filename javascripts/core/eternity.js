@@ -21,7 +21,7 @@ function eternity(force, auto, specialConditions = {}) {
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
     addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
-    player.eternities += Effects.product(RealityUpgrade(3));
+    player.eternities = player.eternities.add(Effects.product(RealityUpgrade(3)));
   }
 
   if (EternityChallenge.isRunning) {
@@ -65,7 +65,10 @@ function eternity(force, auto, specialConditions = {}) {
 
   if (player.respec) respecTimeStudies(auto);
   player.respec = false;
-  if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
+  if (player.eternities.eq(1) ||
+        (player.reality.rebuyables[3] > 0 &&
+        player.eternities.eq(RealityUpgrade(3).effectValue) &&
+        player.eternityPoints.lte(10))) {
     Tab.dimensions.time.show();
   }
   
@@ -82,7 +85,8 @@ function eternity(force, auto, specialConditions = {}) {
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
   try {
-      kong.submitStats('Eternities', player.eternities);
+    // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
+    // kong.submitStats('Eternities', player.eternities);
   } catch (err) {
       console.log("Couldn't load Kongregate API")
   }
@@ -116,8 +120,8 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = (player.eternities >= 4) ? 4 : 0;
-  player.galaxies = (player.eternities >= 4) ? 1 : 0;
+  player.resets = player.eternities.gte(4) ? 4 : 0;
+  player.galaxies = player.eternities.gte(4) ? 1 : 0;
   player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
@@ -129,11 +133,11 @@ function initializeResourcesAfterEternity() {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
-  player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
-  player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
+  player.offlineProd = player.eternities.gte(20) ? player.offlineProd : 0;
+  player.offlineProdCost = player.eternities.gte(20) ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (player.eternities < 20) {
+  if (player.eternities.lt(20)) {
     player.infinityRebuyables = [0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
@@ -163,7 +167,7 @@ function applyRealityUpgrades() {
 }
 
 function eternityResetReplicanti() {
-  player.replicanti.unl = player.eternities >= 50;
+  player.replicanti.unl = player.eternities.gte(50);
   player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
   player.replicanti.chance = 0.01;
   player.replicanti.chanceCost = new Decimal(1e150);
@@ -172,7 +176,7 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (player.eternities >= 3 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  if (player.eternities.gte(3) && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
 function askEternityConfirmation() {
@@ -203,7 +207,7 @@ class EternityMilestoneState {
   }
 
   get isReached() {
-    return player.eternities >= this.config.eternities;
+    return player.eternities.gte(this.config.eternities);
   }
 }
 

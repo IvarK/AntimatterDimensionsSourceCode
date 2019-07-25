@@ -137,7 +137,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get isAutobuyerUnlocked() {
-    return player.eternities >= 10 + this.tier;
+    return player.eternities.gte(10 + this.tier);
   }
 
   get isAvailableForPuchase() {
@@ -161,7 +161,7 @@ class InfinityDimensionState extends DimensionState {
       toGain = InfinityDimension(tier + 1).productionPerSecond;
     }
     const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
   get productionPerSecond() {
@@ -199,7 +199,7 @@ class InfinityDimensionState extends DimensionState {
 
     mult = mult.clampMin(0);
 
-    if (player.dilation.active) {
+    if (player.dilation.active || Ra.isCompressed) {
       mult = dilatedValueOf(mult);
     }
 
@@ -311,7 +311,7 @@ const InfinityDimensions = {
 };
 
 function tryUnlockInfinityDimensions() {
-  if (player.eternities < 25 || InfinityDimension(8).isUnlocked) return;
+  if (player.eternities.lt(25) || InfinityDimension(8).isUnlocked) return;
   for (let tier = 1; tier <= 8; ++tier) {
     if (InfinityDimension(tier).isUnlocked) continue;
     // If we cannot unlock this one, we can't unlock the rest, either

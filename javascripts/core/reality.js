@@ -305,7 +305,7 @@ function completeReality(force, reset, auto = false) {
   // This has to be reset before player.eternities to make the bumpLimit logic work
   // correctly
   EternityUpgrade.epMult.reset();
-  player.eternities = 0;
+  player.eternities = new Decimal(0);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
@@ -368,7 +368,7 @@ function completeReality(force, reset, auto = false) {
   if (player.celestials.ra.disCharge) disChargeAll();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
-    player.eternities = 100;
+    player.eternities = new Decimal(100);
     if (Achievements.totalDisabledTime === 0) {
       initializeChallengeCompletions();
     }
@@ -383,11 +383,12 @@ function completeReality(force, reset, auto = false) {
   IPminpeak = new Decimal(0);
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
-  kong.submitStats('Eternities', player.eternities);
-  if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  // FIXME: Eternity count is now a Decimal so this needs to be addressed
+  // kong.submitStats('Eternities', player.eternities);
+  if (player.eternities.gt(2) && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
-  if (player.eternities <= 1) {
+  if (player.eternities.lte(1)) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();

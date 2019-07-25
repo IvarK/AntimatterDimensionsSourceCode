@@ -17,21 +17,21 @@ GameDatabase.tabs = [
         name: "Infinity Dimensions",
         symbol: "∞",
         component: "infinity-dim-tab",
-        condition: () => player.eternities > 0 || InfinityDimension(1).isUnlocked
+        condition: () => player.eternities.gt(0) || InfinityDimension(1).isUnlocked
       },
       {
         key: "time",
         name: "Time Dimensions",
         symbol: "Δ",
         component: "time-dim-tab",
-        condition: () => player.eternities > 0
+        condition: () => player.eternities.gt(0)
       },
       {
         key: "production",
         name: "Production",
         symbol: "📈",
         component: "dim-production-tab",
-        condition: () => player.eternities > 0 || player.infinitied.gt(0)
+        condition: () => player.eternities.gt(0) || player.infinitied.gt(0)
       }
     ]
   },
@@ -109,7 +109,7 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
-    condition: () => player.eternities > 0 || player.infinitied.gt(0),
+    condition: () => player.eternities.gt(0) || player.infinitied.gt(0),
     subtabs: [
       {
         key: "normal",
@@ -144,7 +144,7 @@ GameDatabase.tabs = [
     name: "Infinity",
     oldUIClass: "infinitytabbtn",
     newUIClass: "infinity",
-    condition: () => player.eternities > 0 || player.infinitied.gt(0),
+    condition: () => player.eternities.gt(0) || player.infinitied.gt(0),
     before: "infinity-points-header",
     subtabs: [
       {
@@ -178,7 +178,7 @@ GameDatabase.tabs = [
     name: "Eternity",
     oldUIClass: "eternitytabbtn",
     newUIClass: "eternity",
-    condition: () => player.eternities > 0,
+    condition: () => player.eternities.gt(0),
     subtabs: [
       {
         key: "studies",

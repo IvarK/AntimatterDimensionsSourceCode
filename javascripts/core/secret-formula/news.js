@@ -1062,7 +1062,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1072,7 +1072,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1082,7 +1082,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1092,7 +1092,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1102,7 +1102,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1114,7 +1114,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1128,7 +1128,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1138,7 +1138,7 @@ GameDatabase.news = [
       player.resets >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1148,13 +1148,13 @@ GameDatabase.news = [
       "one with matter, and a large time vortex.",
     condition: () =>
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c20",
     text: "Infinity: the one thing that's supposed to break.",
-    condition: () => player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0
+    condition: () => player.infinitied.gt(0) || PlayerProgress.eternityUnlocked() || player.realities > 0
   },
   {
     id: "c21",
@@ -1186,7 +1186,7 @@ GameDatabase.news = [
     text:
       "Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi " +
       "has a fully powered eternity gauntlet",
-    condition: () => player.eternities > 0 || player.realities > 0 
+    condition: () => PlayerProgress.eternityUnlocked() || player.realities > 0 
   },
   {
     id: "c27",
@@ -1309,12 +1309,12 @@ GameDatabase.news = [
   {
     id: "c49",
     text: "One day you will stop your incessant grind.",
-    condition: () => player.eternities > 50000
+    condition: () => player.eternities.gt(50000)
   },
   {
     id: "c50",
     text: "You can probably stop farming for eternities now...",
-    condition: () => player.eternities > 2000000
+    condition: () => player.eternities.gt(2000000)
   },
   {
     id: "c51",
@@ -1392,7 +1392,7 @@ GameDatabase.news = [
     condition: () =>
       Achievement(43).isUnlocked &&
       player.infinitied.eq(1) &&
-      player.eternities === 0 &&
+      !PlayerProgress.eternityUnlocked() &&
       player.realities === 0
   },
   {
@@ -1401,7 +1401,7 @@ GameDatabase.news = [
     condition: () =>
       player.antimatter.e >= 41900 &&
       !player.replicanti.unl &&
-      player.eternities === 0 &&
+      !PlayerProgress.eternityUnlocked() &&
       player.realities === 0
   },
   {

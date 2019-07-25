@@ -151,7 +151,7 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return NormalDimension(2).amount.gt(0) || player.eternities >= 30;
+    return NormalDimension(2).amount.gt(0) || player.eternities.gte(30);
   },
 
   get multiplier() {
@@ -180,8 +180,8 @@ const Tickspeed = {
 
 const FreeTickspeed = {
   BASE_SOFTCAP: 300000,
-  GROWTH_RATE: 4e-3,
-  GROWTH_EXP: 1.5,
+  GROWTH_RATE: 6e-6,
+  GROWTH_EXP: 2,
 
   get amount() {
     return player.totalTickGained;

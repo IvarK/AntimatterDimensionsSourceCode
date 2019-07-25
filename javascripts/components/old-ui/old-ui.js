@@ -18,13 +18,13 @@ Vue.component("old-ui", {
   methods: {
     update() {
       const canCrunch = player.antimatter.gte(Player.infinityGoal);
-      if (player.break || !canCrunch) {
+      const challenge = NormalChallenge.current || InfinityChallenge.current;
+      if (!canCrunch || (player.break && challenge === undefined)) {
         this.bigCrunch = false;
         this.smallCrunch = false;
         return;
       }
       this.smallCrunch = true;
-      const challenge = NormalChallenge.current || InfinityChallenge.current;
       const endOfChallenge = challenge !== undefined && !player.options.retryChallenge;
       this.bigCrunch = endOfChallenge || Time.bestInfinity.totalMinutes > 1;
     }

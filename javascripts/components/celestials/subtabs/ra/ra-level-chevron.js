@@ -1,4 +1,5 @@
 "use strict";
+
 Vue.component("ra-level-chevron", {
   props: {
     level: Number,
@@ -8,7 +9,7 @@ Vue.component("ra-level-chevron", {
       type: Boolean,
       defualt: false
     },
-    importantLevels: Array
+    isImportantLevel: Boolean
   },
   data() {
     return {
@@ -28,9 +29,6 @@ Vue.component("ra-level-chevron", {
       return {
         left: `${this.percentPerLevel * (this.level - 1)}%`,
       };
-    },
-    isImportantLevel() {
-      return this.importantLevels.includes(this.level);
     },
     classList() {
       return [

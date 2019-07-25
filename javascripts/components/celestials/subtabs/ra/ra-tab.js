@@ -54,12 +54,12 @@ Vue.component("ra-tab", {
             <br>
             <h2> Rewards: </h2>
             <div class="c-ra-rewards">
-              <span class="c-ra-rewards-inner"> Teresa: {{this.shorten(expMultis[0], 2, 2)}}x </span>
-              <span class="c-ra-rewards-inner"> Effarig: {{this.shorten(expMultis[1], 2, 2)}}x </span>
+              <span class="c-ra-rewards-inner"> Teresa: {{formatX(expMultis[0], 2, 2)}} </span>
+              <span class="c-ra-rewards-inner"> Effarig: {{formatX(expMultis[1], 2, 2)}} </span>
             </div>
             <div class="c-ra-rewards">
-              <span class="c-ra-rewards-inner"> Enslaved: {{this.shorten(expMultis[2], 2, 2)}}x </span>
-              <span class="c-ra-rewards-inner"> V: {{this.shorten(expMultis[3], 2, 2)}}x </span>
+              <span class="c-ra-rewards-inner"> Enslaved: {{formatX(expMultis[2], 2, 2)}} </span>
+              <span class="c-ra-rewards-inner"> V: {{formatX(expMultis[3], 2, 2)}} </span>
             </div>
           </div>
         </button>

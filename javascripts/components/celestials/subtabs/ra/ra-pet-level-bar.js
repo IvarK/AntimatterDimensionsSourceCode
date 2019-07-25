@@ -77,8 +77,11 @@ Vue.component("ra-pet-level-bar", {
       this.lastTenGlyphLevls = player.lastTenRealities.map(([, , , lvl]) => lvl);
       this.lastTenRunTimers = player.lastTenRealities.map(([, , time]) => time);
     },
-    findUnlockByLevel(lvl) {
-      return this.unlocks.find(unlock => unlock.level === lvl);
+    findUnlockByLevel(level) {
+      return this.unlocks.find(unlock => unlock.level === level);
+    },
+    isImportant(level) {
+      return this.importantLevels.includes(level);
     }
   },
   template: `
@@ -90,7 +93,7 @@ Vue.component("ra-pet-level-bar", {
             :level ="currentLevelGoal - 2 + lvl"
             :goal="currentLevelGoal"
             :singleLevel="true"
-            :importantLevels="importantLevels"
+            :isImportantLevel="isImportant(lvl)"
           />
         </div>
         <div v-else>
@@ -99,7 +102,7 @@ Vue.component("ra-pet-level-bar", {
             :level="lvl"
             :goal="currentLevelGoal"
             :unlock="findUnlockByLevel(lvl)"
-            :importantLevels="importantLevels"
+            :isImportantLevel="isImportant(lvl)"
           />
         </div>
         <div class="l-ra-exp-bar-inner" :style="[shiftDown ? singleLevelStyle : multiLevelStyle, petStyle]" />

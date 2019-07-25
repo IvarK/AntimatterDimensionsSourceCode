@@ -14,15 +14,12 @@ Vue.component("ra-pet", {
     pet() {
       return this.petConfig.pet;
     },
-    petColor() {
-      return this.pet.color;
-    },
     scalingUpgradeText() {
       return this.petConfig.scalingUpgradeText(this.level);
     },
     petStyle() {
       return {
-        color: this.petColor
+        color: this.pet.color
       };
     },
   },

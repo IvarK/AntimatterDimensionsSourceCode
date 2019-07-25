@@ -2035,10 +2035,6 @@ screen and (max-width: 480px) {
 
 /*#region Header*/
 
-.l-game-header--hidden {
-  visibility: hidden;
-}
-
 .l-game-header__amounts-line {
   position: relative;
   font-size: 1.2rem;

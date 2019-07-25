@@ -1,83 +1,117 @@
 "use strict";
 
 Vue.component("game-header", {
-  data: function() {
+  components: {
+    "challenge-display": {
+      data() {
+        return {
+          activityTokens: [],
+          infinityUnlocked: false
+        };
+      },
+      computed: {
+        parts() {
+          // We need activityToken for NC/IC/EC because plain check of WhateverChallenge.isRunning
+          // won't trigger display update if we, say, switch from one challenge to another
+          function celestialReality(celestial, name) {
+            return {
+              name: () => name,
+              isActive: token => token,
+              activityToken: () => celestial.isRunning
+            };
+          }
+          return [
+            celestialReality(Teresa, "Teresa's"),
+            celestialReality(Effarig, "Effarig's"),
+            celestialReality(Enslaved, "The Enslaved Ones'"),
+            celestialReality(V, "V's"),
+            celestialReality(Ra, "Ra's"),
+            celestialReality(Laitela, "Lai'tela's"),
+            {
+              name: () => "Time Dilation",
+              isActive: token => token,
+              activityToken: () => player.dilation.active
+            },
+            {
+              name: token => `${NormalChallenge(token).config.reward} Challenge`,
+              isActive: token => token > 0,
+              activityToken: () => player.challenge.normal.current
+            },
+            {
+              name: token => `Infinity Challenge ${token}`,
+              isActive: token => token > 0,
+              activityToken: () => player.challenge.infinity.current
+            },
+            {
+              name: token => `Eternity Challenge ${token}`,
+              isActive: token => token > 0,
+              activityToken: () => player.challenge.eternity.current
+            },
+          ];
+        },
+        activeChallengeNames() {
+          const names = [];
+          for (let i = 0; i < this.activityTokens.length; i++) {
+            const token = this.activityTokens[i];
+            const part = this.parts[i];
+            if (!part.isActive(token)) continue;
+            names.push(part.name(token));
+          }
+          return names;
+        },
+        isVisible() {
+          return this.infinityUnlocked || this.activeChallengeNames.length > 0;
+        },
+        challengeDisplay() {
+          if (this.activeChallengeNames.length === 0) {
+            return "the Antimatter Universe (no active challenges)";
+          }
+          return this.activeChallengeNames.join(" + ");
+        }
+      },
+      methods: {
+        update() {
+          this.infinityUnlocked = PlayerProgress.infinityUnlocked();
+          this.activityTokens = this.parts.map(part => part.activityToken());
+        }
+      },
+      template: `
+        <div v-if="isVisible">You are currently in {{challengeDisplay}}</div>
+      `
+    }
+  },
+  data() {
     return {
-      isInAnyChallenge: false,
       isInMatterChallenge: false,
       matter: new Decimal(0),
       antimatter: new Decimal(0),
-      antimatterPerSec: new Decimal(0),
-      currCelestial: "",
-      challengeDisplay: ""
+      antimatterPerSec: new Decimal(0)
     };
-  },
-  computed: {
-    classObject: function() {
-      return {
-        "l-game-header--hidden": this.$viewModel.bigCrunch
-      };
-    }
   },
   methods: {
     update() {
-      this.isInAnyChallenge = this.challengeDisplay.length !== 0;
       this.isInMatterChallenge = Player.isInMatterChallenge;
       if (this.isInMatterChallenge) {
         this.matter.copyFrom(Player.effectiveMatterAmount);
       }
       this.antimatter.copyFrom(player.antimatter);
       this.antimatterPerSec.copyFrom(Player.antimatterPerSecond);
-      this.updateCelestial();
-      this.updateChallengeDisplay();
-    },
-    updateCelestial() {
-      if (Teresa.isRunning) this.currCelestial = "Teresa's";
-      else if (Effarig.isRunning) this.currCelestial = "Effarig's";
-      else if (Enslaved.isRunning) this.currCelestial = "The Enslaved Ones'";
-      else if (V.isRunning) this.currCelestial = "V's";
-      else if (Ra.isRunning) this.currCelestial = "Ra's";
-      else if (Laitela.isRunning) this.currCelestial = "Lai'tela's";
-      else this.currCelestial = "";
-    },
-    updateChallengeDisplay() {
-      // Pls don't hate me Razen
-      let displayValue = "";
-
-      const inCelestialReality = this.currCelestial.length !== 0;
-      if (inCelestialReality) displayValue += " + " + this.currCelestial + " Reality";
-
-      const inDilation = player.dilation.active;
-      if (inDilation) displayValue += " + Time Dilation";
-
-      const normalChallenge = NormalChallenge.current;
-      if (normalChallenge !== undefined) displayValue += ` + ${normalChallenge.config.reward} Challenge `;
-
-      const infinityChallenge = InfinityChallenge.current;
-      if (infinityChallenge !== undefined) displayValue += ` + Infinity Challenge ${infinityChallenge.id}`;
-
-      const eternityChallenge = EternityChallenge.current;
-      if (eternityChallenge !== undefined) displayValue += ` + Eternity Challenge ${eternityChallenge.id}`;
-
-      if (displayValue.length != 0) this.challengeDisplay = displayValue.substring(3);
-      else if (PlayerProgress.infinityUnlocked()) this.challengeDisplay = "the Antimatter Universe (no active challenges)";
-      else  this.challengeDisplay = "";
     }
   },
   template:
-    `<div :class="classObject">
-      <div v-if="isInAnyChallenge">You are currently in {{challengeDisplay}}</div>
+    `<div>
+      <challenge-display />
       <div v-if="isInMatterChallenge">There is {{shortenMoney(matter)}} matter.</div>
-        <game-header-amounts-line />
-        <div>
-          <p>You have <span class="c-game-header__antimatter">{{shortenMoney(antimatter)}}</span> antimatter.</p>
-        </div>
-        <div class="l-game-header__buttons-line">
-          <game-header-big-crunch-button />
-          <game-header-new-dim-button />
-          <game-header-eternity-button />
-        </div>
-        <div>You are getting {{shortenDimensions(antimatterPerSec)}} antimatter per second.</div>
-        <game-header-tickspeed-row />
+      <game-header-amounts-line />
+      <div>
+        <p>You have <span class="c-game-header__antimatter">{{shortenMoney(antimatter)}}</span> antimatter.</p>
+      </div>
+      <div class="l-game-header__buttons-line">
+        <game-header-big-crunch-button />
+        <game-header-new-dim-button />
+        <game-header-eternity-button />
+      </div>
+      <div>You are getting {{shortenDimensions(antimatterPerSec)}} antimatter per second.</div>
+      <game-header-tickspeed-row />
     </div>`
 });

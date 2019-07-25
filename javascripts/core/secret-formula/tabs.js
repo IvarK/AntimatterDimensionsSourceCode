@@ -135,7 +135,7 @@ GameDatabase.tabs = [
         condition: () =>
           player.challenge.eternity.unlocked !== 0 ||
           EternityChallenges.all.some(ec => ec.completions > 0) ||
-          player.reality.autoEC
+          (player.reality.autoEC && player.realities > 0)
       }
     ],
   },

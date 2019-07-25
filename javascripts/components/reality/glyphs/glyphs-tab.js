@@ -4,13 +4,6 @@ Vue.component("glyphs-tab", {
   data: () => ({
     showEnslavedHint: false,
   }),
-  computed: {
-    // Until we vue-ify the rest of reality, this is a local workaround:
-    showTab() {
-      return this.$viewModel.tabs.current === "reality-tab" &&
-        this.$viewModel.tabs.reality.subtab === "glyphstab";
-    },
-  },
   methods: {
     update() {
       if (!Enslaved.isRunning) {
@@ -21,7 +14,7 @@ Vue.component("glyphs-tab", {
     }
   },
   template:
-  `<div v-if="showTab" class="l-glyphs-tab">
+  `<div class="l-glyphs-tab">
     <div class="l-reality-button-column">
       <reality-button />
       <reality-amplify-button />

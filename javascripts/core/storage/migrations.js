@@ -116,6 +116,7 @@ GameStorage.migrations = {
       GameStorage.migrations.removePostC3Reward(player);
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
+      GameStorage.migrations.convertNewsToSet(player);
     }
   },
 
@@ -561,6 +562,11 @@ GameStorage.migrations = {
     }
 
     delete player.eternityBuyer;
+  },
+
+  convertNewsToSet(player) {
+    player.news = new Set(player.newsArray);
+    delete player.newsArray;
   },
 
   prePatch(saveData) {

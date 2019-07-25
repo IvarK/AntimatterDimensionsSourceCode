@@ -22,10 +22,6 @@ body.t-inverted-metro {
     border: 1px solid black;
 }
 
-.t-inverted-metro #game {
-    border: 1px solid black;
-}
-
 .t-inverted-metro .secondarytabbtn {
     background: #EEEEEE;
     border: 1px solid #2196F3;

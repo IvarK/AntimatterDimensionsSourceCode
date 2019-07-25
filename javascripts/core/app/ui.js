@@ -163,12 +163,9 @@ const UIID = function() {
 }());
 
 ui = new Vue({
-  el: '#ui',
+  el: "#ui",
   data: ui,
   computed: {
-    themeCss() {
-      return "stylesheets/theme-" + this.view.theme + ".css";
-    },
     notation() {
       return Notation.find(this.notationName);
     },
@@ -211,6 +208,7 @@ ui = new Vue({
       }
     },
   },
+  template: "<game-ui />"
 });
 
 GameUI.initialized = true;

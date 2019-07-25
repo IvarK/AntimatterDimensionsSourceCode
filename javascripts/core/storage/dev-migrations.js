@@ -418,7 +418,8 @@ GameStorage.devMigrations = {
       delete player.realityBuyer;
       delete player.autoRealityMode;
       delete player.autoEternityMode;
-    }
+    },
+    GameStorage.migrations.convertNewsToSet
   ],
 
   patch(player) {

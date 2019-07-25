@@ -131,24 +131,16 @@ const GameStorage = {
       SecretAchievement(42).unlock();
     }
 
-    if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
-    }
+    ui.view.newsHidden = player.options.newsHidden;
+    ui.view.newUI = player.options.newUI;
 
     recalculateAllGlyphs();
     checkPerkValidity();
     Teresa.checkPPShopValidity();
-    drawPerkNetwork();
-    updatePerkColors();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
     Notation.find(player.options.notation).setCurrent();
-
-    if (player.options.newUI) {
-      ui.view.newUI = true;
-      ui.view.page = "new-dimensions-tab";
-    }
 
     EventHub.dispatch(GameEvent.GAME_LOAD);
     AutomatorBackend.initializeFromSave();

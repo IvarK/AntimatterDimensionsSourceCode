@@ -16,15 +16,6 @@ body.t-dark-metro {
     box-shadow: 0 0 10px 0 black;
 }
 
-.t-dark-metro #news {
-    color: #E0E0E0;
-}
-
-.t-dark-metro #game {
-    border: 1px solid black;
-    background-color: #455A64;
-}
-
 .t-dark-metro input {
     background-color: #455A64;
     border: 1px solid black;

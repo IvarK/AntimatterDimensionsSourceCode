@@ -136,7 +136,7 @@ let player = {
   tickDecrease: 0.9,
   totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
-  newsArray: [],
+  news: new Set(),
   // TODO: Not used, remove
   interval: null,
   lastUpdate: new Date().getTime(),
@@ -421,7 +421,7 @@ let player = {
     hotkeys: true,
     theme: "Normal",
     commas: true,
-    updateRate: 50,
+    updateRate: 33,
     newUI: true,
     chart: {
       updateRate: 1000,
@@ -507,6 +507,11 @@ const Player = {
 
   get achievementPower() {
     return GameCache.achievementPower.value.pow(getAdjustedGlyphEffect("effarigachievement"));
+  },
+
+  get infinityGoal() {
+    const challenge = NormalChallenge.current || InfinityChallenge.current;
+    return challenge === undefined ? Decimal.MAX_NUMBER : challenge.goal;
   },
 
   get eternityGoal() {

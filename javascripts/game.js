@@ -11,49 +11,12 @@ let kongEPMult = 1
 
 let until10Setting = true;
 
-function showTab(tabName) {
-    tryShowtab(tabName);
-    hideLegacyTabs(tabName);
-    Modal.hide();
-    if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
-}
-
-function hideLegacyTabs(tabName) {
-  var tabs = document.getElementsByClassName('tab');
-  var tab;
-  for (var i = 0; i < tabs.length; i++) {
-    tab = tabs.item(i);
-    if (tab.id === tabName) {
-      tab.style.display = 'block';
-    } else {
-      tab.style.display = 'none';
-    }
-  }
-  // workaround for Vue mounted issues until reality tab is vue'd
-  if (tabName === "reality") {
-    if (!ui.view.tabs.reality.subtab) ui.view.tabs.reality.subtab = "glyphstab";
-    ui.view.tabs.current = "reality-tab";
-  }
-}
-
 function floatText(tier, text) {
   if (!player.options.animations.floatingText) return;
   const floatingText = ui.view.tabs.dimensions.normal.floatingText[tier];
   floatingText.push({ text: text, key: UIID.next() });
   setTimeout(() => floatingText.shift(), 1000)
 }
-
-document.getElementById("news").onclick = function () {
-    if (document.getElementById("news").textContent === "Click this to unlock a secret achievement.") {
-      SecretAchievement(24).unlock();
-    }
-};
-
-document.getElementById("newNews").onclick = function () {
-  if (document.getElementById("newNews").textContent === "Click this to unlock a secret achievement.") {
-    SecretAchievement(24).unlock();
-  }
-};
 
 function maxAll() {
   if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
@@ -372,19 +335,10 @@ setInterval(kongLog10StatSubmission, 10000)
 var ttMaxTimer = 0;
 
 function randomStuffThatShouldBeRefactored() {
-  document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
-  document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
-  document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
-  document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
-
-  if (player.eternities !== 0) document.getElementById("eternitystorebtn").style.display = "inline-block"
-  else document.getElementById("eternitystorebtn").style.display = "none"
-
-  if (player.realities > 0 || player.dilation.studies.includes(6)) $("#realitybtn").show()
-  else $("#realitybtn").hide()
-
-  if (RealityUpgrades.allBought) $("#celestialsbtn").show() // Rebuyables and that one null value = 6
-  else $("#celestialsbtn").hide()
+  // document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
+  // document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
+  // document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
+  // document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
 
   ttMaxTimer++;
   if (autoBuyMaxTheorems()) ttMaxTimer = 0;
@@ -659,12 +613,6 @@ function gameLoop(diff, options = {}) {
   player.totalTickGained += gain;
   player.tickThreshold = freeTickspeed.nextShards;
 
-    if (player.antimatter.gte(Decimal.MAX_NUMBER) && (!player.break || (challenge && player.antimatter.gte(challenge.goal)))) {
-        document.getElementById("bigcrunch").style.display = 'inline-block';
-        if ((challenge && !player.options.retryChallenge) || (player.bestInfinityTime > 60000 && !player.break)) {
-          showTab("emptiness");
-        }
-    } else document.getElementById("bigcrunch").style.display = 'none';
 
     var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
     if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
@@ -707,39 +655,6 @@ function gameLoop(diff, options = {}) {
       if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
       player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
-    if (player.infinityPoints.gt(0) || player.eternities !== 0) {
-        document.getElementById("infinitybtn").style.display = "block";
-    }
-
-    document.getElementById("infinitybtn").style.display = "none";
-    document.getElementById("challengesbtn").style.display = "none";
-
-    if (player.antimatter.gte(Decimal.MAX_NUMBER) &&
-        (((challenge && player.antimatter.gte(challenge.goal)) && !player.options.retryChallenge) ||
-         (player.bestInfinityTime > 60000 && !player.break))) {
-        ui.view.bigCrunch = true;
-        document.getElementById("dimensionsbtn").style.display = "none";
-        document.getElementById("optionsbtn").style.display = "none";
-        document.getElementById("statisticsbtn").style.display = "none";
-        document.getElementById("achievementsbtn").style.display = "none";
-        document.getElementById("challengesbtn").style.display = "none";
-        document.getElementById("infinitybtn").style.display = "none";
-    } else {
-        ui.view.bigCrunch = false;
-        document.getElementById("dimensionsbtn").style.display = "inline-block";
-        document.getElementById("optionsbtn").style.display = "inline-block";
-        document.getElementById("statisticsbtn").style.display = "inline-block";
-        document.getElementById("achievementsbtn").style.display = "inline-block";
-        if (player.infinitied.gt(0)) {
-            document.getElementById("infinitybtn").style.display = "inline-block";
-            document.getElementById("challengesbtn").style.display = "inline-block";
-        }
-    }
-
-    if (player.eternities > 0) {
-        document.getElementById("infinitybtn").style.display = "inline-block";
-        document.getElementById("challengesbtn").style.display = "inline-block";
-    }
 
     tryUnlockInfinityDimensions();
 
@@ -747,8 +662,6 @@ function gameLoop(diff, options = {}) {
     DilationUpgrade.ttGenerator.applyEffect(gen =>
       player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.ttGen()))
     );
-
-  document.getElementById("rm-amount").textContent = shortenDimensions(player.reality.realityMachines);
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -956,92 +869,20 @@ setInterval(function() {
   }
 }, 333)
 
-
-//start scrolling
-scrollNextMessage();
-
-function showRealityTab(tabName) {
-  if (ui.view.tabs.current !== "reality-tab") {
-    showTab("reality")
-    ui.view.tabs.current = "reality-tab";
-  }
-  ui.view.tabs.reality.subtab = tabName;
-    //iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
-    var tabs = document.getElementsByClassName('realitytab');
-    var tab;
-    for (var i = 0; i < tabs.length; i++) {
-        tab = tabs.item(i);
-        if (tab.id === tabName) {
-            tab.style.display = 'block';
-        } else {
-            tab.style.display = 'none';
-        }
-    }
-    if (document.getElementById("perks").style.display !== "none") network.moveTo({position: {x:0, y:0}, scale: 0.8, offset: {x:0, y:0}})
-}
-
-function init() {
-    console.log('init');
-
-    document.getElementById('dimensionsbtn').onclick = function () {
-        showTab('dimensions');
-    };
-    document.getElementById('optionsbtn').onclick = function () {
-        showTab('options');
-    };
-    document.getElementById('statisticsbtn').onclick = function () {
-        showTab('statistics');
-    };
-    document.getElementById('achievementsbtn').onclick = function () {
-        showTab('achievements');
-    };
-    document.getElementById('challengesbtn').onclick=function () {
-      showTab('challenges');
-    };
-    document.getElementById('infinitybtn').onclick = function () {
-        showTab('infinity');
-    };
-    document.getElementById("eternitystorebtn").onclick = function () {
-        showTab('eternitystore')
-    }
-    document.getElementById("realitybtn").onclick = function () {
-        showTab('reality')
-    }
-    document.getElementById("shopbtn").onclick = function () {
-        showTab('shop')
-        kong.updatePurchases();
-    }
-    document.getElementById('celestialsbtn').onclick = function () {
-      showTab('celestials');
-    };
-    Tab.dimensions.normal.show();
-    GameStorage.load();
-    kong.init();
-
-    //if (typeof kongregate === 'undefined') document.getElementById("shopbtn").style.display = "none"
-}
-
 setInterval(function () {
     if (playFabId != -1 && player.options.cloud) playFabSaveCheck();
 }, 1000*60*5)
-document.getElementById("hiddenheader").style.display = "none";
-
 
 window.onload = function() {
     GameIntervals.start();
-    setTimeout(function() {
+    setTimeout(() => {
         if (kong.enabled) {
             playFabLogin();
             kong.updatePurchases();
         }
-        else {
-            document.getElementById("shopbtn").style.display = "none";
-        }
-        //document.getElementById("container").style.display = "flex"
-        document.getElementById("loading").style.display = "none"
-    }, 1000)
-
-}
+        document.getElementById("loading").style.display = "none";
+    }, 1000);
+};
 
 window.onfocus = function() {
     setShiftKey(false);
@@ -1054,8 +895,14 @@ window.onblur = function() {
 function setShiftKey(isDown) {
   shiftDown = isDown;
   ui.view.shiftDown = isDown;
-  if (isDown) showPerkLabels()
-  else hidePerkLabels()
+}
+
+function init() {
+  // eslint-disable-next-line no-console
+  console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
+  Tab.dimensions.normal.show();
+  GameStorage.load();
+  kong.init();
 }
 
 init();

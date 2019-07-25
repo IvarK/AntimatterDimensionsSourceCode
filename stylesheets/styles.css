@@ -2,6 +2,13 @@ html {
   font-size: 62.5%;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -47,10 +54,6 @@ body {
     outline: none;
 }
 
-button {
-    padding: 1px 6px;
-}
-
 .checkbox {
     vertical-align: bottom;
     top: -2px;
@@ -58,18 +61,6 @@ button {
     padding: 0;
     margin: 0;
     margin-top: 5px;
-}
-
-#game {
-    border: 2px solid black;
-    border-radius: 4px;
-    padding: 2px;
-    width: 75%;
-    height: 22px;
-    overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left
 }
 
 /* Background for s6 is not displayed by default */
@@ -365,17 +356,25 @@ button {
 
 /*#endregion TT shop*/
 
-#news {
-  color: #000000;
-  position: relative;
-  display: inline-block;
-  font-family: Typewriter;
-  font-size: 15px;
-  white-space: nowrap;
-  font-weight: bold
+.c-news-ticker {
+  overflow: hidden;
 }
 
-#news a {
+.c-news-ticker__line {
+  padding-left: 100%;
+  transition: transform linear;
+}
+
+.c-news-line {
+  display: inline-block;
+  font-family: Typewriter, serif;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  font-weight: bold;
+  text-align: left;
+}
+
+.c-news-line a {
   text-decoration: underline;
 }
 
@@ -478,7 +477,6 @@ button {
     background-color: white;
     border: 2px solid #0b600e;
     color: #0b600e;
-    display: none;
 }
 
 .realitytabbtn:hover {
@@ -491,7 +489,6 @@ button {
   background-color: #5151ec;
   border: 2px solid #d0d0d0;
   color: #d0d0d0;
-  display: none;
 }
 
 .celestialtabbtn:hover {
@@ -596,6 +593,7 @@ button {
     height:800px;
     margin-top: -400px;
     margin-left: -525px;
+    z-index: 1000;
 }
 
 .l-reality-button {
@@ -1097,12 +1095,6 @@ br {
     transform: translate(-50%,-50%);
 }
 
-#perks {
-    width: 900px;
-    height: 500px;
-    border: 1px solid black;
-}
-
 .glyphDescriptions {
   width: 32%;
   border: 1px solid rgb(184, 184, 184);
@@ -1266,6 +1258,11 @@ screen and (max-width: 480px) {
  * BEM *
  *******/
 
+.c-game-ui {
+  width: 100%;
+  height: 100%
+}
+
 /*#region o-btn*/
 
 .o-btn {
@@ -1283,11 +1280,6 @@ screen and (max-width: 480px) {
 .o-btn:hover {
   color: white;
   background: #4980CC;
-}
-
-.o-btn--secondary-tab {
-  width: 17.5rem;
-  height: 2.5rem;
 }
 
 /*#region themes*/
@@ -1986,48 +1978,6 @@ screen and (max-width: 480px) {
   height: 1.8rem;
 }
 
-/*#region l-game-tab*/
-
-.l-game-tab {
-  display: flex;
-  flex-direction: column;
-}
-
-.l-game-tab__inner {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0;
-}
-
-.l-game-tab__content {
-  flex: 1 0;
-}
-
-.l-game-tab__footer {
-  flex-shrink: 0;
-}
-
-/*#endregion l-game-tab*/
-
-/*#region l-game-tab-with-subtabs*/
-
-.l-game-tab-with-subtabs {
-  display: flex;
-  flex-direction: column;
-}
-
-.l-game-tab-with-subtabs__tab-buttons-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap
-}
-
-.l-game-tab-with-subtabs__tab-button {
-  margin: .5rem .8rem;
-}
-
-/*#endregion l-game-tab-with-subtabs*/
-
 /*#region hint-text*/
 
 .o-hint-text {
@@ -2242,7 +2192,7 @@ screen and (max-width: 480px) {
 }
 
 .l-normal-dim-tab__progress_bar {
-  margin-top: 1rem;
+  margin: 1rem 0;
 }
 
 /*#endregion l-normal-dim-tab*/
@@ -2950,6 +2900,8 @@ screen and (max-width: 480px) {
 /*#region l-challenges-tab*/
 
 .l-challenges-tab {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -6614,4 +6566,32 @@ kbd {
   color: #ff3333;
   font-size: 1.7rem;
   cursor: pointer;
+}
+
+.c-perk-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-perk-network {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  width: 90rem;
+  height: 50rem;
+  border: 0.1rem solid black;
+}
+
+.c-perk-network__canvas {
+  position: relative;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
 }

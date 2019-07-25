@@ -3,14 +3,13 @@
 class GameOptions {
 
   static toggleNews() {
-    if (player.options.newsHidden) {
-      document.getElementById("game").style.display = "block";
-      player.options.newsHidden = false;
-      scrollNextMessage();
-    } else {
-      document.getElementById("game").style.display = "none";
-      player.options.newsHidden = true;
-    }
+    player.options.newsHidden = !player.options.newsHidden;
+    ui.view.newsHidden = player.options.newsHidden;
+  }
+
+  static toggleUI() {
+    player.options.newUI = !player.options.newUI;
+    ui.view.newUI = player.options.newUI;
   }
 
   static cloudSave() {

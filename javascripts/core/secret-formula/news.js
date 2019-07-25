@@ -1209,52 +1209,52 @@ GameDatabase.news = [
   {
     id: "c30",
     text: "Does Hevi just pick quotes to put into the game?",
-    condition: () => player.newsArray.length >= 30
+    condition: () => player.news.size >= 30
   },
   {
     id: "c31",
     text: "New news company has become rivals with us. They are made entirely of antimatter.",
-    condition: () => player.newsArray.length >= 80
+    condition: () => player.news.size >= 80
   },
   {
     id: "c32",
     text: "How many times can we use \"Anti\" in a row before people stop listening?",
-    condition: () => player.newsArray.length >= 100
+    condition: () => player.news.size >= 100
   },
   {
     id: "c33",
     text: "Does Hevi even check #news-ticker-suggestions anymore?",
-    condition: () => player.newsArray.length >= 120
+    condition: () => player.news.size >= 120
   },
   {
     id: "c34",
     text: "Need more quotes! -hevipelle",
-    condition: () => player.newsArray.length >= 135
+    condition: () => player.news.size >= 135
   },
   {
     id: "c35",
     text: "Man destroys known universe with antimatter, writes news tickers to keep from feeling lonely.",
-    condition: () => player.newsArray.length >= 150
+    condition: () => player.news.size >= 150
   },
   {
     id: "c36",
     text: "You're almost there!",
-    condition: () => player.newsArray.length >= 160
+    condition: () => player.news.size >= 160
   },
   {
     id: "c37",
     text: "You can stop now",
-    condition: () => player.newsArray.length >= 165
+    condition: () => player.news.size >= 165
   },
   {
     id: "c38",
     text: "fucking hacker",
-    condition: () => player.newsArray.length >= 200
+    condition: () => player.news.size >= 200
   },
   {
     id: "c39",
     text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
-    condition: () => player.newsArray.includes("c1") 
+    condition: () => player.news.has("c1")
   },
   {
     id: "c40",
@@ -1262,7 +1262,7 @@ GameDatabase.news = [
       "I broke the 8th wall, there is only chaos, Slabdrill is ritually sacrificing antimatter to the 9th " +
       "dimension. This will be my last entry, may Hevipelle have mercy on our souls, we didn't listen, " +
       "We should have listened.",
-    condition: () => player.newsArray.includes("b22")
+    condition: () => player.news.has("b22")
   },
   {
     id: "c41",

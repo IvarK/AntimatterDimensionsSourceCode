@@ -58,7 +58,7 @@ GameDatabase.achievements.normal = [
     id: 22,
     name: "Fake News",
     tooltip: "Encounter 50 different news messages.",
-    checkRequirement: () => player.newsArray.length >= 50
+    checkRequirement: () => player.news.size >= 50
   },
   {
     id: 23,

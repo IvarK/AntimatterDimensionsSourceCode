@@ -49,7 +49,9 @@ function bigCrunchReset() {
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
   handleChallengeCompletion();
 
-  if (earlyGame || (challenge && !player.options.retryChallenge)) showTab("dimensions");
+  if (earlyGame || (challenge && !player.options.retryChallenge)) {
+    Tab.dimensions.normal.show();
+  }
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
   addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
@@ -111,8 +113,6 @@ function secondSoftReset() {
     player.noSacrifices = true;
     AchievementTimers.marathon2.reset();
 }
-
-document.getElementById("bigcrunch").onclick = bigCrunchResetRequest;
 
 function totalIPMult() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.INFINITY) {

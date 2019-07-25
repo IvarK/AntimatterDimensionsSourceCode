@@ -7,7 +7,7 @@ Vue.component("footer-links", {
     };
   },
   created() {
-    this.on$(GameEvent.TAB_CHANGED, () => this.isVisible = !Tab.eternity.timeStudies.isOpen);
+    this.on$(GameEvent.TAB_CHANGED, () => this.isVisible = !Tab.eternity.studies.isOpen);
   },
   template:
     `<div v-if="isVisible" class="o-footer">

@@ -374,7 +374,7 @@ function respecTimeStudies(auto) {
     player.challenge.eternity.unlocked = 0;
   }
   if (!auto) {
-    Tab.eternity.timeStudies.show();
+    Tab.eternity.studies.show();
   }
 }
 
@@ -644,7 +644,7 @@ class DilationTimeStudyState extends TimeStudyState {
     if (this.isBought || !this.canBeBought) return false;
     if (this.id === 1) unlockDilation(quiet);
     if (this.id === 6 && !Perk.autounlockReality.isBought) {
-      showRealityTab("glyphstab");
+      Tab.reality.glyphs.show();
     }
     player.dilation.studies.push(this.id);
     player.timestudy.theorem = player.timestudy.theorem.minus(this.cost);

@@ -2,26 +2,16 @@
 
 function startDilatedEternity(auto) {
   if (!TimeStudy.dilation.isBought) return false
-  GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
       eternity(false, auto, { switchingDilation: true });
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
       return false
   }
   if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
       return false
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  setTimeout(function() {
-    GameIntervals.gameLoop.start();
-  }, 250)
   return true
 }
 

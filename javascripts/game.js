@@ -437,21 +437,49 @@ function getGameSpeedupForDisplay() {
 
 let autobuyerOnGameLoop = true;
 
-// "diff" is in ms
+// "diff" is in ms.  When unspecified, it just uses the game update rate.
+let nextTickDiff;
 function gameLoop(diff, options = {}) {
-  // When storing real time, all we do is count time and update the UI. This ignores any logic
-  // that may have gone into diff or options.
+  PerformanceStats.start("Frame Time");
+  PerformanceStats.start("Game Update");
+  EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
+  const thisUpdate = Date.now();
+  const realDiff = diff === undefined
+    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
+    : diff;
+
+  player.realTimePlayed += realDiff;
+  player.thisInfinityRealTime += realDiff;
+  player.thisEternityRealTime += realDiff;
+  player.thisRealityRealTime += realDiff;
+
+  // Matter dimensions bypass any kind of stored time mechanics
+  Laitela.handleMatterDimensionUnlocks();
+  matterDimensionLoop(realDiff);
+
+  // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
     Enslaved.storeRealTime();
     GameUI.update();
     return;
   }
-    PerformanceStats.start("Frame Time");
-    PerformanceStats.start("Game Update");
-    EventHub.dispatch(GameEvent.GAME_TICK_BEFORE);
-    const thisUpdate = Date.now();
-    if (diff === undefined) var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
-    if (diff < 0) diff = 1;
+
+  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  let isAutoReleaseTick;
+  if (Enslaved.isAutoReleasing) {
+    Enslaved.autoReleaseTick++;
+  }
+  if (Enslaved.autoReleaseTick >= 5) {
+    Enslaved.autoReleaseTick = 0;
+    Enslaved.useStoredTime(true);
+    isAutoReleaseTick = true;
+  } else {
+    nextTickDiff = player.options.updateRate;
+    isAutoReleaseTick = false;
+  }
+  if (diff === undefined) {
+    diff = nextTickDiff;
+  }
 
     if (autobuyerOnGameLoop) {
       Autobuyers.tick();
@@ -464,10 +492,9 @@ function gameLoop(diff, options = {}) {
     GameCache.timeDimensionCommonMultiplier.invalidate();
     GameCache.totalIPMult.invalidate();
 
-    const realDiff = diff;
     const blackHoleDiff = realDiff;
 
-    if (options.gameDiff === undefined) {
+    if (!isAutoReleaseTick) {
       let speedFactor;
       if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
@@ -488,8 +515,6 @@ function gameLoop(diff, options = {}) {
         speedFactor = reducedTimeFactor;
       }
       diff *= speedFactor;
-    } else {
-      diff = options.gameDiff;
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
 
@@ -589,15 +614,11 @@ function gameLoop(diff, options = {}) {
         }
     }
 
-    player.realTimePlayed += realDiff;
     if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
     player.totalTimePlayed += diff;
     player.thisInfinityTime += diff;
-    player.thisInfinityRealTime += realDiff;
     player.thisEternity += diff;
-    player.thisEternityRealTime += realDiff;
     player.thisReality += diff;
-    player.thisRealityRealTime += realDiff;
 
     EternityChallenge(12).tryFail();
 
@@ -709,18 +730,7 @@ function gameLoop(diff, options = {}) {
 
   if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP)) rewardTP();
 
-  // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  if (Enslaved.isAutoReleasing && options.gameDiff === undefined) {
-    Enslaved.autoReleaseTick++;
-    if (Enslaved.autoReleaseTick >= 5) {
-      Enslaved.autoReleaseTick = 0;
-      Enslaved.useStoredTime(true);
-    }
-  }
-
   V.checkForUnlocks();
-  Laitela.handleMatterDimensionUnlocks();
-  matterDimensionLoop(realDiff);
   AutomatorBackend.update();
 
   EventHub.dispatch(GameEvent.GAME_TICK_AFTER);
@@ -758,6 +768,7 @@ function simulateTime(seconds, real, fast) {
   const largeDiff = (1000 * seconds) / ticks;
 
   // Simulation code with black hole (doesn't use diff since it splits up based on real time instead)
+  const playerStart = deepmerge.all([{}, player]);
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
     let remainingRealSeconds = seconds;
     for (let numberOfTicksRemaining = ticks; numberOfTicksRemaining > 0; numberOfTicksRemaining--) {
@@ -771,7 +782,6 @@ function simulateTime(seconds, real, fast) {
     gameLoopWithAutobuyers(largeDiff / 1000, ticks, real);
   }
 
-  const playerStart = deepmerge.all([{}, player]);
   const offlineIncreases = ["While you were away"];
   // OoM increase
   const oomVarNames = ["antimatter", "infinityPower", "timeShards"];

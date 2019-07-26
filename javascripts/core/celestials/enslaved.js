@@ -103,7 +103,7 @@ const Enslaved = {
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     if (autoRelease) release *= 0.01;
-    gameLoop(Time.unscaledDeltaTime.totalSeconds, { gameDiff: release });
+    nextTickDiff = release;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);

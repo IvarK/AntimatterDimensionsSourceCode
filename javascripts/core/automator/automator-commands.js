@@ -206,7 +206,13 @@ const AutomatorCommands = ((() => {
             : AutomatorCommandStatus.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
-      blockify: ctx => findAutomatorBlockByName('PAUSE')
+      blockify: ctx => {
+        const c = ctx.duration[0].children
+        return {
+          ...findAutomatorBlockByName('PAUSE'),
+          inputValue: c.NumberLiteral[0].image + c.TimeUnit[0].image
+        }
+      }
     },
     {
       id: "prestige",

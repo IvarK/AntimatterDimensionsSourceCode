@@ -6326,6 +6326,17 @@ kbd {
   margin-right: .5rem
 }
 
+.c-automator-block-row-active {
+  background: #50316f;
+}
+
+.c-automaotr-block-row-ghost {
+  display: block;
+  margin: auto;
+  margin-left: 0;
+  margin-bottom: .5rem;
+}
+
 .c-automator-block-editor {
   overflow-y: scroll;
   height: 100%;

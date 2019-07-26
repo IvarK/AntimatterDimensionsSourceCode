@@ -134,9 +134,7 @@ Vue.component("automator-editor", {
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
-      if (!this.mode) {
-        this.parseTextFromBlocks()
-      }
+      if (!this.mode) this.parseTextFromBlocks()
       if (AutomatorBackend.isOn) AutomatorBackend.mode = AutomatorMode.RUN;
       else AutomatorBackend.start(this.currentScriptID);
     },
@@ -187,14 +185,11 @@ Vue.component("automator-editor", {
       return label;
     },
     parseTextFromBlocks() {
-      const content = parseLines(block_automator_lines).join("\n")
+      const content = BlockAutomator.parseLines(BlockAutomator.lines).join("\n")
       const automatorID = ui.view.tabs.reality.automator.editorScriptID
       AutomatorBackend.saveScript(automatorID, content)
       AutomatorUI.documents[automatorID].setValue(content)
       setTimeout( () => AutomatorUI.editor.refresh(), 10 )
-    },
-    showTextAutomator() {
-      return this.mode || AutomatorBackend.mode == AutomatorMode.RUN || AutomatorBackend.mode == AutomatorMode.PAUSE
     },
     toggleAutomatorMode() {
       this.mode = !this.mode
@@ -276,7 +271,7 @@ Vue.component("automator-editor", {
           @click="toggleAutomatorMode()"
         />
       </div>
-      <div v-show="showTextAutomator()" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
-      <automator-block-editor v-show="!showTextAutomator()" />
+      <div v-show="mode" class="c-automator-editor l-automator-editor l-automator-pane__content" ref="container" />
+      <automator-block-editor v-show="!mode" />
     </div>`
 });

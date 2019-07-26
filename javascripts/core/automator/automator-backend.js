@@ -185,6 +185,10 @@ const AutomatorBackend = {
     return this.isOn && this.mode === AutomatorMode.RUN;
   },
 
+  get currentLineNumber() {
+    return this.stack.top.lineNumber;
+  },
+
   update() {
     if (!this.isOn) return;
     switch (this.mode) {

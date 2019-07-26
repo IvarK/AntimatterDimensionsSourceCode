@@ -3,7 +3,8 @@
 Vue.component("automator-single-block", {
   data() {
     return {
-      b: {}
+      b: {},
+      currentBlockId: -1
     }
   },
   props: {
@@ -23,6 +24,9 @@ Vue.component("automator-single-block", {
     updateBlockFromNest(block, id) {
       this.$set(this.b.nest, this.b.nest.findIndex( x => x.id == id), block)
     },
+    update() {
+      this.currentBlockId = BlockAutomator.currentBlockId
+    }
   },
   computed: {
     hasInput() {
@@ -30,12 +34,14 @@ Vue.component("automator-single-block", {
     },
     hasSecondaryTargets() {
       return this.b.secondaryTargets && ( this.b.targetsWithoutInput ? !this.b.targetsWithoutInput.includes(this.b.target) : true )
-    }
+    },
+    isCurrentLine() {
+      return this.b.id == this.currentBlockId;
+    },
   },
   template:
     `<div>
-      <div class="c-automator-block-row">
-        <div class="o-automator-linenumber">{{ lineNumber + 1 }}</div>
+      <div class="c-automator-block-row" :class="{ 'c-automator-block-row-active' : isCurrentLine }">
         <div class="o-automator-command">{{ b.cmd }}</div>
         <select v-if="b.targets" @change="updateBlock(block, b.id)" v-model="b.target" class="o-automator-block-input">
           <option v-for="target in b.targets" :value="target">{{ target }}</option>

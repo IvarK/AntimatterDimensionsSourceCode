@@ -451,8 +451,7 @@
     if (lexResult.errors.length == 0 && AutomatorGrammar.parser.errors.length == 0 && validator.errors.length == 0) {
       const b = new Blockifier()
       let blocks = b.visit(parseResult)
-      console.log(blocks)
-      block_automator_lines = blocks
+      BlockAutomator.lines = blocks
       return true
     }
 

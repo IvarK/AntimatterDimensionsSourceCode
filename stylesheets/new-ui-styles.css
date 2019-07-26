@@ -157,7 +157,8 @@ body.t-dark {
 
 .resource-information {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--color-text);
   justify-content: space-between;
   padding: 0 5px;
@@ -166,8 +167,7 @@ body.t-dark {
 
 .resource-per-second {
   font-size: 0.7em;
-  color: var(--color-text);;
-  padding-left: 10px;
+  color: var(--color-text);
 }
 
 .resource-name {
@@ -179,13 +179,15 @@ body.t-dark {
 #ep { color: var(--color-eternity) }
 #rm { color: var(--color-reality) }
 
-.resource-infinity-canreset {
+.resource-infinity-canreset,
+.resource-eternity-canreset {
   background-color: black;
   cursor: pointer;
   transition-duration: 0.12s;
 }
 
-.resource-infinity-canreset:hover {
+.resource-infinity-canreset:hover,
+.resource-eternity-canreset:hover {
   background-color: rgb(49, 49, 49)
 }
 

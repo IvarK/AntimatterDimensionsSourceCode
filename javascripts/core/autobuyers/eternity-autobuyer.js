@@ -68,7 +68,7 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
   }
 
   reset() {
-    if (!RealityUpgrade(10).isBought && player.eternities < 100) {
+    if (!EternityMilestone.autobuyerEternity.isReached) {
       this.isActive = false;
     }
   }

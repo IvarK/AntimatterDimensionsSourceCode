@@ -397,7 +397,7 @@ body.t-dark {
   justify-content: center;
 }
 
-.tab-container > div{
+.tab-container > .l-normal-dim-tab {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -577,7 +577,7 @@ body.t-dark {
   background-color: var(--color-dark);
   border: 1px solid var(--color-good);
   padding: 10px;
-  color: var(--color-text);;
+  color: var(--color-text);
   font-family: Typewriter, serif;
   border-radius: 5px;
   position: relative;
@@ -782,6 +782,12 @@ body.t-dark {
   border: 1px solid var(--color-good);
 }
 
+.o-primary-btn {
+  background-color: var(--color-dark);
+  border: 1px solid var(--color-good);
+  color: var(--color-text);
+}
+
 .o-primary-btn:hover {
   background: #414141;
 }
@@ -808,4 +814,20 @@ body.t-dark {
 
 .c-stats-tab {
   color: white;
+}
+
+.o-autobuyer-input,
+.l-autobuyer-grid select {
+  background: #1c1d1d;
+  border: 0.1rem solid var(--color-accent-1);
+  color: var(--color-accent-1);
+}
+
+.o-autobuyer-btn {
+  border: 0.1rem solid var(--color-accent-1);
+}
+
+
+.c-replicanti-description__accent {
+  color: #2196f3
 }

@@ -51,7 +51,7 @@ const BlockAutomator = {
     for (let i = 0; i < blocks.length; i++) {
       const b = blocks[i]
       output.push(b.id)
-      if (b.nested) output.push(...this.blockIdArray(b.nest))
+      if (b.nested) output.push(...this.blockIdArray(b.nest), undefined)
     }
     return output;
   },

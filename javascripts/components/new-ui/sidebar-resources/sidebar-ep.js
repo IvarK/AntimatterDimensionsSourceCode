@@ -90,11 +90,58 @@ Vue.component("sidebar-ep", {
     :class=" { 'resource-eternity-canreset': showEternity }"
     v-tooltip="eternityPeaks">
     <div v-if="cond">
-      <h2 id="ep">{{ shorten(ep, 2, 0) }}</h2>
-      <div class="resource-information">
-        <span class="resource-name">Eternity Points</span>
-        <span v-if="showEternity" class="resource-per-second"> +{{ shorten(gainedEP, 2, 0) }}</span>
-      </div>
+      <h2 v-if="type !== 0" id="ep">{{ shorten(ep, 2, 0) }}</h2>
+
+      <template v-if="type === 0">
+        Other times await... I need to become Eternal
+      </template>
+
+      <template v-else-if="type === 1">
+        <div class="resource-information">
+          <span class="resource-name">{{ showEternity ? "Eternity now for" : "Eternity Points" }}</span>
+          <span v-if="showEternity" class="resource-per-second"> +{{ shorten(gainedEP, 2, 0) }}</span>
+        </div>
+      </template>
+
+      <template v-else-if="type === 2">
+        <div class="resource-information">
+          Other challenges await... I need to become Eternal
+        </div>
+      </template>
+
+      
+      <template v-else-if="type === 3">
+        <div class="resource-information">
+          <span class="resource-name">{{ showEternity ? "Eternity now for" : "Eternity Points" }}</span>
+          <span v-if="showEternity" class="resource-per-second"> +{{ shorten(gainedEP, 2, 0) }}</span>
+          <span v-if="showEternity" class="resource-per-second"> +{{ shorten(gainedTachyons, 2, 0) }} Tachyon Particles</span>
+        </div>
+      </template>
+
+      <!-- TODO: add type 4 and 5 -->
+
+      <template v-else-if="type === 6">
+        <div class="resource-information">
+          <span class="resource-name">Other challenges await...</span>
+          <template v-if="fullyCompleted">
+            <br>
+            (This challenge is already fully completed)
+          </template>
+          <template v-else>
+            <br>
+            {{gainedCompletions}} {{ "completion" | pluralize(gainedCompletions) }} on Eternity
+            <template v-if="failedRestriction">
+              <br>
+              {{failedRestriction}}
+            </template>
+            <template v-else-if="hasMoreCompletions">
+              <br>
+              Next goal at {{shortenCosts(nextGoalAt)}} IP
+            </template>
+          </template>
+        </div>
+      </template>
+
     </div>
   </div>`
 });

@@ -755,10 +755,12 @@ body.t-dark {
 
 /* FIXING OLD TABS */
 
+.l-achievement-grid__cell {
+  margin: -0.5rem -0.5rem;
+}
+
 .o-achievement {
-  height: 8.6rem;
-  width: 8.6rem;
-  background-size: contain;
+  transform:scale(0.8)
 }
 
 .o-infinity-upgrade-btn--unavailable {
@@ -792,6 +794,16 @@ body.t-dark {
 
 .o-primary-btn:hover {
   background: #414141;
+}
+
+.o-primary-btn--disabled {
+  background: #752626;
+  border-color: var(--color-bad) !important;
+  cursor: default;
+}
+
+.o-primary-btn--disabled:hover {
+  background: var(--color-bad) !important;
 }
 
 .c-challenge-box--normal {
@@ -832,4 +844,62 @@ body.t-dark {
 
 .c-replicanti-description__accent {
   color: #2196f3
+}
+
+.c-infinity-dim-description__accent {
+  color: var(--color-infinity);
+}
+
+.l-infinity-dim-tab {
+  padding: 1rem 6rem;
+}
+
+.c-infinity-dim-row {
+  padding-left: 1rem;
+  border-radius: .5rem;
+}
+
+.c-infinity-dim-row:nth-child(even) {
+  background: #5f441e;
+}
+
+.c-infinity-dim-row__name {
+  font-size: 2rem;
+}
+
+.c-infinity-dim-row__multiplier {
+  font-size: 1.4rem
+}
+
+.c-time-dim-description__accent {
+  color: var(--color-eternity);
+}
+
+.l-time-dim-tab {
+  padding: 2rem 0;
+}
+
+.c-time-dim-row {
+  padding-left: 1rem;
+  border-radius: .5rem;
+}
+
+.c-time-dim-row:nth-child(even) {
+  background: #63217d
+}
+
+.c-time-dim-row__name {
+  font-size: 2rem;
+}
+
+.c-time-dim-row__multiplier {
+  font-size: 1.4rem
+}
+
+.l-reality-upgrade-grid__row > * {
+  margin: 0.5rem;
+}
+
+.c-reality-upgrade-btn {
+  width: 15.6rem;
 }

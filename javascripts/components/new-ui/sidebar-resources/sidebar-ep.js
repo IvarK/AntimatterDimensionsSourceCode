@@ -25,9 +25,9 @@ Vue.component("sidebar-ep", {
     update() {
       this.ep.copyFrom(player.eternityPoints);
       this.showEternity = player.infinityPoints.gte(Player.eternityGoal)
-      if (!this.showEternity) return;
       if (player.eternities === 0) {
         this.type = EPButtonDisplayType.FIRST_TIME;
+        console.log(this.type)
         return;
       }
 
@@ -89,11 +89,11 @@ Vue.component("sidebar-ep", {
     @click="eternity"
     :class=" { 'resource-eternity-canreset': showEternity }"
     v-tooltip="eternityPeaks">
-    <div v-if="cond">
+    <div v-if="cond || showEternity">
       <h2 v-if="type !== 0" id="ep">{{ shorten(ep, 2, 0) }}</h2>
 
       <template v-if="type === 0">
-        Other times await... I need to become Eternal
+        <div class="o-eternity-button__eternity-text">Other times await... I need to become Eternal</div>
       </template>
 
       <template v-else-if="type === 1">
@@ -104,7 +104,7 @@ Vue.component("sidebar-ep", {
       </template>
 
       <template v-else-if="type === 2">
-        <div class="resource-information">
+        <div class="resource-information o-eternity-button__eternity-text">
           Other challenges await... I need to become Eternal
         </div>
       </template>
@@ -121,7 +121,7 @@ Vue.component("sidebar-ep", {
       <!-- TODO: add type 4 and 5 -->
 
       <template v-else-if="type === 6">
-        <div class="resource-information">
+        <div class="resource-information o-eternity-button__eternity-text">
           <span class="resource-name">Other challenges await...</span>
           <template v-if="fullyCompleted">
             <br>

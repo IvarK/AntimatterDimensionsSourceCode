@@ -41,7 +41,7 @@ Vue.component("sidebar-ip", {
     @click="infinity"
     :class=" { 'resource-infinity-canreset': showCrunch }"
     v-tooltip="crunchPeaks">
-    <div v-if="cond">
+    <div v-if="cond || showCrunch">
       <h2 id="ip">{{ shorten(ip, 2, 0) }}</h2>
       <div class="resource-information">
         <span class="resource-name">{{ showCrunch ? "Infinity now for" : "Infinity Points" }}</span>

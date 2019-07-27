@@ -903,3 +903,16 @@ body.t-dark {
 .c-reality-upgrade-btn {
   width: 15.6rem;
 }
+
+.resource-eternity-canreset > div {
+  height: 100%;
+}
+
+.o-eternity-button__eternity-text {
+  color: var(--color-eternity);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+}

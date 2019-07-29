@@ -115,10 +115,10 @@ Notation.personal = new class PersonalNotation extends Notation {
     // The jump from metric to minim is sudden. Small values (< 10) get more decimal places
     // because that's usually something like sacrifice multiplier
     if (x < 1000) {
-      return ((x < 10 || x === Math.round(x)) ? x.toFixed(2) : x.toFixed(0)) + "pL";
+      return `${(x < 10 || x === Math.round(x)) ? x.toFixed(2) : x.toFixed(0)}pL`;
     }
-    if (x < 1e6) return (x / 1000).toPrecision(4) + "nL";
-    return (x / 1e6).toPrecision(4) + "μL";
+    if (x < 1e6) return `${(x / 1000).toPrecision(4)}nL`;
+    return `${(x / 1e6).toPrecision(4)}μL`;
   }
 
   /**
@@ -195,11 +195,11 @@ Notation.personal = new class PersonalNotation extends Notation {
 
   bigAndSmall(adjective, numBig, big, numSmall, small) {
     const bigStr = this.pluralOrArticle(numBig, adjective + big[1]);
-    return numSmall === 0 ? bigStr : bigStr + " and " + this.pluralOrArticle(numSmall, small[1]);
+    return numSmall === 0 ? bigStr : `${bigStr} and ${this.pluralOrArticle(numSmall, small[1])}`;
   }
 
   almost(adjective, numBig, big) {
-    return "almost " + this.pluralOrArticle(numBig, adjective + big[1]);
+    return `almost ${this.pluralOrArticle(numBig, adjective + big[1])}`;
   }
 
   almostOrShortOf(x, adjective, numBig, big, small) {
@@ -210,12 +210,12 @@ Notation.personal = new class PersonalNotation extends Notation {
   }
 
   shortOf(adjective, numBig, big, numSmall, small) {
-    return this.pluralOrArticle(numSmall, small[1]) + " short of " +
-      this.pluralOrArticle(numBig, adjective + big[1]);
+    return `${this.pluralOrArticle(numSmall, small[1])} short of ${ 
+      this.pluralOrArticle(numBig, adjective + big[1])}`;
   }
 
   pluralOrArticle(num, str) {
-    return num === 1 ? this.addArticle(str) : num + " " + str + "s";
+    return num === 1 ? this.addArticle(str) : `${num} ${str}s`;
   }
 
   addArticle(x) {

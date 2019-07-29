@@ -33,10 +33,12 @@ Notation.personal = new class PersonalNotation extends Notation {
       [666 * 60 * 8 * 4 * 2 * 2 * 2 * 4 * 3456, "Michael", 9],
     ];
     this.MINIMS = this.VOLUME_UNITS[1];
-    this.VOLUME_ADJECTIVES = ["sky blue ", "mint ", "blue steel ", "forest green ", "mesmerizing yellow ", "hot pink ", "not purple ",
-      "blurple ", "cookie brown ", "deep purple ", "leafy green ", "snowstorm white ", "stunning purple ", "piss yellow ", "Hunter maroon ", 
-      "Slabdrill banned red ", "shite brown ", "gah green ", "angery red ", "snow yellow", "celestial white ", "diabolical black", "idle orange ",
-      "muted gray ", "off-white ", "ultraviolet "];
+    this.VOLUME_ADJECTIVES = ["sky blue ", "mint ", "blue steel ", "forest green ", "mesmerizing yellow ", 
+                              "hot pink ", "not purple ", "blurple ", "cookie brown ", "deep purple", 
+                              "leafy green ", "snowstorm white ", "stunning purple ", "piss yellow ", "Hunter maroon ", 
+                              "Slabdrill banned red ", "shite brown ", "gah green ", "angery red ", "snow yellow", 
+                              "celestial white ", "diabolical black", "idle orange ", "muted gray ", "off-white ",
+                              "ultraviolet "];
     this.VOWELS = new Set("aeiouAEIOU");
     this.maxVolume = 10 * this.VOLUME_UNITS[this.VOLUME_UNITS.length - 1][0];
     this.logMaxVolume = Math.log10(this.maxVolume);
@@ -181,6 +183,7 @@ Notation.personal = new class PersonalNotation extends Notation {
 
   // Try to do "almost a big thing" or "a thing short of a big thing", based on the setting
   // we have for rounding error units; may return nothing if we are not actually near something
+  // eslint-disable-next-line max-params
   checkAlmost(adjective, x, numBig, bigIndex) {
     const big = this.VOLUME_UNITS[bigIndex];
     if (x + this.VOLUME_UNITS[bigIndex - big[2]][0] >= big[0]) {
@@ -192,7 +195,7 @@ Notation.personal = new class PersonalNotation extends Notation {
     }
     return null;
   }
-
+// eslint-disable-next-line max-params
   bigAndSmall(adjective, numBig, big, numSmall, small) {
     const bigStr = this.pluralOrArticle(numBig, adjective + big[1]);
     return numSmall === 0 ? bigStr : `${bigStr} and ${this.pluralOrArticle(numSmall, small[1])}`;
@@ -201,14 +204,14 @@ Notation.personal = new class PersonalNotation extends Notation {
   almost(adjective, numBig, big) {
     return `almost ${this.pluralOrArticle(numBig, adjective + big[1])}`;
   }
-
+// eslint-disable-next-line max-params
   almostOrShortOf(x, adjective, numBig, big, small) {
     const short = Math.round((numBig * big[0] - x) / small[0]);
     return short
       ? this.shortOf(adjective, numBig, big, short, small)
       : this.almost(adjective, numBig, big);
   }
-
+// eslint-disable-next-line max-params
   shortOf(adjective, numBig, big, numSmall, small) {
     return `${this.pluralOrArticle(numSmall, small[1])} short of ${ 
       this.pluralOrArticle(numBig, adjective + big[1])}`;

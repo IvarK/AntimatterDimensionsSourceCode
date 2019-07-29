@@ -195,6 +195,7 @@ Notation.personal = new class PersonalNotation extends Notation {
     }
     return null;
   }
+
 // eslint-disable-next-line max-params
   bigAndSmall(adjective, numBig, big, numSmall, small) {
     const bigStr = this.pluralOrArticle(numBig, adjective + big[1]);
@@ -204,6 +205,7 @@ Notation.personal = new class PersonalNotation extends Notation {
   almost(adjective, numBig, big) {
     return `almost ${this.pluralOrArticle(numBig, adjective + big[1])}`;
   }
+
 // eslint-disable-next-line max-params
   almostOrShortOf(x, adjective, numBig, big, small) {
     const short = Math.round((numBig * big[0] - x) / small[0]);
@@ -211,6 +213,7 @@ Notation.personal = new class PersonalNotation extends Notation {
       ? this.shortOf(adjective, numBig, big, short, small)
       : this.almost(adjective, numBig, big);
   }
+
 // eslint-disable-next-line max-params
   shortOf(adjective, numBig, big, numSmall, small) {
     return `${this.pluralOrArticle(numSmall, small[1])} short of ${ 

@@ -27,5 +27,6 @@ const Notations = {
     Notation.bar,
     Notation.shi,
     Notation.empty,
+    Notation.personal,
   ]
 };

@@ -204,6 +204,13 @@ GameDatabase.tabs = [
         symbol: "TD",
         component: "time-dilation-tab",
         condition: () => TimeStudy.dilation.isBought
+      },
+      {
+        key: "compression",
+        name: "Time Compression",
+        symbol: "TC",
+        component: "time-compression-tab",
+        condition: () => Ra.pets.enslaved.level >= 25
       }
     ],
   },

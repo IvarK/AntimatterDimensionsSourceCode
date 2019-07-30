@@ -429,7 +429,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing) {
+  if (Enslaved.isAutoReleasing && !(EternityChallenge(12).isRunning || Ra.isCompressed)) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -494,7 +494,8 @@ function gameLoop(diff, options = {}) {
 
     const blackHoleDiff = realDiff;
 
-    if (!isAutoReleaseTick) {
+    const fixedSpeedActive = EternityChallenge(12).isRunning || Ra.isCompressed;
+    if (!isAutoReleaseTick && !fixedSpeedActive) {
       let speedFactor;
       if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
@@ -503,7 +504,7 @@ function gameLoop(diff, options = {}) {
         speedFactor = getGameSpeedupFactor(undefined, options.blackHoleSpeedup);
       }
 
-      if (player.celestials.enslaved.isStoring && !(EternityChallenge(12).isRunning || Ra.isCompressed)) {
+      if (player.celestials.enslaved.isStoring && !fixedSpeedActive) {
         // These variables are the actual game speed used and the game speed unaffected by time storage, respectively
         const reducedTimeFactor = getGameSpeedupFactor();
         const totalTimeFactor = getGameSpeedupFactor([GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH,
@@ -515,6 +516,8 @@ function gameLoop(diff, options = {}) {
         speedFactor = reducedTimeFactor;
       }
       diff *= speedFactor;
+    } else if (fixedSpeedActive) {
+      diff *= getGameSpeedupFactor();
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
 

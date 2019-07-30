@@ -459,6 +459,10 @@ function handleCelestialRuns(force) {
     player.celestials.ra.run = false;
   }
 
+  if (Ra.isCompressed) {
+    Ra.isCompressed = false;
+  }
+
   if (Laitela.isRunning) {
     player.celestials.laitela.run = false;
     if (!force && player.antimatter.gte(player.celestials.laitela.maxAmGained)) {

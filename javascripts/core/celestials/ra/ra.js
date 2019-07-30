@@ -246,14 +246,20 @@ const Ra = {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
   },
-  entanglementValue(value) {
-    return 100 * Math.clamp((Math.sqrt(value.log10() / 3e8) - 1) / 10, 0, 1);
+  get entanglement() {
+    return player.celestials.ra.compression.entanglement;
+  },
+  set entanglement(value) {
+    player.celestials.ra.compression.entanglement = value;
   },
   get isRunning() {
     return player.celestials.ra.run;
   },
   get isCompressed() {
     return player.celestials.ra.compression.active;
+  },
+  set isCompressed(value) {
+    player.celestials.ra.compression.active = value;
   },
   get compressionDepth() {
     return 2;

@@ -4484,6 +4484,65 @@ screen and (max-width: 480px) {
 
 /*#endregion o-dilation-btn*/
 
+/*#region o-compression-btn*/
+
+.o-compression-btn {
+  color: #5151ec;
+  background-color: black;
+  font-weight: bold;
+  font-size: 1.12rem;
+  border: .2rem solid #5151ec;
+  width: 19rem;
+  height: 9rem;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  border-radius: .4rem;
+  font-family: Typewriter, serif;
+  animation: a-compression-btn-glow 5s infinite;
+  animation-timing-function: linear
+}
+
+.o-compression-btn:hover {
+  background-color: white;
+}
+
+.t-dark .o-compression-btn {
+  color: #5151ec;
+  background-color: black;
+}
+
+.t-dark .o-compression-btn:hover,
+.t-s6 .o-compression-btn:hover {
+  color: #5151ec;
+  background-color: white;
+}
+
+.t-s4 .o-compression-btn {
+  animation: a-compression-btn-glow 0.5s infinite;
+}
+
+.t-metro .o-compression-btn,
+.t-dark-metro .o-compression-btn,
+.t-inverted-metro .o-compression-btn,
+.t-s8 .o-compression-btn {
+  border-radius: 0;
+  border-width: 0.1rem;
+}
+
+@keyframes a-compression-btn-glow {
+  0%   { box-shadow: inset 0  0  2rem   0}
+  13%  { box-shadow: inset 0  0  2rem   0.15rem}
+  25%  { box-shadow: inset 0  0  2rem   0.4rem}
+  38%  { box-shadow: inset 0  0  2rem   0.65rem}
+  50%  { box-shadow: inset 0  0  2rem   0.8rem}
+  63%  { box-shadow: inset 0  0  2rem   0.65rem}
+  75%  { box-shadow: inset 0  0  2rem   0.4rem}
+  88%  { box-shadow: inset 0  0  2rem   0.15rem}
+  100% { box-shadow: inset 0  0  2rem   0}
+}
+
+/*#endregion o-compression-btn*/
+
 /*#region o-dilation-upgrade*/
 
 .o-dilation-upgrade {

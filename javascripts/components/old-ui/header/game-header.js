@@ -33,6 +33,11 @@ Vue.component("game-header", {
               activityToken: () => player.dilation.active
             },
             {
+              name: () => "Time Compression",
+              isActive: token => token,
+              activityToken: () => Ra.isCompressed
+            },
+            {
               name: token => `${NormalChallenge(token).config.reward} Challenge`,
               isActive: token => token > 0,
               activityToken: () => player.challenge.normal.current

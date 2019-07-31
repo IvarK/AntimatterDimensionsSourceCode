@@ -107,6 +107,6 @@ Currency.perkPoints = new class extends NumberCurrency {
 }();
 
 Currency.entanglement = new class extends NumberCurrency {
-  get value() { return player.celestials.ra.entanglement; }
-  set value(value) { player.celestials.ra.entanglement = value; }
+  get value() { return player.celestials.ra.compression.entanglement; }
+  set value(value) { player.celestials.ra.compression.entanglement = value; }
 }();

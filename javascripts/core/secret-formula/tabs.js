@@ -207,7 +207,7 @@ GameDatabase.tabs = [
       },
       {
         key: "compression",
-        name: "Time Compression",
+        name: "Time compression",
         symbol: "TC",
         component: "time-compression-tab",
         condition: () => Ra.pets.enslaved.level >= 25
@@ -251,7 +251,14 @@ GameDatabase.tabs = [
         name: "Black hole",
         symbol: "BH",
         component: "black-hole-tab",
-      }
+      },
+      {
+        key: "alchemy",
+        name: "Glyph alchemy",
+        symbol: "⛧",
+        component: "alchemy-tab",
+        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
+      },
     ],
   },
   {
@@ -294,13 +301,6 @@ GameDatabase.tabs = [
         symbol: "R",
         component: "ra-tab",
         condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
-      },
-      {
-        key: "alchemy",
-        name: "Glyph Alchemy",
-        symbol: "⛧",
-        component: "alchemy-tab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
       },
       {
         key: "laitela",

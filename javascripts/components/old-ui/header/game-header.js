@@ -21,12 +21,12 @@ Vue.component("game-header", {
             };
           }
           return [
-            celestialReality(Teresa, "Teresa's"),
-            celestialReality(Effarig, "Effarig's"),
-            celestialReality(Enslaved, "The Enslaved Ones'"),
-            celestialReality(V, "V's"),
-            celestialReality(Ra, "Ra's"),
-            celestialReality(Laitela, "Lai'tela's"),
+            celestialReality(Teresa, "Teresa's Reality"),
+            celestialReality(Effarig, "Effarig's Reality"),
+            celestialReality(Enslaved, "The Enslaved Ones' Reality"),
+            celestialReality(V, "V's Reality"),
+            celestialReality(Ra, "Ra's Reality"),
+            celestialReality(Laitela, "Lai'tela's Reality"),
             {
               name: () => "Time Dilation",
               isActive: token => token,

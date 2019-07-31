@@ -2,48 +2,34 @@
 
 Vue.component("compression-upgrade", {
   props: {
-    isRebuyable: {
-      type: Boolean,
-      default: false
-    },
     upgrade: Object
   },
   data() {
     return {
       isBought: false,
+      isActive: false,
       isAffordable: false,
-      isAutoUnlocked: false,
-      isAutobuyerOn: false,
     };
-  },
-  watch: {
-    isAutobuyerOn(newValue) {
-      this.upgrade.isAutobuyerOn = newValue;
-    }
   },
   computed: {
     classObject() {
       return {
-        "o-dilation-upgrade": true,
-        "o-dilation-upgrade--rebuyable": this.isRebuyable,
-        "o-dilation-upgrade--bought": this.isBought,
-        "o-dilation-upgrade--available": !this.isBought && this.isAffordable,
-        "o-dilation-upgrade--unavailable": !this.isBought && !this.isAffordable
+        "o-compression-upgrade": true,
+        "o-compression-upgrade--active": this.isBought && this.isActive,
+        "o-compression-upgrade--inactive": this.isBought,
+        "o-compression-upgrade--available": !this.isBought && this.isAffordable,
+        "o-compression-upgrade--unavailable": !this.isBought && !this.isAffordable
       };
     }
   },
   methods: {
     update() {
-      if (this.isRebuyable) {
-        this.isAffordable = this.upgrade.isAffordable;
+      this.isBought = this.upgrade.isBought;
+      if (this.isBought) {
+        this.isActive = new Decimal(this.upgrade.config.resource()).gte(this.upgrade.config.threshold());
       } else {
-        this.isBought = this.upgrade.isBought;
-        if (!this.isBought) {
-          this.isAffordable = this.upgrade.isAffordable;
-        }
+        this.isAffordable = this.upgrade.isAffordable;
       }
-      this.isAutoUnlocked = Perk.autobuyerDilation.isBought;
-      this.isAutobuyerOn = this.upgrade.isAutobuyerOn;
     }
   },
   template:
@@ -52,21 +38,22 @@ Vue.component("compression-upgrade", {
         <description-display 
           :config="upgrade.config"
           :length="70"
-          name="o-dilation-upgrade__description"
+          name="o-compression-upgrade__description"
         />
-        <effect-display br :config="upgrade.config" />
-        <cost-display br
+        <br><br>
+        <span>To activate: {{ upgrade.config.secondary() }}</span>
+        <br>
+        <span>(Currently {{ shorten(upgrade.config.resource(), 2, 2) }})</span>
+        <br><br>
+        <effect-display :config="upgrade.config" />
+        <cost-display
           v-if="!isBought"
           :config="upgrade.config"
           singular="Entanglement"
           plural="Entanglement"
         />
+        <div v-else-if="isActive">Active!</div>
+        <div v-else>Inactive</div>
       </button>
-      <primary-button-on-off
-        v-if="isRebuyable && isAutoUnlocked"
-        v-model="isAutobuyerOn"
-        text="Auto:"
-        class="l--spoon-btn-group__little-spoon o-primary-btn--dilation-upgrade-toggle"
-      />
     </div>`
 });

@@ -162,7 +162,7 @@ const Tickspeed = {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
       : this.baseValue;
-    return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
+    return (player.dilation.active || Ra.isCompressed) ? dilatedValueOf(tickspeed) : tickspeed;
   },
 
   get baseValue() {

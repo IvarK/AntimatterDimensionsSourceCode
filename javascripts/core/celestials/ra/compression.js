@@ -24,7 +24,7 @@ function entanglementThisRun() {
     return 0;
   }
   const value = player.antimatter;
-  return 100 * Math.clamp((Math.sqrt(value.log10() / 3e8) - 1) / 10, 0, 1);
+  return 308 * Math.clamp((Math.pow(value.log10() / 2e5, 0.4) - 1) / 10, 0, 1);
 }
 
 // Returns amount of entanglement gained this run, used only for display purposes
@@ -37,7 +37,7 @@ function minAntimatterForEntanglement() {
   if (Ra.entanglement === 100) {
     return Decimal.pow10(9e15);
   }
-  return Decimal.pow10(3e8 * Math.pow(1 + Ra.entanglement / 10, 2));
+  return Decimal.pow10(2e5 * Math.pow(1 + Ra.entanglement / 30.8, 2.5));
 }
 
 class CompressionUpgradeState extends SetPurchasableMechanicState {

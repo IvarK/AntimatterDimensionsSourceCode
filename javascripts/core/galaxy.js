@@ -141,7 +141,7 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
   player.galaxies++;
   player.tickDecrease -= 0.03;
-  player.resets = 0;
+  player.dimensionBoosts = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;

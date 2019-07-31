@@ -277,7 +277,7 @@ function completeReality(force, reset, auto = false) {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = isRUPG10Bought ? 4 : 0;
+  player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
   player.tickDecrease = 0.9;
   player.interval = null;
@@ -356,6 +356,7 @@ function completeReality(force, reset, auto = false) {
     Perk.startAM2
   ).toDecimal();
   Enslaved.autoReleaseTick = 0;
+  player.celestials.ra.compression.freeDimboosts = 0;
 
   resetInfinityRuns();
   resetEternityRuns();

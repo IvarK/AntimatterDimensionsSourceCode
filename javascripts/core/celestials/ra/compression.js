@@ -40,6 +40,10 @@ function minAntimatterForEntanglement() {
   return Decimal.pow10(2e5 * Math.pow(1 + Ra.entanglement / 30.8, 2.5));
 }
 
+function getFreeDimboostsPerSecond() {
+  return Effects.sum(CompressionUpgrade.freeBoost) * (1 + Math.log10(getGameSpeedupFactor()) / 500);
+}
+
 class CompressionUpgradeState extends SetPurchasableMechanicState {
   get currency() {
     return Currency.entanglement;

@@ -55,7 +55,7 @@ function updateSpoilers() {
 			if (i < 5) {
 				displayed = 1 - displayed;
 			}
-			if (i === 5 && (player.resets >= 4 || player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {
+			if (i === 5 && (DimBoost.totalBoosts() >= 4 || player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {
 				displayed = 1 - displayed;
 			}
 			if (i === 7 && (player.galaxies >= 1 || player.infinitied.gte(1) || PlayerProgress.eternityUnlocked())) {

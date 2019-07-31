@@ -42,7 +42,7 @@ class DimBoost {
   static get isShift() {
     // Player starts with 4 unlocked dimensions,
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
-    return player.resets + 4 < this.maxShiftTier;
+    return DimBoost.purchasedBoosts() + 4 < this.maxShiftTier;
   }
 
   static get requirement() {
@@ -50,8 +50,8 @@ class DimBoost {
   }
 
   static bulkRequirement(bulk) {
-    let targetResets = player.resets + bulk;
-    let tier = Math.min(targetResets + 3, this.maxShiftTier);
+    const targetResets = DimBoost.purchasedBoosts() + bulk;
+    const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
 
     if (tier === 6 && NormalChallenge(10).isRunning) {
@@ -77,20 +77,35 @@ class DimBoost {
 
     return new DimBoostRequirement(tier, amount);
   }
+
+  static purchasedBoosts() {
+    return player.dimensionBoosts;
+  }
+
+  static freeBoosts() {
+    // If the compression upgrade isn't active, then make it so free boosts don't count either
+    const isGenerating = Effects.sum(CompressionUpgrade.freeBoost) !== 0;
+    return isGenerating
+      ? Math.floor(player.celestials.ra.compression.freeDimboosts)
+      : 0;
+  }
+
+  static totalBoosts() {
+    return this.purchasedBoosts() + this.freeBoosts();
+  }
 }
 
 function applyDimensionBoost() {
     const power = DimBoost.power;
     for (let tier = 1; tier <= 8; tier++) {
-        NormalDimension(tier).power = power.pow(player.resets + 1 - tier).max(1);
+        NormalDimension(tier).power = power.pow(DimBoost.totalBoosts() + 1 - tier).max(1);
     }
 }
 
 function softReset(bulk) {
-    //if (bulk < 1) bulk = 1 (fixing issue 184)
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
-    player.resets += bulk;
+    player.dimensionBoosts += bulk;
 
     /**
      * All reset stuff are in these functions now. (Hope this works)
@@ -113,13 +128,13 @@ function skipResetsIfPossible() {
   if (NormalChallenge.isRunning || InfinityChallenge.isRunning) {
     return;
   }
-  if (InfinityUpgrade.skipResetGalaxy.isBought && player.resets < 4) {
-    player.resets = 4;
+  if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
+    player.dimensionBoosts = 4;
     if (player.galaxies === 0) player.galaxies = 1;
   }
-  else if (InfinityUpgrade.skipReset3.isBought && player.resets < 3) player.resets = 3;
-  else if (InfinityUpgrade.skipReset2.isBought && player.resets < 2) player.resets = 2;
-  else if (InfinityUpgrade.skipReset1.isBought && player.resets < 1) player.resets = 1;
+  else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
+  else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
+  else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
 }
 
 function softResetBtnClick() {
@@ -128,9 +143,9 @@ function softResetBtnClick() {
   if (BreakInfinityUpgrade.bulkDimBoost.isBought) maxBuyDimBoosts(true);
   else softReset(1)
   
-  for (let tier = 1; tier<9; tier++) {
-    const mult = DimBoost.power.pow(player.resets + 1 - tier);
-    if (mult.gt(1)) floatText(tier, "x" + shortenDimensions(mult));
+  for (let tier = 1; tier < 9; tier++) {
+    const mult = DimBoost.power.pow(DimBoost.totalBoosts() + 1 - tier);
+    if (mult.gt(1)) floatText(tier, formatX(mult));
   }
 }
 
@@ -142,7 +157,7 @@ function maxBuyDimBoosts(manual) {
   }
   let availableBoosts = Number.MAX_VALUE;
   if (Autobuyer.dimboost.galaxies > player.galaxies && !manual) {
-    availableBoosts = Autobuyer.dimboost.maxDimBoosts - player.resets;
+    availableBoosts = Autobuyer.dimboost.maxDimBoosts - DimBoost.purchasedBoosts();
   }
   if (availableBoosts <= 0) return;
 

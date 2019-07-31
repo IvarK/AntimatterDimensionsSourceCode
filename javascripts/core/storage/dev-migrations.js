@@ -427,6 +427,10 @@ GameStorage.devMigrations = {
     player => {
       player.eternities = new Decimal(player.eternities);
       player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+    },
+    player => {
+      player.dimensionBoosts = player.resets;
+      delete player.resets;
     }
   ],
 

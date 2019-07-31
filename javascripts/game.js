@@ -521,6 +521,11 @@ function gameLoop(diff, options = {}) {
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
 
+    // I need to make up some better in-game explanation for this, but free dimboosts created by time compression are
+    // much less strongly affected by game speed positively and negatively.  It needs to be this way so that it can
+    // still be useful during compression without being utterly broken outside of it.
+    player.celestials.ra.compression.freeDimboosts += getFreeDimboostsPerSecond() * (realDiff / 1000);
+
     DeltaTimeState.update(realDiff, diff);
 
     updateNormalAndInfinityChallenges(diff);

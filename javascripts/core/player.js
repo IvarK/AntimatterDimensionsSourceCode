@@ -131,7 +131,7 @@ let player = {
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
   thisInfinityLastBuyTime: 0,
-  resets: 0,
+  dimensionBoosts: 0,
   galaxies: 0,
   tickDecrease: 0.9,
   totalAntimatter: new Decimal(0),
@@ -397,7 +397,7 @@ let player = {
         active: false,
         entanglement: 0,
         upgrades: new Set(),
-        freeDimboost: 0
+        freeDimboosts: 0
       },
     },
     laitela: {

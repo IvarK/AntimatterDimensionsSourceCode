@@ -4,7 +4,7 @@ Vue.component("statistics-tab", {
   data() {
     return {
       totalAntimatter: new Decimal(0),
-      resets: 0,
+      boosts: 0,
       galaxies: 0,
       realTimePlayed: TimeSpan.zero,
       infinity: {
@@ -38,7 +38,7 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.resets = player.resets;
+      this.boosts = DimBoost.purchasedBoosts();
       this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;
@@ -94,7 +94,7 @@ Vue.component("statistics-tab", {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have done {{ resets }} Dimension {{"Boost/Shift" | pluralize(resets, "Boosts/Shifts")}}.</div>
+        <div>You have purchased {{ boosts }} Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.</div>
         <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
         <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">

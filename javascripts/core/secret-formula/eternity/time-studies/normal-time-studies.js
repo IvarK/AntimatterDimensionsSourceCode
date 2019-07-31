@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: 22,
       description: () => `You gain ${TimeStudy(32).effectValue}x more infinitied stat (based on Dimension Boosts)`,
-      effect: () => Math.max(player.resets, 1)
+      effect: () => Math.max(DimBoost.totalBoosts(), 1)
     },
     {
       id: 33,
@@ -154,7 +154,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 72,
       description: "Dimension Boosts affect Infinity Dimensions",
-      effect: () => Decimal.pow(1.0000109, Math.pow(player.resets, 2)),
+      effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts(), 2)),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -425,7 +425,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(211).isBought && !TimeStudy(222).isBought,
       requirementV: () => TimeStudy(211).isBought && TimeStudy(222).isBought,
       description: "Time Dimensions gain a multiplier based on Dimension Boosts",
-      effect: () => Decimal.pow(1 + 0.0025, player.resets),
+      effect: () => Decimal.pow(1 + 0.0025, DimBoost.totalBoosts()),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -454,7 +454,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         const noun = effect === 1 ? "galaxy" : "galaxies";
         return `Galaxy cost scaling starts ${effect} ${noun} later (1 for every 2000 DimBoosts)`;
       },
-      effect: () => Math.floor(player.resets / 2000)
+      effect: () => Math.floor(DimBoost.totalBoosts() / 2000)
     },
     {
       id: 225,
@@ -497,7 +497,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
       requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
       description: "Dimension Boosts are more effective based on their amount",
-      effect: () => Decimal.pow(player.resets, 0.3).clampMin(1),
+      effect: () => Decimal.pow(DimBoost.totalBoosts(), 0.3).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {
@@ -507,7 +507,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => (TimeStudy(223).isBought || TimeStudy(224).isBought) && TimeStudy(231).isBought,
       description: "Galaxies are more effective based on Antimatter Galaxies",
       effect: () => Math.pow(1 + player.galaxies / 1000, 0.2),
-      formatEffect: value => "+" + formatPercents(value - 1, 3)
+      formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },
     {
       id: 233,

@@ -99,7 +99,7 @@ function bigCrunchReset() {
 }
 
 function secondSoftReset() {
-    player.resets = 0;
+    player.dimensionBoosts = 0;
     player.galaxies = 0;
     player.tickDecrease = 0.9;
     resetAntimatter();

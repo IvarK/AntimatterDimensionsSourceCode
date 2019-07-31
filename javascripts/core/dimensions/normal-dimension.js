@@ -59,7 +59,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     return player.infinityPower.pow(getInfinityConversionRate())
       .max(1)
-      .times(DimBoost.power.pow(player.resets - tier + 1).max(1));
+      .times(DimBoost.power.pow(DimBoost.totalBoosts() - tier + 1).max(1));
   }
   if (NormalChallenge(12).isRunning) {
     if (tier === 4) multiplier = multiplier.pow(1.4);
@@ -677,7 +677,7 @@ class NormalDimensionState extends DimensionState {
 
   get isAvailable() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
-    if (this.tier > player.resets + 4) return false;
+    if (this.tier > DimBoost.totalBoosts() + 4) return false;
     if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && player.eternities.lt(30)) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }

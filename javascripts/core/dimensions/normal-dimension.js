@@ -10,9 +10,7 @@ function normalDimensionCommonMultiplier() {
   multiplier = multiplier.times(kongAllDimMult);
 
   if (!EternityChallenge(9).isRunning) {
-    let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-    if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect
-    multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
+    multiplier = multiplier.times(player.infinityPower.pow(getInfinityConversionRate()).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -59,7 +57,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   let multiplier = new Decimal(NormalDimension(tier).power);
 
   if (EternityChallenge(11).isRunning) {
-    return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate"))
+    return player.infinityPower.pow(getInfinityConversionRate())
       .max(1)
       .times(DimBoost.power.pow(player.resets - tier + 1).max(1));
   }

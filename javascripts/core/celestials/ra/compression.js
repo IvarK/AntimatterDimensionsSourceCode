@@ -48,6 +48,13 @@ class CompressionUpgradeState extends SetPurchasableMechanicState {
   get set() {
     return player.celestials.ra.compression.upgrades;
   }
+
+  get canBeApplied() {
+    // eslint-disable-next-line no-bitwise
+    const requirementFulfilled = new Decimal(this.config.resource()).gte(this.config.threshold()) ^
+      this.config.invertedCondition;
+    return this.isBought && requirementFulfilled;
+  }
 }
 
 const CompressionUpgrade = (function() {

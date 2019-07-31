@@ -245,7 +245,7 @@ dev.showProductionBreakdown = function() {
   const totalCount = AGCount + RGCount + FGCount;
   
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
-  const IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
+  const IDComponent = player.infinityPower.pow(getInfinityConversionRate()).pow(8).pow(IC4pow);
   const DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {

@@ -132,7 +132,7 @@ function timeDimensionCommonMultiplier() {
       AlchemyResource.dimensionality
     );
   if (EternityChallenge(9).isRunning) {
-    mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
+    mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow(getInfinityConversionRate() / 7).log2(), 1), 4)).max(1));
   }
   return mult;
 }

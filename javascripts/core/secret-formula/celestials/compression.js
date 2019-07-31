@@ -8,7 +8,8 @@ GameDatabase.celestials.compression = {
     cost: 5,
     resource: () => player.dilation.freeGalaxies,
     threshold: () => 10000,
-    effect: () => Math.floor(Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.2))
+    invertedCondition: false,
+    effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.2) / 1000
   },
   improvedDTMult: {
     id: 1,
@@ -17,6 +18,7 @@ GameDatabase.celestials.compression = {
     cost: 36,
     resource: () => player.dilation.dilatedTime,
     threshold: () => new Decimal("1e1100"),
+    invertedCondition: false,
     effect: () => 2.2
   },
   replicantiSpeedFromDB: {
@@ -26,6 +28,7 @@ GameDatabase.celestials.compression = {
     cost: 20,
     resource: () => player.replicanti.amount,
     threshold: () => new Decimal("1e1500000"),
+    invertedCondition: false,
     effect: () => Math.pow(player.celestials.ra.compression.freeDimboost, 3)
   },
   strongerDilationGalaxies: {
@@ -33,8 +36,10 @@ GameDatabase.celestials.compression = {
     description: "Galaxies are stronger within dilation and compression",
     secondary: () => `${shorten(13000)} total galaxies`,
     cost: 15,
-    resource: () => undefined,
+    resource: () => player.galaxies + Replicanti.galaxies.total + player.dilation.freeGalaxies,
     threshold: () => 13000,
+    invertedCondition: false,
+    effect: () => 1.5
   },
   freeGalaxySoftcap: {
     id: 4,
@@ -43,30 +48,37 @@ GameDatabase.celestials.compression = {
     cost: 100,
     resource: () => player.antimatter,
     threshold: () => Decimal.pow10(1e11),
+    invertedCondition: false,
+    effect: () => 10000
   },
   freeGalaxyScaling: {
     id: 5,
     description: "Improve the free galaxy threshold formula",
     secondary: () => "Free galaxy threshold below 1.325",
     cost: 30,
-    resource: () => undefined,
+    resource: () => getFreeGalaxyMult(),
     threshold: () => 1.325,
+    invertedCondition: true,
+    effect: () => 0.1 * Math.sqrt(player.dilation.baseFreeGalaxies / 20000)
   },
   infDimSoftcap: {
     id: 6,
     description: "ID softcap increases based on free galaxies past 10,000",
-    secondary: () => "^7.5 Infinity power conversion",
+    secondary: () => "^7.3 Infinity power conversion",
     cost: 24,
-    resource: () => undefined,
-    threshold: () => 7.5,
+    resource: () => getInfinityConversionRate(),
+    threshold: () => 7.3,
+    invertedCondition: false,
     effect: () => 100 * Math.clampMin(player.dilation.freeGalaxies - 10000, 0)
   },
   moreEntanglement: {
     id: 7,
     description: "Gain 30% more entanglement",
-    secondary: () => "???",
-    resource: () => undefined,
+    secondary: () => "No 8th time dimensions",
     cost: 45,
+    resource: () => TimeDimension(8).amount,
+    threshold: () => 0.5,
+    invertedCondition: true,
     effect: () => 1.3
   },
   matterBoost: {
@@ -76,6 +88,7 @@ GameDatabase.celestials.compression = {
     cost: 33,
     resource: () => Laitela.matter,
     threshold: () => 10,
+    invertedCondition: false,
     effect: () => Math.clampMin(player.dilation.dilatedTime.log10() / 1000, 1)
   },
 };

@@ -26,7 +26,9 @@ Vue.component("compression-upgrade", {
     update() {
       this.isBought = this.upgrade.isBought;
       if (this.isBought) {
-        this.isActive = new Decimal(this.upgrade.config.resource()).gte(this.upgrade.config.threshold());
+        // eslint-disable-next-line no-bitwise
+        this.isActive = new Decimal(this.upgrade.config.resource()).gte(this.upgrade.config.threshold()) ^
+          this.upgrade.config.invertedCondition;
       } else {
         this.isAffordable = this.upgrade.isAffordable;
       }
@@ -43,7 +45,7 @@ Vue.component("compression-upgrade", {
         <br><br>
         <span>To activate: {{ upgrade.config.secondary() }}</span>
         <br>
-        <span>(Currently {{ shorten(upgrade.config.resource(), 2, 2) }})</span>
+        <span>(Currently {{ shorten(upgrade.config.resource(), 2, 3) }})</span>
         <br><br>
         <effect-display :config="upgrade.config" />
         <cost-display

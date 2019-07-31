@@ -324,3 +324,8 @@ function tryUnlockInfinityDimensions() {
     }
   }
 }
+
+function getInfinityConversionRate() {
+  const laitelaBoost = Laitela.has(LAITELA_UNLOCKS.ID) ? Laitela.idConversionEffect : 0;
+  return 7 + getAdjustedGlyphEffect("infinityrate") + laitelaBoost;
+}

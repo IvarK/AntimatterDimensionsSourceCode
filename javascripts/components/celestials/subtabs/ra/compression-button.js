@@ -4,7 +4,7 @@ Vue.component("compression-button", {
   data() {
     return {
       timeShards: new Decimal(0),
-      shardRequirement: new Decimal("1e5000000"),
+      shardRequirement: new Decimal("1e3500000"),
       canCompress: false,
       isRunning: false,
       hasGain: false,

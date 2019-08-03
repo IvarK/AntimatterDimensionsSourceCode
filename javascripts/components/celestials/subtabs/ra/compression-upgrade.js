@@ -45,7 +45,7 @@ Vue.component("compression-upgrade", {
         <br><br>
         <span>To activate: {{ upgrade.config.secondary() }}</span>
         <br>
-        <span>(Currently {{ shorten(upgrade.config.resource(), 2, 3) }})</span>
+        <span>(Currently {{ upgrade.config.currentDisplay() }})</span>
         <br><br>
         <effect-display :config="upgrade.config" />
         <cost-display

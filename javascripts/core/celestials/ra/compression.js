@@ -1,7 +1,7 @@
 "use strict";
 
 function toggleCompression() {
-  if (player.timeShards.lt(new Decimal("1e5000000")) && !Ra.isCompressed) {
+  if (player.timeShards.lt(new Decimal("1e3500000")) && !Ra.isCompressed) {
     return;
   }
   if (Ra.isCompressed) {
@@ -43,7 +43,7 @@ function minAntimatterForEntanglement() {
     return Decimal.pow10(9e15);
   }
   const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
-  return Decimal.pow10(2e5 * Math.pow(1 + Ra.entanglement / (30.8 * entanglementMult), 2.5));
+  return Decimal.pow10(2e5 * Math.pow(1 + totalEntanglement() / (30.8 * entanglementMult), 2.5));
 }
 
 class CompressionUpgradeState extends SetPurchasableMechanicState {

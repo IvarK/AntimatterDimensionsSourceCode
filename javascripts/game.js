@@ -238,14 +238,21 @@ function resetInfinityRuns() {
 }
 
 function getInfinitiedMilestoneReward(ms) {
-  // player gains 50% of (timeOffline / average gain of infinitied stat per second for last 10 infinities) infinitied stat
+  // Player gains 50% of (timeOffline / average gain of 
+  // infinitied stat per second for last 10 infinities) infinitied stat
   // if he has 1000 eternities milestone and turned on infinity autobuyer with 1 minute or less per crunch
+
+  function eternitiesReduce(acc, curr) {
+    return curr.length > 3 ? curr[3].dividedBy(curr[2]).plus(acc) : acc;
+  }
+
   let infinitiedTotal = 0;
-  if (player.eternities >= 1000 && player.auto.bigCrunch.isActive && player.auto.bigCrunch.mode == 1 && player.auto.bigCrunch.time < 60) {
-    const averageInfinities = player.lastTenRuns.reduce( 
-      (acc, curr) => curr.length > 3 ? curr[3].dividedBy(curr[2]).plus(acc) : acc
-    ).dividedBy(10);
-    infinitiedTotal = Decimal.floor( averageInfinities.times(ms).dividedBy(2) );
+  if (player.eternities >= 1000 && 
+    player.auto.bigCrunch.isActive && 
+    player.auto.bigCrunch.mode === 1 && 
+    player.auto.bigCrunch.time < 60) {
+    const averageInfinities = player.lastTenRuns.reduce(eternitiesReduce, new Decimal(0)).dividedBy(10);
+    infinitiedTotal = Decimal.floor(averageInfinities.times(ms).dividedBy(2));
   }
   return infinitiedTotal;
 }
@@ -264,11 +271,13 @@ function resetEternityRuns() {
 function getEternitiedMilestoneReward(ms) {
   // Player gains 50% of (timeOffline / average of last 10 eternity times) eternities
   // If he has 100 eternities milestone and turned on eternity autobuyer with 0 EP
+  function eternitiesReduce(acc, curr) {
+    return (curr.length > 3 ? acc + curr[3] / curr[2] : acc);
+  }
+
   let eternitiedTotal = 0;
   if (player.eternities >= 100 && player.auto.eternity.isActive && player.auto.eternity.amount.equals(0)) {
-    const averageEternities = player.lastTenEternities.reduce(
-      (acc, curr) => (curr.length > 3 ? acc + curr[3] / curr[2] : acc)
-    ) / 10;
+    const averageEternities = player.lastTenEternities.reduce(eternitiesReduce, 0) / 10;
     eternitiedTotal = Math.floor(averageEternities * ms / 2);
   }
   return eternitiedTotal;

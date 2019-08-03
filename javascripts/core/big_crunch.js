@@ -54,7 +54,7 @@ function bigCrunchReset() {
   }
   let infinityPoints = gainedInfinityPoints();
   player.infinityPoints = player.infinityPoints.plus(infinityPoints);
-  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints);
+  addInfinityTime(player.thisInfinityTime, player.thisInfinityRealTime, infinityPoints, gainedInfinities().round());
 
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);

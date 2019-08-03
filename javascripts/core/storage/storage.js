@@ -150,6 +150,7 @@ const GameStorage = {
     if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
       diff = Enslaved.autoStoreRealTime(diff);
     }
+    
     if (diff > 1000 * 1000) {
       simulateTime(diff / 1000);
     }

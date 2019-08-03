@@ -21,9 +21,21 @@ GameDatabase.eternity.milestones = {
     eternities: 5,
     reward: "Unlock more Big Crunch autobuyer options"
   },
+  autoEP: {
+    eternities: 6,
+    rewardFn: () => {
+      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds)
+      return `Only while offline, gain 25% of your best EP/min. Currently ${shorten(EPmin, 2, 2)} EP/min`;
+    },
+    reward: "Only while offline, gain 25% of your best EP/min. Currently"
+  },
   autoIC: {
     eternities: 7,
     reward: "You complete Infinity Challenges as soon as you unlock them (you get sacrifice autobuyer immediately)"
+  },
+  keepBreakUpgrades: {
+    eternities: 8,
+    reward: "You keep your Breaking Infinity upgrades on Eternity"
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -65,10 +77,6 @@ GameDatabase.eternity.milestones = {
     eternities: 18,
     reward: "Unlock autobuyer for the 8th Infinity Dimension"
   },
-  keepBreakUpgrades: {
-    eternities: 20,
-    reward: "You keep your Breaking Infinity upgrades on Eternity"
-  },
   autoUnlockID: {
     eternities: 25,
     reward: "You automatically unlock Infinity Dimensions upon reaching them"
@@ -95,6 +103,19 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerEternity: {
     eternities: 100,
-    reward: "Unlock autobuyer for Eternities"
+    rewardFn: () => {
+      const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
+      return `Unlock autobuyer for Eternities. 
+      Only while offline, gain eternities based on the last 10 eternities. 
+      Currently ${shorten(eternities, 2, 2)}/hour`;
+    },
+  },
+  autoInfinities: {
+    eternities: 1000,
+    rewardFn: () => {
+      const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
+      return `Only while offline, 
+      gain infinities based on the last 10 infinities. Currently ${shorten(infinities, 2, 2)}/hour`;
+    },
   }
 };

@@ -155,8 +155,8 @@ let player = {
     themes: new Set(),
     secretTS: 0,    // incremented every time secret time study toggles
   },
-  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
-  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime]),
+  lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
+  lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),

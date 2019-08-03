@@ -110,7 +110,7 @@ function buyUntilTen(tier) {
 
 function playerInfinityUpgradesOnEternity() {
   if (player.eternities < 4) player.infinityUpgrades.clear();
-  else if (player.eternities < 20) {
+  else if (player.eternities < 8) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
       "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]);
@@ -226,26 +226,60 @@ function averageRun(runs) {
     ];
 }
 
-function addInfinityTime(time, realTime, ip) {
+function addInfinityTime(time, realTime, ip, infinities) {
   player.lastTenRuns.pop();
-  player.lastTenRuns.unshift([time, ip, realTime]);
+  player.lastTenRuns.unshift([time, ip, realTime, infinities]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 function resetInfinityRuns() {
-  player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31], new Decimal(1));
   GameCache.bestRunIPPM.invalidate();
 }
 
-function addEternityTime(time, realTime, ep) {
+function getInfinitiedMilestoneReward(ms) {
+  // player gains 50% of (timeOffline / average gain of infinitied stat per second for last 10 infinities) infinitied stat
+  // if he has 1000 eternities milestone and turned on infinity autobuyer with 1 minute or less per crunch
+  let infinitiedTotal = 0;
+  if (player.eternities >= 1000 && player.auto.bigCrunch.isActive && player.auto.bigCrunch.mode == 1 && player.auto.bigCrunch.time < 60) {
+    const averageInfinities = player.lastTenRuns.reduce( 
+      (acc, curr) => curr.length > 3 ? curr[3].dividedBy(curr[2]).plus(acc) : acc
+    ).dividedBy(10);
+    infinitiedTotal = Decimal.floor( averageInfinities.times(ms).dividedBy(2) );
+  }
+  return infinitiedTotal;
+}
+
+function addEternityTime(time, realTime, ep, eternities) {
   player.lastTenEternities.pop();
-  player.lastTenEternities.unshift([time, ep, realTime]);
+  player.lastTenEternities.unshift([time, ep, realTime, eternities]);
   GameCache.averageEPPerRun.invalidate();
 }
 
 function resetEternityRuns() {
-  player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31]);
+  player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]);
   GameCache.averageEPPerRun.invalidate();
+}
+
+function getEternitiedMilestoneReward(ms) {
+  // Player gains 50% of (timeOffline / average of last 10 eternity times) eternities
+  // If he has 100 eternities milestone and turned on eternity autobuyer with 0 EP
+  let eternitiedTotal = 0;
+  if (player.eternities >= 100 && player.auto.eternity.isActive && player.auto.eternity.amount.equals(0)) {
+    const averageEternities = player.lastTenEternities.reduce(
+      (acc, curr) => (curr.length > 3 ? acc + curr[3] / curr[2] : acc)
+    ) / 10;
+    eternitiedTotal = Math.floor(averageEternities * ms / 2);
+  }
+  return eternitiedTotal;
+}
+
+function getOfflineEPGain(ms) {
+  const bestRun = player.lastTenEternities.reduce(
+    (acc, curr) => Decimal.max(acc, curr[1].dividedBy(curr[0]))
+  );
+
+  return bestRun.times(ms);
 }
 
 function addRealityTime(time, realTime, rm, level) {
@@ -750,6 +784,11 @@ function simulateTime(seconds, real, fast) {
     else {
       gameLoopWithAutobuyers((50+bonusDiff) / 1000, ticks, real)
     }
+
+    
+    player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(diff));
+    player.eternities += getEternitiedMilestoneReward(diff);
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(diff));
 
     const offlineIncreases = ["While you were away"];
     // OoM increase

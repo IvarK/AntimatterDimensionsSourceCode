@@ -20,7 +20,7 @@ function eternity(force, auto, specialConditions = {}) {
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
+    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints(), Effects.product(RealityUpgrade(3)));
     player.eternities += Effects.product(RealityUpgrade(3));
   }
 
@@ -207,7 +207,7 @@ class EternityMilestoneState {
   }
 }
 
-const EternityMilestone = function() {
+const EternityMilestone = (function() {
   const db = GameDatabase.eternity.milestones;
   const infinityDims = Array.dimensionTiers
     .map(tier => new EternityMilestoneState(db["autobuyerID" + tier]));
@@ -217,6 +217,7 @@ const EternityMilestone = function() {
     autobuyerReplicantiGalaxy: new EternityMilestoneState(db.autobuyerReplicantiGalaxy),
     keepInfinityUpgrades: new EternityMilestoneState(db.keepInfinityUpgrades),
     bigCrunchModes: new EternityMilestoneState(db.bigCrunchModes),
+    autoEP: new EternityMilestoneState(db.autoEP),
     autoIC: new EternityMilestoneState(db.autoIC),
     autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
     autobuyMaxDimboosts: new EternityMilestoneState(db.autobuyMaxDimboosts),
@@ -229,8 +230,9 @@ const EternityMilestone = function() {
     autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
     autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
     autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
+    autoInfinities: new EternityMilestoneState(db.autoInfinities),
   };
-}();
+}());
 
 class EternityUpgradeState extends SetPurchasableMechanicState {
   get currency() {

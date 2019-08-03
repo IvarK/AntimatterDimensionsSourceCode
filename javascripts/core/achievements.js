@@ -150,7 +150,7 @@ const Achievements = {
   },
 
   get timeUntilNext() {
-    const firstDisabled = Achievements.all.find(a => !a.isEnabled);
+    const firstDisabled = Achievements.all.find(a => a.hasLockedTime && !a.isEnabled);
     return firstDisabled === undefined ? 0 : firstDisabled.remainingDisabledTime;
   },
 

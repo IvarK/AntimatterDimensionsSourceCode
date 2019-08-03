@@ -8,6 +8,10 @@ Notation.empty = new class EmptyNotation extends Notation {
   get isPainful() {
     return true;
   }
+  
+  formatInfinite() {
+    return " ";
+  }
 
   formatUnder1000() {
     return " ";

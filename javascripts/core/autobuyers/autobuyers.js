@@ -16,14 +16,7 @@ const Autobuyers = (function() {
   return {
     all,
     dimensions,
-    intervaled: dimensions
-      .concat([
-        Autobuyer.tickspeed,
-        Autobuyer.dimboost,
-        Autobuyer.galaxy,
-        Autobuyer.sacrifice,
-        Autobuyer.bigCrunch
-      ]),
+    upgradeable: dimensions.concat([Autobuyer.tickspeed]),
 
     get unlocked() {
       return Autobuyers.all.filter(a => a.isUnlocked);

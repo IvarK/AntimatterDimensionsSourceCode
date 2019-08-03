@@ -5,7 +5,13 @@ Vue.component("time-compression-tab", {
     return {
       entanglement: 0,
       recordAntimatter: new Decimal(0),
+      respec: false,
     };
+  },
+  watch: {
+    respec(newValue) {
+      player.celestials.ra.compression.respec = newValue;
+    }
   },
   computed: {
     upgrades() {
@@ -26,12 +32,19 @@ Vue.component("time-compression-tab", {
           CompressionUpgrade.matterBoost
         ],
       ];
+    },
+    respecClassObject() {
+      return {
+        "o-primary-btn--respec-options": true,
+        "o-primary-btn--respec-active": this.respec
+      };
     }
   },
   methods: {
     update() {
       this.entanglement = player.celestials.ra.compression.entanglement;
       this.recordAntimatter.copyFrom(player.dilation.tachyonParticles);
+      this.respec = player.celestials.ra.compression.respec;
     }
   },
   template:
@@ -56,5 +69,9 @@ Vue.component("time-compression-tab", {
           />
         </div>
       </div>
+      <primary-button
+          :class="respecClassObject"
+          @click="respec = !respec"
+        >Respec compression upgrades on Reality</primary-button>
     </div>`
 });

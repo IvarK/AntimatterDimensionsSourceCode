@@ -396,7 +396,8 @@ let player = {
       compression: {
         active: false,
         entanglement: 0,
-        upgrades: new Set()
+        upgrades: new Set(),
+        respec: false
       },
     },
     laitela: {

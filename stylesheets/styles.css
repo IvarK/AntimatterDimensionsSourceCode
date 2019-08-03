@@ -1602,16 +1602,6 @@ screen and (max-width: 480px) {
   font-size: 1rem;
 }
 
-.o-primary-btn--discharge-active {
-  background-color: #5ac467;
-}
-
-.o-primary-btn--discharge-active:hover {
-  background-color: #5ac467;
-  color: black;
-  cursor: default;
-}
-
 /*#endregion modifiers*/
 
 /*#region themes*/

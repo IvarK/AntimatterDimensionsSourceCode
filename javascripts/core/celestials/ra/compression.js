@@ -12,10 +12,14 @@ function toggleCompression() {
   Ra.isCompressed = !Ra.isCompressed;
 }
 
+function totalEntanglement() {
+  return Ra.entanglement + Ra.spentEntanglement;
+}
+
 // Updates entanglement
 function rewardEntanglement() {
   const newEntanglement = entanglementThisRun();
-  Ra.entanglement = Math.max(Ra.entanglement, newEntanglement);
+  Ra.entanglement = Math.max(Ra.entanglement, newEntanglement) - Ra.spentEntanglement;
 }
 
 // Returns how much entanglement the current run will give
@@ -30,7 +34,7 @@ function entanglementThisRun() {
 
 // Returns amount of entanglement gained this run, used only for display purposes
 function getEntanglementGain() {
-  return Math.max(0, entanglementThisRun() - Ra.entanglement);
+  return Math.max(0, entanglementThisRun() - totalEntanglement());
 }
 
 // Returns the mimimum antimatter to gain entanglement, only used for display

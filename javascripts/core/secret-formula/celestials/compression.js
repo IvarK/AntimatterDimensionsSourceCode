@@ -3,13 +3,13 @@
 GameDatabase.celestials.compression = {
   freeBoost: {
     id: 0,
-    description: "Generate free dimboosts based on free galaxy count",
+    description: "Get free dimboosts based on free galaxy count",
     secondary: () => `${shorten(10000)} free galaxies`,
     cost: 5,
     resource: () => player.dilation.freeGalaxies,
     threshold: () => 10000,
     invertedCondition: false,
-    effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.2) / 1000
+    effect: () => Math.pow(Math.clampMin(player.dilation.freeGalaxies - 10000, 0), 1.6)
   },
   improvedDTMult: {
     id: 1,
@@ -29,17 +29,17 @@ GameDatabase.celestials.compression = {
     resource: () => player.replicanti.amount,
     threshold: () => new Decimal("1e1500000"),
     invertedCondition: false,
-    effect: () => Math.pow(player.celestials.ra.compression.freeDimboosts, 3)
+    effect: () => Math.pow(DimBoost.freeBoosts(), 25)
   },
   strongerDilationGalaxies: {
     id: 3,
-    description: "Galaxies are stronger within dilation and compression",
-    secondary: () => `${shorten(13000)} total galaxies`,
+    description: "Galaxies are twice as strong when dilated",
+    secondary: () => `${shortenSmallInteger(13000)} total galaxies`,
     cost: 15,
     resource: () => player.galaxies + Replicanti.galaxies.total + player.dilation.freeGalaxies,
     threshold: () => 13000,
     invertedCondition: false,
-    effect: () => 1.5
+    effect: () => 2
   },
   freeGalaxySoftcap: {
     id: 4,
@@ -53,10 +53,10 @@ GameDatabase.celestials.compression = {
   },
   freeGalaxyScaling: {
     id: 5,
-    description: "Improve the free galaxy threshold formula",
+    description: "Improve the free galaxy threshold scaling",
     secondary: () => "Free galaxy threshold below 1.325",
     cost: 30,
-    resource: () => getFreeGalaxyMult(),
+    resource: () => getFreeGalaxyMultBeforeCompression(),
     threshold: () => 1.325,
     invertedCondition: true,
     effect: () => 0.1 * Math.sqrt(player.dilation.baseFreeGalaxies / 20000)

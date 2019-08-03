@@ -520,12 +520,7 @@ function gameLoop(diff, options = {}) {
       diff *= getGameSpeedupFactor();
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
-
-    // I need to make up some better in-game explanation for this, but free dimboosts created by time compression are
-    // much less strongly affected by game speed positively and negatively.  It needs to be this way so that it can
-    // still be useful during compression without being utterly broken outside of it.
-    player.celestials.ra.compression.freeDimboosts += getFreeDimboostsPerSecond() * (realDiff / 1000);
-
+    
     DeltaTimeState.update(realDiff, diff);
 
     updateNormalAndInfinityChallenges(diff);
@@ -695,17 +690,22 @@ function gameLoop(diff, options = {}) {
     if (TimeStudy.dilation.isBought) {
       player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
     }
-    // Free galaxies (2x doesn't apply past 1000)
-    let freeGalaxyMult = Effects.max(
+
+    // Free galaxies
+    const freeGalaxyMult = Effects.max(
       1,
       DilationUpgrade.doubleGalaxies
     );
-    if (player.dilation.baseFreeGalaxies == undefined)
+    const freeGalaxyThreshold = Effects.max(1000, CompressionUpgrade.freeGalaxySoftcap);
+    if (player.dilation.baseFreeGalaxies === undefined)
       player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
-    let thresholdMult = getFreeGalaxyMult();
-    player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies, 1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
-    player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult).pow(player.dilation.baseFreeGalaxies));
-    player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, 1000) + Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - 1000, 0) / freeGalaxyMult;
+    const thresholdMult = getFreeGalaxyMult();
+    player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
+      1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
+    player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
+      .pow(player.dilation.baseFreeGalaxies));
+    player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, freeGalaxyThreshold) +
+      Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
 
     if (!Teresa.isRunning) {
       let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;

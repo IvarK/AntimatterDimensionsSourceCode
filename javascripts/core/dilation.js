@@ -78,11 +78,17 @@ function buyDilationUpgrade(id, bulk) {
   return true
 }
 
-function getFreeGalaxyMult() {
+// This two are separate to avoid an infinite loop as the compression unlock condition checks the free galaxy mult
+function getFreeGalaxyMultBeforeCompression() {
   const thresholdMult = 3.65 * DilationUpgrade.galaxyThreshold.effectValue + 0.35;
   const glyphEffect = getAdjustedGlyphEffect("dilationgalaxyThreshold");
   const glyphReduction = glyphEffect === 0 ? 1 : glyphEffect;
-  return thresholdMult * glyphReduction + 1;
+  return 1 + thresholdMult * glyphReduction;
+}
+
+function getFreeGalaxyMult() {
+  const compressionReduction = Effects.max(0, CompressionUpgrade.freeGalaxyScaling);
+  return getFreeGalaxyMultBeforeCompression() - compressionReduction;
 }
 
 function getDilationGainPerSecond() {

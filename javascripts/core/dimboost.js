@@ -83,11 +83,7 @@ class DimBoost {
   }
 
   static freeBoosts() {
-    // If the compression upgrade isn't active, then make it so free boosts don't count either
-    const isGenerating = Effects.sum(CompressionUpgrade.freeBoost) !== 0;
-    return isGenerating
-      ? Math.floor(player.celestials.ra.compression.freeDimboosts)
-      : 0;
+    return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
   }
 
   static totalBoosts() {

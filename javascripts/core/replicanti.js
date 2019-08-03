@@ -78,6 +78,7 @@ function getReplicantiInterval(noMod, intervalIn) {
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
   interval = interval.dividedByEffectOf(AlchemyResource.replication);
+  interval = interval.divide(Effects.max(1, CompressionUpgrade.replicantiSpeedFromDB));
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.

@@ -396,8 +396,7 @@ let player = {
       compression: {
         active: false,
         entanglement: 0,
-        upgrades: new Set(),
-        freeDimboosts: 0
+        upgrades: new Set()
       },
     },
     laitela: {

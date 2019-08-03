@@ -24,7 +24,8 @@ function entanglementThisRun() {
     return 0;
   }
   const value = player.antimatter;
-  return 308 * Math.clamp((Math.pow(value.log10() / 2e5, 0.4) - 1) / 10, 0, 1);
+  const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
+  return 308 * Math.clamp((Math.pow(value.log10() / 2e5, 0.4) - 1) / 10 * entanglementMult, 0, 1);
 }
 
 // Returns amount of entanglement gained this run, used only for display purposes
@@ -32,16 +33,13 @@ function getEntanglementGain() {
   return Math.max(0, entanglementThisRun() - Ra.entanglement);
 }
 
-// Returns the mimimum antimatter to gain entanglement
+// Returns the mimimum antimatter to gain entanglement, only used for display
 function minAntimatterForEntanglement() {
   if (Ra.entanglement === 100) {
     return Decimal.pow10(9e15);
   }
-  return Decimal.pow10(2e5 * Math.pow(1 + Ra.entanglement / 30.8, 2.5));
-}
-
-function getFreeDimboostsPerSecond() {
-  return Effects.sum(CompressionUpgrade.freeBoost) * (1 + Math.log10(getGameSpeedupFactor()) / 500);
+  const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
+  return Decimal.pow10(2e5 * Math.pow(1 + Ra.entanglement / (30.8 * entanglementMult), 2.5));
 }
 
 class CompressionUpgradeState extends SetPurchasableMechanicState {

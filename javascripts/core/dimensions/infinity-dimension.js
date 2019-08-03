@@ -240,10 +240,11 @@ class InfinityDimensionState extends DimensionState {
     if (Enslaved.isRunning) {
       return 1;
     }
-    if (Enslaved.isCompleted) {
-      return this._purchaseCap + Math.floor(player.totalTickGained / 1000) * 1000;
-    }
-    return this._purchaseCap;
+    const enslavedBoost = Enslaved.isCompleted
+      ? Math.floor(player.totalTickGained / 1000) * 1000
+      : 0;
+    const compressionBoost = Effects.max(0, CompressionUpgrade.infDimSoftcap);
+    return this._purchaseCap + enslavedBoost + compressionBoost;
   }
 
   get baseAmountCap() {

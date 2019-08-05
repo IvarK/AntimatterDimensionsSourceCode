@@ -33,6 +33,8 @@ let player = {
   achievements: new Set(),
   secretAchievements: new Set(),
   infinityUpgrades: new Set(),
+  usedMaxAll: false,
+  bestIpPerMsWithoutMaxAll: new Decimal(0),
   infinityRebuyables: [0, 0],
   challenge: {
     normal: {

@@ -59,6 +59,12 @@ function bigCrunchReset() {
   player.infinitied = player.infinitied.plus(gainedInfinities().round());
   player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime);
 
+  if (!player.usedMaxAll) {
+    const bestIpPerMsWithoutMaxAll = infinityPoints.dividedBy(player.thisInfinityRealTime);
+    player.bestIpPerMsWithoutMaxAll = Decimal.max(bestIpPerMsWithoutMaxAll, player.bestIpPerMsWithoutMaxAll);
+  }
+  player.usedMaxAll = false;
+
   if (EternityChallenge(4).tryFail()) return;
 
   // FIXME: Infinitified is now Decimal so decide what happens here!
@@ -250,6 +256,8 @@ function disChargeAll() {
   InfinityUpgrade.skipReset2 = upgrade(db.skipReset2, InfinityUpgrade.skipReset1);
   InfinityUpgrade.skipReset3 = upgrade(db.skipReset3, InfinityUpgrade.skipReset2);
   InfinityUpgrade.skipResetGalaxy = upgrade(db.skipResetGalaxy, InfinityUpgrade.skipReset3);
+
+  InfinityUpgrade.ipOffline = upgrade(db.ipOffline, InfinityUpgrade.totalTimeMult);
 }());
 
 class InfinityIPMultUpgrade extends GameMechanicState {

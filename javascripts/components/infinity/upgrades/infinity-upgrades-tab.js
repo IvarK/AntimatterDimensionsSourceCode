@@ -47,6 +47,9 @@ Vue.component("infinity-upgrades-tab", {
         "o-primary-btn--discharge-options": true,
         "o-primary-btn--discharge-active": this.disCharge
       };
+    },
+    offlineIpButton() {
+      return InfinityUpgrade.ipOffline;
     }
   },
   methods: {
@@ -85,6 +88,12 @@ Vue.component("infinity-upgrades-tab", {
           />
         </div>
       </div>
-      <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+      <div class="l-infinity-upgrades-bottom-row">
+        <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
+        <infinity-upgrade-button
+          :upgrade="offlineIpButton"
+          :class="btnClassObject(1)"
+        />
+      </div>
     </div>`
 });

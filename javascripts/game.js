@@ -20,6 +20,9 @@ function floatText(tier, text) {
 
 function maxAll() {
   if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
+
+  player.usedMaxAll = true;
+
   buyMaxTickSpeed();
 
   for (let tier = 1; tier < 9; tier++) {
@@ -284,11 +287,12 @@ function getEternitiedMilestoneReward(ms) {
 }
 
 function getOfflineEPGain(ms) {
+  if (player.eternities < 6) return new Decimal(0);
   const bestRun = player.lastTenEternities.reduce(
     (acc, curr) => Decimal.max(acc, curr[1].dividedBy(curr[0]))
   );
 
-  return bestRun.times(ms);
+  return bestRun.times(ms / 4);
 }
 
 function addRealityTime(time, realTime, rm, level) {
@@ -798,6 +802,10 @@ function simulateTime(seconds, real, fast) {
     player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(diff));
     player.eternities += getEternitiedMilestoneReward(diff);
     player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(diff));
+
+    if (InfinityUpgrade.ipOffline.isBought) {
+      player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(ms / 2))
+    }
 
     const offlineIncreases = ["While you were away"];
     // OoM increase

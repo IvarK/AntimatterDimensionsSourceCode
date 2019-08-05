@@ -20,7 +20,12 @@ function eternity(force, auto, specialConditions = {}) {
     EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
     player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
     player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints(), Effects.product(RealityUpgrade(3)));
+    addEternityTime(
+      player.thisEternity, 
+      player.thisEternityRealTime, 
+      gainedEternityPoints(), 
+      Effects.product(RealityUpgrade(3))
+    );
     player.eternities += Effects.product(RealityUpgrade(3));
   }
 

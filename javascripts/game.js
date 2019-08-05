@@ -236,7 +236,10 @@ function addInfinityTime(time, realTime, ip, infinities) {
 }
 
 function resetInfinityRuns() {
-  player.lastTenRuns = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31], new Decimal(1));
+  player.lastTenRuns = Array.from(
+    { length: 10 }, 
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, new Decimal(1)]
+  );
   GameCache.bestRunIPPM.invalidate();
 }
 
@@ -267,7 +270,10 @@ function addEternityTime(time, realTime, ep, eternities) {
 }
 
 function resetEternityRuns() {
-  player.lastTenEternities = Array.from({length:10}, () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]);
+  player.lastTenEternities = Array.from(
+    { length: 10 }, 
+    () => [600 * 60 * 24 * 31, new Decimal(1), 600 * 60 * 24 * 31, 1]
+  );
   GameCache.averageEPPerRun.invalidate();
 }
 
@@ -804,7 +810,7 @@ function simulateTime(seconds, real, fast) {
     player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
 
     if (InfinityUpgrade.ipOffline.isBought) {
-      player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2))
+      player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2));
     }
 
     const offlineIncreases = ["While you were away"];

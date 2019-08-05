@@ -20,7 +20,7 @@ Vue.component("eternity-milestone", {
       return this.config.eternities;
     },
     reward() {
-      if (this.config.rewardFn) return this.config.rewardFn()
+      if (this.config.rewardFn) return this.config.rewardFn();
       return this.config.reward;
     },
     rewardClassObject() {

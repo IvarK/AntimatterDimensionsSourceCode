@@ -24,7 +24,7 @@ GameDatabase.eternity.milestones = {
   autoEP: {
     eternities: 6,
     rewardFn: () => {
-      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds)
+      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
       return `Only while offline, gain 25% of your best EP/min. Currently ${shorten(EPmin, 2, 2)} EP/min`;
     },
     reward: "Only while offline, gain 25% of your best EP/min. Currently"

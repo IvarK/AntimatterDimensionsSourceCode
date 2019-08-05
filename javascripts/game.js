@@ -799,12 +799,12 @@ function simulateTime(seconds, real, fast) {
     }
 
     
-    player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(diff));
-    player.eternities += getEternitiedMilestoneReward(diff);
-    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(diff));
+    player.infinitied = player.infinitied.plus(getInfinitiedMilestoneReward(seconds * 1000));
+    player.eternities += getEternitiedMilestoneReward(seconds * 1000);
+    player.eternityPoints = player.eternityPoints.plus(getOfflineEPGain(seconds * 1000));
 
     if (InfinityUpgrade.ipOffline.isBought) {
-      player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(ms / 2))
+      player.infinityPoints = player.infinityPoints.plus(player.bestIpPerMsWithoutMaxAll.times(seconds * 1000 / 2))
     }
 
     const offlineIncreases = ["While you were away"];

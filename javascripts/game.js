@@ -116,7 +116,7 @@ function playerInfinityUpgradesOnEternity() {
   else if (player.eternities < 8) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
-      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy"]);
+      "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy", "ipOffline"]);
   }
 }
 

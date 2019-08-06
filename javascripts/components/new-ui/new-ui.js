@@ -19,6 +19,11 @@ Vue.component("new-ui", {
     <div class="game-container">
       <news-ticker />
       <div class="tab-container">
+        <div class="l-reset-buttons-container">
+          <game-header-big-crunch-button/>
+          <reality-button/>
+          <game-header-eternity-button/>
+        </div>
         <div v-if="showCrunch">
           <h3>The world has collapsed due to excess antimatter.</h3>
           <button class="btn-big-crunch" onclick="bigCrunchResetRequest()">Big Crunch</button>

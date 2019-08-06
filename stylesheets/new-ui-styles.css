@@ -175,9 +175,9 @@ body.t-dark {
 }
 
 .t-dark #antimatter {animation: a-game-header__antimatter--glow 25s infinite;}
-#ip { color: var(--color-infinity) }
-#ep { color: var(--color-eternity) }
-#rm { color: var(--color-reality) }
+.o-color-infinity { color: var(--color-infinity) !important }
+.o-color-eternity { color: var(--color-eternity) !important }
+.o-color-reality { color: var(--color-reality) !important }
 
 .resource-infinity-canreset,
 .resource-eternity-canreset {
@@ -394,9 +394,16 @@ body.t-dark {
   color: var(--color-text);;
 }
 
+.l-reset-buttons-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+}
+
 .tab-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .tab-container > .l-normal-dim-tab {
@@ -915,4 +922,8 @@ body.t-dark {
   align-items: center;
   height: 100%;
   padding: 0 10px;
+}
+
+.l-game-header__big-crunch-btn, .l-game-header__eternity-btn {
+  position: initial;
 }

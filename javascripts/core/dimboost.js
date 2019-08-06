@@ -145,18 +145,12 @@ function softResetBtnClick() {
   }
 }
 
-function maxBuyDimBoosts(manual) {
+function maxBuyDimBoosts() {
   // Shifts are bought one at a time, unlocking the next dimension
   if (DimBoost.isShift) {
     if (DimBoost.requirement.isSatisfied) softReset(1);
     return;
   }
-  let availableBoosts = Number.MAX_VALUE;
-  if (Autobuyer.dimboost.galaxies > player.galaxies && !manual) {
-    availableBoosts = Autobuyer.dimboost.maxDimBoosts - DimBoost.purchasedBoosts();
-  }
-  if (availableBoosts <= 0) return;
-
   const req1 = DimBoost.bulkRequirement(1);
   if (!req1.isSatisfied) return;
   const req2 = DimBoost.bulkRequirement(2);
@@ -164,7 +158,7 @@ function maxBuyDimBoosts(manual) {
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
   const increase = req2.amount - req1.amount;
-  let maxBoosts = Math.min(availableBoosts,
+  let maxBoosts = Math.min(Number.MAX_VALUE,
     1 + Math.floor((NormalDimension(req1.tier).amount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) return softReset(maxBoosts);
 

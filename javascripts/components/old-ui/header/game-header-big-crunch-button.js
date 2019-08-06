@@ -16,9 +16,15 @@ Vue.component("game-header-big-crunch-button", {
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
     amountStyles() {
+      if (this.currentIP.lt(1e50)) return {};
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
-      const rgb = [(1 - ratio) * 10 * 255, 0, (ratio - 1) * 10 * 255];
-      return { color: `rbg(${rgb.join(",")})` };
+      const rgb = [
+        Math.round(255 - (ratio - 1) * 10 * 255),
+        Math.round(255 - (1 - ratio) * 10 * 255),
+        ratio > 1 ? Math.round(255 - (ratio - 1) * 10 * 255)
+        : Math.round(255 - (1 - ratio) * 10 * 255)
+      ];
+      return { color: `rgb(${rgb.join(",")})` };
     }
   },
   methods: {

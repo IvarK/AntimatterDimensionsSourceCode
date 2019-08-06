@@ -1911,6 +1911,10 @@ screen and (max-width: 480px) {
   background-color: white;
 }
 
+.o-prestige-btn--eternity:hover b {
+  color: #511568 !important;
+}
+
 .t-dark .o-prestige-btn--eternity {
   background-color: black;
 }

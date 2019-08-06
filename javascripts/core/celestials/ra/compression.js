@@ -19,7 +19,7 @@ function totalEntanglement() {
 // Updates entanglement
 function rewardEntanglement() {
   const newEntanglement = entanglementThisRun();
-  Ra.entanglement = Math.max(Ra.entanglement, newEntanglement) - Ra.spentEntanglement;
+  Ra.entanglement = Math.max(Ra.entanglement, newEntanglement - Ra.spentEntanglement);
 }
 
 // Returns how much entanglement the current run will give

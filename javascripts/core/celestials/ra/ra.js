@@ -49,7 +49,7 @@ class RaPetState {
     if (this.level < 25) {
       return Math.floor(4000 * Math.pow(1.18, this.level + 30));
     }
-    return Math.floor(4000 * Math.pow(1.18, 3 * this.level - 20));
+    return Math.floor(4000 * Math.pow(1.18, 7 * this.level - 120));
   }
 
   addGainedExp() {

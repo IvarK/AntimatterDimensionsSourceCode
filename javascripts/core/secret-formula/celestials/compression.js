@@ -4,7 +4,7 @@ GameDatabase.celestials.compression = {
   freeBoost: {
     id: 0,
     description: "Get free dimboosts based on free galaxy count",
-    secondary: () => `${shorten(10000)} free galaxies`,
+    secondary: () => `${shortenSmallInteger(10000)} free galaxies`,
     cost: 2,
     resource: () => player.dilation.freeGalaxies,
     threshold: () => 10000,

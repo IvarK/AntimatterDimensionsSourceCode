@@ -395,9 +395,8 @@ body.t-dark {
 }
 
 .l-reset-buttons-container {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 2rem;
+  position: relative;
+  min-height: 8rem;
 }
 
 .tab-container {
@@ -924,6 +923,20 @@ body.t-dark {
   padding: 0 10px;
 }
 
-.l-game-header__big-crunch-btn, .l-game-header__eternity-btn {
-  position: initial;
+.l-game-header__big-crunch-btn {
+  top: 15%;
+  left: 72%;
+} 
+.l-game-header__eternity-btn {
+  top: 15%;
+  right: 72%;
+}
+
+.l-reset-buttons-container .l-reality-button {
+  margin-top: 1.7rem;
+  margin-bottom: 0;
+}
+
+.c-achievements-tab__timer {
+  color: white;
 }

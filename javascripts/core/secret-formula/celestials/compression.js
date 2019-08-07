@@ -15,10 +15,10 @@ GameDatabase.celestials.compression = {
   improvedDTMult: {
     id: 1,
     description: "Improve the rebuyable DT multiplier to 2.2x",
-    secondary: () => `${shorten(new Decimal("1e1100"))} Dilated Time`,
-    cost: 36,
+    secondary: () => `${shorten(new Decimal("1e1400"))} Dilated Time`,
+    cost: 21,
     resource: () => player.dilation.dilatedTime,
-    threshold: () => new Decimal("1e1100"),
+    threshold: () => new Decimal("1e1400"),
     currentDisplay: () => shorten(player.dilation.dilatedTime, 2, 2),
     invertedCondition: false,
     effect: () => 2.2
@@ -62,7 +62,7 @@ GameDatabase.celestials.compression = {
     id: 5,
     description: "Improve the free galaxy threshold scaling",
     secondary: () => "Free galaxy threshold below 1.325",
-    cost: 30,
+    cost: 45,
     resource: () => getFreeGalaxyMultBeforeCompression(),
     threshold: () => 1.325,
     currentDisplay: () => shorten(getFreeGalaxyMult(), 2, 3),
@@ -82,14 +82,14 @@ GameDatabase.celestials.compression = {
   },
   moreEntanglement: {
     id: 7,
-    description: "Gain 30% more entanglement",
+    description: "Gain 40% more entanglement",
     secondary: () => "No 8th time dimensions",
     cost: 48,
     resource: () => TimeDimension(8).amount,
     threshold: () => 0.5,
     currentDisplay: () => shortenSmallInteger(TimeDimension(8).amount),
     invertedCondition: true,
-    effect: () => 1.3
+    effect: () => 1.4
   },
   matterBoost: {
     id: 8,

@@ -12,7 +12,7 @@ Vue.component("replicanti-gain-text", {
       const ticksPerSecond = 1000 / updateRateMs;
       const logGainFactorPerTick = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
-      const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10).toNumber();
+      const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10);
       const replicantiAmount = player.replicanti.amount;
       if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
         const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
@@ -33,18 +33,19 @@ Vue.component("replicanti-gain-text", {
           ` (${timeEstimateText} until ${shorten(nextThousandOOM)})`;
         return;
       }
-      if (log10GainFactorPerTick > 308) {
-        const galaxiesPerSecond = ticksPerSecond * log10GainFactorPerTick / 308;
+      if (log10GainFactorPerTick.gt(308)) {
+        const galaxiesPerSecond = log10GainFactorPerTick.times(ticksPerSecond / 308);
         let baseGalaxiesPerSecond, effectiveMaxRG;
         if (RealityUpgrade(6).isBought) {
-          baseGalaxiesPerSecond = galaxiesPerSecond / RealityUpgrade(6).effectValue;
+          baseGalaxiesPerSecond = galaxiesPerSecond.divide(RealityUpgrade(6).effectValue);
           effectiveMaxRG = 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5);
         } else {
           baseGalaxiesPerSecond = galaxiesPerSecond;
           effectiveMaxRG = Replicanti.galaxies.max;
         }
+        const allGalaxyTime = Decimal.divide(effectiveMaxRG, baseGalaxiesPerSecond).toNumber();
         this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
-          ` (all galaxies within ${TimeSpan.fromSeconds(effectiveMaxRG / baseGalaxiesPerSecond)})`;
+          ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
         return;
       }
       const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick);

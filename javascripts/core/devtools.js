@@ -406,7 +406,7 @@ dev.kongTest = function() {
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {
-  console.log(`Antimatter: e${player.money.exponent.toPrecision(3)}`);
+  console.log(`Antimatter: e${player.antimatter.exponent.toPrecision(3)}`);
   console.log(`RM: e${Math.round(gainedRealityMachines().log10())}`);
   console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
 

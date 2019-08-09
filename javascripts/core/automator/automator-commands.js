@@ -82,16 +82,16 @@ const AutomatorCommands = ((() => {
           autobuyer.isActive = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
-            autobuyer.limit = new Decimal(1e-3 * duration);
+            autobuyer.time = 1e-3 * duration;
           } else if (xLast !== undefined) {
             autobuyer.mode = xLastMode;
-            autobuyer.limit = new Decimal(xLast);
+            autobuyer.xLast = new Decimal(xLast);
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
               autobuyer.rm = new Decimal(fixedAmount);
             } else {
-              autobuyer.limit = new Decimal(fixedAmount);
+              autobuyer.amount = new Decimal(fixedAmount);
             }
           }
           return AutomatorCommandStatus.NEXT_INSTRUCTION;

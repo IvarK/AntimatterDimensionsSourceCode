@@ -940,3 +940,11 @@ body.t-dark {
 .c-achievements-tab__timer {
   color: white;
 }
+
+.c-dilation-tab__tachyons,
+.c-dilation-tab__dilated-time,
+.c-dilation-tab__dilated-time-income,
+.c-dilation-tab__galaxy-threshold,
+.c-dilation-tab__galaxies {
+  color: #64dd17;
+}

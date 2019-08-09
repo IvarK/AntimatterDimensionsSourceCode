@@ -246,32 +246,8 @@ const Ra = {
     if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, player.timestudy.theorem.pLog10() - 350) / 50);
   },
-  get entanglement() {
-    return player.celestials.ra.compression.entanglement;
-  },
-  set entanglement(value) {
-    player.celestials.ra.compression.entanglement = value;
-  },
-  get spentEntanglement() {
-    let spentTotal = 0;
-    for (const upgrade of CompressionUpgrades.all) {
-      if (upgrade.isBought) {
-        spentTotal += upgrade.cost;
-      }
-    }
-    return spentTotal;
-  },
   get isRunning() {
     return player.celestials.ra.run;
-  },
-  get isCompressed() {
-    return player.celestials.ra.compression.active;
-  },
-  set isCompressed(value) {
-    player.celestials.ra.compression.active = value;
-  },
-  get compressionDepth() {
-    return 2;
   },
   get totalCharges() {
     return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));

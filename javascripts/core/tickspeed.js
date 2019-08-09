@@ -21,8 +21,8 @@ function getTickSpeedMultiplier() {
   // this value should not be contributed to total replicanti galaxies
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
-  if (Ra.isCompressed) {
-    galaxies *= Math.pow(Effects.max(1, CompressionUpgrade.strongerDilationGalaxies), Ra.compressionDepth);
+  if (TimeCompression.isActive) {
+    galaxies *= Math.pow(Effects.max(1, CompressionUpgrade.strongerDilationGalaxies), TimeCompression.compressionDepth);
   } else if (player.dilation.active) {
     galaxies *= Effects.max(1, CompressionUpgrade.strongerDilationGalaxies);
   }
@@ -166,7 +166,7 @@ const Tickspeed = {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
       : this.baseValue;
-    return (player.dilation.active || Ra.isCompressed) ? dilatedValueOf(tickspeed) : tickspeed;
+    return (player.dilation.active || TimeCompression.isActive) ? dilatedValueOf(tickspeed) : tickspeed;
   },
 
   get baseValue() {

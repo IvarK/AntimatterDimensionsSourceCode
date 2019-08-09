@@ -35,7 +35,7 @@ Vue.component("game-header", {
             {
               name: () => "Time Compression",
               isActive: token => token,
-              activityToken: () => Ra.isCompressed
+              activityToken: () => TimeCompression.isActive
             },
             {
               name: token => `${NormalChallenge(token).config.reward} Challenge`,

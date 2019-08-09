@@ -59,7 +59,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     return player.infinityPower.pow(getInfinityConversionRate())
       .max(1)
-      .times(DimBoost.power.pow(DimBoost.totalBoosts() - tier + 1).max(1));
+      .times(DimBoost.power.pow(DimBoost.totalBoosts - tier + 1).max(1));
   }
   if (NormalChallenge(12).isRunning) {
     if (tier === 4) multiplier = multiplier.pow(1.4);
@@ -70,7 +70,7 @@ function getDimensionFinalMultiplierUncached(tier) {
   multiplier = applyNDPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  if (player.dilation.active || Ra.isCompressed) {
+  if (player.dilation.active || TimeCompression.isActive) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier, 1));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
@@ -78,8 +78,8 @@ function getDimensionFinalMultiplierUncached(tier) {
   multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   // The "unaffected by dilation" ND mult and ND dilation power effect only apply to the first layer of dilation
-  if (Ra.isCompressed) {
-    multiplier = dilatedValueOf(multiplier, Ra.compressionDepth - 1);
+  if (TimeCompression.isActive) {
+    multiplier = dilatedValueOf(multiplier, TimeCompression.compressionDepth - 1);
   }
 
   if (Effarig.isRunning) {
@@ -677,7 +677,7 @@ class NormalDimensionState extends DimensionState {
 
   get isAvailable() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
-    if (this.tier > DimBoost.totalBoosts() + 4) return false;
+    if (this.tier > DimBoost.totalBoosts + 4) return false;
     if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && player.eternities.lt(30)) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }

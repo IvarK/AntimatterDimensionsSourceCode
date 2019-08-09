@@ -42,7 +42,7 @@ Vue.component("time-compression-tab", {
   },
   methods: {
     update() {
-      this.entanglement = player.celestials.ra.compression.entanglement;
+      this.entanglement = TimeCompression.entanglement;
       this.totalEntanglement = TimeCompression.totalEntanglement;
       this.respec = player.celestials.ra.compression.respec;
     }

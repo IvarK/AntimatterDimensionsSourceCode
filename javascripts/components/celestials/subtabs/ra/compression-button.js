@@ -5,15 +5,12 @@ Vue.component("compression-button", {
     return {
       timeShards: new Decimal(0),
       isRunning: false,
-      hasGain: false,
       requiredForGain: new Decimal(0),
       entanglementGain: 0
     };
   },
   computed: {
-    shardRequirement() {
-      return TimeCompression.timeShardRequirement;
-    },
+    shardRequirement: () => TimeCompression.timeShardRequirement,
     canCompress() {
       return this.timeShards.gte(this.shardRequirement);
     }
@@ -23,13 +20,21 @@ Vue.component("compression-button", {
       this.timeShards.copyFrom(player.timeShards);
       this.isRunning = player.celestials.ra.compression.active;
       if (!this.isRunning) return;
-      this.hasGain = TimeCompression.entanglementGain > 0;
-      if (this.hasGain) {
-        this.entanglementGain = TimeCompression.entanglementGain;
-      } else {
-        this.requiredForGain.copyFrom(TimeCompression.minAntimatterForEntanglement);
+      this.entanglementGain = this.gainedEntanglement();
+      if (this.entanglementGain <= 0) {
+        this.requiredForGain.copyFrom(this.minAntimatterForEntanglement());
       }
-    }
+    },
+    minAntimatterForEntanglement() {
+      if (TimeCompression.totalEntanglement === 308) {
+        return Decimal.pow10(9e15);
+      }
+      const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
+      return Decimal.pow10(2e5 * Math.pow(1 + TimeCompression.totalEntanglement / (30.8 * entanglementMult), 2.5));
+    },
+    gainedEntanglement() {
+      return Math.max(0, TimeCompression.entanglementThisRun - TimeCompression.totalEntanglement);
+    },
   },
   template:
     `<button class="o-compression-btn" onclick="TimeCompression.toggle()">
@@ -39,7 +44,7 @@ Vue.component("compression-button", {
         Currently: {{ shorten(timeShards) }} time shards
       </span>
       <span v-else-if="!isRunning">Compress time.</span>
-      <span v-else-if="hasGain">
+      <span v-else-if="entanglementGain > 0">
         Disable compression.
         <br>
         Gain {{shorten(entanglementGain, 0, 2)}} Entanglement.

@@ -1014,7 +1014,7 @@ GameDatabase.news = [
   {
     id: "c3",
     text: "What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.",
-    condition: () => NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts() > 0
+    condition: () => NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0
   },
   {
     id: "c4",
@@ -1036,7 +1036,7 @@ GameDatabase.news = [
   {
     id: "c7",
     text: "To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!",
-    condition: () => player.sacrificed.e >= 10 || DimBoost.totalBoosts() >= 6
+    condition: () => player.sacrificed.e >= 10 || DimBoost.totalBoosts >= 6
   },
   {
     id: "c8",
@@ -1059,7 +1059,7 @@ GameDatabase.news = [
     id: "c11",
     text: "9th Dimension is a lie.",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1069,7 +1069,7 @@ GameDatabase.news = [
     id: "c12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1079,7 +1079,7 @@ GameDatabase.news = [
     id: "c13",
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1089,7 +1089,7 @@ GameDatabase.news = [
     id: "c14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1099,7 +1099,7 @@ GameDatabase.news = [
     id: "c15",
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1111,7 +1111,7 @@ GameDatabase.news = [
       "If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through " +
       "before you encounter bad things, so you should be fine",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1125,7 +1125,7 @@ GameDatabase.news = [
       "no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up " +
       "forcefully to avoid getting the offline achievement.",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||
@@ -1135,7 +1135,7 @@ GameDatabase.news = [
     id: "c18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     condition: () =>
-      DimBoost.totalBoosts() >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
       PlayerProgress.eternityUnlocked() ||

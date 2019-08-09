@@ -4,53 +4,52 @@ const TimeCompression = {
   get timeShardRequirement() {
     return new Decimal("1e3500000");
   },
-
   toggle() {
-    if (player.timeShards.lt(this.timeShardRequirement) && !Ra.isCompressed) {
+    if (player.timeShards.lt(this.timeShardRequirement) && !this.isActive) {
       return;
     }
-    if (Ra.isCompressed) {
+    if (this.isActive) {
       this.rewardEntanglement();
     }
     eternity(false, false, { switchingDilation: true });
     player.dilation.active = false;
-    Ra.isCompressed = !Ra.isCompressed;
+    this.isActive = !this.isActive;
   },
-
+  get entanglement() {
+    return player.celestials.ra.compression.entanglement;
+  },
+  set entanglement(value) {
+    player.celestials.ra.compression.entanglement = value;
+  },
   get totalEntanglement() {
-    return Ra.entanglement + Ra.spentEntanglement;
+    return this.entanglement + this.spentEntanglement;
   },
-
-  // Updates entanglement
   rewardEntanglement() {
-    const newEntanglement = TimeCompression.entanglementThisRun;
-    Ra.entanglement = Math.max(Ra.entanglement, newEntanglement - Ra.spentEntanglement);
+    this.entanglement = Math.max(this.entanglement, this.entanglementThisRun - this.spentEntanglement);
   },
-
-  // Returns how much entanglement the current run will give
+  get spentEntanglement() {
+    return CompressionUpgrades.all
+      .filter(u => u.isBought)
+      .map(u => u.cost)
+      .sum();
+  },
   get entanglementThisRun() {
-    if (!Ra.isCompressed) {
+    if (!this.isActive) {
       return 0;
     }
-    const value = player.antimatter;
     const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
-    return 308 * Math.clamp((Math.pow(value.log10() / 2e5, 0.4) - 1) / 10 * entanglementMult, 0, 1);
+    return 308 * Math.clamp((Math.pow(player.antimatter.log10() / 2e5, 0.4) - 1) / 10 * entanglementMult, 0, 1);
   },
-
-  // Returns amount of entanglement gained this run, used only for display purposes
-  get entanglementGain() {
-    return Math.max(0, this.entanglementThisRun - this.totalEntanglement);
+  get compressionDepth() {
+    return 2;
   },
-
-  // Returns the mimimum antimatter to gain entanglement, only used for display
-  get minAntimatterForEntanglement() {
-    if (this.totalEntanglement === 308) {
-      return Decimal.pow10(9e15);
-    }
-    const entanglementMult = Effects.max(1, CompressionUpgrade.moreEntanglement);
-    return Decimal.pow10(2e5 * Math.pow(1 + this.totalEntanglement / (30.8 * entanglementMult), 2.5));
-  }
-}
+  get isActive() {
+    return player.celestials.ra.compression.active;
+  },
+  set isActive(value) {
+    player.celestials.ra.compression.active = value;
+  },
+};
 
 class CompressionUpgradeState extends BitPurchasableMechanicState {
   get currency() {
@@ -95,7 +94,7 @@ const CompressionUpgrade = (function() {
 const CompressionUpgrades = {
   all: Object.values(CompressionUpgrade),
   respec() {
-    Ra.entanglement += Ra.spentEntanglement;
+    TimeCompression.entanglement += TimeCompression.spentEntanglement;
     player.celestials.ra.compression.upgradeBits = 0;
     player.celestials.ra.compression.respec = false;
   }

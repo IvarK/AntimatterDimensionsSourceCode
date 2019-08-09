@@ -27,7 +27,7 @@ function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (NormalDimension(2).amount.neq(0)) {
       player.matter = player.matter
-        .times(Decimal.pow((1.03 + DimBoost.totalBoosts() / 200 + player.galaxies / 100), diff / 100));
+        .times(Decimal.pow((1.03 + DimBoost.totalBoosts / 200 + player.galaxies / 100), diff / 100));
     }
     if (player.matter.gt(player.antimatter) && NormalChallenge(11).isRunning) {
       Modal.message.show(`Your ${shorten(player.antimatter, 2, 2)} antimatter was annhiliated by ` +

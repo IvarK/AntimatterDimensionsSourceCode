@@ -246,7 +246,7 @@ dev.showProductionBreakdown = function() {
   
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
   const IDComponent = player.infinityPower.pow(getInfinityConversionRate()).pow(8).pow(IC4pow);
-  const DBComponent = DimBoost.power.pow(DimBoost.totalBoosts()).pow(8).pow(IC4pow);
+  const DBComponent = DimBoost.power.pow(DimBoost.totalBoosts).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
@@ -280,7 +280,7 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent
     .times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"));
   if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent
-    .times(Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts(), 2)));
+    .times(Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)));
   const EU1Component = player.eternityPoints.plus(1).pow(8);
   const IDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / infinitypow;
   
@@ -305,7 +305,7 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent
     .times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")));
   if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent
-    .times(Decimal.pow(1.0025, DimBoost.totalBoosts())).pow(8);
+    .times(Decimal.pow(1.0025, DimBoost.totalBoosts)).pow(8);
   if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent
     .times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
   const TDPowComponent = timepow === 0 ? 0 : (timepow - 1) / timepow;

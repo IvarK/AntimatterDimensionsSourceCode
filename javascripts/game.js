@@ -383,7 +383,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
   }
 
   if (effects.includes(GameSpeedEffect.FIXEDSPEED)) {
-    if (Ra.isCompressed) {
+    if (TimeCompression.isActive) {
       return 1e-100;
     }
     if (EternityChallenge(12).isRunning) {
@@ -438,7 +438,7 @@ function getGameSpeedupFactor(effectsToConsider, blackHoleOverride, blackHolesAc
 
 function getGameSpeedupForDisplay() {
   const speedFactor = getGameSpeedupFactor();
-  if (Enslaved.isAutoReleasing && !(EternityChallenge(12).isRunning || Ra.isCompressed)) {
+  if (Enslaved.isAutoReleasing && !(EternityChallenge(12).isRunning || TimeCompression.isActive)) {
     return Math.max(Enslaved.autoReleaseSpeed, speedFactor);
   }
   return speedFactor;
@@ -503,7 +503,7 @@ function gameLoop(diff, options = {}) {
 
     const blackHoleDiff = realDiff;
 
-    const fixedSpeedActive = EternityChallenge(12).isRunning || Ra.isCompressed;
+    const fixedSpeedActive = EternityChallenge(12).isRunning || TimeCompression.isActive;
     if (!isAutoReleaseTick && !fixedSpeedActive) {
       let speedFactor;
       if (options.blackHoleSpeedup === undefined) {

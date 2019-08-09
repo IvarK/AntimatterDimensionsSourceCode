@@ -16,7 +16,7 @@ Vue.component("compression-upgrade", {
       return {
         "o-compression-upgrade": true,
         "o-compression-upgrade--active": this.isBought && this.isActive,
-        "o-compression-upgrade--inactive": this.isBought,
+        "o-compression-upgrade--inactive": this.isBought && !this.isActive,
         "o-compression-upgrade--available": !this.isBought && this.isAffordable,
         "o-compression-upgrade--unavailable": !this.isBought && !this.isAffordable
       };

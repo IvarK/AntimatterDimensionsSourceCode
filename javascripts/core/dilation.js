@@ -12,7 +12,7 @@ function startDilatedEternity(auto) {
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  Ra.isCompressed = false;
+  TimeCompression.isActive = false;
   return true;
 }
 
@@ -158,8 +158,8 @@ function dilatedValueOf(value, depth) {
   if (player.dilation.active) {
     return recursiveDilation(value, 1);
   }
-  if (Ra.isCompressed) {
-    return recursiveDilation(value, Ra.compressionDepth);
+  if (TimeCompression.isActive) {
+    return recursiveDilation(value, TimeCompression.compressionDepth);
   }
   throw crash("Invald dilation depth");
 }

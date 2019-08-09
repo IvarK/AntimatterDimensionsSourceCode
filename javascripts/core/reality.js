@@ -461,8 +461,8 @@ function handleCelestialRuns(force) {
     player.celestials.ra.run = false;
   }
 
-  if (Ra.isCompressed) {
-    Ra.isCompressed = false;
+  if (TimeCompression.isActive) {
+    TimeCompression.isActive = false;
   }
 
   if (Laitela.isRunning) {

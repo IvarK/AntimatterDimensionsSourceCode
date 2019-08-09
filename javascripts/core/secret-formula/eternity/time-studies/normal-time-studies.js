@@ -48,7 +48,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 2,
       requirement: 22,
       description: () => `You gain ${TimeStudy(32).effectValue}x more infinitied stat (based on Dimension Boosts)`,
-      effect: () => Math.max(DimBoost.totalBoosts(), 1)
+      effect: () => Math.max(DimBoost.totalBoosts, 1)
     },
     {
       id: 33,
@@ -154,7 +154,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 6,
       requirement: 72,
       description: "Dimension Boosts affect Infinity Dimensions",
-      effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts(), 2)),
+      effect: () => Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)),
+      cap: new Decimal("1e10000000000"),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -401,7 +402,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       description: "Galaxies are more effective based on your time shards",
       effect: () => Math.pow(player.timeShards.clampMin(2).log2(), 0.005),
       cap: 1.1,
-      formatEffect: value => "+" + formatPercents(value - 1, 3)
+      formatEffect: value => `+${formatPercents(value - 1, 3)}`
     },
     {
       id: 213,
@@ -430,7 +431,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(211).isBought && !TimeStudy(222).isBought,
       requirementV: () => TimeStudy(211).isBought && TimeStudy(222).isBought,
       description: "Time Dimensions gain a multiplier based on Dimension Boosts",
-      effect: () => Decimal.pow(1 + 0.0025, DimBoost.totalBoosts()),
+      effect: () => Decimal.pow(1 + 0.0025, DimBoost.totalBoosts),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -459,7 +460,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
         const noun = effect === 1 ? "galaxy" : "galaxies";
         return `Galaxy cost scaling starts ${effect} ${noun} later (1 for every 2000 DimBoosts)`;
       },
-      effect: () => Math.floor(DimBoost.totalBoosts() / 2000)
+      effect: () => Math.floor(DimBoost.totalBoosts / 2000)
     },
     {
       id: 225,
@@ -502,7 +503,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && !TimeStudy(232).isBought,
       requirementV: () => (TimeStudy(221).isBought || TimeStudy(222).isBought) && TimeStudy(232).isBought,
       description: "Dimension Boosts are more effective based on their amount",
-      effect: () => Decimal.pow(DimBoost.totalBoosts(), 0.3).clampMin(1),
+      effect: () => Decimal.pow(DimBoost.totalBoosts, 0.3).clampMin(1),
       formatEffect: value => formatX(value, 2, 2)
     },
     {

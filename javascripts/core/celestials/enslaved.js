@@ -98,7 +98,7 @@ const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (Ra.isCompressed) return;
+    if (TimeCompression.isActive) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);

@@ -56,8 +56,7 @@ class DimBoost {
 
     if (tier === 6 && NormalChallenge(10).isRunning) {
       amount += Math.ceil((targetResets - 3) * 20);
-    }
-    else if (tier === 8) {
+    } else if (tier === 8) {
       const mult = 15 - Effects.sum(
         TimeStudy(211),
         TimeStudy(222)
@@ -86,7 +85,7 @@ class DimBoost {
     return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
   }
 
-  static totalBoosts() {
+  static get totalBoosts() {
     return this.purchasedBoosts + this.freeBoosts;
   }
 }
@@ -94,7 +93,7 @@ class DimBoost {
 function applyDimensionBoost() {
     const power = DimBoost.power;
     for (let tier = 1; tier <= 8; tier++) {
-        NormalDimension(tier).power = power.pow(DimBoost.totalBoosts() + 1 - tier).max(1);
+      NormalDimension(tier).power = power.pow(DimBoost.totalBoosts + 1 - tier).max(1);
     }
 }
 
@@ -140,7 +139,7 @@ function softResetBtnClick() {
   else softReset(1)
   
   for (let tier = 1; tier < 9; tier++) {
-    const mult = DimBoost.power.pow(DimBoost.totalBoosts() + 1 - tier);
+    const mult = DimBoost.power.pow(DimBoost.totalBoosts + 1 - tier);
     if (mult.gt(1)) floatText(tier, formatX(mult));
   }
 }

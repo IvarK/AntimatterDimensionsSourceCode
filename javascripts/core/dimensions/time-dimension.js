@@ -193,7 +193,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || Ra.isCompressed) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive) {
       return new Decimal(0);
     }
 

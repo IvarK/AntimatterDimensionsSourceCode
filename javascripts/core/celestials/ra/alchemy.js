@@ -87,6 +87,10 @@ class AlchemyReaction {
     return this.isReality ? 1 : AlchemyResource.synergism.effectValue;
   }
 
+  get reactionProduction() {
+    return this.baseProduction * this.reactionEfficiency;
+  }
+
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not bring
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
@@ -112,7 +116,7 @@ class AlchemyReaction {
     for (const reagent of this._reagents) {
       reagent.resource.amount -= cappedYield * reagent.cost;
     }
-    this._product.amount += this.baseProduction * cappedYield * this.reactionEfficiency;
+    this._product.amount += cappedYield * this.reactionProduction;
   }
 }
 

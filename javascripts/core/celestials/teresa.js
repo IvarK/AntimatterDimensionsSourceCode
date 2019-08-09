@@ -101,7 +101,7 @@ const Teresa = {
     return true;
   },
   rewardMultiplier(antimatter) {
-    return Decimal.max(Decimal.pow(antimatter.log10() / 1.5e8, 12), 1).toNumber();
+    return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
   },
   perkShopCap(upgrade) {
     switch (upgrade.id) {

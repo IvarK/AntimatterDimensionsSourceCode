@@ -42,8 +42,8 @@ Vue.component("normal-dim-shift-row", {
       this.requirement.amount = requirement.amount;
       this.isBuyable = requirement.isSatisfied;
       this.isShift = DimBoost.isShift;
-      this.purchasedBoosts = DimBoost.purchasedBoosts();
-      this.freeBoosts = DimBoost.freeBoosts();
+      this.purchasedBoosts = DimBoost.purchasedBoosts;
+      this.freeBoosts = DimBoost.freeBoosts;
     },
     softReset() {
       softResetBtnClick();

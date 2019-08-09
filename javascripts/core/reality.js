@@ -367,7 +367,7 @@ function completeReality(force, reset, auto = false) {
   NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
-  if (player.celestials.ra.compression.respec) Ra.respecEntanglement();
+  if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
     player.eternities = new Decimal(100);

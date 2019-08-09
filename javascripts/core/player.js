@@ -396,7 +396,7 @@ let player = {
       compression: {
         active: false,
         entanglement: 0,
-        upgrades: new Set(),
+        upgradeBits: 0,
         respec: false
       },
     },

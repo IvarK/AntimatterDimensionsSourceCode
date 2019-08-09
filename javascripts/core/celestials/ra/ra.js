@@ -253,20 +253,13 @@ const Ra = {
     player.celestials.ra.compression.entanglement = value;
   },
   get spentEntanglement() {
-    const upgradeNames = Object.keys(CompressionUpgrade);
     let spentTotal = 0;
-    for (const name of upgradeNames) {
-      const upgrade = CompressionUpgrade[name]; 
+    for (const upgrade of CompressionUpgrades.all) {
       if (upgrade.isBought) {
         spentTotal += upgrade.cost;
       }
     }
     return spentTotal;
-  },
-  respecEntanglement() {
-    this.entanglement += this.spentEntanglement;
-    player.celestials.ra.compression.upgrades = new Set();
-    player.celestials.ra.compression.respec = false;
   },
   get isRunning() {
     return player.celestials.ra.run;

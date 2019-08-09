@@ -4,30 +4,35 @@ Vue.component("compression-button", {
   data() {
     return {
       timeShards: new Decimal(0),
-      shardRequirement: new Decimal("1e3500000"),
-      canCompress: false,
       isRunning: false,
       hasGain: false,
       requiredForGain: new Decimal(0),
       entanglementGain: 0
     };
   },
+  computed: {
+    shardRequirement() {
+      return TimeCompression.timeShardRequirement;
+    },
+    canCompress() {
+      return this.timeShards.gte(this.shardRequirement);
+    }
+  },
   methods: {
     update() {
       this.timeShards.copyFrom(player.timeShards);
-      this.canCompress = this.timeShards.gte(this.shardRequirement);
       this.isRunning = player.celestials.ra.compression.active;
       if (!this.isRunning) return;
-      this.hasGain = getEntanglementGain() > 0;
+      this.hasGain = TimeCompression.entanglementGain > 0;
       if (this.hasGain) {
-        this.entanglementGain = getEntanglementGain();
+        this.entanglementGain = TimeCompression.entanglementGain;
       } else {
-        this.requiredForGain.copyFrom(minAntimatterForEntanglement());
+        this.requiredForGain.copyFrom(TimeCompression.minAntimatterForEntanglement);
       }
     }
   },
   template:
-    `<button class="o-compression-btn" onclick="toggleCompression()">
+    `<button class="o-compression-btn" onclick="TimeCompression.toggle()">
       <span v-if="!canCompress && !isRunning">
         Time compression requires {{ shorten(shardRequirement) }} time shards to activate.
         <br>

@@ -19,7 +19,15 @@ Vue.component("alchemy-resource-info", {
       return this.resource.isBaseResource;
     },
     reactionText() {
-      return this.resource.reactionText;
+      const resource = this.resource;
+      if (resource.reaction === null) return "Base Resource";
+      const isReality = resource.reaction._product.id === ALCHEMY_RESOURCE.REALITY;
+      const reagentStrings = [];
+      for (const reagent of resource.reaction._reagents) {
+        reagentStrings.push(`${isReality ? "" : reagent.cost}${reagent.resource.symbol}`);
+      }
+      const product = Math.floor(100 * resource.reaction.baseProduction * resource.reaction.reactionEfficiency) / 100;
+      return `${reagentStrings.join(" + ")} ➜ ${isReality ? "" : product}${resource.reaction._product.symbol}`;
     },
     effectConfig() {
       const resource = this.resource;

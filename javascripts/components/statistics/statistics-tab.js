@@ -38,7 +38,7 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.boosts = DimBoost.purchasedBoosts();
+      this.boosts = DimBoost.purchasedBoosts;
       this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;

@@ -42,7 +42,7 @@ class DimBoost {
   static get isShift() {
     // Player starts with 4 unlocked dimensions,
     // hence there are just 4 (or 2, if in Auto DimBoosts challenge) shifts
-    return DimBoost.purchasedBoosts() + 4 < this.maxShiftTier;
+    return DimBoost.purchasedBoosts + 4 < this.maxShiftTier;
   }
 
   static get requirement() {
@@ -50,7 +50,7 @@ class DimBoost {
   }
 
   static bulkRequirement(bulk) {
-    const targetResets = DimBoost.purchasedBoosts() + bulk;
+    const targetResets = DimBoost.purchasedBoosts + bulk;
     const tier = Math.min(targetResets + 3, this.maxShiftTier);
     let amount = 20;
 
@@ -78,16 +78,16 @@ class DimBoost {
     return new DimBoostRequirement(tier, amount);
   }
 
-  static purchasedBoosts() {
+  static get purchasedBoosts() {
     return player.dimensionBoosts;
   }
 
-  static freeBoosts() {
+  static get freeBoosts() {
     return Math.floor(Effects.max(0, CompressionUpgrade.freeBoost));
   }
 
   static totalBoosts() {
-    return this.purchasedBoosts() + this.freeBoosts();
+    return this.purchasedBoosts + this.freeBoosts;
   }
 }
 

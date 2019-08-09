@@ -17,6 +17,7 @@ GameDatabase.tabs = [
         name: "Infinity Dimensions",
         symbol: "∞",
         component: "infinity-dim-tab",
+        newUIComponent: "new-inf-dimensions-tab",
         condition: () => player.eternities.gt(0) || InfinityDimension(1).isUnlocked
       },
       {
@@ -24,6 +25,7 @@ GameDatabase.tabs = [
         name: "Time Dimensions",
         symbol: "Δ",
         component: "time-dim-tab",
+        newUIComponent: "new-time-dimensions-tab",
         condition: () => player.eternities.gt(0)
       },
       {

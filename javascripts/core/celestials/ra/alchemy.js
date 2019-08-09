@@ -33,17 +33,6 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.effect(this.amount);
   }
 
-  get reactionText() {
-    if (this.reaction === null) return "Base Resource";
-    const isReality = this.reaction._product.id === ALCHEMY_RESOURCE.REALITY;
-    const reagentStrings = [];
-    for (const reagent of this.reaction._reagents) {
-      reagentStrings.push(`${isReality ? "" : reagent.cost}${reagent.resource.symbol}`);
-    }
-    const produced = `${Math.floor(100 * this.reaction.baseProduction * this.reaction.reactionEfficiency) / 100}`;
-    return `${reagentStrings.join(" + ")} ➜ ${isReality ? "" : produced}${this.reaction._product.symbol}`;
-  }
-
   get reaction() {
     return AlchemyReactions.all[this.id];
   }

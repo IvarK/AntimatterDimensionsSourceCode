@@ -4,7 +4,7 @@ Vue.component("time-compression-tab", {
   data() {
     return {
       entanglement: 0,
-      recordAntimatter: new Decimal(0),
+      totalEntanglement: 0,
       respec: false,
     };
   },
@@ -43,7 +43,7 @@ Vue.component("time-compression-tab", {
   methods: {
     update() {
       this.entanglement = player.celestials.ra.compression.entanglement;
-      this.recordAntimatter.copyFrom(player.dilation.tachyonParticles);
+      this.totalEntanglement = TimeCompression.totalEntanglement;
       this.respec = player.celestials.ra.compression.respec;
     }
   },
@@ -53,6 +53,9 @@ Vue.component("time-compression-tab", {
         You have
         <span class="c-dilation-tab__tachyons">{{shorten(entanglement, 2, 2)}}</span>
         Entanglement.
+      </span>
+      <span>
+        Your total entanglement is {{shorten(totalEntanglement, 2, 2)}}.
       </span>
       <compression-button />
       <span>

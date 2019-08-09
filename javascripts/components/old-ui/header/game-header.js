@@ -15,18 +15,18 @@ Vue.component("game-header", {
           // won't trigger display update if we, say, switch from one challenge to another
           function celestialReality(celestial, name) {
             return {
-              name: () => name,
+              name: () => `${name} Reality`,
               isActive: token => token,
               activityToken: () => celestial.isRunning
             };
           }
           return [
-            celestialReality(Teresa, "Teresa's Reality"),
-            celestialReality(Effarig, "Effarig's Reality"),
-            celestialReality(Enslaved, "The Enslaved Ones' Reality"),
-            celestialReality(V, "V's Reality"),
-            celestialReality(Ra, "Ra's Reality"),
-            celestialReality(Laitela, "Lai'tela's Reality"),
+            celestialReality(Teresa, "Teresa's"),
+            celestialReality(Effarig, "Effarig's"),
+            celestialReality(Enslaved, "The Enslaved Ones'"),
+            celestialReality(V, "V's"),
+            celestialReality(Ra, "Ra's"),
+            celestialReality(Laitela, "Lai'tela's"),
             {
               name: () => "Time Dilation",
               isActive: token => token,

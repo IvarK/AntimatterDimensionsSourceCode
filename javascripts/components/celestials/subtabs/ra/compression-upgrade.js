@@ -25,13 +25,8 @@ Vue.component("compression-upgrade", {
   methods: {
     update() {
       this.isBought = this.upgrade.isBought;
-      if (this.isBought) {
-        // eslint-disable-next-line no-bitwise
-        this.isActive = new Decimal(this.upgrade.config.resource()).gte(this.upgrade.config.threshold()) ^
-          this.upgrade.config.invertedCondition;
-      } else {
-        this.isAffordable = this.upgrade.isAffordable;
-      }
+      this.isActive = this.upgrade.canBeApplied;
+      this.isAffordable = this.upgrade.isAffordable;
     }
   },
   template:
@@ -54,8 +49,8 @@ Vue.component("compression-upgrade", {
           singular="Entanglement"
           plural="Entanglement"
         />
-        <div v-else-if="isActive">Active!</div>
-        <div v-else>Inactive</div>
+        <div v-else-if="isActive">Active! (Cost: {{ upgrade.config.cost }})</div>
+        <div v-else>Inactive (Cost: {{ upgrade.config.cost }})</div>
       </button>
     </div>`
 });

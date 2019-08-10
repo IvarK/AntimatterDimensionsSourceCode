@@ -167,7 +167,7 @@ ui = new Vue({
   data: ui,
   computed: {
     notation() {
-      return Notation.find(this.notationName);
+      return Notations.find(this.notationName);
     },
     currentGlyphTooltip() {
       return this.view.tabs.reality.currentGlyphTooltip;

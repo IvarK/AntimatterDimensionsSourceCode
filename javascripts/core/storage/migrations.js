@@ -81,8 +81,8 @@ GameStorage.migrations = {
       if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
       if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
 
-      player.realTimePlayed = player.totalTimePlayed * 100;
-      player.thisReality = player.totalTimePlayed * 100;
+      player.realTimePlayed = player.totalTimePlayed;
+      player.thisReality = player.totalTimePlayed;
       player.thisInfinityRealTime = player.thisInfinityTime * 100;
       player.thisEternityRealTime = player.thisEternity * 100;
       player.thisRealityRealTime = player.thisReality * 100;
@@ -104,7 +104,7 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
-      GameStorage.migrations.adjustSacrificeConfirmation(player);
+      GameStorage.migrations.migrateConfirmations(player);
       GameStorage.migrations.migrateNotation(player);
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
@@ -328,11 +328,15 @@ GameStorage.migrations = {
     delete player.achPow;
   },
 
-  adjustSacrificeConfirmation(player) {
+  migrateConfirmations(player) {
     if (player.options.sacrificeConfirmation !== undefined) {
       player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
       delete player.options.sacrificeConfirmation;
     }
+    player.options.confirmations.challenges = !player.options.challConf;
+    delete player.options.challConf;
+    player.options.confirmations.eternity = player.options.eternityconfirm;
+    delete player.options.eternityconfirm;
   },
 
   migrateNotation(player) {

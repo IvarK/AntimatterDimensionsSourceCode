@@ -11,7 +11,7 @@ Vue.component("sidebar", {
   methods: {
     update() {
       this.ipVisible = player.infinitied.gt(0);
-      this.epVisible = player.eternities > 0;
+      this.epVisible = PlayerProgress.eternityUnlocked();
       this.rmVisible = player.realities > 0;
     }
   },

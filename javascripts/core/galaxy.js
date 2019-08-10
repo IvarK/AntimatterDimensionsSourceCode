@@ -141,7 +141,7 @@ function galaxyReset() {
   EventHub.dispatch(GameEvent.GALAXY_RESET_BEFORE);
   player.galaxies++;
   player.tickDecrease -= 0.03;
-  player.resets = 0;
+  player.dimensionBoosts = 0;
   softReset(0);
   if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;
@@ -149,7 +149,7 @@ function galaxyReset() {
 }
 
 function galaxyResetBtnClick() {
-  if (player.eternities >= 7 && !shiftDown) return maxBuyGalaxies(true);
+  if (player.eternities.gte(9) && !shiftDown) return maxBuyGalaxies(true);
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   galaxyReset();
   return true;

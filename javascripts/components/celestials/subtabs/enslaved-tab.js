@@ -6,10 +6,8 @@ Vue.component("enslaved-tab", {
     isStoringReal: false,
     autoStoreReal: false,
     hasAmplifyStoredReal: false,
-    hasStoredTimeSpeedBoost: false,
     canAdjustStoredTime: false,
     storedFraction: 0,
-    storedTimeSpeedValue: 1,
     inEnslaved: false,
     completed: false,
     storedBlackHole: 0,
@@ -24,19 +22,13 @@ Vue.component("enslaved-tab", {
   }),
   computed: {
     amplifiedGameDesc() {
-      return `^${RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification().toFixed(2)}`;
-    },
-    storedTimeBoostDesc() {
-      return formatX(this.storedTimeSpeedValue, 2, 2);
+      return `${formatPow(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2, 2)}`;
     },
     storedRealEfficiencyDesc() {
       return formatPercents(this.storedRealEffiency);
     },
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
-    },
-    autoReleaseSpeedup() {
-      return formatX(this.autoReleaseSpeed, 2, 2);
     },
     unlocksInfo() {
       return ENSLAVED_UNLOCKS;
@@ -67,9 +59,7 @@ Vue.component("enslaved-tab", {
       this.isStoringReal = player.celestials.enslaved.isStoringReal;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.hasAmplifyStoredReal = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME);
-      this.hasStoredTimeSpeedBoost = Ra.has(RA_UNLOCKS.GAMESPEED_BOOST);
       this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
-      this.storedTimeSpeedValue = Ra.gamespeedStoredTimeMult();
       this.inEnslaved = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -157,7 +147,6 @@ Vue.component("enslaved-tab", {
             <p v-if="inEnslaved">{{timeDisplayShort(nerfedBlackHoleTime)}} in this reality</p>
           </button>
           <div v-if="hasAmplifyStoredReal"> Amplified: {{ amplifiedGameDesc }} </div>
-          <div v-if="hasStoredTimeSpeedBoost"> Game speed: {{ storedTimeBoostDesc }} </div>
         </div>
         <div class="l-enslaved-top-container__half">
           <button :class="['o-enslaved-mechanic-button',
@@ -190,7 +179,6 @@ Vue.component("enslaved-tab", {
           :value="autoRelease"
           @input="toggleAutoRelease()">
         <label for="autoReleaseBox">Use 1% of stored time every 5 ticks</label>
-        <div>Effective game speed of last auto-released tick: {{ autoReleaseSpeedup }}</div>
       </div>
       <div class="l-enslaved-shop-container">
         <button

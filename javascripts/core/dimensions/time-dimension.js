@@ -132,7 +132,7 @@ function timeDimensionCommonMultiplier() {
       AlchemyResource.dimensionality
     );
   if (EternityChallenge(9).isRunning) {
-    mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow((7 + getAdjustedGlyphEffect("infinityrate")) / 7).log2(), 1), 4)).max(1));
+    mult = mult.times((Decimal.pow(Math.max(player.infinityPower.pow(getInfinityConversionRate() / 7).log2(), 1), 4)).max(1));
   }
   return mult;
 }
@@ -193,7 +193,7 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning) {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning || TimeCompression.isActive) {
       return new Decimal(0);
     }
 
@@ -214,7 +214,7 @@ class TimeDimensionState extends DimensionState {
     }
     const toGain = TimeDimension(tier + 1).productionPerSecond;
     const current = Decimal.max(this.amount, 1);
-    return toGain.times(10).dividedBy(current).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
   get baseCost() {

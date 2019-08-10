@@ -20,8 +20,11 @@ GameDatabase.eternity.dilation = (function() {
       id: 1,
       initialCost: 1e5,
       increment: 10,
-      description: "Double Dilated Time gain.",
-      effect: bought => Decimal.pow(2, bought),
+      description: () =>
+       (CompressionUpgrade.improvedDTMult.canBeApplied
+       ? "Multiply Dilated Time gain by 2.2x"
+       : "Double Dilated Time gain."),
+      effect: bought => Decimal.pow(Effects.max(2, CompressionUpgrade.improvedDTMult), bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0)
     }),
@@ -49,7 +52,7 @@ GameDatabase.eternity.dilation = (function() {
     doubleGalaxies: {
       id: 4,
       cost: 5e6,
-      description: "Gain twice as many free galaxies.",
+      description: "Gain twice as many free galaxies, up to 1,000.",
       effect: 2
     },
     tdMultReplicanti: {

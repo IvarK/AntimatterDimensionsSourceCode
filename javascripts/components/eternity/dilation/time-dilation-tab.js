@@ -41,7 +41,7 @@ Vue.component("time-dilation-tab", {
     update() {
       this.tachyons.copyFrom(player.dilation.tachyonParticles);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
-      this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupFactor()));
+      this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupForDisplay()));
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.freeGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;

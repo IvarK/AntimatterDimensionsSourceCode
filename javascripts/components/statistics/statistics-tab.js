@@ -4,7 +4,7 @@ Vue.component("statistics-tab", {
   data() {
     return {
       totalAntimatter: new Decimal(0),
-      resets: 0,
+      boosts: 0,
       galaxies: 0,
       realTimePlayed: TimeSpan.zero,
       infinity: {
@@ -18,7 +18,7 @@ Vue.component("statistics-tab", {
       },
       eternity: {
         isUnlocked: false,
-        count: 0,
+        count: new Decimal(0),
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
@@ -38,7 +38,7 @@ Vue.component("statistics-tab", {
   methods: {
     update() {
       this.totalAntimatter.copyFrom(player.totalAntimatter);
-      this.resets = player.resets;
+      this.boosts = DimBoost.purchasedBoosts;
       this.galaxies = Math.round(player.galaxies);
       this.realTimePlayed.setFrom(Date.now() - player.gameCreatedTime);
       const progress = PlayerProgress.current;
@@ -56,7 +56,7 @@ Vue.component("statistics-tab", {
       const eternity = this.eternity;
       eternity.isUnlocked = isEternityUnlocked;
       if (isEternityUnlocked) {
-        eternity.count = player.eternities;
+        eternity.count.copyFrom(player.eternities);
         eternity.hasBest = player.bestEternity < 999999999999;
         eternity.best.setFrom(player.bestEternity);
         eternity.this.setFrom(player.thisEternity);
@@ -94,7 +94,7 @@ Vue.component("statistics-tab", {
         <br>
         <h3>General</h3>
         <div>You have made a total of {{ shortenMoney(totalAntimatter) }} antimatter.</div>
-        <div>You have done {{ resets }} Dimension {{"Boost/Shift" | pluralize(resets, "Boosts/Shifts")}}.</div>
+        <div>You have purchased {{ boosts }} Dimension {{"Boost/Shift" | pluralize(boosts, "Boosts/Shifts")}}.</div>
         <div>You have {{ galaxies }} Antimatter {{"Galaxy" | pluralize(galaxies, "Galaxies")}}.</div>
         <div>You have played for {{ realTimePlayed }}.</div>
         <div v-if="reality.isUnlocked">
@@ -126,9 +126,9 @@ Vue.component("statistics-tab", {
         </div>
         <div v-if="eternity.isUnlocked">
             <h3>Eternity</h3>
-            <div v-if="eternity.count > 0">
+            <div v-if="eternity.count.gt(0)">
               You have Eternitied
-              {{ formatResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
+              {{ formatDecimalResetAmount(eternity.count) }}<span v-if="reality.isUnlocked"> this Reality</span>.
             </div>
             <div v-else>You haven't Eternitied<span v-if="reality.isUnlocked"> this Reality</span>.</div>
             <div v-if="eternity.hasBest">Your fastest Eternity was {{ eternity.best }}.</div>

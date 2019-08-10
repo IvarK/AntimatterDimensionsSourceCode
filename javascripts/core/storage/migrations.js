@@ -117,6 +117,8 @@ GameStorage.migrations = {
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
       GameStorage.migrations.convertNewsToSet(player);
+      GameStorage.migrations.convertEternityCountToDecimal(player);
+      GameStorage.migrations.renameDimboosts(player);
     }
   },
 
@@ -567,6 +569,16 @@ GameStorage.migrations = {
   convertNewsToSet(player) {
     player.news = new Set(player.newsArray);
     delete player.newsArray;
+  },
+
+  convertEternityCountToDecimal(player) {
+    player.eternities = new Decimal(player.eternities);
+    player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+  },
+
+  renameDimboosts(player) {
+    player.dimensionBoosts = player.resets;
+    delete player.resets;
   },
 
   prePatch(saveData) {

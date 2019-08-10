@@ -195,8 +195,7 @@ GameDatabase.celestials.alchemy = {
       effect: amount => 1 + amount / 2000000,
       tier: 3,
       uiOrder: 3,
-      formatEffect: value => `Game speed ${formatX(value, 5, 5)} for every real-time minute ` +
-        "spent in your current reality",
+      formatEffect: value => `Game speed ${formatX(value, 5, 5)} per real-time minute in this reality`,
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,
@@ -341,9 +340,9 @@ GameDatabase.celestials.alchemy = {
       effect: amount => amount / 50000,
       tier: 4,
       uiOrder: 4,
-      formatEffect: value => (Ra.has(RA_UNLOCKS.LAITELA_UNLOCK)
-        ? `Boost matter dimension generation chance by +${formatPercents(value, 2, 2)}`
-        : "?????"),
+      formatEffect: value => (player.celestials.laitela.matter === 0
+        ? "?????"
+        : `Boost matter dimension generation chance by +${formatPercents(value, 2, 2)}`),
       reagents: [
         {
           resource: ALCHEMY_RESOURCE.EFFARIG,

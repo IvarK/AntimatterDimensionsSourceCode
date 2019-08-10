@@ -138,7 +138,7 @@ GameDatabase.reality.upgrades = (function() {
       id: 14,
       cost: 50,
       requirement: () => `${shorten(2e6)} Eternities`,
-      checkRequirement: () => player.eternities >= 2e6,
+      checkRequirement: () => player.eternities.gte(2e6),
       checkEvent: GameEvent.ETERNITY_RESET_AFTER,
       description: "Gain Eternities per second equal to your Realities",
       effect: () => Math.pow(player.realities * RA_UNLOCKS.TT_BOOST.effect.eternity(),
@@ -181,7 +181,7 @@ GameDatabase.reality.upgrades = (function() {
       checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
       checkEvent: GameEvent.REALITY_RESET_BEFORE,
       description: "Eternities affect glyph level",
-      effect: () => Math.max(Math.sqrt(Math.log10(player.eternities)) * 0.45, 1),
+      effect: () => Math.max(Math.sqrt(player.eternities.log10()) * 0.45, 1),
       formatCost: value => shorten(value, 1, 0)
     },
     {

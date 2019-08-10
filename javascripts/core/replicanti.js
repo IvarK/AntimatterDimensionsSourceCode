@@ -41,16 +41,20 @@ function replicantiGalaxy() {
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
-  if (!isAutobuyerActive) {
-    player.replicanti.amount = Math.clampMax(player.replicanti.amount.exponent + log10GainFactor,
-      replicantiCap().log10());
+  // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
+  // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
+  const uncappedAmount = Decimal.pow(10, log10GainFactor.plus(player.replicanti.amount.log10()));
+  // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
+  if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
+    if (isAutobuyerActive) {
+      player.replicanti.galaxies += Replicanti.galaxies.max - player.replicanti.galaxies;
+    }
+    player.replicanti.amount = replicantiCap();
     return;
   }
 
-  // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
-  // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
-  if (log10GainFactor.gt(Number.MAX_VALUE)) {
-    player.replicanti.galaxies += Replicanti.galaxies.max - player.replicanti.galaxies;
+  if (!isAutobuyerActive) {
+    player.replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
     return;
   }
 

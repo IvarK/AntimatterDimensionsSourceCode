@@ -123,11 +123,9 @@ function applyNDMultipliers(mult, tier) {
 
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
-    // eslint-disable-next-line no-negated-condition
-    tier !== 8 ? Achievement(34) : null,
+    tier < 8 ? Achievement(34) : null,
     tier <= 4 ? Achievement(43) : null,
-    // eslint-disable-next-line no-negated-condition
-    tier !== 8 ? TimeStudy(71) : null,
+    tier < 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null,
     AlchemyResource.dimensionality

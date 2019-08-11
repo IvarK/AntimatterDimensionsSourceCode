@@ -22,10 +22,10 @@ const AutoEternityMode = {
 };
 
 const AutoRealityMode = {
-  RM: 1,
-  GLYPH: 2,
-  EITHER: 3,
-  BOTH: 4
+  RM: 0,
+  GLYPH: 1,
+  EITHER: 2,
+  BOTH: 3
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
@@ -76,7 +76,7 @@ const AutoGlyphSacMode = {
   ALL: 1,
   RARITY_THRESHOLDS: 2,
   ADVANCED: 3,
-  ALCHEMY: 4  
+  ALCHEMY: 4
 }
 
 const AutoGlyphPickMode = {

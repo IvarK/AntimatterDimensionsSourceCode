@@ -391,7 +391,7 @@ dev.buyAllPerks = function() {
   }
 };
 
-(function(){
+(function() {
   let kongTest;
   const setKongTest = value => {
     kongTest = value;

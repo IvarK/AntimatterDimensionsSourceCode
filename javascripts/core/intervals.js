@@ -2,10 +2,13 @@
 
 const GameIntervals = (function() {
   const interval = (handler, timeout) => {
-    let id;
+    let id = -1;
     return {
       start() {
         id = setInterval(handler, typeof timeout === "function" ? timeout() : timeout);
+      },
+      get isStarted() {
+        return id !== -1;
       },
       stop() {
         clearInterval(id);

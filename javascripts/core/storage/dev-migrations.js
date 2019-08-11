@@ -424,7 +424,13 @@ GameStorage.devMigrations = {
     },
     GameStorage.migrations.convertNewsToSet,
     GameStorage.migrations.convertEternityCountToDecimal,
-    GameStorage.migrations.renameDimboosts
+    GameStorage.migrations.renameDimboosts,
+    player => {
+      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Disable it also to not wreck people's long runs or smth
+      player.auto.reality.mode = 0;
+      player.auto.reality.isActive = false;
+    }
   ],
 
   patch(player) {

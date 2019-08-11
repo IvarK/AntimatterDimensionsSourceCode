@@ -66,6 +66,10 @@ class TabState {
     Modal.hide();
     EventHub.dispatch(GameEvent.TAB_CHANGED);
   }
+
+  resetCurrentSubtab() {
+    this._currentSubtab = this.subtabs[0];
+  }
 }
 
 const Tab = GameDatabase.tabs.mapToObject(
@@ -81,3 +85,9 @@ const Tabs = (function() {
     }
   };
 }());
+
+EventHub.logic.on(GameEvent.GAME_LOAD, () => {
+  for (const tab of Tabs.all) {
+    tab.resetCurrentSubtab();
+  }
+});

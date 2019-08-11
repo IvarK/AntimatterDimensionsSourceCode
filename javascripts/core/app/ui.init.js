@@ -38,5 +38,6 @@ let ui = {
     newUI: false,
     newsHidden: false
   },
-  notationName: ""
+  notationName: "",
+  formatPreBreak: false
 };

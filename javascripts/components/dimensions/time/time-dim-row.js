@@ -14,7 +14,7 @@ Vue.component("time-dim-row", {
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
       isAffordable: false,
-      autobuyers: player.reality.tdbuyers
+      autobuyers: Array.from(player.reality.tdbuyers)
     };
   },
   computed: {
@@ -45,6 +45,7 @@ Vue.component("time-dim-row", {
       }
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
+      this.autobuyers = Array.from(player.reality.tdbuyers);
     },
     buyTimeDimension() {
       buyTimeDimension(this.tier);

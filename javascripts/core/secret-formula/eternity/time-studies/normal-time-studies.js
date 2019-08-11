@@ -540,7 +540,7 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirementV: () => (TimeStudy(227).isBought || TimeStudy(228).isBought) && TimeStudy(233).isBought,
       description: "Sacrifice boosts First Dimension",
       effect: () => Sacrifice.totalBoost,
-      formatEffect: value => formatX(value, 2, 1)
+      formatEffect: value => formatX(value, 0, 0)
     },
   ];
 }());

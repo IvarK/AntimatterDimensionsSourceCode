@@ -102,7 +102,9 @@ Vue.component("statistics-tab", {
         </div>
         <div>
           <br>
-          <div v-for="line in matterScale">{{line}}</div>
+          <div
+            v-if="eternity.thisReal.seconds > 1"
+            v-for="line in matterScale">{{line}}</div>
         </div>
         <br>
         <div v-if="infinity.isUnlocked">

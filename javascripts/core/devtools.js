@@ -391,18 +391,20 @@ dev.buyAllPerks = function() {
   }
 };
 
-dev.kongTest = function() {
-  const page = document.getElementById("page");
-  if (document.getElementById("page").style.width === "") {
-    page.style.width = "1050px";
-    page.style.height = "700px";
-    page.style.marginTop = "100px";
-  } else {
-    page.style.width = "";
-    page.style.height = "";
-    page.style.marginTop = "";
-  }
-};
+(function(){
+  let kongTest;
+  const setKongTest = value => {
+    kongTest = value;
+    localStorage.setItem("kongTest", kongTest);
+    if (kongTest) {
+      document.documentElement.classList.add("_kong-test");
+    } else {
+      document.documentElement.classList.remove("_kong-test");
+    }
+  };
+  setKongTest(localStorage.getItem("kongTest") === "true");
+  dev.kongTest = () => setKongTest(!kongTest);
+}());
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {

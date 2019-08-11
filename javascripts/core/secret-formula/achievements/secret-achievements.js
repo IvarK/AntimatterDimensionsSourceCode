@@ -31,7 +31,7 @@ GameDatabase.achievements.secret = [
     name: "Do you enjoy pain?",
     tooltip: "Use a \"painful\" notation for 10 minutes with more than 1 eternity.",
     checkRequirement: () => AchievementTimers.pain
-      .check(player.eternities.gte(1) && Notation.current.isPainful, 600),
+      .check(player.eternities.gte(1) && Notations.current.isPainful, 600),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {

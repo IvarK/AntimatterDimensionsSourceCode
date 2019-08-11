@@ -143,7 +143,7 @@ function galaxyReset() {
   player.tickDecrease -= 0.03;
   player.dimensionBoosts = 0;
   softReset(0);
-  if (Notation.current === Notation.cancer) player.spreadingCancer += 1;
+  if (Notations.current === Notation.cancer) player.spreadingCancer += 1;
   player.noSacrifices = true;
   EventHub.dispatch(GameEvent.GALAXY_RESET_AFTER);
 }
@@ -162,7 +162,7 @@ function maxBuyGalaxies(manual) {
   const req = Galaxy.requirement;
   if (!req.isSatisfied) return false;
   const newGalaxies = Math.min(limit, Galaxy.buyableGalaxies(Math.round(NormalDimension(req.tier).amount.toNumber())));
-  if (Notation.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
+  if (Notations.current === Notation.cancer) player.spreadingCancer += newGalaxies - player.galaxies;
   // galaxyReset increments galaxies, so we add one less than we should:
   player.galaxies = newGalaxies - 1;
   galaxyReset();

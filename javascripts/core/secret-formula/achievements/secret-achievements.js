@@ -148,7 +148,9 @@ GameDatabase.achievements.secret = [
   {
     id: 42,
     name: "Was it even broken?",
-    tooltip: '"Fix" your save.'
+    tooltip: '"Fix" your save.',
+    checkRequirement: () => player.secretUnlocks.fixed === "hasbeenfixed",
+    checkEvent: GameEvent.GAME_LOAD
   },
   {
     id: 43,

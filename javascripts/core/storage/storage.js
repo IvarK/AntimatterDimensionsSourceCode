@@ -127,9 +127,6 @@ const GameStorage = {
     if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
-    if (player.secretUnlocks.fixed === "hasbeenfixed") {
-      SecretAchievement(42).unlock();
-    }
 
     ui.view.newsHidden = player.options.newsHidden;
     ui.view.newUI = player.options.newUI;

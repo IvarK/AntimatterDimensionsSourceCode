@@ -18,7 +18,7 @@ GameDatabase.reality.upgrades = (function() {
     props.formatCost = value => shorten(value, 2, 0);
     return props;
   };
-  const isFirstEternity = () => player.realities > 0 && Player.gainedEternities === 0;
+  const isFirstEternity = () => player.realities > 0 && Player.gainedEternities.eq(0);
   const isFirstInfinity = () => isFirstEternity() && player.infinitied.eq(0);
   return [
     rebuyable({

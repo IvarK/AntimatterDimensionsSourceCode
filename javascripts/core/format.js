@@ -31,10 +31,10 @@ function shortenSmallInteger(value) {
 }
 
 function shortenPostBreak(value, places, placesUnder1000) {
-  const currentFormat = Notations.formatPreBreak;
-  Notations.formatPreBreak = false;
+  const currentFormat = ui.formatPreBreak;
+  ui.formatPreBreak = false;
   const shortened = shorten(value, places, placesUnder1000);
-  Notations.formatPreBreak = currentFormat;
+  ui.formatPreBreak = currentFormat;
   return shortened;
 }
 

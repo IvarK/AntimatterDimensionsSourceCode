@@ -29,7 +29,14 @@ GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
 GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
 GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
-GameKeyboard.bindHotkey("u", () => automatorOnOff());
+GameKeyboard.bindHotkey("u", () => {
+  if (AutomatorBackend.isRunning) {
+    AutomatorBackend.pause();
+  }
+  else if (AutomatorBackend.isOn) {
+    AutomatorBackend.mode = AutomatorMode.RUN;
+  }
+});
 
 GameKeyboard.bindHotkey("esc", () => {
   if (Modal.isOpen) {

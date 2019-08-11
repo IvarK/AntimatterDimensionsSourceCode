@@ -1,11 +1,11 @@
 "use strict";
 
 GameDatabase.eternity.timeStudies.normal = (function() {
-  const thisInfinityMult = () => {
+  const thisInfinityMult = thisInfinity => {
     // All "this inf time" or "best inf time" mults are * 10
-    const thisInfinity = Time.thisInfinity.totalSeconds * 10 + 1;
-    const cappedInfinity = Math.min(Math.pow(thisInfinity, 0.125), 500);
-    return Decimal.pow(15, Math.log(thisInfinity) * cappedInfinity);
+    const scaledInfinity = thisInfinity * 10 + 1;
+    const cappedInfinity = Math.min(Math.pow(scaledInfinity, 0.125), 500);
+    return Decimal.pow(15, Math.log(scaledInfinity) * cappedInfinity);
   };
   return [
     {
@@ -274,8 +274,10 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 5,
       requirement: () => TimeStudy(122).isBought && !TimeStudy(131).isBought && !TimeStudy(133).isBought,
       requirementV: () => TimeStudy(122).isBought && (TimeStudy(131).isBought || TimeStudy(133).isBought),
-      description: "Replicanti galaxies are 40% more effective",
-      effect: 0.4
+      description: () => (Perk.studyPassive.isBought
+        ? "Replicanti galaxies are 50% more effective"
+        : "Replicanti galaxies are 40% more effective"),
+      effect: () => (Perk.studyPassive.isBought ? 0.5 : 0.4)
     },
     {
       id: 133,
@@ -292,8 +294,12 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: () => TimeStudy(131).isBought && !TimeStudy(142).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(131).isBought && (TimeStudy(142).isBought || TimeStudy(143).isBought),
-      description: "Multiplier to IP, which decays over this Infinity",
-      effect: () => Decimal.divide(1e45, thisInfinityMult()).clampMin(1),
+      description: () => (Perk.studyActiveEP.isBought
+        ? "Multiplier to IP"
+        : "Multiplier to IP, which decays over this Infinity"),
+      effect: () => (Perk.studyActiveEP.isBought
+        ? 1e45
+        : Decimal.divide(1e45, thisInfinityMult(Time.thisInfinity.totalSeconds)).clampMin(1)),
       formatEffect: value => formatX(value, 2, 1)
     },
     {
@@ -301,8 +307,8 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       cost: 4,
       requirement: () => TimeStudy(132).isBought && !TimeStudy(141).isBought && !TimeStudy(143).isBought,
       requirementV: () => TimeStudy(132).isBought && (TimeStudy(141).isBought || TimeStudy(143).isBought),
-      description: () => `You gain ${shorten(1e25, 0, 0)}x more IP`,
-      effect: 1e25
+      description: () => `You gain ${shorten(Perk.studyPassive.isBought ? 1e60 : 1e25, 0, 0)}x more IP`,
+      effect: () => (Perk.studyPassive.isBought ? 1e60 : 1e25)
     },
     {
       id: 143,
@@ -310,7 +316,11 @@ GameDatabase.eternity.timeStudies.normal = (function() {
       requirement: () => TimeStudy(133).isBought && !TimeStudy(141).isBought && !TimeStudy(142).isBought,
       requirementV: () => TimeStudy(133).isBought && (TimeStudy(141).isBought || TimeStudy(142).isBought),
       description: "Multiplier to IP, which increases over this Infinity",
-      effect: () => thisInfinityMult(),
+      effect: () => {
+        let thisInfinity = Time.thisInfinity;
+        Perk.studyIdleEP.applyEffect(v => thisInfinity = thisInfinity.plus(v));
+        return thisInfinityMult(thisInfinity.totalSeconds);
+      },
       formatEffect: value => formatX(value, 2, 1),
       cap: () => Effarig.eternityCap
     },

@@ -67,7 +67,7 @@ function bigCrunchReset() {
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
-  secondSoftReset();
+  secondSoftReset(true);
 
   if (Achievement(95).isEnabled) {
     player.replicanti.amount = currentReplicanti;
@@ -98,11 +98,11 @@ function bigCrunchReset() {
 
 }
 
-function secondSoftReset() {
+function secondSoftReset(forcedNDReset = false) {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
     resetAntimatter();
-    softReset(0);
+    softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
     IPminpeak = new Decimal(0);
     if (player.replicanti.unl)

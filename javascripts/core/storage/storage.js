@@ -152,5 +152,8 @@ const GameStorage = {
     }
     nextTickDiff = player.options.updateRate;
     GameUI.update();
+    if (GameIntervals.gameLoop.isStarted) {
+      GameIntervals.gameLoop.restart();
+    }
   }
 };

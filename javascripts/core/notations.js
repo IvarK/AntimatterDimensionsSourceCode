@@ -74,12 +74,11 @@ const Notations = {
   },
   get current() {
     return GameUI.initialized ? ui.notation : Notation.mixedScientific;
-  },
-  formatPreBreak: true
+  }
 };
 
-ADNotations.Settings.isInfinite = decimal => Notations.formatPreBreak && decimal.gte(Decimal.MAX_NUMBER);
+ADNotations.Settings.isInfinite = decimal => ui.formatPreBreak && decimal.gte(Decimal.MAX_NUMBER);
 
 EventHub.logic.on(GameEvent.GAME_TICK_AFTER, () => {
-  Notations.formatPreBreak = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
+  ui.formatPreBreak = !player.break || (NormalChallenge.isRunning && !Enslaved.isRunning);
 });

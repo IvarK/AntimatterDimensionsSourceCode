@@ -166,7 +166,7 @@ function gainedEternityPoints() {
 }
 
 function getRealityMachineMultiplier() {
-  return Teresa.rmMultiplier * player.celestials.teresa.rmMult * getAdjustedGlyphEffect("effarigrm");
+  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) * getAdjustedGlyphEffect("effarigrm");
 }
 
 function gainedRealityMachines() {

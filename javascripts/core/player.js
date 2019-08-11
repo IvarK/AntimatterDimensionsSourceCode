@@ -311,9 +311,7 @@ let player = {
       unlocks: [],
       run: false,
       bestRunAM: new Decimal(1),
-      glyphLevelMult: 1,
-      rmMult: 1,
-      dtBulk: 1
+      perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,

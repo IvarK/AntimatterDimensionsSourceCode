@@ -98,11 +98,12 @@ const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
+    if (TimeCompression.isActive) return;
     if (this.maxQuoteIdx === 9) player.celestials.enslaved.maxQuotes += 4;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) release = Enslaved.storedTimeInsideEnslaved(release);
     if (autoRelease) release *= 0.01;
-    gameLoop(0, { gameDiff: release });
+    nextTickDiff = release;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release / 50;
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);

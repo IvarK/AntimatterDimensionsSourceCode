@@ -152,6 +152,8 @@ GameDatabase.reality.glyphEffects = [
     effect: (level, strength) => 1.01 + Math.pow(level, 0.32) * Math.pow(strength, 0.45) / 75,
     formatEffect: x => shorten(x, 3, 3),
     combine: GlyphCombiner.multiply,
+    /** @type {function(number):number} */
+    softcap: value => (value > 4 ? 4 + 0.1 * (value - 4) : value),
   }, {
     id: "timespeed",
     bitmaskIndex: 1,

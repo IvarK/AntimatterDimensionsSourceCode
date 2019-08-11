@@ -33,17 +33,6 @@ class AlchemyResourceState extends GameMechanicState {
     return this.config.effect(this.amount);
   }
 
-  get reactionText() {
-    if (this.reaction === null) return "Base Resource";
-    const isReality = this.reaction._product.id === ALCHEMY_RESOURCE.REALITY;
-    const reagentStrings = [];
-    for (const reagent of this.reaction._reagents) {
-      reagentStrings.push(`${isReality ? "" : reagent.cost}${reagent.resource.symbol}`);
-    }
-    const produced = `${Math.floor(100 * this.reaction.baseProduction * this.reaction.reactionEfficiency) / 100}`;
-    return `${reagentStrings.join(" + ")} ➜ ${isReality ? "" : produced}${this.reaction._product.symbol}`;
-  }
-
   get reaction() {
     return AlchemyReactions.all[this.id];
   }
@@ -98,6 +87,10 @@ class AlchemyReaction {
     return this.isReality ? 1 : AlchemyResource.synergism.effectValue;
   }
 
+  get reactionProduction() {
+    return this.baseProduction * this.reactionEfficiency;
+  }
+
   // Cap products at the minimum amount of all reagents before the reaction occurs, eg. 200Ξ and 350Ψ will not bring
   // ω above 200.  In fact, since some Ξ will be used during the reaction, the actual cap will be a bit lower.
   combineReagents() {
@@ -123,7 +116,7 @@ class AlchemyReaction {
     for (const reagent of this._reagents) {
       reagent.resource.amount -= cappedYield * reagent.cost;
     }
-    this._product.amount += this.baseProduction * cappedYield * this.reactionEfficiency;
+    this._product.amount += cappedYield * this.reactionProduction;
   }
 }
 

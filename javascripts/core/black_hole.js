@@ -330,7 +330,8 @@ const BlackHoles = {
    * starting from black hole 1 and black hole 0 being normal game.
    */
   calculateSpeedups() {
-    const effectsToConsider = [GameSpeedEffect.EC12, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE];
+    const effectsToConsider = [GameSpeedEffect.FIXEDSPEED, GameSpeedEffect.TIMEGLYPH, GameSpeedEffect.BLACKHOLE, 
+      GameSpeedEffect.MOMENTUM];
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider, 1);
     const speedups = [1];
     for (const blackHole of this.list) {

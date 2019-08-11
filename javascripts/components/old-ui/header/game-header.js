@@ -15,7 +15,7 @@ Vue.component("game-header", {
           // won't trigger display update if we, say, switch from one challenge to another
           function celestialReality(celestial, name) {
             return {
-              name: () => name,
+              name: () => `${name} Reality`,
               isActive: token => token,
               activityToken: () => celestial.isRunning
             };
@@ -31,6 +31,11 @@ Vue.component("game-header", {
               name: () => "Time Dilation",
               isActive: token => token,
               activityToken: () => player.dilation.active
+            },
+            {
+              name: () => "Time Compression",
+              isActive: token => token,
+              activityToken: () => TimeCompression.isActive
             },
             {
               name: token => `${NormalChallenge(token).config.reward} Challenge`,

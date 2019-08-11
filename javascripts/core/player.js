@@ -131,7 +131,7 @@ let player = {
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
   thisInfinityLastBuyTime: 0,
-  resets: 0,
+  dimensionBoosts: 0,
   galaxies: 0,
   tickDecrease: 0.9,
   totalAntimatter: new Decimal(0),
@@ -166,7 +166,7 @@ let player = {
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
-  eternities: 0,
+  eternities: new Decimal(0),
   thisEternity: 0,
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
@@ -278,7 +278,7 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0,
+    partEternitied: new Decimal(0),
     automator: {
       state: {
         mode: AutomatorMode.STOP,
@@ -393,6 +393,12 @@ let player = {
       quoteIdx: 0,
       disCharge: false,
       peakGamespeed: 1,
+      compression: {
+        active: false,
+        entanglement: 0,
+        upgradeBits: 0,
+        respec: false
+      },
     },
     laitela: {
       matter: new Decimal(0),
@@ -456,7 +462,7 @@ const Player = {
   },
 
   get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
+    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
   },
 
   get isInMatterChallenge() {
@@ -481,7 +487,7 @@ const Player = {
     if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond.times(getGameSpeedupFactor());
+    return basePerSecond.times(getGameSpeedupForDisplay());
   },
 
   get bestRunIPPM() {

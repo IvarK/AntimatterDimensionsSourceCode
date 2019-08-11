@@ -399,6 +399,8 @@ GameStorage.migrations = {
     delete player.tickspeed;
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
+    // This did nothing on live and continues to do nothing...?
+    delete player.tickDecrease;
   },
 
   removePostC3Reward(player) {

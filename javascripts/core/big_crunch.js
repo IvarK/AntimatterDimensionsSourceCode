@@ -101,7 +101,6 @@ function bigCrunchReset() {
 function secondSoftReset() {
     player.dimensionBoosts = 0;
     player.galaxies = 0;
-    player.tickDecrease = 0.9;
     resetAntimatter();
     softReset(0);
     InfinityDimensions.resetAmount();

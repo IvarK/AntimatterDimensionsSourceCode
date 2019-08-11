@@ -3638,6 +3638,11 @@ screen and (max-width: 480px) {
 
 /*#endregion o-infinity-upgrade-btn--bought*/
 
+.o-infinity-upgrade-btn--chargeable {
+  background-color: #25e8e6;
+  animation: a-compression-btn-glow 2s infinite;
+}
+
 .o-infinity-upgrade-btn--charged {
   background-color: #25e8e6;
 }

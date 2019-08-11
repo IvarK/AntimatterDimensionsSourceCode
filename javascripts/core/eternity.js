@@ -122,7 +122,6 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityRealTime = 0;
   player.dimensionBoosts = player.eternities.gte(4) ? 4 : 0;
   player.galaxies = player.eternities.gte(4) ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
   player.infMult = new Decimal(1);

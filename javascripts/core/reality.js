@@ -279,7 +279,6 @@ function completeReality(force, reset, auto = false) {
   player.thisInfinityRealTime = 0;
   player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.interval = null;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;

@@ -717,10 +717,11 @@ function gameLoop(diff, options = {}) {
       Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
 
     if (!Teresa.isRunning) {
-      let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
-      if (Enslaved.isRunning) ttGain *= 1e-3;
-      ttGain *= RA_UNLOCKS.TT_BOOST.effect.ttGen();
-      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+      let ttGain = new Decimal(diff / 1000)
+        .times(getAdjustedGlyphEffect("dilationTTgen"))
+        .times(RA_UNLOCKS.TT_BOOST.effect.ttGen());
+      if (Enslaved.isRunning) ttGain = ttGain.times(1e-3);
+      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain = ttGain.times(RA_UNLOCKS.TT_ACHIEVEMENT.effect());
       player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
     }
 

@@ -15,6 +15,7 @@ Vue.component("statistics-tab", {
         best: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
+        bestRate: new Decimal(0),
       },
       eternity: {
         isUnlocked: false,
@@ -23,6 +24,7 @@ Vue.component("statistics-tab", {
         best: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
+        bestRate: new Decimal(0),
       },
       reality: {
         isUnlocked: false,
@@ -31,6 +33,7 @@ Vue.component("statistics-tab", {
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
         totalTimePlayed: TimeSpan.zero,
+        bestRate: new Decimal(0),
       },
       matterScale: [],
     };
@@ -51,6 +54,7 @@ Vue.component("statistics-tab", {
         infinity.hasBest = player.bestInfinityTime < 999999999999;
         infinity.best.setFrom(player.bestInfinityTime);
         infinity.this.setFrom(player.thisInfinityTime);
+        infinity.bestRate.copyFrom(player.bestIPminThisEternity);
       }
       const isEternityUnlocked = progress.isEternityUnlocked;
       const eternity = this.eternity;
@@ -60,6 +64,7 @@ Vue.component("statistics-tab", {
         eternity.hasBest = player.bestEternity < 999999999999;
         eternity.best.setFrom(player.bestEternity);
         eternity.this.setFrom(player.thisEternity);
+        eternity.bestRate.copyFrom(player.bestEPminThisReality);
       }
       const isRealityUnlocked = progress.isRealityUnlocked;
       const reality = this.reality;
@@ -73,6 +78,7 @@ Vue.component("statistics-tab", {
         infinity.thisReal.setFrom(player.thisInfinityRealTime);
         eternity.thisReal.setFrom(player.thisEternityRealTime);
         reality.thisReal.setFrom(player.thisRealityRealTime);
+        reality.bestRate.copyFrom(player.bestRMmin);
       }
       this.matterScale = MatterScale.estimate(player.antimatter);
     },
@@ -103,7 +109,7 @@ Vue.component("statistics-tab", {
         <div>
           <br>
           <div
-            v-if="eternity.thisReal.seconds > 1"
+            v-if="eternity.thisReal.seconds > 1 && infinity.thisReal.seconds > 1"
             v-for="line in matterScale">{{line}}</div>
         </div>
         <br>
@@ -124,6 +130,11 @@ Vue.component("statistics-tab", {
                 ({{infinity.thisReal.toStringShort()}} real time)
               </span>
             </div>
+            <div>
+              Your best IP/min 
+              <span v-if="eternity.count.gt(0)">this Eternity </span>
+              is {{ shorten(infinity.bestRate, 2, 2) }}.
+            </div>
             <br>
         </div>
         <div v-if="eternity.isUnlocked">
@@ -140,6 +151,11 @@ Vue.component("statistics-tab", {
                 ({{eternity.thisReal.toStringShort()}} real time)
               </span>
             </div>
+            <div>
+              Your best EP/min 
+              <span v-if="reality.isUnlocked">this Reality </span>
+              is {{ shorten(eternity.bestRate, 2, 2) }}.
+            </div>
             <br>
         </div>
         <div v-if="reality.isUnlocked">
@@ -149,6 +165,9 @@ Vue.component("statistics-tab", {
             <div>
               You have spent
               {{ reality.this }} in this Reality. ({{reality.thisReal.toStringShort()}} real time)
+            </div>
+            <div>
+              Your best RM/min is {{ shorten(reality.bestRate, 2, 2) }}.
             </div>
             <br>
         </div>

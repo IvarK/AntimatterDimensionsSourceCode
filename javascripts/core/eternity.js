@@ -81,8 +81,10 @@ function eternity(force, auto, specialConditions = {}) {
   
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   try {
     // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?

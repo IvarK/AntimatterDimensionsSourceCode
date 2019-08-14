@@ -1,45 +1,50 @@
+"use strict";
+
 Vue.mixin({
   computed: {
-    $viewModel: function() {
+    $viewModel() {
       return ui.view;
     }
   },
   methods: {
-    emitClick: function() {
-      this.$emit('click');
+    emitClick() {
+      this.$emit("click");
     },
-    emitInput: function(val) {
-      this.$emit('input', val);
+    emitInput(val) {
+      this.$emit("input", val);
     },
-    emitClose: function() {
-      this.$emit('close');
+    emitClose() {
+      this.$emit("close");
     },
-    on$: function(event, fn) {
-      EventHub.global.on(event, fn, this);
+    on$(event, fn) {
+      EventHub.ui.on(event, fn, this);
     },
-    shorten: function(value, places, placesUnder1000) {
+    shorten(value, places, placesUnder1000) {
       return shorten(value, places, placesUnder1000);
     },
-    shortenPostBreak: function(value, places, placesUnder1000) {
+    shortenPostBreak(value, places, placesUnder1000) {
       return shortenPostBreak(value, places, placesUnder1000);
     },
-    shortenRateOfChange: function(value) {
+    shortenRateOfChange(value) {
       return shortenRateOfChange(value);
     },
-    shortenCosts: function(value) {
+    shortenCosts(value) {
       return shortenCosts(value);
     },
-    shortenDimensions: function(value) {
+    shortenDimensions(value) {
       return shortenDimensions(value);
     },
-    shortenMoney: function(value) {
+    shortenMoney(value) {
       return shortenMoney(value);
     },
-    shortenGlyphEffect: function(value) {
-      return shortenGlyphEffect(value);
-    },
-    shortenMultiplier: function(value) {
+    shortenMultiplier(value) {
       return shortenMultiplier(value);
+    },
+    shortenSmallInteger(value) {
+      return shortenSmallInteger(value);
+    },
+    formatX(value) {
+      return formatX(value);
     }
   },
   created() {
@@ -51,11 +56,11 @@ Vue.mixin({
     }
   },
   destroyed() {
-    EventHub.global.offAll(this);
+    EventHub.ui.offAll(this);
   }
 });
 
-Vue.filter("pluralize", function (value, amount, plural) {
+function pluralize(value, amount, plural) {
   if (value === undefined || amount === undefined)
     throw "Arguments must be defined";
   let isSingular = true;
@@ -68,7 +73,36 @@ Vue.filter("pluralize", function (value, amount, plural) {
   else
     throw "Amount must be either a number or Decimal";
   return isSingular ? value : (plural !== undefined ? plural : value + "s");
-});
+}
+
+Vue.filter("pluralize", pluralize);
+
+const ReactivityComplainer = {
+  path: "",
+  addDep() {
+    throw crash(`Boi you fukked up - ${this.path} became REACTIVE (oh shite)`);
+  },
+  complain() {
+    Vue.pushTarget(this);
+    try {
+      this.checkReactivity(player, "player");
+    } finally {
+      Vue.popTarget();
+    }
+  },
+  checkReactivity(obj, path) {
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) continue;
+      this.path = `${path}.${key}`;
+      // FIXME: DON'T add new exceptions here, player.options should be fixed and never become reactive
+      if (this.path === "player.options") continue;
+      const prop = obj[key];
+      if (typeof prop === "object") {
+        this.checkReactivity(prop, this.path);
+      }
+    }
+  }
+};
 
 const GameUI = {
   events: [],
@@ -96,10 +130,11 @@ const GameUI = {
       Vue.nextTick(() => PerformanceStats.start("Vue Render"));
       PerformanceStats.start("Vue Update");
     }
-    for (let event of this.events) {
-      EventHub.global.emit(event);
+    for (const event of this.events) {
+      EventHub.ui.dispatch(event);
     }
-    EventHub.global.emit(GameEvent.UPDATE);
+    EventHub.ui.dispatch(GameEvent.UPDATE);
+    ReactivityComplainer.complain();
     if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
       PerformanceStats.end();
       Vue.nextTick(() => {
@@ -128,12 +163,9 @@ const UIID = function() {
 }());
 
 ui = new Vue({
-  el: '#ui',
+  el: "#ui",
   data: ui,
   computed: {
-    themeCss() {
-      return "stylesheets/theme-" + this.view.theme + ".css";
-    },
     notation() {
       return Notation.find(this.notationName);
     },
@@ -142,6 +174,9 @@ ui = new Vue({
     },
     scrollWindow() {
       return this.view.scrollWindow;
+    },
+    newUI() {
+      return this.view.newUI;
     }
   },
   methods: {
@@ -151,7 +186,7 @@ ui = new Vue({
         window.scrollBy(0, this.view.scrollWindow * (now - t) / 2);
         setTimeout(() => this.scroll(now), 20);
       }
-    },
+    }
   },
   watch: {
     currentGlyphTooltip(newVal) {
@@ -173,6 +208,7 @@ ui = new Vue({
       }
     },
   },
+  template: "<game-ui />"
 });
 
 GameUI.initialized = true;

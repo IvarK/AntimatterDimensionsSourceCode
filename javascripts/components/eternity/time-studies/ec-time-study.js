@@ -1,8 +1,10 @@
+"use strict";
+
 Vue.component("ec-time-study", {
   props: {
     setup: Object
   },
-  data: function() {
+  data() {
     return {
       hasRequirement: false,
       requirement: {
@@ -12,17 +14,20 @@ Vue.component("ec-time-study", {
     };
   },
   computed: {
-    study: function() {
+    study() {
       return this.setup.study;
     },
-    id: function() {
+    id() {
       return this.study.id;
     },
-    hasDecimalRequirement: function() {
-      return this.id > 6;
+    config() {
+      return this.study.config;
     },
-    requirementResource: function() {
-      return this.study.config.requirement.resource;
+    hasNumberRequirement() {
+      return typeof this.study.requirementCurrent === "number";
+    },
+    formatValue() {
+      return this.config.requirement.formatValue;
     }
   },
   methods: {
@@ -32,26 +37,13 @@ Vue.component("ec-time-study", {
       if (!this.hasRequirement || id > 10) return;
       const requirement = this.requirement;
       const study = this.study;
-      if (this.hasDecimalRequirement) {
+      if (this.hasNumberRequirement) {
+        requirement.total = study.requirementTotal;
+        requirement.current = Math.min(study.requirementCurrent, requirement.total);
+      } else {
         requirement.total.copyFrom(study.requirementTotal);
         requirement.current.copyFrom(study.requirementCurrent.min(requirement.total));
       }
-      else {
-        requirement.total = study.requirementTotal;
-        requirement.current = Decimal.min(study.requirementCurrent, requirement.total);
-      }
-    },
-    formatNumber(value) {
-      return value.toString();
-    },
-    formatWithCommas(value) {
-      return formatWithCommas(value);
-    },
-    formatDecimal(value) {
-      return this.shorten(value, 0, 0);
-    },
-    formatRequirement(formatFn) {
-      return `${formatFn(this.requirement.current)}/${formatFn(this.requirement.total)}`;
     }
   },
   template:
@@ -63,10 +55,8 @@ Vue.component("ec-time-study", {
         <span v-if="id === 12">Use only the Time Dimension path</span>
         <span v-else-if="id === 11">Use only the Normal Dimension path</span>
         <span v-else>
-          <span v-if="id > 6">{{formatRequirement(formatDecimal)}}</span>
-          <span v-else-if="id === 4">{{formatRequirement(formatWithCommas)}}</span>
-          <span v-else>{{formatRequirement(formatNumber)}}</span>
-          {{requirementResource}}
+          {{formatValue(requirement.current)}}/{{formatValue(requirement.total)}}
+          {{config.requirement.resource}}
         </span>
       </template>
     </time-study>`

@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.achievements.secret = [
   {
     id: 11,
@@ -27,7 +29,10 @@ GameDatabase.achievements.secret = [
   {
     id: 16,
     name: "Do you enjoy pain?",
-    tooltip: "Use standard, cancer, or bracket notation for 10 minutes with more than 1 eternity."
+    tooltip: "Use standard, cancer, or bracket notation for 10 minutes with more than 1 eternity.",
+    checkRequirement: () => AchievementTimers.pain
+      .check(player.eternities >= 1 && Notation.current.isPainful, 600),
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 17,
@@ -47,7 +52,9 @@ GameDatabase.achievements.secret = [
   {
     id: 22,
     name: "Cancer = Spread",
-    tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation."
+    tooltip: "Buy 100,000 Antimatter Galaxies in total while using cancer notation.",
+    checkRequirement: () => player.spreadingCancer >= 100000,
+    checkEvent: GameEvent.GALAXY_RESET_AFTER
   },
   {
     id: 23,
@@ -67,12 +74,19 @@ GameDatabase.achievements.secret = [
   {
     id: 26,
     name: "You're a failure",
-    tooltip: "Fail eternity challenges 10 times without refreshing. What are you doing with your life..."
+    tooltip: "Fail eternity challenges 10 times without refreshing. What are you doing with your life...",
+    checkRequirement: (function() {
+      let count = 0;
+      return () => ++count >= 10;
+    }()),
+    checkEvent: GameEvent.CHALLENGE_FAILED
   },
   {
     id: 27,
     name: "It's not called matter dimensions is it?",
-    tooltip: "Get Infinite matter."
+    tooltip: "Get Infinite matter.",
+    checkRequirement: () => player.matter.gte(InfinityChallenge(6).isRunning ? 2.586e15 : Decimal.MAX_NUMBER),
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 28,
@@ -87,7 +101,11 @@ GameDatabase.achievements.secret = [
   {
     id: 32,
     name: "Less than or equal to 0.001",
-    tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds."
+    tooltip: "Get a fastest infinity or eternity time of less than or equal to 0.001 seconds.",
+    checkRequirement: () =>
+      Time.bestInfinity.totalMilliseconds <= 1 ||
+      Time.bestEternity.totalMilliseconds <= 1,
+    checkEvent: [GameEvent.BIG_CRUNCH_BEFORE, GameEvent.ETERNITY_RESET_BEFORE]
   },
   {
     id: 33,
@@ -102,7 +120,9 @@ GameDatabase.achievements.secret = [
   {
     id: 35,
     name: "Should we tell them about buy max...",
-    tooltip: "Buy single tickspeed 100,000 times."
+    tooltip: "Buy single tickspeed 100,000 times.",
+    checkRequirement: () => player.secretUnlocks.why >= 1e5,
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 36,
@@ -117,7 +137,8 @@ GameDatabase.achievements.secret = [
   {
     id: 38,
     name: "Professional bodybuilder",
-    tooltip: "Get all your dimension bulk buyers to 1e100."
+    tooltip: "Get all your dimension bulk buyers to 1e100.",
+    checkRequirement: () => Autobuyers.dimensions.countWhere(a => !a.hasMaxedBulk) === 0
   },
   {
     id: 41,
@@ -132,17 +153,22 @@ GameDatabase.achievements.secret = [
   {
     id: 43,
     name: "Time fixes everything",
-    tooltip: "Fix infinity while dilated."
+    tooltip: "Fix infinity while dilated.",
+    checkRequirement: () => player.dilation.active,
+    checkEvent: GameEvent.FIX_INFINITY
   },
   {
     id: 44,
     name: "Are you statisfied now?",
-    tooltip: "Stare intently at the statistics tab for 15 minutes."
+    tooltip: "Stare intently at the statistics tab for 15 minutes.",
+    checkRequirement: () => AchievementTimers.stats.check(Tab.statistics.isOpen, 900),
+    checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
     id: 45,
     name: "This dragging is dragging on",
-    tooltip: "Drag the perks around for a minute."
+    tooltip: "Drag the perks around for a minute.",
+    checkRequirement: () => ++player.secretUnlocks.dragging / 100 >= 60
   },
   {
     id: 46,

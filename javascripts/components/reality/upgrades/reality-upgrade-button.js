@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("reality-upgrade-button", {
   props: {
     upgrade: Object
@@ -28,10 +30,10 @@ Vue.component("reality-upgrade-button", {
   },
   methods: {
     update() {
-      const { upgrade } = this;
-      this.isUnlocked = upgrade.isUnlocked;
+      const upgrade = this.upgrade;
+      this.isUnlocked = upgrade.isAvailable;
       this.canBeBought = upgrade.canBeBought;
-      this.isBought = upgrade.isBought;
+      this.isBought = !upgrade.isRebuyable && upgrade.isBought;
     }
   },
   template: `

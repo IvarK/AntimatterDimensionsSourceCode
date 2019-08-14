@@ -1,219 +1,178 @@
+"use strict";
+
 function canEternity() {
-  const challenge = EternityChallenge.current();
-  if (challenge === undefined && player.infinityPoints.lt(Number.MAX_VALUE)) return false;
-  if (challenge !== undefined && !challenge.canBeCompleted) return false;
+  return EternityChallenge.isRunning
+    ? EternityChallenge.current.canBeCompleted
+    : player.infinityPoints.gte(Decimal.MAX_NUMBER);
+}
+
+function eternity(force, auto, specialConditions = {}) {
+  if (specialConditions.switchingDilation && !canEternity()) {
+    force = true;
+  }
+  
+  if (force) {
+    player.challenge.eternity.current = 0;
+  }
+  else {
+    if (!canEternity()) return false;
+    if (!auto && !askEternityConfirmation()) return false;
+    EventHub.dispatch(GameEvent.ETERNITY_RESET_BEFORE);
+    player.bestEternity = Math.min(player.thisEternity, player.bestEternity);
+    player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
+    addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
+    player.eternities += Effects.product(RealityUpgrade(3));
+  }
+
+  if (EternityChallenge.isRunning) {
+    const challenge = EternityChallenge.current;
+    challenge.addCompletion();
+    if (Perk.studyECBulk.isBought) {
+      while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
+        challenge.addCompletion();
+      }
+    }
+    player.etercreq = 0;
+    respecTimeStudies(auto);
+  }
+
+  player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
+    Achievement(131),
+    TimeStudy(191)
+  );
+
+  if (player.dilation.active && !force) {
+    rewardTP();
+  }
+
+  initializeChallengeCompletions();
+  initializeResourcesAfterEternity();
+
+  if (!EternityMilestone.keepAutobuyers.isReached) {
+    // Fix infinity because it can only break after big crunch autobuyer interval is maxed
+    player.break = false;
+  }
+  
+  player.challenge.eternity.current = 0;
+  if (!specialConditions.enteringEC) {
+    player.dilation.active = false;
+  }
+  resetInfinityRuns();
+  InfinityDimensions.fullReset();
+  eternityResetReplicanti();
+  resetChallengeStuff();
+  NormalDimensions.reset();
+
+  if (player.respec) respecTimeStudies(auto);
+  player.respec = false;
+  if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
+    Tab.dimensions.time.show();
+  }
+  
+  if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Decimal.MAX_NUMBER)) {
+    EffarigUnlock.eternity.unlock();
+    Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} ` + 
+      "and IP multipliers apply with full effect; eternity count generates infinities " + 
+      "and The Enslaved Ones have been unlocked.");
+  }
+  
+  resetInfinityPointsOnEternity();
+  InfinityDimensions.resetAmount();
+  IPminpeak = new Decimal(0);
+  EPminpeak = new Decimal(0);
+  resetTimeDimensions();
+  try {
+      kong.submitStats('Eternities', player.eternities);
+  } catch (err) {
+      console.log("Couldn't load Kongregate API")
+  }
+  resetTickspeed();
+  playerInfinityUpgradesOnEternity();
+  AchievementTimers.marathon2.reset();
+  applyRealityUpgrades();
+  resetAntimatter();
+
+  EventHub.dispatch(GameEvent.ETERNITY_RESET_AFTER);
   return true;
 }
 
-function eternity(force, auto, switchingDilation) {
-    if (switchingDilation) {
-      if (!canEternity()) force = true;
-    }
-    if (force) {
-      player.currentEternityChall = String.empty;
-    }
-    else {
-      if (!canEternity()) return false;
-      if (!auto && !askEternityConfirmation()) return false;
-      if (player.thisEternity < player.bestEternity) {
-        player.bestEternity = player.thisEternity;
-      }
-      if (player.thisEternity < 30000) giveAchievement("That wasn't an eternity");
-      if (player.thisEternity < 200) giveAchievement("Eternities are the new infinity");
-      if (player.thisEternity <= 1) giveAchievement("Less than or equal to 0.001");
-      if (player.infinitied.lt(10)) giveAchievement("Do you really need a guide for this?");
-      if (Decimal.round(player.replicanti.amount).eq(9)) giveAchievement("We could afford 9");
-      if (player.dimlife) giveAchievement("8 nobody got time for that");
-      if (player.dead) giveAchievement("You're already dead.");
-      if (player.infinitied.lte(1)) giveAchievement("Do I really need to infinity");
-      if (gainedEternityPoints().gte("1e600") && player.thisEternity <= 60000 && player.dilation.active) {
-        giveAchievement("Now you're thinking with dilation!");
-      }
-      player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints());
-      addEternityTime(player.thisEternity, player.thisEternityRealTime, gainedEternityPoints());
-    }
-    if (player.eternities < 20 && Autobuyer.dimboost.isUnlocked) Autobuyer.dimboost.buyMaxInterval = 1;
-    if (EternityChallenge.isRunning()) {
-      const challenge = EternityChallenge.current();
-      challenge.addCompletion();
-      if (Perk.studyECBulk.isBought) {
-        while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
-          challenge.addCompletion();
-        }
-      }
-      player.etercreq = 0;
-      respecTimeStudies();
-      if (EternityChallenge.completedTiers() >= 50) {
-        giveAchievement("5 more eternities until the update");
+function initializeChallengeCompletions() {
+  NormalChallenges.clearCompletions();
+  InfinityChallenges.clearCompletions();
+  if (EternityMilestone.keepAutobuyers.isReached) {
+    NormalChallenges.completeAll();
+  }
+  if (Achievement(133).isEnabled) {
+    InfinityChallenges.completeAll();
+  }
+  player.challenge.normal.current = 0;
+  player.challenge.infinity.current = 0;
+}
+
+function initializeResourcesAfterEternity() {
+  player.sacrificed = new Decimal(0);
+  player.infinitied = new Decimal(0);
+  player.bestInfinityTime = 9999999999;
+  player.thisInfinityTime = 0;
+  player.thisInfinityLastBuyTime = 0;
+  player.thisInfinityRealTime = 0;
+  player.resets = (player.eternities >= 4) ? 4 : 0;
+  player.galaxies = (player.eternities >= 4) ? 1 : 0;
+  player.tickDecrease = 0.9;
+  player.partInfinityPoint = 0;
+  player.partInfinitied = 0;
+  player.infMult = new Decimal(1);
+  player.infMultCost = new Decimal(10);
+  player.infinityPower = new Decimal(1);
+  player.timeShards = new Decimal(0);
+  player.tickThreshold = new Decimal(1);
+  player.thisEternity = 0;
+  player.thisEternityRealTime = 0;
+  player.totalTickGained = 0;
+  player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
+  player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
+  player.eterc8ids = 50;
+  player.eterc8repl = 40;
+  if (player.eternities < 20) {
+    player.infinityRebuyables = [0, 0];
+    GameCache.tickSpeedMultDecrease.invalidate();
+    GameCache.dimensionMultDecrease.invalidate();
+  }
+  player.noSacrifices = true;
+  player.onlyEighthDimensons = true;
+  player.onlyFirstDimensions = true;
+  player.noEighthDimensions = true;
+  player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
+}
+
+function applyRealityUpgrades() {
+  if (RealityUpgrade(13).isBought) {
+      if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
+      for (let i = 1; i < 9; i++) {
+          if (player.reality.tdbuyers[i - 1]) {
+              buyMaxTimeDimTier(i);
+          }
       }
   }
-
-    player.infinitiedBank = player.infinitiedBank.plusEffectsOf(
-      Achievement(131),
-      TimeStudy(191)
-    );
-    if (player.infinitiedBank.gt(5000000000)) giveAchievement("No ethical consumption");
-    if (player.dilation.active && !force) {
-        player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(getTachyonGain());
-        player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(getTachyonGain())
-    }
-    RealityUpgrades.tryUnlock([6, 10]);
-    if (!force) {
-        player.eternities += Effects.product(RealityUpgrade(3));
-    }
-    player.sacrificed = new Decimal(0);
-    player.challenges = [];
-    if (EternityMilestone.keepAutobuyers.isReached) {
-      for (let challenge of Challenge.all) {
-        challenge.complete();
-      }
-    }
-    if (Achievement(133).isEnabled) {
-      for (let challenge of InfinityChallenge.all) {
-        challenge.complete();
-      }
-    }
-    player.currentChallenge = "";
-    player.infinitied = new Decimal(0);
-    player.bestInfinityTime = 999999999999;
-    player.thisInfinityTime = 0;
-    player.thisInfinityRealTime = 0;
-    player.resets = (player.eternities >= 4) ? 4  : 0;
-    player.galaxies = (player.eternities >= 4) ? 1  : 0;
-    player.tickDecrease = 0.9;
-    if (player.eternities < 2) {
-      Autobuyer.resetUnlockables();
-    }
-    player.partInfinityPoint = 0;
-    player.partInfinitied = 0;
-    player.break= player.eternities >= 2 ? player.break : false;
-    player.infMult = new Decimal(1);
-    player.infMultCost = new Decimal(10);
-    if (player.eternities < 20) {
-      player.infinityRebuyables = [0, 0];
-      GameCache.tickSpeedMultDecrease.invalidate();
-      GameCache.dimensionMultDecrease.invalidate();
-    }
-    player.postChallUnlocked = Achievement(133).isEnabled ? 8 : 0;
-    player.infDimensionsUnlocked = [false, false, false, false, false, false, false, false];
-    player.infinityPower = new Decimal(1);
-    player.timeShards = new Decimal(0);
-    player.tickThreshold = new Decimal(1);
-    player.thisEternity = 0;
-    player.thisEternityRealTime = 0;
-    player.totalTickGained = 0;
-    player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
-    player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
-    player.challengeTarget = new Decimal(0);
-    if (player.eternities < 7 && !Achievement(133).isEnabled) {
-        player.autoSacrifice = 1;
-    }
-    player.eternityChallGoal = new Decimal(Number.MAX_VALUE);
-    player.currentEternityChall = "";
-    player.autoIP = new Decimal(0);
-    player.autoTime = 1e300;
-    player.eterc8ids = 50;
-    player.eterc8repl = 40;
-    player.dimlife = true;
-    player.dead = true;
-
-    player.dilation.active = false;
-
-    resetInfinityRuns();
-    fullResetInfDimensions();
-    eternityResetReplicanti();
-    resetChallengeStuff();
-    resetDimensions();
-    if (player.respec) respecTimeStudies();
-    player.respec = false;
-    giveAchievement("Time is relative");
-    if (player.eternities >= 100) giveAchievement("This mile took an Eternity");
-    if (player.replicanti.unl) player.replicanti.amount = new Decimal(1);
-    player.replicanti.galaxies = 0;
-
-    if (player.infinitied.gt(0) && !Challenge(1).isCompleted) {
-      Challenge(1).complete();
-      Autobuyer.tryUnlockAny();
-    }
-    
-    if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked && player.infinityPoints.gt(Number.MAX_VALUE)) {
-      EffarigUnlock.eternity.unlock();
-      Modal.message.show(`Effarig Eternity reward: Glyph Level cap raised to ${Effarig.glyphLevelCap} and IP multipliers apply with full effect; eternity count generates infinities and The Enslaved Ones have been unlocked.`);
-    }
-    
-    resetInfinityPointsOnEternity();
-    resetInfDimensions();
-    IPminpeak = new Decimal(0);
-    EPminpeak = new Decimal(0);
-    resetTimeDimensions();
-    try {
-        kong.submitStats('Eternities', player.eternities);
-    } catch (err) {
-        console.log("Couldn't load Kongregate API")
-    }
-    if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
-    resetTickspeed();
-    playerInfinityUpgradesOnEternity();
-    if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
-        Tab.dimensions.time.show();
-    }
-    Marathon2 = 0;
-
-    RealityUpgrades.tryUnlock([11, 12, 13, 14, 15, 25]);
-
-    if (RealityUpgrade(13).isBought) {
-        if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
-        for (var i = 1; i < 9; i++) {
-            if (player.reality.tdbuyers[i - 1]) {
-                buyMaxTimeDimTier(i);
-            }
-        }
-    }
-
-    if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
-      for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
-    }
-
-    if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
-      for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
-    }
-
-    if (!Achievement(143).isUnlocked && player.lastTenEternities[9][1] !== 1) {
-        var n = 0;
-        for (i = 0; i < 9; i++) {
-            if (player.lastTenEternities[i][1].gte(player.lastTenEternities[i + 1][1].times(Number.MAX_VALUE))) n++;
-        }
-        if (n === 9) giveAchievement("Yo dawg, I heard you liked reskins...")
-    }
-
-    resetMoney();
-
-    return true;
+  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+    for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
+  }
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+    for (const id of [4, 5, 6]) player.eternityUpgrades.add(id);
+  }
 }
 
 function eternityResetReplicanti() {
-    player.replicanti.amount = player.eternities >= 50 ? new Decimal(1) : new Decimal(0);
-    player.replicanti.unl = player.eternities >= 50;
-    player.replicanti.chance = 0.01;
-    player.replicanti.chanceCost = new Decimal(1e150);
-    player.replicanti.interval = 1000;
-    player.replicanti.intervalCost = new Decimal(1e140);
-    player.replicanti.gal = 0;
-    player.replicanti.galaxies = 0;
-    player.replicanti.galCost = new Decimal(1e170);
-    player.replicanti.galaxybuyer = (player.eternities > 1) ? player.replicanti.galaxybuyer : undefined;
-}
-
-function fullResetInfDimensions() {
-    const cost = [1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280];
-    for (let i = 0; i < 8; i++) {
-        let dimension = player["infinityDimension" + (i + 1)];
-        dimension.cost = new Decimal(cost[i]);
-        dimension.amount = new Decimal(0);
-        dimension.bought = 0;
-        dimension.power = new Decimal(1);
-        dimension.baseAmount = 0;
-    }
+  player.replicanti.unl = player.eternities >= 50;
+  player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
+  player.replicanti.chance = 0.01;
+  player.replicanti.chanceCost = new Decimal(1e150);
+  player.replicanti.interval = 1000;
+  player.replicanti.intervalCost = new Decimal(1e140);
+  player.replicanti.gal = 0;
+  player.replicanti.galaxies = 0;
+  player.replicanti.galCost = new Decimal(1e170);
+  if (player.eternities >= 3 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
 function askEternityConfirmation() {
@@ -273,9 +232,13 @@ const EternityMilestone = function() {
   };
 }();
 
-class EternityUpgradeState extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.eternityPoints, () => player.eternityUpgrades);
+class EternityUpgradeState extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.eternityPoints;
+  }
+
+  get set() {
+    return player.eternityUpgrades;
   }
 }
 
@@ -318,7 +281,7 @@ class EPMultiplierState extends GameMechanicState {
     player.epmultUpgrades = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
-    Autobuyer.eternity.bumpLimit(Decimal.pow(5, diff));
+    Autobuyer.eternity.bumpAmount(Decimal.pow(5, diff));
   }
 
   get effectValue() {

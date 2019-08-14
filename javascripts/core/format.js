@@ -1,3 +1,5 @@
+"use strict";
+
 function shortenRateOfChange(money) {
   return shorten(money, 2, 2);
 }
@@ -14,40 +16,37 @@ function shortenMoney(money) {
   return shorten(money, 2, 1);
 }
 
-function shortenGlyphEffect(money) {
-  return shorten(money, 2, 3);
-}
-
 function shortenMultiplier(money) {
   return shorten(money, 1, 1);
-}
-
-function shortenAutobuyerInput(value) {
-  return Notation.scientific.format(value, 2, 0);
 }
 
 function shorten(value, places, placesUnder1000) {
   return Notation.current.format(value, places, placesUnder1000);
 }
 
+function shortenSmallInteger(value) {
+  return Notation.current.isPainful
+    ? shorten(value, 2, 2)
+    : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
+}
+
 function shortenPostBreak(value, places, placesUnder1000) {
   Notation.forcePostBreakFormat = true;
-  const shortened = this.shorten(value, places, placesUnder1000);
+  const shortened = shorten(value, places, placesUnder1000);
   Notation.forcePostBreakFormat = false;
   return shortened;
 }
 
 function formatX(value, places, placesUnder1000) {
-  return shorten(value, places, placesUnder1000) + "x";
+  return `${shorten(value, places, placesUnder1000)}x`;
 }
 
 function formatPow(value, places, placesUnder1000) {
-  return "^" + shorten(value, places, placesUnder1000);
+  return `^${shorten(value, places, placesUnder1000)}`;
 }
 
 function formatPercents(value, places) {
-  const placesOOM = Math.pow(10, places);
-  return Math.round(value * 100 * placesOOM) / placesOOM + "%";
+  return `${(value * 100).toFixed(places)}%`;
 }
 
 function timeDisplay(ms) {
@@ -62,7 +61,7 @@ function timeDisplayShort(ms) {
   return TimeSpan.fromMilliseconds(ms).toStringShort();
 }
 
-const commaRegexp = /\B(?=(\d{3})+(?!\d))/g;
+const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
 function formatWithCommas(value) {
   return value.toString().replace(commaRegexp, ",");
 }

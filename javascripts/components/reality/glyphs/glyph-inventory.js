@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("glyph-inventory", {
-  data: function () {
+  data() {
     return {
       inventory: [],
     };
@@ -20,7 +22,7 @@ Vue.component("glyph-inventory", {
       if (event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) event.preventDefault();
     },
     drop(idx, event) {
-      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE));
+      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
@@ -33,7 +35,7 @@ Vue.component("glyph-inventory", {
       const glyph = Glyphs.findById(id);
       if (!glyph) return;
       if (glyph.symbol === "key266b") {
-        let tempAudio = new Audio(`images/note${col}.mp3`);
+        const tempAudio = new Audio(`images/note${col}.mp3`);
         tempAudio.play();
       }
     },
@@ -44,7 +46,7 @@ Vue.component("glyph-inventory", {
       Glyphs.sort();
     }
   },
-  template: /*html*/`
+  template: `
   <div class="l-glyph-inventory">
     <div v-for="row in rowCount" class="l-glyph-inventory__row">
       <div v-for="col in colCount"
@@ -67,4 +69,4 @@ Vue.component("glyph-inventory", {
     </button>
   </div>
   `,
-})
+});

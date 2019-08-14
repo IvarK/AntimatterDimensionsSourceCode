@@ -1,45 +1,47 @@
-body {
-    background-color: black !important;
+body.t-inverted {
+    background-color: black;
 }
 
-#container {
+.t-inverted #container {
     filter: invert(100%);
 }
 
-.popup {
+.t-inverted .popup {
     filter: invert(100%);
 }
 
-#realityanimbg {
+.t-inverted #realityanimbg {
     filter: invert(1);
 }
 
-#theorembuybackground {
-    border-color: #fff !important;
-    background-color: #1f1f1f !important;
+.t-inverted #theorembuybackground {
+    border-color: #fff;
+    background-color: #1f1f1f;
 }
 
-#timetheorems, #studytreeloadsavetext, #minimizeArrow {
-    color: #bbb !important;
+.t-inverted #timetheorems,
+.t-inverted .c-ttshop__save-load-text,
+.t-inverted #minimizeArrow {
+    color: #bbb;
 }
 
-.timetheorembtn {
-    color: #c55329 !important;
-    background-color: #dcdfd7 !important;
-    border-color: #96e05a !important;
+.t-inverted .c-tt-buy-button--unlocked {
+  color: #c55329;
+  background-color: #dcdfd7;
+  border-color: #96e05a;
 }
 
-.timetheorembtn:hover {
-    color: #dcdfd7 !important;
-    background-color: #c55329 !important;
+.t-inverted .c-tt-buy-button--unlocked:hover {
+  color: #dcdfd7;
+  background-color: #c55329;
 }
 
-.timetheorembtnlocked {
-    color: #fff !important;
-    background-color: #b5b5b5 !important;
-    border-color: #96e05a !important;
+.t-inverted .c-tt-buy-button--locked {
+  color: #fff;
+  background-color: #b5b5b5;
+  border-color: #96e05a;
 }
 
-.timetheorembtnlocked:hover {
-    background: #9ad0d0 !important;
+.t-inverted .c-tt-buy-button--locked:hover {
+  background: #9ad0d0;
 }

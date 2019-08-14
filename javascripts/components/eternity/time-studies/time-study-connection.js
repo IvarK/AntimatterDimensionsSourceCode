@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("time-study-connection", {
-  data: function() {
+  data() {
     return {
       isOverridden: false,
       isBought: false
@@ -9,7 +11,7 @@ Vue.component("time-study-connection", {
     setup: Object
   },
   computed: {
-    classObject: function() {
+    classObject() {
       const classObject = {
         "o-time-study-connection": true,
         "o-time-study-connection--bought": this.isBought,
@@ -18,20 +20,20 @@ Vue.component("time-study-connection", {
       const connection = this.setup.connection;
       const from = connection.from;
       const to = connection.to;
+      function pathClassOf(study) {
+        switch (study.path) {
+          case TimeStudyPath.NORMAL_DIM: return "o-time-study-connection--normal-dim";
+          case TimeStudyPath.INFINITY_DIM: return "o-time-study-connection--infinity-dim";
+          case TimeStudyPath.TIME_DIM: return "o-time-study-connection--time-dim";
+          case TimeStudyPath.ACTIVE: return "o-time-study-connection--active";
+          case TimeStudyPath.PASSIVE: return "o-time-study-connection--passive";
+          case TimeStudyPath.IDLE: return "o-time-study-connection--idle";
+          default: return undefined;
+        }
+      }
       switch (to.type) {
         case TimeStudyType.NORMAL:
-          function setPath(study) {
-            switch (study.path) {
-              case TimeStudyPath.NORMAL_DIM: pathClass = "o-time-study-connection--normal-dim"; break;
-              case TimeStudyPath.INFINITY_DIM: pathClass = "o-time-study-connection--infinity-dim"; break;
-              case TimeStudyPath.TIME_DIM: pathClass = "o-time-study-connection--time-dim"; break;
-              case TimeStudyPath.ACTIVE: pathClass = "o-time-study-connection--active"; break;
-              case TimeStudyPath.PASSIVE: pathClass = "o-time-study-connection--passive"; break;
-              case TimeStudyPath.IDLE: pathClass = "o-time-study-connection--idle"; break;
-            }
-          }
-          setPath(from);
-          setPath(to);
+          pathClass = pathClassOf(to) || pathClassOf(from);
           break;
         case TimeStudyType.ETERNITY_CHALLENGE:
           pathClass = "o-time-study-connection--eternity-challenge";

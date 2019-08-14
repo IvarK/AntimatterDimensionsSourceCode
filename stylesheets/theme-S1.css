@@ -59,10 +59,6 @@ body {
     border: 1px solid black !important;
 }
 
-#game {
-    background: #dbd242
-}
-
 #container.container {
     color: black !important;
 }
@@ -85,23 +81,23 @@ input {
     border-radius: 3px !important;
 }
 
-.timetheorembtn {
-    color: #639565 !important;
-    border-color: #639565 !important;
+.t-s1 .c-tt-buy-button--unlocked {
+  color: #639565;
+  border-color: #639565;
 }
 
-.timetheorembtn:hover {
-    color: #232028 !important;
-    background: #639565 !important;
+.t-s1 .c-tt-buy-button--unlocked:hover {
+  color: #232028;
+  background: #639565;
 }
 
-.timetheorembtnlocked {
-    border-color: #639565 !important;
+.t-s1 .c-tt-buy-button--locked {
+  border-color: #639565;
 }
 
-.timetheorembtnlocked:hover {
-    background: #d72621 !important;
-    border-color: black !important;
+.t-s1 .c-tt-buy-button--locked:hover {
+  background: #d72621;
+  border-color: black;
 }
 
 #theorembuybackground {

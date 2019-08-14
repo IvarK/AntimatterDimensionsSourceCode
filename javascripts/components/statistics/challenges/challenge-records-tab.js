@@ -1,18 +1,20 @@
-Vue.component('challenge-records-tab', {
-  data: function() {
+"use strict";
+
+Vue.component("challenge-records-tab", {
+  data() {
     return {
-      normalChallenges: player.challengeTimes.slice(0),
-      infinityChallenges: player.infchallengeTimes.slice(0),
+      normalChallenges: player.challenge.normal.bestTimes.slice(0),
+      infinityChallenges: player.challenge.infinity.bestTimes.slice(0),
     };
   },
   methods: {
     update() {
-      this.normalChallenges = player.challengeTimes.slice(0);
-      this.infinityChallenges = player.infchallengeTimes.slice(0);
+      this.normalChallenges = player.challenge.normal.bestTimes.slice(0);
+      this.infinityChallenges = player.challenge.infinity.bestTimes.slice(0);
     }
   },
   template:
-    `<div class="l-challenge-records-tab">
+    `<div class="l-challenge-records-tab c-stats-tab">
         <challenge-records-list
             :start="2"
             :times="normalChallenges"

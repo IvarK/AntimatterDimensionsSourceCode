@@ -1,83 +1,4 @@
-Vue.component("time-studies-tab", {
-  mixins: [remMixin],
-  data() {
-    return {
-      respec: player.respec,
-      layoutType: StudyTreeLayoutType.NORMAL
-    };
-  },
-  watch: {
-    respec(newValue) {
-      player.respec = newValue;
-    }
-  },
-  computed: {
-    layout() {
-      return TimeStudyTreeLayout.create(this.layoutType);
-    },
-    treeStyleObject() {
-      return {
-        width: this.rem(this.layout.width),
-        height: this.rem(this.layout.height)
-      };
-    },
-    respecClassObject() {
-      return {
-        "o-primary-btn--time-study-options": true,
-        "o-primary-btn--respec-active": this.respec
-      };
-    }
-  },
-  methods: {
-    update() {
-      this.respec = player.respec;
-      this.layoutType = StudyTreeLayoutType.current;
-    },
-    studyComponent(study) {
-      switch (study.type) {
-        case TimeStudyType.NORMAL: return "normal-time-study";
-        case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
-        case TimeStudyType.DILATION: return "dilation-time-study";
-      }
-      throw "Unknown study type";
-    }
-  },
-  template:
-    `<div class="l-time-studies-tab">
-      <div class="l-time-study-options">
-        <primary-button
-          class="o-primary-btn--time-study-options"
-          onclick="exportStudyTree()"
-        >Export tree</primary-button>
-        <primary-button
-          :class="respecClassObject"
-          @click="respec = !respec"
-        >Respec time studies on next Eternity</primary-button>
-        <primary-button
-          class="o-primary-btn--time-study-options"
-          onclick="importStudyTree()"
-        >Import tree</primary-button>
-      </div>
-      <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
-        <component
-          v-for="(setup, index) in layout.studies"
-          :key="setup.study.type.toString() + setup.study.id.toString()"
-          :setup="setup"
-          :is="studyComponent(setup.study)"
-        />
-        <secret-time-study :setup="layout.secretStudy" />
-        <svg :style="treeStyleObject" class="l-time-study-connection">
-          <time-study-connection
-            v-for="(setup, index) in layout.connections"
-            :key="'connection' + index"
-            :setup="setup"
-          />
-          <secret-time-study-connection :setup="layout.secretStudyConnection" />
-        </svg>
-      </div>
-      <tt-shop class="l-time-studies-tab__tt-shop" />
-    </div>`
-});
+"use strict";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -132,7 +53,7 @@ class TimeStudyTreeLayout {
     /**
      * @type {TimeStudyRow[]}
      */
-    /* eslint-disable no-multi-spaces, space-in-parens */
+    /* eslint-disable no-multi-spaces, space-in-parens, func-call-spacing */
     this.rows = [
       normalRow(                       null,   TS(11),   null                         ),
       normalRow(                           TS(21), TS(22)                             ),
@@ -145,8 +66,7 @@ class TimeStudyTreeLayout {
         normalRow(                       null,   TS(51),  TS(62)                        ),
         normalRow(                               TS(61)                                 )
       );
-    }
-    else {
+    } else {
       this.rows.push(
         normalRow(                           TS(41), TS(42)                             ),
         normalRow(                       null,   TS(51),  EC(5)                         ),
@@ -172,8 +92,7 @@ class TimeStudyTreeLayout {
         normalRow(                         null, TS(171),  EC(2)                        ),
         normalRow(                        EC(1), TS(181),  EC(3)                        )
       );
-    }
-    else {
+    } else {
       this.rows.push(
         normalRow(                               TS(171)                                ),
         normalRow(                         EC(1), EC(2), EC(3)                          ),
@@ -194,7 +113,7 @@ class TimeStudyTreeLayout {
       normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
       normalRow(                          TimeStudy.reality                           )
     );
-    /* eslint-enable no-multi-spaces, space-in-parens */
+    /* eslint-enable no-multi-spaces, space-in-parens, func-call-spacing */
 
     /**
      * @type {TimeStudySetup[]}
@@ -206,7 +125,7 @@ class TimeStudyTreeLayout {
         const study = row.items[columnIndex];
         if (study === null) continue;
         const setup = new TimeStudySetup({
-          study: study,
+          study,
           row: rowIndex,
           column: columnIndex
         });
@@ -236,12 +155,12 @@ class TimeStudyTreeLayout {
     const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).sum();
     this.height = heightNoSpacing + (this.rows.length - 1) * this.spacing;
 
-    for (let study of this.studies) {
+    for (const study of this.studies) {
       study.setPosition(this);
     }
     this.secretStudy.setPosition(this);
 
-    for (let connection of this.connections) {
+    for (const connection of this.connections) {
       connection.setPosition(this.studies, this.width, this.height);
     }
     this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy), this.width, this.height);
@@ -280,3 +199,84 @@ const StudyTreeLayoutType = {
     return this.NORMAL;
   }
 };
+
+Vue.component("time-studies-tab", {
+  mixins: [remMixin],
+  data() {
+    return {
+      respec: player.respec,
+      layoutType: StudyTreeLayoutType.NORMAL,
+    };
+  },
+  watch: {
+    respec(newValue) {
+      player.respec = newValue;
+    }
+  },
+  computed: {
+    layout() {
+      return TimeStudyTreeLayout.create(this.layoutType);
+    },
+    treeStyleObject() {
+      return {
+        width: this.rem(this.layout.width),
+        height: this.rem(this.layout.height)
+      };
+    },
+    respecClassObject() {
+      return {
+        "o-primary-btn--time-study-options": true,
+        "o-primary-btn--respec-active": this.respec
+      };
+    }
+  },
+  methods: {
+    update() {
+      this.respec = player.respec;
+      this.layoutType = StudyTreeLayoutType.current;
+    },
+    studyComponent(study) {
+      switch (study.type) {
+        case TimeStudyType.NORMAL: return "normal-time-study";
+        case TimeStudyType.ETERNITY_CHALLENGE: return "ec-time-study";
+        case TimeStudyType.DILATION: return "dilation-time-study";
+      }
+      throw "Unknown study type";
+    }
+  },
+  template:
+    `<div class="l-time-studies-tab">
+      <div class="l-time-study-options">
+        <primary-button
+          class="o-primary-btn--time-study-options"
+          onclick="exportStudyTree()"
+        >Export tree</primary-button>
+        <primary-button
+          :class="respecClassObject"
+          @click="respec = !respec"
+        >Respec time studies on next Eternity</primary-button>
+        <primary-button
+          class="o-primary-btn--time-study-options"
+          onclick="Modal.importTree.show()"
+        >Import tree</primary-button>
+      </div>
+      <div class="l-time-study-tree l-time-studies-tab__tree" :style="treeStyleObject">
+        <component
+          v-for="(setup, index) in layout.studies"
+          :key="setup.study.type.toString() + setup.study.id.toString()"
+          :setup="setup"
+          :is="studyComponent(setup.study)"
+        />
+        <secret-time-study :setup="layout.secretStudy" />
+        <svg :style="treeStyleObject" class="l-time-study-connection">
+          <time-study-connection
+            v-for="(setup, index) in layout.connections"
+            :key="'connection' + index"
+            :setup="setup"
+          />
+          <secret-time-study-connection :setup="layout.secretStudyConnection" />
+        </svg>
+      </div>
+      <tt-shop class="l-time-studies-tab__tt-shop" />
+    </div>`
+});

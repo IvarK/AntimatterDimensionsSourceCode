@@ -1,3 +1,5 @@
+"use strict";
+
 class Lazy {
   constructor(getValue) {
     this._getValue = getValue;
@@ -31,20 +33,26 @@ class Lazy {
   invalidate() {
     this._value = undefined;
   }
+
+  /**
+   * @return {Lazy}
+   */
+  invalidateOn(...events) {
+    for (const event of events) {
+      EventHub.logic.on(event, () => this.invalidate());
+    }
+    return this;
+  }
 }
 
 const GameCache = {
-  worstChallengeTime: new Lazy(() => Math.max(player.challengeTimes.max(), 100)),
+  worstChallengeTime: new Lazy(() => Math.max(player.challenge.normal.bestTimes.max(), 100)),
 
-  bestRunIPPM: new Lazy(() => {
-    const bestRunIppm = player.lastTenRuns
+  bestRunIPPM: new Lazy(() =>
+    player.lastTenRuns
       .map(run => ratePerMinute(run[1], run[0]))
-      .reduce(Decimal.maxReducer);
-
-    if (bestRunIppm.gte(1e8)) giveAchievement("Oh hey, you're still here");
-    if (bestRunIppm.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
-    return bestRunIppm;
-  }),
+      .reduce(Decimal.maxReducer)
+  ),
 
   averageEPPerRun: new Lazy(() => {
     return player.lastTenEternities
@@ -84,13 +92,17 @@ const GameCache = {
     );
   }),
 
-  buyablePerks: new Lazy(() => Perk.all.filter(p => p.canBeBought)),
+  buyablePerks: new Lazy(() => Perks.all.filter(p => p.canBeBought)),
 
   normalDimensionCommonMultiplier: new Lazy(() => {
     // The effect is defined in normal_dimensions.js because that's where the non-cached
     // code originally lived.
     return normalDimensionCommonMultiplier();
   }),
+
+  // 0 will cause a crash if invoked; this way the tier can be used as an index
+  normalDimensionFinalMultipliers: Array.range(0, 9)
+    .map(tier => new Lazy(() => getDimensionFinalMultiplierUncached(tier))),
 
   infinityDimensionCommonMultiplier: new Lazy(() => {
     return infinityDimensionCommonMultiplier();
@@ -103,8 +115,30 @@ const GameCache = {
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),
 
   totalIPMult: new Lazy(() => totalIPMult()),
+
+  // This seemingly-random number is in order to match the per-row value of achievements to pre-update values
+  achievementPower: new Lazy(() => Decimal.pow(
+    1.1841138514709035,
+    Array.range(1, 14)
+      .map(Achievements.row)
+      .countWhere(row => row.every(ach => ach.isEnabled))
+  ).times(Math.pow(1.03, Achievements.effectiveCount))),
+
+  challengeTimeSum: new Lazy(() => player.challenge.normal.bestTimes.sum()),
+
+  infinityChallengeTimeSum: new Lazy(() => player.challenge.infinity.bestTimes.sum()),
+
+  realityAchTimeModifier: new Lazy(() => Math.pow(0.9, Math.clampMin(player.realities - 1, 0)))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE),
+
+  baseTimeForAllAchs: new Lazy(() => Achievements.defaultDisabledTime.times(GameCache.realityAchTimeModifier.value))
+    .invalidateOn(GameEvent.REALITY_RESET_BEFORE)
 };
 
-EventHub.global.on(GameEvent.GLYPHS_CHANGED, () => {
+EventHub.logic.on(GameEvent.GLYPHS_CHANGED, () => {
   GameCache.glyphEffects.invalidate();
 }, GameCache.glyphEffects);
+
+GameCache.normalDimensionFinalMultipliers.invalidate = function() {
+  for (const x of this) x.invalidate();
+};

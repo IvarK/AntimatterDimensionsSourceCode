@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("time-dilation-tab", {
   data() {
     return {
@@ -39,7 +41,7 @@ Vue.component("time-dilation-tab", {
     update() {
       this.tachyons.copyFrom(player.dilation.tachyonParticles);
       this.dilatedTime.copyFrom(player.dilation.dilatedTime);
-      this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond());
+      this.dilatedTimeIncome.copyFrom(getDilationGainPerSecond().times(getGameSpeedupFactor()));
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.freeGalaxies;
       this.animateTachyons = player.options.animations.tachyonParticles;
@@ -63,7 +65,7 @@ Vue.component("time-dilation-tab", {
         Next free galaxy at
         <span class="c-dilation-tab__galaxy-threshold">{{shorten(galaxyThreshold, 2, 1)}}</span>
         Dilated Time, gained total of
-        <span class="c-dilation-tab__galaxies">{{galaxies}}</span>
+        <span class="c-dilation-tab__galaxies">{{shortenSmallInteger(galaxies)}}</span>
         galaxies
       </span>
       <div class="l-dilation-upgrades-grid">

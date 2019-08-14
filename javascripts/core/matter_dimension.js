@@ -1,18 +1,16 @@
+"use strict";
+
 /**
  * Constants for easily adjusting values
  */
 
-const CHANCE_COST_MULT = 1.5
-const INTERVAL_COST_MULT = 2.5
-const POWER_COST_MULT = 3
+const CHANCE_COST_MULT = 1.5;
+const INTERVAL_COST_MULT = 2.5;
+const POWER_COST_MULT = 3;
 
-const CHANCE_START_COST = 20
-const INTERVAL_START_COST = 5
-const POWER_START_COST = 10
-
-
-// How much the starting costs increase per tier
-const COST_MULT_PER_TIER = 100
+const CHANCE_START_COST = 20;
+const INTERVAL_START_COST = 5;
+const POWER_START_COST = 10;
 
 class MatterDimensionState {
   constructor(tier) {
@@ -25,28 +23,32 @@ class MatterDimensionState {
 
   // In percents
   get chance() {
-    return 5 - this._tier + this.dimension.chanceUpgrades
+    return 5 - this._tier + this.dimension.chanceUpgrades +
+      Math.floor(100 * AlchemyResource.unpredictability.effectValue);
   }
 
   // In milliseconds
   get interval() {
-    return Math.pow(0.89, this.dimension.intervalUpgrades) * Math.pow(2, this._tier) * 1000
+    return Decimal.pow(0.89, this.dimension.intervalUpgrades).times(Decimal.pow(2, this._tier)).times(1000);
   }
 
   get power() {
-    return Math.pow(1.1, this.dimension.powerUpgrades)
+    return Decimal.pow(1.1, this.dimension.powerUpgrades).times(Laitela.realityReward);
   }
 
   get chanceCost() {
-    return Math.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * CHANCE_START_COST;
+    return Decimal.pow(CHANCE_COST_MULT, this.dimension.chanceUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(CHANCE_START_COST);
   }
 
   get intervalCost() {
-    return Math.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * INTERVAL_START_COST;
+    return Decimal.pow(INTERVAL_COST_MULT, this.dimension.intervalUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(INTERVAL_START_COST);
   }
 
   get powerCost() {
-    return Math.pow(POWER_COST_MULT, this.dimension.powerUpgrades) * Math.pow(COST_MULT_PER_TIER, this._tier) * POWER_START_COST;
+    return Decimal.pow(POWER_COST_MULT, this.dimension.powerUpgrades).times(
+      Decimal.pow(COST_MULT_PER_TIER, this._tier)).times(POWER_START_COST);
   }
 
 
@@ -58,31 +60,33 @@ class MatterDimensionState {
     this.dimension.amount = value;
   }
 
-  get lastUpdate() {
-    return this.dimension.lastUpdate
+  get timeSinceLastUpdate() {
+    return this.dimension.timeSinceLastUpdate;
   }
 
-  set lastUpdate(ms) {
-    this.dimension.lastUpdate = ms
+  set timeSinceLastUpdate(ms) {
+    this.dimension.timeSinceLastUpdate = ms;
   }
-
 
   buyChance() {
-    if (this.chanceCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.chanceCost
+    if (this.chanceCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.chanceCost);
     this.dimension.chanceUpgrades++;
+    return true;
   }
 
   buyInterval() {
-    if (this.intervalCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.intervalCost
+    if (this.intervalCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.intervalCost);
     this.dimension.intervalUpgrades++;
+    return true;
   }
 
   buyPower() {
-    if (this.powerCost > player.celestials.laitela.matter) return false
-    player.celestials.laitela.matter -= this.powerCost
+    if (this.powerCost.gt(player.celestials.laitela.matter)) return false;
+    player.celestials.laitela.matter = player.celestials.laitela.matter.minus(this.powerCost);
     this.dimension.powerUpgrades++;
+    return true;
   }
 
 }
@@ -104,42 +108,23 @@ function MatterDimension(tier) {
  * if interval < updaterate it will be called with diff each update
  */
 function getMatterDimensionProduction(tier, ticks) {
-  const d = MatterDimension(tier)
-
-  let prod = 0
-
-  if (d.amount < 100) {
-    let x = 0
-    while (x < d.amount) {
-      if (Math.random() < d.chance / 100) prod++;
-      x++;
-    }
-  } else {
-    let x = 0
-    while (x < 100) {
-      if (Math.random() < d.chance / 100) prod += Math.round(d.amount/100);
-      x++;
-    }
-  }
-
-  prod *= d.power * ticks
-
-  return Math.round(prod)
+  const d = MatterDimension(tier);
+  // The multiple ticks act just like more binomial samples
+  const produced = binomialDistribution(d.amount.times(ticks), d.chance / 100);
+  return Decimal.round(produced.times(d.power));
 }
 
-function matterDimensionLoop() {
-
+function matterDimensionLoop(realDiff) {
   for (let i = 1; i <= 4; i++) {
-    let d = MatterDimension(i)
-
-    if (d.lastUpdate + d.interval < player.realTimePlayed) {
-      let ticks = Math.floor((player.realTimePlayed - d.lastUpdate) / d.interval)
-      if (i == 1) player.celestials.laitela.matter += getMatterDimensionProduction(i, ticks)
-      else MatterDimension(i - 1).amount += getMatterDimensionProduction(i, ticks)
-
-      d.lastUpdate += ticks * d.interval
+    const d = MatterDimension(i);
+    d.timeSinceLastUpdate += realDiff;
+    if (d.interval.lt(d.timeSinceLastUpdate)) {
+      const ticks = Decimal.floor(Decimal.div(d.timeSinceLastUpdate, d.interval));
+      const production = getMatterDimensionProduction(i, ticks);
+      if (i === 1) player.celestials.laitela.matter = player.celestials.laitela.matter.plus(production);
+      else MatterDimension(i - 1).amount = MatterDimension(i - 1).amount.plus(production);
+      d.timeSinceLastUpdate = Decimal.minus(d.timeSinceLastUpdate, d.interval.times(ticks)).toNumber();
     }
-
   }
 
 }

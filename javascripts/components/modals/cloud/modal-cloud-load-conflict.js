@@ -1,8 +1,10 @@
-Vue.component('modal-cloud-load-conflict', {
+"use strict";
+
+Vue.component("modal-cloud-load-conflict", {
   mixins: [modalCloudConflictMixin],
   template:
     `<div class="c-modal-options l-modal-options">
-      <strong>Your cloud save appears to be older than your local save. Please select which one you would like to keep.</strong>
+      <b>Your cloud save appears to be older than your local save. Please select which one you would like to keep.</b>
       <modal-cloud-conflict-record
         :saveData="conflict.local"
         :saveId="conflict.saveId"

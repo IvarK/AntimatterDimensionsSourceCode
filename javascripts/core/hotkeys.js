@@ -1,3 +1,5 @@
+"use strict";
+
 // Add your hotkeys and combinations here
 // GameKeyboard.bind for single press combinations
 // GameKeyboard.bindRepeatable for repeatable combinations
@@ -14,47 +16,65 @@ GameKeyboard.bindRepeatableHotkey("s", () => sacrificeBtnClick());
 GameKeyboard.bindRepeatableHotkey("r", () => replicantiGalaxy());
 GameKeyboard.bindRepeatableHotkey("t", () => buyMaxTickSpeed());
 GameKeyboard.bindRepeatableHotkey("shift+t", () => buyTickSpeed());
-GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchReset());
+GameKeyboard.bindRepeatableHotkey("c", () => bigCrunchResetRequest());
 GameKeyboard.bindRepeatableHotkey("e", () => eternity());
 
-for (let i = 1; i < 9; i++) {
-  GameKeyboard.bindRepeatableHotkey(`${i}`, () => buyManyDimension(i));
-  GameKeyboard.bindRepeatableHotkey(`shift+${i}`, () => buyOneDimension(i));
-}
-
-GameKeyboard.bindHotkey("a", () => toggleAutobuyers());
-GameKeyboard.bindHotkey("esc", () => {
-  if (Modal.isOpen()) {
-    Modal.hide();
+(function() {
+  function bindDimensionHotkeys(tier) {
+    GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
+    GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
   }
-  else {
+  for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
+}());
+
+GameKeyboard.bindHotkey("a", () => Autobuyers.toggle());
+GameKeyboard.bindHotkey("b", () => BlackHoles.togglePause());
+GameKeyboard.bindHotkey("u", () => automatorOnOff());
+
+GameKeyboard.bindHotkey("esc", () => {
+  if (Modal.isOpen) {
+    Modal.hide();
+  } else {
     Tab.options.show();
   }
 });
-GameKeyboard.bindHotkey("b", () => pauseBlackHole());
+
+GameKeyboard.bindHotkey("?", () => {
+  if (Modal.shortcuts.isOpen) {
+    Modal.hide();
+    return;
+  }
+  if (Modal.isOpen) return;
+  Modal.shortcuts.show();
+});
+
+GameKeyboard.bindHotkey(["ctrl+s", "meta+s"], () => {
+  GameStorage.save();
+  return false;
+});
+GameKeyboard.bindHotkey(["ctrl+e", "meta+e"], () => {
+  GameStorage.export();
+  return false;
+});
 
 GameKeyboard.bind("shift", () => setShiftKey(true), "keydown");
 GameKeyboard.bind("shift", () => setShiftKey(false), "keyup");
 
-GameKeyboard.bind(["ctrl", "command"], () => setControlKey(true), "keydown");
-GameKeyboard.bind(["ctrl", "command"], () => setControlKey(false), "keyup");
+GameKeyboard.bind("9", () => SecretAchievement(41).unlock());
 
-GameKeyboard.bind(["ctrl+shift", "command+shift"], () => setControlShiftKey(true), "keydown");
-
-GameKeyboard.bind("9", () => giveAchievement("That dimension doesn’t exist"));
-
-GameKeyboard.bind(["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"], () => {
-  giveAchievement("Stop right there criminal scum!")
-});
+GameKeyboard.bind(
+  ["ctrl+shift+c", "ctrl+shift+i", "ctrl+shift+j", "f12"],
+  () => SecretAchievement(23).unlock()
+);
 
 GameKeyboard.bind("up up down down left right left right b a", () => {
-  giveAchievement("30 Lives");
-  if (player.money.lt(30)) {
-    player.money = new Decimal(30);
+  SecretAchievement(17).unlock();
+  if (player.antimatter.lt(30)) {
+    player.antimatter = new Decimal(30);
   }
 });
 
 GameKeyboard.bindRepeatable("f", () => {
   GameUI.notify.info("Paying respects");
-  giveAchievement("It pays to have respect");
+  SecretAchievement(13).unlock();
 });

@@ -1,6 +1,7 @@
-GameUI.notify = function() {
-  const container = document.getElementById("notification-container");
-  const template = document.createElement('div');
+"use strict";
+
+GameUI.notify = (function() {
+  const template = document.createElement("div");
   template.classList.add("o-notification");
   const enterAnimation = "a-notification--enter";
   const leaveAnimation = "a-notification--leave";
@@ -8,6 +9,7 @@ GameUI.notify = function() {
     const el = template.cloneNode();
     el.textContent = text;
     el.classList.add(elClass, enterAnimation);
+    const container = document.getElementById("notification-container");
     container.appendChild(el);
     let entered = false;
     function stopEnter() {
@@ -28,9 +30,10 @@ GameUI.notify = function() {
     el.onclick = () => leave();
   }
   return {
-    success: (text) => showNotification(text, "o-notification--success"),
-    error: (text) => showNotification(text, "o-notification--error"),
-    info: (text) => showNotification(text, "o-notification--info"),
-    blackHoles: true
+    success: text => showNotification(text, "o-notification--success"),
+    error: text => showNotification(text, "o-notification--error"),
+    info: text => showNotification(text, "o-notification--info"),
+    blackHole: text => showNotification(text, "o-notification--black-hole"),
+    showBlackHoles: true
   };
-}();
+}());

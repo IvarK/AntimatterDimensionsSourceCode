@@ -1,3 +1,5 @@
+"use strict";
+
 const DeltaTimeState = {
   deltaTime: new TimeSpan(0),
   unscaledDeltaTime: new TimeSpan(0),
@@ -201,5 +203,19 @@ const Time = {
    */
   get worstChallenge() {
     return this.fromMilliseconds(() => GameCache.worstChallengeTime.value);
+  },
+
+  /**
+   * @return {TimeSpan}
+   */
+  get challengeSum() {
+    return this.fromMilliseconds(() => GameCache.challengeTimeSum.value);
+  },
+
+  /**
+   * @return {TimeSpan}
+   */
+  get infinityChallengeSum() {
+    return this.fromMilliseconds(() => GameCache.infinityChallengeTimeSum.value);
   }
 };

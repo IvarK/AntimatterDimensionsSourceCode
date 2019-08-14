@@ -1,15 +1,17 @@
-Vue.component('normal-dim-tab', {
-  data: function() {
+"use strict";
+
+Vue.component("normal-dim-tab", {
+  data() {
     return {
       isChallengePowerVisible: false,
-      challengePower: String.empty,
+      challengePower: "",
       isQuickResetAvailable: false
     };
   },
   methods: {
     update() {
-      const isC2Running = Challenge(2).isRunning;
-      const isC3Running = Challenge(3).isRunning;
+      const isC2Running = NormalChallenge(2).isRunning;
+      const isC3Running = NormalChallenge(3).isRunning;
       const isChallengePowerVisible = isC2Running || isC3Running;
       this.isChallengePowerVisible = isChallengePowerVisible;
       if (isChallengePowerVisible) {
@@ -17,25 +19,21 @@ Vue.component('normal-dim-tab', {
         const c3Power = `${this.shortenRateOfChange(player.chall3Pow.times(100))}%`;
         if (isC2Running && isC3Running) {
           this.challengePower = `Production: ${c2Power}, First dimension: ${c3Power}`;
-        }
-        else if (isC2Running) {
+        } else if (isC2Running) {
           this.challengePower = `Production: ${c2Power}`;
-        }
-        else if (isC3Running) {
+        } else if (isC3Running) {
           this.challengePower = `First dimension: ${c3Power}`;
         }
       }
-      const challenge = Challenge.current();
-      const infinityChallenge = InfinityChallenge.current();
-      this.isQuickResetAvailable = challenge !== undefined && challenge.isQuickResettable ||
-        infinityChallenge !== undefined && infinityChallenge.isQuickResettable;
+      const challenge = NormalChallenge.current || InfinityChallenge.current;
+      this.isQuickResetAvailable = challenge && challenge.isQuickResettable;
     },
-    quickReset: function() {
-      quickReset();
+    quickReset() {
+      softReset(0);
     }
   },
   template:
-    `<div class="l-normal-dim-tab">
+    `<div class="l-old-ui-normal-dim-tab">
       <normal-dim-tab-header />
       <span v-if="isChallengePowerVisible">{{challengePower}}</span>
       <div class="l-normal-dim-tab__row-container l-normal-dim-row-container">
@@ -53,6 +51,7 @@ Vue.component('normal-dim-tab', {
         class="o-primary-btn--quick-reset"
         @click="quickReset"
       >Lose a reset, returning to the start of the reset</primary-button>
+      <div style="flex: 1 0" />
       <normal-dim-tab-progress-bar class="l-normal-dim-tab__progress_bar" />
     </div>`
 });

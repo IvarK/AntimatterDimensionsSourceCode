@@ -1,14 +1,14 @@
-#stars {
-    display: block !important;
+.t-s6 #stars {
+    display: block;
     position: fixed;
     /* Make video to at least 100% wide and tall */
-    min-width: 100%; 
-    min-height: 100%; 
-  
+    min-width: 100%;
+    min-height: 100%;
+
     /* Setting width & height to auto prevents the browser from stretching or squishing the video */
     width: auto;
     height: auto;
-  
+
     /* Center the video */
     position: absolute;
     top: 50%;
@@ -17,200 +17,149 @@
     transform: translate(-50%,-50%);
 }
 
-body {
-    background: black !important;
+body.t-s6 {
+    background: black;
+    background-image: url('../images/s6-bg.png');
+    background-size: 100%;
+    background-position: center;
 }
 
-button {
+.t-s6 .popup {
     color: #E0E0E0;
-    background-color: black !important;
-    border: 1px solid white;
-    box-shadow: 0px 0px 7px 2px #111111;
-}
-
-.popup {
-    color: #E0E0E0 !important;
     background-color: black!important;
-    border: 1px solid #1B5E20 !important;
-    box-shadow: 0px 0px 15px 0px black !important;
+    border: 1px solid #1B5E20;
+    box-shadow: 0 0 15px 0 black;
 }
 
+/*
 strong {
-    color: #E0E0E0 !important;
+    color: #E0E0E0;
+}
+*/
+.t-s6 .storebtn {
+    color: #FFF;
+    background-color: black;
+    box-shadow: 0 0 7px 2px #111111;
 }
 
-.storebtn {
-    color: #FFF !important;
-    background-color: black !important;
-    box-shadow: 0px 0px 7px 2px #111111;
+.t-s6 .storebtn:hover {
+    background: #1B5E20;
 }
 
-.storebtn:hover {
-    background: #1B5E20 !important;
+.t-s6 input {
+    color: white;
+    background-color: black;
+    border: 1px solid grey;
 }
 
-input {
-    color: white !important;
-    background-color: black !important;
-    border: 1px solid grey !important;
+.t-s6 .container {
+    color: #999;
 }
 
-#news {
-    color: #E0E0E0 !important;
+.t-s6 .secondarytabbtn {
+    color: #E0E0E0;
+    background: black;
+    border: 2px solid #1565C0;
+    text-shadow: 0 0 10px white;
 }
 
-#game {
-    border: 1px solid grey !important;
-    background-color: #000000;
+.t-s6 .secondarytabbtn:hover {
+    background: #1565C0;
+    color: black;
 }
 
-.container {
-    color: #999 !important;
+.t-s6 .unavailablebtn {
+    color: grey;
+    background-color: black;
 }
 
-.tabbtn {
-    border: 2px solid #1565C0 !important;
-    text-shadow: 0px 0px 10px white;
+.t-s6 .unavailablebtn:hover {
+    color: black;
+    background: #B84B5F;
 }
 
-.tabbtn:hover {
-    background: #1565C0 !important;
-    color: black !important;
+.t-s6 .storebtn:hover {
+    color: #FFF;
 }
 
-.secondarytabbtn:hover {
-    background: #1565C0 !important;
-    color: black !important;
+.t-s6 .eternitytabbtn {
+    color: #b341e0;
+    background: black;
+    border: 2px solid #b341e0;
 }
 
-.secondarytabbtn {
-    border: 2px solid #1565C0 !important;
-    text-shadow: 0px 0px 10px white;
+.t-s6 .eternitytabbtn:hover {
+    color: #511568;
+    background: white;
 }
 
-.unavailablebtn {
-    color: grey !important;
-    background-color: black !important;
+.t-s6 .c-tt-amount {
+    color: #64DD17;
+    text-shadow: 0 0 7px #64DD17;
 }
 
-.unavailablebtn:hover {
-    color: black !important;
-    background: #B84B5F !important;
+.t-s6 #timetheorems, .t-s6 .c-ttshop__save-load-text, .t-s6 #minimizeArrow {
+    color: grey;
 }
 
-.storebtn:hover {
-    color: #FFF !important;
+.t-s6 .c-tt-buy-button--unlocked {
+  color: #3AACD6;
+  background: black;
+  border: 1px solid #3AACD6;
 }
 
-.eternitytabbtn {
-    color: #b341e0 !important;
-    background: black !important;
-    border: 2px solid #b341e0 !important;
+.t-s6 .c-tt-buy-button--unlocked:hover {
+  color: black;
+  background: #3AACD6;
 }
 
-.eternitytabbtn:hover {
-    color: #511568 !important;
-    background: white !important;
+.t-s6 .c-tt-buy-button--locked {
+  color: grey;
+  background: black;
+  border: 1px solid grey;
 }
 
-.TheoremAmount {
-    color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
+.t-s6 .c-tt-buy-button--locked:hover {
+  color: black;
+  background: #B84B5F;
+  border: 1px solid #B84B5F;
 }
 
-#timetheorems, #studytreeloadsavetext, #minimizeArrow {
-    color: grey !important;
+.t-s6 #theorembuybackground {
+    border: 1px solid #3AACD6;
+    background: black;
 }
 
-.timetheorembtn {
-    color: #3AACD6 !important;
-    background: black !important;
-    border: 1px solid #3AACD6 !important;
+.t-s6 .greedbtn {
+    background-color: #f2d729;
+    color: black;
 }
 
-.timetheorembtn:hover {
-    color: black !important;
-    background: #3AACD6 !important;
+.t-s6 .greedbtn:hover {
+    background-color: #9E913A;
 }
 
-.timetheorembtnlocked {
-    color: grey !important;
-    background: black !important;
-    border: 1px solid grey !important;
+.t-s6 .realitytabbtn {
+  color: #0b600e;
+  background-color: white;
+  border: 2px solid #0b600e;
 }
 
-.timetheorembtnlocked:hover {
-    color: black !important;
-    background: #B84B5F !important;
-    border: 1px solid #B84B5F !important;
+.t-s6 .realitytabbtn:hover {
+    color: white ;
+    background-color: #0b600e;
+    border: 2px solid #0b600e;
 }
 
-#theorembuybackground {
-    border: 1px solid #3AACD6 !important;
-    background: black !important;
+.t-s6 .c-rm-amount__desc {
+    color: #999;
 }
 
-.greedbtn {
-    background-color: #f2d729 !important;
-    color: black !important;
+.t-s6 .c-rm-amount {
+  color: #0b600e;
+  text-shadow: 0 0 7px #0b600e;
 }
 
-.greedbtn:hover {
-    background-color: #9E913A !important;
-}
-
-.realitytabbtn {
-    background-color: white !important;
-    border: 2px solid #0b600e !important;
-}
-
-.realitytabbtn:hover {
-    color: white  !important;
-    background-color: #0b600e !important;
-    border: 2px solid #0b600e !important;
-}
-
-#realitymachines {
-    color: #999 !important;
-}
-
-.RMAmount1 {
-    color: #0b600e !important;
-    text-shadow: 0px 0px 7px #0b600e;
-}
-
-.automatorinstruction.command {
-    background-color: black !important;
-}
-
-.automatorinstruction.target {
-    background-color: black !important;
-}
-
-.automatorinstruction.command:hover {
-    background-color: #d5ffd7 !important;
-}
-
-.automatorinstruction.target:hover {
-    background-color: #BBDEFB !important;
-}
-
-.automatorinstructionbought.command {
-    background-color: #0b600e !important;
-}
-
-.automatorinstructionbought.target {
-    background-color: #2196F3 !important;
-}
-
-.automatorinstructionlocked.command {
-    background-color: #656565 !important;
-}
-
-.automatorinstructionlocked.target {
-    background-color: #656565 !important;
-}
-
-#realityanimbg {
+.t-s6 #realityanimbg {
     filter: invert(1);
 }

@@ -1,8 +1,10 @@
+"use strict";
+
 Vue.component("autobuyer-priority-selector", {
   props: {
     autobuyer: Object
   },
-  data: function() {
+  data() {
     return {
       value: 1
     };
@@ -12,7 +14,7 @@ Vue.component("autobuyer-priority-selector", {
       this.value = this.autobuyer.priority;
     },
     handleChange(event) {
-      const newValue = parseInt(event.target.value);
+      const newValue = parseInt(event.target.value, 10);
       this.autobuyer.priority = newValue;
       this.value = newValue;
     }

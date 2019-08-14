@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("eternity-challenges-tab", {
   components: {
     "eternity-challenge-box": {
@@ -11,6 +13,7 @@ Vue.component("eternity-challenges-tab", {
           isCompleted: false,
           completions: 0,
           showGoalSpan: false,
+          enslavedSpanOverride: false,
         };
       },
       computed: {
@@ -35,7 +38,17 @@ Vue.component("eternity-challenges-tab", {
           return this.goalAtCompletions(0);
         },
         lastGoal() {
-          return this.goalAtCompletions(TIERS_PER_EC - 1);
+          const goal = this.goalAtCompletions(this.challenge.maxCompletions - 1);
+          if (this.enslavedSpanOverride) {
+            // Fuck up the text
+            let mangled = "";
+            for (let idx = 0; idx < goal.length; ++idx) {
+              const badChar = Math.random() > 0.4 ? goal.charCodeAt(idx) : Math.floor(Math.random() * 65000 + 65);
+              mangled += String.fromCharCode(badChar);
+            }
+            return mangled;
+          }
+          return goal;
         },
         currentRewardConfig() {
           const challenge = this.challenge;
@@ -67,6 +80,7 @@ Vue.component("eternity-challenges-tab", {
           this.isCompleted = challenge.isFullyCompleted;
           this.completions = challenge.completions;
           this.showGoalSpan = player.realities > 0;
+          this.enslavedSpanOverride = Enslaved.isRunning && this.challenge.id === 1;
         },
         start() {
           this.challenge.start();
@@ -87,13 +101,12 @@ Vue.component("eternity-challenges-tab", {
           <description-display :config="config" slot="top" />
           <template slot="bottom">
             <div :style="{ visiblity: completions < 5 ? 'visible' : 'hidden' }">
-              <span>Completed {{completions}} {{"time" | pluralize(completions)}}</span>
-              <br>
-              <span>{{goalDisplay}}</span>
+              <div>Completed {{completions}} {{"time" | pluralize(completions)}}</div>
+              <div v-if="!isCompleted">{{goalDisplay}}</div>
             </div>
             <span v-if="showGoalSpan">Goal Span: {{firstGoal}} IP - {{lastGoal}} IP</span>
             <span>
-              Reward: 
+              Reward:
               <description-display
                 :config="config.reward"
                 :length="55"
@@ -126,7 +139,8 @@ Vue.component("eternity-challenges-tab", {
     }
   },
   template:
-    `<div>
+    `<div class="l-challenges-tab">
+      <challenges-header/>
       <div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.</div>
       <div>(You have unlocked {{unlockedCount}} out of 12 Eternity Challenges)</div>
       <challenge-grid :count="12" :isChallengeVisible="isChallengeVisible">

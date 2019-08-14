@@ -1,3 +1,5 @@
+"use strict";
+
 class TimeSpan {
   /**
    * @param {Number} value
@@ -154,11 +156,12 @@ class TimeSpan {
   get totalMilliseconds() {
     return this._ms;
   }
+  
   /**
    * @param {TimeSpan} other
    * @returns {TimeSpan}
    */
-  add(other) {
+  plus(other) {
     Guard.isTimeSpan(other);
     return new TimeSpan(this._ms + other._ms);
   }
@@ -167,7 +170,7 @@ class TimeSpan {
    * @param {TimeSpan} other
    * @returns {TimeSpan}
    */
-  subtract(other) {
+  minus(other) {
     Guard.isTimeSpan(other);
     return new TimeSpan(this._ms - other._ms);
   }
@@ -176,7 +179,7 @@ class TimeSpan {
    * @param {Number} other
    * @returns {TimeSpan}
    */
-  multiply(other) {
+  times(other) {
     Guard.isNumber(other);
     return new TimeSpan(this._ms * other);
   }
@@ -185,7 +188,7 @@ class TimeSpan {
    * @param {Number} other
    * @returns {TimeSpan}
    */
-  divide(other) {
+  dividedBy(other) {
     Guard.isNumber(other);
     return new TimeSpan(this._ms / other);
   }
@@ -195,12 +198,12 @@ class TimeSpan {
    */
   toString() {
     if (this.years > 1e6) {
-      return shorten(this.totalYears, 3, 0) + " years";
+      return `${shorten(this.totalYears, 3, 0)} years`;
     }
     if (this.totalSeconds > 10) {
       return this.toStringNoDecimals();
     }
-    return this.totalSeconds.toFixed(3) + " seconds";
+    return `${this.totalSeconds.toFixed(3)} seconds`;
   }
 
   /**
@@ -221,34 +224,42 @@ class TimeSpan {
     addCheckedComponent(this.days, "day");
     addCheckedComponent(this.hours, "hour");
     addCheckedComponent(this.minutes, "minute");
-    addComponent(this.seconds, "second");
+    addCheckedComponent(this.seconds, "second");
     // Join with commas and 'and' in the end.
-    return [parts.slice(0, -1).join(', '), parts.slice(-1)[0]].join(parts.length < 2 ? '' : ' and ');
+    return [parts.slice(0, -1).join(", "), parts.slice(-1)[0]].join(parts.length < 2 ? "" : " and ");
   }
 
   /**
+   * @param {boolean} useHMS If true, will display times as HH:MM:SS in between a minute and 100 hours.
    * @returns {String}
    */
-  toStringShort() {
+  toStringShort(useHMS = true) {
     const totalSeconds = this.totalSeconds;
     if (totalSeconds <= 10) {
       return `${totalSeconds.toFixed(3)} seconds`;
     }
-    else if (totalSeconds <= 60) {
+    if (totalSeconds <= 60) {
       return `${totalSeconds.toFixed(2)} seconds`;
     }
-    else if (this.totalHours < 10000) {
-      return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+    if (this.totalHours < 100) {
+      if (useHMS) {
+        return `${format(Math.floor(this.totalHours))}:${format(this.minutes)}:${format(this.seconds)}`;
+      }
+      if (this.totalMinutes < 60) {
+        return `${this.totalMinutes.toFixed(2)} minutes`;
+      }
+      if (this.totalHours < 24) {
+        return `${this.totalHours.toFixed(2)} hours`;
+      }
     }
-    else if (this.totalDays < 10000) {
+    if (this.totalDays < 500) {
       return `${this.totalDays.toFixed(2)} days`;
     }
-    else { 
-      return `${shorten(this.totalYears, 3, 0)} years`;
-    }
+    return `${shorten(this.totalYears, 3, 2)} years`;
+    
     function format(value) {
       const s = value.toString();
-      return s.length === 1 ? "0" + s : s;
+      return s.length === 1 ? `0${s}` : s;
     }
   }
 

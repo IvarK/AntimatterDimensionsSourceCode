@@ -108,6 +108,7 @@
     "computed-property-spacing": "error",
     "consistent-this": "error",
     "func-call-spacing": "error",
+    "guard-for-in": "warn",
     "id-blacklist": [
       "error",
       "ret",
@@ -187,6 +188,10 @@
     "space-in-parens": "error",
     "space-infix-ops": "error",
     "spaced-comment": "error",
+    "strict": [
+      "error",
+      "global"
+    ],
     "switch-colon-spacing": "error",
     "template-tag-spacing": "error",
     "arrow-body-style": "error",
@@ -208,10 +213,10 @@
     "object-shorthand": "error",
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
-    "prefer-destructuring": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "rest-spread-spacing": "error",
-    "template-curly-spacing": "error"
+    "template-curly-spacing": "error",
+    "prefer-template": "error"
   }
 }

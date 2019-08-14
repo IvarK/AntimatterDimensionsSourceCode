@@ -1,6 +1,6 @@
-body {
+body.t-s8 {
     background: url('../images/s8-bg.jpg') no-repeat;
-    color: black !important;
+    color: black;
     background-color: white;
     height: 100%; 
 
@@ -11,138 +11,117 @@ body {
     background-attachment: fixed;
 }
 
-.container {
-    color: black !important;
+.t-s8 .container {
+    color: black;
 }
 
-.RMAmount1 {
-    color: black !important;
+.t-s8 .c-rm-amount {
+  color: black;
+  color: #0b600e;
 }
 
-.glyphDescriptions {
+.t-s8 .glyphDescriptions {
     border-color: black;
 }
 
 /*metro  theme with less box shadows*/
 
-* {
-    border-radius: 0px !important;
-    border-width: 1px !important;
-}
-
 .radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
-    border-radius: 50% !important;
+    border-radius: 50%;
 }
 
-input, select {
+.t-s8 input, .t-s8 select {
     border: 1px solid #A9A9A9;
 }
 
-.popup {
-    border: 1px solid black !important;
+.t-s8 .popup {
+    border: 1px solid black;
 }
 
-#game {
-    border: 1px solid black !important;
+.t-s8 .secondarytabbtn {
+    background: #EEEEEE;
+    border: 1px solid #2196F3;
+    border-radius: 0;
 }
 
-.tabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
+.t-s8 .secondarytabbtn:hover {
+    background: #2196F3;
+    border: 1px solid #2196F3;
 }
 
-.tabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
+.t-s8 .storebtn {
+    background: #EEEEEE;
+    border: 1px solid #66BB6A;
+    border-radius: 0;
 }
 
-.secondarytabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
+.t-s8 .storebtn:hover {
+    background: #66BB6A;
 }
 
-.secondarytabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
+.t-s8 .unavailablebtn {
+    background: #9E9E9E;
+    border: 1px solid #EF5350;
 }
 
-.storebtn {
-    background: #EEEEEE !important;
-    border: 1px solid #66BB6A !important;
+.t-s8 .unavailablebtn:hover {
+    background: #EF5350;
 }
 
-.storebtn:hover {
-    background: #66BB6A !important;
+.t-s8 .infinitytabbtn {
+    border: 1px solid #FF9800;
+    background: #1F1F1F;
 }
 
-.unavailablebtn {
-    background: #9E9E9E !important;
-    border: 1px solid #EF5350 !important;
+.t-s8 .infinitytabbtn:hover {
+    background: #FF9800;
+    border: 1px solid #FF9800;
 }
 
-.unavailablebtn:hover {
-    background: #EF5350 !important;
+.t-s8 .eternitytabbtn {
+    color: #673AB7;
+    background: #000;
+    border: 1px solid #673AB7;
 }
 
-.infinitytabbtn {
-    border: 1px solid #FF9800 !important;
-    background: #1F1F1F !important;
+.t-s8 .eternitytabbtn:hover {
+    background: #FFF;
+    border: 1px solid #673AB7;
 }
 
-.infinitytabbtn:hover {
-    background: #FF9800 !important;
-    border: 1px solid #FF9800 !important;
+.t-s8 .c-tt-buy-button--unlocked {
+  background: #212121;
+  color: #00BCD4;
+  border: 1px solid #00BCD4;
 }
 
-.eternitytabbtn {
-    color: #673AB7 !important;
-    background: #000 !important;
-    border: 1px solid #673AB7 !important;
+.t-s8 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: #00BCD4;
 }
 
-.eternitytabbtn:hover {
-    background: #FFF !important;
-    border: 1px solid #673AB7 !important;
+.t-s8 .c-tt-buy-button--locked {
+  background: #9E9E9E;
+  border: none;
+  box-shadow: 1px 1px 1px 0px #000;
 }
 
-.RMAmount1 {
-    color: #0b600e;
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #EF5350;
 }
 
-.timetheorembtn {
-    background: #212121 !important;
-    color: #00BCD4 !important;
-    border: 1px solid #00BCD4 !important;
+.t-s8 #theorembuybackground {
+    background: #EEEEEE;
+    border-width: 1px;
 }
 
-.timetheorembtn:hover {
-    color: #212121 !important;
-    background: #00BCD4 !important;
+.t-s8 .realitytabbtn {
+    background: white;
+    border: 1px solid #0b600e;
 }
 
-.timetheorembtnlocked {
-    background: #9E9E9E !important;
-    border: none !important;
-    box-shadow: 1px 1px 1px 0px #000;
-}
-
-.timetheorembtnlocked:hover {
-    background: #EF5350 !important;
-}
-
-#theorembuybackground {
-    background: #EEEEEE !important;
-    border-width: 1px !important;
-}
-
-.realitytabbtn {
-    background: white !important;
-    border: 1px solid #0b600e !important;
-    display: none;
-}
-
-.realitytabbtn:hover {
-    background-color: #0b600e !important;
-    border: 1px solid #0b600e !important;
+.t-s8 .realitytabbtn:hover {
+    background-color: #0b600e;
+    border: 1px solid #0b600e;
     color: white;
 }

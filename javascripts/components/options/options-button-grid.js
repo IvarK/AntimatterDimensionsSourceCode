@@ -1,4 +1,6 @@
-Vue.component('options-button-grid', {
+"use strict";
+
+Vue.component("options-button-grid", {
   components: {
     "options-button": {
       template:
@@ -28,33 +30,44 @@ Vue.component('options-button-grid', {
          </div>`
     }
   },
-  data: function() {
+  data() {
     return {
       options: player.options
     };
   },
   computed: {
-    theme: function() {
-      return Themes.find(this.options.theme).displayName();
+    themeLabel() {
+      return `Theme: ${Themes.find(this.options.theme).displayName()} ▼`;
+    },
+    notationLabel() {
+      return `Notation: ${this.options.notation} ▼`;
+    },
+    UILabel() {
+      return `UI: ${this.$viewModel.newUI ? "New" : "Old"}`;
     }
   },
   methods: {
-    hardReset: function() {
+    hardReset() {
       if (confirm("Do you really want to erase all your progress?")) {
-        hardReset();
+        GameStorage.hardReset();
       }
     }
   },
-  template:
-    `<div class="l-options-grid">
+  template: `
+    <div class="l-options-grid">
       <div class="l-options-grid__row">
-        <options-button
-          class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.changeTheme()"
-        >Current theme: {{ theme }}</options-button>
-        <options-button
-          onclick="GameOptions.changeNotation()"
-        >Notation: {{ options.notation }}</options-button>
+        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+            {{themeLabel}}
+          </div>
+          <select-theme slot="dropdown" />
+        </expanding-control-box>
+        <expanding-control-box width-source="header" class="l-options-grid__button c-options-grid__notations">
+          <div slot="header" class="o-primary-btn o-primary-btn--option l-options-grid__notations-header">
+            {{notationLabel}}
+          </div>
+          <select-notation slot="dropdown" />
+        </expanding-control-box>
         <options-button
           onclick="GameOptions.toggleNews()"
         >Hide/show the news</options-button>
@@ -67,7 +80,7 @@ Vue.component('options-button-grid', {
         />
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.export()"
+          onclick="GameStorage.export()"
         >Export</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -81,7 +94,7 @@ Vue.component('options-button-grid', {
         >Confirmations</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
-          onclick="GameOptions.save()"
+          onclick="GameStorage.save()"
         >Save</options-button>
         <options-button
           class="o-primary-btn--option_font-x-large"
@@ -121,8 +134,9 @@ Vue.component('options-button-grid', {
       </div>
       <div class="l-options-grid__row">
         <options-button
-          class="o-primary-btn--option l-options-grid__button--hidden"
-        />
+          class="o-primary-btn--option_font-large"
+          onclick="GameOptions.toggleUI()"
+        >{{ UILabel }}</options-button>
         <update-rate-slider
           v-model="options.updateRate"
           oninput="GameOptions.refreshUpdateRate()"

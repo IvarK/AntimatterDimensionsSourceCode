@@ -1,3 +1,5 @@
+"use strict";
+
 var kong = {};
 
 kong.enabled = false;
@@ -26,8 +28,11 @@ kong.purchaseIP = function(cost) {
   player.IAP.STD -= cost
   if (player.IAP.IPMult == 1) player.IAP.IPMult = 2;
   else player.IAP.IPMult += 2;
-
   //kongregate.mtx.purchaseItems(['doubleip'], kong.onPurchaseResult);
+};
+
+kong.submitAchievements = function() {
+  kong.submitStats("Achievements", Achievements.effectiveCount + player.secretAchievements.size);
 };
 
 kong.purchaseDimMult = function(cost) {

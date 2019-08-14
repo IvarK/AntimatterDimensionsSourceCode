@@ -1,20 +1,18 @@
-Vue.component('past-infinities-tab', {
-  mixins: [pastRunsMixin],
-  data: function() {
+"use strict";
+
+Vue.component("past-infinities-tab", {
+  data() {
     return {
-      runs: player.lastTenRuns,
-      reward: function(run) {
-        return this.runGain(run) + " IP";
-      }
+      getRuns: () => player.lastTenRuns,
+      reward: runGain => `${runGain} IP`
     };
   },
   template:
     `<past-runs-tab
-      :runs="runs"
+      :getRuns="getRuns"
       singular="Infinity"
       plural="Infinities"
       points="IP"
       :reward="reward"
-      :real-time-index=2
     />`
 });

@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("modal-import", {
-  data: function() {
+  data() {
     return {
       input: ""
     };
@@ -19,7 +21,7 @@ Vue.component("modal-import", {
       <div class="c-modal-import__save-info">
         <div v-if="inputIsSecret">???</div>
         <template v-else-if="inputIsValidSave">
-          <div>Antimatter: {{ formatMoney(player.money) }}</div>
+          <div>Antimatter: {{ formatAntimatter(antimatter) }}</div>
           <div v-if="progress.isInfinityUnlocked">Infinities: {{ shortenDimensions(player.infinitied) }}</div>
           <div v-if="progress.isEternityUnlocked">Eternities: {{ shortenDimensions(player.eternities) }}</div>
           <div v-if="progress.isRealityUnlocked">Realities: {{ shortenDimensions(player.realities) }}</div>
@@ -34,36 +36,40 @@ Vue.component("modal-import", {
       >Import</primary-button>
     </div>`,
   computed: {
-    player: function() {
-      return parseSaveData(this.input);
+    player() {
+      const save = GameSaveSerializer.deserialize(this.input);
+      return GameStorage.verifyPlayerObject(save) ? save : undefined;
     },
-    progress: function() {
+    progress() {
       return PlayerProgress.of(this.player);
     },
-    hasInput: function() {
+    antimatter() {
+      return this.player.antimatter || this.player.money;
+    },
+    hasInput() {
       return this.input !== "";
     },
-    inputIsValid: function() {
+    inputIsValid() {
       return this.inputIsValidSave || this.inputIsSecret;
     },
-    inputIsValidSave: function() {
+    inputIsValidSave() {
       return this.player !== undefined;
     },
-    inputIsSecret: function() {
+    inputIsSecret() {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     }
   },
   methods: {
-    formatMoney: function(money) {
-      return this.shortenPostBreak(money, 2, 1);
+    formatAntimatter(antimatter) {
+      return this.shortenPostBreak(antimatter, 2, 1);
     },
-    importSave: function() {
+    importSave() {
       if (!this.inputIsValid) return;
       Modal.hide();
-      importSave(this.input);
+      GameStorage.import(this.input);
     }
   },
-  mounted: function() {
+  mounted() {
     this.$refs.input.select();
   }
 });

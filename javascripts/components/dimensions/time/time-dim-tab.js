@@ -1,23 +1,25 @@
-Vue.component('time-dim-tab', {
-  data: function() {
+"use strict";
+
+Vue.component("time-dim-tab", {
+  data() {
     return {
       totalUpgrades: 0,
       timeShards: new Decimal(0),
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
-      incomeType: String.empty,
+      incomeType: "",
       showCostScaleTooltip: false,
       areAutobuyersUnlocked: false
     };
   },
   computed: {
-    totalUpgradesDisplay: function() {
+    totalUpgradesDisplay() {
       return formatWithCommas(this.totalUpgrades);
     },
-    e6000Tooltip: function() {
+    e6000Tooltip() {
       return "TD costs start increasing faster after " + shortenDimensions(new Decimal("1e6000"));
     },
-    costScaleTooltip: function() {
+    costScaleTooltip() {
       return this.showCostScaleTooltip ? this.e6000Tooltip : undefined;
     }
   },
@@ -31,10 +33,10 @@ Vue.component('time-dim-tab', {
       this.showCostScaleTooltip = player.eternityPoints.exponent > 6000;
       this.areAutobuyersUnlocked = RealityUpgrade(13).isBought;
     },
-    maxAll: function() {
+    maxAll() {
       buyMaxTimeDimensions();
     },
-    toggleAllAutobuyers: function() {
+    toggleAllAutobuyers() {
       toggleAllTimeDims();
     }
   },
@@ -45,7 +47,8 @@ Vue.component('time-dim-tab', {
         <p>
           You have
           <span class="c-time-dim-description__accent">{{shortenMoney(timeShards)}}</span> time shards.
-          Next tickspeed upgrade at <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
+          Next tickspeed upgrade at
+          <span class="c-time-dim-description__accent">{{shortenMoney(upgradeThreshold)}}</span>
         </p>
       </div>      
       <div>You are getting {{shortenDimensions(shardsPerSecond)}} {{incomeType}} per second.</div>

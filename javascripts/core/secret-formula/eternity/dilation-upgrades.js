@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.dilation = (function() {
   function rebuyableCost(initialCost, increment, id) {
     return Decimal.multiply(initialCost, Decimal.pow(increment, player.dilation.rebuyables[id]));
@@ -19,7 +21,7 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e5,
       increment: 10,
       description: "Double Dilated Time gain.",
-      effect: bought => Math.pow(2, bought),
+      effect: bought => Decimal.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0)
     }),
@@ -28,9 +30,9 @@ GameDatabase.eternity.dilation = (function() {
       initialCost: 1e6,
       increment: 100,
       description: () =>
-        Perk.bypassDGReset.isBought ?
-        "Reset Dilated Galaxies, but lower their threshold" :
-        "Reset Dilated Time and Dilated Galaxies, but lower their threshold",
+        (Perk.bypassDGReset.isBought
+        ? "Reset Dilated Galaxies, but lower their threshold"
+        : "Reset Dilated Time and Dilated Galaxies, but lower their threshold"),
       effect: bought => Math.pow(0.8, bought),
       formatEffect: () => getFreeGalaxyMult().toFixed(3),
       formatCost: value => shorten(value, 2, 0)
@@ -54,15 +56,15 @@ GameDatabase.eternity.dilation = (function() {
       id: 5,
       cost: 1e9,
       description: () => {
-        let mult = replicantiMult().log10();
-        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.log10() / mult;
-        let out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
-        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`
+        const mult = replicantiMult().pLog10();
+        const ratio = DilationUpgrade.tdMultReplicanti.effectValue.pLog10() / mult;
+        const out = ratio > 0.095 ? "0.1" : ratio.toFixed(2);
+        return `Time Dimensions are affected by Replicanti multiplier ^${out}.`;
       },
       effect: () => {
-        let rep10 = replicantiMult().log10() * 0.1;
+        let rep10 = replicantiMult().pLog10() * 0.1;
         rep10 = rep10 > 9000 ? 9000 + 0.5 * (rep10 - 9000) : rep10;
-        return Decimal.pow(10, rep10);
+        return Decimal.pow10(rep10);
       },
       formatEffect: value => formatX(value, 2, 1)
     },
@@ -99,4 +101,4 @@ GameDatabase.eternity.dilation = (function() {
       formatEffect: value => formatX(value, 2, 1)
     }
   };
-})();
+}());

@@ -1,40 +1,43 @@
-Vue.component('modal-load-game', {
+"use strict";
+
+Vue.component("modal-load-game", {
   components: {
-    'save-game-record': {
+    "save-game-record": {
       props: {
         saveId: Number
       },
-      data: function() {
-        const save = saves[this.saveId];
+      data() {
+        const save = GameStorage.saves[this.saveId];
         return {
-          antimatter: new Decimal(save ? save.money : 10)
+          antimatter: new Decimal(save ? save.antimatter || save.money : 10)
         };
       },
       computed: {
-        isSelected: function() {
-          return currentSave === this.saveId;
+        isSelected() {
+          return GameStorage.currentSlot === this.saveId;
         }
       },
       methods: {
-        loadSave: function() {
-          change_save(this.saveId);
+        load() {
+          GameStorage.loadSlot(this.saveId);
+          Modal.hide();
         },
-        formatMoney: function(money) {
-          return this.shortenPostBreak(money, 2, 1);
+        formatAntimatter(antimatter) {
+          return this.shortenPostBreak(antimatter, 2, 1);
         },
         update() {
           if (this.isSelected) {
-            this.antimatter.copyFrom(player.money);
+            this.antimatter.copyFrom(player.antimatter);
           }
         }
       },
       template:
         `<div class="l-modal-options__save-record">
           <strong>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></strong>
-          <span>Antimatter: {{ formatMoney(antimatter) }}</span>
+          <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
           <primary-button
             class="o-primary-btn--width-medium"
-            @click="loadSave"
+            @click="load"
           >Load</primary-button>
         </div>`
     }

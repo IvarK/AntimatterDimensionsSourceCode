@@ -1,10 +1,12 @@
+"use strict";
+
 Vue.component("reality-upgrades-tab", {
   computed: {
-    upgrades: () => RealityUpgrades.list
+    upgrades: () => RealityUpgrades.all
   },
   methods: {
     id(row, column) {
-      return (row - 1) * 5 + column;
+      return (row - 1) * 5 + column - 1;
     }
   },
   template: `

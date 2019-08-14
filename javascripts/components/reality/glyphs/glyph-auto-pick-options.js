@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("glyph-auto-pick-options", {
-  data: function () {
+  data() {
     return {
       unlocked: false,
       mode: AutoGlyphPickMode.RANDOM,
@@ -12,11 +14,13 @@ Vue.component("glyph-auto-pick-options", {
   },
   methods: {
     optionClass(idx) {
-      return [idx == this.mode
-        ? "c-glyph-auto-pick-options__option--active"
-        : "c-glyph-auto-pick-options__option--inactive",
+      return [
+        idx === this.mode
+          ? "c-glyph-auto-pick-options__option--active"
+          : "c-glyph-auto-pick-options__option--inactive",
         "c-glyph-auto-pick-options__option",
-        "l-glyph-auto-pick-options__option"];
+        "l-glyph-auto-pick-options__option"
+      ];
     },
     update() {
       this.unlocked = EffarigUnlock.autopicker.isUnlocked;
@@ -26,7 +30,7 @@ Vue.component("glyph-auto-pick-options", {
       AutoGlyphPicker.mode = m;
     },
   },
-  template: /*html*/`
+  template: `
   <div v-if="unlocked" class="l-glyph-sacrifice-options c-glyph-sacrifice-options">
     <div :class="optionClass(modes.RANDOM)" @click="setMode(modes.RANDOM)">
       Auto pick random

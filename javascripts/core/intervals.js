@@ -1,3 +1,5 @@
+"use strict";
+
 const GameIntervals = (function() {
   const interval = (handler, timeout) => {
     let id;
@@ -31,6 +33,6 @@ const GameIntervals = (function() {
       }
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
-    save: interval(() => save_game(), 30000)
+    save: interval(() => GameStorage.save(), 30000)
   };
 }());

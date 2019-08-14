@@ -1,194 +1,133 @@
-body {
+body.t-dark {
     background-image: url('../images/dark-bg.png');
-    background-position: center; 
+    background-position: center;
 }
 
-button {
-    color: #E0E0E0;
-    background-color: #455A64 !important;
-    border: 1px solid black;
-    box-shadow: 0px 0px 7px 2px #111111;
-}
-
-.popup {
-    background-color: #455A64 !important;
-    box-shadow: 0px 0px 15px 0px black !important;
-}
-
-.storebtn {
-    color: #E0E0E0;
-    background-color: #455A64 !important;
-    border: 1px solid black;
-    box-shadow: 0px 0px 7px 2px #111111;
-}
-
-.storebtn:hover {
-    background: #1B5E20 !important;
-}
-
-input {
-    background-color: #455A64 !important;
-    border: 1px solid black !important;
-}
-
-#news {
-    color: #E0E0E0 !important;
-}
-
-#game {
-    border: 1px solid #546E7A !important;
+.t-dark .popup {
     background-color: #455A64;
+    box-shadow: 0 0 15px 0 black;
 }
 
-.container {
-    color: #888888 !important;
+.t-dark .storebtn {
+    color: #E0E0E0;
+    background-color: #455A64;
+    border: 1px solid black;
+    box-shadow: 0 0 7px 2px #111111;
 }
 
-.tabbtn {
-    border: 2px solid #1565C0 !important;
+.t-dark .storebtn:hover {
+  color: #FFF;
+  background: #1B5E20;
 }
 
-.tabbtn:hover {
-    background: #1565C0 !important;
-    color: black !important;
+input.t-dark {
+    background-color: #455A64;
+    border: 1px solid black;
 }
 
-.secondarytabbtn:hover {
-    background: #1565C0 !important;
-    color: black !important;
+.t-dark .container {
+    color: #888888;
 }
 
-.secondarytabbtn {
-    border: 2px solid #1565C0 !important;
+.t-dark .secondarytabbtn {
+  color: #E0E0E0;
+  border: 2px solid #1565C0;
+  background-color: #455A64;
 }
 
-.infinitytabbtn {
-    color: #000 !important;
-    background: #F5F5F5 !important;
-    border: 2px solid #FF9800 !important;
+.t-dark .secondarytabbtn:hover {
+    background: #1565C0;
+    color: black;
 }
 
-.infinitytabbtn:hover {
-    background: #FF9800 !important;
+.t-dark .infinitytabbtn {
+    color: #000;
+    background: #F5F5F5;
+    border: 2px solid #FF9800;
 }
 
-.RMAmount1 {
+.t-dark .infinitytabbtn:hover {
+    background: #FF9800;
+}
+
+.t-dark .c-rm-amount {
     color: #0b600e;
-    text-shadow: 0px 0px 7px #0b600e;
+    text-shadow: 0 0 7px #0b600e;
 }
 
-.unavailablebtn {
-    background: #37474F !important;
+.t-dark .unavailablebtn {
+    background: #37474F;
 }
 
-.unavailablebtn:hover {
-    background: #B84B5F !important;
+.t-dark .unavailablebtn:hover {
+    background: #B84B5F;
 }
 
-.storebtn:hover {
-    color: #FFF !important;
+.t-dark .eternitytabbtn {
+    color: #b341e0;
+    background: black;
+    border: 2px solid #b341e0;
 }
 
-.eternitytabbtn {
-    color: #b341e0 !important;
-    background: black !important;
-    border: 2px solid #b341e0 !important;
+.t-dark .eternitytabbtn:hover {
+    color: #511568;
+    background: white;
 }
 
-.eternitytabbtn:hover {
-    color: #511568 !important;
-    background: white !important;
+.t-dark .c-tt-amount {
+    color: #64DD17;
+    text-shadow: 0 0 7px #64DD17;
 }
 
-.TheoremAmount {
-    color: #64DD17 !important;
-    text-shadow: 0px 0px 7px #64DD17;
+.t-dark .c-tt-buy-button--unlocked {
+  color: #3AACD6;
+  background: #161616;
+  border: 1px solid #3AACD6;
 }
 
-.timetheorembtn {
-    color: #3AACD6 !important;
-    background: #161616 !important;
-    border: 1px solid #3AACD6 !important;
+.t-dark .c-tt-buy-button--unlocked:hover {
+  color: #161616;
+  background: #3AACD6;
 }
 
-.timetheorembtn:hover {
-    color: #161616 !important;
-    background: #3AACD6 !important;
+.t-dark .c-tt-buy-button--locked {
+  background: #263238;
+  border: 1px solid #3AACD6;
 }
 
-.timetheorembtnlocked {
-    background: #263238 !important;
-    border: 1px solid #3AACD6 !important;
+.t-dark .c-tt-buy-button--locked:hover {
+  background: #B84B5F;
+  border: 1px solid #B84B5F;
 }
 
-.timetheorembtnlocked:hover {
-    background: #B84B5F !important;
-    border: 1px solid #B84B5F !important;
+.t-dark #theorembuybackground {
+    background: #455A64;
 }
 
-#theorembuybackground {
-    background: #455A64 !important;
+.t-dark .greedbtn {
+    background-color: #f2d729;
+    color: black;
 }
 
-.greedbtn {
-    background-color: #f2d729 !important;
-    color: black !important;
+.t-dark .greedbtn:hover {
+    background-color: #9E913A;
 }
 
-.greedbtn:hover {
-    background-color: #9E913A !important;
+.t-dark .realitytabbtn {
+  color: #0b600e;
+  background-color: white;
+  border: 2px solid #0b600e;
 }
 
-.realitytabbtn {
-    background-color: white !important;
-    border: 2px solid #0b600e !important;
+.t-dark .realitytabbtn:hover {
+    background-color: #0b600e;
+    color: white;
 }
 
-.realitytabbtn:hover {
-    background-color: #0b600e !important;
-    color: white !important;
+.t-dark .c-rm-amount__desc {
+    color: #757575;
 }
 
-#realitymachines {
-    color: #757575 !important;
-}
-
-.automatorinstruction.command {
-    background-color: black !important;
-}
-
-.automatorinstruction.target {
-    background-color: black !important;
-}
-
-.automatorinstruction.command:hover {
-    color: black !important;
-    background-color: #d5ffd7 !important;
-}
-
-.automatorinstruction.target:hover {
-    color: black !important;
-    background-color: #BBDEFB !important;
-}
-
-.automatorinstructionbought.command {
-    background-color: #0b600e !important;
-    border: 2px solid #08450b !important;
-}
-
-.automatorinstructionbought.target {
-    background-color: #2196F3 !important;
-    border: 2px solid #1976D2 !important;
-}
-
-.automatorinstructionlocked.command {
-    background-color: #656565 !important;
-}
-
-.automatorinstructionlocked.target {
-    background-color: #656565 !important;
-}
-
-#realityanimbg {
+.t-dark #realityanimbg {
     filter: invert(1);
 }

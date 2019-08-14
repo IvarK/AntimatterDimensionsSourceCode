@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.challenges.normal = [
   {
     id: 1,
@@ -17,14 +19,16 @@ GameDatabase.challenges.normal = [
     id: 3,
     legacyId: 3,
     isQuickResettable: false,
-    description: "The 1st Dimension is heavily weakened but gets an exponentially increasing bonus that resets on reset.",
+    description: "The 1st Dimension is heavily weakened but gets " +
+      "an exponentially increasing bonus that resets on reset.",
     reward: "Third Dimension Autobuyer"
   },
   {
     id: 4,
     legacyId: 8,
     isQuickResettable: false,
-    description: "Buying a dimension automatically erases all lower tier dimensions, like a sacrifice without the boost.",
+    description: "Buying a dimension automatically erases all lower tier dimensions, " +
+      "like a sacrifice without the boost.",
     reward: "Fourth Dimension Autobuyer"
   },
   {
@@ -52,14 +56,16 @@ GameDatabase.challenges.normal = [
     id: 8,
     legacyId: 11,
     isQuickResettable: false,
-    description: "Dimension Boosts and galaxies are useless, sacrifice resets everything but is immensely more powerful.",
+    description: "Dimension Boosts and galaxies are useless, " +
+      "sacrifice resets everything but is immensely more powerful.",
     reward: "Eighth Dimension Autobuyer"
   },
   {
     id: 9,
     legacyId: 5,
     isQuickResettable: true,
-    description: "Whenever you buy 10 of a dimension or tickspeed, everything else of equal cost will increase to its next cost step.",
+    description: "Whenever you buy 10 of a dimension or tickspeed, " +
+      "everything else of equal cost will increase to its next cost step.",
     reward: "Tickspeed Autobuyer"
   },
   {
@@ -73,7 +79,8 @@ GameDatabase.challenges.normal = [
     id: 11,
     legacyId: 12,
     isQuickResettable: true,
-    description: "There's normal matter which rises once you have at least 1 2nd Dimension. If it exceeds your antimatter, it will Dimension Boost without giving the bonus.",
+    description: "There's normal matter which rises once you have at least 1 2nd Dimension. " +
+      "If it exceeds your antimatter, it will Dimension Boost without giving the bonus.",
     reward: "Automated Antimatter Galaxies"
   },
   {

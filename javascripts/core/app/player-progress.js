@@ -1,3 +1,5 @@
+"use strict";
+
 class PlayerProgress {
   constructor(player) {
     this._player = player;

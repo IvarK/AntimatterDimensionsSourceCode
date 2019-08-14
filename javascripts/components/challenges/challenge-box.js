@@ -1,30 +1,34 @@
+"use strict";
+
 Vue.component("challenge-box", {
   props: {
     name: String,
     isUnlocked: false,
     isRunning: false,
-    isCompleted: false
+    isCompleted: false,
+    overrideLabel: {
+      type: String,
+      default: "",
+    }
   },
   computed: {
-    buttonClassObject: function() {
+    buttonClassObject() {
       const classObject = {
         "o-challenge-btn": true
       };
       if (this.isRunning) {
         classObject["o-challenge-btn--running"] = true;
-      }
-      else if (this.isCompleted) {
+      } else if (this.isCompleted) {
         classObject["o-challenge-btn--completed"] = true;
-      }
-      else if (this.isUnlocked) {
+      } else if (this.isUnlocked) {
         classObject["o-challenge-btn--unlocked"] = true;
-      }
-      else {
+      } else {
         classObject["o-challenge-btn--locked"] = true;
       }
       return classObject;
     },
-    buttonText: function() {
+    buttonText() {
+      if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
       if (this.isCompleted) return "Completed";
       if (this.isUnlocked) return "Start";

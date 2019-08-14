@@ -1,17 +1,14 @@
+"use strict";
+
 Vue.component("tickspeed-autobuyer-box", {
-  data: function() {
+  data() {
     return {
       mode: AutobuyerMode.BUY_SINGLE
     };
   },
   computed: {
-    autobuyer: function() {
-      return Autobuyer.tickspeed;
-    },
-    boxSetup: function() {
-      return new AutobuyerBoxSetup("Tickspeed Autobuyer", this.autobuyer);
-    },
-    modeDisplay: function() {
+    autobuyer: () => Autobuyer.tickspeed,
+    modeDisplay() {
       switch (this.mode) {
         case AutobuyerMode.BUY_SINGLE: return "Buys singles";
         case AutobuyerMode.BUY_MAX: return "Buys max";
@@ -21,7 +18,6 @@ Vue.component("tickspeed-autobuyer-box", {
   },
   methods: {
     update() {
-      if (!this.autobuyer.isUnlocked) return;
       this.mode = this.autobuyer.mode;
     },
     toggleMode() {
@@ -30,12 +26,12 @@ Vue.component("tickspeed-autobuyer-box", {
     }
   },
   template:
-    `<autobuyer-box :setup="boxSetup">
+    `<autobuyer-box :autobuyer="autobuyer" name="Tickspeed Autobuyer" showInterval>
       <template slot="beforeInterval">
         <autobuyer-interval-button :autobuyer="autobuyer" />
         <button class="o-autobuyer-btn" @click="toggleMode">{{modeDisplay}}</button>
       </template>
-      <autobuyer-priority-selector :autobuyer="autobuyer"/>
-      <br>
+      <div class="l-autobuyer-box__fill" />
+      <autobuyer-priority-selector :autobuyer="autobuyer" class="l-autobuyer-box__priority-selector" />
     </autobuyer-box>`
 });

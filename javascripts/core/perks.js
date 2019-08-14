@@ -1,10 +1,20 @@
-class PerkState extends PurchasableMechanicState {
+"use strict";
+
+class PerkState extends SetPurchasableMechanicState {
   constructor(config) {
-    super(config, Currency.perkPoints, () => player.reality.perks);
+    super(config);
     /**
      * @type {PerkState[]}
      */
     this.connectedPerks = [];
+  }
+
+  get currency() {
+    return Currency.perkPoints;
+  }
+
+  get set() {
+    return player.reality.perks;
   }
 
   get cost() {
@@ -15,36 +25,31 @@ class PerkState extends PurchasableMechanicState {
     return this.id === 0 || this.connectedPerks.some(p => p.isBought);
   }
 
-  initializeConnections(perks) {
+  initializeConnections() {
     const dbConnections = GameDatabase.reality.perkConnections;
     const connections = new Set(dbConnections[this.id]);
-    for (let start in dbConnections) {
+    for (const start in dbConnections) {
       if (!dbConnections.hasOwnProperty(start)) continue;
-      const startId = parseInt(start);
+      const startId = parseInt(start, 10);
       if (startId === this.id) continue;
       if (dbConnections[start].includes(this.id)) {
         connections.add(startId);
       }
     }
-    this.connectedPerks = [...connections].map(id => perks.find(id));
+    this.connectedPerks = [...connections].map(id => Perks.find(id));
   }
 
   purchase() {
     if (!super.purchase()) return;
     GameCache.achSkipPerkCount.invalidate();
     GameCache.buyablePerks.invalidate();
-    updateAutomatorRows();
-    document.getElementById("pp").textContent = "You have " + player.reality.pp + " Perk Point" + ((player.reality.pp === 1) ? "." : "s.");
-    if (player.reality.perks.length === Perk.all.length) {
-      giveAchievement("Perks of living");
-    }
-    drawPerkNetwork()
+    EventHub.dispatch(GameEvent.PERK_BOUGHT);
   }
 }
 
 const Perk = (function() {
   const db = GameDatabase.reality.perks;
-  const perks = {
+  return {
     glyphChoice3: new PerkState(db.glyphChoice3),
     startAM1: new PerkState(db.startAM1),
     startAM2: new PerkState(db.startAM2),
@@ -105,19 +110,21 @@ const Perk = (function() {
     achievementRowGroup5: new PerkState(db.achievementRowGroup5),
     achievementRowGroup6: new PerkState(db.achievementRowGroup6)
   };
-  /**
-   * @type {PerkState[]}
-   */
-  perks.all = Object.values(perks);
-  /**
-   * @param {number} id
-   * @return {PerkState}
-   */
-  perks.find = function(id) {
-    return perks.all.find(p => p.id === id);
-  };
-  for (let perk of perks.all) {
-    perk.initializeConnections(perks);
-  }
-  return perks;
 }());
+
+const Perks = {
+  all: Object.values(Perk),
+  find(id) {
+    return Perks.all.find(p => p.id === id);
+  }
+};
+
+for (const perk of Perks.all) {
+  perk.initializeConnections();
+}
+
+function checkPerkValidity() {
+  if (player.reality.perks.every(id => Perks.find(id) !== undefined)) return;
+  dev.respecPerks();
+  Modal.message.show("Your old Reality perks were invalid, your perks have been reset and your perk points refunded.");
+}

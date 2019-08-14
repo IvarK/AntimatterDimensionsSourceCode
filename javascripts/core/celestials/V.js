@@ -1,5 +1,7 @@
+"use strict";
+
 /**
- * runUnlocks:
+ * Information about how to format runUnlocks:
  * id: unique id
  * name: the achievement name
  * description: Description what you need to do, for values add {value}
@@ -9,24 +11,18 @@
  */
 
 class VRunUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-  }
-
   get completions() {
-    let completions = player.celestials.v.runUnlocks[this.id];
+    const completions = player.celestials.v.runUnlocks[this.id];
     return completions === undefined ? 0 : completions;
   }
 
   get conditionValue() {
     const value = this.config.values[this.completions];
-    return value !== undefined ? value : this.config.values[this.completions - 1];
+    return value === undefined ? this.config.values[this.completions - 1] : value;
   }
 
   get formattedDescription() {
-    let val = this.conditionValue
-    const formatted = this.config.format ? this.config.format(val) : shorten(val)
-    return this.config.description.replace('{value}', formatted)
+    return this.config.description(this.conditionValue);
   }
 
   set completions(value) {
@@ -41,22 +37,20 @@ class VRunUnlockState extends GameMechanicState {
   }
 }
 
-/**
- * @type {VRunUnlockState[]}
- */
-VRunUnlockState.all = mapGameData(
-  GameDatabase.celestials.v.runUnlocks,
-  config => new VRunUnlockState(config)
-);
+VRunUnlockState.createIndex(GameDatabase.celestials.v.runUnlocks);
 
 /**
  * @param {number} id
  * @return {VRunUnlockState}
  */
-function VRunUnlock(id) {
-  return VRunUnlockState.all[id];
-}
+const VRunUnlock = id => VRunUnlockState.index[id];
 
+const VRunUnlocks = {
+  /**
+   * @type {VRunUnlockState[]}
+   */
+  all: VRunUnlockState.index.compact(),
+};
 
 const V_UNLOCKS = {
   MAIN_UNLOCK: {
@@ -69,6 +63,7 @@ const V_UNLOCKS = {
       if (player.infinitied.plus(player.infinitiedBank).lt(db.infinities)) return false;
       if (player.dilation.dilatedTime.lt(db.dilatedTime)) return false;
       if (player.replicanti.amount.lt(db.replicanti)) return false;
+      if (player.reality.realityMachines.lt(db.rm)) return false;
   
       return true;
     }
@@ -78,17 +73,17 @@ const V_UNLOCKS = {
     id: 1,
     reward: "Achievement multiplier affects auto EC completion time.",
     description: "Have 10 V-achievements",
-    effect: () => Math.pow(player.achPow.toNumber(), getAdjustedGlyphEffect("effarigachievement")),
-    format: x => formatX(x),
+    effect: () => Player.achievementPower.toNumber(),
+    format: x => formatX(x, 2, 2),
     requirement: () => V.totalRunUnlocks >= 10
     },
     {
     id: 2,
     reward: "Achievement count affects black hole power, Unlock Ra, Celestial of the Forgotten.",
-    description: "Have 23 V-achievements",
-    effect: () => Math.pow(1.1, Math.pow(player.achievements.size, getAdjustedGlyphEffect("effarigachievement"))),
-    format: x => formatX(x),
-    requirement: () => V.totalRunUnlocks >= 23
+    description: "Have 30 V-achievements",
+    effect: () => Player.achievementPower.toNumber(),
+    format: x => formatX(x, 2, 0),
+    requirement: () => V.totalRunUnlocks >= 30
     },
     {
     id: 3,
@@ -117,7 +112,7 @@ const V = {
     }
 
     if (this.isRunning) {
-      for (let unlock of VRunUnlockState.all) {
+      for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
     }
@@ -126,19 +121,21 @@ const V = {
     return player.celestials.v.unlocks.includes(info.id);
   },
   startRun() {
-    player.celestials.v.run = startRealityOver();
+    player.celestials.v.run = startRealityOver() || player.celestials.v.run;
   },
   canBuyLockedPath() {
-    return player.celestials.v.additionalStudies < this.totalAdditionalStudies
+    return player.celestials.v.additionalStudies < this.totalAdditionalStudies;
   },
   updateTotalRunUnlocks() {
-    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum()
+    this.totalRunUnlocks = player.celestials.v.runUnlocks.sum();
   },
   get isRunning() {
     return player.celestials.v.run;
   },
+  get achievementsPerAdditionalStudy() {
+    return this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2]) ? 3 : 6;
+  },
   get totalAdditionalStudies() {
-    if (this.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[2])) return Math.floor(this.totalRunUnlocks / 3)
-    else return Math.floor(this.totalRunUnlocks / 6)
+    return Math.floor(this.totalRunUnlocks / this.achievementsPerAdditionalStudy);
   }
 };

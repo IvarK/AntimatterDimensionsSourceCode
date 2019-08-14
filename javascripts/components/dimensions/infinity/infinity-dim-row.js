@@ -1,8 +1,10 @@
+"use strict";
+
 Vue.component("infinity-dim-row", {
   props: {
     tier: Number
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
       multiplier: new Decimal(0),
@@ -16,28 +18,29 @@ Vue.component("infinity-dim-row", {
       isCapped: false,
       capIP: new Decimal(0),
       autobuyers: player.infDimBuyers,
-      isEC8Running: false
+      isEC8Running: false,
+      hardcap: HARDCAP_ID_PURCHASES,
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    rateOfChangeDisplay: function() {
-      return this.hasRateOfChange ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.hasRateOfChange
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
     },
-    costDisplay: function() {
+    costDisplay() {
       return this.isCapped ? "Capped!" : `Cost: ${this.shortenCosts(this.cost)} IP`;
     },
-    hardcapPurchases: function() {
-      return this.shortenCosts(HARDCAP_ID_PURCHASES);
+    hardcapPurchases() {
+      return this.shorten(this.hardcap, 1, 1);
     },
-    capTooltip: function() {
-      return this.isCapped ?
-        `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`:
-        undefined;
+    capTooltip() {
+      return this.isCapped
+        ? `Limited to ${this.hardcapPurchases} upgrades (${this.shortenCosts(this.capIP)} IP)`
+        : undefined;
     }
   },
   methods: {
@@ -59,10 +62,11 @@ Vue.component("infinity-dim-row", {
       this.isCapped = dimension.isCapped;
       if (this.isCapped) {
         this.capIP.copyFrom(dimension.hardcapIPAmount);
+        this.hardcap = dimension.purchaseCap;
       }
       this.isEC8Running = EternityChallenge(8).isRunning;
     },
-    buyManyInfinityDimension: function() {
+    buyManyInfinityDimension() {
       buyManyInfinityDimension(this.tier);
     }
   },

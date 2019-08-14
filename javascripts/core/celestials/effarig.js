@@ -1,3 +1,5 @@
+"use strict";
+
 const effarigQuotes = [
   "Welcome to my humble abode.",
   "I am Effarig, and I govern Glyphs.",
@@ -26,8 +28,8 @@ const EFFARIG_STAGES = {
 }
 
 class EffarigUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
+  get cost() {
+    return this.config.cost;
   }
 
   get isUnlocked() {
@@ -46,7 +48,7 @@ class EffarigUnlockState extends GameMechanicState {
     player.celestials.effarig.relicShards -= this.cost;
     if (this === EffarigUnlock.adjuster) {
       ui.view.tabs.reality.openGlyphWeights = true;
-      showRealityTab("glyphstab");
+      Tab.reality.glyphs.show();
     }
   }
 }
@@ -62,19 +64,21 @@ const EffarigUnlock = (function() {
     eternity: new EffarigUnlockState(db.eternity),
     reality: new EffarigUnlockState(db.reality),
   };
-})();
+}());
 
-var Effarig = {
+const Effarig = {
   startRun() {
     if (!startRealityOver()) return;
-    player.celestials.effarig.run = true
-    recalculateAllGlyphs()
-    showRealityTab("glyphstab");
-    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}.  Infinity power reduces the nerf to multipliers and gamespeed, and time shards reduce the nerf to tickspeed.`);
+    player.celestials.effarig.run = true;
+    recalculateAllGlyphs();
+    Tab.reality.glyphs.show();
+    Modal.message.show(`Your glyph levels have been limited to ${Effarig.glyphLevelCap}. ` +
+      "Infinity power reduces the nerf to multipliers and game speed, and time shards reduce the nerf to tickspeed.");
   },
   get isRunning() {
     return player.celestials.effarig.run;
   },
+
   get currentStage() {
     if (!EffarigUnlock.infinity.isUnlocked) {
       return EFFARIG_STAGES.INFINITY;
@@ -84,9 +88,11 @@ var Effarig = {
     }
     return EFFARIG_STAGES.REALITY;
   },
+
   get eternityCap() {
     return Effarig.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? new Decimal(1e50) : undefined;
   },
+
   get glyphLevelCap() {
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
@@ -94,59 +100,55 @@ var Effarig = {
       case EFFARIG_STAGES.ETERNITY:
         return 1500;
       case EFFARIG_STAGES.REALITY:
-        return 10000;
+      default:
+        return 2000;
     }
   },
+
   get glyphEffectAmount() {
-    let counted = []
-    let counter = 0
-    player.reality.glyphs.active.forEach((g) => {
-      for (i in g.effects) {
-        if (!counted.includes(g.type + i)) {
-          counted.push(g.type + i)
-          counter += 1
-        }
-      }
-    })
-    return counter
+    // eslint-disable-next-line no-bitwise
+    const allEffectBitmask = Glyphs.activeList.reduce((prev, curr) => prev | curr.effects, 0);
+    return countEffectsFromBitmask(allEffectBitmask);
   },
+
   get shardsGained() {
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
-      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount))
+      return Math.floor(Math.pow(player.eternityPoints.e / 7500, this.glyphEffectAmount)) *
+        AlchemyResource.effarig.effectValue;
     }
-    return 0
+    return 0;
   },
   get shardAmount() {
-    return player.celestials.effarig.relicShards
+    return player.celestials.effarig.relicShards;
   },
   nerfFactor(power) {
-    let x = Decimal.max(power, 1);
     let c;
     switch (this.currentStage) {
       case EFFARIG_STAGES.INFINITY:
-        c = 1000
-        break
+        c = 1500;
+        break;
       case EFFARIG_STAGES.ETERNITY: 
-        c = 30
-        break
+        c = 29;
+        break;
       case EFFARIG_STAGES.REALITY:
-        c = 25
-        break
+        c = 25;
+        break;
     }
-    return 3 * (1 - c / (c + Math.sqrt(x.log10())));
+    return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
   get tickspeed() {
-    const base = 3 + player.tickspeed.reciprocal().log10();
+    const base = 3 + Tickspeed.baseValue.reciprocal().log10();
     const pow = 0.7 + 0.1 * this.nerfFactor(player.timeShards);
-    return new Decimal.pow(10, Math.pow(base, pow)).reciprocal();
+    return Decimal.pow10(Math.pow(base, pow)).reciprocal();
   },
   multiplier(mult) {
-    const base = new Decimal(mult).clampMin(1).log10();
+    const base = new Decimal(mult).pLog10();
     const pow = 0.25 + 0.25 * this.nerfFactor(player.infinityPower);
-    return new Decimal.pow(10, Math.pow(base, pow));
+    return Decimal.pow10(Math.pow(base, pow));
   },
-  get bonusRG() { // Will return 0 if Effarig Infinity is uncompleted
-    return Math.floor(replicantiCap().log10() / Math.log10(Number.MAX_VALUE) - 1);
+  get bonusRG() {
+    // Will return 0 if Effarig Infinity is uncompleted
+    return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
   get maxQuoteIdx() {
     const base = 5;

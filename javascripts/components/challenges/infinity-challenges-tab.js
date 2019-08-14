@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("infinity-challenges-tab", {
   components: {
     "infinity-challenge-box": {
@@ -45,7 +47,7 @@ Vue.component("infinity-challenges-tab", {
           </template>
           <div slot="bottom" class="l-challenge-box__bottom--infinity">
             <span>Goal: {{shorten(config.goal, 0, 0)}} antimatter</span>
-            <span>Reward: <description-display :config="config.reward" /></span>
+            <description-display :config="config.reward" title="Reward:"/>
             <effect-display v-if="isCompleted" :config="config.reward" />
           </div>
         </challenge-box>`
@@ -58,10 +60,12 @@ Vue.component("infinity-challenges-tab", {
   },
   computed: {
     nextAtDisplay() {
-      const next = nextAt[this.postChallUnlocked];
-      return next !== undefined ?
-        `Next challenge unlocks at ${this.shorten(next, 0, 0)} antimatter.` :
-        "All Infinity Challenges unlocked";
+      const next = this.postChallUnlocked < 8
+        ? InfinityChallenge(this.postChallUnlocked + 1).config.unlockAM
+        : undefined;
+      return next === undefined
+        ? "All Infinity Challenges unlocked"
+        : `Next challenge unlocks at ${this.shorten(next, 0, 0)} antimatter.`;
     }
   },
   methods: {
@@ -73,7 +77,8 @@ Vue.component("infinity-challenges-tab", {
     }
   },
   template:
-    `<div>
+    `<div class="l-challenges-tab">
+      <challenges-header/>
       <div>{{nextAtDisplay}}</div>
       <challenge-grid :count="8" :isChallengeVisible="isChallengeVisible">
         <infinity-challenge-box slot-scope="slotProps" :challengeId="slotProps.challengeId" />

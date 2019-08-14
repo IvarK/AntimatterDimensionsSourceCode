@@ -1,60 +1,15 @@
-class GameOptions {
-  static changeTheme() {
-    const themes = Themes.available();
-    const current = Theme.current();
-    const next = shiftDown ? themes.previousSibling(current) : themes.nextSibling(current);
-    next.set();
-  }
+"use strict";
 
-  static changeNotation() {
-    const notations = Notation.all.map(n => n.name);
-    const current = player.options.notation;
-    const next = shiftDown ? notations.previousSibling(current) : notations.nextSibling(current);
-    Notation.find(next).setCurrent();
-  }
+class GameOptions {
 
   static toggleNews() {
-    if (!player.options.newsHidden) {
-      document.getElementById("game").style.display = "none";
-      player.options.newsHidden = true;
-    } else {
-      document.getElementById("game").style.display = "block";
-      player.options.newsHidden = false;
-      scrollNextMessage();
-    }
+    player.options.newsHidden = !player.options.newsHidden;
+    ui.view.newsHidden = player.options.newsHidden;
   }
 
-  static export() {
-    const save = btoa(JSON.stringify(player, translatorForJSON));
-
-    if (player.options.pastebinkey) {
-      $.ajax({
-        type: "POST",
-        url: "http://pastebin.com/api/api_post.php",
-        data: {
-          api_option: "paste",
-          api_dev_key: player.options.pastebinkey,
-          api_paste_name: Date.now(),
-          api_paste_code: encodeURIComponent(save)
-        },
-        success: function(response) {
-          window.open(response);
-        },
-        fail: function(response) {
-          console.log(response);
-        }
-      });
-    }
-
-    copyToClipboardAndNotify(save);
-  }
-
-  static save() {
-    saved++;
-    if (saved > 99) giveAchievement("Just in case");
-    player.reality.automatorOn = automatorOn;
-    player.reality.automatorCurrentRow = automatorIdx;
-    save_game();
+  static toggleUI() {
+    player.options.newUI = !player.options.newUI;
+    ui.view.newUI = player.options.newUI;
   }
 
   static cloudSave() {
@@ -67,35 +22,10 @@ class GameOptions {
 
   static refreshUpdateRate() {
     if (player.options.updateRate === 200) {
-      giveAchievement("You should download some more RAM");
+      SecretAchievement(31).unlock();
     }
     GameIntervals.gameLoop.restart();
-    Enslaved.infinityTracking = []
-    Enslaved.totalInfinities = new Decimal(0);
   }
-}
-
-function importSave(save_data) {
-    if (tryImportSecret(save_data) || Theme.tryUnlock(save_data)) {
-      return;
-    }
-    let parsedSave = parseSaveData(save_data);
-    if (parsedSave === undefined) {
-      alert('could not load the save..');
-      load_custom_game();
-      return;
-    }
-    hardReset();
-    saved = 0;
-    postc8Mult = new Decimal(0);
-    mult18 = new Decimal(1);
-    player = parsedSave;
-    console.log(player);
-    save_game(false, true);
-    console.log(player);
-    load_game();
-    console.log(player);
-    transformSaveToDecimal();
 }
 
 let secretImports = [
@@ -116,40 +46,13 @@ function tryImportSecret(data) {
   let index = secretImportIndex(data);
   if (index === 0) {
     document.body.style.animation = "barrelRoll 5s 1";
-    giveAchievement("Do a barrel roll!");
+    SecretAchievement(15).unlock();
     setTimeout(() => document.body.style.animation = "", 5000);
     return true;
   }
   if (index === 1) {
-    giveAchievement("So do I");
+    SecretAchievement(14).unlock();
     return true;
   }
   return false;
-}
-
-function parseSaveData(save) {
-  let parsedSave;
-  try {
-    parsedSave = JSON.parse(atob(save), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
-  }
-  catch (e) {
-    parsedSave = undefined;
-  }
-  if (!parsedSave || !verify_save(parsedSave)) {
-    return undefined;
-  }
-  return parsedSave;
-}
-
-function verify_save(obj) {
-  return typeof obj === 'object';
-}
-
-function hardReset() {
-  if (isDevEnvironment()) set_save('dimensionTestSave', currentSave, defaultStart);
-  else set_save('dimensionSave', currentSave, defaultStart);
-  player = defaultStart;
-  save_game();
-  load_game();
-  Tab.dimensions.normal.show();
 }

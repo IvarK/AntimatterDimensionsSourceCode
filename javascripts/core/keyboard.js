@@ -1,3 +1,5 @@
+"use strict";
+
 class KeySpin {
   constructor(key, action) {
     this.key = key;
@@ -50,7 +52,7 @@ class GameKeyboard {
   }
 
   static _bindSpin(key, spin) {
-    if (GameKeyboard.spins.find(spin => spin.key === key)) {
+    if (GameKeyboard.spins.find(s => s.key === key)) {
       throw `Duplicate spin binding for ${key}`;
     }
     GameKeyboard.spins.push(spin);
@@ -67,10 +69,10 @@ class GameKeyboard {
 GameKeyboard.spins = [];
 
 function executeHotkey(action) {
-  if (!player.options.hotkeys || controlDown ||
+  if (!player.options.hotkeys ||
     document.activeElement.type === "text" ||
     document.activeElement.type === "textarea") {
-    return;
+    return undefined;
   }
-  action();
+  return action();
 }

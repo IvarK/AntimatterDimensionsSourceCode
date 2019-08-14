@@ -122,7 +122,8 @@
   box-shadow: 0 0 0.4rem 0.1rem #d5ffd7;
 }
 
-.c-auto-sac-type-tab__input::-webkit-outer-spin-button, .c-auto-sac-type-tab__input::-webkit-inner-spin-button {
+.c-auto-sac-type-tab__input::-webkit-outer-spin-button,
+.c-auto-sac-type-tab__input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   margin: 0;
@@ -400,8 +401,23 @@
 }
 
 .l-current-glyph-effects {
-  overflow-y: auto;
-  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: initial;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 .5rem grey;
+  border-radius: 1rem;
+}
+
+.l-current-glyph-effects::-webkit-scrollbar-thumb {
+  background: #08450b;
+  border-radius: .5rem;
 }
 
 .c-current-glyph-effects {
@@ -487,16 +503,10 @@
   background-color: gainsboro;
 }
 
-.t-dark-metro .c--glyph-inventory__slot {
-  background-color: #333;
-}
-
-.t-dark .c-glyph-inventory__slot {
-  background-color: #333;
-}
-
+.t-dark .c-glyph-inventory__slot,
+.t-dark-metro .c-glyph-inventory__slot,
 .t-s6 .c-glyph-inventory__slot {
-  background-color: #333333;
+  background-color: #333;
 }
 
 .l-glyph-inventory__sort {

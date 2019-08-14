@@ -1,10 +1,13 @@
+"use strict";
+
 Vue.component("tt-shop", {
-  data: function() {
+  data() {
     return {
       theoremAmount: new Decimal(0),
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
+      ttAutobuyerOn: false,
       budget: {
         am: new Decimal(0),
         ip: new Decimal(0),
@@ -18,84 +21,107 @@ Vue.component("tt-shop", {
     };
   },
   computed: {
-    theoremAmountDisplay: function() {
-      let theorems = this.theoremAmount;
+    theoremAmountDisplay() {
+      const theorems = this.theoremAmount;
       if (theorems.gt(99999)) {
         return this.shortenMoney(theorems);
       }
       return Math.floor(theorems.toNumber()).toFixed(0);
     },
-    theoremNoun: function() {
-      return this.theoremAmount.eq(1) ? "Theorem" : "Theorems";
+    theoremNoun() {
+      return this.theoremAmount.floor().eq(1) ? "Theorem" : "Theorems";
     },
-    minimized: function() {
+    minimized() {
       return this.minimizeAvailable && this.shopMinimized;
     },
-    minimizeArrowStyle: function() {
+    minimizeArrowStyle() {
       return {
         transform: this.minimized ? "rotateX(180deg)" : "",
       };
     },
-    containerStyle: function() {
+    containerStyle() {
       return {
-        //transform: this.minimized ? "translateY(73px)" : "",
+        // Transform: this.minimized ? "translateY(73px)" : "",
         width: this.minimized ? "440px" : "555px"
       };
+    },
+    saveLoadText() {
+      return this.$viewModel.shiftDown ? "save:" : "load:";
+    },
+    autobuyerText() {
+      return this.ttAutobuyerOn ? "ON" : "OFF";
     }
   },
   methods: {
-    minimize: function() {
+    minimize() {
       player.timestudy.shopMinimized = !player.timestudy.shopMinimized;
     },
-    formatAM: function(am) {
-      return this.shortenCosts(am);
+    formatAM(am) {
+      return this.shortenCosts(am) + " AM";
     },
-    buyWithAM: function() {
-      buyWithAntimatter();
+    buyWithAM() {
+      TimeTheorems.buyWithAntimatter();
     },
-    formatIP: function(ip) {
+    formatIP(ip) {
       return this.shortenCosts(ip) + " IP";
     },
-    buyWithIP: function() {
-      buyWithIP();
+    buyWithIP() {
+      TimeTheorems.buyWithIP();
     },
-    formatEP: function(ep) {
+    formatEP(ep) {
       return this.shortenDimensions(ep) + " EP";
     },
-    buyWithEP: function() {
-      buyWithEP();
+    buyWithEP() {
+      TimeTheorems.buyWithEP();
+    },
+    buyMaxTheorems() {
+      TimeTheorems.buyMax();
     },
     update() {
-      this.theoremAmount = player.timestudy.theorem;
+      this.theoremAmount.copyFrom(player.timestudy.theorem);
       this.shopMinimized = player.timestudy.shopMinimized;
       this.minimizeAvailable = DilationUpgrade.ttGenerator.isBought;
       this.hasTTAutobuyer = Perk.autobuyerTT1.isBought;
+      this.ttAutobuyerOn = player.ttbuyer;
       const budget = this.budget;
-      budget.am.copyFrom(player.money);
+      budget.am.copyFrom(player.antimatter);
       budget.ip.copyFrom(player.infinityPoints);
       budget.ep.copyFrom(player.eternityPoints);
       const costs = this.costs;
       costs.am.copyFrom(player.timestudy.amcost);
       costs.ip.copyFrom(player.timestudy.ipcost);
       costs.ep.copyFrom(player.timestudy.epcost);
+    },
+    toggleTTAutobuyer() {
+      player.ttbuyer = !player.ttbuyer;
     }
   },
-  template:
-    `<div id="TTbuttons">
+  template: `
+    <div id="TTbuttons">
       <div id="theorembuybackground" class="ttshop-container" :style="containerStyle">
         <div data-role="page" class="ttbuttons-row ttbuttons-top-row">
-          <button class="timetheorembtn" style="width:130px; white-space:nowrap;" v-if="!minimized" onclick="maxTheorems()">Buy max Theorems</button>
-          <button v-if="hasTTAutobuyer" onclick="toggleTTAutomation()" class="timetheorembtn" id="ttautobuyer" style="width: 130px; font-size: 0.5em">Autobuyer: on</button>
-          <p id="timetheorems">You have <span class="TheoremAmount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}.</p>
-          <div style="display: flex; flex-direction: row; align-items: center">
-            <p id="studytreeloadsavetext">{{ $viewModel.shiftDown ? 'save:' : 'load:' }}</p>
-            <tt-save-load-button v-for="saveslot in 3" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
+          <p id="timetheorems">
+            <span class="c-tt-amount">{{ theoremAmountDisplay }}</span> Time {{ theoremNoun }}
+          </p>
+          <div style="display: flex; flex-direction: row; align-items: center;">
+            <span class="c-ttshop__save-load-text">{{ saveLoadText }}</span>
+            <tt-save-load-button v-for="saveslot in 6" :key="saveslot" :saveslot="saveslot"></tt-save-load-button>
           </div>
         </div>
         <div class="ttbuttons-row" v-if="!minimized">
           <tt-buy-button :budget="budget.am" :cost="costs.am" :format="formatAM" :action="buyWithAM"/>
           <tt-buy-button :budget="budget.ip" :cost="costs.ip" :format="formatIP" :action="buyWithIP"/>
           <tt-buy-button :budget="budget.ep" :cost="costs.ep" :format="formatEP" :action="buyWithEP"/>
+          <div class="l-tt-buy-max-vbox">
+            <button v-if="!minimized" class="o-tt-top-row-button c-tt-buy-button c-tt-buy-button--unlocked"
+              @click="buyMaxTheorems">
+              Buy max
+            </button>
+            <button v-if="!minimized && hasTTAutobuyer" class="o-tt-autobuyer-button c-tt-buy-button c-tt-buy-button--unlocked"
+              @click="toggleTTAutobuyer">
+              Auto: {{autobuyerText}}
+            </button>
+          </div>
         </div>
       </div>
       <button v-if="minimizeAvailable" id="theorembuybackground" class="ttshop-minimize-btn" @click="minimize">
@@ -108,66 +134,88 @@ Vue.component("tt-save-load-button", {
   props: {
     saveslot: Number
   },
-  data: () => {
+  data() {
     return {
-      msg: "Hold to save",
-      showTip: false,
-    }
+      name: player.timestudy.presets[this.saveslot - 1].name,
+    };
   },
   computed: {
-    tooltip: function () {
-      return {
-        content: this.msg,
-        placement: "top",
-        show: this.showTip,
-        trigger: "manual"
-      };
+    preset() {
+      return player.timestudy.presets[this.saveslot - 1];
     },
-    listeners: function () {
-      return Object.assign({}, this.$listeners, {
-        touchstart: () => this.showTip = true,
-        mouseover: () => this.showTip = true,
-        mouseout: () => this.resetTip(),
-        touchend: () => this.resetTip(),
-        touchcancel: () => this.resetTip(),
-        touchmove: e => {
-          e.preventDefault();  // suggested in stackoverflow example
-          var t = e.changedTouches[0];
-          if (this.$el !== document.elementFromPoint(t.pageX, t.pageY)) {
-            this.resetTip();
-          }
-        },
-        "longpress": () => {
-          studyTreeSaveButton(this.saveslot, true)
-          this.msg = "Saved"
-        },
-        "longpressclick": () => {
-          studyTreeSaveButton(this.saveslot, false);
-        }
-      });
+    displayName() {
+      return this.name === "" ? this.saveslot : this.name;
     }
   },
-  template:
-    `<button class="timetheorembtn tt-save-load-btn" v-on="listeners"
-             v-tooltip="tooltip" v-long-press="{ delay: 1000 }">{{saveslot}}</button>`,
   methods: {
-    resetTip: function () {
-      this.msg = "Hold to save";
-      this.showTip = false;
+    nicknameBlur(event) {
+      this.preset.name = event.target.value.slice(0, 4);
+      this.name = this.preset.name;
+    },
+    hideContextMenu() {
+      this.$viewModel.currentContextMenu = null;
+    },
+    save() {
+      this.hideContextMenu();
+      this.preset.studies = studyTreeExportString();
+    },
+    load() {
+      this.hideContextMenu();
+      if (this.preset.studies) {
+        importStudyTree(this.preset.studies);
+      } else {
+        alert("This time study list currently contains no studies.");
+      }
+    },
+    handleExport() {
+      this.hideContextMenu();
+      copyToClipboardAndNotify(this.preset.studies);
+    },
+    edit() {
+      const newValue = prompt("Edit time study list", this.preset.studies);
+      this.hideContextMenu();
+      if (newValue !== null) this.preset.studies = newValue;
     }
   },
+  template: `
+  <hover-menu class="l-tt-save-load-btn__wrapper">
+    <button slot="object"
+            class="l-tt-save-load-btn c-tt-buy-button c-tt-buy-button--unlocked"
+            @click.shift.exact="save"
+            @click.exact="load">
+      {{displayName}}
+    </button>
+    <div slot="menu"
+         class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
+      <input type="text" size="4" maxlength="4"
+             class="l-tt-save-load-btn__menu-rename c-tt-save-load-btn__menu-rename"
+             :value="name"
+             ach-tooltip="Set a custom name (up to 4 characters)"
+             @keyup.esc="hideContextMenu"
+             @blur="nicknameBlur" />
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="edit">Edit</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="handleExport">Export</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="save">Save</div>
+      <div class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item" @click="load">Load</div>
+    </div>
+  </hover-menu>
+`,
 });
 
 Vue.component("tt-buy-button", {
   props: ["budget", "cost", "format", "action"],
-  template:
-    `<button :class="cssClass" @click="action">Buy Time Theorems Cost: {{ format(cost) }}</button>`,
+  template: `
+    <button class="l-tt-buy-button c-tt-buy-button"
+            :class="enabledClass"
+            @click="action">
+      {{ format(cost) }}
+    </button>`,
   computed: {
-    isEnabled: function() {
+    isEnabled() {
       return this.budget.gte(this.cost);
     },
-    cssClass: function() {
-      return this.isEnabled ? "timetheorembtn" : "timetheorembtnlocked";
+    enabledClass() {
+      return this.isEnabled ? "c-tt-buy-button--unlocked" : "c-tt-buy-button--locked";
     }
   }
 });

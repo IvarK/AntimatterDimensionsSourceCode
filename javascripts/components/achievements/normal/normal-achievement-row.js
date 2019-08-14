@@ -1,53 +1,33 @@
-Vue.component('normal-achievement-row', {
+"use strict";
+
+Vue.component("normal-achievement-row", {
   props: {
-    row: Number
+    row: Array
   },
-  data: function() {
+  data() {
     return {
-      isCompleted: false,
-      updateStateAt: 0
+      isCompleted: false
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "l-achievement-grid__row": true,
         "c-achievement-grid__row--completed": this.isCompleted
       };
     }
   },
-  created() {
-    this.on$(GameEvent.ACHIEVEMENT_UNLOCKED, this.updateState);
-    this.on$(GameEvent.REALITY, this.updateState);
-    this.updateState();
-  },
   methods: {
     update() {
-      if (this.isCompleted || this.updateStateAt === 0) return;
-      if (new Date().getTime() < this.updateStateAt) return;
-      this.updateState();
-    },
-    updateState() {
-      const unlockState = Array.range(1, 8).map(i => Achievement(this.row * 10 + i).isEnabled);
-      if (!unlockState.includes(false)) {
-        this.isCompleted = true;
-        return;
-      }
-      this.isCompleted = false;
-      if (player.realities === 0) {
-        this.updateStateAt = 0;
-        return;
-      }
-      this.updateStateAt = new Date().getTime() + nextAchIn();
+      this.isCompleted = this.row.every(a => a.isEnabled);
     }
   },
   template:
     `<div :class="classObject">
       <normal-achievement
-        v-for="column in 8"
-        :key="column"
-        :row="row"
-        :column="column"
+        v-for="(achievement, i) in row"
+        :key="i"
+        :achievement="achievement"
         class="l-achievement-grid__cell"
       />
     </div>`

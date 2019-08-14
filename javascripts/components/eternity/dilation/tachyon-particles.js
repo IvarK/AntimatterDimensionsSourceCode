@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("tachyon-particles", {
   data() {
     return {
@@ -19,9 +21,9 @@ Vue.component("tachyon-particles", {
   },
   methods: {
     update() {
-      this.count = player.dilation.tachyonParticles.gte(1) ?
-        player.dilation.tachyonParticles.exponent + 1 :
-        0;
+      this.count = player.dilation.tachyonParticles.gte(1)
+        ? player.dilation.tachyonParticles.exponent + 1
+        : 0;
     },
     updateSize() {
       this.bounds.x = this.$el.clientWidth;
@@ -52,8 +54,7 @@ Vue.component("tachyon-particle", {
   created() {
     if (GameUI.initialized) {
       this.fly();
-    }
-    else {
+    } else {
       Vue.nextTick(() => this.fly());
     }
   },
@@ -68,7 +69,7 @@ Vue.component("tachyon-particle", {
       const MIN_SPEED = 1;
       const MAX_SPEED = 1.5;
       const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
-      const intersectionLength = intersect(start, direction, {x: 0, y: 0}, bounds);
+      const intersectionLength = intersect(start, direction, { x: 0, y: 0 }, bounds);
       const intersection = {
         x: start.x + direction.x * intersectionLength,
         y: start.y + direction.y * intersectionLength

@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("equipped-glyphs", {
-  data: function () {
+  data() {
     return {
       glyphs: [],
       dragoverIndex: -1,
@@ -15,13 +17,6 @@ Vue.component("equipped-glyphs", {
     arrangementRadius() {
       return [0, 0, 0, 4, 5, 6][this.slotCount];
     },
-    glyphPositionStyle() {
-      return this.glyphs.map((g, idx) => ({
-        position: "absolute",
-        left: `calc(50% + ${this.glyphX(idx)}rem)`,
-        top: `calc(50% + ${this.glyphY(idx)}rem)`,
-      }));
-    },
     respecTooltip() {
       return this.respec
         ? "Respec is active and will place your currently - equipped glyphs into your inventory after reality."
@@ -33,6 +28,13 @@ Vue.component("equipped-glyphs", {
     this.glyphsChanged();
   },
   methods: {
+    glyphPositionStyle(idx) {
+      return {
+        position: "absolute",
+        left: `calc(50% + ${this.glyphX(idx)}rem)`,
+        top: `calc(50% + ${this.glyphY(idx)}rem)`,
+      };
+    },
     glyphX(idx) {
       return -this.GLYPH_SIZE / 2 + this.arrangementRadius *
         Math.sin(2 * Math.PI * idx / this.slotCount);
@@ -51,7 +53,7 @@ Vue.component("equipped-glyphs", {
     },
     drop(event, idx) {
       this.dragoverIndex = -1;
-      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE));
+      const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
       if (isNaN(id)) return;
       const glyph = Glyphs.findById(id);
       if (glyph) Glyphs.equip(glyph, idx);
@@ -66,19 +68,19 @@ Vue.component("equipped-glyphs", {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
     },
   },
-  template: /*html*/`
+  template: `
   <div class="l-equipped-glyphs">
     <div class="l-equipped-glyphs__slots">
       <template v-for="(glyph, idx) in glyphs">
         <glyph-component v-if="glyph"
                          :key="idx"
                          :glyph="glyph"
-                         :style="glyphPositionStyle[idx]"
+                         :style="glyphPositionStyle(idx)"
                          :circular="true"/>
         <div v-else
              :class="['l-equipped-glyphs__empty', 'c-equipped-glyphs__empty',
                       {'c-equipped-glyphs__empty--dragover': dragoverIndex == idx}]"
-             :style=glyphPositionStyle[idx]>
+             :style=glyphPositionStyle(idx)>
           <!-- the drop zone is a bit larger than the glyph itself. -->
           <div class="l-equipped-glyphs__dropzone"
                @dragover="dragover($event, idx)"

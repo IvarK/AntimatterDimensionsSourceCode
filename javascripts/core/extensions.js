@@ -1,3 +1,5 @@
+"use strict";
+
 Array.prototype.distinct = function() {
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;
@@ -5,13 +7,21 @@ Array.prototype.distinct = function() {
 };
 
 Math.wrap = function(number, min, max) {
-    let range = max - min + 1;
-    number = ((number - min) % range);
-    return number < 0 ? min + 1 + number : min + number;
+  const range = max - min + 1;
+  const offset = ((number - min) % range);
+  return offset < 0 ? max + 1 + offset : min + offset;
 };
 
 Math.clamp = function(value, min, max) {
-    return (value < min) ? min : (value > max ? max : value);
+  return Math.clampMax(Math.clampMin(value, min), max);
+};
+
+Math.clampMin = function(value, min) {
+  return Math.max(value, min);
+};
+
+Math.clampMax = function(value, max) {
+  return Math.min(value, max);
 };
 
 Array.prototype.nextSiblingIndex = function(current) {
@@ -91,8 +101,6 @@ function copyToClipboardAndNotify(str) {
 function safeCall(fn) {
     if (fn) fn();
 }
-
-String.empty = "";
 
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/, c => c.toUpperCase());
@@ -183,6 +191,14 @@ Array.prototype.max = function() {
 };
 
 /**
+ * @returns {number}
+ */
+Array.prototype.min = function() {
+  if (this.length === 0) return 0;
+  return this.reduce((a, b) => Math.min(a, b));
+};
+
+/**
  * @param {function} predicate
  * @returns {number}
  */
@@ -197,48 +213,9 @@ Array.prototype.countWhere = function(predicate) {
 /**
  * @returns {Decimal}
  */
-Decimal.prototype.clamp = function(min, max) {
-  return this.max(min).min(max);
-};
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.clampMin = function(min) {
-  return this.max(min);
-};
-
-/**
- * @returns {Decimal}
- */
-Decimal.prototype.clampMax = function(max) {
-  return this.min(max);
-};
-
-/**
- * @returns {Decimal}
- */
 Decimal.prototype.clampMaxExponent = function(maxExp) {
   return this.exponent >= maxExp
     ? Decimal.fromMantissaExponent_noNormalize(1, maxExp) : this;
-};
-
-/**
- * This version of times avoids an extra conversion to Decimal, if possible. Since the
- * mantissa is -10...10, any number short of MAX/10 can be safely multiplied in
- * @returns {Decimal}
- */
-Decimal.prototype.times = function(value) {
-  if (typeof value === "number") {
-    if (value < 1e307 && value > -1e307) {
-      return Decimal.fromMantissaExponent(this.mantissa * value, this.exponent);
-    }
-    // If the value is larger than 1e307, we can divide that out of mantissa (since it's
-    // greater than 1, it won't underflow)
-    return Decimal.fromMantissaExponent(this.mantissa * 1e-307 * value, this.exponent + 307);
-  }
-  if (typeof value === "string") return this.times(new Decimal(value));
-  return Decimal.fromMantissaExponent(this.mantissa * value.mantissa, this.exponent + value.exponent);
 };
 
 /**
@@ -264,6 +241,13 @@ Set.prototype.countWhere = function(predicate) {
   return count;
 };
 
+Set.prototype.find = function(predicate) {
+  for (const item of this) {
+    if (predicate(item)) return item;
+  }
+  return undefined;
+};
+
 Set.prototype.every = function(predicate) {
   for (const item of this) {
     if (!predicate(item)) return false;
@@ -271,3 +255,12 @@ Set.prototype.every = function(predicate) {
   return true;
 };
 
+Array.prototype.compact = function() {
+  return this.filter(x => x !== undefined && x !== null);
+};
+
+Decimal.MAX_NUMBER = new Decimal(Number.MAX_VALUE);
+
+String.isWhiteSpace = function(value) {
+  return value && !value.trim();
+};

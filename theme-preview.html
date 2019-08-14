@@ -79,7 +79,12 @@
     <div class="c-component-block">
       <button class="o-primary-btn">Normal button</button>
       <button class="o-primary-btn o-primary-btn--disabled">Disabled button</button>
+      <button class="tabbtn">Primary tab</button>
       <button class="o-btn o-btn--secondary-tab">Secondary tab</button>
+      <button class="tabbtn infinitytabbtn">Infinity tab</button>
+      <button class="tabbtn eternitytabbtn">Eternity tab</button>
+      <button class="tabbtn realitytabbtn" style="display: flex;">Reality tab</button>
+      <button class="tabbtn celestialtabbtn" style="display: flex;">Celestial tab</button>
     </div>
 
 
@@ -708,10 +713,17 @@
       </div>
     </div>
 
-
     <span>Texts</span>
     <div class="c-component-block" style="flex-direction: column; flex-wrap: nowrap">
       <span>You have <span class="c-game-header__antimatter">1e308</span> antimatter.</span>
+      <span>
+        You have <span class="c-infinity-dim-description__accent">1e308</span> infinity power.
+        Translated to <span class="c-infinity-dim-description__accent">1e308</span>x multiplier on all dimensions
+      </span>
+      <span>
+        You have <span class="c-time-dim-description__accent">1e308</span> time shards.
+        Next tickspeed upgrade at <span class="c-time-dim-description__accent">1e308</span>
+      </span>
       <span class="c-replicanti-description">
         You have <span class="c-replicanti-description__accent">1e308</span> replicanti.
         Translated to <span class="c-replicanti-description__accent">1e308</span>x multiplier on all infinity dimensions
@@ -724,8 +736,31 @@
       <div class="o-notification o-notification--info">Info</div>
       <div class="o-notification o-notification--success">Success</div>
       <div class="o-notification o-notification--error">Error</div>
+      <div class="o-notification o-notification--black-hole">Black Hole</div>
     </div>
 
+    <span>Teresa</span>
+    <div class="c-component-block">
+        <div style="display: flex; flex-direction: column">
+          <div class="c-teresa-unlock c-teresa-run-button">Start a new reality. TT generation is disabled and you gain less IP and EP (x^0.6). The further you get the better the reward.<br><br>Multiplies power gained from glyph sacrifice by 1e308x, based on realities.</div>
+          <div class="c-teresa-unlock">Teresa Reality Machine pour unlock</div>
+          <div class="o-teresa-shop-button">Teresa perk point shop button</div>
+          <button class="o-primary-btn c-teresa-pour">Pour RM</button>
+        </div>
+      <div class="c-rm-store">
+        <div class="c-rm-store-inner" style="height: 100%;"><div class="c-rm-store-label"> 251.19x RM gain
+          <br>1.00e24/1.00e24
+          Leaking 0.00 RM/s</div></div> <div id="0" class="c-teresa-unlock-description" style="bottom: 58.33%;">
+          1.00e14: unlock Teresa's reality.
+        </div><div id="1" class="c-teresa-unlock-description" style="bottom: 75%;">
+          1.00e18: unlock Teresa's EP generation.
+        </div><div id="2" class="c-teresa-unlock-description" style="bottom: 87.5%;">
+          1.00e21: unlock Effarig, Celestial of Ancient Relics.
+        </div><div id="3" class="c-teresa-unlock-description" style="bottom: 100%;">
+          1.00e24: unlock Perk Point Shop.
+        </div>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -766,6 +801,7 @@
     }
   }
   let current = "Normal";
+  let newUI = true;
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme) {
     setTheme(savedTheme);

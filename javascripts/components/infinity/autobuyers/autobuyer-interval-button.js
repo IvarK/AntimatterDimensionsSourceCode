@@ -1,8 +1,10 @@
+"use strict";
+
 Vue.component("autobuyer-interval-button", {
   props: {
     autobuyer: Object
   },
-  data: function() {
+  data() {
     return {
       cost: 0,
       isMaxed: false

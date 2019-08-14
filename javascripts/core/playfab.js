@@ -1,3 +1,5 @@
+"use strict";
+
 function playFabLogin() {
   try {
     var authTicket = kongregate.services.getGameAuthToken();
@@ -84,7 +86,7 @@ function saveToPlayFabCallback(data, error) {
   if (data) {
     console.log("Game Saved!");
     GameUI.notify.info("Game saved to cloud");
-    save_game()
+    GameStorage.save();
     return true;
   }
 }
@@ -197,10 +199,10 @@ function playFabLoadCheck() {
     for (var i = 0; i < 3; i++) {
       let saveId = i;
       let cloudSave = cloudRoot.saves[saveId];
-      let localSave = saves[saveId];
+      let localSave = GameStorage.saves[saveId];
       let newestSave = newestSave(cloudSave, localSave);
       function overwriteLocalSave() {
-          load_cloud_save(saveId, cloudSave);
+          GameStorage.overwriteSlot(saveId, cloudSave);
       }
       if (newestSave === localSave) {
           Modal.addCloudConflict(saveId, cloudSave, localSave, overwriteLocalSave);
@@ -217,11 +219,11 @@ function playFabSaveCheck() {
     for (var i = 0; i < 3; i++) {
       let saveId = i;
       let cloudSave = cloudRoot.saves[saveId];
-      let localSave = saves[saveId];
+      let localSave = GameStorage.saves[saveId];
       let newestSave = newestSave(cloudSave, localSave);
       let isConflicted = false;
       function overwriteCloudSave() {
-          cloudRoot.saves[saveId] = saves[saveId];
+          cloudRoot.saves[saveId] = GameStorage.saves[saveId];
       }
       function sendCloudSave() {
           saveToPlayFab(cloudRoot);

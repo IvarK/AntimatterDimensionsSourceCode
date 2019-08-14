@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.celestials.effarig = {
   unlocks: {
     adjuster: {
@@ -18,7 +20,7 @@ GameDatabase.celestials.effarig = {
     run: {
       id: 3,
       description: "Effarig's reality",
-      cost: 1e12
+      cost: 5e11
     },
     infinity: {
       id: 4,
@@ -33,6 +35,7 @@ GameDatabase.celestials.effarig = {
       label: "Eternity",
       description: "Eternitied stat generates infinitied stat\n" +
         "You have unlocked The Enslaved Ones\n" +
+        "Free tickspeed upgrade softcap is 100,000 larger\n" +
         "IP mults are no longer limited in Effarig Reality"
     },
     reality: {

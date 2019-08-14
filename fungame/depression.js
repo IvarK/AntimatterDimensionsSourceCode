@@ -1,3 +1,4 @@
+"use strict";
 
 let game = {
   costs: [new Decimal(1)],

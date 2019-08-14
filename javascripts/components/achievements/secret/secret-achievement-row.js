@@ -1,14 +1,16 @@
-Vue.component('secret-achievement-row', {
+"use strict";
+
+Vue.component("secret-achievement-row", {
   props: {
     row: Number
   },
-  data: function() {
+  data() {
     return {
       isCompleted: false
     };
   },
   computed: {
-    classObject: function() {
+    classObject() {
       return {
         "l-achievement-grid__row": true,
         "c-achievement-grid__row--completed": this.isCompleted

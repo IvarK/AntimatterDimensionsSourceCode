@@ -1,4 +1,6 @@
-Vue.component('dim-production-tab', {
+"use strict";
+
+Vue.component("dim-production-tab", {
   components: {
     "number-input": {
       props: {
@@ -7,17 +9,17 @@ Vue.component('dim-production-tab', {
         max: Number,
         default: Number
       },
-      data: function() {
+      data() {
         return {
           inputValue: this.clamp(this.value)
         };
       },
       methods: {
-        clamp: function(value) {
+        clamp(value) {
           return Math.clamp(value, this.min, this.max);
         },
-        handleInput: function(event) {
-          const input = parseInt(event.target.value);
+        handleInput(event) {
+          const input = parseInt(event.target.value, 10);
           const finalValue = isNaN(input) ? this.min : this.clamp(input);
           this.inputValue = finalValue;
           this.emitInput(finalValue);
@@ -27,22 +29,22 @@ Vue.component('dim-production-tab', {
         `<input type="number" :value="inputValue" @input="handleInput" />`
     }
   },
-  data: function() {
+  data() {
     return {
       options: player.options
     };
   },
   computed: {
-    chartOptions: function() {
+    chartOptions() {
       return this.options.chart;
     }
   },
-  mounted: function() {
+  mounted() {
     const container = this.$refs.chartContainer;
     container.appendChild(dimChartEl);
   },
   methods: {
-    checkOptionsWarnings: function() {
+    checkOptionsWarnings() {
       const options = this.chartOptions;
       const updateRate = options.updateRate;
       const duration = options.duration;
@@ -51,11 +53,12 @@ Vue.component('dim-production-tab', {
         options.warning = 1;
       }
       if (duration / updateRate * 1000 >= 1000 && options.warning !== 2) {
-        alert("Warning: you have set the duration and update rate quite high, make sure you know what you're doing or have a good computer");
+        alert("Warning: you have set the duration and update rate quite high, " +
+          "make sure you know what you're doing or have a good computer");
         options.warning = 2;
       }
     },
-    checkToggleWarnings: function() {
+    checkToggleWarnings() {
       if (this.chartOptions.on) return;
       if (this.chartOptions.warning < 1) {
         alert("Warning: the chart can cause performance issues. Please disable it if you're experiencing lag.");

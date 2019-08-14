@@ -1,3 +1,5 @@
+"use strict";
+
 const GlyphTooltipEffect = {
   props: {
     effect: String,
@@ -15,7 +17,7 @@ const GlyphTooltipEffect = {
       return this.effectConfig.singleDescSplit[1].replace("\n", "<br>");
     },
     displayValue() {
-      let value = this.effectConfig.formatEffect(this.value);
+      const value = this.effectConfig.formatEffect(this.value);
       return this.boostColor ? `⯅${value}⯅` : value;
     },
     valueStyle() {
@@ -24,10 +26,10 @@ const GlyphTooltipEffect = {
         "text-shadow": `0 0 0.4rem ${this.boostColor}`
       } : {
           color: "#76EE76",
-        }
+        };
     }
   },
-  template: /*html*/`
+  template: `
     <div class="c-glyph-tooltip__effect">
       <span v-html="prefix"/>
       <span :style="valueStyle">{{displayValue}}</span>
@@ -44,7 +46,7 @@ const GlyphTooltipComponent = {
     type: String,
     strength: Number,
     level: Number,
-    effects: Object,
+    effects: Number,
     id: Number,
     sacrificeReward: {
       type: Number,
@@ -60,13 +62,13 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     sortedEffects() {
-      return Object.keys(this.effects).map(e => ({
-        id: this.type + e,
-        value: this.effects[e],
-      })).sort((a, b) => GlyphEffectOrder[a.id] - GlyphEffectOrder[b.id]);
+      return getGlyphEffectsFromBitmask(this.effects, this.level, this.strength);
     },
     rarityInfo() {
       return getRarity(this.strength);
+    },
+    roundedRarity() {
+      return 0.1 * Math.floor(strengthToRarity(this.strength) * 10);
     },
     descriptionStyle() {
       return {
@@ -74,26 +76,39 @@ const GlyphTooltipComponent = {
         "text-shadow": `-1px 1px 1px black, 1px 1px 1px black,
                         -1px -1px 1px black, 1px -1px 1px black, 0 0 3px ${this.rarityInfo.color}`,
         float: "left"
-      }
+      };
     },
     description() {
-      return `${this.rarityInfo.name} glyph of ${this.type} (${strengthToRarity(this.strength).toFixed(1)}%)`;
+      return `${this.rarityInfo.name} glyph of ${this.type} (${this.roundedRarity.toFixed(1)}%)`;
     },
     isLevelCapped() {
       return this.levelCap < this.level;
     },
     levelText() {
       return this.isLevelCapped
-        ? `Level: ▼${this.levelCap}▼`
-        : `Level: ${this.level}`;
+        ? `Level: ▼${shortenSmallInteger(this.levelCap)}▼`
+        : `Level: ${shortenSmallInteger(this.level)}`;
     },
     levelStyle() {
-      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" }
+      return { color: this.isLevelCapped ? "#FF1111" : "#FFFFFF" };
     },
     sacrificeText() {
+      if (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY && this.type !== "reality") {
+        const refinementText = `${shorten(this.sacrificeReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]}`;
+        const limitText = this.sacrificeReward === 0
+          ? ` (limit reached)`
+          : ``;
+        return this.onTouchDevice
+          ? `Refine for ${refinementText}${limitText}`
+          : `Can be refined for ${refinementText}${limitText}`;
+      }
+      const powerText = `${shorten(this.sacrificeReward, 2, 2)} power`;
       return this.onTouchDevice
-        ? `Sacrifice for ${shorten(this.sacrificeReward, 2, 2)} power`
-        : `Can be sacrificed for ${shorten(this.sacrificeReward, 2, 2)} power`;
+        ? `Sacrifice for ${powerText}`
+        : `Can be sacrificed for ${powerText}`;
+    },
+    showDeletionText() {
+      return (AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY) || this.sacrificeReward > 0;
     },
     eventHandlers() {
       return GameUI.touchDevice ? {
@@ -127,7 +142,7 @@ const GlyphTooltipComponent = {
       sacrificeGlyph(Glyphs.findById(this.id), false);
     },
   },
-  template: /*html*/`
+  template: `
   <div class="l-glyph-tooltip c-glyph-tooltip"
        :style="pointerEventStyle"
        v-on="eventHandlers">
@@ -142,7 +157,7 @@ const GlyphTooltipComponent = {
                    :effect="e.id"
                    :value="e.value"/>
     </div>
-    <div v-if="sacrificeReward > 0"
+    <div v-if="showDeletionText"
          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
          v-on="onTouchDevice ? { click: sacrificeGlyph } : {}">
       {{sacrificeText}}
@@ -186,7 +201,7 @@ Vue.component("glyph-component", {
       default: false,
     }
   },
-  data: function () {
+  data() {
     return {
       componentID: UIID.next(),
       isDragging: false,
@@ -195,20 +210,21 @@ Vue.component("glyph-component", {
       isTouched: false,
       sacrificeReward: 0,
       levelCap: Number.MAX_VALUE,
-    }
+    };
   },
   computed: {
     hasTooltip() {
-      return this.glyph.effects !== undefined;
+      return this.glyph.effects !== 0;
     },
     typeConfig() {
       return GlyphTypes[this.glyph.type];
     },
     symbol() {
       const symbol = this.glyph.symbol;
-      return symbol
-        ? (symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol)
-        : this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
+      if (symbol) {
+        return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
+      }
+      return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     borderColor() {
       return this.glyph.color || this.typeConfig.color;
@@ -221,7 +237,7 @@ Vue.component("glyph-component", {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     outerStyle() {
       return {
@@ -230,7 +246,7 @@ Vue.component("glyph-component", {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     innerStyle() {
       const rarityColor = this.glyph.color ||
@@ -242,10 +258,10 @@ Vue.component("glyph-component", {
         color: rarityColor,
         "text-shadow": `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
-      }
+      };
     },
     mouseEventHandlers() {
-      let ret = this.hasTooltip ? {
+      const handlers = this.hasTooltip ? {
         mouseenter: this.mouseEnter,
         "&mousemove": this.mouseMove,
         mouseleave: this.mouseLeave,
@@ -254,16 +270,16 @@ Vue.component("glyph-component", {
         touchend: this.touchEnd
       } : {};
       if (this.hasTooltip || this.draggable) {
-        ret.touchmove = this.touchMove;
+        handlers.touchmove = this.touchMove;
       }
-      return ret;
+      return handlers;
     },
     isCurrentTooltip() {
       return this.$viewModel.tabs.reality.currentGlyphTooltip === this.componentID;
     },
   },
   created() {
-    this.$on("tooltip-touched", () => this.hideTooltip() );
+    this.$on("tooltip-touched", () => this.hideTooltip());
   },
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
@@ -275,15 +291,17 @@ Vue.component("glyph-component", {
     },
     showTooltip() {
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = glyphSacrificeGain(this.glyph);
+      this.sacrificeReward = AutoGlyphSacrifice.mode === AutoGlyphSacMode.ALCHEMY
+        ? glyphRefinementGain(this.glyph)
+        : glyphSacrificeGain(this.glyph);
       this.levelCap = Effarig.isRunning ? Effarig.glyphLevelCap : Number.MAX_VALUE;
     },
     moveTooltipTo(x, y) {
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = this.$el.getBoundingClientRect();
-        tooltipEl.style.left = `${x - rect.left}px`
-        tooltipEl.style.top = `${y - rect.top}px`
+        tooltipEl.style.left = `${x - rect.left}px`;
+        tooltipEl.style.top = `${y - rect.top}px`;
       }
     },
     mouseEnter() {
@@ -311,7 +329,7 @@ Vue.component("glyph-component", {
       ev.dataTransfer.dropEffect = "move";
       this.$viewModel.draggingUIID = this.componentID;
       const rect = this.$refs.over.getBoundingClientRect();
-      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX-rect.left, ev.clientY-rect.top);
+      ev.dataTransfer.setDragImage(this.$refs.over, ev.clientX - rect.left, ev.clientY - rect.top);
     },
     dragEnd() {
       this.isDragging = false;
@@ -328,7 +346,7 @@ Vue.component("glyph-component", {
       }
       const boundary = 100;
       if (ev.clientY < boundary) {
-        this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY/boundary;
+        this.$viewModel.scrollWindow = -1 + 0.9 * ev.clientY / boundary;
       } else if (ev.clientY > $(window).height() - boundary) {
         this.$viewModel.scrollWindow = 1 - 0.9 * ($(window).height() - ev.clientY) / boundary;
       } else {
@@ -362,7 +380,7 @@ Vue.component("glyph-component", {
       }
     },
   },
-  template:  /*html*/`
+  template: `
   <!-- The naive approach with a border and box-shadow seems to have problems with
       weird seams/artifacts at the edges. This makes for a rather complex workaround -->
     <div :style="outerStyle"

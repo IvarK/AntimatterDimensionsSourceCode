@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("modal-glyph-selection", {
-  data: function () {
+  data() {
     return {
       glyphs: GlyphSelection.glyphs.map(GlyphGenerator.copy),
     };
@@ -12,16 +14,14 @@ Vue.component("modal-glyph-selection", {
         const newGlyph = GlyphSelection.glyphs[i];
         if (currentGlyph.level === newGlyph.level) continue;
         currentGlyph.level = newGlyph.level;
-        for (e of Object.keys(currentGlyph.effects)) {
-          currentGlyph.effects[e] = newGlyph.effects[e];
-        }
+        currentGlyph.effects = newGlyph.effects;
       }
     },
     select(index) {
       GlyphSelection.select(index);
     }
   },
-  template: /*html*/`
+  template: `
   <div class="l-modal-overlay c-modal-overlay">
     <div class="l-modal-glyph-selection c-modal">
       <glyph-component v-for="(glyph, index) in glyphs"

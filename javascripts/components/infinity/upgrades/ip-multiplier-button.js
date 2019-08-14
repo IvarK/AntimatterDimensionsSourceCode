@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("ip-multiplier-button", {
-  data: function() {
+  data() {
     return {
       isAutobuyerOn: false,
       isAutoUnlocked: false,
@@ -7,12 +9,12 @@ Vue.component("ip-multiplier-button", {
     };
   },
   watch: {
-    isAutobuyerOn: function (newValue) {
+    isAutobuyerOn(newValue) {
       player.infMultBuyer = newValue;
     }
   },
   computed: {
-    upgrade: function() {
+    upgrade() {
       return InfinityUpgrade.ipMult;
     }
   },

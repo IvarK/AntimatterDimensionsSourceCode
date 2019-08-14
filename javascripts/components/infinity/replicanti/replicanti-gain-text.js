@@ -1,25 +1,63 @@
+"use strict";
+
 Vue.component("replicanti-gain-text", {
-  data: function() {
+  data() {
     return {
-      text: String.empty
+      text: ""
     };
   },
   methods: {
     update() {
-      const noModInterval = getReplicantiInterval(true);
-      const logInfinity = Math.log(Number.MAX_VALUE);
-      const logChance = Math.log(Replicanti.chance + 1);
-      const galaxyInterval = logInfinity / logChance * noModInterval;
-      if (galaxyInterval < Time.deltaTimeMs / 2) {
-        const gps = 1000 / Math.max(galaxyInterval, 0);
-        const speed = gps < 1000 ? gps.toPrecision(3) : gps < 1000000000 ? formatWithCommas(Math.floor(gps)) : shorten(gps, 3);
-        this.text = `You gain Approximately ${speed} RGs per Second`;
-      } else {
-        const est = logChance * 1000 / getReplicantiInterval();
-        const estimate = Math.max((logInfinity - Replicanti.amount.ln()) / est, 0);
-        const timeSpan = TimeSpan.fromSeconds(estimate);
-        this.text = `Approximately ${timeSpan} until infinite Replicanti.`;
+      const updateRateMs = player.options.updateRate;
+      const ticksPerSecond = 1000 / updateRateMs;
+      const storedTimeWeight = player.celestials.enslaved.storedFraction;
+      const gamespeedWithStoredTime = getGameSpeedupFactor() * (1 - storedTimeWeight) + storedTimeWeight;
+      const logGainFactorPerTick = Decimal.divide(gamespeedWithStoredTime * updateRateMs *
+        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
+      const log10GainFactorPerTick = logGainFactorPerTick.dividedBy(Math.LN10).toNumber();
+      const replicantiAmount = player.replicanti.amount;
+      if (TimeStudy(192).isBought && replicantiAmount.log10() > 308) {
+        const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
+        const gainFactorPerSecond = logGainFactorPerTick
+          .times(postScale)
+          .plus(1)
+          .pow(ticksPerSecond / postScale);
+        // The calculations to estimate time to next thousand OOM (eg. e18000, e19000, etc.) assumes that uncapped
+        // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
+        const nextThousandOOM = Decimal.pow10(1000 * Math.floor(replicantiAmount.log10() / 1000 + 1));
+        const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.exp().pow(postScale).minus(1));
+        const timeToThousand = coeff.times(nextThousandOOM.divide(replicantiAmount).pow(postScale).minus(1));
+        // The calculation seems to choke and return zero if the time is too large, probably because of rounding issues
+        const timeEstimateText = timeToThousand.eq(0)
+          ? "an extremely long time"
+          : `${TimeSpan.fromSeconds(timeToThousand.toNumber())}`;
+        this.text = `You are gaining ${formatX(gainFactorPerSecond, 2, 1)} Replicanti per second` +
+          ` (${timeEstimateText} until ${shorten(nextThousandOOM)})`;
+        return;
       }
+      if (log10GainFactorPerTick > 308) {
+        const galaxiesPerSecond = ticksPerSecond * log10GainFactorPerTick / 308;
+        let baseGalaxiesPerSecond, effectiveMaxRG;
+        if (RealityUpgrade(6).isBought) {
+          baseGalaxiesPerSecond = galaxiesPerSecond / RealityUpgrade(6).effectValue;
+          effectiveMaxRG = 50 * Math.log((Replicanti.galaxies.max + 49.5) / 49.5);
+        } else {
+          baseGalaxiesPerSecond = galaxiesPerSecond;
+          effectiveMaxRG = Replicanti.galaxies.max;
+        }
+        this.text = `You are gaining ${shorten(galaxiesPerSecond, 2, 1)} galaxies per second` +
+          ` (all galaxies within ${TimeSpan.fromSeconds(effectiveMaxRG / baseGalaxiesPerSecond)})`;
+        return;
+      }
+      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick);
+      let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
+        (ticksPerSecond * log10GainFactorPerTick);
+      if (remainingTime < 0) {
+        // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
+        remainingTime = 0;
+      }
+      this.text = `${TimeSpan.fromSeconds(remainingTime)} until Infinite Replicanti` +
+        ` (${TimeSpan.fromSeconds(totalTime)} total)`;
     }
   },
   template: `<p>{{text}}</p>`

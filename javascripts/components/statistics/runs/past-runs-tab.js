@@ -1,65 +1,62 @@
-const pastRunsMixin = {
-  methods: {
-    runGain(run) {
-      return this.shortenDimensions(run[1]);
-    }
-  }
-};
+"use strict";
 
-Vue.component('past-runs-tab', {
-  data: function() {
+Vue.component("past-runs-tab", {
+  data() {
     return {
       isRealityUnlocked: false,
+      runs: Array.repeat(0, 10).map(() => [0, new Decimal(0), 0, 0])
     };
   },
-  mixins: [pastRunsMixin],
   props: {
-    runs: Array,
+    getRuns: Function,
     singular: String,
     plural: String,
     points: String,
     reward: Function,
-    realTimeIndex: Number,
   },
   computed: {
-    averageRun: function() {
+    averageRun() {
       return averageRun(this.runs);
     }
   },
   methods: {
-    update: function() {
+    update() {
+      this.runs = this.clone(this.getRuns());
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
     },
-    averageGain: function(time, amount) {
-      let rpm = ratePerMinute(amount, time);
-      let tempstring = shortenRateOfChange(rpm) + " " + this.points + "/min";
-      if (Decimal.lt(rpm, 1)) {
-        tempstring = shortenRateOfChange(Decimal.mul(rpm, 60)) + " " + this.points + "/hour";
-      }
-      return tempstring;
+    clone(runs) {
+      return runs.map(run =>
+        run.map(item =>
+          (item instanceof Decimal ? Decimal.fromDecimal(item) : item)
+        )
+      );
     },
-    averageRunGain: function(run) {
-      return this.averageGain(run[this.realTimeIndex], run[1]);
+    averageRunGain(run) {
+      const amount = run[1];
+      const time = run[2];
+      const rpm = ratePerMinute(amount, time);
+      return Decimal.lt(rpm, 1)
+        ? `${shorten(Decimal.mul(rpm, 60), 2, 2)} ${this.points}/hour`
+        : `${shorten(rpm, 2, 2)} ${this.points}/min`;
     },
-    runTime(run) {
-      return timeDisplayShort(run[0]);
-    },
-    realRunTime(run) {
-      return run[this.realTimeIndex] == undefined ? "unrecorded" : timeDisplayShort(run[this.realTimeIndex]);
-    }
+    runTime: run => timeDisplayShort(run[0]),
+    runGain: run => shorten(run[1], 2, 0),
+    realRunTime: run => (run[2] === undefined ? "unrecorded" : timeDisplayShort(run[2]))
   },
   template:
-    '<div>\
-      <br>\
-      <div v-for="(run, index) in runs" :key="index">\
-        <span>The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }} </span>\
-        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>\
-        <span>and gave {{ reward(run) }}. {{ averageRunGain(run) }}</span>\
-      </div>\
-      <br>\
-      <div>\
-        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }}. </span>\
-        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>\
-      </div>\
-    </div>'
+    `<div class="c-stats-tab">
+      <br>
+      <div v-for="(run, index) in runs" :key="index">
+        <span>
+          The {{ singular }} {{ index + 1 }} {{ index === 0 ? singular : plural }} ago took {{ runTime(run) }}
+        </span>
+        <span v-if="isRealityUnlocked"> ( {{ realRunTime(run) }} real time ) </span>
+        <span>and gave {{ reward(runGain(run), run) }}. {{ averageRunGain(run) }}</span>
+      </div>
+      <br>
+      <div>
+        <span>Last 10 {{ plural }} average time: {{ runTime(averageRun) }}. </span>
+        <span>Average {{ points }} gain: {{ averageRunGain(averageRun) }}.</span>
+      </div>
+    </div>`
 });

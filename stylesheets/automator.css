@@ -1,0 +1,173 @@
+._-automator-split-pane-fix {
+  width: 100%;
+}
+
+.c-automator-tab {
+  height: 35rem;
+  width: 94rem;
+}
+
+.c-automator-tab--full-screen {
+  height: auto;
+  width: auto;
+}
+
+.l-automator-tab {
+  position: relative;
+  align-self: center;
+  margin-top: .5rem;
+}
+
+.l-automator-tab--full-screen {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-top: 0;
+}
+
+.l-automator-pane {
+  display: flex;
+  flex-direction: column;
+  height: 100%
+}
+
+.l-automator-pane__content {
+  flex: 1 1 auto;
+}
+
+.l-automator-pane__controls {
+  flex: 0 0 auto;
+}
+
+.c-automator__controls {
+  background-color: #262626;
+}
+
+.l-automator__controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  /* for corner buttons */
+  position: relative;
+}
+
+.l-automator__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.8rem 0.3rem 0.8rem;
+}
+
+.l-automator__button--corner {
+  position: absolute;
+  right: 0;
+  top: 0
+}
+
+.c-automator__button {
+  margin: 0.4rem;
+  border-radius: 0.3rem;
+}
+
+.c-automator__button-play--active {
+  border-color: #45a047;
+  color: #45a047;
+}
+
+.c-automator__button--active {
+  border-color: #45a047;
+  color: #45a047;
+}
+
+.l-automator__script-names {
+  width: 15rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.l-automator__scripts-dropdown {
+  width: 90%;
+  height: 90%;
+  padding: 0.1rem;
+}
+
+.l-automator__rename-input {
+  width: 90%;
+  height: 90%;
+  padding: 0.1rem;
+}
+
+.c-automator-editor__active-line {
+  background: rgb(43, 6, 92);
+  outline: 1px solid rgb(68, 0, 255);
+}
+
+.c-automator-editor__active-line-gutter {
+  font-weight: bold;
+  background: rgb(43, 6, 92);
+  filter: brightness(200%);
+  outline: 1px solid rgb(68, 0, 255);
+}
+
+.c-automator-editor {
+  font-family: Typewriter, serif;
+  font-size: 1.4rem;
+  text-align: left;
+  border-bottom: 0.15rem solid #262626;
+}
+
+.l-automator-editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.l-automator-editor__codemirror-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.CodeMirror-hint {
+  font-size: 1rem;
+  font-family: Typewriter, serif;
+}
+
+.cm-s-liquibyte.CodeMirror {
+  font-size: 1.4rem;
+  font-family: Typewriter, serif;
+  line-height: 1.6rem;
+  /* required for expanding into pane */
+  flex: 1 1 auto;
+}
+
+.c-automator-docs {
+  border-right: 0.15rem solid #262626;
+  border-bottom: 0.15rem solid #262626;
+  background-color: lightgray;
+  padding-left: 1rem;
+  font-size: 1.4rem;
+  color: black;
+  text-align: left;
+  overflow: auto;
+}
+
+.c-automator-docs-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.c-automator-docs-page__link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.c-automator-docs-page__indented {
+  margin-left: 4rem;
+}

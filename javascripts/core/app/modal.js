@@ -1,3 +1,5 @@
+"use strict";
+
 class Modal {
   constructor(component) {
     this._component = component;
@@ -8,22 +10,28 @@ class Modal {
     ui.view.modal.current = this._component;
   }
 
+  get isOpen() {
+    return ui.view.modal.current === this._component;
+  }
+
   static hide() {
     if (!GameUI.initialized) return;
     ui.view.modal.current = undefined;
     ui.view.modal.cloudConflicts = [];
   }
 
-  static isOpen() {
+  static get isOpen() {
     return ui.view.modal.current !== undefined;
   }
 }
 
+Modal.shortcuts = new Modal("modal-shortcuts");
 Modal.animationOptions = new Modal("modal-animation-options");
 Modal.confirmationOptions = new Modal("modal-confirmation-options");
 Modal.loadGame = new Modal("modal-load-game");
 Modal.import = new Modal("modal-import");
 Modal.shop = new Modal("modal-std-store")
+Modal.importTree = new Modal("modal-import-tree");
 
 Modal.cloudSaveConflict = new Modal("modal-cloud-save-conflict");
 Modal.cloudLoadConflict = new Modal("modal-cloud-load-conflict");
@@ -51,4 +59,8 @@ Modal.message.show = function(text, callback, closeButton = false) {
   ui.view.modal.callback = callback;
   ui.view.modal.closeButton = closeButton;
   ui.view.modal.current = "modal-message";
+  // Sometimes we have stacked messages that get lost, since we don't have stacking modal system.
+  // TODO: remove this console.log
+  // eslint-disable-next-line no-console
+  console.log(`Modal mesasge: ${text}`);
 };

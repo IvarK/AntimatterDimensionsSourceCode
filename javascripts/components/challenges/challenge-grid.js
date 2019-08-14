@@ -1,16 +1,18 @@
+"use strict";
+
 Vue.component("challenge-grid", {
   props: {
     count: Number,
     isChallengeVisible: Function
   },
-  data: function() {
+  data() {
     return {
       boxVisibility: [],
       options: player.options
     };
   },
   created() {
-    this.boxVisibility = Array.from({length: this.count + 1}, () => false);
+    this.boxVisibility = Array.from({ length: this.count + 1 }, () => false);
     this.update();
   },
   methods: {
@@ -21,7 +23,7 @@ Vue.component("challenge-grid", {
         Vue.set(boxVisibility, challenge, isChallengeVisible === undefined || isChallengeVisible(challenge));
       }
     },
-    boxClassObject: function(id) {
+    boxClassObject(id) {
       return {
         "l-challenge-grid__cell": true,
         "l-challenge-grid__cell--hidden": !this.options.showAllChallenges && !this.boxVisibility[id]

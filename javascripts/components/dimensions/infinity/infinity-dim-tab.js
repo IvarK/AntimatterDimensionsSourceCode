@@ -1,10 +1,12 @@
-Vue.component('infinity-dim-tab', {
-  data: function() {
+"use strict";
+
+Vue.component("infinity-dim-tab", {
+  data() {
     return {
       infinityPower: new Decimal(0),
       dimMultiplier: new Decimal(0),
       powerPerSecond: new Decimal(0),
-      incomeType: String.empty,
+      incomeType: "",
       isEC8Running: false,
       EC8PurchasesLeft: 0,
       isAnyAutobuyerUnlocked: false
@@ -16,8 +18,7 @@ Vue.component('infinity-dim-tab', {
       this.infinityPower.copyFrom(infinityPower);
       if (EternityChallenge(9).isRunning) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
-      }
-      else {
+      } else {
         const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
         this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
       }
@@ -29,10 +30,10 @@ Vue.component('infinity-dim-tab', {
       }
       this.isAnyAutobuyerUnlocked = InfinityDimension(1).isAutobuyerUnlocked;
     },
-    maxAll: function() {
+    maxAll() {
       buyMaxInfinityDimensions();
     },
-    toggleAllAutobuyers: function() {
+    toggleAllAutobuyers() {
       toggleAllInfDims();
     }
   },
@@ -43,7 +44,8 @@ Vue.component('infinity-dim-tab', {
           You have
           <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
           translated to
-          <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x multiplier on all dimensions
+          <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
+          multiplier on all dimensions
         </p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>

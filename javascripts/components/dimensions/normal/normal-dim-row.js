@@ -1,11 +1,14 @@
-Vue.component('normal-dim-row', {
+"use strict";
+
+Vue.component("normal-dim-row", {
   props: {
     floatingText: Array,
     tier: Number
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
+      isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       boughtBefore10: 0,
@@ -17,25 +20,31 @@ Vue.component('normal-dim-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    amountDisplay: function() {
-      return this.tier < 8 ? this.shortenDimensions(this.amount) : Decimal.round(this.amount).toString();
+    amountDisplay() {
+      return this.tier < 8 ? this.shortenDimensions(this.amount) : shortenSmallInteger(this.amount);
     },
-    rateOfChangeDisplay: function() {
-      return this.tier < 8 ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
+    },
+    cappedTooltip() {
+      return this.isCapped
+        ? "Further eighth dimension purchases are prohibited, as they are the only way to acquire galaxies"
+        : null;
     }
   },
   methods: {
     update() {
       const tier = this.tier;
-      const isUnlocked = canBuyDimension(tier);
+      const isUnlocked = NormalDimension(tier).isAvailable;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       const dimension = NormalDimension(tier);
+      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 10;
       this.multiplier.copyFrom(getDimensionFinalMultiplier(tier));
       this.amount.copyFrom(dimension.amount);
       this.boughtBefore10 = dimension.boughtBefore10;
@@ -47,13 +56,13 @@ Vue.component('normal-dim-row', {
       this.isAffordable = dimension.isAffordable;
       this.isAffordableUntil10 = dimension.isAffordableUntil10;
     },
-    buySingle: function() {
+    buySingle() {
       buyOneDimensionBtnClick(this.tier);
     },
-    buyUntil10: function() {
+    buyUntil10() {
       buyManyDimensionsBtnClick(this.tier);
     },
-    showCostTitle: function(value) {
+    showCostTitle(value) {
       return value.exponent < 1000000;
     }
   },
@@ -68,13 +77,23 @@ Vue.component('normal-dim-row', {
       <primary-button
         :enabled="isAffordable"
         class="o-primary-btn--buy-nd o-primary-btn--buy-single-nd c-normal-dim-row__buy-button"
-        @click="buySingle"
-      ><span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}</primary-button>
+        :ach-tooltip="cappedTooltip"
+        @click="buySingle">
+        <span v-if="isCapped">Capped!</span>
+        <template v-else>
+          <span v-if="showCostTitle(singleCost)">Cost: </span>{{shortenCosts(singleCost)}}
+        </template>
+      </primary-button>
       <primary-button
         :enabled="isAffordableUntil10"
         class="o-primary-btn--buy-nd o-primary-btn--buy-10-nd c-normal-dim-row__buy-button"
-        @click="buyUntil10"
-      >Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}</primary-button>
+        :ach-tooltip="cappedTooltip"
+        @click="buyUntil10">
+        <span v-if="isCapped">Capped!</span>
+        <template v-else>
+          Until 10, <span v-if="showCostTitle(until10Cost)">Cost: </span>{{shortenCosts(until10Cost)}}
+        </template>
+      </primary-button>
       <div
         v-for="text in floatingText"
         :key="text.key"

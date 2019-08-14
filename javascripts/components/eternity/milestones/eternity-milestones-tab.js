@@ -1,5 +1,7 @@
+"use strict";
+
 Vue.component("eternity-milestones-tab", {
-  data: function() {
+  data() {
     return {
       eternityCount: 0,
     };
@@ -24,7 +26,7 @@ Vue.component("eternity-milestones-tab", {
   },
   template:
     `<div class="l-eternity-milestone-grid">
-      <div>You have eternitied {{shorten(eternityCount, 6)}} {{"time" | pluralize(eternityCount)}}.</div>
+      <div>You have eternitied {{shorten(eternityCount, 3)}} {{"time" | pluralize(eternityCount)}}.</div>
       <div v-for="row in rows" class="l-eternity-milestone-grid__row">
         <eternity-milestone
           v-for="column in 3"

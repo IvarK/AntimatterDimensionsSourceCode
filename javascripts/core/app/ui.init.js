@@ -1,50 +1,42 @@
+"use strict";
+
 let ui = {
   view: {
     modal: {
       current: undefined,
       cloudConflicts: [],
-      message: String.empty,
+      message: "",
       callback: undefined,
       closeButton: false,
       glyphSelection: false,
     },
     tabs: {
-      current: undefined,
       dimensions: {
-        subtab: String.empty,
         normal: {
           floatingText: Array.from({length: 9}, () => [])
         },
       },
-      statistics: {
-        subtab: String.empty
-      },
-      achievements: {
-        subtab: String.empty
-      },
-      challenges: {
-        subtab: String.empty
-      },
-      infinity: {
-        subtab: String.empty
-      },
-      eternity: {
-        subtab: String.empty
-      },
       reality: {
-        subtab: String.empty,
         openGlyphWeights: false,
         currentGlyphTooltip: -1,
-      },
-      celestials: {
-        subtab: String.empty
+        automator: {
+          fullScreen: false,
+          editorScriptID: "",
+          // TODO: enum
+          mode: true
+        }
       }
     },
     shiftDown: false,
-    theme: undefined,
+    theme: "Normal",
     bigCrunch: false,
     scrollWindow: 0,
     draggingUIID: -1,
+    currentContextMenu: null,
+    tab: "dimensions",
+    subtab: "normal",
+    newUI: false,
+    newsHidden: false
   },
-  notationName: String.empty,
+  notationName: ""
 };

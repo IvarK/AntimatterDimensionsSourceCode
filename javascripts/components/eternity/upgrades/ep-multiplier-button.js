@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("ep-multiplier-button", {
   data() {
     return {

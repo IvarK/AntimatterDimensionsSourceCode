@@ -1,5 +1,7 @@
-Vue.component('normal-dim-tab-header', {
-  data: function() {
+"use strict";
+
+Vue.component("normal-dim-tab-header", {
+  data() {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
@@ -8,37 +10,30 @@ Vue.component('normal-dim-tab-header', {
     };
   },
   computed: {
-    sacrificeBoostDisplay: function() {
+    sacrificeBoostDisplay() {
       return this.shortenRateOfChange(this.sacrificeBoost);
     },
-    sacrificeTooltip: function() {
+    sacrificeTooltip() {
       return `Boosts 8th Dimension by ${this.sacrificeBoostDisplay}x`;
     },
   },
   methods: {
     update() {
-      const isSacrificeUnlocked = Sacrifice.isUnlocked && player.resets > 4;
+      const isSacrificeUnlocked = Sacrifice.isUnlocked;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.isAffordable;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
-    sacrifice: function() {
+    sacrifice() {
       sacrificeBtnClick();
     },
-    maxAll: function() {
+    maxAll() {
       maxAll();
     }
   },
   template:
     `<div class="l-normal-dim-tab__header">
-      <input
-        v-show="isSacrificeUnlocked"
-        v-model="options.noSacrificeConfirmation"
-        v-tooltip="'No confirmation when doing Dimensional Sacrifice'"
-        type="checkbox"
-        class="o-big-checkbox"
-      />
       <primary-button
         v-show="isSacrificeUnlocked"
         v-tooltip="sacrificeTooltip"

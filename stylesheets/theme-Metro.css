@@ -1,126 +1,96 @@
-* {
-    border-radius: 0px !important;
-    border-width: 1px !important;
-}
-
 .radial-progress, .circle, .mask full, .fill, .fill fix, .inset{
     border-radius: 50% !important;
 }
 
-input, select {
+.t-metro input, .t-metro select {
     border: 1px solid #A9A9A9;
 }
 
-.popup {
+.t-metro .popup {
     border: 1px solid black !important;
 }
 
-#game {
-    border: 1px solid black !important;
+.t-metro .secondarytabbtn {
+    background: #EEEEEE;
+    border: 1px solid #2196F3;
+    box-shadow: 1px 1px 1px 0px #9E9E9E;
+    border-radius: 0;
 }
 
-.tabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
+.t-metro .secondarytabbtn:hover {
+    background: #2196F3;
+    border: 1px solid #2196F3;
+}
+
+.t-metro .unavailablebtn {
+    background: #9E9E9E;
+    border: 1px solid #EF5350;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
-.tabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
+.t-metro .unavailablebtn:hover {
+    background: #EF5350;
 }
 
-.secondarytabbtn {
-    background: #EEEEEE !important;
-    border: 1px solid #2196F3 !important;
+.t-metro .infinitytabbtn {
+    border: 1px solid #FF9800;
+    background: #1F1F1F;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
-.secondarytabbtn:hover {
-    background: #2196F3 !important;
-    border: 1px solid #2196F3 !important;
+.t-metro .infinitytabbtn:hover {
+    background: #FF9800;
+    border: 1px solid #FF9800;
 }
 
-.storebtn {
-    background: #EEEEEE !important;
-    border: 1px solid #66BB6A !important;
+.t-metro .eternitytabbtn {
+    color: #673AB7;
+    background: #000;
+    border: 1px solid #673AB7;
     box-shadow: 1px 1px 1px 0px #9E9E9E;
 }
 
-.storebtn:hover {
-    background: #66BB6A !important;
+.t-metro .eternitytabbtn:hover {
+    background: #FFF;
+    border: 1px solid #673AB7;
 }
 
-.unavailablebtn {
-    background: #9E9E9E !important;
-    border: 1px solid #EF5350 !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+.t-metro .c-rm-amount {
+  color: #0b600e;
 }
 
-.unavailablebtn:hover {
-    background: #EF5350 !important;
+.t-metro .c-tt-buy-button--unlocked {
+  background: #212121;
+  color: #00BCD4;
+  border: 1px solid #00BCD4;
 }
 
-.infinitytabbtn {
-    border: 1px solid #FF9800 !important;
-    background: #1F1F1F !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+.t-metro .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: #00BCD4;
 }
 
-.infinitytabbtn:hover {
-    background: #FF9800 !important;
-    border: 1px solid #FF9800 !important;
+.t-metro .c-tt-buy-button--locked {
+  background: #9E9E9E;
+  border: none;
+  box-shadow: 1px 1px 1px 0px #000;
 }
 
-.eternitytabbtn {
-    color: #673AB7 !important;
-    background: #000 !important;
-    border: 1px solid #673AB7 !important;
-    box-shadow: 1px 1px 1px 0px #9E9E9E;
+.t-metro .c-tt-buy-button--locked:hover {
+  background: #EF5350;
 }
 
-.eternitytabbtn:hover {
-    background: #FFF !important;
-    border: 1px solid #673AB7 !important;
-}
-
-.RMAmount1 {
-    color: #0b600e;
-}
-
-.timetheorembtn {
-    background: #212121 !important;
-    color: #00BCD4 !important;
-    border: 1px solid #00BCD4 !important;
-}
-
-.timetheorembtn:hover {
-    color: #212121 !important;
-    background: #00BCD4 !important;
-}
-
-.timetheorembtnlocked {
-    background: #9E9E9E !important;
-    border: none !important;
-    box-shadow: 1px 1px 1px 0px #000;
-}
-
-.timetheorembtnlocked:hover {
-    background: #EF5350 !important;
-}
-
-#theorembuybackground {
+.t-metro #theorembuybackground {
     background: #EEEEEE !important;
     border-width: 1px !important;
 }
 
-.realitytabbtn {
+.t-metro .realitytabbtn {
     background: white !important;
     border: 1px solid #0b600e !important;
-    display: none;
 }
 
-.realitytabbtn:hover {
+.t-metro .realitytabbtn:hover {
     background-color: #0b600e !important;
     border: 1px solid #0b600e !important;
     color: white;

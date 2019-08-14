@@ -1,15 +1,17 @@
-Vue.component('normal-dim-tab-progress-bar', {
-  data: function() {
+"use strict";
+
+Vue.component("normal-dim-tab-progress-bar", {
+  data() {
     return {
       fill: new Decimal(0),
-      tooltip: String.empty
+      tooltip: ""
     };
   },
   computed: {
-    percents: function() {
+    percents() {
       return `${this.fill.toFixed(2)}%`;
     },
-    progressBarStyle: function() {
+    progressBarStyle() {
       return {
         width: this.percents
       };
@@ -18,19 +20,22 @@ Vue.component('normal-dim-tab-progress-bar', {
   methods: {
     update() {
       const setProgress = (current, goal, tooltip) => {
-        this.fill.copyFrom(Decimal.min(Decimal.log10(current.add(1)) / Decimal.log10(goal) * 100, 100));
+        this.fill.copyFrom(Decimal.min(current.pLog10() / Decimal.log10(goal) * 100, 100));
         this.tooltip = tooltip;
       };
-      if (player.currentChallenge !== "") {
-        setProgress(player.money, player.challengeTarget, "Percentage to challenge goal");
+      const challenge = NormalChallenge.current || InfinityChallenge.current;
+      if (challenge) {
+        setProgress(player.antimatter, challenge.goal, "Percentage to challenge goal");
       } else if (!player.break) {
-        setProgress(player.money, Number.MAX_VALUE, "Percentage to Infinity");
-      } else if (player.infDimensionsUnlocked.includes(false)) {
-        setProgress(player.money, getNewInfReq(), "Percentage to next dimension unlock");
-      } else if (EternityChallenge.isRunning()) {
-        setProgress(player.infinityPoints, player.eternityChallGoal, "Percentage to eternity challenge goal");
+        setProgress(player.antimatter, Decimal.MAX_NUMBER, "Percentage to Infinity");
+      } else if (!InfinityDimension(8).isUnlocked) {
+        setProgress(player.antimatter, InfinityDimensions.next().requirement, "Percentage to next dimension unlock");
       } else {
-        setProgress(player.infinityPoints, Number.MAX_VALUE, "Percentage to Eternity");
+        setProgress(
+          player.infinityPoints,
+          Player.eternityGoal,
+          EternityChallenge.isRunning ? "Percentage to Eternity Challenge goal" : "Percentage to Eternity"
+        );
       }
     }
   },

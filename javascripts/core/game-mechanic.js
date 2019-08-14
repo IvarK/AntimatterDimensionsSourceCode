@@ -1,10 +1,13 @@
+"use strict";
+
+/**
+ * @abstract
+ */
 class GameMechanicState {
   constructor(config) {
     if (!config) throw crash("Must specify config for GameMechanicState");
     this.config = config;
-    this._effectIsConstant = false;
     if (typeof this.config.effect === "number" || this.config.effect instanceof Decimal) {
-      this._effectIsConstant = true;
       Object.defineProperty(this, "effectValue", {
         configurable: false,
         writable: false,
@@ -15,10 +18,6 @@ class GameMechanicState {
 
   get id() {
     return this.config.id;
-  }
-
-  get cost() {
-    return this.config.cost;
   }
 
   get effectValue() {
@@ -33,51 +32,58 @@ class GameMechanicState {
     if (this.canBeApplied) {
       let effectValue = this.effectValue;
       if (this.config.cap !== undefined) {
-        const cap = typeof this.config.cap === "function" ?
-         this.config.cap() :
-         this.config.cap;
+        const cap = typeof this.config.cap === "function"
+         ? this.config.cap()
+         : this.config.cap;
         if (cap !== undefined) {
-          effectValue = typeof effectValue === "number" ?
-            Math.min(effectValue, cap) :
-            Decimal.min(effectValue, cap);
+          effectValue = typeof effectValue === "number"
+            ? Math.min(effectValue, cap)
+            : Decimal.min(effectValue, cap);
         }
       }
       applyFn(effectValue);
     }
   }
+
+  static createIndex(gameData) {
+    this.index = mapGameData(gameData, config => new this(config));
+  }
 }
 
+/**
+ * @abstract
+ */
 class PurchasableMechanicState extends GameMechanicState {
-  constructor(config, currency, getCollection) {
-    super(config);
-    this._currency = currency;
-    this._getCollection = getCollection;
-  }
-
-  get collection() {
-    return this._getCollection();
-  }
+  /**
+   * @abstract
+   */
+  get currency() { throw NotImplementedCrash(); }
 
   get isAffordable() {
-    const currency = this._currency.value;
-    return typeof currency === "number" ? currency >= (this.cost) : currency.gte(this.cost);
+    return this.currency.isAffordable(this.cost);
   }
 
   get isAvailable() {
     return true;
   }
 
-  get isBought() {
-    return this.collection.has(this.id);
+  get isRebuyable() {
+    return false;
   }
 
-  set isBought(value) {
-    if (value) {
-      this.collection.add(this.id);
-    } else {
-      this.collection.delete(this.id);
-    }
+  get cost() {
+    return this.config.cost;
   }
+
+  /**
+   * @abstract
+   */
+  get isBought() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set isBought(value) { throw NotImplementedCrash(); }
 
   get canBeBought() {
     return !this.isBought && this.isAffordable && this.isAvailable;
@@ -85,13 +91,8 @@ class PurchasableMechanicState extends GameMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
+    this.currency.subtract(this.cost);
     this.isBought = true;
-    const currency = this._currency.value;
-    if (typeof currency === "number") {
-      this._currency.value = currency - this.cost;
-    } else {
-      this._currency.value = currency.minus(this.cost);
-    }
     GameUI.update();
     return true;
   }
@@ -101,37 +102,111 @@ class PurchasableMechanicState extends GameMechanicState {
   }
 }
 
-class Currency {
-  constructor(get, set) {
-    this._get = get;
-    this._set = set;
+/**
+ * @abstract
+ */
+class SetPurchasableMechanicState extends PurchasableMechanicState {
+  /**
+   * @abstract
+   */
+  get set() { throw NotImplementedCrash(); }
+
+  get isBought() {
+    return this.set.has(this.id);
   }
 
-  get value() {
-    return this._get();
-  }
-
-  set value(value) {
-    this._set(value);
+  set isBought(value) {
+    if (value) {
+      this.set.add(this.id);
+    } else {
+      this.set.delete(this.id);
+    }
   }
 }
 
-Currency.infinityPoints = new Currency(
-  () => player.infinityPoints,
-  ep => player.infinityPoints = ep
-);
+/**
+ * @abstract
+ */
+class BitPurchasableMechanicState extends PurchasableMechanicState {
+  /**
+   * @abstract
+   */
+  get bits() { throw NotImplementedCrash(); }
 
-Currency.eternityPoints = new Currency(
-  () => player.eternityPoints,
-  ep => player.eternityPoints = ep
-);
+  /**
+   * @abstract
+   */
+  set bits(value) { throw NotImplementedCrash(); }
 
-Currency.dilatedTime = new Currency(
-  () => player.dilation.dilatedTime,
-  dt => player.dilation.dilatedTime = dt
-);
+  /**
+   * @abstract
+   */
+  get bitIndex() { throw NotImplementedCrash(); }
 
-Currency.perkPoints = new Currency(
-  () => player.reality.pp,
-  pp => player.reality.pp = pp
-);
+  get isBought() {
+    // eslint-disable-next-line no-bitwise
+    return (this.bits & (1 << this.bitIndex)) !== 0;
+  }
+
+  set isBought(value) {
+    if (value) {
+      // eslint-disable-next-line no-bitwise
+      this.bits |= (1 << this.bitIndex);
+    } else {
+      // eslint-disable-next-line no-bitwise
+      this.bits &= ~(1 << this.bitIndex);
+    }
+  }
+}
+
+/**
+ * @abstract
+ */
+class RebuyableMechanicState extends GameMechanicState {
+  /**
+   * @abstract
+   */
+  get currency() { throw NotImplementedCrash(); }
+
+  get isAffordable() {
+    return this.currency.isAffordable(this.cost);
+  }
+
+  get cost() {
+    return this.config.cost();
+  }
+
+  get isAvailable() {
+    return true;
+  }
+
+  get isRebuyable() {
+    return true;
+  }
+
+  /**
+   * @abstract
+   */
+  get boughtAmount() { throw NotImplementedCrash(); }
+
+  /**
+   * @abstract
+   */
+  set boughtAmount(value) { throw NotImplementedCrash(); }
+
+  get canBeApplied() {
+    return this.boughtAmount > 0;
+  }
+
+  get canBeBought() {
+    return this.isAffordable && this.isAvailable;
+  }
+
+  purchase() {
+    if (!this.canBeBought) return false;
+    this.currency.subtract(this.cost);
+    this.boughtAmount++;
+    GameUI.update();
+    return true;
+  }
+}

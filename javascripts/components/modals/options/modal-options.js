@@ -1,4 +1,6 @@
-Vue.component('modal-options', {
+"use strict";
+
+Vue.component("modal-options", {
   template:
     `<div class="c-modal-options l-modal-options">
       <modal-close-button @click="emitClose"/>
@@ -7,12 +9,13 @@ Vue.component('modal-options', {
 });
 
 const modalOptionsMixin = {
-  data: function() {
+  data() {
     return {
       bigCrunchUnlocked: false,
       eternityUnlocked: false,
       realityUnlocked: false,
-      dilationUnlocked: false
+      dilationUnlocked: false,
+      animatedThemeUnlocked: false
     };
   },
   methods: {
@@ -22,6 +25,7 @@ const modalOptionsMixin = {
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
       this.dilationUnlocked = progress.isRealityUnlocked || player.dilation.tachyonParticles.neq(0);
+      this.animatedThemeUnlocked = Themes.find("S1").isAvailable() || Themes.find("S6").isAvailable();
     }
   },
   components: {

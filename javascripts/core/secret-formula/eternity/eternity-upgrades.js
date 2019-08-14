@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.eternity.upgrades = {
   idMultEP: {
     id: 1,
@@ -10,7 +12,7 @@ GameDatabase.eternity.upgrades = {
     id: 2,
     cost: 10,
     description: "Infinity Dimension multiplier based on Eternities ((x/200)^log4(2x))",
-    effect: function() {
+    effect() {
       const log4 = Math.log4;
       const eternities = Math.min(player.eternities, 100000);
       const base = eternities / 200 + 1;
@@ -26,8 +28,11 @@ GameDatabase.eternity.upgrades = {
     id: 3,
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
-    effect: function() {
-      const sumOfRecords = Math.max(infchallengeTimes, Effects.min(750, Achievement(112)));
+    effect() {
+      const sumOfRecords = Math.max(
+        Time.infinityChallengeSum.totalMilliseconds,
+        Effects.min(750, Achievement(112))
+      );
       return Decimal.pow(2, 30000 / sumOfRecords);
     },
     formatEffect: value => `${shortenMoney(value)}x`
@@ -36,7 +41,7 @@ GameDatabase.eternity.upgrades = {
     id: 4,
     cost: 1e16,
     description: "Your achievement bonus affects Time Dimensions",
-    effect: () => player.achPow.pow(getAdjustedGlyphEffect("effarigachievement")),
+    effect: () => Player.achievementPower,
     formatEffect: value => `${shortenMoney(value)}x`
   },
   tdMultTheorems: {

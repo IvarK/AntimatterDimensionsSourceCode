@@ -1,3 +1,5 @@
+"use strict";
+
 const Effects = {
   /**
    * @param effectSources
@@ -25,14 +27,15 @@ const Effects = {
   last(defaultValue, ...effectSources) {
     let result = defaultValue;
     let foundLast = false;
-    let reversedSources = effectSources
+    const reversedSources = effectSources
       .filter(s => s !== null && s !== undefined)
       .reverse();
-    for (let effectSource of reversedSources) {
-      effectSource.applyEffect(v => {
-        result = v;
-        foundLast = true;
-      });
+    const reducer = v => {
+      result = v;
+      foundLast = true;
+    };
+    for (const effectSource of reversedSources) {
+      effectSource.applyEffect(reducer);
       if (foundLast) break;
     }
     return result;
@@ -63,6 +66,7 @@ const Effects = {
  * @returns {Decimal}
  */
 Decimal.prototype.plusEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   effectSource.applyEffect(v => result = result.plus(v));
   return result;
@@ -72,6 +76,7 @@ Decimal.prototype.plusEffectOf = function(effectSource) {
  * @returns {Decimal}
  */
 Decimal.prototype.plusEffectsOf = function(...effectSources) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   applyEffectsOf(effectSources, v => result = result.plus(v));
   return result;
@@ -80,7 +85,28 @@ Decimal.prototype.plusEffectsOf = function(...effectSources) {
 /**
  * @returns {Decimal}
  */
+Decimal.prototype.minusEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
+  let result = this;
+  effectSource.applyEffect(v => result = result.minus(v));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
+Decimal.prototype.minusEffectsOf = function(...effectSources) {
+  // eslint-disable-next-line consistent-this
+  let result = this;
+  applyEffectsOf(effectSources, v => result = result.minus(v));
+  return result;
+};
+
+/**
+ * @returns {Decimal}
+ */
 Decimal.prototype.timesEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   effectSource.applyEffect(v => result = result.times(v));
   return result;
@@ -106,6 +132,7 @@ Decimal.prototype.timesEffectsOf = function(...effectSources) {
  * @returns {Decimal}
  */
 Decimal.prototype.dividedByEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   effectSource.applyEffect(v => result = result.dividedBy(v));
   return result;
@@ -115,6 +142,7 @@ Decimal.prototype.dividedByEffectOf = function(effectSource) {
  * @returns {Decimal}
  */
 Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   applyEffectsOf(effectSources, v => result = result.dividedBy(v));
   return result;
@@ -124,6 +152,7 @@ Decimal.prototype.dividedByEffectsOf = function(...effectSources) {
  * @returns {Decimal}
  */
 Decimal.prototype.powEffectOf = function(effectSource) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   effectSource.applyEffect(v => result = result.pow(v));
   return result;
@@ -133,6 +162,7 @@ Decimal.prototype.powEffectOf = function(effectSource) {
  * @returns {Decimal}
  */
 Decimal.prototype.powEffectsOf = function(...effectSources) {
+  // eslint-disable-next-line consistent-this
   let result = this;
   applyEffectsOf(effectSources, v => result = result.pow(v));
   return result;

@@ -1,27 +1,17 @@
-function startDilatedEternity() {
+"use strict";
+
+function startDilatedEternity(auto) {
   if (!TimeStudy.dilation.isBought) return false
-  GameIntervals.gameLoop.stop();
   if (player.dilation.active) {
-      eternity(false, false, true)
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
+      eternity(false, auto, { switchingDilation: true });
       return false
   }
   if (player.options.confirmations.dilation && !confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
-      setTimeout(function() {
-        GameIntervals.gameLoop.start();
-      }, 250)
       return false
   }
-  giveAchievement("I told you already, time is relative")
-  eternity(false, false, true)
+  Achievement(136).unlock();
+  eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
-  postc8Mult = new Decimal(0)
-  mult18 = new Decimal(1)
-  setTimeout(function() {
-    GameIntervals.gameLoop.start();
-  }, 250)
   return true
 }
 
@@ -44,8 +34,8 @@ const DIL_UPG_COSTS = [null, [1e5, 10], [1e6, 100], [1e7, 20],
                                         1e15];
 
 
-function buyDilationUpgrade(id) {
-  // Upgrades 1-3 are rebuyable
+function buyDilationUpgrade(id, bulk) {
+  // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   if (id > 3) {
     if (player.dilation.dilatedTime.lt(DIL_UPG_COSTS[id])) return false;
     if (player.dilation.upgrades.has(id)) return false;
@@ -60,6 +50,9 @@ function buyDilationUpgrade(id) {
     let buying = Decimal.affordGeometricSeries(player.dilation.dilatedTime,
       DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount).toNumber();
     buying = Math.min(buying, player.celestials.teresa.dtBulk);
+    if (!bulk) {
+      buying = Math.min(buying, 1);
+    }
     const cost = Decimal.sumGeometricSeries(buying, DIL_UPG_COSTS[id][0], DIL_UPG_COSTS[id][1], upgAmount);
     player.dilation.dilatedTime = player.dilation.dilatedTime.minus(cost);
     player.dilation.rebuyables[id] += buying;
@@ -79,7 +72,6 @@ function buyDilationUpgrade(id) {
         Perk.retroactiveTP4
       );
       player.dilation.tachyonParticles = player.dilation.tachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
-      player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.times(Decimal.pow(retroactiveTPFactor, buying))
     }
   }
   return true
@@ -93,82 +85,117 @@ function getFreeGalaxyMult() {
 }
 
 function getDilationGainPerSecond() {
-  let ret = new Decimal(player.dilation.tachyonParticles)
+  let dtRate = new Decimal(player.dilation.tachyonParticles)
     .timesEffectsOf(
       DilationUpgrade.dtGain,
       Achievement(132),
-      RealityUpgrade(1)
+      RealityUpgrade(1),
+      AlchemyResource.dilation
     );
-  ret = ret.times(getAdjustedGlyphEffect("dilationdilationMult"));
-  ret = ret.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
-  if (Enslaved.isRunning) ret = ret.times(Enslaved.adjustedDilationMultiplier)
-  if (V.isRunning) ret = ret.pow(0.5)
-  return ret
+  dtRate = dtRate.times(getAdjustedGlyphEffect("dilationdilationMult"));
+  dtRate = dtRate.times(Math.max(player.replicanti.amount.e * getAdjustedGlyphEffect("replicationdtgain"), 1));
+  dtRate = dtRate.times(Ra.gamespeedDTMult());
+  if (Enslaved.isRunning) {
+    dtRate = dilatedValueOf(dtRate).dividedBy(player.dilation.dilatedTime.plus(1).log10() + 1);
+  }
+  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime())
+  if (V.isRunning) dtRate = dtRate.pow(0.5);
+  return dtRate;
 }
 
+function tachyonGainMultiplier() {
+  return new Decimal(1).timesEffectsOf(
+    DilationUpgrade.tachyonGain,
+    GlyphSacrifice.dilation,
+    RealityUpgrade(4),
+    RealityUpgrade(8),
+    RealityUpgrade(15)
+  );
+}
+
+function rewardTP() {
+  player.dilation.tachyonParticles = Decimal.max(player.dilation.tachyonParticles, getTP());
+}
+
+// Returns the TP that would be gained this run
+function getTP() {
+  let tachyon = Decimal
+    .pow(Decimal.log10(player.antimatter) / 400, 1.5)
+    .times(tachyonGainMultiplier());
+  if (Enslaved.isRunning) tachyon = tachyon.pow(0.25);
+  return tachyon;
+}
+
+// Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
 function getTachyonGain() {
-  let mult = new Decimal(1).timesEffectsOf(
-    DilationUpgrade.tachyonGain,
-    GlyphSacrifice.dilation,
-    RealityUpgrade(4),
-    RealityUpgrade(8),
-    RealityUpgrade(15)
-  );
-
-  let tachyonGain = new Decimal(Decimal.pow(Decimal.log10(player.money) / 400, 1.5).times(mult).minus(player.dilation.totalTachyonParticles)).max(0)
-  return tachyonGain
+  return getTP().minus(player.dilation.tachyonParticles).clampMin(0);
 }
 
+// Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 function getTachyonReq() {
-  let mult = new Decimal(1).timesEffectsOf(
-    DilationUpgrade.tachyonGain,
-    GlyphSacrifice.dilation,
-    RealityUpgrade(4),
-    RealityUpgrade(8),
-    RealityUpgrade(15)
+  let effectiveTP = player.dilation.tachyonParticles;
+  if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(4);
+  return Decimal.pow10(
+    effectiveTP
+      .times(Math.pow(400, 1.5))
+      .dividedBy(tachyonGainMultiplier())
+      .pow(2 / 3)
+      .toNumber()
   );
-  let req = Decimal.pow(10, Decimal.pow(player.dilation.totalTachyonParticles.times(Math.pow(400, 1.5)).divideBy(mult), 2/3))
-  return req
 }
 
 function dilatedValueOf(value) {
   const log10 = value.log10();
-  const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const basePenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);
+  const alchemyReduction = (player.replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
+  const dilationPenalty = Math.min(1, basePenalty + (1 - basePenalty) * alchemyReduction);
   return Decimal.pow10(Math.sign(log10) * Math.pow(Math.abs(log10), dilationPenalty));
 }
 
-class DilationUpgradeState extends PurchasableMechanicState {
-  constructor(config) {
-    super(config, Currency.dilatedTime, () => player.dilation.upgrades);
+class DilationUpgradeState extends SetPurchasableMechanicState {
+  get currency() {
+    return Currency.dilatedTime;
+  }
+
+  get set() {
+    return player.dilation.upgrades;
   }
 
   purchase() {
-    const purchaseSucceeded = super.purchase();
-    if (purchaseSucceeded && this.id === 4) {
+    if (!super.purchase()) return;
+    if (this.id === 4) {
       player.dilation.freeGalaxies *= 2;
     }
   }
 }
 
-class RebuyableDilationUpgradeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
+class RebuyableDilationUpgradeState extends RebuyableMechanicState {
+  get currency() {
+    return Currency.dilatedTime;
   }
 
-  get cost() {
-    return this.config.cost();
+  get boughtAmount() {
+    return player.dilation.rebuyables[this.id];
   }
 
-  get isAffordable() {
-    return player.dilation.dilatedTime.gte(this.cost);
+  set boughtAmount(value) {
+    player.dilation.rebuyables[this.id] = value;
   }
 
-  get canBeApplied() {
-    return true;
+  get autobuyerId() {
+    return this.config.id - 1;
   }
 
-  purchase() {
-    buyDilationUpgrade(this.config.id);
+  get isAutobuyerOn() {
+    return player.dilation.auto[this.autobuyerId];
+  }
+
+  set isAutobuyerOn(value) {
+    player.dilation.auto[this.autobuyerId] = value;
+  }
+
+  purchase(bulk) {
+    buyDilationUpgrade(this.config.id, bulk);
   }
 }
 

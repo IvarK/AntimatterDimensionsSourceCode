@@ -1,11 +1,14 @@
-Vue.component('time-dim-row', {
+"use strict";
+
+Vue.component("time-dim-row", {
   props: {
     tier: Number,
     areAutobuyersUnlocked: Boolean
   },
-  data: function() {
+  data() {
     return {
       isUnlocked: false,
+      isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       rateOfChange: new Decimal(0),
@@ -15,13 +18,16 @@ Vue.component('time-dim-row', {
     };
   },
   computed: {
-    name: function() {
+    name() {
       return DISPLAY_NAMES[this.tier];
     },
-    rateOfChangeDisplay: function() {
-      return this.tier < 8 ?
-        ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)` :
-        String.empty;
+    rateOfChangeDisplay() {
+      return this.tier < 8
+        ? ` (+${this.shortenRateOfChange(this.rateOfChange)}%/s)`
+        : "";
+    },
+    buttonContents() {
+      return this.isCapped ? "Capped" : `Cost: ${this.shortenDimensions(this.cost)} EP`;
     }
   },
   methods: {
@@ -29,6 +35,7 @@ Vue.component('time-dim-row', {
       const tier = this.tier;
       const dimension = TimeDimension(tier);
       const isUnlocked = dimension.isUnlocked;
+      this.isCapped = Enslaved.isRunning && dimension.bought > 0;
       this.isUnlocked = isUnlocked;
       if (!isUnlocked) return;
       this.multiplier.copyFrom(dimension.multiplier);
@@ -39,7 +46,7 @@ Vue.component('time-dim-row', {
       this.cost.copyFrom(dimension.cost);
       this.isAffordable = dimension.isAffordable;
     },
-    buyTimeDimension: function() {
+    buyTimeDimension() {
       buyTimeDimension(this.tier);
     }
   },
@@ -61,6 +68,6 @@ Vue.component('time-dim-row', {
         :enabled="isAffordable"
         class="o-primary-btn--buy-td c-time-dim-row__button"
         @click="buyTimeDimension"
-      >Cost: {{shortenDimensions(cost)}} EP</primary-button>
+      >{{buttonContents}}</primary-button>
     </div>`,
 });

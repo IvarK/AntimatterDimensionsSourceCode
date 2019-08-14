@@ -3,6 +3,8 @@
     transition-duration: 0s !important;
     border-width: 1px !important;
     border-radius: 0px !important;
+    box-shadow: none !important;
+    animation: none !important;
 }
 
 #container {
@@ -18,6 +20,19 @@
 }
 
 button {
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
+    background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+    background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important; 
+    padding: 3px !important;
+    border: 1px solid #9B9B9B !important;
+    color: black !important;
+    text-decoration: none !important;
+}
+
+.o-primary-btn {
     -webkit-border-radius: 0px !important;
     -moz-border-radius: 0px !important;
     border-radius: 0px !important;

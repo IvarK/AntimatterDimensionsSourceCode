@@ -1,331 +1,8 @@
-const allAchievements = {
-  r11 : "You gotta start somewhere",
-  r12 : "100 antimatter is a lot",
-  r13 : "Half life 3 confirmed",
-  r14 : "L4D: Left 4 Dimensions",
-  r15 : "5 Dimension Antimatter Punch",
-  r16 : "We couldn't afford 9",
-  r17 : "Not a luck related achievement",
-  r18 : "90 degrees to infinity",
-  r21 : "To infinity!",
-  r22 : "Fake News",
-  r23 : "The 9th Dimension is a lie",
-  r24 : "Antimatter Apocalypse",
-  r25 : "Boosting to the max",
-  r26 : "You got past The Big Wall",
-  r27 : "Double Galaxy",
-  r28 : "There's no point in doing that",
-  r31 : "I forgot to nerf that",
-  r32 : "The Gods are pleased",
-  r33 : "That's a lot of infinites",
-  r34 : "You didn't need it anyway",
-  r35 : "Don't you dare to sleep",
-  r36 : "Claustrophobic",
-  r37 : "That's fast!",
-  r38 : "I don't believe in Gods",
-  r41 : "Spreading Cancer",
-  r42 : "Supersanic",
-  r43 : "Zero Deaths",
-  r44 : "Over in 30 seconds",
-  r45 : "Faster than a potato",
-  r46 : "Multidimensional",
-  r47 : "Daredevil",
-  r48 : "AntiChallenged",
-  r51 : "Limit Break",
-  r52 : "Age of Automation",
-  r53 : "Definitely not worth it",
-  r54 : "That's faster!",
-  r55 : "Forever isn't that long",
-  r56 : "Many Deaths",
-  r57 : "Gift from the Gods",
-  r58 : "Is this hell?",
-  r61 : "Bulked up",
-  r62 : "Oh hey, you're still here",
-  r63 : "A new beginning.",
-  r64 : "1 million is a lot",
-  r65 : "Not-so-challenging",
-  r66 : "Faster than a squared potato",
-  r67 : "Infinitely Challenging",
-  r68 : "You did this again just for the achievement right?",
-  r71 : "ERROR 909: Dimension not found",
-  r72 : "Can't hold all these infinities",
-  r73 : "This achievement doesn't exist",
-  r74 : "End me",
-  r75 : "NEW DIMENSIONS???",
-  r76 : "One for each dimension",
-  r77 : "How the antitables have turned",
-  r78 : "Blink of an eye",
-  r81 : "Hevipelle did nothing wrong",
-  r82 : "Anti-antichallenged",
-  r83 : "YOU CAN GET 50 GALAXIES!??",
-  r84 : "I got a few to spare",
-  r85 : "All your IP are belong to us",
-  r86 : "Do you even bend time bro?",
-  r87 : "2 Million Infinities",
-  r88 : "Yet another infinity reference",
-  r91 : "Ludicrous Speed",
-  r92 : "I brake for nobody",
-  r93 : "MAXIMUM OVERDRIVE",
-  r94 : "4.3333 minutes of Infinity",
-  r95 : "Is this safe?",
-  r96 : "Time is relative",
-  r97 : "Yes. This is hell.",
-  r98 : "0 degrees from infinity",
-  r101 : "Costco sells dimboosts now",
-  r102 : "This mile took an Eternity",
-  r103 : "This achievement doesn't exist II",
-  r104 : "That wasn't an eternity",
-  r105 : "Infinite time",
-  r106 : "The swarm",
-  r107 : "Do you really need a guide for this?",
-  r108 : "We could afford 9",
-  r111 : "Yo dawg, I heard you liked infinities...",
-  r112 : "Never again",
-  r113 : "Long lasting relationship",
-  r114 : "You're a mistake",
-  r115 : "I wish I had gotten 7 eternities",
-  r116 : "Do I really need to infinity",
-  r117 : "8 nobody got time for that",
-  r118 : "IT'S OVER 9000",
-  r121 : "Can you get infinite IP?",
-  r122 : "You're already dead.",
-  r123 : "5 more eternities until the update",
-  r124 : "Eternities are the new infinity",
-  r125 : "Like feasting on a behind",
-  r126 : "Popular music",
-  r127 : "But I wanted another prestige layer...",
-  r128 : "What do I have to do to get rid of you",
-  r131 : "No ethical consumption",
-  r132 : "Unique snowflakes",
-  r133 : "I never liked this infinity stuff anyway",
-  r134 : "When will it be enough?",
-  r135 : "Faster than a potato^286078",
-  r136 : "I told you already, time is relative",
-  r137 : "Now you're thinking with dilation!",
-  r138 : "This is what I have to do to get rid of you.",
-  r141 : "Snap back to reality",
-  r142 : "How does this work?",
-  r143 : "Yo dawg, I heard you liked reskins...",
-  r144 : "Is this an Interstellar reference?",
-  r145 : "Are you sure these are the right way around?",
-  r146 : "Perks of living",
-  r147 : "Master of Reality",
-  r148 : "Royal Flush",
-  r151 : "Transcension sucked anyway",
-  r152 : "Personal Space",
-  r153 : "Do I really have to do this?",
-  r154 : "I didn't even realize how fast you are",
-  r155 : "Why did you have to add RNG to the game?",
-  r156 : "True Sacrifice",
-  r157 : "I'm up all night to get lucky",
-  r158 : "Bruh, are you like, inside the hole?",
-  s11 : "The first one's always free",
-  s12 : "Just in case",
-  s13 : "It pays to have respect",
-  s14 : "So do I",
-  s15 : "Do a barrel roll!",
-  s16 : "Do you enjoy pain?",
-  s17 : "30 Lives",
-  s18 : "Do you feel lucky? Well do ya punk?",
-  s21 : "Go study in real life instead",
-  s22 : "Cancer = Spread",
-  s23 : "Stop right there criminal scum!",
-  s24 : "Real news",
-  s25 : "Shhh... It's a secret",
-  s26 : "You're a failure",
-  s27 : "It's not called matter dimensions is it?",
-  s28 : "Nice.",
-  s31 : "You should download some more RAM",
-  s32 : "Less than or equal to 0.001",
-  s33 : "A sound financial decision",
-  s34 : "You do know how these work, right?",
-  s35 : "Should we tell them about buy max...",
-  s36 : "While you were away... Nothing happened.",
-  s37 : "You followed the instructions",
-  s38 : "Professional bodybuilder",
-  s41 : "That dimension doesn’t exist",
-  s42 : "Was it even broken?",
-  s43 : "Time fixes everything",
-  s44 : "Are you statisfied now?",
-  s45 : "This dragging is dragging on",
-  s46 : "s46",
-  s47 : "s47",
-  s48 : "s48",
-};
-const allAchievementNums = Object.invert(allAchievements)
-// to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");
-
-function updateAchievementPower() {
-  let completedRows = 0
-  for (let i = 1; i <= TOTAL_ACH_ROWS; i++) {
-    let achUnlocked = 0;
-    for (let j = 1; j <= ACH_PER_ROW; j++) {
-      if (Achievement(i*10 + j).isEnabled) {
-        achUnlocked++;
-      }
-    }
-    if (achUnlocked === ACH_PER_ROW) {
-      completedRows++;
-    }
-  }
-  player.achPow = Decimal.pow(1.5, completedRows);
-}
-
-function clearOldAchieves() {
-  for (let achId of player.achievements) {
-    const achieveKey = Object.keys(allAchievements).find(key => allAchievements[key] === achId);
-    if (achieveKey !== undefined) {
-      player.achievements.delete(achId);
-      player.achievements.add(achieveKey);
-    } else if (Achievement(achId) === undefined && allAchievements[achId] === undefined) {
-      player.achievements.delete(achId);
-    }
-  }
-}
-
-function giveAchievement(name) {
-  let id = allAchievementNums[name];
-  if (id === undefined) throw crash(`giveAchievement of unknown "${name}"`);
-  let achNumber = parseInt(id.slice(1));
-  if (isNaN(achNumber)) throw crash(`Couldn't get achievement number from id ${id}`);
-  if (id.startsWith("s")) {
-    if (player.secretAchievements.has(achNumber)) return false;
-    player.secretAchievements.add(achNumber);
-  } else if (id.startsWith("r")) {
-    if (player.achievements.has(achNumber)) return false;
-    player.achievements.add(achNumber);
-  } else {
-    throw crash(`Achievement id ${id} doesn't start with r or s`);
-  }
-
-  GameUI.notify.success(name);
-  kong.submitStats('Achievements', player.achievements.size + player.secretAchievements.size);
-  if (name === "All your IP are belong to us" || name === "MAXIMUM OVERDRIVE") {
-    Autobuyer.infinity.bumpLimit(4);
-  }
-  updateAchievementPower();
-  GameUI.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
-}
-
-function isAchEnabled(achId) {
-  if (!player.achievements.has(achId)) return false;
-  if (player.realities === 0) return true;
-  if (achId > 140) return true;
-  const row = Math.floor(achId / 10);
-  if (row <= GameCache.achSkipPerkCount.value) return true;
-  const currentSeconds = player.thisReality / 1000;
-  return timeRequiredForAchievement(achId) <= currentSeconds;
-}
-
-function timeForAllAchievements() {
-  if (GameCache.achSkipPerkCount.value === TOTAL_PRE_REALITY_ACH_ROWS) {
-    return 0;
-  }
-  return totalAchRowTime(TOTAL_PRE_REALITY_ACH_ROWS - GameCache.achSkipPerkCount.value);
-}
-
-function nextAchIn() {
-  updateRealityAchievementModifiers();
-  let currentSeconds = player.thisReality / 1000;
-  if (currentSeconds > timeForAllAchievements()) return 0;
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-  let timeReq = 0;
-
-  let row = 1;
-  function achTime() {
-    return baseAchTime + ((row - 7) * rowModifier);
-  }
-  function rowTime() {
-    return achTime() * ACH_PER_ROW;
-  }
-
-  while (currentSeconds > timeReq + rowTime()) {
-    timeReq += rowTime();
-    row++;
-  }
-
-  while (currentSeconds > timeReq) {
-    timeReq += achTime();
-  }
-  return (timeReq - currentSeconds) * 1000
-}
-
-function timeUntilAch(achId) {
-  if (achId > 140 || isNaN(achId)) return NaN;
-  if (!player.achievements.has(achId)) return NaN;
-  const row = Math.floor(achId / 10);
-  if (row <= GameCache.achSkipPerkCount.value) return NaN;
-  const currentSeconds = player.thisReality / 1000;
-  return timeRequiredForAchievement(achId) - currentSeconds;
-}
-
-function timeRequiredForAchievement(achId) {
-  updateRealityAchievementModifiers();
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-
-  const row = Math.floor(achId / 10);
-  const perkAdjustedRow = Math.clamp(row - GameCache.achSkipPerkCount.value, 1, row);
-  const previousRowCount = perkAdjustedRow - 1;
-  const previousRowsTime = totalAchRowTime(previousRowCount);
-  const currentRowAchTime = baseAchTime + (perkAdjustedRow - 7) * rowModifier;
-  const column = achId % 10;
-  const currentRowTime = currentRowAchTime * column;
-  return previousRowsTime + currentRowTime;
-}
-
-// Total time required for a row count if we go from the first perk-adjusted row
-function totalAchRowTime(rowCount) {
-  updateRealityAchievementModifiers();
-  const baseAchTime = realityAchievementModifiers.baseAchTime;
-  const rowModifier = realityAchievementModifiers.rowModifier;
-  const achCount = rowCount * ACH_PER_ROW;
-  // Unoptimized version
-  // const achTime = row => baseAchTime + (row - 7) * rowModifier;
-  // totalTime = 0;
-  // for (let i = 1; i < row; i++) {
-  //   totalTime += achTime(i) * 8
-  // }
-  return achCount * (baseAchTime + (rowCount - 13) * rowModifier / 2);
-}
-
-let realityAchievementModifiers = {
-  realities: -1,
-  baseAchTime: -1,
-  rowModifier: -1,
-  secondsForAllAchs: -1
-};
-
-const SECONDS_IN_DAY = TimeSpan.fromDays(1).totalSeconds;
-const DAYS_FOR_ALL_ACHS = 2;
-const DEFAULT_SECONDS_FOR_ALL_ACHS = SECONDS_IN_DAY * DAYS_FOR_ALL_ACHS;
-const ACH_PER_ROW = 8;
-const TOTAL_ACH_ROWS = 14;
-const TOTAL_PRE_REALITY_ACH_ROWS = 13;
-const TOTAL_PRE_REALITY_ACHS = TOTAL_PRE_REALITY_ACH_ROWS * ACH_PER_ROW;
-
-// TODO: further optimization:
-// pre-generate ach times on reality
-function updateRealityAchievementModifiers() {
-  if (realityAchievementModifiers.realities === player.realities) {
-    return;
-  }
-  const requiredTimeModifier = Math.pow(0.9, Math.max(player.realities - 1, 0));
-  const secondsForAllAchs = DEFAULT_SECONDS_FOR_ALL_ACHS * requiredTimeModifier;
-  realityAchievementModifiers = {
-    realities: player.realities,
-    // how much it takes for row 7 achievement to get
-    baseAchTime: secondsForAllAchs / TOTAL_PRE_REALITY_ACHS,
-    rowModifier: 100 * DAYS_FOR_ALL_ACHS * requiredTimeModifier,
-    secondsForAllAchs: secondsForAllAchs
-  };
-}
+"use strict";
 
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
-    this._fullId = "r" + this.id;
     if (config.secondaryEffect) {
       const secondaryConfig = {
         id: config.id,
@@ -333,14 +10,85 @@ class AchievementState extends GameMechanicState {
       };
       this._secondaryState = new AchievementState(secondaryConfig);
     }
+    this._row = Math.floor(this.id / 10);
+    this._column = this.id % 10;
+    this._totalDisabledTime = new Lazy(() => {
+      if (!this.hasLockedTime) return 0;
+      const perkAdjustedRow = Math.clamp(this.row - GameCache.achSkipPerkCount.value, 1, this.row);
+      const currentRowAchTime = Achievements.rowDisabledTime(perkAdjustedRow) / 8;
+      if (this.id === 11) return currentRowAchTime;
+      return currentRowAchTime + this.previousAchievement.totalDisabledTime;
+      })
+      .invalidateOn(
+        GameEvent.REALITY_RESET_AFTER,
+        GameEvent.PERK_BOUGHT
+      );
+  }
+
+  get name() {
+    return this.config.name;
   }
 
   get isUnlocked() {
     return player.achievements.has(this.id);
   }
 
+  get previousAchievement() {
+    const previousAchColumn = Math.wrap(this.column - 1, 1, 8);
+    const previousAchRow = previousAchColumn === 8 ? this.row - 1 : this.row;
+    return Achievement(previousAchRow * 10 + previousAchColumn);
+  }
+
+  get row() {
+    return this._row;
+  }
+
+  get column() {
+    return this._column;
+  }
+
+  get isPreReality() {
+    return this.row < 14;
+  }
+  
+  tryUnlock(a1, a2, a3) {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    this.unlock();
+  }
+
+  unlock() {
+    if (this.isUnlocked) return;
+    player.achievements.add(this.id);
+    if (this.id === 85 || this.id === 93) {
+      Autobuyer.bigCrunch.bumpAmount(4);
+    }
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    GameCache.achievementPower.invalidate();
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  }
+
   get isEnabled() {
-    return isAchEnabled(this.id);
+    if (!this.isUnlocked) return false;
+    if (!this.hasLockedTime) return true;
+    // Keep player.thisReality instead of Time.thisReality here because this is a hot path
+    return this.totalDisabledTime <= player.thisReality;
+  }
+
+  get remainingDisabledTime() {
+    if (!this.isUnlocked || !this.hasLockedTime) return NaN;
+    return Math.clampMin(this.totalDisabledTime - player.thisReality, 0);
+  }
+
+  get hasLockedTime() {
+    return player.realities !== 0 &&
+      this.isPreReality &&
+      this.row > GameCache.achSkipPerkCount.value;
+  }
+
+  get totalDisabledTime() {
+    return this._totalDisabledTime.value;
   }
 
   get isEffectConditionSatisfied() {
@@ -356,43 +104,149 @@ class AchievementState extends GameMechanicState {
   }
 }
 
-AchievementState.all = mapGameData(
-  GameDatabase.achievements.normal,
-  data => new AchievementState(data)
-);
+AchievementState.createIndex(GameDatabase.achievements.normal);
 
 /**
  * @param {number} id
  * @returns {AchievementState}
  */
-function Achievement(id) {
-  return AchievementState.all[id];
-}
+const Achievement = id => AchievementState.index[id];
 
 const Achievements = {
-  row: row => Array.range(1, 8).map(column => Achievement(row * 10 + column))
+  /**
+   * @type {AchievementState[]}
+   */
+  all: AchievementState.index.compact(),
+
+  get effectiveCount() {
+    const additionalAchievements = Ra.has(RA_UNLOCKS.V_UNLOCK)
+      ? Ra.pets.v.level
+      : 0;
+    const enabledAchievements = Achievements.all.filter(a => a.isEnabled).length;
+    return enabledAchievements + additionalAchievements;
+  },
+
+  row: row => Array.range(row * 10 + 1, 8).map(Achievement),
+
+  rows: (start, count) => Array.range(start, count).map(Achievements.row),
+
+  get defaultDisabledTime() {
+    return TimeSpan.fromDays(2);
+  },
+
+  get totalDisabledTime() {
+    return Achievement(138).totalDisabledTime;
+  },
+
+  get nextTotalDisabledTime() {
+    if (player.realities === 0) {
+      return Achievements.defaultDisabledTime;
+    }
+    return GameCache.baseTimeForAllAchs.value.times(0.9);
+  },
+
+  get remainingDisabledTime() {
+    return Achievement(138).remainingDisabledTime;
+  },
+
+  get timeUntilNext() {
+    const firstDisabled = Achievements.all.find(a => a.hasLockedTime && !a.isEnabled);
+    return firstDisabled === undefined ? 0 : firstDisabled.remainingDisabledTime;
+  },
+
+  rowDisabledTime(row) {
+    const baseTimeForAllAchs = GameCache.baseTimeForAllAchs.value.totalMilliseconds;
+    const PRE_REALITY_ACH_ROWS = 13;
+    const baseRowTime = baseTimeForAllAchs / PRE_REALITY_ACH_ROWS;
+    const realityModifier = GameCache.realityAchTimeModifier.value;
+    const rowModifier = realityModifier * TimeSpan.fromSeconds(1600).totalMilliseconds;
+    return Math.clampMin(baseRowTime + (row - 7) * rowModifier, 0);
+  }
 };
 
+EventHub.registerStateCollectionEvents(
+  Achievements.all,
+  achievement => achievement.config.checkEvent,
+  // eslint-disable-next-line max-params
+  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
+);
+
 class SecretAchievementState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    this._fullId = "s" + this.id;
+  get name() {
+    return this.config.name;
   }
 
   get isUnlocked() {
     return player.secretAchievements.has(this.id);
   }
+
+  tryUnlock(a1, a2, a3) {
+    if (this.isUnlocked) return;
+    if (!this.config.checkRequirement(a1, a2, a3)) return;
+    this.unlock();
+  }
+
+  unlock() {
+    if (this.isUnlocked) return;
+    player.secretAchievements.add(this.id);
+    GameUI.notify.success(this.name);
+    kong.submitAchievements();
+    EventHub.dispatch(GameEvent.ACHIEVEMENT_UNLOCKED);
+  }
 }
 
-SecretAchievementState.all = mapGameData(
-  GameDatabase.achievements.secret,
-  data => new SecretAchievementState(data)
-);
+SecretAchievementState.createIndex(GameDatabase.achievements.secret);
 
 /**
  * @param {number} id
- * @returns {AchievementState}
+ * @returns {SecretAchievementState}
  */
-function SecretAchievement(id) {
-  return SecretAchievementState.all[id];
+const SecretAchievement = id => SecretAchievementState.index[id];
+
+const SecretAchievements = {
+  /**
+   * @type {SecretAchievementState[]}
+   */
+  all: SecretAchievementState.index.compact()
+};
+
+setInterval(() => {
+  if (Math.random() < 0.00001) SecretAchievement(18).unlock();
+}, 1000);
+
+EventHub.registerStateCollectionEvents(
+  SecretAchievements.all,
+  achievement => achievement.config.checkEvent,
+  // eslint-disable-next-line max-params
+  (achievement, a1, a2, a3) => achievement.tryUnlock(a1, a2, a3)
+);
+
+class AchievementTimer {
+  constructor() {
+    this.time = 0;
+  }
+  
+  reset() {
+    this.time = 0;
+  }
+  
+  advance() {
+    this.time += Time.deltaTime;
+  }
+  
+  check(condition, duration) {
+    if (!condition) {
+      this.reset();
+      return false;
+    }
+    this.advance();
+    return this.time >= duration;
+  }
 }
+
+const AchievementTimers = {
+  marathon1: new AchievementTimer(),
+  marathon2: new AchievementTimer(),
+  pain: new AchievementTimer(),
+  stats: new AchievementTimer()
+};

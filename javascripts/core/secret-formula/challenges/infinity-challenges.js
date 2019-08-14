@@ -1,3 +1,5 @@
+"use strict";
+
 GameDatabase.challenges.infinity = [
   {
     id: 1,
@@ -6,9 +8,10 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: true,
     reward: {
       description: "1.3x on all Infinity Dimensions for each Infinity Challenge completed",
-      effect: () => Math.pow(1.3, InfinityChallenge.completed().length),
+      effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
-    }
+    },
+    unlockAM: new Decimal("1e2000"),
   },
   {
     id: 2,
@@ -17,20 +20,23 @@ GameDatabase.challenges.infinity = [
     isQuickResettable: false,
     reward: {
       description: "Sacrifice autobuyer and more powerful sacrifice"
-    }
+    },
+    unlockAM: new Decimal("1e5000"),
   },
   {
     id: 3,
-    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
+    description: "Tickspeed interval decrease is always at 0%, but for every tickspeed purchase, " +
+      "you get a static multiplier on all dimensions (increases with Antimatter Galaxies).",
     goal: new Decimal("1e5000"),
     isQuickResettable: false,
-    effect: () => player.postC3Reward,
+    effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
       description: "Static multiplier on each tickspeed purchase based on Antimatter Galaxies",
-      effect: () => player.postC3Reward,
+      effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
       formatEffect: value => formatX(value, 2, 2),
-    }
+    },
+    unlockAM: new Decimal("1e12000"),
   },
   {
     id: 4,
@@ -41,21 +47,26 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "All normal dimension multipliers become multiplier^1.05",
       effect: 1.05
-    }
+    },
+    unlockAM: new Decimal("1e14000"),
   },
   {
     id: 5,
-    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. When buying dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.",
+    description: "When buying dimensions 1-4, everything with costs smaller or equal increases. " +
+      "When buying dimensions 5-8, everything with costs bigger or equal increases. " +
+      "When buying tickspeed, everything with the same cost increases.",
     goal: new Decimal("1e11111"),
     isQuickResettable: true,
     reward: {
       description: "Galaxies are 10% more powerful and reduce the requirements for them and Dimension Boosts by 1",
       effect: 1.1
-    }
+    },
+    unlockAM: new Decimal("1e18000"),
   },
   {
     id: 6,
-    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter that divides the multiplier on all of your dimensions.",
+    description: "Once you have at least 1 2nd Dimension, there's an exponentially rising matter " +
+      "that divides the multiplier on all of your dimensions.",
     goal: new Decimal("2e22222"),
     isQuickResettable: true,
     effect: () => player.matter.clampMin(1),
@@ -64,7 +75,8 @@ GameDatabase.challenges.infinity = [
       description: "Tickspeed affects Infinity Dimensions with reduced effect",
       effect: () => Decimal.divide(1000, Tickspeed.current).pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
-    }
+    },
+    unlockAM: new Decimal("1e20000"),
   },
   {
     id: 7,
@@ -75,18 +87,21 @@ GameDatabase.challenges.infinity = [
     reward: {
       description: "Dimension Boost multiplier 2.5x ➜ 4x",
       effect: 4
-    }
+    },
+    unlockAM: new Decimal("1e23000"),
   },
   {
     id: 8,
     description: "Your production is at 100% after purchasing anything, after that it rapidly drops down.",
     goal: new Decimal("1e27000"),
     isQuickResettable: true,
-    effect: () => postc8Mult,
+    effect: () => Decimal.pow(0.8446303389034288,
+      Math.max(0, player.thisInfinityLastBuyTime - player.thisInfinityTime)),
     reward: {
       description: "You get a multiplier to dimensions 2-7 based on 1st and 8th dimension multipliers.",
-      effect: () => mult18,
+      effect: () => getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },
+    unlockAM: new Decimal("1e28000"),
   },
 ];

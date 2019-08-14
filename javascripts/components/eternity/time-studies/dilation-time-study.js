@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component("dilation-time-study", {
   props: {
     setup: Object
@@ -6,7 +8,7 @@ Vue.component("dilation-time-study", {
     return {
       showCost: true,
       showRequirement: false,
-      requirement: String.empty
+      requirement: ""
     };
   },
   computed: {
@@ -25,7 +27,7 @@ Vue.component("dilation-time-study", {
   },
   created() {
     if (this.id === 1) {
-      this.requirement = "Requirement: 5 EC11 and EC12 completions and 13000 total theorems";
+      this.requirement = "Requirement: 5 EC11 and EC12 completions and 13,000 total theorems";
     }
     if (this.id === 6) {
       this.requirement = "Requirement: 1e4000 EP";

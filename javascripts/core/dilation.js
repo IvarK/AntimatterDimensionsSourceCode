@@ -155,7 +155,7 @@ function dilatedValueOf(value, depth) {
   if (depth !== undefined) {
     return recursiveDilation(value, depth);
   }
-  if (player.dilation.active) {
+  if (player.dilation.active || Enslaved.isRunning) {
     return recursiveDilation(value, 1);
   }
   if (TimeCompression.isActive) {

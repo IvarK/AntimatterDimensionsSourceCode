@@ -1,0 +1,121 @@
+.vue-winwheel {
+	text-align: center;
+	background-size: cover;
+	background-position: center bottom;
+	background-repeat: no-repeat;
+}
+.vue-winwheel h1 {
+	color: #b32656;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	font-size: 36px;
+	line-height: 90px;
+	letter-spacing: 4px;
+	margin: 0;
+}
+.vue-winwheel h2 {
+	margin: 0;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content {
+	width: calc(100vw - 30px);
+	padding-top: 52px;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content h2 {
+	text-transform: uppercase;
+	color: #b32656;
+	margin-bottom: 16px;
+	margin-top: 0;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	letter-spacing: 1.1px;
+	margin: 0;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content p {
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	color: black;
+	text-align: center;
+	line-height: 25px;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content p strong {
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content .modal-dismiss {
+	top: 12px;
+	right: 12px;
+}
+.vue-winwheel #modalSpinwheel.custom-modal .content-wrapper .content .modal-dismiss i.icon_close {
+	font-size: 30px;
+	color: #da2a52;
+}
+.vue-winwheel canvas#canvas {
+	position: relative;
+}
+.vue-winwheel .canvas-wrapper {
+	position: relative;
+}
+.vue-winwheel .canvas-wrapper:after {
+	content: '';
+	display: block;
+	width: 42px;
+	background: #c4376f;
+	height: 42px;
+	position: absolute;
+	left: calc(50% - 25px);
+	margin: auto;
+	border-radius: 100%;
+	top: calc(50% - 29px);
+	border: 5px solid white;
+	box-sizing: content-box;
+}
+.vue-winwheel .canvas-wrapper:before {
+	content: '';
+	display: block;
+	width: 310px;
+	background: #0f0f0f;
+	height: 310px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	border-radius: 100%;
+	top: 0;
+}
+.vue-winwheel .wheel-wrapper {
+	position: relative;
+}
+.vue-winwheel .wheel-wrapper:before {
+	content: '';
+	width: 62px;
+	height: 47px;
+	position: absolute;
+	top: -10px;
+	left: calc(50% - 31px);
+	right: 0;
+	display: block;
+	z-index: 99999;
+	background-image: url('../images/wheel-marker.svg');
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vue-winwheel .wheel-wrapper .button-wrapper {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 231px;
+	height: 118px;
+}
+.vue-winwheel .wheel-wrapper .btn.btn-play {
+	padding: 0 58px !important;
+	background: #c4376f;
+	height: 40px;
+	line-height: 40px;
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+	border-radius: 2px;
+	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+	letter-spacing: 2px;
+}

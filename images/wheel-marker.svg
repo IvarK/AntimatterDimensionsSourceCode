@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="46px" viewBox="0 0 58 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="35.1057128%" y1="82.7823178%" x2="62.8992509%" y2="34.1408624%" id="linearGradient-1">
+            <stop stop-color="#DA4E8F" offset="0%"></stop>
+            <stop stop-color="#B32656" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="51.2374114%" y1="34.1408624%" x2="36.8070738%" y2="87.9919223%" id="linearGradient-2">
+            <stop stop-color="#DA4E8F" offset="0%"></stop>
+            <stop stop-color="#B32656" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Desktop-Web" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Lucky-Spin" transform="translate(-690.000000, -241.000000)" fill-rule="nonzero">
+            <g id="spinner" transform="translate(-4.000000, 106.000000)">
+                <g id="wheel" transform="translate(514.000000, 131.000000)">
+                    <g id="Spin">
+                        <g id="Group-2" transform="translate(176.250000, 4.000000)">
+                            <path d="M38.3238824,8.80309447 L60.1421473,41.3321441 C61.7572681,43.7401423 61.1145139,47.0015247 58.7065156,48.6166455 C57.8415572,49.1968006 56.8235859,49.5065789 55.7820808,49.5065789 L12.1455508,49.5065789 C9.24605589,49.5065789 6.89555083,47.1560739 6.89555083,44.2565789 C6.89555083,43.2150738 7.20532918,42.1971025 7.78548425,41.3321441 L29.6037492,8.80309447 C31.21887,6.39509619 34.4802524,5.752342 36.8882507,7.36746279 C37.4556491,7.7480349 37.9433103,8.23569605 38.3238824,8.80309447 Z" id="Triangle-Copy" fill="url(#linearGradient-1)" transform="translate(33.963816, 25.904605) scale(1, -1) translate(-33.963816, -25.904605) "></path>
+                            <path d="M36.0212508,6.50046289 L57.8395157,39.0295125 C59.4546365,41.4375107 58.8118823,44.6988931 56.4038841,46.3140139 C55.5389256,46.894169 54.5209544,47.2039474 53.4794492,47.2039474 L9.84291925,47.2039474 C6.94342431,47.2039474 4.59291925,44.8534423 4.59291925,41.9539474 C4.59291925,40.9124422 4.9026976,39.8944709 5.48285268,39.0295125 L27.3011176,6.50046289 C28.9162384,4.09246462 32.1776208,3.44971042 34.5856191,5.06483122 C35.1530175,5.44540332 35.6406787,5.93306448 36.0212508,6.50046289 Z" id="Triangle" fill="url(#linearGradient-2)" transform="translate(31.661184, 23.601974) scale(1, -1) translate(-31.661184, -23.601974) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

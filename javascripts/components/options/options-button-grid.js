@@ -146,5 +146,8 @@ Vue.component("options-button-grid", {
           onclick="Modal.animationOptions.show();"
         >Animations</options-button>
       </div>
+      <div class="l-options-grid__row">
+        <notation-wheel/>
+      </div>
     </div>`
 });

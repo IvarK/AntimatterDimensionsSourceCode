@@ -11,11 +11,11 @@ Vue.component("game-header-amounts-line", {
   },
   methods: {
     update() {
-      this.showInfinityPoints = Player.totalInfinitied.gt(0) || player.eternities > 0;
+      this.showInfinityPoints = Player.totalInfinitied.gt(0) || PlayerProgress.eternityUnlocked();
       if (this.showInfinityPoints) {
         this.infinityPoints.copyFrom(player.infinityPoints);
       }
-      this.showEternityPoints = player.eternities > 0;
+      this.showEternityPoints = PlayerProgress.eternityUnlocked();
       if (this.showEternityPoints) {
         this.eternityPoints.copyFrom(player.eternityPoints);
       }

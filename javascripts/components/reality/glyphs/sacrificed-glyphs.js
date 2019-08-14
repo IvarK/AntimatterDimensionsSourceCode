@@ -23,7 +23,7 @@ Vue.component("sacrificed-glyphs", {
           return this.typeConfig.symbol;
         },
         formatAmount() {
-          return this.shorten(this.amount, 2);
+          return this.shorten(this.amount, 2, 2);
         },
         description() {
           return this.sacConfig.description(this.effectValue);

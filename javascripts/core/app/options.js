@@ -5,11 +5,13 @@ class GameOptions {
   static toggleNews() {
     player.options.newsHidden = !player.options.newsHidden;
     ui.view.newsHidden = player.options.newsHidden;
+    GameStorage.save(true);
   }
 
   static toggleUI() {
     player.options.newUI = !player.options.newUI;
     ui.view.newUI = player.options.newUI;
+    GameStorage.save(true);
   }
 
   static cloudSave() {

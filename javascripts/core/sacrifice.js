@@ -2,7 +2,7 @@
 
 function sacrificeReset(auto) {
   if (!Sacrifice.isAffordable) return false;
-  if (player.resets < 5) return false;
+  if (DimBoost.totalBoosts < 5) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
     player.antimatter.gte(Decimal.MAX_NUMBER) && !Enslaved.isRunning) return false;
   if (
@@ -42,7 +42,7 @@ function sacrificeBtnClick() {
 
 class Sacrifice {
   static get isUnlocked() {
-    return player.infinitied.gt(0) || player.resets > 4;
+    return player.infinitied.gt(0) || DimBoost.totalBoosts > 4;
   }
 
   static get isAffordable() {

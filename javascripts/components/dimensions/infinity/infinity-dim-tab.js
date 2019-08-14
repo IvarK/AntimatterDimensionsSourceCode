@@ -9,18 +9,19 @@ Vue.component("infinity-dim-tab", {
       incomeType: "",
       isEC8Running: false,
       EC8PurchasesLeft: 0,
-      isAnyAutobuyerUnlocked: false
+      isAnyAutobuyerUnlocked: false,
+      conversionRate: 0,
     };
   },
   methods: {
     update() {
       const infinityPower = player.infinityPower;
       this.infinityPower.copyFrom(infinityPower);
+      this.conversionRate = getInfinityConversionRate();
       if (EternityChallenge(9).isRunning) {
         this.dimMultiplier.copyFrom(Decimal.pow(Math.max(infinityPower.log2(), 1), 4).max(1));
       } else {
-        const conversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-        this.dimMultiplier.copyFrom(infinityPower.pow(conversionRate).max(1));
+        this.dimMultiplier.copyFrom(infinityPower.pow(this.conversionRate).max(1));
       }
       this.powerPerSecond.copyFrom(InfinityDimension(1).productionPerSecond);
       this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
@@ -45,7 +46,7 @@ Vue.component("infinity-dim-tab", {
           <span class="c-infinity-dim-description__accent">{{shortenMoney(infinityPower)}}</span> infinity power,
           translated to
           <span class="c-infinity-dim-description__accent">{{shortenMoney(dimMultiplier)}}</span>x
-          multiplier on all dimensions
+          multiplier on all dimensions (^{{ conversionRate.toFixed(3) }}).
         </p>
       </div>
       <div>You are getting {{shortenDimensions(powerPerSecond)}} {{incomeType}} per second.</div>

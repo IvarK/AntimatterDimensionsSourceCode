@@ -79,7 +79,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    Notation.cancer.setCurrent();
+    Notation.cancer.setAsCurrent();
 };
 
 dev.fixSave = function() {
@@ -219,7 +219,7 @@ dev.showProductionBreakdown = function() {
   const tickComponent = tickspeed.reciprocal().pow(8);
   const NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
   const tickPercent = 100 - NDPercent;
-  
+
   const totalTickspeedUpgrades = tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
   const freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
   const purchasedTickPercent = 100 - freeTickPercent;
@@ -227,7 +227,7 @@ dev.showProductionBreakdown = function() {
   const powerpow = getAdjustedGlyphEffect("powerpow");
   const infinitypow = getAdjustedGlyphEffect("infinitypow");
   const timepow = getAdjustedGlyphEffect("timepow");
-  
+
   // Assumes >= 3 galaxies
   const effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
   const AGCount = player.galaxies;
@@ -243,10 +243,10 @@ dev.showProductionBreakdown = function() {
     EternityChallenge(8).completions) - 1, 0);
   const FGCount = player.dilation.freeGalaxies;
   const totalCount = AGCount + RGCount + FGCount;
-  
+
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
-  const IDComponent = player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).pow(8).pow(IC4pow);
-  const DBComponent = DimBoost.power.pow(player.resets).pow(8).pow(IC4pow);
+  const IDComponent = player.infinityPower.pow(getInfinityConversionRate()).pow(8).pow(IC4pow);
+  const DBComponent = DimBoost.power.pow(DimBoost.totalBoosts).pow(8).pow(IC4pow);
   let buyTenComponent = new Decimal(1);
   for (let i = 1; i <= 8; i++) {
     buyTenComponent = buyTenComponent.times(new Decimal(getBuyTenMultiplier()).pow(NormalDimension(i).bought / 10));
@@ -280,10 +280,10 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(72)) TSmultToIDComponent = TSmultToIDComponent
     .times(Sacrifice.totalBoost.pow(0.04).max(1).min("1e30000"));
   if (player.timestudy.studies.includes(82)) TSmultToIDComponent = TSmultToIDComponent
-    .times(Decimal.pow(1.0000109, Math.pow(player.resets, 2)));
+    .times(Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)));
   const EU1Component = player.eternityPoints.plus(1).pow(8);
   const IDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / infinitypow;
-  
+
   let totalTDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
     totalTDMults = totalTDMults.times(TimeDimension(tier).multiplier);
@@ -305,12 +305,12 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(73)) TSmultToTDComponent = TSmultToTDComponent
     .times(Sacrifice.totalBoost.pow(0.005).min(new Decimal("1e1300")));
   if (player.timestudy.studies.includes(221)) TSmultToTDComponent = TSmultToTDComponent
-    .times(Decimal.pow(1.0025, player.resets)).pow(8);
+    .times(Decimal.pow(1.0025, DimBoost.totalBoosts)).pow(8);
   if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent
     .times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
   const TDPowComponent = timepow === 0 ? 0 : (timepow - 1) / timepow;
-  
-  const productionText = 
+
+  const productionText =
 `Tickspeed:
   ${tickPercent.toFixed(2)}% from tickspeed
   Tickspeed upgrades:
@@ -391,15 +391,57 @@ dev.buyAllPerks = function() {
   }
 };
 
-dev.kongTest = function() {
-  const page = document.getElementById("page");
-  if (document.getElementById("page").style.width === "") {
-    page.style.width = "1050px";
-    page.style.height = "700px";
-    page.style.marginTop = "100px";
-  } else {
-    page.style.width = "";
-    page.style.height = "";
-    page.style.marginTop = "";
+(function() {
+  let kongTest;
+  const setKongTest = value => {
+    kongTest = value;
+    localStorage.setItem("kongTest", kongTest);
+    if (kongTest) {
+      document.documentElement.classList.add("_kong-test");
+    } else {
+      document.documentElement.classList.remove("_kong-test");
+    }
+  };
+  setKongTest(localStorage.getItem("kongTest") === "true");
+  dev.kongTest = () => setKongTest(!kongTest);
+}());
+
+// This should help for balancing different glyph types, strong rounding of values is intentional
+dev.printResourceTotals = function() {
+  console.log(`Antimatter: e${player.antimatter.exponent.toPrecision(3)}`);
+  console.log(`RM: e${Math.round(gainedRealityMachines().log10())}`);
+  console.log(`Glyph level: ${100 * Math.floor(gainedGlyphLevel().actualLevel / 100 + 0.5)}`);
+
+  console.log(`Tickspeed: e${-Tickspeed.current.exponent.toPrecision(3)}`);
+  console.log(`Gamespeed: ${Math.pow(getGameSpeedupFactor(), 1.2).toPrecision(1)}`);
+  const aGalaxy = 100 * Math.floor(player.galaxies / 100 + 0.5);
+  const rGalaxy = 100 * Math.floor(Replicanti.galaxies.total / 100 + 0.5);
+  const dGalaxy = 100 * Math.floor(player.dilation.freeGalaxies / 100 + 0.5);
+  console.log(`Galaxies: ${aGalaxy}+${rGalaxy}+${dGalaxy} (${aGalaxy + rGalaxy + dGalaxy})`);
+  console.log(`Tick reduction: e${-Math.round(getTickSpeedMultiplier().log10())}`);
+
+  let NDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    NDmults = NDmults.times(getDimensionFinalMultiplier(i));
   }
-};
+  console.log(`ND mults: e${NDmults.log10().toPrecision(3)}`);
+  let IDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    IDmults = IDmults.times(InfinityDimension(i).multiplier);
+  }
+  console.log(`ID mults: e${IDmults.log10().toPrecision(3)}`);
+  let TDmults = new Decimal(1);
+  for (let i = 1; i <= 8; i++) {
+    TDmults = TDmults.times(TimeDimension(i).multiplier);
+  }
+  console.log(`TD mults: e${TDmults.log10().toPrecision(3)}`);
+  console.log(`Free tickspeed: ${formatWithCommas(1000 * Math.floor(player.totalTickGained / 1000 + 0.5))}`);
+
+  console.log(`Infinities: e${Math.round(player.infinitied.log10())}`);
+  console.log(`Eternities: e${Math.round(player.eternities.log10())}`);
+  console.log(`Replicanti: e${formatWithCommas(1e5 * Math.floor(player.replicanti.amount.log10() / 1e5 + 0.5))}`);
+
+  console.log(`TT: e${Math.round(player.timestudy.theorem.log10())}`);
+  console.log(`DT: e${Math.round(player.dilation.dilatedTime.log10())}`);
+  console.log(`TP: e${Math.round(player.dilation.tachyonParticles.log10())}`);
+}

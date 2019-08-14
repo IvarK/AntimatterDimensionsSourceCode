@@ -1014,7 +1014,7 @@ GameDatabase.news = [
   {
     id: "c3",
     text: "What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.",
-    condition: () => NormalDimension(3).amount.gt(0) || player.resets > 0
+    condition: () => NormalDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0
   },
   {
     id: "c4",
@@ -1036,7 +1036,7 @@ GameDatabase.news = [
   {
     id: "c7",
     text: "To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!",
-    condition: () => player.sacrificed.e >= 10 || player.resets >= 6
+    condition: () => player.sacrificed.e >= 10 || DimBoost.totalBoosts >= 6
   },
   {
     id: "c8",
@@ -1059,50 +1059,50 @@ GameDatabase.news = [
     id: "c11",
     text: "9th Dimension is a lie.",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoost >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c13",
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c15",
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1111,10 +1111,10 @@ GameDatabase.news = [
       "If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through " +
       "before you encounter bad things, so you should be fine",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1125,20 +1125,20 @@ GameDatabase.news = [
       "no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up " +
       "forcefully to avoid getting the offline achievement.",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     condition: () =>
-      player.resets >= 5 ||
+      DimBoost.totalBoosts >= 5 ||
       player.galaxies > 0 ||
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
@@ -1148,13 +1148,13 @@ GameDatabase.news = [
       "one with matter, and a large time vortex.",
     condition: () =>
       player.infinitied.gt(0) ||
-      player.eternities > 0 ||
+      PlayerProgress.eternityUnlocked() ||
       player.realities > 0
   },
   {
     id: "c20",
     text: "Infinity: the one thing that's supposed to break.",
-    condition: () => player.infinitied.gt(0) || player.eternities > 0 || player.realities > 0
+    condition: () => player.infinitied.gt(0) || PlayerProgress.eternityUnlocked() || player.realities > 0
   },
   {
     id: "c21",
@@ -1186,7 +1186,7 @@ GameDatabase.news = [
     text:
       "Thanos is gonna be super dissapointed when he shows up with a fully powered infinity gauntlet, and Hevi " +
       "has a fully powered eternity gauntlet",
-    condition: () => player.eternities > 0 || player.realities > 0 
+    condition: () => PlayerProgress.eternityUnlocked() || player.realities > 0 
   },
   {
     id: "c27",
@@ -1309,12 +1309,12 @@ GameDatabase.news = [
   {
     id: "c49",
     text: "One day you will stop your incessant grind.",
-    condition: () => player.eternities > 50000
+    condition: () => player.eternities.gt(50000)
   },
   {
     id: "c50",
     text: "You can probably stop farming for eternities now...",
-    condition: () => player.eternities > 2000000
+    condition: () => player.eternities.gt(2000000)
   },
   {
     id: "c51",
@@ -1392,7 +1392,7 @@ GameDatabase.news = [
     condition: () =>
       Achievement(43).isUnlocked &&
       player.infinitied.eq(1) &&
-      player.eternities === 0 &&
+      !PlayerProgress.eternityUnlocked() &&
       player.realities === 0
   },
   {
@@ -1401,7 +1401,7 @@ GameDatabase.news = [
     condition: () =>
       player.antimatter.e >= 41900 &&
       !player.replicanti.unl &&
-      player.eternities === 0 &&
+      !PlayerProgress.eternityUnlocked() &&
       player.realities === 0
   },
   {

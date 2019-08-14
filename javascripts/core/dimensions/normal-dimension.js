@@ -10,9 +10,7 @@ function normalDimensionCommonMultiplier() {
   multiplier = multiplier.times(kongAllDimMult);
 
   if (!EternityChallenge(9).isRunning) {
-    let glyphConversionRate = 7 + getAdjustedGlyphEffect("infinityrate");
-    if (Laitela.has(LAITELA_UNLOCKS.ID)) glyphConversionRate += Laitela.idConversionEffect
-    multiplier = multiplier.times(player.infinityPower.pow(glyphConversionRate).max(1));
+    multiplier = multiplier.times(player.infinityPower.pow(getInfinityConversionRate()).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -55,26 +53,56 @@ function getDimensionFinalMultiplier(tier) {
 function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw crash(`Invalid tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return new Decimal(1);
-  //if (player.currentEternityChall == "eterc3" && tier > 4) return new Decimal(0)
-  const dimension = NormalDimension(tier);
 
-  let multiplier = new Decimal(dimension.power);
+  let multiplier = new Decimal(NormalDimension(tier).power);
 
-  if (EternityChallenge(11).isRunning) return player.infinityPower.pow(7 + getAdjustedGlyphEffect("infinityrate")).max(1).times(DimBoost.power.pow(player.resets - tier + 1).max(1));
+  if (EternityChallenge(11).isRunning) {
+    return player.infinityPower.pow(getInfinityConversionRate())
+      .max(1)
+      .times(DimBoost.power.pow(DimBoost.totalBoosts - tier + 1).max(1));
+  }
   if (NormalChallenge(12).isRunning) {
     if (tier === 4) multiplier = multiplier.pow(1.4);
     if (tier === 2) multiplier = multiplier.pow(1.7)
   }
 
-  multiplier = multiplier.times(GameCache.normalDimensionCommonMultiplier.value);
+  multiplier = applyNDMultipliers(multiplier, tier);
+  multiplier = applyNDPowers(multiplier, tier);
 
-  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
-  const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
+  if (player.dilation.active || TimeCompression.isActive) {
+    multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier, 1));
+  } else if (Enslaved.isRunning) {
+    multiplier = dilatedValueOf(multiplier);
+  }
+  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
+
+  // The "unaffected by dilation" ND mult and ND dilation power effect only apply to the first layer of dilation
+  if (TimeCompression.isActive) {
+    multiplier = dilatedValueOf(multiplier, TimeCompression.compressionDepth - 1);
+  }
+
+  if (Effarig.isRunning) {
+    multiplier = Effarig.multiplier(multiplier);
+  } else if (V.isRunning) {
+    multiplier = multiplier.pow(0.5);
+  } else if (Laitela.isRunning) {
+    multiplier = multiplier.pow(Laitela.dimMultNerf);
+  }
+
+  // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
+  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+    multiplier = multiplier.pow(1.05);
+  }
+
+  return multiplier;
+}
+
+function applyNDMultipliers(mult, tier) {
+  let multiplier = mult.times(GameCache.normalDimensionCommonMultiplier.value);
 
   let infinitiedMult = new Decimal(1).timesEffectsOf(
-    dimension.infinityUpgrade,
+    NormalDimension(tier).infinityUpgrade,
     BreakInfinityUpgrade.infinitiedMult
   );
   infinitiedMult = infinitiedMult.pow(Effects.product(TimeStudy(31)));
@@ -95,9 +123,9 @@ function getDimensionFinalMultiplierUncached(tier) {
 
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
-    tier !== 8 ? Achievement(34) : null,
+    tier < 8 ? Achievement(34) : null,
     tier <= 4 ? Achievement(43) : null,
-    tier !== 8 ? TimeStudy(71) : null,
+    tier < 8 ? TimeStudy(71) : null,
     tier === 8 ? TimeStudy(214) : null,
     tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null,
     AlchemyResource.dimensionality
@@ -111,6 +139,15 @@ function getDimensionFinalMultiplierUncached(tier) {
 
   multiplier = multiplier.clampMin(1);
 
+  return multiplier;
+}
+
+function applyNDPowers(mult, tier) {
+  let multiplier = mult;
+  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
+  const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
+  const laitelaPowMultiplier = Laitela.has(LAITELA_UNLOCKS.DIM_POW) ? Laitela.dimensionMultPowerEffect : 1;
+
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }
@@ -122,37 +159,25 @@ function getDimensionFinalMultiplierUncached(tier) {
 
   multiplier = multiplier
     .powEffectsOf(
-      dimension.infinityUpgrade.chargedEffect,
+      NormalDimension(tier).infinityUpgrade.chargedEffect,
       InfinityUpgrade.totalTimeMult.chargedEffect,
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
       AlchemyResource.power
     );
 
-  if (player.dilation.active) {
-    multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
-  } else if (Enslaved.isRunning) {
-    multiplier = dilatedValueOf(multiplier);
-  }
-  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
-
-  if (Effarig.isRunning) {
-    multiplier = Effarig.multiplier(multiplier);
-  } else if (V.isRunning) {
-    multiplier = multiplier.pow(0.5);
-  } else if (Laitela.isRunning) {
-    multiplier = multiplier.pow(Laitela.dimMultNerf);
-  }
-
-  // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
-    multiplier = multiplier.pow(1.05);
-  }
-
   return multiplier;
 }
 
 function multiplySameCosts(cost) {
-  const tierCosts = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)];
+  const tierCosts = [null,
+    new Decimal(1e3),
+    new Decimal(1e4),
+    new Decimal(1e5),
+    new Decimal(1e6),
+    new Decimal(1e8),
+    new Decimal(1e10),
+    new Decimal(1e12),
+    new Decimal(1e15)];
 
   for (let i = 1; i <= 8; ++i) {
     const dimension = NormalDimension(i);
@@ -619,7 +644,7 @@ class NormalDimensionState extends DimensionState {
     else {
       toGain = getDimensionProductionPerSecond(tier + 1);
     }
-    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupFactor());
+    return toGain.times(10).dividedBy(this.amount.max(1)).times(getGameSpeedupForDisplay());
   }
 
   /**
@@ -650,8 +675,8 @@ class NormalDimensionState extends DimensionState {
 
   get isAvailable() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
-    if (this.tier > player.resets + 4) return false;
-    if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && player.eternities < 30) return false;
+    if (this.tier > DimBoost.totalBoosts + 4) return false;
+    if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && player.eternities.lt(30)) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 

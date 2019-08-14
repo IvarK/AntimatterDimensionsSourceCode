@@ -40,14 +40,27 @@ function replicantiGalaxy() {
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
-function fastReplicantiBelow308(gainFactor, isAutobuyerActive) {
-  if (!isAutobuyerActive) {
-    player.replicanti.amount = Decimal.min(replicantiCap(), player.replicanti.amount.times(gainFactor));
+function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
+  // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
+  // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
+  const uncappedAmount = Decimal.pow(10, log10GainFactor.plus(player.replicanti.amount.log10()));
+  // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
+  if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
+    if (isAutobuyerActive) {
+      player.replicanti.galaxies += Replicanti.galaxies.max - player.replicanti.galaxies;
+    }
+    player.replicanti.amount = replicantiCap();
     return;
   }
-  const replicantiExponent = gainFactor.log10() + player.replicanti.amount.log10();
+
+  if (!isAutobuyerActive) {
+    player.replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
+    return;
+  }
+
+  const replicantiExponent = log10GainFactor.toNumber() + player.replicanti.amount.log10();
   const toBuy = Math.floor(Math.min(replicantiExponent / 308, Replicanti.galaxies.max - player.replicanti.galaxies));
-  player.replicanti.amount = Decimal.min(replicantiCap(), Decimal.pow10(replicantiExponent - 308 * toBuy));
+  player.replicanti.amount = Decimal.pow10(replicantiExponent - 308 * toBuy).clampMax(replicantiCap());
   player.replicanti.galaxies += toBuy;
 }
 
@@ -78,6 +91,7 @@ function getReplicantiInterval(noMod, intervalIn) {
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
   interval = interval.dividedByEffectOf(AlchemyResource.replication);
+  interval = interval.divide(Effects.max(1, CompressionUpgrade.replicantiSpeedFromDB));
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.
@@ -112,7 +126,7 @@ function replicantiLoop(diff) {
       player.replicanti.amount =
         Decimal.exp(logGainFactorPerTick.times(postScale).plus(1).log(Math.E) / postScale + logReplicanti);
     } else {
-      fastReplicantiBelow308(Decimal.exp(logGainFactorPerTick), isRGAutobuyerEnabled);
+      fastReplicantiBelow308(logGainFactorPerTick.times(LOG10_E), isRGAutobuyerEnabled);
     }
     replicantiTicks = 0;
   } else if (interval.lte(replicantiTicks)) {

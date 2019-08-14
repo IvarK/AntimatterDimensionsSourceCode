@@ -61,11 +61,11 @@ Vue.component("new-dimensions-tab", {
       this.updateCelestial();
       this.updateChallengeDisplay();
 
-      const isSacrificeUnlocked = Sacrifice.isUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
 
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
     updateCelestial() {

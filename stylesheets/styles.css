@@ -1896,6 +1896,12 @@ screen and (max-width: 480px) {
   border-color: #b341e0;
 }
 
+.o-prestige-btn--dilation {
+  color: #64dd17;
+  background-color: black;
+  border-color: #64dd17;
+}
+
 .o-prestige-btn--eternity:hover {
   color: #511568;
   background-color: white;

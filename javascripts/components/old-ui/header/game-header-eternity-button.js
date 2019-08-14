@@ -24,6 +24,14 @@ Vue.component("game-header-eternity-button", {
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
+    },
+    classObject() {
+      return {
+        "o-prestige-btn": true,
+        "o-prestige-btn--eternity": this.type !== 3,
+        "o-prestige-btn--dilation": this.type === 3,
+        "l-game-header__eternity-btn": true
+      };
     }
   },
   methods: {
@@ -80,7 +88,7 @@ Vue.component("game-header-eternity-button", {
   template:
     `<button
       v-if="isVisible"
-      class="o-prestige-btn o-prestige-btn--eternity l-game-header__eternity-btn"
+      :class="classObject"
       onclick="eternity()"
     >
       <!-- First time -->

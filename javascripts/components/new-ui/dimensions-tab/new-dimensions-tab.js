@@ -7,7 +7,6 @@ Vue.component("new-dimensions-tab", {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
       sacrificeBoost: new Decimal(0),
-      options: player.options,
       currCelestial: "",
       challengeDisplay: "",
       isInAnyChallenge: false,

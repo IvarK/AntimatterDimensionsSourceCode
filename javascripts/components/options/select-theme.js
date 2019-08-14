@@ -3,12 +3,17 @@
 Vue.component("select-theme", {
   data() {
     return {
-      themes: Themes.available()
+      availableThemeNames: []
     };
+  },
+  computed: {
+    themes() {
+      return this.availableThemeNames.map(name => Themes.find(name));
+    }
   },
   methods: {
     update() {
-      this.themes = Themes.available();
+      this.availableThemeNames = Themes.available().map(t => t.name);
     }
   },
   template: `

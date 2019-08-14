@@ -6904,6 +6904,69 @@ input.o-automator-block-input {
 
 /* #startregion h2p tab*/
 
-.c-h2p-modal {
+.l-h2p-modal {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  width: calc(100vw - 20rem);
+  height: calc(100vh - 20rem);
+}
 
+.l-h2p-header {
+  flex: 0.2 none 10rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.o-h2p-return {
+  cursor: pointer;
+  transform: translateY(-20%);
+}
+
+.o-h2p-return::before {
+  content: "⬅";
+  font-size: 4rem;
+}
+
+.o-h2p-exit {
+  cursor: pointer;
+  transform: translateY(-25%) rotate(45deg);
+}
+
+.o-h2p-exit::before {
+  content: "✚";
+  font-size: 4rem;
+}
+
+.c-h2p-title {
+  user-select: none;
+  font-size: 3rem;
+}
+
+.c-h2p-body {
+  text-align: left;
+  font-size: 1.15rem;
+}
+
+.l-h2p-body {
+  flex: 0.8 none 30rem;
+  overflow-y: scroll;
+  margin: 1rem;
+}
+
+.c-h2p-search-bar {
+  font-size: 3rem;
+  width: 50%;
+}
+
+.l-h2p-tab-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  margin: 0.5rem;
+}
+
+.l-h2p-tab-button {
+  margin: 0.5rem;
 }

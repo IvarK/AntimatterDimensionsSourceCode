@@ -38,6 +38,10 @@ function shortenPostBreak(value, places, placesUnder1000) {
   return shortened;
 }
 
+function format(value, places, placesUnder1000) {
+  return shorten(value, places, placesUnder1000);
+}
+
 function formatX(value, places, placesUnder1000) {
   return `${shorten(value, places, placesUnder1000)}x`;
 }

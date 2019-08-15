@@ -8,7 +8,7 @@ GameDatabase.celestials.perkShop = (function() {
     return {
       id: config.id,
       cost: () => rebuyableCost(config.initialCost, config.increment, config.id),
-      cap: () => config.cap(),
+      cap: config.cap,
       description: config.description,
       effect: () => config.effect(player.celestials.teresa.perkShop[config.id]),
       formatEffect: config.formatEffect,

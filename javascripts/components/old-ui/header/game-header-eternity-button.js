@@ -32,7 +32,7 @@ Vue.component("game-header-eternity-button", {
     },
     isDilation() {
       return this.type === EPButtonDisplayType.DILATION ||
-      this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
+        this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
     }
   },
   methods: {

@@ -442,13 +442,7 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.rmMult;
       delete player.celestials.teresa.dtBulk;
     },
-    player => {
-    player.options.confirmations.challenges = !player.options.challConf;
-    delete player.options.challConf;
-    player.options.confirmations.eternity = player.options.eternityconfirm;
-    delete player.options.eternityconfirm;
-    delete player.tickDecrease;
-    },
+    GameStorage.migrations.migrateConfirmations,
   ],
 
   patch(player) {

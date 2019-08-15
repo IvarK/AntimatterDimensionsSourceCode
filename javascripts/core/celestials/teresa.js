@@ -117,7 +117,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
 
   purchase() {
     if (!super.purchase()) return;
-    if (this.config.id === 3) {
+    if (this.id === 3) {
       dev.giveMusicGlyph();
     }
   }

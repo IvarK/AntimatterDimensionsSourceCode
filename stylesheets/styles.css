@@ -6908,12 +6908,12 @@ input.o-automator-block-input {
   display: flex;
   flex-direction: column;
   margin: 0.5rem;
-  width: calc(100vw - 20rem);
-  height: calc(100vh - 20rem);
+  width: calc(100vw - 20vh);
+  height: calc(100vh - 20vh);
 }
 
 .l-h2p-header {
-  flex: 0.2 none 10rem;
+  flex: 0 0.2 5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -6946,13 +6946,23 @@ input.o-automator-block-input {
 
 .c-h2p-body {
   text-align: left;
-  font-size: 1.15rem;
+  font-size: 1.6rem;
 }
 
 .l-h2p-body {
-  flex: 0.8 none 30rem;
+  flex: 0.8 0.8 30rem;
   overflow-y: scroll;
   margin: 1rem;
+  padding: 0.5rem;
+}
+
+.l-h2p-body::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.l-h2p-body::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 0.5rem;
 }
 
 .c-h2p-search-bar {
@@ -6968,5 +6978,5 @@ input.o-automator-block-input {
 }
 
 .l-h2p-tab-button {
-  margin: 0.5rem;
+  margin: 1rem;
 }

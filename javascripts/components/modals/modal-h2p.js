@@ -11,8 +11,9 @@ Vue.component("modal-h2p", {
   },
   created() {
     this.activeTab = this.unlockedTabs.find(
-      h2pTab => h2pTab.tab === `${this.$viewModel.tab}/${this.$viewModel.subtab}`
-    );
+      h2pTab =>
+        h2pTab.tab === `${this.$viewModel.tab}/${this.$viewModel.subtab}` || h2pTab.tab === this.$viewModel.tab
+    ) || this.menuObject;
   },
   computed: {
     allTabs: () => H2P_TABS,
@@ -74,10 +75,17 @@ Vue.component("modal-h2p", {
   },
   methods: {
     goBack() {
+      if (this.activeTab === this.menuObject) {
+        if (this.searchValue === "") this.exit();
+        this.searchValue = "";
+      }
       this.activeTab = this.menuObject;
     },
     exit() {
       Modal.hide();
+    },
+    setActiveTab(id) {
+      this.activeTab = this.allTabs[id];
     }
   },
   template: `
@@ -94,14 +102,15 @@ Vue.component("modal-h2p", {
         <input v-model="searchValue" placeholder="Type to search..." class="c-h2p-search-bar"/>
       </div>
       <div class="l-h2p-tab-list">
-        <button v-for="tab in matchingTabs" :key="tab.name" class="o-primary-button tabbtn l-h2p-tab-button">
+        <button v-for="tab in matchingTabs"
+          :key="tab.name"
+          class="o-primary-button tabbtn l-h2p-tab-button"
+          @click="setActiveTab(tab.id)">
           {{tab.name}}
         </button">
       </div>
     </div>
-    <div v-else class="l-h2p-body c-h2p-body">
-      <p v-html="activeTab.info()" />
-    </div>
+    <div v-else class="l-h2p-body c-h2p-body" v-html="activeTab.info()" />
   </div>
   `
 });

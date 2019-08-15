@@ -5,8 +5,7 @@ Vue.component("normal-dim-tab-header", {
     return {
       isSacrificeUnlocked: false,
       isSacrificeAffordable: false,
-      sacrificeBoost: new Decimal(0),
-      options: player.options
+      sacrificeBoost: new Decimal(0)
     };
   },
   computed: {

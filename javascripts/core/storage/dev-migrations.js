@@ -425,8 +425,14 @@ GameStorage.devMigrations = {
     GameStorage.migrations.convertNewsToSet,
     GameStorage.migrations.convertEternityCountToDecimal,
     GameStorage.migrations.renameDimboosts,
-    // Perk shop refactor
     player => {
+      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Disable it also to not wreck people's long runs or smth
+      player.auto.reality.mode = 0;
+      player.auto.reality.isActive = false;
+    },
+    player => {
+      // Perk shop refactor
       player.celestials.teresa.perkShop = [
         Math.floor(Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)),
         Math.floor(Math.log(player.celestials.teresa.rmMult) / Math.log(2)),
@@ -435,7 +441,14 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.glyphLevelMult;
       delete player.celestials.teresa.rmMult;
       delete player.celestials.teresa.dtBulk;
-    }
+    },
+    player => {
+    player.options.confirmations.challenges = !player.options.challConf;
+    delete player.options.challConf;
+    player.options.confirmations.eternity = player.options.eternityconfirm;
+    delete player.options.eternityconfirm;
+    delete player.tickDecrease;
+    },
   ],
 
   patch(player) {

@@ -79,7 +79,7 @@ dev.spin4d = function() {
 
 dev.cancerize = function() {
     Theme.tryUnlock("Cancer");
-    Notation.cancer.setCurrent();
+    Notation.cancer.setAsCurrent();
 };
 
 dev.fixSave = function() {
@@ -219,7 +219,7 @@ dev.showProductionBreakdown = function() {
   const tickComponent = tickspeed.reciprocal().pow(8);
   const NDPercent = 100 * NDComponent.log10() / (NDComponent.log10() + tickComponent.log10());
   const tickPercent = 100 - NDPercent;
-  
+
   const totalTickspeedUpgrades = tickspeed.reciprocal().log10() / getTickSpeedMultiplier().reciprocal().log10();
   const freeTickPercent = 100 * player.totalTickGained / totalTickspeedUpgrades;
   const purchasedTickPercent = 100 - freeTickPercent;
@@ -227,7 +227,7 @@ dev.showProductionBreakdown = function() {
   const powerpow = getAdjustedGlyphEffect("powerpow");
   const infinitypow = getAdjustedGlyphEffect("infinitypow");
   const timepow = getAdjustedGlyphEffect("timepow");
-  
+
   // Assumes >= 3 galaxies
   const effectiveGalaxyCount = Decimal.log(getTickSpeedMultiplier().divide(0.8), 0.965) + 2;
   const AGCount = player.galaxies;
@@ -243,7 +243,7 @@ dev.showProductionBreakdown = function() {
     EternityChallenge(8).completions) - 1, 0);
   const FGCount = player.dilation.freeGalaxies;
   const totalCount = AGCount + RGCount + FGCount;
-  
+
   IC4pow = InfinityChallenge(4).isCompleted ? 1.05 : 1;
   const IDComponent = player.infinityPower.pow(getInfinityConversionRate()).pow(8).pow(IC4pow);
   const DBComponent = DimBoost.power.pow(DimBoost.totalBoosts).pow(8).pow(IC4pow);
@@ -283,7 +283,7 @@ dev.showProductionBreakdown = function() {
     .times(Decimal.pow(1.0000109, Math.pow(DimBoost.totalBoosts, 2)));
   const EU1Component = player.eternityPoints.plus(1).pow(8);
   const IDPowComponent = powerpow === 0 ? 0 : (powerpow - 1) / infinitypow;
-  
+
   let totalTDMults = new Decimal(1);
   for (let tier = 1; tier <= 8; tier++) {
     totalTDMults = totalTDMults.times(TimeDimension(tier).multiplier);
@@ -309,8 +309,8 @@ dev.showProductionBreakdown = function() {
   if (player.timestudy.studies.includes(227)) TSmultToTDComponent = TSmultToTDComponent
     .times(Math.max(Math.pow(Sacrifice.totalBoost.log10(), 10), 1));
   const TDPowComponent = timepow === 0 ? 0 : (timepow - 1) / timepow;
-  
-  const productionText = 
+
+  const productionText =
 `Tickspeed:
   ${tickPercent.toFixed(2)}% from tickspeed
   Tickspeed upgrades:
@@ -391,18 +391,20 @@ dev.buyAllPerks = function() {
   }
 };
 
-dev.kongTest = function() {
-  const page = document.getElementById("page");
-  if (document.getElementById("page").style.width === "") {
-    page.style.width = "1050px";
-    page.style.height = "700px";
-    page.style.marginTop = "100px";
-  } else {
-    page.style.width = "";
-    page.style.height = "";
-    page.style.marginTop = "";
-  }
-};
+(function() {
+  let kongTest;
+  const setKongTest = value => {
+    kongTest = value;
+    localStorage.setItem("kongTest", kongTest);
+    if (kongTest) {
+      document.documentElement.classList.add("_kong-test");
+    } else {
+      document.documentElement.classList.remove("_kong-test");
+    }
+  };
+  setKongTest(localStorage.getItem("kongTest") === "true");
+  dev.kongTest = () => setKongTest(!kongTest);
+}());
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {

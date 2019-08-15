@@ -104,7 +104,7 @@ GameStorage.migrations = {
       GameStorage.migrations.adjustWhy(player);
       GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
-      GameStorage.migrations.migrateConfirmations(player);
+      GameStorage.migrations.adjustSacrificeConfirmation(player);
       GameStorage.migrations.migrateNotation(player);
       GameStorage.migrations.fixAutobuyers(player);
       GameStorage.migrations.removeAutoIPProperties(player);
@@ -119,6 +119,7 @@ GameStorage.migrations = {
       GameStorage.migrations.convertNewsToSet(player);
       GameStorage.migrations.convertEternityCountToDecimal(player);
       GameStorage.migrations.renameDimboosts(player);
+      GameStorage.migrations.migrateConfirmations(player);
     }
   },
 
@@ -328,15 +329,11 @@ GameStorage.migrations = {
     delete player.achPow;
   },
 
-  migrateConfirmations(player) {
+  adjustSacrificeConfirmation(player) {
     if (player.options.sacrificeConfirmation !== undefined) {
       player.options.confirmations.sacrifice = player.options.sacrificeConfirmation;
       delete player.options.sacrificeConfirmation;
     }
-    player.options.confirmations.challenges = !player.options.challConf;
-    delete player.options.challConf;
-    player.options.confirmations.eternity = player.options.eternityconfirm;
-    delete player.options.eternityconfirm;
   },
 
   migrateNotation(player) {
@@ -399,8 +396,6 @@ GameStorage.migrations = {
     delete player.tickspeed;
     player.tickSpeedCost = new Decimal(1000);
     player.tickspeedMultiplier = new Decimal(10);
-    // This did nothing on live and continues to do nothing...?
-    delete player.tickDecrease;
   },
 
   removePostC3Reward(player) {
@@ -585,6 +580,16 @@ GameStorage.migrations = {
   renameDimboosts(player) {
     player.dimensionBoosts = player.resets;
     delete player.resets;
+  },
+
+  migrateConfirmations(player) {
+    player.options.confirmations.challenges = !player.options.challConf;
+    delete player.options.challConf;
+    player.options.confirmations.eternity = player.options.eternityconfirm;
+    delete player.options.eternityconfirm;
+    
+    // This did nothing on live and continues to do nothing...?
+    delete player.tickDecrease;
   },
 
   prePatch(saveData) {

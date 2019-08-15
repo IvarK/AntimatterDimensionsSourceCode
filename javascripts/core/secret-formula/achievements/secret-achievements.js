@@ -31,7 +31,7 @@ GameDatabase.achievements.secret = [
     name: "Do you enjoy pain?",
     tooltip: "Use a \"painful\" notation for 10 minutes with more than 1 eternity.",
     checkRequirement: () => AchievementTimers.pain
-      .check(player.eternities.gte(1) && Notation.current.isPainful, 600),
+      .check(player.eternities.gte(1) && Notations.current.isPainful, 600),
     checkEvent: GameEvent.GAME_TICK_AFTER
   },
   {
@@ -148,7 +148,9 @@ GameDatabase.achievements.secret = [
   {
     id: 42,
     name: "Was it even broken?",
-    tooltip: '"Fix" your save.'
+    tooltip: '"Fix" your save.',
+    checkRequirement: () => player.secretUnlocks.fixed === "hasbeenfixed",
+    checkEvent: GameEvent.GAME_LOAD
   },
   {
     id: 43,

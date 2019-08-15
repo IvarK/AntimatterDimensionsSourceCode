@@ -224,6 +224,7 @@ let player = {
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
     nextThreshold: new Decimal(1000),
+    baseFreeGalaxies: 0,
     freeGalaxies: 0,
     upgrades: new Set(),
     rebuyables: {

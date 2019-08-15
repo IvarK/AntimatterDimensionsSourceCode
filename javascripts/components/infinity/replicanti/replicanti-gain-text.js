@@ -48,9 +48,10 @@ Vue.component("replicanti-gain-text", {
           ` (all galaxies within ${TimeSpan.fromSeconds(allGalaxyTime)})`;
         return;
       }
-      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick);
+      // Explicit toNumber() is safe here since log10GainFactorPerTick must be less than 308
+      const totalTime = LOG10_MAX_VALUE / (ticksPerSecond * log10GainFactorPerTick.toNumber());
       let remainingTime = (LOG10_MAX_VALUE - replicantiAmount.log10()) /
-        (ticksPerSecond * log10GainFactorPerTick);
+        (ticksPerSecond * log10GainFactorPerTick.toNumber());
       if (remainingTime < 0) {
         // If the cap is raised via Effarig Infinity but the player doesn't have TS192, this will be a negative number
         remainingTime = 0;

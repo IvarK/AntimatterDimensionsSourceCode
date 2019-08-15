@@ -78,27 +78,21 @@ function pluralize(value, amount, plural) {
 Vue.filter("pluralize", pluralize);
 
 const ReactivityComplainer = {
-  path: "",
-  addDep() {
-    throw crash(`Boi you fukked up - ${this.path} became REACTIVE (oh shite)`);
-  },
   complain() {
-    Vue.pushTarget(this);
-    try {
-      this.checkReactivity(player, "player");
-    } finally {
-      Vue.popTarget();
-    }
+    this.checkReactivity(player, "player");
   },
   checkReactivity(obj, path) {
+    if (obj === undefined || obj === null) {
+      return;
+    }
+    if (obj.__ob__ !== undefined) {
+      throw crash(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
+    }
     for (const key in obj) {
       if (!obj.hasOwnProperty(key)) continue;
-      this.path = `${path}.${key}`;
-      // FIXME: DON'T add new exceptions here, player.options should be fixed and never become reactive
-      if (this.path === "player.options") continue;
       const prop = obj[key];
       if (typeof prop === "object") {
-        this.checkReactivity(prop, this.path);
+        this.checkReactivity(prop, `${path}.${key}`);
       }
     }
   }
@@ -167,7 +161,7 @@ ui = new Vue({
   data: ui,
   computed: {
     notation() {
-      return Notation.find(this.notationName);
+      return Notations.find(this.notationName);
     },
     currentGlyphTooltip() {
       return this.view.tabs.reality.currentGlyphTooltip;

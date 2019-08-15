@@ -18,10 +18,10 @@ Vue.component("normal-dim-tab-header", {
   },
   methods: {
     update() {
-      const isSacrificeUnlocked = Sacrifice.isUnlocked;
+      const isSacrificeUnlocked = Sacrifice.isVisible;
       this.isSacrificeUnlocked = isSacrificeUnlocked;
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = Sacrifice.isAffordable;
+      this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
     },
     sacrifice() {

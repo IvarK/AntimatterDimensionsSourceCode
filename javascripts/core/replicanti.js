@@ -34,9 +34,7 @@ function replicantiGalaxy() {
     player.replicanti.amount = new Decimal(1);
   }
   player.replicanti.galaxies += galaxyGain;
-  // Galaxy count will be increased inside galaxyReset
-  player.galaxies -= 1;
-  galaxyReset();
+  softReset(0);
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough

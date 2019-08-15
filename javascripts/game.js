@@ -166,7 +166,7 @@ function gainedEternityPoints() {
 }
 
 function getRealityMachineMultiplier() {
-  return Teresa.rmMultiplier * player.celestials.teresa.rmMult * getAdjustedGlyphEffect("effarigrm");
+  return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) * getAdjustedGlyphEffect("effarigrm");
 }
 
 function gainedRealityMachines() {
@@ -359,8 +359,6 @@ function randomStuffThatShouldBeRefactored() {
 setInterval(randomStuffThatShouldBeRefactored, 1000);
 
 var postC2Count = 0;
-var IPminpeak = new Decimal(0)
-var EPminpeak = new Decimal(0)
 var replicantiTicks = 0
 
 const GameSpeedEffect = { FIXEDSPEED: 1, TIMEGLYPH: 2, BLACKHOLE: 3, TIMESTORAGE: 4, MOMENTUM: 5 };
@@ -574,21 +572,11 @@ function gameLoop(diff, options = {}) {
       player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
     }
 
-    if (Teresa.has(TERESA_UNLOCKS.EPGEN)) { // Teresa EP gen.
-      player.eternityPoints = player.eternityPoints.plus(EPminpeak.times(0.01)
-        .times(diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
-    }
+  applyAutoprestige(realDiff);
 
     const uncountabilityGain = AlchemyResource.uncountability.effectValue * Time.unscaledDeltaTime.totalSeconds;
     player.realities += uncountabilityGain;
     player.reality.pp += uncountabilityGain;
-
-    if (InfinityUpgrade.ipGen.isCharged) {  // Charged IP gen is RM gen
-      const addedRM = gainedRealityMachines()
-        .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
-        .times(realDiff / 1000);
-      player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
-    }
 
     const challenge = NormalChallenge.current || InfinityChallenge.current;
     if (player.antimatter.lte(Decimal.MAX_NUMBER) ||
@@ -676,9 +664,8 @@ function gameLoop(diff, options = {}) {
   player.totalTickGained += gain;
   player.tickThreshold = freeTickspeed.nextShards;
 
-
-    var currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinity.totalMinutes)
-    if (currentIPmin.gt(IPminpeak)) IPminpeak = currentIPmin
+  const currentIPmin = gainedInfinityPoints().dividedBy(Time.thisInfinityRealTime.totalMinutes);
+  if (currentIPmin.gt(player.bestIPminThisInfinity) && canCrunch()) player.bestIPminThisInfinity = currentIPmin;
 
     tryUnlockInfinityChallenges();
 
@@ -692,44 +679,17 @@ function gameLoop(diff, options = {}) {
 
     if (player.reality.epmultbuyer) EternityUpgrade.epMult.buyMax();
 
-	// Text on Eternity button
-    var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/60000)
-    if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Decimal.MAX_NUMBER)) EPminpeak = currentEPmin;
+  const currentEPmin = gainedEternityPoints().dividedBy(Time.thisEternityRealTime.totalMinutes);
+  if (currentEPmin.gt(player.bestEPminThisEternity) && canEternity()) player.bestEPminThisEternity = currentEPmin;
 
-    if (TimeStudy.dilation.isBought) {
-      player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
-    }
+  if (TimeStudy.dilation.isBought) {
+    player.dilation.dilatedTime = player.dilation.dilatedTime.plus(getDilationGainPerSecond().times(diff / 1000));
+  }
 
-    // Free galaxies
-    const freeGalaxyMult = Effects.max(
-      1,
-      DilationUpgrade.doubleGalaxies
-    );
-    const freeGalaxyThreshold = Effects.max(1000, CompressionUpgrade.freeGalaxySoftcap);
-    if (player.dilation.baseFreeGalaxies === undefined)
-      player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
-    const thresholdMult = getFreeGalaxyMult();
-    player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
-      1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
-    player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
-      .pow(player.dilation.baseFreeGalaxies));
-    player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, freeGalaxyThreshold) +
-      Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
-
-    if (!Teresa.isRunning) {
-      let ttGain = getAdjustedGlyphEffect("dilationTTgen") * diff / 1000;
-      if (Enslaved.isRunning) ttGain *= 1e-3;
-      ttGain *= RA_UNLOCKS.TT_BOOST.effect.ttGen();
-      if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttGain *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
-      player.timestudy.theorem = player.timestudy.theorem.plus(ttGain);
-    }
-
-    tryUnlockInfinityDimensions();
-
-    player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
-    DilationUpgrade.ttGenerator.applyEffect(gen =>
-      player.timestudy.theorem = player.timestudy.theorem.plus(gen.times(Time.deltaTime).times(RA_UNLOCKS.TT_BOOST.effect.ttGen()))
-    );
+  updateFreeGalaxies();
+  player.timestudy.theorem = player.timestudy.theorem.add(getTTPerSecond().times(diff / 1000));
+  tryUnlockInfinityDimensions();
+  applyAutoprestige();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
@@ -756,7 +716,52 @@ function gameLoop(diff, options = {}) {
   PerformanceStats.end("Game Update");
 }
 
-// Reducing boilerplate code a bit (runs a specified number of ticks with a specified length and triggers autobuyers after each tick)
+// This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
+function applyAutoprestige(diff) {
+  player.infinityPoints = player.infinityPoints.plusEffectOf(TimeStudy(181));
+
+  if (Teresa.has(TERESA_UNLOCKS.EPGEN)) {
+    player.eternityPoints = player.eternityPoints.plus(player.bestEPminThisEternity.times(0.01)
+      .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
+  }
+
+  if (InfinityUpgrade.ipGen.isCharged) {
+    const addedRM = gainedRealityMachines()
+      .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
+      .times(diff / 1000);
+    player.reality.realityMachines = player.reality.realityMachines.add(addedRM);
+  }
+}
+
+function updateFreeGalaxies() {
+  const freeGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
+  const freeGalaxyThreshold = Effects.max(1000, CompressionUpgrade.freeGalaxySoftcap);
+  const thresholdMult = getFreeGalaxyMult();
+  player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
+    1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));
+  player.dilation.nextThreshold = new Decimal(1000).times(new Decimal(thresholdMult)
+    .pow(player.dilation.baseFreeGalaxies));
+  player.dilation.freeGalaxies = Math.min(player.dilation.baseFreeGalaxies * freeGalaxyMult, freeGalaxyThreshold) +
+    Math.max(player.dilation.baseFreeGalaxies * freeGalaxyMult - freeGalaxyThreshold, 0) / freeGalaxyMult;
+}
+
+function getTTPerSecond() {
+  // All TT multipliers (note that this is equal to 1 pre-Ra)
+  let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
+  if (Enslaved.isRunning) ttMult *= 1e-3;
+  if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+
+  // Glyph TT generation
+  const glyphTT = Teresa.isRunning
+    ? 0
+    : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
+  
+  // Dilation TT generation
+  const dilationTT = DilationUpgrade.ttGenerator.effectValue.times(ttMult);
+
+  return dilationTT.add(glyphTT);
+}
+
 function gameLoopWithAutobuyers(seconds, ticks, real) {
   for (let ticksDone = 0; ticksDone < ticks; ticksDone++) {
     gameLoop(1000 * seconds);

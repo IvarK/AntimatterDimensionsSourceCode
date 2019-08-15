@@ -97,7 +97,7 @@ function applyDimensionBoost() {
     }
 }
 
-function softReset(bulk) {
+function softReset(bulk, forcedNDReset = false) {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return;
     EventHub.dispatch(GameEvent.DIMBOOST_BEFORE, bulk);
     player.dimensionBoosts += bulk;
@@ -107,13 +107,15 @@ function softReset(bulk) {
      */
     player.sacrificed = new Decimal(0);
     resetChallengeStuff();
-    NormalDimensions.reset();
+    if (forcedNDReset || !Perk.dimboostNonReset.isBought) {
+      NormalDimensions.reset();
+    }
     applyDimensionBoost();
     skipResetsIfPossible();
     resetTickspeed();
     const currentAntimatter = player.antimatter;
     resetAntimatter();
-    if (Achievement(111).isEnabled) {
+    if (Achievement(111).isEnabled || Perk.dimboostNonReset.isBought) {
         player.antimatter = player.antimatter.max(currentAntimatter);
     }
     EventHub.dispatch(GameEvent.DIMBOOST_AFTER, bulk);

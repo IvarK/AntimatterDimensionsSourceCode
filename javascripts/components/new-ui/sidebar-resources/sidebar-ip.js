@@ -21,7 +21,7 @@ Vue.component("sidebar-ip", {
       if (!this.showCrunch) return
       const gainedIP = gainedInfinityPoints();
       this.gained.copyFrom(gainedIP);
-      this.peakIPPM.copyFrom(IPminpeak);
+      this.peakIPPM.copyFrom(player.bestIPminThisInfinity);
       this.currentIPPM.copyFrom(gainedIP.dividedBy(Time.thisInfinity.totalMinutes));
     },
     infinity() {

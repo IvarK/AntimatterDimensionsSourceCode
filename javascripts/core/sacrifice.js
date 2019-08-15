@@ -11,29 +11,26 @@ class Sacrifice {
 
   static get nextBoost() {
     const nd1Amount = NormalDimension(1).amount;
+    const sacrificed = player.sacrificed.clampMin(1);
     if (nd1Amount.eq(0)) return new Decimal(1);
     if (InfinityChallenge(2).isCompleted) {
-      const scale = Effects.max(
+      const sacrificePow = Effects.max(
         0.01,
         Achievement(88),
         TimeStudy(228)
       );
-      return nd1Amount.dividedBy(player.sacrificed.clampMin(1)).pow(scale).clampMin(1);
+      return nd1Amount.dividedBy(sacrificed).pow(sacrificePow).clampMin(1);
     }
 
-    if (!NormalChallenge(8).isRunning) {
-      const sacrificePow = 2 + Effects.sum(
-        Achievement(32),
-        Achievement(57)
-      );
-      return Decimal.pow((nd1Amount.log10() / 10.0), sacrificePow)
-        .dividedBy(Decimal.max(player.sacrificed.log10(), 1)
-          .dividedBy(10.0)
-          .pow(sacrificePow)
-          .max(1)).max(1);
+    if (NormalChallenge(8).isRunning) {
+      return nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1);
     }
 
-    return nd1Amount.pow(0.05).dividedBy(player.sacrificed.pow(0.04).max(1)).max(1);
+    const sacrificePow = 2 + Effects.sum(
+      Achievement(32),
+      Achievement(57)
+    );
+    return Decimal.pow(nd1Amount.log10() / sacrificed.log10(), sacrificePow).clampMin(1);
   }
 
   static get totalBoost() {
@@ -48,15 +45,15 @@ class Sacrifice {
       return player.sacrificed.pow(scale).clampMin(1);
     }
 
-    if (!NormalChallenge(8).isRunning) {
-      const sacrificePow = 2 + Effects.sum(
-        Achievement(32),
-        Achievement(57)
-      );
-      return Decimal.pow((player.sacrificed.log10() / 10.0), sacrificePow);
+    if (NormalChallenge(8).isRunning) {
+      return player.sacrificed.pow(0.05);
     }
 
-    return player.sacrificed.pow(0.05);
+    const sacrificePow = 2 + Effects.sum(
+      Achievement(32),
+      Achievement(57)
+    );
+    return Decimal.pow(player.sacrificed.log10() / 10.0, sacrificePow);
   }
 }
 

@@ -34,14 +34,13 @@ Vue.component("infinity-upgrade-button", {
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isMaxed;
       this.canBeBought = upgrade.canBeBought;
-      const isBanned = upgrade.config.bannedFromCharging;
-      this.canBeCharged = (isBanned ? !isBanned : true) && Ra.chargesLeft > 0;
+      this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
     }
   },
   template:
     `<button :class="classObject"
-      @mouseover="showingCharged = canBeCharged"
+      @mouseenter="showingCharged = canBeCharged"
       @mouseleave="showingCharged = false" 
       @click="upgrade.purchase()">
       <description-display :config="config"/>

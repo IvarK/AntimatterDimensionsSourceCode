@@ -133,7 +133,6 @@ const GameStorage = {
 
     recalculateAllGlyphs();
     checkPerkValidity();
-    Teresa.checkPPShopValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);

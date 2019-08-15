@@ -754,12 +754,9 @@ function getTTPerSecond() {
   if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
 
   // Glyph TT generation
-  let glyphTT;
-  if (Teresa.isRunning) {
-    glyphTT = 0;
-  } else {
-    glyphTT = getAdjustedGlyphEffect("dilationTTgen") * ttMult;
-  }
+  const glyphTT = Teresa.isRunning
+    ? 0
+    : getAdjustedGlyphEffect("dilationTTgen") * ttMult;
   
   // Dilation TT generation
   const dilationTT = DilationUpgrade.ttGenerator.effectValue.times(ttMult);

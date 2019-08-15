@@ -5,6 +5,7 @@ Vue.component("game-header-eternity-button", {
     return {
       isVisible: false,
       type: EPButtonDisplayType.FIRST_TIME,
+      isDilation: false,
       gainedEP: new Decimal(0),
       currentEPPM: new Decimal(0),
       peakEPPM: new Decimal(0),
@@ -27,16 +28,16 @@ Vue.component("game-header-eternity-button", {
     },
     classObject() {
       return {
-        "o-prestige-btn": true,
-        "o-prestige-btn--eternity": this.type !== 3,
-        "o-prestige-btn--dilation": this.type === 3,
-        "l-game-header__eternity-btn": true
+        "o-prestige-btn--eternity": !this.isDilation,
+        "o-prestige-btn--dilation": this.isDilation,
       };
     }
   },
   methods: {
     update() {
       this.isVisible = player.infinityPoints.gte(Player.eternityGoal) && InfinityDimension(8).isUnlocked;
+      this.isDilation = this.type === EPButtonDisplayType.DILATION ||
+        this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
       if (!this.isVisible) return;
       if (!PlayerProgress.eternityUnlocked()) {
         this.type = EPButtonDisplayType.FIRST_TIME;
@@ -89,6 +90,7 @@ Vue.component("game-header-eternity-button", {
     `<button
       v-if="isVisible"
       :class="classObject"
+      class="o-prestige-btn l-game-header__eternity-btn"
       onclick="eternity()"
     >
       <!-- First time -->

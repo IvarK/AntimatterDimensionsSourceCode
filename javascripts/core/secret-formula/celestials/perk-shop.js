@@ -25,7 +25,7 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(1.05, bought),
       formatEffect: value => formatX(value, 2, 2),
       formatCost: value => shorten(value, 2, 0),
-      cap: () => Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL.id)
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
     rmMult: rebuyable({
       id: 1,
@@ -35,7 +35,7 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0),
-      cap: () => Teresa.perkShopCap(PERK_SHOP.RM_MULT.id)
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1048576 : 2048)
     }),
     bulkDilation: rebuyable({
       id: 2,
@@ -45,7 +45,7 @@ GameDatabase.celestials.perkShop = (function() {
       effect: bought => Math.pow(2, bought),
       formatEffect: value => formatX(value, 2, 0),
       formatCost: value => shorten(value, 2, 0),
-      cap: () => Teresa.perkShopCap(PERK_SHOP.DILATION_BULK.id)
+      cap: () => (Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE) ? 1638400 : 1600)
     }),
     musicGlyph: rebuyable({
       id: 3,

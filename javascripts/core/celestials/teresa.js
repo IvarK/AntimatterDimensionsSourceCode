@@ -35,21 +35,6 @@ const TERESA_UNLOCKS = {
   },
 };
 
-const PERK_SHOP = {
-  GLYPH_LEVEL: {
-    id: 0
-  },
-  RM_MULT: {
-    id: 1
-  },
-  DILATION_BULK: {
-    id: 2
-  },
-  MUSIC_GLYPH: {
-    id: 3
-  }
-}
-
 const Teresa = {
   timePoured: 0,
   unlockInfo: TERESA_UNLOCKS,
@@ -81,19 +66,6 @@ const Teresa = {
   rewardMultiplier(antimatter) {
     return Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1).toNumber();
   },
-  perkShopCap(id) {
-    const increasedCap = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
-    switch (id) {
-      case PERK_SHOP.GLYPH_LEVEL.id:
-        return increasedCap ? 1048576 : 2048;
-      case PERK_SHOP.RM_MULT.id:
-        return increasedCap ? 1048576 : 2048;
-      case PERK_SHOP.DILATION_BULK.id:
-        return increasedCap ? 1638400 : 1600;
-      default:
-        return 0;
-    }
-  },
   get rmStore() {
     return player.celestials.teresa.rmStore;
   },
@@ -120,25 +92,6 @@ const Teresa = {
   get isRunning() {
     return player.celestials.teresa.run;
   },
-  checkPPShopValidity() {
-    let ppRefund = 0;
-    if (PerkShopUpgrade.glyphLevel.config.cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL.id)) {
-      PerkShopUpgrade.glyphLevel.boughtAmount = 0;
-      ppRefund += PerkShopUpgrade.glyphLevel.config.cost - 1;
-    }
-    if (PerkShopUpgrade.rmMult.config.cost > Teresa.perkShopCap(PERK_SHOP.RM_MULT.id)) {
-      PerkShopUpgrade.rmMult.boughtAmount = 0;
-      ppRefund += PerkShopUpgrade.rmMult.config.cost - 1;
-    }
-    if (PerkShopUpgrade.bulkDilation.config.cost > Teresa.perkShopCap(PERK_SHOP.DILATION_BULK.id)) {
-      PerkShopUpgrade.bulkDilation.boughtAmount = 0;
-      ppRefund += 100 * (PerkShopUpgrade.bulkDilation.config.cost - 1);
-    }
-    if (ppRefund > 0) {
-      player.reality.pp += ppRefund;
-      Modal.message.show("You had too many PP shop purchases, some perk shop purchases have been reset and refunded.");
-    }
-  }
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
@@ -153,12 +106,16 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.celestials.teresa.perkShop[this.id] = value;
   }
+  
+  get cap() {
+    return this.config.cap();
+  }
 
   purchase() {
-    if (this.config.cost() > this.config.cap() || !super.purchase()) {
+    if (this.cost >= this.cap || !super.purchase()) {
       return;
     }
-    if (this.config.id === PERK_SHOP.MUSIC_GLYPH.id) {
+    if (this.config.id === 3) {
       dev.giveMusicGlyph();
     }
   }

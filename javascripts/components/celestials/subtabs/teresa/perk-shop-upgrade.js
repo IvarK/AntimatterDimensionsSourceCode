@@ -4,14 +4,21 @@ Vue.component("perk-shop-upgrade", {
   props: {
     upgrade: Object
   },
-  computed: {
-    classObject() {
-      return "o-teresa-shop-button";
+  data() {
+    return {
+      cost: 0,
+      cap: 0
+    };
+  },
+  methods: {
+    update() {
+      this.cost = this.upgrade.config.cost();
+      this.cap = this.upgrade.config.cap();
     }
   },
   template:
     `<div class="l-spoon-btn-group">
-      <button :class="classObject" @click="upgrade.purchase()">
+      <button class="o-teresa-shop-button" @click="upgrade.purchase()">
         <description-display 
           :config="upgrade.config"
           :length="70"
@@ -19,10 +26,10 @@ Vue.component("perk-shop-upgrade", {
         />
         <br>
         <effect-display :config="upgrade.config"
-          v-if="upgrade.config.cost() !== 1" />
+          v-if="cost !== 1" />
         <br>
         <cost-display
-          v-if="upgrade.config.cost() < upgrade.config.cap()"
+          v-if="cost < cap"
           :config="upgrade.config"
           singular="Perk point"
           plural="Perk points"

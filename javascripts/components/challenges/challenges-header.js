@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('challenges-header', {
   data: function() {
     return {
@@ -53,7 +55,7 @@ Vue.component('challenges-header', {
       }
     }
   },
-  template: 
+  template:
   `<div v-if="isInChallenge || isShowAllVisible" class="l-challenges-tab__header">
     <primary-button
       v-if="isInChallenge"
@@ -82,8 +84,8 @@ Vue.component('challenges-header', {
     >
       <span>Until</span>
       <div class="l-challenges-tab__auto-ec-timers">
-        <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC.toString()}}</span>
-        <span>all auto EC completions: {{untilAllEC.toString()}}</span>
+        <span v-if="remainingECTiers > 1">next auto EC completion: {{untilNextEC}}</span>
+        <span>all auto EC completions: {{untilAllEC}}</span>
       </div>
     </div>
   </div>

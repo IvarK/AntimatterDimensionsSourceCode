@@ -446,11 +446,11 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity in under 200 milliseconds.",
     checkRequirement: () => Time.thisInfinity.totalMilliseconds <= 200,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(1e25, 0, 0)} antimatter ` +
+    reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
       "and all Dimensions are stronger in the first 300ms of Infinities.",
     effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
     effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
-    secondaryEffect: () => 1e25
+    secondaryEffect: () => 2e25
   },
   {
     id: 81,
@@ -817,7 +817,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have 630 Antimatter Galaxies without having any Replicanti Galaxies.",
     checkRequirement: () => player.galaxies >= 630 && player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
-    reward: "Gain a multiplier to Dilated Time gain based on Antimatter Galaxies.",
+    reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1)
   },
   {

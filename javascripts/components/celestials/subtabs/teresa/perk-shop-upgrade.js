@@ -6,14 +6,12 @@ Vue.component("perk-shop-upgrade", {
   },
   data() {
     return {
-      cost: 0,
-      cap: 0
+      isAvailable: false,
     };
   },
   methods: {
     update() {
-      this.cost = this.upgrade.config.cost();
-      this.cap = this.upgrade.config.cap();
+      this.isAvailable = this.upgrade.isAvailable;
     }
   },
   template:
@@ -25,11 +23,10 @@ Vue.component("perk-shop-upgrade", {
           name="o-compression-upgrade__description"
         />
         <br>
-        <effect-display :config="upgrade.config"
-          v-if="cost !== 1" />
+        <effect-display :config="upgrade.config" />
         <br>
         <cost-display
-          v-if="cost < cap"
+          v-if="isAvailable"
           :config="upgrade.config"
           singular="Perk point"
           plural="Perk points"

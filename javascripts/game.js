@@ -736,8 +736,6 @@ function applyAutoprestige(diff) {
 function updateFreeGalaxies() {
   const freeGalaxyMult = Effects.max(1, DilationUpgrade.doubleGalaxies);
   const freeGalaxyThreshold = Effects.max(1000, CompressionUpgrade.freeGalaxySoftcap);
-  if (player.dilation.baseFreeGalaxies === undefined)
-    player.dilation.baseFreeGalaxies = player.dilation.freeGalaxies / freeGalaxyMult;
   const thresholdMult = getFreeGalaxyMult();
   player.dilation.baseFreeGalaxies = Math.max(player.dilation.baseFreeGalaxies,
     1 + Math.floor(Decimal.log(player.dilation.dilatedTime.dividedBy(1000), thresholdMult)));

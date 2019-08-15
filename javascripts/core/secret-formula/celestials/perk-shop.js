@@ -53,7 +53,6 @@ GameDatabase.celestials.perkShop = (function() {
       increment: 1,
       description: "Receive a music glyph.",
       effect: bought => Decimal.pow(3, bought),
-      formatEffect: () => "",
       formatCost: value => shorten(value, 2, 0),
       cap: () => Number.MAX_VALUE
     })

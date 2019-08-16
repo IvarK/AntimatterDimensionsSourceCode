@@ -1407,12 +1407,12 @@ GameDatabase.news = [
   {
     id: "j3",
     text: "Person with money likes to support this game.",
-    condition: () => kongDimMult > 1 || kongIPMult > 1
+    condition: () => kongDimMult > 1 || player.IAP.IPMult > 1
   },
   {
     id: "j4",
     text: "Whale is bad at making smart purchases.",
-    condition: () => kongIPMult > 500 && kongDimMult < 5e307
+    condition: () => player.IAP.IPMult > 500 && kongDimMult < 5e307
   },
   {
     id: "j5",
@@ -1422,7 +1422,7 @@ GameDatabase.news = [
   {
     id: "j6",
     text: "Whale complains that their buying isn't doing anything.",
-    condition: () => kongIPMult > 1.8e16
+    condition: () => player.IAP.IPMult > 1.8e16
   },
   {
     id: "p1",

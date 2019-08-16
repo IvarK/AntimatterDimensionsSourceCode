@@ -122,7 +122,7 @@ function totalIPMult() {
     return new Decimal(1);
   }
   let ipMult = new Decimal(1)
-    .times(kongIPMult)
+    .times(player.IAP.IPMult)
     .timesEffectsOf(
       TimeStudy(41),
       TimeStudy(51),

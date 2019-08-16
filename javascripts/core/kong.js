@@ -119,3 +119,31 @@ kong.updatePurchases = function() {
   }
 
 };
+
+kong.migratePurchases = function() {
+  if (!kong.enabled) return;
+  try {
+      kongregate.mtx.requestUserItemList("", items);
+  } catch (e) { console.log(e); }
+
+  function items(result) {
+      let ipmult = 0;
+      let dimmult = 1;
+      let epmult = 0;
+      let alldimmult = 1;
+      for (let i = 0; i < result.data.length; i++) {
+          const item = result.data[i];
+          if (item.identifier === "doublemult") dimmult *= 2;
+          if (item.identifier === "doubleip") ipmult += 2;
+          if (item.identifier === "tripleep") epmult += 3;
+          if (item.identifier === "alldimboost") alldimmult = (alldimmult < 32) ? alldimmult * 2 : alldimmult + 32;
+
+      }
+      player.IAP.dimMult = dimmult;
+      player.IAP.allDimMult = alldimmult;
+
+      if (ipmult > 0) player.IAP.IPMult = ipmult;
+
+      if (epmult > 0) player.IAP.EPMult = epmult;
+  }
+}

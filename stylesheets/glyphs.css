@@ -9,8 +9,7 @@
 .c-glyph-component {
   font-family: Typewriter;
   background: black;
-  padding-left: 0.04em;
-  padding-bottom: 0.04em;
+  padding-bottom: 0.2em;
 }
 
 .c-glyph-component--dragging {

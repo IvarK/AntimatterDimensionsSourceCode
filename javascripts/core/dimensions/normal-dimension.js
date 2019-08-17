@@ -651,7 +651,7 @@ class NormalDimensionState extends DimensionState {
   get isAvailable() {
     if (!player.break && player.antimatter.gt(Decimal.MAX_NUMBER)) return false;
     if (this.tier > player.resets + 4) return false;
-    if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && player.eternities < 30) return false;
+    if (this.tier > 1 && NormalDimension(this.tier - 1).amount.eq(0) && !EternityMilestone.unlockAllND.isReached) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 

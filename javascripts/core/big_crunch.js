@@ -82,7 +82,7 @@ function bigCrunchReset() {
     player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
   }
 
-  if (player.eternities > 10 && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
+  if (EternityMilestone.autobuyerID1.isReached && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
     for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i);

@@ -48,9 +48,7 @@ Vue.component("infinity-upgrades-tab", {
         "o-primary-btn--discharge-active": this.disCharge
       };
     },
-    offlineIpButton() {
-      return InfinityUpgrade.ipOffline;
-    }
+    offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   methods: {
     update() {
@@ -91,7 +89,7 @@ Vue.component("infinity-upgrades-tab", {
       <div class="l-infinity-upgrades-bottom-row">
         <ip-multiplier-button class="l-infinity-upgrades-tab__mult-btn" />
         <infinity-upgrade-button
-          :upgrade="offlineIpButton"
+          :upgrade="offlineIpUpgrade"
           :class="btnClassObject(1)"
         />
       </div>

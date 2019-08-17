@@ -112,8 +112,8 @@ function buyUntilTen(tier) {
 }
 
 function playerInfinityUpgradesOnEternity() {
-  if (player.eternities < 4) player.infinityUpgrades.clear();
-  else if (player.eternities < 8) {
+  if (!EternityMilestone.keepInfinityUpgrades.isReached) player.infinityUpgrades.clear();
+  else if (!EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityUpgrades = new Set(["timeMult", "dimMult", "timeMult2", "skipReset1", "skipReset2",
       "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "skipReset3", "passiveGen",
       "45Mult", "resetBoost", "galaxyBoost", "skipResetGalaxy", "ipOffline"]);
@@ -249,14 +249,19 @@ function getInfinitiedMilestoneReward(ms) {
   // if he has 1000 eternities milestone and turned on infinity autobuyer with 1 minute or less per crunch
 
   function eternitiesReduce(acc, curr) {
+    // So curr[3] is eternities gained, if it's not recorded yet, just return accumulator
+    // curr[2] is real time spent, so divide eternities by real time spent and
+    // add it to the accumulator
     return curr.length > 3 ? curr[3].dividedBy(curr[2]).plus(acc) : acc;
   }
 
+  const autoInfinitiesAvailable = EternityMilestone.autoInfinities.isReached && 
+                                  player.auto.bigCrunch.isActive && 
+                                  player.auto.bigCrunch.mode === 1 && 
+                                  player.auto.bigCrunch.time < 60;
+
   let infinitiedTotal = 0;
-  if (player.eternities >= 1000 && 
-    player.auto.bigCrunch.isActive && 
-    player.auto.bigCrunch.mode === 1 && 
-    player.auto.bigCrunch.time < 60) {
+  if (autoInfinitiesAvailable) {
     const averageInfinities = player.lastTenRuns.reduce(eternitiesReduce, new Decimal(0)).dividedBy(10);
     infinitiedTotal = Decimal.floor(averageInfinities.times(ms).dividedBy(2));
   }
@@ -285,7 +290,9 @@ function getEternitiedMilestoneReward(ms) {
   }
 
   let eternitiedTotal = 0;
-  if (player.eternities >= 100 && player.auto.eternity.isActive && player.auto.eternity.amount.equals(0)) {
+  if (EternityMilestone.autobuyerEternity.isReached && 
+    player.auto.eternity.isActive && 
+    player.auto.eternity.amount.equals(0)) {
     const averageEternities = player.lastTenEternities.reduce(eternitiesReduce, 0) / 10;
     eternitiedTotal = Math.floor(averageEternities * ms / 2);
   }
@@ -293,7 +300,7 @@ function getEternitiedMilestoneReward(ms) {
 }
 
 function getOfflineEPGain(ms) {
-  if (player.eternities < 6) return new Decimal(0);
+  if (EternityMilestone.autoEP.isReached) return new Decimal(0);
   const bestRun = player.lastTenEternities.reduce(
     (acc, curr) => Decimal.max(acc, curr[1].dividedBy(curr[0]))
   );
@@ -889,7 +896,7 @@ function autoBuyDilationUpgrades() {
 }
 
 function autoBuyInfDims() {
-  if (player.eternities > 10 && !EternityChallenge(8).isRunning) {
+  if (EternityMilestone.autobuyerID1.isReached && !EternityChallenge(8).isRunning) {
     for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)

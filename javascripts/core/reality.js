@@ -384,7 +384,7 @@ function completeReality(force, reset, auto = false) {
   EPminpeak = new Decimal(0);
   resetTimeDimensions();
   kong.submitStats('Eternities', player.eternities);
-  if (player.eternities > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  if (!EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
   if (player.eternities <= 1) {

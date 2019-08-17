@@ -23,11 +23,10 @@ GameDatabase.eternity.milestones = {
   },
   autoEP: {
     eternities: 6,
-    rewardFn: () => {
+    reward: () => {
       const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
       return `Only while offline, gain 25% of your best EP/min. Currently ${shorten(EPmin, 2, 2)} EP/min`;
     },
-    reward: "Only while offline, gain 25% of your best EP/min. Currently"
   },
   autoIC: {
     eternities: 7,
@@ -103,7 +102,7 @@ GameDatabase.eternity.milestones = {
   },
   autobuyerEternity: {
     eternities: 100,
-    rewardFn: () => {
+    reward: () => {
       const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
       return `Unlock autobuyer for Eternities. 
       Only while offline, gain eternities based on the last 10 eternities. 
@@ -112,7 +111,7 @@ GameDatabase.eternity.milestones = {
   },
   autoInfinities: {
     eternities: 1000,
-    rewardFn: () => {
+    reward: () => {
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds);
       return `Only while offline, 
       gain infinities based on the last 10 infinities. Currently ${shorten(infinities, 2, 2)}/hour`;

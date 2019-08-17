@@ -121,8 +121,8 @@ function initializeResourcesAfterEternity() {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = (player.eternities >= 4) ? 4 : 0;
-  player.galaxies = (player.eternities >= 4) ? 1 : 0;
+  player.resets = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
+  player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.tickDecrease = 0.9;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
@@ -134,11 +134,11 @@ function initializeResourcesAfterEternity() {
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.totalTickGained = 0;
-  player.offlineProd = player.eternities >= 20 ? player.offlineProd : 0;
-  player.offlineProdCost = player.eternities >= 20 ? player.offlineProdCost : 1e7;
+  player.offlineProd = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProd : 0;
+  player.offlineProdCost = EternityMilestone.keepBreakUpgrades.isReached ? player.offlineProdCost : 1e7;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
-  if (player.eternities < 20) {
+  if (EternityMilestone.keepBreakUpgrades.isReached) {
     player.infinityRebuyables = [0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
@@ -168,7 +168,7 @@ function applyRealityUpgrades() {
 }
 
 function eternityResetReplicanti() {
-  player.replicanti.unl = player.eternities >= 50;
+  player.replicanti.unl = EternityMilestone.unlockReplicanti.isReached;
   player.replicanti.amount = player.replicanti.unl ? new Decimal(1) : new Decimal(0);
   player.replicanti.chance = 0.01;
   player.replicanti.chanceCost = new Decimal(1e150);
@@ -177,7 +177,8 @@ function eternityResetReplicanti() {
   player.replicanti.gal = 0;
   player.replicanti.galaxies = 0;
   player.replicanti.galCost = new Decimal(1e170);
-  if (player.eternities >= 3 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
+  if (EternityMilestone.autobuyerReplicantiGalaxy.isReached && 
+    player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
 }
 
 function askEternityConfirmation() {

@@ -75,6 +75,20 @@ Vue.component("automator-editor", {
       this.updateScriptList();
       this.rename();
     },
+    deleteScript() {
+      if (!confirm("Permanently and irrevocably delete script?")) return;
+      const scriptID = this.currentScriptID;
+      AutomatorBackend.deleteScript(scriptID);
+      this.updateScriptList();
+      // If a script is running, select that one
+      if (AutomatorBackend.isOn && this.runningScriptID !== scriptID) {
+        player.reality.automator.state.editorScript = this.runningScriptID;
+      } else {
+        // AutomatorBackend.deleteScript will create an empty script if necessary
+        player.reality.automator.state.editorScript = this.scripts[0].id;
+      }
+      this.updateCurrentScriptID();
+    },
     onScriptDropdown(event) {
       const menu = event.target;
       if (menu.selectedIndex === menu.length - 1) this.createNewScript();
@@ -128,6 +142,9 @@ Vue.component("automator-editor", {
                         @blur="nameEdited"
                         @keyup.enter="$refs.renameInput.blur()"/>
         </div>
+        <automator-button class="fas fa-trash"
+                          @click="deleteScript"
+                          v-tooltip="'Delete this script'"/>
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"/>

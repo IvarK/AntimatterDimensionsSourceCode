@@ -191,7 +191,7 @@ const AutomatorBackend = {
       case AutomatorMode.PAUSE:
         return;
       case AutomatorMode.SINGLE_STEP:
-        this.step();
+        this.singleStep();
         this.state.mode = AutomatorMode.PAUSE;
         return;
       case AutomatorMode.RUN:
@@ -219,6 +219,16 @@ const AutomatorBackend = {
         return false;
     }
     throw crash("Unrecognized return code from command");
+  },
+
+  singleStep() {
+    if (this.stack.isEmpty) return;
+    // SAME_INSTRUCTION is used to enter blocks; this means we've successfully
+    // advanced a line. Otherwise, we always advance a line, regardless of return
+    // state.
+    if (this.runCurrentCommand() !== AutomatorCommandStatus.SAME_INSTRUCTION) {
+      this.nextCommand();
+    }
   },
 
   runCurrentCommand() {

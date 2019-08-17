@@ -120,7 +120,8 @@ Vue.component("automator-editor", {
                       :value="script.id">{{dropdownLabel(script)}}</option>
               <option value="createNewScript">Create new...</option>
             </select>
-            <automator-button class="far fa-edit" @click="rename"/>
+            <automator-button class="far fa-edit" @click="rename"
+                      v-tooltip="'Rename script'"/>
           </template>
           <input v-else ref="renameInput"
                         class="l-automator__rename-input"

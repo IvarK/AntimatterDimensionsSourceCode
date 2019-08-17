@@ -34,38 +34,51 @@ const AutomatorTextUI = {
 Vue.component("automator-text-editor", {
   props: {
     activeLine: Number,
-    currentScriptID: String,
+    currentScriptID: {
+      Type: String,
+      Default: "",
+    }
   },
   watch: {
-    activeLine(newVal, oldVal) {
-      if (oldVal > 0) {
-        AutomatorTextUI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
-        AutomatorTextUI.editor.removeLineClass(oldVal - 1, "gutter", "c-automator-editor__active-line-gutter");
-      }
-      if (newVal > 0 && newVal <= AutomatorTextUI.editor.getDoc().lineCount()) {
-        AutomatorTextUI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
-        AutomatorTextUI.editor.addLineClass(newVal - 1, "gutter", "c-automator-editor__active-line-gutter");
-      }
+    activeLine: {
+      handler(newVal, oldVal) {
+        if (oldVal > 0) {
+          this.UI.editor.removeLineClass(oldVal - 1, "background", "c-automator-editor__active-line");
+          this.UI.editor.removeLineClass(oldVal - 1, "gutter", "c-automator-editor__active-line-gutter");
+        }
+        if (newVal > 0 && newVal <= this.UI.editor.getDoc().lineCount()) {
+          this.UI.editor.addLineClass(newVal - 1, "background", "c-automator-editor__active-line");
+          this.UI.editor.addLineClass(newVal - 1, "gutter", "c-automator-editor__active-line-gutter");
+        }
+      },
+      immediate: true,
     },
-    currentScriptID(id) {
-      const storedScripts = player.reality.automator.scripts;
-      if (AutomatorTextUI.documents[id] === undefined) {
-        AutomatorTextUI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
-      }
-      AutomatorTextUI.editor.swapDoc(AutomatorTextUI.documents[id]);
+    currentScriptID: {
+      handler(id) {
+        const storedScripts = player.reality.automator.scripts;
+        if (this.UI.documents[id] === undefined) {
+          this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
+        }
+        this.UI.editor.swapDoc(this.UI.documents[id]);
+      },
+      immediate: true,
     },
     fullScreen() {
-      this.$nextTick(() => AutomatorTextUI.editor.refresh());
+      this.$nextTick(() => this.UI.editor.refresh());
     }
   },
   computed: {
+    UI() {
+      AutomatorTextUI.initialize();
+      return AutomatorTextUI;
+    },
     fullScreen() {
       return this.$viewModel.tabs.reality.automator.fullScreen;
     },
   },
   methods: {
     onGameLoad() {
-      AutomatorTextUI.documents = {};
+      this.UI.documents = {};
     },
   },
   created() {
@@ -73,18 +86,18 @@ Vue.component("automator-text-editor", {
     EventHub.ui.on(GameEvent.GAME_LOAD, () => this.onGameLoad(), this);
   },
   mounted() {
-    this.$refs.container.appendChild(AutomatorTextUI.container);
+    this.$refs.container.appendChild(this.UI.container);
     this.$nextTick(() => {
-      AutomatorTextUI.editor.refresh();
-      AutomatorTextUI.editor.performLint();
+      this.UI.editor.refresh();
+      this.UI.editor.performLint();
     });
   },
   beforeDestroy() {
     if (this.activeLine > 0) {
       // This will stick around, otherwise
-      AutomatorTextUI.editor.removeLineClass(this.activeLine - 1, "background", "c-automator-editor__active-line");
+      this.UI.editor.removeLineClass(this.activeLine - 1, "background", "c-automator-editor__active-line");
     }
-    this.$refs.container.removeChild(AutomatorTextUI.container);
+    this.$refs.container.removeChild(this.UI.container);
     EventHub.ui.offAll(this);
   },
   template: `

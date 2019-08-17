@@ -762,6 +762,54 @@ function getGlyphLevelInputs() {
   };
 }
 
+function handleRUpg10() {
+
+  // Handle all the autobuyers
+  player.auto.dimensions = player.auto.dimensions.map(d => ({
+    isUnlocked: true,
+    cost: 1e100,
+    interval: 100,
+    bulk: 1e100,
+    mode: d.mode,
+    priority: d.priority,
+    isActive: d.isActive,
+    lastTick: d.lastTick
+  }));
+
+  player.auto.tickspeed.isUnlocked = true;
+  player.auto.tickspeed.cost = 32;
+  player.auto.tickspeed.interval = 100;
+
+  player.auto.dimBoost.cost = 256;
+  player.auto.dimBoost.interval = 100;
+
+  player.auto.galaxy.cost = 4096;
+  player.auto.galaxy.interval = 100;
+
+  player.auto.bigCrunch.cost = 8192;
+  player.auto.bigCrunch.interval = 100;
+
+  // Handle infinity upgrades
+  player.infinityUpgrades = new Set(
+    "timeMult", "dimMult", "timeMult2", 
+    "skipReset1", "skipReset2", "unspentBonus", 
+    "27Mult", "18Mult", "36Mult", "resetMult", 
+    "skipReset3", "passiveGen", "45Mult", 
+    "resetBoost", "galaxyBoost", "skipResetGalaxy", 
+    "totalMult", "currentMult", "postGalaxy", 
+    "challengeMult", "achievementMult", "infinitiedMult", 
+    "infinitiedGeneration", "autoBuyerUpgrade", "bulkBoost", 
+    "ipOffline"
+  );
+
+  // Handle replicanti autobuyers
+  player.replicanti.auto = [true, true, true];
+  player.replicanti.unl = true;
+
+  // Handle inf dim buyers
+  player.infDimBuyers = [true, true, true, true, true, true, true, true];
+}
+
 class GlyphEffectState {
   constructor(id, props) {
     this._id = id;
@@ -824,6 +872,9 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     const id = this.id;
     if (id === 9 || id === 24) {
       Glyphs.refreshActive();
+    }
+    if (id === 10) {
+      handleRUpg10();
     }
     if (id === 20) {
       if (!player.blackHole[0].unlocked) return true;

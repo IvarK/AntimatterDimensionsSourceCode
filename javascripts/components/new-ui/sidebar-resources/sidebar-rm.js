@@ -17,7 +17,7 @@ Vue.component("sidebar-rm", {
   template:
   `<div class="resource">
     <div v-if="cond">
-      <h2 class="o-color-reality">{{ shorten(rm, 2, 0) }}</h2>
+      <h2 class="o-sidebar-reality-button">{{ shorten(rm, 2, 0) }}</h2>
       <div class="resource-information">
         <span class="resource-name">Reality Machines</span>
       </div>

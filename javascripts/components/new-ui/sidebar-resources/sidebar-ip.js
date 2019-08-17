@@ -17,7 +17,7 @@ Vue.component("sidebar-ip", {
   template:
   `<div class="resource">
     <div v-if="cond">
-      <h2 class="o-color-infinity">{{ shorten(ip, 2, 0) }}</h2>
+      <h2 class="o-sidebar-infinity-button">{{ shorten(ip, 2, 0) }}</h2>
       <div class="resource-information">
         <span class="resource-name">Infinity Points</span>
       </div>

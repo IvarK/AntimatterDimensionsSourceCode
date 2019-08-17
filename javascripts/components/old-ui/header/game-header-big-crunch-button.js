@@ -15,8 +15,8 @@ Vue.component("game-header-big-crunch-button", {
     isPeakIPPMVisible() { 
       return this.peakIPPM.lte(this.peakIPPMThreshold);
     },
-    amountStyles() {
-      if (this.currentIP.lt(1e50)) return {};
+    amountStyle() {
+      if (this.currentIP.lt(1e50)) return undefined;
       const ratio = this.gainedIP.log10() / this.currentIP.log10();
       const rgb = [
         Math.round(255 - (ratio - 1) * 10 * 255),
@@ -48,7 +48,7 @@ Vue.component("game-header-big-crunch-button", {
       onclick="bigCrunchResetRequest()"
     >
       <b>Big Crunch for 
-      <span :style="amountStyles">{{shortenDimensions(gainedIP)}}</span> 
+      <span :style="amountStyle">{{shortenDimensions(gainedIP)}}</span> 
       Infinity {{ "point" | pluralize(gainedIP) }}.</b>
       <template v-if="isPeakIPPMVisible">
         <br>

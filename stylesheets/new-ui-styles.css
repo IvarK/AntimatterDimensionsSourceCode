@@ -175,9 +175,9 @@ body.t-dark {
 }
 
 .t-dark #antimatter {animation: a-game-header__antimatter--glow 25s infinite;}
-.o-color-infinity { color: var(--color-infinity) !important }
-.o-color-eternity { color: var(--color-eternity) !important }
-.o-color-reality { color: var(--color-reality) !important }
+.o-sidebar-infinity-button  { color: var(--color-infinity) !important }
+.o-sidebar-eternity-button  { color: var(--color-eternity) !important }
+.o-sidebar-reality-button { color: var(--color-reality) !important }
 
 .resource-infinity-canreset,
 .resource-eternity-canreset {
@@ -932,7 +932,7 @@ body.t-dark {
   right: 72%;
 }
 
-.l-reset-buttons-container .l-reality-button {
+.l-reset-buttons-container__reality-button {
   margin-top: 1.7rem;
   margin-bottom: 0;
 }

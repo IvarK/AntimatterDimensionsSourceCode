@@ -17,7 +17,7 @@ Vue.component("sidebar-ep", {
   template:
   `<div class="resource">
     <div v-if="cond">
-      <h2 class="o-color-eternity">{{ shorten(ep, 2, 0) }}</h2>
+      <h2 class="o-sidebar-eternity-button">{{ shorten(ep, 2, 0) }}</h2>
       <div class="resource-information">
         <span class="resource-name">Eternity Points</span>
       </div>

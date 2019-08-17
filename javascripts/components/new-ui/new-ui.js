@@ -5,14 +5,14 @@ Vue.component("new-ui", {
     return {
       view: ui.view,
       showCrunch: false,
-      breakInf: false,
+      breakInfinity: false,
       realities: 0
     };
   },
   methods: {
     update() {
       this.showCrunch = !player.break && player.antimatter.gte(Number.MAX_VALUE);
-      this.breakInf = player.break;
+      this.breakInfinity = player.break;
       this.realities = player.realities;
     }
   },
@@ -23,9 +23,9 @@ Vue.component("new-ui", {
     <div class="game-container">
       <news-ticker />
       <div class="tab-container">
-        <div class="l-reset-buttons-container" v-if="breakInf">
+        <div class="l-reset-buttons-container" v-if="breakInfinity">
           <game-header-eternity-button/>
-          <reality-button v-if="realities > 0"/>
+          <reality-button v-if="realities > 0" class="l-reset-buttons-container__reality-button"/>
           <game-header-big-crunch-button/>
         </div>
         <div v-if="showCrunch">

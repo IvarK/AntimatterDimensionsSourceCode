@@ -23,17 +23,6 @@ Vue.component("automator-editor", {
         this.$viewModel.tabs.reality.automator.editorScriptID = value;
       }
     },
-    mode: {
-      get() {
-        return this.$viewModel.tabs.reality.automator.mode;
-      },
-      set(value) {
-        this.$viewModel.tabs.reality.automator.mode = value;
-      }
-    },
-    modeIconClass() {
-      return this.mode ? "fa-cubes" : "fa-code";
-    },
     playTooltip() {
       if (this.isRunning) return undefined;
       if (this.isPaused) return "Resume automator execution";
@@ -138,11 +127,6 @@ Vue.component("automator-editor", {
                         @blur="nameEdited"
                         @keyup.enter="$refs.renameInput.blur()"/>
         </div>
-        <automator-button
-          class="l-automator__button--corner"
-          :class="modeIconClass"
-          @click="mode = !mode"
-        />
       </div>
       <automator-text-editor :currentScriptID="currentScriptID"
                              :activeLine="activeLine"/>

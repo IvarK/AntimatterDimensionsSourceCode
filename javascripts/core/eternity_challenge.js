@@ -162,7 +162,7 @@ class EternityChallengeState extends GameMechanicState {
 
   start(auto) {
     if (!this.isUnlocked) return false;
-    if (player.options.confirmations.challenges) {
+    if (!auto && player.options.confirmations.challenges) {
       const confirmation =
         "You will start over with just your time studies, " +
         "eternity upgrades and achievements. " +

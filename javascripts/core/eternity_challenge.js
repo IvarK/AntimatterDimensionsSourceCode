@@ -11,10 +11,11 @@ function startEternityChallenge() {
   player.replicanti.galaxies = 0;
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestEPminThisEternity = new Decimal(0);
   resetTimeDimensions();
-  kong.submitStats("Eternities", player.eternities);
+  // FIXME: Eternity count is now a Decimal, also why is this submitted twice?
+  // kong.submitStats("Eternities", player.eternities);
   resetTickspeed();
   resetAntimatter();
   playerInfinityUpgradesOnEternity();
@@ -274,8 +275,6 @@ const EternityChallenges = {
         }
         return;
       }
-      const isPostEc = RealityUpgrade(10).isBought ? player.eternities > 100 : player.eternities > 0;
-      if (!isPostEc) return;
       const interval = this.interval;
       let next = this.nextChallenge;
       while (player.reality.lastAutoEC - interval > 0 && next !== undefined) {

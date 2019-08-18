@@ -18,7 +18,7 @@ GameDatabase.tabs = [
         symbol: "∞",
         component: "infinity-dim-tab",
         newUIComponent: "new-inf-dimensions-tab",
-        condition: () => player.eternities > 0 || InfinityDimension(1).isUnlocked
+        condition: () => player.eternities.gt(0) || InfinityDimension(1).isUnlocked
       },
       {
         key: "time",
@@ -26,14 +26,14 @@ GameDatabase.tabs = [
         symbol: "Δ",
         component: "time-dim-tab",
         newUIComponent: "new-time-dimensions-tab",
-        condition: () => player.eternities > 0
+        condition: () => player.eternities.gt(0)
       },
       {
         key: "production",
         name: "Production",
         symbol: "📈",
         component: "dim-production-tab",
-        condition: () => player.eternities > 0 || player.infinitied.gt(0)
+        condition: () => player.eternities.gt(0) || player.infinitied.gt(0)
       }
     ]
   },
@@ -111,7 +111,7 @@ GameDatabase.tabs = [
   {
     key: "challenges",
     name: "Challenges",
-    condition: () => player.eternities > 0 || player.infinitied.gt(0),
+    condition: () => player.eternities.gt(0) || player.infinitied.gt(0),
     subtabs: [
       {
         key: "normal",
@@ -146,7 +146,7 @@ GameDatabase.tabs = [
     name: "Infinity",
     oldUIClass: "infinitytabbtn",
     newUIClass: "infinity",
-    condition: () => player.eternities > 0 || player.infinitied.gt(0),
+    condition: () => player.eternities.gt(0) || player.infinitied.gt(0) || player.infinityPoints.gt(0),
     before: "infinity-points-header",
     subtabs: [
       {
@@ -180,7 +180,7 @@ GameDatabase.tabs = [
     name: "Eternity",
     oldUIClass: "eternitytabbtn",
     newUIClass: "eternity",
-    condition: () => player.eternities > 0,
+    condition: () => player.eternities.gt(0),
     subtabs: [
       {
         key: "studies",
@@ -206,6 +206,13 @@ GameDatabase.tabs = [
         symbol: "TD",
         component: "time-dilation-tab",
         condition: () => TimeStudy.dilation.isBought
+      },
+      {
+        key: "compression",
+        name: "Time compression",
+        symbol: "TC",
+        component: "time-compression-tab",
+        condition: () => Ra.pets.enslaved.level >= 25
       }
     ],
   },
@@ -246,7 +253,14 @@ GameDatabase.tabs = [
         name: "Black hole",
         symbol: "BH",
         component: "black-hole-tab",
-      }
+      },
+      {
+        key: "alchemy",
+        name: "Glyph alchemy",
+        symbol: "⛧",
+        component: "alchemy-tab",
+        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
+      },
     ],
   },
   {
@@ -289,13 +303,6 @@ GameDatabase.tabs = [
         symbol: "R",
         component: "ra-tab",
         condition: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])
-      },
-      {
-        key: "alchemy",
-        name: "Glyph Alchemy",
-        symbol: "⛧",
-        component: "alchemy-tab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)
       },
       {
         key: "laitela",

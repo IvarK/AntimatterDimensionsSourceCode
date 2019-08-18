@@ -7,21 +7,25 @@ function canBuyTickSpeed() {
 function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning || Laitela.isRunning) return new Decimal(1);
   if (Ra.isRunning) return new Decimal(0.89);
-  let replicantiGalaxies = player.replicanti.galaxies;
+  // Note that this already includes the "50% more" active path effect
+  let replicantiGalaxies = Replicanti.galaxies.bought;
   replicantiGalaxies *= (1 + Effects.sum(
     TimeStudy(132),
     TimeStudy(133)
   ));
-  replicantiGalaxies += Effects.sum(
-    TimeStudy(225),
-    TimeStudy(226)
-  );
-  replicantiGalaxies += Effarig.bonusRG;
-  const nonActivePathReplicantiGalaxies = Math.min(player.replicanti.galaxies, player.replicanti.gal);
+  // "extra" galaxies unaffected by the passive/idle boosts come from studies 225/226 and Effarig Infinity
+  replicantiGalaxies += Replicanti.galaxies.extra;
+  const nonActivePathReplicantiGalaxies = Math.min(Replicanti.galaxies.bought,
+    ReplicantiUpgrade.galaxies.value);
   // Effects.sum is intentional here - if EC8 is not completed,
   // this value should not be contributed to total replicanti galaxies
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let galaxies = player.galaxies + player.dilation.freeGalaxies + replicantiGalaxies;
+  if (TimeCompression.isActive) {
+    galaxies *= Math.pow(Effects.max(1, CompressionUpgrade.strongerDilationGalaxies), TimeCompression.compressionDepth);
+  } else if (player.dilation.active) {
+    galaxies *= Effects.max(1, CompressionUpgrade.strongerDilationGalaxies);
+  }
   if (galaxies < 3) {
       let baseMultiplier = 0.9;
       if (player.galaxies === 0) baseMultiplier = 0.89;
@@ -151,7 +155,7 @@ function resetTickspeed() {
 const Tickspeed = {
 
   get isUnlocked() {
-    return NormalDimension(2).amount.gt(0) || player.eternities >= 30;
+    return NormalDimension(2).amount.gt(0) || player.eternities.gte(30);
   },
 
   get multiplier() {
@@ -162,7 +166,7 @@ const Tickspeed = {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
       : this.baseValue;
-    return player.dilation.active ? dilatedValueOf(tickspeed) : tickspeed;
+    return (player.dilation.active || TimeCompression.isActive) ? dilatedValueOf(tickspeed) : tickspeed;
   },
 
   get baseValue() {
@@ -180,8 +184,8 @@ const Tickspeed = {
 
 const FreeTickspeed = {
   BASE_SOFTCAP: 300000,
-  GROWTH_RATE: 4e-3,
-  GROWTH_EXP: 1.5,
+  GROWTH_RATE: 6e-6,
+  GROWTH_EXP: 2,
 
   get amount() {
     return player.totalTickGained;

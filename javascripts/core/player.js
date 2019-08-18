@@ -133,9 +133,8 @@ let player = {
   thisInfinityTime: 0,
   thisInfinityRealTime: 0,
   thisInfinityLastBuyTime: 0,
-  resets: 0,
+  dimensionBoosts: 0,
   galaxies: 0,
-  tickDecrease: 0.9,
   totalAntimatter: new Decimal(0),
   achPow: new Decimal(1),
   news: new Set(),
@@ -160,6 +159,11 @@ let player = {
   lastTenRuns: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, new Decimal(1)]),
   lastTenEternities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 1]),
   lastTenRealities: Array.range(0, 10).map(() => [defaultMaxTime, new Decimal(1), defaultMaxTime, 0]),
+  bestIPminThisInfinity: new Decimal(0),
+  bestIPminThisEternity: new Decimal(0),
+  bestEPminThisEternity: new Decimal(0),
+  bestEPminThisReality: new Decimal(0),
+  bestRMmin: new Decimal(0),
   infMult: new Decimal(1),
   infMultCost: new Decimal(10),
   version: 13,
@@ -168,7 +172,7 @@ let player = {
   postChallUnlocked: 0,
   postC4Tier: 0,
   eternityPoints: new Decimal(0),
-  eternities: 0,
+  eternities: new Decimal(0),
   thisEternity: 0,
   thisEternityRealTime: 0,
   bestEternity: 999999999999,
@@ -214,7 +218,7 @@ let player = {
   noSacrifices: true,
   onlyEighthDimensons: true,
   onlyFirstDimensions: true,
-  noEighthDimensions: true,
+  noEighthDimensions: false,
   noTheoremPurchases: true,
   dilation: {
     studies: [],
@@ -222,6 +226,7 @@ let player = {
     tachyonParticles: new Decimal(0),
     dilatedTime: new Decimal(0),
     nextThreshold: new Decimal(1000),
+    baseFreeGalaxies: 0,
     freeGalaxies: 0,
     upgrades: new Set(),
     rebuyables: {
@@ -271,7 +276,6 @@ let player = {
     upgReqChecks: [false],
     automatorOn: false,
     automatorCurrentRow: 0,
-    automatorRows: 0,
     automatorCommands: new Set(),
     perks: new Set(),
     respec: false,
@@ -280,7 +284,7 @@ let player = {
     pp: 0,
     autoEC: true,
     lastAutoEC: 0,
-    partEternitied: 0,
+    partEternitied: new Decimal(0),
     automator: {
       state: {
         mode: AutomatorMode.STOP,
@@ -313,9 +317,7 @@ let player = {
       unlocks: [],
       run: false,
       bestRunAM: new Decimal(1),
-      glyphLevelMult: 1,
-      rmMult: 1,
-      dtBulk: 1
+      perkShop: Array.repeat(0, 4)
     },
     effarig: {
       relicShards: 0,
@@ -395,6 +397,12 @@ let player = {
       quoteIdx: 0,
       disCharge: false,
       peakGamespeed: 1,
+      compression: {
+        active: false,
+        entanglement: 0,
+        upgradeBits: 0,
+        respec: false
+      },
     },
     laitela: {
       matter: new Decimal(0),
@@ -458,7 +466,7 @@ const Player = {
   },
 
   get gainedEternities() {
-    return RealityUpgrade(10).isBought ? player.eternities - 100 : player.eternities;
+    return RealityUpgrade(10).isBought ? player.eternities.sub(100) : player.eternities;
   },
 
   get isInMatterChallenge() {
@@ -483,7 +491,7 @@ const Player = {
     if (NormalChallenge(12).isRunning) {
       return basePerSecond.plus(getDimensionProductionPerSecond(2));
     }
-    return basePerSecond.times(getGameSpeedupFactor());
+    return basePerSecond.times(getGameSpeedupForDisplay());
   },
 
   get bestRunIPPM() {

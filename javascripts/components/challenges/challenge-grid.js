@@ -8,7 +8,7 @@ Vue.component("challenge-grid", {
   data() {
     return {
       boxVisibility: [],
-      options: player.options
+      showAllChallenges: false
     };
   },
   created() {
@@ -17,6 +17,7 @@ Vue.component("challenge-grid", {
   },
   methods: {
     update() {
+      this.showAllChallenges = player.options.showAllChallenges;
       const boxVisibility = this.boxVisibility;
       const isChallengeVisible = this.isChallengeVisible;
       for (let challenge = 1; challenge < boxVisibility.length; challenge++) {
@@ -26,7 +27,7 @@ Vue.component("challenge-grid", {
     boxClassObject(id) {
       return {
         "l-challenge-grid__cell": true,
-        "l-challenge-grid__cell--hidden": !this.options.showAllChallenges && !this.boxVisibility[id]
+        "l-challenge-grid__cell--hidden": !this.showAllChallenges && !this.boxVisibility[id]
       };
     }
   },

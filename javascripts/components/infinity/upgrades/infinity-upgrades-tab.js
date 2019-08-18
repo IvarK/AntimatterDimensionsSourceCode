@@ -44,8 +44,8 @@ Vue.component("infinity-upgrades-tab", {
     },
     disChargeClassObject() {
       return {
-        "o-primary-btn--discharge-options": true,
-        "o-primary-btn--discharge-active": this.disCharge
+        "o-primary-btn--respec-options": true,
+        "o-primary-btn--respec-active": this.disCharge
       };
     },
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline

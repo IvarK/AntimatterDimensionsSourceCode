@@ -718,7 +718,8 @@ function getGlyphLevelInputs() {
   const replEffect = adjustFactor(replBase, weights.repl / 100);
   const dtEffect = adjustFactor(dtBase, weights.dt / 100);
   const eterEffect = adjustFactor(eterBase, weights.eternities / 100);
-  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * player.celestials.teresa.glyphLevelMult;
+  const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
+  let baseLevel = epEffect * replEffect * dtEffect * eterEffect * perkShopEffect;
   let scaledLevel = baseLevel;
   // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
   const scaleDelay = getAdjustedGlyphEffect("effarigglyph");
@@ -751,7 +752,7 @@ function getGlyphLevelInputs() {
     replEffect: replEffect,
     dtEffect: dtEffect,
     eterEffect: eterEffect,
-    perkShop: player.celestials.teresa.glyphLevelMult,
+    perkShop: perkShopEffect,
     scalePenalty: scalePenalty,
     perkFactor: perkFactor,
     shardFactor: shardFactor,

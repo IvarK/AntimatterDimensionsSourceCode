@@ -10,7 +10,8 @@ GameDatabase.infinity.breakUpgrades = (function() {
       description: config.description,
       effect: () => player.infinityRebuyables[config.id],
       formatEffect: value => (value === maxUpgrades ? `10x ➜ ${10 - value}x` : `10x ➜ ${10 - value - 1}x`),
-      staticEffect: true
+      staticEffect: true,
+      formatCost: value => shorten(value, 2, 0)
     };
   }
 

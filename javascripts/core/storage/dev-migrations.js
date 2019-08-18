@@ -174,6 +174,9 @@ GameStorage.devMigrations = {
       //   player.lastTenEternities[i][2] = undefined;
       //   player.lastTenRealities[i][3] = undefined;
       // }
+
+      // For anyone who is looking at this part of the code for debugging purposes, note that GameSpeedEffect.EC12
+      // has been replaced by GameSpeedEffect.FIXEDSPEED since EC12 is no longer the only fixed-speed effect
     },
     GameStorage.migrations.fixChallengeIds,
     GameStorage.migrations.adjustMultCosts,
@@ -419,7 +422,27 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNewsToSet
+    GameStorage.migrations.convertNewsToSet,
+    GameStorage.migrations.convertEternityCountToDecimal,
+    GameStorage.migrations.renameDimboosts,
+    player => {
+      // Reset reality autobuyer mode, since AutoRealityMode was incorrectly starting from 1 and not from 0.
+      // Disable it also to not wreck people's long runs or smth
+      player.auto.reality.mode = 0;
+      player.auto.reality.isActive = false;
+    },
+    player => {
+      // Perk shop refactor
+      player.celestials.teresa.perkShop = [
+        Math.floor(Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05)),
+        Math.floor(Math.log(player.celestials.teresa.rmMult) / Math.log(2)),
+        Math.floor(Math.log(player.celestials.teresa.dtBulk) / Math.log(2)),
+        0];
+      delete player.celestials.teresa.glyphLevelMult;
+      delete player.celestials.teresa.rmMult;
+      delete player.celestials.teresa.dtBulk;
+    },
+    GameStorage.migrations.migrateConfirmations,
   ],
 
   patch(player) {

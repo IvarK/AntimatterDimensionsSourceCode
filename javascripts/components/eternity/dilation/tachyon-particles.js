@@ -22,7 +22,7 @@ Vue.component("tachyon-particles", {
   methods: {
     update() {
       this.count = player.dilation.tachyonParticles.gte(1)
-        ? player.dilation.tachyonParticles.exponent + 1
+        ? Math.clampMin(Math.floor(20 * Math.log10(player.dilation.tachyonParticles.exponent)), 1)
         : 0;
     },
     updateSize() {

@@ -1,7 +1,7 @@
 "use strict";
 
-Vue.component('teresa-tab', {
-  data: function() {
+Vue.component("teresa-tab", {
+  data() {
     return {
       pour: false,
       time: new Date().getTime(),
@@ -13,11 +13,6 @@ Vue.component('teresa-tab', {
       quoteIdx: 0,
       unlocks: [],
       runReward: 0,
-      glyphUpg: {
-        cost: 1,
-        mult: 1
-      },
-      rmUpg: 1, // Cost and mult are the same
       pp: 0,
       leakRate: 0
     };
@@ -25,6 +20,14 @@ Vue.component('teresa-tab', {
   computed: {
     unlockInfo: () => Teresa.unlockInfo,
     rmStoreMax: () => Teresa.rmStoreMax,
+    upgrades() {
+      return [
+          PerkShopUpgrade.glyphLevel,
+          PerkShopUpgrade.rmMult,
+          PerkShopUpgrade.bulkDilation,
+          PerkShopUpgrade.musicGlyph
+      ];
+    }
   },
   methods: {
     update() {
@@ -35,16 +38,12 @@ Vue.component('teresa-tab', {
       }
       this.time = now;
       this.rmStore = player.celestials.teresa.rmStore;
-      this.percentage = (Teresa.fill * 100) + "%";
+      this.percentage = formatPercents(Teresa.fill, 2);
       this.rmMult = Teresa.rmMultiplier;
       this.quote = Teresa.quote;
       this.quoteIdx = player.celestials.teresa.quoteIdx;
       this.unlocks = Object.values(TERESA_UNLOCKS).map(info => Teresa.has(info)).filter(x => x);
       this.runReward = Teresa.runRewardMultiplier;
-      this.glyphUpg.cost = Math.pow(2, Math.log(player.celestials.teresa.glyphLevelMult) / Math.log(1.05));
-      this.glyphUpg.mult = player.celestials.teresa.glyphLevelMult;
-      this.rmUpg = player.celestials.teresa.rmMult;
-      this.dtBulk = player.celestials.teresa.dtBulk;
       this.pp = player.reality.pp;
       this.rm.copyFrom(player.reality.realityMachines);
       this.leakRate = this.unlocks[2] ? 0 : this.rmStore * (1 - Math.pow(0.98, 1 / 60));
@@ -55,35 +54,11 @@ Vue.component('teresa-tab', {
     startRun() {
       Teresa.startRun();
     },
-    buyRmMult() {
-      Teresa.buyRmMult();
-    },
-    buyGlyphMult() {
-      Teresa.buyGlyphLevelPower();
-    },
-    buyDtBulk() {
-      Teresa.buyDtBulk();
-    },
-    glyphMultCostDisplay() {
-      return this.glyphUpg.cost > Teresa.perkShopCap(PERK_SHOP.GLYPH_LEVEL)
-        ? "Capped!"
-        : `Costs: ${this.shorten(this.glyphUpg.cost, 2, 0)} PP`;
-    },
-    rmMultCostDisplay() {
-      return this.rmUpg > Teresa.perkShopCap(PERK_SHOP.RM_MULT)
-        ? "Capped!"
-        : `Costs: ${this.shorten(this.rmUpg, 2, 0)} PP`;
-    },
-    dtBulkCostDisplay() {
-      return this.dtBulk > 100 * Teresa.perkShopCap(PERK_SHOP.DILATION_BULK)
-        ? "Capped!"
-        : `Costs: ${this.shorten(this.dtBulk * 100, 2, 0)} PP`;
-    },
     unlockDescriptionStyle(unlockInfo) {
       const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
-      const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice) * 100;
+      const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return {
-         bottom: pos.toFixed(2) + "%",
+         bottom: formatPercents(pos, 2),
       };
     },
   },
@@ -98,9 +73,11 @@ Vue.component('teresa-tab', {
           <div class="c-teresa-unlock" v-if="unlocks[2]">The container no longer leaks.</div>
           <div class="c-teresa-shop" v-if="unlocks[3]">
             <span class="o-teresa-pp"> You have {{ shorten(pp, 2, 0) }} {{"Perk Point" | pluralize(pp)}}.</span>
-            <button class="o-teresa-shop-button" @click="buyGlyphMult()">Glyph levels are 5% bigger.<br/>Currently {{ shortenRateOfChange(glyphUpg.mult )}}x, {{ glyphMultCostDisplay() }}</button>
-            <button class="o-teresa-shop-button" @click="buyRmMult()">Gain 2 times more RM.<br/>Currently {{ shortenRateOfChange(rmUpg ) }}x, {{ rmMultCostDisplay() }}</button>
-            <button class="o-teresa-shop-button" @click="buyDtBulk()">Bulk buy 2 times more DT upgrades at once.<br/>Currently {{ shortenRateOfChange(dtBulk ) }}x, {{ dtBulkCostDisplay() }}</button>
+            <perk-shop-upgrade
+              v-for="upgrade in upgrades"
+              :key="upgrade.id"
+              :upgrade="upgrade"
+            />
           </div>
         </div>
         <div class="l-rm-container l-teresa-mechanic-container">
@@ -122,7 +99,6 @@ Vue.component('teresa-tab', {
             </div>
           </div>
         </div>
-
         <div class="c-unlock-descriptions l-teresa-mechanic-container"></div>
       </div>
     </div>`

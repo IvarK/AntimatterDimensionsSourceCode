@@ -44,6 +44,8 @@ function bigCrunchResetRequest(disableAnimation = false) {
 
 function bigCrunchReset() {
   if (!canCrunch()) return;
+  player.bestIPminThisEternity = player.bestIPminThisEternity.clampMin(player.bestIPminThisInfinity);
+  player.bestIPminThisInfinity = new Decimal(0);
   const earlyGame = player.bestInfinityTime > 60000 && !player.break;
   const challenge = NormalChallenge.current || InfinityChallenge.current;
   EventHub.dispatch(GameEvent.BIG_CRUNCH_BEFORE);
@@ -73,7 +75,7 @@ function bigCrunchReset() {
 
   const currentReplicanti = player.replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
-  secondSoftReset();
+  secondSoftReset(true);
 
   if (Achievement(95).isEnabled) {
     player.replicanti.amount = currentReplicanti;
@@ -82,8 +84,11 @@ function bigCrunchReset() {
     player.replicanti.galaxies = Math.floor(currentReplicantiGalaxies / 2);
   }
 
-  if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning && !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning) {
-    for (let i = 1; i < player.eternities - 9 && i < 9; i++) {
+  if (EternityMilestone.autobuyerID(1).isReached &&
+      !EternityChallenge(8).isRunning &&
+      !EternityChallenge(2).isRunning &&
+      !EternityChallenge(10).isRunning) {
+    for (let i = 1; i <= player.eternities.sub(10).clampMax(8).toNumber(); i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i);
         buyManyInfinityDimension(i)
@@ -101,14 +106,12 @@ function bigCrunchReset() {
 
 }
 
-function secondSoftReset() {
-    player.resets = 0;
+function secondSoftReset(forcedNDReset = false) {
+    player.dimensionBoosts = 0;
     player.galaxies = 0;
-    player.tickDecrease = 0.9;
     resetAntimatter();
-    softReset(0);
+    softReset(0, forcedNDReset);
     InfinityDimensions.resetAmount();
-    IPminpeak = new Decimal(0);
     if (player.replicanti.unl)
         player.replicanti.amount = new Decimal(1);
     player.replicanti.galaxies = 0;

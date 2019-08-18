@@ -25,7 +25,7 @@ Vue.component("autobuyer-toggles", {
         case AutoRealityMode.EITHER: return "either";
         case AutoRealityMode.BOTH: return "both";
       }
-      throw "Unknown auto reality mode";
+      throw crash("Unknown auto reality mode");
     }
   },
   methods: {

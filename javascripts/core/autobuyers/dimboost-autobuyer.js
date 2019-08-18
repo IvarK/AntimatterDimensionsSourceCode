@@ -69,7 +69,7 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends IntervaledAutobuye
       maxBuyDimBoosts();
       return;
     }
-    if (player.resets >= this.maxDimBoosts && player.galaxies < this.galaxies) {
+    if (DimBoost.purchasedBoosts >= this.maxDimBoosts && player.galaxies < this.galaxies) {
       return;
     }
     if (this.isBulkBuyUnlocked && !DimBoost.isShift) {

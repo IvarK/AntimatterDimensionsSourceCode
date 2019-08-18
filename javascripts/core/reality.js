@@ -243,6 +243,7 @@ function completeReality(force, reset, auto = false) {
       player.bestReality = player.thisReality;
     }
     player.reality.realityMachines = player.reality.realityMachines.plus(gainedRealityMachines());
+    player.bestRMmin = player.bestRMmin.max(gainedRealityMachines().dividedBy(Time.thisRealityRealTime.totalMinutes));
     addRealityTime(player.thisReality, player.thisRealityRealTime, gainedRealityMachines(), gainedGlyphLevel().actualLevel);
     if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) player.celestials.effarig.relicShards += Effarig.shardsGained;
     if (V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1])) {
@@ -277,9 +278,8 @@ function completeReality(force, reset, auto = false) {
   player.thisInfinityTime = 0;
   player.thisInfinityLastBuyTime = 0;
   player.thisInfinityRealTime = 0;
-  player.resets = isRUPG10Bought ? 4 : 0;
+  player.dimensionBoosts = isRUPG10Bought ? 4 : 0;
   player.galaxies = isRUPG10Bought ? 1 : 0;
-  player.tickDecrease = 0.9;
   player.interval = null;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
@@ -305,7 +305,7 @@ function completeReality(force, reset, auto = false) {
   // This has to be reset before player.eternities to make the bumpLimit logic work
   // correctly
   EternityUpgrade.epMult.reset();
-  player.eternities = 0;
+  player.eternities = new Decimal(0);
   player.thisEternity = 0;
   player.thisEternityRealTime = 0;
   player.bestEternity = 999999999999;
@@ -356,6 +356,7 @@ function completeReality(force, reset, auto = false) {
     Perk.startAM2
   ).toDecimal();
   Enslaved.autoReleaseTick = 0;
+  player.celestials.ra.compression.freeDimboosts = 0;
 
   resetInfinityRuns();
   resetEternityRuns();
@@ -366,9 +367,10 @@ function completeReality(force, reset, auto = false) {
   NormalDimensions.reset();
   secondSoftReset();
   if (player.celestials.ra.disCharge) disChargeAll();
+  if (player.celestials.ra.compression.respec) CompressionUpgrades.respec();
   player.celestials.ra.peakGamespeed = 1;
   if (isRUPG10Bought) {
-    player.eternities = 100;
+    player.eternities = new Decimal(100);
     if (Achievements.totalDisabledTime === 0) {
       initializeChallengeCompletions();
     }
@@ -380,14 +382,17 @@ function completeReality(force, reset, auto = false) {
   if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestEPminThisReality = new Decimal(0);
   resetTimeDimensions();
-  kong.submitStats('Eternities', player.eternities);
+  // FIXME: Eternity count is now a Decimal so this needs to be addressed
+  // kong.submitStats('Eternities', player.eternities);
   if (!EternityMilestone.autobuyerReplicantiGalaxy.isReached && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false;
   resetTickspeed();
   playerInfinityUpgradesOnEternity();
-  if (player.eternities <= 1) {
+  if (player.eternities.lte(1)) {
     Tab.dimensions.normal.show();
   }
   AchievementTimers.marathon2.reset();
@@ -456,6 +461,10 @@ function handleCelestialRuns(force) {
 
   if (Ra.isRunning) {
     player.celestials.ra.run = false;
+  }
+
+  if (TimeCompression.isActive) {
+    TimeCompression.isActive = false;
   }
 
   if (Laitela.isRunning) {

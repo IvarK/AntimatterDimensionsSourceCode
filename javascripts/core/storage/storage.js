@@ -8,11 +8,11 @@ const GameStorage = {
     2: undefined
   },
   saved: 0,
-  
+
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
   },
-  
+
   load() {
     const save = localStorage.getItem(this.localStorageKey);
     const root = GameSaveSerializer.deserialize(save);
@@ -40,7 +40,7 @@ const GameStorage = {
     this.currentSlot = root.current;
     this.loadPlayerObject(this.saves[this.currentSlot]);
   },
-  
+
   loadSlot(slot) {
     this.currentSlot = slot;
     // Save current slot to make sure no changes are lost
@@ -102,9 +102,6 @@ const GameStorage = {
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
-    IPminpeak = new Decimal(0);
-    EPminpeak = new Decimal(0);
-
     if (
       playerObject === Player.defaultStart ||
       !this.verifyPlayerObject(playerObject)
@@ -127,20 +124,16 @@ const GameStorage = {
     if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
       NormalChallenge(1).complete();
     }
-    if (player.secretUnlocks.fixed === "hasbeenfixed") {
-      SecretAchievement(42).unlock();
-    }
 
     ui.view.newsHidden = player.options.newsHidden;
     ui.view.newUI = player.options.newUI;
 
     recalculateAllGlyphs();
     checkPerkValidity();
-    Teresa.checkPPShopValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     Theme.set(player.options.theme);
-    Notation.find(player.options.notation).setCurrent();
+    Notations.find(player.options.notation).setAsCurrent();
 
     EventHub.dispatch(GameEvent.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
@@ -154,6 +147,10 @@ const GameStorage = {
     if (diff > 1000 * 1000) {
       simulateTime(diff / 1000);
     }
+    nextTickDiff = player.options.updateRate;
     GameUI.update();
+    if (GameIntervals.gameLoop.isStarted) {
+      GameIntervals.gameLoop.restart();
+    }
   }
 };

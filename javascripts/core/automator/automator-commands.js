@@ -79,19 +79,19 @@ const AutomatorCommands = ((() => {
         const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
         const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
         return () => {
-          autobuyer.isOn = on;
+          autobuyer.isActive = on;
           if (duration !== undefined) {
             autobuyer.mode = durationMode;
-            autobuyer.limit = new Decimal(1e-3 * duration);
+            autobuyer.time = 1e-3 * duration;
           } else if (xLast !== undefined) {
             autobuyer.mode = xLastMode;
-            autobuyer.limit = new Decimal(xLast);
+            autobuyer.xLast = new Decimal(xLast);
           } else if (fixedAmount !== undefined) {
             autobuyer.mode = fixedMode;
             if (isReality) {
               autobuyer.rm = new Decimal(fixedAmount);
             } else {
-              autobuyer.limit = new Decimal(fixedAmount);
+              autobuyer.amount = new Decimal(fixedAmount);
             }
           }
           return AutomatorCommandStatus.NEXT_INSTRUCTION;

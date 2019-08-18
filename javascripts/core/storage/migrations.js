@@ -81,8 +81,8 @@ GameStorage.migrations = {
       if (player.achievements.has("r85")) player.infMult = player.infMult.div(4);
       if (player.achievements.has("r93")) player.infMult = player.infMult.div(4);
 
-      player.realTimePlayed = player.totalTimePlayed * 100;
-      player.thisReality = player.totalTimePlayed * 100;
+      player.realTimePlayed = player.totalTimePlayed;
+      player.thisReality = player.totalTimePlayed;
       player.thisInfinityRealTime = player.thisInfinityTime * 100;
       player.thisEternityRealTime = player.thisEternity * 100;
       player.thisRealityRealTime = player.thisReality * 100;
@@ -117,6 +117,9 @@ GameStorage.migrations = {
       GameStorage.migrations.renameMoney(player);
       GameStorage.migrations.moveAutobuyers(player);
       GameStorage.migrations.convertNewsToSet(player);
+      GameStorage.migrations.convertEternityCountToDecimal(player);
+      GameStorage.migrations.renameDimboosts(player);
+      GameStorage.migrations.migrateConfirmations(player);
     }
   },
 
@@ -567,6 +570,26 @@ GameStorage.migrations = {
   convertNewsToSet(player) {
     player.news = new Set(player.newsArray);
     delete player.newsArray;
+  },
+
+  convertEternityCountToDecimal(player) {
+    player.eternities = new Decimal(player.eternities);
+    player.reality.partEternitied = new Decimal(player.reality.partEternitied);
+  },
+
+  renameDimboosts(player) {
+    player.dimensionBoosts = player.resets;
+    delete player.resets;
+  },
+
+  migrateConfirmations(player) {
+    player.options.confirmations.challenges = !player.options.challConf;
+    delete player.options.challConf;
+    player.options.confirmations.eternity = player.options.eternityconfirm;
+    delete player.options.eternityconfirm;
+    
+    // This did nothing on live and continues to do nothing...?
+    delete player.tickDecrease;
   },
 
   prePatch(saveData) {

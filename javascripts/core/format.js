@@ -21,19 +21,20 @@ function shortenMultiplier(money) {
 }
 
 function shorten(value, places, placesUnder1000) {
-  return Notation.current.format(value, places, placesUnder1000);
+  return Notations.current.format(value, places, placesUnder1000);
 }
 
 function shortenSmallInteger(value) {
-  return Notation.current.isPainful
+  return Notations.current.isPainful
     ? shorten(value, 2, 2)
     : formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
 function shortenPostBreak(value, places, placesUnder1000) {
-  Notation.forcePostBreakFormat = true;
+  const currentFormat = ui.formatPreBreak;
+  ui.formatPreBreak = false;
   const shortened = shorten(value, places, placesUnder1000);
-  Notation.forcePostBreakFormat = false;
+  ui.formatPreBreak = currentFormat;
   return shortened;
 }
 
@@ -63,5 +64,7 @@ function timeDisplayShort(ms) {
 
 const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;
 function formatWithCommas(value) {
-  return value.toString().replace(commaRegexp, ",");
+  const decimalPointSplit = value.toString().split(".");
+  decimalPointSplit[0] = decimalPointSplit[0].replace(commaRegexp, ",");
+  return decimalPointSplit.join(".");
 }

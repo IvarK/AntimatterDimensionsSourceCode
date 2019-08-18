@@ -3,7 +3,7 @@
 function canEternity() {
   return EternityChallenge.isRunning
     ? EternityChallenge.current.canBeCompleted
-    : player.infinityPoints.gte(Decimal.MAX_NUMBER);
+    : player.infinityPoints.gte(Decimal.MAX_NUMBER) && InfinityDimension(8).isUnlocked;
 }
 
 function eternity(force, auto, specialConditions = {}) {
@@ -26,7 +26,7 @@ function eternity(force, auto, specialConditions = {}) {
       gainedEternityPoints(), 
       Effects.product(RealityUpgrade(3))
     );
-    player.eternities += Effects.product(RealityUpgrade(3));
+    player.eternities = player.eternities.add(Effects.product(RealityUpgrade(3)));
   }
 
   if (EternityChallenge.isRunning) {
@@ -70,7 +70,10 @@ function eternity(force, auto, specialConditions = {}) {
 
   if (player.respec) respecTimeStudies(auto);
   player.respec = false;
-  if (player.eternities === 1 || (player.reality.rebuyables[3] > 0 && player.eternities === RealityUpgrade(3).effectValue && player.eternityPoints.lte(10))) {
+  if (player.eternities.eq(1) ||
+        (player.reality.rebuyables[3] > 0 &&
+        player.eternities.eq(RealityUpgrade(3).effectValue) &&
+        player.eternityPoints.lte(10))) {
     Tab.dimensions.time.show();
   }
   
@@ -83,11 +86,14 @@ function eternity(force, auto, specialConditions = {}) {
   
   resetInfinityPointsOnEternity();
   InfinityDimensions.resetAmount();
-  IPminpeak = new Decimal(0);
-  EPminpeak = new Decimal(0);
+  player.bestEPminThisReality = player.bestEPminThisReality.max(player.bestEPminThisEternity);
+  player.bestEPminThisEternity = new Decimal(0);
+  player.bestIPminThisInfinity = new Decimal(0);
+  player.bestIPminThisEternity = new Decimal(0);
   resetTimeDimensions();
   try {
-      kong.submitStats('Eternities', player.eternities);
+    // FIXME: Eternity count is a Decimal and also why is this submitted in so many places?
+    // kong.submitStats('Eternities', player.eternities);
   } catch (err) {
       console.log("Couldn't load Kongregate API")
   }
@@ -209,7 +215,7 @@ class EternityMilestoneState {
   }
 
   get isReached() {
-    return player.eternities >= this.config.eternities;
+    return player.eternities.gte(this.config.eternities);
   }
 }
 

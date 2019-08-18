@@ -79,7 +79,7 @@ GameDatabase.achievements.normal = [
     id: 25,
     name: "Boosting to the max",
     tooltip: "Buy 10 Dimension Boosts.",
-    checkRequirement: () => player.resets >= 10,
+    checkRequirement: () => DimBoost.purchasedBoosts >= 10,
     checkEvent: GameEvent.DIMBOOST_AFTER
   },
   {
@@ -190,7 +190,7 @@ GameDatabase.achievements.normal = [
     id: 43,
     name: "Zero Deaths",
     tooltip: "Get to Infinity without Dimension shifts, boosts or Antimatter Galaxies in a challenge.",
-    checkRequirement: () => player.galaxies === 0 && player.resets === 0,
+    checkRequirement: () => player.galaxies === 0 && DimBoost.purchasedBoosts === 0,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "Dimensions 1-4 are 25% stronger.",
     effect: 1.25
@@ -373,7 +373,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () =>
       NormalChallenge(11).isRunning &&
       NormalDimension(1).amount.eq(1) &&
-      player.resets === 0 &&
+      DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
     reward: "1st Dimensions are 3 times stronger.",
@@ -446,11 +446,11 @@ GameDatabase.achievements.normal = [
     tooltip: "Get to Infinity in under 200 milliseconds.",
     checkRequirement: () => Time.thisInfinity.totalMilliseconds <= 200,
     checkEvent: GameEvent.BIG_CRUNCH_BEFORE,
-    reward: () => `Start with ${shorten(1e25, 0, 0)} antimatter ` +
+    reward: () => `Start with ${shorten(2e25, 0, 0)} antimatter ` +
       "and all Dimensions are stronger in the first 300ms of Infinities.",
     effect: () => 330 / (Time.thisInfinity.totalMilliseconds + 30),
     effectCondition: () => Time.thisInfinity.totalMilliseconds < 300,
-    secondaryEffect: () => 1e25
+    secondaryEffect: () => 2e25
   },
   {
     id: 81,
@@ -603,7 +603,7 @@ GameDatabase.achievements.normal = [
     id: 102,
     name: "This mile took an Eternity",
     tooltip: "Get all Eternity milestones.",
-    checkRequirement: () => player.eternities >= 100,
+    checkRequirement: () => player.eternities.gte(100),
     checkEvent: GameEvent.ETERNITY_RESET_AFTER
   },
   {
@@ -766,7 +766,7 @@ GameDatabase.achievements.normal = [
       player.infinityPoints.exponent >= 100 &&
       NormalDimension(1).amount.eq(0) &&
       player.infinitied.eq(0) &&
-      player.resets <= 4 &&
+      DimBoost.purchasedBoosts <= 4 &&
       player.galaxies <= 1 &&
       player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GAME_TICK_AFTER,
@@ -817,7 +817,7 @@ GameDatabase.achievements.normal = [
     tooltip: "Have 630 Antimatter Galaxies without having any Replicanti Galaxies.",
     checkRequirement: () => player.galaxies >= 630 && player.replicanti.galaxies === 0,
     checkEvent: GameEvent.GALAXY_RESET_AFTER,
-    reward: "Gain a multiplier to Dilated Time gain based on Antimatter Galaxies.",
+    reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
     effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1)
   },
   {

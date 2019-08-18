@@ -7,7 +7,7 @@ GameDatabase.eternity.timeStudies.ec = [
     requirement: {
       resource: "Eternities",
       current: () => player.eternities,
-      required: completions => 20000 + completions * 20000,
+      required: completions => new Decimal(20000 + completions * 20000),
       formatValue: value => value.toString()
     }
   },

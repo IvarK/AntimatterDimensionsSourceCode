@@ -23,7 +23,7 @@ Vue.component("alchemy-resource-info", {
       const reagents = this.reaction.reagents
         .map(r => `${r.cost}${r.resource.symbol}`)
         .join(" + ");
-      return `${reagents} ➜ ${this.reactionProduction}${this.resource.symbol}`;
+      return `${reagents} ➜ ${this.reaction.reactionProduction.toFixed(2)}${this.resource.symbol}`;
     },
     realityReactionText() {
       const reagents = this.reaction.reagents

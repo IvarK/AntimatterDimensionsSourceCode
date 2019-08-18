@@ -214,7 +214,7 @@ Vue.component("glyph-component", {
   },
   computed: {
     hasTooltip() {
-      return this.glyph.effects !== 0;
+      return Boolean(this.glyph.effects);
     },
     typeConfig() {
       return GlyphTypes[this.glyph.type];

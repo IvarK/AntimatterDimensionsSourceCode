@@ -24,13 +24,22 @@ Vue.component("game-header-eternity-button", {
     peakEPPMThreshold: () => new Decimal("1e100"),
     isPeakEPPMVisible() {
       return this.currentEPPM.lte(this.peakEPPMThreshold);
+    },
+    buttonTypeClass() {
+      return this.isDilation
+        ? "o-prestige-btn--dilation"
+        : "o-prestige-btn--eternity";
+    },
+    isDilation() {
+      return this.type === EPButtonDisplayType.DILATION ||
+        this.type === EPButtonDisplayType.DILATION_EXPLORE_NEW_CONTENT;
     }
   },
   methods: {
     update() {
       this.isVisible = player.infinityPoints.gte(Player.eternityGoal) && InfinityDimension(8).isUnlocked;
       if (!this.isVisible) return;
-      if (player.eternities === 0) {
+      if (!PlayerProgress.eternityUnlocked()) {
         this.type = EPButtonDisplayType.FIRST_TIME;
         return;
       }
@@ -64,7 +73,7 @@ Vue.component("game-header-eternity-button", {
         ? EPButtonDisplayType.NORMAL_EXPLORE_NEW_CONTENT
         : EPButtonDisplayType.NORMAL;
       this.currentEPPM.copyFrom(gainedEP.dividedBy(Time.thisEternity.totalMinutes));
-      this.peakEPPM.copyFrom(EPminpeak);
+      this.peakEPPM.copyFrom(player.bestEPminThisEternity);
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;
@@ -80,7 +89,8 @@ Vue.component("game-header-eternity-button", {
   template:
     `<button
       v-if="isVisible"
-      class="o-prestige-btn o-prestige-btn--eternity l-game-header__eternity-btn"
+      :class="buttonTypeClass"
+      class="o-prestige-btn l-game-header__eternity-btn"
       onclick="eternity()"
     >
       <!-- First time -->

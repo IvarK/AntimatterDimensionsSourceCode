@@ -222,15 +222,15 @@ GameDatabase.achievements.normal = [
   {
     id: 47,
     name: "Daredevil",
-    tooltip: "Complete 2 challenges.",
-    checkRequirement: () => NormalChallenges.completed.length === 2,
+    tooltip: "Complete 2 challenges (not including the first one).",
+    checkRequirement: () => NormalChallenges.all.slice(1).countWhere(c => c.isCompleted) === 2,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER
   },
   {
     id: 48,
     name: "AntiChallenged",
     tooltip: "Complete all the challenges.",
-    checkRequirement: () => NormalChallenges.completed.length === 12,
+    checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: GameEvent.BIG_CRUNCH_AFTER,
     reward: "All Dimensions are 10% stronger.",
     effect: 1.1

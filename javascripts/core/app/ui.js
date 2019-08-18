@@ -109,7 +109,7 @@ const GameUI = {
   dispatch(event) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
-      this.events = this.events.splice(index, 1);
+      this.events.splice(index, 1);
     }
     if (event !== GameEvent.UPDATE) {
       this.events.push(event);

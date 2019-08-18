@@ -302,7 +302,7 @@ GameDatabase.reality.glyphEffects = [
     singleDesc: "Multiply IP gain by {value}",
     totalDesc: "IP gain ×{value}",
     genericDesc: "IP gain multiplier",
-    effect: (level, strength) => Math.pow(level * strength, 5) * 100,
+    effect: (level, strength) => Math.pow(level * strength, 6.5) * 1000,
     formatEffect: x => shorten(x, 2, 0),
     combine: GlyphCombiner.multiply,
     // eslint-disable-next-line no-negated-condition

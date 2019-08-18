@@ -896,7 +896,7 @@ function autoBuyDilationUpgrades() {
 }
 
 function autoBuyInfDims() {
-  if (EternityMilestone.autobuyerID1.isReached && !EternityChallenge(8).isRunning) {
+  if (EternityMilestone.autobuyerID(1).isReached && !EternityChallenge(8).isRunning) {
     for (var i = 1; i < player.eternities - 9 && i < 9; i++) {
       if (player.infDimBuyers[i - 1]) {
         buyMaxInfDims(i)

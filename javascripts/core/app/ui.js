@@ -109,7 +109,7 @@ const GameUI = {
   dispatch(event) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
-      this.events = this.events.splice(index, 1);
+      this.events.splice(index, 1);
     }
     if (event !== GameEvent.UPDATE) {
       this.events.push(event);
@@ -154,6 +154,21 @@ const UIID = function() {
   vTooltip.defaultClass = 'general-tooltip';
   vTooltip.popover.defaultBaseClass = 'general-tooltip';
   vTooltip.defaultTemplate = '<div role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>';
+}());
+
+(function() {
+  const methodStrategy = Vue.config.optionMergeStrategies.methods;
+  // eslint-disable-next-line max-params
+  Vue.config.optionMergeStrategies.methods = (parentVal, childVal, vm, key) => {
+    const result = methodStrategy(parentVal, childVal, vm, key);
+    const hasUpdate = val => val && val.update;
+    if (!hasUpdate(parentVal) || !hasUpdate(childVal)) return result;
+    result.update = function() {
+      parentVal.update.call(this);
+      childVal.update.call(this);
+    };
+    return result;
+  };
 }());
 
 ui = new Vue({

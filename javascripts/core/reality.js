@@ -379,7 +379,6 @@ function completeReality(force, reset, auto = false) {
   if (player.infinitied.gt(0) && !NormalChallenge(1).isCompleted) {
     NormalChallenge(1).complete();
   }
-  if (player.realities === 4) player.reality.automatorCommands = new Set([12, 24, 25]);
   player.reality.upgReqChecks = [true];
   InfinityDimensions.resetAmount();
   player.bestIPminThisInfinity = new Decimal(0);

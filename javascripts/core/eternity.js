@@ -41,7 +41,7 @@ function eternity(force, auto, specialConditions = {}) {
     TimeStudy(191)
   );
 
-  if (player.dilation.active && !force) {
+  if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
     rewardTP();
   }
 

@@ -6912,11 +6912,27 @@ input.o-automator-block-input {
   height: calc(100vh - 20vh);
 }
 
-.l-h2p-header {
-  flex: 0 0.2 5rem;
+.l-h2p-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  flex: 1 1 50rem;
+  margin: 2rem 0 2rem 0;
+}
+
+.l-h2p-header {
+  flex: 0 0.2 5rem;
+  text-align: center;
+}
+
+.l-h2p-search-tab {
+  flex: 0.1 0 10rem;
+  display: flex;
+  flex-direction: column;
+}
+.l-h2p-info {
+  flex: 1 1 50rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .o-h2p-return {
@@ -6961,24 +6977,51 @@ input.o-automator-block-input {
 }
 
 .l-h2p-body::-webkit-scrollbar-thumb {
-  background: black;
+  background: grey;
   border-radius: 0.5rem;
+}
+.c-h2p-body--title {
+  font-size: 2.5rem;
 }
 
 .c-h2p-search-bar {
-  font-size: 3rem;
-  width: 50%;
+  font-size: 2rem;
+  width: calc(100% - 1rem);
+  padding: 0.2rem;
 }
 
 .l-h2p-tab-list {
   display: flex;
   justify-content: flex-start;
-  flex-flow: row wrap;
+  flex-direction: column;
+  overflow-y: scroll;
   margin: 0.5rem;
+  flex: 1 0.8 40rem;
 }
 
-.l-h2p-tab-button {
-  margin: 1rem;
+.l-h2p-tab-list::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.l-h2p-tab-list::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 0.5rem;
+}
+
+.o-h2p-tab-button {
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-bottom: 0.1rem solid black;
+  padding: 0.3rem 0.5rem 0.3rem 0;
+}
+.t-dark .o-h2p-tab-button,
+.t-dark-metro .o-h2p-tab-button,
+.t-s6 .o-h2p-tab-button{
+  border-bottom: 0.1rem solid white;
+}
+
+.o-h2p-tab-button--selected {
+  color: aqua;
 }
 
 .l-help-me {

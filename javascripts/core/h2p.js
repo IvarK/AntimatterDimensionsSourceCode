@@ -3,6 +3,7 @@
  * @template
  * {
  *  name: {String}
+ *  alias: {String}
  *  id: {Number}
  *  info: {function: @return String}
  *  unlock: {function: @return Boolean}
@@ -489,6 +490,7 @@ const H2P_TABS = [
     tab: ""
   }, {
     name: "Teresa, Celestial of Reality",
+    alias: "Teresa",
     id: 25,
     info: () => `Teresa is the first Celestial. It is unlocked by obtaining all of the Reality Upgrades.<br>
     On the main screen, you see a bar with a button above it that says "Pour RM".
@@ -513,6 +515,7 @@ const H2P_TABS = [
     tab: "celestials/teresa"
   }, {
     name: "Effarig, Celestial of Ancient Relics",
+    alias: "Effarig",
     id: 26,
     info: () => `Effarig is the second Celestial you encounter.
     It is unlocked by pouring atleast ${format(1e21)} RM into Teresa's container.<br>
@@ -555,6 +558,7 @@ const H2P_TABS = [
     tab: "celestials/effarig"
   }, {
     name: "The Enslaved Ones, Celestial of Time",
+    alias: "Enslaved Ones",
     id: 27,
     info: () => `The Enslaved Ones are the third Celestial, unlocked by completing Effarig's Eternity.<br>
     The interface for The Enslaved Ones has a few buttons on it.
@@ -594,6 +598,7 @@ const H2P_TABS = [
     tab: "celestials/enslaved"
   }, {
     name: "V, Celestial of Achievements",
+    alias: "V",
     id: 28,
     // Proofread up until unlock condition
     info: () => `V is a special Celestial in the sense that it is not unlocked by another Celestial,
@@ -630,6 +635,7 @@ const H2P_TABS = [
     tab: "celestials/v"
   }, {
     name: "Ra, Celestial of the Forgotten",
+    alias: "Ra",
     id: 29,
     info: () => `<h1>Work in Progress</h1>`,
     unlock: () => V.has(V_UNLOCKS.RUN_UNLOCK_THRESHOLDS[1]),
@@ -638,6 +644,7 @@ const H2P_TABS = [
     tab: "celestials/ra"
   }, {
     name: "Lai'tela, Celestial of Matter",
+    alias: "Lai'tela",
     id: 30,
     info: () => `<h1>Work in Progress</h1>`,
     unlock: () => Ra.has(RA_LAITELA_UNLOCK),
@@ -645,6 +652,7 @@ const H2P_TABS = [
     tab: "celestials/laitela"
   }, {
     name: "Pelle, Celestial of Antimatter",
+    alias: "Pelle",
     id: 31,
     info: () => `<h1>Work in Progress</h1>`,
     unlock: () => Laitela.has(LAITELA_UNLOCKS.PELLE),
@@ -652,6 +660,11 @@ const H2P_TABS = [
     tab: "celestials/pelle"
   }
 ];
+
+H2P_TABS.forEach((tab, index) => {
+  tab.id = index;
+  if (tab.alias === undefined) tab.alias = tab.name;
+});
 
 // eslint-disable-next-line multiline-comment-style
 /*

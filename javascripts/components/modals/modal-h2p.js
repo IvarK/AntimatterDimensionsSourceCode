@@ -2,10 +2,7 @@
 Vue.component("modal-h2p", {
   data() {
     return {
-      menuObject: {
-        name: "How to Play?"
-      },
-      activeTab: this.menuObject,
+      activeTab: {},
       searchValue: "",
     };
   },
@@ -13,15 +10,12 @@ Vue.component("modal-h2p", {
     this.activeTab = this.unlockedTabs.find(
       h2pTab =>
         h2pTab.tab === `${this.$viewModel.tab}/${this.$viewModel.subtab}` || h2pTab.tab === this.$viewModel.tab
-    ) || this.menuObject;
+    ) || this.unlockedTabs[0];
   },
   computed: {
     allTabs: () => H2P_TABS,
     unlockedTabs() {
       return this.allTabs.filter(tab => tab.unlock());
-    },
-    displayMenu() {
-      return this.activeTab === this.menuObject;
     },
     searchTerm() {
       return this.searchValue.toLowerCase();
@@ -91,26 +85,29 @@ Vue.component("modal-h2p", {
   template: `
   <div class="l-h2p-modal">
     <div class="l-h2p-header">
-      <div class="o-h2p-return" @click="goBack" />
       <div class="c-h2p-title">
-        {{activeTab.name}}
+        How To Play
       </div>
-      <div class="o-h2p-exit" @click= "exit" />
+      <div class="c-modal__close-btn o-primary-btn .o-primary-btn--modal-close" @click="exit">×</div>
     </div>
-    <div v-if=displayMenu>
-      <div>
+    <div class="l-h2p-container">
+      <div class="l-h2p-search-tab">
         <input v-model="searchValue" placeholder="Type to search..." class="c-h2p-search-bar"/>
+        <div class="l-h2p-tab-list">
+          <div v-for="tab in matchingTabs"
+            :key="tab.name"
+            class="o-h2p-tab-button"
+            :class="tab === activeTab ? 'o-h2p-tab-button--selected' : ''"
+            @click="setActiveTab(tab.id)">
+            {{tab.alias}}
+          </div>
+        </div>
       </div>
-      <div class="l-h2p-tab-list">
-        <button v-for="tab in matchingTabs"
-          :key="tab.name"
-          class="o-primary-button tabbtn l-h2p-tab-button"
-          @click="setActiveTab(tab.id)">
-          {{tab.name}}
-        </button">
+      <div class="l-h2p-info">
+        <div class="c-h2p-body--title"> {{activeTab.name}} </div>
+        <div class="l-h2p-body c-h2p-body" v-html="activeTab.info()" />
       </div>
     </div>
-    <div v-else class="l-h2p-body c-h2p-body" v-html="activeTab.info()" />
   </div>
   `
 });

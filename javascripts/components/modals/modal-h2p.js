@@ -28,7 +28,7 @@ Vue.component("modal-h2p", {
     },
     matchingTabs() {
       if (this.searchTerm === "") return this.unlockedTabs;
-      const searchWords = this.searchTerm.split(" ");
+      const searchWords = this.searchTerm.split(" ").filter(str => str !== "");
       let unusedTabs = this.unlockedTabs;
       // Find tab names that exactly match the search term
       let tabs = unusedTabs.filter(tab => tab.name.toLowerCase() === this.searchTerm);

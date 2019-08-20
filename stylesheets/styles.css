@@ -6980,3 +6980,16 @@ input.o-automator-block-input {
 .l-h2p-tab-button {
   margin: 1rem;
 }
+
+.l-help-me {
+  position: absolute;
+  top: 1rem;
+  width: 2rem;
+  right: 1rem;
+  height: 2rem;
+  border-radius: 50%;
+  line-height: 1.9rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}

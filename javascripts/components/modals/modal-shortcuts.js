@@ -16,6 +16,7 @@ Vue.component("modal-shortcuts", {
       { name: "Toggle Black Hole", keys: ["b"] },
       { name: "Save game", keys: ["ctrl", "s"] },
       { name: "Export game", keys: ["ctrl", "e"] },
+      { name: "Open \"How to Play\" modal", keys: ["h"] },
       { name: "Close pop-up or open options", keys: ["esc"] }
     ]
   },

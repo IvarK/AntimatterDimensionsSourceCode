@@ -122,6 +122,54 @@ const AutomatorLexer = (() => {
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });
+  createInCategory(Currency, "EC1", /ec1_completions/i, {
+    $autocomplete: "ec1_completions",
+    $getter: () => EternityChallenge(1).completions
+  });
+  createInCategory(Currency, "EC2", /ec2_completions/i, {
+    $autocomplete: "ec2_completions",
+    $getter: () => EternityChallenge(2).completions
+  });
+  createInCategory(Currency, "EC3", /ec3_completions/i, {
+    $autocomplete: "ec3_completions",
+    $getter: () => EternityChallenge(3).completions
+  });
+  createInCategory(Currency, "EC4", /ec4_completions/i, {
+    $autocomplete: "ec4_completions",
+    $getter: () => EternityChallenge(4).completions
+  });
+  createInCategory(Currency, "EC5", /ec5_completions/i, {
+    $autocomplete: "ec5_completions",
+    $getter: () => EternityChallenge(5).completions
+  });
+  createInCategory(Currency, "EC6", /ec6_completions/i, {
+    $autocomplete: "ec6_completions",
+    $getter: () => EternityChallenge(6).completions
+  });
+  createInCategory(Currency, "EC", /ec7_completions/i, {
+    $autocomplete: "ec7_completions",
+    $getter: () => EternityChallenge(7).completions
+  });
+  createInCategory(Currency, "EC8", /ec8_completions/i, {
+    $autocomplete: "ec8_completions",
+    $getter: () => EternityChallenge(8).completions
+  });
+  createInCategory(Currency, "EC9", /ec9_completions/i, {
+    $autocomplete: "ec9_completions",
+    $getter: () => EternityChallenge(9).completions
+  });
+  createInCategory(Currency, "EC10", /ec10_completions/i, {
+    $autocomplete: "ec10_completions",
+    $getter: () => EternityChallenge(10).completions
+  });
+  createInCategory(Currency, "EC11", /ec11_completions/i, {
+    $autocomplete: "ec11_completions",
+    $getter: () => EternityChallenge(11).completions
+  });
+  createInCategory(Currency, "EC", /ec12_completions/i, {
+    $autocomplete: "ec12_completions",
+    $getter: () => EternityChallenge(12).completions
+  });
 
   // $prestigeLevel is used by things that wait for a prestige event. Something waiting for
   // eternity will be triggered by something waiting for reality, for example.
@@ -260,11 +308,11 @@ const AutomatorLexer = (() => {
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     NumberLiteral,
+    Currency, ...tokenLists.Currency,
     ECLiteral,
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
-    Currency, ...tokenLists.Currency,
     TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,

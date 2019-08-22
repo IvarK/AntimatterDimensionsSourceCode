@@ -271,6 +271,8 @@ const AutomatorBackend = {
     if (currentScript.commands) {
       const commands = currentScript.commands;
       if (!this.stack.initializeFromSave(commands)) this.reset(commands);
+    } else {
+      this.stack.clear();
     }
   },
 

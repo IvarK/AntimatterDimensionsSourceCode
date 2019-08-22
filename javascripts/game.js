@@ -445,7 +445,6 @@ function getGameSpeedupForDisplay() {
 let autobuyerOnGameLoop = true;
 
 // "diff" is in ms.  When unspecified, it just uses the game update rate.
-let nextTickDiff;
 function gameLoop(diff, options = {}) {
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
@@ -472,20 +471,18 @@ function gameLoop(diff, options = {}) {
   }
 
   // Ra-Enslaved auto-release stored time (once every 5 ticks)
-  let isAutoReleaseTick;
   if (Enslaved.isAutoReleasing) {
     Enslaved.autoReleaseTick++;
   }
   if (Enslaved.autoReleaseTick >= 5) {
     Enslaved.autoReleaseTick = 0;
     Enslaved.useStoredTime(true);
-    isAutoReleaseTick = true;
-  } else {
-    nextTickDiff = player.options.updateRate;
-    isAutoReleaseTick = false;
+    Enslaved.isReleaseTick = true;
+  } else if (!Enslaved.isReleaseTick) {
+    Enslaved.nextTickDiff = player.options.updateRate;
   }
   if (diff === undefined) {
-    diff = nextTickDiff;
+    diff = Enslaved.nextTickDiff;
   }
 
     if (autobuyerOnGameLoop) {
@@ -502,7 +499,7 @@ function gameLoop(diff, options = {}) {
     const blackHoleDiff = realDiff;
 
     const fixedSpeedActive = EternityChallenge(12).isRunning || TimeCompression.isActive;
-    if (!isAutoReleaseTick && !fixedSpeedActive) {
+    if (!Enslaved.isReleaseTick && !fixedSpeedActive) {
       let speedFactor;
       if (options.blackHoleSpeedup === undefined) {
         speedFactor = getGameSpeedupFactor();
@@ -527,6 +524,7 @@ function gameLoop(diff, options = {}) {
       diff *= getGameSpeedupFactor();
     }
     player.celestials.ra.peakGamespeed = Math.max(player.celestials.ra.peakGamespeed, getGameSpeedupFactor());
+    Enslaved.isReleaseTick = false;
     
     DeltaTimeState.update(realDiff, diff);
 

@@ -618,7 +618,9 @@ function canSacrifice() {
 function glyphSacrificeGain(glyph) {
   if (!canSacrifice()) return 0;
   if (glyph.type === "reality") return 0.01 * glyph.level;
-  return Math.pow(glyph.level + 10, 2.5) * glyph.strength * Teresa.runRewardMultiplier;
+  const pre10kFactor = Math.pow(Math.min(glyph.level, 10000) + 10, 2.5);
+  const post10kFactor = 1 + Math.max(glyph.level - 10000, 0) / 100;
+  return pre10kFactor * post10kFactor * glyph.strength * Teresa.runRewardMultiplier;
 }
 
 function glyphAlchemyResource(glyph) {

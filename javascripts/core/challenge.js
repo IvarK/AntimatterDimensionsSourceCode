@@ -139,12 +139,6 @@ const NormalChallenges = {
    * @type {NormalChallengeState[]}
    */
   all: NormalChallengeState.index.compact(),
-  /**
-   * @returns {NormalChallengeState[]}
-   */
-  get completed() {
-    return NormalChallenges.all.filter(c => c.isCompleted);
-  },
   completeAll() {
     for (const challenge of NormalChallenges.all) challenge.complete();
   },

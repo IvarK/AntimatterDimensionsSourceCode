@@ -62,7 +62,7 @@ const GlyphTooltipComponent = {
       return GameUI.touchDevice;
     },
     sortedEffects() {
-      return getGlyphEffectsFromBitmask(this.effects, this.level, this.strength);
+      return getGlyphEffectsFromBitmask(this.effects, Math.min(this.level, this.levelCap), this.strength);
     },
     rarityInfo() {
       return getRarity(this.strength);
@@ -214,7 +214,7 @@ Vue.component("glyph-component", {
   },
   computed: {
     hasTooltip() {
-      return this.glyph.effects !== 0;
+      return Boolean(this.glyph.effects);
     },
     typeConfig() {
       return GlyphTypes[this.glyph.type];

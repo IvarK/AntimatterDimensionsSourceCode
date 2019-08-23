@@ -80,6 +80,9 @@ function getReplicantiInterval(noMod, intervalIn) {
   if ((TimeStudy(133).isBought && !Achievement(138).isEnabled) || (amount.gt(replicantiCap()) || noMod)) {
     interval = interval.times(10);
   }
+  if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
+    interval = interval.divide(10);
+  }
   if (amount.lte(replicantiCap()) || noMod) {
     if (Achievement(134).isEnabled) interval = interval.divide(2);
   } else {

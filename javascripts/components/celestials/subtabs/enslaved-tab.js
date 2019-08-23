@@ -66,7 +66,7 @@ Vue.component("enslaved-tab", {
       this.storedReal = player.celestials.enslaved.storedReal;
       this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
-      this.unlocks = player.celestials.enslaved.unlocks;
+      this.unlocks = Array.from(player.celestials.enslaved.unlocks);
       this.quote = Enslaved.quote;
       this.quoteIdx = player.celestials.enslaved.quoteIdx;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
@@ -109,7 +109,7 @@ Vue.component("enslaved-tab", {
     },
     unlockClassObject(info) {
       return {
-        "o-enslaved-shop-button--bought": this.hasUnlock(info), 
+        "o-enslaved-shop-button--bought": this.hasUnlock(info),
         "o-enslaved-shop-button--available": this.canBuyUnlock(info)
       };
     },

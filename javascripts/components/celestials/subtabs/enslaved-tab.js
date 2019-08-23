@@ -19,6 +19,7 @@ Vue.component("enslaved-tab", {
     unlocks: [],
     quote: "",
     quoteIdx: 0,
+    currentSpeedUp: 0
   }),
   computed: {
     amplifiedGameDesc() {
@@ -71,6 +72,7 @@ Vue.component("enslaved-tab", {
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
       this.autoRelease = player.celestials.enslaved.isAutoReleasing;
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
+      this.currentSpeedUp = getGameSpeedupFactor();
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -186,7 +188,11 @@ Vue.component("enslaved-tab", {
           :key="unlock.id"
           class="o-enslaved-shop-button"
           :class="unlockClassObject(unlock)"
-          @click="buyUnlock(unlock)"> {{ unlock.description }} <br> Costs: {{ timeDisplayShort(unlock.price) }}</button>
+          @click="buyUnlock(unlock)"> 
+            {{ unlock.description }} <br> 
+            Costs: {{ timeDisplayShort(unlock.price) }}<br>
+            <span v-if="isStoringBlackHole">Time left to obtain: {{ timeDisplayShort(unlock.price / currentSpeedUp) }}</span>
+          </button>
       </div>
       <div class="l-enslaved-unlocks-container" v-if="hasUnlock(unlocksInfo.RUN)">
         <div class="o-enslaved-run-box">

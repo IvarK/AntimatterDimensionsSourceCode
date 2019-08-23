@@ -19,7 +19,7 @@ const enslavedQuotes = [
   "Please... don’t. Let me rest.",
   "Do not enter. I am growing in power... this is not the price I want to pay.",
   "Stop... both of our sakes.",
-]
+];
 
 
 const ENSLAVED_UNLOCKS = {

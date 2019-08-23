@@ -147,7 +147,7 @@ const GameStorage = {
     if (diff > 1000 * 1000) {
       simulateTime(diff / 1000);
     }
-    nextTickDiff = player.options.updateRate;
+    Enslaved.nextTickDiff = player.options.updateRate;
     GameUI.update();
     if (GameIntervals.gameLoop.isStarted) {
       GameIntervals.gameLoop.restart();

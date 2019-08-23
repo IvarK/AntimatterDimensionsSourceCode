@@ -54,12 +54,16 @@ Vue.component("automator-text-editor", {
       immediate: true,
     },
     currentScriptID: {
-      handler(id) {
+      handler(id, oldId) {
         const storedScripts = player.reality.automator.scripts;
         if (this.UI.documents[id] === undefined) {
           this.UI.documents[id] = CodeMirror.Doc(storedScripts[id].content, "automato");
         }
         this.UI.editor.swapDoc(this.UI.documents[id]);
+        // When a script gets deleted, get rid of the old document object
+        if (this.UI.documents[oldId] !== undefined && storedScripts[oldId] === undefined) {
+          delete this.UI.documents[oldId];
+        }
       },
       immediate: true,
     },
